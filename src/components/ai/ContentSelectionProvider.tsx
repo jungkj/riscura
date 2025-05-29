@@ -4,7 +4,7 @@ import { AIActionToolbar } from './AIActionToolbar';
 import { ContentAnalysisPanel } from './ContentAnalysisPanel';
 import { BatchSelectionManager } from './BatchSelectionManager';
 import { useContentAnalysis } from '@/hooks/useContentAnalysis';
-import { useTextSelection, TextSelection } from '@/hooks/useTextSelection';
+import { TextSelection } from '@/hooks/useTextSelection';
 import { AIAction } from './SelectableContent';
 
 interface ContentSelectionContextValue {
