@@ -7,6 +7,16 @@ interface AIContextType {
   generateContent: (request: any) => Promise<any>;
   explainContent: (request: any) => Promise<any>;
   isLoading: boolean;
+  performanceMetrics: any;
+  rateLimitStatus: any;
+  conversations: any[];
+  sendMessage: (content: string, attachments?: any) => Promise<void>;
+  selectedAgent: string;
+  switchAgent: (agentType: string) => void;
+  currentConversation: any;
+  startConversation: (agentType: string, context?: any) => void;
+  error: any;
+  toggleARIA: () => void;
 }
 
 const AIContext = createContext<AIContextType | undefined>(undefined);
@@ -25,6 +35,43 @@ interface AIProviderProps {
 
 export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedAgent, setSelectedAgent] = useState('general_assistant');
+  const [currentConversation, setCurrentConversation] = useState<any>(null);
+
+  const performanceMetrics = {
+    averageResponseTime: 1200,
+    cacheHitRate: 0.85,
+    totalRequests: 150,
+    successRate: 0.98
+  };
+
+  const rateLimitStatus = {
+    requestsRemaining: 42,
+    resetTime: new Date(Date.now() + 3600000),
+    limit: 50
+  };
+
+  const conversations = [
+    {
+      id: 'conv-1',
+      title: 'Risk Assessment Discussion',
+      messages: [
+        { id: 'msg-1', content: 'Hello', timestamp: new Date() },
+        { id: 'msg-2', content: 'How can I help?', timestamp: new Date() }
+      ],
+      updatedAt: new Date(),
+      agentType: 'risk_analyzer'
+    },
+    {
+      id: 'conv-2',
+      title: 'Control Design Session',
+      messages: [
+        { id: 'msg-3', content: 'Design controls', timestamp: new Date() }
+      ],
+      updatedAt: new Date(),
+      agentType: 'control_advisor'
+    }
+  ];
 
   const analyzeRisk = async (risk: Risk) => {
     setIsLoading(true);
@@ -91,12 +138,50 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     }
   };
 
+  const sendMessage = async (content: string, attachments?: any) => {
+    console.log('Sending message:', content, attachments);
+    // Mock implementation - would integrate with actual chat service
+  };
+
+  const switchAgent = (agentType: string) => {
+    setSelectedAgent(agentType);
+    console.log('Switched to agent:', agentType);
+  };
+
+  const startConversation = (agentType: string, context?: any) => {
+    const newConversation = {
+      id: `conv-${Date.now()}`,
+      title: `New ${agentType} conversation`,
+      messages: [],
+      agentType,
+      context,
+      createdAt: new Date()
+    };
+    setCurrentConversation(newConversation);
+    setSelectedAgent(agentType);
+  };
+
+  const toggleARIA = () => {
+    console.log('Toggle ARIA widget');
+    // Mock implementation - would toggle widget visibility
+  };
+
   const value: AIContextType = {
     analyzeRisk,
     recommendControls,
     generateContent,
     explainContent,
-    isLoading
+    isLoading,
+    performanceMetrics,
+    rateLimitStatus,
+    conversations,
+    sendMessage,
+    selectedAgent,
+    switchAgent,
+    currentConversation,
+    startConversation,
+    error: null,
+    toggleARIA
   };
 
   return (

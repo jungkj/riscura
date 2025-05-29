@@ -345,7 +345,7 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
         <>
           {/* Agent Selector and Search */}
           <div className="p-4 border-b space-y-3">
-            <AgentSelector currentAgent={agent} onAgentChange={actions.switchAgent} />
+            <AgentSelector currentAgent={agent as any} onAgentChange={actions.switchAgent} />
             
             {state.messages.length > 0 && (
               <div className="relative">
