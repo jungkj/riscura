@@ -478,7 +478,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   // Response Management
-  const submitResponse = async (questionnaireId: string, responses: Omit<Response, 'id' | 'createdAt'>[]) => {
+  const submitResponse = async (_questionnaireId: string, responses: Omit<Response, 'id' | 'createdAt'>[]) => {
     await new Promise(resolve => setTimeout(resolve, 800));
     
     const newResponses = responses.map(r => ({

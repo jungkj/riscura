@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ControlLibraryView } from '@/components/controls/ControlLibraryView';
 import { useControls } from '@/context/ControlContext';
 import { Control } from '@/types';

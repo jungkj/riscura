@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
+import { AIProvider } from './context/AIContext';
 import { RiskProvider } from './context/RiskContext';
 import { ControlProvider } from './context/ControlContext';
 import { QuestionnaireProvider } from './context/QuestionnaireContext';
@@ -27,6 +28,7 @@ import ControlLibraryPage from './pages/controls/ControlLibraryPage';
 import QuestionnairePage from './pages/questionnaires/QuestionnairePage';
 import WorkflowPage from './pages/workflows/WorkflowPage';
 import ReportingPage from './pages/reporting/ReportingPage';
+import ARIAPage from './pages/ai/ARIAPage';
 
 // Import route components
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
@@ -36,48 +38,51 @@ function App() {
   return (
     <ThemeProvider defaultTheme="light">
       <AuthProvider>
-        <RiskProvider>
-          <ControlProvider>
-            <QuestionnaireProvider>
-              <WorkflowProvider>
-                <Router>
-                  <Routes>
-                    {/* Public Landing Page Route */}
-                    <Route path="/" element={<PublicRoute />} />
-                    
-                    {/* Auth Routes */}
-                    <Route element={<AuthLayout />}>
-                      <Route path="/login" element={<LoginPage />} />
-                      <Route path="/register" element={<RegisterPage />} />
-                      <Route path="/onboarding" element={<OnboardingPage />} />
-                    </Route>
-                    
-                    {/* Unauthorized Route */}
-                    <Route path="/unauthorized" element={<UnauthorizedPage />} />
-                    
-                    {/* Protected App Routes */}
-                    <Route element={
-                      <ProtectedRoute>
-                        <MainLayout />
-                      </ProtectedRoute>
-                    }>
-                      <Route path="/dashboard" element={<DashboardPage />} />
-                      <Route path="/risks" element={<RiskListPage />} />
-                      <Route path="/risks/:id" element={<RiskDetailPage />} />
-                      <Route path="/document-analysis" element={<DocumentAnalysisPage />} />
-                      <Route path="/ai-insights" element={<AIInsightsPage />} />
-                      <Route path="/controls" element={<ControlLibraryPage />} />
-                      <Route path="/questionnaires" element={<QuestionnairePage />} />
-                      <Route path="/workflows" element={<WorkflowPage />} />
-                      <Route path="/reporting" element={<ReportingPage />} />
-                    </Route>
-                  </Routes>
-                </Router>
-                <Toaster />
-              </WorkflowProvider>
-            </QuestionnaireProvider>
-          </ControlProvider>
-        </RiskProvider>
+        <AIProvider>
+          <RiskProvider>
+            <ControlProvider>
+              <QuestionnaireProvider>
+                <WorkflowProvider>
+                  <Router>
+                    <Routes>
+                      {/* Public Landing Page Route */}
+                      <Route path="/" element={<PublicRoute />} />
+                      
+                      {/* Auth Routes */}
+                      <Route element={<AuthLayout />}>
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/register" element={<RegisterPage />} />
+                        <Route path="/onboarding" element={<OnboardingPage />} />
+                      </Route>
+                      
+                      {/* Unauthorized Route */}
+                      <Route path="/unauthorized" element={<UnauthorizedPage />} />
+                      
+                      {/* Protected App Routes */}
+                      <Route element={
+                        <ProtectedRoute>
+                          <MainLayout />
+                        </ProtectedRoute>
+                      }>
+                        <Route path="/dashboard" element={<DashboardPage />} />
+                        <Route path="/aria" element={<ARIAPage />} />
+                        <Route path="/risks" element={<RiskListPage />} />
+                        <Route path="/risks/:id" element={<RiskDetailPage />} />
+                        <Route path="/document-analysis" element={<DocumentAnalysisPage />} />
+                        <Route path="/ai-insights" element={<AIInsightsPage />} />
+                        <Route path="/controls" element={<ControlLibraryPage />} />
+                        <Route path="/questionnaires" element={<QuestionnairePage />} />
+                        <Route path="/workflows" element={<WorkflowPage />} />
+                        <Route path="/reporting" element={<ReportingPage />} />
+                      </Route>
+                    </Routes>
+                  </Router>
+                  <Toaster />
+                </WorkflowProvider>
+              </QuestionnaireProvider>
+            </ControlProvider>
+          </RiskProvider>
+        </AIProvider>
       </AuthProvider>
     </ThemeProvider>
   );

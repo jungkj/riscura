@@ -30,6 +30,7 @@ export interface Risk {
   evidence: Document[];
   createdAt: string;
   updatedAt: string;
+  lastAssessed?: Date;
   aiConfidence?: number;
   comments?: Comment[];
   tasks?: string[]; // task IDs

@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRisks } from '@/context/RiskContext';
 import { Risk, RiskCategory } from '@/types';
-import { formatDate, getRiskLevel, getRiskLevelColor, debounce } from '@/lib/utils';
+import { formatDate, getRiskLevel, getRiskLevelColor } from '@/lib/utils';
 
 // UI Components
 import {
@@ -83,20 +83,17 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
     getRiskStats,
   } = useRisks();
 
-  const [searchTerm, setSearchTerm] = useState(filters.search || '');
+  const [searchInput, setSearchInput] = useState(filters.search || '');
   const [showFilters, setShowFilters] = useState(false);
 
   // Debounced search
-  const debouncedSearch = useMemo(
-    () => debounce((term: string) => {
-      setFilters({ search: term });
-    }, 300),
-    [setFilters]
-  );
-
-  React.useEffect(() => {
-    debouncedSearch(searchTerm);
-  }, [searchTerm, debouncedSearch]);
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setFilters({ search: searchInput });
+    }, 300);
+    
+    return () => clearTimeout(timeoutId);
+  }, [searchInput, setFilters]);
 
   const filteredRisks = getFilteredRisks();
   const stats = getRiskStats();
@@ -239,8 +236,8 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search risks..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
                 className="pl-10"
               />
             </div>
