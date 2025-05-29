@@ -1,0 +1,267 @@
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { useAuth } from '@/context/AuthContext';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { toast } from '@/hooks/use-toast';
+
+// UI Components
+import {
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Loader2, Eye, EyeOff, Shield } from 'lucide-react';
+
+// Enhanced components
+import { GlowingStarsBackground } from '@/components/ui/aceternity/glowing-stars-background';
+import { HoverCard } from '@/components/ui/aceternity/hover-effect';
+import { FormErrorBoundary } from '@/components/ui/error-boundary';
+
+// Form schema
+const loginSchema = z.object({
+  email: z.string().email({ message: 'Please enter a valid email address' }),
+  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
+
+export default function LoginPage() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Initialize form
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit = async (values: LoginFormValues) => {
+    setIsLoading(true);
+    try {
+      await login(values.email, values.password);
+      toast({
+        title: 'Welcome back!',
+        description: 'You have successfully logged in.',
+      });
+      navigate('/dashboard');
+    } catch {
+      toast({
+        title: 'Login failed',
+        description: 'Invalid email or password. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const demoCredentials = [
+    { role: 'Risk Manager', email: 'demo@rcsa.com', password: 'demo123' },
+    { role: 'Admin', email: 'admin@rcsa.com', password: 'admin123' },
+    { role: 'Auditor', email: 'auditor@rcsa.com', password: 'audit123' },
+  ];
+
+  const fillDemoCredentials = (email: string, password: string) => {
+    form.setValue('email', email);
+    form.setValue('password', password);
+  };
+
+  return (
+    <FormErrorBoundary>
+      <div className="relative min-h-screen flex items-center justify-center p-4">
+        <GlowingStarsBackground className="absolute inset-0" starCount={150} />
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-md relative z-10"
+        >
+          <HoverCard className="backdrop-blur-sm bg-white/90 dark:bg-gray-900/90 border-white/20">
+            <CardHeader className="space-y-1 text-center">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+                className="mx-auto mb-4 w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center"
+              >
+                <Shield className="w-8 h-8 text-white" />
+              </motion.div>
+              <CardTitle className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                Welcome Back
+              </CardTitle>
+              <CardDescription>
+                Enter your credentials to access your RCSA dashboard
+              </CardDescription>
+            </CardHeader>
+            
+            <CardContent>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <motion.div
+                            whileFocus={{ scale: 1.02 }}
+                            transition={{ type: 'spring', stiffness: 300 }}
+                          >
+                            <Input 
+                              placeholder="name@company.com" 
+                              {...field} 
+                              autoComplete="email"
+                              className="transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+                            />
+                          </motion.div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <motion.div
+                            whileFocus={{ scale: 1.02 }}
+                            transition={{ type: 'spring', stiffness: 300 }}
+                            className="relative"
+                          >
+                            <Input 
+                              type={showPassword ? 'text' : 'password'}
+                              placeholder="••••••••" 
+                              {...field} 
+                              autoComplete="current-password"
+                              className="transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 pr-10"
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                              onClick={() => setShowPassword(!showPassword)}
+                            >
+                              {showPassword ? (
+                                <EyeOff className="h-4 w-4 text-gray-400" />
+                              ) : (
+                                <Eye className="h-4 w-4 text-gray-400" />
+                              )}
+                            </Button>
+                          </motion.div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-200" 
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Signing in...
+                        </>
+                      ) : (
+                        'Sign In'
+                      )}
+                    </Button>
+                  </motion.div>
+                </form>
+              </Form>
+
+              <div className="mt-4 text-center text-sm">
+                <Link 
+                  to="/forgot-password" 
+                  className="text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+            </CardContent>
+            
+            <CardFooter className="flex justify-center">
+              <p className="text-sm text-muted-foreground">
+                Don't have an account?{' '}
+                <Link 
+                  to="/register" 
+                  className="text-blue-600 hover:text-blue-700 hover:underline transition-colors font-medium"
+                >
+                  Sign up
+                </Link>
+              </p>
+            </CardFooter>
+            
+            {/* Enhanced Demo credentials */}
+            <motion.div 
+              className="px-6 pb-4 space-y-3"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              <div className="text-center">
+                <p className="text-sm font-medium text-muted-foreground mb-3">
+                  Quick Demo Access:
+                </p>
+              </div>
+              <div className="grid grid-cols-1 gap-2">
+                {demoCredentials.map((cred, index) => (
+                  <motion.button
+                    key={cred.role}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.6 + index * 0.1 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => fillDemoCredentials(cred.email, cred.password)}
+                    className="flex justify-between items-center p-2 rounded-md bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-xs group"
+                  >
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
+                      {cred.role}
+                    </span>
+                    <span className="text-gray-500 dark:text-gray-400 group-hover:text-blue-600 transition-colors">
+                      Click to fill
+                    </span>
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+          </HoverCard>
+        </motion.div>
+      </div>
+    </FormErrorBoundary>
+  );
+}
