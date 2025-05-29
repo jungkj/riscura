@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { 
   AlertTriangle, 
   TrendingUp, 
-  TrendingDown, 
   Brain, 
   Eye, 
   Clock, 
@@ -16,9 +15,7 @@ import {
   Target,
   Zap,
   AlertCircle,
-  CheckCircle,
-  BarChart3,
-  Settings
+  CheckCircle
 } from 'lucide-react';
 import { 
   ProactiveInsight, 
