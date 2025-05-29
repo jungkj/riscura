@@ -182,7 +182,7 @@ export function useARIAChat(initialContext?: RiskContext) {
   // Update messages from AI context
   useEffect(() => {
     if (currentConversation) {
-      const chatMessages: ChatMessage[] = currentConversation.messages.map(msg => ({
+      const chatMessages: ChatMessage[] = currentConversation.messages.map((msg: any) => ({
         ...msg,
         canRegenerate: msg.role === 'assistant',
         suggestions: msg.role === 'assistant' ? generateSuggestions(msg) : undefined,
