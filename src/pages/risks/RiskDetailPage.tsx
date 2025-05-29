@@ -29,7 +29,7 @@ export default function RiskDetailPage() {
           id: id || '1',
           title: 'Data Breach Vulnerability',
           description: 'Risk of unauthorized access to customer data due to weak encryption protocols and outdated access controls. This vulnerability was identified during the annual security assessment and confirmed by penetration testing.',
-          category: 'Technology',
+          category: 'technology',
           likelihood: 3,
           impact: 5,
           riskScore: 15,
@@ -62,7 +62,7 @@ export default function RiskDetailPage() {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-2">
-          <Button variant="ghost\" size="icon\" onClick={() => navigate('/risks')}>
+          <Button variant="ghost" size="icon" onClick={() => navigate('/risks')}>
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div className="animate-pulse h-8 w-48 bg-muted rounded"></div>

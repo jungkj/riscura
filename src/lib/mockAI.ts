@@ -258,13 +258,29 @@ const simulateTextExtraction = (document: Document): string => {
 
 // Analyze text content and identify relevant risks
 const analyzeTextContent = (text: string): {
-  identifiedRisks: AIAnalysisResponse['results']['identifiedRisks'];
-  suggestedControls: AIAnalysisResponse['results']['suggestedControls'];
+  identifiedRisks: Array<{
+    text: string;
+    confidence: number;
+    category: RiskCategory;
+  }>;
+  suggestedControls: Array<{
+    title: string;
+    description: string;
+    confidence: number;
+  }>;
   documentSummary: string;
 } => {
   const lowerText = text.toLowerCase();
-  const identifiedRisks: AIAnalysisResponse['results']['identifiedRisks'] = [];
-  const suggestedControls: AIAnalysisResponse['results']['suggestedControls'] = [];
+  const identifiedRisks: Array<{
+    text: string;
+    confidence: number;
+    category: RiskCategory;
+  }> = [];
+  const suggestedControls: Array<{
+    title: string;
+    description: string;
+    confidence: number;
+  }> = [];
   
   // Analyze text for risk keywords and generate relevant risks
   Object.entries(riskKeywords).forEach(([category, keywords]) => {
@@ -301,8 +317,8 @@ const analyzeTextContent = (text: string): {
   // Generate document summary
   const documentSummary = `
     This document contains ${identifiedRisks.length} potential risk areas across 
-    ${new Set(identifiedRisks.map(r => r.category)).size} categories. 
-    Key themes include ${identifiedRisks.slice(0, 3).map(r => r.category).join(', ')}.
+    ${new Set(identifiedRisks.map((r: { category: RiskCategory }) => r.category)).size} categories. 
+    Key themes include ${identifiedRisks.slice(0, 3).map((r: { category: RiskCategory }) => r.category).join(', ')}.
     The analysis suggests implementing ${suggestedControls.length} control measures
     to mitigate the identified risks.
   `.trim();
@@ -349,11 +365,19 @@ export const mockAIAnalysis = async (document: Document): Promise<AIAnalysisResp
 
 // Function to convert AI analysis results to Risk objects
 export const convertAIRisksToRiskObjects = (
-  aiRisks: AIAnalysisResponse['results']['identifiedRisks'],
-  documentId: string,
+  aiRisks: Array<{
+    text: string;
+    confidence: number;
+    category: RiskCategory;
+  }>,
+  _documentId: string,
   owner: string = 'AI Analysis'
 ): Omit<Risk, 'id' | 'createdAt' | 'updatedAt' | 'riskScore'>[] => {
-  return aiRisks.map((aiRisk, index) => ({
+  return aiRisks.map((aiRisk: {
+    text: string;
+    confidence: number;
+    category: RiskCategory;
+  }, index: number) => ({
     title: `AI Identified Risk ${index + 1}`,
     description: aiRisk.text,
     category: aiRisk.category,
@@ -362,17 +386,25 @@ export const convertAIRisksToRiskObjects = (
     owner,
     status: 'identified' as const,
     controls: [],
-    evidence: [{ id: documentId }], // Reference to source document
+    evidence: [], // Empty array, document reference can be added separately
     aiConfidence: aiRisk.confidence
   }));
 };
 
 // Function to convert AI controls to Control objects
 export const convertAIControlsToControlObjects = (
-  aiControls: AIAnalysisResponse['results']['suggestedControls'],
+  aiControls: Array<{
+    title: string;
+    description: string;
+    confidence: number;
+  }>,
   owner: string = 'AI Analysis'
 ): Omit<Control, 'id' | 'createdAt' | 'updatedAt'>[] => {
-  return aiControls.map(aiControl => ({
+  return aiControls.map((aiControl: {
+    title: string;
+    description: string;
+    confidence: number;
+  }) => ({
     title: aiControl.title,
     description: aiControl.description,
     type: 'preventive' as const, // Default type, can be adjusted

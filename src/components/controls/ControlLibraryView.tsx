@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useControls } from '@/context/ControlContext';
 import { Control } from '@/types';
-import { formatDate, debounce } from '@/lib/utils';
+import { formatDate } from '@/lib/utils';
 
 // UI Components
 import {
@@ -97,21 +97,18 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
     getControlStats,
   } = useControls();
 
-  const [searchTerm, setSearchTerm] = useState(filters.search || '');
+  const [searchInput, setSearchInput] = useState(filters.search || '');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedControl, setSelectedControl] = useState<Control | null>(null);
 
   // Debounced search
-  const debouncedSearch = useMemo(
-    () => debounce((term: string) => {
-      setFilters({ search: term });
-    }, 300),
-    [setFilters]
-  );
-
-  React.useEffect(() => {
-    debouncedSearch(searchTerm);
-  }, [searchTerm, debouncedSearch]);
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setFilters({ search: searchInput });
+    }, 300);
+    
+    return () => clearTimeout(timeoutId);
+  }, [searchInput, setFilters]);
 
   const filteredControls = getFilteredControls();
   const stats = getControlStats();
@@ -360,8 +357,8 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search controls..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
                 className="pl-10"
               />
             </div>

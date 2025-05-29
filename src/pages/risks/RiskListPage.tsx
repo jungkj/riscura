@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Risk } from '@/types';
 import { useRisks } from '@/context/RiskContext';
 import { RiskListView } from '@/components/risks/RiskListView';

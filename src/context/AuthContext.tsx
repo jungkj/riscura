@@ -198,7 +198,7 @@ const authService = {
     return Promise.resolve();
   },
   
-  updateProfile: async (userId: string, userData: Partial<AuthUser>): Promise<AuthUser> => {
+  updateProfile: async (_userId: string, userData: Partial<AuthUser>): Promise<AuthUser> => {
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 800));
     

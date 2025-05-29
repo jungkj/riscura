@@ -249,7 +249,7 @@ export default function DocumentAnalysisPage() {
                         {formatFileSize(analyzedDocument.size)} • Analyzed {new Date(analyzedDocument.uploadedAt).toLocaleTimeString()}
                       </p>
                     </div>
-                    <Badge variant="success" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                    <Badge variant="default" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
                       Analyzed
                     </Badge>
                   </div>

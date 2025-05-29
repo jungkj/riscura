@@ -12,7 +12,8 @@ import {
   BarChart3,
   Lightbulb,
   ClipboardList,
-  Settings
+  Settings,
+  Bot
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -25,6 +26,8 @@ interface NavItem {
   href: string;
   icon: React.ReactNode;
   requiresPermission?: string;
+  badge?: string;
+  isNew?: boolean;
 }
 
 export default function Sidebar({ isOpen, user }: SidebarProps) {
@@ -36,6 +39,13 @@ export default function Sidebar({ isOpen, user }: SidebarProps) {
       title: "Dashboard",
       href: "/dashboard",
       icon: <LayoutDashboard className="h-5 w-5" />
+    },
+    {
+      title: "ARIA AI Assistant",
+      href: "/aria",
+      icon: <Bot className="h-5 w-5" />,
+      badge: "NEW",
+      isNew: true
     },
     {
       title: "Risk Register",
@@ -102,12 +112,18 @@ export default function Sidebar({ isOpen, user }: SidebarProps) {
               key={item.href}
               to={item.href}
               className={cn(
-                "flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                location.pathname === item.href ? "bg-accent text-accent-foreground" : "transparent"
+                "flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground relative",
+                location.pathname === item.href ? "bg-accent text-accent-foreground" : "transparent",
+                item.isNew && "bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950"
               )}
             >
               {item.icon}
               <span className="ml-3">{item.title}</span>
+              {item.badge && (
+                <span className="ml-auto inline-flex items-center rounded-full bg-gradient-to-r from-blue-500 to-purple-600 px-2 py-1 text-xs font-medium text-white">
+                  {item.badge}
+                </span>
+              )}
             </Link>
           ))}
         </div>
