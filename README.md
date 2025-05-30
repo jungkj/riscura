@@ -298,25 +298,136 @@ To use the AI-powered features in RISCURA, you need an OpenAI API key:
 
 ## 🤖 AI Features
 
-RISCURA includes comprehensive AI-powered features:
+RISCURA includes comprehensive AI-powered features with specialized agents:
 
-### **ARIA AI Assistant**
-- **Risk Analysis**: Automated risk assessment and scoring
-- **Control Recommendations**: AI-suggested controls for identified risks
-- **Content Generation**: Automated documentation and report generation
-- **Conversational Interface**: Natural language interaction with different AI agents
+### **ARIA AI Assistant - Specialized Agents**
 
-### **AI Agent Types**
-- **Risk Analyzer**: Specialized in risk assessment and analysis
-- **Control Advisor**: Expert in control design and implementation
-- **Compliance Expert**: Focused on regulatory compliance guidance
-- **General Assistant**: Multi-purpose risk management support
+#### **🧠 Risk Analyzer Agent**
+- **Expertise**: Comprehensive risk identification, assessment, and quantification
+- **Methodologies**: COSO, ISO 31000, NIST RMF, Monte Carlo simulation, VaR modeling
+- **Key Features**:
+  - Quantitative and qualitative risk assessment
+  - Risk interdependency and correlation analysis
+  - Scenario modeling and stress testing
+  - Key Risk Indicator (KRI) development
+  - Risk appetite and tolerance recommendations
+- **Prompt Templates**: Comprehensive assessment, quick assessment, scenario analysis
 
-### **Real-time Features**
-- **Streaming Responses**: Live AI responses for better user experience
-- **Usage Tracking**: Monitor API usage and costs
-- **Rate Limiting**: Built-in protection against API limits
-- **Error Handling**: Comprehensive error recovery and retry logic
+#### **🛡️ Control Advisor Agent**
+- **Expertise**: Control framework design, implementation, and optimization
+- **Frameworks**: COSO Internal Control, COBIT, SOX Section 404, ISO 27001
+- **Key Features**:
+  - Preventive, detective, and corrective control design
+  - Control effectiveness assessment and testing methodologies
+  - Implementation planning with cost-benefit analysis
+  - Automated control recommendations
+  - Control optimization and rationalization
+- **Prompt Templates**: Control design, effectiveness assessment, environment optimization
+
+#### **📋 Compliance Expert Agent**
+- **Expertise**: Multi-jurisdictional regulatory compliance and audit preparation
+- **Regulations**: SOX, GDPR, HIPAA, Basel III, MiFID II, CCPA, ISO standards
+- **Key Features**:
+  - Compliance gap analysis and remediation roadmaps
+  - Regulatory interpretation and implementation guidance
+  - Audit preparation and management
+  - Policy and procedure development
+  - Cross-jurisdictional compliance guidance
+- **Prompt Templates**: Compliance assessment, regulatory interpretation, audit preparation
+
+#### **🤖 General Assistant (ARIA)**
+- **Expertise**: Enterprise risk management strategy and governance
+- **Domains**: Strategic risk, operational risk, crisis management, ESG risk
+- **Key Features**:
+  - Enterprise risk strategy development
+  - Business continuity and crisis management planning
+  - Risk communication and reporting frameworks
+  - Vendor and third-party risk management
+  - Risk culture and awareness program development
+- **Prompt Templates**: Enterprise strategy, crisis management, risk communication
+
+### **Advanced AI Capabilities**
+
+#### **Enterprise-Grade Features**
+- **Real-time Streaming**: Live AI responses with typing indicators
+- **Context Awareness**: Risk and control data injection into prompts
+- **Confidence Scoring**: AI-calculated confidence levels for all recommendations
+- **Prompt Templates**: Pre-built templates for common risk management tasks
+- **Response Formatting**: Structured, enterprise-appropriate output formats
+- **Fallback Responses**: Intelligent handling of edge cases and limitations
+
+#### **Performance & Reliability**
+- **Rate Limiting**: 50 requests/minute, 100k tokens/hour with automatic throttling
+- **Circuit Breaker Pattern**: Automatic failure detection and recovery
+- **Response Caching**: 15-minute TTL caching for improved performance
+- **Usage Tracking**: Real-time token usage monitoring and cost calculation
+- **Error Handling**: Comprehensive error recovery with retry mechanisms
+
+#### **Agent Selection Interface**
+- **Interactive Agent Cards**: Detailed agent capabilities and expertise areas
+- **Template Explorer**: Browse available prompt templates for each agent
+- **Usage Examples**: Real-world use cases for each agent specialization
+- **Capability Matrix**: Clear overview of agent strengths and limitations
+
+### **Risk Management Frameworks Integration**
+
+The AI agents are trained on and reference industry-standard frameworks:
+
+#### **Risk Assessment Frameworks**
+- **COSO ERM**: Enterprise Risk Management Framework components and principles
+- **ISO 31000**: Risk management guidelines and processes  
+- **NIST RMF**: Risk Management Framework for information systems
+- **Basel III**: Financial risk management for banking institutions
+
+#### **Control Frameworks**
+- **COSO Internal Control**: 17 principles across 5 components
+- **COBIT**: IT governance and management framework
+- **SOX Section 404**: Internal control over financial reporting
+- **ISO 27001**: Information security management controls
+
+#### **Compliance Standards**
+- **Financial Services**: SOX, Basel III, MiFID II, Dodd-Frank, PCI DSS
+- **Data Protection**: GDPR, CCPA, PIPEDA, SOC 2
+- **Healthcare**: HIPAA, FDA regulations
+- **Industry-Specific**: Varies by sector (energy, pharma, manufacturing)
+
+### **AI Agent Usage Examples**
+
+#### **Risk Analyzer Examples**
+```
+"Analyze our cybersecurity risk including likelihood assessment, impact analysis, 
+and treatment recommendations using NIST framework."
+
+"Conduct best/worst case scenario analysis for supply chain disruption risk 
+with quantitative impact modeling."
+```
+
+#### **Control Advisor Examples**
+```
+"Design comprehensive controls for data privacy compliance including preventive, 
+detective, and corrective measures with implementation timeline."
+
+"Optimize our current control environment to reduce redundancy and improve 
+automation opportunities."
+```
+
+#### **Compliance Expert Examples**
+```
+"Assess our current compliance state against GDPR requirements and provide 
+detailed remediation roadmap with priorities."
+
+"Help prepare for upcoming SOX audit including documentation requirements 
+and testing procedures."
+```
+
+#### **General Assistant Examples**
+```
+"Develop comprehensive enterprise risk management strategy aligned with 
+business objectives and stakeholder requirements."
+
+"Create crisis management plan for business continuity during operational 
+disruptions with stakeholder communication protocols."
+```
 
 ## 📊 Current Features
 

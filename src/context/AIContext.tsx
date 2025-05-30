@@ -1,28 +1,139 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { Risk } from '@/types';
-import { AIService, AIServiceError, RateLimitError } from '@/services/AIService';
-import { AgentType, ConversationMessage } from '@/types/ai.types';
+import { AIService, AIServiceError, RateLimitError, ConnectionStatus } from '@/services/AIService';
+import { AgentType, ConversationMessage, MessageAttachment } from '@/types/ai.types';
+import { AI_AGENTS } from '@/config/ai-agents';
+import { 
+  tokenManagementService, 
+  type UsageAlert
+} from '@/services/TokenManagementService';
+
+// Enhanced interfaces for token management integration
+interface TokenUsageMetrics {
+  dailyTokens: number;
+  dailyLimit: number;
+  dailyPercentage: number;
+  dailyCost: number;
+  weeklyTokens: number;
+  weeklyLimit: number;
+  weeklyPercentage: number;
+  weeklyCost: number;
+  monthlyTokens: number;
+  monthlyLimit: number;
+  monthlyPercentage: number;
+  monthlyCost: number;
+  currentTier: string;
+}
+
+interface RealTimeUsageStats {
+  sessionTokens: number;
+  sessionCost: number;
+  sessionDuration: number;
+  todayTokens: number;
+  todayCost: number;
+  todayConversations: number;
+  costProjections: {
+    daily: number;
+    weekly: number;
+    monthly: number;
+  };
+}
+
+interface ConversationUsage {
+  id: string;
+  title: string;
+  agentType: string;
+  tokens: number;
+  cost: number;
+  messageCount: number;
+  startTime: Date;
+  lastActivity: Date;
+}
+
+interface ContentGenerationRequest {
+  type: string;
+  context?: Record<string, unknown>;
+  requirements?: string;
+}
+
+interface ExplanationRequest {
+  content: string;
+  complexity?: 'simple' | 'detailed' | 'expert';
+}
+
+// Enhanced conversation interface
+interface Conversation {
+  id: string;
+  title: string;
+  messages: ConversationMessage[];
+  updatedAt: Date;
+  agentType: string;
+}
+
+// Enhanced performance metrics
+interface PerformanceMetrics {
+  averageResponseTime: number;
+  cacheHitRate: number;
+  totalRequests: number;
+  successRate: number;
+  totalCost: number;
+  circuitBreakerState: string;
+}
+
+// Enhanced rate limit status
+interface RateLimitStatus {
+  requestsRemaining: number;
+  resetTime: Date;
+  limit: number;
+  isLimited: boolean;
+}
+
+// Enhanced error interface
+interface EnhancedError {
+  type: string;
+  message: string;
+  code?: string;
+  retryable: boolean;
+  severity?: string;
+  userMessage?: string;
+  retryAfter?: Date;
+}
 
 interface AIContextType {
-  analyzeRisk: (risk: Risk) => Promise<any>;
-  recommendControls: (risk: Risk) => Promise<any>;
-  generateContent: (request: any) => Promise<any>;
-  explainContent: (request: any) => Promise<any>;
+  analyzeRisk: (risk: Risk) => Promise<unknown>;
+  recommendControls: (risk: Risk) => Promise<unknown>;
+  generateContent: (request: ContentGenerationRequest) => Promise<unknown>;
+  explainContent: (request: ExplanationRequest) => Promise<unknown>;
   isLoading: boolean;
-  performanceMetrics: any;
-  rateLimitStatus: any;
-  conversations: any[];
-  sendMessage: (content: string, attachments?: any) => Promise<void>;
-  selectedAgent: string;
-  switchAgent: (agentType: string) => void;
-  currentConversation: any;
-  startConversation: (agentType: string, context?: any) => void;
-  error: any;
+  performanceMetrics: PerformanceMetrics;
+  rateLimitStatus: RateLimitStatus;
+  conversations: Conversation[];
+  sendMessage: (content: string, attachments?: MessageAttachment[]) => Promise<void>;
+  selectedAgent: AgentType;
+  switchAgent: (agentType: AgentType) => void;
+  currentConversation: Conversation | null;
+  startConversation: (agentType: AgentType, context?: Record<string, unknown>) => void;
+  error: EnhancedError | null;
   toggleARIA: () => void;
   aiService: AIService | null;
   streamingResponse: string;
   clearError: () => void;
   retryLastRequest: () => Promise<void>;
+  // Token management features
+  tokenUsageMetrics: TokenUsageMetrics;
+  realTimeUsageStats: RealTimeUsageStats;
+  usageAlerts: UsageAlert[];
+  acknowledgeAlert: (alertId: string) => void;
+  generateUsageReport: (period: 'daily' | 'weekly' | 'monthly', format?: 'json' | 'csv') => string;
+  exportUsageData: (format: 'json' | 'csv') => void;
+  upgradeTier: (tierName: string) => boolean;
+  canMakeRequest: () => { allowed: boolean; reason?: string };
+  conversationUsages: ConversationUsage[];
+  // Enhanced error handling
+  connectionStatus: ConnectionStatus;
+  isReconnecting: boolean;
+  lastError: EnhancedError | null;
+  errorHistory: EnhancedError[];
 }
 
 const AIContext = createContext<AIContextType | undefined>(undefined);
@@ -42,20 +153,106 @@ interface AIProviderProps {
 export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState<AgentType>('general_assistant');
-  const [currentConversation, setCurrentConversation] = useState<any>(null);
-  const [conversations, setConversations] = useState<any[]>([]);
-  const [error, setError] = useState<any>(null);
+  const [currentConversation, setCurrentConversation] = useState<Conversation | null>(null);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [error, setError] = useState<EnhancedError | null>(null);
   const [streamingResponse, setStreamingResponse] = useState('');
   const [aiService, setAIService] = useState<AIService | null>(null);
-  const [performanceMetrics, setPerformanceMetrics] = useState<any>({});
-  const [rateLimitStatus, setRateLimitStatus] = useState<any>({});
-  const [lastFailedRequest, setLastFailedRequest] = useState<(() => Promise<any>) | null>(null);
+  const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetrics>({
+    averageResponseTime: 0,
+    cacheHitRate: 0,
+    totalRequests: 0,
+    successRate: 1,
+    totalCost: 0,
+    circuitBreakerState: 'CLOSED'
+  });
+  const [rateLimitStatus, setRateLimitStatus] = useState<RateLimitStatus>({
+    requestsRemaining: 50,
+    resetTime: new Date(),
+    limit: 50,
+    isLimited: false
+  });
+  const [lastFailedRequest, setLastFailedRequest] = useState<(() => Promise<unknown>) | null>(null);
 
-  // Initialize AI Service
+  // Enhanced error handling state
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(ConnectionStatus.CONNECTED);
+  const [isReconnecting, setIsReconnecting] = useState(false);
+  const [lastError, setLastError] = useState<EnhancedError | null>(null);
+  const [errorHistory, setErrorHistory] = useState<EnhancedError[]>([]);
+
+  // Token management state
+  const [tokenUsageMetrics, setTokenUsageMetrics] = useState<TokenUsageMetrics>({
+    dailyTokens: 0,
+    dailyLimit: 0,
+    dailyPercentage: 0,
+    dailyCost: 0,
+    weeklyTokens: 0,
+    weeklyLimit: 0,
+    weeklyPercentage: 0,
+    weeklyCost: 0,
+    monthlyTokens: 0,
+    monthlyLimit: 0,
+    monthlyPercentage: 0,
+    monthlyCost: 0,
+    currentTier: 'free'
+  });
+
+  const [realTimeUsageStats, setRealTimeUsageStats] = useState<RealTimeUsageStats>({
+    sessionTokens: 0,
+    sessionCost: 0,
+    sessionDuration: 0,
+    todayTokens: 0,
+    todayCost: 0,
+    todayConversations: 0,
+    costProjections: {
+      daily: 0,
+      weekly: 0,
+      monthly: 0
+    }
+  });
+
+  const [usageAlerts, setUsageAlerts] = useState<UsageAlert[]>([]);
+  const [conversationUsages, setConversationUsages] = useState<ConversationUsage[]>([]);
+
+  const userId = 'current-user'; // Would come from auth context
+
+  // Enhanced error handling utility
+  const enhanceError = useCallback((error: unknown, context: string): EnhancedError => {
+    if (error instanceof AIServiceError) {
+      return {
+        type: 'service_error',
+        message: error.message,
+        code: error.code,
+        retryable: error.retryable,
+        severity: error.severity,
+        userMessage: error.userMessage
+      };
+    }
+
+    if (error instanceof RateLimitError) {
+      return {
+        type: 'rate_limit',
+        message: error.message,
+        code: error.code,
+        retryable: error.retryable,
+        severity: error.severity,
+        userMessage: error.userMessage,
+        retryAfter: error.resetTime
+      };
+    }
+
+    return {
+      type: 'unknown_error',
+      message: error instanceof Error ? error.message : 'An unexpected error occurred',
+      retryable: false,
+      userMessage: `${context} failed. Please try again or contact support.`
+    };
+  }, []);
+
+  // Initialize AI Service with enhanced error handling
   useEffect(() => {
     try {
       const service = new AIService({
-        // Configuration will be loaded from environment variables
         defaultModel: import.meta.env.VITE_AI_DEFAULT_MODEL || 'gpt-4o-mini',
         maxTokens: parseInt(import.meta.env.VITE_AI_MAX_TOKENS) || 4000,
         temperature: parseFloat(import.meta.env.VITE_AI_TEMPERATURE) || 0.7,
@@ -63,6 +260,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
         rateLimitTpm: parseInt(import.meta.env.VITE_AI_RATE_LIMIT_TPM) || 100000,
       });
       setAIService(service);
+      setConnectionStatus(ConnectionStatus.CONNECTED);
       
       // Initialize mock conversations for UI compatibility
       setConversations([
@@ -70,7 +268,12 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           id: 'conv-1',
           title: 'Risk Assessment Discussion',
           messages: [
-            { id: 'msg-1', content: 'Hello! I\'m ARIA, your AI Risk Intelligence Assistant. How can I help you today?', timestamp: new Date(), role: 'assistant' }
+            { 
+              id: 'msg-1', 
+              content: 'Hello! I\'m ARIA, your AI Risk Intelligence Assistant. How can I help you today?', 
+              timestamp: new Date(), 
+              role: 'assistant' 
+            }
           ],
           updatedAt: new Date(),
           agentType: 'risk_analyzer'
@@ -78,9 +281,61 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
       ]);
     } catch (error) {
       console.error('Failed to initialize AI Service:', error);
-      setError(error);
+      const enhancedError = enhanceError(error, 'AI Service initialization');
+      setError(enhancedError);
+      setLastError(enhancedError);
+      setConnectionStatus(ConnectionStatus.DISCONNECTED);
     }
-  }, []);
+  }, [enhanceError]);
+
+  // Update token usage metrics periodically
+  useEffect(() => {
+    const updateTokenMetrics = () => {
+      const userUsage = tokenManagementService.getUserUsage(userId);
+      const realTimeStats = tokenManagementService.getRealTimeStats(userId);
+      const alerts = tokenManagementService.getActiveAlerts(userId);
+
+      if (userUsage) {
+        setTokenUsageMetrics({
+          dailyTokens: userUsage.dailyTokens,
+          dailyLimit: userUsage.tier.quotas.dailyTokenLimit,
+          dailyPercentage: (userUsage.dailyTokens / userUsage.tier.quotas.dailyTokenLimit) * 100,
+          dailyCost: userUsage.dailyCost,
+          weeklyTokens: userUsage.weeklyTokens,
+          weeklyLimit: userUsage.tier.quotas.weeklyTokenLimit,
+          weeklyPercentage: (userUsage.weeklyTokens / userUsage.tier.quotas.weeklyTokenLimit) * 100,
+          weeklyCost: userUsage.weeklyCost,
+          monthlyTokens: userUsage.monthlyTokens,
+          monthlyLimit: userUsage.tier.quotas.monthlyTokenLimit,
+          monthlyPercentage: (userUsage.monthlyTokens / userUsage.tier.quotas.monthlyTokenLimit) * 100,
+          monthlyCost: userUsage.monthlyCost,
+          currentTier: userUsage.tier.name
+        });
+      }
+
+      setRealTimeUsageStats({
+        sessionTokens: realTimeStats.currentSession.tokens,
+        sessionCost: realTimeStats.currentSession.cost,
+        sessionDuration: realTimeStats.currentSession.duration,
+        todayTokens: realTimeStats.today.tokens,
+        todayCost: realTimeStats.today.cost,
+        todayConversations: realTimeStats.today.conversations,
+        costProjections: {
+          daily: realTimeStats.costProjection.dailyProjected,
+          weekly: realTimeStats.costProjection.weeklyProjected,
+          monthly: realTimeStats.costProjection.monthlyProjected
+        }
+      });
+
+      setUsageAlerts(alerts);
+    };
+
+    // Update immediately and then every 30 seconds
+    updateTokenMetrics();
+    const interval = setInterval(updateTokenMetrics, 30000);
+    
+    return () => clearInterval(interval);
+  }, [userId]);
 
   // Update metrics periodically
   useEffect(() => {
@@ -108,6 +363,22 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
         });
       } catch (error) {
         console.error('Error updating metrics:', error);
+        // Use default values if methods don't exist
+        setPerformanceMetrics({
+          averageResponseTime: 0,
+          cacheHitRate: 0.85,
+          totalRequests: 0,
+          successRate: 1,
+          totalCost: 0,
+          circuitBreakerState: 'CLOSED'
+        });
+
+        setRateLimitStatus({
+          requestsRemaining: 50,
+          resetTime: new Date(),
+          limit: 50,
+          isLimited: false
+        });
       }
     };
 
@@ -118,7 +389,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     return () => clearInterval(interval);
   }, [aiService]);
 
-  const handleError = useCallback((error: unknown, requestFn?: () => Promise<any>) => {
+  const handleError = useCallback((error: unknown, requestFn?: () => Promise<unknown>) => {
     console.error('AI Service Error:', error);
     
     if (error instanceof RateLimitError) {
@@ -150,9 +421,74 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     setIsLoading(false);
   }, []);
 
+  // Token management methods
+  const acknowledgeAlert = useCallback((alertId: string) => {
+    tokenManagementService.acknowledgeAlert(alertId);
+    setUsageAlerts(prev => prev.filter(alert => alert.id !== alertId));
+  }, []);
+
+  const generateUsageReport = useCallback((
+    period: 'daily' | 'weekly' | 'monthly', 
+    format: 'json' | 'csv' = 'json'
+  ): string => {
+    const report = tokenManagementService.generateUsageReport(userId, period);
+    if (format === 'json') {
+      return JSON.stringify(report, null, 2);
+    } else {
+      return tokenManagementService.exportUsageData(userId, 'csv', period);
+    }
+  }, [userId]);
+
+  const exportUsageData = useCallback((format: 'json' | 'csv') => {
+    const data = tokenManagementService.exportUsageData(userId, format, 'monthly');
+    const blob = new Blob([data], { 
+      type: format === 'json' ? 'application/json' : 'text/csv' 
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `riscura-usage-${new Date().toISOString().split('T')[0]}.${format}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, [userId]);
+
+  const upgradeTier = useCallback((tierName: string): boolean => {
+    const success = tokenManagementService.upgradeUserTier(userId, tierName);
+    if (success) {
+      // Refresh token metrics
+      const userUsage = tokenManagementService.getUserUsage(userId);
+      if (userUsage) {
+        setTokenUsageMetrics(prev => ({
+          ...prev,
+          currentTier: userUsage.tier.name,
+          dailyLimit: userUsage.tier.quotas.dailyTokenLimit,
+          weeklyLimit: userUsage.tier.quotas.weeklyTokenLimit,
+          monthlyLimit: userUsage.tier.quotas.monthlyTokenLimit,
+          dailyPercentage: (userUsage.dailyTokens / userUsage.tier.quotas.dailyTokenLimit) * 100,
+          weeklyPercentage: (userUsage.weeklyTokens / userUsage.tier.quotas.weeklyTokenLimit) * 100,
+          monthlyPercentage: (userUsage.monthlyTokens / userUsage.tier.quotas.monthlyTokenLimit) * 100
+        }));
+      }
+    }
+    return success;
+  }, [userId]);
+
+  const canMakeRequest = useCallback((): { allowed: boolean; reason?: string } => {
+    const result = tokenManagementService.canMakeRequest(userId);
+    return { allowed: result.allowed, reason: result.reason };
+  }, [userId]);
+
   const analyzeRisk = async (risk: Risk) => {
     if (!aiService) {
       throw new Error('AI Service not initialized. Please check your API configuration.');
+    }
+
+    // Check quota before making request
+    const quotaCheck = canMakeRequest();
+    if (!quotaCheck.allowed) {
+      throw new Error(quotaCheck.reason || 'Usage quota exceeded');
     }
 
     const requestFn = async () => {
@@ -222,7 +558,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     return requestFn();
   };
 
-  const generateContent = async (request: any) => {
+  const generateContent = async (request: ContentGenerationRequest) => {
     if (!aiService) {
       throw new Error('AI Service not initialized. Please check your API configuration.');
     }
@@ -250,7 +586,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     return requestFn();
   };
 
-  const explainContent = async (request: any) => {
+  const explainContent = async (request: ExplanationRequest) => {
     if (!aiService) {
       throw new Error('AI Service not initialized. Please check your API configuration.');
     }
@@ -278,7 +614,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     return requestFn();
   };
 
-  const sendMessage = async (content: string, attachments?: any) => {
+  const sendMessage = async (content: string, attachments?: MessageAttachment[]) => {
     if (!aiService) {
       throw new Error('AI Service not initialized. Please check your API configuration.');
     }
@@ -364,7 +700,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     }
   };
 
-  const startConversation = (agentType: string, context?: any) => {
+  const startConversation = (agentType: string, context?: Record<string, unknown>) => {
     const newConversation = {
       id: `conv-${Date.now()}`,
       title: `New ${agentType.replace('_', ' ')} conversation`,
@@ -387,13 +723,8 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
   };
 
   const getWelcomeMessage = (agentType: AgentType): string => {
-    const messages = {
-      risk_analyzer: "Hello! I'm your Risk Analyzer assistant. I can help you assess risks, analyze risk scenarios, and provide detailed risk insights. What risk would you like me to analyze?",
-      control_advisor: "Hi! I'm your Control Advisor. I specialize in recommending and designing effective controls for your risks. Share a risk with me and I'll suggest appropriate controls.",
-      compliance_expert: "Greetings! I'm your Compliance Expert. I can help you understand regulatory requirements, assess compliance gaps, and provide guidance on compliance frameworks. How can I assist you today?",
-      general_assistant: "Hello! I'm ARIA, your AI Risk Intelligence Assistant. I can help you with risk management, control design, compliance guidance, and general risk advisory. What would you like to discuss?"
-    };
-    return messages[agentType] || messages.general_assistant;
+    const agent = AI_AGENTS[agentType];
+    return agent?.welcomeMessage || AI_AGENTS.general_assistant.welcomeMessage;
   };
 
   const toggleARIA = () => {
@@ -436,7 +767,20 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     aiService,
     streamingResponse,
     clearError,
-    retryLastRequest
+    retryLastRequest,
+    tokenUsageMetrics,
+    realTimeUsageStats,
+    usageAlerts,
+    acknowledgeAlert,
+    generateUsageReport,
+    exportUsageData,
+    upgradeTier,
+    canMakeRequest,
+    conversationUsages,
+    connectionStatus,
+    isReconnecting,
+    lastError,
+    errorHistory
   };
 
   return (

@@ -67,15 +67,15 @@ export function useContentAnalysis(options: UseContentAnalysisOptions = {}) {
         case 'explain': {
           const explanation = await explainContent({
             content: selection.text,
-            context: {
-              domain: selection.context.contentType,
-              complexity: 'intermediate',
-              format: 'detailed',
-            },
+            complexity: 'detailed',
           });
-          content = explanation.summary;
-          confidence = explanation.confidence;
-          alternatives = explanation.relatedConcepts;
+          content = typeof explanation === 'string' ? explanation : 
+                   typeof explanation === 'object' && explanation && 'summary' in explanation ? 
+                   explanation.summary as string : 'Explanation not available';
+          confidence = typeof explanation === 'object' && explanation && 'confidence' in explanation ? 
+                      explanation.confidence as number : 0.8;
+          alternatives = typeof explanation === 'object' && explanation && 'relatedConcepts' in explanation ? 
+                        explanation.relatedConcepts as string[] : [];
           break;
         }
 
@@ -83,11 +83,15 @@ export function useContentAnalysis(options: UseContentAnalysisOptions = {}) {
         case 'regenerate': {
           content = await generateContent({
             type: getContentType(selection.context.contentType),
-            context: selection.text,
-            requirements: [`Improve the following ${selection.context.contentType} content`],
-            format: 'text',
-            length: 'medium',
-          });
+            context: { 
+              text: selection.text, 
+              contentType: selection.context.contentType,
+              purpose: action 
+            },
+            requirements: 'Improve and enhance the content quality',
+          }) as string;
+          alternatives = content.split('\n').filter(line => line.trim());
+          content = alternatives[0] || content;
           break;
         }
 
@@ -107,38 +111,29 @@ export function useContentAnalysis(options: UseContentAnalysisOptions = {}) {
         case 'compliance-check': {
           content = await generateContent({
             type: 'assessment_questionnaire',
-            context: `Compliance check for: ${selection.text}`,
-            requirements: ['Identify compliance requirements and gaps'],
-            format: 'structured',
-            length: 'detailed',
-          });
+            context: { text: selection.text, purpose: 'compliance-check' },
+            requirements: 'Identify compliance requirements and gaps',
+          }) as string;
           break;
         }
 
-        case 'analyze-risk': {
-          if (selection.context.contentType === 'risk') {
-            // This would need a proper Risk object, so we'll simulate
-            content = 'Risk analysis would be performed here with proper risk data';
-          } else {
+        case 'risk-analysis': {
+          if (generateContent) {
             content = await generateContent({
-              type: 'risk_scenario',
-              context: selection.text,
-              requirements: ['Identify potential risks'],
-              format: 'structured',
-              length: 'detailed',
-            });
+              type: 'risk_analysis',
+              context: { text: selection.text, purpose: 'risk-analysis' },
+              requirements: 'Identify potential risks',
+            }) as string;
           }
           break;
         }
 
-        case 'suggest-controls': {
+        case 'control-recommendations': {
           content = await generateContent({
-            type: 'control_procedure',
-            context: selection.text,
-            requirements: ['Suggest relevant controls and procedures'],
-            format: 'structured',
-            length: 'detailed',
-          });
+            type: 'control_design',
+            context: { text: selection.text, purpose: 'control-recommendations' },
+            requirements: 'Suggest relevant controls and procedures',
+          }) as string;
           break;
         }
 
