@@ -144,10 +144,12 @@ export const isValidUrl = (url: string): boolean => {
 };
 
 // ID generation
-export const generateId = (prefix?: string): string => {
-  const id = Math.random().toString(36).substring(2, 9);
+export function generateId(prefix?: string): string {
+  const timestamp = Date.now().toString(36);
+  const randomPart = Math.random().toString(36).substring(2, 8);
+  const id = `${timestamp}${randomPart}`;
   return prefix ? `${prefix}-${id}` : id;
-};
+}
 
 // Debounce utility
 export function debounce<T extends (...args: unknown[]) => unknown>(

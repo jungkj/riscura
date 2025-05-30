@@ -238,3 +238,86 @@ For technical support or feature requests, contact the development team.
 ---
 
 *ARIA - Your AI Risk Intelligence Assistant is ready to help optimize your risk management processes.* 
+
+## 🚀 Quick Start
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd riscura
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure OpenAI Integration:**
+   Create a `.env.local` file in the root directory with your OpenAI configuration:
+   ```env
+   # OpenAI Configuration (Required for AI features)
+   VITE_OPENAI_API_KEY=your_openai_api_key_here
+   
+   # Optional OpenAI Configuration
+   VITE_OPENAI_ORGANIZATION=your_openai_organization_id
+   VITE_OPENAI_BASE_URL=https://api.openai.com/v1
+   
+   # AI Service Configuration
+   VITE_AI_DEFAULT_MODEL=gpt-4o-mini
+   VITE_AI_MAX_TOKENS=4000
+   VITE_AI_TEMPERATURE=0.7
+   VITE_AI_RATE_LIMIT_RPM=50
+   VITE_AI_RATE_LIMIT_TPM=100000
+   ```
+
+4. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open your browser and navigate to** `http://localhost:5173`
+
+## 🔑 OpenAI API Setup
+
+To use the AI-powered features in RISCURA, you need an OpenAI API key:
+
+1. **Get an OpenAI API key:**
+   - Visit [OpenAI's API platform](https://platform.openai.com/api-keys)
+   - Sign up or log in to your account
+   - Generate a new API key
+
+2. **Add the API key to your environment:**
+   - Copy the `.env.example` file to `.env.local`
+   - Replace `your_openai_api_key_here` with your actual API key
+   - Never commit your `.env.local` file to version control
+
+3. **Configure model preferences:**
+   - `gpt-4o-mini`: Recommended for development (cost-effective)
+   - `gpt-4o`: For production use (higher quality responses)
+   - `gpt-4-turbo`: Alternative high-quality option
+
+## 🤖 AI Features
+
+RISCURA includes comprehensive AI-powered features:
+
+### **ARIA AI Assistant**
+- **Risk Analysis**: Automated risk assessment and scoring
+- **Control Recommendations**: AI-suggested controls for identified risks
+- **Content Generation**: Automated documentation and report generation
+- **Conversational Interface**: Natural language interaction with different AI agents
+
+### **AI Agent Types**
+- **Risk Analyzer**: Specialized in risk assessment and analysis
+- **Control Advisor**: Expert in control design and implementation
+- **Compliance Expert**: Focused on regulatory compliance guidance
+- **General Assistant**: Multi-purpose risk management support
+
+### **Real-time Features**
+- **Streaming Responses**: Live AI responses for better user experience
+- **Usage Tracking**: Monitor API usage and costs
+- **Rate Limiting**: Built-in protection against API limits
+- **Error Handling**: Comprehensive error recovery and retry logic
+
+## 📊 Current Features
+
+### ✅ **Implemented Core Features** 
