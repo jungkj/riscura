@@ -2,205 +2,259 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
 import { 
   AlertTriangle, 
   TrendingUp, 
+  TrendingDown,
   Brain, 
   Eye, 
   Clock, 
-  Filter,
   RefreshCw,
   ChevronDown,
   ChevronRight,
   Target,
   Zap,
   AlertCircle,
-  CheckCircle
+  CheckCircle,
+  BarChart3,
+  Lightbulb,
+  MessageSquare,
+  Activity,
+  ArrowRight,
+  Sparkles,
+  Bot,
+  LineChart,
+  PieChart,
+  Users,
+  Shield
 } from 'lucide-react';
-import { 
-  ProactiveInsight, 
-  InsightPriority, 
-  ActionItem,
-  UserContext,
-  DashboardContext 
-} from '@/types/proactive-monitoring.types';
+import {
+  AreaChart,
+  Area,
+  LineChart as RechartsLineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  PieChart as RechartsPieChart,
+  Cell
+} from 'recharts';
 import { cn } from '@/lib/utils';
-import { ProactiveMonitoringService } from '@/services/ProactiveMonitoringService';
-
-// Mock interface for incomplete implementation
-interface MockServiceDependency {
-  // Placeholder for actual service implementation
-  [key: string]: unknown;
-}
+import { 
+  dashboardIntelligenceService,
+  type DashboardInsight,
+  type PredictiveAnalytics,
+  type SmartRecommendation,
+  type InteractiveAssistance,
+  type DashboardConfig,
+  type RealTimeUpdate
+} from '@/services/DashboardIntelligenceService';
+import type { Risk, Control } from '@/types';
 
 interface AIInsightsWidgetProps {
   userId: string;
-  context: DashboardContext;
-  refreshInterval?: number;
-  categories?: InsightCategory[];
-  maxInsights?: number;
-  showTrends?: boolean;
+  risks?: Risk[];
+  controls?: Control[];
   className?: string;
+  showPredictions?: boolean;
+  showRecommendations?: boolean;
+  maxInsights?: number;
+  refreshInterval?: number;
 }
 
-interface InsightCategory {
-  id: string;
+interface MetricData {
   name: string;
-  icon: React.ReactNode;
-  color: string;
-  enabled: boolean;
-}
-
-interface TrendData {
-  timestamp: Date;
   value: number;
+  change: number;
+  trend: 'up' | 'down' | 'stable';
   prediction?: number;
   confidence?: number;
 }
 
-const defaultCategories: InsightCategory[] = [
-  {
-    id: 'risk_alerts',
-    name: 'Risk Alerts',
-    icon: <AlertTriangle className="h-4 w-4" />,
-    color: 'bg-red-100 text-red-800',
-    enabled: true
-  },
-  {
-    id: 'compliance_gaps',
-    name: 'Compliance Gaps',
-    icon: <AlertCircle className="h-4 w-4" />,
-    color: 'bg-orange-100 text-orange-800',
-    enabled: true
-  },
-  {
-    id: 'optimization_opportunities',
-    name: 'Optimization',
-    icon: <Zap className="h-4 w-4" />,
-    color: 'bg-blue-100 text-blue-800',
-    enabled: true
-  },
-  {
-    id: 'emerging_threats',
-    name: 'Emerging Threats',
-    icon: <Target className="h-4 w-4" />,
-    color: 'bg-purple-100 text-purple-800',
-    enabled: true
-  },
-  {
-    id: 'process_improvements',
-    name: 'Process Improvements',
-    icon: <TrendingUp className="h-4 w-4" />,
-    color: 'bg-green-100 text-green-800',
-    enabled: true
-  }
-];
-
 export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
   userId,
-  context,
-  refreshInterval = 30000,
-  categories = defaultCategories,
-  maxInsights = 10,
-  showTrends = true,
-  className
+  risks = [],
+  controls = [],
+  className,
+  showPredictions = true,
+  showRecommendations = true,
+  maxInsights = 8,
+  refreshInterval = 30000
 }) => {
-  const [insights, setInsights] = useState<ProactiveInsight[]>([]);
+  const [insights, setInsights] = useState<DashboardInsight[]>([]);
+  const [predictions, setPredictions] = useState<PredictiveAnalytics[]>([]);
+  const [recommendations, setRecommendations] = useState<SmartRecommendation[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [activeTab, setActiveTab] = useState('insights');
   const [expandedInsights, setExpandedInsights] = useState<Set<string>>(new Set());
-  const [trendData, setTrendData] = useState<TrendData[]>([]);
+  const [metrics, setMetrics] = useState<MetricData[]>([]);
+  const [assistance, setAssistance] = useState<InteractiveAssistance | null>(null);
+  const [realtimeEnabled, setRealtimeEnabled] = useState(false);
 
-  // Fetch insights from proactive monitoring service
+  // Dashboard configuration
+  const config: DashboardConfig = {
+    userId,
+    organizationId: 'org-001',
+    preferences: {
+      insightTypes: ['critical_alert', 'trend_prediction', 'optimization', 'compliance_warning'],
+      refreshRate: refreshInterval,
+      notificationLevel: 'standard',
+      showPredictions,
+      enableInteractiveHelp: true
+    },
+    context: {
+      currentView: 'dashboard',
+      activeFilters: {},
+      timeRange: {
+        start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
+        end: new Date()
+      },
+      selectedEntities: []
+    }
+  };
+
+  // Fetch AI insights
   const fetchInsights = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
 
-      const monitoringService = new ProactiveMonitoringService(
-        // Dependencies would be injected here in real implementation
-        {} as MockServiceDependency, 
-        {} as MockServiceDependency, 
-        {} as MockServiceDependency, 
-        {} as MockServiceDependency, 
-        {} as MockServiceDependency, 
-        {} as MockServiceDependency, 
-        {} as MockServiceDependency
+      // Generate insights
+      const aiInsights = await dashboardIntelligenceService.generateDashboardInsights(
+        config,
+        risks,
+        controls
       );
-
-      const userContext: UserContext = {
-        userId,
-        organizationId: context.organizationId,
-        role: context.userRole,
-        permissions: context.permissions,
-        preferences: context.preferences as any, // Mock preferences
-        currentSession: {
-          sessionId: 'mock-session',
-          startTime: new Date(),
-          lastActivity: new Date(),
-          currentPage: context.currentView,
-          deviceInfo: {
-            type: 'desktop',
-            os: 'unknown',
-            browser: 'unknown',
-            screen_resolution: 'unknown',
-            network_type: 'unknown'
-          },
-          locationInfo: {
-            timezone: 'UTC',
-            country: 'unknown',
-            region: 'unknown', 
-            city: 'unknown',
-            ip_address: 'unknown'
-          }
-        },
-        workContext: {
-          active_risks: [],
-          recent_activities: [],
-          pending_tasks: [],
-          upcoming_deadlines: [],
-          collaboration_sessions: []
-        },
-        historicalBehavior: []
-      };
-
-      const insights = await monitoringService.generateProactiveInsights(userContext);
       
-      // Filter by category and limit
-      const filteredInsights = selectedCategory === 'all' 
-        ? insights 
-        : insights.filter(insight => insight.type === selectedCategory);
-      
-      const limitedInsights = filteredInsights.slice(0, maxInsights);
-      
-      setInsights(limitedInsights);
-      setLastUpdate(new Date());
+      setInsights(aiInsights.slice(0, maxInsights));
 
-      // Generate trend data for visualization
-      if (showTrends) {
-        const trends = generateTrendData(limitedInsights);
-        setTrendData(trends);
+      // Generate predictions if enabled
+      if (showPredictions) {
+        const mockMetrics = generateMockMetrics();
+        const aiPredictions = await dashboardIntelligenceService.generatePredictiveAnalytics(
+          mockMetrics,
+          config
+        );
+        setPredictions(aiPredictions);
       }
 
+      // Generate recommendations if enabled
+      if (showRecommendations) {
+        const aiRecommendations = await dashboardIntelligenceService.generateSmartRecommendations(
+          config,
+          aiInsights
+        );
+        setRecommendations(aiRecommendations);
+      }
+
+      // Update metrics
+      updateMetrics();
+      setLastUpdate(new Date());
+
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to fetch insights'));
+      setError(err instanceof Error ? err.message : 'Failed to fetch AI insights');
       console.error('Error fetching AI insights:', err);
     } finally {
       setLoading(false);
     }
-  }, [userId, context, selectedCategory, maxInsights, showTrends]);
+  }, [config, risks, controls, maxInsights, showPredictions, showRecommendations]);
 
-  // Auto-refresh insights
-  useEffect(() => {
-    fetchInsights();
+  // Start real-time updates
+  const startRealTimeUpdates = useCallback(() => {
+    dashboardIntelligenceService.startRealTimeUpdates(config, (update: RealTimeUpdate) => {
+      if (update.type === 'metric') {
+        updateMetrics();
+      } else if (update.type === 'insight') {
+        fetchInsights();
+      }
+    });
+    setRealtimeEnabled(true);
+  }, [config, fetchInsights]);
+
+  // Stop real-time updates
+  const stopRealTimeUpdates = useCallback(() => {
+    dashboardIntelligenceService.stopRealTimeUpdates();
+    setRealtimeEnabled(false);
+  }, []);
+
+  // Get interactive assistance
+  const getAssistance = useCallback(async (elementType: string, elementData: Record<string, unknown>) => {
+    try {
+      const assistanceData = await dashboardIntelligenceService.getInteractiveAssistance(
+        elementType,
+        elementData
+      );
+      setAssistance(assistanceData);
+    } catch (err) {
+      console.error('Error getting assistance:', err);
+    }
+  }, []);
+
+  // Update metrics with simulated data
+  const updateMetrics = () => {
+    const mockMetrics: MetricData[] = [
+      {
+        name: 'Risk Score',
+        value: 8.7,
+        change: 12.3,
+        trend: 'up',
+        prediction: 9.2,
+        confidence: 0.85
+      },
+      {
+        name: 'Compliance',
+        value: 94.2,
+        change: -2.1,
+        trend: 'down',
+        prediction: 92.8,
+        confidence: 0.78
+      },
+      {
+        name: 'Incidents',
+        value: 3,
+        change: -15.8,
+        trend: 'down',
+        prediction: 2,
+        confidence: 0.72
+      },
+      {
+        name: 'Controls Active',
+        value: 89,
+        change: 5.4,
+        trend: 'up',
+        prediction: 92,
+        confidence: 0.81
+      }
+    ];
+    setMetrics(mockMetrics);
+  };
+
+  // Generate mock metrics for predictions
+  const generateMockMetrics = () => {
+    const metrics: Record<string, number[]> = {};
     
-    const interval = setInterval(fetchInsights, refreshInterval);
-    return () => clearInterval(interval);
-  }, [fetchInsights, refreshInterval]);
+    // Generate 30 days of mock data for each metric
+    ['riskScore', 'complianceScore', 'incidentCount', 'controlsActive'].forEach(metric => {
+      metrics[metric] = Array.from({ length: 30 }, (_, i) => {
+        const base = metric === 'complianceScore' ? 90 : 10;
+        const variance = base * 0.1;
+        return base + (Math.random() - 0.5) * variance;
+      });
+    });
+    
+    return metrics;
+  };
 
-  // Handle insight expansion
+  // Toggle insight expansion
   const toggleInsightExpansion = (insightId: string) => {
     const newExpanded = new Set(expandedInsights);
     if (newExpanded.has(insightId)) {
@@ -211,96 +265,70 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
     setExpandedInsights(newExpanded);
   };
 
-  // Handle action execution
-  const executeAction = async (insight: ProactiveInsight, action: ActionItem) => {
-    try {
-      console.log(`Executing action: ${action.title} for insight: ${insight.title}`);
-      
-      // In real implementation, this would call the appropriate service
-      // For now, we'll just mark the action as completed
-      
-      // Update insight status
-      const updatedInsights = insights.map(i => 
-        i.id === insight.id 
-          ? { ...i, status: 'acknowledged' as const }
-          : i
-      );
-      setInsights(updatedInsights);
+  // Auto-refresh insights
+  useEffect(() => {
+    fetchInsights();
+    
+    const interval = setInterval(fetchInsights, refreshInterval);
+    return () => clearInterval(interval);
+  }, [fetchInsights, refreshInterval]);
 
-    } catch (err) {
-      console.error('Error executing action:', err);
+  const getImpactColor = (impact: string) => {
+    switch (impact) {
+      case 'critical': return 'text-red-600 bg-red-50 border-red-200';
+      case 'high': return 'text-orange-600 bg-orange-50 border-orange-200';
+      case 'medium': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+      case 'low': return 'text-blue-600 bg-blue-50 border-blue-200';
+      default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
   };
 
-  // Generate mock trend data for visualization
-  const generateTrendData = (insights: ProactiveInsight[]): TrendData[] => {
-    const now = new Date();
-    const data: TrendData[] = [];
-    
-    for (let i = 29; i >= 0; i--) {
-      const timestamp = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
-      const baseValue = 50 + Math.sin(i / 5) * 20;
-      const noise = (Math.random() - 0.5) * 10;
-      
-      data.push({
-        timestamp,
-        value: Math.max(0, Math.min(100, baseValue + noise)),
-        prediction: i < 7 ? baseValue + 5 : undefined,
-        confidence: i < 7 ? 0.85 : undefined
-      });
+  const getImpactIcon = (impact: string) => {
+    switch (impact) {
+      case 'critical': return <AlertTriangle className="h-4 w-4" />;
+      case 'high': return <AlertCircle className="h-4 w-4" />;
+      case 'medium': return <Eye className="h-4 w-4" />;
+      case 'low': return <CheckCircle className="h-4 w-4" />;
+      default: return <Activity className="h-4 w-4" />;
     }
-    
-    return data;
   };
 
-  // Get priority icon and color
-  const getPriorityDisplay = (priority: InsightPriority) => {
-    const displays = {
-      critical: { icon: AlertTriangle, color: 'text-red-600', bg: 'bg-red-50' },
-      high: { icon: AlertCircle, color: 'text-orange-600', bg: 'bg-orange-50' },
-      medium: { icon: Eye, color: 'text-yellow-600', bg: 'bg-yellow-50' },
-      low: { icon: CheckCircle, color: 'text-blue-600', bg: 'bg-blue-50' },
-      info: { icon: CheckCircle, color: 'text-gray-600', bg: 'bg-gray-50' }
-    };
-    
-    return displays[priority] || displays.info;
+  const getTrendIcon = (trend: string) => {
+    switch (trend) {
+      case 'up': return <TrendingUp className="h-4 w-4 text-red-500" />;
+      case 'down': return <TrendingDown className="h-4 w-4 text-green-500" />;
+      default: return <Activity className="h-4 w-4 text-gray-500" />;
+    }
   };
 
-  // Get category display info
-  const getCategoryDisplay = (type: string) => {
-    const category = categories.find(c => c.id === type);
-    return category || {
-      id: type,
-      name: type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-      icon: <Brain className="h-4 w-4" />,
-      color: 'bg-gray-100 text-gray-800',
-      enabled: true
-    };
+  const preparePredictionChartData = (prediction: PredictiveAnalytics) => {
+    return prediction.chartData.map(point => ({
+      date: point.timestamp.toLocaleDateString(),
+      actual: point.actual,
+      predicted: point.predicted,
+      upperBound: point.upperBound,
+      lowerBound: point.lowerBound
+    }));
   };
 
-  if (error) {
+  if (loading && insights.length === 0) {
     return (
       <Card className={cn("w-full", className)}>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Brain className="h-5 w-5" />
-            AI Insights
+            <Brain className="h-5 w-5 text-indigo-600 animate-pulse" />
+            AI Intelligence Loading...
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center gap-2 text-red-600">
-            <AlertTriangle className="h-4 w-4" />
-            <span>Failed to load insights: {error.message}</span>
+          <div className="space-y-3">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="animate-pulse">
+                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+              </div>
+            ))}
           </div>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={fetchInsights}
-            className="mt-2"
-          >
-            <RefreshCw className="h-4 w-4 mr-1" />
-            Retry
-          </Button>
         </CardContent>
       </Card>
     );
@@ -311,255 +339,359 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <Brain className="h-5 w-5 text-blue-600" />
-            AI Insights
-            {loading && <RefreshCw className="h-4 w-4 animate-spin text-gray-400" />}
+            <Brain className="h-5 w-5 text-indigo-600" />
+            AI Intelligence Hub
+            <Badge variant="outline" className="ml-2">
+              <Sparkles className="h-3 w-3 mr-1" />
+              Live
+            </Badge>
           </CardTitle>
-          
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1 text-xs text-gray-500">
-              <Clock className="h-3 w-3" />
-              Updated {new Date(lastUpdate).toLocaleTimeString()}
-            </div>
-            
             <Button
               variant="ghost"
               size="sm"
-              onClick={fetchInsights}
-              disabled={loading}
+              onClick={realtimeEnabled ? stopRealTimeUpdates : startRealTimeUpdates}
             >
+              {realtimeEnabled ? (
+                <>
+                  <Activity className="h-4 w-4 mr-1 text-green-500" />
+                  Live
+                </>
+              ) : (
+                <>
+                  <Activity className="h-4 w-4 mr-1 text-gray-400" />
+                  Start Live
+                </>
+              )}
+            </Button>
+            <Button variant="ghost" size="sm" onClick={fetchInsights} disabled={loading}>
               <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
             </Button>
           </div>
         </div>
-        
-        {/* Category Filter */}
-        <div className="flex items-center gap-2 mt-2">
-          <Filter className="h-4 w-4 text-gray-500" />
-          <div className="flex flex-wrap gap-1">
-            <Button
-              variant={selectedCategory === 'all' ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSelectedCategory('all')}
-              className="h-6 text-xs"
-            >
-              All
-            </Button>
-            {categories.filter(c => c.enabled).map(category => (
-              <Button
-                key={category.id}
-                variant={selectedCategory === category.id ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectedCategory(category.id)}
-                className="h-6 text-xs"
-              >
-                {category.icon}
-                <span className="ml-1">{category.name}</span>
-              </Button>
-            ))}
-          </div>
-        </div>
+        {lastUpdate && (
+          <p className="text-xs text-gray-500">
+            Last updated: {lastUpdate.toLocaleTimeString()}
+          </p>
+        )}
       </CardHeader>
 
-      <CardContent className="pt-0">
-        {loading && insights.length === 0 ? (
-          <div className="flex items-center justify-center py-8">
-            <div className="text-center">
-              <RefreshCw className="h-8 w-8 animate-spin text-gray-400 mx-auto mb-2" />
-              <p className="text-sm text-gray-500">Loading AI insights...</p>
-            </div>
-          </div>
-        ) : insights.length === 0 ? (
-          <div className="flex items-center justify-center py-8">
-            <div className="text-center">
-              <CheckCircle className="h-8 w-8 text-green-500 mx-auto mb-2" />
-              <p className="text-sm text-gray-500">No insights available</p>
-              <p className="text-xs text-gray-400 mt-1">Everything looks good!</p>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {insights.map(insight => {
-              const priorityDisplay = getPriorityDisplay(insight.priority);
-              const categoryDisplay = getCategoryDisplay(insight.type);
-              const isExpanded = expandedInsights.has(insight.id);
-              const PriorityIcon = priorityDisplay.icon;
+      <CardContent className="space-y-4">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="insights" className="text-xs">
+              Insights ({insights.length})
+            </TabsTrigger>
+            <TabsTrigger value="predictions" className="text-xs">
+              Predictions
+            </TabsTrigger>
+            <TabsTrigger value="recommendations" className="text-xs">
+              Recommendations
+            </TabsTrigger>
+            <TabsTrigger value="metrics" className="text-xs">
+              Live Metrics
+            </TabsTrigger>
+          </TabsList>
 
-              return (
-                <div
-                  key={insight.id}
-                  className={cn(
-                    "border rounded-lg p-3 transition-all duration-200",
-                    priorityDisplay.bg,
-                    "hover:shadow-md"
-                  )}
-                >
-                  {/* Header */}
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-start gap-2 flex-1">
-                      <PriorityIcon className={cn("h-4 w-4 mt-0.5", priorityDisplay.color)} />
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-sm text-gray-900 leading-tight">
-                          {insight.title}
-                        </h4>
-                        <p className="text-xs text-gray-600 mt-1">
-                          {insight.description}
-                        </p>
+          {/* Insights Tab */}
+          <TabsContent value="insights" className="space-y-3 mt-4">
+            {error && (
+              <div className="text-red-600 text-sm p-2 bg-red-50 rounded">
+                {error}
+              </div>
+            )}
+            
+            {insights.length > 0 ? (
+              <div className="space-y-3 max-h-96 overflow-y-auto">
+                {insights.map((insight) => (
+                  <div
+                    key={insight.id}
+                    className={cn(
+                      "border rounded-lg p-3 hover:shadow-sm transition-shadow cursor-pointer",
+                      getImpactColor(insight.impact)
+                    )}
+                    onClick={() => toggleInsightExpansion(insight.id)}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          {getImpactIcon(insight.impact)}
+                          <h4 className="font-medium text-sm">{insight.title}</h4>
+                          <Badge variant="outline" className="text-xs">
+                            {(insight.confidence * 100).toFixed(0)}%
+                          </Badge>
+                        </div>
+                        <p className="text-xs text-gray-600 mb-2">{insight.description}</p>
+                        
+                        {expandedInsights.has(insight.id) && (
+                          <div className="space-y-2 mt-3 pt-3 border-t border-gray-200">
+                            {insight.recommendations.length > 0 && (
+                              <div>
+                                <h5 className="text-xs font-medium mb-1">Recommendations:</h5>
+                                <ul className="text-xs space-y-1">
+                                  {insight.recommendations.map((rec, index) => (
+                                    <li key={index} className="flex items-start gap-1">
+                                      <ArrowRight className="h-3 w-3 mt-0.5 flex-shrink-0" />
+                                      {rec}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                            
+                            <div className="flex items-center gap-2 pt-2">
+                              <Button size="sm" variant="outline" className="text-xs">
+                                <Eye className="h-3 w-3 mr-1" />
+                                Investigate
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                variant="outline" 
+                                className="text-xs"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  getAssistance('insight', { insight });
+                                }}
+                              >
+                                <MessageSquare className="h-3 w-3 mr-1" />
+                                Ask AI
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="flex items-center gap-1">
+                        <Badge variant="secondary" className="text-xs">
+                          {insight.source.replace('_', ' ')}
+                        </Badge>
+                        {expandedInsights.has(insight.id) ? (
+                          <ChevronDown className="h-4 w-4" />
+                        ) : (
+                          <ChevronRight className="h-4 w-4" />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                <Bot className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+                <p className="text-sm">No insights available yet.</p>
+                <p className="text-xs">AI is analyzing your data...</p>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* Predictions Tab */}
+          <TabsContent value="predictions" className="space-y-3 mt-4">
+            {predictions.length > 0 ? (
+              <div className="space-y-4 max-h-96 overflow-y-auto">
+                {predictions.map((prediction) => (
+                  <div key={prediction.id} className="border rounded-lg p-3">
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="font-medium text-sm">{prediction.metric}</h4>
+                      <Badge variant="outline" className="text-xs">
+                        {(prediction.confidence * 100).toFixed(0)}% confidence
+                      </Badge>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4 mb-3">
+                      <div>
+                        <p className="text-xs text-gray-500">Current</p>
+                        <p className="font-semibold">{prediction.currentValue.toFixed(1)}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Predicted ({prediction.predictionHorizon})</p>
+                        <p className="font-semibold">{prediction.predictedValue.toFixed(1)}</p>
                       </div>
                     </div>
                     
-                    <div className="flex items-center gap-1 ml-2">
-                      <Badge className={cn("text-xs", categoryDisplay.color)}>
-                        {categoryDisplay.icon}
-                        <span className="ml-1">{categoryDisplay.name}</span>
-                      </Badge>
-                      
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => toggleInsightExpansion(insight.id)}
-                        className="h-6 w-6 p-0"
-                      >
-                        {isExpanded ? (
-                          <ChevronDown className="h-3 w-3" />
-                        ) : (
-                          <ChevronRight className="h-3 w-3" />
-                        )}
+                    <div className="h-32 mb-3">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={preparePredictionChartData(prediction)}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="date" tick={{ fontSize: 10 }} />
+                          <YAxis tick={{ fontSize: 10 }} />
+                          <Tooltip />
+                          <Area 
+                            type="monotone" 
+                            dataKey="actual" 
+                            stroke="#8884d8" 
+                            fill="#8884d8" 
+                            fillOpacity={0.3}
+                            name="Actual"
+                          />
+                          <Area 
+                            type="monotone" 
+                            dataKey="predicted" 
+                            stroke="#ff7c7c" 
+                            fill="#ff7c7c" 
+                            fillOpacity={0.3}
+                            strokeDasharray="5 5"
+                            name="Predicted"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </div>
+                    
+                    <Badge className={cn(
+                      "text-xs",
+                      prediction.riskLevel === 'high' ? 'bg-red-100 text-red-800' :
+                      prediction.riskLevel === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-green-100 text-green-800'
+                    )}>
+                      {prediction.riskLevel} risk
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            ) : showPredictions ? (
+              <div className="text-center py-8 text-gray-500">
+                <LineChart className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+                <p className="text-sm">Generating predictions...</p>
+                <p className="text-xs">AI is analyzing trends</p>
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                <p className="text-sm">Predictions disabled</p>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* Recommendations Tab */}
+          <TabsContent value="recommendations" className="space-y-3 mt-4">
+            {recommendations.length > 0 ? (
+              <div className="space-y-3 max-h-96 overflow-y-auto">
+                {recommendations.map((rec) => (
+                  <div key={rec.id} className="border rounded-lg p-3 hover:shadow-sm transition-shadow">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-medium text-sm">{rec.title}</h4>
+                      <div className="flex items-center gap-1">
+                        <Badge variant="outline" className="text-xs">{rec.effort} effort</Badge>
+                        <Badge variant="secondary" className="text-xs">P{rec.priority}</Badge>
+                      </div>
+                    </div>
+                    
+                    <p className="text-xs text-gray-600 mb-2">{rec.description}</p>
+                    
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div>
+                        <span className="text-gray-500">Timeline:</span>
+                        <span className="ml-1">{rec.timeline}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-500">Type:</span>
+                        <span className="ml-1">{rec.type.replace('_', ' ')}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-2 mt-3">
+                      <Button size="sm" variant="outline" className="text-xs">
+                        <CheckCircle className="h-3 w-3 mr-1" />
+                        Accept
+                      </Button>
+                      <Button size="sm" variant="outline" className="text-xs">
+                        <Lightbulb className="h-3 w-3 mr-1" />
+                        Learn More
                       </Button>
                     </div>
                   </div>
+                ))}
+              </div>
+            ) : showRecommendations ? (
+              <div className="text-center py-8 text-gray-500">
+                <Lightbulb className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+                <p className="text-sm">Generating recommendations...</p>
+                <p className="text-xs">AI is analyzing opportunities</p>
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                <p className="text-sm">Recommendations disabled</p>
+              </div>
+            )}
+          </TabsContent>
 
-                  {/* AI Insight */}
-                  <div className="flex items-start gap-2 mb-2">
-                    <Brain className="h-3 w-3 text-blue-500 mt-0.5 flex-shrink-0" />
-                    <p className="text-xs text-gray-700 italic">
-                      {insight.aiInsight || 'AI-generated insight not available'}
-                    </p>
+          {/* Live Metrics Tab */}
+          <TabsContent value="metrics" className="space-y-3 mt-4">
+            <div className="grid grid-cols-2 gap-3">
+              {metrics.map((metric) => (
+                <div key={metric.name} className="border rounded-lg p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-xs font-medium">{metric.name}</h4>
+                    {getTrendIcon(metric.trend)}
                   </div>
-
-                  {/* Confidence & Priority */}
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="flex items-center gap-1">
-                      <span className="text-xs text-gray-500">Confidence:</span>
-                      <div className="w-16 h-1.5 bg-gray-200 rounded-full">
-                        <div 
-                          className="h-full bg-blue-500 rounded-full"
-                          style={{ width: `${insight.confidence}%` }}
-                        />
-                      </div>
-                      <span className="text-xs text-gray-500">{insight.confidence}%</span>
+                  
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-lg font-bold">{metric.value}</span>
+                      <span className={cn(
+                        "text-xs",
+                        metric.change > 0 ? "text-red-600" : metric.change < 0 ? "text-green-600" : "text-gray-600"
+                      )}>
+                        {metric.change > 0 ? '+' : ''}{metric.change.toFixed(1)}%
+                      </span>
                     </div>
                     
-                    <Badge 
-                      variant="outline" 
-                      className={cn("text-xs", priorityDisplay.color)}
-                    >
-                      {insight.priority.toUpperCase()}
-                    </Badge>
-                  </div>
-
-                  {/* Action Items */}
-                  {insight.actionItems && insight.actionItems.length > 0 && (
-                    <div className="flex flex-wrap gap-1">
-                      {insight.actionItems.slice(0, isExpanded ? undefined : 2).map(action => (
-                        <Button
-                          key={action.id}
-                          variant="outline"
-                          size="sm"
-                          onClick={() => executeAction(insight, action)}
-                          className="h-6 text-xs"
-                        >
-                          {action.title}
-                        </Button>
-                      ))}
-                      {!isExpanded && insight.actionItems.length > 2 && (
-                        <span className="text-xs text-gray-500 self-center">
-                          +{insight.actionItems.length - 2} more
-                        </span>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Expanded Details */}
-                  {isExpanded && (
-                    <div className="mt-3 pt-3 border-t border-gray-200 space-y-2">
-                      {/* Detailed Context */}
-                      {insight.details?.context && (
-                        <div>
-                          <h5 className="text-xs font-medium text-gray-900 mb-1">Context</h5>
-                          <p className="text-xs text-gray-600">{insight.details.context}</p>
-                        </div>
-                      )}
-
-                      {/* Evidence */}
-                      {insight.details?.evidence && insight.details.evidence.length > 0 && (
-                        <div>
-                          <h5 className="text-xs font-medium text-gray-900 mb-1">Evidence</h5>
-                          <ul className="space-y-1">
-                            {insight.details.evidence.map((evidence, index) => (
-                              <li key={index} className="text-xs text-gray-600 flex items-start gap-1">
-                                <span className="text-gray-400">•</span>
-                                <span>{evidence.description}: {evidence.value} (threshold: {evidence.threshold})</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-
-                      {/* Recommendations */}
-                      {insight.details?.prediction?.assumptions && insight.details.prediction.assumptions.length > 0 && (
-                        <div>
-                          <h5 className="text-xs font-medium text-gray-900 mb-1">Recommendations</h5>
-                          <ul className="space-y-1">
-                            {insight.details.prediction.assumptions.map((assumption, index) => (
-                              <li key={index} className="text-xs text-gray-600 flex items-start gap-1">
-                                <span className="text-gray-400">→</span>
-                                <span>{assumption}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-
-                      {/* Metadata */}
-                      <div className="flex items-center gap-4 text-xs text-gray-500">
-                        <span>Source: {insight.source.system}</span>
-                        <span>Created: {insight.createdAt.toLocaleString()}</span>
-                        {insight.deadline && (
-                          <span className="text-orange-600">
-                            Due: {insight.deadline.toLocaleDateString()}
-                          </span>
-                        )}
+                    {metric.prediction && (
+                      <div className="text-xs text-gray-500">
+                        Predicted: {metric.prediction} ({(metric.confidence! * 100).toFixed(0)}%)
                       </div>
-                    </div>
-                  )}
+                    )}
+                    
+                    {metric.confidence && (
+                      <Progress value={metric.confidence * 100} className="h-1" />
+                    )}
+                  </div>
                 </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Trend Visualization */}
-        {showTrends && trendData.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-gray-200">
-            <h4 className="text-sm font-medium text-gray-900 mb-2 flex items-center gap-2">
-              <TrendingUp className="h-4 w-4" />
-              Insight Trends (30 days)
-            </h4>
-            <div className="h-20 bg-gray-50 rounded-md flex items-end justify-between px-2 py-2">
-              {trendData.map((point, index) => (
-                <div
-                  key={index}
-                  className="w-1 bg-blue-500 rounded-t"
-                  style={{ height: `${(point.value / 100) * 100}%` }}
-                  title={`${point.timestamp.toLocaleDateString()}: ${point.value.toFixed(1)}`}
-                />
               ))}
             </div>
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
-              <span>30 days ago</span>
-              <span>Today</span>
+          </TabsContent>
+        </Tabs>
+
+        {/* Interactive Assistance Modal/Panel */}
+        {assistance && (
+          <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="font-medium text-sm flex items-center gap-2">
+                <Bot className="h-4 w-4 text-blue-600" />
+                AI Assistant
+              </h4>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setAssistance(null)}
+              >
+                ×
+              </Button>
             </div>
+            
+            {assistance.suggestions.length > 0 && (
+              <div className="space-y-1">
+                {assistance.suggestions.slice(0, 3).map((suggestion) => (
+                  <p key={suggestion.id} className="text-xs text-blue-700">
+                    • {suggestion.text}
+                  </p>
+                ))}
+              </div>
+            )}
+            
+            {assistance.quickActions.length > 0 && (
+              <div className="flex gap-2 mt-3">
+                {assistance.quickActions.slice(0, 3).map((action) => (
+                  <Button
+                    key={action.id}
+                    size="sm"
+                    variant="outline"
+                    className="text-xs"
+                    disabled={!action.enabled}
+                  >
+                    {action.label}
+                  </Button>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </CardContent>

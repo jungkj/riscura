@@ -9,19 +9,32 @@ import {
   AlertTriangle,
   TrendingUp,
   FileText,
-  Settings
+  Settings,
+  BarChart3,
+  Brain,
+  Target,
+  Eye,
+  Lightbulb
 } from 'lucide-react';
 
 import { ARIAChat } from '@/components/ai/ARIAChat';
 import { ARIAWidget } from '@/components/ai/ARIAWidget';
+import { TokenUsageAnalytics } from '@/components/ai/TokenUsageAnalytics';
 import { useARIAChat, RiskContext } from '@/hooks/useARIAChat';
 import { useAI } from '@/context/AIContext';
+import { Risk, Control } from '@/types';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { RiskAnalysisAI } from '@/components/ai/RiskAnalysisAI';
+import { ControlRecommendationsAI } from '@/components/ai/ControlRecommendationsAI';
+import { ComplianceIntelligenceAI } from '@/components/ai/ComplianceIntelligenceAI';
+import { ProactiveIntelligenceAI } from '@/components/ai/ProactiveIntelligenceAI';
+import { ComplianceAssessment, ComplianceRoadmap, AuditPreparation } from '@/services/ComplianceAIService';
 
 interface FeatureCardProps {
   icon: React.ReactNode;
@@ -64,11 +77,123 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   </Card>
 );
 
+// Mock data for demonstration
+const mockRisks: Risk[] = [
+  {
+    id: 'risk-1',
+    title: 'Data Breach Risk',
+    description: 'Risk of unauthorized access to sensitive customer data',
+    category: 'operational',
+    riskScore: 18,
+    impact: 'high',
+    likelihood: 'medium',
+    owner: 'CISO',
+    status: 'active',
+    lastAssessed: new Date('2024-01-15'),
+    nextReview: new Date('2024-04-15'),
+    linkedControls: ['ctrl-1', 'ctrl-2'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-15')
+  },
+  {
+    id: 'risk-2', 
+    title: 'Compliance Violation Risk',
+    description: 'Risk of failing to meet regulatory requirements',
+    category: 'compliance',
+    riskScore: 15,
+    impact: 'high',
+    likelihood: 'low',
+    owner: 'Compliance Officer',
+    status: 'active',
+    lastAssessed: new Date('2024-01-10'),
+    nextReview: new Date('2024-04-10'),
+    linkedControls: ['ctrl-3'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-10')
+  },
+  {
+    id: 'risk-3',
+    title: 'System Outage Risk',
+    description: 'Risk of critical system unavailability',
+    category: 'operational',
+    riskScore: 12,
+    impact: 'medium',
+    likelihood: 'medium',
+    owner: 'IT Manager',
+    status: 'active',
+    lastAssessed: new Date('2024-01-20'),
+    nextReview: new Date('2024-04-20'),
+    linkedControls: ['ctrl-4'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-20')
+  }
+];
+
+const mockControls: Control[] = [
+  {
+    id: 'ctrl-1',
+    title: 'Data Encryption',
+    description: 'Encryption of data at rest and in transit',
+    type: 'preventive',
+    effectiveness: 85,
+    status: 'active',
+    owner: 'IT Security Team',
+    lastTested: new Date('2024-01-15'),
+    nextTest: new Date('2024-04-15'),
+    linkedRisks: ['risk-1'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-15')
+  },
+  {
+    id: 'ctrl-2',
+    title: 'Access Control',
+    description: 'Role-based access control system',
+    type: 'preventive',
+    effectiveness: 78,
+    status: 'active',
+    owner: 'IT Security Team',
+    lastTested: new Date('2024-01-10'),
+    nextTest: new Date('2024-04-10'),
+    linkedRisks: ['risk-1'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-10')
+  },
+  {
+    id: 'ctrl-3',
+    title: 'Compliance Monitoring',
+    description: 'Automated compliance monitoring and reporting',
+    type: 'detective',
+    effectiveness: 92,
+    status: 'active',
+    owner: 'Compliance Team',
+    lastTested: new Date('2024-01-20'),
+    nextTest: new Date('2024-04-20'),
+    linkedRisks: ['risk-2'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-20')
+  },
+  {
+    id: 'ctrl-4',
+    title: 'System Monitoring',
+    description: 'Real-time system health monitoring',
+    type: 'detective',
+    effectiveness: 88,
+    status: 'active',
+    owner: 'IT Operations',
+    lastTested: new Date('2024-01-18'),
+    nextTest: new Date('2024-04-18'),
+    linkedRisks: ['risk-3'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-18')
+  }
+];
+
 const ARIAPage: React.FC = () => {
   const location = useLocation();
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [selectedMode, setSelectedMode] = useState<'sidebar' | 'fullscreen'>('sidebar');
   const [initialContext, setInitialContext] = useState<RiskContext | undefined>();
+  const [activeTab, setActiveTab] = useState<'risk-analysis' | 'control-recommendations' | 'compliance-intelligence' | 'proactive-intelligence'>('risk-analysis');
 
   const { state: chatState, actions } = useARIAChat();
   const { 
@@ -95,6 +220,7 @@ const ARIAPage: React.FC = () => {
           data: { riskId, controlId },
         },
       });
+      setActiveTab('chat');
       setIsChatOpen(true);
     }
   }, [location]);
@@ -124,49 +250,71 @@ const ARIAPage: React.FC = () => {
     }
     
     setInitialContext(context);
+    setActiveTab('chat');
+    setIsChatOpen(true);
+  };
+
+  const handleStartConversation = () => {
+    setActiveTab('chat');
     setIsChatOpen(true);
   };
 
   const features = [
     {
-      icon: <AlertTriangle className="h-5 w-5 text-amber-500" />,
-      title: "Risk Analysis",
-      description: "Get AI-powered insights into risk assessment, likelihood, impact, and mitigation strategies.",
-      badge: "Popular",
-      onClick: () => handleFeatureClick('risk_analysis'),
+      icon: <Brain className="h-5 w-5" />,
+      title: 'Risk Analysis AI',
+      description: 'AI-powered risk assessment and quantification',
+      tab: 'risk-analysis' as typeof activeTab
     },
     {
-      icon: <Shield className="h-5 w-5 text-green-500" />,
-      title: "Control Design",
-      description: "Design effective controls with AI recommendations for implementation and testing.",
-      onClick: () => handleFeatureClick('control_design'),
+      icon: <Target className="h-5 w-5" />,
+      title: 'Control Recommendations',
+      description: 'Intelligent control design and optimization',
+      tab: 'control-recommendations' as typeof activeTab
     },
     {
-      icon: <FileText className="h-5 w-5 text-blue-500" />,
-      title: "Compliance Guidance",
-      description: "Navigate regulatory requirements and ensure compliance with expert AI assistance.",
-      onClick: () => handleFeatureClick('compliance'),
+      icon: <Shield className="h-5 w-5" />,
+      title: 'Compliance Intelligence',
+      description: 'Automated compliance gap analysis and roadmaps',
+      tab: 'compliance-intelligence' as typeof activeTab
     },
     {
-      icon: <TrendingUp className="h-5 w-5 text-purple-500" />,
-      title: "Risk Insights",
-      description: "Discover patterns and trends in your risk data with advanced analytics.",
-      badge: "New",
-      onClick: () => handleFeatureClick('insights'),
-    },
-    {
-      icon: <Zap className="h-5 w-5 text-orange-500" />,
-      title: "Quick Actions",
-      description: "Streamline common risk management tasks with AI-powered automation.",
-      onClick: () => handleFeatureClick('quick_actions'),
-    },
-    {
-      icon: <MessageSquare className="h-5 w-5 text-teal-500" />,
-      title: "Expert Consultation",
-      description: "Get expert advice on complex risk scenarios and regulatory questions.",
-      onClick: () => handleFeatureClick('consultation'),
-    },
+      icon: <Lightbulb className="h-5 w-5" />,
+      title: 'Proactive Intelligence',
+      description: 'Background AI monitoring and predictive insights',
+      tab: 'proactive-intelligence' as typeof activeTab
+    }
   ];
+
+  const handleAssessmentCompleted = (assessment: ComplianceAssessment) => {
+    console.log('Compliance assessment completed:', assessment);
+    // Handle assessment completion
+  };
+
+  const handleRoadmapGenerated = (roadmap: ComplianceRoadmap) => {
+    console.log('Compliance roadmap generated:', roadmap);
+    // Handle roadmap generation
+  };
+
+  const handleAuditPlanCreated = (plan: AuditPreparation) => {
+    console.log('Audit plan created:', plan);
+    // Handle audit plan creation
+  };
+
+  const handleInsightGenerated = (insight: unknown) => {
+    console.log('Proactive insight generated:', insight);
+    // Handle insight generation
+  };
+
+  const handleRecommendationAccepted = (recommendation: unknown) => {
+    console.log('Recommendation accepted:', recommendation);
+    // Handle recommendation acceptance
+  };
+
+  const handleNotificationRead = (notificationId: string) => {
+    console.log('Notification read:', notificationId);
+    // Handle notification read
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -196,10 +344,41 @@ const ARIAPage: React.FC = () => {
 
       <div className="container mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
+          {/* Main Content with Tabs */}
           <div className="lg:col-span-2 space-y-8">
-            {!isChatOpen ? (
-              <>
+            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as typeof activeTab)}>
+              <TabsList className="grid w-full grid-cols-6">
+                <TabsTrigger value="features" className="flex items-center gap-2">
+                  <Zap className="h-4 w-4" />
+                  Features
+                </TabsTrigger>
+                <TabsTrigger value="chat" className="flex items-center gap-2">
+                  <MessageSquare className="h-4 w-4" />
+                  Chat
+                </TabsTrigger>
+                <TabsTrigger value="analytics" className="flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4" />
+                  Token Analytics
+                </TabsTrigger>
+                <TabsTrigger value="risk-analysis" className="flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4" />
+                  Risk Analysis
+                </TabsTrigger>
+                <TabsTrigger value="control-recommendations" className="flex items-center gap-2">
+                  <Shield className="h-4 w-4" />
+                  Control Recommendations
+                </TabsTrigger>
+                <TabsTrigger value="compliance-intelligence" className="flex items-center gap-2">
+                  <FileText className="h-4 w-4" />
+                  Compliance Intelligence
+                </TabsTrigger>
+                <TabsTrigger value="proactive-intelligence" className="flex items-center gap-2">
+                  <Lightbulb className="h-4 w-4" />
+                  Proactive Intelligence
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="features" className="space-y-8">
                 {/* Welcome Section */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -220,7 +399,7 @@ const ARIAPage: React.FC = () => {
                     <CardContent>
                       <div className="flex gap-3">
                         <Button 
-                          onClick={() => setIsChatOpen(true)}
+                          onClick={handleStartConversation}
                           className="flex-1"
                         >
                           <MessageSquare className="h-4 w-4 mr-2" />
@@ -279,7 +458,7 @@ const ARIAPage: React.FC = () => {
                               key={conversation.id}
                               className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent cursor-pointer"
                               onClick={() => {
-                                // Load conversation context
+                                setActiveTab('chat');
                                 setIsChatOpen(true);
                               }}
                             >
@@ -299,23 +478,94 @@ const ARIAPage: React.FC = () => {
                     </Card>
                   </motion.div>
                 )}
-              </>
-            ) : (
-              /* Chat Interface */
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="h-[calc(100vh-12rem)]"
-              >
-                <ARIAChat
-                  isOpen={isChatOpen}
-                  onClose={() => setIsChatOpen(false)}
-                  initialContext={initialContext}
-                  mode={selectedMode}
-                  className="h-full"
-                />
-              </motion.div>
-            )}
+              </TabsContent>
+
+              <TabsContent value="chat">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="h-[calc(100vh-16rem)]"
+                >
+                  <ARIAChat
+                    isOpen={true}
+                    onClose={() => {
+                      setIsChatOpen(false);
+                      setActiveTab('features');
+                    }}
+                    initialContext={initialContext}
+                    mode={selectedMode}
+                    className="h-full"
+                  />
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="analytics">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <TokenUsageAnalytics />
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="risk-analysis">
+                <div className="space-y-6">
+                  <RiskAnalysisAI
+                    risks={mockRisks}
+                    controls={mockControls}
+                    onReportGenerated={(report) => {
+                      console.log('Risk analysis report generated:', report);
+                      // Handle report generation
+                    }}
+                    onRecommendationApplied={(recommendation) => {
+                      console.log('Recommendation applied:', recommendation);
+                      // Handle recommendation application
+                    }}
+                  />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="control-recommendations">
+                <div className="space-y-6">
+                  <ControlRecommendationsAI
+                    risks={mockRisks}
+                    existingControls={mockControls}
+                    onRecommendationAccepted={(recommendation) => {
+                      console.log('Control recommendation accepted:', recommendation);
+                      // Handle recommendation acceptance - could create new control
+                    }}
+                    onImplementationPlanGenerated={(plan) => {
+                      console.log('Implementation plan generated:', plan);
+                      // Handle implementation plan generation
+                    }}
+                  />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="compliance-intelligence">
+                <div className="space-y-6">
+                  <ComplianceIntelligenceAI
+                    risks={mockRisks}
+                    existingControls={mockControls}
+                    onAssessmentCompleted={handleAssessmentCompleted}
+                    onRoadmapGenerated={handleRoadmapGenerated}
+                    onAuditPlanCreated={handleAuditPlanCreated}
+                  />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="proactive-intelligence">
+                <div className="space-y-6">
+                  <ProactiveIntelligenceAI
+                    risks={mockRisks}
+                    controls={mockControls}
+                    onInsightGenerated={handleInsightGenerated}
+                    onRecommendationAccepted={handleRecommendationAccepted}
+                    onNotificationRead={handleNotificationRead}
+                  />
+                </div>
+              </TabsContent>
+            </Tabs>
           </div>
 
           {/* Sidebar */}

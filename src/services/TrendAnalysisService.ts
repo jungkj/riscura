@@ -15,6 +15,11 @@ import {
 import { Risk } from '@/types';
 import { generateId } from '@/lib/utils';
 
+// Import AI services for real integration
+import { AIService } from './AIService';
+import { RiskAnalysisAIService } from './RiskAnalysisAIService';
+import { ProactiveAIIntegrationService } from './ProactiveAIIntegrationService';
+
 interface RiskData {
   riskId: string;
   timestamp: Date;
@@ -119,6 +124,99 @@ interface TrendRecommendation {
   expectedOutcome: string;
   timeframe: string;
   confidence: number;
+}
+
+// Enhanced AI trend analysis interfaces
+interface AITrendAnalysisRequest {
+  entityId: string;
+  entityType: 'risk' | 'control' | 'process' | 'compliance';
+  timeSeriesData: TimeSeriesData[];
+  analysisType: 'prediction' | 'anomaly_detection' | 'pattern_recognition' | 'correlation_analysis';
+  timeHorizon: 'short_term' | 'medium_term' | 'long_term'; // 1-3 months, 3-12 months, 1+ years
+  confidence: number;
+  context: {
+    industry?: string;
+    organizationSize?: string;
+    riskCategory?: string;
+    historicalEvents?: unknown[];
+    externalFactors?: unknown[];
+  };
+}
+
+interface AITrendAnalysisResult {
+  analysis: TrendAnalysis;
+  predictions: TrendPrediction[];
+  anomalies: Anomaly[];
+  patterns: Pattern[];
+  insights: TrendInsight[];
+  confidence: number;
+  explanations: {
+    methodology: string;
+    keyFactors: string[];
+    limitations: string[];
+    recommendations: string[];
+  };
+  aiProcessingTime: number;
+  tokenUsage: {
+    prompt: number;
+    completion: number;
+    total: number;
+  };
+}
+
+interface IntelligentPatternRecognition {
+  patterns: Array<{
+    id: string;
+    type: 'cyclical' | 'seasonal' | 'trending' | 'volatile' | 'stable';
+    description: string;
+    confidence: number;
+    timeframe: string;
+    predictability: number;
+    riskLevel: 'low' | 'medium' | 'high';
+    actionable: boolean;
+    recommendations: string[];
+  }>;
+  correlations: Array<{
+    entityA: string;
+    entityB: string;
+    correlation: number;
+    significance: number;
+    causality: 'none' | 'potential' | 'strong';
+    explanation: string;
+  }>;
+  anomalies: Array<{
+    timestamp: Date;
+    value: number;
+    expected: number;
+    deviation: number;
+    severity: 'low' | 'medium' | 'high' | 'critical';
+    explanation: string;
+    actionRequired: boolean;
+  }>;
+}
+
+interface PredictiveModelingResult {
+  predictions: Array<{
+    timestamp: Date;
+    predictedValue: number;
+    confidence: number;
+    range: {
+      lower: number;
+      upper: number;
+    };
+    factors: string[];
+  }>;
+  accuracy: {
+    mape: number; // Mean Absolute Percentage Error
+    rmse: number; // Root Mean Square Error
+    confidence: number;
+  };
+  modelType: 'linear' | 'polynomial' | 'exponential' | 'neural_network' | 'ensemble';
+  featureImportance: Array<{
+    feature: string;
+    importance: number;
+    explanation: string;
+  }>;
 }
 
 export class TrendAnalysisService {

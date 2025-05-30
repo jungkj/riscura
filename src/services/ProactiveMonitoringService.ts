@@ -18,6 +18,57 @@ import { Risk, Control } from '@/types';
 import { OrganizationContext, RiskCategory } from '@/types/risk-intelligence.types';
 import { generateId } from '@/lib/utils';
 
+// Import AI services for real integration
+import { AIService } from './AIService';
+import { ComplianceAIService } from './ComplianceAIService';
+import { RiskAnalysisAIService } from './RiskAnalysisAIService';
+import { ControlRecommendationAIService } from './ControlRecommendationAIService';
+import { TrendAnalysisService } from './TrendAnalysisService';
+import { SmartNotificationService } from './SmartNotificationService';
+
+// Enhanced AI processing queue for background tasks
+interface AIProcessingTask {
+  id: string;
+  type: 'risk_analysis' | 'trend_analysis' | 'compliance_check' | 'insight_generation' | 'prediction';
+  priority: 'critical' | 'high' | 'medium' | 'low';
+  targetEntity: {
+    id: string;
+    type: 'risk' | 'control' | 'process' | 'compliance' | 'system';
+    data: unknown;
+  };
+  aiModel: 'gpt-4' | 'gpt-3.5-turbo';
+  context: Record<string, unknown>;
+  scheduledAt: Date;
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+  retryCount: number;
+  maxRetries: number;
+}
+
+interface AIProcessingResult {
+  taskId: string;
+  insights: ProactiveInsight[];
+  recommendations: ActionRecommendation[];
+  predictions: PredictiveResult[];
+  confidence: number;
+  processingTime: number;
+  tokenUsage: {
+    prompt: number;
+    completion: number;
+    total: number;
+  };
+}
+
+interface PredictiveResult {
+  id: string;
+  type: 'risk_emergence' | 'trend_change' | 'compliance_breach' | 'control_failure';
+  prediction: string;
+  probability: number;
+  timeframe: string;
+  confidence: number;
+  factors: string[];
+  mitigation: string[];
+}
+
 // Supporting interfaces for schedule management
 interface ScheduleManager {
   scheduleTask(task: MonitoringTask): Promise<void>;
@@ -32,6 +83,16 @@ interface MonitoringQueue {
   peek(): Promise<MonitoringTask | null>;
   size(): Promise<number>;
   clear(): Promise<void>;
+}
+
+// Enhanced AI Queue for background processing
+interface AIProcessingQueue {
+  enqueue(task: AIProcessingTask): Promise<void>;
+  dequeue(): Promise<AIProcessingTask | null>;
+  peek(): Promise<AIProcessingTask | null>;
+  size(): Promise<number>;
+  clear(): Promise<void>;
+  processBatch(batchSize: number): Promise<AIProcessingResult[]>;
 }
 
 // Supporting result types
@@ -57,35 +118,214 @@ interface EmergingRisk {
   };
 }
 
+// In-memory implementations for development
+class InMemoryMonitoringQueue implements MonitoringQueue {
+  private queue: MonitoringTask[] = [];
+
+  async enqueue(task: MonitoringTask): Promise<void> {
+    this.queue.push(task);
+    // Sort by priority (assuming higher priority first)
+    this.queue.sort((a, b) => this.getPriorityValue(b.priority) - this.getPriorityValue(a.priority));
+  }
+
+  async dequeue(): Promise<MonitoringTask | null> {
+    return this.queue.shift() || null;
+  }
+
+  async peek(): Promise<MonitoringTask | null> {
+    return this.queue[0] || null;
+  }
+
+  async size(): Promise<number> {
+    return this.queue.length;
+  }
+
+  async clear(): Promise<void> {
+    this.queue = [];
+  }
+
+  private getPriorityValue(priority: string): number {
+    const priorityMap: Record<string, number> = {
+      'critical': 4,
+      'high': 3,
+      'medium': 2,
+      'low': 1
+    };
+    return priorityMap[priority] || 1;
+  }
+}
+
+class InMemoryAIProcessingQueue implements AIProcessingQueue {
+  private queue: AIProcessingTask[] = [];
+
+  async enqueue(task: AIProcessingTask): Promise<void> {
+    this.queue.push(task);
+    // Sort by priority
+    this.queue.sort((a, b) => this.getPriorityValue(b.priority) - this.getPriorityValue(a.priority));
+  }
+
+  async dequeue(): Promise<AIProcessingTask | null> {
+    return this.queue.shift() || null;
+  }
+
+  async peek(): Promise<AIProcessingTask | null> {
+    return this.queue[0] || null;
+  }
+
+  async size(): Promise<number> {
+    return this.queue.length;
+  }
+
+  async clear(): Promise<void> {
+    this.queue = [];
+  }
+
+  async processBatch(batchSize: number): Promise<AIProcessingResult[]> {
+    const batch = this.queue.splice(0, batchSize);
+    return batch.map(task => ({
+      taskId: task.id,
+      insights: [],
+      recommendations: [],
+      predictions: [],
+      confidence: 0.8,
+      processingTime: 1000,
+      tokenUsage: { prompt: 100, completion: 200, total: 300 }
+    }));
+  }
+
+  private getPriorityValue(priority: string): number {
+    const priorityMap: Record<string, number> = {
+      'critical': 4,
+      'high': 3,
+      'medium': 2,
+      'low': 1
+    };
+    return priorityMap[priority] || 1;
+  }
+}
+
+class InMemoryScheduleManager implements ScheduleManager {
+  private schedules: Map<string, ScheduledAnalysis> = new Map();
+
+  async scheduleTask(task: MonitoringTask): Promise<void> {
+    const schedule: ScheduledAnalysis = {
+      id: generateId('schedule'),
+      frequency: task.frequency,
+      nextExecution: task.scheduledAt,
+      enabled: true,
+      config: {
+        thresholds: {},
+        parameters: {},
+        scope: 'organization',
+        outputFormat: 'json',
+        retentionDays: 30
+      }
+    };
+    this.schedules.set(task.id, schedule);
+  }
+
+  async cancelTask(taskId: string): Promise<void> {
+    this.schedules.delete(taskId);
+  }
+
+  async updateSchedule(taskId: string, schedule: unknown): Promise<void> {
+    const existing = this.schedules.get(taskId);
+    if (existing) {
+      this.schedules.set(taskId, { ...existing, ...schedule as Partial<ScheduledAnalysis> });
+    }
+  }
+
+  async getActiveSchedules(): Promise<ScheduledAnalysis[]> {
+    return Array.from(this.schedules.values()).filter(s => s.enabled);
+  }
+}
+
+// Stub services for development
+interface AIAnalysisService {
+  analyzeRisk(risk: Risk): Promise<unknown>;
+  analyzeTrend(data: unknown[]): Promise<TrendAnalysisResult>;
+  detectAnomalies(data: unknown[]): Promise<unknown[]>;
+  generateInsights(context: unknown): Promise<ProactiveInsight[]>;
+}
+
+interface DataRetrievalService {
+  getRiskData(riskId: string): Promise<Risk | null>;
+  getControlData(controlId: string): Promise<Control | null>;
+  getHistoricalData(entityId: string, timeRange: unknown): Promise<unknown[]>;
+  getPerformanceMetrics(entityId: string): Promise<PerformanceMetrics>;
+}
+
+interface CacheService {
+  get(key: string): Promise<unknown>;
+  set(key: string, value: unknown, ttl?: number): Promise<void>;
+  delete(key: string): Promise<void>;
+  clear(): Promise<void>;
+}
+
+interface EventService {
+  emit(event: string, data: unknown): Promise<void>;
+  subscribe(event: string, handler: (data: unknown) => void): void;
+  unsubscribe(event: string, handler: (data: unknown) => void): void;
+}
+
+interface PerformanceService {
+  startTimer(operation: string): () => void;
+  recordMetric(metric: string, value: number): void;
+  getMetrics(): Promise<PerformanceMetrics>;
+}
+
+interface MonitoringSession {
+  id: string;
+  userId: string;
+  startTime: Date;
+  status: 'active' | 'paused' | 'stopped';
+  metrics: PerformanceMetrics;
+}
+
 export class ProactiveMonitoringService {
   private readonly monitoringQueue: MonitoringQueue;
   private readonly scheduleManager: ScheduleManager;
-  private readonly aiService: AIAnalysisService;
+  private readonly aiService: AIService;
+  private readonly complianceAIService: ComplianceAIService;
+  private readonly riskAnalysisAIService: RiskAnalysisAIService;
+  private readonly controlRecommendationAIService: ControlRecommendationAIService;
+  private readonly trendAnalysisService: TrendAnalysisService;
+  private readonly smartNotificationService: SmartNotificationService;
   private readonly dataService: DataRetrievalService;
   private readonly cacheService: CacheService;
   private readonly eventService: EventService;
   private readonly performanceService: PerformanceService;
+  private readonly aiProcessingQueue: AIProcessingQueue;
   
   private isMonitoring: boolean = false;
   private monitoringInterval: NodeJS.Timeout | null = null;
   private activeMonitors: Map<string, MonitoringSession> = new Map();
+  private backgroundProcessingInterval: NodeJS.Timeout | null = null;
 
   constructor(
-    monitoringQueue: MonitoringQueue,
-    scheduleManager: ScheduleManager,
-    aiService: AIAnalysisService,
-    dataService: DataRetrievalService,
-    cacheService: CacheService,
-    eventService: EventService,
-    performanceService: PerformanceService
+    aiService?: AIService,
+    complianceAIService?: ComplianceAIService,
+    riskAnalysisAIService?: RiskAnalysisAIService,
+    controlRecommendationAIService?: ControlRecommendationAIService,
+    trendAnalysisService?: TrendAnalysisService,
+    smartNotificationService?: SmartNotificationService
   ) {
-    this.monitoringQueue = monitoringQueue;
-    this.scheduleManager = scheduleManager;
-    this.aiService = aiService;
-    this.dataService = dataService;
-    this.cacheService = cacheService;
-    this.eventService = eventService;
-    this.performanceService = performanceService;
+    // Initialize with real AI services or create instances
+    this.aiService = aiService || new AIService();
+    this.complianceAIService = complianceAIService || new ComplianceAIService();
+    this.riskAnalysisAIService = riskAnalysisAIService || new RiskAnalysisAIService();
+    this.controlRecommendationAIService = controlRecommendationAIService || new ControlRecommendationAIService();
+    this.trendAnalysisService = trendAnalysisService || new TrendAnalysisService();
+    this.smartNotificationService = smartNotificationService || new SmartNotificationService();
+    
+    // Initialize supporting services with in-memory implementations
+    this.monitoringQueue = new InMemoryMonitoringQueue();
+    this.scheduleManager = new InMemoryScheduleManager();
+    this.aiProcessingQueue = new InMemoryAIProcessingQueue();
+    this.dataService = new InMemoryDataService();
+    this.cacheService = new InMemoryCacheService();
+    this.eventService = new InMemoryEventService();
+    this.performanceService = new InMemoryPerformanceService();
   }
 
   /**
@@ -451,7 +691,8 @@ export class ProactiveMonitoringService {
       activeTasks: 0,
       completedTasks: 0,
       generatedInsights: 0,
-      status: 'active'
+      status: 'active',
+      metrics: await this.performanceService.getMetrics()
     };
   }
 
@@ -1213,6 +1454,7 @@ interface MonitoringSession {
   completedTasks: number;
   generatedInsights: number;
   status: 'active' | 'paused' | 'stopped';
+  metrics: PerformanceMetrics;
 }
 
 interface MonitoringStatus {
@@ -1226,7 +1468,10 @@ interface MonitoringStatus {
 
 // Service interfaces
 interface AIAnalysisService {
-  analyzeRiskTrend(risk: Risk): Promise<TrendAnalysisResult>;
+  analyzeRisk(risk: Risk): Promise<unknown>;
+  analyzeTrend(data: unknown[]): Promise<TrendAnalysisResult>;
+  detectAnomalies(data: unknown[]): Promise<unknown[]>;
+  generateInsights(context: unknown): Promise<ProactiveInsight[]>;
   getEmergingRisks(organizationId: string): Promise<EmergingRisk[]>;
   performAnalysis(type: AnalysisType, data: unknown, metadata: unknown): Promise<unknown>;
   generateFindings(task: MonitoringTask, result: unknown): Promise<MonitoringFinding[]>;
@@ -1240,17 +1485,163 @@ interface DataRetrievalService {
   getOrganizationControls(organizationId: string): Promise<Control[]>;
   getRisk(riskId: string): Promise<Risk | null>;
   getEntityData(entityId: string, entityType: string): Promise<unknown>;
+  getRiskData(riskId: string): Promise<Risk | null>;
+  getControlData(controlId: string): Promise<Control | null>;
+  getHistoricalData(entityId: string, timeRange: unknown): Promise<unknown[]>;
+  getPerformanceMetrics(entityId: string): Promise<PerformanceMetrics>;
 }
 
 interface CacheService {
   get(key: string): Promise<unknown>;
   set(key: string, value: unknown, options?: { ttl?: number }): Promise<void>;
+  delete(key: string): Promise<void>;
+  clear(): Promise<void>;
 }
 
 interface EventService {
   emit(event: string, data: unknown): Promise<void>;
+  subscribe(event: string, handler: (data: unknown) => void): void;
+  unsubscribe(event: string, handler: (data: unknown) => void): void;
 }
 
 interface PerformanceService {
+  startTimer(operation: string): () => void;
+  recordMetric(metric: string, value: number): void;
   getCurrentMetrics(): Promise<PerformanceMetrics>;
+  getMetrics(): Promise<PerformanceMetrics>;
+}
+
+// Additional in-memory service implementations
+class InMemoryDataService implements DataRetrievalService {
+  private risks: Map<string, Risk> = new Map();
+  private controls: Map<string, Control> = new Map();
+
+  async getRiskData(riskId: string): Promise<Risk | null> {
+    return this.risks.get(riskId) || null;
+  }
+
+  async getControlData(controlId: string): Promise<Control | null> {
+    return this.controls.get(controlId) || null;
+  }
+
+  async getHistoricalData(entityId: string, timeRange: unknown): Promise<unknown[]> {
+    console.log('Getting historical data for', entityId, timeRange);
+    return [];
+  }
+
+  async getPerformanceMetrics(entityId: string): Promise<PerformanceMetrics> {
+    console.log('Getting performance metrics for', entityId);
+    return {
+      responseTime: 100,
+      throughput: 50,
+      errorRate: 0.01,
+      availability: 99.9,
+      resourceUtilization: 75
+    };
+  }
+
+  async getRisk(riskId: string): Promise<Risk | null> {
+    return this.getRiskData(riskId);
+  }
+
+  async getEntityData(entityId: string, entityType: string): Promise<unknown> {
+    console.log('Getting entity data for', entityId, entityType);
+    return null;
+  }
+}
+
+class InMemoryCacheService implements CacheService {
+  private cache: Map<string, { value: unknown; expires: number }> = new Map();
+
+  async get(key: string): Promise<unknown> {
+    const entry = this.cache.get(key);
+    if (!entry) return null;
+    
+    if (Date.now() > entry.expires) {
+      this.cache.delete(key);
+      return null;
+    }
+    
+    return entry.value;
+  }
+
+  async set(key: string, value: unknown, ttl: number = 3600000): Promise<void> {
+    this.cache.set(key, {
+      value,
+      expires: Date.now() + ttl
+    });
+  }
+
+  async delete(key: string): Promise<void> {
+    this.cache.delete(key);
+  }
+
+  async clear(): Promise<void> {
+    this.cache.clear();
+  }
+}
+
+class InMemoryEventService implements EventService {
+  private listeners: Map<string, Array<(data: unknown) => void>> = new Map();
+
+  async emit(event: string, data: unknown): Promise<void> {
+    const handlers = this.listeners.get(event) || [];
+    handlers.forEach(handler => {
+      try {
+        handler(data);
+      } catch (error) {
+        console.error('Error in event handler:', error);
+      }
+    });
+  }
+
+  subscribe(event: string, handler: (data: unknown) => void): void {
+    const handlers = this.listeners.get(event) || [];
+    handlers.push(handler);
+    this.listeners.set(event, handlers);
+  }
+
+  unsubscribe(event: string, handler: (data: unknown) => void): void {
+    const handlers = this.listeners.get(event) || [];
+    const index = handlers.indexOf(handler);
+    if (index > -1) {
+      handlers.splice(index, 1);
+      this.listeners.set(event, handlers);
+    }
+  }
+}
+
+class InMemoryPerformanceService implements PerformanceService {
+  private metrics: Map<string, number> = new Map();
+  private timers: Map<string, number> = new Map();
+
+  startTimer(operation: string): () => void {
+    const startTime = Date.now();
+    this.timers.set(operation, startTime);
+    
+    return () => {
+      const endTime = Date.now();
+      const duration = endTime - startTime;
+      this.recordMetric(`${operation}_duration`, duration);
+      this.timers.delete(operation);
+    };
+  }
+
+  recordMetric(metric: string, value: number): void {
+    this.metrics.set(metric, value);
+  }
+
+  async getMetrics(): Promise<PerformanceMetrics> {
+    return {
+      responseTime: this.metrics.get('response_time') || 100,
+      throughput: this.metrics.get('throughput') || 50,
+      errorRate: this.metrics.get('error_rate') || 0.01,
+      availability: this.metrics.get('availability') || 99.9,
+      resourceUtilization: this.metrics.get('resource_utilization') || 75
+    };
+  }
+
+  async getCurrentMetrics(): Promise<PerformanceMetrics> {
+    return this.getMetrics();
+  }
 } 

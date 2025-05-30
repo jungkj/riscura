@@ -15,6 +15,12 @@ import {
 import { Risk, Control } from '@/types';
 import { generateId } from '@/lib/utils';
 
+// Import AI services for real integration
+import { AIService } from './AIService';
+import { ComplianceAIService } from './ComplianceAIService';
+import { RiskAnalysisAIService } from './RiskAnalysisAIService';
+import { ProactiveAIIntegrationService } from './ProactiveAIIntegrationService';
+
 // Add missing ComplianceRequirement interface
 interface ComplianceRequirement {
   id: string;
@@ -71,6 +77,76 @@ interface NotificationAnalytics {
     escalated: boolean;
     feedback?: string;
   };
+}
+
+// Enhanced AI notification interfaces
+interface AINotificationRequest {
+  userId: string;
+  triggerType: 'risk_change' | 'compliance_gap' | 'trend_alert' | 'insight_available' | 'deadline_approaching';
+  entityId: string;
+  entityType: 'risk' | 'control' | 'compliance' | 'process';
+  context: Record<string, unknown>;
+  urgency: 'immediate' | 'high' | 'medium' | 'low';
+  personalization: {
+    userRole: string;
+    preferences: UserPreferences;
+    historicalEngagement: unknown[];
+  };
+}
+
+interface AIGeneratedContent {
+  title: string;
+  message: string;
+  summary: string;
+  details: string;
+  actionItems: ActionItem[];
+  tone: 'urgent' | 'informative' | 'advisory' | 'celebratory';
+  complexity: 'simple' | 'medium' | 'detailed';
+  personalizationApplied: boolean;
+  confidence: number;
+}
+
+interface IntelligentPrioritizationResult {
+  priority: InsightPriority;
+  reasoning: string;
+  factors: Array<{
+    factor: string;
+    weight: number;
+    score: number;
+    description: string;
+  }>;
+  urgencyScore: number;
+  relevanceScore: number;
+  impactScore: number;
+  finalScore: number;
+}
+
+// Enhanced user service interfaces
+interface UserService {
+  getUserContext(userId: string): Promise<UserContext>;
+  getUserPreferences(userId: string): Promise<UserPreferences>;
+  updateUserPreferences(userId: string, preferences: Partial<UserPreferences>): Promise<void>;
+  getHistoricalEngagement(userId: string): Promise<unknown[]>;
+  recordEngagement(userId: string, notificationId: string, action: string): Promise<void>;
+}
+
+// Enhanced AI insight service
+interface AIInsightService {
+  analyzeComplianceRequirement(requirement: ComplianceRequirement): Promise<{
+    status: 'compliant' | 'non_compliant' | 'partial';
+    confidence: number;
+    gap?: { severity: string; recommendations: string[] };
+  }>;
+  generateComplianceInsight(
+    requirement: ComplianceRequirement,
+    userContext: UserContext,
+    analysis: unknown
+  ): Promise<{ insight: string; confidence: number; actionable: boolean }>;
+  generatePersonalizedNotification(request: AINotificationRequest): Promise<AIGeneratedContent>;
+  calculateIntelligentPriority(
+    context: Record<string, unknown>,
+    userProfile: UserContext
+  ): Promise<IntelligentPrioritizationResult>;
 }
 
 export class SmartNotificationService {

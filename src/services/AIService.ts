@@ -3,14 +3,48 @@ import {
   AIResponse, 
   TokenUsage, 
   AIRequest, 
-  AIRequestType,
   AgentType,
   ConversationMessage,
   RiskAnalysis,
-  ControlRecommendation
+  ControlRecommendation,
+  MessageAttachment
 } from '@/types/ai.types';
 import { Risk } from '@/types';
 import { generateId } from '@/lib/utils';
+
+// Enhanced interfaces for proper typing
+interface ContentGenerationRequest {
+  type: string;
+  context?: Record<string, unknown>;
+  requirements?: string;
+}
+
+interface ContentGenerationResult {
+  id: string;
+  content: string;
+  timestamp: Date;
+  usage: TokenUsage;
+  confidence: number;
+}
+
+interface ExplanationRequest {
+  content: string;
+  complexity?: 'simple' | 'detailed' | 'expert';
+}
+
+interface ExplanationResult {
+  summary: string;
+  complexity: 'simple' | 'detailed' | 'expert';
+  confidence: number;
+  timestamp: Date;
+  usage: TokenUsage;
+}
+
+interface CacheEntry {
+  response: AIResponse;
+  timestamp: number;
+  ttl: number;
+}
 
 // Configuration interfaces
 export interface AIConfig {
@@ -65,7 +99,9 @@ export class AIServiceError extends Error {
     message: string,
     public code: string,
     public statusCode?: number,
-    public retryable: boolean = false
+    public retryable: boolean = false,
+    public severity: 'low' | 'medium' | 'high' | 'critical' = 'medium',
+    public userMessage?: string
   ) {
     super(message);
     this.name = 'AIServiceError';
@@ -74,10 +110,24 @@ export class AIServiceError extends Error {
 
 export class RateLimitError extends AIServiceError {
   constructor(message: string, resetTime: Date) {
-    super(message, 'RATE_LIMIT_EXCEEDED', 429, true);
+    super(message, 'RATE_LIMIT_EXCEEDED', 429, true, 'medium', 'Rate limit reached. Please wait a moment before trying again.');
     this.resetTime = resetTime;
   }
   resetTime: Date;
+}
+
+export class NetworkError extends AIServiceError {
+  constructor(message: string) {
+    super(message, 'NETWORK_ERROR', 0, true, 'medium', 'Connection issue detected. Retrying automatically...');
+  }
+}
+
+// Connection status enum
+export enum ConnectionStatus {
+  CONNECTED = 'CONNECTED',
+  DISCONNECTED = 'DISCONNECTED',
+  RECONNECTING = 'RECONNECTING',
+  DEGRADED = 'DEGRADED'
 }
 
 // Circuit breaker states
@@ -146,7 +196,7 @@ export class AIService {
   private rateLimitState: RateLimitState;
   private usageMetrics: UsageMetrics;
   private circuitBreaker: CircuitBreaker;
-  private cache: Map<string, { response: any; timestamp: number; ttl: number }>;
+  private cache: Map<string, CacheEntry>;
 
   constructor(config: Partial<AIConfig> = {}) {
     // Initialize configuration with defaults
@@ -284,14 +334,13 @@ export class AIService {
   /**
    * Generate content based on request
    */
-  async generateContent(request: { type: string; context?: any; requirements?: string }): Promise<any> {
+  async generateContent(request: ContentGenerationRequest): Promise<ContentGenerationResult> {
     const prompt = this.buildContentGenerationPrompt(request);
     const response = await this.makeCompletion(prompt, 'general_assistant');
 
     return {
       id: generateId('generated-content'),
       content: response.content,
-      type: request.type,
       timestamp: new Date(),
       usage: response.usage,
       confidence: 0.85
@@ -301,7 +350,7 @@ export class AIService {
   /**
    * Explain content or concepts
    */
-  async explainContent(request: { content: string; complexity?: 'simple' | 'detailed' | 'expert' }): Promise<any> {
+  async explainContent(request: ExplanationRequest): Promise<ExplanationResult> {
     const prompt = this.buildExplanationPrompt(request);
     const response = await this.makeCompletion(prompt, 'general_assistant');
 
@@ -320,7 +369,7 @@ export class AIService {
   async sendMessage(
     content: string, 
     agentType: AgentType = 'general_assistant',
-    attachments?: any[],
+    attachments?: MessageAttachment[],
     onStream?: (chunk: string) => void
   ): Promise<ConversationMessage> {
     const prompt = this.buildConversationPrompt(content, agentType, attachments);
@@ -405,19 +454,20 @@ export class AIService {
 
         return aiResponse;
 
-      } catch (error: any) {
+      } catch (error: unknown) {
         this.updateUsageMetrics({ promptTokens: 0, completionTokens: 0, totalTokens: 0, estimatedCost: 0 }, Date.now() - startTime, false);
         
-        if (error.status === 429) {
+        const err = error as { status?: number; message?: string };
+        if (err.status === 429) {
           const resetTime = new Date(Date.now() + 60000);
           throw new RateLimitError('Rate limit exceeded', resetTime);
         }
         
-        if (error.status >= 500) {
-          throw new AIServiceError(`OpenAI service error: ${error.message}`, 'SERVICE_ERROR', error.status, true);
+        if (err.status && err.status >= 500) {
+          throw new AIServiceError(`OpenAI service error: ${err.message}`, 'SERVICE_ERROR', err.status, true);
         }
         
-        throw new AIServiceError(`AI request failed: ${error.message}`, 'REQUEST_FAILED', error.status);
+        throw new AIServiceError(`AI request failed: ${err.message}`, 'REQUEST_FAILED', err.status);
       }
     });
 
@@ -506,15 +556,16 @@ export class AIService {
 
         return aiResponse;
 
-      } catch (error: any) {
+      } catch (error: unknown) {
         this.updateUsageMetrics({ promptTokens: 0, completionTokens: 0, totalTokens: 0, estimatedCost: 0 }, Date.now() - startTime, false);
         
-        if (error.status === 429) {
+        const err = error as { status?: number; message?: string };
+        if (err.status === 429) {
           const resetTime = new Date(Date.now() + 60000);
           throw new RateLimitError('Rate limit exceeded', resetTime);
         }
         
-        throw new AIServiceError(`Streaming request failed: ${error.message}`, 'STREAMING_FAILED', error.status);
+        throw new AIServiceError(`Streaming request failed: ${err.message}`, 'STREAMING_FAILED', err.status);
       }
     });
   }
@@ -610,7 +661,7 @@ Please recommend 3-5 controls that should include:
 Prioritize practical, cost-effective solutions appropriate for enterprise implementation.`;
   }
 
-  private buildContentGenerationPrompt(request: { type: string; context?: any; requirements?: string }): string {
+  private buildContentGenerationPrompt(request: ContentGenerationRequest): string {
     return `Generate ${request.type} content for enterprise risk management.
 
 Context: ${JSON.stringify(request.context || {})}
@@ -625,7 +676,7 @@ Please ensure the content is:
 - Compliant with industry standards`;
   }
 
-  private buildExplanationPrompt(request: { content: string; complexity?: string }): string {
+  private buildExplanationPrompt(request: ExplanationRequest): string {
     const complexity = request.complexity || 'simple';
     const complexityMap = {
       simple: 'Explain in simple terms suitable for general business users',
@@ -644,7 +695,7 @@ Provide a clear, well-structured explanation that includes:
 - Best practices where applicable`;
   }
 
-  private buildConversationPrompt(content: string, agentType: AgentType, attachments?: any[]): string {
+  private buildConversationPrompt(content: string, agentType: AgentType, attachments?: MessageAttachment[]): string {
     let prompt = content;
 
     if (attachments && attachments.length > 0) {
