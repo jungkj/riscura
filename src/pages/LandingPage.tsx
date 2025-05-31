@@ -1,5 +1,8 @@
+"use client";
+
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -19,14 +22,14 @@ import {
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleGetStarted = () => {
-    navigate('/register');
+    router.push('/register');
   };
 
   const handleRequestDemo = () => {
-    navigate('/register');
+    router.push('/register');
   };
 
   return (
@@ -37,7 +40,7 @@ export default function LandingPage() {
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex items-center">
-              <Link to="/" className="flex items-center space-x-2">
+              <Link href="/" className="flex items-center space-x-2">
                 <Shield className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                 <span className="text-xl font-bold text-gray-900 dark:text-white">Riscura</span>
               </Link>
@@ -45,13 +48,13 @@ export default function LandingPage() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
-              <Link to="/" className="text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors font-medium">
+              <Link href="/" className="text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors font-medium">
                 Home
               </Link>
-              <Link to="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+              <Link href="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
                 Enterprise
               </Link>
-              <Link to="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+              <Link href="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
                 About Us
               </Link>
               <Button 
@@ -85,13 +88,13 @@ export default function LandingPage() {
               exit={{ opacity: 0, height: 0 }}
             >
               <div className="flex flex-col space-y-4">
-                <Link to="/" className="text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors font-medium">
+                <Link href="/" className="text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors font-medium">
                   Home
                 </Link>
-                <Link to="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+                <Link href="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
                   Enterprise
                 </Link>
-                <Link to="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+                <Link href="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
                   About Us
                 </Link>
                 <Button onClick={handleRequestDemo} variant="outline" className="w-full">
@@ -469,22 +472,22 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 lg:gap-8">
-              <Link to="/" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+              <Link href="/" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
                 Home
               </Link>
-              <Link to="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+              <Link href="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
                 Enterprise
               </Link>
-              <Link to="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+              <Link href="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
                 About us
               </Link>
-              <Link to="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+              <Link href="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
                 Legal
               </Link>
-              <Link to="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+              <Link href="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
                 Terms of Service
               </Link>
-              <Link to="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+              <Link href="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
                 Privacy Policy
               </Link>
             </div>

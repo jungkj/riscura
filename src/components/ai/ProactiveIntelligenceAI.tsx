@@ -4,18 +4,14 @@ import {
   TrendingUp,
   Bell,
   AlertTriangle,
-  Eye,
-  Zap,
   Target,
-  Clock,
   BarChart3,
   Activity,
   Shield,
   Settings,
   RefreshCw,
   Play,
-  Pause,
-  Download
+  Pause
 } from 'lucide-react';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -26,23 +22,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
 
 import { Risk, Control } from '@/types';
 import { 
-  ProactiveInsight,
   ActionRecommendation,
   SmartNotification,
-  TrendAnalysis,
-  PredictiveResult,
-  InsightPriority
+  InsightPriority,
+  UserContext
 } from '@/types/proactive-monitoring.types';
 
 // Import AI integration services
 import { 
   proactiveAIIntegrationService,
   IntelligentInsight,
-  AIProcessingResult
+  PredictiveResult
 } from '@/services/ProactiveAIIntegrationService';
 
 interface ProactiveIntelligenceAIProps {
@@ -181,16 +174,53 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
   // Generate smart notifications
   const handleGenerateNotifications = async () => {
     try {
-      const mockUserContext = {
+      const mockUserContext: UserContext = {
         userId: 'current-user',
+        organizationId: 'org-1',
         role: 'risk_manager',
         permissions: ['read', 'write', 'analyze'],
-        organizationId: 'org-1',
         preferences: {
-          notificationChannels: ['in_app', 'email'],
-          frequency: 'realtime',
-          priority: 'medium'
-        }
+          notificationFrequency: 'immediate',
+          priorityThreshold: 'medium',
+          categories: [],
+          channels: ['in_app', 'email'],
+          quietHours: {
+            enabled: false,
+            startTime: '22:00',
+            endTime: '08:00',
+            timezone: 'UTC',
+            exceptions: []
+          },
+          language: 'en'
+        },
+        currentSession: {
+          sessionId: 'session-1',
+          startTime: new Date(),
+          lastActivity: new Date(),
+          currentPage: '/dashboard',
+          deviceInfo: {
+            type: 'desktop',
+            os: 'Windows',
+            browser: 'Chrome',
+            screen_resolution: '1920x1080',
+            network_type: 'wifi'
+          },
+          locationInfo: {
+            timezone: 'UTC',
+            country: 'US',
+            region: 'CA',
+            city: 'San Francisco',
+            ip_address: '127.0.0.1'
+          }
+        },
+        workContext: {
+          active_risks: risks.map(r => r.id),
+          recent_activities: [],
+          pending_tasks: [],
+          upcoming_deadlines: [],
+          collaboration_sessions: []
+        },
+        historicalBehavior: []
       };
 
       const newNotifications = await proactiveAIIntegrationService.generateSmartNotifications(

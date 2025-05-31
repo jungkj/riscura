@@ -98,11 +98,13 @@ export function useContentAnalysis(options: UseContentAnalysisOptions = {}) {
         case 'alternatives': {
           content = await generateContent({
             type: getContentType(selection.context.contentType),
-            context: selection.text,
-            requirements: ['Generate 3 alternative approaches'],
-            format: 'list',
-            length: 'medium',
-          });
+            context: { 
+              text: selection.text, 
+              contentType: selection.context.contentType,
+              purpose: 'alternatives' 
+            },
+            requirements: 'Generate 3 alternative approaches as a bulleted list',
+          }) as string;
           alternatives = content.split('\n').filter(line => line.trim());
           content = alternatives[0] || content;
           break;

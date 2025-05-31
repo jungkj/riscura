@@ -22,10 +22,7 @@ import {
   Area,
   BarChart,
   Bar,
-  LineChart,
   Line,
-  ScatterChart,
-  Scatter,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -44,10 +41,6 @@ import {
   Eye,
   CheckCircle,
   Clock,
-  Search,
-  Filter,
-  RefreshCw,
-  Settings,
   BarChart3,
   Zap,
   Target,
@@ -60,7 +53,6 @@ import {
   anomalyDetectionAIService,
   type AnomalyAlert,
   type AnomalyPattern,
-  type MonitoringTarget,
   type AnomalyDetectionConfig
 } from '@/services/AnomalyDetectionAIService';
 import { generateId } from '@/lib/utils';
@@ -386,8 +378,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
   };
 
   const prepareTimeSeriesData = () => {
-    // Generate historical data for demo
-    const data = [];
+    const data: Array<{ date: string; value: number; anomaly: number }> = [];
     const now = new Date();
     
     for (let i = 30; i >= 0; i--) {

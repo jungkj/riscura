@@ -1,5 +1,7 @@
+"use client";
+
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { ArrowLeft, Edit, Trash2, BarChart, Clipboard, FileText, Lightbulb, Shield, Users } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -10,9 +12,12 @@ import { Separator } from '@/components/ui/separator';
 import { toast } from '@/hooks/use-toast';
 import { Risk } from '@/types';
 
-export default function RiskDetailPage() {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+interface RiskDetailPageProps {
+  riskId: string;
+}
+
+export default function RiskDetailPage({ riskId }: RiskDetailPageProps) {
+  const router = useRouter();
   const [risk, setRisk] = useState<Risk | null>(null);
   const [loading, setLoading] = useState(true);
   
@@ -26,7 +31,7 @@ export default function RiskDetailPage() {
         
         // Mock risk data
         const mockRisk: Risk = {
-          id: id || '1',
+          id: riskId || '1',
           title: 'Data Breach Vulnerability',
           description: 'Risk of unauthorized access to customer data due to weak encryption protocols and outdated access controls. This vulnerability was identified during the annual security assessment and confirmed by penetration testing.',
           category: 'technology',
@@ -56,13 +61,13 @@ export default function RiskDetailPage() {
     };
     
     fetchRisk();
-  }, [id]);
+  }, [riskId]);
   
   if (loading) {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/risks')}>
+          <Button variant="ghost" size="icon" onClick={() => router.push('/risks')}>
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div className="animate-pulse h-8 w-48 bg-muted rounded"></div>
@@ -86,7 +91,7 @@ export default function RiskDetailPage() {
       <div className="flex flex-col items-center justify-center h-96">
         <h2 className="text-xl font-semibold mb-2">Risk Not Found</h2>
         <p className="text-muted-foreground mb-4">The risk you're looking for doesn't exist or you don't have permission to view it.</p>
-        <Button onClick={() => navigate('/risks')}>
+        <Button onClick={() => router.push('/risks')}>
           Return to Risk Register
         </Button>
       </div>
@@ -121,7 +126,7 @@ export default function RiskDetailPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/risks')}>
+          <Button variant="ghost" size="icon" onClick={() => router.push('/risks')}>
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <h1 className="text-2xl font-bold tracking-tight">{risk.title}</h1>

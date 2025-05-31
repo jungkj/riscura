@@ -1,3 +1,5 @@
+"use client";
+
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { Workflow, WorkflowStep, WorkflowState, WorkflowCondition } from '@/types';
 

@@ -22,10 +22,7 @@ import {
 import {
   AreaChart,
   Area,
-  LineChart as RechartsLineChart,
   Line,
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -34,8 +31,7 @@ import {
   ResponsiveContainer,
   ComposedChart,
   ReferenceLine,
-  Scatter,
-  ScatterChart
+  Scatter
 } from 'recharts';
 import { cn } from '@/lib/utils';
 import {
@@ -280,12 +276,16 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
     }
   };
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }: { 
+    active?: boolean; 
+    payload?: Array<{ name: string; value: number; color: string; dataKey: string; }>; 
+    label?: string; 
+  }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-medium">{label}</p>
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry, index: number) => (
             <p key={index} style={{ color: entry.color }} className="text-sm">
               {entry.name}: {entry.value?.toFixed(2)}
               {entry.dataKey === 'confidence' && '%'}
@@ -577,7 +577,6 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                       fill="#8b5cf6"
                       fillOpacity={0.3}
                       name="Confidence"
-                      formatter={(value: number) => [`${(value * 100).toFixed(1)}%`, 'Confidence']}
                     />
                   </AreaChart>
                 </ResponsiveContainer>

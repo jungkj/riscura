@@ -231,7 +231,7 @@ export const useKeyboardShortcuts = (shortcuts: Record<string, () => void>) => {
       };
 
       // Create shortcut string (e.g., "ctrl+s", "alt+shift+n")
-      const shortcutParts = [];
+      const shortcutParts: string[] = [];
       if (modifiers.ctrl) shortcutParts.push('ctrl');
       if (modifiers.alt) shortcutParts.push('alt');
       if (modifiers.shift) shortcutParts.push('shift');

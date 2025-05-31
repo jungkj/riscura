@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useRisks } from '@/context/RiskContext';
 import { Risk, RiskCategory } from '@/types';
 import { formatDate, getRiskLevel, getRiskLevelColor } from '@/lib/utils';
@@ -63,7 +63,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
   onEditRisk,
   onViewRisk,
 }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const {
     getFilteredRisks,
     loading,
@@ -221,7 +221,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
             {stats.total} risks • {stats.byLevel.critical || 0} critical • {stats.byLevel.high || 0} high
           </p>
         </div>
-        <Button onClick={onCreateRisk || (() => navigate('/risks/new'))}>
+        <Button onClick={onCreateRisk || (() => router.push('/risks/new'))}>
           <Plus className="mr-2 h-4 w-4" />
           Add Risk
         </Button>
@@ -461,13 +461,13 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
-                          onClick={() => onViewRisk ? onViewRisk(risk) : navigate(`/risks/${risk.id}`)}
+                          onClick={() => onViewRisk ? onViewRisk(risk) : router.push(`/risks/${risk.id}`)}
                         >
                           <Eye className="mr-2 h-4 w-4" />
                           View
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => onEditRisk ? onEditRisk(risk) : navigate(`/risks/${risk.id}/edit`)}
+                          onClick={() => onEditRisk ? onEditRisk(risk) : router.push(`/risks/${risk.id}/edit`)}
                         >
                           <Edit className="mr-2 h-4 w-4" />
                           Edit
@@ -544,7 +544,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                   : 'Get started by creating your first risk.'}
               </p>
               {Object.keys(filters).length === 0 && (
-                <Button onClick={onCreateRisk || (() => navigate('/risks/new'))} className="mt-4">
+                <Button onClick={onCreateRisk || (() => router.push('/risks/new'))} className="mt-4">
                   <Plus className="mr-2 h-4 w-4" />
                   Add Risk
                 </Button>

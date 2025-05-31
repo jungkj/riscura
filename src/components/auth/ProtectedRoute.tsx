@@ -1,8 +1,9 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { hasPermission, hasAnyPermission } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
+import { useEffect } from 'react';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -17,10 +18,40 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requiredPermissions = [],
   requiredRoles = [],
   requireAll = false,
-  fallbackPath = '/login'
+  fallbackPath = '/auth/login'
 }) => {
   const { user, isAuthenticated, isLoading } = useAuth();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  // Handle authentication and authorization logic in useEffect
+  useEffect(() => {
+    if (isLoading) return; // Don't do anything while loading
+
+    if (!isAuthenticated || !user) {
+      const redirectUrl = `${fallbackPath}?from=${encodeURIComponent(pathname || '')}`;
+      router.push(redirectUrl);
+      return;
+    }
+
+    // Check role requirements
+    if (requiredRoles.length > 0 && !requiredRoles.includes(user.role)) {
+      router.push('/unauthorized');
+      return;
+    }
+
+    // Check permission requirements
+    if (requiredPermissions.length > 0) {
+      const hasRequiredPermissions = requireAll
+        ? requiredPermissions.every(permission => hasPermission(user.permissions, permission))
+        : hasAnyPermission(user.permissions, requiredPermissions);
+
+      if (!hasRequiredPermissions) {
+        router.push('/unauthorized');
+        return;
+      }
+    }
+  }, [isAuthenticated, user, isLoading, router, pathname, fallbackPath, requiredRoles, requiredPermissions, requireAll]);
 
   // Show loading spinner while checking authentication
   if (isLoading) {
@@ -31,14 +62,14 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     );
   }
 
-  // Redirect to login if not authenticated
+  // If not authenticated or doesn't have permissions, don't render children
   if (!isAuthenticated || !user) {
-    return <Navigate to={fallbackPath} state={{ from: location }} replace />;
+    return null;
   }
 
   // Check role requirements
   if (requiredRoles.length > 0 && !requiredRoles.includes(user.role)) {
-    return <Navigate to="/unauthorized" replace />;
+    return null;
   }
 
   // Check permission requirements
@@ -48,7 +79,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       : hasAnyPermission(user.permissions, requiredPermissions);
 
     if (!hasRequiredPermissions) {
-      return <Navigate to="/unauthorized" replace />;
+      return null;
     }
   }
 
@@ -60,11 +91,14 @@ export const withProtectedRoute = <P extends object>(
   Component: React.ComponentType<P>,
   options: Omit<ProtectedRouteProps, 'children'> = {}
 ) => {
-  return (props: P) => (
+  const WrappedComponent = (props: P) => (
     <ProtectedRoute {...options}>
       <Component {...props} />
     </ProtectedRoute>
   );
+  
+  WrappedComponent.displayName = `withProtectedRoute(${Component.displayName || Component.name})`;
+  return WrappedComponent;
 };
 
 // Specific role-based route components

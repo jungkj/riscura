@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -43,7 +45,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const { register } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   // Initialize form
@@ -71,7 +73,7 @@ export default function RegisterPage() {
         title: 'Account created!',
         description: 'You have successfully registered.',
       });
-      navigate('/onboarding');
+      router.push('/onboarding');
     } catch {
       toast({
         title: 'Registration failed',
@@ -189,7 +191,7 @@ export default function RegisterPage() {
       <CardFooter className="flex justify-center">
         <p className="text-sm text-muted-foreground">
           Already have an account?{' '}
-          <Link to="/login" className="text-primary hover:underline">
+          <Link href="/login" className="text-primary hover:underline">
             Sign in
           </Link>
         </p>

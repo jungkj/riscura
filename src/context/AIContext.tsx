@@ -1,3 +1,5 @@
+"use client";
+
 import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { Risk } from '@/types';
 import { AIService, AIServiceError, RateLimitError, ConnectionStatus } from '@/services/AIService';
@@ -253,11 +255,11 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
   useEffect(() => {
     try {
       const service = new AIService({
-        defaultModel: import.meta.env.VITE_AI_DEFAULT_MODEL || 'gpt-4o-mini',
-        maxTokens: parseInt(import.meta.env.VITE_AI_MAX_TOKENS) || 4000,
-        temperature: parseFloat(import.meta.env.VITE_AI_TEMPERATURE) || 0.7,
-        rateLimitRpm: parseInt(import.meta.env.VITE_AI_RATE_LIMIT_RPM) || 50,
-        rateLimitTpm: parseInt(import.meta.env.VITE_AI_RATE_LIMIT_TPM) || 100000,
+        defaultModel: process.env.NEXT_PUBLIC_AI_DEFAULT_MODEL || 'gpt-4o-mini',
+        maxTokens: parseInt(process.env.NEXT_PUBLIC_AI_MAX_TOKENS || '4000') || 4000,
+        temperature: parseFloat(process.env.NEXT_PUBLIC_AI_TEMPERATURE || '0.7') || 0.7,
+        rateLimitRpm: parseInt(process.env.NEXT_PUBLIC_AI_RATE_LIMIT_RPM || '50') || 50,
+        rateLimitTpm: parseInt(process.env.NEXT_PUBLIC_AI_RATE_LIMIT_TPM || '100000') || 100000,
       });
       setAIService(service);
       setConnectionStatus(ConnectionStatus.CONNECTED);

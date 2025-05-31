@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { 
   ConversationMessage, 
   AgentType, 
@@ -180,7 +180,8 @@ const defaultTemplates: ConversationTemplate[] = [
 
 // Custom hook for enhanced ARIA chat with deep context integration
 export const useARIAChat = (initialContext?: RiskContext) => {
-  const location = useLocation();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { user } = useAuth();
   const { 
     sendMessage: aiSendMessage, 
@@ -240,28 +241,28 @@ export const useARIAChat = (initialContext?: RiskContext) => {
 
   // Track page navigation for context updates
   useEffect(() => {
-    if (user && state.autoContextUpdate) {
+    if (user && state.autoContextUpdate && pathname) {
       trackActivity({
         action: 'navigate',
         entityType: 'document', // Page navigation
-        entityId: location.pathname,
-        context: { page: location.pathname, search: location.search }
+        entityId: pathname,
+        context: { page: pathname, search: searchParams?.toString() || '' }
       });
       
       // Refresh context on navigation
       setTimeout(refreshContext, 1000);
     }
-  }, [location.pathname]);
+  }, [pathname]);
 
   // Enhanced context refresh
   const refreshContext = useCallback(async () => {
-    if (!user) return;
+    if (!user || !pathname) return;
 
     try {
       // Get intelligent context
       const intelligentContext = await contextIntelligenceService.getIntelligentContext(
         user.id,
-        location.pathname,
+        pathname,
         {
           risks: state.context.intelligentContext?.current.selectedEntities.risks || [],
           controls: state.context.intelligentContext?.current.selectedEntities.controls || [],
@@ -308,7 +309,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
     } catch (error) {
       console.error('Error refreshing context:', error);
     }
-  }, [user, location.pathname, selectedAgent, state.contextMode, state.context.intelligentContext, state.messages]);
+  }, [user, pathname, selectedAgent, state.contextMode, state.context.intelligentContext, state.messages]);
 
   // Track user activity
   const trackActivity = useCallback((activity: Omit<ActivityContext, 'timestamp'>) => {

@@ -1,9 +1,20 @@
-import { Navigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import LandingPage from '@/pages/LandingPage';
+import { useEffect } from 'react';
 
 export function PublicRoute() {
   const { isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
+
+  // Handle authentication logic in useEffect
+  useEffect(() => {
+    if (isLoading) return; // Don't do anything while loading
+    
+    if (isAuthenticated) {
+      router.push('/dashboard');
+    }
+  }, [isAuthenticated, isLoading, router]);
 
   // Show loading state while checking authentication
   if (isLoading) {
@@ -14,9 +25,9 @@ export function PublicRoute() {
     );
   }
 
-  // If user is authenticated, redirect to dashboard
+  // If user is authenticated, don't render the landing page
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
+    return null;
   }
 
   // If user is not authenticated, show landing page

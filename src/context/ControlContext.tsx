@@ -1,3 +1,5 @@
+"use client";
+
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { Control, ControlState, ControlFilters, ControlRiskMapping, Document } from '@/types';
 import { generateMockControls } from '@/lib/mockData';
@@ -495,7 +497,7 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const getEffectivenessTrends = () => {
-    const trends = [];
+    const trends: Array<{ date: string; effectiveness: number }> = [];
     for (let i = 30; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);

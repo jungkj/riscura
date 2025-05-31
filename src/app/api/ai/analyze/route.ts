@@ -17,15 +17,17 @@ export async function POST(request: NextRequest) {
     let result;
 
     switch (type) {
-      case 'risk':
+      case 'risk': {
         const riskAnalysisService = new RiskAnalysisAIService();
-        result = await riskAnalysisService.analyzeRisk(data);
+        result = await riskAnalysisService.assessRisk(data);
         break;
+      }
       
-      case 'content':
+      case 'content': {
         const aiService = new AIService();
-        result = await aiService.analyzeContent(data, options);
+        result = await aiService.generateContent(data);
         break;
+      }
       
       default:
         return NextResponse.json(

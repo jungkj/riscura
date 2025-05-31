@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useSearchParams, usePathname } from 'next/navigation';
 import { 
   Bot, 
   MessageSquare, 
@@ -14,7 +14,16 @@ import {
   Brain,
   Target,
   Eye,
-  Lightbulb
+  Lightbulb,
+  CheckCircle,
+  Clock,
+  Users,
+  Maximize2,
+  Minimize2,
+  X,
+  Send,
+  Sparkles,
+  User
 } from 'lucide-react';
 
 import { ARIAChat } from '@/components/ai/ARIAChat';
@@ -206,7 +215,8 @@ const mockControls: Control[] = [
 ];
 
 const ARIAPage: React.FC = () => {
-  const location = useLocation();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [selectedMode, setSelectedMode] = useState<'sidebar' | 'fullscreen'>('sidebar');
   const [initialContext, setInitialContext] = useState<RiskContext | undefined>();
@@ -221,9 +231,10 @@ const ARIAPage: React.FC = () => {
 
   // Extract context from URL or state if coming from another page
   useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const riskId = urlParams.get('risk');
-    const controlId = urlParams.get('control');
+    if (!searchParams) return;
+    
+    const riskId = searchParams.get('risk');
+    const controlId = searchParams.get('control');
     
     if (riskId || controlId) {
       setInitialContext({
@@ -233,14 +244,14 @@ const ARIAPage: React.FC = () => {
           documents: [],
         },
         pageContext: {
-          section: location.pathname,
+          section: pathname || '',
           data: { riskId, controlId },
         },
       });
       setActiveTab('features');
       setIsChatOpen(true);
     }
-  }, [location]);
+  }, [searchParams, pathname]);
 
   const handleFeatureClick = (feature: string) => {
     let context: RiskContext | undefined;
@@ -700,7 +711,7 @@ const ARIAPage: React.FC = () => {
       </div>
 
       {/* Floating Widget (for other pages) */}
-      {!isChatOpen && location.pathname !== '/aria' && (
+      {!isChatOpen && pathname !== '/aria' && (
         <ARIAWidget initialContext={initialContext} />
       )}
     </div>
