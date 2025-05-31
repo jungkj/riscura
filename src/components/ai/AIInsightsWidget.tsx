@@ -10,41 +10,27 @@ import {
   TrendingDown,
   Brain, 
   Eye, 
-  Clock, 
   RefreshCw,
   ChevronDown,
   ChevronRight,
-  Target,
-  Zap,
   AlertCircle,
   CheckCircle,
-  BarChart3,
   Lightbulb,
   MessageSquare,
   Activity,
   ArrowRight,
   Sparkles,
   Bot,
-  LineChart,
-  PieChart,
-  Users,
-  Shield
+  LineChart
 } from 'lucide-react';
 import {
   AreaChart,
   Area,
-  LineChart as RechartsLineChart,
-  Line,
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
-  ResponsiveContainer,
-  PieChart as RechartsPieChart,
-  Cell
+  ResponsiveContainer
 } from 'recharts';
 import { cn } from '@/lib/utils';
 import { 
@@ -322,8 +308,8 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="animate-pulse">
+            {[...Array(3)].map((_, index) => (
+              <div key={index} className="animate-pulse">
                 <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
                 <div className="h-3 bg-gray-200 rounded w-1/2"></div>
               </div>

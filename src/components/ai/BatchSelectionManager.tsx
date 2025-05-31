@@ -82,7 +82,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
 
   // Toggle item selection
   const toggleItemSelection = useCallback((itemId: string) => {
-    setSelectedItems(prev => {
+    setSelectedItems((prev: Set<string>) => {
       const next = new Set(prev);
       if (next.has(itemId)) {
         next.delete(itemId);
@@ -95,7 +95,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
 
   // Select all items
   const selectAll = useCallback(() => {
-    setSelectedItems(new Set(selections.map(item => item.id)));
+    setSelectedItems(new Set(selections.map((item: BatchSelectionItem) => item.id)));
   }, [selections]);
 
   // Clear selection
@@ -127,7 +127,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
 
   // Start batch processing
   const startBatchProcessing = useCallback(async () => {
-    const itemsToProcess = selections.filter(item => selectedItems.has(item.id));
+    const itemsToProcess = selections.filter((item: BatchSelectionItem) => selectedItems.has(item.id));
     
     if (itemsToProcess.length === 0) {
       toast({
@@ -144,7 +144,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
       items: itemsToProcess,
       totalItems: itemsToProcess.length,
       completedItems: 0,
-      status: 'running',
+      status: 'running' as const,
       startTime: new Date(),
     };
 
@@ -157,7 +157,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
       await onProcessBatch(itemsToProcess, [selectedAction]);
       
       // Update queue status
-      queue.status = 'completed';
+      queue.status = 'completed' as const;
       queue.endTime = new Date();
       queue.completedItems = itemsToProcess.length;
       setProcessingQueue({ ...queue });
@@ -168,7 +168,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
         description: `Successfully processed ${itemsToProcess.length} items.`,
       });
     } catch (error) {
-      queue.status = 'error';
+      queue.status = 'error' as const;
       setProcessingQueue({ ...queue });
       
       toast({
@@ -185,7 +185,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
     if (processingQueue) {
       const updatedQueue = { 
         ...processingQueue, 
-        status: isPaused ? 'running' : 'paused' as const 
+        status: (isPaused ? 'running' : 'paused') as const 
       };
       setProcessingQueue(updatedQueue);
     }
@@ -212,7 +212,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
       totalSelections: selections.length,
       selectedItems: Array.from(selectedItems),
       queue: processingQueue,
-      results: selections.map(item => ({
+      results: selections.map((item: BatchSelectionItem) => ({
         id: item.id,
         contentType: item.selection.context.contentType,
         contentId: item.selection.context.contentId,
@@ -244,10 +244,10 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
   const stats = {
     total: selections.length,
     selected: selectedItems.size,
-    pending: selections.filter(item => item.status === 'pending').length,
-    processing: selections.filter(item => item.status === 'processing').length,
-    completed: selections.filter(item => item.status === 'completed').length,
-    errors: selections.filter(item => item.status === 'error').length,
+    pending: selections.filter((item: BatchSelectionItem) => item.status === 'pending').length,
+    processing: selections.filter((item: BatchSelectionItem) => item.status === 'processing').length,
+    completed: selections.filter((item: BatchSelectionItem) => item.status === 'completed').length,
+    errors: selections.filter((item: BatchSelectionItem) => item.status === 'error').length,
   };
 
   return (
@@ -406,7 +406,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
               ) : (
                 <ScrollArea className="h-full p-4">
                   <div className="space-y-3">
-                    {selections.map((item) => (
+                    {selections.map((item: BatchSelectionItem) => (
                       <Card 
                         key={item.id}
                         className={cn(
@@ -429,12 +429,11 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
                               <div className="flex items-center gap-2 mb-2">
                                 {getStatusIcon(item.status)}
                                 <Badge 
-                                  variant="outline" 
                                   className={getPriorityColor(item.priority)}
                                 >
                                   {item.priority}
                                 </Badge>
-                                <Badge variant="secondary">
+                                <Badge>
                                   {item.selection.context.contentType}
                                 </Badge>
                               </div>
@@ -449,8 +448,8 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
                               
                               <div className="flex items-center gap-2">
                                 <span className="text-xs text-muted-foreground">Actions:</span>
-                                {item.actions.map((action) => (
-                                  <Badge key={action} variant="outline" className="text-xs">
+                                {item.actions.map((action: AIAction) => (
+                                  <Badge key={action} className="text-xs">
                                     {action}
                                   </Badge>
                                 ))}
@@ -466,7 +465,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={(e) => {
+                              onClick={(e: React.MouseEvent) => {
                                 e.stopPropagation();
                                 onRemoveItem(item.id);
                               }}

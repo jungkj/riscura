@@ -24,13 +24,18 @@ export interface Risk {
   likelihood: number; // 1-5 scale
   impact: number; // 1-5 scale
   riskScore: number; // calculated
+  riskLevel?: 'low' | 'medium' | 'high' | 'critical';
   owner: string;
   status: 'identified' | 'assessed' | 'mitigated' | 'closed';
   controls: string[]; // control IDs
+  linkedControls?: string[]; // alias for controls
+  existingControls?: any[]; // for backwards compatibility
   evidence: Document[];
   createdAt: string;
   updatedAt: string;
   lastAssessed?: Date;
+  dateIdentified?: Date | string;
+  nextReview?: Date;
   aiConfidence?: number;
   comments?: Comment[];
   tasks?: string[]; // task IDs
@@ -58,7 +63,7 @@ export interface Control {
   title: string;
   description: string;
   type: 'preventive' | 'detective' | 'corrective';
-  effectiveness: 'high' | 'medium' | 'low';
+  effectiveness: 'high' | 'medium' | 'low' | number; // support both string and number
   owner: string;
   frequency: string;
   evidence: Document[];
@@ -66,6 +71,8 @@ export interface Control {
   status: 'active' | 'inactive' | 'planned';
   lastTestDate?: string;
   nextTestDate?: string;
+  lastTested?: Date; // alias for lastTestDate
+  nextTest?: Date; // alias for nextTestDate
   createdAt: string;
   updatedAt: string;
   comments?: Comment[];
