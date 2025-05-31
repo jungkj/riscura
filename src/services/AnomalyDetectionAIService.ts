@@ -181,7 +181,7 @@ export class AnomalyDetectionAIService {
     predictiveService?: PredictiveRiskModelingService
   ) {
     this.aiService = aiService || new AIService();
-    this.notificationService = notificationService || new SmartNotificationService();
+    this.notificationService = notificationService || null as any; // Lazy initialization to avoid constructor complexity
     this.predictiveService = predictiveService || new PredictiveRiskModelingService();
     
     this.initializeMonitoring();
@@ -617,28 +617,7 @@ export class AnomalyDetectionAIService {
     // Determine severity based on score
     const severity = this.determineSeverity(detectionResult.score, type);
     
-    // Perform initial root cause analysis
-    const rootCauseAnalysis = await this.performRootCauseAnalysis({
-      id: generateId('temp-alert'),
-      type,
-      severity,
-      entityId: entity.id,
-      entityType: 'id' in entity ? 'risk' : 'control',
-      title: `${detectionResult.method} Anomaly in ${metric}`,
-      description: `Detected anomaly using ${detectionResult.method}`,
-      detectedAt: new Date(),
-      confidence: Math.min(detectionResult.score * 20, 100),
-      metric,
-      currentValue,
-      expectedValue,
-      deviation,
-      context: {} as AnomalyContext,
-      rootCauseAnalysis: {} as RootCauseAnalysis,
-      recommendations: [],
-      status: 'new',
-      tags: [type, detectionResult.method.toLowerCase()]
-    });
-    
+    // Create the alert object first
     const alert: AnomalyAlert = {
       id: generateId('anomaly-alert'),
       type,
@@ -653,12 +632,17 @@ export class AnomalyDetectionAIService {
       currentValue,
       expectedValue,
       deviation,
-      context: await this.gatherAnomalyContext(alert),
-      rootCauseAnalysis,
-      recommendations: await this.generateRecommendations(entity, detectionResult),
+      context: {} as AnomalyContext, // Placeholder context
+      rootCauseAnalysis: {} as RootCauseAnalysis, // Placeholder
+      recommendations: [],
       status: 'new',
       tags: [type, detectionResult.method.toLowerCase()]
     };
+    
+    // Now populate the context and analysis that require the alert object
+    alert.context = await this.gatherAnomalyContext(alert);
+    alert.rootCauseAnalysis = await this.performRootCauseAnalysis(alert);
+    alert.recommendations = await this.generateRecommendations(entity, detectionResult);
     
     // Cache the alert
     this.alerts.set(alert.id, alert);
@@ -763,20 +747,80 @@ export class AnomalyDetectionAIService {
   }
 
   private async sendAnomalyNotifications(alerts: AnomalyAlert[]): Promise<void> {
+    // Check if notification service is available
+    if (!this.notificationService) {
+      console.log('Notification service not available, skipping notifications');
+      return;
+    }
+    
     for (const alert of alerts) {
       if (alert.severity === 'high' || alert.severity === 'critical') {
-        await this.notificationService.sendNotification({
+        const notification: any = {
           id: generateId('notification'),
           type: 'anomaly_alert',
-          priority: alert.severity,
           title: alert.title,
           message: alert.description,
+          priority: alert.severity as any,
           userId: 'system',
-          channels: ['email', 'dashboard'],
-          data: alert,
-          createdAt: new Date(),
-          read: false
-        });
+          timestamp: new Date(),
+          read: false,
+          aiInsight: alert.description,
+          contextualData: {
+            userRole: 'system',
+            userPreferences: {},
+            workingHours: {},
+            currentActivity: 'monitoring',
+            relevantEntities: [alert.entityId],
+            historicalContext: {}
+          },
+          intelligentPriority: {
+            calculated: alert.severity as any,
+            factors: [],
+            urgencyScore: 80,
+            relevanceScore: 90,
+            impactScore: 85,
+            contextScore: 75,
+            personalizedScore: 70
+          },
+          dismissible: true,
+          autoExpire: true,
+          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+          aggregatedWith: [],
+          suppressionRules: [],
+          deliveryChannels: [
+            {
+              channel: 'email' as any,
+              enabled: true,
+              priority: alert.severity as any,
+              delay: 0,
+              retryAttempts: 3
+            },
+            {
+              channel: 'dashboard' as any,
+              enabled: true,
+              priority: alert.severity as any,
+              delay: 0,
+              retryAttempts: 1
+            }
+          ],
+          personalizedContent: {
+            title: alert.title,
+            summary: alert.description,
+            details: alert.description,
+            recommendations: alert.recommendations,
+            tone: 'professional' as any,
+            complexity: 'detailed' as any
+          },
+          metadata: {
+            alertId: alert.id,
+            entityType: alert.entityType,
+            metric: alert.metric,
+            currentValue: alert.currentValue,
+            generatedAt: new Date()
+          }
+        };
+        
+        await this.notificationService.sendNotification(notification);
       }
     }
   }

@@ -1,14 +1,27 @@
-import { Outlet } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
-import { Navigate } from 'react-router-dom';
-import { RiskIcon } from '@/components/icons/RiskIcon';
+"use client";
 
-export default function AuthLayout() {
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
+import { RiskIcon } from '@/components/icons/RiskIcon';
+import { useEffect } from 'react';
+
+interface AuthLayoutProps {
+  children: React.ReactNode;
+}
+
+export default function AuthLayout({ children }: AuthLayoutProps) {
   const { isAuthenticated } = useAuth();
+  const router = useRouter();
   
   // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace('/dashboard');
+    }
+  }, [isAuthenticated, router]);
+
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
+    return null; // Don't render anything while redirecting
   }
 
   return (
@@ -21,7 +34,7 @@ export default function AuthLayout() {
           </div>
         </div>
         
-        <Outlet />
+        {children}
         
         <p className="text-center text-sm text-muted-foreground mt-6">
           &copy; {new Date().getFullYear()} Riscura Platform. All rights reserved.

@@ -895,6 +895,11 @@ export class TokenManagementService {
 
   private loadStoredData(): void {
     try {
+      // Only access localStorage in browser environment
+      if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+        return;
+      }
+
       // Load user usage
       const userUsageData = localStorage.getItem(this.USER_USAGE_KEY);
       if (userUsageData) {
@@ -946,6 +951,11 @@ export class TokenManagementService {
 
   private persistData(): void {
     try {
+      // Only access localStorage in browser environment
+      if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+        return;
+      }
+
       // Persist user usage
       const userUsageData = Object.fromEntries(this.userUsageCache);
       localStorage.setItem(this.USER_USAGE_KEY, JSON.stringify(userUsageData));

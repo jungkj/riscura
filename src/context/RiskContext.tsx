@@ -1,3 +1,5 @@
+"use client";
+
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { Risk, RiskState, RiskFilters, RiskCategory } from '@/types';
 import { generateMockRisks } from '@/lib/mockData';

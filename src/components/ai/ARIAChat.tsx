@@ -30,6 +30,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
+import { useAI } from '@/context/AIContext';
 
 interface ARIAChatProps {
   isOpen: boolean;
@@ -140,7 +141,8 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
   mode,
   className,
 }) => {
-  const { state, actions, agent } = useARIAChat(initialContext);
+  const { state, actions, messagesEndRef } = useARIAChat(initialContext);
+  const { selectedAgent } = useAI();
   const { toast } = useToast();
   
   // Local state
@@ -153,7 +155,6 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
   // Refs
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-focus input when opened
   useEffect(() => {
@@ -345,7 +346,7 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
         <>
           {/* Agent Selector and Search */}
           <div className="p-4 border-b space-y-3">
-            <AgentSelector currentAgent={agent as any} onAgentChange={actions.switchAgent} />
+            <AgentSelector currentAgent={selectedAgent} onAgentChange={actions.switchAgent} />
             
             {state.messages.length > 0 && (
               <div className="relative">

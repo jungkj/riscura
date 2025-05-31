@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import { Upload, AlertCircle, FileText, CheckCircle2, XCircle, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -21,7 +21,7 @@ interface RiskInsight {
 }
 
 export default function DocumentAnalysisPage() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [processing, setProcessing] = useState(false);
@@ -151,7 +151,7 @@ export default function DocumentAnalysisPage() {
     // In a real app, we would add the risk to the risk register
     // For now, just navigate to the risk list page
     setTimeout(() => {
-      navigate('/risks');
+      router.push('/risks');
     }, 1000);
   };
 

@@ -44,8 +44,8 @@ export interface AIConfig {
 
 // Production configuration
 export const aiConfig: AIConfig = {
-  openaiApiKey: process.env.VITE_OPENAI_API_KEY || '',
-  agentEndpoint: process.env.VITE_AI_AGENT_ENDPOINT || 'https://api.openai.com/v1/agents',
+  openaiApiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY || '',
+  agentEndpoint: process.env.NEXT_PUBLIC_AI_AGENT_ENDPOINT || 'https://api.openai.com/v1/agents',
   maxTokens: 4000,
   temperature: 0.7,
   rateLimits: {

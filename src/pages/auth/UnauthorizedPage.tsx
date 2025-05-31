@@ -1,48 +1,46 @@
+import { AlertCircle, Home, ArrowLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useNavigate } from 'react-router-dom';
-import { Lock, AlertCircle } from 'lucide-react';
 
 export default function UnauthorizedPage() {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-            <AlertCircle className="h-6 w-6 text-red-600" />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="max-w-md w-full mx-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
+          <div className="mb-6">
+            <AlertCircle className="mx-auto h-16 w-16 text-red-500" />
           </div>
-          <CardTitle className="text-2xl font-bold text-gray-900">
+          
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
             Access Denied
-          </CardTitle>
-          <CardDescription className="text-gray-600">
-            You don't have permission to access this page
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-sm text-gray-500 text-center">
-            Your current role doesn't have the required permissions to view this content. 
-            Please contact your administrator if you believe this is an error.
+          </h1>
+          
+          <p className="text-gray-600 dark:text-gray-300 mb-8">
+            You don't have permission to access this page. Please contact your administrator if you believe this is an error.
           </p>
-          <div className="flex flex-col space-y-2">
+          
+          <div className="space-y-3">
             <Button 
-              onClick={() => navigate(-1)}
+              onClick={() => router.back()}
               variant="outline"
               className="w-full"
             >
-              <Lock className="mr-2 h-4 w-4" />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Go Back
             </Button>
+            
             <Button 
-              onClick={() => navigate('/dashboard')}
+              onClick={() => router.push('/dashboard')}
               className="w-full"
             >
+              <Home className="mr-2 h-4 w-4" />
               Go to Dashboard
             </Button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 } 

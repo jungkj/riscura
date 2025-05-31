@@ -34,31 +34,25 @@ import {
   Area
 } from 'recharts';
 import {
+  Brain,
   TrendingUp,
   TrendingDown,
-  Activity,
-  Brain,
-  Zap,
   AlertTriangle,
-  CheckCircle,
   Target,
   BarChart3,
-  LineChart as LineChartIcon,
-  Download,
-  RefreshCw,
-  Settings,
+  Activity,
+  CheckCircle,
+  Zap,
   Info,
-  Warning,
-  Eye
+  Eye,
+  RefreshCw,
+  LineChart as LineChartIcon
 } from 'lucide-react';
 
 import { 
   predictiveRiskModelingService,
   type RiskForecast,
-  type MonteCarloSimulation,
-  type ForecastScenario,
-  type ModelValidationMetrics,
-  type PredictiveModel
+  type MonteCarloSimulation
 } from '@/services/PredictiveRiskModelingService';
 import { generateId } from '@/lib/utils';
 import type { Risk } from '@/types';
@@ -76,7 +70,7 @@ interface PredictiveInsight {
   confidence: number;
   impact: 'low' | 'medium' | 'high' | 'critical';
   timeframe: string;
-  data: any;
+  data: unknown;
   generatedAt: Date;
 }
 
@@ -112,15 +106,12 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
 
   // Generate historical time series data for demo
   const generateHistoricalData = () => {
-    const data = [];
-    const baseDate = new Date();
-    baseDate.setDate(baseDate.getDate() - 365); // 1 year of historical data
+    const data: Array<{ timestamp: Date; value: number; metadata: { day: number; weekday: number; month: number; } }> = [];
+    let currentValue = 5; // Starting risk level
     
-    let currentValue = 8; // Starting residual risk score
-    
-    for (let i = 0; i < 365; i++) {
-      const date = new Date(baseDate);
-      date.setDate(date.getDate() + i);
+    for (let i = 0; i < 100; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() - (100 - i));
       
       // Add some realistic variation
       const trend = Math.sin(i / 30) * 0.5; // Monthly cycle

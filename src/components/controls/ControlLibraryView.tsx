@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useControls } from '@/context/ControlContext';
 import { Control } from '@/types';
 import { formatDate } from '@/lib/utils';
@@ -77,7 +77,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
   onEditControl,
   onTestControl,
 }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const {
     getFilteredControls,
     loading,
@@ -216,7 +216,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
       <div className="flex items-center space-x-2">
         <Progress value={config.value} className="w-16" />
         <Badge variant="outline" className={`${config.color} ${config.bgColor}`}>
-          {effectiveness.toUpperCase()}
+          {String(effectiveness).toUpperCase()}
         </Badge>
       </div>
     );
@@ -281,7 +281,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
             {stats.total} controls • {stats.overdueTests} overdue tests • {stats.coverageGaps} coverage gaps
           </p>
         </div>
-        <Button onClick={onCreateControl || (() => navigate('/controls/new'))}>
+        <Button onClick={onCreateControl || (() => router.push('/controls/new'))}>
           <Plus className="mr-2 h-4 w-4" />
           Add Control
         </Button>
@@ -398,7 +398,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
               </Select>
 
               <Select
-                value={filters.effectiveness || ''}
+                value={filters.effectiveness ? String(filters.effectiveness) : ''}
                 onValueChange={(value) => setFilters({ effectiveness: value as Control['effectiveness'] })}
               >
                 <SelectTrigger>
@@ -563,13 +563,13 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                           View Details
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => onEditControl ? onEditControl(control) : navigate(`/controls/${control.id}/edit`)}
+                          onClick={() => onEditControl ? onEditControl(control) : router.push(`/controls/${control.id}/edit`)}
                         >
                           <Edit className="mr-2 h-4 w-4" />
                           Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => onTestControl ? onTestControl(control) : navigate(`/controls/${control.id}/test`)}
+                          onClick={() => onTestControl ? onTestControl(control) : router.push(`/controls/${control.id}/test`)}
                         >
                           <Calendar className="mr-2 h-4 w-4" />
                           Schedule Test
@@ -647,7 +647,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                   : 'Get started by creating your first control.'}
               </p>
               {Object.keys(filters).length === 0 && (
-                <Button onClick={onCreateControl || (() => navigate('/controls/new'))} className="mt-4">
+                <Button onClick={onCreateControl || (() => router.push('/controls/new'))} className="mt-4">
                   <Plus className="mr-2 h-4 w-4" />
                   Add Control
                 </Button>

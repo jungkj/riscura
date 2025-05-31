@@ -84,7 +84,7 @@ export class AIIntegrationService {
       await this.validateRequestContext(request.context);
 
       // 2. Apply security middleware if tenant is specified
-      let securityContext = null;
+      let securityContext: SecurityContext | null = null;
       if (request.context.tenantId) {
         securityContext = {
           userId: request.context.userId,

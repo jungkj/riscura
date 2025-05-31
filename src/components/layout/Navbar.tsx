@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { RiskIcon } from '@/components/icons/RiskIcon';
@@ -24,13 +24,17 @@ interface NavbarProps {
 }
 
 export default function Navbar({ toggleSidebar, toggleChat }: NavbarProps) {
+  const router = useRouter();
   const { user, logout } = useAuth();
   const { theme, setTheme } = useTheme();
-  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push('/auth/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   const userInitials = user ? 
@@ -102,11 +106,11 @@ export default function Navbar({ toggleSidebar, toggleChat }: NavbarProps) {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => navigate('/profile')}>
+              <DropdownMenuItem onClick={() => router.push('/profile')}>
                 <User className="mr-2 h-4 w-4" />
                 <span>Profile</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate('/settings')}>
+              <DropdownMenuItem onClick={() => router.push('/settings')}>
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Settings</span>
               </DropdownMenuItem>

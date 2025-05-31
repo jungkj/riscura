@@ -361,7 +361,14 @@ export class AISecurityMiddleware {
     remediation: string;
     reportable: boolean;
   }>> {
-    const violations = [];
+    const violations: Array<{
+      type: 'compliance_breach';
+      severity: 'low' | 'medium' | 'high' | 'critical';
+      description: string;
+      evidence: Record<string, unknown>;
+      remediation: string;
+      reportable: boolean;
+    }> = [];
     const resultString = JSON.stringify(result);
     
     // GDPR compliance check

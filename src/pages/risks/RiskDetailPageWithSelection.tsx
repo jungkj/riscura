@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'next/navigation';
 import { ArrowLeft, Eye, Edit3, AlertTriangle, Shield, FileText, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,8 +12,9 @@ import {
   ContentSelectionControls,
 } from '@/components/ai/ContentSelectionProvider';
 
-const RiskDetailPageWithSelection: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+export default function RiskDetailPageWithSelection() {
+  const params = useParams();
+  const id = params?.id as string;
   const { risks } = useRisks();
   const risk = risks.find(r => r.id === id);
 
@@ -101,8 +102,8 @@ const RiskDetailPageWithSelection: React.FC = () => {
                   </EnhancedSelectableContent>
                 </CardTitle>
                 <div className="flex items-center gap-2">
-                  <Badge className={getRiskLevelColor(risk.riskLevel)}>
-                    {risk.riskLevel} Risk
+                  <Badge className={getRiskLevelColor(risk.riskLevel || 'medium')}>
+                    {risk.riskLevel || 'Medium'} Risk
                   </Badge>
                   <Badge className={getStatusColor(risk.status)}>
                     {risk.status}
@@ -115,7 +116,7 @@ const RiskDetailPageWithSelection: React.FC = () => {
               <div className="text-right text-sm text-muted-foreground">
                 <div className="flex items-center gap-1 mb-1">
                   <Calendar className="w-3 h-3" />
-                  Created: {new Date(risk.dateIdentified).toLocaleDateString()}
+                  Created: {risk.dateIdentified ? new Date(risk.dateIdentified).toLocaleDateString() : 'N/A'}
                 </div>
                 <div>ID: {risk.id}</div>
               </div>
@@ -350,6 +351,4 @@ const RiskDetailPageWithSelection: React.FC = () => {
       </div>
     </ContentSelectionProvider>
   );
-};
-
-export default RiskDetailPageWithSelection; 
+} 

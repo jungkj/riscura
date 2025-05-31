@@ -183,9 +183,10 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
   const togglePause = useCallback(() => {
     setIsPaused(!isPaused);
     if (processingQueue) {
+      const newStatus: 'running' | 'paused' = isPaused ? 'running' : 'paused';
       const updatedQueue = { 
         ...processingQueue, 
-        status: (isPaused ? 'running' : 'paused') as const 
+        status: newStatus 
       };
       setProcessingQueue(updatedQueue);
     }

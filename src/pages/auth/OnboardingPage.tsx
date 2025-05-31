@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -51,7 +51,7 @@ type OnboardingFormValues = z.infer<typeof onboardingSchema>;
 
 export default function OnboardingPage() {
   const { updateProfile } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -83,7 +83,7 @@ export default function OnboardingPage() {
         title: 'Setup complete!',
         description: 'Your organization has been set up successfully.',
       });
-      navigate('/dashboard');
+      router.push('/dashboard');
     } catch {
       toast({
         title: 'Setup failed',
@@ -93,6 +93,10 @@ export default function OnboardingPage() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleComplete = () => {
+    router.push('/dashboard');
   };
 
   return (

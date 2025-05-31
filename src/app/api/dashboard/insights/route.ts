@@ -39,10 +39,12 @@ export async function GET(request: NextRequest) {
         impact: 5,
         riskScore: 15,
         status: 'identified' as const,
-        category: 'cybersecurity',
+        category: 'technology' as const,
         owner: 'IT Security Team',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        controls: ['1'],
+        evidence: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       }
     ];
 
@@ -52,12 +54,15 @@ export async function GET(request: NextRequest) {
         title: 'Access Control Policy',
         description: 'Comprehensive access control procedures',
         type: 'preventive' as const,
-        effectiveness: 85,
+        effectiveness: 'high' as const,
         status: 'active' as const,
         owner: 'Security Team',
+        frequency: 'monthly',
+        evidence: [],
+        linkedRisks: ['1'],
         lastTested: new Date(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       }
     ];
 

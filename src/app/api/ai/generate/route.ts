@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { AIService } from '@/services/AIService';
-import { ComplianceAIService } from '@/services/ComplianceAIService';
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,13 +28,14 @@ export async function POST(request: NextRequest) {
         });
         break;
       
-      case 'compliance_content':
-        const complianceService = new ComplianceAIService();
-        result = await complianceService.generateComplianceContent({
+      case 'compliance_content': {
+        result = await aiService.generateContent({
+          type,
           context,
           requirements,
         });
         break;
+      }
       
       default:
         return NextResponse.json(

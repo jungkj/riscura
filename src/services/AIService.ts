@@ -201,9 +201,9 @@ export class AIService {
   constructor(config: Partial<AIConfig> = {}) {
     // Initialize configuration with defaults
     this.config = {
-      apiKey: import.meta.env.VITE_OPENAI_API_KEY || '',
-      baseURL: import.meta.env.VITE_OPENAI_BASE_URL,
-      organization: import.meta.env.VITE_OPENAI_ORGANIZATION,
+      apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY || '',
+      baseURL: process.env.NEXT_PUBLIC_OPENAI_BASE_URL,
+      organization: process.env.NEXT_PUBLIC_OPENAI_ORGANIZATION,
       defaultModel: 'gpt-4o-mini',
       maxTokens: 4000,
       temperature: 0.7,
@@ -219,7 +219,7 @@ export class AIService {
 
     if (!this.config.apiKey) {
       throw new AIServiceError(
-        'OpenAI API key is required. Please set VITE_OPENAI_API_KEY environment variable.',
+        'OpenAI API key is required. Please set NEXT_PUBLIC_OPENAI_API_KEY environment variable.',
         'MISSING_API_KEY'
       );
     }

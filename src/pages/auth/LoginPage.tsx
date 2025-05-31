@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useForm } from 'react-hook-form';
@@ -42,7 +43,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const { login } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -63,7 +64,7 @@ export default function LoginPage() {
         title: 'Welcome back!',
         description: 'You have successfully logged in.',
       });
-      navigate('/dashboard');
+      router.push('/dashboard');
     } catch {
       toast({
         title: 'Login failed',
@@ -205,7 +206,7 @@ export default function LoginPage() {
 
               <div className="mt-4 text-center text-sm">
                 <Link 
-                  to="/forgot-password" 
+                  href="/forgot-password" 
                   className="text-blue-600 hover:text-blue-700 hover:underline transition-colors"
                 >
                   Forgot password?
@@ -217,7 +218,7 @@ export default function LoginPage() {
               <p className="text-sm text-muted-foreground">
                 Don't have an account?{' '}
                 <Link 
-                  to="/register" 
+                  href="/register" 
                   className="text-blue-600 hover:text-blue-700 hover:underline transition-colors font-medium"
                 >
                   Sign up

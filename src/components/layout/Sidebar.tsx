@@ -1,24 +1,30 @@
-import { Link, useLocation } from 'react-router-dom';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { User } from '@/types';
-
-// Icons
-import { 
-  LayoutDashboard, 
-  AlertTriangle, 
-  ShieldCheck, 
-  FileText, 
-  GitBranch, 
-  BarChart3,
-  Lightbulb,
+import { hasPermission } from '@/lib/utils';
+import { User as UserType } from '@/types';
+import {
+  LayoutDashboard,
+  Shield,
+  CheckCircle,
+  FileText,
+  GitBranch,
+  Folder,
+  BarChart,
+  Brain,
+  User,
   ClipboardList,
   Settings,
-  Bot
+  Bot,
+  AlertTriangle,
+  ShieldCheck,
+  BarChart3,
+  Lightbulb
 } from 'lucide-react';
 
 interface SidebarProps {
   isOpen: boolean;
-  user: User | null;
+  user?: UserType;
 }
 
 interface NavItem {
@@ -31,103 +37,144 @@ interface NavItem {
 }
 
 export default function Sidebar({ isOpen, user }: SidebarProps) {
-  const location = useLocation();
+  const pathname = usePathname();
   
   // Define navigation items
-  const navItems: NavItem[] = [
+  const navigationItems = [
     {
-      title: "Dashboard",
-      href: "/dashboard",
-      icon: <LayoutDashboard className="h-5 w-5" />
+      name: 'Dashboard',
+      href: '/dashboard',
+      icon: LayoutDashboard,
+      permissions: ['dashboard:read'],
     },
     {
-      title: "ARIA AI Assistant",
-      href: "/aria",
-      icon: <Bot className="h-5 w-5" />,
-      badge: "NEW",
-      isNew: true
+      name: 'Risks',
+      href: '/risks',
+      icon: Shield,
+      permissions: ['risks:read'],
     },
     {
-      title: "Risk Register",
-      href: "/risks",
-      icon: <AlertTriangle className="h-5 w-5" />,
-      requiresPermission: "risks.view"
+      name: 'Controls',
+      href: '/controls',
+      icon: CheckCircle,
+      permissions: ['controls:read'],
     },
     {
-      title: "Document Analysis",
-      href: "/document-analysis",
-      icon: <FileText className="h-5 w-5" />
+      name: 'Questionnaires',
+      href: '/questionnaires',
+      icon: FileText,
+      permissions: ['questionnaires:read'],
     },
     {
-      title: "Control Library",
-      href: "/controls",
-      icon: <ShieldCheck className="h-5 w-5" />,
-      requiresPermission: "controls.view"
+      name: 'Workflows',
+      href: '/workflows',
+      icon: GitBranch,
+      permissions: ['workflows:read'],
     },
     {
-      title: "Workflows",
-      href: "/workflows",
-      icon: <GitBranch className="h-5 w-5" />
+      name: 'Documents',
+      href: '/documents',
+      icon: Folder,
+      permissions: ['documents:read'],
     },
     {
-      title: "Questionnaires",
-      href: "/questionnaires",
-      icon: <ClipboardList className="h-5 w-5" />
+      name: 'Reports',
+      href: '/reports',
+      icon: BarChart,
+      permissions: ['reports:read'],
     },
     {
-      title: "Reporting",
-      href: "/reporting",
-      icon: <BarChart3 className="h-5 w-5" />
-    },
-    {
-      title: "AI Insights",
-      href: "/ai-insights",
-      icon: <Lightbulb className="h-5 w-5" />
-    },
-    {
-      title: "Settings",
-      href: "/settings",
-      icon: <Settings className="h-5 w-5" />
+      name: 'AI Insights',
+      href: '/dashboard/aria',
+      icon: Brain,
+      permissions: ['ai:read'],
     },
   ];
 
-  // Filter items based on user permissions
-  const filteredNavItems = navItems.filter(item => {
-    if (!item.requiresPermission) return true;
-    return user?.permissions.includes(item.requiresPermission);
-  });
+  // Filter navigation items based on user permissions (simplified for demo)
+  const filteredNavigationItems = navigationItems;
 
   return (
-    <aside 
-      className={cn(
-        "fixed left-0 z-30 w-64 flex-col border-r bg-card transition-all duration-300 ease-in-out",
-        "top-16 bottom-0", // Position below navbar (assuming navbar height is 4rem/64px)
-        isOpen ? "translate-x-0" : "-translate-x-full"
-      )}
-    >
-      <div className="px-4 py-6">
-        <div className="space-y-1">
-          {filteredNavItems.map((item) => (
+    <div className="flex h-full flex-col bg-card">
+      {/* Logo */}
+      <div className="flex h-16 items-center justify-center border-b border-border px-4">
+        <Shield className="h-8 w-8 text-primary" />
+        {isOpen && (
+          <span className="ml-2 text-xl font-bold text-foreground">
+            Riscura
+          </span>
+        )}
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 space-y-1 p-4">
+        {filteredNavigationItems.map((item) => {
+          const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
+          
+          return (
             <Link
               key={item.href}
-              to={item.href}
+              href={item.href}
               className={cn(
-                "flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground relative",
-                location.pathname === item.href ? "bg-accent text-accent-foreground" : "transparent",
-                item.isNew && "bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950"
+                "flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground relative group",
+                isActive
+                  ? "bg-accent text-accent-foreground"
+                  : "text-muted-foreground",
+                !isOpen && "justify-center"
               )}
             >
-              {item.icon}
-              <span className="ml-3">{item.title}</span>
-              {item.badge && (
-                <span className="ml-auto inline-flex items-center rounded-full bg-gradient-to-r from-blue-500 to-purple-600 px-2 py-1 text-xs font-medium text-white">
-                  {item.badge}
-                </span>
+              <item.icon className="h-5 w-5 shrink-0" />
+              {isOpen && (
+                <span className="ml-3 truncate">{item.name}</span>
+              )}
+              {!isOpen && (
+                <div className="absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-sm rounded-md border shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
+                  {item.name}
+                </div>
+              )}
+              {isActive && (
+                <div className="absolute right-0 top-0 h-full w-1 rounded-l-md bg-primary" />
               )}
             </Link>
-          ))}
+          );
+        })}
+      </nav>
+
+      {/* User Info */}
+      {isOpen && user && (
+        <div className="border-t border-border p-4">
+          <div className="flex items-center space-x-3">
+            <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+              <User className="h-4 w-4 text-primary" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-foreground truncate">
+                {user.firstName} {user.lastName}
+              </p>
+              <p className="text-xs text-muted-foreground truncate">
+                {user.role.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
-    </aside>
+      )}
+      
+      {/* Collapsed User Info */}
+      {!isOpen && user && (
+        <div className="border-t border-border p-2 relative group">
+          <div className="flex justify-center">
+            <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+              <User className="h-4 w-4 text-primary" />
+            </div>
+          </div>
+          <div className="absolute left-full ml-2 px-3 py-2 bg-popover text-popover-foreground text-sm rounded-md border shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
+            <p className="font-medium">{user.firstName} {user.lastName}</p>
+            <p className="text-xs text-muted-foreground">
+              {user.role.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
