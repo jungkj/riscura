@@ -117,33 +117,17 @@ export function useContentAnalysis(options: UseContentAnalysisOptions = {}) {
           break;
         }
 
-        case 'risk-analysis': {
+        default: {
+          // Handle other actions with generateContent
           if (generateContent) {
             content = await generateContent({
               type: 'risk_analysis',
-              context: { text: selection.text, purpose: 'risk-analysis' },
-              requirements: 'Identify potential risks',
+              context: { text: selection.text, purpose: action },
+              requirements: 'Analyze content based on action type',
             }) as string;
           }
           break;
         }
-
-        case 'control-recommendations': {
-          content = await generateContent({
-            type: 'control_design',
-            context: { text: selection.text, purpose: 'control-recommendations' },
-            requirements: 'Suggest relevant controls and procedures',
-          }) as string;
-          break;
-        }
-
-        case 'find-related': {
-          content = 'Related content search would be implemented here';
-          break;
-        }
-
-        default:
-          throw new Error(`Unsupported action: ${action}`);
       }
 
       // Update result with completed analysis

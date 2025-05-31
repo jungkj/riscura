@@ -33,7 +33,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RiskAnalysisAI } from '@/components/ai/RiskAnalysisAI';
 import { ControlRecommendationsAI } from '@/components/ai/ControlRecommendationsAI';
 import { ComplianceIntelligenceAI } from '@/components/ai/ComplianceIntelligenceAI';
-import { ProactiveIntelligenceAI } from '@/components/ai/ProactiveIntelligenceAI';
+import ProactiveIntelligenceAI from '@/components/ai/ProactiveIntelligenceAI';
 import { ComplianceAssessment, ComplianceRoadmap, AuditPreparation } from '@/services/ComplianceAIService';
 
 interface FeatureCardProps {
@@ -84,48 +84,57 @@ const mockRisks: Risk[] = [
     title: 'Data Breach Risk',
     description: 'Risk of unauthorized access to sensitive customer data',
     category: 'operational',
+    likelihood: 4,
+    impact: 5,
     riskScore: 18,
-    impact: 'high',
-    likelihood: 'medium',
+    riskLevel: 'high',
     owner: 'CISO',
-    status: 'active',
+    status: 'identified',
+    controls: ['ctrl-1', 'ctrl-2'],
+    evidence: [],
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-15T00:00:00Z',
     lastAssessed: new Date('2024-01-15'),
-    nextReview: new Date('2024-04-15'),
-    linkedControls: ['ctrl-1', 'ctrl-2'],
-    createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-15')
+    dateIdentified: '2024-01-01T00:00:00Z',
+    nextReview: new Date('2024-04-15')
   },
   {
     id: 'risk-2', 
     title: 'Compliance Violation Risk',
     description: 'Risk of failing to meet regulatory requirements',
     category: 'compliance',
+    likelihood: 2,
+    impact: 5,
     riskScore: 15,
-    impact: 'high',
-    likelihood: 'low',
+    riskLevel: 'high',
     owner: 'Compliance Officer',
-    status: 'active',
+    status: 'identified',
+    controls: ['ctrl-3'],
+    evidence: [],
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-10T00:00:00Z',
     lastAssessed: new Date('2024-01-10'),
-    nextReview: new Date('2024-04-10'),
-    linkedControls: ['ctrl-3'],
-    createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-10')
+    dateIdentified: '2024-01-01T00:00:00Z',
+    nextReview: new Date('2024-04-10')
   },
   {
     id: 'risk-3',
     title: 'System Outage Risk',
     description: 'Risk of critical system unavailability',
     category: 'operational',
+    likelihood: 3,
+    impact: 4,
     riskScore: 12,
-    impact: 'medium',
-    likelihood: 'medium',
+    riskLevel: 'medium',
     owner: 'IT Manager',
-    status: 'active',
+    status: 'identified',
+    controls: ['ctrl-4'],
+    evidence: [],
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-20T00:00:00Z',
     lastAssessed: new Date('2024-01-20'),
-    nextReview: new Date('2024-04-20'),
-    linkedControls: ['ctrl-4'],
-    createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-20')
+    dateIdentified: '2024-01-01T00:00:00Z',
+    nextReview: new Date('2024-04-20')
   }
 ];
 
@@ -135,56 +144,64 @@ const mockControls: Control[] = [
     title: 'Data Encryption',
     description: 'Encryption of data at rest and in transit',
     type: 'preventive',
-    effectiveness: 85,
-    status: 'active',
+    effectiveness: 'high',
     owner: 'IT Security Team',
-    lastTested: new Date('2024-01-15'),
-    nextTest: new Date('2024-04-15'),
+    frequency: 'continuous',
+    evidence: [],
     linkedRisks: ['risk-1'],
-    createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-15')
+    status: 'active',
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-15T00:00:00Z',
+    lastTestDate: '2024-01-15T00:00:00Z',
+    nextTestDate: '2024-04-15T00:00:00Z'
   },
   {
     id: 'ctrl-2',
     title: 'Access Control',
     description: 'Role-based access control system',
     type: 'preventive',
-    effectiveness: 78,
-    status: 'active',
+    effectiveness: 'high',
     owner: 'IT Security Team',
-    lastTested: new Date('2024-01-10'),
-    nextTest: new Date('2024-04-10'),
+    frequency: 'continuous',
+    evidence: [],
     linkedRisks: ['risk-1'],
-    createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-10')
+    status: 'active',
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-10T00:00:00Z',
+    lastTestDate: '2024-01-10T00:00:00Z',
+    nextTestDate: '2024-04-10T00:00:00Z'
   },
   {
     id: 'ctrl-3',
     title: 'Compliance Monitoring',
     description: 'Automated compliance monitoring and reporting',
     type: 'detective',
-    effectiveness: 92,
-    status: 'active',
+    effectiveness: 'high',
     owner: 'Compliance Team',
-    lastTested: new Date('2024-01-20'),
-    nextTest: new Date('2024-04-20'),
+    frequency: 'daily',
+    evidence: [],
     linkedRisks: ['risk-2'],
-    createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-20')
+    status: 'active',
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-20T00:00:00Z',
+    lastTestDate: '2024-01-20T00:00:00Z',
+    nextTestDate: '2024-04-20T00:00:00Z'
   },
   {
     id: 'ctrl-4',
     title: 'System Monitoring',
     description: 'Real-time system health monitoring',
     type: 'detective',
-    effectiveness: 88,
-    status: 'active',
+    effectiveness: 'high',
     owner: 'IT Operations',
-    lastTested: new Date('2024-01-18'),
-    nextTest: new Date('2024-04-18'),
+    frequency: 'continuous',
+    evidence: [],
     linkedRisks: ['risk-3'],
-    createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-18')
+    status: 'active',
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-18T00:00:00Z',
+    lastTestDate: '2024-01-18T00:00:00Z',
+    nextTestDate: '2024-04-18T00:00:00Z'
   }
 ];
 
@@ -193,7 +210,7 @@ const ARIAPage: React.FC = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [selectedMode, setSelectedMode] = useState<'sidebar' | 'fullscreen'>('sidebar');
   const [initialContext, setInitialContext] = useState<RiskContext | undefined>();
-  const [activeTab, setActiveTab] = useState<'risk-analysis' | 'control-recommendations' | 'compliance-intelligence' | 'proactive-intelligence'>('risk-analysis');
+  const [activeTab, setActiveTab] = useState<'features' | 'chat' | 'analytics' | 'risk-analysis' | 'control-recommendations' | 'compliance-intelligence' | 'proactive-intelligence'>('features');
 
   const { state: chatState, actions } = useARIAChat();
   const { 
@@ -220,7 +237,7 @@ const ARIAPage: React.FC = () => {
           data: { riskId, controlId },
         },
       });
-      setActiveTab('chat');
+      setActiveTab('features');
       setIsChatOpen(true);
     }
   }, [location]);
@@ -250,12 +267,12 @@ const ARIAPage: React.FC = () => {
     }
     
     setInitialContext(context);
-    setActiveTab('chat');
+    setActiveTab('features');
     setIsChatOpen(true);
   };
 
   const handleStartConversation = () => {
-    setActiveTab('chat');
+    setActiveTab('features');
     setIsChatOpen(true);
   };
 
@@ -264,25 +281,25 @@ const ARIAPage: React.FC = () => {
       icon: <Brain className="h-5 w-5" />,
       title: 'Risk Analysis AI',
       description: 'AI-powered risk assessment and quantification',
-      tab: 'risk-analysis' as typeof activeTab
+      tab: 'risk-analysis' as const
     },
     {
       icon: <Target className="h-5 w-5" />,
       title: 'Control Recommendations',
       description: 'Intelligent control design and optimization',
-      tab: 'control-recommendations' as typeof activeTab
+      tab: 'control-recommendations' as const
     },
     {
       icon: <Shield className="h-5 w-5" />,
       title: 'Compliance Intelligence',
       description: 'Automated compliance gap analysis and roadmaps',
-      tab: 'compliance-intelligence' as typeof activeTab
+      tab: 'compliance-intelligence' as const
     },
     {
       icon: <Lightbulb className="h-5 w-5" />,
       title: 'Proactive Intelligence',
       description: 'Background AI monitoring and predictive insights',
-      tab: 'proactive-intelligence' as typeof activeTab
+      tab: 'proactive-intelligence' as const
     }
   ];
 
