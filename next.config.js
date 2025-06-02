@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    appDir: true,
-    serverComponentsExternalPackages: ['@tabler/icons-react', 'lucide-react'],
     optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
   },
   
@@ -135,4 +133,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig; 
+export default nextConfig; 

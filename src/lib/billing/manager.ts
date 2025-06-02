@@ -152,6 +152,92 @@ export class BillingManager {
     return subscription;
   }
 
+  async changeSubscriptionPlan(
+    subscriptionId: string,
+    newPlanId: string
+  ): Promise<OrganizationSubscription> {
+    // TODO: Implement with real database operations
+    // Return mock updated subscription for now
+    const subscription: OrganizationSubscription = {
+      id: subscriptionId,
+      organizationId: 'org_123',
+      planId: newPlanId,
+      stripeSubscriptionId: undefined,
+      stripeCustomerId: undefined,
+      status: 'active',
+      currentPeriodStart: new Date(),
+      currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      trialStart: undefined,
+      trialEnd: undefined,
+      cancelAtPeriodEnd: false,
+      billingCycle: 'monthly',
+      quantity: 1,
+      unitPrice: 0,
+      metadata: {},
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    return subscription;
+  }
+
+  async cancelSubscription(
+    subscriptionId: string,
+    immediately: boolean = false
+  ): Promise<OrganizationSubscription> {
+    // TODO: Implement with real database operations
+    // Return mock canceled subscription for now
+    const subscription: OrganizationSubscription = {
+      id: subscriptionId,
+      organizationId: 'org_123',
+      planId: 'plan_free',
+      stripeSubscriptionId: undefined,
+      stripeCustomerId: undefined,
+      status: immediately ? 'canceled' : 'active',
+      currentPeriodStart: new Date(),
+      currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      trialStart: undefined,
+      trialEnd: undefined,
+      cancelAtPeriodEnd: !immediately,
+      billingCycle: 'monthly',
+      quantity: 1,
+      unitPrice: 0,
+      metadata: {},
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    return subscription;
+  }
+
+  async reactivateSubscription(
+    subscriptionId: string
+  ): Promise<OrganizationSubscription> {
+    // TODO: Implement with real database operations
+    // Return mock reactivated subscription for now
+    const subscription: OrganizationSubscription = {
+      id: subscriptionId,
+      organizationId: 'org_123',
+      planId: 'plan_pro',
+      stripeSubscriptionId: undefined,
+      stripeCustomerId: undefined,
+      status: 'active',
+      currentPeriodStart: new Date(),
+      currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      trialStart: undefined,
+      trialEnd: undefined,
+      cancelAtPeriodEnd: false,
+      billingCycle: 'monthly',
+      quantity: 1,
+      unitPrice: 0,
+      metadata: {},
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    return subscription;
+  }
+
   // Usage Tracking
   async trackUsage(
     organizationId: string,

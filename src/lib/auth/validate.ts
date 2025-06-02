@@ -5,6 +5,7 @@ export interface ValidatedUser {
   email: string;
   role: string;
   organizationId: string;
+  permissions: string[];
 }
 
 export async function validateRequest(request: NextRequest): Promise<{ user: ValidatedUser | null }> {
@@ -23,6 +24,7 @@ export async function validateRequest(request: NextRequest): Promise<{ user: Val
       email: 'user@example.com',
       role: 'ADMIN',
       organizationId: 'org_123',
+      permissions: ['*'], // Admin has all permissions
     };
 
     return { user };

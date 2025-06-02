@@ -422,6 +422,9 @@ export class MonitoringService {
       averageResponseTime: avgDuration,
       p95ResponseTime: this.calculatePercentile(durationMetrics.map(m => m.value), 95),
       p99ResponseTime: this.calculatePercentile(durationMetrics.map(m => m.value), 99),
+      requestCount: totalRequests,
+      slowRequests: durationMetrics.filter(m => m.value > 2000).length,
+      endpointMetrics: {},
     };
   }
 
@@ -438,6 +441,9 @@ export class MonitoringService {
       totalQueries,
       averageQueryTime: avgDuration,
       slowQueries: durationMetrics.filter(m => m.value > 1000).length, // > 1 second
+      queryCount: totalQueries,
+      connectionPoolSize: 10,
+      activeConnections: 5,
     };
   }
 
@@ -675,12 +681,22 @@ export interface APIMetrics {
   averageResponseTime: number;
   p95ResponseTime: number;
   p99ResponseTime: number;
+  requestCount: number;
+  slowRequests: number;
+  endpointMetrics: Record<string, {
+    count: number;
+    averageTime: number;
+    errorCount: number;
+  }>;
 }
 
 export interface DatabaseMetrics {
   totalQueries: number;
   averageQueryTime: number;
   slowQueries: number;
+  queryCount: number;
+  connectionPoolSize: number;
+  activeConnections: number;
 }
 
 export interface CacheMetrics {
@@ -716,26 +732,6 @@ export interface PerformanceMetric {
   timestamp: Date;
   tags?: Record<string, string>;
   metadata?: Record<string, any>;
-}
-
-export interface DatabaseMetrics {
-  queryCount: number;
-  averageQueryTime: number;
-  slowQueries: number;
-  connectionPoolSize: number;
-  activeConnections: number;
-}
-
-export interface APIMetrics {
-  requestCount: number;
-  averageResponseTime: number;
-  errorRate: number;
-  slowRequests: number;
-  endpointMetrics: Record<string, {
-    count: number;
-    averageTime: number;
-    errorCount: number;
-  }>;
 }
 
 export interface SystemMetrics {
@@ -926,12 +922,18 @@ class PerformanceMonitor {
       totalErrors += data.errors;
     }
 
+    const values = Array.from(this.apiMetrics.values()).flatMap(d => d.times);
+
     return {
       requestCount: totalRequests,
       averageResponseTime: totalRequests > 0 ? Math.round(totalTime / totalRequests) : 0,
       errorRate: totalRequests > 0 ? (totalErrors / totalRequests) * 100 : 0,
       slowRequests: this.countSlowRequests(),
       endpointMetrics,
+      totalRequests,
+      totalErrors,
+      p95ResponseTime: this.calculatePercentile(values, 95),
+      p99ResponseTime: this.calculatePercentile(values, 99),
     };
   }
 
@@ -947,6 +949,7 @@ class PerformanceMonitor {
       slowQueries: this.dbMetrics.slowQueries,
       connectionPoolSize: 10, // This would come from your DB pool configuration
       activeConnections: 5, // This would come from your DB pool status
+      totalQueries: this.dbMetrics.queries,
     };
   }
 
@@ -1061,6 +1064,17 @@ class PerformanceMonitor {
       slowCount += data.times.filter(time => time > 2000).length; // 2 second threshold
     }
     return slowCount;
+  }
+
+  /**
+   * Calculate percentile for an array of values
+   */
+  private calculatePercentile(values: number[], percentile: number): number {
+    if (values.length === 0) return 0;
+    
+    const sorted = values.sort((a, b) => a - b);
+    const index = Math.ceil(sorted.length * (percentile / 100)) - 1;
+    return sorted[Math.max(0, index)];
   }
 
   /**

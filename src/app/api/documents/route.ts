@@ -145,7 +145,6 @@ export const GET = withAPI(
           },
           _count: {
             select: {
-              files: true,
               risks: true,
               controls: true,
               versions: true,

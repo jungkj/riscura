@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripeService } from '@/lib/billing/stripe';
-import { headers } from 'next/headers';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.text();
-    const headersList = headers();
+    const headersList = await request.headers;
     const signature = headersList.get('stripe-signature');
 
     if (!signature) {

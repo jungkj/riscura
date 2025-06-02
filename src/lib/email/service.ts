@@ -40,7 +40,7 @@ export interface EmailResult {
 }
 
 class EmailService {
-  private transporter: nodemailer.Transporter;
+  private transporter: nodemailer.Transporter | null = null;
   private templates: Map<string, EmailTemplate> = new Map();
   private queue: Array<{ id: string; email: EmailOptions; retryCount: number; scheduledAt: Date }> = [];
   private isProcessing = false;
@@ -57,7 +57,7 @@ class EmailService {
       return;
     }
 
-    this.transporter = nodemailer.createTransporter({
+    this.transporter = nodemailer.createTransport({
       host: emailConfig.host,
       port: emailConfig.port,
       secure: emailConfig.port === 465,
@@ -255,7 +255,7 @@ class EmailService {
   }
 
   async send(options: EmailOptions): Promise<EmailResult | null> {
-    if (!emailConfig.enabled) {
+    if (!emailConfig.enabled || !this.transporter) {
       console.warn('Email service is disabled. Email not sent:', options.subject);
       return null;
     }
@@ -309,10 +309,16 @@ class EmailService {
     templateName: string, 
     to: string | string[], 
     data: Record<string, any>,
-    options: Partial<EmailOptions> = {}
+    options: Partial<Omit<EmailOptions, 'template' | 'templateData'>> = {}
   ): Promise<EmailResult | null> {
+    const template = this.templates.get(templateName);
+    if (!template) {
+      throw new Error(`Email template not found: ${templateName}`);
+    }
+
     return this.send({
       to,
+      subject: template.subject,
       template: templateName,
       templateData: data,
       ...options,

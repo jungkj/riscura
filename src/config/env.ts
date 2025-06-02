@@ -23,6 +23,10 @@ const envSchema = z.object({
   SESSION_SECRET: z.string().min(32, 'SESSION_SECRET must be at least 32 characters'),
   BCRYPT_ROUNDS: z.string().transform(Number).default('12'),
   
+  // Google OAuth
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
+  
   // OpenAI API
   OPENAI_API_KEY: z.string().min(1, 'OPENAI_API_KEY is required'),
   OPENAI_ORG_ID: z.string().optional(),
@@ -100,6 +104,13 @@ export const authConfig = {
   nextAuthUrl: env.NEXTAUTH_URL || env.APP_URL,
   sessionSecret: env.SESSION_SECRET,
   bcryptRounds: env.BCRYPT_ROUNDS,
+};
+
+// Google OAuth configuration helper
+export const googleConfig = {
+  clientId: env.GOOGLE_CLIENT_ID,
+  clientSecret: env.GOOGLE_CLIENT_SECRET,
+  enabled: !!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET),
 };
 
 // OpenAI configuration helper
