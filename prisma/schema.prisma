@@ -54,6 +54,10 @@ model User {
   permissions    String[]  @default([])
   isActive       Boolean   @default(true)
   emailVerified  DateTime?
+  emailVerificationToken   String?   // Token for email verification
+  emailVerificationExpires DateTime? // Expiration time for verification token
+  passwordResetToken       String?   // Token for password reset
+  passwordResetExpires     DateTime? // Expiration time for password reset token
   lastLogin      DateTime?
   organizationId String
   

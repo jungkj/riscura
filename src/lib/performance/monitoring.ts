@@ -1,6 +1,7 @@
 import { cacheService } from './cache';
 import { databaseOptimizer } from './database';
 import { compressionService } from './compression';
+import { env } from '@/config/env';
 
 export class MonitoringService {
   private metrics = new Map<string, Metric[]>();
@@ -705,4 +706,414 @@ export interface PerformanceReport {
 }
 
 // Global monitoring service instance
-export const monitoringService = new MonitoringService(); 
+export const monitoringService = new MonitoringService();
+
+// Performance Monitoring Service for Riscura RCSA Platform
+export interface PerformanceMetric {
+  name: string;
+  value: number;
+  unit: string;
+  timestamp: Date;
+  tags?: Record<string, string>;
+  metadata?: Record<string, any>;
+}
+
+export interface DatabaseMetrics {
+  queryCount: number;
+  averageQueryTime: number;
+  slowQueries: number;
+  connectionPoolSize: number;
+  activeConnections: number;
+}
+
+export interface APIMetrics {
+  requestCount: number;
+  averageResponseTime: number;
+  errorRate: number;
+  slowRequests: number;
+  endpointMetrics: Record<string, {
+    count: number;
+    averageTime: number;
+    errorCount: number;
+  }>;
+}
+
+export interface SystemMetrics {
+  memoryUsage: {
+    used: number;
+    total: number;
+    percentage: number;
+  };
+  cpuUsage?: number;
+  uptime: number;
+  nodeVersion: string;
+  environment: string;
+}
+
+export interface UserMetrics {
+  activeUsers: number;
+  totalSessions: number;
+  averageSessionDuration: number;
+  bounceRate: number;
+  pageViews: number;
+}
+
+class PerformanceMonitor {
+  private metrics: PerformanceMetric[] = [];
+  private apiMetrics: Map<string, { times: number[]; errors: number }> = new Map();
+  private dbMetrics: { queries: number; totalTime: number; slowQueries: number } = {
+    queries: 0,
+    totalTime: 0,
+    slowQueries: 0,
+  };
+  private isEnabled: boolean;
+  private metricsBuffer: PerformanceMetric[] = [];
+  private flushInterval: NodeJS.Timeout | null = null;
+
+  constructor() {
+    this.isEnabled = env.NODE_ENV === 'production' || env.DEBUG_MODE;
+    this.startMetricsCollection();
+  }
+
+  /**
+   * Record a performance metric
+   */
+  recordMetric(metric: PerformanceMetric): void {
+    if (!this.isEnabled) return;
+
+    this.metrics.push(metric);
+    this.metricsBuffer.push(metric);
+
+    // Keep only last 1000 metrics in memory
+    if (this.metrics.length > 1000) {
+      this.metrics = this.metrics.slice(-1000);
+    }
+  }
+
+  /**
+   * Track API request performance
+   */
+  trackAPIRequest(endpoint: string, duration: number, success: boolean): void {
+    if (!this.isEnabled) return;
+
+    const key = this.normalizeEndpoint(endpoint);
+    
+    if (!this.apiMetrics.has(key)) {
+      this.apiMetrics.set(key, { times: [], errors: 0 });
+    }
+
+    const metrics = this.apiMetrics.get(key)!;
+    metrics.times.push(duration);
+    
+    if (!success) {
+      metrics.errors++;
+    }
+
+    // Keep only last 100 measurements per endpoint
+    if (metrics.times.length > 100) {
+      metrics.times = metrics.times.slice(-100);
+    }
+
+    this.recordMetric({
+      name: 'api_request_duration',
+      value: duration,
+      unit: 'ms',
+      timestamp: new Date(),
+      tags: {
+        endpoint: key,
+        success: success.toString(),
+      },
+    });
+  }
+
+  /**
+   * Track database query performance
+   */
+  trackDatabaseQuery(query: string, duration: number, success: boolean): void {
+    if (!this.isEnabled) return;
+
+    this.dbMetrics.queries++;
+    this.dbMetrics.totalTime += duration;
+
+    if (duration > 1000) { // Slow query threshold: 1 second
+      this.dbMetrics.slowQueries++;
+    }
+
+    this.recordMetric({
+      name: 'db_query_duration',
+      value: duration,
+      unit: 'ms',
+      timestamp: new Date(),
+      tags: {
+        success: success.toString(),
+        slow: (duration > 1000).toString(),
+      },
+      metadata: {
+        query: query.substring(0, 100), // First 100 chars for privacy
+      },
+    });
+  }
+
+  /**
+   * Track memory usage
+   */
+  trackMemoryUsage(): void {
+    if (!this.isEnabled) return;
+
+    const memoryUsage = process.memoryUsage();
+    
+    this.recordMetric({
+      name: 'memory_heap_used',
+      value: memoryUsage.heapUsed,
+      unit: 'bytes',
+      timestamp: new Date(),
+    });
+
+    this.recordMetric({
+      name: 'memory_heap_total',
+      value: memoryUsage.heapTotal,
+      unit: 'bytes',
+      timestamp: new Date(),
+    });
+
+    this.recordMetric({
+      name: 'memory_rss',
+      value: memoryUsage.rss,
+      unit: 'bytes',
+      timestamp: new Date(),
+    });
+  }
+
+  /**
+   * Track user activity
+   */
+  trackUserActivity(userId: string, action: string, duration?: number): void {
+    if (!this.isEnabled) return;
+
+    this.recordMetric({
+      name: 'user_activity',
+      value: duration || 1,
+      unit: duration ? 'ms' : 'count',
+      timestamp: new Date(),
+      tags: {
+        userId,
+        action,
+      },
+    });
+  }
+
+  /**
+   * Get API metrics summary
+   */
+  getAPIMetrics(): APIMetrics {
+    const endpointMetrics: Record<string, any> = {};
+    let totalRequests = 0;
+    let totalTime = 0;
+    let totalErrors = 0;
+
+    for (const [endpoint, data] of this.apiMetrics.entries()) {
+      const count = data.times.length;
+      const averageTime = count > 0 ? data.times.reduce((a, b) => a + b, 0) / count : 0;
+      
+      endpointMetrics[endpoint] = {
+        count,
+        averageTime: Math.round(averageTime),
+        errorCount: data.errors,
+      };
+
+      totalRequests += count;
+      totalTime += data.times.reduce((a, b) => a + b, 0);
+      totalErrors += data.errors;
+    }
+
+    return {
+      requestCount: totalRequests,
+      averageResponseTime: totalRequests > 0 ? Math.round(totalTime / totalRequests) : 0,
+      errorRate: totalRequests > 0 ? (totalErrors / totalRequests) * 100 : 0,
+      slowRequests: this.countSlowRequests(),
+      endpointMetrics,
+    };
+  }
+
+  /**
+   * Get database metrics summary
+   */
+  getDatabaseMetrics(): DatabaseMetrics {
+    return {
+      queryCount: this.dbMetrics.queries,
+      averageQueryTime: this.dbMetrics.queries > 0 
+        ? Math.round(this.dbMetrics.totalTime / this.dbMetrics.queries) 
+        : 0,
+      slowQueries: this.dbMetrics.slowQueries,
+      connectionPoolSize: 10, // This would come from your DB pool configuration
+      activeConnections: 5, // This would come from your DB pool status
+    };
+  }
+
+  /**
+   * Get system metrics
+   */
+  getSystemMetrics(): SystemMetrics {
+    const memoryUsage = process.memoryUsage();
+    
+    return {
+      memoryUsage: {
+        used: Math.round(memoryUsage.heapUsed / 1024 / 1024), // MB
+        total: Math.round(memoryUsage.heapTotal / 1024 / 1024), // MB
+        percentage: Math.round((memoryUsage.heapUsed / memoryUsage.heapTotal) * 100),
+      },
+      uptime: Math.round(process.uptime()),
+      nodeVersion: process.version,
+      environment: env.NODE_ENV,
+    };
+  }
+
+  /**
+   * Get performance summary
+   */
+  getPerformanceSummary(): {
+    api: APIMetrics;
+    database: DatabaseMetrics;
+    system: SystemMetrics;
+    timestamp: Date;
+  } {
+    return {
+      api: this.getAPIMetrics(),
+      database: this.getDatabaseMetrics(),
+      system: this.getSystemMetrics(),
+      timestamp: new Date(),
+    };
+  }
+
+  /**
+   * Get metrics for a specific time range
+   */
+  getMetricsInRange(startTime: Date, endTime: Date): PerformanceMetric[] {
+    return this.metrics.filter(
+      metric => metric.timestamp >= startTime && metric.timestamp <= endTime
+    );
+  }
+
+  /**
+   * Clear all metrics
+   */
+  clearMetrics(): void {
+    this.metrics = [];
+    this.metricsBuffer = [];
+    this.apiMetrics.clear();
+    this.dbMetrics = { queries: 0, totalTime: 0, slowQueries: 0 };
+  }
+
+  /**
+   * Start automatic metrics collection
+   */
+  private startMetricsCollection(): void {
+    if (!this.isEnabled) return;
+
+    // Collect memory metrics every 30 seconds
+    setInterval(() => {
+      this.trackMemoryUsage();
+    }, 30000);
+
+    // Flush metrics buffer every 60 seconds
+    this.flushInterval = setInterval(() => {
+      this.flushMetrics();
+    }, 60000);
+  }
+
+  /**
+   * Flush metrics to external service (if configured)
+   */
+  private async flushMetrics(): Promise<void> {
+    if (this.metricsBuffer.length === 0) return;
+
+    try {
+      // In production, you would send these to a monitoring service
+      // like DataDog, New Relic, or CloudWatch
+      if (env.NODE_ENV === 'development') {
+        console.log(`Flushing ${this.metricsBuffer.length} metrics`);
+      }
+
+      // Clear the buffer after successful flush
+      this.metricsBuffer = [];
+    } catch (error) {
+      console.error('Failed to flush metrics:', error);
+    }
+  }
+
+  /**
+   * Normalize API endpoint for consistent tracking
+   */
+  private normalizeEndpoint(endpoint: string): string {
+    // Remove query parameters and normalize dynamic segments
+    return endpoint
+      .split('?')[0]
+      .replace(/\/\d+/g, '/:id')
+      .replace(/\/[a-f0-9-]{36}/g, '/:uuid');
+  }
+
+  /**
+   * Count slow API requests
+   */
+  private countSlowRequests(): number {
+    let slowCount = 0;
+    for (const data of this.apiMetrics.values()) {
+      slowCount += data.times.filter(time => time > 2000).length; // 2 second threshold
+    }
+    return slowCount;
+  }
+
+  /**
+   * Cleanup resources
+   */
+  destroy(): void {
+    if (this.flushInterval) {
+      clearInterval(this.flushInterval);
+      this.flushInterval = null;
+    }
+    this.clearMetrics();
+  }
+}
+
+// Export singleton instance
+export const performanceMonitor = new PerformanceMonitor();
+
+// Middleware helper for Express/Next.js
+export function createPerformanceMiddleware() {
+  return (req: any, res: any, next: any) => {
+    const startTime = Date.now();
+    
+    res.on('finish', () => {
+      const duration = Date.now() - startTime;
+      const success = res.statusCode < 400;
+      
+      performanceMonitor.trackAPIRequest(
+        req.url || req.path,
+        duration,
+        success
+      );
+    });
+    
+    next();
+  };
+}
+
+// Database query wrapper
+export function wrapDatabaseQuery<T>(
+  queryFn: () => Promise<T>,
+  queryName: string
+): Promise<T> {
+  const startTime = Date.now();
+  
+  return queryFn()
+    .then(result => {
+      const duration = Date.now() - startTime;
+      performanceMonitor.trackDatabaseQuery(queryName, duration, true);
+      return result;
+    })
+    .catch(error => {
+      const duration = Date.now() - startTime;
+      performanceMonitor.trackDatabaseQuery(queryName, duration, false);
+      throw error;
+    });
+} 
