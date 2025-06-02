@@ -1,17 +1,14 @@
 import jsPDF from 'jspdf';
 import ExcelJS from 'exceljs';
 import html2canvas from 'html2canvas';
-import { ReportData, ReportWidget, ExportFormat, ExportOptions } from '@/types/reporting';
+import { ReportData, ReportWidget, ExportFormat, ExportOptions as BaseExportOptions } from '@/types/reporting';
 
-export interface ExportOptions {
-  format?: 'pdf' | 'excel' | 'csv';
+export interface PDFExportOptions extends BaseExportOptions {
   title?: string;
   subtitle?: string;
-  includeCharts?: boolean;
   includeData?: boolean;
   pageOrientation?: 'portrait' | 'landscape';
   pageSize?: 'a4' | 'letter' | 'legal';
-  compression?: boolean;
   watermark?: string;
 }
 
@@ -28,7 +25,7 @@ export class ReportExporter {
   async exportToPDF(
     reportData: any,
     charts: ChartExportData[] = [],
-    options: ExportOptions = {}
+    options: PDFExportOptions = {}
   ): Promise<Buffer> {
     const pdf = new jsPDF({
       orientation: options.pageOrientation || 'portrait',
@@ -265,10 +262,10 @@ export class ReportExporter {
     }
   }
 
-  // Export report to Excel
+  // Export report to Excel using ExcelJS
   async exportToExcel(
     reportData: ReportData,
-    options: ExportOptions = {}
+    options: BaseExportOptions = {}
   ): Promise<Buffer> {
     try {
       const workbook = new ExcelJS.Workbook();
@@ -378,7 +375,7 @@ export class ReportExporter {
   // Export report to CSV
   async exportToCSV(
     reportData: any,
-    options: ExportOptions = {}
+    options: PDFExportOptions = {}
   ): Promise<Buffer> {
     let csvContent = '';
 
@@ -445,7 +442,7 @@ export class ReportExporter {
   }
 
   // Optimize PDF size
-  private optimizePDF(pdf: jsPDF, options: ExportOptions): void {
+  private optimizePDF(pdf: jsPDF, options: PDFExportOptions): void {
     if (options.compression) {
       // PDF compression would be implemented here
       // jsPDF doesn't have built-in compression, but you could use libraries like pdf-lib

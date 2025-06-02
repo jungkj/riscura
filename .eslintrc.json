@@ -16,7 +16,8 @@
     "@typescript-eslint/no-unused-vars": "off",
     "react-hooks/exhaustive-deps": "warn",
     "prefer-const": "warn",
-    "no-unused-vars": "off"
+    "no-unused-vars": "off",
+    "no-console": "warn"
   },
   "settings": {
     "react": {
