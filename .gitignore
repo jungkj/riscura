@@ -1,26 +1,120 @@
-# Logs
-logs
-*.log
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+/coverage
+/.nyc_output
+/test-results
+/playwright-report
+/playwright/.cache
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+/dist
+
+# misc
+.DS_Store
+*.pem
+.idea
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+.pnpm-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# local env files
 .env
+.env*.local
+.env.development
+.env.test
+.env.production
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# database
+/prisma/migrations/dev
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# logs
+logs
+*.log
+/logs
+
+# OS files
+Thumbs.db
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-.next
+
+# editor
+*.swp
+*.swo
+*~
+.project
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+*.cache
+
+# security
+*.key
+*.pem
+*.p12
+*.pfx
+*.cert
+*.crt
+/certificates
+
+# backups
+*.backup
+*.bak
+/backups
+
+# uploads
+/uploads
+/public/uploads
+
+# generated files
+/generated
+/src/generated
+
+# monitoring
+.sentryclirc
+
+# package managers
+.npm
+.yarn-integrity
+
+# build tools
+.cache/
+.parcel-cache/
+
+# documentation
+/docs/.docusaurus
+/docs/build

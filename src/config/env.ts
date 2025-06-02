@@ -1,0 +1,228 @@
+// Environment configuration with validation
+import { z } from 'zod';
+
+// Define environment schema with Zod for validation
+const envSchema = z.object({
+  // Database
+  DATABASE_URL: z.string().url('DATABASE_URL must be a valid PostgreSQL connection string'),
+  
+  // Application
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  APP_URL: z.string().url().default('http://localhost:3001'),
+  APP_NAME: z.string().default('Riscura'),
+  PORT: z.string().default('3001'),
+  
+  // API Configuration
+  API_VERSION: z.string().default('v1'),
+  
+  // Authentication & Security
+  JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
+  JWT_EXPIRES_IN: z.string().default('7d'),
+  NEXTAUTH_SECRET: z.string().min(32, 'NEXTAUTH_SECRET must be at least 32 characters'),
+  NEXTAUTH_URL: z.string().url().optional(),
+  SESSION_SECRET: z.string().min(32, 'SESSION_SECRET must be at least 32 characters'),
+  BCRYPT_ROUNDS: z.string().transform(Number).default('12'),
+  
+  // OpenAI API
+  OPENAI_API_KEY: z.string().min(1, 'OPENAI_API_KEY is required'),
+  OPENAI_ORG_ID: z.string().optional(),
+  
+  // Email Configuration
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.string().transform(Number).default('587'),
+  SMTP_USER: z.string().email().optional(),
+  SMTP_PASS: z.string().optional(),
+  SMTP_FROM: z.string().email().default('noreply@riscura.com'),
+  
+  // File Storage
+  UPLOAD_MAX_SIZE: z.string().transform(Number).default('10485760'), // 10MB
+  UPLOAD_ALLOWED_TYPES: z.string().default('pdf,docx,xlsx,png,jpg,jpeg'),
+  STORAGE_TYPE: z.enum(['local', 's3', 'gcs']).default('local'),
+  AWS_S3_BUCKET: z.string().optional(),
+  AWS_S3_REGION: z.string().default('us-east-1'),
+  AWS_ACCESS_KEY_ID: z.string().optional(),
+  AWS_SECRET_ACCESS_KEY: z.string().optional(),
+  
+  // Redis (optional for caching)
+  REDIS_URL: z.string().url().optional(),
+  
+  // Rate Limiting
+  RATE_LIMIT_MAX: z.string().transform(Number).default('100'),
+  RATE_LIMIT_WINDOW: z.string().transform(Number).default('900000'), // 15 minutes
+  
+  // Monitoring
+  SENTRY_DSN: z.string().url().optional(),
+  LOG_LEVEL: z.enum(['error', 'warn', 'info', 'debug']).default('info'),
+  
+  // Feature Flags
+  ENABLE_AI_FEATURES: z.string().transform(v => v === 'true').default('true'),
+  ENABLE_COLLABORATION: z.string().transform(v => v === 'true').default('true'),
+  ENABLE_REAL_TIME: z.string().transform(v => v === 'true').default('true'),
+  ENABLE_EMAIL_NOTIFICATIONS: z.string().transform(v => v === 'true').default('true'),
+  
+  // Development
+  DEBUG_MODE: z.string().transform(v => v === 'true').default('false'),
+  MOCK_DATA: z.string().transform(v => v === 'true').default('false'),
+  SKIP_EMAIL_VERIFICATION: z.string().transform(v => v === 'true').default('false'),
+});
+
+// Parse and validate environment variables
+function validateEnv() {
+  try {
+    return envSchema.parse(process.env);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const missingVars = error.errors.map(err => `${err.path.join('.')}: ${err.message}`);
+      throw new Error(
+        `Environment validation failed:\n${missingVars.join('\n')}\n\n` +
+        'Please check your .env.local file and ensure all required variables are set.'
+      );
+    }
+    throw error;
+  }
+}
+
+// Export validated environment variables
+export const env = validateEnv();
+
+// Database configuration helper
+export const databaseConfig = {
+  url: env.DATABASE_URL,
+  logging: env.NODE_ENV === 'development',
+  ssl: env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+};
+
+// Authentication configuration helper
+export const authConfig = {
+  jwtSecret: env.JWT_SECRET,
+  jwtExpiresIn: env.JWT_EXPIRES_IN,
+  nextAuthSecret: env.NEXTAUTH_SECRET,
+  nextAuthUrl: env.NEXTAUTH_URL || env.APP_URL,
+  sessionSecret: env.SESSION_SECRET,
+  bcryptRounds: env.BCRYPT_ROUNDS,
+};
+
+// OpenAI configuration helper
+export const aiConfig = {
+  apiKey: env.OPENAI_API_KEY,
+  organizationId: env.OPENAI_ORG_ID,
+  enabled: env.ENABLE_AI_FEATURES,
+};
+
+// Email configuration helper
+export const emailConfig = {
+  host: env.SMTP_HOST,
+  port: env.SMTP_PORT,
+  user: env.SMTP_USER,
+  pass: env.SMTP_PASS,
+  from: env.SMTP_FROM,
+  enabled: env.ENABLE_EMAIL_NOTIFICATIONS && !!env.SMTP_HOST,
+};
+
+// File storage configuration helper
+export const storageConfig = {
+  maxSize: env.UPLOAD_MAX_SIZE,
+  allowedTypes: env.UPLOAD_ALLOWED_TYPES.split(','),
+  type: env.STORAGE_TYPE,
+  aws: {
+    bucket: env.AWS_S3_BUCKET,
+    region: env.AWS_S3_REGION,
+    accessKeyId: env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+  },
+};
+
+// Rate limiting configuration helper
+export const rateLimitConfig = {
+  max: env.RATE_LIMIT_MAX,
+  windowMs: env.RATE_LIMIT_WINDOW,
+};
+
+// Feature flags helper
+export const features = {
+  ai: env.ENABLE_AI_FEATURES,
+  collaboration: env.ENABLE_COLLABORATION,
+  realTime: env.ENABLE_REAL_TIME,
+  emailNotifications: env.ENABLE_EMAIL_NOTIFICATIONS,
+  mockData: env.MOCK_DATA,
+  debugMode: env.DEBUG_MODE,
+  skipEmailVerification: env.SKIP_EMAIL_VERIFICATION,
+};
+
+// Application configuration helper
+export const appConfig = {
+  name: env.APP_NAME,
+  url: env.APP_URL,
+  port: env.PORT,
+  nodeEnv: env.NODE_ENV,
+  apiVersion: env.API_VERSION,
+  isDevelopment: env.NODE_ENV === 'development',
+  isProduction: env.NODE_ENV === 'production',
+  isTest: env.NODE_ENV === 'test',
+};
+
+// Logging configuration helper
+export const loggingConfig = {
+  level: env.LOG_LEVEL,
+  enableConsole: env.NODE_ENV !== 'production',
+  enableFile: env.NODE_ENV === 'production',
+  sentryDsn: env.SENTRY_DSN,
+};
+
+// Redis configuration helper (if available)
+export const redisConfig = env.REDIS_URL ? {
+  url: env.REDIS_URL,
+  enabled: true,
+} : {
+  enabled: false,
+  url: '',
+};
+
+// Export type for TypeScript usage
+export type Environment = typeof env;
+
+// Environment validation check
+export function checkRequiredEnvironmentVariables(): {
+  isValid: boolean;
+  missing: string[];
+  warnings: string[];
+} {
+  const missing: string[] = [];
+  const warnings: string[] = [];
+  
+  // Check critical variables
+  if (!env.DATABASE_URL) missing.push('DATABASE_URL');
+  if (!env.JWT_SECRET) missing.push('JWT_SECRET');
+  if (!env.NEXTAUTH_SECRET) missing.push('NEXTAUTH_SECRET');
+  if (!env.OPENAI_API_KEY && env.ENABLE_AI_FEATURES) missing.push('OPENAI_API_KEY (required when AI features are enabled)');
+  
+  // Check optional but recommended variables
+  if (!env.SMTP_HOST && env.ENABLE_EMAIL_NOTIFICATIONS) {
+    warnings.push('SMTP_HOST not configured - email notifications will be disabled');
+  }
+  
+  if (!env.REDIS_URL && env.NODE_ENV === 'production') {
+    warnings.push('REDIS_URL not configured - session storage will use database');
+  }
+  
+  return {
+    isValid: missing.length === 0,
+    missing,
+    warnings,
+  };
+}
+
+// Development environment helper
+export function isDevelopmentEnvironment(): boolean {
+  return env.NODE_ENV === 'development';
+}
+
+// Production environment helper
+export function isProductionEnvironment(): boolean {
+  return env.NODE_ENV === 'production';
+}
+
+// Test environment helper
+export function isTestEnvironment(): boolean {
+  return env.NODE_ENV === 'test';
+} 

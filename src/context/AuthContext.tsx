@@ -6,6 +6,10 @@ import { User } from '@/types';
 // Enhanced User interface with all required fields
 interface AuthUser extends User {
   updatedAt?: string;
+  organization?: {
+    id: string;
+    name: string;
+  };
 }
 
 interface AuthState {
@@ -14,13 +18,16 @@ interface AuthState {
   isLoading: boolean;
   error: string | null;
   isAuthenticated: boolean;
+  isInitialized: boolean;
 }
 
 interface AuthContextType extends AuthState {
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
   register: (userData: RegisterData) => Promise<void>;
-  logout: () => void;
+  logout: (logoutType?: 'current' | 'all') => Promise<void>;
   updateProfile: (userData: Partial<AuthUser>) => Promise<void>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
+  refreshToken: () => Promise<void>;
   clearError: () => void;
 }
 
@@ -28,8 +35,10 @@ interface RegisterData {
   email: string;
   firstName: string;
   lastName: string;
+  password: string;
   organizationName?: string;
-  role?: 'admin' | 'risk_manager' | 'auditor' | 'user';
+  organizationId?: string;
+  acceptTerms: boolean;
 }
 
 // Auth Actions
@@ -38,6 +47,7 @@ type AuthAction =
   | { type: 'AUTH_SUCCESS'; payload: { user: AuthUser; token: string } }
   | { type: 'AUTH_ERROR'; payload: string }
   | { type: 'AUTH_LOGOUT' }
+  | { type: 'AUTH_INITIALIZE'; payload: { user: AuthUser; token: string } | null }
   | { type: 'UPDATE_USER'; payload: AuthUser }
   | { type: 'CLEAR_ERROR' };
 
@@ -48,6 +58,7 @@ const initialState: AuthState = {
   isLoading: false,
   error: null,
   isAuthenticated: false,
+  isInitialized: false,
 };
 
 // Auth reducer
@@ -67,6 +78,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         isLoading: false,
         error: null,
         isAuthenticated: true,
+        isInitialized: true,
       };
     case 'AUTH_ERROR':
       return {
@@ -76,11 +88,33 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         isLoading: false,
         error: action.payload,
         isAuthenticated: false,
+        isInitialized: true,
       };
     case 'AUTH_LOGOUT':
       return {
         ...initialState,
+        isInitialized: true,
       };
+    case 'AUTH_INITIALIZE':
+      if (action.payload) {
+        return {
+          ...state,
+          user: action.payload.user,
+          token: action.payload.token,
+          isAuthenticated: true,
+          isInitialized: true,
+          isLoading: false,
+        };
+      } else {
+        return {
+          ...state,
+          user: null,
+          token: null,
+          isAuthenticated: false,
+          isInitialized: true,
+          isLoading: false,
+        };
+      }
     case 'UPDATE_USER':
       return {
         ...state,
@@ -108,133 +142,267 @@ export const useAuth = () => {
   return context;
 };
 
-// Mock authentication service
+// Real authentication service
 const authService = {
-  login: async (email: string, password: string): Promise<{ user: AuthUser; token: string }> => {
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Mock user authentication logic
-    if (email === 'demo@rcsa.com' && password === 'demo123') {
-      const user: AuthUser = {
-        id: '1',
-        email: 'demo@rcsa.com',
-        firstName: 'Demo',
-        lastName: 'User',
-        role: 'risk_manager',
-        organizationId: 'org-1',
-        permissions: ['read_risks', 'write_risks', 'read_controls', 'write_controls'],
-        createdAt: new Date().toISOString(),
-        lastLogin: new Date().toISOString(),
-      };
-      
-      const token = btoa(JSON.stringify({ userId: user.id, exp: Date.now() + 3600000 }));
-      return { user, token };
+  // Login with email and password
+  login: async (
+    email: string, 
+    password: string, 
+    rememberMe: boolean = false
+  ): Promise<{ user: AuthUser; token: string }> => {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password, rememberMe }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Login failed');
     }
-    
-    // Additional demo users for different roles
-    if (email === 'admin@rcsa.com' && password === 'admin123') {
-      const user: AuthUser = {
-        id: '2',
-        email: 'admin@rcsa.com',
-        firstName: 'Admin',
-        lastName: 'User',
-        role: 'admin',
-        organizationId: 'org-1',
-        permissions: ['*'], // All permissions
-        createdAt: new Date().toISOString(),
-        lastLogin: new Date().toISOString(),
-      };
-      
-      const token = btoa(JSON.stringify({ userId: user.id, exp: Date.now() + 3600000 }));
-      return { user, token };
+
+    // Store token in localStorage for persistence
+    if (data.tokens?.accessToken) {
+      localStorage.setItem('accessToken', data.tokens.accessToken);
     }
-    
-    if (email === 'auditor@rcsa.com' && password === 'audit123') {
-      const user: AuthUser = {
-        id: '3',
-        email: 'auditor@rcsa.com',
-        firstName: 'Auditor',
-        lastName: 'User',
-        role: 'auditor',
-        organizationId: 'org-1',
-        permissions: ['read_risks', 'read_controls', 'read_reports'],
-        createdAt: new Date().toISOString(),
-        lastLogin: new Date().toISOString(),
-      };
-      
-      const token = btoa(JSON.stringify({ userId: user.id, exp: Date.now() + 3600000 }));
-      return { user, token };
-    }
-    
-    throw new Error('Invalid credentials');
+
+    return {
+      user: data.user,
+      token: data.tokens.accessToken,
+    };
   },
-  
+
+  // Register new user
   register: async (userData: RegisterData): Promise<{ user: AuthUser; token: string }> => {
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Check if email already exists (mock validation)
-    if (userData.email === 'demo@rcsa.com' || userData.email === 'admin@rcsa.com') {
-      throw new Error('Email already exists');
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Registration failed');
     }
-    
-    const user: AuthUser = {
-      id: Math.random().toString(36).substring(2, 9),
-      email: userData.email,
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      role: userData.role || 'user',
-      organizationId: 'org-' + Math.random().toString(36).substring(2, 5),
-      permissions: ['read_risks', 'read_controls'],
-      createdAt: new Date().toISOString(),
-      lastLogin: new Date().toISOString(),
+
+    // If registration requires email verification
+    if (data.requiresVerification) {
+      throw new Error('Please check your email to verify your account before logging in.');
+    }
+
+    // Store token if login is immediate
+    if (data.tokens?.accessToken) {
+      localStorage.setItem('accessToken', data.tokens.accessToken);
+    }
+
+    return {
+      user: data.user,
+      token: data.tokens?.accessToken || '',
     };
-    
-    const token = btoa(JSON.stringify({ userId: user.id, exp: Date.now() + 3600000 }));
-    return { user, token };
   },
-  
-  logout: () => {
-    // Clear in-memory token and user data
-    return Promise.resolve();
+
+  // Logout user
+  logout: async (logoutType: 'current' | 'all' = 'current'): Promise<void> => {
+    const token = localStorage.getItem('accessToken');
+    
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` }),
+        },
+        body: JSON.stringify({ logoutType }),
+      });
+    } finally {
+      // Always clear local storage, even if API call fails
+      localStorage.removeItem('accessToken');
+    }
   },
-  
-  updateProfile: async (_userId: string, userData: Partial<AuthUser>): Promise<AuthUser> => {
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 800));
+
+  // Refresh access token
+  refreshToken: async (): Promise<{ user: AuthUser; token: string } | null> => {
+    try {
+      const response = await fetch('/api/auth/refresh', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Include cookies for refresh token
+      });
+
+      if (!response.ok) {
+        return null;
+      }
+
+      const data = await response.json();
+
+      if (data.tokens?.accessToken) {
+        localStorage.setItem('accessToken', data.tokens.accessToken);
+      }
+
+      return {
+        user: data.user,
+        token: data.tokens.accessToken,
+      };
+    } catch {
+      return null;
+    }
+  },
+
+  // Get current user profile
+  getCurrentUser: async (): Promise<AuthUser | null> => {
+    const token = localStorage.getItem('accessToken');
     
-    // Mock profile update - in real app, this would update the backend
-    const updatedUser: AuthUser = {
-      ...userData as AuthUser,
-      updatedAt: new Date().toISOString(),
-    };
-    
-    return updatedUser;
-  }
+    if (!token) {
+      return null;
+    }
+
+    try {
+      const response = await fetch('/api/users/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        return null;
+      }
+
+      const data = await response.json();
+      return data.user;
+    } catch {
+      return null;
+    }
+  },
+
+  // Update user profile
+  updateProfile: async (userId: string, userData: Partial<AuthUser>): Promise<AuthUser> => {
+    const token = localStorage.getItem('accessToken');
+
+    if (!token) {
+      throw new Error('No access token found');
+    }
+
+    const response = await fetch('/api/users/me', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(userData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to update profile');
+    }
+
+    return data.user;
+  },
+
+  // Change password
+  changePassword: async (currentPassword: string, newPassword: string): Promise<void> => {
+    const token = localStorage.getItem('accessToken');
+
+    if (!token) {
+      throw new Error('No access token found');
+    }
+
+    const response = await fetch('/api/users/me', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ currentPassword, newPassword }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to change password');
+    }
+  },
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  // Check for token expiration
+  // Initialize authentication state on app load
   useEffect(() => {
-    if (state.token) {
+    const initializeAuth = async () => {
+      const token = localStorage.getItem('accessToken');
+      
+      if (!token) {
+        dispatch({ type: 'AUTH_INITIALIZE', payload: null });
+        return;
+      }
+
       try {
-        const tokenData = JSON.parse(atob(state.token));
-        if (tokenData.exp < Date.now()) {
+        // Try to get current user with existing token
+        const user = await authService.getCurrentUser();
+        
+        if (user) {
+          dispatch({ type: 'AUTH_INITIALIZE', payload: { user, token } });
+        } else {
+          // Token might be expired, try to refresh
+          const refreshResult = await authService.refreshToken();
+          
+          if (refreshResult) {
+            dispatch({ type: 'AUTH_INITIALIZE', payload: refreshResult });
+          } else {
+            // Refresh failed, clear auth state
+            localStorage.removeItem('accessToken');
+            dispatch({ type: 'AUTH_INITIALIZE', payload: null });
+          }
+        }
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+        localStorage.removeItem('accessToken');
+        dispatch({ type: 'AUTH_INITIALIZE', payload: null });
+      }
+    };
+
+    initializeAuth();
+  }, []);
+
+  // Auto-refresh token before expiration
+  useEffect(() => {
+    if (!state.isAuthenticated || !state.token) {
+      return;
+    }
+
+    // Set up token refresh interval (13 minutes - before 15 min expiration)
+    const refreshInterval = setInterval(async () => {
+      try {
+        const result = await authService.refreshToken();
+        if (result) {
+          dispatch({ type: 'AUTH_SUCCESS', payload: result });
+        } else {
+          // Refresh failed, logout user
           dispatch({ type: 'AUTH_LOGOUT' });
         }
-      } catch {
+      } catch (error) {
+        console.error('Token refresh error:', error);
         dispatch({ type: 'AUTH_LOGOUT' });
       }
-    }
-  }, [state.token]);
+    }, 13 * 60 * 1000); // 13 minutes
 
-  const login = async (email: string, password: string) => {
+    return () => clearInterval(refreshInterval);
+  }, [state.isAuthenticated, state.token]);
+
+  const login = async (email: string, password: string, rememberMe: boolean = false) => {
     dispatch({ type: 'AUTH_START' });
     try {
-      const { user, token } = await authService.login(email, password);
+      const { user, token } = await authService.login(email, password, rememberMe);
       dispatch({ type: 'AUTH_SUCCESS', payload: { user, token } });
     } catch (error) {
       dispatch({ type: 'AUTH_ERROR', payload: (error as Error).message });
@@ -253,24 +421,53 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const logout = () => {
-    authService.logout();
-    dispatch({ type: 'AUTH_LOGOUT' });
+  const logout = async (logoutType: 'current' | 'all' = 'current') => {
+    try {
+      await authService.logout(logoutType);
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      dispatch({ type: 'AUTH_LOGOUT' });
+    }
   };
 
   const updateProfile = async (userData: Partial<AuthUser>) => {
-    if (!state.user) throw new Error('No user logged in');
-    
+    if (!state.user) {
+      throw new Error('No user logged in');
+    }
+
     dispatch({ type: 'AUTH_START' });
     try {
-      const updatedUser = await authService.updateProfile(state.user.id, {
-        ...state.user,
-        ...userData,
-      });
+      const updatedUser = await authService.updateProfile(state.user.id, userData);
       dispatch({ type: 'UPDATE_USER', payload: updatedUser });
     } catch (error) {
       dispatch({ type: 'AUTH_ERROR', payload: (error as Error).message });
       throw error;
+    }
+  };
+
+  const changePassword = async (currentPassword: string, newPassword: string) => {
+    dispatch({ type: 'AUTH_START' });
+    try {
+      await authService.changePassword(currentPassword, newPassword);
+      dispatch({ type: 'CLEAR_ERROR' });
+    } catch (error) {
+      dispatch({ type: 'AUTH_ERROR', payload: (error as Error).message });
+      throw error;
+    }
+  };
+
+  const refreshToken = async () => {
+    try {
+      const result = await authService.refreshToken();
+      if (result) {
+        dispatch({ type: 'AUTH_SUCCESS', payload: result });
+      } else {
+        dispatch({ type: 'AUTH_LOGOUT' });
+      }
+    } catch (error) {
+      console.error('Manual token refresh error:', error);
+      dispatch({ type: 'AUTH_LOGOUT' });
     }
   };
 
@@ -279,14 +476,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{
-      ...state,
-      login,
-      register,
-      logout,
-      updateProfile,
-      clearError,
-    }}>
+    <AuthContext.Provider
+      value={{
+        ...state,
+        login,
+        register,
+        logout,
+        updateProfile,
+        changePassword,
+        refreshToken,
+        clearError,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
