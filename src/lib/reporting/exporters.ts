@@ -1,6 +1,7 @@
 import jsPDF from 'jspdf';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 import html2canvas from 'html2canvas';
+import { ReportData, ReportWidget, ExportFormat, ExportOptions } from '@/types/reporting';
 
 export interface ExportOptions {
   format?: 'pdf' | 'excel' | 'csv';
@@ -266,100 +267,112 @@ export class ReportExporter {
 
   // Export report to Excel
   async exportToExcel(
-    reportData: any,
+    reportData: ReportData,
     options: ExportOptions = {}
   ): Promise<Buffer> {
-    const workbook = XLSX.utils.book_new();
-
-    // Summary worksheet
-    if (reportData.summary) {
-      const summaryData = this.prepareSummaryData(reportData.summary);
-      const summaryWS = XLSX.utils.json_to_sheet(summaryData);
-      XLSX.utils.book_append_sheet(workbook, summaryWS, 'Summary');
-    }
-
-    // Widget data worksheets
-    if (reportData.widgets) {
-      for (let i = 0; i < reportData.widgets.length; i++) {
-        const widget = reportData.widgets[i];
-        if (widget.data && widget.data.length > 0) {
-          const ws = XLSX.utils.json_to_sheet(widget.data);
+    try {
+      const workbook = new ExcelJS.Workbook();
+      
+      // Set workbook properties
+      workbook.creator = 'Riscura RCSA Platform';
+      workbook.lastModifiedBy = 'Riscura';
+      workbook.created = new Date();
+      workbook.modified = new Date();
+      
+      // Create summary sheet
+      const summarySheet = workbook.addWorksheet('Summary');
+      
+      // Add summary data
+      const summaryData = [
+        ['Report Title', reportData.title],
+        ['Generated On', new Date().toLocaleDateString()],
+        ['Total Widgets', reportData.widgets.length],
+        ['Report Type', reportData.type],
+        ['Organization', reportData.organizationName || 'N/A'],
+      ];
+      
+      summarySheet.addRows(summaryData);
+      
+      // Style the summary sheet
+      summarySheet.getColumn(1).width = 20;
+      summarySheet.getColumn(2).width = 30;
+      summarySheet.getRow(1).font = { bold: true, size: 14 };
+      
+      // Process each widget
+      reportData.widgets.forEach((widget, index) => {
+        if (!widget.data || !Array.isArray(widget.data)) return;
+        
+        const sheetName = widget.title?.substring(0, 31) || `Widget_${index + 1}`;
+        const worksheet = workbook.addWorksheet(sheetName);
+        
+        // Add widget title
+        worksheet.addRow([widget.title || `Widget ${index + 1}`]);
+        worksheet.getRow(1).font = { bold: true, size: 12 };
+        worksheet.addRow([]); // Empty row
+        
+        // Add data based on widget type
+        if (widget.type === 'table' && widget.data.length > 0) {
+          // Add headers
+          const headers = Object.keys(widget.data[0]);
+          worksheet.addRow(headers);
           
-          // Add title row
-          XLSX.utils.sheet_add_aoa(ws, [[widget.id || `Widget ${i + 1}`]], { origin: 'A1' });
+          // Style headers
+          const headerRow = worksheet.lastRow;
+          if (headerRow) {
+            headerRow.font = { bold: true };
+            headerRow.fill = {
+              type: 'pattern',
+              pattern: 'solid',
+              fgColor: { argb: 'FFE0E0E0' }
+            };
+          }
           
-          // Style the title
-          if (!ws['!merges']) ws['!merges'] = [];
-          const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
-          ws['!merges'].push({
-            s: { r: 0, c: 0 },
-            e: { r: 0, c: range.e.c },
+          // Add data rows
+          widget.data.forEach(row => {
+            const values = headers.map(header => row[header]);
+            worksheet.addRow(values);
           });
-
-          const sheetName = `Widget_${i + 1}`.substring(0, 31); // Excel sheet name limit
-          XLSX.utils.book_append_sheet(workbook, ws, sheetName);
-        }
-      }
-    }
-
-    // Charts data worksheet
-    const chartsData = this.prepareChartsData(reportData);
-    if (chartsData.length > 0) {
-      const chartsWS = XLSX.utils.json_to_sheet(chartsData);
-      XLSX.utils.book_append_sheet(workbook, chartsWS, 'Charts_Data');
-    }
-
-    // KPIs worksheet
-    const kpisData = await this.prepareKPIsData(reportData);
-    if (kpisData.length > 0) {
-      const kpisWS = XLSX.utils.json_to_sheet(kpisData);
-      XLSX.utils.book_append_sheet(workbook, kpisWS, 'KPIs');
-    }
-
-    // Generate buffer
-    const excelBuffer = XLSX.write(workbook, {
-      type: 'buffer',
-      bookType: 'xlsx',
-      compression: options.compression !== false,
-    });
-
-    return excelBuffer;
-  }
-
-  // Prepare summary data for Excel
-  private prepareSummaryData(summary: any): any[] {
-    return [
-      { Metric: 'Total Widgets', Value: summary.totalWidgets },
-      { Metric: 'Data Points', Value: summary.dataPoints },
-      { Metric: 'Generated At', Value: new Date(summary.generatedAt).toLocaleString() },
-    ];
-  }
-
-  // Prepare charts data for Excel
-  private prepareChartsData(reportData: any): any[] {
-    const chartsData: any[] = [];
-
-    if (reportData.widgets) {
-      for (const widget of reportData.widgets) {
-        if (widget.data && Array.isArray(widget.data)) {
-          for (const dataPoint of widget.data) {
-            chartsData.push({
-              Widget: widget.id,
-              ...dataPoint,
+          
+          // Auto-fit columns
+          headers.forEach((_, colIndex) => {
+            worksheet.getColumn(colIndex + 1).width = 15;
+          });
+          
+        } else if (widget.type === 'chart') {
+          // For charts, add the underlying data
+          worksheet.addRow(['Chart Data']);
+          worksheet.getRow(3).font = { bold: true };
+          
+          if (widget.data.length > 0) {
+            const headers = Object.keys(widget.data[0]);
+            worksheet.addRow(headers);
+            
+            widget.data.forEach(row => {
+              const values = headers.map(header => row[header]);
+              worksheet.addRow(values);
+            });
+          }
+        } else if (widget.type === 'kpi') {
+          // For KPIs, add key metrics
+          worksheet.addRow(['KPI Metrics']);
+          worksheet.getRow(3).font = { bold: true };
+          
+          if (widget.data.length > 0) {
+            widget.data.forEach(kpi => {
+              worksheet.addRow([kpi.label || 'Metric', kpi.value || 0]);
             });
           }
         }
-      }
+      });
+      
+      // Generate buffer
+      const buffer = await workbook.xlsx.writeBuffer();
+      return Buffer.from(buffer);
+      
+    } catch (error) {
+      console.error('Error exporting to Excel:', error);
+      throw new Error(`Excel export failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
-
-    return chartsData;
-  }
-
-  // Prepare KPIs data for Excel
-  private async prepareKPIsData(reportData: any): Promise<any[]> {
-    // This would fetch KPI data from the database
-    // For now, return empty array
-    return [];
   }
 
   // Export report to CSV

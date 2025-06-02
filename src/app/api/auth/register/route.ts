@@ -6,6 +6,8 @@ import { createSession } from '@/lib/auth/session';
 import { rateLimit, generateCSRFToken } from '@/lib/auth/middleware';
 import { env } from '@/config/env';
 import { UserRole } from '@prisma/client';
+import { emailService } from '@/lib/email/service';
+import jwt from 'jsonwebtoken';
 
 // Registration request schema
 const registerSchema = z.object({
@@ -229,7 +231,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
       return response;
     } else {
-      // Send email verification (placeholder - implement email service)
+      // Send email verification
       await sendVerificationEmail(user.email, user.id);
 
       return NextResponse.json({
@@ -299,40 +301,61 @@ function getDefaultPermissions(role: UserRole): string[] {
 }
 
 /**
- * Send email verification (placeholder)
+ * Send email verification
  */
 async function sendVerificationEmail(email: string, userId: string): Promise<void> {
-  // TODO: Implement actual email service
-  console.log(`Send verification email to ${email} for user ${userId}`);
-  
-  // Generate verification token
-  const verificationToken = generateVerificationToken(userId);
-  
-  // Store token in database or cache
-  // await storeVerificationToken(userId, verificationToken);
-  
-  // Send email with verification link
-  // const verificationUrl = `${env.APP_URL}/auth/verify?token=${verificationToken}`;
-  // await emailService.send({
-  //   to: email,
-  //   subject: 'Verify your Riscura account',
-  //   template: 'verification',
-  //   data: { verificationUrl }
-  // });
+  try {
+    // Generate verification token
+    const verificationToken = generateVerificationToken(userId);
+    
+    // Store token in database with expiration
+    await db.client.user.update({
+      where: { id: userId },
+      data: {
+        emailVerificationToken: verificationToken,
+        emailVerificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+      },
+    });
+    
+    // Get user details for personalization
+    const user = await db.client.user.findUnique({
+      where: { id: userId },
+      select: { firstName: true, lastName: true },
+    });
+    
+    // Send verification email
+    const verificationUrl = `${env.APP_URL}/auth/verify?token=${verificationToken}`;
+    
+    await emailService.sendTemplate('verification', email, {
+      firstName: user?.firstName || 'User',
+      verificationUrl,
+    });
+    
+    console.log(`Verification email sent to ${email} for user ${userId}`);
+    
+  } catch (error) {
+    console.error('Failed to send verification email:', error);
+    // Don't throw error to prevent registration failure due to email issues
+  }
 }
 
 /**
  * Generate verification token
  */
 function generateVerificationToken(userId: string): string {
-  // Simple token generation - in production, use more secure method
-  const payload = {
-    userId,
-    type: 'email_verification',
-    exp: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
-  };
-  
-  return btoa(JSON.stringify(payload));
+  return jwt.sign(
+    { 
+      userId, 
+      type: 'email_verification',
+      iat: Math.floor(Date.now() / 1000),
+    },
+    env.JWT_SECRET,
+    { 
+      expiresIn: '24h',
+      issuer: 'riscura',
+      audience: 'riscura-users',
+    }
+  );
 }
 
 /**
