@@ -526,7 +526,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
                         ${isDragTarget ? 'ring-2 ring-blue-500 scale-105' : ''}
                         ${cell.clustered ? 'cursor-pointer' : ''}
                       `}
-                      style={getCellStyle(cell, isHovered || isDragTarget)}
+                      style={getCellStyle(cell, Boolean(isHovered || isDragTarget))}
                       onDragOver={handleDragOver}
                       onDrop={(e) => handleDrop(e, cell.likelihood, cell.impact)}
                       onDragEnter={() => handleDragEnter(cell.likelihood, cell.impact)}

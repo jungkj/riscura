@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function AIDemo() {
   const [result, setResult] = useState<any>(null);
@@ -56,66 +58,71 @@ export default function AIDemo() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
+    <div className="min-h-screen bg-background py-12 px-4">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">
-            🤖 ARIA AI Demo - OpenAI Integration Test
-          </h1>
-          
-          <div className="space-y-6">
+        <Card className="notion-card">
+          <CardHeader>
+            <CardTitle className="text-3xl font-bold text-foreground">
+              🤖 ARIA AI Demo - OpenAI Integration Test
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <button
+              <Button
                 onClick={testContentGeneration}
                 disabled={loading}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50"
+                className="notion-button-primary py-3 px-6"
               >
                 {loading ? 'Testing...' : 'Test Content Generation'}
-              </button>
+              </Button>
               
-              <button
+              <Button
                 onClick={testRiskAnalysis}
                 disabled={loading}
-                className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50"
+                className="notion-button-secondary py-3 px-6"
               >
                 {loading ? 'Testing...' : 'Test Risk Analysis'}
-              </button>
+              </Button>
             </div>
 
             {result && (
               <div className="mt-8">
-                <h3 className="text-lg font-semibold mb-4">Result:</h3>
-                <div className="bg-gray-100 p-4 rounded-lg overflow-auto">
-                  <pre className="text-sm whitespace-pre-wrap">
+                <h3 className="text-lg font-semibold mb-4 text-foreground">Result:</h3>
+                <div className="bg-secondary p-4 rounded-lg overflow-auto">
+                  <pre className="text-sm whitespace-pre-wrap text-foreground">
                     {JSON.stringify(result, null, 2)}
                   </pre>
                 </div>
               </div>
             )}
-          </div>
 
-          <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-            <h3 className="text-lg font-semibold text-blue-900 mb-2">✅ Available Routes:</h3>
-            <ul className="text-blue-800 space-y-1">
-              <li>🏠 <strong>Landing Page:</strong> <a href="/" className="underline">http://localhost:3000/</a></li>
-              <li>🤖 <strong>AI Demo (this page):</strong> <a href="/demo" className="underline">http://localhost:3000/demo</a></li>
-              <li>🔐 <strong>Login:</strong> <a href="/auth/login" className="underline">http://localhost:3000/auth/login</a></li>
-              <li>📊 <strong>Dashboard:</strong> <a href="/dashboard" className="underline">http://localhost:3000/dashboard</a></li>
-              <li>💬 <strong>ARIA AI Chat:</strong> <a href="/dashboard/aria" className="underline">http://localhost:3000/dashboard/aria</a></li>
-            </ul>
-          </div>
+            <Card className="notion-card-minimal bg-notion-blue/10 border-notion-blue/20">
+              <CardContent className="p-4">
+                <h3 className="text-lg font-semibold text-foreground mb-2">✅ Available Routes:</h3>
+                <ul className="text-muted-foreground space-y-1">
+                  <li>🏠 <strong>Landing Page:</strong> <a href="/" className="text-foreground hover:underline">http://localhost:3000/</a></li>
+                  <li>🤖 <strong>AI Demo (this page):</strong> <a href="/demo" className="text-foreground hover:underline">http://localhost:3000/demo</a></li>
+                  <li>🔐 <strong>Login:</strong> <a href="/auth/login" className="text-foreground hover:underline">http://localhost:3000/auth/login</a></li>
+                  <li>📊 <strong>Dashboard:</strong> <a href="/dashboard" className="text-foreground hover:underline">http://localhost:3000/dashboard</a></li>
+                  <li>💬 <strong>ARIA AI Chat:</strong> <a href="/dashboard/aria" className="text-foreground hover:underline">http://localhost:3000/dashboard/aria</a></li>
+                </ul>
+              </CardContent>
+            </Card>
 
-          <div className="mt-6 p-4 bg-green-50 rounded-lg">
-            <h3 className="text-lg font-semibold text-green-900 mb-2">🎯 OpenAI Integration Status:</h3>
-            <p className="text-green-800">
-              ✅ API Key configured<br/>
-              ✅ Content generation working<br/>
-              ✅ Risk analysis working<br/>
-              ✅ Using model: gpt-4o-mini<br/>
-              ✅ Cost tracking enabled
-            </p>
-          </div>
-        </div>
+            <Card className="notion-card-minimal bg-notion-green/10 border-notion-green/20">
+              <CardContent className="p-4">
+                <h3 className="text-lg font-semibold text-foreground mb-2">🎯 OpenAI Integration Status:</h3>
+                <p className="text-muted-foreground">
+                  ✅ API Key configured<br/>
+                  ✅ Content generation working<br/>
+                  ✅ Risk analysis working<br/>
+                  ✅ Using model: gpt-4o-mini<br/>
+                  ✅ Cost tracking enabled
+                </p>
+              </CardContent>
+            </Card>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

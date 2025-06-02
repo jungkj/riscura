@@ -101,56 +101,56 @@ export default function RiskListPage() {
   ];
 
   return (
-    <div className="min-h-screen gradient-bg">
+    <div className="min-h-screen notion-content">
       <div className="container mx-auto py-8 space-y-8">
         {/* Breadcrumb Navigation */}
-        <div className="animate-fade-in-up">
+        <div className="notion-fade-in">
           <BreadcrumbNav items={breadcrumbItems} />
         </div>
 
         {/* Header */}
-        <div className="flex justify-between items-start animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+        <div className="flex justify-between items-start notion-fade-in">
           <div className="space-y-2">
-            <h1 className="text-4xl font-bold text-slate-900 tracking-tight">
+            <h1 className="text-4xl font-bold text-foreground tracking-tight">
               Risk Management
             </h1>
-            <p className="text-lg text-slate-600 max-w-2xl">
+            <p className="text-lg text-muted-foreground max-w-2xl">
               Comprehensive risk assessment and management platform with AI-powered insights
             </p>
             <div className="flex items-center space-x-4 pt-2">
               <Button
                 onClick={() => setCommandPaletteOpen(true)}
-                className="btn-ghost"
+                className="notion-button-ghost"
               >
                 <Command className="w-4 h-4 mr-2" />
                 Command Palette
-                <kbd className="ml-2 text-xs bg-slate-100 px-1.5 py-0.5 rounded">⌘K</kbd>
+                <kbd className="ml-2 text-xs bg-muted px-1.5 py-0.5 rounded">⌘K</kbd>
               </Button>
               <Button
                 onClick={handleRefresh}
                 disabled={isRefreshing}
-                className="btn-ghost"
+                className="notion-button-ghost"
               >
                 <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
                 Refresh
               </Button>
             </div>
           </div>
-          <Button onClick={handleCreateRisk} className="btn-primary">
+          <Button onClick={handleCreateRisk} className="notion-button-primary">
             <Plus className="mr-2 h-5 w-5" />
             Add Risk
           </Button>
         </div>
 
         {/* Enhanced Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 notion-fade-in">
           <EnhancedStatsCard
             title="Total Risks"
             value={stats.total}
             subtitle="Across all categories"
             icon={Shield}
-            iconColor="text-slate-600"
-            iconBgColor="bg-slate-100"
+            iconColor="text-foreground"
+            iconBgColor="bg-secondary"
             trend={{
               value: 5,
               label: 'vs last month',
@@ -169,7 +169,7 @@ export default function RiskListPage() {
             subtitle="Require immediate attention"
             icon={AlertTriangle}
             iconColor="text-red-600"
-            iconBgColor="bg-red-50"
+            iconBgColor="bg-red-50 dark:bg-red-950/20"
             trend={{
               value: 12,
               label: 'vs last month',
@@ -188,7 +188,7 @@ export default function RiskListPage() {
             subtitle="Need mitigation plans"
             icon={Target}
             iconColor="text-orange-600"
-            iconBgColor="bg-orange-50"
+            iconBgColor="bg-orange-50 dark:bg-orange-950/20"
             trend={{
               value: 8,
               label: 'vs last month',
@@ -202,138 +202,196 @@ export default function RiskListPage() {
           />
           
           <EnhancedStatsCard
-            title="Average Score"
-            value={stats.averageScore.toFixed(1)}
-            subtitle="Out of 25 maximum"
+            title="Medium Risks"
+            value={stats.byLevel.medium || 0}
+            subtitle="Monitor regularly"
             icon={Activity}
-            iconColor="text-blue-600"
-            iconBgColor="bg-blue-50"
+            iconColor="text-yellow-600"
+            iconBgColor="bg-yellow-50 dark:bg-yellow-950/20"
             trend={{
               value: 3,
-              label: 'improvement',
-              direction: 'down'
+              label: 'vs last month',
+              direction: 'up'
             }}
             progress={{
-              value: stats.averageScore,
-              max: 25,
-              color: stats.averageScore > 15 ? 'high' : stats.averageScore > 8 ? 'medium' : 'low'
+              value: stats.byLevel.medium || 0,
+              max: 50,
+              color: 'medium'
             }}
           />
         </div>
 
-        {/* Enhanced Tabs with smooth transitions */}
-        <div className="animate-fade-in-up" style={{ animationDelay: '300ms' }}>
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <div className="risk-card p-1 w-fit">
-              <TabsList className="grid w-full grid-cols-6 bg-transparent">
-                <TabsTrigger 
-                  value="list" 
-                  className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all duration-300"
-                >
-                  <FileText className="h-4 w-4" />
-                  Risk List
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="matrix" 
-                  className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all duration-300"
-                >
-                  <BarChart3 className="h-4 w-4" />
-                  Risk Matrix
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="analytics" 
-                  className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all duration-300"
-                >
-                  <PieChart className="h-4 w-4" />
-                  Analytics
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="filters" 
-                  className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all duration-300"
-                >
-                  <Filter className="h-4 w-4" />
-                  Filters
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="upload" 
-                  className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all duration-300"
-                >
-                  <Upload className="h-4 w-4" />
-                  Document Upload
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="ai" 
-                  className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all duration-300"
-                >
-                  <Brain className="h-4 w-4" />
-                  AI Analysis
-                </TabsTrigger>
-              </TabsList>
-            </div>
-
-            <TabsContent value="list" className="tab-content space-y-6">
-              <RiskListView
-                onCreateRisk={handleCreateRisk}
-                onEditRisk={handleEditRisk}
-                onViewRisk={handleRiskClick}
-              />
-            </TabsContent>
-
-            <TabsContent value="matrix" className="tab-content space-y-6">
-              <div className="risk-card p-6">
-                <EnhancedRiskMatrix
-                  onRiskClick={handleRiskClick}
-                  selectedRisks={selectedRisks}
-                  viewMode="matrix"
-                  enableClustering={true}
-                  enableExport={true}
-                />
-              </div>
-            </TabsContent>
-
-            <TabsContent value="analytics" className="tab-content space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <RiskDistributionChart 
-                  distributionBy="level"
-                  chartType="donut"
-                />
-                <RiskDistributionChart 
-                  distributionBy="category"
-                  chartType="bar"
-                />
-              </div>
+        {/* Quick Actions */}
+        <Card className="notion-card notion-fade-in">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Activity className="h-5 w-5 text-foreground" />
+              Quick Actions
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Button
+                onClick={handleCreateRisk}
+                className="notion-button-outline h-auto p-4 flex flex-col items-center gap-2"
+              >
+                <Plus className="h-6 w-6" />
+                <div className="text-center">
+                  <div className="font-medium">Add Risk</div>
+                  <div className="text-xs text-muted-foreground">Create new risk</div>
+                </div>
+              </Button>
               
-              <div className="grid grid-cols-1 gap-6">
-                <Card className="risk-card">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <TrendingUp className="h-5 w-5" />
-                      Risk Trends & Analytics
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center py-8">
-                      <div className="bg-gradient-to-br from-blue-100 to-purple-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                        <TrendingUp className="h-8 w-8 text-blue-600" />
-                      </div>
-                      <h4 className="text-lg font-semibold text-slate-900 mb-2">
-                        Advanced Analytics Coming Soon
-                      </h4>
-                      <p className="text-slate-600 max-w-md mx-auto">
-                        Time-series analysis, trend predictions, and comparative visualizations will be available in the next update.
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
+              <Button
+                onClick={() => setActiveTab('analytics')}
+                className="notion-button-outline h-auto p-4 flex flex-col items-center gap-2"
+              >
+                <BarChart3 className="h-6 w-6" />
+                <div className="text-center">
+                  <div className="font-medium">Analytics</div>
+                  <div className="text-xs text-muted-foreground">View insights</div>
+                </div>
+              </Button>
+              
+              <Button
+                onClick={() => setActiveTab('matrix')}
+                className="notion-button-outline h-auto p-4 flex flex-col items-center gap-2"
+              >
+                <Target className="h-6 w-6" />
+                <div className="text-center">
+                  <div className="font-medium">Risk Matrix</div>
+                  <div className="text-xs text-muted-foreground">Visual analysis</div>
+                </div>
+              </Button>
+              
+              <Button className="notion-button-outline h-auto p-4 flex flex-col items-center gap-2">
+                <Brain className="h-6 w-6" />
+                <div className="text-center">
+                  <div className="font-medium">AI Analysis</div>
+                  <div className="text-xs text-muted-foreground">Get recommendations</div>
+                </div>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
-            <TabsContent value="filters" className="tab-content space-y-6">
-              <AdvancedFilters />
-            </TabsContent>
+        {/* Main Content Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="notion-fade-in">
+          <TabsList className="grid w-full grid-cols-5 bg-secondary">
+            <TabsTrigger value="list" className="flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              Risk List
+            </TabsTrigger>
+            <TabsTrigger value="matrix" className="flex items-center gap-2">
+              <Target className="h-4 w-4" />
+              Risk Matrix
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="flex items-center gap-2">
+              <BarChart3 className="h-4 w-4" />
+              Analytics
+            </TabsTrigger>
+            <TabsTrigger value="upload" className="flex items-center gap-2">
+              <Upload className="h-4 w-4" />
+              Upload
+            </TabsTrigger>
+            <TabsTrigger value="ai" className="flex items-center gap-2">
+              <Brain className="h-4 w-4" />
+              AI Insights
+            </TabsTrigger>
+          </TabsList>
 
-            <TabsContent value="upload" className="tab-content space-y-6">
-              <div className="risk-card p-6">
+          <TabsContent value="list" className="space-y-6">
+            <Card className="notion-card">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+                <div className="space-y-1">
+                  <CardTitle className="flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-foreground" />
+                    Risk Register
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    Complete list of identified risks with details and status
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" className="notion-button-outline">
+                    <Filter className="h-4 w-4 mr-1" />
+                    Filters
+                  </Button>
+                  <Button variant="outline" size="sm" className="notion-button-outline">
+                    <Download className="h-4 w-4 mr-1" />
+                    Export
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <RiskListView
+                  onCreateRisk={handleCreateRisk}
+                  onEditRisk={handleEditRisk}
+                  onViewRisk={handleRiskClick}
+                />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="matrix" className="space-y-6">
+            <Card className="notion-card">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5 text-foreground" />
+                  Enhanced Risk Matrix
+                </CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Interactive risk visualization with impact vs probability analysis
+                </p>
+              </CardHeader>
+              <CardContent>
+                <EnhancedRiskMatrix />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="analytics" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card className="notion-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <PieChart className="h-5 w-5 text-foreground" />
+                    Risk Distribution
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <RiskDistributionChart />
+                </CardContent>
+              </Card>
+
+              <Card className="notion-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 text-foreground" />
+                    Risk Trends
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-64 flex items-center justify-center text-muted-foreground">
+                    Risk trend analysis coming soon
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="upload" className="space-y-6">
+            <Card className="notion-card">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Upload className="h-5 w-5 text-foreground" />
+                  Document Upload & AI Analysis
+                </CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Upload documents for AI-powered risk extraction and analysis
+                </p>
+              </CardHeader>
+              <CardContent>
                 <DocumentUpload
                   onUpload={async (formData) => {
                     console.log('Document uploaded:', formData);
@@ -343,127 +401,110 @@ export default function RiskListPage() {
                   organizationId="demo-org"
                   userId="demo-user"
                 />
-              </div>
-            </TabsContent>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-            <TabsContent value="ai" className="tab-content space-y-6">
-              <Card className="risk-card">
-                <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-blue-600">
-                      <Brain className="h-6 w-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold">AI Risk Analysis</h3>
-                      <p className="text-sm text-slate-600 font-normal">
-                        Upload documents to automatically identify risks and suggest controls
-                      </p>
-                    </div>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-12">
-                    <div className="bg-gradient-to-br from-purple-100 to-blue-100 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                      <Brain className="h-10 w-10 text-purple-600" />
-                    </div>
-                    <h4 className="text-lg font-semibold text-slate-900 mb-2">
-                      Ready for AI Analysis
-                    </h4>
-                    <p className="text-slate-600 mb-6 max-w-md mx-auto">
-                      Upload a document in the Document Upload tab to start AI-powered risk identification and analysis
+          <TabsContent value="ai" className="space-y-6">
+            <Card className="notion-card">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="h-5 w-5 text-foreground" />
+                  AI Risk Insights
+                </CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  AI-powered recommendations and risk analysis
+                </p>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="p-4 bg-secondary/50 rounded-lg border">
+                    <h4 className="font-medium text-foreground mb-2">Risk Assessment Summary</h4>
+                    <p className="text-sm text-muted-foreground">
+                      AI analysis shows {stats.byLevel.critical} critical risks requiring immediate attention.
+                      Focus areas include cybersecurity, compliance, and operational risks.
                     </p>
-                    <Button onClick={() => setActiveTab('upload')} className="btn-accent">
-                      <Upload className="w-4 h-4 mr-2" />
-                      Upload Documents
-                    </Button>
                   </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
+                  
+                  <div className="p-4 bg-secondary/50 rounded-lg border">
+                    <h4 className="font-medium text-foreground mb-2">Recommendations</h4>
+                    <ul className="space-y-2 text-sm text-muted-foreground">
+                      <li>• Prioritize cybersecurity risk mitigation</li>
+                      <li>• Review and update compliance controls</li>
+                      <li>• Implement enhanced monitoring for high-risk areas</li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
 
-        {/* Enhanced Risk Detail Dialog */}
-        <Dialog open={!!selectedRisk} onOpenChange={() => setSelectedRisk(null)}>
-          <DialogContent className="max-w-3xl risk-card border-0">
-            <DialogHeader className="pb-6">
-              <DialogTitle className="text-2xl font-semibold flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-blue-600" />
-                </div>
-                {selectedRisk?.title}
-              </DialogTitle>
-              <DialogDescription className="text-base text-slate-600">
-                {selectedRisk?.description}
-              </DialogDescription>
-            </DialogHeader>
-            
+      {/* Floating Action Button */}
+      <FloatingActionButton
+        onPrimaryAction={handleCreateRisk}
+        actions={[
+          {
+            icon: Plus,
+            label: 'Add New Risk',
+            onClick: handleCreateRisk
+          }
+        ]}
+      />
+
+      {/* Command Palette */}
+      <CommandPaletteDialog
+        open={commandPaletteOpen}
+        onOpenChange={setCommandPaletteOpen}
+        onCreateRisk={handleCreateRisk}
+        onFilter={() => setActiveTab('list')}
+        onExport={() => console.log('Export')}
+        onSettings={() => console.log('Settings')}
+      />
+
+      {/* Risk Detail Dialog */}
+      <Dialog open={!!selectedRisk} onOpenChange={() => setSelectedRisk(null)}>
+        <DialogContent className="notion-card max-w-4xl">
+          <DialogHeader>
+            <DialogTitle className="text-foreground">
+              {selectedRisk?.title}
+            </DialogTitle>
+            <DialogDescription className="text-muted-foreground">
+              {selectedRisk?.description}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
             {selectedRisk && (
-              <div className="space-y-6">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="text-center p-4 bg-slate-50 rounded-xl">
-                    <div className="text-2xl font-bold text-slate-900">{selectedRisk.likelihood}</div>
-                    <div className="text-sm text-slate-600">Likelihood</div>
-                  </div>
-                  <div className="text-center p-4 bg-slate-50 rounded-xl">
-                    <div className="text-2xl font-bold text-slate-900">{selectedRisk.impact}</div>
-                    <div className="text-sm text-slate-600">Impact</div>
-                  </div>
-                  <div className="text-center p-4 bg-slate-50 rounded-xl">
-                    <div className="text-2xl font-bold text-slate-900">{selectedRisk.riskScore}</div>
-                    <div className="text-sm text-slate-600">Risk Score</div>
-                  </div>
-                  <div className="text-center p-4 bg-slate-50 rounded-xl">
-                    <div className="text-sm font-semibold text-slate-900 capitalize">{selectedRisk.status}</div>
-                    <div className="text-sm text-slate-600">Status</div>
-                  </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-foreground">Category</label>
+                  <p className="text-sm text-muted-foreground capitalize">{selectedRisk.category}</p>
                 </div>
-                
-                <div className="flex gap-3 pt-4">
-                  <Button onClick={() => handleEditRisk(selectedRisk)} className="btn-primary">
-                    Edit Risk
-                  </Button>
-                  <Button onClick={() => setSelectedRisk(null)} className="btn-ghost">
-                    Close
-                  </Button>
+                <div>
+                  <label className="text-sm font-medium text-foreground">Risk Level</label>
+                  <p className={`text-sm font-medium ${
+                    selectedRisk.riskLevel === 'critical' ? 'text-red-600' :
+                    selectedRisk.riskLevel === 'high' ? 'text-orange-600' :
+                    selectedRisk.riskLevel === 'medium' ? 'text-yellow-600' :
+                    'text-green-600'
+                  }`}>
+                    {selectedRisk.riskLevel?.toUpperCase()}
+                  </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground">Likelihood</label>
+                  <p className="text-sm text-muted-foreground">{selectedRisk.likelihood}/5</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground">Impact</label>
+                  <p className="text-sm text-muted-foreground">{selectedRisk.impact}/5</p>
                 </div>
               </div>
             )}
-          </DialogContent>
-        </Dialog>
-
-        {/* Floating Action Button */}
-        <FloatingActionButton
-          onPrimaryAction={handleCreateRisk}
-          actions={[
-            {
-              icon: Search,
-              label: 'Quick Search',
-              onClick: () => setCommandPaletteOpen(true)
-            },
-            {
-              icon: Filter,
-              label: 'Open Filters',
-              onClick: () => console.log('Open filters')
-            },
-            {
-              icon: Download,
-              label: 'Export Data',
-              onClick: () => console.log('Export data')
-            }
-          ]}
-        />
-
-        {/* Command Palette */}
-        <CommandPaletteDialog
-          open={commandPaletteOpen}
-          onOpenChange={setCommandPaletteOpen}
-          onCreateRisk={handleCreateRisk}
-          onFilter={() => console.log('Filter')}
-          onExport={() => console.log('Export')}
-          onSettings={() => console.log('Settings')}
-        />
-      </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

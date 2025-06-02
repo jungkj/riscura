@@ -217,7 +217,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
           </CardTitle>
           
           <div className="flex items-center gap-2">
-            <Select value={selectedDistribution} onValueChange={setSelectedDistribution}>
+            <Select value={selectedDistribution} onValueChange={(value) => setSelectedDistribution(value as typeof selectedDistribution)}>
               <SelectTrigger className="w-32">
                 <SelectValue />
               </SelectTrigger>
@@ -229,7 +229,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
               </SelectContent>
             </Select>
             
-            <Select value={selectedChartType} onValueChange={setSelectedChartType}>
+            <Select value={selectedChartType} onValueChange={(value) => setSelectedChartType(value as typeof selectedChartType)}>
               <SelectTrigger className="w-24">
                 <SelectValue />
               </SelectTrigger>
