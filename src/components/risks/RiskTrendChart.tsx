@@ -249,7 +249,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
           </CardTitle>
           
           <div className="flex items-center gap-2">
-            <Select value={selectedTimeRange} onValueChange={setSelectedTimeRange}>
+            <Select value={selectedTimeRange} onValueChange={(value) => setSelectedTimeRange(value as typeof selectedTimeRange)}>
               <SelectTrigger className="w-24">
                 <SelectValue />
               </SelectTrigger>
@@ -261,7 +261,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
               </SelectContent>
             </Select>
             
-            <Select value={selectedChartType} onValueChange={setSelectedChartType}>
+            <Select value={selectedChartType} onValueChange={(value) => setSelectedChartType(value as typeof selectedChartType)}>
               <SelectTrigger className="w-32">
                 <SelectValue />
               </SelectTrigger>
