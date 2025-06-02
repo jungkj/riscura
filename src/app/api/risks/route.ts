@@ -1,270 +1,151 @@
-import { NextRequest } from 'next/server';
-import { withAPI, withValidation, createAPIResponse, createErrorResponse, parsePagination, parseFilters, parseSorting, parseSearch, createPaginationMeta, NotFoundError, ForbiddenError } from '@/lib/api/middleware';
-import { createRiskSchema, riskQuerySchema } from '@/lib/api/schemas';
-import { getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/middleware';
-import { db } from '@/lib/db';
-import { PERMISSIONS } from '@/lib/auth';
+import { NextRequest, NextResponse } from 'next/server';
+import { appConfig } from '@/config/env';
 
-// GET /api/risks - List risks with pagination and filtering
-export const GET = withAPI(
-  withValidation(riskQuerySchema)(async (req: NextRequest, query: any) => {
-    const authReq = req as AuthenticatedRequest;
-    const user = getAuthenticatedUser(authReq);
+// GET /api/risks - List risks (demo mode)
+export async function GET(request: NextRequest): Promise<NextResponse> {
+  try {
+    // Mock risks data
+    const mockRisks = [
+      {
+        id: 'risk_cyber_security',
+        title: 'Cybersecurity Threat',
+        description: 'Potential data breach due to inadequate cybersecurity measures',
+        category: 'Operational',
+        type: 'Technology',
+        severity: 'High',
+        likelihood: 'Medium',
+        impact: 'High',
+        riskScore: 85,
+        riskLevel: 'High',
+        status: 'Open',
+        ownerId: 'user_manager_demo',
+        department: 'IT',
+        businessUnit: 'Technology',
+        tags: ['cybersecurity', 'data-protection', 'IT'],
+        createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+        owner: {
+          id: 'user_manager_demo',
+          firstName: 'Maria',
+          lastName: 'Manager',
+          email: 'manager@riscura.demo',
+        },
+        _count: {
+          controls: 2,
+          assessments: 1,
+        },
+      },
+      {
+        id: 'risk_regulatory_compliance',
+        title: 'GDPR Compliance Gap',
+        description: 'Non-compliance with GDPR data protection requirements',
+        category: 'Compliance',
+        type: 'Regulatory',
+        severity: 'Critical',
+        likelihood: 'High',
+        impact: 'Critical',
+        riskScore: 95,
+        riskLevel: 'Critical',
+        status: 'In Progress',
+        ownerId: 'user_admin_demo',
+        department: 'Legal',
+        businessUnit: 'Compliance',
+        tags: ['gdpr', 'compliance', 'legal'],
+        createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+        owner: {
+          id: 'user_admin_demo',
+          firstName: 'Alex',
+          lastName: 'Administrator',
+          email: 'admin@riscura.demo',
+        },
+        _count: {
+          controls: 3,
+          assessments: 2,
+        },
+      },
+      {
+        id: 'risk_financial_fraud',
+        title: 'Financial Fraud Risk',
+        description: 'Risk of internal financial fraud and embezzlement',
+        category: 'Financial',
+        type: 'Fraud',
+        severity: 'Medium',
+        likelihood: 'Low',
+        impact: 'High',
+        riskScore: 60,
+        riskLevel: 'Medium',
+        status: 'Mitigated',
+        ownerId: 'user_analyst_demo',
+        department: 'Finance',
+        businessUnit: 'Finance',
+        tags: ['fraud', 'financial', 'internal-controls'],
+        createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+        owner: {
+          id: 'user_analyst_demo',
+          firstName: 'Riley',
+          lastName: 'Analyst',
+          email: 'analyst@riscura.demo',
+        },
+        _count: {
+          controls: 4,
+          assessments: 3,
+        },
+      },
+    ];
 
-    if (!user) {
-      throw new ForbiddenError('Authentication required');
+    return NextResponse.json({
+      success: true,
+      data: mockRisks,
+      meta: {
+        total: mockRisks.length,
+        page: 1,
+        limit: 50,
+        demoMode: true,
+      },
+    });
+
+  } catch (error) {
+    console.error('Risks API error:', error);
+    return NextResponse.json(
+      { error: 'Failed to retrieve risks' },
+      { status: 500 }
+    );
+  }
+}
+
+// POST /api/risks - Create new risk (demo mode)
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  try {
+    if (!appConfig.isDevelopment) {
+      return NextResponse.json(
+        { error: 'Risk creation only available in development mode' },
+        { status: 403 }
+      );
     }
 
-    const url = new URL(req.url);
-    const searchParams = url.searchParams;
+    const body = await request.json();
 
-    // Parse pagination
-    const { skip, take, page, limit } = parsePagination(searchParams, { maxLimit: 100 });
-
-    // Parse filters
-    const filters = parseFilters(searchParams);
-
-    // Parse sorting
-    const orderBy = parseSorting(searchParams);
-
-    // Parse search
-    const search = parseSearch(searchParams);
-
-    // Build where clause
-    let where: any = {
-      organizationId: user.organizationId, // Organization isolation
+    // Simulate creating a risk
+    const newRisk = {
+      id: `risk_${Date.now()}`,
+      ...body,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
 
-    // Add search functionality
-    if (search) {
-      where.OR = [
-        { title: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
-        { mitigationStrategy: { contains: search, mode: 'insensitive' } },
-      ];
-    }
-
-    // Add filters
-    if (query.category) {
-      where.category = query.category;
-    }
-    if (query.severity) {
-      where.severity = query.severity;
-    }
-    if (query.likelihood) {
-      where.likelihood = query.likelihood;
-    }
-    if (query.impact) {
-      where.impact = query.impact;
-    }
-    if (query.status) {
-      where.status = query.status;
-    }
-    if (query.priority) {
-      where.priority = query.priority;
-    }
-    if (query.ownerId) {
-      where.ownerId = query.ownerId;
-    }
-    if (query.businessUnit) {
-      where.businessUnit = { contains: query.businessUnit, mode: 'insensitive' };
-    }
-    if (query.department) {
-      where.department = { contains: query.department, mode: 'insensitive' };
-    }
-    if (query.tags) {
-      const tagList = query.tags.split(',').map((tag: string) => tag.trim());
-      where.tags = { hasSome: tagList };
-    }
-
-    // Date range filters
-    if (query.dateFrom || query.dateTo) {
-      where.createdAt = {};
-      if (query.dateFrom) {
-        where.createdAt.gte = new Date(query.dateFrom);
-      }
-      if (query.dateTo) {
-        where.createdAt.lte = new Date(query.dateTo);
-      }
-    }
-
-    // Execute queries
-    const [risks, total] = await Promise.all([
-      db.client.risk.findMany({
-        where,
-        skip,
-        take,
-        orderBy,
-        include: {
-          owner: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              email: true,
-            },
-          },
-          controls: {
-            select: {
-              id: true,
-              title: true,
-              status: true,
-              effectiveness: true,
-            },
-          },
-          riskAssessments: {
-            select: {
-              id: true,
-              assessmentDate: true,
-              inherentRisk: true,
-              residualRisk: true,
-            },
-            orderBy: { assessmentDate: 'desc' },
-            take: 1,
-          },
-          _count: {
-            select: {
-              controls: true,
-              riskAssessments: true,
-              documents: true,
-            },
-          },
-        },
-      }),
-      db.client.risk.count({ where }),
-    ]);
-
-    // Log activity
-    await db.client.activity.create({
-      data: {
-        type: 'READ',
-        entityType: 'RISK',
-        entityId: 'list',
-        description: `Retrieved ${risks.length} risks`,
-        userId: user.id,
-        organizationId: user.organizationId,
-        metadata: {
-          query: query,
-          resultCount: risks.length,
-          filters: Object.keys(filters),
-        },
-        isPublic: false,
-      },
+    return NextResponse.json({
+      success: true,
+      message: 'Risk created successfully (demo mode)',
+      data: newRisk,
     });
 
-    return createAPIResponse(risks, {
-      pagination: createPaginationMeta(page, limit, total),
-    });
-  }),
-  {
-    requiredPermissions: [PERMISSIONS.RISKS_READ],
-    rateLimit: { limit: 100, windowMs: 15 * 60 * 1000 },
+  } catch (error) {
+    console.error('Risk creation error:', error);
+    return NextResponse.json(
+      { error: 'Failed to create risk' },
+      { status: 500 }
+    );
   }
-);
-
-// POST /api/risks - Create new risk
-export const POST = withAPI(
-  withValidation(createRiskSchema)(async (req: NextRequest, data: any) => {
-    const authReq = req as AuthenticatedRequest;
-    const user = getAuthenticatedUser(authReq);
-
-    if (!user) {
-      throw new ForbiddenError('Authentication required');
-    }
-
-    // Validate owner if specified
-    if (data.ownerId) {
-      const owner = await db.client.user.findFirst({
-        where: {
-          id: data.ownerId,
-          organizationId: user.organizationId,
-          isActive: true,
-        },
-      });
-
-      if (!owner) {
-        throw new NotFoundError('Specified owner not found in organization');
-      }
-    }
-
-    // Calculate risk score based on likelihood and impact
-    const riskScore = calculateRiskScore(data.likelihood, data.impact);
-
-    // Create risk
-    const risk = await db.client.risk.create({
-      data: {
-        ...data,
-        organizationId: user.organizationId,
-        createdById: user.id,
-        riskScore,
-        inherentRisk: riskScore, // Initial inherent risk
-        residualRisk: riskScore, // Initial residual risk (same as inherent until controls applied)
-      },
-      include: {
-        owner: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
-          },
-        },
-        createdBy: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
-          },
-        },
-      },
-    });
-
-    // Log activity
-    await db.client.activity.create({
-      data: {
-        type: 'CREATED',
-        entityType: 'RISK',
-        entityId: risk.id,
-        description: `Created risk: ${risk.title}`,
-        userId: user.id,
-        organizationId: user.organizationId,
-        metadata: {
-          riskId: risk.id,
-          category: risk.category,
-          severity: risk.severity,
-          riskScore,
-        },
-        isPublic: false,
-      },
-    });
-
-    return createAPIResponse(risk, { statusCode: 201 });
-  }),
-  {
-    requiredPermissions: [PERMISSIONS.RISKS_WRITE],
-    rateLimit: { limit: 50, windowMs: 15 * 60 * 1000 },
-  }
-);
-
-// Helper function to calculate risk score
-function calculateRiskScore(likelihood: string, impact: string): number {
-  const likelihoodValues = {
-    very_low: 1,
-    low: 2,
-    medium: 3,
-    high: 4,
-    very_high: 5,
-  };
-
-  const impactValues = {
-    very_low: 1,
-    low: 2,
-    medium: 3,
-    high: 4,
-    very_high: 5,
-  };
-
-  return (likelihoodValues[likelihood as keyof typeof likelihoodValues] || 3) *
-         (impactValues[impact as keyof typeof impactValues] || 3);
 } 

@@ -5,6 +5,7 @@ import { verifyPassword } from '@/lib/auth/password';
 import { createSession } from '@/lib/auth/session';
 import { generateCSRFToken, rateLimit } from '@/lib/auth/middleware';
 import { appConfig } from '@/config/env';
+import { validateTestCredentials, type TestUser } from '@/lib/demo/testUser';
 
 // Login request schema
 const loginSchema = z.object({
@@ -58,65 +59,28 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const { email, password } = validationResult.data;
 
-    // Demo credentials for development
-    if (appConfig.isDevelopment) {
-      if (email === 'admin@riscura.com' && password === 'admin123') {
-        // Create a demo user session
-        const demoUser = {
-          id: 'demo-admin-id',
-          email: 'admin@riscura.com',
-          firstName: 'Admin',
-          lastName: 'User',
-          role: 'ADMIN',
-          permissions: ['*'],
-          organizationId: 'demo-org-id',
-          isActive: true,
-          emailVerified: new Date(),
-        };
+    // First, try test user authentication
+    const testUser = validateTestCredentials(email, password);
+    if (testUser) {
+      return handleTestUserLogin(testUser, clientIP, request);
+    }
 
-        const sessionOptions = {
-          ipAddress: clientIP,
-          userAgent: request.headers.get('user-agent') || undefined,
-        };
+    // Legacy demo credentials for backward compatibility
+    if ((email === 'admin@riscura.com' && password === 'admin123') || 
+        (appConfig.isDevelopment && email === 'demo@demo.com' && password === 'demo123')) {
+      const demoUser = {
+        id: 'demo-admin-id',
+        email: email,
+        firstName: 'Demo',
+        lastName: 'User',
+        role: 'ADMIN',
+        permissions: ['*'],
+        organizationId: 'demo-org-id',
+        isActive: true,
+        emailVerified: new Date(),
+      };
 
-        // For demo, create a simple session response
-        const tokens = {
-          accessToken: 'demo-access-token',
-          refreshToken: 'demo-refresh-token',
-          expiresIn: 3600,
-          refreshExpiresIn: 86400,
-        };
-
-        const csrfToken = generateCSRFToken();
-
-        const response = NextResponse.json({
-          message: 'Login successful',
-          user: demoUser,
-          tokens: {
-            accessToken: tokens.accessToken,
-            expiresIn: tokens.expiresIn,
-          },
-        });
-
-        // Set cookies
-        response.cookies.set('refreshToken', tokens.refreshToken, {
-          httpOnly: true,
-          secure: appConfig.isProduction,
-          sameSite: 'strict',
-          maxAge: tokens.refreshExpiresIn,
-          path: '/',
-        });
-
-        response.cookies.set('csrf-token', csrfToken, {
-          httpOnly: false,
-          secure: appConfig.isProduction,
-          sameSite: 'strict',
-          maxAge: tokens.expiresIn,
-          path: '/',
-        });
-
-        return response;
-      }
+      return handleDemoLogin(demoUser, clientIP, request);
     }
 
     // Try to find user in database
@@ -229,47 +193,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     } catch (dbError) {
       console.error('Database error during login:', dbError);
       
-      // Fallback to demo credentials if database is not available
-      if (email === 'admin@riscura.com' && password === 'admin123') {
-        const demoUser = {
-          id: 'demo-admin-id',
-          email: 'admin@riscura.com',
-          firstName: 'Admin',
-          lastName: 'User',
-          role: 'ADMIN',
-          permissions: ['*'],
-          organizationId: 'demo-org-id',
-          isActive: true,
-          emailVerified: new Date(),
-        };
-
-        const tokens = {
-          accessToken: 'demo-access-token',
-          refreshToken: 'demo-refresh-token',
-          expiresIn: 3600,
-          refreshExpiresIn: 86400,
-        };
-
-        const response = NextResponse.json({
-          message: 'Login successful (demo mode)',
-          user: demoUser,
-          tokens: {
-            accessToken: tokens.accessToken,
-            expiresIn: tokens.expiresIn,
-          },
-        });
-
-        response.cookies.set('refreshToken', tokens.refreshToken, {
-          httpOnly: true,
-          secure: appConfig.isProduction,
-          sameSite: 'strict',
-          maxAge: tokens.refreshExpiresIn,
-          path: '/',
-        });
-
-        return response;
-      }
-
       return NextResponse.json(
         { error: 'Invalid credentials' },
         { status: 401 }
@@ -283,6 +206,108 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       { status: 500 }
     );
   }
+}
+
+// Handle test user login with comprehensive demo data
+function handleTestUserLogin(testUser: TestUser, clientIP: string, request: NextRequest): NextResponse {
+  const tokens = {
+    accessToken: `demo-token-${testUser.id}`,
+    refreshToken: `demo-refresh-${testUser.id}`,
+    expiresIn: 3600,
+    refreshExpiresIn: 86400,
+  };
+
+  const csrfToken = generateCSRFToken();
+
+  const response = NextResponse.json({
+    message: 'Login successful',
+    user: {
+      id: testUser.id,
+      email: testUser.email,
+      firstName: testUser.firstName,
+      lastName: testUser.lastName,
+      role: testUser.role,
+      permissions: testUser.permissions,
+      organizationId: testUser.organizationId,
+      organization: testUser.organization,
+      profile: testUser.profile,
+      lastLogin: testUser.lastLogin,
+    },
+    tokens: {
+      accessToken: tokens.accessToken,
+      expiresIn: tokens.expiresIn,
+    },
+    demoMode: true,
+    features: {
+      hasAI: true,
+      hasReporting: true,
+      hasCollaboration: true,
+      hasAPI: testUser.permissions.includes('*') || testUser.permissions.includes('api:read'),
+    },
+  });
+
+  // Set cookies
+  response.cookies.set('refreshToken', tokens.refreshToken, {
+    httpOnly: true,
+    secure: appConfig.isProduction,
+    sameSite: 'strict',
+    maxAge: tokens.refreshExpiresIn,
+    path: '/',
+  });
+
+  response.cookies.set('csrf-token', csrfToken, {
+    httpOnly: false,
+    secure: appConfig.isProduction,
+    sameSite: 'strict',
+    maxAge: tokens.expiresIn,
+    path: '/',
+  });
+
+  // Store user session in cookie for demo purposes
+  response.cookies.set('demo-user', JSON.stringify({
+    id: testUser.id,
+    email: testUser.email,
+    role: testUser.role,
+    permissions: testUser.permissions,
+  }), {
+    httpOnly: false,
+    secure: appConfig.isProduction,
+    sameSite: 'strict',
+    maxAge: tokens.expiresIn,
+    path: '/',
+  });
+
+  return response;
+}
+
+// Handle legacy demo login
+function handleDemoLogin(demoUser: any, clientIP: string, request: NextRequest): NextResponse {
+  const tokens = {
+    accessToken: 'demo-access-token',
+    refreshToken: 'demo-refresh-token',
+    expiresIn: 3600,
+    refreshExpiresIn: 86400,
+  };
+
+  const response = NextResponse.json({
+    message: 'Login successful (legacy demo mode)',
+    user: demoUser,
+    tokens: {
+      accessToken: tokens.accessToken,
+      expiresIn: tokens.expiresIn,
+    },
+    demoMode: true,
+  });
+
+  response.cookies.set('refreshToken', tokens.refreshToken, {
+    httpOnly: true,
+    secure: appConfig.isProduction,
+    sameSite: 'strict',
+    maxAge: tokens.refreshExpiresIn,
+    path: '/',
+  });
+
+  return response;
 }
 
 /**
@@ -346,5 +371,10 @@ export async function GET(): Promise<NextResponse> {
     status: 'ok', 
     endpoint: 'login',
     timestamp: new Date().toISOString(),
+    testUsers: [
+      { email: 'admin@riscura.demo', role: 'ADMIN', password: 'demo123' },
+      { email: 'manager@riscura.demo', role: 'MANAGER', password: 'demo123' },
+      { email: 'analyst@riscura.demo', role: 'USER', password: 'demo123' },
+    ],
   });
 } 

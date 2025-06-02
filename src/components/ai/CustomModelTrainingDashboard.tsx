@@ -781,19 +781,19 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                     <div className="grid grid-cols-4 gap-4 text-sm">
                       <div>
                         <span className="text-gray-500">Documents:</span>
-                        <span className="ml-1 font-medium">{kb.qualityMetrics.totalDocuments}</span>
+                        <span className="ml-1 font-medium">{kb.qualityMetrics?.totalDocuments || 0}</span>
                       </div>
                       <div>
                         <span className="text-gray-500">Quality Score:</span>
-                        <span className="ml-1 font-medium">{kb.qualityMetrics.averageQuality}%</span>
+                        <span className="ml-1 font-medium">{kb.qualityMetrics?.averageQuality?.toFixed(1) || 'N/A'}%</span>
                       </div>
                       <div>
                         <span className="text-gray-500">Embeddings:</span>
-                        <span className="ml-1 font-medium">{kb.embeddings.totalVectors}</span>
+                        <span className="ml-1 font-medium">{kb.embeddings?.totalVectors || 0}</span>
                       </div>
                       <div>
-                        <span className="text-gray-500">Last Updated:</span>
-                        <span className="ml-1 font-medium">{kb.updatedAt.toLocaleDateString()}</span>
+                        <span className="text-gray-500">Updated:</span>
+                        <span className="ml-1 font-medium">{kb.updatedAt ? new Date(kb.updatedAt).toLocaleDateString() : 'N/A'}</span>
                       </div>
                     </div>
                   </div>
@@ -828,7 +828,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                     
                     <div className="space-y-3">
                       <div className="grid grid-cols-2 gap-4">
-                        {experiment.variants.map((variant) => (
+                        {experiment.variants?.map((variant) => (
                           <div key={variant.id} className="border rounded p-3">
                             <div className="flex items-center justify-between mb-2">
                               <span className="font-medium text-sm">{variant.name}</span>
@@ -845,20 +845,20 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                         <div>
                           <span className="text-gray-500">Success Metric:</span>
                           <span className="ml-1 font-medium">
-                            {experiment.successMetrics[0]?.name || 'N/A'}
+                            {experiment.successMetrics?.[0]?.name || 'N/A'}
                           </span>
                         </div>
                         <div>
                           <span className="text-gray-500">Target:</span>
                           <span className="ml-1 font-medium">
-                            {experiment.successMetrics[0]?.target ? 
+                            {experiment.successMetrics?.[0]?.target ? 
                               (experiment.successMetrics[0].target * 100).toFixed(1) + '%' : 'N/A'}
                           </span>
                         </div>
                         <div>
                           <span className="text-gray-500">Duration:</span>
                           <span className="ml-1 font-medium">
-                            {experiment.experimentConfig.maxDuration} days
+                            {experiment.experimentConfig?.maxDuration || 'N/A'} days
                           </span>
                         </div>
                       </div>
@@ -889,15 +889,15 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                           Model {deployment.modelId} v{deployment.version}
                         </h4>
                         <p className="text-sm text-gray-500">
-                          {deployment.target.name} • {deployment.target.environment}
+                          {deployment.target?.name || 'Unknown'} • {deployment.target?.environment || 'Unknown'}
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
                         <Badge className={getStatusColor(deployment.status)}>
                           {deployment.status}
                         </Badge>
-                        <Badge className={getStatusColor(deployment.health.status)}>
-                          {deployment.health.status}
+                        <Badge className={getStatusColor(deployment.health?.status || 'unknown')}>
+                          {deployment.health?.status || 'unknown'}
                         </Badge>
                       </div>
                     </div>
@@ -905,19 +905,19 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                     <div className="grid grid-cols-4 gap-4 text-sm">
                       <div>
                         <span className="text-gray-500">Uptime:</span>
-                        <span className="ml-1 font-medium">{deployment.health.uptime.toFixed(2)}%</span>
+                        <span className="ml-1 font-medium">{deployment.health?.uptime?.toFixed(2) || 'N/A'}%</span>
                       </div>
                       <div>
                         <span className="text-gray-500">Requests:</span>
-                        <span className="ml-1 font-medium">{deployment.metrics.requestCount.toLocaleString()}</span>
+                        <span className="ml-1 font-medium">{deployment.metrics?.requestCount?.toLocaleString() || 'N/A'}</span>
                       </div>
                       <div>
                         <span className="text-gray-500">Latency:</span>
-                        <span className="ml-1 font-medium">{deployment.health.latency}ms</span>
+                        <span className="ml-1 font-medium">{deployment.health?.latency || 'N/A'}ms</span>
                       </div>
                       <div>
                         <span className="text-gray-500">Error Rate:</span>
-                        <span className="ml-1 font-medium">{deployment.health.errorRate.toFixed(2)}%</span>
+                        <span className="ml-1 font-medium">{deployment.health?.errorRate?.toFixed(2) || 'N/A'}%</span>
                       </div>
                     </div>
                   </div>
@@ -940,8 +940,8 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                     <AreaChart data={performance.slice(0, 7).map((p, i) => ({
                       day: `Day ${i + 1}`,
                       accuracy: (p.metrics?.accuracy || 0) * 100,
-                      throughput: p.metrics?.throughput / 10, // Scale for visibility
-                      satisfaction: p.metrics?.userSatisfaction * 20 // Scale for visibility
+                      throughput: (p.metrics?.throughput || 0) / 10, // Scale for visibility
+                      satisfaction: (p.metrics?.userSatisfaction || 0) * 20 // Scale for visibility
                     }))}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="day" tick={{ fontSize: 10 }} />
@@ -983,13 +983,13 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                       <div className="grid grid-cols-2 gap-4">
                         <div className="text-center p-3 border rounded">
                           <div className="text-2xl font-bold text-green-600">
-                            ${p.metrics.businessMetrics.revenueImpact.toLocaleString()}
+                            ${p.metrics?.businessMetrics?.revenueImpact?.toLocaleString() || '0'}
                           </div>
                           <div className="text-sm text-gray-500">Revenue Impact</div>
                         </div>
                         <div className="text-center p-3 border rounded">
                           <div className="text-2xl font-bold text-blue-600">
-                            {p.metrics.businessMetrics.operationalEfficiency}%
+                            {p.metrics?.businessMetrics?.operationalEfficiency || 0}%
                           </div>
                           <div className="text-sm text-gray-500">Efficiency</div>
                         </div>
@@ -998,19 +998,19 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                       <div>
                         <h5 className="font-medium mb-2">Recent Feedback</h5>
                         <div className="space-y-2">
-                          {p.feedbackAnalysis.commonIssues.map((issue, index) => (
+                          {p.feedbackAnalysis?.commonIssues?.map((issue, index) => (
                             <div key={index} className="text-sm text-gray-600 flex items-center gap-2">
                               <AlertTriangle className="h-3 w-3 text-yellow-500" />
                               {issue}
                             </div>
-                          ))}
+                          )) || <div className="text-sm text-gray-600">No issues reported</div>}
                         </div>
                       </div>
                       
                       <div>
                         <h5 className="font-medium mb-2">Recommendations</h5>
                         <div className="space-y-2">
-                          {p.recommendations.map((rec, index) => (
+                          {p.recommendations?.map((rec, index) => (
                             <div key={index} className="text-sm">
                               <div className="flex items-center gap-2">
                                 <Badge className={getStatusColor(rec.priority)}>
