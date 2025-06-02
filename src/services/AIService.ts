@@ -11,6 +11,7 @@ import {
 } from '@/types/ai.types';
 import { Risk } from '@/types';
 import { generateId } from '@/lib/utils';
+import { RISCURA_MASTER_PROMPT, AGENT_MODIFIERS, buildContextualPrompt } from '@/config/master-prompt';
 
 // Enhanced interfaces for proper typing
 interface ContentGenerationRequest {
@@ -305,29 +306,32 @@ export class AIService {
   /**
    * Analyze a risk using AI
    */
-  async analyzeRisk(risk: Risk): Promise<RiskAnalysis> {
-    const request: AIRequest = {
-      id: generateId('ai-request'),
-      type: 'risk_analysis',
-      content: JSON.stringify(risk),
-      context: { riskId: risk.id, category: risk.category },
-      userId: 'current-user', // Would come from auth context
-      timestamp: new Date()
-    };
-
-    const prompt = this.buildRiskAnalysisPrompt(risk);
-    const response = await this.makeCompletion(prompt, 'risk_analyzer');
-
+  async analyzeRisk(risk: Risk, organizationalContext?: {
+    industry?: string;
+    size?: string;
+    geography?: string;
+    riskAppetite?: string;
+    frameworks?: string[];
+  }): Promise<RiskAnalysis> {
+    const prompt = this.buildRiskAnalysisPrompt(risk, organizationalContext);
+    const response = await this.makeCompletion(prompt, 'risk_analyzer', undefined, organizationalContext);
+    
     return this.parseRiskAnalysisResponse(response, risk);
   }
 
   /**
-   * Recommend controls for a risk
+   * Get control recommendations for a risk
    */
-  async recommendControls(risk: Risk): Promise<ControlRecommendation[]> {
-    const prompt = this.buildControlRecommendationPrompt(risk);
-    const response = await this.makeCompletion(prompt, 'control_advisor');
-
+  async recommendControls(risk: Risk, organizationalContext?: {
+    industry?: string;
+    size?: string;
+    geography?: string;
+    riskAppetite?: string;
+    frameworks?: string[];
+  }): Promise<ControlRecommendation[]> {
+    const prompt = this.buildControlRecommendationPrompt(risk, organizationalContext);
+    const response = await this.makeCompletion(prompt, 'control_advisor', undefined, organizationalContext);
+    
     return this.parseControlRecommendationsResponse(response, risk);
   }
 
@@ -364,29 +368,37 @@ export class AIService {
   }
 
   /**
-   * Send a message and get streaming response
+   * Send a message with optional streaming
    */
   async sendMessage(
     content: string, 
     agentType: AgentType = 'general_assistant',
     attachments?: MessageAttachment[],
-    onStream?: (chunk: string) => void
+    onStream?: (chunk: string) => void,
+    organizationalContext?: {
+      industry?: string;
+      size?: string;
+      geography?: string;
+      riskAppetite?: string;
+      frameworks?: string[];
+    }
   ): Promise<ConversationMessage> {
     const prompt = this.buildConversationPrompt(content, agentType, attachments);
     
+    let response: AIResponse;
     if (onStream) {
-      const response = await this.makeStreamingCompletion(prompt, agentType, onStream);
-      return this.formatConversationMessage(response, 'assistant');
+      response = await this.makeStreamingCompletion(prompt, agentType, onStream, undefined, organizationalContext);
     } else {
-      const response = await this.makeCompletion(prompt, agentType);
-      return this.formatConversationMessage(response, 'assistant');
+      response = await this.makeCompletion(prompt, agentType, undefined, organizationalContext);
     }
+    
+    return this.formatConversationMessage(response, 'assistant');
   }
 
   /**
    * Make a completion request with error handling and rate limiting
    */
-  private async makeCompletion(prompt: string, agentType: AgentType, model?: string): Promise<AIResponse> {
+  private async makeCompletion(prompt: string, agentType: AgentType, model?: string, organizationalContext?: any): Promise<AIResponse> {
     const startTime = Date.now();
     const modelName = model || this.config.defaultModel;
     const modelConfig = this.modelConfigs.get(modelName);
@@ -408,7 +420,7 @@ export class AIService {
     // Execute with circuit breaker
     const response = await this.circuitBreaker.execute(async () => {
       try {
-        const systemPrompt = this.getSystemPrompt(agentType);
+        const systemPrompt = this.getSystemPrompt(agentType, organizationalContext);
         
         const completion = await this.client.chat.completions.create({
           model: modelName,
@@ -481,23 +493,29 @@ export class AIService {
     prompt: string, 
     agentType: AgentType, 
     onStream: (chunk: string) => void,
-    model?: string
+    model?: string,
+    organizationalContext?: any
   ): Promise<AIResponse> {
     const startTime = Date.now();
     const modelName = model || this.config.defaultModel;
     const modelConfig = this.modelConfigs.get(modelName);
-
-    if (!modelConfig?.supportsStreaming) {
-      // Fallback to regular completion
-      return this.makeCompletion(prompt, agentType, model);
+    
+    if (!modelConfig) {
+      throw new AIServiceError(
+        `Model ${modelName} is not available`,
+        'MODEL_NOT_FOUND'
+      );
     }
 
-    // Check rate limits
     await this.checkRateLimit();
 
-    return await this.circuitBreaker.execute(async () => {
+    let accumulatedContent = '';
+    let promptTokens = 0;
+    let completionTokens = 0;
+
+    const response = await this.circuitBreaker.execute(async () => {
       try {
-        const systemPrompt = this.getSystemPrompt(agentType);
+        const systemPrompt = this.getSystemPrompt(agentType, organizationalContext);
         
         const stream = await this.client.chat.completions.create({
           model: modelName,
@@ -510,114 +528,138 @@ export class AIService {
           top_p: this.config.topP,
           frequency_penalty: this.config.frequencyPenalty,
           presence_penalty: this.config.presencePenalty,
-          stream: true,
-          user: 'riscura-user'
+          stream: true
         });
 
-        let fullContent = '';
-        let totalTokens = 0;
-
         for await (const chunk of stream) {
-          const content = chunk.choices[0]?.delta?.content;
-          if (content) {
-            fullContent += content;
-            onStream(content);
+          const delta = chunk.choices[0]?.delta;
+          if (delta?.content) {
+            accumulatedContent += delta.content;
+            onStream(delta.content);
+          }
+          
+          // Extract usage information from the final chunk
+          if (chunk.usage) {
+            promptTokens = chunk.usage.prompt_tokens;
+            completionTokens = chunk.usage.completion_tokens;
           }
         }
 
-        // Estimate token usage for streaming (no usage data returned)
-        const estimatedTokens = Math.ceil(fullContent.length / 4);
-        totalTokens = estimatedTokens;
+        // Estimate tokens if not provided
+        if (promptTokens === 0) {
+          promptTokens = Math.ceil((systemPrompt.length + prompt.length) / 4);
+        }
+        if (completionTokens === 0) {
+          completionTokens = Math.ceil(accumulatedContent.length / 4);
+        }
 
-        const tokenUsage: TokenUsage = {
-          promptTokens: Math.ceil(prompt.length / 4),
-          completionTokens: estimatedTokens,
-          totalTokens: Math.ceil(prompt.length / 4) + estimatedTokens,
-          estimatedCost: this.calculateCost(Math.ceil(prompt.length / 4), estimatedTokens, modelConfig)
+        const usage: TokenUsage = {
+          promptTokens,
+          completionTokens,
+          totalTokens: promptTokens + completionTokens,
+          estimatedCost: this.calculateCost(promptTokens, completionTokens, modelConfig)
         };
 
-        const aiResponse: AIResponse = {
+        const responseTime = Date.now() - startTime;
+        this.updateRateLimit(usage.totalTokens);
+        this.updateUsageMetrics(usage, responseTime, true);
+
+        return {
           id: generateId('ai-response'),
-          content: fullContent,
-          confidence: 0.85,
+          content: accumulatedContent,
+          model: modelName,
+          usage,
           timestamp: new Date(),
-          usage: tokenUsage,
-          metadata: {
-            model: modelName,
-            agentType,
-            responseTime: Date.now() - startTime,
-            streaming: true
-          }
+          confidence: this.calculateConfidence(accumulatedContent)
         };
 
-        // Update metrics
-        this.updateUsageMetrics(tokenUsage, Date.now() - startTime, true);
-        this.updateRateLimit(tokenUsage.totalTokens);
-
-        return aiResponse;
-
-      } catch (error: unknown) {
-        this.updateUsageMetrics({ promptTokens: 0, completionTokens: 0, totalTokens: 0, estimatedCost: 0 }, Date.now() - startTime, false);
+      } catch (error) {
+        const responseTime = Date.now() - startTime;
+        this.updateUsageMetrics({ 
+          promptTokens: 0, 
+          completionTokens: 0, 
+          totalTokens: 0, 
+          estimatedCost: 0 
+        }, responseTime, false);
         
-        const err = error as { status?: number; message?: string };
-        if (err.status === 429) {
-          const resetTime = new Date(Date.now() + 60000);
-          throw new RateLimitError('Rate limit exceeded', resetTime);
+        if (error instanceof Error) {
+          if (error.message.includes('rate limit')) {
+            throw new RateLimitError(error.message, new Date(Date.now() + 60000));
+          }
+          if (error.message.includes('network') || error.message.includes('timeout')) {
+            throw new NetworkError(error.message);
+          }
+          throw new AIServiceError(
+            `OpenAI API error: ${error.message}`,
+            'API_ERROR',
+            undefined,
+            true
+          );
         }
-        
-        throw new AIServiceError(`Streaming request failed: ${err.message}`, 'STREAMING_FAILED', err.status);
+        throw error;
       }
     });
+
+    return response;
   }
 
-  // System prompts for different agents
-  private getSystemPrompt(agentType: AgentType): string {
-    const prompts = {
-      risk_analyzer: `You are an expert Risk Analyzer for enterprise risk management. You specialize in:
-- Quantitative and qualitative risk assessment
-- Risk scoring using likelihood and impact matrices
-- Root cause analysis and risk correlation
-- Industry best practices (COSO, ISO 31000, NIST)
-- Regulatory compliance requirements
+  // System prompts for different agents - now using master prompt
+  private getSystemPrompt(agentType: AgentType, organizationalContext?: {
+    industry?: string;
+    size?: string;
+    geography?: string;
+    riskAppetite?: string;
+    frameworks?: string[];
+  }): string {
+    const modifier = AGENT_MODIFIERS[agentType] || AGENT_MODIFIERS.general_assistant;
+    
+    const context = organizationalContext ? `
+ORGANIZATIONAL CONTEXT:
+- Industry: ${organizationalContext.industry || 'Not specified'}
+- Organization Size: ${organizationalContext.size || 'Not specified'}
+- Geographic Presence: ${organizationalContext.geography || 'Not specified'}
+- Risk Appetite: ${organizationalContext.riskAppetite || 'Not specified'}
+- Applied Frameworks: ${organizationalContext.frameworks?.join(', ') || 'Not specified'}
+` : '';
 
-Provide detailed, actionable risk analysis with specific recommendations. Use professional language appropriate for enterprise risk management. Always include confidence levels and supporting rationale.`,
+    return `${RISCURA_MASTER_PROMPT.systemIdentity}
 
-      control_advisor: `You are an expert Control Advisor for enterprise risk management. You specialize in:
-- Control design and implementation strategies
-- Control effectiveness assessment
-- Preventive, detective, and corrective controls
-- Control frameworks (COSO, COBIT, SOX)
-- Control testing methodologies
+${RISCURA_MASTER_PROMPT.mission}
 
-Provide practical, implementable control recommendations with clear implementation guidance. Focus on cost-effectiveness and organizational fit.`,
+SPECIALIZED ROLE: ${modifier.focus}
+EXPERTISE: ${modifier.specialization}
+COMMUNICATION TONE: ${modifier.tone}
 
-      compliance_expert: `You are an expert Compliance Specialist for enterprise governance. You specialize in:
-- Regulatory requirements analysis (SOX, GDPR, HIPAA, etc.)
-- Compliance gap analysis and remediation
-- Audit preparation and evidence collection
-- Industry-specific compliance frameworks
-- Risk-based compliance strategies
+${RISCURA_MASTER_PROMPT.professionalStandards}
 
-Provide clear, actionable compliance guidance with specific regulatory references and implementation timelines.`,
+${RISCURA_MASTER_PROMPT.expertiseDomains}
 
-      general_assistant: `You are ARIA, an AI Risk Intelligence Assistant for enterprise risk management. You provide:
-- General risk management guidance
-- Best practice recommendations
-- Industry insights and trends
-- Process optimization suggestions
-- Strategic risk advisory
+${RISCURA_MASTER_PROMPT.responseFramework}
 
-Maintain a professional, helpful tone while providing comprehensive risk management support across all domains.`
-    };
+${RISCURA_MASTER_PROMPT.qualityStandards}
 
-    return prompts[agentType] || prompts.general_assistant;
+${agentType === 'risk_analyzer' ? RISCURA_MASTER_PROMPT.riskMethodology : ''}
+${agentType === 'compliance_expert' ? RISCURA_MASTER_PROMPT.complianceFramework : ''}
+${agentType === 'control_advisor' ? RISCURA_MASTER_PROMPT.controlPrinciples : ''}
+
+${RISCURA_MASTER_PROMPT.confidenceGuidelines}
+
+${RISCURA_MASTER_PROMPT.regulatoryFrameworks}
+
+${RISCURA_MASTER_PROMPT.outputGuidelines}
+
+${RISCURA_MASTER_PROMPT.escalationTriggers}
+
+${context}
+
+Please provide responses that follow the established framework and maintain consistency with Riscura's enterprise risk management standards.`;
   }
 
-  // Prompt builders for different use cases
-  private buildRiskAnalysisPrompt(risk: Risk): string {
-    return `Analyze the following risk for a comprehensive assessment:
+  // Enhanced prompt builders that incorporate master prompt structure
+  private buildRiskAnalysisPrompt(risk: Risk, organizationalContext?: any): string {
+    const basePrompt = `RISK ANALYSIS REQUEST
 
-Risk Details:
+RISK DETAILS:
 - Title: ${risk.title}
 - Description: ${risk.description}
 - Category: ${risk.category}
@@ -627,38 +669,93 @@ Risk Details:
 - Status: ${risk.status}
 - Owner: ${risk.owner}
 
-Please provide:
-1. Detailed risk assessment and validation of current scoring
-2. Key risk factors and potential triggers
-3. Risk dependencies and correlations
-4. Quantitative analysis where applicable
-5. Risk treatment recommendations
-6. Key risk indicators (KRIs) suggestions
-7. Confidence level in your analysis
+ANALYSIS REQUIREMENTS:
+Following the Riscura risk assessment methodology, please provide:
 
-Format your response as a structured analysis suitable for enterprise risk management.`;
+1. EXECUTIVE SUMMARY
+   - Risk validation and current scoring assessment
+   - Key findings and priority level
+   - Primary recommendations
+
+2. DETAILED ANALYSIS
+   - Root cause analysis
+   - Risk triggers and warning signs
+   - Potential consequences breakdown
+   - Risk velocity and persistence assessment
+   - Risk interdependencies and correlations
+
+3. RECOMMENDATIONS
+   - Risk response strategy options (avoid, mitigate, transfer, accept)
+   - Prioritized action items
+   - Implementation considerations
+   - Resource requirements and timeline
+
+4. MONITORING & VALIDATION
+   - Key Risk Indicators (KRIs) suggestions
+   - Monitoring frequency recommendations
+   - Escalation triggers
+   - Success metrics
+
+5. CONFIDENCE & ASSUMPTIONS
+   - Analysis confidence level (High/Medium/Low)
+   - Key assumptions made
+   - Data limitations identified
+   - Areas requiring expert validation
+
+Format as a professional risk assessment report suitable for enterprise review.`;
+
+    return basePrompt;
   }
 
-  private buildControlRecommendationPrompt(risk: Risk): string {
-    return `Recommend optimal controls for the following risk:
+  private buildControlRecommendationPrompt(risk: Risk, organizationalContext?: any): string {
+    const basePrompt = `CONTROL DESIGN REQUEST
 
-Risk Details:
-- Title: ${risk.title}
+RISK INFORMATION:
+- Risk: ${risk.title}
 - Description: ${risk.description}
 - Category: ${risk.category}
-- Likelihood: ${risk.likelihood}/5
-- Impact: ${risk.impact}/5
-- Risk Score: ${risk.riskScore}
+- Current Risk Score: ${risk.riskScore}
+- Risk Owner: ${risk.owner}
 
-Please recommend 3-5 controls that should include:
-1. A mix of preventive, detective, and corrective controls
-2. Implementation difficulty and cost considerations
-3. Expected effectiveness in reducing risk
-4. Control testing methodologies
-5. Key performance indicators for each control
-6. Implementation timeline and dependencies
+CONTROL DESIGN REQUIREMENTS:
+Following Riscura's control design principles, please recommend:
 
-Prioritize practical, cost-effective solutions appropriate for enterprise implementation.`;
+1. EXECUTIVE SUMMARY
+   - Control strategy overview
+   - Expected risk reduction
+   - Implementation priority
+
+2. DETAILED ANALYSIS
+   - Primary Controls (3-5 controls)
+     * Control objective and description
+     * Control type (preventive/detective/corrective)
+     * Control category (manual/automated/hybrid)
+     * Expected effectiveness (% risk reduction)
+   - Alternative control options
+   - Control interdependencies
+
+3. RECOMMENDATIONS
+   - Phased implementation roadmap
+   - Resource requirements and costs
+   - Dependencies and prerequisites
+   - Timeline and milestones
+   - Quick wins vs. long-term solutions
+
+4. MONITORING & VALIDATION
+   - Key Control Indicators (KCIs)
+   - Testing methodology and frequency
+   - Success criteria and metrics
+   - Evidence requirements
+
+5. CONFIDENCE & ASSUMPTIONS
+   - Control design confidence level
+   - Implementation risk assessment
+   - Key assumptions
+   - Areas requiring expert review
+
+Include cost-benefit analysis and implementation guidance.`;
+
+    return basePrompt;
   }
 
   private buildContentGenerationPrompt(request: ContentGenerationRequest): string {
@@ -932,5 +1029,39 @@ Provide a clear, well-structured explanation that includes:
 
   public updateConfig(newConfig: Partial<AIConfig>): void {
     this.config = { ...this.config, ...newConfig };
+  }
+
+  /**
+   * Calculate confidence level based on response content
+   */
+  private calculateConfidence(content: string): number {
+    // Simple confidence calculation based on content characteristics
+    let confidence = 0.7; // Base confidence
+    
+    // Increase confidence for longer, more detailed responses
+    if (content.length > 500) confidence += 0.1;
+    if (content.length > 1000) confidence += 0.1;
+    
+    // Increase confidence for structured responses
+    if (content.includes('1.') || content.includes('•') || content.includes('-')) confidence += 0.05;
+    
+    // Increase confidence for responses with specific frameworks or standards
+    const frameworks = ['COSO', 'ISO 31000', 'NIST', 'COBIT', 'SOX', 'GDPR'];
+    for (const framework of frameworks) {
+      if (content.includes(framework)) {
+        confidence += 0.02;
+        break;
+      }
+    }
+    
+    // Decrease confidence for responses indicating uncertainty
+    if (content.toLowerCase().includes('uncertain') || 
+        content.toLowerCase().includes('may be') ||
+        content.toLowerCase().includes('might be')) {
+      confidence -= 0.1;
+    }
+    
+    // Ensure confidence is within bounds
+    return Math.max(0.3, Math.min(0.95, confidence));
   }
 } 

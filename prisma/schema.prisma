@@ -1,0 +1,1170 @@
+// Prisma schema for Riscura RCSA Platform
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// ORGANIZATION & USER MANAGEMENT
+// ============================================================================
+
+model Organization {
+  id               String   @id @default(cuid())
+  name             String
+  domain           String?  @unique
+  settings         Json?    // Organization-specific settings
+  plan             String   @default("free") // free, pro, enterprise
+  stripeCustomerId String?  // Stripe customer ID for billing
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relationships
+  users                   User[]
+  risks                   Risk[]
+  controls                Control[]
+  documents               Document[]
+  questionnaires          Questionnaire[]
+  workflows               Workflow[]
+  reports                 Report[]
+  activities              Activity[]
+  tasks                   Task[]
+  workflows_v2            WorkflowV2[]
+  subscriptions           OrganizationSubscription[]
+  encryptionKeys          EncryptionKey[]
+  billingEvents           BillingEvent[]
+  apiKeys                 APIKey[]
+  
+  @@map("organizations")
+}
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  firstName      String
+  lastName       String
+  passwordHash   String?
+  avatar         String?
+  phoneNumber    String?   // Phone number for SMS notifications
+  role           UserRole  @default(USER)
+  permissions    String[]  @default([])
+  isActive       Boolean   @default(true)
+  emailVerified  DateTime?
+  lastLogin      DateTime?
+  organizationId String
+  
+  // Audit fields
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  
+  // Relationships
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  // Created entities
+  createdRisks            Risk[]            @relation("RiskCreatedBy")
+  createdControls         Control[]         @relation("ControlCreatedBy")
+  createdDocuments        Document[]        @relation("DocumentCreatedBy")
+  createdQuestionnaires   Questionnaire[]   @relation("QuestionnaireCreatedBy")
+  createdWorkflows        Workflow[]        @relation("WorkflowCreatedBy")
+  createdReports          Report[]          @relation("ReportCreatedBy")
+  createdActivities       Activity[]        @relation("ActivityCreatedBy")
+  createdTasks            Task[]            @relation("TaskCreatedBy")
+  
+  // Assigned entities
+  assignedRisks           Risk[]            @relation("RiskAssignedTo")
+  assignedControls        Control[]         @relation("ControlAssignedTo")
+  assignedTasks           Task[]            @relation("TaskAssignedTo")
+  assignedWorkflowSteps   WorkflowStep[]    @relation("WorkflowStepAssignedTo")
+  
+  // Responses and interactions
+  responses               Response[]
+  comments                Comment[]
+  messages                Message[]         @relation("MessageSender")
+  receivedMessages        Message[]         @relation("MessageRecipient")
+  notifications           Notification[]
+  
+  // Session management
+  sessions                Session[]
+  
+  // Preferences
+  notificationPreferences NotificationPreferences?
+  
+  // AI & Billing
+  aiConversations         AIConversation[]
+  aiUsageLogs             AIUsageLog[]
+  
+  @@index([organizationId])
+  @@index([email])
+  @@map("users")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  token        String   @unique
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  ipAddress    String?
+  userAgent    String?
+  
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([token])
+  @@index([userId])
+  @@map("sessions")
+}
+
+enum UserRole {
+  ADMIN
+  RISK_MANAGER
+  AUDITOR
+  USER
+}
+
+// ============================================================================
+// RISK MANAGEMENT
+// ============================================================================
+
+model Risk {
+  id             String       @id @default(cuid())
+  title          String
+  description    String
+  category       RiskCategory
+  likelihood     Int          @default(1) // 1-5 scale
+  impact         Int          @default(1) // 1-5 scale
+  riskScore      Int          @default(1) // calculated
+  riskLevel      RiskLevel?
+  owner          String?
+  status         RiskStatus   @default(IDENTIFIED)
+  dateIdentified DateTime?
+  lastAssessed   DateTime?
+  nextReview     DateTime?
+  aiConfidence   Float?
+  
+  // Multi-tenant isolation
+  organizationId String
+  
+  // Audit fields
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  createdBy      String?
+  
+  // Relationships
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  creator        User?        @relation("RiskCreatedBy", fields: [createdBy], references: [id])
+  assignedUser   User?        @relation("RiskAssignedTo", fields: [owner], references: [id])
+  
+  controls       ControlRiskMapping[]
+  evidence       Document[]   @relation("RiskEvidence")
+  comments       Comment[]
+  tasks          Task[]
+  activities     Activity[]
+  
+  @@index([organizationId])
+  @@index([category])
+  @@index([status])
+  @@index([riskLevel])
+  @@index([createdAt])
+  @@map("risks")
+}
+
+model ControlRiskMapping {
+  id             String    @id @default(cuid())
+  riskId         String
+  controlId      String
+  effectiveness  Float     @default(0) // 0-1 scale
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  
+  risk           Risk      @relation(fields: [riskId], references: [id], onDelete: Cascade)
+  control        Control   @relation(fields: [controlId], references: [id], onDelete: Cascade)
+  
+  @@unique([riskId, controlId])
+  @@map("control_risk_mappings")
+}
+
+enum RiskCategory {
+  OPERATIONAL
+  FINANCIAL
+  STRATEGIC
+  COMPLIANCE
+  TECHNOLOGY
+}
+
+enum RiskStatus {
+  IDENTIFIED
+  ASSESSED
+  MITIGATED
+  CLOSED
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+// ============================================================================
+// CONTROL MANAGEMENT
+// ============================================================================
+
+model Control {
+  id                String        @id @default(cuid())
+  title             String
+  description       String
+  type              ControlType
+  category          ControlCategory @default(OPERATIONAL)
+  frequency         String
+  automationLevel   AutomationLevel @default(MANUAL)
+  effectiveness     Float         @default(0) // 0-1 scale
+  effectivenessRating EffectivenessRating?
+  owner             String?
+  operatorId        String?
+  reviewerId        String?
+  status            ControlStatus @default(PLANNED)
+  priority          Priority?
+  
+  // Testing fields
+  lastTestDate      DateTime?
+  nextTestDate      DateTime?
+  testResults       String?
+  
+  // Business context
+  businessUnit      String?
+  department        String?
+  location          String?
+  cost              Float?
+  effort            ControlEffort?
+  
+  // Custom fields
+  tags              String[]      @default([])
+  customFields      Json?
+  
+  // Multi-tenant isolation
+  organizationId    String
+  
+  // Audit fields
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  createdBy         String?
+  
+  // Relationships
+  organization      Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  creator           User?         @relation("ControlCreatedBy", fields: [createdBy], references: [id])
+  assignedUser      User?         @relation("ControlAssignedTo", fields: [owner], references: [id])
+  
+  risks             ControlRiskMapping[]
+  evidence          Document[]    @relation("ControlEvidence")
+  comments          Comment[]
+  tasks             Task[]
+  activities        Activity[]
+  
+  @@index([organizationId])
+  @@index([type])
+  @@index([status])
+  @@index([category])
+  @@index([createdAt])
+  @@map("controls")
+}
+
+enum ControlType {
+  PREVENTIVE
+  DETECTIVE
+  CORRECTIVE
+  DIRECTIVE
+  COMPENSATING
+}
+
+enum ControlStatus {
+  PLANNED
+  IMPLEMENTED
+  TESTING
+  OPERATIONAL
+  REMEDIATION
+  DISABLED
+  ACTIVE
+  INACTIVE
+}
+
+enum ControlCategory {
+  TECHNICAL
+  ADMINISTRATIVE
+  PHYSICAL
+  OPERATIONAL
+  MANAGEMENT
+}
+
+enum AutomationLevel {
+  MANUAL
+  SEMI_AUTOMATED
+  FULLY_AUTOMATED
+}
+
+enum EffectivenessRating {
+  NOT_EFFECTIVE
+  PARTIALLY_EFFECTIVE
+  LARGELY_EFFECTIVE
+  FULLY_EFFECTIVE
+}
+
+enum ControlEffort {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+// ============================================================================
+// DOCUMENT MANAGEMENT
+// ============================================================================
+
+model Document {
+  id            String    @id @default(cuid())
+  name          String
+  type          String
+  size          Int
+  content       String?   // base64 encoded or file path
+  extractedText String?
+  aiAnalysis    Json?     // AI analysis results
+  uploadedAt    DateTime  @default(now())
+  
+  // Multi-tenant isolation
+  organizationId String
+  uploadedBy     String?
+  
+  // Audit fields
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  
+  // Relationships
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  uploader       User?        @relation("DocumentCreatedBy", fields: [uploadedBy], references: [id])
+  
+  riskEvidence   Risk[]       @relation("RiskEvidence")
+  controlEvidence Control[]   @relation("ControlEvidence")
+  comments       Comment[]
+  activities     Activity[]
+  
+  @@index([organizationId])
+  @@index([type])
+  @@index([uploadedAt])
+  @@map("documents")
+}
+
+// ============================================================================
+// QUESTIONNAIRE SYSTEM
+// ============================================================================
+
+model Questionnaire {
+  id             String                 @id @default(cuid())
+  title          String
+  description    String
+  questions      Json                   // Array of Question objects
+  targetRoles    String[]              @default([])
+  status         QuestionnaireStatus   @default(DRAFT)
+  dueDate        DateTime?
+  estimatedTime  Int?                  // minutes
+  tags           String[]              @default([])
+  
+  // Multi-tenant isolation
+  organizationId String
+  
+  // Audit fields
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+  createdBy      String?
+  
+  // Relationships
+  organization   Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  creator        User?                 @relation("QuestionnaireCreatedBy", fields: [createdBy], references: [id])
+  
+  responses      Response[]
+  activities     Activity[]
+  
+  @@index([organizationId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("questionnaires")
+}
+
+model Response {
+  id             String        @id @default(cuid())
+  questionnaireId String
+  questionId     String
+  userId         String
+  answer         Json          // Flexible answer storage
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  
+  questionnaire  Questionnaire @relation(fields: [questionnaireId], references: [id], onDelete: Cascade)
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([questionnaireId])
+  @@index([userId])
+  @@map("responses")
+}
+
+enum QuestionnaireStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+// ============================================================================
+// WORKFLOW MANAGEMENT
+// ============================================================================
+
+model Workflow {
+  id             String        @id @default(cuid())
+  name           String
+  description    String
+  type           WorkflowType
+  steps          Json          // Array of WorkflowStep objects
+  status         WorkflowStatus @default(DRAFT)
+  assignedTo     String[]      @default([])
+  priority       Priority      @default(MEDIUM)
+  completedAt    DateTime?
+  tags           String[]      @default([])
+  relatedEntities Json?        // Related risks, controls, documents
+  
+  // Multi-tenant isolation
+  organizationId String
+  
+  // Audit fields
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  createdBy      String?
+  
+  // Relationships
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  creator        User?         @relation("WorkflowCreatedBy", fields: [createdBy], references: [id])
+  
+  activities     Activity[]
+  
+  @@index([organizationId])
+  @@index([status])
+  @@index([type])
+  @@index([createdAt])
+  @@map("workflows")
+}
+
+// New workflow system with proper step relationships
+model WorkflowV2 {
+  id             String         @id @default(cuid())
+  name           String
+  description    String
+  type           WorkflowType
+  status         WorkflowStatus @default(DRAFT)
+  priority       Priority       @default(MEDIUM)
+  completedAt    DateTime?
+  
+  // Multi-tenant isolation
+  organizationId String
+  
+  // Audit fields
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  createdBy      String?
+  
+  // Relationships
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  steps          WorkflowStep[]
+  
+  @@index([organizationId])
+  @@index([status])
+  @@map("workflows_v2")
+}
+
+model WorkflowStep {
+  id           String           @id @default(cuid())
+  workflowId   String
+  name         String
+  type         WorkflowStepType
+  assigneeId   String?
+  status       StepStatus       @default(PENDING)
+  dueDate      DateTime?
+  completedAt  DateTime?
+  completedBy  String?
+  order        Int
+  conditions   Json?            // Workflow conditions
+  
+  // Audit fields
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  
+  // Relationships
+  workflow     WorkflowV2       @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  assignee     User?            @relation("WorkflowStepAssignedTo", fields: [assigneeId], references: [id])
+  
+  @@index([workflowId])
+  @@index([assigneeId])
+  @@map("workflow_steps")
+}
+
+enum WorkflowType {
+  APPROVAL
+  REVIEW
+  ASSESSMENT
+  CUSTOM
+}
+
+enum WorkflowStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+enum WorkflowStepType {
+  APPROVAL
+  REVIEW
+  ACTION
+  NOTIFICATION
+}
+
+enum StepStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  REJECTED
+  SKIPPED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+// ============================================================================
+// REPORTING SYSTEM
+// ============================================================================
+
+model Report {
+  id             String       @id @default(cuid())
+  title          String
+  type           ReportType
+  status         ReportStatus @default(DRAFT)
+  data           Json?        // Report data and configuration
+  parameters     Json?        // Report parameters
+  sharedWith     String[]     @default([])
+  exportFormats  String[]     @default([])
+  
+  // Multi-tenant isolation
+  organizationId String
+  
+  // Audit fields
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  createdBy      String?
+  
+  // Relationships
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  creator        User?        @relation("ReportCreatedBy", fields: [createdBy], references: [id])
+  
+  activities     Activity[]
+  
+  @@index([organizationId])
+  @@index([type])
+  @@index([status])
+  @@map("reports")
+}
+
+enum ReportType {
+  RISK_ASSESSMENT
+  CONTROL_EFFECTIVENESS
+  COMPLIANCE
+  AUDIT
+  EXECUTIVE_DASHBOARD
+}
+
+enum ReportStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+// ============================================================================
+// TASK MANAGEMENT
+// ============================================================================
+
+model Task {
+  id              String      @id @default(cuid())
+  title           String
+  description     String?
+  type            TaskType
+  status          TaskStatus  @default(TODO)
+  priority        Priority    @default(MEDIUM)
+  assigneeId      String?
+  assignedBy      String?
+  dueDate         DateTime?
+  completedAt     DateTime?
+  estimatedHours  Int?
+  actualHours     Int?
+  tags            String[]    @default([])
+  
+  // Related entities
+  riskId          String?
+  controlId       String?
+  
+  // Multi-tenant isolation
+  organizationId  String
+  
+  // Audit fields
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  createdBy       String?
+  
+  // Relationships
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assignee        User?        @relation("TaskAssignedTo", fields: [assigneeId], references: [id])
+  creator         User?        @relation("TaskCreatedBy", fields: [createdBy], references: [id])
+  risk            Risk?        @relation(fields: [riskId], references: [id])
+  control         Control?     @relation(fields: [controlId], references: [id])
+  
+  comments        Comment[]
+  activities      Activity[]
+  
+  @@index([organizationId])
+  @@index([assigneeId])
+  @@index([status])
+  @@index([dueDate])
+  @@map("tasks")
+}
+
+enum TaskType {
+  RISK_ASSESSMENT
+  CONTROL_TESTING
+  DOCUMENT_REVIEW
+  WORKFLOW_STEP
+  CUSTOM
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  OVERDUE
+}
+
+// ============================================================================
+// COLLABORATION & COMMUNICATION
+// ============================================================================
+
+model Message {
+  id             String        @id @default(cuid())
+  content        String
+  type           MessageType   @default(DIRECT)
+  status         MessageStatus @default(SENT)
+  senderId       String
+  recipientIds   String[]      @default([])
+  threadId       String?
+  mentions       String[]      @default([])
+  attachments    Json?         // File attachments
+  
+  // Audit fields
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  
+  // Relationships
+  sender         User          @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipients     User[]        @relation("MessageRecipient")
+  
+  @@index([senderId])
+  @@index([threadId])
+  @@index([createdAt])
+  @@map("messages")
+}
+
+model Comment {
+  id             String      @id @default(cuid())
+  content        String
+  authorId       String
+  entityType     EntityType
+  entityId       String
+  parentId       String?     // For threaded comments
+  mentions       String[]    @default([])
+  attachments    Json?
+  
+  // Audit fields
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  
+  // Relationships
+  author         User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent         Comment?    @relation("CommentReplies", fields: [parentId], references: [id])
+  replies        Comment[]   @relation("CommentReplies")
+  
+  // Entity relationships with unique constraint names
+  risk           Risk?       @relation(fields: [entityId], references: [id], map: "comment_risk_fkey")
+  control        Control?    @relation(fields: [entityId], references: [id], map: "comment_control_fkey")
+  document       Document?   @relation(fields: [entityId], references: [id], map: "comment_document_fkey")
+  task           Task?       @relation(fields: [entityId], references: [id], map: "comment_task_fkey")
+  
+  @@index([entityType, entityId])
+  @@index([authorId])
+  @@index([createdAt])
+  @@map("comments")
+}
+
+model Notification {
+  id                   String           @id @default(cuid())
+  type                 NotificationType
+  title                String
+  message              String
+  read                 Boolean          @default(false)
+  isRead               Boolean          @default(false) // Alias for consistency
+  readAt               DateTime?
+  deliveredAt          DateTime?
+  userId               String
+  recipientId          String           // Alias for userId for consistency
+  senderId             String?          @default("system")
+  entityType           String?          @default("SYSTEM")
+  entityId             String?          @default("system")
+  actionUrl            String?
+  relatedEntityType    String?
+  relatedEntityId      String?
+  priority             Priority         @default(MEDIUM)
+  
+  // Digest fields
+  includeInDigest      Boolean          @default(false)
+  pendingDigest        Boolean          @default(false)
+  digestFrequency      String?
+  digestSentAt         DateTime?
+  
+  // Audit fields
+  createdAt            DateTime         @default(now())
+  
+  // Relationships
+  user                 User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([recipientId])
+  @@index([read])
+  @@index([isRead])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+enum MessageType {
+  DIRECT
+  GROUP
+  BROADCAST
+}
+
+enum MessageStatus {
+  SENT
+  DELIVERED
+  READ
+}
+
+enum EntityType {
+  RISK
+  CONTROL
+  DOCUMENT
+  TASK
+  WORKFLOW
+  QUESTIONNAIRE
+  REPORT
+  USER
+}
+
+enum NotificationType {
+  SUCCESS
+  ERROR
+  WARNING
+  INFO
+  MENTION
+  TASK_ASSIGNED
+  WORKFLOW_UPDATE
+  APPROVAL_REQUIRED
+  COMMENT_CREATED
+  DOCUMENT_SHARED
+  RISK_UPDATED
+  CONTROL_UPDATED
+  SUBSCRIPTION_CANCELED
+  PAYMENT_SUCCEEDED
+  PAYMENT_FAILED
+  TRIAL_ENDING
+  NOTIFICATION_DIGEST
+}
+
+// ============================================================================
+// ACTIVITY LOGGING & AUDIT TRAIL
+// ============================================================================
+
+model Activity {
+  id             String       @id @default(cuid())
+  type           ActivityType
+  userId         String?
+  entityType     EntityType
+  entityId       String
+  description    String
+  metadata       Json?
+  isPublic       Boolean      @default(true)
+  
+  // Multi-tenant isolation
+  organizationId String
+  
+  // Audit fields
+  createdAt      DateTime     @default(now())
+  
+  // Relationships
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User?        @relation("ActivityCreatedBy", fields: [userId], references: [id])
+  
+  // Entity relationships with unique constraint names
+  risk           Risk?        @relation(fields: [entityId], references: [id], map: "activity_risk_fkey")
+  control        Control?     @relation(fields: [entityId], references: [id], map: "activity_control_fkey")
+  document       Document?    @relation(fields: [entityId], references: [id], map: "activity_document_fkey")
+  questionnaire  Questionnaire? @relation(fields: [entityId], references: [id], map: "activity_questionnaire_fkey")
+  workflow       Workflow?    @relation(fields: [entityId], references: [id], map: "activity_workflow_fkey")
+  report         Report?      @relation(fields: [entityId], references: [id], map: "activity_report_fkey")
+  task           Task?        @relation(fields: [entityId], references: [id], map: "activity_task_fkey")
+  
+  @@index([organizationId])
+  @@index([entityType, entityId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("activities")
+}
+
+enum ActivityType {
+  CREATED
+  UPDATED
+  DELETED
+  READ
+  APPROVED
+  REJECTED
+  SUBMITTED
+  COMPLETED
+  ASSIGNED
+  COMMENTED
+  UPLOADED
+  DOWNLOADED
+  EXPORTED
+  IMPORTED
+}
+
+// ============================================================================
+// AI & ANALYTICS
+// ============================================================================
+
+model AIConversation {
+  id             String   @id @default(cuid())
+  userId         String
+  title          String
+  agentType      String
+  messages       Json     // Array of conversation messages
+  context        Json?    // Conversation context
+  status         String   @default("active")
+  tokenUsage     Int      @default(0)
+  estimatedCost  Float    @default(0)
+  
+  // Multi-tenant isolation
+  organizationId String
+  
+  // Audit fields
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  // Relationships
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([organizationId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("ai_conversations")
+}
+
+model AIUsageLog {
+  id             String   @id @default(cuid())
+  userId         String
+  requestType    String
+  promptTokens   Int
+  completionTokens Int
+  totalTokens    Int
+  estimatedCost  Float
+  responseTime   Int      // milliseconds
+  success        Boolean  @default(true)
+  errorMessage   String?
+  
+  // Multi-tenant isolation
+  organizationId String
+  
+  // Audit fields
+  createdAt      DateTime @default(now())
+  
+  // Relationships
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([organizationId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("ai_usage_logs")
+}
+
+// ============================================================================
+// NOTIFICATION PREFERENCES
+// ============================================================================
+
+model NotificationPreferences {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  email          Json     // Email notification preferences
+  push           Json     // Push notification preferences
+  sms            Json     // SMS notification preferences
+  slack          Json     // Slack notification preferences
+  inApp          Json     // In-app notification preferences
+  quietHours     Json     // Quiet hours settings
+  
+  // Audit fields
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  // Relationships
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("notification_preferences")
+}
+
+// ============================================================================
+// ENCRYPTION & SECURITY
+// ============================================================================
+
+model EncryptionKey {
+  id             String   @id @default(cuid())
+  purpose        String
+  encryptedKey   String
+  algorithm      String
+  status         String   @default("active") // active, rotated, revoked
+  version        Int      @default(1)
+  metadata       Json?
+  
+  // Multi-tenant isolation
+  organizationId String
+  
+  // Audit fields
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  rotatedAt      DateTime @default(now())
+  
+  // Relationships
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  @@index([organizationId])
+  @@index([purpose])
+  @@index([status])
+  @@map("encryption_keys")
+}
+
+model EncryptionKeyHistory {
+  id             String   @id @default(cuid())
+  keyId          String
+  version        Int
+  encryptedKey   String
+  rotatedAt      DateTime
+  reason         String
+  
+  // Audit fields
+  createdAt      DateTime @default(now())
+  
+  @@index([keyId])
+  @@map("encryption_key_history")
+}
+
+// ============================================================================
+// BILLING & SUBSCRIPTIONS
+// ============================================================================
+
+model SubscriptionPlan {
+  id               String   @id @default(cuid())
+  name             String
+  description      String
+  type             String   // freemium, professional, enterprise, custom
+  price            Float
+  currency         String   @default("USD")
+  billingInterval  String   // monthly, quarterly, yearly
+  features         Json     // Array of features
+  limits           Json     // Usage limits
+  isActive         Boolean  @default(true)
+  trialDays        Int      @default(0)
+  stripeProductId  String?
+  stripePriceId    String?
+  
+  // Audit fields
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  // Relationships
+  subscriptions    OrganizationSubscription[]
+  
+  @@map("subscription_plans")
+}
+
+model OrganizationSubscription {
+  id                    String   @id @default(cuid())
+  organizationId        String
+  planId                String
+  stripeSubscriptionId  String?
+  stripeCustomerId      String?
+  status                String   // active, trialing, past_due, canceled, paused
+  currentPeriodStart    DateTime
+  currentPeriodEnd      DateTime
+  trialStart            DateTime?
+  trialEnd              DateTime?
+  canceledAt            DateTime?
+  cancelAtPeriodEnd     Boolean  @default(false)
+  billingCycle          String   // monthly, quarterly, yearly
+  quantity              Int      @default(1)
+  unitPrice             Float
+  metadata              Json?
+  
+  // Audit fields
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  // Relationships
+  organization          Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  plan                  SubscriptionPlan @relation(fields: [planId], references: [id])
+  invoices              Invoice[]
+  usageRecords          UsageRecord[]
+  
+  @@index([organizationId])
+  @@index([stripeSubscriptionId])
+  @@map("organization_subscriptions")
+}
+
+model PaymentMethod {
+  id                    String   @id @default(cuid())
+  organizationId        String
+  stripePaymentMethodId String
+  type                  String   // card, bank_account, etc.
+  card                  Json?    // Card details (last4, brand, etc.)
+  bankAccount           Json?    // Bank account details
+  isDefault             Boolean  @default(false)
+  isActive              Boolean  @default(true)
+  metadata              Json?
+  
+  // Audit fields
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  @@index([organizationId])
+  @@map("payment_methods")
+}
+
+model Invoice {
+  id                    String   @id @default(cuid())
+  organizationId        String
+  subscriptionId        String?
+  stripeInvoiceId       String?  @unique
+  invoiceNumber         String
+  status                String   // draft, open, paid, void, uncollectible
+  type                  String   // subscription, usage, one-time
+  subtotal              Float
+  taxAmount             Float    @default(0)
+  discountAmount        Float    @default(0)
+  total                 Float
+  currency              String   @default("USD")
+  billingPeriod         Json?    // { start: Date, end: Date }
+  lineItems             Json     // Array of line items
+  dueDate               DateTime
+  paidAt                DateTime?
+  metadata              Json?
+  
+  // Audit fields
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  // Relationships
+  subscription          OrganizationSubscription? @relation(fields: [subscriptionId], references: [id])
+  
+  @@index([organizationId])
+  @@index([subscriptionId])
+  @@map("invoices")
+}
+
+model UsageRecord {
+  id                    String   @id @default(cuid())
+  organizationId        String
+  subscriptionId        String
+  metricType            String   // api_calls, storage_gb, ai_queries, users, etc.
+  quantity              Float
+  unitPrice             Float    @default(0)
+  total                 Float    @default(0)
+  period                DateTime
+  metadata              Json?
+  
+  // Audit fields
+  createdAt             DateTime @default(now())
+  
+  // Relationships
+  subscription          OrganizationSubscription @relation(fields: [subscriptionId], references: [id])
+  
+  @@index([organizationId])
+  @@index([subscriptionId])
+  @@index([metricType])
+  @@index([period])
+  @@map("usage_records")
+}
+
+model BillingEvent {
+  id                    String   @id @default(cuid())
+  organizationId        String
+  type                  String   // subscription_created, payment_succeeded, payment_failed, etc.
+  eventData             Json
+  stripeEventId         String?  @unique
+  processed             Boolean  @default(false)
+  processedAt           DateTime?
+  errorMessage          String?
+  retryCount            Int      @default(0)
+  nextRetryAt           DateTime?
+  
+  // Audit fields
+  createdAt             DateTime @default(now())
+  
+  // Relationships
+  organization          Organization @relation(fields: [organizationId], references: [id])
+  
+  @@index([organizationId])
+  @@index([type])
+  @@index([processed])
+  @@map("billing_events")
+}
+
+// ============================================================================
+// API KEY MANAGEMENT
+// ============================================================================
+
+model APIKey {
+  id                    String   @id @default(cuid())
+  organizationId        String
+  name                  String
+  description           String?
+  key                   String   @unique
+  hashedKey             String   @unique
+  permissions           String[]
+  ipWhitelist           String[]
+  lastUsedAt            DateTime?
+  expiresAt             DateTime?
+  isActive              Boolean  @default(true)
+  
+  // Audit fields
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  // Relationships
+  organization          Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  @@index([organizationId])
+  @@index([hashedKey])
+  @@map("api_keys")
+} 

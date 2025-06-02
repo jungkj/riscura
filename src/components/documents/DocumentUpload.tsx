@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -6,8 +8,14 @@ import { toast } from '@/hooks/use-toast';
 // UI Components
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 import {
   Sheet,
   SheetContent,
@@ -21,7 +29,6 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -39,56 +46,236 @@ import {
   Loader2,
   CheckCircle,
   AlertCircle,
-  Brain
+  Brain,
+  X
 } from 'lucide-react';
 
 interface UploadedFile {
+  file: File;
   id: string;
-  name: string;
-  size: number;
-  type: string;
-  content: string; // Base64 encoded content
-  uploadedAt: Date;
-  status: 'uploading' | 'uploaded' | 'analyzing' | 'analyzed' | 'error';
   progress: number;
-  aiAnalysis?: {
-    risks: Array<{
-      title: string;
-      description: string;
-      likelihood: number;
-      impact: number;
-      confidence: number;
-    }>;
-    summary: string;
-    recommendations: string[];
-  };
+  status: 'pending' | 'uploading' | 'completed' | 'error';
+  error?: string;
+  preview?: string;
 }
 
 interface DocumentUploadProps {
-  onFilesUploaded?: (files: UploadedFile[]) => void;
+  onUpload: (formData: FormData) => Promise<void>;
+  maxFileSize?: number;
+  allowedTypes?: string[];
   maxFiles?: number;
-  maxSize?: number; // in bytes
-  acceptedTypes?: string[];
+  organizationId: string;
+  userId: string;
 }
 
+const DOCUMENT_CATEGORIES = [
+  { value: 'policy', label: 'Policy' },
+  { value: 'procedure', label: 'Procedure' },
+  { value: 'guideline', label: 'Guideline' },
+  { value: 'form', label: 'Form' },
+  { value: 'report', label: 'Report' },
+  { value: 'evidence', label: 'Evidence' },
+  { value: 'other', label: 'Other' },
+];
+
+const DOCUMENT_TYPES = [
+  { value: 'internal', label: 'Internal' },
+  { value: 'external', label: 'External' },
+  { value: 'regulatory', label: 'Regulatory' },
+  { value: 'standard', label: 'Standard' },
+];
+
+const CONFIDENTIALITY_LEVELS = [
+  { value: 'public', label: 'Public' },
+  { value: 'internal', label: 'Internal' },
+  { value: 'confidential', label: 'Confidential' },
+  { value: 'restricted', label: 'Restricted' },
+];
+
 export default function DocumentUpload({
-  onFilesUploaded,
-  maxFiles = 10,
-  maxSize = 10 * 1024 * 1024, // 10MB
-  acceptedTypes = [
+  onUpload,
+  maxFileSize = 10 * 1024 * 1024, // 10MB default
+  allowedTypes = [
     'application/pdf',
     'application/msword',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'application/vnd.ms-excel',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     'text/plain',
+    'image/png',
     'image/jpeg',
-    'image/png'
-  ]
+    'image/gif',
+  ],
+  maxFiles = 10,
+  organizationId,
+  userId,
 }: DocumentUploadProps) {
   const [files, setFiles] = useState<UploadedFile[]>([]);
-  const [deleteFile, setDeleteFile] = useState<UploadedFile | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+
+  // Form state
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
+  const [type, setType] = useState('');
+  const [confidentiality, setConfidentiality] = useState('internal');
+  const [businessUnit, setBusinessUnit] = useState('');
+  const [department, setDepartment] = useState('');
+  const [tags, setTags] = useState('');
+  const [riskIds, setRiskIds] = useState('');
+  const [controlIds, setControlIds] = useState('');
+  const [aiAnalysis, setAiAnalysis] = useState(true);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any[]) => {
+    // Handle rejected files
+    if (rejectedFiles.length > 0) {
+      const errors = rejectedFiles.map(({ file, errors }) => 
+        `${file.name}: ${errors.map((e: any) => e.message).join(', ')}`
+      );
+      setUploadError(`Some files were rejected: ${errors.join('; ')}`);
+    }
+
+    // Add accepted files
+    const newFiles: UploadedFile[] = acceptedFiles.map(file => ({
+      file,
+      id: Math.random().toString(36).substring(2),
+      progress: 0,
+      status: 'pending',
+      preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
+    }));
+
+    setFiles(prev => {
+      const combined = [...prev, ...newFiles];
+      if (combined.length > maxFiles) {
+        setUploadError(`Maximum ${maxFiles} files allowed`);
+        return prev;
+      }
+      return combined;
+    });
+
+    setUploadError(null);
+  }, [maxFiles]);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: allowedTypes.reduce((acc, type) => {
+      acc[type] = [];
+      return acc;
+    }, {} as Record<string, string[]>),
+    maxSize: maxFileSize,
+    multiple: true,
+    disabled: isUploading,
+  });
+
+  const removeFile = (fileId: string) => {
+    setFiles(prev => prev.filter(f => f.id !== fileId));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (files.length === 0) {
+      setUploadError('Please select at least one file');
+      return;
+    }
+
+    if (!title || !category || !type) {
+      setUploadError('Please fill in all required fields');
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadError(null);
+    setUploadSuccess(false);
+
+    try {
+      const formData = new FormData();
+      
+      // Add document metadata
+      formData.append('title', title);
+      formData.append('description', description);
+      formData.append('category', category);
+      formData.append('type', type);
+      formData.append('confidentiality', confidentiality);
+      formData.append('businessUnit', businessUnit);
+      formData.append('department', department);
+      formData.append('tags', tags);
+      formData.append('riskIds', riskIds);
+      formData.append('controlIds', controlIds);
+      formData.append('organizationId', organizationId);
+      formData.append('userId', userId);
+      formData.append('aiAnalysis', aiAnalysis.toString());
+
+      // Add files
+      files.forEach(({ file }) => {
+        formData.append('files', file);
+      });
+
+      // Simulate upload progress
+      const updateProgress = (fileId: string, progress: number, status: UploadedFile['status']) => {
+        setFiles(prev => prev.map(f => 
+          f.id === fileId ? { ...f, progress, status } : f
+        ));
+      };
+
+      // Update files to uploading status
+      files.forEach(f => updateProgress(f.id, 0, 'uploading'));
+
+      // Simulate progressive upload
+      for (let i = 0; i <= 100; i += 10) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        files.forEach(f => updateProgress(f.id, i, 'uploading'));
+      }
+
+      await onUpload(formData);
+
+      // Mark all files as completed
+      files.forEach(f => updateProgress(f.id, 100, 'completed'));
+      
+      setUploadSuccess(true);
+      
+      // Reset form after successful upload
+      setTimeout(() => {
+        resetForm();
+      }, 2000);
+
+    } catch (error) {
+      setUploadError(error instanceof Error ? error.message : 'Upload failed');
+      
+      // Mark files as error
+      files.forEach(f => {
+        setFiles(prev => prev.map(file => 
+          file.id === f.id ? { ...file, status: 'error', error: 'Upload failed' } : file
+        ));
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const resetForm = () => {
+    setFiles([]);
+    setTitle('');
+    setDescription('');
+    setCategory('');
+    setType('');
+    setConfidentiality('internal');
+    setBusinessUnit('');
+    setDepartment('');
+    setTags('');
+    setRiskIds('');
+    setControlIds('');
+    setAiAnalysis(true);
+    setUploadError(null);
+    setUploadSuccess(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   // File type icons
   const getFileIcon = (type: string) => {
@@ -107,399 +294,299 @@ export default function DocumentUpload({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  // Mock AI analysis
-  const analyzeDocument = async (file: UploadedFile): Promise<UploadedFile['aiAnalysis']> => {
-    // Simulate AI processing delay
-    await new Promise(resolve => setTimeout(resolve, 3000 + Math.random() * 2000));
-
-    // Mock analysis results based on file type and name
-    const mockRisks = [
-      {
-        title: 'Data Privacy Risk',
-        description: 'Document contains potential PII that may require protection',
-        likelihood: 3,
-        impact: 4,
-        confidence: 85
-      },
-      {
-        title: 'Operational Risk',
-        description: 'Process dependencies identified that could impact operations',
-        likelihood: 2,
-        impact: 3,
-        confidence: 78
-      },
-      {
-        title: 'Compliance Risk',
-        description: 'Regulatory requirements mentioned that need monitoring',
-        likelihood: 4,
-        impact: 5,
-        confidence: 92
-      }
-    ];
-
-    return {
-      risks: mockRisks.slice(0, Math.floor(Math.random() * 3) + 1),
-      summary: `AI analysis identified ${mockRisks.length} potential risk areas in this document. The content appears to be ${file.type.includes('pdf') ? 'a policy document' : 'operational documentation'} with moderate risk exposure.`,
-      recommendations: [
-        'Review data handling procedures for compliance',
-        'Implement additional controls for identified risks',
-        'Schedule regular review of this document',
-        'Consider stakeholder notification requirements'
-      ]
-    };
-  };
-
-  // Handle file upload
-  const handleFileUpload = useCallback(async (acceptedFiles: File[]) => {
-    if (files.length + acceptedFiles.length > maxFiles) {
-      toast({
-        title: 'Too many files',
-        description: `Maximum ${maxFiles} files allowed`,
-        variant: 'destructive'
-      });
-      return;
-    }
-
-    const newFiles: UploadedFile[] = [];
-
-    for (const file of acceptedFiles) {
-      if (file.size > maxSize) {
-        toast({
-          title: 'File too large',
-          description: `${file.name} exceeds ${formatFileSize(maxSize)} limit`,
-          variant: 'destructive'
-        });
-        continue;
-      }
-
-      const fileId = `file-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      
-      // Convert to base64
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        const content = e.target?.result as string;
-        
-        const uploadedFile: UploadedFile = {
-          id: fileId,
-          name: file.name,
-          size: file.size,
-          type: file.type,
-          content,
-          uploadedAt: new Date(),
-          status: 'uploading',
-          progress: 0
-        };
-
-        setFiles(prev => [...prev, uploadedFile]);
-
-        // Simulate upload progress
-        for (let progress = 0; progress <= 100; progress += 10) {
-          await new Promise(resolve => setTimeout(resolve, 100));
-          setFiles(prev => prev.map(f => 
-            f.id === fileId ? { ...f, progress } : f
-          ));
-        }
-
-        // Mark as uploaded
-        setFiles(prev => prev.map(f => 
-          f.id === fileId ? { ...f, status: 'uploaded' } : f
-        ));
-
-        // Start AI analysis
-        setFiles(prev => prev.map(f => 
-          f.id === fileId ? { ...f, status: 'analyzing' } : f
-        ));
-
-        try {
-          const analysis = await analyzeDocument(uploadedFile);
-          setFiles(prev => prev.map(f => 
-            f.id === fileId ? { ...f, status: 'analyzed', aiAnalysis: analysis } : f
-          ));
-          
-          toast({
-            title: 'Analysis Complete',
-            description: `AI analysis completed for ${file.name}`,
-          });
-        } catch {
-          setFiles(prev => prev.map(f => 
-            f.id === fileId ? { ...f, status: 'error' } : f
-          ));
-          
-          toast({
-            title: 'Analysis Failed',
-            description: `Failed to analyze ${file.name}`,
-            variant: 'destructive'
-          });
-        }
-      };
-
-      reader.readAsDataURL(file);
-      newFiles.push({
-        id: fileId,
-        name: file.name,
-        size: file.size,
-        type: file.type,
-        content: '',
-        uploadedAt: new Date(),
-        status: 'uploading',
-        progress: 0
-      });
-    }
-
-    if (onFilesUploaded) {
-      onFilesUploaded(newFiles);
-    }
-  }, [files.length, maxFiles, maxSize, onFilesUploaded]);
-
-  // Dropzone configuration
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop: handleFileUpload,
-    accept: acceptedTypes.reduce((acc, type) => ({ ...acc, [type]: [] }), {}),
-    maxFiles: maxFiles - files.length,
-    maxSize
-  });
-
-  // Handle file deletion
-  const handleDeleteFile = (file: UploadedFile) => {
-    setFiles(prev => prev.filter(f => f.id !== file.id));
-    setDeleteFile(null);
-    toast({
-      title: 'File Removed',
-      description: `${file.name} has been removed`,
-    });
-  };
-
-  // Get status badge
-  const getStatusBadge = (status: UploadedFile['status']) => {
-    switch (status) {
-      case 'uploading':
-        return <Badge variant="secondary"><Loader2 className="h-3 w-3 mr-1 animate-spin" />Uploading</Badge>;
-      case 'uploaded':
-        return <Badge variant="outline"><CheckCircle className="h-3 w-3 mr-1" />Uploaded</Badge>;
-      case 'analyzing':
-        return <Badge variant="secondary"><Brain className="h-3 w-3 mr-1 animate-pulse" />Analyzing</Badge>;
-      case 'analyzed':
-        return <Badge variant="default"><CheckCircle className="h-3 w-3 mr-1" />Analyzed</Badge>;
-      case 'error':
-        return <Badge variant="destructive"><AlertCircle className="h-3 w-3 mr-1" />Error</Badge>;
-      default:
-        return null;
-    }
-  };
-
   return (
-    <div className="space-y-6">
-      {/* Upload Area */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Upload className="h-5 w-5" />
-            Document Upload & AI Analysis
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div
-            {...getRootProps()}
-            className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-              isDragActive 
-                ? 'border-primary bg-primary/5' 
-                : 'border-muted-foreground/25 hover:border-primary/50'
-            }`}
-          >
-            <input {...getInputProps()} ref={fileInputRef} />
-            <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-            {isDragActive ? (
-              <p className="text-lg font-medium">Drop files here...</p>
-            ) : (
-              <div>
-                <p className="text-lg font-medium mb-2">
-                  Drag & drop files here, or click to select
-                </p>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Supports PDF, Word, Excel, images and text files up to {formatFileSize(maxSize)}
-                </p>
-                <Button variant="outline">
-                  Choose Files
-                </Button>
+    <Card className="w-full max-w-4xl mx-auto">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Upload className="h-5 w-5" />
+          Upload Documents
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Document Metadata */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="title">Title *</Label>
+              <Input
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Enter document title"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="category">Category *</Label>
+              <Select value={category} onValueChange={setCategory} required>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {DOCUMENT_CATEGORIES.map(cat => (
+                    <SelectItem key={cat.value} value={cat.value}>
+                      {cat.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="type">Type *</Label>
+              <Select value={type} onValueChange={setType} required>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {DOCUMENT_TYPES.map(docType => (
+                    <SelectItem key={docType.value} value={docType.value}>
+                      {docType.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confidentiality">Confidentiality</Label>
+              <Select value={confidentiality} onValueChange={setConfidentiality}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select confidentiality level" />
+                </SelectTrigger>
+                <SelectContent>
+                  {CONFIDENTIALITY_LEVELS.map(level => (
+                    <SelectItem key={level.value} value={level.value}>
+                      {level.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="businessUnit">Business Unit</Label>
+              <Input
+                id="businessUnit"
+                value={businessUnit}
+                onChange={(e) => setBusinessUnit(e.target.value)}
+                placeholder="Enter business unit"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="department">Department</Label>
+              <Input
+                id="department"
+                value={department}
+                onChange={(e) => setDepartment(e.target.value)}
+                placeholder="Enter department"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Enter document description"
+              rows={3}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="tags">Tags (comma-separated)</Label>
+              <Input
+                id="tags"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+                placeholder="tag1, tag2, tag3"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="riskIds">Related Risk IDs (comma-separated)</Label>
+              <Input
+                id="riskIds"
+                value={riskIds}
+                onChange={(e) => setRiskIds(e.target.value)}
+                placeholder="risk-id-1, risk-id-2"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="controlIds">Related Control IDs (comma-separated)</Label>
+            <Input
+              id="controlIds"
+              value={controlIds}
+              onChange={(e) => setControlIds(e.target.value)}
+              placeholder="control-id-1, control-id-2"
+            />
+          </div>
+
+          {/* AI Analysis Option */}
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="aiAnalysis"
+              checked={aiAnalysis}
+              onCheckedChange={(checked) => setAiAnalysis(checked as boolean)}
+            />
+            <Label htmlFor="aiAnalysis" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Enable AI analysis for automatic content extraction and classification
+            </Label>
+          </div>
+
+          {/* File Upload Area */}
+          <div className="space-y-4">
+            <Label>Files</Label>
+            
+            <div
+              {...getRootProps()}
+              className={`
+                border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
+                ${isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400'}
+                ${isUploading ? 'pointer-events-none opacity-50' : ''}
+              `}
+            >
+              <input {...getInputProps()} ref={fileInputRef} />
+              
+              <div className="space-y-2">
+                <Upload className="h-12 w-12 mx-auto text-gray-400" />
+                
+                {isDragActive ? (
+                  <p className="text-blue-600">Drop the files here...</p>
+                ) : (
+                  <div>
+                    <p className="text-gray-600">
+                      Drag & drop files here, or <span className="text-blue-600 underline">browse</span>
+                    </p>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Max {formatFileSize(maxFileSize)} per file, up to {maxFiles} files
+                    </p>
+                    <p className="text-xs text-gray-400 mt-1">
+                      Supported: PDF, Word, Excel, Images, Text
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* File List */}
+            {files.length > 0 && (
+              <div className="space-y-2">
+                <Label>Selected Files ({files.length}/{maxFiles})</Label>
+                
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {files.map((file) => (
+                    <div key={file.id} className="flex items-center space-x-3 p-3 border rounded-lg">
+                      {file.preview ? (
+                        <img
+                          src={file.preview}
+                          alt={file.file.name}
+                          className="w-10 h-10 object-cover rounded"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 flex items-center justify-center text-2xl">
+                          {getFileIcon(file.file.name)}
+                        </div>
+                      )}
+                      
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">{file.file.name}</p>
+                        <p className="text-xs text-gray-500">{formatFileSize(file.file.size)}</p>
+                        
+                        {file.status === 'uploading' && (
+                          <div className="mt-1">
+                            <Progress value={file.progress} className="h-1" />
+                            <p className="text-xs text-gray-500 mt-1">{file.progress}% uploaded</p>
+                          </div>
+                        )}
+                        
+                        {file.status === 'error' && (
+                          <p className="text-xs text-red-500 mt-1">{file.error}</p>
+                        )}
+                      </div>
+                      
+                      <div className="flex items-center space-x-2">
+                        {file.status === 'completed' && (
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                        )}
+                        {file.status === 'error' && (
+                          <AlertCircle className="h-4 w-4 text-red-500" />
+                        )}
+                        
+                        {!isUploading && (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeFile(file.id)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
-        </CardContent>
-      </Card>
 
-      {/* Uploaded Files */}
-      {files.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Uploaded Files ({files.length})</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <AnimatePresence>
-                {files.map((file) => (
-                  <motion.div
-                    key={file.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    className="flex items-center gap-4 p-4 border rounded-lg"
-                  >
-                    {getFileIcon(file.type)}
-                    
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <p className="font-medium truncate">{file.name}</p>
-                        {getStatusBadge(file.status)}
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        {formatFileSize(file.size)} • {file.uploadedAt.toLocaleString()}
-                      </p>
-                      
-                      {file.status === 'uploading' && (
-                        <Progress value={file.progress} className="mt-2" />
-                      )}
-                      
-                      {file.aiAnalysis && (
-                        <div className="mt-2 text-sm">
-                          <p className="text-green-600 font-medium">
-                            ✓ {file.aiAnalysis.risks.length} risks identified
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <Sheet>
-                        <SheetTrigger asChild>
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </SheetTrigger>
-                        <SheetContent className="w-[600px] sm:w-[800px]">
-                          <SheetHeader>
-                            <SheetTitle>{file.name}</SheetTitle>
-                            <SheetDescription>
-                              File details and AI analysis results
-                            </SheetDescription>
-                          </SheetHeader>
-                          
-                          <div className="mt-6 space-y-6">
-                            {/* File Info */}
-                            <div>
-                              <h4 className="font-medium mb-2">File Information</h4>
-                              <div className="grid grid-cols-2 gap-4 text-sm">
-                                <div>
-                                  <span className="text-muted-foreground">Size:</span>
-                                  <span className="ml-2">{formatFileSize(file.size)}</span>
-                                </div>
-                                <div>
-                                  <span className="text-muted-foreground">Type:</span>
-                                  <span className="ml-2">{file.type}</span>
-                                </div>
-                                <div>
-                                  <span className="text-muted-foreground">Uploaded:</span>
-                                  <span className="ml-2">{file.uploadedAt.toLocaleString()}</span>
-                                </div>
-                                <div>
-                                  <span className="text-muted-foreground">Status:</span>
-                                  <span className="ml-2">{getStatusBadge(file.status)}</span>
-                                </div>
-                              </div>
-                            </div>
-                            
-                            {/* AI Analysis Results */}
-                            {file.aiAnalysis && (
-                              <div>
-                                <h4 className="font-medium mb-2">AI Analysis Results</h4>
-                                
-                                <div className="space-y-4">
-                                  <div>
-                                    <h5 className="text-sm font-medium mb-2">Summary</h5>
-                                    <p className="text-sm text-muted-foreground">
-                                      {file.aiAnalysis.summary}
-                                    </p>
-                                  </div>
-                                  
-                                  <div>
-                                    <h5 className="text-sm font-medium mb-2">Identified Risks</h5>
-                                    <div className="space-y-2">
-                                      {file.aiAnalysis.risks.map((risk, index) => (
-                                        <div key={index} className="p-3 border rounded">
-                                          <div className="flex items-center justify-between mb-1">
-                                            <h6 className="font-medium">{risk.title}</h6>
-                                            <Badge variant="outline">
-                                              {risk.confidence}% confidence
-                                            </Badge>
-                                          </div>
-                                          <p className="text-sm text-muted-foreground mb-2">
-                                            {risk.description}
-                                          </p>
-                                          <div className="flex gap-4 text-xs">
-                                            <span>Likelihood: {risk.likelihood}/5</span>
-                                            <span>Impact: {risk.impact}/5</span>
-                                          </div>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  </div>
-                                  
-                                  <div>
-                                    <h5 className="text-sm font-medium mb-2">Recommendations</h5>
-                                    <ul className="text-sm text-muted-foreground space-y-1">
-                                      {file.aiAnalysis.recommendations.map((rec, index) => (
-                                        <li key={index} className="flex items-start gap-2">
-                                          <span className="text-primary">•</span>
-                                          {rec}
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        </SheetContent>
-                      </Sheet>
-                      
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        onClick={() => setDeleteFile(file)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+          {/* Error/Success Messages */}
+          {uploadError && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{uploadError}</AlertDescription>
+            </Alert>
+          )}
 
-      {/* Delete Confirmation Dialog */}
-      <AlertDialog open={!!deleteFile} onOpenChange={() => setDeleteFile(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete File</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete "{deleteFile?.name}"? This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction 
-              onClick={() => deleteFile && handleDeleteFile(deleteFile)}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+          {uploadSuccess && (
+            <Alert>
+              <CheckCircle className="h-4 w-4" />
+              <AlertDescription>
+                Document uploaded successfully! 
+                {aiAnalysis && ' AI analysis is processing in the background.'}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {/* Submit Button */}
+          <div className="flex space-x-4">
+            <Button
+              type="submit"
+              disabled={isUploading || files.length === 0 || !title || !category || !type}
+              className="flex-1"
             >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+              {isUploading ? (
+                <>
+                  <Upload className="h-4 w-4 mr-2 animate-spin" />
+                  Uploading...
+                </>
+              ) : (
+                <>
+                  <Upload className="h-4 w-4 mr-2" />
+                  Upload Document
+                </>
+              )}
+            </Button>
+            
+            <Button
+              type="button"
+              variant="outline"
+              onClick={resetForm}
+              disabled={isUploading}
+            >
+              Reset
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 } 
