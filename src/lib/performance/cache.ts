@@ -1,37 +1,102 @@
-import Redis from 'ioredis';
+// Conditional Redis import for demo mode compatibility
+let Redis: any = null;
+try {
+  Redis = require('ioredis').default || require('ioredis');
+} catch (error) {
+  console.warn('Redis module not available, using in-memory cache');
+}
+
 import { v4 as uuidv4 } from 'uuid';
 
+// In-memory cache fallback for demo mode
+class InMemoryCache {
+  private cache = new Map<string, { value: any; expires: number }>();
+
+  get(key: string): any {
+    const item = this.cache.get(key);
+    if (!item) return null;
+    
+    if (item.expires < Date.now()) {
+      this.cache.delete(key);
+      return null;
+    }
+    
+    return item.value;
+  }
+
+  set(key: string, value: any, ttl: number): boolean {
+    const expires = Date.now() + (ttl * 1000);
+    this.cache.set(key, { value, expires });
+    return true;
+  }
+
+  del(key: string): boolean {
+    return this.cache.delete(key);
+  }
+
+  exists(key: string): boolean {
+    const item = this.cache.get(key);
+    if (!item) return false;
+    
+    if (item.expires < Date.now()) {
+      this.cache.delete(key);
+      return false;
+    }
+    
+    return true;
+  }
+
+  clear(): void {
+    this.cache.clear();
+  }
+}
+
 export class CacheService {
-  private redis: Redis;
+  private redis: any = null;
+  private memoryCache: InMemoryCache = new InMemoryCache();
   private defaultTTL = 3600; // 1 hour
   private keyPrefix = 'riscura:';
+  private isRedisAvailable = false;
 
   constructor() {
-    this.redis = new Redis({
-      host: process.env.REDIS_HOST || 'localhost',
-      port: parseInt(process.env.REDIS_PORT || '6379'),
-      password: process.env.REDIS_PASSWORD,
-      db: parseInt(process.env.REDIS_DB || '0'),
-      retryDelayOnFailover: 100,
-      maxRetriesPerRequest: 3,
-      lazyConnect: true,
-      enableReadyCheck: true,
-      showFriendlyErrorStack: true,
-    });
+    // Only initialize Redis if we have Redis configuration and the module is available
+    if (Redis && (process.env.REDIS_HOST || process.env.REDIS_URL)) {
+      try {
+        this.redis = new Redis({
+          host: process.env.REDIS_HOST || 'localhost',
+          port: parseInt(process.env.REDIS_PORT || '6379'),
+          password: process.env.REDIS_PASSWORD,
+          db: parseInt(process.env.REDIS_DB || '0'),
+          retryDelayOnFailover: 100,
+          maxRetriesPerRequest: 3,
+          lazyConnect: true,
+          enableReadyCheck: true,
+          showFriendlyErrorStack: true,
+        });
 
-    this.setupEventHandlers();
+        this.setupEventHandlers();
+        this.isRedisAvailable = true;
+      } catch (error) {
+        console.warn('Redis not available, falling back to in-memory cache:', error);
+        this.redis = null;
+        this.isRedisAvailable = false;
+      }
+    } else {
+      console.log('No Redis configuration found, using in-memory cache for demo mode');
+      this.isRedisAvailable = false;
+    }
   }
 
   private setupEventHandlers(): void {
-    this.redis.on('connect', () => {
+    this.redis?.on('connect', () => {
       console.log('Redis cache connected');
     });
 
-    this.redis.on('error', (error) => {
+    this.redis?.on('error', (error) => {
       console.error('Redis cache error:', error);
     });
 
-    this.redis.on('close', () => {
+    this.redis?.on('close', () => {
       console.log('Redis cache connection closed');
     });
   }
@@ -39,8 +104,14 @@ export class CacheService {
   // Basic Cache Operations
   async get<T>(key: string): Promise<T | null> {
     try {
-      const value = await this.redis.get(this.prefixKey(key));
-      return value ? JSON.parse(value) : null;
+      if (this.isRedisAvailable && this.redis) {
+        const value = await this.redis.get(this.prefixKey(key));
+        return value ? JSON.parse(value) : null;
+      } else {
+        // Use in-memory cache fallback
+        const value = this.memoryCache.get(this.prefixKey(key));
+        return value || null;
+      }
     } catch (error) {
       console.error('Cache get error:', error);
       return null;
@@ -49,16 +120,20 @@ export class CacheService {
 
   async set(key: string, value: any, ttl?: number): Promise<boolean> {
     try {
-      const serialized = JSON.stringify(value);
       const expiration = ttl || this.defaultTTL;
       
-      const result = await this.redis.setex(
-        this.prefixKey(key),
-        expiration,
-        serialized
-      );
-      
-      return result === 'OK';
+      if (this.isRedisAvailable && this.redis) {
+        const serialized = JSON.stringify(value);
+        const result = await this.redis.setex(
+          this.prefixKey(key),
+          expiration,
+          serialized
+        );
+        return result === 'OK';
+      } else {
+        // Use in-memory cache fallback
+        return this.memoryCache.set(this.prefixKey(key), value, expiration);
+      }
     } catch (error) {
       console.error('Cache set error:', error);
       return false;
@@ -67,8 +142,13 @@ export class CacheService {
 
   async del(key: string): Promise<boolean> {
     try {
-      const result = await this.redis.del(this.prefixKey(key));
-      return result > 0;
+      if (this.isRedisAvailable && this.redis) {
+        const result = await this.redis.del(this.prefixKey(key));
+        return result > 0;
+      } else {
+        // Use in-memory cache fallback
+        return this.memoryCache.del(this.prefixKey(key));
+      }
     } catch (error) {
       console.error('Cache delete error:', error);
       return false;
@@ -77,8 +157,13 @@ export class CacheService {
 
   async exists(key: string): Promise<boolean> {
     try {
-      const result = await this.redis.exists(this.prefixKey(key));
-      return result > 0;
+      if (this.isRedisAvailable && this.redis) {
+        const result = await this.redis.exists(this.prefixKey(key));
+        return result > 0;
+      } else {
+        // Use in-memory cache fallback
+        return this.memoryCache.exists(this.prefixKey(key));
+      }
     } catch (error) {
       console.error('Cache exists error:', error);
       return false;
@@ -89,7 +174,7 @@ export class CacheService {
   async mget<T>(keys: string[]): Promise<(T | null)[]> {
     try {
       const prefixedKeys = keys.map(key => this.prefixKey(key));
-      const values = await this.redis.mget(...prefixedKeys);
+      const values = await this.redis?.mget(...prefixedKeys);
       
       return values.map(value => 
         value ? JSON.parse(value) : null
@@ -102,15 +187,15 @@ export class CacheService {
 
   async mset(entries: Array<{ key: string; value: any; ttl?: number }>): Promise<boolean> {
     try {
-      const pipeline = this.redis.pipeline();
+      const pipeline = this.redis?.pipeline();
       
       entries.forEach(({ key, value, ttl }) => {
         const serialized = JSON.stringify(value);
         const expiration = ttl || this.defaultTTL;
-        pipeline.setex(this.prefixKey(key), expiration, serialized);
+        pipeline?.setex(this.prefixKey(key), expiration, serialized);
       });
       
-      const results = await pipeline.exec();
+      const results = await pipeline?.exec();
       return results?.every(([error, result]) => !error && result === 'OK') || false;
     } catch (error) {
       console.error('Cache mset error:', error);
@@ -190,7 +275,7 @@ export class CacheService {
 
   async extendSession(sessionId: string, ttl = 86400): Promise<boolean> {
     try {
-      const result = await this.redis.expire(this.prefixKey(`session:${sessionId}`), ttl);
+      const result = await this.redis?.expire(this.prefixKey(`session:${sessionId}`), ttl);
       return result === 1;
     } catch (error) {
       console.error('Session extend error:', error);
@@ -207,11 +292,11 @@ export class CacheService {
     const key = `rate_limit:${identifier}`;
     
     try {
-      const pipeline = this.redis.pipeline();
-      pipeline.incr(key);
-      pipeline.expire(key, window);
+      const pipeline = this.redis?.pipeline();
+      pipeline?.incr(key);
+      pipeline?.expire(key, window);
       
-      const results = await pipeline.exec();
+      const results = await pipeline?.exec();
       const count = results?.[0]?.[1] as number || 0;
       
       const remaining = Math.max(0, limit - count);
@@ -237,10 +322,10 @@ export class CacheService {
   // Cache invalidation patterns
   async invalidatePattern(pattern: string): Promise<number> {
     try {
-      const keys = await this.redis.keys(this.prefixKey(pattern));
+      const keys = await this.redis?.keys(this.prefixKey(pattern));
       if (keys.length === 0) return 0;
       
-      return await this.redis.del(...keys);
+      return await this.redis?.del(...keys);
     } catch (error) {
       console.error('Cache invalidation error:', error);
       return 0;
@@ -276,9 +361,9 @@ export class CacheService {
   // Analytics and monitoring
   async getCacheStats(): Promise<CacheStats> {
     try {
-      const info = await this.redis.info('memory');
-      const stats = await this.redis.info('stats');
-      const keyspace = await this.redis.info('keyspace');
+      const info = await this.redis?.info('memory');
+      const stats = await this.redis?.info('stats');
+      const keyspace = await this.redis?.info('keyspace');
       
       return {
         memoryUsed: this.parseInfoValue(info, 'used_memory_human'),
@@ -372,7 +457,7 @@ export class CacheService {
 
   // Cleanup
   async disconnect(): Promise<void> {
-    await this.redis.quit();
+    await this.redis?.quit();
   }
 }
 

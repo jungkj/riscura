@@ -17,58 +17,148 @@ const changePasswordSchema = z.object({
   newPassword: z.string().min(8, 'New password must be at least 8 characters'),
 });
 
-// Get current user profile
-export const GET = withAuth(async (req: AuthenticatedRequest) => {
+// Get current user profile - with demo mode fallback
+export async function GET(req: NextRequest) {
   try {
-    const user = getAuthenticatedUser(req);
+    console.log('=== /api/users/me DEBUG ===');
+    console.log('Authorization header:', req.headers.get('authorization'));
+    console.log('Demo user cookie:', req.cookies.get('demo-user')?.value);
+    console.log('Refresh token cookie:', req.cookies.get('refreshToken')?.value);
     
-    if (!user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
+    // Check for demo authentication first - prioritize demo mode
+    const demoUserCookie = req.cookies.get('demo-user')?.value;
+    const authHeader = req.headers.get('authorization');
+    
+    console.log('Demo check conditions:');
+    console.log('- Has demo cookie:', !!demoUserCookie);
+    console.log('- Demo cookie content:', demoUserCookie);
+    
+    // If demo cookie exists, always use demo mode regardless of auth header
+    if (demoUserCookie) {
+      console.log('Taking demo authentication path');
+      try {
+        const demoUser = JSON.parse(demoUserCookie);
+        console.log('Parsed demo user:', demoUser);
+        
+        return NextResponse.json({
+          user: {
+            id: demoUser.id,
+            email: demoUser.email,
+            firstName: 'Demo',
+            lastName: 'User',
+            avatar: null,
+            role: demoUser.role,
+            permissions: demoUser.permissions || ['*'],
+            isActive: true,
+            emailVerified: new Date(),
+            lastLogin: new Date(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            organizationId: 'demo-org-id',
+            organization: {
+              id: 'demo-org-id',
+              name: 'Demo Organization',
+              domain: 'demo.riscura.com',
+              plan: 'ENTERPRISE',
+              settings: {},
+              isActive: true,
+            },
+          },
+        });
+      } catch (parseError) {
+        console.error('Failed to parse demo user cookie:', parseError);
+        return NextResponse.json(
+          { error: 'Invalid demo session' },
+          { status: 401 }
+        );
+      }
     }
 
-    // Get full user profile with organization details
-    const userProfile = await db.client.user.findUnique({
-      where: { id: user.id },
-      select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        avatar: true,
-        role: true,
-        permissions: true,
-        isActive: true,
-        emailVerified: true,
-        lastLogin: true,
-        createdAt: true,
-        updatedAt: true,
-        organizationId: true,
-        organization: {
-          select: {
-            id: true,
-            name: true,
-            domain: true,
-            plan: true,
-            settings: true,
+    console.log('Taking regular auth middleware path');
+    // Use regular authentication middleware for non-demo users
+    return withAuth(async (req: AuthenticatedRequest) => {
+      console.log('Inside withAuth middleware');
+      const user = getAuthenticatedUser(req);
+      console.log('Authenticated user:', user);
+      
+      if (!user) {
+        return NextResponse.json(
+          { error: 'User not found' },
+          { status: 404 }
+        );
+      }
+
+      // In demo mode with no database, return demo user data
+      if (process.env.MOCK_DATA === 'true' || !process.env.DATABASE_URL) {
+        console.log('Using mock data for authenticated user');
+        return NextResponse.json({
+          user: {
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName || 'Demo',
+            lastName: user.lastName || 'User',
+            avatar: null,
+            role: user.role,
+            permissions: user.permissions || ['*'],
             isActive: true,
+            emailVerified: new Date(),
+            lastLogin: new Date(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            organizationId: user.organizationId || 'demo-org-id',
+            organization: {
+              id: user.organizationId || 'demo-org-id',
+              name: 'Demo Organization',
+              domain: 'demo.riscura.com',
+              plan: 'ENTERPRISE',
+              settings: {},
+              isActive: true,
+            },
+          },
+        });
+      }
+
+      // Get full user profile with organization details
+      const userProfile = await db.client.user.findUnique({
+        where: { id: user.id },
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          avatar: true,
+          role: true,
+          permissions: true,
+          isActive: true,
+          emailVerified: true,
+          lastLogin: true,
+          createdAt: true,
+          updatedAt: true,
+          organizationId: true,
+          organization: {
+            select: {
+              id: true,
+              name: true,
+              domain: true,
+              plan: true,
+              settings: true,
+              isActive: true,
+            },
           },
         },
-      },
-    });
+      });
 
-    if (!userProfile) {
-      return NextResponse.json(
-        { error: 'User profile not found' },
-        { status: 404 }
-      );
-    }
+      if (!userProfile) {
+        return NextResponse.json(
+          { error: 'User profile not found' },
+          { status: 404 }
+        );
+      }
 
-    return NextResponse.json({
-      user: userProfile,
-    });
+      return NextResponse.json({
+        user: userProfile,
+      });
+    })(req);
 
   } catch (error) {
     console.error('Get profile error:', error);
@@ -77,7 +167,7 @@ export const GET = withAuth(async (req: AuthenticatedRequest) => {
       { status: 500 }
     );
   }
-});
+}
 
 // Update user profile
 export const PUT = withAuth(async (req: AuthenticatedRequest) => {

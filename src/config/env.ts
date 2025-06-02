@@ -1,10 +1,15 @@
 // Environment configuration with validation
 import { z } from 'zod';
 
+// Check if we're in demo mode first (before validation)
+const isDemoMode = process.env.MOCK_DATA === 'true' || process.env.NODE_ENV === 'development';
+
 // Define environment schema with Zod for validation
 const envSchema = z.object({
-  // Database
-  DATABASE_URL: z.string().url('DATABASE_URL must be a valid PostgreSQL connection string'),
+  // Database - make optional in demo mode
+  DATABASE_URL: isDemoMode 
+    ? z.string().default('file:./dev.db')
+    : z.string().url('DATABASE_URL must be a valid PostgreSQL connection string'),
   
   // Application
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
@@ -15,20 +20,28 @@ const envSchema = z.object({
   // API Configuration
   API_VERSION: z.string().default('v1'),
   
-  // Authentication & Security
-  JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
+  // Authentication & Security - make less strict in demo mode
+  JWT_SECRET: isDemoMode 
+    ? z.string().default('dev-jwt-secret-12345678901234567890123456789012')
+    : z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
   JWT_EXPIRES_IN: z.string().default('7d'),
-  NEXTAUTH_SECRET: z.string().min(32, 'NEXTAUTH_SECRET must be at least 32 characters'),
+  NEXTAUTH_SECRET: isDemoMode
+    ? z.string().default('dev-nextauth-secret-12345678901234567890123456789012')
+    : z.string().min(32, 'NEXTAUTH_SECRET must be at least 32 characters'),
   NEXTAUTH_URL: z.string().url().optional(),
-  SESSION_SECRET: z.string().min(32, 'SESSION_SECRET must be at least 32 characters'),
+  SESSION_SECRET: isDemoMode
+    ? z.string().default('dev-session-secret-12345678901234567890123456789012')
+    : z.string().min(32, 'SESSION_SECRET must be at least 32 characters'),
   BCRYPT_ROUNDS: z.string().transform(Number).default('12'),
   
   // Google OAuth
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
   
-  // OpenAI API
-  OPENAI_API_KEY: z.string().min(1, 'OPENAI_API_KEY is required'),
+  // OpenAI API - make optional in demo mode
+  OPENAI_API_KEY: isDemoMode
+    ? z.string().default('sk-placeholder')
+    : z.string().min(1, 'OPENAI_API_KEY is required'),
   OPENAI_ORG_ID: z.string().optional(),
   
   // Email Configuration

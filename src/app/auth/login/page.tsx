@@ -10,11 +10,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [isLoading, setIsLoading] = useState(false);
+  const { login, isLoading, error: authError, clearError } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
@@ -31,45 +32,30 @@ export default function LoginPage() {
       [name]: value,
     }));
     if (error) setError('');
+    if (authError) {
+      clearError();
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     setError('');
 
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        // Store tokens or handle authentication
-        router.push(redirectTo);
-      } else {
-        const errorData = await response.json();
-        setError(errorData.error || 'Invalid credentials. Please try again.');
-      }
-    } catch (err) {
-      setError('An error occurred. Please try again.');
-    } finally {
-      setIsLoading(false);
+      await login(formData.email, formData.password);
+      // If login is successful, redirect to the intended page
+      router.push(redirectTo);
+    } catch (err: any) {
+      setError(err.message || 'Invalid credentials. Please try again.');
     }
   };
 
   const handleGoogleLogin = async () => {
-    setIsLoading(true);
     try {
       // Implement Google OAuth login
       window.location.href = `/api/auth/google?redirect=${encodeURIComponent(redirectTo)}`;
     } catch (err) {
       setError('Google login failed. Please try again.');
-      setIsLoading(false);
     }
   };
 
@@ -93,10 +79,10 @@ export default function LoginPage() {
 
         <Card className="border-0 shadow-none">
           <CardContent className="p-6 space-y-4">
-            {error && (
+            {(error || authError) && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
+                <AlertDescription>{error || authError}</AlertDescription>
               </Alert>
             )}
 

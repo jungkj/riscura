@@ -15,7 +15,7 @@ const protectedRoutes = [
 ];
 
 // Define auth routes
-const authRoutes = ['/login', '/register'];
+const authRoutes = ['/auth/login', '/auth/register', '/login', '/register'];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -26,20 +26,25 @@ export function middleware(request: NextRequest) {
   );
   
   // Check if the current path is an auth route
-  const isAuthRoute = authRoutes.includes(pathname);
+  const isAuthRoute = authRoutes.some(route => pathname.startsWith(route));
   
-  // Get the token from cookies (adjust based on your auth implementation)
-  const token = request.cookies.get('auth-token')?.value;
+  // Check for authentication - look for the cookies that are actually set by the login API
+  const refreshToken = request.cookies.get('refreshToken')?.value;
+  const demoUser = request.cookies.get('demo-user')?.value;
+  const csrfToken = request.cookies.get('csrf-token')?.value;
   
-  // If accessing a protected route without a token, redirect to login
-  if (isProtectedRoute && !token) {
-    const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('redirect', pathname);
+  // User is authenticated if they have either a refresh token or demo user cookie
+  const isAuthenticated = !!(refreshToken || demoUser);
+  
+  // If accessing a protected route without authentication, redirect to login
+  if (isProtectedRoute && !isAuthenticated) {
+    const loginUrl = new URL('/auth/login', request.url);
+    loginUrl.searchParams.set('from', pathname);
     return NextResponse.redirect(loginUrl);
   }
   
-  // If accessing auth routes with a valid token, redirect to dashboard
-  if (isAuthRoute && token) {
+  // If accessing auth routes while authenticated, redirect to dashboard
+  if (isAuthRoute && isAuthenticated) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
   

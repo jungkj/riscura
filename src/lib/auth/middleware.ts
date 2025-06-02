@@ -41,8 +41,48 @@ export function withAuth(
         );
       }
 
-      // Extract and verify token
+      // Extract token
       const token = extractTokenFromHeader(authHeader);
+      
+      // Check if this is a demo token
+      if (token.startsWith('demo-token-') || token === 'demo-access-token') {
+        // Handle demo mode authentication
+        const demoUserCookie = req.cookies.get('demo-user')?.value;
+        
+        if (!demoUserCookie) {
+          return NextResponse.json(
+            { error: 'Demo session not found' },
+            { status: 401 }
+          );
+        }
+
+        try {
+          const demoUser = JSON.parse(demoUserCookie);
+          
+          // Create a mock user object for demo mode
+          (req as AuthenticatedRequest).user = {
+            id: demoUser.id,
+            email: demoUser.email,
+            firstName: 'Demo',
+            lastName: 'User',
+            role: demoUser.role,
+            permissions: demoUser.permissions || ['*'],
+            organizationId: 'demo-org-id',
+            sessionId: 'demo-session-id',
+          };
+
+          // Skip permission checks for demo mode (demo users have full access)
+          return handler(req as AuthenticatedRequest);
+          
+        } catch (parseError) {
+          return NextResponse.json(
+            { error: 'Invalid demo session' },
+            { status: 401 }
+          );
+        }
+      }
+
+      // Regular JWT token validation for non-demo users
       const payload = verifyAccessToken(token);
 
       // Verify session is still valid

@@ -253,6 +253,40 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
 
   // Initialize AI Service with enhanced error handling
   useEffect(() => {
+    // Check if AI features are enabled
+    const aiEnabled = process.env.NEXT_PUBLIC_ENABLE_AI_FEATURES !== 'false';
+    const hasApiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY && 
+                     process.env.NEXT_PUBLIC_OPENAI_API_KEY !== 'sk-placeholder';
+    
+    if (!aiEnabled || !hasApiKey) {
+      console.log('AI features disabled or API key missing - running in demo mode');
+      setConnectionStatus(ConnectionStatus.DISCONNECTED);
+      setError({
+        type: 'service_disabled',
+        message: 'AI features are disabled in demo mode',
+        retryable: false
+      });
+      
+      // Initialize mock conversations for UI compatibility
+      setConversations([
+        {
+          id: 'conv-1',
+          title: 'Risk Assessment Discussion',
+          messages: [
+            { 
+              id: 'msg-1', 
+              content: 'Hello! I\'m ARIA, your AI Risk Intelligence Assistant. AI features are currently disabled in demo mode. You can still explore the dashboard and other features!', 
+              timestamp: new Date(), 
+              role: 'assistant' 
+            }
+          ],
+          updatedAt: new Date(),
+          agentType: 'risk_analyzer'
+        }
+      ]);
+      return;
+    }
+
     try {
       const service = new AIService({
         defaultModel: process.env.NEXT_PUBLIC_AI_DEFAULT_MODEL || 'gpt-4o-mini',
