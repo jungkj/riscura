@@ -1,408 +1,305 @@
-import { NextRequest } from 'next/server';
-import { withAPI, withValidation, createAPIResponse, parsePagination, parseFilters, parseSorting, parseSearch, createPaginationMeta, NotFoundError, ForbiddenError } from '@/lib/api/middleware';
-import { createDocumentSchema, documentQuerySchema } from '@/lib/api/schemas';
-import { getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/middleware';
-import { db } from '@/lib/db';
-import { storage, validateFile, formatFileSize } from '@/lib/storage';
-import { storageConfig } from '@/config/env';
-import { documentProcessor } from '@/lib/documents/processor';
-import { PERMISSIONS } from '@/lib/auth';
+import { NextRequest, NextResponse } from 'next/server';
+import { appConfig } from '@/config/env';
 
-// GET /api/documents - List documents with pagination and filtering
-export const GET = withAPI(
-  async (req: NextRequest) => {
-    const authReq = req as AuthenticatedRequest;
-    const user = getAuthenticatedUser(authReq);
+// GET /api/documents - List documents (demo mode)
+export async function GET(request: NextRequest): Promise<NextResponse> {
+  try {
+    // In demo mode, return mock document data
+    const mockDocuments = [
+      {
+        id: 'doc_risk_policy',
+        title: 'Enterprise Risk Management Policy',
+        description: 'Comprehensive policy document for enterprise risk management',
+        category: 'Policy',
+        type: 'Governance',
+        status: 'Approved',
+        version: '2.1',
+        ownerId: 'user_admin_demo',
+        confidentiality: 'Internal',
+        department: 'Risk Management',
+        tags: ['policy', 'risk-management', 'governance'],
+        createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+        size: 2500000, // 2.5MB
+        owner: {
+          id: 'user_admin_demo',
+          firstName: 'Alex',
+          lastName: 'Administrator',
+          email: 'admin@riscura.demo',
+        },
+        files: [
+          {
+            id: 'file_1',
+            filename: 'ERM_Policy_v2.1.pdf',
+            mimeType: 'application/pdf',
+            size: 2500000,
+            uploadedAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000),
+          },
+        ],
+        _count: {
+          versions: 3,
+        },
+      },
+      {
+        id: 'doc_security_procedures',
+        title: 'Cybersecurity Incident Response Procedures',
+        description: 'Step-by-step procedures for responding to cybersecurity incidents',
+        category: 'Procedure',
+        type: 'Operational',
+        status: 'Draft',
+        version: '1.0',
+        ownerId: 'user_manager_demo',
+        confidentiality: 'Confidential',
+        department: 'IT',
+        tags: ['cybersecurity', 'incident-response', 'procedures'],
+        createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+        size: 1800000, // 1.8MB
+        owner: {
+          id: 'user_manager_demo',
+          firstName: 'Maria',
+          lastName: 'Manager',
+          email: 'manager@riscura.demo',
+        },
+        files: [
+          {
+            id: 'file_2',
+            filename: 'Incident_Response_Procedures.docx',
+            mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            size: 1800000,
+            uploadedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+          },
+        ],
+        _count: {
+          versions: 1,
+        },
+      },
+      {
+        id: 'doc_compliance_framework',
+        title: 'GDPR Compliance Framework',
+        description: 'Comprehensive framework for GDPR compliance implementation',
+        category: 'Framework',
+        type: 'Compliance',
+        status: 'In Review',
+        version: '1.2',
+        ownerId: 'user_admin_demo',
+        confidentiality: 'Internal',
+        department: 'Legal',
+        tags: ['gdpr', 'compliance', 'framework', 'privacy'],
+        createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
+        size: 3200000, // 3.2MB
+        owner: {
+          id: 'user_admin_demo',
+          firstName: 'Alex',
+          lastName: 'Administrator',
+          email: 'admin@riscura.demo',
+        },
+        files: [
+          {
+            id: 'file_3',
+            filename: 'GDPR_Framework_v1.2.pdf',
+            mimeType: 'application/pdf',
+            size: 3200000,
+            uploadedAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000),
+          },
+        ],
+        _count: {
+          versions: 2,
+        },
+      },
+    ];
 
-    if (!user) {
-      throw new ForbiddenError('Authentication required');
-    }
-
-    const url = new URL(req.url);
+    // Parse query parameters
+    const url = new URL(request.url);
     const searchParams = url.searchParams;
+    
+    // Get pagination parameters
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = Math.min(parseInt(searchParams.get('limit') || '10'), 100);
+    const skip = (page - 1) * limit;
 
-    // Parse pagination
-    const { skip, take, page, limit } = parsePagination(searchParams, { maxLimit: 100 });
-
-    // Parse filters
-    const filters = parseFilters(searchParams);
-
-    // Parse sorting
-    const orderBy = parseSorting(searchParams);
-
-    // Parse search
-    const search = parseSearch(searchParams);
-
-    // Build where clause
-    let where: any = {
-      organizationId: user.organizationId, // Organization isolation
-    };
-
-    // Add search functionality
-    if (search) {
-      where.OR = [
-        { title: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
-        { extractedText: { contains: search, mode: 'insensitive' } },
-        { aiSummary: { contains: search, mode: 'insensitive' } },
-      ];
-    }
-
-    // Add filters from query parameters
+    // Apply filters
+    let filteredDocuments = [...mockDocuments];
+    
     const category = searchParams.get('category');
     const type = searchParams.get('type');
     const status = searchParams.get('status');
-    const ownerId = searchParams.get('ownerId');
-    const businessUnit = searchParams.get('businessUnit');
-    const department = searchParams.get('department');
-    const confidentiality = searchParams.get('confidentiality');
-    const tags = searchParams.get('tags');
-    const riskId = searchParams.get('riskId');
-    const controlId = searchParams.get('controlId');
+    const search = searchParams.get('search');
 
-    if (category) where.category = category;
-    if (type) where.type = type;
-    if (status) where.status = status;
-    if (ownerId) where.ownerId = ownerId;
-    if (businessUnit) where.businessUnit = { contains: businessUnit, mode: 'insensitive' };
-    if (department) where.department = { contains: department, mode: 'insensitive' };
-    if (confidentiality) where.confidentiality = confidentiality;
-    if (riskId) where.riskIds = { has: riskId };
-    if (controlId) where.controlIds = { has: controlId };
-
-    if (tags) {
-      const tagList = tags.split(',').map((tag: string) => tag.trim());
-      where.tags = { hasSome: tagList };
+    if (category) {
+      filteredDocuments = filteredDocuments.filter(doc => 
+        doc.category.toLowerCase() === category.toLowerCase()
+      );
     }
 
-    // Date range filters
-    const expiryFrom = searchParams.get('expiryFrom');
-    const expiryTo = searchParams.get('expiryTo');
-    
-    if (expiryFrom || expiryTo) {
-      where.expiryDate = {};
-      if (expiryFrom) where.expiryDate.gte = new Date(expiryFrom);
-      if (expiryTo) where.expiryDate.lte = new Date(expiryTo);
+    if (type) {
+      filteredDocuments = filteredDocuments.filter(doc => 
+        doc.type.toLowerCase() === type.toLowerCase()
+      );
     }
 
-    // Execute queries
-    const [documents, total] = await Promise.all([
-      db.client.document.findMany({
-        where,
-        skip,
-        take,
-        orderBy,
-        include: {
-          owner: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              email: true,
-            },
-          },
-          approvedBy: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              email: true,
-            },
-          },
-          files: {
-            select: {
-              id: true,
-              filename: true,
-              mimeType: true,
-              size: true,
-              uploadedAt: true,
-            },
-          },
-          risks: {
-            select: {
-              id: true,
-              title: true,
-              severity: true,
-            },
-            take: 5,
-          },
-          controls: {
-            select: {
-              id: true,
-              title: true,
-              status: true,
-            },
-            take: 5,
-          },
-          versions: {
-            select: {
-              id: true,
-              version: true,
-              createdAt: true,
-            },
-            orderBy: { createdAt: 'desc' },
-            take: 3,
-          },
-          _count: {
-            select: {
-              risks: true,
-              controls: true,
-              versions: true,
-            },
-          },
-        },
-      }),
-      db.client.document.count({ where }),
-    ]);
+    if (status) {
+      filteredDocuments = filteredDocuments.filter(doc => 
+        doc.status.toLowerCase() === status.toLowerCase()
+      );
+    }
 
-    // Log activity
-    await db.client.activity.create({
-      data: {
-        type: 'READ',
-        entityType: 'DOCUMENT',
-        entityId: 'list',
-        description: `Retrieved ${documents.length} documents`,
-        userId: user.id,
-        organizationId: user.organizationId,
-        metadata: {
-          resultCount: documents.length,
-          filters: Object.keys(filters),
-          search: search || undefined,
+    if (search) {
+      const searchLower = search.toLowerCase();
+      filteredDocuments = filteredDocuments.filter(doc => 
+        doc.title.toLowerCase().includes(searchLower) ||
+        doc.description.toLowerCase().includes(searchLower) ||
+        doc.tags.some(tag => tag.toLowerCase().includes(searchLower))
+      );
+    }
+
+    // Apply pagination
+    const total = filteredDocuments.length;
+    const paginatedDocuments = filteredDocuments.slice(skip, skip + limit);
+
+    return NextResponse.json({
+      success: true,
+      data: paginatedDocuments,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit),
+        hasNext: skip + limit < total,
+        hasPrev: page > 1,
+      },
+      meta: {
+        demoMode: true,
+        filters: {
+          category,
+          type,
+          status,
+          search,
         },
-        isPublic: false,
       },
     });
 
-    return createAPIResponse(documents, {
-      pagination: createPaginationMeta(page, limit, total),
-    });
-  },
-  {
-    requiredPermissions: [PERMISSIONS.DOCUMENTS_READ],
-    rateLimit: { limit: 100, windowMs: 15 * 60 * 1000 },
+  } catch (error) {
+    console.error('Documents API error:', error);
+    return NextResponse.json(
+      { error: 'Failed to retrieve documents' },
+      { status: 500 }
+    );
   }
-);
+}
 
-// POST /api/documents - Create new document with file upload
-export const POST = withAPI(
-  async (req: NextRequest) => {
-    const authReq = req as AuthenticatedRequest;
-    const user = getAuthenticatedUser(authReq);
-
-    if (!user) {
-      throw new ForbiddenError('Authentication required');
-    }
-
-    try {
-      const formData = await req.formData();
-      
-      // Extract document metadata
-      const title = formData.get('title') as string;
-      const description = formData.get('description') as string;
-      const category = formData.get('category') as string;
-      const type = formData.get('type') as string;
-      const confidentiality = formData.get('confidentiality') as string || 'internal';
-      const businessUnit = formData.get('businessUnit') as string;
-      const department = formData.get('department') as string;
-      const tags = formData.get('tags') as string;
-      const riskIds = formData.get('riskIds') as string;
-      const controlIds = formData.get('controlIds') as string;
-
-      // Validate required fields
-      if (!title || !category || !type) {
-        throw new Error('Title, category, and type are required');
-      }
-
-      // Parse array fields
-      const parsedTags = tags ? tags.split(',').map(tag => tag.trim()) : [];
-      const parsedRiskIds = riskIds ? riskIds.split(',').map(id => id.trim()) : [];
-      const parsedControlIds = controlIds ? controlIds.split(',').map(id => id.trim()) : [];
-
-      // Validate owner if specified
-      const ownerId = formData.get('ownerId') as string;
-      if (ownerId && ownerId !== user.id) {
-        const owner = await db.client.user.findFirst({
-          where: {
-            id: ownerId,
-            organizationId: user.organizationId,
-            isActive: true,
-          },
-        });
-
-        if (!owner) {
-          throw new NotFoundError('Specified owner not found in organization');
-        }
-      }
-
-      // Validate linked risks and controls
-      if (parsedRiskIds.length > 0) {
-        const risks = await db.client.risk.findMany({
-          where: {
-            id: { in: parsedRiskIds },
-            organizationId: user.organizationId,
-          },
-          select: { id: true },
-        });
-
-        if (risks.length !== parsedRiskIds.length) {
-          throw new NotFoundError('One or more specified risks not found in organization');
-        }
-      }
-
-      if (parsedControlIds.length > 0) {
-        const controls = await db.client.control.findMany({
-          where: {
-            id: { in: parsedControlIds },
-            organizationId: user.organizationId,
-          },
-          select: { id: true },
-        });
-
-        if (controls.length !== parsedControlIds.length) {
-          throw new NotFoundError('One or more specified controls not found in organization');
-        }
-      }
-
-      // Create document
-      const document = await db.client.document.create({
-        data: {
-          title,
-          description,
-          category,
-          type,
-          status: 'draft',
-          version: '1.0',
-          ownerId: ownerId || user.id,
-          organizationId: user.organizationId,
-          createdById: user.id,
-          confidentiality,
-          businessUnit,
-          department,
-          tags: parsedTags,
-          riskIds: parsedRiskIds,
-          controlIds: parsedControlIds,
-        },
-        include: {
-          owner: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              email: true,
-            },
-          },
-          createdBy: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              email: true,
-            },
-          },
-        },
-      });
-
-      // Process file uploads
-      const files = formData.getAll('files') as File[];
-      const uploadedFiles = [];
-
-      for (const file of files) {
-        if (file && file.size > 0) {
-          // Validate file
-          const validation = validateFile(file, {
-            maxSize: storageConfig.maxSize,
-            allowedTypes: [
-              'application/pdf',
-              'application/msword',
-              'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-              'application/vnd.ms-excel',
-              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-              'text/plain',
-              'image/png',
-              'image/jpeg',
-              'image/gif',
-            ],
-          });
-
-          if (!validation.valid) {
-            throw new Error(`File validation failed: ${validation.errors.join(', ')}`);
-          }
-
-          // Upload file to storage
-          const fileBuffer = Buffer.from(await file.arrayBuffer());
-          const storageFile = await storage.upload(fileBuffer, {
-            filename: file.name,
-            metadata: {
-              documentId: document.id,
-              uploadedBy: user.id,
-              originalName: file.name,
-            },
-          });
-
-          // Create file record in database
-          const dbFile = await db.client.documentFile.create({
-            data: {
-              filename: file.name,
-              originalName: file.name,
-              mimeType: file.type,
-              size: file.size,
-              storageId: storageFile.id,
-              storagePath: storageFile.path,
-              checksum: storageFile.checksum,
-              documentId: document.id,
-              uploadedById: user.id,
-              organizationId: user.organizationId,
-            },
-          });
-
-          uploadedFiles.push(dbFile);
-        }
-      }
-
-      // Start AI analysis if files were uploaded
-      if (uploadedFiles.length > 0) {
-        // Run document analysis in background
-        documentProcessor.analyzeDocument(document.id).catch(error => {
-          console.error('Document analysis failed:', error);
-        });
-      }
-
-      // Log activity
-      await db.client.activity.create({
-        data: {
-          type: 'CREATED',
-          entityType: 'DOCUMENT',
-          entityId: document.id,
-          description: `Created document: ${document.title}`,
-          userId: user.id,
-          organizationId: user.organizationId,
-          metadata: {
-            documentId: document.id,
-            category: document.category,
-            type: document.type,
-            filesUploaded: uploadedFiles.length,
-            linkedRisks: parsedRiskIds.length,
-            linkedControls: parsedControlIds.length,
-          },
-          isPublic: false,
-        },
-      });
-
-      return createAPIResponse(
-        {
-          ...document,
-          files: uploadedFiles,
-        },
-        { statusCode: 201 }
+// POST /api/documents - Create new document (demo mode)
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  try {
+    // Check if demo mode
+    if (!appConfig.isDevelopment) {
+      return NextResponse.json(
+        { error: 'Document creation only available in development mode' },
+        { status: 403 }
       );
-
-    } catch (error) {
-      console.error('Document creation failed:', error);
-      throw new Error(`Document creation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
-  },
-  {
-    requiredPermissions: [PERMISSIONS.DOCUMENTS_WRITE],
-    rateLimit: { limit: 20, windowMs: 15 * 60 * 1000 },
+
+    const formData = await request.formData();
+    
+    // Extract document metadata
+    const title = formData.get('title') as string;
+    const description = formData.get('description') as string;
+    const category = formData.get('category') as string;
+    const type = formData.get('type') as string;
+    const confidentiality = formData.get('confidentiality') as string || 'internal';
+
+    // Validate required fields
+    if (!title || !category || !type) {
+      return NextResponse.json(
+        { error: 'Title, category, and type are required' },
+        { status: 400 }
+      );
+    }
+
+    // Process files
+    const files = formData.getAll('files') as File[];
+    const processedFiles: any[] = [];
+
+    for (const file of files) {
+      if (file && file.size > 0) {
+        // Validate file size (10MB limit)
+        if (file.size > 10 * 1024 * 1024) {
+          return NextResponse.json(
+            { error: `File ${file.name} exceeds 10MB limit` },
+            { status: 400 }
+          );
+        }
+
+        // Validate file type
+        const allowedTypes = [
+          'application/pdf',
+          'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          'application/vnd.ms-excel',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          'text/plain',
+          'image/png',
+          'image/jpeg',
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+          return NextResponse.json(
+            { error: `File type ${file.type} not allowed` },
+            { status: 400 }
+          );
+        }
+
+        processedFiles.push({
+          id: `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          filename: file.name,
+          originalName: file.name,
+          mimeType: file.type,
+          size: file.size,
+          uploadedAt: new Date(),
+        });
+      }
+    }
+
+    // Create mock document
+    const newDocument = {
+      id: `doc_${Date.now()}`,
+      title,
+      description,
+      category,
+      type,
+      status: 'draft',
+      version: '1.0',
+      ownerId: 'demo_user',
+      confidentiality,
+      department: 'Demo Department',
+      tags: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      size: processedFiles.reduce((total, file) => total + file.size, 0),
+      files: processedFiles,
+      owner: {
+        id: 'demo_user',
+        firstName: 'Demo',
+        lastName: 'User',
+        email: 'demo@riscura.demo',
+      },
+      _count: {
+        versions: 1,
+      },
+    };
+
+    return NextResponse.json({
+      success: true,
+      message: 'Document created successfully (demo mode)',
+      data: newDocument,
+    }, { status: 201 });
+
+  } catch (error) {
+    console.error('Document creation error:', error);
+    return NextResponse.json(
+      { error: 'Failed to create document' },
+      { status: 500 }
+    );
   }
-); 
+} 

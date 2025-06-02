@@ -41,63 +41,83 @@ export default function Navbar({ toggleSidebar, toggleChat }: NavbarProps) {
     `${user.firstName.charAt(0)}${user.lastName.charAt(0)}` : 'U';
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center">
-        <div className="flex gap-6 md:gap-10">
-          <Button variant="ghost" size="icon" onClick={toggleSidebar} className="md:hidden">
-            <Menu className="h-6 w-6" />
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
+      <div className="flex h-14 items-center px-4">
+        <div className="flex items-center gap-4">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={toggleSidebar} 
+            className="md:hidden h-8 w-8 notion-button-ghost"
+          >
+            <Menu className="h-4 w-4" />
           </Button>
           
-          <a href="/" className="flex items-center space-x-2">
-            <RiskIcon className="h-8 w-8 text-primary" />
-            <span className="font-bold inline-block">Riscura</span>
+          <a href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <RiskIcon className="h-6 w-6 text-foreground" />
+            <span className="font-semibold text-lg text-foreground">Riscura</span>
           </a>
         </div>
         
-        <div className="flex-1"></div>
+        <div className="flex-1" />
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           {/* Theme Toggle */}
           <Button 
             variant="ghost" 
             size="icon" 
             onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-            className="mr-2"
+            className="h-8 w-8 notion-button-ghost"
           >
             {theme === 'light' ? (
-              <Moon className="h-5 w-5" />
+              <Moon className="h-4 w-4" />
             ) : (
-              <Sun className="h-5 w-5" />
+              <Sun className="h-4 w-4" />
             )}
             <span className="sr-only">Toggle theme</span>
           </Button>
           
           {/* Chat Button */}
-          <Button variant="ghost" size="icon" onClick={toggleChat}>
-            <MessageSquare className="h-5 w-5" />
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={toggleChat}
+            className="h-8 w-8 notion-button-ghost"
+          >
+            <MessageSquare className="h-4 w-4" />
             <span className="sr-only">Team Chat</span>
           </Button>
           
           {/* Notifications */}
-          <Button variant="ghost" size="icon">
-            <Bell className="h-5 w-5" />
+          <Button 
+            variant="ghost" 
+            size="icon"
+            className="h-8 w-8 notion-button-ghost"
+          >
+            <Bell className="h-4 w-4" />
             <span className="sr-only">Notifications</span>
           </Button>
           
           {/* User Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <Avatar className="h-8 w-8">
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full notion-button-ghost">
+                <Avatar className="h-7 w-7">
                   <AvatarImage src="" alt={user?.firstName} />
-                  <AvatarFallback>{userInitials}</AvatarFallback>
+                  <AvatarFallback className="text-xs font-medium bg-muted text-muted-foreground">
+                    {userInitials}
+                  </AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
-              <DropdownMenuLabel className="font-normal">
+            <DropdownMenuContent 
+              className="w-56 notion-card border-border/50 shadow-notion-lg" 
+              align="end" 
+              forceMount
+            >
+              <DropdownMenuLabel className="font-normal p-3">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">
+                  <p className="text-sm font-medium leading-none text-foreground">
                     {user?.firstName} {user?.lastName}
                   </p>
                   <p className="text-xs leading-none text-muted-foreground">
@@ -105,19 +125,28 @@ export default function Navbar({ toggleSidebar, toggleChat }: NavbarProps) {
                   </p>
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => router.push('/profile')}>
-                <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
+              <DropdownMenuSeparator className="bg-border/50" />
+              <DropdownMenuItem 
+                onClick={() => router.push('/profile')}
+                className="cursor-pointer hover:bg-accent/50 transition-colors"
+              >
+                <User className="mr-3 h-4 w-4 text-muted-foreground" />
+                <span className="text-sm">Profile</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push('/settings')}>
-                <Settings className="mr-2 h-4 w-4" />
-                <span>Settings</span>
+              <DropdownMenuItem 
+                onClick={() => router.push('/settings')}
+                className="cursor-pointer hover:bg-accent/50 transition-colors"
+              >
+                <Settings className="mr-3 h-4 w-4 text-muted-foreground" />
+                <span className="text-sm">Settings</span>
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout}>
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
+              <DropdownMenuSeparator className="bg-border/50" />
+              <DropdownMenuItem 
+                onClick={handleLogout}
+                className="cursor-pointer hover:bg-destructive/10 hover:text-destructive transition-colors"
+              >
+                <LogOut className="mr-3 h-4 w-4" />
+                <span className="text-sm">Log out</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

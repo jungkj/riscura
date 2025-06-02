@@ -189,7 +189,7 @@ export default function DashboardPage() {
       title: 'Total Risks',
       value: 156,
       trend: { value: 12, isPositive: true },
-      icon: <BarChart3 className="h-5 w-5 text-blue-600" />,
+      icon: <BarChart3 className="h-4 w-4 text-notion-blue" />,
       description: 'Across all categories',
       color: 'blue'
     },
@@ -198,29 +198,28 @@ export default function DashboardPage() {
       title: 'High Priority',
       value: 23,
       trend: { value: 5, isPositive: false },
-      icon: <AlertTriangle className="h-5 w-5 text-orange-600" />,
-      description: 'Requiring immediate attention',
-      color: 'orange'
+      icon: <AlertTriangle className="h-4 w-4 text-notion-red" />,
+      description: 'Require immediate attention',
+      color: 'red'
     },
     {
-      id: 'controls',
+      id: 'controls-active',
       title: 'Active Controls',
       value: 89,
       trend: { value: 8, isPositive: true },
-      icon: <Shield className="h-5 w-5 text-green-600" />,
-      description: 'Monitoring and protecting',
+      icon: <Shield className="h-4 w-4 text-notion-green" />,
+      description: 'Currently implemented',
       color: 'green'
     },
     {
-      id: 'compliance',
+      id: 'compliance-score',
       title: 'Compliance Score',
       value: 94,
-      suffix: '%',
       trend: { value: 2, isPositive: true },
-      icon: <CheckCircle className="h-5 w-5 text-purple-600" />,
-      description: 'Regulatory compliance rate',
+      icon: <CheckCircle className="h-4 w-4 text-notion-purple" />,
+      description: 'Overall compliance rating',
       color: 'purple'
-    },
+    }
   ];
 
   const aiInsights = [
@@ -280,61 +279,49 @@ export default function DashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <div className="space-y-2">
-            <h3 className="text-lg font-medium">Loading Dashboard</h3>
-            <p className="text-sm text-muted-foreground">Preparing your AI-powered risk management overview</p>
-          </div>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent"></div>
+          <p className="text-sm text-muted-foreground">Loading dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <div className="notion-content p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
-            Dashboard
-            {aiEnabled && (
-              <Badge className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white border-0">
-                <Brain className="h-3 w-3 mr-1" />
-                AI Enhanced
-              </Badge>
-            )}
-          </h1>
-          <p className="text-muted-foreground">
-            Your AI-powered risk management overview with predictive insights
+        <div>
+          <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            Welcome back! Here's what's happening with your risk management.
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <Button 
+          <Button
             variant="outline"
             size="sm"
-            onClick={() => setAiEnabled(!aiEnabled)}
-            className="gap-2"
-          >
-            <Bot className="h-4 w-4" />
-            AI {aiEnabled ? 'On' : 'Off'}
-          </Button>
-          <Button 
-            onClick={handleRefresh} 
-            variant="outline"
-            size="sm"
+            onClick={handleRefresh}
             disabled={refreshing}
-            className="gap-2"
+            className="notion-button-secondary"
           >
-            <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-            {refreshing ? 'Refreshing...' : 'Refresh Data'}
+            <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+          <Button
+            size="sm"
+            onClick={() => router.push('/risks/new')}
+            className="notion-button-primary"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Risk
           </Button>
         </div>
       </div>
 
-      {/* Key Metrics */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Metrics Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {metrics.map((metric, index) => (
           <motion.div
             key={metric.id}
@@ -342,36 +329,42 @@ export default function DashboardPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
           >
-            <Card className="hover:shadow-md transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="p-2 rounded-lg bg-muted">
-                    {metric.icon}
+            <Card className="notion-card hover:shadow-notion transition-shadow cursor-pointer">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-muted/50 rounded-md">
+                      {metric.icon}
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        {metric.title}
+                      </p>
+                      <p className="text-2xl font-semibold text-foreground">
+                        {metric.value}
+                        {metric.id === 'compliance-score' && '%'}
+                      </p>
+                    </div>
                   </div>
-                  {metric.trend && (
-                    <div className={`flex items-center text-sm font-medium ${
-                      metric.trend.isPositive ? 'text-green-600' : 'text-red-600'
+                  <div className="text-right">
+                    <div className={`flex items-center gap-1 text-xs ${
+                      metric.trend.isPositive ? 'text-notion-green' : 'text-notion-red'
                     }`}>
                       {metric.trend.isPositive ? (
-                        <ArrowUpRight className="h-4 w-4" />
+                        <ArrowUpRight className="h-3 w-3" />
                       ) : (
-                        <ArrowDownRight className="h-4 w-4" />
+                        <ArrowDownRight className="h-3 w-3" />
                       )}
                       {metric.trend.value}%
                     </div>
-                  )}
+                    <p className="text-xs text-muted-foreground mt-1">
+                      vs last month
+                    </p>
+                  </div>
                 </div>
-                <div className="space-y-1">
-                  <p className="text-2xl font-bold">
-                    {metric.value}{metric.suffix}
-                  </p>
-                  <p className="text-sm font-medium text-muted-foreground">
-                    {metric.title}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {metric.description}
-                  </p>
-                </div>
+                <p className="text-xs text-muted-foreground mt-3">
+                  {metric.description}
+                </p>
               </CardContent>
             </Card>
           </motion.div>

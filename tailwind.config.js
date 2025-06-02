@@ -55,6 +55,39 @@ export default {
           4: 'hsl(var(--chart-4))',
           5: 'hsl(var(--chart-5))',
         },
+        notion: {
+          gray: 'hsl(var(--notion-gray))',
+          brown: 'hsl(var(--notion-brown))',
+          orange: 'hsl(var(--notion-orange))',
+          yellow: 'hsl(var(--notion-yellow))',
+          green: 'hsl(var(--notion-green))',
+          blue: 'hsl(var(--notion-blue))',
+          purple: 'hsl(var(--notion-purple))',
+          pink: 'hsl(var(--notion-pink))',
+          red: 'hsl(var(--notion-red))',
+        },
+      },
+      fontFamily: {
+        sans: [
+          'ui-sans-serif',
+          'system-ui',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"Segoe UI"',
+          'Roboto',
+          '"Helvetica Neue"',
+          'Arial',
+          '"Noto Sans"',
+          'sans-serif',
+          '"Apple Color Emoji"',
+          '"Segoe UI Emoji"',
+          '"Segoe UI Symbol"',
+          '"Noto Color Emoji"',
+        ],
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
       },
       keyframes: {
         'accordion-down': {
@@ -73,10 +106,36 @@ export default {
             height: '0',
           },
         },
+        'notion-fade-in': {
+          from: {
+            opacity: '0',
+            transform: 'translateY(10px)',
+          },
+          to: {
+            opacity: '1',
+            transform: 'translateY(0)',
+          },
+        },
+        'notion-slide-in': {
+          from: {
+            opacity: '0',
+            transform: 'translateX(-10px)',
+          },
+          to: {
+            opacity: '1',
+            transform: 'translateX(0)',
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'notion-fade-in': 'notion-fade-in 0.2s ease-out',
+        'notion-slide-in': 'notion-slide-in 0.2s ease-out',
+      },
+      boxShadow: {
+        'notion': '0 1px 3px rgba(0, 0, 0, 0.1)',
+        'notion-lg': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
       },
     },
   },
