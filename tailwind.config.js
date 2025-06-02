@@ -28,6 +28,7 @@ export default {
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
+          blue: 'hsl(var(--primary-blue))',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
@@ -54,6 +55,24 @@ export default {
           3: 'hsl(var(--chart-3))',
           4: 'hsl(var(--chart-4))',
           5: 'hsl(var(--chart-5))',
+        },
+        risk: {
+          low: 'hsl(var(--risk-low))',
+          medium: 'hsl(var(--risk-medium))',
+          high: 'hsl(var(--risk-high))',
+          critical: 'hsl(var(--risk-critical))',
+        },
+        slate: {
+          50: 'hsl(var(--slate-50))',
+          100: 'hsl(var(--slate-100))',
+          200: 'hsl(var(--slate-200))',
+          300: 'hsl(var(--slate-300))',
+          400: 'hsl(var(--slate-400))',
+          500: 'hsl(var(--slate-500))',
+          600: 'hsl(var(--slate-600))',
+          700: 'hsl(var(--slate-700))',
+          800: 'hsl(var(--slate-800))',
+          900: 'hsl(var(--slate-900))',
         },
         notion: {
           gray: 'hsl(var(--notion-gray))',

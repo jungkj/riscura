@@ -59,6 +59,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const { email, password } = validationResult.data;
 
+    // Check for demo/test credentials FIRST - before any database operations
+    // This allows the demo to work even without a properly configured database
+    
     // First, try test user authentication
     const testUser = validateTestCredentials(email, password);
     if (testUser) {
@@ -81,6 +84,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       };
 
       return handleDemoLogin(demoUser, clientIP, request);
+    }
+
+    // Only try database operations if not in demo mode
+    if (appConfig.isDevelopment && process.env.MOCK_DATA === 'true') {
+      return NextResponse.json(
+        { error: 'Invalid demo credentials. Please use: admin@riscura.com / admin123' },
+        { status: 401 }
+      );
     }
 
     // Try to find user in database
@@ -304,6 +315,20 @@ function handleDemoLogin(demoUser: any, clientIP: string, request: NextRequest):
     secure: appConfig.isProduction,
     sameSite: 'strict',
     maxAge: tokens.refreshExpiresIn,
+    path: '/',
+  });
+
+  // Add demo-user cookie for API authentication
+  response.cookies.set('demo-user', JSON.stringify({
+    id: demoUser.id || 'demo-admin-id',
+    email: demoUser.email,
+    role: demoUser.role || 'ADMIN',
+    permissions: demoUser.permissions || ['*'],
+  }), {
+    httpOnly: false,
+    secure: appConfig.isProduction,
+    sameSite: 'strict',
+    maxAge: tokens.expiresIn,
     path: '/',
   });
 

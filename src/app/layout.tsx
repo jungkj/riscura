@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from 'next-themes';
@@ -18,7 +18,6 @@ export const metadata: Metadata = {
   description: 'Advanced Risk and Control Self-Assessment platform powered by AI',
   keywords: ['risk management', 'compliance', 'AI', 'automation', 'RCSA'],
   authors: [{ name: 'Riscura Team' }],
-  viewport: 'width=device-width, initial-scale=1',
   robots: 'index, follow',
   openGraph: {
     title: 'Riscura - AI-Powered RCSA Automation',
@@ -31,6 +30,11 @@ export const metadata: Metadata = {
     title: 'Riscura - AI-Powered RCSA Automation',
     description: 'Advanced Risk and Control Self-Assessment platform powered by AI',
   },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({

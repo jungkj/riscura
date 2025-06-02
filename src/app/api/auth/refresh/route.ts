@@ -21,6 +21,59 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
+    // Check if this is a demo refresh token
+    if (refreshToken.startsWith('demo-refresh-') || refreshToken === 'demo-refresh-token') {
+      const demoUserCookie = request.cookies.get('demo-user')?.value;
+      
+      if (!demoUserCookie) {
+        return NextResponse.json(
+          { error: 'Demo session not found' },
+          { status: 401 }
+        );
+      }
+
+      try {
+        const demoUser = JSON.parse(demoUserCookie);
+        
+        // Return fresh demo tokens
+        const response = NextResponse.json({
+          message: 'Demo token refreshed successfully',
+          user: {
+            id: demoUser.id,
+            email: demoUser.email,
+            firstName: 'Demo',
+            lastName: 'User',
+            role: demoUser.role,
+            permissions: demoUser.permissions || ['*'],
+            organizationId: 'demo-org-id',
+          },
+          tokens: {
+            accessToken: `demo-token-${demoUser.id}`,
+            expiresIn: 3600,
+          },
+          demoMode: true,
+        });
+
+        // Update demo cookies
+        response.cookies.set('refreshToken', `demo-refresh-${demoUser.id}`, {
+          httpOnly: true,
+          secure: env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: 86400, // 24 hours
+          path: '/',
+        });
+
+        return response;
+        
+      } catch (parseError) {
+        return NextResponse.json(
+          { error: 'Invalid demo session' },
+          { status: 401 }
+        );
+      }
+    }
+
+    // Regular JWT token refresh for non-demo users
     // Verify refresh token
     const payload = verifyRefreshToken(refreshToken);
 

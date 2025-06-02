@@ -9,18 +9,48 @@ declare global {
 // Database configuration options
 const databaseConfig = {
   log: process.env.NODE_ENV === 'development' 
-    ? ['query', 'error', 'warn'] as const
-    : ['error'] as const,
+    ? ['query', 'error', 'warn'] as ('query' | 'error' | 'warn')[]
+    : ['error'] as ('error')[],
   errorFormat: 'pretty' as const,
 };
 
 // Create Prisma client instance with connection pooling
 const createPrismaClient = () => {
+  // Check if we have a valid DATABASE_URL
+  const databaseUrl = process.env.DATABASE_URL;
+  
+  // In demo mode with missing DATABASE_URL, return a mock client
+  if (!databaseUrl || databaseUrl === 'file:./dev.db') {
+    console.log('Demo mode: No database connection configured');
+    
+    // Return a mock Prisma client for demo mode
+    return {
+      $connect: async () => { console.log('Mock DB: Connected'); },
+      $disconnect: async () => { console.log('Mock DB: Disconnected'); },
+      $queryRaw: async () => { throw new Error('Database not available in demo mode'); },
+      user: {
+        findUnique: async () => null,
+        update: async () => { throw new Error('Database not available in demo mode'); },
+      },
+      session: {
+        create: async () => { throw new Error('Database not available in demo mode'); },
+        findUnique: async () => null,
+        update: async () => { throw new Error('Database not available in demo mode'); },
+        delete: async () => { throw new Error('Database not available in demo mode'); },
+        deleteMany: async () => { throw new Error('Database not available in demo mode'); },
+        findMany: async () => [],
+      },
+      organization: {
+        count: async () => 0,
+      },
+    } as any;
+  }
+
   return new PrismaClient({
     ...databaseConfig,
     datasources: {
       db: {
-        url: process.env.DATABASE_URL,
+        url: databaseUrl,
       },
     },
   });
