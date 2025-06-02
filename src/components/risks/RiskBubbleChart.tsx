@@ -210,12 +210,16 @@ export const RiskBubbleChart: React.FC<RiskBubbleChartProps> = ({
     const height = 400;
     const padding = 60;
     
+    type TickData = {
+      value: string;
+      position: number;
+    };
+    
     if (axis === 'timeline') {
-      const dates = risks.map(r => new Date(r.createdAt).getTime());
-      const minDate = Math.min(...dates);
-      const maxDate = Math.max(...dates);
-      const tickCount = 5;
-      const ticks = [];
+      const minDate = Date.now() - 365 * 24 * 60 * 60 * 1000; // 1 year ago
+      const maxDate = Date.now();
+      const tickCount = 4;
+      const ticks: TickData[] = [];
       
       for (let i = 0; i <= tickCount; i++) {
         const timestamp = minDate + (maxDate - minDate) * (i / tickCount);
@@ -231,7 +235,7 @@ export const RiskBubbleChart: React.FC<RiskBubbleChartProps> = ({
     if (axis === 'score') {
       const maxScore = 25;
       const tickCount = 5;
-      const ticks = [];
+      const ticks: TickData[] = [];
       
       for (let i = 0; i <= tickCount; i++) {
         const value = (maxScore / tickCount) * i;
@@ -292,7 +296,7 @@ export const RiskBubbleChart: React.FC<RiskBubbleChartProps> = ({
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div>
             <label className="text-xs text-slate-600 mb-1 block">X-Axis</label>
-            <Select value={selectedXAxis} onValueChange={setSelectedXAxis}>
+            <Select value={selectedXAxis} onValueChange={(value) => setSelectedXAxis(value as typeof selectedXAxis)}>
               <SelectTrigger className="h-8">
                 <SelectValue />
               </SelectTrigger>
@@ -307,7 +311,7 @@ export const RiskBubbleChart: React.FC<RiskBubbleChartProps> = ({
           
           <div>
             <label className="text-xs text-slate-600 mb-1 block">Y-Axis</label>
-            <Select value={selectedYAxis} onValueChange={setSelectedYAxis}>
+            <Select value={selectedYAxis} onValueChange={(value) => setSelectedYAxis(value as typeof selectedYAxis)}>
               <SelectTrigger className="h-8">
                 <SelectValue />
               </SelectTrigger>
@@ -322,7 +326,7 @@ export const RiskBubbleChart: React.FC<RiskBubbleChartProps> = ({
           
           <div>
             <label className="text-xs text-slate-600 mb-1 block">Size By</label>
-            <Select value={selectedSizeBy} onValueChange={setSelectedSizeBy}>
+            <Select value={selectedSizeBy} onValueChange={(value) => setSelectedSizeBy(value as typeof selectedSizeBy)}>
               <SelectTrigger className="h-8">
                 <SelectValue />
               </SelectTrigger>
@@ -336,7 +340,7 @@ export const RiskBubbleChart: React.FC<RiskBubbleChartProps> = ({
           
           <div>
             <label className="text-xs text-slate-600 mb-1 block">Color By</label>
-            <Select value={selectedColorBy} onValueChange={setSelectedColorBy}>
+            <Select value={selectedColorBy} onValueChange={(value) => setSelectedColorBy(value as typeof selectedColorBy)}>
               <SelectTrigger className="h-8">
                 <SelectValue />
               </SelectTrigger>
