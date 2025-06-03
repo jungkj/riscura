@@ -5,7 +5,7 @@ import { PaginationOptions } from '@/lib/db';
 
 export interface RiskFilters {
   category?: PrismaRiskCategory;
-  riskLevel?: RiskLevel;
+  riskLevel?: 'low' | 'medium' | 'high' | 'critical';
   status?: RiskStatus;
   owner?: string;
   search?: string;
@@ -306,7 +306,7 @@ export class RiskRepository extends BaseRepository<Risk> {
   async getStatistics(organizationId: string): Promise<{
     total: number;
     byCategory: Record<PrismaRiskCategory, number>;
-    byLevel: Record<RiskLevel, number>;
+    byLevel: Record<'low' | 'medium' | 'high' | 'critical', number>;
     byStatus: Record<RiskStatus, number>;
     averageScore: number;
     dueForReview: number;
@@ -361,9 +361,9 @@ export class RiskRepository extends BaseRepository<Risk> {
       categoryStats[item.category as PrismaRiskCategory] = item._count._all;
     });
 
-    const levelStats = {} as Record<RiskLevel, number>;
+    const levelStats = {} as Record<'low' | 'medium' | 'high' | 'critical', number>;
     byLevel.forEach((item: any) => {
-      levelStats[item.riskLevel as RiskLevel] = item._count._all;
+      levelStats[item.riskLevel as 'low' | 'medium' | 'high' | 'critical'] = item._count._all;
     });
 
     const statusStats = {} as Record<RiskStatus, number>;
@@ -390,16 +390,16 @@ export class RiskRepository extends BaseRepository<Risk> {
     userId?: string
   ): Promise<Risk> {
     const riskScore = likelihood * impact;
-    let riskLevel: RiskLevel;
+    let riskLevel: 'low' | 'medium' | 'high' | 'critical';
 
     if (riskScore >= 20) {
-      riskLevel = 'CRITICAL';
+      riskLevel = 'critical';
     } else if (riskScore >= 15) {
-      riskLevel = 'HIGH';
+      riskLevel = 'high';
     } else if (riskScore >= 8) {
-      riskLevel = 'MEDIUM';
+      riskLevel = 'medium';
     } else {
-      riskLevel = 'LOW';
+      riskLevel = 'low';
     }
 
     return this.update(

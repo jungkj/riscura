@@ -12,11 +12,16 @@ import type {
 } from './types';
 
 export class StripeService {
-  private stripe: Stripe;
+  private stripe: Stripe | null;
+  private isEnabled: boolean;
 
   constructor() {
+    this.isEnabled = !!process.env.STRIPE_SECRET_KEY;
+    
     if (!process.env.STRIPE_SECRET_KEY) {
-      throw new Error('STRIPE_SECRET_KEY environment variable is required');
+      console.warn('STRIPE_SECRET_KEY not configured - billing features will be disabled');
+      this.stripe = null;
+      return;
     }
 
     this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
@@ -25,9 +30,16 @@ export class StripeService {
     });
   }
 
+  private ensureStripeEnabled(): void {
+    if (!this.isEnabled || !this.stripe) {
+      throw new Error('Stripe is not configured. Please set STRIPE_SECRET_KEY environment variable.');
+    }
+  }
+
   // Customer Management
   async createCustomer(organizationId: string, email: string, name: string, metadata?: Record<string, any>): Promise<Stripe.Customer> {
-    const customer = await this.stripe.customers.create({
+    this.ensureStripeEnabled();
+    const customer = await this.stripe!.customers.create({
       email,
       name,
       metadata: {
@@ -49,12 +61,14 @@ export class StripeService {
   }
 
   async updateCustomer(customerId: string, updates: Stripe.CustomerUpdateParams): Promise<Stripe.Customer> {
-    return await this.stripe.customers.update(customerId, updates);
+    this.ensureStripeEnabled();
+    return await this.stripe!.customers.update(customerId, updates);
   }
 
   async getCustomer(customerId: string): Promise<Stripe.Customer | null> {
+    this.ensureStripeEnabled();
     try {
-      return await this.stripe.customers.retrieve(customerId) as Stripe.Customer;
+      return await this.stripe!.customers.retrieve(customerId) as Stripe.Customer;
     } catch (error) {
       if (error instanceof Stripe.errors.StripeError && error.code === 'resource_missing') {
         return null;
@@ -75,6 +89,7 @@ export class StripeService {
       metadata?: Record<string, any>;
     }
   ): Promise<Stripe.Subscription> {
+    this.ensureStripeEnabled();
     const subscriptionParams: any = {
       customer: customerId,
       items: [
@@ -99,7 +114,7 @@ export class StripeService {
       }];
     }
 
-    const subscription = await this.stripe.subscriptions.create(subscriptionParams);
+    const subscription = await this.stripe!.subscriptions.create(subscriptionParams);
 
     // Store subscription in database
     await this.storeSubscription(subscription, organizationId);
@@ -108,21 +123,24 @@ export class StripeService {
   }
 
   async updateSubscription(subscriptionId: string, updates: Stripe.SubscriptionUpdateParams): Promise<Stripe.Subscription> {
-    return await this.stripe.subscriptions.update(subscriptionId, updates);
+    this.ensureStripeEnabled();
+    return await this.stripe!.subscriptions.update(subscriptionId, updates);
   }
 
   async cancelSubscription(subscriptionId: string, cancelAtPeriodEnd: boolean = true): Promise<Stripe.Subscription> {
+    this.ensureStripeEnabled();
     if (cancelAtPeriodEnd) {
-      return await this.stripe.subscriptions.update(subscriptionId, {
+      return await this.stripe!.subscriptions.update(subscriptionId, {
         cancel_at_period_end: true,
       });
     } else {
-      return await this.stripe.subscriptions.cancel(subscriptionId);
+      return await this.stripe!.subscriptions.cancel(subscriptionId);
     }
   }
 
   async pauseSubscription(subscriptionId: string, resumeAt?: Date): Promise<Stripe.Subscription> {
-    return await this.stripe.subscriptions.update(subscriptionId, {
+    this.ensureStripeEnabled();
+    return await this.stripe!.subscriptions.update(subscriptionId, {
       pause_collection: {
         behavior: 'mark_uncollectible',
         resumes_at: resumeAt ? Math.floor(resumeAt.getTime() / 1000) : undefined,
@@ -131,23 +149,27 @@ export class StripeService {
   }
 
   async resumeSubscription(subscriptionId: string): Promise<Stripe.Subscription> {
-    return await this.stripe.subscriptions.update(subscriptionId, {
+    this.ensureStripeEnabled();
+    return await this.stripe!.subscriptions.update(subscriptionId, {
       pause_collection: null,
     });
   }
 
   // Payment Method Management
   async attachPaymentMethod(paymentMethodId: string, customerId: string): Promise<Stripe.PaymentMethod> {
+    this.ensureStripeEnabled();
     return await this.stripe.paymentMethods.attach(paymentMethodId, {
       customer: customerId,
     });
   }
 
   async detachPaymentMethod(paymentMethodId: string): Promise<Stripe.PaymentMethod> {
+    this.ensureStripeEnabled();
     return await this.stripe.paymentMethods.detach(paymentMethodId);
   }
 
   async setDefaultPaymentMethod(customerId: string, paymentMethodId: string): Promise<Stripe.Customer> {
+    this.ensureStripeEnabled();
     return await this.stripe.customers.update(customerId, {
       invoice_settings: {
         default_payment_method: paymentMethodId,
@@ -156,6 +178,7 @@ export class StripeService {
   }
 
   async listPaymentMethods(customerId: string, type?: Stripe.PaymentMethodListParams.Type): Promise<Stripe.PaymentMethod[]> {
+    this.ensureStripeEnabled();
     const paymentMethods = await this.stripe.paymentMethods.list({
       customer: customerId,
       type: type || 'card',
@@ -166,6 +189,7 @@ export class StripeService {
 
   // Invoice Management
   async createInvoice(customerId: string, params?: Stripe.InvoiceCreateParams): Promise<Stripe.Invoice> {
+    this.ensureStripeEnabled();
     return await this.stripe.invoices.create({
       customer: customerId,
       ...params,
@@ -173,10 +197,12 @@ export class StripeService {
   }
 
   async finalizeInvoice(invoiceId: string): Promise<Stripe.Invoice> {
+    this.ensureStripeEnabled();
     return await this.stripe.invoices.finalizeInvoice(invoiceId);
   }
 
   async payInvoice(invoiceId: string, paymentMethodId?: string): Promise<Stripe.Invoice> {
+    this.ensureStripeEnabled();
     const params: any = {};
     if (paymentMethodId) {
       params.payment_method = paymentMethodId;
@@ -186,15 +212,18 @@ export class StripeService {
   }
 
   async voidInvoice(invoiceId: string): Promise<Stripe.Invoice> {
+    this.ensureStripeEnabled();
     return await this.stripe.invoices.voidInvoice(invoiceId);
   }
 
   async sendInvoice(invoiceId: string): Promise<Stripe.Invoice> {
+    this.ensureStripeEnabled();
     return await this.stripe.invoices.sendInvoice(invoiceId);
   }
 
   // Usage-based Billing (using manual invoice items)
   async createUsageRecord(organizationId: string, customerId: string, description: string, quantity: number, unitAmount: number): Promise<Stripe.InvoiceItem> {
+    this.ensureStripeEnabled();
     return await this.stripe.invoiceItems.create({
       customer: customerId,
       amount: Math.round(quantity * unitAmount * 100), // Convert to cents
@@ -210,6 +239,7 @@ export class StripeService {
   }
 
   async listUsageRecords(customerId: string, startDate?: Date, endDate?: Date): Promise<Stripe.InvoiceItem[]> {
+    this.ensureStripeEnabled();
     const params: any = {
       customer: customerId,
     };
@@ -239,6 +269,7 @@ export class StripeService {
       metadata?: Record<string, any>;
     }
   ): Promise<Stripe.PaymentIntent> {
+    this.ensureStripeEnabled();
     const params: Stripe.PaymentIntentCreateParams = {
       amount: Math.round(amount * 100), // Convert to cents
       currency: currency.toLowerCase(),
@@ -256,6 +287,7 @@ export class StripeService {
   }
 
   async confirmPaymentIntent(paymentIntentId: string, paymentMethodId?: string): Promise<Stripe.PaymentIntent> {
+    this.ensureStripeEnabled();
     const params: any = {};
     
     if (paymentMethodId) {
@@ -267,6 +299,7 @@ export class StripeService {
 
   // Customer Portal
   async createCustomerPortalSession(customerId: string, returnUrl: string): Promise<Stripe.BillingPortal.Session> {
+    this.ensureStripeEnabled();
     return await this.stripe.billingPortal.sessions.create({
       customer: customerId,
       return_url: returnUrl,
@@ -275,11 +308,13 @@ export class StripeService {
 
   // Coupons and Discounts
   async createCoupon(params: Stripe.CouponCreateParams): Promise<Stripe.Coupon> {
+    this.ensureStripeEnabled();
     return await this.stripe.coupons.create(params);
   }
 
   async applyCoupon(customerId: string, couponId: string): Promise<void> {
     // Use the discounts API to apply coupon
+    this.ensureStripeEnabled();
     await this.stripe.customers.update(customerId, {
       metadata: {
         applied_coupon: couponId,
@@ -289,15 +324,18 @@ export class StripeService {
 
   // Tax Management
   async calculateTax(params: Stripe.Tax.CalculationCreateParams): Promise<Stripe.Tax.Calculation> {
+    this.ensureStripeEnabled();
     return await this.stripe.tax.calculations.create(params);
   }
 
   async createTaxRate(params: Stripe.TaxRateCreateParams): Promise<Stripe.TaxRate> {
+    this.ensureStripeEnabled();
     return await this.stripe.taxRates.create(params);
   }
 
   // Webhooks
   constructWebhookEvent(payload: string | Buffer, signature: string, secret: string): Stripe.Event {
+    this.ensureStripeEnabled();
     return this.stripe.webhooks.constructEvent(payload, signature, secret);
   }
 

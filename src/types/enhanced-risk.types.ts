@@ -18,7 +18,7 @@ export interface EnhancedRisk extends Risk {
   riskApprover?: string;
   
   // Collaboration
-  comments: RiskComment[];
+  riskComments: RiskComment[];
   approvals: RiskApproval[];
   assignments: RiskAssignment[];
   
@@ -63,8 +63,10 @@ export interface AISuggestions {
 
 export interface RiskComment {
   id: string;
-  userId: string;
+  authorId: string;
   content: string;
+  entityType: 'risk';
+  entityId: string;
   createdAt: Date;
   updatedAt?: Date;
   parentCommentId?: string;

@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 export const size = {
   width: 32,
@@ -15,7 +15,7 @@ export default function Icon() {
       <div
         style={{
           fontSize: 24,
-          background: '#0ea5e9',
+          background: 'linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%)',
           width: '100%',
           height: '100%',
           display: 'flex',
@@ -23,6 +23,7 @@ export default function Icon() {
           justifyContent: 'center',
           color: 'white',
           fontWeight: 'bold',
+          borderRadius: '4px',
         }}
       >
         R

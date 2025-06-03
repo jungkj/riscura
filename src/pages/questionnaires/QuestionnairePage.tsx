@@ -162,7 +162,7 @@ export default function QuestionnairePage() {
   if (showBuilder) {
     return (
       <QuestionnaireBuilder
-        questionnaireId={editingQuestionnaire || undefined}
+        questionnaire={editingQuestionnaire ? questionnaires.find(q => q.id === editingQuestionnaire) as any || null : null}
         onSave={() => setShowBuilder(false)}
         onCancel={() => setShowBuilder(false)}
       />
@@ -481,7 +481,14 @@ const QuestionnaireAnalytics: React.FC<QuestionnaireAnalyticsProps> = ({
   questionnaire,
 }) => {
   const { getQuestionnaireAnalytics } = useQuestionnaires();
-  const analytics = getQuestionnaireAnalytics(questionnaire.id);
+  
+  let analytics: any = null;
+  try {
+    analytics = getQuestionnaireAnalytics ? getQuestionnaireAnalytics(questionnaire.id) : null;
+  } catch (error) {
+    console.warn('Error getting questionnaire analytics:', error);
+    analytics = null;
+  }
 
   if (!analytics) {
     return (
@@ -498,14 +505,14 @@ const QuestionnaireAnalytics: React.FC<QuestionnaireAnalyticsProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold">{analytics.totalResponses}</div>
+            <div className="text-2xl font-bold">{analytics.totalResponses || 0}</div>
             <div className="text-sm text-muted-foreground">Total Responses</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-green-600">
-              {Math.round(analytics.completionRate * 100)}%
+              {Math.round((analytics.completionRate || 0) * 100)}%
             </div>
             <div className="text-sm text-muted-foreground">Completion Rate</div>
           </CardContent>
@@ -513,7 +520,7 @@ const QuestionnaireAnalytics: React.FC<QuestionnaireAnalyticsProps> = ({
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-blue-600">
-              {analytics.averageTime}min
+              {analytics.averageTime || 0}min
             </div>
             <div className="text-sm text-muted-foreground">Average Time</div>
           </CardContent>

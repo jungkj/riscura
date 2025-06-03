@@ -1000,4 +1000,6 @@ export const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ clas
       </div>
     </div>
   );
-}; 
+};
+
+export default EnhancedRiskRegistry; 

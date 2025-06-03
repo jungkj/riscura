@@ -233,7 +233,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
   // Transaction support
   async transaction<R>(
     organizationId: string,
-    fn: (prisma: PrismaClient) => Promise<R>
+    fn: (prisma: Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'>) => Promise<R>
   ): Promise<R> {
     return this.prisma.$transaction(fn);
   }

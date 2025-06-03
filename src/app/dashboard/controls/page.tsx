@@ -1,6 +1,6 @@
 'use client';
 
-import ControlLibraryPage from '@/pages/controls/ControlLibraryPage';
+import { EnhancedControlRegistry } from '@/pages/controls/EnhancedControlRegistry';
 import MainLayout from '@/layouts/MainLayout';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 
@@ -8,7 +8,7 @@ export default function ControlsPage() {
   return (
     <ProtectedRoute>
       <MainLayout>
-        <ControlLibraryPage />
+        <EnhancedControlRegistry />
       </MainLayout>
     </ProtectedRoute>
   );

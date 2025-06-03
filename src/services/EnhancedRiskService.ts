@@ -486,6 +486,7 @@ export class EnhancedRiskService {
       priority: this.calculatePriority(risk.riskScore),
       riskOwner: risk.owner,
       comments: [],
+      riskComments: [],
       approvals: [],
       assignments: [],
       mitigationStrategies: [],

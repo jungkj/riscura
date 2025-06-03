@@ -1,624 +1,512 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
-import { Responsive, WidthProvider, Layout } from 'react-grid-layout';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { 
-  BarChart, 
-  LineChart, 
-  PieChart, 
-  Table,
-  FileText,
-  Image,
-  Filter,
-  Settings,
-  Plus,
-  Trash2,
-  Copy,
-  Download,
-  Save,
-  Eye,
-  Grid,
-  List
-} from 'lucide-react';
-import { ReportWidget, ReportConfig, VisualizationConfig } from '@/lib/reporting/engine';
-import { ChartWidget } from './widgets/ChartWidget';
-import { TableWidget } from './widgets/TableWidget';
-import { KPIWidget } from './widgets/KPIWidget';
-import { FilterWidget } from './widgets/FilterWidget';
-import { TextWidget } from './widgets/TextWidget';
+import { Textarea } from '@/components/ui/textarea';
 
-const ResponsiveGridLayout = WidthProvider(Responsive);
+// Icons
+import { Plus, Trash2, Settings, Eye, Save, Play, FileText } from 'lucide-react';
 
-interface AvailableWidget {
-  id: string;
-  type: 'chart' | 'table' | 'kpi' | 'text' | 'filter';
-  name: string;
-  icon: React.ReactNode;
-  description: string;
-  defaultConfig: Partial<ReportWidget>;
-}
-
-const availableWidgets: AvailableWidget[] = [
-  {
-    id: 'bar-chart',
-    type: 'chart',
-    name: 'Bar Chart',
-    icon: <BarChart className="w-5 h-5" />,
-    description: 'Display data as vertical bars',
-    defaultConfig: {
-      visualization: {
-        chartType: 'bar',
-        showLegend: true,
-        showGrid: true,
-      },
-      position: { x: 0, y: 0, w: 6, h: 4 },
-    },
-  },
-  {
-    id: 'line-chart',
-    type: 'chart',
-    name: 'Line Chart',
-    icon: <LineChart className="w-5 h-5" />,
-    description: 'Display trends over time',
-    defaultConfig: {
-      visualization: {
-        chartType: 'line',
-        showLegend: true,
-        showGrid: true,
-      },
-      position: { x: 0, y: 0, w: 6, h: 4 },
-    },
-  },
-  {
-    id: 'pie-chart',
-    type: 'chart',
-    name: 'Pie Chart',
-    icon: <PieChart className="w-5 h-5" />,
-    description: 'Display proportions as a pie',
-    defaultConfig: {
-      visualization: {
-        chartType: 'pie',
-        showLegend: true,
-      },
-      position: { x: 0, y: 0, w: 4, h: 4 },
-    },
-  },
-  {
-    id: 'data-table',
-    type: 'table',
-    name: 'Data Table',
-    icon: <Table className="w-5 h-5" />,
-    description: 'Display data in tabular format',
-    defaultConfig: {
-      position: { x: 0, y: 0, w: 8, h: 6 },
-    },
-  },
-  {
-    id: 'kpi',
-    type: 'kpi',
-    name: 'KPI Metric',
-    icon: <div className="w-5 h-5 rounded border-2 border-current flex items-center justify-center text-xs font-bold">KPI</div>,
-    description: 'Display key performance indicators',
-    defaultConfig: {
-      position: { x: 0, y: 0, w: 3, h: 2 },
-    },
-  },
-  {
-    id: 'text',
-    type: 'text',
-    name: 'Text Block',
-    icon: <FileText className="w-5 h-5" />,
-    description: 'Add custom text and formatting',
-    defaultConfig: {
-      position: { x: 0, y: 0, w: 6, h: 2 },
-    },
-  },
-  {
-    id: 'filter',
-    type: 'filter',
-    name: 'Filter Control',
-    icon: <Filter className="w-5 h-5" />,
-    description: 'Add interactive filters',
-    defaultConfig: {
-      position: { x: 0, y: 0, w: 4, h: 1 },
-    },
-  },
-];
+// Types
+import type { ReportTemplate, ReportSection, SectionType } from '@/types/reporting.types';
 
 interface ReportBuilderProps {
-  reportConfig?: ReportConfig;
-  onSave: (config: ReportConfig) => void;
-  onPreview: (config: ReportConfig) => void;
-  onExport: (config: ReportConfig, format: string) => void;
+  template?: ReportTemplate;
+  onSave?: (template: ReportTemplate) => void;
+  onPreview?: (template: ReportTemplate) => void;
 }
 
-export function ReportBuilder({ 
-  reportConfig, 
-  onSave, 
-  onPreview, 
-  onExport 
-}: ReportBuilderProps) {
-  const [config, setConfig] = useState<Partial<ReportConfig>>(reportConfig || {
-    name: 'New Report',
-    description: '',
-    type: 'dashboard',
-    layout: {
-      widgets: [],
-      gridSettings: {
-        cols: 12,
-        rowHeight: 60,
-        margin: [10, 10],
-        containerPadding: [10, 10],
-        breakpoints: { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 },
-      },
-    },
-    filters: [],
-    scheduledRuns: [],
-    permissions: [],
-    isPublic: false,
-    tags: [],
-  });
+export default function ReportBuilder({ template, onSave, onPreview }: ReportBuilderProps) {
+  const [reportName, setReportName] = useState(template?.name || '');
+  const [reportDescription, setReportDescription] = useState(template?.description || '');
+  const [reportCategory, setReportCategory] = useState(template?.category || 'custom');
+  const [reportType, setReportType] = useState(template?.type || 'custom');
+  const [sections, setSections] = useState<ReportSection[]>(template?.sections || []);
 
-  const [selectedWidget, setSelectedWidget] = useState<string | null>(null);
-  const [showCode, setShowCode] = useState(false);
-  const [previewMode, setPreviewMode] = useState(false);
-  const [draggedWidget, setDraggedWidget] = useState<AvailableWidget | null>(null);
-  const gridRef = useRef<any>(null);
-
-  // Handle adding new widget to the canvas
-  const addWidget = useCallback((widgetTemplate: AvailableWidget) => {
-    const newWidget: ReportWidget = {
-      id: `widget_${Date.now()}`,
-      type: widgetTemplate.type,
-      title: widgetTemplate.name,
-      position: widgetTemplate.defaultConfig.position || { x: 0, y: 0, w: 4, h: 3 },
-      dataSource: {
-        type: 'query',
-        source: '',
-        parameters: {},
-      },
-      visualization: widgetTemplate.defaultConfig.visualization || {},
-      filters: [],
-    };
-
-    setConfig(prev => ({
-      ...prev,
-      layout: {
-        ...prev.layout!,
-        widgets: [...(prev.layout?.widgets || []), newWidget],
-      },
-    }));
-
-    setSelectedWidget(newWidget.id);
-  }, []);
-
-  // Handle widget deletion
-  const deleteWidget = useCallback((widgetId: string) => {
-    setConfig(prev => ({
-      ...prev,
-      layout: {
-        ...prev.layout!,
-        widgets: prev.layout?.widgets.filter(w => w.id !== widgetId) || [],
-      },
-    }));
-    
-    if (selectedWidget === widgetId) {
-      setSelectedWidget(null);
-    }
-  }, [selectedWidget]);
-
-  // Handle widget duplication
-  const duplicateWidget = useCallback((widgetId: string) => {
-    const widget = config.layout?.widgets.find(w => w.id === widgetId);
-    if (!widget) return;
-
-    const newWidget: ReportWidget = {
-      ...widget,
-      id: `widget_${Date.now()}`,
-      title: `${widget.title} (Copy)`,
+  const addSection = (type: SectionType) => {
+    const newSection: Partial<ReportSection> = {
+      id: `section-${Date.now()}`,
+      name: `New ${type} Section`,
+      title: `${type.charAt(0).toUpperCase() + type.slice(1)} Section`,
+      type,
+      order: sections.length,
       position: {
-        ...widget.position,
-        x: Math.min(widget.position.x + 1, (config.layout?.gridSettings.cols || 12) - widget.position.w),
-        y: widget.position.y + 1,
+        row: 0,
+        column: 0,
+        rowSpan: 1,
+        columnSpan: 1
       },
+      size: {
+        width: '100%',
+        height: '300px'
+      },
+      config: {
+        title: {
+          show: true,
+          text: `${type.charAt(0).toUpperCase() + type.slice(1)} Section`,
+          style: {}
+        },
+        borders: {
+          width: 1,
+          style: 'solid',
+          color: '#e0e0e0'
+        },
+        background: {},
+        padding: { top: 16, right: 16, bottom: 16, left: 16 },
+        margin: { top: 0, right: 0, bottom: 0, left: 0 },
+        interactive: true,
+        exportable: true
+      },
+      dataSource: 'default',
+      query: {
+        select: [],
+        from: 'data'
+      },
+      visualization: {
+        chartType: 'bar',
+        chartConfig: {
+          data: { x: 'category', y: 'value' },
+          series: [],
+          dimensions: [],
+          measures: [],
+          sorting: [],
+          grouping: [],
+          aggregations: []
+        },
+        colorScheme: {
+          type: 'categorical',
+          palette: ['#8884d8', '#82ca9d', '#ffc658', '#ff7300']
+        },
+        legend: {
+          show: true,
+          position: 'top',
+          alignment: 'center',
+          orientation: 'horizontal',
+          style: {}
+        },
+        axes: {
+          x: {
+            show: true,
+            title: { show: true, style: {} },
+            labels: { show: true, style: {} },
+            grid: { show: true, style: { width: 1, style: 'solid', color: '#f0f0f0' } },
+            ticks: { show: true, style: { width: 1, style: 'solid', color: '#ccc' } },
+            scale: { type: 'category' }
+          },
+          y: {
+            show: true,
+            title: { show: true, style: {} },
+            labels: { show: true, style: {} },
+            grid: { show: true, style: { width: 1, style: 'solid', color: '#f0f0f0' } },
+            ticks: { show: true, style: { width: 1, style: 'solid', color: '#ccc' } },
+            scale: { type: 'linear' }
+          }
+        },
+        annotations: [],
+        interactions: {
+          hover: true,
+          click: true,
+          zoom: false,
+          pan: false,
+          brush: false,
+          crossfilter: false,
+          tooltip: {
+            enabled: true,
+            format: 'default',
+            fields: [],
+            style: {
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              borderColor: '#ccc',
+              textColor: '#fff',
+              fontSize: 12,
+              padding: { top: 8, right: 8, bottom: 8, left: 8 }
+            }
+          }
+        }
+      }
     };
 
-    setConfig(prev => ({
-      ...prev,
-      layout: {
-        ...prev.layout!,
-        widgets: [...(prev.layout?.widgets || []), newWidget],
+    setSections(prev => [...prev, newSection as ReportSection]);
+  };
+
+  const removeSection = (sectionId: string) => {
+    setSections(prev => prev.filter(s => s.id !== sectionId));
+  };
+
+  const updateSection = (sectionId: string, updates: Partial<ReportSection>) => {
+    setSections(prev => prev.map(s => 
+      s.id === sectionId ? { ...s, ...updates } : s
+    ));
+  };
+
+  const handleSave = () => {
+    if (!reportName.trim()) return;
+
+    const template: Partial<ReportTemplate> = {
+      id: `rpt-${Date.now()}`,
+      name: reportName,
+      description: reportDescription,
+      category: reportCategory as any,
+      type: reportType as any,
+      version: '1.0',
+      sections,
+      config: {
+        refreshFrequency: 'manual',
+        autoRefresh: false,
+        cacheEnabled: true,
+        cacheDuration: 60,
+        maxDataPoints: 1000,
+        dateRange: {
+          type: 'relative',
+          relative: { unit: 'days', value: 30, includeToday: true }
+        },
+        aggregationLevel: 'daily',
+        includeHistorical: false,
+        realTimeUpdates: false
       },
-    }));
-  }, [config.layout]);
-
-  // Handle widget configuration updates
-  const updateWidget = useCallback((widgetId: string, updates: Partial<ReportWidget>) => {
-    setConfig(prev => ({
-      ...prev,
       layout: {
-        ...prev.layout!,
-        widgets: prev.layout?.widgets.map(w => 
-          w.id === widgetId ? { ...w, ...updates } : w
-        ) || [],
+        orientation: 'portrait',
+        pageSize: 'A4',
+        columns: 2,
+        gridTemplate: {
+          rows: ['auto'],
+          columns: ['1fr', '1fr'],
+          areas: [],
+          gap: { row: 16, column: 16 }
+        },
+        responsiveBreakpoints: []
       },
-    }));
-  }, []);
-
-  // Handle grid layout changes
-  const handleLayoutChange = useCallback((layouts: Layout[]) => {
-    setConfig(prev => ({
-      ...prev,
-      layout: {
-        ...prev.layout!,
-        widgets: prev.layout?.widgets.map(widget => {
-          const layout = layouts.find(l => l.i === widget.id);
-          return layout ? {
-            ...widget,
-            position: { x: layout.x, y: layout.y, w: layout.w, h: layout.h },
-          } : widget;
-        }) || [],
+      dataSources: [],
+      filters: [],
+      parameters: [],
+      styling: {} as any,
+      permissions: {
+        view: [],
+        edit: [],
+        delete: [],
+        export: [],
+        schedule: [],
+        share: []
       },
-    }));
-  }, []);
-
-  // Handle drag end for adding widgets
-  const handleDragEnd = useCallback((result: DropResult) => {
-    if (!result.destination) return;
-
-    const { source, destination } = result;
-    
-    if (source.droppableId === 'widget-palette' && destination.droppableId === 'canvas') {
-      const widget = availableWidgets[source.index];
-      addWidget(widget);
-    }
-  }, [addWidget]);
-
-  // Convert widgets to grid layout format
-  const gridLayouts = config.layout?.widgets.map(widget => ({
-    i: widget.id,
-    x: widget.position.x,
-    y: widget.position.y,
-    w: widget.position.w,
-    h: widget.position.h,
-    minW: 2,
-    minH: 1,
-  })) || [];
-
-  // Render widget based on type
-  const renderWidget = (widget: ReportWidget) => {
-    const isSelected = selectedWidget === widget.id;
-    
-    const baseProps = {
-      widget,
-      isSelected,
-      onSelect: () => setSelectedWidget(widget.id),
-      onUpdate: (updates: Partial<ReportWidget>) => updateWidget(widget.id, updates),
-      onDelete: () => deleteWidget(widget.id),
-      onDuplicate: () => duplicateWidget(widget.id),
+      aiFeatures: {
+        narrativeGeneration: {
+          enabled: false,
+          sections: [],
+          style: 'paragraph',
+          length: 'medium',
+          language: 'en',
+          tone: 'formal',
+          includeInsights: false,
+          includeRecommendations: false
+        },
+        insightGeneration: {
+          enabled: false,
+          types: [],
+          confidence: 80,
+          priority: [],
+          categories: [],
+          maxInsights: 5
+        },
+        recommendationEngine: {
+          enabled: false,
+          types: [],
+          context: {
+            organizationProfile: {
+              industry: 'technology',
+              size: 'medium',
+              region: 'us',
+              riskProfile: 'medium',
+              maturityLevel: 3
+            },
+            userRole: 'analyst',
+            historicalData: false,
+            industryBenchmarks: false,
+            regulatoryRequirements: false
+          },
+          personalization: {
+            enabled: false,
+            userPreferences: false,
+            roleBasedFiltering: false,
+            historicalInteractions: false,
+            learningEnabled: false
+          },
+          maxRecommendations: 3
+        },
+        anomalyDetection: {
+          enabled: false,
+          algorithms: [],
+          sensitivity: 0.7,
+          seasonality: false,
+          trendFiltering: false,
+          minDataPoints: 30
+        },
+        predictiveAnalytics: {
+          enabled: false,
+          models: [],
+          horizon: 30,
+          confidence: 0.8,
+          scenarios: []
+        },
+        naturalLanguageQuery: {
+          enabled: false,
+          supportedLanguages: ['en'],
+          contextAware: false,
+          suggestionsEnabled: false,
+          maxTokens: 1000
+        }
+      },
+      createdBy: 'current-user',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      usageCount: 0,
+      isPublic: false,
+      isSystem: false,
+      tags: [],
+      organizationId: 'org-1'
     };
 
-    switch (widget.type) {
-      case 'chart':
-        return <ChartWidget key={widget.id} {...baseProps} />;
-      case 'table':
-        return <TableWidget key={widget.id} {...baseProps} />;
-      case 'kpi':
-        return <KPIWidget key={widget.id} {...baseProps} />;
-      case 'filter':
-        return <FilterWidget key={widget.id} {...baseProps} />;
-      case 'text':
-        return <TextWidget key={widget.id} {...baseProps} />;
-      default:
-        return <div key={widget.id}>Unknown widget type</div>;
-    }
+    onSave?.(template as ReportTemplate);
+  };
+
+  const handlePreview = () => {
+    if (!reportName.trim()) return;
+
+    const template: Partial<ReportTemplate> = {
+      name: reportName,
+      description: reportDescription,
+      sections
+    };
+
+    onPreview?.(template as ReportTemplate);
   };
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b bg-white">
-        <div className="flex items-center space-x-4">
-          <Input
-            value={config.name || ''}
-            onChange={(e) => setConfig(prev => ({ ...prev, name: e.target.value }))}
-            placeholder="Report Name"
-            className="text-lg font-semibold"
-          />
-          <Badge variant="outline">{config.type}</Badge>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-notion-text-primary">Report Builder</h2>
+          <p className="text-notion-text-secondary">
+            Create custom reports with drag-and-drop components
+          </p>
         </div>
         
         <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setPreviewMode(!previewMode)}
-          >
+          <Button variant="outline" onClick={handlePreview} disabled={!reportName.trim()}>
             <Eye className="w-4 h-4 mr-2" />
-            {previewMode ? 'Edit' : 'Preview'}
+            Preview
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onPreview(config as ReportConfig)}
-          >
-            <Grid className="w-4 h-4 mr-2" />
-            Full Preview
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowCode(!showCode)}
-          >
-            <List className="w-4 h-4 mr-2" />
-            {showCode ? 'Visual' : 'JSON'}
-          </Button>
-          <Select onValueChange={(format) => onExport(config as ReportConfig, format)}>
-            <SelectTrigger className="w-32">
-              <Download className="w-4 h-4 mr-2" />
-              <SelectValue placeholder="Export" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="pdf">PDF</SelectItem>
-              <SelectItem value="excel">Excel</SelectItem>
-              <SelectItem value="csv">CSV</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button onClick={() => onSave(config as ReportConfig)}>
+          <Button onClick={handleSave} disabled={!reportName.trim()}>
             <Save className="w-4 h-4 mr-2" />
-            Save
+            Save Report
           </Button>
         </div>
       </div>
 
-      <div className="flex-1 flex">
-        {!previewMode && (
-          <DragDropContext onDragEnd={handleDragEnd}>
-            {/* Widget Palette */}
-            <div className="w-64 border-r bg-gray-50 p-4">
-              <h3 className="font-semibold mb-4">Widget Palette</h3>
-              <Droppable droppableId="widget-palette">
-                {(provided) => (
-                  <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-2">
-                    {availableWidgets.map((widget, index) => (
-                      <Draggable key={widget.id} draggableId={widget.id} index={index}>
-                        {(provided, snapshot) => (
-                          <Card
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className={`cursor-grab hover:shadow-md transition-shadow ${
-                              snapshot.isDragging ? 'shadow-lg' : ''
-                            }`}
-                          >
-                            <CardContent className="p-3">
-                              <div className="flex items-center space-x-2 mb-1">
-                                {widget.icon}
-                                <span className="font-medium text-sm">{widget.name}</span>
-                              </div>
-                              <p className="text-xs text-gray-600">{widget.description}</p>
-                            </CardContent>
-                          </Card>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </div>
-          </DragDropContext>
-        )}
-
-        {/* Main Canvas */}
-        <div className="flex-1 flex">
-          <div className="flex-1 p-4">
-            {showCode ? (
-              <div className="h-full">
-                <textarea
-                  className="w-full h-full p-4 border rounded font-mono text-sm"
-                  value={JSON.stringify(config, null, 2)}
-                  onChange={(e) => {
-                    try {
-                      const parsed = JSON.parse(e.target.value);
-                      setConfig(parsed);
-                    } catch (error) {
-                      // Invalid JSON, don't update
-                    }
-                  }}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Configuration Panel */}
+        <div className="lg:col-span-1">
+          <Card className="border-notion-border bg-white dark:bg-notion-bg-secondary">
+            <CardHeader>
+              <CardTitle className="text-lg">Report Configuration</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="name">Report Name</Label>
+                <Input
+                  id="name"
+                  value={reportName}
+                  onChange={(e) => setReportName(e.target.value)}
+                  placeholder="Enter report name..."
                 />
               </div>
-            ) : (
-              <Droppable droppableId="canvas">
-                {(provided) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    className="h-full bg-white border rounded"
-                  >
-                    <ResponsiveGridLayout
-                      ref={gridRef}
-                      className="layout"
-                      layouts={{ lg: gridLayouts }}
-                      breakpoints={config.layout?.gridSettings.breakpoints}
-                      cols={{ lg: config.layout?.gridSettings.cols || 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
-                      rowHeight={config.layout?.gridSettings.rowHeight || 60}
-                      onLayoutChange={handleLayoutChange}
-                      isDraggable={!previewMode}
-                      isResizable={!previewMode}
-                      margin={config.layout?.gridSettings.margin || [10, 10]}
-                      containerPadding={config.layout?.gridSettings.containerPadding || [10, 10]}
-                    >
-                      {config.layout?.widgets.map(renderWidget)}
-                    </ResponsiveGridLayout>
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            )}
-          </div>
 
-          {/* Properties Panel */}
-          {!previewMode && selectedWidget && (
-            <div className="w-80 border-l bg-gray-50 p-4">
-              <WidgetPropertiesPanel
-                widget={config.layout?.widgets.find(w => w.id === selectedWidget)!}
-                onUpdate={(updates) => updateWidget(selectedWidget, updates)}
-                onClose={() => setSelectedWidget(null)}
-              />
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Widget Properties Panel Component
-interface WidgetPropertiesPanelProps {
-  widget: ReportWidget;
-  onUpdate: (updates: Partial<ReportWidget>) => void;
-  onClose: () => void;
-}
-
-function WidgetPropertiesPanel({ widget, onUpdate, onClose }: WidgetPropertiesPanelProps) {
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="font-semibold">Widget Properties</h3>
-        <Button variant="ghost" size="sm" onClick={onClose}>
-          ×
-        </Button>
-      </div>
-
-      <Tabs defaultValue="general" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="data">Data</TabsTrigger>
-          <TabsTrigger value="style">Style</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="general" className="space-y-4">
-          <div>
-            <Label htmlFor="title">Title</Label>
-            <Input
-              id="title"
-              value={widget.title}
-              onChange={(e) => onUpdate({ title: e.target.value })}
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="refresh">Refresh Interval (seconds)</Label>
-            <Input
-              id="refresh"
-              type="number"
-              value={widget.refreshInterval || ''}
-              onChange={(e) => onUpdate({ refreshInterval: Number(e.target.value) || undefined })}
-            />
-          </div>
-        </TabsContent>
-
-        <TabsContent value="data" className="space-y-4">
-          <div>
-            <Label htmlFor="dataSource">Data Source</Label>
-            <Select 
-              value={widget.dataSource.type} 
-              onValueChange={(value) => onUpdate({ 
-                dataSource: { ...widget.dataSource, type: value as any } 
-              })}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="query">Database Query</SelectItem>
-                <SelectItem value="api">External API</SelectItem>
-                <SelectItem value="static">Static Data</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <Label htmlFor="source">Source</Label>
-            <textarea
-              id="source"
-              className="w-full p-2 border rounded text-sm"
-              rows={4}
-              value={widget.dataSource.source}
-              onChange={(e) => onUpdate({
-                dataSource: { ...widget.dataSource, source: e.target.value }
-              })}
-              placeholder={
-                widget.dataSource.type === 'query' 
-                  ? 'SELECT * FROM risks WHERE status = "open"'
-                  : widget.dataSource.type === 'api'
-                  ? 'https://api.example.com/data'
-                  : '{"data": []}'
-              }
-            />
-          </div>
-        </TabsContent>
-
-        <TabsContent value="style" className="space-y-4">
-          {widget.type === 'chart' && (
-            <>
               <div>
-                <Label htmlFor="chartType">Chart Type</Label>
-                <Select 
-                  value={widget.visualization.chartType || 'bar'} 
-                  onValueChange={(value) => onUpdate({ 
-                    visualization: { ...widget.visualization, chartType: value as any } 
-                  })}
-                >
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  value={reportDescription}
+                  onChange={(e) => setReportDescription(e.target.value)}
+                  placeholder="Enter report description..."
+                  rows={3}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="category">Category</Label>
+                <Select value={reportCategory} onValueChange={(value) => setReportCategory(value as any)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="bar">Bar Chart</SelectItem>
-                    <SelectItem value="line">Line Chart</SelectItem>
-                    <SelectItem value="pie">Pie Chart</SelectItem>
-                    <SelectItem value="area">Area Chart</SelectItem>
-                    <SelectItem value="scatter">Scatter Plot</SelectItem>
+                    <SelectItem value="executive">Executive</SelectItem>
+                    <SelectItem value="operational">Operational</SelectItem>
+                    <SelectItem value="compliance">Compliance</SelectItem>
+                    <SelectItem value="risk_management">Risk Management</SelectItem>
+                    <SelectItem value="audit">Audit</SelectItem>
+                    <SelectItem value="performance">Performance</SelectItem>
+                    <SelectItem value="financial">Financial</SelectItem>
+                    <SelectItem value="custom">Custom</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="showLegend"
-                  checked={widget.visualization.showLegend || false}
-                  onChange={(e) => onUpdate({
-                    visualization: { ...widget.visualization, showLegend: e.target.checked }
-                  })}
-                />
-                <Label htmlFor="showLegend">Show Legend</Label>
+              <div>
+                <Label htmlFor="type">Report Type</Label>
+                <Select value={reportType} onValueChange={(value) => setReportType(value as any)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="dashboard">Dashboard</SelectItem>
+                    <SelectItem value="detailed_report">Detailed Report</SelectItem>
+                    <SelectItem value="summary_report">Summary Report</SelectItem>
+                    <SelectItem value="trend_analysis">Trend Analysis</SelectItem>
+                    <SelectItem value="compliance_report">Compliance Report</SelectItem>
+                    <SelectItem value="custom">Custom</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="showGrid"
-                  checked={widget.visualization.showGrid || false}
-                  onChange={(e) => onUpdate({
-                    visualization: { ...widget.visualization, showGrid: e.target.checked }
-                  })}
-                />
-                <Label htmlFor="showGrid">Show Grid</Label>
+              <div className="pt-4 border-t border-notion-border">
+                <Label className="text-sm font-medium">Add Components</Label>
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => addSection('chart')}
+                    className="text-xs"
+                  >
+                    Chart
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => addSection('table')}
+                    className="text-xs"
+                  >
+                    Table
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => addSection('kpi')}
+                    className="text-xs"
+                  >
+                    KPI
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => addSection('text')}
+                    className="text-xs"
+                  >
+                    Text
+                  </Button>
+                </div>
               </div>
-            </>
-          )}
-        </TabsContent>
-      </Tabs>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Canvas */}
+        <div className="lg:col-span-3">
+          <Card className="border-notion-border bg-white dark:bg-notion-bg-secondary min-h-96">
+            <CardHeader>
+              <CardTitle className="text-lg">Report Canvas</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {sections.length === 0 && (
+                <div className="text-center py-12 border-2 border-dashed border-notion-border rounded-lg">
+                  <FileText className="w-12 h-12 text-notion-text-tertiary mx-auto mb-4" />
+                  <p className="text-notion-text-secondary mb-4">
+                    No sections added yet. Start building your report by adding sections.
+                  </p>
+                  
+                  <Button
+                    variant="outline"
+                    className="w-full h-16 border-2 border-dashed border-notion-border"
+                    onClick={() => addSection('chart')}
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Your First Section
+                  </Button>
+                </div>
+              )}
+
+              {sections.length > 0 && (
+                <div className="space-y-4">
+                  {sections.map((section, index) => (
+                    <motion.div
+                      key={section.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="border border-notion-border rounded-lg p-4 bg-notion-bg-primary"
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-2">
+                          <div className="w-3 h-3 bg-notion-blue rounded-full" />
+                          <span className="font-medium text-notion-text-primary">
+                            {section.title}
+                          </span>
+                          <span className="text-xs text-notion-text-secondary px-2 py-1 bg-notion-bg-secondary rounded">
+                            {section.type}
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center space-x-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              // TODO: Open section configuration modal
+                            }}
+                          >
+                            <Settings className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeSection(section.id)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      <div className="h-32 bg-notion-bg-secondary rounded border-2 border-dashed border-notion-border flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="text-2xl mb-2">📊</div>
+                          <p className="text-sm text-notion-text-secondary">
+                            {section.type.charAt(0).toUpperCase() + section.type.slice(1)} Component
+                          </p>
+                          <p className="text-xs text-notion-text-tertiary">
+                            Configure data source and visualization
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                  
+                  <Button
+                    variant="outline"
+                    className="w-full h-16 border-2 border-dashed border-notion-border"
+                    onClick={() => addSection('chart')}
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Another Section
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 } 
