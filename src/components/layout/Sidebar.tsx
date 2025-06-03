@@ -95,12 +95,12 @@ export default function Sidebar({ isOpen, user }: SidebarProps) {
   const filteredNavigationItems = navigationItems;
 
   return (
-    <div className="flex h-full flex-col bg-card">
+    <div className="flex h-full flex-col bg-[#FAFAFA] border-r border-[#D8C3A5] font-inter">
       {/* Logo */}
-      <div className="flex h-16 items-center justify-center border-b border-border px-4">
-        <Shield className="h-8 w-8 text-primary" />
+      <div className="flex h-16 items-center justify-center border-b border-[#D8C3A5] px-4">
+        <Shield className="h-8 w-8 text-[#191919]" />
         {isOpen && (
-          <span className="ml-2 text-xl font-bold text-foreground">
+          <span className="ml-2 text-xl font-bold text-[#191919] font-inter">
             Riscura
           </span>
         )}
@@ -116,10 +116,10 @@ export default function Sidebar({ isOpen, user }: SidebarProps) {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground relative group",
+                "flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[#D8C3A5]/20 hover:text-[#191919] relative group font-inter",
                 isActive
-                  ? "bg-accent text-accent-foreground"
-                  : "text-muted-foreground",
+                  ? "bg-[#D8C3A5]/30 text-[#191919]"
+                  : "text-[#A8A8A8]",
                 !isOpen && "justify-center"
               )}
             >
@@ -128,12 +128,12 @@ export default function Sidebar({ isOpen, user }: SidebarProps) {
                 <span className="ml-3 truncate">{item.name}</span>
               )}
               {!isOpen && (
-                <div className="absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-sm rounded-md border shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
+                <div className="absolute left-full ml-2 px-2 py-1 bg-[#191919] text-[#FAFAFA] text-sm rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50 font-inter">
                   {item.name}
                 </div>
               )}
               {isActive && (
-                <div className="absolute right-0 top-0 h-full w-1 rounded-l-md bg-primary" />
+                <div className="absolute right-0 top-0 h-full w-1 rounded-l-md bg-[#191919]" />
               )}
             </Link>
           );
@@ -142,16 +142,16 @@ export default function Sidebar({ isOpen, user }: SidebarProps) {
 
       {/* User Info */}
       {isOpen && user && (
-        <div className="border-t border-border p-4">
+        <div className="border-t border-[#D8C3A5] p-4">
           <div className="flex items-center space-x-3">
-            <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-              <User className="h-4 w-4 text-primary" />
+            <div className="h-8 w-8 rounded-full bg-[#D8C3A5]/20 flex items-center justify-center">
+              <User className="h-4 w-4 text-[#191919]" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">
+              <p className="text-sm font-medium text-[#191919] truncate font-inter">
                 {user.firstName} {user.lastName}
               </p>
-              <p className="text-xs text-muted-foreground truncate">
+              <p className="text-xs text-[#A8A8A8] truncate font-inter">
                 {user.role.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
               </p>
             </div>
@@ -161,15 +161,15 @@ export default function Sidebar({ isOpen, user }: SidebarProps) {
       
       {/* Collapsed User Info */}
       {!isOpen && user && (
-        <div className="border-t border-border p-2 relative group">
+        <div className="border-t border-[#D8C3A5] p-2 relative group">
           <div className="flex justify-center">
-            <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-              <User className="h-4 w-4 text-primary" />
+            <div className="h-8 w-8 rounded-full bg-[#D8C3A5]/20 flex items-center justify-center">
+              <User className="h-4 w-4 text-[#191919]" />
             </div>
           </div>
-          <div className="absolute left-full ml-2 px-3 py-2 bg-popover text-popover-foreground text-sm rounded-md border shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
+          <div className="absolute left-full ml-2 px-3 py-2 bg-[#191919] text-[#FAFAFA] text-sm rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50 font-inter">
             <p className="font-medium">{user.firstName} {user.lastName}</p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-[#A8A8A8]">
               {user.role.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
             </p>
           </div>

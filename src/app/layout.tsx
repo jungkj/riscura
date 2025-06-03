@@ -10,6 +10,8 @@ import { RiskProvider } from '@/context/RiskContext';
 import { ControlProvider } from '@/context/ControlContext';
 import { QuestionnaireProvider } from '@/context/QuestionnaireContext';
 import { WorkflowProvider } from '@/context/WorkflowContext';
+import { cn } from '@/lib/utils';
+import { ClientProviders } from '@/components/ui/client-providers';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -44,13 +46,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+      <body 
+        className={cn(inter.className, "min-h-screen bg-background font-sans antialiased")}
+        suppressHydrationWarning
+      >
+        <ClientProviders>
           <AuthProvider>
             <AIProvider>
               <RiskProvider>
@@ -66,7 +66,7 @@ export default function RootLayout({
               </RiskProvider>
             </AIProvider>
           </AuthProvider>
-        </ThemeProvider>
+        </ClientProviders>
       </body>
     </html>
   );

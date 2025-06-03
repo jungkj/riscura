@@ -928,7 +928,7 @@ export class TrendAnalysisService {
     if (timeSeries.length < 3) return 0;
     
     // Calculate second derivative to measure acceleration
-    const derivatives = [];
+    const derivatives: number[] = [];
     for (let i = 1; i < timeSeries.length - 1; i++) {
       const prev = timeSeries[i - 1].value;
       const curr = timeSeries[i].value;

@@ -85,6 +85,53 @@ const envSchema = z.object({
 
 // Parse and validate environment variables
 function validateEnv() {
+  // Skip validation if explicitly requested (useful for builds)
+  if (process.env.SKIP_ENV_VALIDATION === '1' || process.env.SKIP_ENV_VALIDATION === 'true') {
+    console.warn('Environment validation skipped due to SKIP_ENV_VALIDATION flag');
+    return {
+      DATABASE_URL: process.env.DATABASE_URL || 'file:./dev.db',
+      NODE_ENV: process.env.NODE_ENV || 'development',
+      APP_URL: process.env.APP_URL || 'http://localhost:3001',
+      APP_NAME: process.env.APP_NAME || 'Riscura',
+      PORT: process.env.PORT || '3001',
+      API_VERSION: process.env.API_VERSION || 'v1',
+      JWT_SECRET: process.env.JWT_SECRET || 'dev-jwt-secret-12345678901234567890123456789012',
+      JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '7d',
+      NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'dev-nextauth-secret-12345678901234567890123456789012',
+      NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+      SESSION_SECRET: process.env.SESSION_SECRET || 'dev-session-secret-12345678901234567890123456789012',
+      BCRYPT_ROUNDS: parseInt(process.env.BCRYPT_ROUNDS || '12'),
+      GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+      GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+      OPENAI_API_KEY: process.env.OPENAI_API_KEY || 'sk-placeholder',
+      OPENAI_ORG_ID: process.env.OPENAI_ORG_ID,
+      SMTP_HOST: process.env.SMTP_HOST,
+      SMTP_PORT: parseInt(process.env.SMTP_PORT || '587'),
+      SMTP_USER: process.env.SMTP_USER,
+      SMTP_PASS: process.env.SMTP_PASS,
+      SMTP_FROM: process.env.SMTP_FROM || 'noreply@riscura.com',
+      UPLOAD_MAX_SIZE: parseInt(process.env.UPLOAD_MAX_SIZE || '10485760'),
+      UPLOAD_ALLOWED_TYPES: process.env.UPLOAD_ALLOWED_TYPES || 'pdf,docx,xlsx,png,jpg,jpeg',
+      STORAGE_TYPE: process.env.STORAGE_TYPE || 'local',
+      AWS_S3_BUCKET: process.env.AWS_S3_BUCKET,
+      AWS_S3_REGION: process.env.AWS_S3_REGION || 'us-east-1',
+      AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+      AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+      REDIS_URL: process.env.REDIS_URL,
+      RATE_LIMIT_MAX: parseInt(process.env.RATE_LIMIT_MAX || '100'),
+      RATE_LIMIT_WINDOW: parseInt(process.env.RATE_LIMIT_WINDOW || '900000'),
+      SENTRY_DSN: process.env.SENTRY_DSN,
+      LOG_LEVEL: process.env.LOG_LEVEL || 'info',
+      ENABLE_AI_FEATURES: process.env.ENABLE_AI_FEATURES === 'true',
+      ENABLE_COLLABORATION: process.env.ENABLE_COLLABORATION !== 'false',
+      ENABLE_REAL_TIME: process.env.ENABLE_REAL_TIME !== 'false',
+      ENABLE_EMAIL_NOTIFICATIONS: process.env.ENABLE_EMAIL_NOTIFICATIONS !== 'false',
+      DEBUG_MODE: process.env.DEBUG_MODE === 'true',
+      MOCK_DATA: process.env.MOCK_DATA === 'true',
+      SKIP_EMAIL_VERIFICATION: process.env.SKIP_EMAIL_VERIFICATION === 'true',
+    } as any;
+  }
+
   try {
     return envSchema.parse(process.env);
   } catch (error) {

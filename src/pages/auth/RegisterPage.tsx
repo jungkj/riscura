@@ -67,6 +67,8 @@ export default function RegisterPage() {
         email: values.email,
         firstName: values.firstName,
         lastName: values.lastName,
+        password: values.password,
+        acceptTerms: true,
       };
       await register(userData);
       toast({

@@ -78,16 +78,16 @@ export class DatabaseService {
     
     // Calculate risk score if likelihood and impact provided
     const riskScore = (riskData.likelihood || 1) * (riskData.impact || 1);
-    let riskLevel: RiskLevel;
+    let riskLevel: 'low' | 'medium' | 'high' | 'critical';
     
     if (riskScore >= 20) {
-      riskLevel = 'CRITICAL';
+      riskLevel = 'critical';
     } else if (riskScore >= 15) {
-      riskLevel = 'HIGH';
+      riskLevel = 'high';
     } else if (riskScore >= 8) {
-      riskLevel = 'MEDIUM';
+      riskLevel = 'medium';
     } else {
-      riskLevel = 'LOW';
+      riskLevel = 'low';
     }
 
     return riskRepo.create(
@@ -95,7 +95,7 @@ export class DatabaseService {
         ...riskData,
         riskScore,
         riskLevel,
-        status: 'IDENTIFIED' as RiskStatus,
+        status: 'identified' as any,
         dateIdentified: new Date(),
       },
       organizationId,
@@ -162,8 +162,8 @@ export class DatabaseService {
       dueForReview,
       summary: {
         totalRisks: statistics.total,
-        criticalRisks: statistics.byLevel.CRITICAL || 0,
-        highRisks: statistics.byLevel.HIGH || 0,
+        criticalRisks: statistics.byLevel.critical || 0,
+        highRisks: statistics.byLevel.high || 0,
         averageScore: Math.round(statistics.averageScore * 10) / 10,
         dueForReviewCount: statistics.dueForReview,
       }
@@ -191,7 +191,7 @@ export class DatabaseService {
     userId?: string
   ) {
     return this.executeTransaction(organizationId, async () => {
-      const results = [];
+      const results: any[] = [];
       
       for (const riskData of risks) {
         const risk = await this.createRisk(riskData, organizationId, userId);

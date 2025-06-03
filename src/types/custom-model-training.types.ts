@@ -1,27 +1,11 @@
 // Re-export all types from CustomModelTrainingService
 export type {
   TrainingConfiguration,
-  TrainingObjective,
-  DatasetConfiguration,
-  DataSource,
-  TrainingHyperparameters,
-  ValidationConfiguration,
   TrainingJob,
-  TrainingStatus,
-  TrainingProgress,
-  TrainingMetrics,
   KnowledgeBase,
-  KnowledgeDocument,
-  EmbeddingStore,
   ModelPerformance,
-  PerformanceMetrics,
-  DriftDetectionResult,
   ABTestExperiment,
-  ModelVariant,
-  ExperimentResults,
-  DeploymentTarget,
-  ModelDeployment,
-  DeploymentStatus
+  ModelDeployment
 } from '@/services/CustomModelTrainingService';
 
 // Import types for type guards

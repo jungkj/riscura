@@ -240,10 +240,34 @@ export class ReportScheduler {
       console.log(`Executing scheduled report: ${schedule.name}`);
 
       // Generate report data
-      const reportData = await reportingEngine.generateReportData(
+      const rawReportData = await reportingEngine.generateReportData(
         schedule.reportId,
         schedule.filters || {}
       );
+
+      // Transform data to match ReportData interface expected by exporters
+      const reportData = {
+        id: schedule.reportId,
+        title: schedule.name,
+        type: 'scheduled_report',
+        organizationName: 'Organization', // Could be fetched from organization data
+        widgets: rawReportData.widgets.map(widget => ({
+          id: widget.id,
+          title: `Widget ${widget.id}`,
+          type: 'table' as const,
+          data: widget.data,
+          config: {
+            columns: widget.data.length > 0 ? Object.keys(widget.data[0]) : [],
+          }
+        })),
+        summary: {
+          totalWidgets: rawReportData.summary.totalWidgets,
+          dataPoints: rawReportData.summary.dataPoints,
+          generatedAt: rawReportData.summary.generatedAt,
+        },
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
 
       // Generate exports in requested formats
       const exports = await Promise.all(
@@ -264,7 +288,6 @@ export class ReportScheduler {
               break;
             case 'excel':
               buffer = await reportExporter.exportToExcel(reportData, {
-                title: schedule.name,
                 compression: true,
               });
               mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
@@ -272,7 +295,7 @@ export class ReportScheduler {
               break;
             case 'csv':
               buffer = await reportExporter.exportToCSV(reportData, {
-                title: schedule.name,
+                compression: false,
               });
               mimeType = 'text/csv';
               extension = 'csv';

@@ -1,32 +1,15 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-
-const DashboardPage = dynamic(() => import('@/pages/dashboard/DashboardPage'), {
-  ssr: false,
-  loading: () => (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-    </div>
-  ),
-});
-
-const MainLayout = dynamic(() => import('@/layouts/MainLayout'), {
-  ssr: false,
-  loading: () => <div>Loading...</div>
-});
-
-const ProtectedRoute = dynamic(() => import('@/components/auth/ProtectedRoute').then(mod => ({ default: mod.ProtectedRoute })), {
-  ssr: false,
-  loading: () => <div>Loading...</div>
-});
+import DashboardLayout from '@/components/layout/DashboardLayout';
+import DashboardPage from '@/pages/dashboard/DashboardPage';
 
 export default function DashboardPageRoute() {
   return (
-    <ProtectedRoute>
-      <MainLayout>
-        <DashboardPage />
-      </MainLayout>
-    </ProtectedRoute>
+    <DashboardLayout
+      title="Executive Dashboard"
+      subtitle="Real-time risk intelligence and analytics"
+    >
+      <DashboardPage />
+    </DashboardLayout>
   );
 } 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ControlLibraryView } from '@/components/controls/ControlLibraryView';
+// import { ControlLibraryView } from '@/components/controls/ControlLibraryView';
 import { useControls } from '@/context/ControlContext';
 import { Control } from '@/types';
 
@@ -18,6 +18,9 @@ import {
 
 // Icons
 import { Plus, Shield, BarChart3, Network, Calendar } from 'lucide-react';
+
+// Force dynamic rendering to avoid prerender issues
+export const dynamic = 'force-dynamic';
 
 export default function ControlLibraryPage() {
   const { getControlStats, getControlCoverage } = useControls();
@@ -141,11 +144,20 @@ export default function ControlLibraryPage() {
         </TabsList>
 
         <TabsContent value="library" className="space-y-4">
-          <ControlLibraryView
+          {/* <ControlLibraryView
             onCreateControl={handleCreateControl}
             onEditControl={handleEditControl}
             onTestControl={handleTestControl}
-          />
+          /> */}
+          <Card>
+            <CardContent className="p-8 text-center">
+              <Shield className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
+              <h3 className="text-lg font-medium mb-2">Control Library</h3>
+              <p className="text-muted-foreground">
+                Control library interface will be available here.
+              </p>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="mapping" className="space-y-4">

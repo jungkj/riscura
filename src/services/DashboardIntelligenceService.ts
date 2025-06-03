@@ -156,8 +156,99 @@ export class DashboardIntelligenceService {
   constructor() {
     this.aiService = new AIService();
     this.anomalyService = anomalyDetectionAIService;
-    this.trendService = new TrendAnalysisService();
-    this.notificationService = new SmartNotificationService();
+    
+    // Create mock implementations for TrendAnalysisService dependencies
+    const mockAIAnalysisService = {
+      detectAnomalies: async () => []
+    };
+    
+    const mockDataRetrievalService = {
+      getRiskHistoricalData: async () => [],
+      getUserContext: async () => ({})
+    };
+    
+    const mockCacheService = {
+      set: async () => {},
+      get: async () => undefined
+    };
+    
+    const mockEventService = {
+      emit: async () => {}
+    };
+    
+    const mockStatisticsService = {
+      detectSeasonality: async () => ({ detected: false, period: '', amplitude: 0, confidence: 0 }),
+      linearRegression: async () => ({ slope: 0, intercept: 0, r2: 0 }),
+      calculateVolatility: async () => 0,
+      detectOutliers: async () => []
+    };
+    
+    const mockForecastingService = {
+      linearForecast: async () => [],
+      exponentialSmoothingForecast: async () => [],
+      arima: async () => []
+    };
+    
+    this.trendService = new TrendAnalysisService(
+      mockAIAnalysisService as any,
+      mockDataRetrievalService as any,
+      mockCacheService as any,
+      mockEventService as any,
+      mockStatisticsService as any,
+      mockForecastingService as any
+    );
+    
+    // Create mock implementations for SmartNotificationService dependencies
+    const mockAIInsightService = {
+      analyzeRiskForAlert: async () => ({ requiresAlert: false, id: '', severity: '' }),
+      analyzeControlForReminder: async () => ({ requiresReminder: false, id: '', type: '' }),
+      analyzeComplianceRequirement: async () => ({ status: 'compliant' }),
+      analyzeWorkflowEfficiency: async () => ({ hasImprovementOpportunity: false, improvementType: '', potentialTimeSavings: 0 }),
+      generateRiskInsight: async () => ({ insight: '' }),
+      generateControlInsight: async () => ({ insight: '' }),
+      generateComplianceInsight: async () => ({ insight: '' }),
+      generateWorkflowInsight: async () => ({ insight: '' }),
+      calculatePriority: async () => ({ priority: 'low' as any, factors: [], urgencyScore: 0, relevanceScore: 0, impactScore: 0, contextScore: 0, personalizedScore: 0 }),
+      generatePersonalizedContent: async () => ({ title: '', summary: '', details: '', tone: 'informative' as any }),
+      generateActionItems: async () => [],
+      evaluateCondition: async () => false
+    };
+    
+    const mockUserContextService = {
+      getUserContext: async () => ({}),
+      getUsersForEntity: async () => [],
+      getUserPreferences: async () => ({}),
+      getWorkingHours: async () => ({}),
+      getCurrentActivity: async () => '',
+      getRelevantEntities: async () => [],
+      getHistoricalContext: async () => ({}),
+      getSuppressionRules: async () => [],
+      getDeliveryChannels: async () => []
+    };
+    
+    const mockTemplateService = {
+      getTemplate: async () => ({ id: '', type: '', channel: 'email' as any, template: '', variables: [], tone: 'professional' as any, language: 'en' })
+    };
+    
+    const mockDeliveryService = {
+      deliver: async () => ({ notificationId: '', channel: 'email' as any, status: 'sent' as any, timestamp: new Date() }),
+      escalate: async () => {}
+    };
+    
+    const mockAnalyticsService = {
+      getNotificationAnalytics: async () => [],
+      recordDeliveryMetrics: async () => {}
+    };
+    
+    this.notificationService = new SmartNotificationService(
+      mockAIInsightService as any,
+      mockUserContextService as any,
+      mockTemplateService as any,
+      mockDeliveryService as any,
+      mockAnalyticsService as any,
+      mockCacheService as any,
+      mockEventService as any
+    );
   }
 
   /**
@@ -256,11 +347,7 @@ export class DashboardIntelligenceService {
     `;
     
     try {
-      const response = await this.aiService.generateResponse(prompt, {
-        systemPrompt: 'You are an expert risk management consultant providing strategic recommendations.',
-        maxTokens: 1500,
-        temperature: 0.7
-      });
+      const response = await this.aiService.sendMessage(prompt, 'risk_analyzer');
       
       const recommendations = this.parseRecommendations(response.content);
       recommendations.forEach(rec => this.recommendations.set(rec.id, rec));
@@ -289,11 +376,7 @@ export class DashboardIntelligenceService {
     `;
     
     try {
-      const response = await this.aiService.generateResponse(contextPrompt, {
-        systemPrompt: 'You are an intelligent dashboard assistant helping users understand and interact with their risk management data.',
-        maxTokens: 800,
-        temperature: 0.6
-      });
+      const response = await this.aiService.sendMessage(contextPrompt, 'general_assistant');
       
       return {
         id: generateId('assistance'),

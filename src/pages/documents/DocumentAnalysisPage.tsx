@@ -236,7 +236,22 @@ export default function DocumentAnalysisPage() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <DocumentUpload onFilesUploaded={handleFilesUploaded} />
+            <DocumentUpload 
+              onUpload={async (formData: FormData) => {
+                // Handle the upload - this would typically send to an API
+                console.log('Uploading files:', formData);
+                // For now, just simulate the file upload completion
+                const files = Array.from(formData.getAll('files') as File[]).map(file => ({
+                  id: Math.random().toString(36).substring(2),
+                  name: file.name,
+                  size: file.size,
+                  type: file.type
+                }));
+                handleFilesUploaded(files);
+              }}
+              organizationId="demo-org"
+              userId="demo-user"
+            />
           </motion.div>
         </TabsContent>
 
