@@ -408,13 +408,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     initializeAuth();
   }, []);
 
-  // Auto-refresh token before expiration
+  // Auto-refresh token before expiration (reduced frequency)
   useEffect(() => {
     if (!state.isAuthenticated || !state.token) {
       return;
     }
 
-    // Set up token refresh interval (13 minutes - before 15 min expiration)
+    // Set up token refresh interval (25 minutes - less frequent)
     const refreshInterval = setInterval(async () => {
       try {
         const result = await authService.refreshToken();
@@ -426,9 +426,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       } catch (error) {
         console.error('Token refresh error:', error);
-        dispatch({ type: 'AUTH_LOGOUT' });
+        // Don't logout on refresh error, just log it
       }
-    }, 13 * 60 * 1000); // 13 minutes
+    }, 25 * 60 * 1000); // 25 minutes
 
     return () => clearInterval(refreshInterval);
   }, [state.isAuthenticated, state.token]);
