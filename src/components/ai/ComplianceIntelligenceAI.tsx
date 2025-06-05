@@ -52,7 +52,7 @@ const FrameworkSelector: React.FC<{
   const frameworkInfo = {
     sox: { name: 'SOX', icon: <Shield className="h-5 w-5" />, color: 'text-blue-600', description: 'Sarbanes-Oxley Act' },
     gdpr: { name: 'GDPR', icon: <Shield className="h-5 w-5" />, color: 'text-green-600', description: 'General Data Protection Regulation' },
-    hipaa: { name: 'HIPAA', icon: <Shield className="h-5 w-5" />, color: 'text-purple-600', description: 'Health Insurance Portability Act' },
+    hipaa: { name: 'HIPAA', icon: <Shield className="h-5 w-5" />, color: 'text-[#191919]', description: 'Health Insurance Portability Act' },
     iso27001: { name: 'ISO 27001', icon: <Target className="h-5 w-5" />, color: 'text-orange-600', description: 'Information Security Management' }
   };
 
@@ -80,7 +80,7 @@ const FrameworkSelector: React.FC<{
             >
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg bg-gray-50 ${info?.color || 'text-gray-600'}`}>
+                  <div className={`p-2 rounded-lg bg-secondary/10 ${info?.color || 'text-muted-foreground'}`}>
                     {info?.icon || <Shield className="h-5 w-5" />}
                   </div>
                   <div>
@@ -231,7 +231,7 @@ const AssessmentOverview: React.FC<{
           <div className="space-y-3">
             {assessment.recommendations.slice(0, 3).map((rec, index) => (
               <div key={rec.id} className="flex items-start gap-3 p-3 border rounded-lg">
-                <div className="p-1 rounded-full bg-blue-50">
+                <div className="p-2 rounded-full bg-secondary/10">
                   <Brain className="h-4 w-4 text-blue-600" />
                 </div>
                 <div className="flex-1">
@@ -273,7 +273,7 @@ const GapAnalysisView: React.FC<{
       case 'high': return 'bg-orange-500';
       case 'medium': return 'bg-yellow-500';
       case 'low': return 'bg-green-500';
-      default: return 'bg-gray-500';
+      default: return 'bg-muted';
     }
   };
 
@@ -317,7 +317,7 @@ const GapAnalysisView: React.FC<{
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
-                      <div className="p-2 bg-gray-50 rounded-lg">
+                      <div className="p-2 bg-secondary/10 rounded-lg">
                         {getGapTypeIcon(gap.gapType)}
                       </div>
                       <div className="flex-1">
@@ -406,7 +406,7 @@ const RegulatoryChangesView: React.FC<{
           <CardHeader>
             <div className="flex items-start justify-between">
               <div className="flex items-start gap-3">
-                <div className="p-2 bg-gray-50 rounded-lg">
+                <div className="p-2 bg-secondary/10 rounded-lg">
                   {getTypeIcon(change.type)}
                 </div>
                 <div>

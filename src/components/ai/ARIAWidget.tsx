@@ -5,7 +5,8 @@ import {
   X, 
   Sparkles,
   AlertCircle,
-  CheckCircle2
+  CheckCircle2,
+  MessageSquare
 } from 'lucide-react';
 
 import { ARIAChat } from './ARIAChat';
@@ -301,9 +302,9 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
                 size="lg"
                 className={cn(
                   "h-14 w-14 rounded-full shadow-lg transition-all duration-300",
-                  "bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700",
-                  "border-2 border-white dark:border-gray-800",
-                  isOpen && "bg-gray-500 hover:bg-gray-600"
+                  "bg-[#D8C3A5] hover:bg-[#C4AE96] border-2 border-[#191919] dark:border-[#FAFAFA]",
+                  "text-[#191919] hover:text-[#000000]",
+                  isOpen && "bg-[#191919] hover:bg-[#2A2A2A] text-[#FAFAFA] border-[#D8C3A5]"
                 )}
               >
                 <AnimatePresence mode="wait">
@@ -324,17 +325,18 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
                       animate={{ rotate: 0, opacity: 1 }}
                       exit={{ rotate: 90, opacity: 0 }}
                       transition={{ duration: 0.2 }}
+                      className="flex items-center justify-center"
                     >
-                      <Bot className="h-6 w-6" />
+                      <MessageSquare className="h-6 w-6" />
                     </motion.div>
                   )}
                 </AnimatePresence>
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="left">
+            <TooltipContent side="left" className="bg-[#191919] text-[#FAFAFA] border-[#D8C3A5]">
               <div className="flex flex-col items-center">
                 <span>{isOpen ? 'Close ARIA' : 'Open ARIA'}</span>
-                <span className="text-xs text-muted-foreground">Ctrl+K</span>
+                <span className="text-xs text-[#D8C3A5]">Ctrl+K</span>
               </div>
             </TooltipContent>
           </Tooltip>
@@ -349,8 +351,7 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
                 className="absolute -top-1 -right-1"
               >
                 <Badge 
-                  variant="destructive" 
-                  className="h-6 w-6 rounded-full p-0 flex items-center justify-center text-xs animate-pulse"
+                  className="h-6 w-6 rounded-full p-0 flex items-center justify-center text-xs animate-pulse bg-[#191919] text-[#FAFAFA] border-[#D8C3A5]"
                 >
                   {state.messages.filter(m => m.role === 'assistant').length}
                 </Badge>
@@ -366,8 +367,8 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
                 exit={{ scale: 0 }}
                 className="absolute -top-2 -left-2"
               >
-                <div className="h-4 w-4 bg-amber-500 rounded-full animate-ping" />
-                <div className="absolute inset-0 h-4 w-4 bg-amber-500 rounded-full" />
+                <div className="h-4 w-4 bg-[#D8C3A5] rounded-full animate-ping" />
+                <div className="absolute inset-0 h-4 w-4 bg-[#D8C3A5] rounded-full" />
               </motion.div>
             )}
           </AnimatePresence>
@@ -377,12 +378,12 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="absolute inset-0 rounded-full border-2 border-white dark:border-gray-800"
+              className="absolute inset-0 rounded-full border-2 border-[#191919] dark:border-[#FAFAFA]"
             >
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="w-full h-full rounded-full border-t-2 border-blue-400"
+                className="w-full h-full rounded-full border-t-2 border-[#D8C3A5]"
               />
             </motion.div>
           )}
@@ -395,7 +396,7 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
           className="absolute bottom-0 right-0 transform translate-x-1 translate-y-1"
         >
           <div className={cn(
-            "h-3 w-3 rounded-full border-2 border-white dark:border-gray-800",
+            "h-3 w-3 rounded-full border-2 border-[#FAFAFA] dark:border-[#191919]",
             state.isConnected ? "bg-green-500" : "bg-red-500"
           )} />
         </motion.div>

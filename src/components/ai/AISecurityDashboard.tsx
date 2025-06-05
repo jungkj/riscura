@@ -320,9 +320,9 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Total Audit Logs</p>
-                  <p className="text-2xl font-bold text-purple-600">{metrics.totalAuditLogs.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-[#191919]">{metrics.totalAuditLogs.toLocaleString()}</p>
                 </div>
-                <FileText className="h-8 w-8 text-purple-600" />
+                <FileText className="h-8 w-8 text-[#191919]" />
               </div>
               <div className="text-xs text-gray-500 mt-1">
                 Last 7 days

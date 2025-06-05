@@ -1,15 +1,12 @@
 'use client';
 
-import DashboardLayout from '@/components/layout/DashboardLayout';
 import DashboardPage from '@/pages/dashboard/DashboardPage';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 
 export default function DashboardPageRoute() {
   return (
-    <DashboardLayout
-      title="Executive Dashboard"
-      subtitle="Real-time risk intelligence and analytics"
-    >
+    <ProtectedRoute>
       <DashboardPage />
-    </DashboardLayout>
+    </ProtectedRoute>
   );
 } 

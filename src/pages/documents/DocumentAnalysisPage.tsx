@@ -115,7 +115,7 @@ export default function DocumentAnalysisPage() {
       case 'down':
         return <TrendingUp className="h-4 w-4 text-green-500 rotate-180" />;
       case 'stable':
-        return <div className="h-4 w-4 bg-gray-400 rounded-full" />;
+        return <div className="h-4 w-4 bg-muted rounded-full" />;
     }
   };
 
@@ -182,7 +182,7 @@ export default function DocumentAnalysisPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-2">
-              <Brain className="h-5 w-5 text-purple-600" />
+              <Brain className="h-5 w-5 text-[#191919]" />
               <div>
                 <p className="text-2xl font-bold">{analysisStats.analyzedDocuments}</p>
                 <p className="text-sm text-muted-foreground">Analyzed</p>
@@ -364,11 +364,11 @@ export default function DocumentAnalysisPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                    <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
+                  <div className="p-4 bg-[#D8C3A5]/20 dark:bg-[#D8C3A5]/10 rounded-lg border border-[#D8C3A5] dark:border-[#D8C3A5]">
+                    <h4 className="font-medium text-[#191919] dark:text-[#191919] mb-2">
                       📊 Pattern Recognition
                     </h4>
-                    <p className="text-sm text-blue-800 dark:text-blue-200">
+                    <p className="text-sm text-[#191919] dark:text-[#191919]">
                       AI has identified recurring data privacy concerns across 75% of uploaded policy documents. 
                       Consider implementing standardized privacy protection templates.
                     </p>
@@ -394,11 +394,11 @@ export default function DocumentAnalysisPage() {
                     </p>
                   </div>
                   
-                  <div className="p-4 bg-purple-50 dark:bg-purple-950/20 rounded-lg border border-purple-200 dark:border-purple-800">
-                    <h4 className="font-medium text-purple-900 dark:text-purple-100 mb-2">
+                  <div className="p-4 bg-[#D8C3A5]/20 dark:bg-[#D8C3A5]/10 rounded-lg border border-[#D8C3A5] dark:border-[#D8C3A5]">
+                    <h4 className="font-medium text-[#191919] dark:text-[#191919] mb-2">
                       🎯 Recommendation
                     </h4>
-                    <p className="text-sm text-purple-800 dark:text-purple-200">
+                    <p className="text-sm text-[#191919] dark:text-[#191919]">
                       Based on analysis patterns, consider scheduling quarterly reviews for high-risk documents 
                       and implementing automated monitoring for compliance-related content.
                     </p>

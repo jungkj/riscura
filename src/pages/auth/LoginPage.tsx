@@ -98,13 +98,13 @@ export default function LoginPage() {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md relative z-10"
         >
-          <HoverCard className="backdrop-blur-sm bg-white/90 dark:bg-gray-900/90 border-white/20">
+          <HoverCard className="backdrop-blur-sm bg-card/90 dark:bg-card/90 border-border/20">
             <CardHeader className="space-y-1 text-center">
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                className="mx-auto mb-4 w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center"
+                className="mx-auto mb-4 w-16 h-16 bg-gradient-to-r from-[#191919] to-[#191919] rounded-full flex items-center justify-center"
               >
                 <Shield className="w-8 h-8 text-white" />
               </motion.div>
@@ -188,7 +188,7 @@ export default function LoginPage() {
                   >
                     <Button 
                       type="submit" 
-                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-200" 
+                      className="w-full bg-gradient-to-r from-[#191919] to-[#191919] hover:from-[#2a2a2a] hover:to-[#2a2a2a] transition-all duration-200" 
                       disabled={isLoading}
                     >
                       {isLoading ? (
@@ -248,7 +248,7 @@ export default function LoginPage() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => fillDemoCredentials(cred.email, cred.password)}
-                    className="flex justify-between items-center p-2 rounded-md bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-xs group"
+                    className="flex justify-between items-center p-2 rounded-md bg-secondary/10 dark:bg-secondary/10 hover:bg-secondary/20 dark:hover:bg-secondary/20 transition-colors text-xs group"
                   >
                     <span className="font-medium text-gray-700 dark:text-gray-300">
                       {cred.role}

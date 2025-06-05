@@ -268,7 +268,7 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
       case 'high': return 'text-orange-600 bg-orange-50';
       case 'medium': return 'text-yellow-600 bg-yellow-50';
       case 'low': return 'text-green-600 bg-green-50';
-      default: return 'text-gray-600 bg-gray-50';
+      default: return 'text-muted-foreground bg-secondary/10';
     }
   };
 
@@ -298,28 +298,28 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Header */}
-      <Card>
+      <Card className="bg-white border border-gray-100 shadow-sm">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-50 rounded-lg">
-                <Brain className="h-6 w-6 text-blue-600" />
+              <div className="p-3 rounded-xl bg-gradient-to-br from-[#191919] to-[#191919] shadow-lg shadow-[#D8C3A5]/50">
+                <Brain className="h-6 w-6 text-white" />
               </div>
               <div>
-                <CardTitle>Proactive Intelligence</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-xl font-bold text-gray-900 font-inter">Proactive Intelligence</CardTitle>
+                <CardDescription className="text-gray-600 font-inter">
                   AI-powered background monitoring, insights, and predictions
                 </CardDescription>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Label htmlFor="monitoring-toggle">Background Monitoring</Label>
+            <div className="flex items-center gap-3">
+              <Label htmlFor="monitoring-toggle" className="text-sm font-medium text-gray-700">Background Monitoring</Label>
               <Switch
                 id="monitoring-toggle"
                 checked={isMonitoringActive}
                 onCheckedChange={handleToggleMonitoring}
               />
-              <Badge variant={isMonitoringActive ? "default" : "secondary"}>
+              <Badge variant={isMonitoringActive ? "default" : "secondary"} className={isMonitoringActive ? "bg-green-100 text-green-700 border-0" : "bg-secondary/20 text-muted-foreground border-0"}>
                 {isMonitoringActive ? "Active" : "Inactive"}
               </Badge>
             </div>
@@ -328,79 +328,85 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
       </Card>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-          <TabsTrigger value="insights">AI Insights</TabsTrigger>
-          <TabsTrigger value="predictions">Predictions</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
-          <TabsTrigger value="monitoring">Monitoring</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-5 bg-white border border-gray-100 p-1 shadow-sm rounded-xl">
+          <TabsTrigger value="dashboard" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg">Dashboard</TabsTrigger>
+          <TabsTrigger value="insights" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg">AI Insights</TabsTrigger>
+          <TabsTrigger value="predictions" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg">Predictions</TabsTrigger>
+          <TabsTrigger value="notifications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg">Notifications</TabsTrigger>
+          <TabsTrigger value="monitoring" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg">Monitoring</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard">
           <div className="space-y-6">
             {/* Key Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <Card>
+              <Card className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
                 <CardHeader className="pb-2">
-                  <CardDescription>Total Insights</CardDescription>
+                  <CardDescription className="text-gray-600 font-inter">Total Insights</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{insightMetrics.totalInsights}</div>
-                  <p className="text-sm text-muted-foreground">
+                  <div className="text-2xl font-bold text-gray-900">{insightMetrics.totalInsights}</div>
+                  <p className="text-sm text-gray-500">
                     {insightMetrics.criticalInsights} critical
                   </p>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
                 <CardHeader className="pb-2">
-                  <CardDescription>Actionable Insights</CardDescription>
+                  <CardDescription className="text-gray-600 font-inter">Actionable Insights</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{insightMetrics.actionableInsights}</div>
-                  <Progress 
-                    value={insightMetrics.totalInsights > 0 ? 
-                      (insightMetrics.actionableInsights / insightMetrics.totalInsights) * 100 : 0} 
-                    className="mt-2" 
-                  />
+                  <div className="text-2xl font-bold text-gray-900">{insightMetrics.actionableInsights}</div>
+                  <div className="relative h-2 bg-secondary/20 rounded-full overflow-hidden mt-2">
+                    <div 
+                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#191919] to-[#191919] rounded-full"
+                      style={{ width: `${insightMetrics.totalInsights > 0 ? (insightMetrics.actionableInsights / insightMetrics.totalInsights) * 100 : 0}%` }}
+                    />
+                  </div>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
                 <CardHeader className="pb-2">
-                  <CardDescription>Avg Confidence</CardDescription>
+                  <CardDescription className="text-gray-600 font-inter">Avg Confidence</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">
+                  <div className="text-2xl font-bold text-gray-900">
                     {(insightMetrics.averageConfidence * 100).toFixed(0)}%
                   </div>
-                  <Progress value={insightMetrics.averageConfidence * 100} className="mt-2" />
+                  <div className="relative h-2 bg-secondary/20 rounded-full overflow-hidden mt-2">
+                    <div 
+                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#191919] to-[#191919] rounded-full"
+                      style={{ width: `${insightMetrics.averageConfidence * 100}%` }}
+                    />
+                  </div>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
                 <CardHeader className="pb-2">
-                  <CardDescription>Predictions</CardDescription>
+                  <CardDescription className="text-gray-600 font-inter">Predictions</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{predictions.length}</div>
-                  <p className="text-sm text-muted-foreground">Active forecasts</p>
+                  <div className="text-2xl font-bold text-gray-900">{predictions.length}</div>
+                  <p className="text-sm text-gray-500">Active forecasts</p>
                 </CardContent>
               </Card>
             </div>
 
             {/* Quick Actions */}
-            <Card>
+            <Card className="bg-white border border-gray-100 shadow-sm">
               <CardHeader>
-                <CardTitle>AI Actions</CardTitle>
-                <CardDescription>Generate insights and perform analysis</CardDescription>
+                <CardTitle className="text-lg font-bold text-gray-900 font-inter">AI Actions</CardTitle>
+                <CardDescription className="text-gray-600 font-inter">Generate insights and perform analysis</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="flex gap-2">
+                <div className="flex gap-3">
                   <Button 
                     onClick={handleGenerateInsights}
                     disabled={isGeneratingInsights}
-                    className="gap-2"
+                    className="gap-2 bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] border-0 shadow-md hover:shadow-lg transition-all duration-300 font-inter font-medium"
                   >
                     {isGeneratingInsights ? (
                       <>
@@ -414,11 +420,11 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
                       </>
                     )}
                   </Button>
-                  <Button variant="outline" onClick={handlePredictiveModeling} className="gap-2">
+                  <Button variant="outline" onClick={handlePredictiveModeling} className="gap-2 border border-gray-200 text-gray-700 hover:text-[#191919] hover:bg-[#D8C3A5]/20 hover:border-[#191919] transition-all duration-300 font-inter font-medium">
                     <TrendingUp className="h-4 w-4" />
                     Predictive Modeling
                   </Button>
-                  <Button variant="outline" onClick={handleGenerateNotifications} className="gap-2">
+                  <Button variant="outline" onClick={handleGenerateNotifications} className="gap-2 border border-gray-200 text-gray-700 hover:text-[#191919] hover:bg-[#D8C3A5]/20 hover:border-[#191919] transition-all duration-300 font-inter font-medium">
                     <Bell className="h-4 w-4" />
                     Smart Notifications
                   </Button>
@@ -427,38 +433,40 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
             </Card>
 
             {/* System Status */}
-            <Card>
+            <Card className="bg-white border border-gray-100 shadow-sm">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Activity className="h-5 w-5" />
+                <CardTitle className="flex items-center gap-2 text-lg font-bold text-gray-900 font-inter">
+                  <Activity className="h-5 w-5 text-[#191919]" />
                   System Status
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Queue Size</span>
-                      <span>{systemStatus.queueSize}</span>
+                  <div className="space-y-3">
+                    <div className="flex justify-between text-sm p-2 bg-secondary/10 rounded-lg">
+                      <span className="text-gray-600">Queue Size</span>
+                      <span className="font-medium text-gray-900">{systemStatus.queueSize}</span>
                     </div>
-                    <div className="flex justify-between text-sm">
-                      <span>Active Tasks</span>
-                      <span>{systemStatus.activeTasksCount}</span>
+                    <div className="flex justify-between text-sm p-2 bg-secondary/10 rounded-lg">
+                      <span className="text-gray-600">Active Tasks</span>
+                      <span className="font-medium text-gray-900">{systemStatus.activeTasksCount}</span>
                     </div>
-                    <div className="flex justify-between text-sm">
-                      <span>Completed Tasks</span>
-                      <span>{systemStatus.completedTasksCount}</span>
+                    <div className="flex justify-between text-sm p-2 bg-secondary/10 rounded-lg">
+                      <span className="text-gray-600">Completed Tasks</span>
+                      <span className="font-medium text-gray-900">{systemStatus.completedTasksCount}</span>
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm">Processing Status</span>
-                      <Badge variant={systemStatus.isProcessing ? "default" : "secondary"}>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-2 bg-secondary/10 rounded-lg">
+                      <span className="text-sm text-gray-600">Processing Status</span>
+                      <Badge variant={systemStatus.isProcessing ? "default" : "secondary"} className={systemStatus.isProcessing ? "bg-[#D8C3A5] text-[#191919] border-0" : "bg-secondary/20 text-muted-foreground border-0"}>
                         {systemStatus.isProcessing ? "Processing" : "Idle"}
                       </Badge>
                     </div>
                     {systemStatus.isProcessing && (
-                      <Progress value={75} className="w-full" />
+                      <div className="relative h-2 bg-secondary/20 rounded-full overflow-hidden">
+                        <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#191919] to-[#191919] rounded-full animate-pulse" style={{ width: '75%' }} />
+                      </div>
                     )}
                   </div>
                 </div>
@@ -466,11 +474,11 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
             </Card>
 
             {/* Recent Insights Preview */}
-            <Card>
+            <Card className="bg-white border border-gray-100 shadow-sm">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle>Recent AI Insights</CardTitle>
-                  <Button variant="outline" size="sm" onClick={() => setActiveTab('insights')}>
+                  <CardTitle className="text-lg font-bold text-gray-900 font-inter">Recent AI Insights</CardTitle>
+                  <Button variant="outline" size="sm" onClick={() => setActiveTab('insights')} className="border border-gray-200 text-gray-700 hover:text-[#191919] hover:bg-[#D8C3A5]/20 hover:border-[#191919] font-inter font-medium">
                     View All
                   </Button>
                 </div>
@@ -478,24 +486,26 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
               <CardContent>
                 <div className="space-y-3">
                   {insights.slice(0, 3).map(insight => (
-                    <div key={insight.id} className="flex items-start gap-3 p-3 border rounded-lg">
-                      <div className="p-1 rounded-full bg-blue-50">
-                        {getCategoryIcon(insight.category)}
+                    <div key={insight.id} className="flex items-start gap-3 p-3 border border-gray-100 rounded-lg hover:bg-[#D8C3A5]/20 hover:border-[#191919] transition-all duration-200">
+                      <div className="p-2 bg-secondary/10 rounded-lg">
+                        <div className="text-[#191919]">
+                          {getCategoryIcon(insight.category)}
+                        </div>
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-medium text-sm">{insight.title}</h4>
-                        <p className="text-xs text-muted-foreground mt-1">{insight.description}</p>
+                        <h4 className="font-medium text-sm text-gray-900">{insight.title}</h4>
+                        <p className="text-xs text-gray-600 mt-1">{insight.description}</p>
                         <div className="flex items-center gap-2 mt-2">
                           <Badge variant="outline" className={`text-xs ${getPriorityColor(insight.priority)}`}>
                             {insight.priority}
                           </Badge>
-                          <span className="text-xs text-muted-foreground">
+                          <span className="text-xs text-gray-500">
                             {(insight.confidence * 100).toFixed(0)}% confidence
                           </span>
                         </div>
                       </div>
                       {insight.actionable && (
-                        <Button size="sm" variant="outline">
+                        <Button size="sm" variant="outline" className="text-[#191919] hover:text-[#191919] hover:bg-[#D8C3A5]/20 border-[#D8C3A5]">
                           Act
                         </Button>
                       )}
@@ -521,7 +531,7 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
                   <div key={insight.id} className="p-4 border rounded-lg">
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-3">
-                        <div className="p-2 bg-gray-50 rounded-lg">
+                        <div className="p-2 bg-secondary/10 rounded-lg">
                           {getCategoryIcon(insight.category)}
                         </div>
                         <div className="flex-1">

@@ -609,7 +609,7 @@ export default function ReportingPage() {
                     </TableCell>
                     <TableCell>
                       <div className="flex -space-x-2">
-                        <div className="w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center text-[10px] text-white">MG</div>
+                        <div className="w-6 h-6 rounded-full bg-[#191919] flex items-center justify-center text-[10px] text-white">MG</div>
                         <div className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center text-[10px] text-white">DL</div>
                         <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-[10px] text-white">JS</div>
                       </div>

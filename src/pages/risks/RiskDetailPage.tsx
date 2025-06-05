@@ -116,7 +116,7 @@ export default function RiskDetailPage({ riskId }: RiskDetailPageProps) {
       case 'mitigated':
         return <Badge className="bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300">Mitigated</Badge>;
       case 'closed':
-        return <Badge className="bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">Closed</Badge>;
+        return <Badge className="bg-secondary/20 text-muted-foreground border-border">Closed</Badge>;
       default:
         return <Badge>{status}</Badge>;
     }

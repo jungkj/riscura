@@ -19,7 +19,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import {
   Edit, Eye, Copy, Share, Archive, Trash2, MoreVertical, 
   Play, Pause, Users, Clock, Target, BarChart3, Brain,
-  Shield, CheckCircle, AlertTriangle, Calendar, FileText
+  Shield, CheckCircle, AlertTriangle, Calendar, FileText,
+  Grid3X3, List, TrendingUp
 } from 'lucide-react';
 
 import type { Questionnaire } from '@/types/questionnaire.types';
@@ -30,6 +31,8 @@ interface QuestionnaireListProps {
   onDuplicate: (questionnaire: Questionnaire) => void;
   onDelete: (id: string) => void;
   onPublish: (id: string) => void;
+  viewMode?: 'grid' | 'list';
+  onViewModeChange?: (mode: 'grid' | 'list') => void;
 }
 
 export function QuestionnaireList({
@@ -37,19 +40,25 @@ export function QuestionnaireList({
   onEdit,
   onDuplicate,
   onDelete,
-  onPublish
+  onPublish,
+  viewMode = 'grid',
+  onViewModeChange
 }: QuestionnaireListProps) {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [view, setView] = useState<'grid' | 'list'>('grid');
+  const [internalView, setInternalView] = useState<'grid' | 'list'>(viewMode);
+
+  // Use internal state if no external control provided
+  const currentView = onViewModeChange ? viewMode : internalView;
+  const setView = onViewModeChange || setInternalView;
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800 border-green-200';
-      case 'published': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'draft': return 'bg-gray-100 text-gray-800 border-gray-200';
-      case 'review': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'archived': return 'bg-red-100 text-red-800 border-red-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'active': return 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800';
+      case 'published': return 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800';
+      case 'draft': return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800/50 dark:text-gray-300 dark:border-gray-700';
+      case 'review': return 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800';
+      case 'archived': return 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800/50 dark:text-gray-300 dark:border-gray-700';
     }
   };
 
@@ -147,7 +156,7 @@ export function QuestionnaireList({
                 <DropdownMenuSeparator />
                 <DropdownMenuItem 
                   onClick={() => onDelete(questionnaire.id)}
-                  className="text-red-600"
+                  className="text-red-600 dark:text-red-400"
                 >
                   <Trash2 className="w-4 h-4 mr-2" />
                   Delete
@@ -171,7 +180,7 @@ export function QuestionnaireList({
             {questionnaire.aiSettings.enabled && (
               <Tooltip>
                 <TooltipTrigger>
-                  <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+                  <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-800">
                     <Brain className="w-3 h-3 mr-1" />
                     AI
                   </Badge>
@@ -256,6 +265,170 @@ export function QuestionnaireList({
     </motion.div>
   );
 
+  const QuestionnaireListItem = ({ questionnaire }: { questionnaire: Questionnaire }) => (
+    <motion.div
+      layout
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      className="w-full"
+    >
+      <Card className="border-notion-border bg-white dark:bg-notion-bg-secondary hover:shadow-md transition-all duration-200">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            {/* Left Section - Main Info */}
+            <div className="flex items-center space-x-4 flex-1 min-w-0">
+              <div className="p-2 bg-notion-bg-tertiary rounded-lg flex-shrink-0">
+                {getCategoryIcon(questionnaire.category)}
+              </div>
+              
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center space-x-3 mb-1">
+                  <h3 className="font-semibold text-notion-text-primary truncate">
+                    {questionnaire.title}
+                  </h3>
+                  <span className="text-sm text-notion-text-secondary">
+                    v{questionnaire.version}
+                  </span>
+                </div>
+                
+                <p className="text-sm text-notion-text-secondary line-clamp-1 mb-2">
+                  {questionnaire.description}
+                </p>
+                
+                <div className="flex items-center space-x-2">
+                  <Badge 
+                    variant="outline" 
+                    className={getStatusColor(questionnaire.status)}
+                  >
+                    {questionnaire.status.charAt(0).toUpperCase() + questionnaire.status.slice(1)}
+                  </Badge>
+                  
+                  <Badge variant="outline" className="text-xs">
+                    {formatCategory(questionnaire.category)}
+                  </Badge>
+
+                  {questionnaire.aiSettings.enabled && (
+                    <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-800 text-xs">
+                      <Brain className="w-3 h-3 mr-1" />
+                      AI
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Center Section - Stats */}
+            <div className="hidden md:flex items-center space-x-8 flex-shrink-0">
+              <div className="text-center">
+                <div className="text-lg font-semibold text-notion-text-primary">
+                  {questionnaire.analytics.overview.totalResponses}
+                </div>
+                <div className="text-xs text-notion-text-secondary">Responses</div>
+              </div>
+              
+              <div className="text-center">
+                <div className="text-lg font-semibold text-notion-text-primary">
+                  {questionnaire.analytics.overview.completionRate}%
+                </div>
+                <div className="text-xs text-notion-text-secondary">Completion</div>
+              </div>
+              
+              <div className="text-center">
+                <div className="text-lg font-semibold text-notion-text-primary">
+                  {questionnaire.analytics.overview.averageScore}
+                </div>
+                <div className="text-xs text-notion-text-secondary">Avg Score</div>
+              </div>
+              
+              <div className="text-center">
+                <div className="text-lg font-semibold text-notion-text-primary">
+                  {questionnaire.analytics.overview.averageTime}m
+                </div>
+                <div className="text-xs text-notion-text-secondary">Avg Time</div>
+              </div>
+            </div>
+
+            {/* Right Section - Date & Actions */}
+            <div className="flex items-center space-x-4 flex-shrink-0">
+              <div className="hidden lg:flex items-center space-x-2 text-xs text-notion-text-secondary">
+                <Calendar className="w-3 h-3" />
+                <span>Updated {formatDate(questionnaire.updatedAt)}</span>
+              </div>
+              
+              <div className="flex items-center space-x-1">
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button variant="ghost" size="sm" onClick={() => onEdit(questionnaire)}>
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Edit questionnaire</TooltipContent>
+                </Tooltip>
+                
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button variant="ghost" size="sm">
+                      <BarChart3 className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>View analytics</TooltipContent>
+                </Tooltip>
+                
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm">
+                      <MoreVertical className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem>
+                      <Eye className="w-4 h-4 mr-2" />
+                      Preview
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => onDuplicate(questionnaire)}>
+                      <Copy className="w-4 h-4 mr-2" />
+                      Duplicate
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Share className="w-4 h-4 mr-2" />
+                      Share
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    {questionnaire.status === 'draft' && (
+                      <DropdownMenuItem onClick={() => onPublish(questionnaire.id)}>
+                        <Play className="w-4 h-4 mr-2" />
+                        Publish
+                      </DropdownMenuItem>
+                    )}
+                    {questionnaire.status === 'active' && (
+                      <DropdownMenuItem>
+                        <Pause className="w-4 h-4 mr-2" />
+                        Pause
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuItem>
+                      <Archive className="w-4 h-4 mr-2" />
+                      Archive
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={() => onDelete(questionnaire.id)}
+                      className="text-red-600 dark:text-red-400"
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+
   if (questionnaires.length === 0) {
     return (
       <motion.div
@@ -291,38 +464,64 @@ export function QuestionnaireList({
           </p>
         </div>
         
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center bg-notion-bg-tertiary rounded-lg p-1">
           <Button
-            variant={view === 'grid' ? 'default' : 'ghost'}
+            variant={currentView === 'grid' ? 'default' : 'ghost'}
             size="sm"
             onClick={() => setView('grid')}
+            className={currentView === 'grid' 
+              ? 'bg-white dark:bg-notion-bg-secondary shadow-sm' 
+              : 'text-notion-text-secondary hover:text-notion-text-primary'
+            }
           >
+            <Grid3X3 className="w-4 h-4 mr-2" />
             Grid
           </Button>
           <Button
-            variant={view === 'list' ? 'default' : 'ghost'}
+            variant={currentView === 'list' ? 'default' : 'ghost'}
             size="sm"
             onClick={() => setView('list')}
+            className={currentView === 'list' 
+              ? 'bg-white dark:bg-notion-bg-secondary shadow-sm' 
+              : 'text-notion-text-secondary hover:text-notion-text-primary'
+            }
           >
+            <List className="w-4 h-4 mr-2" />
             List
           </Button>
         </div>
       </div>
 
-      {/* Questionnaire Grid */}
-      <motion.div
-        layout
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-      >
-        <AnimatePresence>
-          {questionnaires.map((questionnaire) => (
-            <QuestionnaireCard 
-              key={questionnaire.id} 
-              questionnaire={questionnaire} 
-            />
-          ))}
-        </AnimatePresence>
-      </motion.div>
+      {/* Content */}
+      {currentView === 'grid' ? (
+        <motion.div
+          layout
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          <AnimatePresence>
+            {questionnaires.map((questionnaire) => (
+              <QuestionnaireCard 
+                key={questionnaire.id} 
+                questionnaire={questionnaire} 
+              />
+            ))}
+          </AnimatePresence>
+        </motion.div>
+      ) : (
+        <motion.div
+          layout
+          className="space-y-3"
+        >
+          <AnimatePresence>
+            {questionnaires.map((questionnaire) => (
+              <QuestionnaireListItem 
+                key={questionnaire.id} 
+                questionnaire={questionnaire} 
+              />
+            ))}
+          </AnimatePresence>
+        </motion.div>
+      )}
     </div>
   );
 } 

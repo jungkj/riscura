@@ -1,6 +1,4 @@
 import { useState } from 'react';
-// import { ControlLibraryView } from '@/components/controls/ControlLibraryView';
-import { useControls } from '@/context/ControlContext';
 import { Control } from '@/types';
 
 // UI Components
@@ -23,12 +21,25 @@ import { Plus, Shield, BarChart3, Network, Calendar } from 'lucide-react';
 export const dynamic = 'force-dynamic';
 
 export default function ControlLibraryPage() {
-  const { getControlStats, getControlCoverage } = useControls();
   const [activeTab, setActiveTab] = useState('library');
   const [selectedControl, setSelectedControl] = useState<Control | null>(null);
 
-  const stats = getControlStats();
-  const coverage = getControlCoverage();
+  // Mock stats for display
+  const stats = {
+    total: 15,
+    byEffectiveness: { high: 8, medium: 5, low: 2 },
+    byType: { preventive: 6, detective: 5, corrective: 4 },
+    byStatus: { active: 12, inactive: 3 },
+    averageEffectiveness: 3.2,
+    overdueTests: 2,
+    coverageGaps: 1,
+  };
+
+  const coverage = [
+    { riskId: 'risk-1', controlCount: 3, effectivenessScore: 4.2 },
+    { riskId: 'risk-2', controlCount: 2, effectivenessScore: 3.8 },
+    { riskId: 'risk-3', controlCount: 4, effectivenessScore: 4.5 },
+  ];
 
   const handleCreateControl = () => {
     console.log('Create control clicked');
@@ -50,12 +61,12 @@ export default function ControlLibraryPage() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Control Management</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-bold text-gray-900 font-inter">Control Management</h1>
+          <p className="text-gray-600 font-inter">
             Comprehensive control library with effectiveness tracking and risk mapping
           </p>
         </div>
-        <Button onClick={handleCreateControl}>
+        <Button onClick={handleCreateControl} className="bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] border-0 shadow-md hover:shadow-lg transition-all duration-300 font-inter font-medium">
           <Plus className="mr-2 h-4 w-4" />
           Add Control
         </Button>
@@ -63,59 +74,59 @@ export default function ControlLibraryPage() {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
+        <Card className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Controls</CardTitle>
-            <Shield className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-600">Total Controls</CardTitle>
+            <Shield className="h-4 w-4 text-gray-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
-            <p className="text-xs text-muted-foreground">
+            <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+            <p className="text-xs text-gray-600">
               Across all categories
             </p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">High Effectiveness</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-600">High Effectiveness</CardTitle>
             <BarChart3 className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
               {stats.byEffectiveness.high || 0}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-gray-600">
               Performing optimally
             </p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Risk Coverage</CardTitle>
-            <Network className="h-4 w-4 text-blue-600" />
+            <CardTitle className="text-sm font-medium text-gray-600">Risk Coverage</CardTitle>
+            <Network className="h-4 w-4 text-[#191919]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">
+            <div className="text-2xl font-bold text-[#191919]">
               {coverage.length}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-gray-600">
               Risks with controls
             </p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Overdue Tests</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-600">Overdue Tests</CardTitle>
             <Calendar className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-600">
               {stats.overdueTests}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-gray-600">
               Need immediate attention
             </p>
           </CardContent>
@@ -124,36 +135,31 @@ export default function ControlLibraryPage() {
 
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="library" className="flex items-center gap-2">
+        <TabsList className="grid w-full grid-cols-4 bg-white border border-gray-100 p-1 shadow-sm rounded-xl">
+          <TabsTrigger value="library" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg flex items-center gap-2">
             <Shield className="h-4 w-4" />
             Control Library
           </TabsTrigger>
-          <TabsTrigger value="mapping" className="flex items-center gap-2">
+          <TabsTrigger value="mapping" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg flex items-center gap-2">
             <Network className="h-4 w-4" />
             Risk Mapping
           </TabsTrigger>
-          <TabsTrigger value="testing" className="flex items-center gap-2">
+          <TabsTrigger value="testing" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg flex items-center gap-2">
             <Calendar className="h-4 w-4" />
             Testing Schedule
           </TabsTrigger>
-          <TabsTrigger value="analytics" className="flex items-center gap-2">
+          <TabsTrigger value="analytics" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
             Analytics
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="library" className="space-y-4">
-          {/* <ControlLibraryView
-            onCreateControl={handleCreateControl}
-            onEditControl={handleEditControl}
-            onTestControl={handleTestControl}
-          /> */}
-          <Card>
+          <Card className="bg-white border border-gray-100 shadow-sm">
             <CardContent className="p-8 text-center">
-              <Shield className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-              <h3 className="text-lg font-medium mb-2">Control Library</h3>
-              <p className="text-muted-foreground">
+              <Shield className="h-12 w-12 mx-auto mb-4 text-gray-400 opacity-50" />
+              <h3 className="text-lg font-medium mb-2 text-gray-900">Control Library</h3>
+              <p className="text-gray-600">
                 Control library interface will be available here.
               </p>
             </CardContent>
@@ -161,18 +167,18 @@ export default function ControlLibraryPage() {
         </TabsContent>
 
         <TabsContent value="mapping" className="space-y-4">
-          <Card>
+          <Card className="bg-white border border-gray-100 shadow-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-gray-900">
                 <Network className="h-5 w-5" />
                 Control-Risk Mapping
               </CardTitle>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-gray-600">
                 Visual mapping of controls to risks with effectiveness ratings
               </p>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="text-center py-8 text-gray-600">
                 <Network className="h-12 w-12 mx-auto mb-4 opacity-50" />
                 <p>Control-Risk mapping interface coming soon</p>
                 <p className="text-sm">
@@ -184,51 +190,51 @@ export default function ControlLibraryPage() {
         </TabsContent>
 
         <TabsContent value="testing" className="space-y-4">
-          <Card>
+          <Card className="bg-white border border-gray-100 shadow-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-gray-900">
                 <Calendar className="h-5 w-5" />
                 Control Testing Schedule
               </CardTitle>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-gray-600">
                 Manage control testing schedules and track effectiveness
               </p>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <Card>
+                  <Card className="bg-white border border-gray-100 shadow-sm">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-base">Overdue Tests</CardTitle>
+                      <CardTitle className="text-base text-gray-900">Overdue Tests</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold text-red-600">{stats.overdueTests}</div>
-                      <p className="text-xs text-muted-foreground">Require immediate attention</p>
+                      <p className="text-xs text-gray-600">Require immediate attention</p>
                     </CardContent>
                   </Card>
                   
-                  <Card>
+                  <Card className="bg-white border border-gray-100 shadow-sm">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-base">Due This Week</CardTitle>
+                      <CardTitle className="text-base text-gray-900">Due This Week</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold text-yellow-600">3</div>
-                      <p className="text-xs text-muted-foreground">Scheduled for testing</p>
+                      <p className="text-xs text-gray-600">Scheduled for testing</p>
                     </CardContent>
                   </Card>
                   
-                  <Card>
+                  <Card className="bg-white border border-gray-100 shadow-sm">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-base">Completed This Month</CardTitle>
+                      <CardTitle className="text-base text-gray-900">Completed This Month</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold text-green-600">12</div>
-                      <p className="text-xs text-muted-foreground">Tests completed</p>
+                      <p className="text-xs text-gray-600">Tests completed</p>
                     </CardContent>
                   </Card>
                 </div>
                 
-                <div className="text-center py-8 text-muted-foreground">
+                <div className="text-center py-8 text-gray-600">
                   <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
                   <p>Detailed testing schedule interface coming soon</p>
                   <p className="text-sm">
@@ -242,13 +248,13 @@ export default function ControlLibraryPage() {
 
         <TabsContent value="analytics" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
+            <Card className="bg-white border border-gray-100 shadow-sm">
               <CardHeader>
-                <CardTitle className="text-base">Control Effectiveness Trends</CardTitle>
+                <CardTitle className="text-base text-gray-900">Control Effectiveness Trends</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="text-center py-8 text-muted-foreground">
+                  <div className="text-center py-8 text-gray-600">
                     <BarChart3 className="h-12 w-12 mx-auto mb-4 opacity-50" />
                     <p>Effectiveness trend chart coming soon</p>
                     <p className="text-sm">
@@ -261,32 +267,32 @@ export default function ControlLibraryPage() {
                       <div className="text-lg font-semibold text-green-600">
                         {stats.byEffectiveness.high || 0}
                       </div>
-                      <div className="text-xs text-muted-foreground">High</div>
+                      <div className="text-xs text-gray-600">High</div>
                     </div>
                     <div>
                       <div className="text-lg font-semibold text-yellow-600">
                         {stats.byEffectiveness.medium || 0}
                       </div>
-                      <div className="text-xs text-muted-foreground">Medium</div>
+                      <div className="text-xs text-gray-600">Medium</div>
                     </div>
                     <div>
                       <div className="text-lg font-semibold text-red-600">
                         {stats.byEffectiveness.low || 0}
                       </div>
-                      <div className="text-xs text-muted-foreground">Low</div>
+                      <div className="text-xs text-gray-600">Low</div>
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
             
-            <Card>
+            <Card className="bg-white border border-gray-100 shadow-sm">
               <CardHeader>
-                <CardTitle className="text-base">Control Coverage Analysis</CardTitle>
+                <CardTitle className="text-base text-gray-900">Control Coverage Analysis</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="text-center py-8 text-muted-foreground">
+                  <div className="text-center py-8 text-gray-600">
                     <Network className="h-12 w-12 mx-auto mb-4 opacity-50" />
                     <p>Coverage heat map coming soon</p>
                     <p className="text-sm">
@@ -296,16 +302,16 @@ export default function ControlLibraryPage() {
                   
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span>Risks with Controls</span>
-                      <Badge variant="outline">{coverage.length}</Badge>
+                      <span className="text-gray-600">Risks with Controls</span>
+                      <Badge variant="outline" className="bg-secondary/20 text-muted-foreground border-0">{coverage.length}</Badge>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span>Coverage Gaps</span>
-                      <Badge variant="destructive">{stats.coverageGaps}</Badge>
+                      <span className="text-gray-600">Coverage Gaps</span>
+                      <Badge variant="destructive" className="bg-red-100 text-red-700 border-0">{stats.coverageGaps}</Badge>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span>Average Effectiveness</span>
-                      <Badge variant="secondary">{stats.averageEffectiveness.toFixed(1)}</Badge>
+                      <span className="text-gray-600">Average Effectiveness</span>
+                      <Badge variant="secondary" className="bg-secondary/20 text-muted-foreground border-0">{stats.averageEffectiveness.toFixed(1)}</Badge>
                     </div>
                   </div>
                 </div>
@@ -313,18 +319,18 @@ export default function ControlLibraryPage() {
             </Card>
           </div>
           
-          <Card>
+          <Card className="bg-white border border-gray-100 shadow-sm">
             <CardHeader>
-              <CardTitle className="text-base">Control Type Distribution</CardTitle>
+              <CardTitle className="text-base text-gray-900">Control Type Distribution</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">
+                  <div className="text-2xl font-bold text-[#191919]">
                     {stats.byType.preventive || 0}
                   </div>
-                  <div className="text-sm text-muted-foreground">Preventive</div>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-sm text-gray-600">Preventive</div>
+                  <div className="text-xs text-gray-600">
                     {stats.total > 0 ? Math.round(((stats.byType.preventive || 0) / stats.total) * 100) : 0}%
                   </div>
                 </div>
@@ -332,8 +338,8 @@ export default function ControlLibraryPage() {
                   <div className="text-2xl font-bold text-yellow-600">
                     {stats.byType.detective || 0}
                   </div>
-                  <div className="text-sm text-muted-foreground">Detective</div>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-sm text-gray-600">Detective</div>
+                  <div className="text-xs text-gray-600">
                     {stats.total > 0 ? Math.round(((stats.byType.detective || 0) / stats.total) * 100) : 0}%
                   </div>
                 </div>
@@ -341,8 +347,8 @@ export default function ControlLibraryPage() {
                   <div className="text-2xl font-bold text-green-600">
                     {stats.byType.corrective || 0}
                   </div>
-                  <div className="text-sm text-muted-foreground">Corrective</div>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-sm text-gray-600">Corrective</div>
+                  <div className="text-xs text-gray-600">
                     {stats.total > 0 ? Math.round(((stats.byType.corrective || 0) / stats.total) * 100) : 0}%
                   </div>
                 </div>
@@ -354,10 +360,10 @@ export default function ControlLibraryPage() {
 
       {/* Control Detail Dialog */}
       <Dialog open={!!selectedControl} onOpenChange={() => setSelectedControl(null)}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl bg-white border border-gray-100 shadow-lg">
           <DialogHeader>
-            <DialogTitle>{selectedControl?.title}</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-gray-900">{selectedControl?.title}</DialogTitle>
+            <DialogDescription className="text-gray-600">
               Control details and effectiveness information
             </DialogDescription>
           </DialogHeader>
@@ -365,50 +371,50 @@ export default function ControlLibraryPage() {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium">Type</label>
-                  <p className="text-sm text-muted-foreground">{selectedControl.type}</p>
+                  <label className="text-sm font-medium text-gray-900">Type</label>
+                  <p className="text-sm text-gray-600">{selectedControl.type}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium">Effectiveness</label>
-                  <p className="text-sm text-muted-foreground">{selectedControl.effectiveness}</p>
+                  <label className="text-sm font-medium text-gray-900">Effectiveness</label>
+                  <p className="text-sm text-gray-600">{selectedControl.effectiveness}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium">Owner</label>
-                  <p className="text-sm text-muted-foreground">{selectedControl.owner}</p>
+                  <label className="text-sm font-medium text-gray-900">Owner</label>
+                  <p className="text-sm text-gray-600">{selectedControl.owner}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium">Frequency</label>
-                  <p className="text-sm text-muted-foreground">{selectedControl.frequency}</p>
+                  <label className="text-sm font-medium text-gray-900">Frequency</label>
+                  <p className="text-sm text-gray-600">{selectedControl.frequency}</p>
                 </div>
               </div>
               <div>
-                <label className="text-sm font-medium">Description</label>
-                <p className="text-sm text-muted-foreground mt-1">{selectedControl.description}</p>
+                <label className="text-sm font-medium text-gray-900">Description</label>
+                <p className="text-sm text-gray-600 mt-1">{selectedControl.description}</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium">Status</label>
-                  <p className="text-sm text-muted-foreground">{selectedControl.status}</p>
+                  <label className="text-sm font-medium text-gray-900">Status</label>
+                  <p className="text-sm text-gray-600">{selectedControl.status}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium">Linked Risks</label>
-                  <p className="text-sm text-muted-foreground">
+                  <label className="text-sm font-medium text-gray-900">Linked Risks</label>
+                  <p className="text-sm text-gray-600">
                     {selectedControl.linkedRisks.length} risk(s)
                   </p>
                 </div>
               </div>
               {selectedControl.evidence.length > 0 && (
                 <div>
-                  <label className="text-sm font-medium">Evidence ({selectedControl.evidence.length})</label>
+                  <label className="text-sm font-medium text-gray-900">Evidence ({selectedControl.evidence.length})</label>
                   <div className="mt-2 space-y-2">
                     {selectedControl.evidence.slice(0, 3).map((evidence) => (
                       <div key={evidence.id} className="flex items-center space-x-2 text-sm">
-                        <Shield className="h-4 w-4 text-muted-foreground" />
-                        <span>{evidence.name}</span>
+                        <Shield className="h-4 w-4 text-gray-400" />
+                        <span className="text-gray-600">{evidence.name}</span>
                       </div>
                     ))}
                     {selectedControl.evidence.length > 3 && (
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-gray-600">
                         +{selectedControl.evidence.length - 3} more files
                       </p>
                     )}

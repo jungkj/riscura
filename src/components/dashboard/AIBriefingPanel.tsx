@@ -169,7 +169,7 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
       case 'trend':
         return <TrendingUp className="w-4 h-4 text-blue-600" />;
       case 'recommendation':
-        return <Target className="w-4 h-4 text-purple-600" />;
+        return <Target className="w-4 h-4 text-[#191919]" />;
       default:
         return <Sparkles className="w-4 h-4 text-gray-600" />;
     }

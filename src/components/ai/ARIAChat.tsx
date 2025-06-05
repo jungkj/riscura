@@ -52,14 +52,14 @@ const TypingIndicator: React.FC<TypingIndicatorProps> = ({ isVisible }) => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
-      className="flex items-center gap-2 p-3 text-muted-foreground"
+      className="flex items-center gap-3 p-4 text-gray-600 font-inter"
     >
       <div className="flex items-center gap-1">
-        <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-        <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-        <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+        <div className="w-2 h-2 bg-[#191919] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+        <div className="w-2 h-2 bg-[#191919] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+        <div className="w-2 h-2 bg-[#191919] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
       </div>
-      <span className="text-sm">ARIA is thinking...</span>
+      <span className="text-sm font-medium">ARIA is thinking...</span>
     </motion.div>
   );
 };
@@ -79,15 +79,15 @@ const ConversationTemplateCard: React.FC<{
 
   return (
     <Card 
-      className="p-4 cursor-pointer hover:bg-accent/50 transition-colors"
+      className="p-4 cursor-pointer hover:bg-[#D8C3A5]/20 transition-all duration-300 border border-gray-100 hover:border-[#191919] bg-white shadow-sm hover:shadow-md"
       onClick={() => onSelect(template)}
     >
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-4">
         <span className="text-2xl">{getCategoryIcon(template.category)}</span>
         <div className="flex-1">
-          <h3 className="font-medium text-sm">{template.title}</h3>
-          <p className="text-xs text-muted-foreground mt-1">{template.description}</p>
-          <Badge variant="secondary" className="mt-2 text-xs">
+          <h3 className="font-medium text-sm text-gray-900 font-inter">{template.title}</h3>
+          <p className="text-xs text-gray-600 font-inter mt-1 leading-relaxed">{template.description}</p>
+          <Badge variant="secondary" className="mt-2 text-xs bg-[#D8C3A5] text-[#191919] border-0 font-medium">
             {template.category.replace('_', ' ')}
           </Badge>
         </div>
@@ -279,35 +279,38 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: mode === 'floating' ? 0.8 : 1, y: mode === 'floating' ? 20 : 0 }}
       className={cn(
-        "flex flex-col bg-background border rounded-lg overflow-hidden",
+        "flex flex-col bg-white border border-gray-100 rounded-xl overflow-hidden font-inter shadow-xl",
         getContainerClasses(),
         className
       )}
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b bg-card">
+      <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-white">
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <Bot className="h-5 w-5 text-blue-500" />
-            <h2 className="font-semibold">ARIA</h2>
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-gradient-to-br from-[#191919] to-[#191919] shadow-md">
+              <Bot className="h-5 w-5 text-white" />
+            </div>
+            <h2 className="font-bold text-gray-900 font-inter text-lg">ARIA</h2>
           </div>
           {state.isConnected ? (
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="outline" className="text-xs bg-green-100 text-green-700 border-0 font-medium">
               Connected
             </Badge>
           ) : (
-            <Badge variant="destructive" className="text-xs">
+            <Badge variant="destructive" className="text-xs bg-red-100 text-red-700 border-0 font-medium">
               Offline
             </Badge>
           )}
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           {mode === 'floating' && (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsMinimized(!isMinimized)}
+              className="text-gray-500 hover:text-gray-900 hover:bg-gray-100 p-2"
             >
               {isMinimized ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
             </Button>
@@ -315,28 +318,28 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="text-gray-500 hover:text-gray-900 hover:bg-gray-100 p-2">
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => actions.exportConversation('markdown')}>
+            <DropdownMenuContent align="end" className="bg-white border border-gray-100 shadow-lg">
+              <DropdownMenuItem onClick={() => actions.exportConversation('markdown')} className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium">
                 <Download className="h-4 w-4 mr-2" />
                 Export Chat
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setShowTemplates(true)}>
+              <DropdownMenuItem onClick={() => setShowTemplates(true)} className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium">
                 <MessageSquare className="h-4 w-4 mr-2" />
                 Templates
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={actions.clearMessages} className="text-destructive">
+              <DropdownMenuSeparator className="bg-gray-100" />
+              <DropdownMenuItem onClick={actions.clearMessages} className="text-red-600 hover:bg-red-50 font-inter font-medium">
                 <Trash2 className="h-4 w-4 mr-2" />
                 Clear Chat
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button variant="ghost" size="sm" onClick={onClose}>
+          <Button variant="ghost" size="sm" onClick={onClose} className="text-gray-500 hover:text-gray-900 hover:bg-gray-100 p-2">
             <X className="h-4 w-4" />
           </Button>
         </div>
@@ -345,17 +348,17 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
       {!isMinimized && (
         <>
           {/* Agent Selector and Search */}
-          <div className="p-4 border-b space-y-3">
+          <div className="p-4 border-b border-gray-100 space-y-3 bg-white">
             <AgentSelector currentAgent={selectedAgent} onAgentChange={actions.switchAgent} />
             
             {state.messages.length > 0 && (
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   placeholder="Search messages..."
                   value={state.searchQuery}
                   onChange={(e) => actions.searchMessages(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 border border-gray-200 focus:border-[#191919] focus:ring-2 focus:ring-[#D8C3A5]/30 font-inter text-sm"
                 />
               </div>
             )}
@@ -363,15 +366,15 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
 
           {/* Error Display */}
           {state.error && (
-            <Alert className="m-4 border-destructive">
-              <AlertDescription>
+            <Alert className="m-4 border border-red-200 bg-red-50 shadow-sm">
+              <AlertDescription className="text-red-600 font-inter text-sm font-medium">
                 {state.error.message}
                 {state.error.retryable && (
                   <Button 
                     variant="link" 
                     size="sm" 
                     onClick={actions.clearError}
-                    className="ml-2 p-0 h-auto"
+                    className="ml-2 p-0 h-auto text-red-600 hover:text-red-700 font-inter font-medium"
                   >
                     Dismiss
                   </Button>
@@ -383,8 +386,8 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
           {/* Upload Progress */}
           {uploadProgress > 0 && uploadProgress < 100 && (
             <div className="p-4">
-              <Progress value={uploadProgress} className="w-full" />
-              <p className="text-xs text-muted-foreground mt-1">Uploading files...</p>
+              <Progress value={uploadProgress} className="w-full bg-secondary/20 border border-border h-2" />
+              <p className="text-xs text-gray-600 font-inter font-medium mt-2">Uploading files...</p>
             </div>
           )}
 
@@ -392,14 +395,14 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
           <div className="flex-1 overflow-hidden">
             {showTemplates ? (
               /* Templates View */
-              <div className="p-4 h-full overflow-y-auto">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-medium">Conversation Templates</h3>
-                  <Button variant="ghost" size="sm" onClick={() => setShowTemplates(false)}>
+              <div className="p-4 h-full overflow-y-auto bg-white">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="font-bold text-black font-inter text-xl">Conversation Templates</h3>
+                  <Button variant="ghost" size="sm" onClick={() => setShowTemplates(false)} className="text-gray-600 hover:text-black hover:bg-gray-100">
                     <X className="h-4 w-4" />
                   </Button>
                 </div>
-                <div className="grid gap-3">
+                <div className="grid gap-4">
                   {state.conversationTemplates.map((template) => (
                     <ConversationTemplateCard
                       key={template.id}
@@ -411,55 +414,56 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
               </div>
             ) : showEmptyState ? (
               /* Empty State */
-              <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-                <Bot className="h-16 w-16 text-muted-foreground mb-4" />
-                <h3 className="font-medium text-lg mb-2">Welcome to ARIA</h3>
-                <p className="text-muted-foreground mb-6">
+              <div className="flex flex-col items-center justify-center h-full p-8 text-center bg-white">
+                <div className="p-4 rounded-full bg-[#D8C3A5] mb-6">
+                  <Bot className="h-16 w-16 text-[#191919]" />
+                </div>
+                <h3 className="font-bold text-xl mb-2 text-gray-900 font-inter">Welcome to ARIA</h3>
+                <p className="text-gray-600 font-inter text-sm mb-6 max-w-md leading-relaxed">
                   Your AI Risk Intelligence Assistant is ready to help with risk management, compliance, and controls.
                 </p>
-                <div className="flex gap-2">
-                  <Button onClick={() => setShowTemplates(true)} variant="outline">
+                <div className="flex gap-3">
+                  <Button onClick={() => setShowTemplates(true)} variant="outline" className="w-full text-left border border-gray-200 text-gray-700 hover:text-[#191919] hover:bg-[#D8C3A5]/20 hover:border-[#191919] font-inter font-medium px-6 py-2.5">
                     <MessageSquare className="h-4 w-4 mr-2" />
                     Use Template
                   </Button>
-                  <Button onClick={() => inputRef.current?.focus()}>
+                  <Button onClick={() => inputRef.current?.focus()} className="bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] font-inter font-medium px-6 py-2.5">
                     Start Conversation
                   </Button>
                 </div>
               </div>
             ) : (
               /* Messages View */
-              <ScrollArea className="h-full">
+              <ScrollArea className="h-full bg-white">
                 <div className="p-4 space-y-4">
                   {(state.searchQuery ? state.filteredMessages : state.messages).map((message) => (
                     <div key={message.id} className="flex gap-3">
-                      {/* Simplified message display for now */}
                       <div className={cn(
                         "flex flex-col max-w-[80%]",
                         message.role === 'user' ? "ml-auto" : "mr-auto"
                       )}>
                         <div className={cn(
-                          "p-3 rounded-lg",
+                          "p-3 rounded-lg border font-inter shadow-sm",
                           message.role === 'user' 
-                            ? "bg-primary text-primary-foreground" 
-                            : "bg-accent"
+                            ? "bg-gradient-to-r from-[#191919] to-[#191919] text-white border-[#191919]" 
+                            : "bg-secondary/10 text-foreground border-border"
                         )}>
-                          <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                          <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
                           {message.usage && (
-                            <div className="text-xs opacity-70 mt-2 pt-2 border-t border-current/20">
-                              Tokens: {message.usage.totalTokens} • Cost: ${message.usage.estimatedCost.toFixed(4)}
+                            <div className="text-xs opacity-70 mt-2 pt-2 border-t border-current/20 font-medium">
+                              Tokens: {message.usage.promptTokens + message.usage.completionTokens}
                             </div>
                           )}
                         </div>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {message.role === 'user' ? 'You' : 'ARIA'} • {message.timestamp.toLocaleTimeString()}
-                        </p>
+                        <div className="text-xs text-gray-500 font-inter mt-1 px-1 font-medium">
+                          {new Date(message.timestamp).toLocaleTimeString()}
+                        </div>
                       </div>
                     </div>
                   ))}
                   
                   {/* Typing Indicator */}
-                  <TypingIndicator isVisible={state.typingIndicator} />
+                  <TypingIndicator isVisible={state.isLoading} />
                   
                   <div ref={messagesEndRef} />
                 </div>
@@ -469,7 +473,7 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
 
           {/* Input Area */}
           {!showTemplates && (
-            <div className="border-t bg-card p-4">
+            <div className="border-t border-gray-100 bg-white p-4">
               <div className="flex gap-2">
                 <div className="flex-1 relative">
                   <Textarea
@@ -478,16 +482,17 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder="Ask ARIA about risks, controls, or compliance..."
-                    className="min-h-[60px] max-h-32 resize-none pr-12"
+                    className="min-h-[60px] max-h-32 resize-none pr-16 border border-gray-200 focus:border-[#191919] focus:ring-2 focus:ring-[#D8C3A5]/30 font-inter text-sm"
                     disabled={state.isLoading}
                   />
-                  <div className="absolute bottom-2 right-2 flex gap-1">
+                  <div className="absolute bottom-2.5 right-2.5 flex gap-1">
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
                       onClick={() => fileInputRef.current?.click()}
                       disabled={state.isLoading}
+                      className="text-muted-foreground hover:text-foreground hover:bg-secondary/20 p-2"
                     >
                       <Paperclip className="h-4 w-4" />
                     </Button>
@@ -497,7 +502,10 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
                       size="sm"
                       onClick={toggleVoiceInput}
                       disabled={state.isLoading}
-                      className={isVoiceActive ? "text-red-500" : ""}
+                      className={cn(
+                        "text-muted-foreground hover:text-foreground hover:bg-secondary/20 p-2",
+                        isVoiceActive && "text-red-500 hover:text-red-600"
+                      )}
                     >
                       {isVoiceActive ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                     </Button>
@@ -507,6 +515,7 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim() || state.isLoading}
                   size="lg"
+                  className="bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] border-0 font-inter font-medium px-5"
                 >
                   <Send className="h-4 w-4" />
                 </Button>
@@ -514,7 +523,7 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
               
               {/* Rate Limit Status */}
               {state.rateLimitStatus && (
-                <div className="mt-2 text-xs text-muted-foreground">
+                <div className="mt-2 text-xs text-gray-500 font-inter font-medium">
                   {state.rateLimitStatus.requestsRemaining} requests remaining
                 </div>
               )}

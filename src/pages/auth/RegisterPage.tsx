@@ -88,7 +88,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full notion-card">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
         <CardDescription>

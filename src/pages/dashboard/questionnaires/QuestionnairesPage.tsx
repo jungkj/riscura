@@ -13,21 +13,25 @@ import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 
 // Components
-import { QuestionnaireBuilder } from '@/components/questionnaires/QuestionnaireBuilder';
+import { EnhancedQuestionnaireBuilder } from '@/components/questionnaires/EnhancedQuestionnaireBuilder';
 import { QuestionnaireList } from '@/components/questionnaires/QuestionnaireList';
+import { EnhancedQuestionnaireList } from '@/components/questionnaires/EnhancedQuestionnaireList';
+import CollaborativeQuestionnairePage from './CollaborativeQuestionnairePage';
+import { WorkflowProgress } from '@/components/questionnaires/WorkflowProgress';
+import { AnalyticsCards, AnalyticsCardsSkeleton } from '@/components/questionnaires/AnalyticsCards';
+import { AnalyticsDashboard } from '@/components/questionnaires/AnalyticsDashboard';
+import { TemplateLibrary } from '@/components/questionnaires/TemplateLibrary';
+import { WorkflowManagement } from '@/components/questionnaires/WorkflowManagement';
+import { AIAssistantPanel } from '@/components/questionnaires/AIAssistantPanel';
 // TODO: Create these components
 // import { ResponseAnalytics } from '@/components/questionnaires/ResponseAnalytics';
-// import { TemplateLibrary } from '@/components/questionnaires/TemplateLibrary';
-// import { AIQuestionSuggestions } from '@/components/questionnaires/AIQuestionSuggestions';
-// import { WorkflowManager } from '@/components/questionnaires/WorkflowManager';
 // import { CollaborationPanel } from '@/components/questionnaires/CollaborationPanel';
 
 // Icons
 import {
-  Plus, FileText, Brain, BarChart3, Settings, Users, Clock, Target,
-  CheckCircle, AlertTriangle, Search, Filter, Download, Upload, Copy,
-  Play, Pause, Edit, Eye, Trash2, Share, Archive, Star, Tag,
-  TrendingUp, Activity, Shield, Zap, Globe
+  Plus, FileText, Brain, BarChart3, Users, 
+  Filter, Search, Eye, Star, 
+  Activity
 } from 'lucide-react';
 
 // Types
@@ -39,7 +43,7 @@ import type {
 } from '@/types/questionnaire.types';
 
 interface QuestionnairesPageProps {
-  view?: 'list' | 'builder' | 'analytics' | 'templates';
+  view?: 'list' | 'enhanced-search' | 'builder' | 'analytics' | 'templates' | 'collaboration';
 }
 
 export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPageProps) {
@@ -47,6 +51,7 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
   
   // State Management
   const [activeView, setActiveView] = useState<string>(view);
+  const [questionnaireViewMode, setQuestionnaireViewMode] = useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<QuestionnaireCategory | 'all'>('all');
   const [selectedStatus, setSelectedStatus] = useState<QuestionnaireStatus | 'all'>('all');
@@ -543,6 +548,15 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
     setActiveView('builder');
   };
 
+  const handleWorkflowStepClick = (step: string) => {
+    setActiveView(step);
+    
+    // Clear selected questionnaire when switching away from builder
+    if (step !== 'builder') {
+      setSelectedQuestionnaire(null);
+    }
+  };
+
   const handleDuplicateQuestionnaire = async (questionnaire: Questionnaire) => {
     try {
       const duplicate: Questionnaire = {
@@ -656,7 +670,7 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
         <div className="flex items-center justify-between p-6">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-notion-blue to-notion-purple rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-[#191919] to-[#191919] rounded-lg flex items-center justify-center">
                 <FileText className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -757,104 +771,36 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
         {/* Main Content */}
         <main className="flex-1 p-6">
           {/* Analytics Overview */}
+          {isLoading ? (
+            <AnalyticsCardsSkeleton className="mb-6" />
+          ) : (
+            <AnalyticsCards analytics={analytics} className="mb-6" />
+          )}
+
+          {/* Workflow Progress */}
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 mb-6"
+            transition={{ delay: 0.2 }}
+            className="mb-6"
           >
-            <Card className="border-notion-border bg-white dark:bg-notion-bg-secondary">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-notion-text-secondary">Total Questionnaires</p>
-                    <p className="text-2xl font-semibold text-notion-text-primary">
-                      {analytics.totalQuestionnaires}
-                    </p>
-                  </div>
-                  <FileText className="w-8 h-8 text-notion-blue" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-notion-border bg-white dark:bg-notion-bg-secondary">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-notion-text-secondary">Active Responses</p>
-                    <p className="text-2xl font-semibold text-notion-text-primary">
-                      {analytics.activeResponses}
-                    </p>
-                  </div>
-                  <Activity className="w-8 h-8 text-green-500" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-notion-border bg-white dark:bg-notion-bg-secondary">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-notion-text-secondary">Completion Rate</p>
-                    <p className="text-2xl font-semibold text-notion-text-primary">
-                      {analytics.completionRate}%
-                    </p>
-                  </div>
-                  <CheckCircle className="w-8 h-8 text-blue-500" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-notion-border bg-white dark:bg-notion-bg-secondary">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-notion-text-secondary">Average Score</p>
-                    <p className="text-2xl font-semibold text-notion-text-primary">
-                      {analytics.averageScore}
-                    </p>
-                  </div>
-                  <Target className="w-8 h-8 text-purple-500" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-notion-border bg-white dark:bg-notion-bg-secondary">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-notion-text-secondary">AI Questions</p>
-                    <p className="text-2xl font-semibold text-notion-text-primary">
-                      {analytics.aiGeneratedQuestions}
-                    </p>
-                  </div>
-                  <Brain className="w-8 h-8 text-indigo-500" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-notion-border bg-white dark:bg-notion-bg-secondary">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-notion-text-secondary">Risk Assessments</p>
-                    <p className="text-2xl font-semibold text-notion-text-primary">
-                      {analytics.riskAssessments}
-                    </p>
-                  </div>
-                  <Shield className="w-8 h-8 text-red-500" />
-                </div>
-              </CardContent>
-            </Card>
+            <WorkflowProgress 
+              activeStep={activeView}
+              onStepClick={handleWorkflowStepClick}
+              className="bg-white dark:bg-notion-bg-secondary rounded-lg border border-notion-border shadow-sm"
+            />
           </motion.div>
 
           {/* Main Content Tabs */}
           <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
-            <TabsList className="grid w-full grid-cols-5">
+            <TabsList className="grid w-full grid-cols-7">
               <TabsTrigger value="list">Questionnaires</TabsTrigger>
+              <TabsTrigger value="enhanced-search">Advanced Search</TabsTrigger>
               <TabsTrigger value="builder">Builder</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
               <TabsTrigger value="templates">Templates</TabsTrigger>
               <TabsTrigger value="workflow">Workflow</TabsTrigger>
+              <TabsTrigger value="collaboration">Collaboration</TabsTrigger>
             </TabsList>
 
             <TabsContent value="list" className="space-y-6">
@@ -864,11 +810,17 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
                 onDuplicate={handleDuplicateQuestionnaire}
                 onDelete={handleDeleteQuestionnaire}
                 onPublish={handlePublishQuestionnaire}
+                viewMode={questionnaireViewMode}
+                onViewModeChange={setQuestionnaireViewMode}
               />
             </TabsContent>
 
+            <TabsContent value="enhanced-search" className="space-y-6">
+              <EnhancedQuestionnaireList />
+            </TabsContent>
+
             <TabsContent value="builder" className="space-y-6">
-              <QuestionnaireBuilder
+              <EnhancedQuestionnaireBuilder
                 questionnaire={selectedQuestionnaire}
                 onSave={(questionnaire) => {
                   if (selectedQuestionnaire) {
@@ -888,39 +840,19 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
             </TabsContent>
 
             <TabsContent value="analytics" className="space-y-6">
-              <div className="text-center py-12">
-                <BarChart3 className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
-                  Analytics Dashboard Coming Soon
-                </h3>
-                <p className="text-notion-text-secondary">
-                  Advanced reporting and analytics features will be available here
-                </p>
-              </div>
+              <AnalyticsDashboard />
             </TabsContent>
 
             <TabsContent value="templates" className="space-y-6">
-              <div className="text-center py-12">
-                <FileText className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
-                  Template Library Coming Soon
-                </h3>
-                <p className="text-notion-text-secondary">
-                  Pre-built questionnaire templates will be available here
-                </p>
-              </div>
+              <TemplateLibrary />
             </TabsContent>
 
             <TabsContent value="workflow" className="space-y-6">
-              <div className="text-center py-12">
-                <Users className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
-                  Workflow Management Coming Soon
-                </h3>
-                <p className="text-notion-text-secondary">
-                  Automated workflow features will be available here
-                </p>
-              </div>
+              <WorkflowManagement />
+            </TabsContent>
+
+            <TabsContent value="collaboration" className="space-y-6">
+              <CollaborativeQuestionnairePage mode="collaborate" />
             </TabsContent>
           </Tabs>
         </main>
@@ -934,22 +866,15 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
               exit={{ x: 300, opacity: 0 }}
               className="w-80 border-l border-notion-border bg-white dark:bg-notion-bg-secondary"
             >
-              <div className="p-4 border-b border-notion-border">
-                <h3 className="font-semibold text-notion-text-primary">AI Assistant</h3>
-                <p className="text-sm text-notion-text-secondary">
-                  Intelligent question suggestions and analysis
-                </p>
-              </div>
-              
-              <div className="p-4 text-center">
-                <Brain className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
-                <h4 className="font-semibold text-notion-text-primary mb-2">
-                  AI Suggestions Coming Soon
-                </h4>
-                <p className="text-sm text-notion-text-secondary">
-                  AI-powered question suggestions will be available here
-                </p>
-              </div>
+              <AIAssistantPanel 
+                activeTab={activeView}
+                selectedQuestionnaire={selectedQuestionnaire}
+                onApplySuggestion={(suggestion) => {
+                  // Handle applying AI suggestions
+                  console.log('Applying suggestion:', suggestion);
+                  // Could navigate to builder or update questionnaire
+                }}
+              />
             </motion.aside>
           )}
         </AnimatePresence>

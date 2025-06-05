@@ -53,7 +53,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
       previousValue: data.totalRisks - 3,
       format: 'number',
       icon: <BarChart3 className="w-5 h-5" />,
-      color: 'text-blue-600',
+      color: 'text-[#191919]',
       target: 150,
       threshold: { warning: 180, critical: 200 },
       description: 'Active risks across all categories'
@@ -65,7 +65,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
       previousValue: data.highPriorityRisks + 2,
       format: 'number',
       icon: <AlertTriangle className="w-5 h-5" />,
-      color: 'text-red-600',
+      color: 'text-[#191919]',
       target: 15,
       threshold: { warning: 20, critical: 30 },
       description: 'Critical and high-impact risks requiring immediate attention'
@@ -77,7 +77,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
       previousValue: data.complianceScore - 1.2,
       format: 'percentage',
       icon: <CheckCircle className="w-5 h-5" />,
-      color: 'text-green-600',
+      color: 'text-[#191919]',
       target: 95,
       threshold: { warning: 85, critical: 75 },
       description: 'Overall compliance effectiveness across frameworks'
@@ -89,7 +89,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
       previousValue: data.activeIncidents + 1,
       format: 'number',
       icon: <Activity className="w-5 h-5" />,
-      color: 'text-orange-600',
+      color: 'text-[#191919]',
       target: 0,
       threshold: { warning: 3, critical: 5 },
       description: 'Ongoing security incidents and risk events'
@@ -101,7 +101,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
       previousValue: data.controlsActive - 5,
       format: 'number',
       icon: <Shield className="w-5 h-5" />,
-      color: 'text-purple-600',
+      color: 'text-[#191919]',
       target: 250,
       threshold: { warning: 200, critical: 150 },
       description: 'Operational security and compliance controls'
@@ -113,7 +113,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
       previousValue: data.aiInsights - 2,
       format: 'number',
       icon: <Brain className="w-5 h-5" />,
-      color: 'text-indigo-600',
+      color: 'text-[#191919]',
       target: 10,
       threshold: { warning: 5, critical: 2 },
       description: 'Active AI-generated recommendations and insights'

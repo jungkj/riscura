@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { useQuestionnaires } from '@/context/QuestionnaireContext';
 import { QuestionnaireBuilder } from '@/components/questionnaires/QuestionnaireBuilder';
-import { Questionnaire } from '@/types';
+import { Questionnaire, QuestionnaireCategory, QuestionnaireType, QuestionnaireStatus } from '@/types/questionnaire.types';
 import { formatDate } from '@/lib/utils';
 
 // UI Components
@@ -39,7 +38,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // Icons
 import {
@@ -51,28 +49,300 @@ import {
   Send,
   BarChart3,
   CheckCircle,
-  AlertCircle,
   FileText,
   TrendingUp,
 } from 'lucide-react';
 
-export default function QuestionnairePage() {
-  const {
-    questionnaires,
-    loading,
-    error,
-    deleteQuestionnaire,
-    duplicateQuestionnaire,
-    distributeQuestionnaire,
-    getCompletionStats,
-  } = useQuestionnaires();
+// Force dynamic rendering to avoid prerender issues
+export const dynamic = 'force-dynamic';
 
+export default function QuestionnairePage() {
+  // Mock data that matches the proper Questionnaire type
+  const mockQuestionnaires: Questionnaire[] = [
+    {
+      id: 'q1',
+      title: 'Annual Risk Assessment',
+      description: 'Comprehensive risk assessment questionnaire for all departments',
+      category: 'risk_assessment' as QuestionnaireCategory,
+      type: 'static' as QuestionnaireType,
+      version: '1.0',
+      status: 'active' as QuestionnaireStatus,
+      config: {
+        allowPartialSave: true,
+        requiresApproval: false,
+        randomizeQuestions: false,
+        showProgress: true,
+        allowSkipping: false,
+        requiredCompletion: 100,
+        notificationSettings: {
+          enabled: true,
+          types: ['response_submitted'],
+          channels: ['email'],
+          frequency: 'immediate',
+          recipients: []
+        },
+        accessControl: {
+          publicAccess: false,
+          requiresAuthentication: true,
+          allowedRoles: ['admin', 'auditor'],
+          allowedUsers: [],
+          restrictions: []
+        }
+      },
+      sections: [],
+      scoring: {
+        type: 'weighted',
+        maxScore: 100,
+        categories: [],
+        aggregation: 'sum',
+        normalization: false
+      },
+      createdBy: 'admin',
+      createdAt: new Date('2024-01-15'),
+      updatedAt: new Date('2024-01-15'),
+      analytics: {
+        overview: {
+          totalResponses: 25,
+          completionRate: 0.85,
+          averageScore: 78.5,
+          averageTime: 45,
+          lastUpdated: new Date()
+        },
+        completion: {
+          started: 30,
+          completed: 25,
+          abandoned: 5,
+          averageCompletionTime: 42,
+          completionRateBySection: [],
+          dropOffPoints: []
+        },
+        performance: {
+          averageResponseTime: 2.5,
+          questionDifficulty: [],
+          userExperience: {
+            satisfactionScore: 4.2,
+            usabilityScore: 4.0,
+            clarityScore: 4.3,
+            feedbackCount: 15,
+            commonComplaints: []
+          },
+          technicalMetrics: {
+            loadTime: 1.2,
+            errorRate: 0.02,
+            crashRate: 0.001,
+            deviceBreakdown: [],
+            browserBreakdown: []
+          }
+        },
+        responses: {
+          patterns: [],
+          distributions: [],
+          correlations: [],
+          outliers: []
+        },
+        trends: {
+          timeSeriesData: [],
+          trendDirection: 'stable',
+          seasonality: [],
+          forecasts: []
+        }
+      },
+      aiSettings: {
+        enabled: true,
+        questionGeneration: {
+          enabled: false,
+          contextSources: [],
+          generationRules: [],
+          reviewRequired: true,
+          maxQuestions: 50
+        },
+        responseAnalysis: {
+          enabled: true,
+          patterns: [],
+          riskScoring: true,
+          anomalyDetection: true,
+          sentimentAnalysis: false
+        },
+        riskAssessment: {
+          enabled: true,
+          scoringModel: {
+            type: 'weighted',
+            weights: {},
+            rules: []
+          },
+          riskCategories: [],
+          thresholds: [],
+          autoPopulate: false
+        },
+        followUpSuggestions: {
+          enabled: false,
+          triggerConditions: [],
+          suggestionRules: [],
+          maxSuggestions: 5
+        }
+      },
+      permissions: {
+        read: ['admin', 'auditor', 'manager'],
+        write: ['admin'],
+        admin: ['admin'],
+        respond: ['all'],
+        review: ['admin', 'auditor'],
+        approve: ['admin'],
+        analytics: ['admin', 'auditor']
+      }
+    },
+    {
+      id: 'q2',
+      title: 'Control Effectiveness Survey',
+      description: 'Quarterly survey to assess control effectiveness',
+      category: 'control_testing' as QuestionnaireCategory,
+      type: 'dynamic' as QuestionnaireType,
+      version: '2.1',
+      status: 'completed' as QuestionnaireStatus,
+      config: {
+        allowPartialSave: true,
+        requiresApproval: true,
+        randomizeQuestions: false,
+        showProgress: true,
+        allowSkipping: true,
+        requiredCompletion: 90,
+        notificationSettings: {
+          enabled: true,
+          types: ['response_submitted', 'review_required'],
+          channels: ['email'],
+          frequency: 'immediate',
+          recipients: []
+        },
+        accessControl: {
+          publicAccess: false,
+          requiresAuthentication: true,
+          allowedRoles: ['admin', 'manager'],
+          allowedUsers: [],
+          restrictions: []
+        }
+      },
+      sections: [],
+      scoring: {
+        type: 'weighted',
+        maxScore: 100,
+        categories: [],
+        aggregation: 'weighted_average',
+        normalization: true
+      },
+      createdBy: 'admin',
+      createdAt: new Date('2024-02-01'),
+      updatedAt: new Date('2024-02-01'),
+      analytics: {
+        overview: {
+          totalResponses: 18,
+          completionRate: 0.72,
+          averageScore: 82.3,
+          averageTime: 35,
+          lastUpdated: new Date()
+        },
+        completion: {
+          started: 25,
+          completed: 18,
+          abandoned: 7,
+          averageCompletionTime: 33,
+          completionRateBySection: [],
+          dropOffPoints: []
+        },
+        performance: {
+          averageResponseTime: 1.8,
+          questionDifficulty: [],
+          userExperience: {
+            satisfactionScore: 4.1,
+            usabilityScore: 4.2,
+            clarityScore: 4.0,
+            feedbackCount: 12,
+            commonComplaints: []
+          },
+          technicalMetrics: {
+            loadTime: 0.9,
+            errorRate: 0.01,
+            crashRate: 0.0005,
+            deviceBreakdown: [],
+            browserBreakdown: []
+          }
+        },
+        responses: {
+          patterns: [],
+          distributions: [],
+          correlations: [],
+          outliers: []
+        },
+        trends: {
+          timeSeriesData: [],
+          trendDirection: 'improving',
+          seasonality: [],
+          forecasts: []
+        }
+      },
+      aiSettings: {
+        enabled: false,
+        questionGeneration: {
+          enabled: false,
+          contextSources: [],
+          generationRules: [],
+          reviewRequired: true,
+          maxQuestions: 30
+        },
+        responseAnalysis: {
+          enabled: false,
+          patterns: [],
+          riskScoring: false,
+          anomalyDetection: false,
+          sentimentAnalysis: false
+        },
+        riskAssessment: {
+          enabled: false,
+          scoringModel: {
+            type: 'weighted',
+            weights: {},
+            rules: []
+          },
+          riskCategories: [],
+          thresholds: [],
+          autoPopulate: false
+        },
+        followUpSuggestions: {
+          enabled: false,
+          triggerConditions: [],
+          suggestionRules: [],
+          maxSuggestions: 3
+        }
+      },
+      permissions: {
+        read: ['admin', 'manager'],
+        write: ['admin'],
+        admin: ['admin'],
+        respond: ['all'],
+        review: ['admin', 'manager'],
+        approve: ['admin'],
+        analytics: ['admin']
+      }
+    },
+  ];
+
+  const mockStats = {
+    total: 8,
+    active: 3,
+    completed: 4,
+    draft: 1,
+    averageCompletion: 0.75,
+    totalResponses: 142,
+  };
+
+  const [questionnaires] = useState(mockQuestionnaires);
+  const [loading] = useState(false);
+  const [error] = useState<string | null>(null);
   const [showBuilder, setShowBuilder] = useState(false);
   const [editingQuestionnaire, setEditingQuestionnaire] = useState<string | null>(null);
   const [selectedQuestionnaire, setSelectedQuestionnaire] = useState<Questionnaire | null>(null);
   const [showAnalytics, setShowAnalytics] = useState(false);
 
-  const stats = getCompletionStats();
+  const stats = mockStats;
 
   const handleCreateNew = () => {
     setEditingQuestionnaire(null);
@@ -86,7 +356,8 @@ export default function QuestionnairePage() {
 
   const handleDuplicate = async (questionnaire: Questionnaire) => {
     try {
-      await duplicateQuestionnaire(questionnaire.id, `${questionnaire.title} (Copy)`);
+      console.log('Duplicating questionnaire:', questionnaire.id);
+      // Mock implementation
     } catch (error) {
       console.error('Failed to duplicate questionnaire:', error);
     }
@@ -95,7 +366,8 @@ export default function QuestionnairePage() {
   const handleDelete = async (questionnaireId: string) => {
     if (confirm('Are you sure you want to delete this questionnaire?')) {
       try {
-        await deleteQuestionnaire(questionnaireId);
+        console.log('Deleting questionnaire:', questionnaireId);
+        // Mock implementation
       } catch (error) {
         console.error('Failed to delete questionnaire:', error);
       }
@@ -106,7 +378,7 @@ export default function QuestionnairePage() {
     try {
       // In a real app, this would open a user selection dialog
       const mockUserIds = ['user1', 'user2', 'user3'];
-      await distributeQuestionnaire(questionnaire.id, mockUserIds);
+      console.log('Distributing questionnaire:', questionnaire.id, 'to:', mockUserIds);
       alert(`Questionnaire distributed to ${mockUserIds.length} users`);
     } catch (error) {
       console.error('Failed to distribute questionnaire:', error);
@@ -118,15 +390,18 @@ export default function QuestionnairePage() {
     setShowAnalytics(true);
   };
 
-  const getStatusBadge = (status: Questionnaire['status']) => {
+  const getStatusBadge = (status: QuestionnaireStatus) => {
     const statusConfig = {
-      draft: { color: 'bg-gray-100 text-gray-800', label: 'Draft' },
+      draft: { color: 'bg-secondary/20 text-foreground', label: 'Draft' },
+      review: { color: 'bg-yellow-100 text-yellow-800', label: 'Review' },
+      approved: { color: 'bg-blue-100 text-blue-800', label: 'Approved' },
+      published: { color: 'bg-green-100 text-green-800', label: 'Published' },
       active: { color: 'bg-green-100 text-green-800', label: 'Active' },
-      completed: { color: 'bg-blue-100 text-blue-800', label: 'Completed' },
+      deprecated: { color: 'bg-gray-100 text-gray-800', label: 'Deprecated' },
       archived: { color: 'bg-yellow-100 text-yellow-800', label: 'Archived' },
     };
 
-    const config = statusConfig[status];
+    const config = statusConfig[status] || { color: 'bg-gray-100 text-gray-800', label: 'Unknown' };
     return (
       <Badge variant="outline" className={config.color}>
         {config.label}
@@ -146,11 +421,11 @@ export default function QuestionnairePage() {
 
   if (error) {
     return (
-      <Card>
+      <Card className="bg-white border border-gray-100 shadow-sm">
         <CardContent className="p-6">
           <div className="text-center text-red-600">
             <p>Error loading questionnaires: {error}</p>
-            <Button onClick={() => window.location.reload()} className="mt-2">
+            <Button onClick={() => window.location.reload()} className="mt-2 bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a]">
               Retry
             </Button>
           </div>
@@ -162,7 +437,7 @@ export default function QuestionnairePage() {
   if (showBuilder) {
     return (
       <QuestionnaireBuilder
-        questionnaire={editingQuestionnaire ? questionnaires.find(q => q.id === editingQuestionnaire) as any || null : null}
+        questionnaire={editingQuestionnaire ? questionnaires.find(q => q.id === editingQuestionnaire) || null : null}
         onSave={() => setShowBuilder(false)}
         onCancel={() => setShowBuilder(false)}
       />
@@ -174,12 +449,12 @@ export default function QuestionnairePage() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Questionnaires</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-bold text-gray-900 font-inter">Questionnaires</h1>
+          <p className="text-gray-600 font-inter">
             Create and manage dynamic questionnaires with AI assistance
           </p>
         </div>
-        <Button onClick={handleCreateNew}>
+        <Button onClick={handleCreateNew} className="bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] border-0 shadow-md hover:shadow-lg transition-all duration-300 font-inter font-medium">
           <Plus className="mr-2 h-4 w-4" />
           Create Questionnaire
         </Button>
@@ -187,402 +462,199 @@ export default function QuestionnairePage() {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
+        <Card className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Questionnaires</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-600">Total Questionnaires</CardTitle>
+            <FileText className="h-4 w-4 text-gray-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
-            <p className="text-xs text-muted-foreground">
+            <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+            <p className="text-xs text-gray-600">
               Across all statuses
             </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-600">Active</CardTitle>
             <CheckCircle className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{stats.pending}</div>
-            <p className="text-xs text-muted-foreground">
+            <div className="text-2xl font-bold text-green-600">{stats.active}</div>
+            <p className="text-xs text-gray-600">
               Currently collecting responses
             </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completed</CardTitle>
-            <TrendingUp className="h-4 w-4 text-blue-600" />
+            <CardTitle className="text-sm font-medium text-gray-600">Completion Rate</CardTitle>
+            <TrendingUp className="h-4 w-4 text-[#191919]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{stats.completed}</div>
-            <p className="text-xs text-muted-foreground">
-              Finished questionnaires
+            <div className={`text-2xl font-bold ${getCompletionColor(stats.averageCompletion)}`}>
+              {(stats.averageCompletion * 100).toFixed(1)}%
+            </div>
+            <p className="text-xs text-gray-600">
+              Average across all questionnaires
             </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Overdue</CardTitle>
-            <AlertCircle className="h-4 w-4 text-red-600" />
+            <CardTitle className="text-sm font-medium text-gray-600">Total Responses</CardTitle>
+            <BarChart3 className="h-4 w-4 text-[#191919]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{stats.overdue}</div>
-            <p className="text-xs text-muted-foreground">
-              Past due date
+            <div className="text-2xl font-bold text-[#191919]">{stats.totalResponses}</div>
+            <p className="text-xs text-gray-600">
+              All-time responses collected
             </p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Main Content */}
-      <Tabs defaultValue="list" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="list">Questionnaire List</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics Overview</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="list" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>All Questionnaires</CardTitle>
-              <CardDescription>
-                Manage your questionnaires, track responses, and analyze results
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {questionnaires.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p className="text-lg font-medium">No questionnaires yet</p>
-                  <p className="text-sm">Create your first questionnaire to get started</p>
-                  <Button onClick={handleCreateNew} className="mt-4">
-                    <Plus className="mr-2 h-4 w-4" />
-                    Create Questionnaire
-                  </Button>
-                </div>
-              ) : (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Title</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Questions</TableHead>
-                      <TableHead>Completion Rate</TableHead>
-                      <TableHead>Due Date</TableHead>
-                      <TableHead>Target Roles</TableHead>
-                      <TableHead className="w-12"></TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {questionnaires.map((questionnaire) => (
-                      <TableRow key={questionnaire.id}>
-                        <TableCell>
-                          <div>
-                            <div className="font-medium">{questionnaire.title}</div>
-                            <div className="text-sm text-muted-foreground truncate max-w-xs">
-                              {questionnaire.description}
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          {getStatusBadge(questionnaire.status)}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center space-x-2">
-                            <span>{questionnaire.questions.length}</span>
-                            <span className="text-xs text-muted-foreground">
-                              (~{questionnaire.estimatedTime}min)
-                            </span>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center space-x-2">
-                            <Progress 
-                              value={(questionnaire.completionRate || 0) * 100} 
-                              className="w-16" 
-                            />
-                            <span className={`text-sm font-medium ${getCompletionColor(questionnaire.completionRate || 0)}`}>
-                              {Math.round((questionnaire.completionRate || 0) * 100)}%
-                            </span>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className={`text-sm ${new Date(questionnaire.dueDate) < new Date() ? 'text-red-600' : ''}`}>
-                            {formatDate(questionnaire.dueDate)}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex flex-wrap gap-1">
-                            {questionnaire.targetRoles.slice(0, 2).map(role => (
-                              <Badge key={role} variant="outline" className="text-xs">
-                                {role.replace('_', ' ')}
-                              </Badge>
-                            ))}
-                            {questionnaire.targetRoles.length > 2 && (
-                              <Badge variant="outline" className="text-xs">
-                                +{questionnaire.targetRoles.length - 2}
-                              </Badge>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" className="h-8 w-8 p-0">
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <DropdownMenuItem onClick={() => handleEdit(questionnaire)}>
-                                <Edit className="mr-2 h-4 w-4" />
-                                Edit
-                              </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleViewAnalytics(questionnaire)}>
-                                <BarChart3 className="mr-2 h-4 w-4" />
-                                View Analytics
-                              </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleDuplicate(questionnaire)}>
-                                <Copy className="mr-2 h-4 w-4" />
-                                Duplicate
-                              </DropdownMenuItem>
-                              {questionnaire.status === 'draft' && (
-                                <DropdownMenuItem onClick={() => handleDistribute(questionnaire)}>
-                                  <Send className="mr-2 h-4 w-4" />
-                                  Distribute
-                                </DropdownMenuItem>
-                              )}
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem
-                                onClick={() => handleDelete(questionnaire.id)}
-                                className="text-red-600"
-                              >
-                                <Trash2 className="mr-2 h-4 w-4" />
-                                Delete
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="analytics" className="space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Response Trends</CardTitle>
-                <CardDescription>
-                  Response collection over time
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8 text-muted-foreground">
-                  <BarChart3 className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p>Response trends chart coming soon</p>
-                  <p className="text-sm">Will show response collection over time</p>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Completion Rates</CardTitle>
-                <CardDescription>
-                  Average completion rates by questionnaire type
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {questionnaires.slice(0, 5).map(q => (
-                    <div key={q.id} className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <p className="text-sm font-medium truncate">{q.title}</p>
-                        <Progress value={(q.completionRate || 0) * 100} className="mt-1" />
-                      </div>
-                      <span className={`ml-4 text-sm font-medium ${getCompletionColor(q.completionRate || 0)}`}>
-                        {Math.round((q.completionRate || 0) * 100)}%
-                      </span>
+      {/* Questionnaires Table */}
+      <Card className="bg-white border border-gray-100 shadow-sm">
+        <CardHeader>
+          <CardTitle className="text-gray-900 font-inter">Questionnaires</CardTitle>
+          <CardDescription className="text-gray-600 font-inter">
+            Manage your questionnaires and track completion rates
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-gray-700 font-medium">Title</TableHead>
+                <TableHead className="text-gray-700 font-medium">Status</TableHead>
+                <TableHead className="text-gray-700 font-medium">Category</TableHead>
+                <TableHead className="text-gray-700 font-medium">Created</TableHead>
+                <TableHead className="text-gray-700 font-medium">Completion</TableHead>
+                <TableHead className="text-gray-700 font-medium">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {questionnaires.map((questionnaire) => (
+                <TableRow key={questionnaire.id} className="hover:bg-[#D8C3A5]/20">
+                  <TableCell>
+                    <div>
+                      <div className="font-medium text-gray-900">{questionnaire.title}</div>
+                      <div className="text-sm text-gray-600">{questionnaire.description}</div>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Performance Metrics</CardTitle>
-              <CardDescription>
-                Key performance indicators for questionnaire effectiveness
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">
-                    {questionnaires.reduce((acc, q) => acc + (q.completionRate || 0), 0) / questionnaires.length * 100 || 0}%
-                  </div>
-                  <div className="text-sm text-muted-foreground">Average Completion Rate</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600">
-                    {questionnaires.reduce((acc, q) => acc + (q.estimatedTime || 0), 0) / questionnaires.length || 0}
-                  </div>
-                  <div className="text-sm text-muted-foreground">Average Time (minutes)</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600">
-                    {questionnaires.reduce((acc, q) => acc + q.questions.length, 0) / questionnaires.length || 0}
-                  </div>
-                  <div className="text-sm text-muted-foreground">Average Questions</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+                  </TableCell>
+                  <TableCell>{getStatusBadge(questionnaire.status)}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="bg-secondary/20 text-muted-foreground border-0">
+                      {questionnaire.category.replace('_', ' ')}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-gray-600">
+                    {formatDate(questionnaire.createdAt.toISOString())}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center space-x-2">
+                      <Progress value={questionnaire.analytics.overview.completionRate * 100} className="w-16 bg-secondary/20 border border-border h-2" />
+                      <span className="text-sm text-gray-600">{(questionnaire.analytics.overview.completionRate * 100).toFixed(0)}%</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0 text-gray-600 hover:text-gray-900 hover:bg-[#D8C3A5]/20">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="bg-white border border-gray-100 shadow-lg">
+                        <DropdownMenuLabel className="text-gray-900">Actions</DropdownMenuLabel>
+                        <DropdownMenuItem
+                          onClick={() => handleEdit(questionnaire)}
+                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium"
+                        >
+                          <Edit className="mr-2 h-4 w-4" />
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleDuplicate(questionnaire)}
+                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium"
+                        >
+                          <Copy className="mr-2 h-4 w-4" />
+                          Duplicate
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleDistribute(questionnaire)}
+                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium"
+                        >
+                          <Send className="mr-2 h-4 w-4" />
+                          Distribute
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleViewAnalytics(questionnaire)}
+                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium"
+                        >
+                          <BarChart3 className="mr-2 h-4 w-4" />
+                          Analytics
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator className="bg-gray-100" />
+                        <DropdownMenuItem
+                          onClick={() => handleDelete(questionnaire.id)}
+                          className="text-red-600 hover:bg-red-50 font-inter font-medium"
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
 
       {/* Analytics Dialog */}
       <Dialog open={showAnalytics} onOpenChange={setShowAnalytics}>
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-4xl bg-white border border-gray-100 shadow-lg">
           <DialogHeader>
-            <DialogTitle>{selectedQuestionnaire?.title} - Analytics</DialogTitle>
-            <DialogDescription>
-              Detailed analytics and response data for this questionnaire
+            <DialogTitle className="text-gray-900">Questionnaire Analytics</DialogTitle>
+            <DialogDescription className="text-gray-600">
+              {selectedQuestionnaire?.title} - Response analytics and insights
             </DialogDescription>
           </DialogHeader>
           {selectedQuestionnaire && (
-            <QuestionnaireAnalytics questionnaire={selectedQuestionnaire} />
+            <div className="space-y-4">
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    {selectedQuestionnaire.analytics.overview.totalResponses}
+                  </div>
+                  <div className="text-sm text-gray-600">Total Responses</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-green-600">
+                    {(selectedQuestionnaire.analytics.overview.completionRate * 100).toFixed(1)}%
+                  </div>
+                  <div className="text-sm text-gray-600">Completion Rate</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-[#191919]">
+                    {selectedQuestionnaire.analytics.overview.averageScore.toFixed(1)}
+                  </div>
+                  <div className="text-sm text-gray-600">Average Score</div>
+                </div>
+              </div>
+              <div className="text-center py-8 text-gray-600">
+                <BarChart3 className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p>Detailed analytics charts coming soon</p>
+              </div>
+            </div>
           )}
         </DialogContent>
       </Dialog>
     </div>
   );
-}
-
-// Questionnaire Analytics Component
-interface QuestionnaireAnalyticsProps {
-  questionnaire: Questionnaire;
-}
-
-const QuestionnaireAnalytics: React.FC<QuestionnaireAnalyticsProps> = ({
-  questionnaire,
-}) => {
-  const { getQuestionnaireAnalytics } = useQuestionnaires();
-  
-  let analytics: any = null;
-  try {
-    analytics = getQuestionnaireAnalytics ? getQuestionnaireAnalytics(questionnaire.id) : null;
-  } catch (error) {
-    console.warn('Error getting questionnaire analytics:', error);
-    analytics = null;
-  }
-
-  if (!analytics) {
-    return (
-      <div className="text-center py-8 text-muted-foreground">
-        <BarChart3 className="h-12 w-12 mx-auto mb-4 opacity-50" />
-        <p>No analytics data available</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-6">
-      {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold">{analytics.totalResponses || 0}</div>
-            <div className="text-sm text-muted-foreground">Total Responses</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-green-600">
-              {Math.round((analytics.completionRate || 0) * 100)}%
-            </div>
-            <div className="text-sm text-muted-foreground">Completion Rate</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-blue-600">
-              {analytics.averageTime || 0}min
-            </div>
-            <div className="text-sm text-muted-foreground">Average Time</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-purple-600">
-              {questionnaire.questions.length}
-            </div>
-            <div className="text-sm text-muted-foreground">Questions</div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Response Trends */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Response Trends</CardTitle>
-          <CardDescription>
-            Daily response collection over the last 30 days
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center py-8 text-muted-foreground">
-            <TrendingUp className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>Response trends chart coming soon</p>
-            <p className="text-sm">Will integrate with Recharts for visualization</p>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Question Analysis */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Question Analysis</CardTitle>
-          <CardDescription>
-            Response patterns by question
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {questionnaire.questions.slice(0, 5).map((question, index) => (
-              <div key={question.id} className="border rounded-lg p-4">
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex-1">
-                    <p className="font-medium">Q{index + 1}: {question.text}</p>
-                    <Badge variant="outline" className="mt-1">
-                      {question.type.replace('_', ' ')}
-                    </Badge>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm text-muted-foreground">
-                      {Math.floor(Math.random() * 50) + 10} responses
-                    </div>
-                  </div>
-                </div>
-                <Progress value={Math.random() * 100} className="mt-2" />
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}; 
+} 

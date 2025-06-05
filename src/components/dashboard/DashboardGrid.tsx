@@ -436,7 +436,7 @@ function RecentActivityWidget({ expanded }: { expanded: boolean }) {
               activity.type === 'risk' ? 'bg-red-500' :
               activity.type === 'control' ? 'bg-blue-500' :
               activity.type === 'compliance' ? 'bg-green-500' :
-              activity.type === 'document' ? 'bg-purple-500' :
+              activity.type === 'document' ? 'bg-[#191919]' :
               'bg-orange-500'
             }`} />
             <div className="flex-1 min-w-0">

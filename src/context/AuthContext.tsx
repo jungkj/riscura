@@ -150,6 +150,8 @@ const authService = {
     password: string, 
     rememberMe: boolean = false
   ): Promise<{ user: AuthUser; token: string }> => {
+    console.log('AuthContext: Attempting login for:', email);
+    
     const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: {
@@ -158,11 +160,43 @@ const authService = {
       body: JSON.stringify({ email, password, rememberMe }),
     });
 
-    const data = await response.json();
+    console.log('AuthContext: Response status:', response.status);
+    console.log('AuthContext: Response headers:', Object.fromEntries(response.headers.entries()));
+
+    // Check if response is JSON or HTML
+    const contentType = response.headers.get('content-type');
+    
+    let data;
+    try {
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+        console.log('AuthContext: Parsed JSON response:', data);
+      } else {
+        // If not JSON, try to read as text to see what we got
+        const text = await response.text();
+        console.error('AuthContext: API returned non-JSON response:', text.substring(0, 500));
+        
+        // Check if it's an HTML error page
+        if (text.includes('<!DOCTYPE html>')) {
+          throw new Error('Server error: The login API is not responding correctly. Please check the server logs or use demo credentials (admin@riscura.com / admin123)');
+        } else {
+          throw new Error(`Server returned unexpected content: ${text.substring(0, 100)}...`);
+        }
+      }
+    } catch (parseError) {
+      console.error('AuthContext: Failed to parse response:', parseError);
+      if (parseError instanceof Error && parseError.message.includes('Server error:')) {
+        throw parseError; // Re-throw our custom error
+      }
+      throw new Error('Server error: Unable to process response. Please try again or use demo credentials (admin@riscura.com / admin123)');
+    }
 
     if (!response.ok) {
+      console.error('AuthContext: Login failed:', data);
       throw new Error(data.error || 'Login failed');
     }
+
+    console.log('AuthContext: Login successful:', data);
 
     // Store token in localStorage for persistence
     if (data.tokens?.accessToken) {
