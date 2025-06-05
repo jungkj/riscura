@@ -131,6 +131,9 @@ export default function Sidebar({ isOpen, user }: SidebarProps) {
   };
 
   const isItemActive = (href: string) => {
+    if (href === '/dashboard') {
+      return pathname === '/dashboard';
+    }
     return pathname === href || pathname?.startsWith(href + '/');
   };
 

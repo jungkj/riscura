@@ -109,6 +109,10 @@
     @apply border-border;
   }
   
+  html {
+    background-color: rgb(245, 241, 233); /* Ensure no yellow background shows through */
+  }
+  
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
@@ -117,6 +121,7 @@
     font-optical-sizing: auto;
     font-variation-settings: "slnt" 0;
     font-weight: 600; /* Bold text by default */
+    background-color: rgb(245, 241, 233); /* Ensure consistent cream background */
   }
   
   /* Bold Inter font for all headings and text */
