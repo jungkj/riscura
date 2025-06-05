@@ -239,7 +239,7 @@ export default function AIInsightsPage() {
       case 'low':
         return 'text-green-600 bg-green-50 border-green-200';
       default:
-        return 'text-gray-600 bg-gray-50 border-gray-200';
+        return 'text-muted-foreground bg-secondary/20 border-border';
     }
   };
 
@@ -314,7 +314,7 @@ export default function AIInsightsPage() {
                     ) : predictiveAnalysis.trend === 'decreasing' ? (
                       <TrendingDown className="h-6 w-6 text-green-500" />
                     ) : (
-                      <div className="h-6 w-6 bg-gray-400 rounded-full" />
+                      <div className="h-6 w-6 bg-muted rounded-full" />
                     )}
                     <span className="text-lg font-semibold capitalize">
                       {predictiveAnalysis.trend}

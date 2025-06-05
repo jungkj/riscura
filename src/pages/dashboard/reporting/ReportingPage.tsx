@@ -652,7 +652,7 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
         <div className="flex items-center justify-between p-6">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-notion-blue to-notion-purple rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-[#191919] to-[#191919] rounded-lg flex items-center justify-center">
                 <BarChart3 className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -811,7 +811,7 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
                       {analytics.totalViews}
                     </p>
                   </div>
-                  <Eye className="w-8 h-8 text-purple-500" />
+                  <Eye className="w-8 h-8 text-[#191919]" />
                 </div>
               </CardContent>
             </Card>
@@ -825,7 +825,7 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
                       {analytics.aiInsights}
                     </p>
                   </div>
-                  <Brain className="w-8 h-8 text-indigo-500" />
+                  <Brain className="w-8 h-8 text-[#191919]" />
                 </div>
               </CardContent>
             </Card>

@@ -65,7 +65,7 @@ const FrameworkCard: React.FC<{
       name: 'NIST RMF',
       description: 'Cybersecurity Risk Management Framework',
       icon: <Zap className="h-6 w-6" />,
-      color: 'text-purple-600',
+      color: 'text-[#191919]',
       categories: ['Technical', 'Operational', 'Management']
     }
   };
@@ -81,7 +81,7 @@ const FrameworkCard: React.FC<{
     >
       <CardHeader className="pb-3">
         <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-lg bg-gray-50 ${info.color}`}>
+          <div className={`p-2 rounded-lg bg-secondary/10 ${info.color}`}>
             {info.icon}
           </div>
           <div>
@@ -156,7 +156,7 @@ const QuantitativeResultsView: React.FC<{ results: QuantitativeResults }> = ({ r
           <CardDescription>Monte Carlo simulation results</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
+          <div className="h-64 bg-secondary/10 rounded-lg flex items-center justify-center">
             <div className="text-center text-muted-foreground">
               <BarChart3 className="h-12 w-12 mx-auto mb-2" />
               <p>Distribution chart would be rendered here</p>
@@ -299,7 +299,7 @@ const RecommendationsView: React.FC<{
       case 'high': return 'bg-orange-500';
       case 'medium': return 'bg-yellow-500';
       case 'low': return 'bg-green-500';
-      default: return 'bg-gray-500';
+      default: return 'bg-muted';
     }
   };
 
@@ -320,7 +320,7 @@ const RecommendationsView: React.FC<{
           <CardHeader>
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-gray-50 rounded-lg">
+                <div className="p-2 bg-secondary/10 rounded-lg">
                   {getTypeIcon(recommendation.type)}
                 </div>
                 <div>

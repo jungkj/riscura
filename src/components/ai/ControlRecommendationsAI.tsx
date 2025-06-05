@@ -47,7 +47,7 @@ const FrameworkSelector: React.FC<{
   const frameworkInfo = {
     cobit: { name: 'COBIT 2019', icon: <Target className="h-5 w-5" />, color: 'text-blue-600' },
     itil: { name: 'ITIL 4', icon: <Activity className="h-5 w-5" />, color: 'text-green-600' },
-    sox: { name: 'SOX Controls', icon: <Shield className="h-5 w-5" />, color: 'text-purple-600' }
+    sox: { name: 'SOX Controls', icon: <Shield className="h-5 w-5" />, color: 'text-[#191919]' }
   };
 
   return (
@@ -74,7 +74,7 @@ const FrameworkSelector: React.FC<{
             >
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg bg-gray-50 ${info?.color || 'text-gray-600'}`}>
+                  <div className={`p-2 rounded-lg bg-secondary/10 ${info?.color || 'text-muted-foreground'}`}>
                     {info?.icon || <Settings className="h-5 w-5" />}
                   </div>
                   <div>
@@ -104,7 +104,7 @@ const RecommendationCard: React.FC<{
       case 'high': return 'bg-orange-500';
       case 'medium': return 'bg-yellow-500';
       case 'low': return 'bg-green-500';
-      default: return 'bg-gray-500';
+      default: return 'bg-muted';
     }
   };
 
@@ -122,7 +122,7 @@ const RecommendationCard: React.FC<{
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-gray-50 rounded-lg">
+            <div className="p-2 bg-secondary/10 rounded-lg">
               {getTypeIcon(recommendation.controlTemplate.type)}
             </div>
             <div>

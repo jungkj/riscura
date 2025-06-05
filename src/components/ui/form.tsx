@@ -78,7 +78,7 @@ const FormItem = React.forwardRef<
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn('space-y-2', className)} {...props} />
+      <div ref={ref} className={cn('space-y-2 mb-4', className)} {...props} />
     </FormItemContext.Provider>
   );
 });
@@ -93,7 +93,13 @@ const FormLabel = React.forwardRef<
   return (
     <Label
       ref={ref}
-      className={cn(error && 'text-destructive', className)}
+      className={cn(
+        // Drata-style label styling
+        'text-sm font-semibold text-[#191919] font-inter mb-1 block',
+        // Error state
+        error && 'text-red-600',
+        className
+      )}
       htmlFor={formItemId}
       {...props}
     />
@@ -134,7 +140,11 @@ const FormDescription = React.forwardRef<
     <p
       ref={ref}
       id={formDescriptionId}
-      className={cn('text-[0.8rem] text-muted-foreground', className)}
+      className={cn(
+        // Drata-style help text
+        'text-xs text-[#A8A8A8] font-inter mt-1',
+        className
+      )}
       {...props}
     />
   );
@@ -156,10 +166,17 @@ const FormMessage = React.forwardRef<
     <p
       ref={ref}
       id={formMessageId}
-      className={cn('text-[0.8rem] font-medium text-destructive', className)}
+      className={cn(
+        // Drata-style error messaging
+        'text-xs font-medium text-red-600 font-inter mt-1 flex items-center space-x-1',
+        className
+      )}
       {...props}
     >
-      {body}
+      <svg className="w-3 h-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+      </svg>
+      <span>{body}</span>
     </p>
   );
 });

@@ -594,7 +594,7 @@ export function QuestionnaireBuilder({
               {questionnaire ? 'Edit Questionnaire' : 'Create Questionnaire'}
             </h1>
             {aiEnabled && (
-              <Badge className="bg-purple-100 text-purple-800 border-purple-200">
+              <Badge className="bg-secondary/20 text-foreground border-border">
                 <Brain className="w-3 h-3 mr-1" />
                 AI Enhanced
               </Badge>
@@ -772,10 +772,10 @@ export function QuestionnaireBuilder({
                                   <div className="flex items-center space-x-2 text-xs text-notion-text-secondary">
                                     <span className="capitalize">{question.type.replace('_', ' ')}</span>
                                     {question.required && (
-                                      <Badge variant="outline" className="text-xs">Required</Badge>
+                                      <Badge variant="outline" className="text-xs bg-secondary/20 text-foreground">Required</Badge>
                                     )}
                                     {question.aiGenerated && (
-                                      <Badge variant="outline" className="text-xs bg-purple-50 text-purple-700">
+                                      <Badge variant="outline" className="text-xs bg-secondary/20 text-foreground">
                                         <Brain className="w-3 h-3 mr-1" />
                                         AI
                                       </Badge>

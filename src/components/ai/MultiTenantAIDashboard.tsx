@@ -400,7 +400,7 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
                           {analytics?.usage.aiQueries.averageResponseTime || 0}ms
                         </p>
                       </div>
-                      <Clock className="w-8 h-8 text-purple-600" />
+                      <Clock className="w-8 h-8 text-[#191919]" />
                     </div>
                     <div className="mt-2 flex items-center text-sm">
                       <TrendingDown className="w-4 h-4 text-green-600 mr-1" />

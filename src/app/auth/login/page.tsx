@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
-import { Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, AlertCircle, Shield, CheckCircle } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 function LoginForm() {
@@ -68,41 +68,65 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md space-y-6">
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">Welcome back</h1>
-          <p className="text-muted-foreground">
-            Sign in to your Riscura account
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-4">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-grid-slate-200/50 dark:bg-grid-slate-700/25 bg-[size:20px_20px] [mask-image:radial-gradient(white,transparent_85%)]" />
+      
+      <div className="relative w-full max-w-md space-y-8">
+        {/* Logo and Header */}
+        <div className="text-center space-y-6">
+          <div className="mx-auto w-20 h-20 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/25">
+            <Shield className="w-10 h-10 text-white" />
+          </div>
+          
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
+              Welcome back
+            </h1>
+            <p className="text-slate-600 dark:text-slate-400">
+              Sign in to your Riscura account
+            </p>
+          </div>
         </div>
 
-        <Card className="border-0 shadow-none">
-          <CardContent className="p-6 space-y-4">
+        {/* Login Card */}
+        <Card className="backdrop-blur-sm bg-white/70 dark:bg-slate-800/70 border-slate-200/60 dark:border-slate-700/60 shadow-2xl shadow-slate-900/10">
+          <CardContent className="p-8 space-y-6">
             {(error || authError) && (
-              <Alert variant="destructive">
+              <Alert variant="destructive" className="border-red-200 bg-red-50 dark:bg-red-950/50">
                 <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error || authError}</AlertDescription>
+                <AlertDescription className="text-red-700 dark:text-red-300">
+                  {error || authError}
+                </AlertDescription>
               </Alert>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                />
+                <Label htmlFor="email" className="text-slate-700 dark:text-slate-300 font-medium">
+                  Email Address
+                </Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="pl-10 h-11 bg-white/50 dark:bg-slate-900/50 border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500/20"
+                    required
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-slate-700 dark:text-slate-300 font-medium">
+                  Password
+                </Label>
                 <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
                   <Input
                     id="password"
                     name="password"
@@ -110,7 +134,7 @@ function LoginForm() {
                     placeholder="Enter your password"
                     value={formData.password}
                     onChange={handleInputChange}
-                    className="pr-10"
+                    className="pl-10 pr-10 h-11 bg-white/50 dark:bg-slate-900/50 border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500/20"
                     required
                   />
                   <Button
@@ -121,9 +145,9 @@ function LoginForm() {
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                      <EyeOff className="h-4 w-4 text-slate-400" />
                     ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground" />
+                      <Eye className="h-4 w-4 text-slate-400" />
                     )}
                   </Button>
                 </div>
@@ -132,23 +156,34 @@ function LoginForm() {
               <div className="flex items-center justify-between">
                 <Link
                   href="/auth/forgot-password"
-                  className="text-sm text-muted-foreground hover:text-primary underline-offset-4 hover:underline"
+                  className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-500 hover:underline underline-offset-4"
                 >
                   Forgot password?
                 </Link>
               </div>
 
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Signing in...' : 'Sign in'}
+              <Button 
+                type="submit" 
+                className="w-full h-11 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium shadow-lg shadow-blue-500/25 transition-all duration-200" 
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <div className="flex items-center space-x-2">
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span>Signing in...</span>
+                  </div>
+                ) : (
+                  'Sign in'
+                )}
               </Button>
             </form>
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <Separator className="w-full" />
+                <Separator className="w-full bg-slate-200 dark:bg-slate-700" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
+                <span className="bg-white/70 dark:bg-slate-800/70 px-2 text-slate-500 dark:text-slate-400 font-medium">
                   Or continue with
                 </span>
               </div>
@@ -157,7 +192,7 @@ function LoginForm() {
             <Button
               type="button"
               variant="outline"
-              className="w-full"
+              className="w-full h-11 bg-white/50 dark:bg-slate-900/50 border-slate-300 dark:border-slate-600 hover:bg-white dark:hover:bg-slate-800 transition-colors"
               onClick={handleGoogleLogin}
               disabled={isLoading}
             >
@@ -182,31 +217,47 @@ function LoginForm() {
               Log in using Google
             </Button>
 
+            {/* Demo Credentials Section */}
             {process.env.NODE_ENV === 'development' && (
-              <div className="space-y-2">
-                <Separator />
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full text-xs"
-                  onClick={handleDemoLogin}
-                >
-                  Use Demo Credentials
-                </Button>
+              <div className="space-y-3">
+                <Separator className="bg-slate-200 dark:bg-slate-700" />
+                <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <CheckCircle className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                    <span className="text-sm font-medium text-blue-800 dark:text-blue-200">Demo Mode</span>
+                  </div>
+                  <p className="text-xs text-blue-700 dark:text-blue-300 mb-3">
+                    Use demo credentials to explore the platform
+                  </p>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-xs bg-blue-100 dark:bg-blue-900/50 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900"
+                    onClick={handleDemoLogin}
+                  >
+                    Use Demo Credentials (admin@riscura.com)
+                  </Button>
+                </div>
               </div>
             )}
 
-            <div className="text-center text-sm text-muted-foreground">
+            <div className="text-center text-sm text-slate-600 dark:text-slate-400">
               Don't have an account?{' '}
               <Link
                 href="/auth/register"
-                className="text-primary underline-offset-4 hover:underline"
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-500 hover:underline underline-offset-4 font-medium"
               >
                 Sign up
               </Link>
             </div>
           </CardContent>
         </Card>
+
+        {/* Footer */}
+        <div className="text-center text-xs text-slate-500 dark:text-slate-400">
+          © 2024 Riscura. All rights reserved.
+        </div>
       </div>
     </div>
   );
@@ -215,11 +266,8 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-2 text-sm text-muted-foreground">Loading...</p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
       </div>
     }>
       <LoginForm />

@@ -256,10 +256,15 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     // Check if AI features are enabled
     const aiEnabled = process.env.NEXT_PUBLIC_ENABLE_AI_FEATURES !== 'false';
     const hasApiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY && 
-                     process.env.NEXT_PUBLIC_OPENAI_API_KEY !== 'sk-placeholder';
+                     process.env.NEXT_PUBLIC_OPENAI_API_KEY !== 'sk-placeholder' &&
+                     process.env.NEXT_PUBLIC_OPENAI_API_KEY !== 'your-openai-api-key';
     
     if (!aiEnabled || !hasApiKey) {
-      console.log('AI features disabled or API key missing - running in demo mode');
+      // Only log once in development, suppress in production
+      if (process.env.NODE_ENV === 'development' && !hasApiKey) {
+        console.warn('AI features disabled: Missing OpenAI API key. Set NEXT_PUBLIC_OPENAI_API_KEY in your environment.');
+      }
+      
       setConnectionStatus(ConnectionStatus.DISCONNECTED);
       setError({
         type: 'service_disabled',
@@ -275,7 +280,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           messages: [
             { 
               id: 'msg-1', 
-              content: 'Hello! I\'m ARIA, your AI Risk Intelligence Assistant. AI features are currently disabled in demo mode. You can still explore the dashboard and other features!', 
+              content: 'Hello! I\'m ARIA, your AI Risk Intelligence Assistant. AI features are currently disabled. You can still explore the dashboard and other features!', 
               timestamp: new Date(), 
               role: 'assistant' 
             }

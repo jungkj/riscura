@@ -68,7 +68,7 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
       title: 'Generate Report',
       description: 'Create compliance report',
       icon: <BarChart3 className="w-5 h-5" />,
-      color: 'bg-purple-50 hover:bg-purple-100 border-purple-200 text-purple-700',
+      color: 'bg-secondary/20 hover:bg-secondary/30 border-border text-foreground',
       href: '/dashboard/reporting',
       badge: 'AI',
       roles: ['executive', 'analyst', 'auditor']
@@ -97,7 +97,7 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
       title: 'AI Analysis',
       description: 'Run intelligent assessment',
       icon: <Brain className="w-5 h-5" />,
-      color: 'bg-indigo-50 hover:bg-indigo-100 border-indigo-200 text-indigo-700',
+      color: 'bg-secondary/20 hover:bg-secondary/30 border-border text-foreground',
       href: '/dashboard/ai-insights',
       badge: 'New',
       roles: ['executive', 'analyst']
