@@ -4,36 +4,36 @@
 
 @layer base {
   :root {
-    /* New Refined Beige and Dark Black Theme */
-    --background: 245 241 233; /* Background Beige #F5F1E9 */
-    --foreground: 25 25 25; /* Dark Black #191919 */
+    /* Riscura Bold Black Lines & Cream Background Theme */
+    --background: 245 241 233; /* Cream Background #F5F1E9 */
+    --foreground: 25 25 25; /* Bold Black Text #191919 */
     
-    --card: 250 250 250; /* Soft White #FAFAFA */
-    --card-foreground: 25 25 25; /* Dark Black for card text */
+    --card: 250 250 250; /* Soft White Cards #FAFAFA */
+    --card-foreground: 25 25 25; /* Bold Black card text */
     
     --popover: 250 250 250; /* Soft White */
-    --popover-foreground: 25 25 25; /* Dark Black */
+    --popover-foreground: 25 25 25; /* Bold Black */
     
-    --primary: 25 25 25; /* Dark Black primary */
-    --primary-foreground: 250 250 250; /* Soft White text on black */
+    --primary: 25 25 25; /* Bold Black primary */
+    --primary-foreground: 250 250 250; /* White text on black */
     
     --secondary: 216 195 165; /* Warm Beige Accent #D8C3A5 */
-    --secondary-foreground: 25 25 25; /* Dark Black text */
+    --secondary-foreground: 25 25 25; /* Bold Black text */
     
-    --muted: 216 195 165; /* Warm Beige Accent for muted elements */
-    --muted-foreground: 168 168 168; /* Muted Gray #A8A8A8 */
+    --muted: 250 250 250; /* Soft White for muted backgrounds */
+    --muted-foreground: 25 25 25; /* Bold Black text even for muted */
     
     --accent: 216 195 165; /* Warm Beige Accent */
-    --accent-foreground: 25 25 25; /* Dark Black text */
+    --accent-foreground: 25 25 25; /* Bold Black text */
     
     --destructive: 220 38 38; /* Red for destructive actions */
-    --destructive-foreground: 250 250 250; /* Soft White text on red */
+    --destructive-foreground: 250 250 250; /* White text on red */
     
-    --border: 216 195 165; /* Warm Beige Accent for borders */
-    --input: 216 195 165; /* Input borders */
-    --ring: 25 25 25; /* Focus ring color */
+    --border: 25 25 25; /* Bold Black borders */
+    --input: 25 25 25; /* Bold Black input borders */
+    --ring: 25 25 25; /* Bold Black focus ring */
     
-    --radius: 0.5rem;
+    --radius: 0.375rem; /* Slightly smaller radius for cleaner look */
     
     /* Notion-specific variables mapped to new colors */
     --notion-gray: 168 168 168; /* Muted Gray */
@@ -116,26 +116,35 @@
     font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
     font-optical-sizing: auto;
     font-variation-settings: "slnt" 0;
+    font-weight: 600; /* Bold text by default */
   }
   
-  /* Inter font for all headings and text */
+  /* Bold Inter font for all headings and text */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold text-foreground;
+    @apply font-bold text-foreground;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     line-height: 1.2;
     letter-spacing: -0.025em;
+    font-weight: 700; /* Extra bold for headings */
   }
   
-  h1 { @apply text-3xl; }
-  h2 { @apply text-2xl; }
-  h3 { @apply text-xl; }
-  h4 { @apply text-lg; }
-  h5 { @apply text-base; }
-  h6 { @apply text-sm; }
+  h1 { @apply text-3xl; font-weight: 800; }
+  h2 { @apply text-2xl; font-weight: 700; }
+  h3 { @apply text-xl; font-weight: 700; }
+  h4 { @apply text-lg; font-weight: 600; }
+  h5 { @apply text-base; font-weight: 600; }
+  h6 { @apply text-sm; font-weight: 600; }
   
   p {
     @apply text-foreground leading-relaxed;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600; /* Bold paragraph text */
+  }
+  
+  /* Ensure all text elements are bold */
+  span, div, label, button, input, textarea, select {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
   }
   
   /* Enhanced focus styles with new colors */
@@ -145,22 +154,26 @@
 }
 
 @layer components {
-  /* Updated card styles with new colors */
+  /* Clean card styles with thick black borders */
   .notion-card {
-    @apply bg-card border border-border rounded-lg shadow-sm hover:shadow-md transition-all duration-200;
+    @apply bg-card border-2 border-border rounded-md shadow-sm hover:shadow-md transition-all duration-200;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
   }
   
   .notion-card:hover {
-    @apply shadow-lg;
+    @apply shadow-lg border-foreground;
   }
   
-  /* Updated button styles */
+  /* Clean button styles with bold text */
   .notion-button {
-    @apply inline-flex items-center justify-center rounded-md text-sm font-medium;
+    @apply inline-flex items-center justify-center rounded-md text-sm font-bold;
     @apply transition-colors duration-200;
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
     @apply disabled:opacity-50 disabled:pointer-events-none;
+    @apply border-2 border-transparent;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
   }
   
   .notion-button-primary {
@@ -179,14 +192,15 @@
     @apply bg-transparent text-foreground hover:bg-secondary hover:text-secondary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200;
   }
   
-  /* Updated input styles */
+  /* Clean input styles with thick black borders */
   .notion-input {
-    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm;
-    @apply ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium;
+    @apply flex h-10 w-full rounded-md border-2 border-input bg-background px-3 py-2 text-sm;
+    @apply ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-bold;
     @apply placeholder:text-muted-foreground;
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
     @apply disabled:cursor-not-allowed disabled:opacity-50;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
   }
   
   /* Updated navigation */
@@ -478,4 +492,190 @@
 
 .text-soft-white {
   color: #FAFAFA;
+}
+
+/* Form Enhancement Styles for Drata Aesthetic */
+
+/* Custom Slider Styles */
+.slider-thumb::-webkit-slider-thumb {
+  @apply appearance-none w-5 h-5 bg-white border-2 border-[#D8C3A5] rounded-full cursor-pointer shadow-md hover:shadow-lg transition-all duration-200;
+}
+
+.slider-thumb::-webkit-slider-thumb:hover {
+  @apply border-[#191919] shadow-lg transform scale-110;
+}
+
+.slider-thumb::-webkit-slider-thumb:active {
+  @apply border-[#191919] shadow-xl transform scale-105;
+}
+
+.slider-thumb::-moz-range-thumb {
+  @apply appearance-none w-5 h-5 bg-white border-2 border-[#D8C3A5] rounded-full cursor-pointer shadow-md hover:shadow-lg transition-all duration-200;
+  border: none;
+}
+
+.slider-thumb::-moz-range-thumb:hover {
+  @apply border-[#191919] shadow-lg;
+}
+
+.slider-thumb::-moz-range-thumb:active {
+  @apply border-[#191919] shadow-xl;
+}
+
+.slider-thumb::-moz-range-track {
+  @apply bg-[#F5F1E9] rounded-lg;
+}
+
+/* Enhanced focus rings for form elements */
+.enhanced-focus:focus-visible {
+  @apply outline-none ring-2 ring-[#D8C3A5]/30 ring-offset-2 ring-offset-white;
+}
+
+/* Custom checkbox styling */
+input[type="checkbox"]:checked {
+  @apply bg-[#191919] border-[#191919];
+}
+
+input[type="checkbox"]:focus {
+  @apply ring-2 ring-[#D8C3A5]/30 ring-offset-2;
+}
+
+/* Form validation animations */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+.error-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* Success checkmark animation */
+@keyframes checkmark {
+  0% { transform: scale(0) rotate(45deg); opacity: 0; }
+  50% { transform: scale(0.8) rotate(45deg); opacity: 1; }
+  100% { transform: scale(1) rotate(45deg); opacity: 1; }
+}
+
+.success-checkmark {
+  animation: checkmark 0.3s ease-in-out;
+}
+
+/* Loading spinner for form submissions */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Enhanced Input Focus States */
+.form-input-enhanced {
+  @apply transition-all duration-200 ease-in-out;
+  @apply border-[#D8C3A5]/60 bg-[#FAFAFA] focus:border-[#191919] focus:ring-2 focus:ring-[#D8C3A5]/30;
+  @apply shadow-sm hover:shadow-md focus:shadow-lg;
+}
+
+.form-input-error {
+  @apply border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-200;
+  @apply shadow-sm hover:shadow-md focus:shadow-lg;
+}
+
+.form-input-success {
+  @apply border-green-500 bg-green-50 focus:border-green-500 focus:ring-green-200;
+  @apply shadow-sm hover:shadow-md focus:shadow-lg;
+}
+
+/* Tooltip Styling */
+.tooltip-content {
+  @apply bg-[#191919] text-[#FAFAFA] text-xs px-2 py-1 rounded-md;
+  @apply shadow-lg border border-[#D8C3A5]/30;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Form Field Container */
+.form-field-container {
+  @apply space-y-2 mb-4;
+}
+
+/* Enhanced Label Styling */
+.form-label-enhanced {
+  @apply text-sm font-semibold text-[#191919] font-inter mb-1 block;
+  @apply flex items-center space-x-1;
+}
+
+/* Help Text Styling */
+.form-help-text {
+  @apply text-xs text-[#A8A8A8] font-inter mt-1;
+}
+
+/* Error Message Styling */
+.form-error-message {
+  @apply text-xs font-medium text-red-600 font-inter mt-1;
+  @apply flex items-center space-x-1;
+}
+
+/* Required Field Indicator */
+.required-indicator {
+  @apply text-red-500 text-sm;
+}
+
+/* Select Enhancement */
+.select-enhanced {
+  @apply border-[#D8C3A5]/60 bg-[#FAFAFA] focus:border-[#191919] focus:ring-[#D8C3A5]/30;
+  @apply transition-all duration-200 font-inter;
+}
+
+/* Textarea Enhancement */
+.textarea-enhanced {
+  @apply border-[#D8C3A5]/60 bg-[#FAFAFA] focus:border-[#191919] focus:ring-[#D8C3A5]/30;
+  @apply transition-all duration-200 resize-none font-inter;
+  @apply shadow-sm hover:shadow-md focus:shadow-lg;
+}
+
+/* Character Counter */
+.character-counter {
+  @apply text-xs text-[#A8A8A8] font-inter;
+}
+
+/* Form Section Styling */
+.form-section {
+  @apply space-y-4 p-4 bg-[#FAFAFA] rounded-lg border border-[#D8C3A5]/30;
+}
+
+/* Button Enhancement */
+.button-enhanced {
+  @apply transition-all duration-200 font-inter font-medium;
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.button-primary-enhanced {
+  @apply bg-[#191919] text-[#FAFAFA] hover:bg-[#191919]/90;
+  @apply focus:ring-[#191919] focus:ring-offset-white;
+  @apply shadow-md hover:shadow-lg;
+}
+
+.button-secondary-enhanced {
+  @apply border-[#D8C3A5]/60 text-[#A8A8A8] hover:text-[#191919] hover:bg-[#F5F1E9];
+  @apply focus:ring-[#D8C3A5]/30 focus:ring-offset-white;
+}
+
+/* Validation State Colors */
+.validation-success {
+  @apply border-green-500 bg-green-50 text-green-900;
+}
+
+.validation-warning {
+  @apply border-yellow-500 bg-yellow-50 text-yellow-900;
+}
+
+.validation-error {
+  @apply border-red-500 bg-red-50 text-red-900;
+}
+
+/* Smooth transitions for all interactive elements */
+.smooth-transition {
+  @apply transition-all duration-200 ease-in-out;
 } 

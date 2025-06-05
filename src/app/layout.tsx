@@ -1,72 +1,61 @@
-import type { Metadata, Viewport } from 'next';
+import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { ThemeProvider } from 'next-themes';
-import { Toaster } from '@/components/ui/toaster';
-import { Toaster as Sonner } from '@/components/ui/sonner';
-import { AIProvider } from '@/context/AIContext';
+import { ThemeProvider } from '@/components/providers/theme-provider';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { AuthProvider } from '@/context/AuthContext';
 import { RiskProvider } from '@/context/RiskContext';
 import { ControlProvider } from '@/context/ControlContext';
-import { QuestionnaireProvider } from '@/context/QuestionnaireContext';
-import { WorkflowProvider } from '@/context/WorkflowContext';
-import { cn } from '@/lib/utils';
-import { ClientProviders } from '@/components/ui/client-providers';
+import { AIProvider } from '@/context/AIContext';
+import { Toaster } from '@/components/ui/sonner';
+import ClientProvider from '@/components/providers/ClientProvider';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ 
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+  weight: ['400', '500', '600', '700', '800'],
+});
 
 export const metadata: Metadata = {
-  title: 'Riscura - AI-Powered RCSA Automation',
-  description: 'Advanced Risk and Control Self-Assessment platform powered by AI',
-  keywords: ['risk management', 'compliance', 'AI', 'automation', 'RCSA'],
-  authors: [{ name: 'Riscura Team' }],
-  robots: 'index, follow',
-  openGraph: {
-    title: 'Riscura - AI-Powered RCSA Automation',
-    description: 'Advanced Risk and Control Self-Assessment platform powered by AI',
-    type: 'website',
-    locale: 'en_US',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Riscura - AI-Powered RCSA Automation',
-    description: 'Advanced Risk and Control Self-Assessment platform powered by AI',
-  },
-};
-
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
+  title: 'Riscura - AI-Powered Risk Management',
+  description: 'Comprehensive risk management platform with AI-powered insights',
 };
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body 
-        className={cn(inter.className, "min-h-screen bg-background font-sans antialiased")}
-        suppressHydrationWarning
+        className={`${inter.className} min-h-screen bg-background text-foreground antialiased font-semibold`}
+        suppressHydrationWarning={true}
       >
-        <ClientProviders>
-          <AuthProvider>
-            <AIProvider>
-              <RiskProvider>
-                <ControlProvider>
-                  <QuestionnaireProvider>
-                    <WorkflowProvider>
-                      {children}
+        <ClientProvider>
+          <ThemeProvider 
+            attribute="class" 
+            defaultTheme="light" 
+            enableSystem={false}
+            storageKey="riscura-theme"
+          >
+            <TooltipProvider>
+              <AuthProvider>
+                <RiskProvider>
+                  <ControlProvider>
+                    <AIProvider>
+                      <div className="relative min-h-screen bg-background">
+                        {children}
+                      </div>
                       <Toaster />
-                      <Sonner />
-                    </WorkflowProvider>
-                  </QuestionnaireProvider>
-                </ControlProvider>
-              </RiskProvider>
-            </AIProvider>
-          </AuthProvider>
-        </ClientProviders>
+                    </AIProvider>
+                  </ControlProvider>
+                </RiskProvider>
+              </AuthProvider>
+            </TooltipProvider>
+          </ThemeProvider>
+        </ClientProvider>
       </body>
     </html>
   );
