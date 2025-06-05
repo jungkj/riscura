@@ -218,22 +218,29 @@ export class AIService {
       ...config
     };
 
-    if (!this.config.apiKey) {
-      throw new AIServiceError(
-        'OpenAI API key is required. Please set NEXT_PUBLIC_OPENAI_API_KEY environment variable.',
-        'MISSING_API_KEY'
-      );
+    // During build time, skip API key validation to prevent build failures
+    // API key will be validated at runtime when making actual requests
+    const isBuildTime = process.env.NODE_ENV === 'production' && !process.env.VERCEL_ENV && !process.env.NEXT_PUBLIC_OPENAI_API_KEY;
+    const isStaticGeneration = typeof window === 'undefined' && process.env.NEXT_PHASE === 'phase-production-build';
+    
+    if (!this.config.apiKey && !isBuildTime && !isStaticGeneration) {
+      console.warn('OpenAI API key not found. AI features will be disabled.');
     }
 
-    // Initialize OpenAI client
-    this.client = new OpenAI({
-      apiKey: this.config.apiKey,
-      baseURL: this.config.baseURL,
-      organization: this.config.organization,
-      timeout: this.config.timeout,
-      maxRetries: this.config.maxRetries,
-      dangerouslyAllowBrowser: true // For client-side usage
-    });
+    // Initialize OpenAI client (only if API key is available)
+    if (this.config.apiKey) {
+      this.client = new OpenAI({
+        apiKey: this.config.apiKey,
+        baseURL: this.config.baseURL,
+        organization: this.config.organization,
+        timeout: this.config.timeout,
+        maxRetries: this.config.maxRetries,
+        dangerouslyAllowBrowser: true // For client-side usage
+      });
+    } else {
+      // Create a dummy client for build time
+      this.client = null as any;
+    }
 
     // Initialize model configurations
     this.modelConfigs = new Map([
@@ -399,6 +406,17 @@ export class AIService {
    * Make a completion request with error handling and rate limiting
    */
   private async makeCompletion(prompt: string, agentType: AgentType, model?: string, organizationalContext?: any): Promise<AIResponse> {
+    // Check if AI service is available
+    if (!this.client || !this.config.apiKey) {
+      throw new AIServiceError(
+        'OpenAI API key is required. Please set NEXT_PUBLIC_OPENAI_API_KEY environment variable.',
+        'MISSING_API_KEY',
+        undefined,
+        false,
+        'medium',
+        'AI features are currently unavailable. Please contact support.'
+      );
+    }
     const startTime = Date.now();
     const modelName = model || this.config.defaultModel;
     const modelConfig = this.modelConfigs.get(modelName);
@@ -496,6 +514,17 @@ export class AIService {
     model?: string,
     organizationalContext?: any
   ): Promise<AIResponse> {
+    // Check if AI service is available
+    if (!this.client || !this.config.apiKey) {
+      throw new AIServiceError(
+        'OpenAI API key is required. Please set NEXT_PUBLIC_OPENAI_API_KEY environment variable.',
+        'MISSING_API_KEY',
+        undefined,
+        false,
+        'medium',
+        'AI features are currently unavailable. Please contact support.'
+      );
+    }
     const startTime = Date.now();
     const modelName = model || this.config.defaultModel;
     const modelConfig = this.modelConfigs.get(modelName);
