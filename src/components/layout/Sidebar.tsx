@@ -54,7 +54,7 @@ export default function Sidebar({ isOpen, user }: SidebarProps) {
   const pathname = usePathname();
   const [expandedSections, setExpandedSections] = useState<string[]>(['main']);
   
-  // Define navigation sections with cleaner organization
+  // Simplified navigation for small teams
   const navigationSections: NavSection[] = [
     {
       title: 'Main',
@@ -65,26 +65,10 @@ export default function Sidebar({ isOpen, user }: SidebarProps) {
           icon: LayoutDashboard,
         },
         {
-          title: 'Risk Management',
+          title: 'Risks',
           href: '/dashboard/risks',
           icon: Shield,
           badge: '23',
-        },
-        {
-          title: 'Compliance',
-          href: '/dashboard/aria',
-          icon: CheckCircle,
-          badge: '94%',
-        },
-      ]
-    },
-    {
-      title: 'Workflows',
-      items: [
-        {
-          title: 'Questionnaires',
-          href: '/dashboard/questionnaires',
-          icon: ClipboardList,
         },
         {
           title: 'Controls',
@@ -92,31 +76,9 @@ export default function Sidebar({ isOpen, user }: SidebarProps) {
           icon: ShieldCheck,
         },
         {
-          title: 'Documents',
-          href: '/dashboard/documents',
-          icon: Folder,
-        },
-        {
-          title: 'Workflows',
-          href: '/dashboard/workflows',
-          icon: GitBranch,
-        },
-      ]
-    },
-    {
-      title: 'Analytics',
-      items: [
-        {
           title: 'Reports',
           href: '/dashboard/reporting',
           icon: BarChart3,
-        },
-        {
-          title: 'AI Insights',
-          href: '/dashboard/ai-insights',
-          icon: Brain,
-          badge: 'New',
-          isNew: true,
         },
       ]
     }
@@ -282,25 +244,7 @@ export default function Sidebar({ isOpen, user }: SidebarProps) {
         })}
       </nav>
 
-      {/* Quick Actions */}
-      <div className="border-t border-[#D8C3A5] p-4 space-y-2">
-        <Button 
-          size="sm" 
-          className="w-full bg-[#191919] text-[#FAFAFA] hover:bg-[#191919]/90 font-inter"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Risk
-        </Button>
-        
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="w-full border-[#D8C3A5] text-[#A8A8A8] hover:bg-[#D8C3A5]/20 hover:text-[#191919] font-inter"
-        >
-          <ExternalLink className="h-4 w-4 mr-2" />
-          Help Center
-        </Button>
-      </div>
+
 
       {/* User Profile */}
       {user && (
