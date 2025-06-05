@@ -126,6 +126,13 @@ module.exports = {
         sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         inter: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
+      fontWeight: {
+        normal: '600',
+        medium: '600', 
+        semibold: '700',
+        bold: '800',
+        extrabold: '900',
+      },
       fontSize: {
         'beige-xs': ['0.75rem', { lineHeight: '1rem', fontFamily: 'Inter' }],
         'beige-sm': ['0.875rem', { lineHeight: '1.25rem', fontFamily: 'Inter' }],
