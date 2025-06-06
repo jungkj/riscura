@@ -380,11 +380,7 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
               animate={{ opacity: 1 }}
               className="absolute inset-0 rounded-full border-2 border-[#191919] dark:border-[#FAFAFA]"
             >
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="w-full h-full rounded-full border-t-2 border-[#D8C3A5]"
-              />
+              <div className="w-full h-full rounded-full border-t-2 border-[#D8C3A5]" />
             </motion.div>
           )}
         </motion.div>
