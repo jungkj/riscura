@@ -39,15 +39,11 @@ const envSchema = z.object({
   GOOGLE_CLIENT_SECRET: z.string().optional(),
   
   // OpenAI API - server-side only (removed client-side exposure)
-  OPENAI_API_KEY: isDemoMode
-    ? z.string().default('sk-placeholder')
-    : z.string().min(1, 'OPENAI_API_KEY is required for AI features'),
+  OPENAI_API_KEY: z.string().optional().default(''),
   OPENAI_ORG_ID: z.string().optional(),
   
   // AI Security Configuration
-  AI_ENCRYPTION_KEY: isDemoMode
-    ? z.string().default('dev-ai-encryption-key-12345678901234567890123456789012')
-    : z.string().min(32, 'AI_ENCRYPTION_KEY must be at least 32 characters'),
+  AI_ENCRYPTION_KEY: z.string().default('dev-ai-encryption-key-12345678901234567890123456789012'),
   
   // Email Configuration
   SMTP_HOST: z.string().optional(),
@@ -77,7 +73,7 @@ const envSchema = z.object({
   LOG_LEVEL: z.enum(['error', 'warn', 'info', 'debug']).default('info'),
   
   // Feature Flags
-  ENABLE_AI_FEATURES: z.string().transform(v => v === 'true').default('true'),
+  ENABLE_AI_FEATURES: z.string().transform(v => v !== 'false').default('true'),
   ENABLE_COLLABORATION: z.string().transform(v => v === 'true').default('true'),
   ENABLE_REAL_TIME: z.string().transform(v => v === 'true').default('true'),
   ENABLE_EMAIL_NOTIFICATIONS: z.string().transform(v => v === 'true').default('true'),
@@ -108,7 +104,7 @@ function validateEnv() {
       BCRYPT_ROUNDS: parseInt(process.env.BCRYPT_ROUNDS || '12'),
       GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
       GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-      OPENAI_API_KEY: process.env.OPENAI_API_KEY || 'sk-placeholder',
+      OPENAI_API_KEY: process.env.OPENAI_API_KEY || '',
       OPENAI_ORG_ID: process.env.OPENAI_ORG_ID,
       SMTP_HOST: process.env.SMTP_HOST,
       SMTP_PORT: parseInt(process.env.SMTP_PORT || '587'),
@@ -127,7 +123,7 @@ function validateEnv() {
       RATE_LIMIT_WINDOW: parseInt(process.env.RATE_LIMIT_WINDOW || '900000'),
       SENTRY_DSN: process.env.SENTRY_DSN,
       LOG_LEVEL: process.env.LOG_LEVEL || 'info',
-      ENABLE_AI_FEATURES: process.env.ENABLE_AI_FEATURES === 'true',
+      ENABLE_AI_FEATURES: process.env.ENABLE_AI_FEATURES !== 'false',
       ENABLE_COLLABORATION: process.env.ENABLE_COLLABORATION !== 'false',
       ENABLE_REAL_TIME: process.env.ENABLE_REAL_TIME !== 'false',
       ENABLE_EMAIL_NOTIFICATIONS: process.env.ENABLE_EMAIL_NOTIFICATIONS !== 'false',
@@ -180,9 +176,9 @@ export const googleConfig = {
 
 // OpenAI configuration helper
 export const aiConfig = {
-  apiKey: env.OPENAI_API_KEY,
-  organizationId: env.OPENAI_ORG_ID,
-  enabled: env.ENABLE_AI_FEATURES,
+  apiKey: env.OPENAI_API_KEY || '',
+  organizationId: env.OPENAI_ORG_ID || '',
+  enabled: env.ENABLE_AI_FEATURES && !!env.OPENAI_API_KEY,
 };
 
 // Email configuration helper

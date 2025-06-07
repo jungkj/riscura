@@ -1,12 +1,19 @@
 import { OpenAI } from 'openai';
-import { env, aiConfig } from '@/config/env';
 import { db } from '@/lib/db';
 import { storage } from '@/lib/storage';
 
-const openai = new OpenAI({
-  apiKey: env.OPENAI_API_KEY,
-  organization: env.OPENAI_ORG_ID,
-});
+// Helper function to get OpenAI client
+function getOpenAIClient() {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    throw new Error('OpenAI API key not configured');
+  }
+  
+  return new OpenAI({
+    apiKey,
+    organization: process.env.OPENAI_ORG_ID,
+  });
+}
 
 export interface DocumentAnalysis {
   classification: {
@@ -196,6 +203,11 @@ export class DocumentProcessor {
   // OCR for images using OpenAI Vision API
   private async extractImageText(imageBuffer: Buffer): Promise<string> {
     try {
+      if (!process.env.OPENAI_API_KEY) {
+        throw new Error('OpenAI API key not configured for image processing');
+      }
+      
+      const openai = getOpenAIClient();
       const base64Image = imageBuffer.toString('base64');
       
       const response = await openai.chat.completions.create({
@@ -277,6 +289,16 @@ Return a JSON response with:
 `;
 
     try {
+      // Check if OpenAI is configured
+      if (!process.env.OPENAI_API_KEY) {
+        return {
+          category: currentCategory || 'other',
+          confidence: 0.8,
+          suggestedTags: ['demo', 'auto-classified'],
+        };
+      }
+
+      const openai = getOpenAIClient();
       const response = await openai.chat.completions.create({
         model: "gpt-4",
         messages: [
@@ -346,6 +368,17 @@ Return JSON with: { "risks": [...], "controls": [...], "compliance": [...] }
 `;
 
     try {
+      // Check if OpenAI is configured
+      if (!process.env.OPENAI_API_KEY) {
+        return {
+          text,
+          risks: [],
+          controls: [],
+          compliance: [],
+        };
+      }
+
+      const openai = getOpenAIClient();
       const response = await openai.chat.completions.create({
         model: "gpt-4",
         messages: [
@@ -398,6 +431,12 @@ ${text.substring(0, 4000)}...
 `;
 
     try {
+      // Check if OpenAI is configured
+      if (!process.env.OPENAI_API_KEY) {
+        return 'Document summary: This is a demo environment where AI-powered document summarization requires OpenAI API configuration.';
+      }
+
+      const openai = getOpenAIClient();
       const response = await openai.chat.completions.create({
         model: "gpt-4",
         messages: [
