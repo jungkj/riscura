@@ -19,62 +19,138 @@
 
 @layer base {
   :root {
-    --background: 220 33% 98%;
-    --foreground: 224 71.4% 4.1%;
-    --card: 0 0% 100%;
-    --card-foreground: 224 71.4% 4.1%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
-    --primary: 262 83% 58%;
-    --primary-foreground: 210 20% 98%;
-    --secondary: 220 14.3% 95.9%;
-    --secondary-foreground: 220.9 39.3% 11%;
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 220 8.9% 46.1%;
-    --accent: 262 83% 96%;
-    --accent-foreground: 262 83% 28%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 262 83% 58%;
-    --radius: 0.5rem;
+    /* ========== ENTERPRISE NOTION-INSPIRED CSS VARIABLES ========== */
     
-    /* Chart colors */
-    --chart-1: 262 83% 58%;
-    --chart-2: 220 90% 50%;
-    --chart-3: 180 90% 40%;
-    --chart-4: 150 80% 45%;
-    --chart-5: 330 85% 55%;
+    /* Base Semantic Colors (HSL format for shadcn/ui compatibility) */
+    --background: 0 0% 98.2%;           /* #fafbfc - Main background */
+    --foreground: 25 6% 21%;            /* #37352f - Primary text */
+    --card: 0 0% 100%;                  /* #ffffff - Card backgrounds */
+    --card-foreground: 25 6% 21%;       /* #37352f - Card text */
+    --popover: 0 0% 100%;               /* #ffffff - Popover backgrounds */
+    --popover-foreground: 25 6% 21%;    /* #37352f - Popover text */
+    --primary: 213 94% 50%;             /* #2383e2 - Primary actions */
+    --primary-foreground: 0 0% 100%;    /* #ffffff - Primary action text */
+    --secondary: 210 17% 95%;           /* #f1f3f4 - Secondary backgrounds */
+    --secondary-foreground: 213 6% 44%; /* #6f6f6f - Secondary text */
+    --muted: 210 17% 91%;               /* #e8eaed - Muted backgrounds */
+    --muted-foreground: 22 5% 61%;      /* #9b9a97 - Muted text */
+    --accent: 213 97% 96%;              /* #e8f0fe - Accent backgrounds */
+    --accent-foreground: 213 94% 50%;   /* #2383e2 - Accent text */
+    --destructive: 4 90% 58%;           /* #ea4335 - Error/destructive */
+    --destructive-foreground: 0 0% 100%; /* #ffffff - Error text */
+    --border: 210 17% 91%;              /* #e8eaed - Borders */
+    --input: 210 17% 91%;               /* #e8eaed - Input borders */
+    --ring: 213 94% 50%;                /* #2383e2 - Focus rings */
+    --radius: 0.75rem;                  /* Enhanced border radius */
+    
+    /* Enterprise Chart Colors (HSL format) */
+    --chart-1: 213 94% 50%;             /* #2383e2 - Primary blue */
+    --chart-2: 122 39% 49%;             /* #34a853 - Success green */
+    --chart-3: 36 100% 50%;             /* #f57c00 - Warning orange */
+    --chart-4: 4 90% 58%;               /* #eae435 - Error red */
+    --chart-5: 291 64% 42%;             /* #6f42c1 - Purple accent */
+    --chart-6: 174 100% 29%;            /* #00796b - Teal */
+    --chart-7: 45 98% 51%;              /* #fbc02d - Amber */
+    --chart-8: 340 82% 52%;             /* #e91e63 - Pink */
+    
+    /* Enterprise Tenant Branding Support */
+    --brand-primary: 213 94% 50%;       /* Default to primary blue */
+    --brand-secondary: 210 17% 95%;     /* Default to secondary gray */
+    --brand-accent: 291 64% 42%;        /* Default to purple */
+    --brand-surface: 0 0% 98.2%;        /* Default to surface primary */
+    
+    /* Risk Management Colors */
+    --risk-critical: 354 70% 54%;       /* #d32f2f - Critical risk */
+    --risk-high: 36 100% 50%;           /* #f57c00 - High risk */
+    --risk-medium: 48 98% 60%;          /* #fbc02d - Medium risk */
+    --risk-low: 122 39% 49%;            /* #388e3c - Low risk */
+    --risk-minimal: 123 43% 56%;        /* #4caf50 - Minimal risk */
+    
+    /* Compliance Status Colors */
+    --compliance-compliant: 123 43% 56%; /* #4caf50 - Compliant */
+    --compliance-non-compliant: 4 90% 58%; /* #f44336 - Non-compliant */
+    --compliance-in-progress: 207 90% 54%; /* #2196f3 - In progress */
+    --compliance-not-started: 0 0% 62%; /* #9e9e9e - Not started */
+    --compliance-pending: 36 100% 50%;  /* #f57c00 - Pending */
+    --compliance-overdue: 354 70% 54%;  /* #d32f2f - Overdue */
+    
+    /* Accessibility & High Contrast Support */
+    --contrast-high: 0 0% 0%;           /* #000000 - High contrast text */
+    --contrast-medium: 25 6% 21%;       /* #37352f - Medium contrast text */
+    --contrast-low: 22 5% 61%;          /* #9b9a97 - Low contrast text */
+    --contrast-inverse: 0 0% 100%;      /* #ffffff - Inverse text */
+    
+    /* Interactive State Colors */
+    --interactive-hover: 213 96% 45%;   /* #1a73d8 - Hover state */
+    --interactive-active: 213 98% 40%;  /* #1565c0 - Active state */
+    --interactive-disabled: 0 0% 62%;   /* #9e9e9e - Disabled state */
+    
+    /* Surface Elevation Colors */
+    --surface-primary: 0 0% 98.2%;      /* #fafbfc - Base surface */
+    --surface-secondary: 210 17% 95%;   /* #f1f3f4 - Elevated surface */
+    --surface-tertiary: 210 17% 91%;    /* #e8eaed - Higher elevation */
+    --surface-elevated: 0 0% 100%;      /* #ffffff - Highest elevation */
   }
 
   .dark {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 20% 98%;
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 262 83% 58%;
-    --primary-foreground: 210 20% 98%;
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 262 83% 20%;
-    --accent-foreground: 210 20% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 262 83% 58%;
-
-    /* Chart colors for dark mode */
-    --chart-1: 262 70% 65%;
-    --chart-2: 220 80% 60%;
-    --chart-3: 180 70% 50%;
-    --chart-4: 150 70% 55%;
-    --chart-5: 330 75% 60%;
+    /* ========== DARK MODE ENTERPRISE VARIABLES ========== */
+    
+    /* Base Semantic Colors (Dark Mode) */
+    --background: 231 84% 11%;          /* #1a1a2e - Dark background */
+    --foreground: 0 0% 98%;             /* #fafafa - Light text */
+    --card: 231 48% 16%;                /* #282845 - Dark card background */
+    --card-foreground: 0 0% 98%;        /* #fafafa - Card text */
+    --popover: 231 48% 16%;             /* #282845 - Dark popover */
+    --popover-foreground: 0 0% 98%;     /* #fafafa - Popover text */
+    --primary: 213 94% 68%;             /* #5ba3f5 - Lighter primary for dark */
+    --primary-foreground: 231 84% 11%;  /* #1a1a2e - Primary text on light bg */
+    --secondary: 231 32% 20%;           /* #333355 - Dark secondary */
+    --secondary-foreground: 0 0% 85%;   /* #d9d9d9 - Secondary text */
+    --muted: 231 32% 20%;               /* #333355 - Dark muted */
+    --muted-foreground: 0 0% 65%;       /* #a6a6a6 - Muted text */
+    --accent: 213 94% 25%;              /* #0d5aa7 - Dark accent */
+    --accent-foreground: 0 0% 98%;      /* #fafafa - Accent text */
+    --destructive: 4 90% 68%;           /* #f27c6c - Lighter destructive */
+    --destructive-foreground: 0 0% 98%; /* #fafafa - Destructive text */
+    --border: 231 32% 24%;              /* #3d3d5c - Dark border */
+    --input: 231 32% 24%;               /* #3d3d5c - Dark input border */
+    --ring: 213 94% 68%;                /* #5ba3f5 - Light focus ring */
+    
+    /* Enterprise Chart Colors (Dark Mode) */
+    --chart-1: 213 94% 68%;             /* #5ba3f5 - Light blue */
+    --chart-2: 122 39% 65%;             /* #6bc470 - Light green */
+    --chart-3: 36 100% 65%;             /* #ff9947 - Light orange */
+    --chart-4: 4 90% 68%;               /* #f27c6c - Light red */
+    --chart-5: 291 64% 65%;             /* #a56cc1 - Light purple */
+    --chart-6: 174 60% 45%;             /* #4db6a8 - Light teal */
+    --chart-7: 45 98% 65%;              /* #fdd835 - Light amber */
+    --chart-8: 340 82% 65%;             /* #f06292 - Light pink */
+    
+    /* Risk Management Colors (Dark Mode) */
+    --risk-critical: 354 70% 68%;       /* #e57373 - Light critical */
+    --risk-high: 36 100% 65%;           /* #ff9947 - Light high */
+    --risk-medium: 48 98% 70%;          /* #fff176 - Light medium */
+    --risk-low: 122 39% 65%;            /* #6bc470 - Light low */
+    --risk-minimal: 123 43% 70%;        /* #81c784 - Light minimal */
+    
+    /* Compliance Status Colors (Dark Mode) */
+    --compliance-compliant: 123 43% 70%;     /* #81c784 - Light compliant */
+    --compliance-non-compliant: 4 90% 68%;  /* #f27c6c - Light non-compliant */
+    --compliance-in-progress: 207 90% 68%;  /* #64b5f6 - Light in progress */
+    --compliance-not-started: 0 0% 70%;     /* #bdbdbd - Light not started */
+    --compliance-pending: 36 100% 65%;      /* #ff9947 - Light pending */
+    --compliance-overdue: 354 70% 68%;      /* #e57373 - Light overdue */
+    
+    /* Surface Elevation Colors (Dark Mode) */
+    --surface-primary: 231 84% 11%;     /* #1a1a2e - Dark primary surface */
+    --surface-secondary: 231 48% 16%;   /* #282845 - Dark secondary surface */
+    --surface-tertiary: 231 32% 20%;    /* #333355 - Dark tertiary surface */
+    --surface-elevated: 231 32% 24%;    /* #3d3d5c - Dark elevated surface */
+    
+    /* Interactive State Colors (Dark Mode) */
+    --interactive-hover: 213 94% 75%;   /* #7bb8f7 - Light hover */
+    --interactive-active: 213 94% 80%;  /* #9dc7f9 - Light active */
+    --interactive-disabled: 0 0% 50%;   /* #808080 - Dark disabled */
   }
 }
 
@@ -83,6 +159,333 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter;
   }
+  
+  /* ========== ENTERPRISE BASE STYLES ========== */
+  
+  /* Enhanced focus styles for accessibility */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2;
+  }
+  
+  /* Smooth transitions for interactive elements */
+  button, 
+  [role="button"], 
+  input, 
+  select, 
+  textarea {
+    @apply transition-colors duration-200;
+  }
+  
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    :root {
+      --background: 0 0% 100%;
+      --foreground: 0 0% 0%;
+      --border: 0 0% 0%;
+      --ring: 0 0% 0%;
+    }
+    
+    .dark {
+      --background: 0 0% 0%;
+      --foreground: 0 0% 100%;
+      --border: 0 0% 100%;
+      --ring: 0 0% 100%;
+    }
+  }
+  
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    *, 
+    *::before, 
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* ========== ENTERPRISE COMPONENT UTILITIES ========== */
+  
+  /* Notion-style card components */
+  .card-notion {
+    @apply bg-surface-elevated border border-border rounded-lg shadow-notion;
+  }
+  
+  .card-interactive {
+    @apply card-notion hover:shadow-notion-md transition-shadow duration-200 cursor-pointer;
+  }
+  
+  /* Enterprise buttons */
+  .btn-enterprise {
+    @apply inline-flex items-center justify-center px-enterprise-4 py-enterprise-2 
+           text-enterprise-sm font-medium rounded-lg transition-colors duration-200
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
+  }
+  
+  .btn-primary {
+    @apply btn-enterprise bg-interactive-primary text-white 
+           hover:bg-interactive-primaryHover 
+           active:bg-interactive-primaryHover;
+  }
+  
+  .btn-secondary {
+    @apply btn-enterprise bg-surface-secondary text-text-primary 
+           border border-border hover:bg-surface-tertiary;
+  }
+  
+  .btn-danger {
+    @apply btn-enterprise bg-interactive-danger text-white 
+           hover:opacity-90 active:opacity-95;
+  }
+  
+  /* Enterprise form inputs */
+  .input-enterprise {
+    @apply flex h-10 w-full rounded-lg border border-input 
+           bg-surface-elevated px-3 py-2 text-enterprise-sm 
+           ring-offset-background 
+           file:border-0 file:bg-transparent file:text-enterprise-sm file:font-medium 
+           placeholder:text-muted-foreground 
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring 
+           disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  
+  /* Status badges */
+  .badge-risk-critical {
+    @apply inline-flex items-center rounded-full px-2 py-1 text-xs font-medium
+           bg-risk-critical/10 text-risk-critical border border-risk-critical/20;
+  }
+  
+  .badge-risk-high {
+    @apply inline-flex items-center rounded-full px-2 py-1 text-xs font-medium
+           bg-risk-high/10 text-risk-high border border-risk-high/20;
+  }
+  
+  .badge-risk-medium {
+    @apply inline-flex items-center rounded-full px-2 py-1 text-xs font-medium
+           bg-risk-medium/10 text-risk-medium border border-risk-medium/20;
+  }
+  
+  .badge-risk-low {
+    @apply inline-flex items-center rounded-full px-2 py-1 text-xs font-medium
+           bg-risk-low/10 text-risk-low border border-risk-low/20;
+  }
+  
+  .badge-compliant {
+    @apply inline-flex items-center rounded-full px-2 py-1 text-xs font-medium
+           bg-compliance-compliant/10 text-compliance-compliant border border-compliance-compliant/20;
+  }
+  
+  .badge-non-compliant {
+    @apply inline-flex items-center rounded-full px-2 py-1 text-xs font-medium
+           bg-compliance-non-compliant/10 text-compliance-non-compliant border border-compliance-non-compliant/20;
+  }
+  
+  .badge-in-progress {
+    @apply inline-flex items-center rounded-full px-2 py-1 text-xs font-medium
+           bg-compliance-in-progress/10 text-compliance-in-progress border border-compliance-in-progress/20;
+  }
+  
+  /* Enterprise layouts */
+  .layout-enterprise {
+    @apply min-h-screen bg-surface-primary;
+  }
+  
+  .sidebar-enterprise {
+    @apply w-sidebar-width bg-surface-elevated border-r border-border;
+  }
+  
+  .sidebar-collapsed {
+    @apply w-sidebar-collapsed;
+  }
+  
+  .main-content {
+    @apply flex-1 overflow-auto bg-surface-primary;
+  }
+  
+  .page-header {
+    @apply h-header-height flex items-center justify-between px-enterprise-6 
+           bg-surface-elevated border-b border-border;
+  }
+  
+  .content-area {
+    @apply p-enterprise-6 max-w-7xl mx-auto;
+  }
+  
+  /* Data table styles */
+  .table-enterprise {
+    @apply w-full border-collapse bg-surface-elevated rounded-lg overflow-hidden
+           shadow-card border border-border;
+  }
+  
+  .table-header {
+    @apply bg-surface-secondary border-b border-border;
+  }
+  
+  .table-cell {
+    @apply px-enterprise-4 py-enterprise-3 text-enterprise-sm text-text-primary;
+  }
+  
+  .table-row {
+    @apply border-b border-border hover:bg-surface-secondary/50 transition-colors;
+  }
+  
+  /* ========== TYPOGRAPHY UTILITIES ========== */
+  
+  /* Display Typography */
+  .text-display-sm { @apply text-display-sm text-text-primary; }
+  .text-display-md { @apply text-display-md text-text-primary; }
+  .text-display-lg { @apply text-display-lg text-text-primary; }
+  .text-display-xl { @apply text-display-xl text-text-primary; }
+  
+  /* Heading Typography */
+  .text-heading-xs { @apply text-heading-xs text-text-primary; }
+  .text-heading-sm { @apply text-heading-sm text-text-primary; }
+  .text-heading-base { @apply text-heading-base text-text-primary; }
+  .text-heading-lg { @apply text-heading-lg text-text-primary; }
+  .text-heading-xl { @apply text-heading-xl text-text-primary; }
+  .text-heading-2xl { @apply text-heading-2xl text-text-primary; }
+  .text-heading-3xl { @apply text-heading-3xl text-text-primary; }
+  
+  /* Body Typography */
+  .text-body-xs { @apply text-body-xs text-text-secondary; }
+  .text-body-sm { @apply text-body-sm text-text-primary; }
+  .text-body-base { @apply text-body-base text-text-primary; }
+  .text-body-lg { @apply text-body-lg text-text-primary; }
+  
+  /* Caption and Label Typography */
+  .text-caption { @apply text-caption text-text-tertiary; }
+  .text-label { @apply text-label text-text-secondary; }
+  .text-overline { @apply text-overline text-text-tertiary; }
+  
+  /* Interactive Typography */
+  .text-link { 
+    @apply text-link text-interactive-primary hover:text-interactive-primaryHover 
+           transition-colors duration-200 cursor-pointer;
+  }
+  .text-button { @apply text-button; }
+  .text-button-lg { @apply text-button-lg; }
+  
+  /* Contextual Typography Classes */
+  .text-success { @apply text-semantic-success; }
+  .text-warning { @apply text-semantic-warning; }
+  .text-error { @apply text-semantic-error; }
+  .text-info { @apply text-semantic-info; }
+  
+  /* Page Title Hierarchy */
+  .page-title {
+    @apply text-heading-3xl text-text-primary mb-enterprise-2;
+  }
+  
+  .section-title {
+    @apply text-heading-xl text-text-primary mb-enterprise-4;
+  }
+  
+  .subsection-title {
+    @apply text-heading-lg text-text-primary mb-enterprise-3;
+  }
+  
+  .card-title {
+    @apply text-heading-base text-text-primary mb-enterprise-2;
+  }
+  
+  .card-description {
+    @apply text-body-sm text-text-secondary;
+  }
+  
+  /* Content Typography */
+  .content-text {
+    @apply text-body-base text-text-primary leading-body;
+  }
+  
+  .content-text p {
+    @apply mb-enterprise-4;
+  }
+  
+  .content-text h1 {
+    @apply text-heading-3xl text-text-primary mb-enterprise-4 mt-enterprise-8;
+  }
+  
+  .content-text h2 {
+    @apply text-heading-2xl text-text-primary mb-enterprise-3 mt-enterprise-6;
+  }
+  
+  .content-text h3 {
+    @apply text-heading-xl text-text-primary mb-enterprise-3 mt-enterprise-5;
+  }
+  
+  .content-text h4 {
+    @apply text-heading-lg text-text-primary mb-enterprise-2 mt-enterprise-4;
+  }
+  
+  .content-text h5 {
+    @apply text-heading-base text-text-primary mb-enterprise-2 mt-enterprise-3;
+  }
+  
+  .content-text h6 {
+    @apply text-heading-sm text-text-primary mb-enterprise-2 mt-enterprise-3;
+  }
+  
+  /* List Typography */
+  .content-text ul,
+  .content-text ol {
+    @apply mb-enterprise-4 pl-enterprise-6;
+  }
+  
+  .content-text li {
+    @apply mb-enterprise-2 text-body-base text-text-primary;
+  }
+  
+  /* Emphasis and Strong */
+  .content-text strong {
+    @apply font-semibold text-text-primary;
+  }
+  
+  .content-text em {
+    @apply italic text-text-secondary;
+  }
+  
+  /* Code Typography */
+  .content-text code {
+    @apply text-body-sm bg-surface-tertiary text-text-primary 
+           px-enterprise-2 py-enterprise-1 rounded-md font-mono;
+  }
+  
+  .content-text pre {
+    @apply text-body-sm bg-surface-tertiary text-text-primary 
+           p-enterprise-4 rounded-lg overflow-x-auto mb-enterprise-4;
+  }
+  
+  /* Blockquote Typography */
+  .content-text blockquote {
+    @apply border-l-4 border-interactive-primary bg-surface-secondary 
+           pl-enterprise-4 py-enterprise-3 mb-enterprise-4 italic text-text-secondary;
+  }
+  
+  /* Table Typography */
+  .content-text table {
+    @apply w-full mb-enterprise-4;
+  }
+  
+  .content-text th {
+    @apply text-label text-text-primary font-semibold text-left 
+           pb-enterprise-2 border-b border-border;
+  }
+  
+  .content-text td {
+    @apply text-body-sm text-text-primary py-enterprise-2 
+           border-b border-border/50;
+  }
+  
+  /* Legacy enterprise classes (for backwards compatibility) */
+  .text-enterprise-xs { @apply text-enterprise-xs; }
+  .text-enterprise-sm { @apply text-enterprise-sm; }
+  .text-enterprise-base { @apply text-enterprise-base; }
+  .text-enterprise-lg { @apply text-enterprise-lg; }
+  .text-enterprise-xl { @apply text-enterprise-xl; }
+  .text-enterprise-2xl { @apply text-enterprise-2xl; }
+  .text-enterprise-3xl { @apply text-enterprise-3xl; }
 }

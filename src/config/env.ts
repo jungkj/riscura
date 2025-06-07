@@ -38,11 +38,16 @@ const envSchema = z.object({
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
   
-  // OpenAI API - make optional in demo mode
+  // OpenAI API - server-side only (removed client-side exposure)
   OPENAI_API_KEY: isDemoMode
     ? z.string().default('sk-placeholder')
-    : z.string().min(1, 'OPENAI_API_KEY is required'),
+    : z.string().min(1, 'OPENAI_API_KEY is required for AI features'),
   OPENAI_ORG_ID: z.string().optional(),
+  
+  // AI Security Configuration
+  AI_ENCRYPTION_KEY: isDemoMode
+    ? z.string().default('dev-ai-encryption-key-12345678901234567890123456789012')
+    : z.string().min(32, 'AI_ENCRYPTION_KEY must be at least 32 characters'),
   
   // Email Configuration
   SMTP_HOST: z.string().optional(),
