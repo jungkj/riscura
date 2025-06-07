@@ -100,7 +100,7 @@ function NewRiskForm() {
           </div>
           
           <EnhancedHeading 
-            level={1} 
+            level="h1" 
             className="text-[#2C1810] mb-2"
           >
             Create New Risk
@@ -111,7 +111,7 @@ function NewRiskForm() {
         </div>
 
         {/* Form Content */}
-        <div className={spacingClasses.padding.section}>
+        <div className={spacingClasses.padding.lg}>
           <motion.form
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
