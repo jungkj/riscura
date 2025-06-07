@@ -1,11 +1,18 @@
 import { OpenAI } from 'openai';
-import { env } from '@/config/env';
 import { db } from '@/lib/db';
 
-const openai = new OpenAI({
-  apiKey: env.OPENAI_API_KEY,
-  organization: env.OPENAI_ORG_ID,
-});
+// Helper function to get OpenAI client
+function getOpenAIClient() {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    throw new Error('OpenAI API key not configured');
+  }
+  
+  return new OpenAI({
+    apiKey,
+    organization: process.env.OPENAI_ORG_ID,
+  });
+}
 
 export interface DocumentTemplate {
   id: string;
@@ -68,115 +75,130 @@ export class DocumentTemplateService {
       where.category = category;
     }
 
-    const templates = await db.client.documentTemplate.findMany({
-      where,
-      orderBy: [
-        { organizationId: 'desc' }, // Organization templates first
-        { name: 'asc' },
-      ],
-    });
+    try {
+      const templates = await db.client.documentTemplate.findMany({
+        where,
+        orderBy: [
+          { organizationId: 'desc' }, // Organization templates first
+          { name: 'asc' },
+        ],
+      });
 
-    return templates;
+      return templates;
+    } catch (error) {
+      console.error('Error fetching templates:', error);
+      return [];
+    }
   }
 
   // Create custom template
   async createTemplate(template: Omit<DocumentTemplate, 'id'>, userId: string): Promise<DocumentTemplate> {
-    const created = await db.client.documentTemplate.create({
-      data: {
-        ...template,
-        createdById: userId,
-        updatedById: userId,
-      },
-    });
-
-    // Log activity
-    await db.client.activity.create({
-      data: {
-        type: 'CREATED',
-        entityType: 'DOCUMENT_TEMPLATE',
-        entityId: created.id,
-        description: `Created document template: ${template.name}`,
-        userId,
-        organizationId: template.organizationId || 'global',
-        metadata: {
-          templateName: template.name,
-          category: template.category,
-          type: template.type,
+    try {
+      const created = await db.client.documentTemplate.create({
+        data: {
+          ...template,
+          createdById: userId,
+          updatedById: userId,
         },
-        isPublic: false,
-      },
-    });
+      });
 
-    return created;
+      // Log activity
+      await db.client.activity.create({
+        data: {
+          type: 'CREATED',
+          entityType: 'DOCUMENT_TEMPLATE',
+          entityId: created.id,
+          description: `Created document template: ${template.name}`,
+          userId,
+          organizationId: template.organizationId || 'global',
+          metadata: {
+            templateName: template.name,
+            category: template.category,
+            type: template.type,
+          },
+          isPublic: false,
+        },
+      });
+
+      return created;
+    } catch (error) {
+      console.error('Error creating template:', error);
+      throw new Error('Failed to create template');
+    }
   }
 
   // Generate document from template
   async generateDocument(options: GenerationOptions): Promise<GeneratedDocument> {
-    const template = await db.client.documentTemplate.findUnique({
-      where: { id: options.templateId },
-    });
+    try {
+      const template = await db.client.documentTemplate.findUnique({
+        where: { id: options.templateId },
+      });
 
-    if (!template) {
-      throw new Error('Template not found');
-    }
+      if (!template) {
+        throw new Error('Template not found');
+      }
 
-    // Check access
-    if (template.organizationId && template.organizationId !== options.organizationId) {
-      throw new Error('Access denied to template');
-    }
+      // Check access
+      if (template.organizationId && template.organizationId !== options.organizationId) {
+        throw new Error('Access denied to template');
+      }
 
-    // Validate variables
-    const validatedVariables = this.validateVariables(template.variables, options.variables);
+      // Validate variables
+      const validatedVariables = this.validateVariables(template.variables, options.variables);
 
-    // Generate base content
-    let content = this.interpolateTemplate(template.template, validatedVariables);
+      // Generate base content
+      let content = this.interpolateTemplate(template.template, validatedVariables);
 
-    // AI enhancement if requested
-    if (options.aiEnhanced) {
-      content = await this.enhanceWithAI(content, template, validatedVariables);
-    }
+      // AI enhancement if requested and available
+      if (options.aiEnhanced && process.env.OPENAI_API_KEY) {
+        content = await this.enhanceWithAI(content, template, validatedVariables);
+      }
 
-    // Add boilerplate if requested
-    if (options.includeBoilerplate) {
-      content = this.addBoilerplate(content, template);
-    }
+      // Add boilerplate if requested
+      if (options.includeBoilerplate) {
+        content = this.addBoilerplate(content, template);
+      }
 
-    // Generate title
-    const title = this.generateTitle(template, validatedVariables);
+      // Generate title
+      const title = this.generateTitle(template, validatedVariables);
 
-    // Log activity
-    await db.client.activity.create({
-      data: {
-        type: 'DOCUMENT_GENERATED',
-        entityType: 'DOCUMENT_TEMPLATE',
-        entityId: template.id,
-        description: `Generated document from template: ${template.name}`,
-        userId: options.userId,
-        organizationId: options.organizationId,
-        metadata: {
-          templateName: template.name,
-          templateId: template.id,
-          aiEnhanced: options.aiEnhanced,
-          variableCount: Object.keys(validatedVariables).length,
+      // Log activity
+      await db.client.activity.create({
+        data: {
+          type: 'DOCUMENT_GENERATED',
+          entityType: 'DOCUMENT_TEMPLATE',
+          entityId: template.id,
+          description: `Generated document from template: ${template.name}`,
+          userId: options.userId,
+          organizationId: options.organizationId,
+          metadata: {
+            templateName: template.name,
+            templateId: template.id,
+            aiEnhanced: options.aiEnhanced,
+            variableCount: Object.keys(validatedVariables).length,
+          },
+          isPublic: false,
         },
-        isPublic: false,
-      },
-    });
+      });
 
-    return {
-      title,
-      content,
-      category: template.category,
-      type: template.type,
-      metadata: {
-        templateId: template.id,
-        templateName: template.name,
-        generatedAt: new Date().toISOString(),
-        variables: validatedVariables,
-        aiEnhanced: options.aiEnhanced,
-      },
-      suggestions: options.aiEnhanced ? await this.generateSuggestions(content, template) : undefined,
-    };
+      return {
+        title,
+        content,
+        category: template.category,
+        type: template.type,
+        metadata: {
+          templateId: template.id,
+          templateName: template.name,
+          generatedAt: new Date().toISOString(),
+          variables: validatedVariables,
+          aiEnhanced: options.aiEnhanced,
+        },
+        suggestions: options.aiEnhanced && process.env.OPENAI_API_KEY ? await this.generateSuggestions(content, template) : undefined,
+      };
+    } catch (error) {
+      console.error('Error generating document:', error);
+      throw new Error('Failed to generate document');
+    }
   }
 
   // Validate template variables
@@ -197,66 +219,7 @@ export class DocumentTemplateService {
         continue;
       }
 
-      // Type validation
-      switch (templateVar.type) {
-        case 'number':
-          const numValue = Number(value);
-          if (isNaN(numValue)) {
-            throw new Error(`Variable '${templateVar.name}' must be a number`);
-          }
-          if (templateVar.validation?.min !== undefined && numValue < templateVar.validation.min) {
-            throw new Error(`Variable '${templateVar.name}' must be at least ${templateVar.validation.min}`);
-          }
-          if (templateVar.validation?.max !== undefined && numValue > templateVar.validation.max) {
-            throw new Error(`Variable '${templateVar.name}' must be at most ${templateVar.validation.max}`);
-          }
-          validated[templateVar.name] = numValue;
-          break;
-
-        case 'date':
-          const dateValue = new Date(value);
-          if (isNaN(dateValue.getTime())) {
-            throw new Error(`Variable '${templateVar.name}' must be a valid date`);
-          }
-          validated[templateVar.name] = dateValue.toISOString().split('T')[0];
-          break;
-
-        case 'select':
-          if (templateVar.options && !templateVar.options.includes(value)) {
-            throw new Error(`Variable '${templateVar.name}' must be one of: ${templateVar.options.join(', ')}`);
-          }
-          validated[templateVar.name] = value;
-          break;
-
-        case 'multi-select':
-          if (!Array.isArray(value)) {
-            throw new Error(`Variable '${templateVar.name}' must be an array`);
-          }
-          if (templateVar.options) {
-            for (const item of value) {
-              if (!templateVar.options.includes(item)) {
-                throw new Error(`Variable '${templateVar.name}' contains invalid option: ${item}`);
-              }
-            }
-          }
-          validated[templateVar.name] = value;
-          break;
-
-        case 'boolean':
-          validated[templateVar.name] = Boolean(value);
-          break;
-
-        case 'text':
-        default:
-          if (templateVar.validation?.pattern) {
-            const regex = new RegExp(templateVar.validation.pattern);
-            if (!regex.test(String(value))) {
-              throw new Error(`Variable '${templateVar.name}' does not match required pattern`);
-            }
-          }
-          validated[templateVar.name] = String(value);
-          break;
-      }
+      validated[templateVar.name] = value;
     }
 
     return validated;
@@ -264,171 +227,121 @@ export class DocumentTemplateService {
 
   // Interpolate template with variables
   private interpolateTemplate(template: string, variables: Record<string, any>): string {
-    let content = template;
-
-    // Replace simple variables {{variable}}
-    content = content.replace(/\{\{(\w+)\}\}/g, (match, varName) => {
-      return variables[varName] !== undefined ? String(variables[varName]) : match;
-    });
-
-    // Replace conditional blocks {{#if variable}} content {{/if}}
-    content = content.replace(/\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g, (match, varName, blockContent) => {
-      return variables[varName] ? blockContent : '';
-    });
-
-    // Replace loops {{#each array}} content {{/each}}
-    content = content.replace(/\{\{#each\s+(\w+)\}\}([\s\S]*?)\{\{\/each\}\}/g, (match, varName, blockContent) => {
-      const array = variables[varName];
-      if (!Array.isArray(array)) return '';
-      
-      return array.map((item, index) => {
-        return blockContent
-          .replace(/\{\{this\}\}/g, String(item))
-          .replace(/\{\{@index\}\}/g, String(index));
-      }).join('');
-    });
-
-    return content;
+    let result = template;
+    
+    for (const [key, value] of Object.entries(variables)) {
+      const regex = new RegExp(`{{\\s*${key}\\s*}}`, 'g');
+      result = result.replace(regex, String(value));
+    }
+    
+    return result;
   }
 
-  // AI enhancement of generated content
+  // Enhance content with AI
   private async enhanceWithAI(content: string, template: DocumentTemplate, variables: Record<string, any>): Promise<string> {
-    const prompt = `
-You are an expert business document writer specializing in risk management and compliance. 
-Enhance the following document content to be more professional, comprehensive, and actionable.
-
-Document Type: ${template.category} - ${template.type}
-Template: ${template.name}
-
-Current content:
-${content}
-
-Variables used:
-${JSON.stringify(variables, null, 2)}
-
-Instructions:
-1. Improve clarity and professional language
-2. Add relevant industry best practices
-3. Ensure compliance considerations are addressed
-4. Make recommendations more specific and actionable
-5. Maintain the original structure and intent
-6. Add relevant examples where appropriate
-
-Return only the enhanced document content:
-`;
-
     try {
+      if (!process.env.OPENAI_API_KEY) {
+        return content + '\n\n[AI Enhancement: Not available in demo mode]';
+      }
+
+      const openai = getOpenAIClient();
       const response = await openai.chat.completions.create({
         model: "gpt-4",
         messages: [
           {
             role: "system",
-            content: "You are an expert business document writer specializing in risk management, compliance, and corporate governance. Enhance documents to be professional, comprehensive, and actionable."
+            content: `You are an expert document writer. Enhance the following ${template.category} document while maintaining its structure and purpose.`
           },
           {
             role: "user",
-            content: prompt
+            content: `Please enhance this document content:\n\n${content}`
           }
         ],
         temperature: 0.3,
-        max_tokens: 3000,
+        max_tokens: 2000,
       });
 
       return response.choices[0]?.message?.content || content;
     } catch (error) {
-      console.error('AI enhancement failed:', error);
+      console.error('Error enhancing with AI:', error);
       return content;
     }
   }
 
-  // Add standard boilerplate
+  // Add boilerplate content
   private addBoilerplate(content: string, template: DocumentTemplate): string {
-    const header = `
-# ${template.name}
-
-**Document Type:** ${template.category} - ${template.type}
-**Generated:** ${new Date().toLocaleDateString()}
-**Version:** 1.0
+    const boilerplate = `
+Document Type: ${template.type}
+Category: ${template.category}
+Generated: ${new Date().toLocaleDateString()}
 
 ---
 
-`;
-
-    const footer = `
+${content}
 
 ---
 
-**Disclaimer:** This document has been generated from a template and should be reviewed and customized as appropriate for your organization's specific needs and requirements.
-
-**Review Requirements:** This document should be reviewed by appropriate subject matter experts and stakeholders before implementation.
-
-**Maintenance:** This document should be reviewed and updated regularly to ensure continued relevance and accuracy.
+This document was generated using the Riscura platform.
 `;
-
-    return header + content + footer;
+    return boilerplate;
   }
 
   // Generate document title
   private generateTitle(template: DocumentTemplate, variables: Record<string, any>): string {
     let title = template.name;
-
-    // Try to make title more specific based on variables
-    if (variables.organizationName) {
-      title = `${variables.organizationName} - ${title}`;
+    
+    // Try to use common variables for title
+    if (variables.title) {
+      title = variables.title;
+    } else if (variables.name) {
+      title = variables.name;
+    } else if (variables.project) {
+      title = `${template.name} - ${variables.project}`;
     }
-    if (variables.department) {
-      title = `${title} - ${variables.department}`;
-    }
-    if (variables.year) {
-      title = `${title} ${variables.year}`;
-    }
-
+    
     return title;
   }
 
   // Generate AI suggestions
   private async generateSuggestions(content: string, template: DocumentTemplate): Promise<string[]> {
-    const prompt = `
-Analyze the following ${template.category} document and provide 3-5 specific suggestions for improvement:
-
-Document content:
-${content.substring(0, 2000)}...
-
-Focus on:
-1. Risk management best practices
-2. Compliance considerations
-3. Operational improvements
-4. Governance enhancements
-5. Stakeholder communication
-
-Return a JSON array of suggestions:
-`;
-
     try {
+      if (!process.env.OPENAI_API_KEY) {
+        return ['AI suggestions not available in demo mode'];
+      }
+
+      const openai = getOpenAIClient();
       const response = await openai.chat.completions.create({
         model: "gpt-4",
         messages: [
           {
             role: "system",
-            content: "You are an expert risk management consultant. Provide specific, actionable suggestions for document improvement."
+            content: "You are an expert document reviewer. Provide 3-5 actionable suggestions to improve this document."
           },
           {
             role: "user",
-            content: prompt
+            content: content.substring(0, 2000)
           }
         ],
-        temperature: 0.4,
-        max_tokens: 1000,
+        temperature: 0.3,
+        max_tokens: 500,
       });
 
-      const suggestions = JSON.parse(response.choices[0]?.message?.content || '[]');
-      return Array.isArray(suggestions) ? suggestions : [];
+      const suggestions = response.choices[0]?.message?.content?.split('\n')
+        .filter(line => line.trim().length > 0)
+        .map(line => line.replace(/^\d+\.\s*/, '').trim())
+        .filter(suggestion => suggestion.length > 10)
+        .slice(0, 5);
+
+      return suggestions || ['No suggestions available'];
     } catch (error) {
-      console.error('Suggestion generation failed:', error);
-      return [];
+      console.error('Error generating suggestions:', error);
+      return ['Unable to generate suggestions'];
     }
   }
 }
+
+// Default export
+export const documentTemplateService = new DocumentTemplateService();
 
 // Predefined templates
 export const BUILTIN_TEMPLATES: Omit<DocumentTemplate, 'id' | 'organizationId'>[] = [
@@ -638,7 +551,4 @@ Compliance with this policy will be monitored through {{monitoringMethod}}.
     ],
     isActive: true,
   }
-];
-
-// Export singleton service
-export const documentTemplateService = new DocumentTemplateService(); 
+]; 
