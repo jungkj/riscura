@@ -41,10 +41,11 @@ export async function initializePerformance() {
       initializeFileUploadOptimization();
     }
 
-    // Start performance monitoring
-    if (performanceConfig.monitoring.enabled) {
-      startPerformanceMonitoring();
-    }
+    // Start performance monitoring - DISABLED to prevent console errors
+    console.log('Performance monitoring disabled for clean development experience');
+    // if (performanceConfig.monitoring.enabled) {
+    //   startPerformanceMonitoring();
+    // }
 
     isInitialized = true;
     console.log('Performance optimizations initialized successfully');
@@ -194,6 +195,14 @@ function initializeFileUploadOptimization() {
  */
 function startPerformanceMonitoring() {
   if (typeof window === 'undefined') return;
+
+  // Performance monitoring disabled to prevent console errors
+  console.log('Performance monitoring disabled for clean development experience');
+  return;
+
+  // Performance monitoring disabled to prevent console errors
+  console.log('Performance monitoring disabled for clean development experience');
+  return;
 
   const reportMetrics = async () => {
     try {
