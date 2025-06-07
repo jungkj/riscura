@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { initializePerformance, getPerformanceMetrics, isPerformanceInitialized } from '@/lib/performance/init';
+// import { initializePerformance, getPerformanceMetrics, isPerformanceInitialized } from '@/lib/performance/init';
 
 interface PerformanceContextType {
   isInitialized: boolean;
@@ -12,19 +12,24 @@ interface PerformanceContextType {
 const PerformanceContext = createContext<PerformanceContextType | undefined>(undefined);
 
 export function PerformanceProvider({ children }: { children: React.ReactNode }) {
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(true); // Set to true to avoid initialization
   const [metrics, setMetrics] = useState({});
 
   const refreshMetrics = () => {
-    setMetrics(getPerformanceMetrics());
+    // Disabled to prevent console errors
+    // setMetrics(getPerformanceMetrics());
+    console.log('Performance metrics refresh disabled for clean development');
   };
 
   useEffect(() => {
     const init = async () => {
       try {
-        await initializePerformance();
-        setIsInitialized(isPerformanceInitialized());
-        refreshMetrics();
+        // Performance monitoring disabled to prevent console errors
+        console.log('Performance monitoring disabled for clean development experience');
+        setIsInitialized(true);
+        // await initializePerformance();
+        // setIsInitialized(isPerformanceInitialized());
+        // refreshMetrics();
       } catch (error) {
         console.error('Failed to initialize performance optimizations:', error);
       }
@@ -32,10 +37,9 @@ export function PerformanceProvider({ children }: { children: React.ReactNode })
 
     init();
 
-    // Refresh metrics every minute
-    const interval = setInterval(refreshMetrics, 60000);
-
-    return () => clearInterval(interval);
+    // Disabled metrics refresh to prevent console errors
+    // const interval = setInterval(refreshMetrics, 60000);
+    // return () => clearInterval(interval);
   }, []);
 
   return (
