@@ -60,7 +60,14 @@ async function initializeWebVitals() {
   if (typeof window === 'undefined') return;
 
   try {
-    const { getCLS, getFID, getFCP, getLCP, getTTFB } = await import('web-vitals');
+    // Check if web-vitals is available, if not, skip initialization
+    const webVitalsModule = await import('web-vitals').catch(() => null);
+    if (!webVitalsModule) {
+      console.log('Web vitals module not available, skipping Core Web Vitals monitoring');
+      return;
+    }
+    
+    const { getCLS, getFID, getFCP, getLCP, getTTFB } = webVitalsModule;
 
     getCLS((metric) => {
       performanceMetrics.cls = metric.value;
