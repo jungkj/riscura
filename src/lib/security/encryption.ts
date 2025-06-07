@@ -10,6 +10,23 @@ const SALT_LENGTH = 32;
 const IV_LENGTH = 16;
 const TAG_LENGTH = 16;
 
+// Get encryption key from environment or generate one
+function getEncryptionKey(): Buffer {
+  const key = process.env.ENCRYPTION_KEY;
+  if (!key) {
+    throw new Error('ENCRYPTION_KEY environment variable is required');
+  }
+  
+  // If key is shorter than required, pad it
+  if (key.length < KEY_LENGTH * 2) { // *2 because it's hex
+    const hash = crypto.createHash('sha256');
+    hash.update(key);
+    return hash.digest();
+  }
+  
+  return Buffer.from(key.slice(0, KEY_LENGTH * 2), 'hex');
+}
+
 /**
  * Advanced encryption service for securing sensitive documents and data
  */
@@ -855,4 +872,83 @@ export function verifyPassword(password: string, hash: string): Promise<boolean>
       resolve(key === derivedKey.toString('hex'));
     });
   });
+}
+
+/**
+ * Encrypt sensitive data
+ */
+export async function encrypt(plaintext: string): Promise<string> {
+  try {
+    const key = getEncryptionKey();
+    const iv = crypto.randomBytes(IV_LENGTH);
+    
+    const cipher = crypto.createCipher(ENCRYPTION_ALGORITHM, key);
+    cipher.setAAD(Buffer.from('riscura-mfa', 'utf8'));
+    
+    let encrypted = cipher.update(plaintext, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    
+    const tag = cipher.getAuthTag();
+    
+    // Combine iv, tag, and encrypted data
+    const combined = Buffer.concat([iv, tag, Buffer.from(encrypted, 'hex')]);
+    return combined.toString('base64');
+  } catch (error) {
+    throw new Error('Encryption failed');
+  }
+}
+
+/**
+ * Decrypt sensitive data
+ */
+export async function decrypt(encryptedData: string): Promise<string> {
+  try {
+    const key = getEncryptionKey();
+    const combined = Buffer.from(encryptedData, 'base64');
+    
+    // Extract iv, tag, and encrypted data
+    const iv = combined.slice(0, IV_LENGTH);
+    const tag = combined.slice(IV_LENGTH, IV_LENGTH + TAG_LENGTH);
+    const encrypted = combined.slice(IV_LENGTH + TAG_LENGTH);
+    
+    const decipher = crypto.createDecipher(ENCRYPTION_ALGORITHM, key);
+    decipher.setAAD(Buffer.from('riscura-mfa', 'utf8'));
+    decipher.setAuthTag(tag);
+    
+    let decrypted = decipher.update(encrypted, undefined, 'utf8');
+    decrypted += decipher.final('utf8');
+    
+    return decrypted;
+  } catch (error) {
+    throw new Error('Decryption failed');
+  }
+}
+
+/**
+ * Generate a secure random key for encryption
+ */
+export function generateEncryptionKey(): string {
+  return crypto.randomBytes(KEY_LENGTH).toString('hex');
+}
+
+/**
+ * Hash sensitive data (one-way)
+ */
+export function hashData(data: string, salt?: string): string {
+  const saltBuffer = salt ? Buffer.from(salt, 'hex') : crypto.randomBytes(16);
+  const hash = crypto.pbkdf2Sync(data, saltBuffer, 10000, 32, 'sha256');
+  return saltBuffer.toString('hex') + ':' + hash.toString('hex');
+}
+
+/**
+ * Verify hashed data
+ */
+export function verifyHash(data: string, hashedData: string): boolean {
+  const [salt, hash] = hashedData.split(':');
+  const hashBuffer = Buffer.from(hash, 'hex');
+  const saltBuffer = Buffer.from(salt, 'hex');
+  
+  const verifyHash = crypto.pbkdf2Sync(data, saltBuffer, 10000, 32, 'sha256');
+  
+  return crypto.timingSafeEqual(hashBuffer, verifyHash);
 } 

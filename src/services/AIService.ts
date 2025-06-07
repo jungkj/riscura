@@ -202,9 +202,9 @@ export class AIService {
   constructor(config: Partial<AIConfig> = {}) {
     // Initialize configuration with defaults
     this.config = {
-      apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY || '',
-      baseURL: process.env.NEXT_PUBLIC_OPENAI_BASE_URL,
-      organization: process.env.NEXT_PUBLIC_OPENAI_ORGANIZATION,
+      apiKey: '', // No longer needed on client-side
+      baseURL: '/api/ai/proxy', // Use secure proxy
+      organization: '',
       defaultModel: 'gpt-4o-mini',
       maxTokens: 4000,
       temperature: 0.7,
@@ -218,29 +218,8 @@ export class AIService {
       ...config
     };
 
-    // During build time, skip API key validation to prevent build failures
-    // API key will be validated at runtime when making actual requests
-    const isBuildTime = process.env.NODE_ENV === 'production' && !process.env.VERCEL_ENV && !process.env.NEXT_PUBLIC_OPENAI_API_KEY;
-    const isStaticGeneration = typeof window === 'undefined' && process.env.NEXT_PHASE === 'phase-production-build';
-    
-    if (!this.config.apiKey && !isBuildTime && !isStaticGeneration) {
-      console.warn('OpenAI API key not found. AI features will be disabled.');
-    }
-
-    // Initialize OpenAI client (only if API key is available)
-    if (this.config.apiKey) {
-      this.client = new OpenAI({
-        apiKey: this.config.apiKey,
-        baseURL: this.config.baseURL,
-        organization: this.config.organization,
-        timeout: this.config.timeout,
-        maxRetries: this.config.maxRetries,
-        dangerouslyAllowBrowser: true // For client-side usage
-      });
-    } else {
-      // Create a dummy client for build time
-      this.client = null as any;
-    }
+    // Initialize without OpenAI client - use proxy instead
+    this.client = null as any;
 
     // Initialize model configurations
     this.modelConfigs = new Map([

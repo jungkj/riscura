@@ -9,6 +9,7 @@ import { ControlProvider } from '@/context/ControlContext';
 import { AIProvider } from '@/context/AIContext';
 import { Toaster } from '@/components/ui/sonner';
 import ClientProvider from '@/components/providers/ClientProvider';
+import { PerformanceProvider } from '@/components/providers/PerformanceProvider';
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -34,27 +35,29 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <ClientProvider>
-          <ThemeProvider 
-            attribute="class" 
-            defaultTheme="light" 
-            enableSystem={false}
-            storageKey="riscura-theme"
-          >
-            <TooltipProvider>
-              <AuthProvider>
-                <RiskProvider>
-                  <ControlProvider>
-                    <AIProvider>
-                      <div className="relative min-h-screen bg-background">
-                        {children}
-                      </div>
-                      <Toaster />
-                    </AIProvider>
-                  </ControlProvider>
-                </RiskProvider>
-              </AuthProvider>
-            </TooltipProvider>
-          </ThemeProvider>
+          <PerformanceProvider>
+            <ThemeProvider 
+              attribute="class" 
+              defaultTheme="light" 
+              enableSystem={false}
+              storageKey="riscura-theme"
+            >
+              <TooltipProvider>
+                <AuthProvider>
+                  <RiskProvider>
+                    <ControlProvider>
+                      <AIProvider>
+                        <div className="relative min-h-screen bg-background">
+                          {children}
+                        </div>
+                        <Toaster />
+                      </AIProvider>
+                    </ControlProvider>
+                  </RiskProvider>
+                </AuthProvider>
+              </TooltipProvider>
+            </ThemeProvider>
+          </PerformanceProvider>
         </ClientProvider>
       </body>
     </html>
