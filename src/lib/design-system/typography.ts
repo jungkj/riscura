@@ -137,11 +137,23 @@ export const typography = {
 // Helper functions to combine typography styles
 export const getHeadingClasses = (level: keyof typeof typography.headings) => {
   const heading = typography.headings[level];
+  if (!heading) {
+    console.error(`Typography heading level "${level}" not found. Available levels:`, Object.keys(typography.headings));
+    // Fallback to h2 styles
+    const fallback = typography.headings.h2;
+    return `${fallback.size} ${fallback.weight} ${fallback.tracking} ${fallback.leading} ${fallback.color} ${fallback.spacing}`;
+  }
   return `${heading.size} ${heading.weight} ${heading.tracking} ${heading.leading} ${heading.color} ${heading.spacing}`;
 };
 
 export const getBodyClasses = (variant: keyof typeof typography.body) => {
   const body = typography.body[variant];
+  if (!body) {
+    console.error(`Typography body variant "${variant}" not found. Available variants:`, Object.keys(typography.body));
+    // Fallback to normal variant
+    const fallback = typography.body.normal;
+    return `${fallback.size} ${fallback.weight} ${fallback.leading} ${fallback.color}`;
+  }
   return `${body.size} ${body.weight} ${body.leading} ${body.color}`;
 };
 
