@@ -335,7 +335,9 @@ export const PerformanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
   
   // Initialize performance metrics
   useEffect(() => {
-    measureWebVitals().then(setMetrics);
+    // Temporarily disable to fix console errors
+    // measureWebVitals().then(setMetrics);
+    console.log('Performance metrics monitoring disabled to prevent console errors');
   }, []);
   
   // Update cache size when settings change
