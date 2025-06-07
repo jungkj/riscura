@@ -13,6 +13,55 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+// Enhanced Dashboard Components
+import { EnhancedMetricCard } from '@/components/dashboard/EnhancedMetricCard';
+import { EnhancedChartCard } from '@/components/dashboard/EnhancedChartCard';
+import { EnhancedListCard } from '@/components/dashboard/EnhancedListCard';
+import { 
+  EnhancedStatusBadge, 
+  EnhancedRiskLevelIndicator,
+  EnhancedProgressRing,
+  EnhancedTrendIndicator 
+} from '@/components/ui/enhanced-status-indicator';
+import { colorClasses } from '@/lib/design-system/colors';
+import { 
+  EnhancedPageContainer,
+  EnhancedContentSection,
+  EnhancedGrid,
+  EnhancedCardContainer,
+  EnhancedFlex,
+  EnhancedSectionHeader,
+  EnhancedSpacer,
+  EnhancedDivider 
+} from '@/components/layout/enhanced-layout';
+import { spacingClasses, layoutClasses } from '@/lib/design-system/spacing';
+import { cn } from '@/lib/utils';
+import { 
+  EnhancedInteractiveButton, 
+  EnhancedSkeleton
+} from '@/components/ui/enhanced-interactive';
+import { 
+  variants, 
+  interactions, 
+  feedbackAnimations,
+  timings,
+  easings 
+} from '@/lib/design-system/micro-interactions';
+import { 
+  ToastProvider, 
+  useToastHelpers 
+} from '@/components/ui/toast-system';
+
+// Enhanced Typography Components
+import { 
+  EnhancedPageHeader, 
+  EnhancedSection, 
+  EnhancedContentGroup,
+  EnhancedHeading,
+  EnhancedBodyText,
+  EnhancedStatsDisplay 
+} from '@/components/ui/enhanced-typography';
 import {
   Dialog,
   DialogContent,
@@ -72,7 +121,7 @@ interface EnhancedRiskRegistryProps {
   className?: string;
 }
 
-export const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className = '' }) => {
+const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className = '' }) => {
   const { risks: baseRisks, getRiskStats, createRisk, updateRisk, deleteRisk } = useRisks();
   const [enhancedRiskService] = useState(() => new EnhancedRiskService());
 
@@ -234,26 +283,13 @@ export const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ clas
     }
   };
 
-  // Risk status colors
+  // Enhanced status and priority color functions using the new color system
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'identified': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'assessed': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'mitigated': return 'bg-green-100 text-green-800 border-green-200';
-      case 'monitored': return 'bg-secondary/20 text-foreground border-border';
-      case 'closed': return 'bg-secondary/20 text-muted-foreground border-border';
-      default: return 'bg-secondary/20 text-foreground border-border';
-    }
+    return colorClasses.status[status as keyof typeof colorClasses.status] || colorClasses.status.neutral;
   };
 
   const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'critical': return 'bg-red-100 text-red-800 border-red-200';
-      case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-secondary/20 text-foreground border-border';
-    }
+    return colorClasses.status[priority as keyof typeof colorClasses.status] || colorClasses.status.neutral;
   };
 
   // Risk statistics
@@ -275,155 +311,175 @@ export const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ clas
   }, [filteredRisks]);
 
   return (
-    <div className={`min-h-screen bg-background ${className}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+    <EnhancedPageContainer maxWidth="xl" padding="md" className={className}>
+      <EnhancedContentSection spacing="normal">
         {/* Header Section */}
-        <motion.div 
-          className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="space-y-2">
-            <h1 className="text-4xl font-bold text-foreground tracking-tight">
-              Risk Registry
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl">
-              Comprehensive risk management with AI-powered insights and analytics
-            </p>
-            
-            {/* Quick Stats */}
-            <div className="flex items-center gap-6 pt-2">
-              <div className="flex items-center gap-2 text-sm">
-                <div className="w-3 h-3 bg-foreground rounded-full"></div>
-                <span className="text-muted-foreground">Total: {stats.total}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <span className="text-muted-foreground">Critical: {stats.byPriority.critical || 0}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="text-muted-foreground">Mitigated: {stats.byStatus.mitigated || 0}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <TrendingUp className="w-4 h-4 text-muted-foreground" />
-                <span className="text-muted-foreground">Avg Score: {stats.avgScore.toFixed(1)}</span>
-              </div>
-            </div>
-          </div>
+        <EnhancedPageHeader
+          title="Risk Registry"
+          subtitle="Comprehensive risk management with AI-powered insights and analytics"
+          breadcrumbs={[
+            { label: 'Dashboard' },
+            { label: 'Risk Management' },
+            { label: 'Registry' }
+          ]}
+          stats={[
+            {
+              label: 'Total',
+              value: stats.total,
+              description: 'All risks',
+              color: 'default',
+              icon: <Shield className="w-4 h-4 text-slate-600" />
+            },
+            {
+              label: 'Critical',
+              value: stats.byPriority.critical || 0,
+              description: 'High priority',
+              color: 'danger',
+              icon: <AlertTriangle className="w-4 h-4 text-red-600" />
+            },
+            {
+              label: 'Mitigated',
+              value: stats.byStatus.mitigated || 0,
+              description: `${stats.total > 0 ? Math.round(((stats.byStatus.mitigated || 0) / stats.total) * 100) : 0}% resolved`,
+              color: 'success',
+              icon: <CheckCircle className="w-4 h-4 text-green-600" />
+            },
+            {
+              label: 'Score',
+              value: stats.avgScore.toFixed(1),
+              description: 'Average risk level',
+              color: 'info',
+              icon: <TrendingUp className="w-4 h-4 text-blue-600" />
+            }
+          ]}
+          actions={
+            <>
+              <Button
+                onClick={() => setShowFiltersModal(true)}
+                variant="outline"
+                className="notion-button-outline"
+              >
+                <Filter className="w-4 h-4 mr-2" />
+                Filters
+                {Object.keys(filters).length > 0 && (
+                  <Badge className="ml-2 h-5 w-5 p-0 text-xs">
+                    {Object.keys(filters).length}
+                  </Badge>
+                )}
+              </Button>
+              
+              <Button
+                onClick={() => setViewMode(viewMode === 'list' ? 'kanban' : 'list')}
+                variant="outline"
+                className="notion-button-outline"
+              >
+                {viewMode === 'list' ? <BarChart3 className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </Button>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-3">
-            <Button
-              onClick={() => setShowFiltersModal(true)}
-              variant="outline"
-              className="notion-button-outline"
-            >
-              <Filter className="w-4 h-4 mr-2" />
-              Filters
-              {Object.keys(filters).length > 0 && (
-                <Badge className="ml-2 h-5 w-5 p-0 text-xs">
-                  {Object.keys(filters).length}
-                </Badge>
-              )}
-            </Button>
-            
-            <Button
-              onClick={() => setViewMode(viewMode === 'list' ? 'kanban' : 'list')}
-              variant="outline"
-              className="notion-button-outline"
-            >
-              {viewMode === 'list' ? <BarChart3 className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            </Button>
-
-            {selectedRisks.length > 0 && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="notion-button-outline">
-                    <MoreHorizontal className="w-4 h-4 mr-2" />
-                    Bulk Actions ({selectedRisks.length})
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Bulk Operations</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => handleBulkOperation({
-                    type: 'update',
-                    riskIds: selectedRisks,
-                    data: { status: 'assessed' },
-                    userId: 'current-user',
-                    timestamp: new Date()
-                  })}>
-                    <CheckCircle className="w-4 h-4 mr-2" />
-                    Mark as Assessed
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleBulkOperation({
-                    type: 'assign',
-                    riskIds: selectedRisks,
-                    data: { assignee: 'current-user' },
-                    userId: 'current-user',
-                    timestamp: new Date()
-                  })}>
-                    <Users className="w-4 h-4 mr-2" />
-                    Assign to Me
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleBulkOperation({
-                    type: 'export',
-                    riskIds: selectedRisks,
-                    data: { format: 'csv' },
-                    userId: 'current-user',
-                    timestamp: new Date()
-                  })}>
-                    <Download className="w-4 h-4 mr-2" />
-                    Export Selected
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem 
-                    className="text-red-600"
-                    onClick={() => handleBulkOperation({
-                      type: 'delete',
+              {selectedRisks.length > 0 && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="notion-button-outline">
+                      <MoreHorizontal className="w-4 h-4 mr-2" />
+                      Bulk Actions ({selectedRisks.length})
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Bulk Operations</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => handleBulkOperation({
+                      type: 'update',
                       riskIds: selectedRisks,
+                      data: { status: 'assessed' },
                       userId: 'current-user',
                       timestamp: new Date()
-                    })}
-                  >
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    Delete Selected
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
+                    })}>
+                      <CheckCircle className="w-4 h-4 mr-2" />
+                      Mark as Assessed
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleBulkOperation({
+                      type: 'assign',
+                      riskIds: selectedRisks,
+                      data: { assignee: 'current-user' },
+                      userId: 'current-user',
+                      timestamp: new Date()
+                    })}>
+                      <Users className="w-4 h-4 mr-2" />
+                      Assign to Me
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleBulkOperation({
+                      type: 'export',
+                      riskIds: selectedRisks,
+                      data: { format: 'csv' },
+                      userId: 'current-user',
+                      timestamp: new Date()
+                    })}>
+                      <Download className="w-4 h-4 mr-2" />
+                      Export Selected
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      className="text-red-600"
+                      onClick={() => handleBulkOperation({
+                        type: 'delete',
+                        riskIds: selectedRisks,
+                        userId: 'current-user',
+                        timestamp: new Date()
+                      })}
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Delete Selected
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
 
-            <Button
-              onClick={() => setShowCreateModal(true)}
-              className="notion-button-primary"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Risk
-            </Button>
-          </div>
-        </motion.div>
+              <EnhancedInteractiveButton
+                onClick={() => setShowCreateModal(true)}
+                variant="primary"
+                className="notion-button-primary"
+              >
+                <motion.div
+                  whileHover={{ rotate: 90 }}
+                  transition={{ duration: timings.quick, ease: easings.snappy }}
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                </motion.div>
+                Add Risk
+              </EnhancedInteractiveButton>
+            </>
+          }
+        />
 
         {/* Search and Filters Bar */}
-        <Card className="notion-card">
-          <CardContent className="p-4">
-            <div className="flex flex-col lg:flex-row gap-4">
-              <div className="flex-1">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                  <Input
-                    placeholder="Search risks by title, description, owner, or tags..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 notion-input"
-                  />
-                </div>
+        <EnhancedSection background="card" spacing="tight">
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
+                <Input
+                  placeholder="Search risks by title, description, owner, or tags..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Escape') {
+                      setSearchQuery('');
+                    }
+                  }}
+                  className="pl-10 text-base placeholder:text-slate-400 border-slate-200 focus:border-blue-500 focus:ring-blue-500/20 transition-all duration-200"
+                  aria-label="Search risks"
+                  role="searchbox"
+                />
               </div>
-              
+            </div>
+            
+            <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
+                <EnhancedBodyText variant="small" className="text-slate-500 font-medium">
+                  Sort by:
+                </EnhancedBodyText>
                 <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-                  <SelectTrigger className="w-40">
+                  <SelectTrigger className="w-40 border-slate-200">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -438,193 +494,321 @@ export const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ clas
                   onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
                   variant="outline"
                   size="sm"
-                  className="notion-button-outline"
+                  className="border-slate-200 text-slate-600 hover:text-slate-800 hover:border-slate-300"
                 >
                   {sortOrder === 'asc' ? '↑' : '↓'}
                 </Button>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </EnhancedSection>
 
         {/* Main Content Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 bg-secondary">
-            <TabsTrigger value="overview" className="flex items-center gap-2">
-              <Shield className="w-4 h-4" />
-              Overview
-            </TabsTrigger>
-            <TabsTrigger value="list" className="flex items-center gap-2">
-              <FileText className="w-4 h-4" />
-              Risk List
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2">
-              <BarChart3 className="w-4 h-4" />
-              Analytics
-            </TabsTrigger>
-            <TabsTrigger value="workflows" className="flex items-center gap-2">
-              <Workflow className="w-4 h-4" />
-              Workflows
-            </TabsTrigger>
-            <TabsTrigger value="ai-insights" className="flex items-center gap-2">
-              <Brain className="w-4 h-4" />
-              AI Insights
-            </TabsTrigger>
-          </TabsList>
+        <EnhancedSection spacing="small">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-5 bg-slate-100/80 p-1 rounded-lg border border-slate-200/60">
+              <TabsTrigger 
+                value="overview" 
+                className="flex items-center gap-2 font-medium text-slate-600 data-[state=active]:text-slate-900 data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all duration-200 hover:bg-slate-200/50"
+              >
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Shield className="w-4 h-4" />
+                </motion.div>
+                <span className="hidden sm:inline">Overview</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="list" 
+                className="flex items-center gap-2 font-medium text-slate-600 data-[state=active]:text-slate-900 data-[state=active]:bg-white data-[state=active]:shadow-sm"
+              >
+                <FileText className="w-4 h-4" />
+                <span className="hidden sm:inline">Risk List</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="analytics" 
+                className="flex items-center gap-2 font-medium text-slate-600 data-[state=active]:text-slate-900 data-[state=active]:bg-white data-[state=active]:shadow-sm"
+              >
+                <BarChart3 className="w-4 h-4" />
+                <span className="hidden sm:inline">Analytics</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="workflows" 
+                className="flex items-center gap-2 font-medium text-slate-600 data-[state=active]:text-slate-900 data-[state=active]:bg-white data-[state=active]:shadow-sm"
+              >
+                <Workflow className="w-4 h-4" />
+                <span className="hidden sm:inline">Workflows</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="ai-insights" 
+                className="flex items-center gap-2 font-medium text-slate-600 data-[state=active]:text-slate-900 data-[state=active]:bg-white data-[state=active]:shadow-sm"
+              >
+                <Brain className="w-4 h-4" />
+                <span className="hidden sm:inline">AI Insights</span>
+              </TabsTrigger>
+            </TabsList>
 
           {/* Overview Tab */}
-          <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card className="notion-card">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Total Risks</CardTitle>
-                  <Shield className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{stats.total}</div>
-                  <p className="text-xs text-muted-foreground">
-                    +12% from last month
-                  </p>
-                </CardContent>
-              </Card>
+          <TabsContent value="overview" className="space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+            {/* Key Metrics Section */}
+            <EnhancedSection 
+              title="Key Risk Metrics" 
+              subtitle="Real-time overview of your risk portfolio"
+              spacing="tight"
+            >
+                            <EnhancedGrid cols={4} gap="lg" responsive={true}>
+                {isLoading ? (
+                  <>
+                    {[1, 2, 3, 4].map((i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                      >
+                        <EnhancedSkeleton
+                          lines={3}
+                          height="h-20"
+                          animated={true}
+                          className="p-6 bg-white rounded-xl border border-slate-200"
+                        />
+                      </motion.div>
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 }}
+                    >
+                      <EnhancedMetricCard
+                        title="Total Risks"
+                value={stats.total}
+                icon={Shield}
+                variant="default"
+                trend={{
+                  value: 12,
+                  isPositive: true,
+                  period: "from last month"
+                }}
+                sparkline={{
+                  values: [8, 12, 15, 18, 22, 25, stats.total],
+                  trend: 'up'
+                }}
+                onClick={() => console.log('Navigate to all risks')}
+              />
 
-              <Card className="notion-card">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Critical Risks</CardTitle>
-                  <AlertTriangle className="h-4 w-4 text-red-500" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-red-600">{stats.byPriority.critical || 0}</div>
-                  <p className="text-xs text-muted-foreground">
-                    Require immediate attention
-                  </p>
-                </CardContent>
-              </Card>
+              <EnhancedMetricCard
+                title="Critical Risks"
+                value={stats.byPriority.critical || 0}
+                icon={AlertTriangle}
+                variant="danger"
+                subtitle="Require immediate attention"
+                badge={{
+                  text: "High Priority",
+                  variant: "danger"
+                }}
+                onClick={() => console.log('Navigate to critical risks')}
+              />
 
-              <Card className="notion-card">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Average Score</CardTitle>
-                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{stats.avgScore.toFixed(1)}</div>
-                  <Progress value={(stats.avgScore / 25) * 100} className="w-full mt-2" />
-                </CardContent>
-              </Card>
+              <EnhancedMetricCard
+                title="Average Score"
+                value={stats.avgScore.toFixed(1)}
+                icon={TrendingUp}
+                variant="info"
+                progress={{
+                  value: stats.avgScore,
+                  max: 25,
+                  showProgress: true
+                }}
+                trend={{
+                  value: 5,
+                  isPositive: false,
+                  period: "this quarter"
+                }}
+                onClick={() => console.log('Navigate to score analytics')}
+              />
 
-              <Card className="notion-card">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Mitigated</CardTitle>
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-green-600">{stats.byStatus.mitigated || 0}</div>
-                  <p className="text-xs text-muted-foreground">
-                    {stats.total > 0 ? Math.round(((stats.byStatus.mitigated || 0) / stats.total) * 100) : 0}% of total
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
+              <EnhancedMetricCard
+                title="Mitigated Risks"
+                value={stats.byStatus.mitigated || 0}
+                icon={CheckCircle}
+                variant="success"
+                subtitle={`${stats.total > 0 ? Math.round(((stats.byStatus.mitigated || 0) / stats.total) * 100) : 0}% of total`}
+                sparkline={{
+                  values: [2, 4, 6, 8, 10, 12, stats.byStatus.mitigated || 0],
+                  trend: 'up'
+                }}
+                onClick={() => console.log('Navigate to mitigated risks')}
+              />
+                    </motion.div>
+                  </>
+                )}
+              </EnhancedGrid>
+            </EnhancedSection>
             
             {/* Risk Distribution Charts */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card className="notion-card">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <PieChart className="w-5 h-5" />
-                    Risk Distribution by Category
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {Object.entries(analytics?.risksByCategory || {}).map(([category, count]) => (
-                      <div key={category} className="flex items-center justify-between">
-                        <span className="text-sm capitalize">{category}</span>
-                        <div className="flex items-center gap-2">
-                          <div className="w-16 h-2 bg-secondary rounded-full overflow-hidden">
-                            <div 
-                              className="h-full bg-primary transition-all duration-300"
-                              style={{ width: `${(count / stats.total) * 100}%` }}
-                            />
-                          </div>
-                          <span className="text-sm font-medium w-8 text-right">{count}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+            <EnhancedSection 
+              title="Risk Distribution Analysis"
+              subtitle="Detailed breakdown of risks by category and workflow status"
+              spacing="tight"
+              separator="subtle"
+            >
+              <EnhancedGrid cols={2} gap="lg" responsive={true}>
+              <EnhancedChartCard
+                title="Risk Distribution by Category"
+                subtitle="Breakdown of risks across different categories"
+                icon={PieChart}
+                data={Object.entries(analytics?.risksByCategory || {}).map(([category, count]) => ({
+                  label: category,
+                  value: count,
+                  percentage: stats.total > 0 ? (count / stats.total) * 100 : 0,
+                  trend: {
+                    value: Math.floor(Math.random() * 10) + 1,
+                    isPositive: Math.random() > 0.5
+                  }
+                }))}
+                totalValue={stats.total}
+                onItemClick={(item) => console.log('Filter by category:', item.label)}
+              />
 
-              <Card className="notion-card">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Activity className="w-5 h-5" />
-                    Workflow Status
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {Object.entries(stats.byStatus).map(([status, count]) => (
-                      <div key={status} className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Badge className={`text-xs ${getStatusColor(status)}`}>
-                            {status}
-                          </Badge>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-16 h-2 bg-secondary rounded-full overflow-hidden">
-                            <div 
-                              className="h-full bg-primary transition-all duration-300"
-                              style={{ width: `${(count / stats.total) * 100}%` }}
-                            />
-                          </div>
-                          <span className="text-sm font-medium w-8 text-right">{count}</span>
-                        </div>
-                      </div>
-                    ))}
+              <EnhancedChartCard
+                title="Workflow Status Distribution"
+                subtitle="Current status of risk management workflows"
+                icon={Activity}
+                data={Object.entries(stats.byStatus).map(([status, count]) => ({
+                  label: status,
+                  value: count,
+                  percentage: stats.total > 0 ? (count / stats.total) * 100 : 0,
+                  color: status === 'mitigated' ? 'bg-green-500' : 
+                         status === 'critical' ? 'bg-red-500' :
+                         status === 'assessed' ? 'bg-blue-500' : 'bg-amber-500',
+                  trend: {
+                    value: Math.floor(Math.random() * 15) + 1,
+                    isPositive: status === 'mitigated' || status === 'assessed'
+                  }
+                }))}
+                totalValue={stats.total}
+                onItemClick={(item) => console.log('Filter by status:', item.label)}
+              />
+              </EnhancedGrid>
+            </EnhancedSection>
+
+            {/* Enhanced Color System Demo */}
+            <EnhancedSection 
+              title="Risk Status Overview"
+              subtitle="Enhanced visual feedback with color-coded status indicators"
+              spacing="tight"
+              separator="subtle"
+            >
+              <EnhancedGrid cols={4} gap="md" responsive={true} className="mb-6">
+                {/* Status Badges Demo */}
+                <div className="space-y-3">
+                  <h4 className="text-sm font-medium text-slate-700">Priority Levels</h4>
+                  <div className="space-y-2">
+                    <EnhancedStatusBadge status="critical" showIcon={true} animated={true} />
+                    <EnhancedStatusBadge status="high" showIcon={true} animated={true} />
+                    <EnhancedStatusBadge status="medium" showIcon={true} animated={true} />
+                    <EnhancedStatusBadge status="low" showIcon={true} animated={true} />
                   </div>
-                </CardContent>
-              </Card>
-            </div>
+                </div>
+                
+                {/* Workflow Status Demo */}
+                <div className="space-y-3">
+                  <h4 className="text-sm font-medium text-slate-700">Workflow Status</h4>
+                  <div className="space-y-2">
+                    <EnhancedStatusBadge status="identified" variant="outline" animated={true} />
+                    <EnhancedStatusBadge status="assessed" variant="outline" animated={true} />
+                    <EnhancedStatusBadge status="mitigated" variant="outline" animated={true} />
+                    <EnhancedStatusBadge status="monitoring" variant="outline" animated={true} />
+                  </div>
+                </div>
+                
+                {/* Progress Rings Demo */}
+                <div className="space-y-3">
+                  <h4 className="text-sm font-medium text-slate-700">Progress Indicators</h4>
+                  <div className="flex gap-3">
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <EnhancedProgressRing progress={85} status="critical" size={40} animated={true} />
+                    </motion.div>
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: -5 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <EnhancedProgressRing progress={65} status="warning" size={40} animated={true} />
+                    </motion.div>
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <EnhancedProgressRing progress={90} status="success" size={40} animated={true} />
+                    </motion.div>
+                  </div>
+                </div>
+                
+                {/* Trend Indicators Demo */}
+                <div className="space-y-3">
+                  <h4 className="text-sm font-medium text-slate-700">Trend Analysis</h4>
+                  <div className="space-y-2">
+                    <EnhancedTrendIndicator trend="up" value={12} size="sm" />
+                    <EnhancedTrendIndicator trend="down" value={-8} size="sm" />
+                    <EnhancedTrendIndicator trend="stable" value={2} size="sm" />
+                  </div>
+                </div>
+              </EnhancedGrid>
+            </EnhancedSection>
 
             {/* Top Risks Table */}
-            <Card className="notion-card">
-              <CardHeader>
-                <CardTitle>Top Risks by Score</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {filteredRisks
-                    .sort((a, b) => b.riskScore - a.riskScore)
-                    .slice(0, 5)
-                    .map((risk) => (
-                      <div 
-                        key={risk.id}
-                        className="flex items-center justify-between p-3 rounded-lg border hover:bg-accent/50 cursor-pointer transition-colors"
-                        onClick={() => {
-                          setSelectedRisk(risk);
-                          setShowRiskDetail(true);
-                        }}
-                      >
-                        <div className="flex-1">
-                          <h4 className="font-medium text-foreground">{risk.title}</h4>
-                          <p className="text-sm text-muted-foreground truncate">{risk.description}</p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <Badge className={getPriorityColor(risk.priority)}>
-                            {risk.priority}
-                          </Badge>
-                          <div className="text-right">
-                            <div className="text-lg font-bold">{risk.riskScore}</div>
-                            <div className="text-xs text-muted-foreground">{risk.likelihood}×{risk.impact}</div>
-                          </div>
-                        </div>
-                      </div>
-                    ))
-                  }
-                </div>
-              </CardContent>
-            </Card>
+            <EnhancedSection 
+              title="Priority Risk Review"
+              subtitle="Top risks requiring immediate attention"
+              spacing="tight"
+              separator="subtle"
+            >
+              <EnhancedListCard
+              title="Top Risks by Score"
+              subtitle="Highest priority risks requiring attention"
+              icon={Target}
+              items={filteredRisks
+                .sort((a, b) => b.riskScore - a.riskScore)
+                .slice(0, 8)
+                .map((risk) => ({
+                  id: risk.id,
+                  title: risk.title,
+                  description: risk.description,
+                  value: risk.riskScore,
+                  subValue: `${risk.likelihood}×${risk.impact}`,
+                  priority: risk.priority as 'low' | 'medium' | 'high' | 'critical',
+                  status: risk.workflowState,
+                  metadata: { risk }
+                }))}
+              maxItems={5}
+              onItemClick={(item) => {
+                if (item.metadata?.risk) {
+                  setSelectedRisk(item.metadata.risk);
+                  setShowRiskDetail(true);
+                }
+              }}
+              onViewAll={() => setActiveTab('list')}
+              emptyMessage="No risks found"
+              />
+            </EnhancedSection>
+            </motion.div>
           </TabsContent>
 
           {/* Risk List Tab */}
@@ -652,10 +836,23 @@ export const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ clas
                       <motion.div
                         key={risk.id}
                         layout
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        className="p-4 hover:bg-accent/50 transition-colors"
+                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                        whileHover={{ 
+                          y: -2, 
+                          scale: 1.01,
+                          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08)",
+                          backgroundColor: "rgba(59, 130, 246, 0.02)"
+                        }}
+                        whileTap={{ scale: 0.98 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 24,
+                          layout: { duration: 0.3 }
+                        }}
+                        className="p-6 rounded-lg border border-transparent hover:border-blue-200/50 cursor-pointer"
                       >
                         <div className="flex items-start gap-4">
                           <Checkbox
@@ -678,12 +875,18 @@ export const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ clas
                                 </p>
                               </div>
                               <div className="flex items-center gap-2">
-                                <Badge className={getPriorityColor(risk.priority)}>
-                                  {risk.priority}
-                                </Badge>
-                                <Badge className={getStatusColor(risk.workflowState)}>
-                                  {risk.workflowState}
-                                </Badge>
+                                <EnhancedStatusBadge 
+                                  status={risk.priority}
+                                  size="sm"
+                                  showIcon={true}
+                                  animated={true}
+                                />
+                                <EnhancedStatusBadge 
+                                  status={risk.workflowState}
+                                  size="sm"
+                                  variant="outline"
+                                  animated={true}
+                                />
                               </div>
                             </div>
                             
@@ -703,13 +906,21 @@ export const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ clas
                                 </span>
                               </div>
                               
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-3">
                                 <div className="text-right">
                                   <div className="text-lg font-bold">{risk.riskScore}</div>
                                   <div className="text-xs text-muted-foreground">
                                     L:{risk.likelihood} × I:{risk.impact}
                                   </div>
                                 </div>
+                                <EnhancedRiskLevelIndicator 
+                                  level={risk.riskScore}
+                                  confidence={risk.aiConfidence || 0.7}
+                                  showConfidence={false}
+                                  size="sm"
+                                  orientation="vertical"
+                                  animated={true}
+                                />
                                 
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
@@ -730,8 +941,19 @@ export const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ clas
                                       Edit Risk
                                     </DropdownMenuItem>
                                     <DropdownMenuItem onClick={() => handleAIAnalysis(risk)}>
-                                      <Brain className="w-4 h-4 mr-2" />
-                                      AI Analysis
+                                      <motion.div
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.9 }}
+                                        className="flex items-center"
+                                      >
+                                        <motion.div
+                                          animate={aiAnalyzing ? { rotate: 360 } : { rotate: 0 }}
+                                          transition={{ duration: 2, repeat: aiAnalyzing ? Infinity : 0 }}
+                                        >
+                                          <Brain className="w-4 h-4 mr-2" />
+                                        </motion.div>
+                                        AI Analysis
+                                      </motion.div>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem>
                                       <Copy className="w-4 h-4 mr-2" />
@@ -758,14 +980,33 @@ export const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ clas
                               </div>
                             )}
                             
-                            {/* AI Confidence Indicator */}
-                            {risk.aiConfidence > 0 && (
-                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                <Brain className="w-3 h-3" />
-                                <span>AI Confidence: {Math.round(risk.aiConfidence * 100)}%</span>
-                                <Progress value={risk.aiConfidence * 100} className="w-16 h-1" />
-                              </div>
-                            )}
+                            {/* Enhanced Status Indicators */}
+                            <div className="flex items-center justify-between">
+                              {/* AI Confidence Indicator */}
+                              {risk.aiConfidence > 0 && (
+                                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                  <Brain className="w-3 h-3" />
+                                  <span>AI Confidence: {Math.round(risk.aiConfidence * 100)}%</span>
+                                  <EnhancedProgressRing 
+                                    progress={risk.aiConfidence * 100}
+                                    size={24}
+                                    strokeWidth={3}
+                                    status="info"
+                                    showPercentage={false}
+                                    animated={true}
+                                  />
+                                </div>
+                              )}
+                              
+                              {/* Trend Indicator */}
+                              <EnhancedTrendIndicator 
+                                trend={risk.riskScore > 15 ? 'up' : risk.riskScore < 10 ? 'down' : 'stable'}
+                                value={Math.floor(Math.random() * 20) - 10}
+                                showValue={true}
+                                size="sm"
+                                animated={true}
+                              />
+                            </div>
                           </div>
                         </div>
                       </motion.div>
@@ -837,6 +1078,7 @@ export const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ clas
             </Card>
           </TabsContent>
         </Tabs>
+        </EnhancedSection>
 
         {/* Risk Detail Modal */}
         <Dialog open={showRiskDetail} onOpenChange={setShowRiskDetail}>
@@ -981,25 +1223,87 @@ export const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ clas
           </DialogContent>
         </Dialog>
 
-        {/* Loading overlay */}
+        {/* Enhanced Loading overlay with micro-interactions */}
         {(isLoading || aiAnalyzing) && (
-          <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
-            <Card className="notion-card">
-              <CardContent className="p-6 text-center">
-                <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4" />
-                <p className="text-lg font-medium">
-                  {aiAnalyzing ? 'Running AI Analysis...' : 'Processing...'}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  This may take a few moments
-                </p>
-              </CardContent>
-            </Card>
-          </div>
+          <motion.div 
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ 
+                duration: 0.4, 
+                ease: [0.23, 1, 0.32, 1],
+                type: "spring",
+                stiffness: 300,
+                damping: 24
+              }}
+            >
+              <Card className="notion-card">
+                <CardContent className="p-6 text-center">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ 
+                      duration: 2, 
+                      repeat: Infinity, 
+                      ease: "linear" 
+                    }}
+                    className="mx-auto mb-4"
+                  >
+                    <RefreshCw className="w-8 h-8 text-blue-600" />
+                  </motion.div>
+                  <motion.p 
+                    className="text-lg font-medium"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    {aiAnalyzing ? 'Running AI Analysis...' : 'Processing...'}
+                  </motion.p>
+                  <motion.p 
+                    className="text-sm text-muted-foreground"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    This may take a few moments
+                  </motion.p>
+                  {/* Progress dots animation */}
+                  <motion.div 
+                    className="flex justify-center gap-1 mt-4"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                  >
+                    {[0, 1, 2].map((i) => (
+                      <motion.div
+                        key={i}
+                        className="w-2 h-2 bg-blue-600 rounded-full"
+                        animate={{
+                          scale: [1, 1.5, 1],
+                          opacity: [0.5, 1, 0.5]
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: Infinity,
+                          delay: i * 0.2
+                        }}
+                      />
+                    ))}
+                  </motion.div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </motion.div>
         )}
-      </div>
-    </div>
+      </EnhancedContentSection>
+    </EnhancedPageContainer>
   );
 };
 
+export { EnhancedRiskRegistry };
 export default EnhancedRiskRegistry; 

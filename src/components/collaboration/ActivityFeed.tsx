@@ -69,6 +69,7 @@ import {
   Building,
   Briefcase,
   Globe,
+  MoreHorizontal,
 } from 'lucide-react';
 
 // Types
