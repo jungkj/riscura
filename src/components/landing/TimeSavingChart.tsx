@@ -6,10 +6,10 @@ import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, ReferenceLine } fro
 
 
 const data = [
-  { quarter: 'Q1', traditional: 10, riscura: 10 },
-  { quarter: 'Q2', traditional: 25, riscura: 45 },
-  { quarter: 'Q3', traditional: 45, riscura: 85 },
-  { quarter: 'Q4', traditional: 65, riscura: 95 },
+  { quarter: 'Q1', traditional: 80, riscura: 8 },
+  { quarter: 'Q2', traditional: 120, riscura: 12 },
+  { quarter: 'Q3', traditional: 160, riscura: 15 },
+  { quarter: 'Q4', traditional: 200, riscura: 20 },
 ];
 
 export const TimeSavingChart = () => {
@@ -45,11 +45,11 @@ export const TimeSavingChart = () => {
                 Excel vs AI-Powered Platform
               </span>
               <h2 className="text-3xl lg:text-4xl font-bold text-[#191919] mb-6 leading-tight font-inter">
-                See how Riscura's AI automation outperforms traditional Excel-based RCSA tracking.
+                Reduce RCSA management from 200+ hours to just 20 hours per quarter.
               </h2>
               <p className="text-lg text-[#A8A8A8] font-inter leading-relaxed">
-                While Excel requires manual updates, error-prone formulas, and constant maintenance, 
-                Riscura delivers automated risk discovery, real-time analytics, and instant compliance reporting.
+                Excel-based RCSA requires extensive manual data entry, formula maintenance, and report generation. 
+                Riscura's AI automation handles risk discovery, control mapping, and compliance reporting automatically.
               </p>
             </div>
 
@@ -81,17 +81,18 @@ export const TimeSavingChart = () => {
                     tick={{ fill: '#A8A8A8', fontSize: 12, fontFamily: 'Inter' }}
                   />
                   <YAxis 
-                    domain={[0, 100]}
+                    domain={[0, 220]}
                     axisLine={false}
                     tickLine={false}
                     tick={{ fill: '#A8A8A8', fontSize: 12, fontFamily: 'Inter' }}
-                    tickFormatter={(value) => `${value}%`}
+                    tickFormatter={(value) => `${value}h`}
                   />
                   
                   {/* Grid lines */}
-                  <ReferenceLine y={25} stroke="#D8C3A5" strokeDasharray="3 3" />
                   <ReferenceLine y={50} stroke="#D8C3A5" strokeDasharray="3 3" />
-                  <ReferenceLine y={75} stroke="#D8C3A5" strokeDasharray="3 3" />
+                  <ReferenceLine y={100} stroke="#D8C3A5" strokeDasharray="3 3" />
+                  <ReferenceLine y={150} stroke="#D8C3A5" strokeDasharray="3 3" />
+                  <ReferenceLine y={200} stroke="#D8C3A5" strokeDasharray="3 3" />
                   
                   {/* Excel-based RCSA Line */}
                   <Line

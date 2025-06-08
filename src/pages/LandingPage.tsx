@@ -143,16 +143,18 @@ export default function LandingPage() {
         <NavBody>
           <NavbarLogo />
           <NavItems items={navItems} />
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1">
             <NavbarButton 
               variant="secondary"
               onClick={() => router.push('/auth/login')}
+              className="px-3 py-1.5 text-sm"
             >
               Login
             </NavbarButton>
             <NavbarButton 
               variant="gradient"
               onClick={handleGetStarted}
+              className="px-3 py-1.5 text-sm"
             >
               Get Started
             </NavbarButton>
