@@ -99,7 +99,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
         damping: 50,
       }}
       style={{
-        minWidth: visible ? "600px" : "800px",
+        minWidth: visible ? "700px" : "800px",
       }}
       className={cn(
         "relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-full bg-transparent px-6 py-3 lg:flex",
@@ -119,7 +119,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
     <motion.div
       onMouseLeave={() => setHovered(null)}
       className={cn(
-        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-gray-600 transition duration-200 hover:text-gray-800 lg:flex lg:space-x-2",
+        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-1 text-sm font-medium text-gray-600 transition duration-200 hover:text-gray-800 lg:flex lg:space-x-1",
         className,
       )}
     >
@@ -127,7 +127,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
         <a
           onMouseEnter={() => setHovered(idx)}
           onClick={onItemClick}
-          className="relative px-4 py-2 text-gray-700 font-medium hover:text-gray-900 transition-colors"
+          className="relative px-3 py-2 text-gray-700 font-medium hover:text-gray-900 transition-colors"
           key={`link-${idx}`}
           href={item.link}
         >
