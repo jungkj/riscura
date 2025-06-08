@@ -21,8 +21,7 @@ import {
   NavbarButton 
 } from '@/components/ui/resizable-navbar';
 import { TimeSavingChart } from '@/components/landing/TimeSavingChart';
-import WorkflowAnimation from '@/components/landing/WorkflowAnimation';
-import InteractiveDemo from '@/components/landing/InteractiveDemo';
+
 import HeroProcessCard from '@/components/landing/HeroProcessCard';
 import { ModernButton } from '@/components/ui/modern-button';
 
@@ -320,11 +319,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Workflow Animation Section - Moby Analytics Style */}
-      <WorkflowAnimation />
 
-      {/* Interactive Demo Section */}
-      <InteractiveDemo />
 
       {/* Time Saving Chart Section - Keep as requested */}
       <TimeSavingChart />
