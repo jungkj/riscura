@@ -3,6 +3,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { Badge } from '@/components/ui/badge';
+import { Clock, TrendingUp, Zap } from 'lucide-react';
 
 const data = [
   { quarter: 'Q1', traditional: 10, riscura: 10 },
@@ -15,6 +17,44 @@ export const TimeSavingChart = () => {
   return (
     <section className="py-16 bg-[#F5F1E9]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Excel Hook Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <p className="text-2xl sm:text-3xl lg:text-4xl text-[#191919] font-inter leading-relaxed">
+            Still using <span className="font-bold text-green-600">Excel</span> to track your RCSA?{" "}
+            <span className="text-[#A8A8A8]">
+              It's time to upgrade to AI-powered automation that actually works.
+            </span>
+          </p>
+        </motion.div>
+
+        {/* Time Savings Badges */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="flex flex-wrap justify-center gap-4 mb-12"
+        >
+          <Badge className="bg-[#199BEC] text-white px-6 py-3 text-lg font-semibold flex items-center gap-2">
+            <Clock className="w-5 h-5" />
+            90% Faster Implementation
+          </Badge>
+          <Badge className="bg-green-600 text-white px-6 py-3 text-lg font-semibold flex items-center gap-2">
+            <TrendingUp className="w-5 h-5" />
+            75% Less Manual Work
+          </Badge>
+          <Badge className="bg-purple-600 text-white px-6 py-3 text-lg font-semibold flex items-center gap-2">
+            <Zap className="w-5 h-5" />
+            Real-time Updates
+          </Badge>
+        </motion.div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Text content */}
           <motion.div
@@ -25,11 +65,15 @@ export const TimeSavingChart = () => {
           >
             <div className="mb-6">
               <span className="inline-block px-3 py-1 bg-[#191919] text-[#FAFAFA] text-sm font-medium rounded-full mb-4 font-inter">
-                Accelerated Time-to-Value
+                Excel vs AI-Powered Platform
               </span>
               <h2 className="text-3xl lg:text-4xl font-bold text-[#191919] mb-6 leading-tight font-inter">
-                Riscura automates discovery, planning, data migration, and validation so that your customers go live faster.
+                See how Riscura's AI automation outperforms traditional Excel-based RCSA tracking.
               </h2>
+              <p className="text-lg text-[#A8A8A8] font-inter leading-relaxed">
+                While Excel requires manual updates, error-prone formulas, and constant maintenance, 
+                Riscura delivers automated risk discovery, real-time analytics, and instant compliance reporting.
+              </p>
             </div>
             
             {/* Company logos */}
@@ -97,38 +141,38 @@ export const TimeSavingChart = () => {
                   <ReferenceLine y={50} stroke="#D8C3A5" strokeDasharray="3 3" />
                   <ReferenceLine y={75} stroke="#D8C3A5" strokeDasharray="3 3" />
                   
-                  {/* Traditional Methods Line */}
+                  {/* Excel-based RCSA Line */}
                   <Line
                     type="monotone"
                     dataKey="traditional"
-                    stroke="#A8A8A8"
+                    stroke="#16a34a"
                     strokeWidth={3}
-                    dot={{ fill: '#A8A8A8', strokeWidth: 0, r: 6 }}
-                    activeDot={{ r: 8, fill: '#A8A8A8' }}
+                    dot={{ fill: '#16a34a', strokeWidth: 0, r: 6 }}
+                    activeDot={{ r: 8, fill: '#16a34a' }}
                   />
                   
-                  {/* Riscura Line */}
+                  {/* Riscura AI Platform Line */}
                   <Line
                     type="monotone"
                     dataKey="riscura"
-                    stroke="#191919"
+                    stroke="#199BEC"
                     strokeWidth={3}
-                    dot={{ fill: '#191919', strokeWidth: 0, r: 6 }}
-                    activeDot={{ r: 8, fill: '#191919' }}
+                    dot={{ fill: '#199BEC', strokeWidth: 0, r: 6 }}
+                    activeDot={{ r: 8, fill: '#199BEC' }}
                   />
                 </LineChart>
               </ResponsiveContainer>
             </div>
             
             {/* Legend */}
-            <div className="flex justify-end space-x-6 mt-4">
+            <div className="flex justify-center space-x-8 mt-6">
               <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 rounded-full bg-[#191919]"></div>
-                <span className="text-sm text-[#191919] font-medium font-inter">Riscura</span>
+                <div className="w-4 h-4 rounded-full bg-[#199BEC]"></div>
+                <span className="text-sm text-[#191919] font-semibold font-inter">Riscura AI Platform</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 rounded-full bg-[#A8A8A8]"></div>
-                <span className="text-sm text-[#A8A8A8] font-medium font-inter">Traditional Methods</span>
+                <div className="w-4 h-4 rounded-full bg-green-600"></div>
+                <span className="text-sm text-[#A8A8A8] font-medium font-inter">Excel-based RCSA</span>
               </div>
             </div>
           </motion.div>

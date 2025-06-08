@@ -447,22 +447,6 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            {/* Excel Hook */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="mb-8"
-            >
-              <p className="text-2xl sm:text-3xl lg:text-4xl text-[#191919] font-inter leading-relaxed">
-                Still using <span className="font-bold text-green-600">Excel</span> to track your RCSA?{" "}
-                <span className="text-[#A8A8A8]">
-                  It's time to upgrade to AI-powered automation that actually works.
-                </span>
-              </p>
-            </motion.div>
-
             <Badge className="bg-[#191919] text-[#FAFAFA] px-4 py-2 mb-6 text-sm font-inter">
               Platform Demo
             </Badge>
