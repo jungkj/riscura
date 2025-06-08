@@ -1,49 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Badge } from '@/components/ui/badge';
-import { Clock, TrendingUp, Zap, AlertTriangle, CheckCircle, X, FileSpreadsheet, Bot } from 'lucide-react';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, ReferenceLine } from 'recharts';
 
-const comparisonData = [
-  {
-    category: "Setup Time",
-    excel: { value: "3-6 months", color: "text-red-600", icon: Clock },
-    riscura: { value: "5 minutes", color: "text-green-600", icon: Zap }
-  },
-  {
-    category: "Manual Work",
-    excel: { value: "95% manual", color: "text-red-600", icon: AlertTriangle },
-    riscura: { value: "5% manual", color: "text-green-600", icon: Bot }
-  },
-  {
-    category: "Error Rate",
-    excel: { value: "High risk", color: "text-red-600", icon: X },
-    riscura: { value: "AI validated", color: "text-green-600", icon: CheckCircle }
-  },
-  {
-    category: "Real-time Updates",
-    excel: { value: "Manual refresh", color: "text-red-600", icon: Clock },
-    riscura: { value: "Automatic", color: "text-green-600", icon: TrendingUp }
-  }
+const data = [
+  { quarter: 'Q1', excel: 25, riscura: 85 },
+  { quarter: 'Q2', excel: 40, riscura: 90 },
+  { quarter: 'Q3', excel: 60, riscura: 95 },
+  { quarter: 'Q4', excel: 75, riscura: 98 },
 ];
 
 export const TimeSavingChart = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % comparisonData.length);
-    }, 3000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
   return (
     <section className="py-16 bg-[#F5F1E9]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -71,27 +39,40 @@ export const TimeSavingChart = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <div className="mb-8">
+            <div className="mb-6">
               <span className="inline-block px-3 py-1 bg-[#191919] text-[#FAFAFA] text-sm font-medium rounded-full mb-4 font-inter">
-                Excel vs AI-Powered Platform
+                Efficiency Comparison
               </span>
               <h2 className="text-3xl lg:text-4xl font-bold text-[#191919] mb-6 leading-tight font-inter">
-                Stop wasting time on manual RCSA processes.
+                From manual spreadsheets to AI-powered intelligence.
               </h2>
-              <p className="text-lg text-[#A8A8A8] font-inter leading-relaxed mb-8">
-                See the dramatic difference between traditional Excel workflows and Riscura's 
-                intelligent automation across every aspect of risk management.
+              <p className="text-lg text-[#A8A8A8] font-inter leading-relaxed">
+                Watch how risk management effectiveness evolves over time. Excel-based processes plateau quickly, 
+                while Riscura's AI continuously improves your risk detection and compliance capabilities.
               </p>
+            </div>
 
-              {/* Statistics Grid */}
-              <div className="grid grid-cols-2 gap-6 mb-8">
-                <div className="text-center p-4 bg-white/50 rounded-xl">
-                  <div className="text-2xl font-bold text-red-600 mb-1">200+</div>
-                  <div className="text-sm text-gray-600">Hours saved per quarter</div>
+            {/* Company logos */}
+            <div className="mb-8">
+              <p className="text-sm text-[#A8A8A8] font-medium mb-4 font-inter">Trusted by enterprise teams at</p>
+              <div className="flex items-center space-x-6">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm font-inter">M</span>
+                  </div>
+                  <span className="font-semibold text-[#191919] font-inter">Meta</span>
                 </div>
-                <div className="text-center p-4 bg-white/50 rounded-xl">
-                  <div className="text-2xl font-bold text-green-600 mb-1">90%</div>
-                  <div className="text-sm text-gray-600">Less manual work</div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm font-inter">P</span>
+                  </div>
+                  <span className="font-semibold text-[#191919] font-inter">Palantir</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm font-inter">Y</span>
+                  </div>
+                  <span className="font-semibold text-[#191919] font-inter">Combinator</span>
                 </div>
               </div>
             </div>
@@ -102,87 +83,79 @@ export const TimeSavingChart = () => {
               whileTap={{ scale: 0.98 }}
               className="bg-[#199BEC] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#0f7dc7] transition-colors font-inter"
             >
-              See Riscura in Action
+              Start Your Transformation
             </motion.button>
           </motion.div>
 
-          {/* Right side - Animated Comparison */}
+          {/* Right side - Chart */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
-            className="relative"
+            className="bg-[#FAFAFA] rounded-2xl p-8 shadow-lg border border-[#D8C3A5]"
           >
-            {/* Comparison Cards */}
-            <div className="space-y-4">
-              {comparisonData.map((item, index) => (
-                <motion.div
-                  key={item.category}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ 
-                    opacity: isVisible ? 1 : 0, 
-                    y: isVisible ? 0 : 20,
-                    scale: currentIndex === index ? 1.02 : 1
-                  }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className={`bg-white rounded-2xl p-6 shadow-lg border transition-all duration-300 ${
-                    currentIndex === index ? 'border-[#199BEC] shadow-xl' : 'border-gray-200'
-                  }`}
-                >
-                  <div className="text-sm font-semibold text-gray-500 mb-4 font-inter">
-                    {item.category}
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    {/* Excel Side */}
-                    <div className="flex items-center space-x-3 p-3 bg-red-50 rounded-lg">
-                      <div className="flex-shrink-0">
-                        <FileSpreadsheet className="w-6 h-6 text-red-600" />
-                      </div>
-                      <div>
-                        <div className="text-xs text-gray-500 font-inter">Excel</div>
-                        <div className={`text-sm font-semibold ${item.excel.color} font-inter`}>
-                          {item.excel.value}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Riscura Side */}
-                    <div className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg">
-                      <div className="flex-shrink-0">
-                        <item.riscura.icon className="w-6 h-6 text-green-600" />
-                      </div>
-                      <div>
-                        <div className="text-xs text-gray-500 font-inter">Riscura</div>
-                        <div className={`text-sm font-semibold ${item.riscura.color} font-inter`}>
-                          {item.riscura.value}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Progress indicator for highlighted item */}
-                  {currentIndex === index && (
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: "100%" }}
-                      transition={{ duration: 3 }}
-                      className="h-1 bg-[#199BEC] rounded-full mt-4"
-                    />
-                  )}
-                </motion.div>
-              ))}
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold text-[#191919] mb-2 font-inter">Risk Management Effectiveness</h3>
+              <p className="text-sm text-[#A8A8A8] font-inter">Quarterly improvement in risk detection & compliance</p>
             </div>
-
-            {/* Floating indicators */}
-            <motion.div
-              animate={{ y: [-5, 5, -5] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -top-4 -right-4 bg-[#199BEC] text-white p-3 rounded-full shadow-lg"
-            >
-              <TrendingUp className="w-6 h-6" />
-            </motion.div>
+            
+            <div className="h-80 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                  <XAxis 
+                    dataKey="quarter" 
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: '#A8A8A8', fontSize: 12, fontFamily: 'Inter' }}
+                  />
+                  <YAxis 
+                    domain={[0, 100]}
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: '#A8A8A8', fontSize: 12, fontFamily: 'Inter' }}
+                    tickFormatter={(value) => `${value}%`}
+                  />
+                  
+                  {/* Grid lines */}
+                  <ReferenceLine y={25} stroke="#D8C3A5" strokeDasharray="3 3" />
+                  <ReferenceLine y={50} stroke="#D8C3A5" strokeDasharray="3 3" />
+                  <ReferenceLine y={75} stroke="#D8C3A5" strokeDasharray="3 3" />
+                  
+                  {/* Excel-based RCSA Line */}
+                  <Line
+                    type="monotone"
+                    dataKey="excel"
+                    stroke="#A8A8A8"
+                    strokeWidth={3}
+                    dot={{ fill: '#A8A8A8', strokeWidth: 0, r: 6 }}
+                    activeDot={{ r: 8, fill: '#A8A8A8' }}
+                  />
+                  
+                  {/* Riscura AI Platform Line */}
+                  <Line
+                    type="monotone"
+                    dataKey="riscura"
+                    stroke="#199BEC"
+                    strokeWidth={3}
+                    dot={{ fill: '#199BEC', strokeWidth: 0, r: 6 }}
+                    activeDot={{ r: 8, fill: '#199BEC' }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+            
+            {/* Legend */}
+            <div className="flex justify-center space-x-8 mt-6">
+              <div className="flex items-center space-x-2">
+                <div className="w-4 h-4 rounded-full bg-[#199BEC]"></div>
+                <span className="text-sm text-[#191919] font-semibold font-inter">Riscura AI Platform</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-4 h-4 rounded-full bg-[#A8A8A8]"></div>
+                <span className="text-sm text-[#A8A8A8] font-medium font-inter">Excel-based RCSA</span>
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>
