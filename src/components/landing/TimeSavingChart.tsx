@@ -3,8 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, ReferenceLine } from 'recharts';
-import { Badge } from '@/components/ui/badge';
-import { Clock, TrendingUp, Zap } from 'lucide-react';
+
 
 const data = [
   { quarter: 'Q1', traditional: 10, riscura: 10 },
@@ -31,29 +30,7 @@ export const TimeSavingChart = () => {
               It's time to upgrade to AI-powered automation that actually works.
             </span>
           </p>
-        </motion.div>
-
-        {/* Time Savings Badges */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          viewport={{ once: true }}
-          className="flex flex-wrap justify-center gap-4 mb-12"
-        >
-          <Badge className="bg-[#199BEC] text-white px-6 py-3 text-lg font-semibold flex items-center gap-2">
-            <Clock className="w-5 h-5" />
-            90% Faster Implementation
-          </Badge>
-          <Badge className="bg-green-600 text-white px-6 py-3 text-lg font-semibold flex items-center gap-2">
-            <TrendingUp className="w-5 h-5" />
-            75% Less Manual Work
-          </Badge>
-          <Badge className="bg-purple-600 text-white px-6 py-3 text-lg font-semibold flex items-center gap-2">
-            <Zap className="w-5 h-5" />
-            Real-time Updates
-          </Badge>
-        </motion.div>
+                </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Text content */}
@@ -74,31 +51,6 @@ export const TimeSavingChart = () => {
                 While Excel requires manual updates, error-prone formulas, and constant maintenance, 
                 Riscura delivers automated risk discovery, real-time analytics, and instant compliance reporting.
               </p>
-            </div>
-            
-            {/* Company logos */}
-            <div className="mb-8">
-              <p className="text-sm text-[#A8A8A8] font-medium mb-4 font-inter">Built by experts from</p>
-              <div className="flex items-center space-x-6">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-sm font-inter">M</span>
-                  </div>
-                  <span className="font-semibold text-[#191919] font-inter">Meta</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-sm font-inter">P</span>
-                  </div>
-                  <span className="font-semibold text-[#191919] font-inter">Palantir</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-sm font-inter">Y</span>
-                  </div>
-                  <span className="font-semibold text-[#191919] font-inter">Combinator</span>
-                </div>
-              </div>
             </div>
 
             {/* CTA Button */}
@@ -145,10 +97,10 @@ export const TimeSavingChart = () => {
                   <Line
                     type="monotone"
                     dataKey="traditional"
-                    stroke="#16a34a"
+                    stroke="#A8A8A8"
                     strokeWidth={3}
-                    dot={{ fill: '#16a34a', strokeWidth: 0, r: 6 }}
-                    activeDot={{ r: 8, fill: '#16a34a' }}
+                    dot={{ fill: '#A8A8A8', strokeWidth: 0, r: 6 }}
+                    activeDot={{ r: 8, fill: '#A8A8A8' }}
                   />
                   
                   {/* Riscura AI Platform Line */}
@@ -171,7 +123,7 @@ export const TimeSavingChart = () => {
                 <span className="text-sm text-[#191919] font-semibold font-inter">Riscura AI Platform</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 rounded-full bg-green-600"></div>
+                <div className="w-4 h-4 rounded-full bg-[#A8A8A8]"></div>
                 <span className="text-sm text-[#A8A8A8] font-medium font-inter">Excel-based RCSA</span>
               </div>
             </div>
