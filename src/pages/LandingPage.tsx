@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -9,7 +9,22 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MacbookScroll } from '@/components/ui/aceternity/macbook-scroll';
 import { TypewriterEffectSmooth } from '@/components/ui/aceternity/typewriter-effect';
+import { 
+  Navbar, 
+  NavBody, 
+  NavItems, 
+  MobileNav, 
+  MobileNavHeader, 
+  MobileNavMenu,
+  MobileNavToggle,
+  NavbarLogo, 
+  NavbarButton 
+} from '@/components/ui/resizable-navbar';
 import { TimeSavingChart } from '@/components/landing/TimeSavingChart';
+import WorkflowAnimation from '@/components/landing/WorkflowAnimation';
+import InteractiveDemo from '@/components/landing/InteractiveDemo';
+import HeroProcessCard from '@/components/landing/HeroProcessCard';
+import { ModernButton } from '@/components/ui/modern-button';
 
 // Icons
 import {
@@ -31,29 +46,62 @@ import {
   ArrowRight
 } from 'lucide-react';
 
-// Enhanced typewriter effect - only "intelligent" will animate
-const typewriterWords = [
-  {
-    text: "Enterprise",
-    className: "text-[#191919]",
-  },
-  {
-    text: "risk",
-    className: "text-[#191919]",
-  },
-  {
-    text: "management",
-    className: "text-[#191919]",
-  },
-  {
-    text: "made",
-    className: "text-[#191919]",
-  },
-  {
-    text: "intelligent",
-    className: "text-[#191919] font-bold",
-  },
-];
+// New single-word typewriter effect
+const cyclingWords = ["effortless", "intelligent", "automated", "proactive", "streamlined"];
+
+// Single Word Typewriter Component
+function SingleWordTypewriter() {
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [displayText, setDisplayText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [typingSpeed, setTypingSpeed] = useState(150);
+
+  useEffect(() => {
+    const currentWord = cyclingWords[currentWordIndex];
+    
+    const timer = setTimeout(() => {
+      if (!isDeleting) {
+        // Typing
+        setDisplayText(currentWord.substring(0, displayText.length + 1));
+        setTypingSpeed(100);
+        
+        if (displayText === currentWord) {
+          // Start deleting after a pause
+          setTimeout(() => setIsDeleting(true), 2000);
+        }
+      } else {
+        // Deleting
+        setDisplayText(currentWord.substring(0, displayText.length - 1));
+        setTypingSpeed(50);
+        
+        if (displayText === '') {
+          setIsDeleting(false);
+          setCurrentWordIndex((prev) => (prev + 1) % cyclingWords.length);
+        }
+      }
+    }, typingSpeed);
+
+    return () => clearTimeout(timer);
+  }, [displayText, isDeleting, currentWordIndex, typingSpeed]);
+
+  return (
+    <div className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-center lg:text-left font-inter">
+      <span className="text-gray-900">
+        Risk management made{' '}
+      </span>
+      <span className="relative">
+        <span className="text-gray-900">
+          {displayText}
+        </span>
+        <motion.span
+          className="absolute -right-1 top-0 w-1 h-full bg-gray-400 rounded-sm"
+          animate={{ opacity: [0, 1, 0] }}
+          transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </span>
+    </div>
+  );
+}
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -67,100 +115,99 @@ export default function LandingPage() {
     router.push('/register');
   };
 
+  // Navigation items
+  const navItems = [
+    {
+      name: "Platform",
+      link: "#features",
+    },
+    {
+      name: "Enterprise", 
+      link: "#enterprise",
+    },
+    {
+      name: "Pricing",
+      link: "#pricing",
+    },
+    {
+      name: "Demo",
+      link: "#demo",
+    },
+  ];
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-background font-inter">
-      {/* Enhanced Navigation */}
-      <nav className="sticky top-0 z-50 border-b-2 border-border bg-card/95 backdrop-blur-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            {/* Logo */}
-            <div className="flex items-center">
-              <Link href="/" className="flex items-center space-x-3">
-                <div className="relative">
-                  <Shield className="h-9 w-9 text-[#191919]" />
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-[#FAFAFA]"></div>
-                </div>
-                <span className="text-2xl font-bold text-foreground font-inter">Riscura</span>
-              </Link>
-            </div>
-
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-10">
-              <Link href="#features" className="text-foreground hover:text-muted-foreground transition-colors font-semibold font-inter text-base">
-                Platform
-              </Link>
-              <Link href="#enterprise" className="text-foreground hover:text-muted-foreground transition-colors font-semibold font-inter text-base">
-                Enterprise
-              </Link>
-              <Link href="#customers" className="text-foreground hover:text-muted-foreground transition-colors font-semibold font-inter text-base">
-                Customers
-              </Link>
-              <Link href="#pricing" className="text-foreground hover:text-muted-foreground transition-colors font-semibold font-inter text-base">
-                Pricing
-              </Link>
-              <div className="flex items-center space-x-4 ml-6">
-                <Button 
-                  variant="ghost"
-                  className="text-foreground hover:text-muted-foreground font-inter font-semibold"
-                >
-                  Sign in
-                </Button>
-                <Button 
-                  onClick={handleRequestDemo} 
-                  className="bg-secondary text-secondary-foreground hover:bg-secondary/90 px-6 py-2 font-inter font-bold rounded-md shadow-sm"
-                >
-                  Request demo
-                </Button>
-              </div>
-            </div>
-
-            {/* Mobile menu button */}
-            <div className="lg:hidden">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="text-[#191919] p-2"
-              >
-                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </Button>
-            </div>
-          </div>
-
-          {/* Mobile Navigation */}
-          {mobileMenuOpen && (
-            <motion.div 
-              className="lg:hidden border-t border-[#D8C3A5]/30 py-6 bg-[#FAFAFA]"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
+      {/* Resizable Navigation */}
+      <Navbar>
+        <NavBody>
+          <NavbarLogo />
+          <NavItems items={navItems} />
+          <div className="flex items-center space-x-2">
+            <NavbarButton 
+              variant="secondary"
+              onClick={() => router.push('/auth/login')}
             >
-              <div className="flex flex-col space-y-6">
-                <Link href="#features" className="text-[#191919] hover:text-[#A8A8A8] transition-colors font-medium font-inter text-lg">
-                  Platform
-                </Link>
-                <Link href="#enterprise" className="text-[#A8A8A8] hover:text-[#191919] transition-colors font-medium font-inter text-lg">
-                  Enterprise
-                </Link>
-                <Link href="#customers" className="text-[#A8A8A8] hover:text-[#191919] transition-colors font-medium font-inter text-lg">
-                  Customers
-                </Link>
-                <Link href="#pricing" className="text-[#A8A8A8] hover:text-[#191919] transition-colors font-medium font-inter text-lg">
-                  Pricing
-                </Link>
-                <div className="pt-4 border-t border-[#D8C3A5]/30 space-y-4">
-                  <Button variant="ghost" className="w-full text-[#A8A8A8] hover:text-[#191919] font-inter justify-start">
-                    Sign in
-                  </Button>
-                  <Button onClick={handleRequestDemo} className="w-full bg-[#D8C3A5] text-[#191919] hover:bg-[#D8C3A5]/90 font-inter font-semibold">
-                    Request demo
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </div>
-      </nav>
+              Login
+            </NavbarButton>
+            <NavbarButton 
+              variant="gradient"
+              onClick={handleGetStarted}
+            >
+              Get Started
+            </NavbarButton>
+          </div>
+        </NavBody>
+        
+        <MobileNav>
+          <MobileNavHeader>
+            <NavbarLogo />
+            <MobileNavToggle 
+              isOpen={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            />
+          </MobileNavHeader>
+          
+          <MobileNavMenu 
+            isOpen={isMobileMenuOpen}
+            onClose={() => setIsMobileMenuOpen(false)}
+          >
+            {navItems.map((item, idx) => (
+              <a
+                key={idx}
+                href={item.link}
+                className="block px-4 py-3 text-gray-700 hover:text-[#199BEC] font-medium transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {item.name}
+              </a>
+            ))}
+            <div className="flex flex-col space-y-3 pt-4 border-t border-gray-200">
+              <NavbarButton 
+                variant="secondary"
+                onClick={() => {
+                  router.push('/auth/login');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="w-full justify-center"
+              >
+                Login
+              </NavbarButton>
+              <NavbarButton 
+                variant="gradient"
+                onClick={() => {
+                  handleGetStarted();
+                  setIsMobileMenuOpen(false);
+                }}
+                className="w-full justify-center"
+              >
+                Get Started
+              </NavbarButton>
+            </div>
+          </MobileNavMenu>
+        </MobileNav>
+      </Navbar>
 
       {/* Enhanced Hero Section */}
       <section className="pt-20 pb-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-card to-background">
@@ -172,16 +219,16 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-[#A8A8A8] mb-8">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-sm text-[#A8A8A8] mb-8">
               <span className="font-medium font-inter">Trusted by 500+ enterprises</span>
-              <div className="flex items-center gap-6">
-                <Badge variant="outline" className="px-4 py-2 border-[#D8C3A5]/60 text-[#191919] bg-[#FAFAFA] font-inter shadow-sm">
+              <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6">
+                <Badge variant="outline" className="px-3 py-2 sm:px-4 border-[#D8C3A5]/60 text-[#191919] bg-[#FAFAFA] font-inter shadow-sm text-xs sm:text-sm">
                   SOC 2 Compliant
                 </Badge>
-                <Badge variant="outline" className="px-4 py-2 border-[#D8C3A5]/60 text-[#191919] bg-[#FAFAFA] font-inter shadow-sm">
+                <Badge variant="outline" className="px-3 py-2 sm:px-4 border-[#D8C3A5]/60 text-[#191919] bg-[#FAFAFA] font-inter shadow-sm text-xs sm:text-sm">
                   ISO 27001
                 </Badge>
-                <Badge variant="outline" className="px-4 py-2 border-[#D8C3A5]/60 text-[#191919] bg-[#FAFAFA] font-inter shadow-sm">
+                <Badge variant="outline" className="px-3 py-2 sm:px-4 border-[#D8C3A5]/60 text-[#191919] bg-[#FAFAFA] font-inter shadow-sm text-xs sm:text-sm">
                   Enterprise Ready
                 </Badge>
               </div>
@@ -196,13 +243,9 @@ export default function LandingPage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-center lg:text-left"
             >
-              {/* Enhanced Headline with Typewriter */}
+              {/* Enhanced Headline with Single Word Typewriter */}
               <div className="mb-8">
-                <TypewriterEffectSmooth 
-                  words={typewriterWords} 
-                  className="justify-center lg:justify-start text-5xl sm:text-6xl lg:text-7xl"
-                  cursorClassName="bg-[#191919]"
-                />
+                <SingleWordTypewriter />
               </div>
 
               {/* Strong Value Proposition */}
@@ -223,22 +266,23 @@ export default function LandingPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 1.0 }}
               >
-                <Button 
+                <ModernButton 
                   onClick={handleGetStarted}
+                  variant="gradient"
                   size="lg" 
-                  className="bg-[#191919] text-[#FAFAFA] px-10 py-5 text-xl rounded-xl font-semibold shadow-lg hover:bg-[#2a2a2a] hover:shadow-xl transition-all duration-300 font-inter min-w-[200px]"
+                  className="px-10 py-5 text-xl rounded-xl font-semibold font-inter min-w-[200px]"
                 >
                   Start free trial
                   <ArrowRight className="ml-3 h-6 w-6" />
-                </Button>
-                <Button 
+                </ModernButton>
+                <ModernButton 
                   onClick={handleRequestDemo}
                   variant="outline" 
                   size="lg"
-                  className="border-2 border-[#D8C3A5] bg-[#FAFAFA] text-[#191919] hover:bg-[#D8C3A5] px-10 py-5 text-xl rounded-xl font-semibold transition-all duration-300 font-inter min-w-[200px]"
+                  className="px-10 py-5 text-xl rounded-xl font-semibold font-inter min-w-[200px]"
                 >
                   Book a demo
-                </Button>
+                </ModernButton>
               </motion.div>
 
               {/* Social Proof Stats */}
@@ -263,66 +307,24 @@ export default function LandingPage() {
               </motion.div>
             </motion.div>
 
-            {/* Right Column - Visual */}
+            {/* Right Column - Process Showcase */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
               className="relative"
             >
-              <div className="relative">
-                {/* Main Dashboard Preview */}
-                <div className="bg-[#FAFAFA] rounded-2xl shadow-2xl border border-[#D8C3A5]/30 p-8 backdrop-blur-sm">
-                  <div className="mb-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                        <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                      </div>
-                      <Badge className="bg-green-50 text-green-700 border-green-200 text-xs">Live Dashboard</Badge>
-                    </div>
-                    <div className="h-64 bg-gradient-to-br from-[#F5F1E9] to-[#D8C3A5]/20 rounded-lg border border-[#D8C3A5]/30 flex items-center justify-center">
-                      <div className="text-center space-y-4">
-                        <Shield className="w-16 h-16 text-[#191919] mx-auto" />
-                        <div className="space-y-2">
-                          <div className="h-2 bg-[#191919] rounded-full w-32 mx-auto"></div>
-                          <div className="h-2 bg-[#D8C3A5] rounded-full w-24 mx-auto"></div>
-                          <div className="h-2 bg-[#A8A8A8] rounded-full w-28 mx-auto"></div>
-                        </div>
-                        <p className="text-sm text-[#A8A8A8] font-inter">AI Risk Analysis</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Floating Elements */}
-                <motion.div
-                  className="absolute -top-4 -right-4 bg-[#191919] text-[#FAFAFA] px-4 py-2 rounded-lg shadow-lg"
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium font-inter">Live Monitoring</span>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  className="absolute -bottom-4 -left-4 bg-[#FAFAFA] border border-[#D8C3A5] px-4 py-2 rounded-lg shadow-lg"
-                  animate={{ y: [0, 10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                >
-                  <div className="flex items-center space-x-2">
-                    <CheckCircle className="w-4 h-4 text-green-600" />
-                    <span className="text-sm font-medium text-[#191919] font-inter">Compliant</span>
-                  </div>
-                </motion.div>
-              </div>
+              <HeroProcessCard />
             </motion.div>
           </div>
         </div>
       </section>
+
+      {/* Workflow Animation Section - Moby Analytics Style */}
+      <WorkflowAnimation />
+
+      {/* Interactive Demo Section */}
+      <InteractiveDemo />
 
       {/* Time Saving Chart Section - Keep as requested */}
       <TimeSavingChart />
@@ -408,13 +410,13 @@ export default function LandingPage() {
                     <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 ${
                       feature.color === 'black' ? 'bg-secondary/20' :
                       feature.color === 'black' ? 'bg-secondary/20' :
-                      feature.color === 'blue' ? 'bg-blue-50' :
+                      feature.color === 'blue' ? 'bg-[#e6f4fd]' :
                       'bg-gray-50'
                     }`}>
                       <feature.icon className={`h-7 w-7 ${
                         feature.color === 'black' ? 'text-[#191919]' :
                         feature.color === 'black' ? 'text-[#191919]' :
-                        feature.color === 'blue' ? 'text-blue-600' :
+                        feature.color === 'blue' ? 'text-[#199BEC]' :
                         'text-gray-600'
                       }`} />
                     </div>
@@ -440,112 +442,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Customer Testimonials Section */}
-      <section id="customers" className="py-24 px-4 sm:px-6 lg:px-8 bg-[#F5F1E9]">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <Badge className="bg-[#D8C3A5] text-[#191919] px-4 py-2 mb-6 text-sm font-inter">
-                Customer Success
-              </Badge>
-              <h2 className="text-4xl sm:text-5xl font-bold text-[#191919] mb-8 font-inter">
-                Trusted by industry leaders
-              </h2>
-              <p className="text-xl text-[#A8A8A8] max-w-3xl mx-auto font-inter">
-                See how enterprise customers have transformed their risk management with Riscura
-              </p>
-            </motion.div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                quote: "Riscura transformed our risk management process. We went from quarterly assessments to real-time monitoring with AI insights that actually help us prevent issues before they happen.",
-                author: "Sarah Chen",
-                role: "CISO",
-                company: "TechCorp Global",
-                rating: 5,
-                logo: "TC"
-              },
-              {
-                quote: "The platform's automation capabilities saved us 80% of the time we used to spend on compliance reporting. The AI recommendations are surprisingly accurate and actionable.",
-                author: "Michael Rodriguez",
-                role: "Head of Compliance",
-                company: "Financial Dynamics",
-                rating: 5,
-                logo: "FD"
-              },
-              {
-                quote: "Implementation was seamless. Within a week, we had full visibility into our risk landscape. The dashboard gives our board exactly what they need to make informed decisions.",
-                author: "Jennifer Park",
-                role: "VP of Risk Management",
-                company: "InnovateLabs",
-                rating: 5,
-                logo: "IL"
-              }
-            ].map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                viewport={{ once: true }}
-              >
-                <Card className="bg-white border border-[#D8C3A5]/30 h-full hover:shadow-xl transition-all duration-300 rounded-2xl">
-                  <CardContent className="p-8">
-                    <div className="flex items-center mb-6">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                      ))}
-                    </div>
-                    
-                    <Quote className="w-8 h-8 text-[#D8C3A5] mb-4" />
-                    
-                    <p className="text-[#191919] text-lg leading-relaxed mb-8 font-inter">
-                      "{testimonial.quote}"
-                    </p>
-                    
-                    <div className="flex items-center">
-                      <div className="w-12 h-12 bg-[#D8C3A5] rounded-xl flex items-center justify-center mr-4">
-                        <span className="text-[#191919] font-bold font-inter">{testimonial.logo}</span>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-[#191919] font-inter">{testimonial.author}</p>
-                        <p className="text-[#A8A8A8] text-sm font-inter">{testimonial.role}</p>
-                        <p className="text-[#A8A8A8] text-sm font-inter">{testimonial.company}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Trust Indicators */}
-          <motion.div
-            className="mt-20 text-center"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <p className="text-[#A8A8A8] mb-8 font-inter">Join 500+ companies that trust Riscura</p>
-            <div className="flex flex-wrap justify-center items-center gap-12">
-              {['TechStars', 'Sequoia', 'Y Combinator', 'Andreessen', 'Kleiner Perkins'].map((investor, index) => (
-                <Badge key={index} variant="outline" className="px-6 py-3 border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#FAFAFA] font-inter text-base">
-                  {investor}
-                </Badge>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Demo Section with MacbookScroll */}
       <section className="py-24 bg-[#FAFAFA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -556,6 +452,22 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
+            {/* Excel Hook */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="mb-8"
+            >
+              <p className="text-2xl sm:text-3xl lg:text-4xl text-[#191919] font-inter leading-relaxed">
+                Still using <span className="font-bold text-green-600">Excel</span> to track your RCSA?{" "}
+                <span className="text-[#A8A8A8]">
+                  It's time to upgrade to AI-powered automation that actually works.
+                </span>
+              </p>
+            </motion.div>
+
             <Badge className="bg-[#191919] text-[#FAFAFA] px-4 py-2 mb-6 text-sm font-inter">
               Platform Demo
             </Badge>
@@ -612,14 +524,15 @@ export default function LandingPage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
-              <Button 
+              <ModernButton 
                 onClick={handleGetStarted}
+                variant="gradient"
                 size="lg" 
-                className="bg-[#D8C3A5] text-[#191919] px-12 py-6 text-xl font-bold hover:bg-[#D8C3A5]/90 transition-all duration-300 font-inter min-w-[250px] rounded-xl shadow-2xl"
+                className="px-12 py-6 text-xl font-bold font-inter min-w-[250px] rounded-xl shadow-2xl"
               >
                 Start free trial
                 <ChevronRight className="ml-3 h-6 w-6" />
-              </Button>
+              </ModernButton>
               <Button 
                 onClick={handleRequestDemo}
                 variant="outline" 

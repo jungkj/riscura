@@ -42,6 +42,9 @@ module.exports = {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          blue: '#199BEC',
+          'blue-hover': '#0f7dc7',
+          'blue-light': '#e6f4fd',
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -72,11 +75,11 @@ module.exports = {
           charcoal: '#3c4043',     // Alternative primary text
         },
         
-        // Interactive Elements & Actions
+        // Interactive Elements & Actions  
         interactive: {
-          primary: '#2383e2',      // Primary actions (Notion blue)
-          primaryHover: '#1a73d8', // Primary hover state
-          secondary: '#e8f0fe',    // Secondary actions
+          primary: '#199BEC',      // Primary actions (New accent color)
+          primaryHover: '#0f7dc7', // Primary hover state
+          secondary: '#e6f4fd',    // Secondary actions (light blue)
           danger: '#ea4335',       // Destructive actions
           success: '#34a853',      // Success states
           warning: '#fbbc04',      // Warning states
@@ -188,12 +191,21 @@ module.exports = {
           "0%": { opacity: "0", transform: "translateX(-10px)" },
           "100%": { opacity: "1", transform: "translateX(0)" },
         },
+        "shimmer": {
+          from: {
+            backgroundPosition: "0 0",
+          },
+          to: {
+            backgroundPosition: "-200% 0",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "notion-fade-in": "notion-fade-in 0.3s ease-out",
         "notion-slide-in": "notion-slide-in 0.3s ease-out",
+        "shimmer": "shimmer 2s linear infinite",
       },
       fontFamily: {
         sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
