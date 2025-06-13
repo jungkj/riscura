@@ -1,7 +1,7 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { hasPermission } from '@/lib/utils';
 import { User as UserType } from '@/types';
 import {
   LayoutDashboard,
@@ -10,7 +10,7 @@ import {
   FileText,
   GitBranch,
   Folder,
-  BarChart,
+  BarChart3,
   Brain,
   User,
   ClipboardList,
@@ -18,36 +18,46 @@ import {
   Bot,
   AlertTriangle,
   ShieldCheck,
-  BarChart3,
   Lightbulb,
   ChevronRight,
   ChevronDown,
   Plus,
-  ExternalLink,
   Search,
   Bell,
-  Bookmark,
-  Command,
-  HelpCircle,
-  Activity,
   Target,
   Zap,
   PieChart,
   TrendingUp,
-  Database,
   Users,
   Lock,
   Workflow,
   Calendar,
   FileCheck,
-  Monitor
+  Upload,
+  Sparkles,
+  MessageSquare,
+  Gauge,
+  Building2,
+  LineChart,
+  Activity,
+  Archive,
+  BookOpen,
+  Clock,
+  Eye,
+  HelpCircle,
+  Command,
+  MapPin,
+  Monitor,
+  Bookmark,
+  Home
 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Separator } from '@/components/ui/separator';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -58,9 +68,9 @@ interface SidebarProps {
 interface NavSection {
   id: string;
   title: string;
+  emoji: string;
   items: NavItem[];
-  permissions?: string[];
-  priority?: number;
+  collapsible?: boolean;
 }
 
 interface NavItem {
@@ -71,61 +81,72 @@ interface NavItem {
   badge?: string | number;
   badgeVariant?: 'default' | 'critical' | 'warning' | 'success' | 'info';
   isNew?: boolean;
-  isActive?: boolean;
-  permissions?: string[];
   description?: string;
   shortcut?: string;
-  subItems?: NavItem[];
-  analytics?: boolean;
-  external?: boolean;
-}
-
-interface QuickAction {
-  id: string;
-  title: string;
-  icon: React.ComponentType<any>;
-  href: string;
-  shortcut?: string;
-}
-
-interface UserBookmark {
-  id: string;
-  title: string;
-  href: string;
-  icon?: React.ComponentType<any>;
 }
 
 export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
   const pathname = usePathname();
-  const [expandedSections, setExpandedSections] = useState<string[]>(['main', 'risk-management']);
+  const [expandedSections, setExpandedSections] = useState<string[]>([
+    'overview', 
+    'risk-management', 
+    'controls', 
+    'assessments',
+    'compliance',
+    'documents',
+    'workflows',
+    'ai-insights',
+    'reports'
+  ]);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
-  const [userBookmarks, setUserBookmarks] = useState<UserBookmark[]>([]);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Notion-style navigation structure
+  // Navigation structure matching the requirements
   const navigationSections: NavSection[] = [
     {
       id: 'overview',
       title: 'Overview',
-      priority: 1,
+      emoji: '📊',
+      collapsible: false,
       items: [
         {
           id: 'dashboard',
-          title: 'Overview',
+          title: 'Dashboard',
           href: '/dashboard',
           icon: LayoutDashboard,
-          description: 'Dashboard home',
+          description: 'Main dashboard overview',
           shortcut: '⌘ D',
+        },
+        {
+          id: 'quick-actions',
+          title: 'Quick Actions',
+          href: '/dashboard/quick-actions',
+          icon: Zap,
+          description: 'Frequently used actions',
+        },
+        {
+          id: 'recent-activity',
+          title: 'Recent Activity',
+          href: '/dashboard/activity',
+          icon: Clock,
+          description: 'Latest updates and changes',
         }
       ]
     },
     {
       id: 'risk-management',
       title: 'Risk Management',
-      priority: 2,
-      permissions: ['risk:read'],
+      emoji: '🎯',
+      collapsible: true,
       items: [
+        {
+          id: 'risk-assessment',
+          title: 'Risk Assessment',
+          href: '/dashboard/risks/assessment',
+          icon: Target,
+          description: 'Risk evaluation and analysis',
+        },
         {
           id: 'risk-register',
           title: 'Risk Register',
@@ -137,26 +158,26 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           shortcut: '⌘ R',
         },
         {
-          id: 'risk-assessment',
-          title: 'Risk Assessment',
-          href: '/dashboard/risks/assessment',
-          icon: Target,
-          description: 'Risk evaluation and analysis',
-        },
-        {
-          id: 'heat-maps',
-          title: 'Heat Maps',
+          id: 'risk-heatmap',
+          title: 'Risk Heatmap',
           href: '/dashboard/risks/heatmap',
           icon: Activity,
           description: 'Visual risk analysis',
+        },
+        {
+          id: 'risk-monitoring',
+          title: 'Risk Monitoring',
+          href: '/dashboard/risks/monitoring',
+          icon: Monitor,
+          description: 'Real-time risk tracking',
         }
       ]
     },
     {
       id: 'controls',
       title: 'Controls',
-      priority: 3,
-      permissions: ['control:read'],
+      emoji: '🛡️',
+      collapsible: true,
       items: [
         {
           id: 'control-library',
@@ -167,8 +188,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           shortcut: '⌘ C',
         },
         {
-          id: 'testing-schedule',
-          title: 'Testing Schedule',
+          id: 'control-testing',
+          title: 'Control Testing',
           href: '/dashboard/controls/testing',
           icon: Calendar,
           badge: 5,
@@ -176,29 +197,27 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           description: 'Control testing workflows',
         },
         {
-          id: 'compliance-mapping',
-          title: 'Compliance Mapping',
+          id: 'control-mapping',
+          title: 'Control Mapping',
           href: '/dashboard/controls/mapping',
-          icon: Workflow,
-          description: 'Framework compliance mapping',
+          icon: MapPin,
+          description: 'Risk-to-control mapping',
+        },
+        {
+          id: 'effectiveness-tracking',
+          title: 'Effectiveness Tracking',
+          href: '/dashboard/controls/effectiveness',
+          icon: TrendingUp,
+          description: 'Control performance metrics',
         }
       ]
     },
     {
       id: 'assessments',
       title: 'Assessments',
-      priority: 4,
-      permissions: ['assessment:read'],
+      emoji: '📋',
+      collapsible: true,
       items: [
-        {
-          id: 'questionnaires',
-          title: 'Questionnaires',
-          href: '/dashboard/questionnaires',
-          icon: ClipboardList,
-          badge: 12,
-          badgeVariant: 'info',
-          description: 'Assessment questionnaires',
-        },
         {
           id: 'self-assessments',
           title: 'Self-Assessments',
@@ -212,14 +231,184 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           href: '/dashboard/assessments/third-party',
           icon: Users,
           description: 'External assessment reviews',
+        },
+        {
+          id: 'questionnaires',
+          title: 'Questionnaires',
+          href: '/dashboard/questionnaires',
+          icon: ClipboardList,
+          badge: 12,
+          badgeVariant: 'info',
+          description: 'Assessment questionnaires',
+        },
+        {
+          id: 'rcsa-import',
+          title: 'RCSA Import',
+          href: '/dashboard/import/rcsa',
+          icon: Upload,
+          badge: 'New',
+          badgeVariant: 'success',
+          description: 'Import RCSA data',
         }
       ]
     },
     {
-      id: 'reports-analytics',
+      id: 'compliance',
+      title: 'Compliance',
+      emoji: '📚',
+      collapsible: true,
+      items: [
+        {
+          id: 'framework-library',
+          title: 'Framework Library',
+          href: '/dashboard/compliance/frameworks',
+          icon: BookOpen,
+          description: 'SOX, ISO27001, GDPR, HIPAA, etc.',
+        },
+        {
+          id: 'gap-analysis',
+          title: 'Gap Analysis',
+          href: '/dashboard/compliance/gaps',
+          icon: AlertTriangle,
+          badge: 8,
+          badgeVariant: 'warning',
+          description: 'Compliance gap identification',
+        },
+        {
+          id: 'compliance-mapping',
+          title: 'Compliance Mapping',
+          href: '/dashboard/compliance/mapping',
+          icon: Workflow,
+          description: 'Framework compliance mapping',
+        },
+        {
+          id: 'regulatory-monitoring',
+          title: 'Regulatory Monitoring',
+          href: '/dashboard/compliance/monitoring',
+          icon: Eye,
+          description: 'Regulatory change tracking',
+        }
+      ]
+    },
+    {
+      id: 'documents',
+      title: 'Documents',
+      emoji: '📄',
+      collapsible: true,
+      items: [
+        {
+          id: 'document-library',
+          title: 'Document Library',
+          href: '/dashboard/documents',
+          icon: Folder,
+          description: 'Document management',
+        },
+        {
+          id: 'policy-store',
+          title: 'Policy Store',
+          href: '/dashboard/documents/policies',
+          icon: FileText,
+          description: 'Policy management',
+        },
+        {
+          id: 'evidence-collection',
+          title: 'Evidence Collection',
+          href: '/dashboard/documents/evidence',
+          icon: Archive,
+          description: 'Audit evidence management',
+        },
+        {
+          id: 'templates',
+          title: 'Templates',
+          href: '/dashboard/documents/templates',
+          icon: Bookmark,
+          description: 'Document templates',
+        }
+      ]
+    },
+    {
+      id: 'workflows',
+      title: 'Workflows',
+      emoji: '🔄',
+      collapsible: true,
+      items: [
+        {
+          id: 'workflow-builder',
+          title: 'Workflow Builder',
+          href: '/dashboard/workflows',
+          icon: GitBranch,
+          description: 'Process automation',
+        },
+        {
+          id: 'approvals-queue',
+          title: 'Approvals Queue',
+          href: '/dashboard/workflows/approvals',
+          icon: CheckCircle,
+          badge: 8,
+          badgeVariant: 'warning',
+          description: 'Pending approvals',
+        },
+        {
+          id: 'process-automation',
+          title: 'Process Automation',
+          href: '/dashboard/workflows/automation',
+          icon: Zap,
+          description: 'Automated processes',
+        },
+        {
+          id: 'task-management',
+          title: 'Task Management',
+          href: '/dashboard/workflows/tasks',
+          icon: CheckCircle,
+          description: 'Task tracking and management',
+        }
+      ]
+    },
+    {
+      id: 'ai-insights',
+      title: 'AI Insights',
+      emoji: '🤖',
+      collapsible: true,
+      items: [
+        {
+          id: 'aria-assistant',
+          title: 'ARIA Assistant',
+          href: '/dashboard/aria',
+          icon: Bot,
+          isNew: true,
+          description: 'AI-powered assistant',
+          shortcut: '⌘ A',
+        },
+        {
+          id: 'risk-predictions',
+          title: 'Risk Predictions',
+          href: '/dashboard/ai-insights/predictions',
+          icon: Sparkles,
+          description: 'AI-powered risk forecasting',
+        },
+        {
+          id: 'smart-recommendations',
+          title: 'Smart Recommendations',
+          href: '/dashboard/ai-insights/recommendations',
+          icon: Lightbulb,
+          badge: 3,
+          badgeVariant: 'success',
+          description: 'Intelligent recommendations',
+        },
+        {
+          id: 'automated-analysis',
+          title: 'Automated Analysis',
+          href: '/dashboard/ai-insights/analysis',
+          icon: Brain,
+          description: 'Continuous monitoring',
+        }
+      ]
+    },
+    {
+      id: 'reports',
       title: 'Reports & Analytics',
-      priority: 5,
-      permissions: ['report:read'],
+      emoji: '📊',
+      collapsible: true,
       items: [
         {
           id: 'executive-dashboard',
@@ -242,158 +431,52 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           href: '/dashboard/reporting/trends',
           icon: TrendingUp,
           description: 'Historical analysis and trends',
-        }
-      ]
-    },
-    {
-      id: 'ai-insights',
-      title: 'AI Insights',
-      priority: 6,
-      permissions: ['ai:read'],
-      items: [
-        {
-          id: 'risk-predictions',
-          title: 'Risk Predictions',
-          href: '/dashboard/ai/predictions',
-          icon: Brain,
-          description: 'AI-powered risk forecasting',
-          isNew: true,
         },
         {
-          id: 'control-recommendations',
-          title: 'Control Recommendations',
-          href: '/dashboard/ai/recommendations',
-          icon: Lightbulb,
-          badge: 3,
-          badgeVariant: 'success',
-          description: 'Intelligent recommendations',
-        },
-        {
-          id: 'automated-analysis',
-          title: 'Automated Analysis',
-          href: '/dashboard/ai/analysis',
-          icon: Zap,
-          description: 'Continuous automated monitoring',
-        }
-      ]
-    },
-    {
-      id: 'settings',
-      title: 'Settings',
-      priority: 7,
-      permissions: ['admin:read'],
-      items: [
-        {
-          id: 'user-management',
-          title: 'User Management',
-          href: '/dashboard/admin/users',
-          icon: Users,
-          description: 'User accounts and permissions',
-        },
-        {
-          id: 'framework-configuration',
-          title: 'Framework Configuration',
-          href: '/dashboard/admin/frameworks',
-          icon: Settings,
-          description: 'Framework settings and config',
-        },
-        {
-          id: 'integration-settings',
-          title: 'Integration Settings',
-          href: '/dashboard/admin/integrations',
-          icon: Database,
-          description: 'Third-party integrations',
+          id: 'custom-reports',
+          title: 'Custom Reports',
+          href: '/dashboard/reporting/custom',
+          icon: PieChart,
+          description: 'Custom report builder',
         }
       ]
     }
   ];
 
-  // Quick actions for frequent tasks
-  const quickActions: QuickAction[] = [
-    {
-      id: 'new-risk',
-      title: 'New Risk',
-      icon: Plus,
-      href: '/dashboard/risks/new',
-      shortcut: '⌘ ⇧ R',
-    },
-    {
-      id: 'new-control',
-      title: 'New Control',
-      icon: Plus,
-      href: '/dashboard/controls/new',
-      shortcut: '⌘ ⇧ C',
-    },
-    {
-      id: 'search',
-      title: 'Search',
-      icon: Search,
-      href: '/search',
-      shortcut: '⌘ K',
-    }
-  ];
-
-  // Filter navigation based on user permissions
-  const filteredSections = navigationSections.filter(section => {
-    if (!section.permissions) return true;
-    return section.permissions.some(permission => 
-      user && hasPermission(user.permissions || [], permission)
-    );
-  }).map(section => ({
-    ...section,
-    items: section.items.filter(item => {
-      if (!item.permissions) return true;
-      return item.permissions.some(permission => 
-        user && hasPermission(user.permissions || [], permission)
-      );
-    })
-  }));
-
-  // Keyboard navigation and search
+  // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Global keyboard shortcuts
       if (e.metaKey || e.ctrlKey) {
-        switch (e.key) {
-          case 'k':
-            e.preventDefault();
-            setShowSearch(true);
-            setTimeout(() => searchInputRef.current?.focus(), 100);
-            break;
-          case 'd':
-            e.preventDefault();
-            window.location.href = '/dashboard';
-            break;
-          case 'r':
-            e.preventDefault();
-            window.location.href = '/dashboard/risks';
-            break;
-          case 'c':
-            e.preventDefault();
-            window.location.href = '/dashboard/controls';
-            break;
-          case 'e':
-            e.preventDefault();
-            window.location.href = '/dashboard/reporting';
-            break;
+        if (e.key === 'k') {
+          e.preventDefault();
+          setShowSearch(!showSearch);
+        }
+        if (e.key === 'b') {
+          e.preventDefault();
+          onToggle?.();
         }
       }
-      
-      // Escape key handling
       if (e.key === 'Escape') {
         setShowSearch(false);
         setSearchQuery('');
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [showSearch, onToggle]);
+
+  // Focus search input when shown
+  useEffect(() => {
+    if (showSearch && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [showSearch]);
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections(prev => 
-      prev.includes(sectionId)
-        ? prev.filter(s => s !== sectionId)
+      prev.includes(sectionId) 
+        ? prev.filter(id => id !== sectionId)
         : [...prev, sectionId]
     );
   };
@@ -402,384 +485,255 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
     return expandedSections.includes(sectionId);
   };
 
-  const addBookmark = (item: NavItem) => {
-    const bookmark: UserBookmark = {
-      id: item.id,
-      title: item.title,
-      href: item.href,
-      icon: item.icon,
-    };
-    setUserBookmarks(prev => [...prev.filter(b => b.id !== item.id), bookmark]);
-  };
-
-  const removeBookmark = (bookmarkId: string) => {
-    setUserBookmarks(prev => prev.filter(b => b.id !== bookmarkId));
-  };
-
-  const isBookmarked = (itemId: string) => {
-    return userBookmarks.some(b => b.id === itemId);
-  };
-
   const isItemActive = (href: string) => {
+    if (!pathname) return false;
     if (href === '/dashboard') {
       return pathname === '/dashboard';
     }
-    return pathname === href || pathname?.startsWith(href + '/');
+    return pathname.startsWith(href);
   };
-
-  // Search functionality
-  const searchResults = showSearch && searchQuery ? 
-    filteredSections.flatMap(section => 
-      section.items.filter(item => 
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.description?.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    ) : [];
 
   const getBadgeVariant = (variant?: string) => {
     switch (variant) {
       case 'critical': return 'destructive';
-      case 'warning': return 'warning';
-      case 'success': return 'success';
+      case 'warning': return 'secondary';
+      case 'success': return 'default';
       case 'info': return 'secondary';
-      default: return 'default';
+      default: return 'secondary';
     }
   };
 
+  // Filter items based on search
+  const filteredSections = searchQuery 
+    ? navigationSections.map(section => ({
+        ...section,
+        items: section.items.filter(item => 
+          item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.description?.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      })).filter(section => section.items.length > 0)
+    : navigationSections;
+
   if (!isOpen) {
-    // Collapsed sidebar - Notion-Style
     return (
-      <div className="w-15 h-full bg-white border-r border-border flex flex-col font-inter shadow-notion-sm">
-        {/* Logo */}
-        <div className="flex h-16 items-center justify-center border-b border-[#D8C3A5]">
-          <Shield className="h-8 w-8 text-[#191919]" />
+      <div className="flex flex-col h-full w-16 bg-[#FAFAFA] border-r border-gray-200">
+        {/* Collapsed Logo */}
+        <div className="flex items-center justify-center h-16 border-b border-gray-200">
+          <Image
+            src="/images/logo/riscura.png"
+            alt="Riscura"
+            width={32}
+            height={32}
+            className="object-contain"
+            priority
+          />
         </div>
 
-        {/* Collapsed Navigation Icons */}
-        <nav className="flex-1 p-2 space-y-1">
-          {navigationSections.flatMap(section => section.items).map((item) => {
-            const isActive = isItemActive(item.href);
-            
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "relative group flex items-center justify-center w-12 h-12 rounded-lg transition-colors",
-                  isActive
-                    ? "bg-[#191919] text-[#FAFAFA]"
-                    : "text-[#A8A8A8] hover:bg-[#D8C3A5]/20 hover:text-[#191919]"
-                )}
-              >
-                <item.icon className="h-5 w-5" />
-                
-                {/* Tooltip */}
-                <div className="absolute left-full ml-3 px-3 py-2 bg-[#191919] text-[#FAFAFA] text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
-                  {item.title}
-                  {item.badge && (
-                    <span className="ml-2 px-1.5 py-0.5 bg-[#D8C3A5] text-[#191919] text-xs rounded">
-                      {item.badge}
-                    </span>
-                  )}
-                </div>
-
-                {/* Badge indicator */}
-                {item.badge && (
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
-                )}
-              </Link>
-            );
-          })}
-        </nav>
+        {/* Collapsed Navigation */}
+        <div className="flex-1 py-4 space-y-2">
+          {navigationSections.slice(0, 8).map((section) => (
+            <TooltipProvider key={section.id}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className={cn(
+                      "w-10 h-10 mx-auto text-[#191919] hover:bg-[#D8C3A5]/20",
+                      section.items.some(item => isItemActive(item.href)) && "bg-[#199BEC] text-white"
+                    )}
+                    onClick={() => onToggle?.()}
+                  >
+                    <span className="text-lg">{section.emoji}</span>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right" className="font-medium">
+                  {section.title}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ))}
+        </div>
 
         {/* Collapsed User */}
-        {user && (
-          <div className="border-t border-[#D8C3A5] p-2">
-            <div className="relative group flex items-center justify-center w-12 h-12 rounded-lg bg-[#D8C3A5]/20">
-              <User className="h-5 w-5 text-[#191919]" />
-              
-              {/* User tooltip */}
-              <div className="absolute left-full ml-3 px-3 py-2 bg-[#191919] text-[#FAFAFA] text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
-                <p className="font-medium">{user.firstName} {user.lastName}</p>
-                <p className="text-xs text-[#A8A8A8]">
-                  {user.role.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
+        <div className="p-4 border-t border-gray-200">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Avatar className="w-8 h-8 mx-auto cursor-pointer">
+                  <AvatarImage src={user?.avatar} />
+                  <AvatarFallback className="text-xs bg-[#199BEC] text-white">
+                    {user?.firstName?.[0]}{user?.lastName?.[0]}
+                  </AvatarFallback>
+                </Avatar>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="font-medium">
+                {user?.firstName} {user?.lastName}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </div>
     );
   }
 
-  // Expanded sidebar - Notion-Style Navigation
   return (
-    <div className="w-60 h-full bg-white border-r border-border flex flex-col font-inter shadow-notion-sm">
+    <div className="flex flex-col h-full w-64 bg-[#FAFAFA] border-r border-gray-200">
       {/* Header */}
-      <div className="flex h-16 items-center justify-between px-enterprise-4 border-b border-border/50">
-        <div className="flex items-center space-x-enterprise-3">
-          <div className="w-8 h-8 bg-interactive-primary rounded-md flex items-center justify-center">
-            <Shield className="h-5 w-5 text-white" />
-          </div>
-          <span className="text-heading-base text-text-primary font-semibold">Riscura</span>
+      <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
+        <div className="flex items-center gap-3">
+          <Image
+            src="/images/logo/riscura.png"
+            alt="Riscura Logo"
+            width={120}
+            height={32}
+            className="object-contain"
+            priority
+          />
         </div>
         <Button
           variant="ghost"
-          size="sm"
-          onClick={() => setShowSearch(!showSearch)}
-          className="text-text-tertiary hover:text-text-primary hover:bg-surface-secondary/50 rounded-md"
+          size="icon"
+          onClick={onToggle}
+          className="w-8 h-8 text-[#191919] hover:bg-[#D8C3A5]/20"
         >
-          <Search className="h-4 w-4" />
+          <ChevronRight className="w-4 h-4" />
         </Button>
       </div>
 
       {/* Search */}
-      {showSearch && (
-        <div className="p-enterprise-4 border-b border-border">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-text-tertiary" />
-            <Input
-              ref={searchInputRef}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search navigation... (⌘K)"
-              className="pl-10 pr-4 py-2 text-body-sm bg-surface-secondary border-0 focus:ring-1 focus:ring-interactive-primary"
-            />
-            {searchQuery && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setSearchQuery('')}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
-              >
-                ×
-              </Button>
-            )}
-          </div>
-          
-          {/* Search Results */}
-          {searchResults.length > 0 && (
-            <div className="mt-enterprise-3 max-h-60 overflow-y-auto">
-              <div className="text-caption text-text-tertiary mb-enterprise-2">
-                {searchResults.length} result{searchResults.length !== 1 ? 's' : ''}
-              </div>
-              {searchResults.map((item) => (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  onClick={() => setShowSearch(false)}
-                  className="flex items-center space-x-enterprise-3 p-enterprise-2 rounded-md hover:bg-surface-secondary transition-colors"
-                >
-                  <item.icon className="h-4 w-4 text-text-tertiary" />
-                  <div className="flex-1 min-w-0">
-                    <div className="text-body-sm text-text-primary font-medium truncate">
-                      {item.title}
-                    </div>
-                    {item.description && (
-                      <div className="text-caption text-text-tertiary truncate">
-                        {item.description}
-                      </div>
-                    )}
-                  </div>
-                  {item.shortcut && (
-                    <div className="text-caption text-text-tertiary">
-                      {item.shortcut}
-                    </div>
-                  )}
-                </Link>
-              ))}
-            </div>
+      <div className="p-4 border-b border-gray-200">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
+          <Input
+            ref={searchInputRef}
+            placeholder="Search features..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10 pr-4 py-2 text-sm bg-white/50 border-gray-200/60 focus:ring-2 focus:ring-[#199BEC]/20 focus:border-[#199BEC]/50 rounded-xl"
+          />
+          {searchQuery && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setSearchQuery('')}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-gray-400 hover:text-[#191919]"
+            >
+              ×
+            </Button>
           )}
         </div>
-      )}
-
-      {/* Quick Actions */}
-      <div className="p-enterprise-4 border-b border-border">
-        <div className="text-overline text-text-tertiary mb-enterprise-2">
-          Quick Actions
+        <div className="mt-2 text-xs text-gray-500 flex items-center gap-1">
+          <Command className="w-3 h-3" />
+          <span>⌘ K to search</span>
         </div>
-        <div className="flex space-x-enterprise-2">
-          {quickActions.map((action) => (
-            <Tooltip key={action.id}>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  asChild
-                  className="flex-1 text-text-secondary hover:text-text-primary border-border hover:border-interactive-primary"
-                >
-                  <Link href={action.href}>
-                    <action.icon className="h-4 w-4 mr-enterprise-1" />
-                    {action.title}
-                  </Link>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{action.title} {action.shortcut && `(${action.shortcut})`}</p>
-              </TooltipContent>
-            </Tooltip>
+      </div>
+
+      {/* Navigation */}
+      <div className="flex-1 overflow-y-auto py-4">
+        <div className="space-y-6">
+          {filteredSections.map((section) => (
+            <div key={section.id} className="px-4">
+              {/* Section Header */}
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm">{section.emoji}</span>
+                  <h3 className="text-sm font-semibold text-[#191919] font-inter">
+                    {section.title}
+                  </h3>
+                </div>
+                {section.collapsible && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => toggleSection(section.id)}
+                    className="w-5 h-5 p-0 text-gray-500 hover:text-[#191919] hover:bg-[#D8C3A5]/20"
+                  >
+                    {isExpanded(section.id) ? (
+                      <ChevronDown className="w-3 h-3" />
+                    ) : (
+                      <ChevronRight className="w-3 h-3" />
+                    )}
+                  </Button>
+                )}
+              </div>
+
+              {/* Section Items */}
+              {(!section.collapsible || isExpanded(section.id)) && (
+                <div className="space-y-1">
+                  {section.items.map((item) => (
+                    <Link key={item.id} href={item.href}>
+                      <div
+                        className={cn(
+                          "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 group",
+                          isItemActive(item.href)
+                            ? "bg-[#199BEC] text-white shadow-md shadow-[#199BEC]/25 scale-[1.02]"
+                            : "text-[#191919] hover:bg-[#D8C3A5]/20 hover:text-[#191919]"
+                        )}
+                      >
+                        <item.icon 
+                          className={cn(
+                            "w-4 h-4 flex-shrink-0",
+                            isItemActive(item.href) ? "text-white" : "text-gray-600 group-hover:text-[#191919]"
+                          )} 
+                        />
+                        <span className="flex-1 truncate font-inter">{item.title}</span>
+                        
+                        {/* Badges */}
+                        <div className="flex items-center gap-1">
+                          {item.isNew && (
+                            <Badge variant="secondary" className="px-1.5 py-0.5 text-xs bg-[#199BEC] text-white border-0">
+                              New
+                            </Badge>
+                          )}
+                          {item.badge && (
+                            <Badge 
+                              variant={getBadgeVariant(item.badgeVariant)} 
+                              className={cn(
+                                "px-1.5 py-0.5 text-xs font-medium",
+                                item.badgeVariant === 'critical' && "bg-red-100 text-red-700 border-red-200",
+                                item.badgeVariant === 'warning' && "bg-orange-100 text-orange-700 border-orange-200",
+                                item.badgeVariant === 'success' && "bg-green-100 text-green-700 border-green-200",
+                                item.badgeVariant === 'info' && "bg-blue-100 text-blue-700 border-blue-200"
+                              )}
+                            >
+                              {item.badge}
+                            </Badge>
+                          )}
+                          {item.shortcut && !isItemActive(item.href) && (
+                            <span className="text-xs text-gray-400 font-mono">{item.shortcut}</span>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </div>
 
-      {/* Bookmarks */}
-      {userBookmarks.length > 0 && (
-        <div className="p-enterprise-4 border-b border-border">
-          <div className="text-overline text-text-tertiary mb-enterprise-2">
-            Bookmarks
-          </div>
-          <div className="space-y-enterprise-1">
-            {userBookmarks.map((bookmark) => (
-              <Link
-                key={bookmark.id}
-                href={bookmark.href}
-                className="flex items-center space-x-enterprise-2 p-enterprise-2 rounded-md hover:bg-surface-secondary transition-colors group"
-              >
-                {bookmark.icon && <bookmark.icon className="h-4 w-4 text-text-tertiary" />}
-                <span className="text-body-sm text-text-primary truncate">{bookmark.title}</span>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    removeBookmark(bookmark.id);
-                  }}
-                  className="opacity-0 group-hover:opacity-100 h-6 w-6 p-0"
-                >
-                  ×
-                </Button>
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Navigation */}
-      <nav className="flex-1 py-enterprise-4 overflow-y-auto">
-        {filteredSections.map((section) => {
-          const sectionExpanded = isExpanded(section.id);
-          
-          return (
-            <div key={section.id} className="mb-enterprise-6">
-              {/* Section Header */}
-              <button
-                onClick={() => toggleSection(section.id)}
-                className="w-full flex items-center justify-between px-enterprise-4 mb-enterprise-2 text-left hover:bg-surface-secondary/50 rounded-md transition-colors"
-              >
-                <h3 className="text-overline text-text-tertiary">
-                  {section.title}
-                </h3>
-                <ChevronDown 
-                  className={cn(
-                    "h-4 w-4 text-text-tertiary transition-transform",
-                    sectionExpanded ? "rotate-180" : ""
-                  )}
-                />
-              </button>
-
-              {/* Section Items */}
-              {sectionExpanded && (
-                <div className="space-y-enterprise-1 px-enterprise-2">
-                  {section.items.map((item) => {
-                    const isActive = isItemActive(item.href);
-                    const bookmarked = isBookmarked(item.id);
-                    
-                    return (
-                      <div key={item.id} className="group relative">
-                        <Link
-                          href={item.href}
-                          className={cn(
-                            "flex items-center justify-between px-enterprise-3 py-2 mx-enterprise-1 rounded-md text-body-sm font-medium transition-all group/item",
-                            isActive
-                              ? "bg-surface-tertiary text-text-primary border-l-2 border-interactive-primary"
-                              : "text-text-secondary hover:bg-surface-secondary/50 hover:text-text-primary"
-                          )}
-                        >
-                          <div className="flex items-center space-x-enterprise-3 min-w-0 flex-1">
-                            <item.icon className="h-5 w-5 shrink-0" />
-                            <div className="min-w-0 flex-1">
-                              <div className="truncate">{item.title}</div>
-                              {item.description && !isActive && (
-                                <div className="text-caption text-text-tertiary truncate">
-                                  {item.description}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          
-                          <div className="flex items-center space-x-enterprise-2 shrink-0">
-                            {item.shortcut && !isActive && (
-                              <div className="text-caption text-text-tertiary font-mono">
-                                {item.shortcut}
-                              </div>
-                            )}
-                            
-                            {item.badge && (
-                              <Badge 
-                                variant={getBadgeVariant(item.badgeVariant) as any}
-                                className="text-xs px-1.5 py-0.5"
-                              >
-                                {item.badge}
-                              </Badge>
-                            )}
-                            
-                            {item.isNew && (
-                              <Badge variant="secondary" className="text-xs px-1.5 py-0.5 bg-semantic-success text-white">
-                                New
-                              </Badge>
-                            )}
-                            
-                            {item.external && (
-                              <ExternalLink className="h-3 w-3" />
-                            )}
-                          </div>
-                        </Link>
-
-                        {/* Bookmark Button */}
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => bookmarked ? removeBookmark(item.id) : addBookmark(item)}
-                          className={cn(
-                            "absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity",
-                            bookmarked ? "text-yellow-500" : "text-text-tertiary hover:text-text-primary"
-                          )}
-                        >
-                          <Bookmark className={cn("h-3 w-3", bookmarked ? "fill-current" : "")} />
-                        </Button>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </nav>
-
-
-
       {/* User Profile */}
-      {user && (
-        <div className="border-t border-[#D8C3A5] p-4">
-          <div className="flex items-center space-x-3 p-2 rounded-lg hover:bg-[#D8C3A5]/20 transition-colors cursor-pointer">
-            <Avatar className="w-8 h-8">
-              <AvatarFallback className="bg-[#D8C3A5] text-[#191919] text-sm font-semibold">
-                {user.firstName?.[0]}{user.lastName?.[0]}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-[#191919] truncate">
-                {user.firstName} {user.lastName}
-              </p>
-              <p className="text-xs text-[#A8A8A8] truncate">
-                {user.role.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-              </p>
-            </div>
-            <Settings className="h-4 w-4 text-[#A8A8A8]" />
+      <div className="p-4 border-t border-gray-200">
+        <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#D8C3A5]/20 transition-colors cursor-pointer">
+          <Avatar className="w-8 h-8">
+            <AvatarImage src={user?.avatar} />
+            <AvatarFallback className="bg-[#199BEC] text-white text-sm">
+              {user?.firstName?.[0]}{user?.lastName?.[0]}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-[#191919] font-inter truncate">
+              {user?.firstName} {user?.lastName}
+            </p>
+            <p className="text-xs text-gray-600 truncate">{user?.email}</p>
           </div>
+          <Button variant="ghost" size="icon" className="w-6 h-6 text-gray-500 hover:text-[#191919]">
+            <Settings className="w-4 h-4" />
+          </Button>
         </div>
-      )}
+      </div>
     </div>
   );
 }

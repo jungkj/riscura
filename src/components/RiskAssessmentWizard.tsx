@@ -1,0 +1,867 @@
+'use client';
+
+import { useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useDropzone } from 'react-dropzone';
+import { toast } from '@/hooks/use-toast';
+
+// UI Components
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+
+// Icons
+import {
+  Upload,
+  FileSpreadsheet,
+  FileText,
+  Brain,
+  CheckCircle,
+  AlertCircle,
+  Loader2,
+  X,
+  ArrowRight,
+  ArrowLeft,
+  Zap,
+  Target,
+  Shield,
+  Users,
+  Calendar,
+  BarChart3,
+  FileImage,
+  Plus,
+  Trash2
+} from 'lucide-react';
+
+interface WizardStep {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ComponentType<any>;
+  completed: boolean;
+}
+
+interface AssessmentFile {
+  file: File;
+  id: string;
+  type: 'excel-rcsa' | 'policy-document' | 'evidence' | 'framework';
+  status: 'pending' | 'processing' | 'completed' | 'error';
+  progress: number;
+  results?: any;
+  error?: string;
+}
+
+interface AssessmentConfig {
+  name: string;
+  description: string;
+  scope: string;
+  department: string;
+  assessmentType: 'self' | 'third-party' | 'regulatory';
+  dueDate: string;
+  stakeholders: string[];
+  riskCategories: string[];
+  complianceFrameworks: string[];
+}
+
+const WIZARD_STEPS: WizardStep[] = [
+  {
+    id: 'setup',
+    title: 'Assessment Setup',
+    description: 'Configure your risk assessment parameters',
+    icon: Target,
+    completed: false
+  },
+  {
+    id: 'documents',
+    title: 'Document Upload',
+    description: 'Upload RCSA templates, policies, and evidence',
+    icon: Upload,
+    completed: false
+  },
+  {
+    id: 'analysis',
+    title: 'AI Analysis',
+    description: 'AI-powered risk and control extraction',
+    icon: Brain,
+    completed: false
+  },
+  {
+    id: 'review',
+    title: 'Review & Finalize',
+    description: 'Review results and complete assessment',
+    icon: CheckCircle,
+    completed: false
+  }
+];
+
+const RISK_CATEGORIES = [
+  'Operational',
+  'Financial',
+  'Strategic',
+  'Compliance',
+  'Technology',
+  'Reputational',
+  'Environmental'
+];
+
+const COMPLIANCE_FRAMEWORKS = [
+  'SOC 2',
+  'ISO 27001',
+  'NIST',
+  'GDPR',
+  'HIPAA',
+  'PCI DSS',
+  'SOX',
+  'COSO'
+];
+
+interface RiskAssessmentWizardProps {
+  organizationId: string;
+  userId: string;
+  onComplete?: (assessment: any) => void;
+}
+
+export default function RiskAssessmentWizard({
+  organizationId,
+  userId,
+  onComplete
+}: RiskAssessmentWizardProps) {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [steps, setSteps] = useState(WIZARD_STEPS);
+  const [files, setFiles] = useState<AssessmentFile[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [config, setConfig] = useState<AssessmentConfig>({
+    name: '',
+    description: '',
+    scope: '',
+    department: '',
+    assessmentType: 'self',
+    dueDate: '',
+    stakeholders: [],
+    riskCategories: [],
+    complianceFrameworks: []
+  });
+
+  const [newStakeholder, setNewStakeholder] = useState('');
+  const [analysisResults, setAnalysisResults] = useState<any>(null);
+
+  const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any[]) => {
+    if (rejectedFiles.length > 0) {
+      toast({
+        title: "Some files were rejected",
+        description: "Please check file types and sizes",
+        variant: "destructive"
+      });
+    }
+
+    const newFiles: AssessmentFile[] = acceptedFiles.map(file => ({
+      file,
+      id: Math.random().toString(36).substring(2),
+      type: detectFileType(file),
+      status: 'pending',
+      progress: 0
+    }));
+
+    setFiles(prev => [...prev, ...newFiles]);
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'application/vnd.ms-excel': [],
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [],
+      'application/pdf': [],
+      'application/msword': [],
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [],
+      'text/plain': [],
+      'image/png': [],
+      'image/jpeg': []
+    },
+    maxSize: 25 * 1024 * 1024, // 25MB
+    multiple: true,
+    disabled: isProcessing
+  });
+
+  const detectFileType = (file: File): AssessmentFile['type'] => {
+    const name = file.name.toLowerCase();
+    const type = file.type;
+
+    if (type.includes('spreadsheet') || type.includes('excel') || name.includes('rcsa')) {
+      return 'excel-rcsa';
+    }
+    if (type.includes('pdf') || type.includes('word') || type.includes('document')) {
+      return 'policy-document';
+    }
+    if (type.includes('image')) {
+      return 'evidence';
+    }
+    return 'framework';
+  };
+
+  const removeFile = (fileId: string) => {
+    setFiles(prev => prev.filter(f => f.id !== fileId));
+  };
+
+  const addStakeholder = () => {
+    if (newStakeholder.trim()) {
+      setConfig(prev => ({
+        ...prev,
+        stakeholders: [...prev.stakeholders, newStakeholder.trim()]
+      }));
+      setNewStakeholder('');
+    }
+  };
+
+  const removeStakeholder = (index: number) => {
+    setConfig(prev => ({
+      ...prev,
+      stakeholders: prev.stakeholders.filter((_, i) => i !== index)
+    }));
+  };
+
+  const toggleRiskCategory = (category: string) => {
+    setConfig(prev => ({
+      ...prev,
+      riskCategories: prev.riskCategories.includes(category)
+        ? prev.riskCategories.filter(c => c !== category)
+        : [...prev.riskCategories, category]
+    }));
+  };
+
+  const toggleComplianceFramework = (framework: string) => {
+    setConfig(prev => ({
+      ...prev,
+      complianceFrameworks: prev.complianceFrameworks.includes(framework)
+        ? prev.complianceFrameworks.filter(f => f !== framework)
+        : [...prev.complianceFrameworks, framework]
+    }));
+  };
+
+  const processFiles = async () => {
+    setIsProcessing(true);
+    
+    try {
+      const results = [];
+
+      for (const fileObj of files) {
+        setFiles(prev => prev.map(f => 
+          f.id === fileObj.id 
+            ? { ...f, status: 'processing', progress: 10 }
+            : f
+        ));
+
+        const formData = new FormData();
+        formData.append('file', fileObj.file);
+        formData.append('mode', fileObj.type === 'excel-rcsa' ? 'excel-rcsa' : 'policy-document');
+        formData.append('organizationId', organizationId);
+        formData.append('userId', userId);
+        formData.append('options', JSON.stringify({
+          aiAnalysis: true,
+          autoMap: true,
+          validateData: true,
+          createMissing: false,
+          previewMode: true
+        }));
+
+        try {
+          const response = await fetch('/api/import/process', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (!response.ok) {
+            throw new Error(`Processing failed: ${response.statusText}`);
+          }
+
+          const result = await response.json();
+          
+          setFiles(prev => prev.map(f => 
+            f.id === fileObj.id 
+              ? { 
+                  ...f, 
+                  status: 'completed', 
+                  progress: 100,
+                  results: result.data
+                }
+              : f
+          ));
+
+          results.push(result.data);
+
+        } catch (error) {
+          console.error(`Error processing ${fileObj.file.name}:`, error);
+          
+          setFiles(prev => prev.map(f => 
+            f.id === fileObj.id 
+              ? { 
+                  ...f, 
+                  status: 'error', 
+                  progress: 0,
+                  error: error instanceof Error ? error.message : 'Processing failed'
+                }
+              : f
+          ));
+        }
+      }
+
+      setAnalysisResults({
+        totalFiles: files.length,
+        processedFiles: results.length,
+        totalRisks: results.reduce((sum, r) => sum + (r.data?.risks?.length || 0), 0),
+        totalControls: results.reduce((sum, r) => sum + (r.data?.controls?.length || 0), 0),
+        results
+      });
+
+      // Mark analysis step as completed
+      setSteps(prev => prev.map(step => 
+        step.id === 'analysis' ? { ...step, completed: true } : step
+      ));
+
+    } catch (error) {
+      console.error('Analysis failed:', error);
+      toast({
+        title: "Analysis Failed",
+        description: "There was an error processing your files",
+        variant: "destructive"
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const nextStep = () => {
+    if (currentStep < steps.length - 1) {
+      // Mark current step as completed
+      setSteps(prev => prev.map((step, idx) => 
+        idx === currentStep ? { ...step, completed: true } : step
+      ));
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const completeAssessment = async () => {
+    const assessment = {
+      config,
+      files: files.map(f => ({
+        name: f.file.name,
+        type: f.type,
+        status: f.status,
+        results: f.results
+      })),
+      analysisResults,
+      createdAt: new Date(),
+      organizationId,
+      userId
+    };
+
+    if (onComplete) {
+      onComplete(assessment);
+    }
+
+    toast({
+      title: "Assessment Complete",
+      description: "Your risk assessment has been successfully created",
+    });
+  };
+
+  const getFileIcon = (type: AssessmentFile['type']) => {
+    switch (type) {
+      case 'excel-rcsa': return FileSpreadsheet;
+      case 'policy-document': return FileText;
+      case 'evidence': return FileImage;
+      case 'framework': return Shield;
+      default: return FileText;
+    }
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  const renderStepContent = () => {
+    switch (steps[currentStep].id) {
+      case 'setup':
+        return (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="name">Assessment Name *</Label>
+                  <Input
+                    id="name"
+                    value={config.name}
+                    onChange={(e) => setConfig(prev => ({ ...prev, name: e.target.value }))}
+                    placeholder="Q4 2024 Risk Assessment"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="scope">Scope</Label>
+                  <Input
+                    id="scope"
+                    value={config.scope}
+                    onChange={(e) => setConfig(prev => ({ ...prev, scope: e.target.value }))}
+                    placeholder="Enterprise-wide, Department-specific, etc."
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="department">Department</Label>
+                  <Input
+                    id="department"
+                    value={config.department}
+                    onChange={(e) => setConfig(prev => ({ ...prev, department: e.target.value }))}
+                    placeholder="IT, Finance, Operations, etc."
+                  />
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="description">Description</Label>
+                  <Textarea
+                    id="description"
+                    value={config.description}
+                    onChange={(e) => setConfig(prev => ({ ...prev, description: e.target.value }))}
+                    placeholder="Describe the purpose and objectives of this assessment..."
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="assessmentType">Assessment Type</Label>
+                  <Select
+                    value={config.assessmentType}
+                    onValueChange={(value: any) => setConfig(prev => ({ ...prev, assessmentType: value }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="self">Self Assessment</SelectItem>
+                      <SelectItem value="third-party">Third Party Assessment</SelectItem>
+                      <SelectItem value="regulatory">Regulatory Assessment</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="dueDate">Due Date</Label>
+                  <Input
+                    id="dueDate"
+                    type="date"
+                    value={config.dueDate}
+                    onChange={(e) => setConfig(prev => ({ ...prev, dueDate: e.target.value }))}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-4">
+              <div>
+                <Label>Stakeholders</Label>
+                <div className="flex gap-2 mt-2">
+                  <Input
+                    value={newStakeholder}
+                    onChange={(e) => setNewStakeholder(e.target.value)}
+                    placeholder="Add stakeholder email"
+                    onKeyPress={(e) => e.key === 'Enter' && addStakeholder()}
+                  />
+                  <Button onClick={addStakeholder} size="sm">
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {config.stakeholders.map((stakeholder, idx) => (
+                    <Badge key={idx} variant="secondary" className="flex items-center gap-1">
+                      {stakeholder}
+                      <button onClick={() => removeStakeholder(idx)}>
+                        <X className="h-3 w-3" />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <Label>Risk Categories</Label>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
+                  {RISK_CATEGORIES.map(category => (
+                    <div key={category} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`risk-${category}`}
+                        checked={config.riskCategories.includes(category)}
+                        onCheckedChange={() => toggleRiskCategory(category)}
+                      />
+                      <Label htmlFor={`risk-${category}`} className="text-sm">
+                        {category}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <Label>Compliance Frameworks</Label>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
+                  {COMPLIANCE_FRAMEWORKS.map(framework => (
+                    <div key={framework} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`framework-${framework}`}
+                        checked={config.complianceFrameworks.includes(framework)}
+                        onCheckedChange={() => toggleComplianceFramework(framework)}
+                      />
+                      <Label htmlFor={`framework-${framework}`} className="text-sm">
+                        {framework}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'documents':
+        return (
+          <div className="space-y-6">
+            {/* File Drop Zone */}
+            <div
+              {...getRootProps()}
+              className={`
+                border-2 border-dashed rounded-lg p-8 text-center transition-colors duration-200
+                ${isDragActive 
+                  ? 'border-blue-500 bg-blue-50' 
+                  : 'border-gray-300 hover:border-gray-400'
+                }
+                ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+              `}
+            >
+              <input {...getInputProps()} />
+              <motion.div
+                initial={{ scale: 1 }}
+                animate={{ scale: isDragActive ? 1.05 : 1 }}
+                className="space-y-4"
+              >
+                <Upload className={`h-12 w-12 mx-auto ${isDragActive ? 'text-blue-500' : 'text-gray-400'}`} />
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900">
+                    {isDragActive 
+                      ? 'Drop your assessment files here' 
+                      : 'Drag & drop assessment files here'
+                    }
+                  </h3>
+                  <p className="text-gray-600 mt-1">
+                    or click to browse (Excel RCSA templates, policy documents, evidence files)
+                  </p>
+                  <p className="text-sm text-gray-500 mt-2">
+                    Supported: Excel, PDF, Word, Text, Images (max 25MB per file)
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Uploaded Files */}
+            {files.length > 0 && (
+              <div className="space-y-3">
+                <h3 className="font-medium text-gray-900">Uploaded Files ({files.length})</h3>
+                {files.map((fileObj) => {
+                  const FileIcon = getFileIcon(fileObj.type);
+                  return (
+                    <motion.div
+                      key={fileObj.id}
+                      className="flex items-center gap-3 p-3 border rounded-lg"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                    >
+                      <FileIcon className="h-8 w-8 text-blue-600" />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-gray-900 truncate">
+                          {fileObj.file.name}
+                        </p>
+                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                          <span>{formatFileSize(fileObj.file.size)}</span>
+                          <Badge variant="outline" className="text-xs">
+                            {fileObj.type.replace('-', ' ')}
+                          </Badge>
+                        </div>
+                        {fileObj.status === 'processing' && (
+                          <Progress value={fileObj.progress} className="mt-2" />
+                        )}
+                        {fileObj.error && (
+                          <p className="text-sm text-red-600 mt-1">{fileObj.error}</p>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {fileObj.status === 'completed' && (
+                          <CheckCircle className="h-5 w-5 text-green-600" />
+                        )}
+                        {fileObj.status === 'error' && (
+                          <AlertCircle className="h-5 w-5 text-red-600" />
+                        )}
+                        {fileObj.status === 'processing' && (
+                          <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeFile(fileObj.id)}
+                          disabled={isProcessing}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+
+      case 'analysis':
+        return (
+          <div className="space-y-6">
+            {!analysisResults ? (
+              <div className="text-center space-y-4">
+                <Brain className="h-16 w-16 mx-auto text-blue-600" />
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900">AI Analysis Ready</h3>
+                  <p className="text-gray-600 mt-2">
+                    Click the button below to start AI-powered analysis of your uploaded files.
+                    This will extract risks, controls, and generate insights.
+                  </p>
+                </div>
+                <Button
+                  onClick={processFiles}
+                  disabled={files.length === 0 || isProcessing}
+                  size="lg"
+                  className="mt-4"
+                >
+                  {isProcessing ? (
+                    <>
+                      <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                      Analyzing Files...
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="h-5 w-5 mr-2" />
+                      Start AI Analysis
+                    </>
+                  )}
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                <div className="text-center">
+                  <CheckCircle className="h-16 w-16 mx-auto text-green-600" />
+                  <h3 className="text-xl font-semibold text-gray-900 mt-4">Analysis Complete</h3>
+                </div>
+                
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <Card>
+                    <CardContent className="p-4 text-center">
+                      <div className="text-2xl font-bold text-blue-600">{analysisResults.totalFiles}</div>
+                      <div className="text-sm text-gray-600">Files Processed</div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-4 text-center">
+                      <div className="text-2xl font-bold text-red-600">{analysisResults.totalRisks}</div>
+                      <div className="text-sm text-gray-600">Risks Identified</div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-4 text-center">
+                      <div className="text-2xl font-bold text-green-600">{analysisResults.totalControls}</div>
+                      <div className="text-sm text-gray-600">Controls Found</div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-4 text-center">
+                      <div className="text-2xl font-bold text-purple-600">
+                        {Math.round((analysisResults.processedFiles / analysisResults.totalFiles) * 100)}%
+                      </div>
+                      <div className="text-sm text-gray-600">Success Rate</div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+
+      case 'review':
+        return (
+          <div className="space-y-6">
+            <div className="text-center space-y-4">
+              <Target className="h-16 w-16 mx-auto text-green-600" />
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900">Assessment Summary</h3>
+                <p className="text-gray-600 mt-2">
+                  Review your assessment configuration and results before finalizing.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Assessment Details</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div><strong>Name:</strong> {config.name}</div>
+                  <div><strong>Type:</strong> {config.assessmentType}</div>
+                  <div><strong>Department:</strong> {config.department}</div>
+                  <div><strong>Due Date:</strong> {config.dueDate}</div>
+                  <div><strong>Stakeholders:</strong> {config.stakeholders.length}</div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Analysis Results</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {analysisResults ? (
+                    <>
+                      <div><strong>Files Processed:</strong> {analysisResults.totalFiles}</div>
+                      <div><strong>Risks Identified:</strong> {analysisResults.totalRisks}</div>
+                      <div><strong>Controls Found:</strong> {analysisResults.totalControls}</div>
+                      <div><strong>Success Rate:</strong> {Math.round((analysisResults.processedFiles / analysisResults.totalFiles) * 100)}%</div>
+                    </>
+                  ) : (
+                    <div className="text-gray-500">No analysis results available</div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="text-center">
+              <Button onClick={completeAssessment} size="lg" className="mt-4">
+                <CheckCircle className="h-5 w-5 mr-2" />
+                Complete Assessment
+              </Button>
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto space-y-8">
+      {/* Progress Steps */}
+      <div className="flex items-center justify-between">
+        {steps.map((step, idx) => {
+          const IconComponent = step.icon;
+          const isActive = idx === currentStep;
+          const isCompleted = step.completed;
+          
+          return (
+            <div key={step.id} className="flex items-center">
+              <div className={`
+                flex items-center justify-center w-12 h-12 rounded-full border-2 transition-colors duration-200
+                ${isActive 
+                  ? 'border-blue-500 bg-blue-500 text-white' 
+                  : isCompleted 
+                    ? 'border-green-500 bg-green-500 text-white'
+                    : 'border-gray-300 bg-white text-gray-400'
+                }
+              `}>
+                {isCompleted ? (
+                  <CheckCircle className="h-6 w-6" />
+                ) : (
+                  <IconComponent className="h-6 w-6" />
+                )}
+              </div>
+              <div className="ml-3">
+                <div className={`font-medium ${isActive ? 'text-blue-600' : isCompleted ? 'text-green-600' : 'text-gray-500'}`}>
+                  {step.title}
+                </div>
+                <div className="text-sm text-gray-500">{step.description}</div>
+              </div>
+              {idx < steps.length - 1 && (
+                <div className={`w-16 h-0.5 mx-4 ${isCompleted ? 'bg-green-500' : 'bg-gray-300'}`} />
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Step Content */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            {React.createElement(steps[currentStep].icon, { className: "h-6 w-6 text-blue-600" })}
+            {steps[currentStep].title}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentStep}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              {renderStepContent()}
+            </motion.div>
+          </AnimatePresence>
+        </CardContent>
+      </Card>
+
+      {/* Navigation */}
+      <div className="flex justify-between">
+        <Button
+          variant="outline"
+          onClick={prevStep}
+          disabled={currentStep === 0}
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Previous
+        </Button>
+        
+        {currentStep < steps.length - 1 ? (
+          <Button
+            onClick={nextStep}
+            disabled={
+              (currentStep === 0 && !config.name) ||
+              (currentStep === 1 && files.length === 0) ||
+              (currentStep === 2 && !analysisResults)
+            }
+          >
+            Next
+            <ArrowRight className="h-4 w-4 ml-2" />
+          </Button>
+        ) : null}
+      </div>
+    </div>
+  );
+} 

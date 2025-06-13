@@ -1,6 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { Menu, X, Shield } from "lucide-react";
+import Image from "next/image";
 import {
   motion,
   AnimatePresence,
@@ -90,7 +91,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
         boxShadow: visible
           ? "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset"
           : "none",
-        width: visible ? "40%" : "100%",
+        width: visible ? "60%" : "100%",
         y: visible ? 20 : 0,
       }}
       transition={{
@@ -99,10 +100,11 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
         damping: 50,
       }}
       style={{
-        minWidth: visible ? "700px" : "800px",
+        minWidth: visible ? "850px" : "800px",
       }}
       className={cn(
-        "relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-full bg-transparent px-6 py-3 lg:flex",
+        "relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-full bg-transparent py-3 lg:flex",
+        visible ? "px-4" : "px-6",
         visible && "bg-white/90",
         className,
       )}
@@ -119,7 +121,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
     <motion.div
       onMouseLeave={() => setHovered(null)}
       className={cn(
-        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-1 text-sm font-medium text-gray-600 transition duration-200 hover:text-gray-800 lg:flex lg:space-x-1",
+        "hidden flex-1 flex-row items-center justify-center space-x-1 text-sm font-medium text-gray-600 transition duration-200 hover:text-gray-800 lg:flex lg:space-x-1 mx-8",
         className,
       )}
     >
@@ -127,7 +129,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
         <a
           onMouseEnter={() => setHovered(idx)}
           onClick={onItemClick}
-          className="relative px-3 py-2 text-gray-700 font-medium hover:text-gray-900 transition-colors"
+          className="relative px-3 py-2 text-gray-700 font-medium hover:text-gray-900 transition-colors whitespace-nowrap"
           key={`link-${idx}`}
           href={item.link}
         >
@@ -237,10 +239,19 @@ export const NavbarLogo = () => {
   return (
     <a
       href="/"
-      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
+      className="relative z-20 mr-4 flex items-center px-2 py-1 text-sm font-normal text-black"
     >
-      <Shield className="w-7 h-7 text-[#199BEC]" />
-      <span className="font-bold text-gray-900 text-lg">Riscura</span>
+      <Image
+        src="/images/logo/riscura.png"
+        alt="Riscura Logo"
+        width={120}
+        height={32}
+        className="object-contain"
+        priority
+      />
+      <span className="ml-3 text-2xl font-bold text-[#199BEC] font-inter tracking-tight bg-gradient-to-r from-[#199BEC] to-[#0f7dc7] bg-clip-text text-transparent drop-shadow-sm">
+        Riscura
+      </span>
     </a>
   );
 };
@@ -252,7 +263,7 @@ export const NavbarButton = ({
   className,
   variant = "primary",
   onClick,
-  ...props
+  ...restProps
 }: {
   href?: string;
   as?: React.ElementType;
@@ -264,12 +275,18 @@ export const NavbarButton = ({
   | React.ComponentPropsWithoutRef<"a">
   | React.ComponentPropsWithoutRef<"button">
 )) => {
+  // Create clean button props by excluding href and as
+  const buttonProps = Object.fromEntries(
+    Object.entries(restProps).filter(([key]) => key !== 'href' && key !== 'as')
+  );
+  
   if (variant === "primary") {
     return (
       <ModernButton
         onClick={onClick}
         className={cn("text-sm", className)}
-        {...props}
+        type="button"
+        {...buttonProps}
       >
         {children}
       </ModernButton>
@@ -282,7 +299,8 @@ export const NavbarButton = ({
         variant="gradient"
         onClick={onClick}
         className={cn("text-sm", className)}
-        {...props}
+        type="button"
+        {...buttonProps}
       >
         {children}
       </ModernButton>
@@ -294,7 +312,8 @@ export const NavbarButton = ({
       variant="outline"
       onClick={onClick}
       className={cn("text-sm bg-transparent", className)}
-      {...props}
+      type="button"
+      {...buttonProps}
     >
       {children}
     </ModernButton>

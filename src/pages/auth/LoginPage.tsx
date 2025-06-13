@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useForm } from 'react-hook-form';
@@ -104,9 +105,16 @@ export default function LoginPage() {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                className="mx-auto mb-4 w-16 h-16 bg-gradient-to-r from-[#191919] to-[#191919] rounded-full flex items-center justify-center"
+                className="mx-auto mb-4 flex justify-center"
               >
-                <Shield className="w-8 h-8 text-white" />
+                <Image
+                  src="/images/logo/riscura.png"
+                  alt="Riscura Logo"
+                  width={140}
+                  height={46}
+                  className="object-contain"
+                  priority
+                />
               </motion.div>
               <CardTitle className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                 Welcome Back

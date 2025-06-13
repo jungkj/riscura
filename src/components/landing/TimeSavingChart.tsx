@@ -5,10 +5,10 @@ import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, ReferenceLine } from 'recharts';
 
 const data = [
-  { quarter: 'Q1', excel: 25, riscura: 85 },
-  { quarter: 'Q2', excel: 40, riscura: 90 },
-  { quarter: 'Q3', excel: 60, riscura: 95 },
-  { quarter: 'Q4', excel: 75, riscura: 98 },
+  { quarter: 'Q1', excel: 120, riscura: 12 },
+  { quarter: 'Q2', excel: 100, riscura: 8 },
+  { quarter: 'Q3', excel: 85, riscura: 6 },
+  { quarter: 'Q4', excel: 75, riscura: 4 },
 ];
 
 export const TimeSavingChart = () => {
@@ -44,38 +44,15 @@ export const TimeSavingChart = () => {
                 Efficiency Comparison
               </span>
               <h2 className="text-3xl lg:text-4xl font-bold text-[#191919] mb-6 leading-tight font-inter">
-                From manual spreadsheets to AI-powered intelligence.
+                Cut assessment time by 95% with AI-powered automation.
               </h2>
               <p className="text-lg text-[#A8A8A8] font-inter leading-relaxed">
-                Watch how risk management effectiveness evolves over time. Excel-based processes plateau quickly, 
-                while Riscura's AI continuously improves your risk detection and compliance capabilities.
+                Traditional Excel-based risk assessments consume 120+ hours per quarter. Riscura's AI platform 
+                completes the same comprehensive analysis in under 4 hours, freeing your team for strategic work.
               </p>
             </div>
 
-            {/* Company logos */}
-            <div className="mb-8">
-              <p className="text-sm text-[#A8A8A8] font-medium mb-4 font-inter">Trusted by enterprise teams at</p>
-              <div className="flex items-center space-x-6">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-sm font-inter">M</span>
-                  </div>
-                  <span className="font-semibold text-[#191919] font-inter">Meta</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-sm font-inter">P</span>
-                  </div>
-                  <span className="font-semibold text-[#191919] font-inter">Palantir</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-sm font-inter">Y</span>
-                  </div>
-                  <span className="font-semibold text-[#191919] font-inter">Combinator</span>
-                </div>
-              </div>
-            </div>
+
 
             {/* CTA Button */}
             <motion.button
@@ -96,8 +73,8 @@ export const TimeSavingChart = () => {
             className="bg-[#FAFAFA] rounded-2xl p-8 shadow-lg border border-[#D8C3A5]"
           >
             <div className="mb-4">
-              <h3 className="text-lg font-semibold text-[#191919] mb-2 font-inter">Risk Management Effectiveness</h3>
-              <p className="text-sm text-[#A8A8A8] font-inter">Quarterly improvement in risk detection & compliance</p>
+              <h3 className="text-lg font-semibold text-[#191919] mb-2 font-inter">Risk Assessment Completion Time</h3>
+              <p className="text-sm text-[#A8A8A8] font-inter">Hours required per quarterly risk assessment</p>
             </div>
             
             <div className="h-80 w-full">
@@ -110,17 +87,18 @@ export const TimeSavingChart = () => {
                     tick={{ fill: '#A8A8A8', fontSize: 12, fontFamily: 'Inter' }}
                   />
                   <YAxis 
-                    domain={[0, 100]}
+                    domain={[0, 140]}
                     axisLine={false}
                     tickLine={false}
                     tick={{ fill: '#A8A8A8', fontSize: 12, fontFamily: 'Inter' }}
-                    tickFormatter={(value) => `${value}%`}
+                    tickFormatter={(value) => `${value}h`}
                   />
                   
                   {/* Grid lines */}
-                  <ReferenceLine y={25} stroke="#D8C3A5" strokeDasharray="3 3" />
-                  <ReferenceLine y={50} stroke="#D8C3A5" strokeDasharray="3 3" />
-                  <ReferenceLine y={75} stroke="#D8C3A5" strokeDasharray="3 3" />
+                  <ReferenceLine y={30} stroke="#D8C3A5" strokeDasharray="3 3" />
+                  <ReferenceLine y={60} stroke="#D8C3A5" strokeDasharray="3 3" />
+                  <ReferenceLine y={90} stroke="#D8C3A5" strokeDasharray="3 3" />
+                  <ReferenceLine y={120} stroke="#D8C3A5" strokeDasharray="3 3" />
                   
                   {/* Excel-based RCSA Line */}
                   <Line

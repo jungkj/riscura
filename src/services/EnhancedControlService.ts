@@ -527,7 +527,7 @@ export class EnhancedControlService {
 
   private calculateNextTestDate(schedule: TestingSchedule): Date {
     const now = new Date();
-    let nextDate = new Date(now);
+    const nextDate = new Date(now);
 
     switch (schedule.frequency) {
       case 'daily':

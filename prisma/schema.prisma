@@ -6,6 +6,8 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DATABASE_DIRECT_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 // ============================================================================
@@ -28,6 +30,9 @@ model Organization {
   risks                   Risk[]
   controls                Control[]
   documents               Document[]
+  rcsaEntries             RcsaEntry[]
+  extractedRisks          ExtractedRisk[]
+  extractedControls       ExtractedControl[]
   questionnaires          Questionnaire[]
   workflows               Workflow[]
   reports                 Report[]
@@ -72,6 +77,9 @@ model User {
   createdRisks            Risk[]            @relation("RiskCreatedBy")
   createdControls         Control[]         @relation("ControlCreatedBy")
   createdDocuments        Document[]        @relation("DocumentCreatedBy")
+  createdRcsaEntries      RcsaEntry[]       @relation("RcsaEntryCreatedBy")
+  createdExtractedRisks   ExtractedRisk[]   @relation("ExtractedRiskCreatedBy")
+  createdExtractedControls ExtractedControl[] @relation("ExtractedControlCreatedBy")
   createdQuestionnaires   Questionnaire[]   @relation("QuestionnaireCreatedBy")
   createdWorkflows        Workflow[]        @relation("WorkflowCreatedBy")
   createdReports          Report[]          @relation("ReportCreatedBy")
@@ -357,6 +365,107 @@ model Document {
   @@index([type])
   @@index([uploadedAt])
   @@map("documents")
+}
+
+// ============================================================================
+// RCSA IMPORT SYSTEM
+// ============================================================================
+
+model RcsaEntry {
+  id              String   @id @default(cuid())
+  riskId          String   // External risk identifier from imported file
+  riskDescription String
+  
+  // Multi-tenant isolation
+  organizationId  String
+  uploadedBy      String?
+  
+  // Audit fields
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Relationships
+  organization    Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  uploader        User?          @relation("RcsaEntryCreatedBy", fields: [uploadedBy], references: [id])
+  
+  controls        ControlEntry[]
+  
+  @@unique([riskId, organizationId]) // Prevent duplicate risk IDs within organization
+  @@index([organizationId])
+  @@index([riskId])
+  @@index([createdAt])
+  @@map("rcsa_entries")
+}
+
+model ControlEntry {
+  id                 String    @id @default(cuid())
+  controlId          String    // External control identifier from imported file
+  controlDescription String
+  rcsaEntryId        String    // Foreign key to RcsaEntry
+  
+  // Audit fields
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  
+  // Relationships
+  rcsaEntry          RcsaEntry @relation(fields: [rcsaEntryId], references: [id], onDelete: Cascade)
+  
+  @@index([rcsaEntryId])
+  @@index([controlId])
+  @@index([createdAt])
+  @@map("control_entries")
+}
+
+model ExtractedRisk {
+  id              String   @id @default(cuid())
+  externalId      String   // AI-generated ID from extraction
+  text            String   // Risk statement text
+  sourceDocument  String   // Original document name
+  extractedAt     DateTime @default(now())
+  confidence      Float?   // AI confidence score (0-1)
+  
+  // Multi-tenant isolation
+  organizationId  String
+  extractedBy     String?
+  
+  // Audit fields
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Relationships
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  extractor       User?        @relation("ExtractedRiskCreatedBy", fields: [extractedBy], references: [id])
+  
+  @@index([organizationId])
+  @@index([sourceDocument])
+  @@index([extractedAt])
+  @@map("extracted_risks")
+}
+
+model ExtractedControl {
+  id              String   @id @default(cuid())
+  externalId      String   // AI-generated ID from extraction
+  text            String   // Control statement text
+  sourceDocument  String   // Original document name
+  extractedAt     DateTime @default(now())
+  confidence      Float?   // AI confidence score (0-1)
+  
+  // Multi-tenant isolation
+  organizationId  String
+  extractedBy     String?
+  
+  // Audit fields
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Relationships
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  extractor       User?        @relation("ExtractedControlCreatedBy", fields: [extractedBy], references: [id])
+  
+  @@index([organizationId])
+  @@index([sourceDocument])
+  @@index([extractedAt])
+  @@map("extracted_controls")
 }
 
 // ============================================================================

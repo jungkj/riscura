@@ -1,84 +1,193 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { generateCSPNonce } from '@/lib/security/headers';
 
-// Define protected routes
-const protectedRoutes = [
-  '/dashboard',
-  '/aria',
-  '/risks',
-  '/controls',
-  '/questionnaires',
-  '/workflows',
-  '/reporting',
-  '/documents',
-  '/ai-insights',
-];
+/**
+ * Rate limiting store
+ */
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 
-// Define auth routes
-const authRoutes = ['/auth/login', '/auth/register', '/login', '/register'];
-
-export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  
-  // Check if the current path is a protected route
-  const isProtectedRoute = protectedRoutes.some(route => 
-    pathname.startsWith(route)
+/**
+ * Get client IP address
+ */
+function getClientIP(request: NextRequest): string {
+  return (
+    request.headers.get('cf-connecting-ip') ||
+    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    request.headers.get('x-real-ip') ||
+    'unknown'
   );
+}
+
+/**
+ * Apply rate limiting
+ */
+function applyRateLimit(
+  request: NextRequest, 
+  config: { windowMs: number; maxRequests: number }
+): { allowed: boolean; resetTime: number } {
+  const clientIP = getClientIP(request);
+  const key = `${clientIP}:${request.nextUrl.pathname}`;
+  const now = Date.now();
   
-  // Check if the current path is an auth route
-  const isAuthRoute = authRoutes.some(route => pathname.startsWith(route));
+  const existing = rateLimitStore.get(key);
   
-  // Check for authentication - look for the cookies that are actually set by the login API
-  const refreshToken = request.cookies.get('refreshToken')?.value;
-  const demoUser = request.cookies.get('demo-user')?.value;
-  const csrfToken = request.cookies.get('csrf-token')?.value;
-  
-  // User is authenticated if they have either a refresh token or demo user cookie
-  const isAuthenticated = !!(refreshToken || demoUser);
-  
-  // If accessing a protected route without authentication, redirect to login
-  if (isProtectedRoute && !isAuthenticated) {
-    const loginUrl = new URL('/auth/login', request.url);
-    loginUrl.searchParams.set('from', pathname);
-    return NextResponse.redirect(loginUrl);
+  if (!existing || now > existing.resetTime) {
+    rateLimitStore.set(key, { count: 1, resetTime: now + config.windowMs });
+    return { allowed: true, resetTime: now + config.windowMs };
   }
   
-  // If accessing auth routes while authenticated, redirect to dashboard
-  if (isAuthRoute && isAuthenticated) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+  if (existing.count >= config.maxRequests) {
+    return { allowed: false, resetTime: existing.resetTime };
   }
   
-  // Add security headers
-  const response = NextResponse.next();
-  
-  // Add CORS headers for API routes
-  if (pathname.startsWith('/api/')) {
-    response.headers.set('Access-Control-Allow-Origin', '*');
-    response.headers.set('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  }
-  
-  // Add security headers
+  rateLimitStore.set(key, { ...existing, count: existing.count + 1 });
+  return { allowed: true, resetTime: existing.resetTime };
+}
+
+/**
+ * Apply security headers
+ */
+function applySecurityHeaders(response: NextResponse, nonce?: string): NextResponse {
+  // Security headers
+  response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
   response.headers.set('X-Frame-Options', 'DENY');
   response.headers.set('X-Content-Type-Options', 'nosniff');
-  response.headers.set('Referrer-Policy', 'origin-when-cross-origin');
-  response.headers.set(
-    'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:;"
-  );
+  response.headers.set('X-XSS-Protection', '1; mode=block');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  
+  // Content Security Policy
+  const cspDirectives = [
+    "default-src 'self'",
+    nonce ? `script-src 'self' 'nonce-${nonce}'` : "script-src 'self' 'unsafe-inline'",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "img-src 'self' data: blob: https:",
+    "font-src 'self' https://fonts.gstatic.com data:",
+    "connect-src 'self' https://api.openai.com https://api.stripe.com",
+    "frame-src 'self' https://js.stripe.com",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'"
+  ].join('; ');
+  
+  response.headers.set('Content-Security-Policy', cspDirectives);
   
   return response;
 }
 
+/**
+ * Main middleware function
+ */
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  
+  // Skip middleware for static assets
+  if (
+    pathname.startsWith('/_next/') ||
+    pathname.startsWith('/images/') ||
+    pathname.startsWith('/favicon.ico') ||
+    pathname === '/api/health'
+  ) {
+    return NextResponse.next();
+  }
+  
+  // Generate CSP nonce
+  const nonce = generateCSPNonce();
+  
+  // Create response
+  let response = NextResponse.next();
+  
+  try {
+    // Apply rate limiting
+    let rateLimitConfig = { windowMs: 15 * 60 * 1000, maxRequests: 100 }; // Default API limits
+    
+    if (pathname.startsWith('/api/auth/')) {
+      rateLimitConfig = { windowMs: 15 * 60 * 1000, maxRequests: 5 };
+    } else if (pathname.startsWith('/api/upload/')) {
+      rateLimitConfig = { windowMs: 60 * 60 * 1000, maxRequests: 10 };
+    }
+    
+    const rateLimit = applyRateLimit(request, rateLimitConfig);
+    
+    if (!rateLimit.allowed) {
+      const resetTimeSeconds = Math.ceil((rateLimit.resetTime - Date.now()) / 1000);
+      
+      response = NextResponse.json(
+        { 
+          error: 'Too many requests',
+          code: 'RATE_LIMIT_EXCEEDED',
+          retryAfter: resetTimeSeconds 
+        },
+        { 
+          status: 429,
+          headers: {
+            'Retry-After': resetTimeSeconds.toString(),
+            'X-RateLimit-Limit': rateLimitConfig.maxRequests.toString(),
+            'X-RateLimit-Remaining': '0',
+            'X-RateLimit-Reset': rateLimit.resetTime.toString(),
+          }
+        }
+      );
+    } else {
+      // Add rate limit headers to successful responses
+      response.headers.set('X-RateLimit-Limit', rateLimitConfig.maxRequests.toString());
+      response.headers.set('X-RateLimit-Reset', rateLimit.resetTime.toString());
+    }
+    
+    // Authentication check for protected routes
+    if (pathname.startsWith('/dashboard') || pathname.startsWith('/admin')) {
+      const token = request.cookies.get('auth-token')?.value;
+      
+      if (!token) {
+        const url = request.nextUrl.clone();
+        url.pathname = '/auth/login';
+        url.searchParams.set('redirect', pathname);
+        return NextResponse.redirect(url);
+      }
+    }
+    
+    // Apply security headers
+    response = applySecurityHeaders(response, nonce);
+    response.headers.set('X-CSP-Nonce', nonce);
+    
+    return response;
+    
+  } catch (error) {
+    console.error('Middleware error:', error);
+    
+    response = NextResponse.json(
+      { 
+        error: 'Internal server error',
+        code: 'MIDDLEWARE_ERROR',
+        timestamp: new Date().toISOString()
+      },
+      { status: 500 }
+    );
+    
+    return applySecurityHeaders(response, nonce);
+  }
+}
+
+/**
+ * Cleanup old rate limit entries periodically
+ */
+if (typeof setInterval !== 'undefined') {
+  setInterval(() => {
+    const now = Date.now();
+    for (const [key, value] of rateLimitStore.entries()) {
+      if (value.resetTime < now) {
+        rateLimitStore.delete(key);
+      }
+    }
+  }, 60000);
+}
+
+/**
+ * Configure which paths the middleware should run on
+ */
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     */
     '/((?!_next/static|_next/image|favicon.ico|public/).*)',
   ],
 }; 

@@ -63,9 +63,16 @@ import {
   Heart,
   MessageSquare,
   Command,
-  Option,
-  Shift,
+  Laptop,
 } from 'lucide-react';
+import { ResponsiveSidebar } from './ResponsiveSidebar';
+import { 
+  useDevice, 
+  useSidebarState, 
+  useSwipeGesture, 
+  useKeyboardShortcuts,
+  useSafeAreaInsets 
+} from '@/lib/responsive/hooks';
 
 // Types
 interface NavigationItem {
@@ -81,13 +88,24 @@ interface NavigationItem {
 
 interface ResponsiveLayoutProps {
   children: React.ReactNode;
-  sidebarCollapsed?: boolean;
-  onSidebarToggle?: (collapsed: boolean) => void;
-  showBreadcrumbs?: boolean;
-  breadcrumbs?: Array<{ label: string; href?: string }>;
+  currentPath?: string;
+  onNavigate?: (href: string) => void;
   pageTitle?: string;
-  pageDescription?: string;
+  pageSubtitle?: string;
+  breadcrumbs?: Array<{ label: string; href?: string }>;
   actions?: React.ReactNode;
+  user?: {
+    name: string;
+    email: string;
+    avatar?: string;
+    role?: string;
+  };
+  notifications?: number;
+  showBreadcrumbs?: boolean;
+  showPageHeader?: boolean;
+  theme?: 'light' | 'dark' | 'system';
+  onThemeChange?: (theme: 'light' | 'dark' | 'system') => void;
+  className?: string;
 }
 
 interface Device {
@@ -304,483 +322,262 @@ const navigationItems: NavigationItem[] = [
   },
 ];
 
-// Mobile Navigation Component
-const MobileNavigation: React.FC<{
-  items: NavigationItem[];
-  currentPath: string;
-  onNavigate: (href: string) => void;
-}> = ({ items, currentPath, onNavigate }) => {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="sm" className="md:hidden" aria-label="Open navigation menu">
-          <Menu className="h-5 w-5" />
-        </Button>
-      </SheetTrigger>
-      <SheetContent side="left" className="w-80 p-0">
-        <div className="flex h-full flex-col">
-          {/* Header */}
-          <div className="flex items-center justify-between p-enterprise-4 border-b border-border">
-            <div className="flex items-center space-x-enterprise-2">
-              <div className="h-8 w-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">R</span>
-              </div>
-              <span className="font-semibold">Riscura</span>
-            </div>
-            <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-
-          {/* Navigation */}
-          <ScrollArea className="flex-1 p-enterprise-2">
-            <nav className="space-y-enterprise-1">
-              {items.map((item) => (
-                <div key={item.id}>
-                  <Button
-                    variant={currentPath === item.href ? 'secondary' : 'ghost'}
-                    className={cn(
-                      "w-full justify-start h-12 px-enterprise-3",
-                      currentPath === item.href && "bg-blue-50 text-blue-700 border-blue-200"
-                    )}
-                    onClick={() => {
-                      onNavigate(item.href);
-                      setOpen(false);
-                    }}
-                  >
-                    <div className="flex items-center space-x-enterprise-3 w-full">
-                      <div className="flex-shrink-0">
-                        {item.icon}
-                      </div>
-                      <div className="flex-1 text-left">
-                        <div className="font-medium">{item.label}</div>
-                        <div className="text-caption text-text-secondary truncate">
-                          {item.description}
-                        </div>
-                      </div>
-                      {item.badge && (
-                        <Badge variant="secondary" className="text-caption">
-                          {item.badge}
-                        </Badge>
-                      )}
-                    </div>
-                  </Button>
-
-                  {/* Sub-navigation */}
-                  {item.children && currentPath.startsWith(item.href) && (
-                    <div className="ml-enterprise-6 mt-enterprise-1 space-y-enterprise-1">
-                      {item.children.map((child) => (
-                        <Button
-                          key={child.id}
-                          variant={currentPath === child.href ? 'secondary' : 'ghost'}
-                          className="w-full justify-start h-10 px-enterprise-3"
-                          onClick={() => {
-                            onNavigate(child.href);
-                            setOpen(false);
-                          }}
-                        >
-                          <div className="flex items-center space-x-enterprise-2">
-                            {child.icon}
-                            <span>{child.label}</span>
-                          </div>
-                        </Button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </nav>
-          </ScrollArea>
-
-          {/* Footer */}
-          <div className="p-enterprise-4 border-t border-border">
-            <div className="flex items-center space-x-enterprise-3">
-              <Avatar className="h-8 w-8">
-                <AvatarFallback>SJ</AvatarFallback>
-              </Avatar>
-              <div className="flex-1 min-w-0">
-                <div className="text-body-sm font-medium truncate">Sarah Johnson</div>
-                <div className="text-caption text-text-secondary truncate">Risk Manager</div>
-              </div>
-              <Button variant="ghost" size="sm">
-                <Settings className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </SheetContent>
-    </Sheet>
-  );
-};
-
-// Desktop Sidebar Component
-const DesktopSidebar: React.FC<{
-  items: NavigationItem[];
-  currentPath: string;
-  collapsed: boolean;
-  onNavigate: (href: string) => void;
-  onToggleCollapse: () => void;
-}> = ({ items, currentPath, collapsed, onNavigate, onToggleCollapse }) => {
-  const [expandedItems, setExpandedItems] = useState<string[]>([]);
-
-  const toggleExpanded = (itemId: string) => {
-    setExpandedItems(prev =>
-      prev.includes(itemId)
-        ? prev.filter(id => id !== itemId)
-        : [...prev, itemId]
-    );
-  };
-
-  return (
-    <div className={cn(
-      "hidden md:flex flex-col border-r border-border bg-white transition-all duration-300",
-      collapsed ? "w-16" : "w-64"
-    )}>
-      {/* Header */}
-      <div className="flex items-center justify-between p-enterprise-4 border-b border-border">
-        {!collapsed && (
-          <div className="flex items-center space-x-enterprise-2">
-            <div className="h-8 w-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">R</span>
-            </div>
-            <span className="font-semibold">Riscura</span>
-          </div>
-        )}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onToggleCollapse}
-          className={cn("transition-transform duration-200", collapsed && "mx-auto")}
-        >
-          {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-        </Button>
-      </div>
-
-      {/* Navigation */}
-      <ScrollArea className="flex-1 p-enterprise-2">
-        <nav className="space-y-enterprise-1">
-          {items.map((item) => (
-            <div key={item.id}>
-              <Button
-                variant={currentPath === item.href ? 'secondary' : 'ghost'}
-                className={cn(
-                  "w-full justify-start group relative",
-                  collapsed ? "h-10 px-2" : "h-10 px-enterprise-3",
-                  currentPath === item.href && "bg-blue-50 text-blue-700 border-blue-200"
-                )}
-                onClick={() => {
-                  if (item.children && !collapsed) {
-                    toggleExpanded(item.id);
-                  } else {
-                    onNavigate(item.href);
-                  }
-                }}
-                title={collapsed ? item.label : undefined}
-              >
-                <div className={cn(
-                  "flex items-center w-full",
-                  collapsed ? "justify-center" : "space-x-enterprise-3"
-                )}>
-                  <div className="flex-shrink-0">
-                    {item.icon}
-                  </div>
-                  {!collapsed && (
-                    <>
-                      <span className="flex-1 text-left truncate">{item.label}</span>
-                      {item.badge && (
-                        <Badge variant="secondary" className="text-caption">
-                          {item.badge}
-                        </Badge>
-                      )}
-                      {item.children && (
-                        <ChevronRight
-                          className={cn(
-                            "h-3 w-3 transition-transform duration-200",
-                            expandedItems.includes(item.id) && "rotate-90"
-                          )}
-                        />
-                      )}
-                    </>
-                  )}
-                </div>
-
-                {/* Tooltip for collapsed state */}
-                {collapsed && (
-                  <div className="absolute left-full ml-2 px-2 py-1 bg-black text-white text-caption rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
-                    {item.label}
-                    {item.shortcut && (
-                      <span className="ml-2 opacity-75">{item.shortcut}</span>
-                    )}
-                  </div>
-                )}
-              </Button>
-
-              {/* Sub-navigation */}
-              {item.children && !collapsed && expandedItems.includes(item.id) && (
-                <div className="ml-enterprise-6 mt-enterprise-1 space-y-enterprise-1">
-                  {item.children.map((child) => (
-                    <Button
-                      key={child.id}
-                      variant={currentPath === child.href ? 'secondary' : 'ghost'}
-                      className="w-full justify-start h-8 px-enterprise-3 text-caption"
-                      onClick={() => onNavigate(child.href)}
-                    >
-                      <div className="flex items-center space-x-enterprise-2">
-                        {child.icon}
-                        <span>{child.label}</span>
-                      </div>
-                    </Button>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </nav>
-      </ScrollArea>
-
-      {/* Footer */}
-      {!collapsed && (
-        <div className="p-enterprise-4 border-t border-border">
-          <div className="flex items-center space-x-enterprise-3">
-            <Avatar className="h-8 w-8">
-              <AvatarFallback>SJ</AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <div className="text-body-sm font-medium truncate">Sarah Johnson</div>
-              <div className="text-caption text-text-secondary truncate">Risk Manager</div>
-            </div>
-            <Button variant="ghost" size="sm">
-              <Settings className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-// Top Navigation Bar
-const TopNavigationBar: React.FC<{
-  device: Device;
-  breadcrumbs?: Array<{ label: string; href?: string }>;
+// Mobile Header Component
+const MobileHeader: React.FC<{
   pageTitle?: string;
-  pageDescription?: string;
+  onMenuToggle: () => void;
+  onBack?: () => void;
   actions?: React.ReactNode;
-  onNavigate: (href: string) => void;
-  showMobileMenu: boolean;
-}> = ({ device, breadcrumbs, pageTitle, pageDescription, actions, onNavigate, showMobileMenu }) => {
-  const [showSearch, setShowSearch] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-
+  notifications?: number;
+}> = ({ pageTitle, onMenuToggle, onBack, actions, notifications }) => {
+  const insets = useSafeAreaInsets();
+  
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-border">
-      {/* Main navigation bar */}
-      <div className="flex items-center justify-between px-enterprise-4 py-enterprise-3">
-        <div className="flex items-center space-x-enterprise-4">
-          {/* Mobile menu and logo */}
-          <div className="flex items-center space-x-enterprise-3">
-            {showMobileMenu && (
-              <MobileNavigation
-                items={navigationItems}
-                currentPath="/dashboard"
-                onNavigate={onNavigate}
-              />
-            )}
-
-            {/* Mobile logo */}
-            <div className="md:hidden flex items-center space-x-enterprise-2">
-              <div className="h-6 w-6 bg-gradient-to-br from-blue-600 to-purple-600 rounded flex items-center justify-center">
-                <span className="text-white font-bold text-xs">R</span>
-              </div>
-              <span className="font-semibold text-sm">Riscura</span>
-            </div>
-          </div>
-
-          {/* Breadcrumbs - Hidden on mobile */}
-          {breadcrumbs && device.type !== 'mobile' && (
-            <nav className="hidden md:flex items-center space-x-enterprise-2 text-body-sm">
-              {breadcrumbs.map((crumb, index) => (
-                <div key={index} className="flex items-center space-x-enterprise-2">
-                  {index > 0 && <ChevronRight className="h-3 w-3 text-text-secondary" />}
-                  {crumb.href ? (
-                    <Button
-                      variant="link"
-                      className="h-auto p-0 text-text-secondary hover:text-text-primary"
-                      onClick={() => onNavigate(crumb.href!)}
-                    >
-                      {crumb.label}
-                    </Button>
-                  ) : (
-                    <span className="text-text-primary font-medium">{crumb.label}</span>
-                  )}
-                </div>
-              ))}
-            </nav>
-          )}
-        </div>
-
-        {/* Actions */}
-        <div className="flex items-center space-x-enterprise-2">
-          {/* Search */}
-          <div className="relative">
-            {device.type === 'mobile' ? (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowSearch(!showSearch)}
-                aria-label="Search"
-              >
-                <Search className="h-4 w-4" />
-              </Button>
-            ) : (
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-text-secondary" />
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 w-64 text-body-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                {searchQuery && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
-                    onClick={() => setSearchQuery('')}
-                  >
-                    <X className="h-3 w-3" />
-                  </Button>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Notifications */}
-          <Button variant="ghost" size="sm" className="relative" aria-label="Notifications">
-            <Bell className="h-4 w-4" />
-            <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full text-caption p-0 bg-red-500">
-              3
-            </Badge>
-          </Button>
-
-          {/* User menu */}
-          <Button variant="ghost" size="sm" className="flex items-center space-x-enterprise-2">
-            <Avatar className="h-6 w-6">
-              <AvatarFallback className="text-caption">SJ</AvatarFallback>
-            </Avatar>
-            {device.type !== 'mobile' && <span className="text-body-sm">Sarah</span>}
-          </Button>
-
-          {/* Custom actions */}
-          {actions}
-        </div>
-      </div>
-
-      {/* Mobile search overlay */}
-      {showSearch && device.type === 'mobile' && (
-        <div className="px-enterprise-4 pb-enterprise-3 border-t border-border bg-surface-secondary">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-text-secondary" />
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-10 py-3 w-full text-body-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              autoFocus
-            />
+    <header 
+      className="sticky top-0 z-50 bg-white border-b border-gray-200 px-4 py-3"
+      style={{ paddingTop: `${insets.top + 12}px` }}
+    >
+      <div className="flex items-center justify-between gap-3">
+        {/* Left side */}
+        <div className="flex items-center gap-3">
+          {onBack ? (
             <Button
               variant="ghost"
-              size="sm"
-              className="absolute right-2 top-1/2 transform -translate-y-1/2"
-              onClick={() => setShowSearch(false)}
+              size="icon"
+              onClick={onBack}
+              className="h-9 w-9"
             >
-              <X className="h-4 w-4" />
+              <ArrowLeft className="h-5 w-5" />
             </Button>
-          </div>
-        </div>
-      )}
-
-      {/* Page header - Mobile */}
-      {(pageTitle || pageDescription) && device.type === 'mobile' && (
-        <div className="px-enterprise-4 py-enterprise-3 border-t border-border">
-          {pageTitle && <h1 className="text-heading-sm font-semibold">{pageTitle}</h1>}
-          {pageDescription && (
-            <p className="text-body-sm text-text-secondary mt-enterprise-1">{pageDescription}</p>
+          ) : (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onMenuToggle}
+              className="h-9 w-9"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          )}
+          
+          {pageTitle && (
+            <h1 className="text-lg font-semibold text-[#191919] font-inter truncate">
+              {pageTitle}
+            </h1>
           )}
         </div>
-      )}
+
+        {/* Right side */}
+        <div className="flex items-center gap-2">
+          {actions}
+          
+          {/* Notifications */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9 relative"
+          >
+            <Bell className="h-5 w-5" />
+            {notifications && notifications > 0 && (
+              <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 text-xs bg-red-500 text-white border-white border-2">
+                {notifications > 9 ? '9+' : notifications}
+              </Badge>
+            )}
+          </Button>
+        </div>
+      </div>
     </header>
   );
 };
 
-// Touch-friendly Action Bar
-const TouchActionBar: React.FC<{
-  device: Device;
-  actions: Array<{
-    id: string;
-    label: string;
-    icon: React.ReactNode;
-    onClick: () => void;
-    variant?: 'primary' | 'secondary' | 'destructive';
-    disabled?: boolean;
-  }>;
-}> = ({ device, actions }) => {
-  if (device.type === 'desktop') return null;
+// Desktop Header Component
+const DesktopHeader: React.FC<{
+  pageTitle?: string;
+  pageSubtitle?: string;
+  breadcrumbs?: Array<{ label: string; href?: string }>;
+  actions?: React.ReactNode;
+  user?: ResponsiveLayoutProps['user'];
+  notifications?: number;
+  theme?: 'light' | 'dark' | 'system';
+  onThemeChange?: (theme: 'light' | 'dark' | 'system') => void;
+  showBreadcrumbs?: boolean;
+}> = ({ 
+  pageTitle, 
+  pageSubtitle, 
+  breadcrumbs, 
+  actions, 
+  user, 
+  notifications, 
+  theme = 'light',
+  onThemeChange,
+  showBreadcrumbs = true 
+}) => {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const getThemeIcon = () => {
+    switch (theme) {
+      case 'light': return Sun;
+      case 'dark': return Moon;
+      case 'system': return Monitor;
+      default: return Sun;
+    }
+  };
+
+  const ThemeIcon = getThemeIcon();
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-border safe-area-bottom">
-      <div className="flex items-center justify-around px-enterprise-2 py-enterprise-3">
-        {actions.slice(0, device.type === 'mobile' ? 4 : 6).map((action) => (
-          <Button
-            key={action.id}
-            variant={action.variant === 'primary' ? 'default' : 'ghost'}
-            size="sm"
-            className={cn(
-              "flex-col h-12 px-enterprise-3 space-y-1",
-              action.variant === 'destructive' && "text-red-600 hover:text-red-700 hover:bg-red-50"
-            )}
-            onClick={action.onClick}
-            disabled={action.disabled}
-          >
-            {action.icon}
-            <span className="text-caption">{action.label}</span>
-          </Button>
-        ))}
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
+      <div className="px-6 py-4">
+        {/* Top row - Search, Theme, Notifications, User */}
+        <div className="flex items-center justify-between mb-4">
+          {/* Search */}
+          <div className="flex-1 max-w-md">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search anything..."
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg bg-[#FAFAFA] text-sm font-inter placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#199BEC] focus:border-transparent transition-all"
+              />
+            </div>
+          </div>
 
-        {actions.length > (device.type === 'mobile' ? 4 : 6) && (
-          <Drawer>
-            <DrawerTrigger asChild>
-              <Button variant="ghost" size="sm" className="flex-col h-12 px-enterprise-3 space-y-1">
-                <MoreHorizontal className="h-4 w-4" />
-                <span className="text-caption">More</span>
-              </Button>
-            </DrawerTrigger>
-            <DrawerContent>
-              <div className="p-enterprise-4">
-                <h3 className="text-heading-sm font-semibold mb-enterprise-4">More Actions</h3>
-                <div className="grid grid-cols-2 gap-enterprise-3">
-                  {actions.slice(device.type === 'mobile' ? 4 : 6).map((action) => (
-                    <Button
-                      key={action.id}
-                      variant="ghost"
-                      className="h-12 justify-start space-x-enterprise-2"
-                      onClick={action.onClick}
-                      disabled={action.disabled}
-                    >
-                      {action.icon}
-                      <span>{action.label}</span>
-                    </Button>
-                  ))}
+          {/* Right side controls */}
+          <div className="flex items-center gap-3">
+            {/* Theme Toggle */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => {
+                const themes: Array<'light' | 'dark' | 'system'> = ['light', 'dark', 'system'];
+                const currentIndex = themes.indexOf(theme);
+                const nextTheme = themes[(currentIndex + 1) % themes.length];
+                onThemeChange?.(nextTheme);
+              }}
+              className="h-10 w-10"
+            >
+              <ThemeIcon className="h-5 w-5" />
+            </Button>
+
+            {/* Notifications */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-10 w-10 relative"
+            >
+              <Bell className="h-5 w-5" />
+              {notifications && notifications > 0 && (
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 text-xs bg-red-500 text-white border-white border-2">
+                  {notifications > 9 ? '9+' : notifications}
+                </Badge>
+              )}
+            </Button>
+
+            {/* User Profile */}
+            {user && (
+              <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#FAFAFA] transition-colors cursor-pointer">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarFallback className="bg-[#199BEC] text-white text-sm font-medium">
+                    {user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="text-left">
+                  <p className="text-sm font-medium text-[#191919] font-inter">
+                    {user.name}
+                  </p>
+                  <p className="text-xs text-gray-500 font-inter">
+                    {user.role || user.email}
+                  </p>
                 </div>
               </div>
-            </DrawerContent>
-          </Drawer>
-        )}
+            )}
+          </div>
+        </div>
+
+        {/* Bottom row - Breadcrumbs, Title, Actions */}
+        <div className="flex items-center justify-between">
+          {/* Left side - Breadcrumbs and Title */}
+          <div className="flex-1">
+            {/* Breadcrumbs */}
+            {showBreadcrumbs && breadcrumbs && breadcrumbs.length > 0 && (
+              <nav className="mb-2">
+                <ol className="flex items-center gap-2 text-sm text-gray-500 font-inter">
+                  {breadcrumbs.map((item, index) => (
+                    <li key={index} className="flex items-center gap-2">
+                      {index > 0 && <span>/</span>}
+                      {item.href ? (
+                        <button className="hover:text-[#199BEC] transition-colors">
+                          {item.label}
+                        </button>
+                      ) : (
+                        <span className="text-[#191919] font-medium">{item.label}</span>
+                      )}
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )}
+
+            {/* Page Title and Subtitle */}
+            <div>
+              {pageTitle && (
+                <h1 className="text-2xl font-bold text-[#191919] font-inter">
+                  {pageTitle}
+                </h1>
+              )}
+              {pageSubtitle && (
+                <p className="text-gray-600 font-inter mt-1">
+                  {pageSubtitle}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Actions */}
+          {actions && (
+            <div className="flex items-center gap-3">
+              {actions}
+            </div>
+          )}
+        </div>
       </div>
+    </header>
+  );
+};
+
+// Touch Action Bar for Mobile
+const TouchActionBar: React.FC<{
+  actions?: Array<{
+    label: string;
+    icon: React.ElementType;
+    action: () => void;
+    primary?: boolean;
+  }>;
+}> = ({ actions }) => {
+  const insets = useSafeAreaInsets();
+
+  if (!actions || actions.length === 0) return null;
+
+  return (
+    <div 
+      className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 flex items-center gap-3 z-40"
+      style={{ paddingBottom: `${insets.bottom + 12}px` }}
+    >
+      {actions.map((action, index) => {
+        const IconComponent = action.icon;
+        return (
+          <Button
+            key={index}
+            variant={action.primary ? 'default' : 'secondary'}
+            className="flex-1 gap-2"
+            onClick={action.action}
+          >
+            <IconComponent className="h-4 w-4" />
+            {action.label}
+          </Button>
+        );
+      })}
     </div>
   );
 };
@@ -788,172 +585,175 @@ const TouchActionBar: React.FC<{
 // Main Responsive Layout Component
 export const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({
   children,
-  sidebarCollapsed: controlledCollapsed,
-  onSidebarToggle,
-  showBreadcrumbs = true,
-  breadcrumbs,
+  currentPath = '/dashboard',
+  onNavigate = () => {},
   pageTitle,
-  pageDescription,
+  pageSubtitle,
+  breadcrumbs,
   actions,
+  user,
+  notifications,
+  showBreadcrumbs = true,
+  showPageHeader = true,
+  theme = 'light',
+  onThemeChange,
+  className,
 }) => {
   const device = useDevice();
-  const [internalCollapsed, setInternalCollapsed] = useState(false);
-  const [currentPath, setCurrentPath] = useState('/dashboard');
+  const { isOpen, isCollapsed, toggle, close } = useSidebarState();
   const layoutRef = useRef<HTMLDivElement>(null);
-
-  const collapsed = controlledCollapsed !== undefined ? controlledCollapsed : internalCollapsed;
-
-  const handleSidebarToggle = () => {
-    const newCollapsed = !collapsed;
-    setInternalCollapsed(newCollapsed);
-    onSidebarToggle?.(newCollapsed);
-  };
-
-  const handleNavigate = (href: string) => {
-    setCurrentPath(href);
-    // In a real app, this would use router.push(href)
-    console.log('Navigate to:', href);
-  };
+  const insets = useSafeAreaInsets();
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
+    'ctrl+b': toggle,
+    'cmd+b': toggle,
     'ctrl+k': () => console.log('Open command palette'),
+    'cmd+k': () => console.log('Open command palette'),
     'ctrl+/': () => console.log('Open help'),
-    'ctrl+b': handleSidebarToggle,
-    'escape': () => console.log('Close modals'),
-    ...navigationItems.reduce((acc, item) => {
-      if (item.shortcut) {
-        acc[item.shortcut] = () => handleNavigate(item.href);
-      }
-      return acc;
-    }, {} as Record<string, () => void>),
+    'cmd+/': () => console.log('Open help'),
+    'escape': close,
   });
 
   // Swipe gestures for mobile
   useSwipeGesture(layoutRef, (direction) => {
     if (device.type === 'mobile') {
-      if (direction === 'right') {
-        // Could open sidebar or go back
-        console.log('Swipe right - open sidebar');
-      } else if (direction === 'left') {
-        // Could close sidebar or go forward
-        console.log('Swipe left - close sidebar');
+      if (direction === 'right' && !isOpen) {
+        toggle();
+      } else if (direction === 'left' && isOpen) {
+        close();
       }
     }
   });
 
-  const sampleActions = [
+  // Sample touch actions for mobile
+  const mobileActions = device.type === 'mobile' ? [
     {
-      id: 'add',
       label: 'Add',
-      icon: <Plus className="h-4 w-4" />,
-      onClick: () => console.log('Add'),
-      variant: 'primary' as const,
+      icon: Plus,
+      action: () => console.log('Add action'),
+      primary: true,
     },
     {
-      id: 'filter',
-      label: 'Filter',
-      icon: <Filter className="h-4 w-4" />,
-      onClick: () => console.log('Filter'),
+      label: 'Search',
+      icon: Search,
+      action: () => console.log('Search action'),
     },
-    {
-      id: 'export',
-      label: 'Export',
-      icon: <Download className="h-4 w-4" />,
-      onClick: () => console.log('Export'),
-    },
-    {
-      id: 'share',
-      label: 'Share',
-      icon: <Share2 className="h-4 w-4" />,
-      onClick: () => console.log('Share'),
-    },
-    {
-      id: 'archive',
-      label: 'Archive',
-      icon: <Archive className="h-4 w-4" />,
-      onClick: () => console.log('Archive'),
-    },
-  ];
+  ] : undefined;
 
   return (
-    <div
+    <div 
       ref={layoutRef}
-      className="h-screen bg-surface-primary overflow-hidden flex flex-col"
+      className={cn(
+        "min-h-screen bg-white font-inter",
+        device.type === 'mobile' && "pb-20", // Space for touch action bar
+        className
+      )}
+      style={{
+        paddingLeft: `${insets.left}px`,
+        paddingRight: `${insets.right}px`,
+      }}
     >
-      {/* Top Navigation */}
-      <TopNavigationBar
-        device={device}
-        breadcrumbs={showBreadcrumbs ? breadcrumbs : undefined}
-        pageTitle={pageTitle}
-        pageDescription={pageDescription}
-        actions={actions}
-        onNavigate={handleNavigate}
-        showMobileMenu={device.type === 'mobile'}
+      {/* Sidebar */}
+      <ResponsiveSidebar
+        currentPath={currentPath}
+        onNavigate={onNavigate}
       />
 
-      {/* Main Layout */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Desktop Sidebar */}
-        <DesktopSidebar
-          items={navigationItems}
-          currentPath={currentPath}
-          collapsed={collapsed}
-          onNavigate={handleNavigate}
-          onToggleCollapse={handleSidebarToggle}
-        />
+      {/* Main Content Area */}
+      <div className={cn(
+        "flex flex-col min-h-screen",
+        device.type === 'desktop' && !isCollapsed && "ml-64",
+        device.type === 'desktop' && isCollapsed && "ml-16",
+        device.type === 'tablet' && "ml-16",
+      )}>
+        {/* Header */}
+        {device.type === 'mobile' ? (
+          <MobileHeader
+            pageTitle={pageTitle}
+            onMenuToggle={toggle}
+            actions={actions}
+            notifications={notifications}
+          />
+        ) : (
+          showPageHeader && (
+            <DesktopHeader
+              pageTitle={pageTitle}
+              pageSubtitle={pageSubtitle}
+              breadcrumbs={breadcrumbs}
+              actions={actions}
+              user={user}
+              notifications={notifications}
+              theme={theme}
+              onThemeChange={onThemeChange}
+              showBreadcrumbs={showBreadcrumbs}
+            />
+          )
+        )}
 
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto">
           <div className={cn(
             "h-full",
-            device.type !== 'desktop' ? "pb-20" : "" // Add bottom padding for touch action bar
+            device.type === 'mobile' ? "p-0" : "p-6",
+            // Add extra padding for safe areas on mobile
+            device.type === 'mobile' && insets.top > 0 && "pt-safe-top",
+            device.type === 'mobile' && insets.bottom > 0 && "pb-safe-bottom"
           )}>
-            {/* Page Header - Desktop/Tablet */}
-            {(pageTitle || pageDescription) && device.type !== 'mobile' && (
-              <div className="px-enterprise-6 py-enterprise-4 border-b border-border bg-white">
-                <div className="flex items-center justify-between">
-                  <div>
-                    {pageTitle && <h1 className="text-heading-lg font-semibold">{pageTitle}</h1>}
-                    {pageDescription && (
-                      <p className="text-body-base text-text-secondary mt-enterprise-1">
-                        {pageDescription}
-                      </p>
-                    )}
-                  </div>
-                  {actions && device.type === 'desktop' && actions}
-                </div>
+            {/* Mobile Page Header */}
+            {device.type === 'mobile' && (pageSubtitle || breadcrumbs) && (
+              <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
+                {/* Breadcrumbs */}
+                {showBreadcrumbs && breadcrumbs && breadcrumbs.length > 0 && (
+                  <nav className="mb-2">
+                    <ol className="flex items-center gap-2 text-sm text-gray-500 font-inter">
+                      {breadcrumbs.map((item, index) => (
+                        <li key={index} className="flex items-center gap-2">
+                          {index > 0 && <span>/</span>}
+                          {item.href ? (
+                            <button className="hover:text-[#199BEC] transition-colors">
+                              {item.label}
+                            </button>
+                          ) : (
+                            <span className="text-[#191919] font-medium">{item.label}</span>
+                          )}
+                        </li>
+                      ))}
+                    </ol>
+                  </nav>
+                )}
+
+                {/* Page Subtitle */}
+                {pageSubtitle && (
+                  <p className="text-sm text-gray-600 font-inter">
+                    {pageSubtitle}
+                  </p>
+                )}
               </div>
             )}
 
             {/* Page Content */}
             <div className={cn(
-              "h-full",
-              (pageTitle || pageDescription) && device.type !== 'mobile' ? "pt-0" : "pt-enterprise-6",
-              device.type === 'mobile' ? "px-enterprise-4" : "px-enterprise-6"
+              "min-h-full",
+              device.type === 'mobile' ? "" : "max-w-none"
             )}>
               {children}
             </div>
           </div>
         </main>
+
+        {/* Touch Action Bar (Mobile Only) */}
+        {device.type === 'mobile' && (
+          <TouchActionBar actions={mobileActions} />
+        )}
       </div>
 
-      {/* Touch Action Bar */}
-      <TouchActionBar device={device} actions={sampleActions} />
-
-      {/* Keyboard Shortcuts Help - Desktop only */}
-      {device.type === 'desktop' && (
-        <div className="fixed bottom-4 right-4 z-50">
-          <Button
-            variant="outline"
-            size="sm"
-            className="shadow-lg bg-white"
-            onClick={() => console.log('Show keyboard shortcuts')}
-          >
-            <Keyboard className="h-4 w-4 mr-enterprise-1" />
-            Shortcuts
-          </Button>
-        </div>
+      {/* Overlay for mobile sidebar */}
+      {device.type === 'mobile' && isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40"
+          onClick={close}
+        />
       )}
     </div>
   );

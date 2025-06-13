@@ -172,8 +172,8 @@ export const db = {
   raw: prisma.$queryRaw,
   rawUnsafe: prisma.$queryRawUnsafe,
   
-  // Metrics and monitoring
-  metrics: prisma.$metrics,
+  // Metrics and monitoring (disabled for now)
+  // metrics: prisma.$metrics,
 };
 
 // Export the Prisma client as default

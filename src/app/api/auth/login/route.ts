@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import bcrypt from 'bcryptjs';
+import { db } from '@/lib/db';
+import { createSession } from '@/lib/auth/session';
 
 // Login request schema
 const loginSchema = z.object({
@@ -88,9 +91,91 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const { email, password } = validationResult.data;
     console.log('Login attempt for email:', email);
 
-    // Demo credentials check
+    try {
+      // Check database connection
+      const isConnected = await db.healthCheck();
+      
+      if (isConnected) {
+        // Try database authentication first
+        const user = await db.client.user.findUnique({
+          where: { email },
+          include: {
+            organization: {
+              select: {
+                id: true,
+                name: true,
+                plan: true,
+                isActive: true,
+              },
+            },
+          },
+        });
+
+        if (user && user.isActive && user.passwordHash) {
+          const isValidPassword = await bcrypt.compare(password, user.passwordHash);
+          
+          if (isValidPassword) {
+            console.log('Database login successful for:', email);
+            
+            // Create session
+            const { session, tokens } = await createSession(user, {
+              ipAddress: clientIP,
+              userAgent: request.headers.get('user-agent') || undefined,
+            });
+
+            const csrfToken = generateCSRFToken();
+
+            const response = NextResponse.json({
+              message: 'Login successful',
+              user: {
+                id: user.id,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                role: user.role,
+                permissions: user.permissions,
+                organizationId: user.organizationId,
+                organization: {
+                  id: user.organization.id,
+                  name: user.organization.name,
+                  plan: user.organization.plan,
+                },
+              },
+              tokens: {
+                accessToken: tokens.accessToken,
+                expiresIn: 3600,
+              },
+              demoMode: false,
+            });
+
+            // Set cookies
+            response.cookies.set('refreshToken', tokens.refreshToken, {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              sameSite: 'strict',
+              maxAge: 86400, // 24 hours
+              path: '/',
+            });
+
+            response.cookies.set('csrf-token', csrfToken, {
+              httpOnly: false,
+              secure: process.env.NODE_ENV === 'production',
+              sameSite: 'strict',
+              maxAge: 3600, // 1 hour
+              path: '/',
+            });
+
+            return response;
+          }
+        }
+      }
+    } catch (dbError) {
+      console.error('Database authentication error:', dbError);
+    }
+
+    // Fallback to demo mode if database is not available or user not found
     if (email === 'admin@riscura.com' && password === 'admin123') {
-      console.log('Demo login successful');
+      console.log('Fallback demo login successful');
       
       const demoUser = {
         id: 'demo-admin-id',
@@ -105,8 +190,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       };
 
       const tokens = {
-        accessToken: 'demo-access-token-' + Date.now(),
-        refreshToken: 'demo-refresh-token-' + Date.now(),
+        accessToken: `demo-access-token-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        refreshToken: `demo-refresh-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         expiresIn: 3600,
         refreshExpiresIn: 86400,
       };
@@ -172,14 +257,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Invalid credentials
     console.log('Invalid credentials for email:', email);
     return NextResponse.json(
-      { error: 'Invalid credentials. Please use demo credentials: admin@riscura.com / admin123' },
+      { error: 'Invalid credentials' },
       { status: 401 }
     );
 
   } catch (error) {
     console.error('Login API error:', error);
     return NextResponse.json(
-      { error: 'An error occurred during login. Please try again or use demo credentials.' },
+      { error: 'An error occurred during login. Please try again.' },
       { status: 500 }
     );
   }

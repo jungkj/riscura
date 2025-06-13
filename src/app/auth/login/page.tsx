@@ -2,6 +2,7 @@
 
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -75,8 +76,15 @@ function LoginForm() {
       <div className="relative w-full max-w-md space-y-8">
         {/* Logo and Header */}
         <div className="text-center space-y-6">
-          <div className="mx-auto w-20 h-20 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/25">
-            <Shield className="w-10 h-10 text-white" />
+          <div className="mx-auto flex justify-center">
+            <Image
+              src="/images/logo/riscura.png"
+              alt="Riscura Logo"
+              width={180}
+              height={60}
+              className="object-contain"
+              priority
+            />
           </div>
           
           <div className="space-y-2">
@@ -191,7 +199,7 @@ function LoginForm() {
 
             <Button
               type="button"
-              variant="outline"
+              variant="secondary"
               className="w-full h-11 bg-white/50 dark:bg-slate-900/50 border-slate-300 dark:border-slate-600 hover:bg-white dark:hover:bg-slate-800 transition-colors"
               onClick={handleGoogleLogin}
               disabled={isLoading}
@@ -231,7 +239,7 @@ function LoginForm() {
                   </p>
                   <Button
                     type="button"
-                    variant="outline"
+                    variant="secondary"
                     size="sm"
                     className="w-full text-xs bg-blue-100 dark:bg-blue-900/50 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900"
                     onClick={handleDemoLogin}
