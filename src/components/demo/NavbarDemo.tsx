@@ -29,11 +29,11 @@ export default function NavbarDemo() {
         <NavBody>
           <NavbarLogo />
           <NavItems items={navItems} />
-          <div className="flex items-center space-x-2">
-            <NavbarButton variant="secondary">
+          <div className="flex items-center space-x-3 flex-shrink-0">
+            <NavbarButton variant="secondary" className="px-3 py-2 text-sm whitespace-nowrap">
               Login
             </NavbarButton>
-            <NavbarButton variant="gradient">
+            <NavbarButton variant="gradient" className="px-3 py-2 text-sm whitespace-nowrap">
               Get Started
             </NavbarButton>
           </div>

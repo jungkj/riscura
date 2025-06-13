@@ -2,6 +2,7 @@ import { cacheService } from './cache';
 import { databaseOptimizer } from './database';
 import { compressionService } from './compression';
 import { env } from '@/config/env';
+import { getCLS, getFID, getFCP, getLCP, getTTFB, Metric } from 'web-vitals';
 
 export class MonitoringService {
   private metrics = new Map<string, Metric[]>();
@@ -1130,4 +1131,268 @@ export function wrapDatabaseQuery<T>(
       performanceMonitor.trackDatabaseQuery(queryName, duration, false);
       throw error;
     });
+}
+
+// ============================================================================
+// WEB VITALS MONITORING
+// ============================================================================
+
+interface PerformanceMetrics {
+  lcp?: number; // Largest Contentful Paint
+  fid?: number; // First Input Delay
+  cls?: number; // Cumulative Layout Shift
+  fcp?: number; // First Contentful Paint
+  ttfb?: number; // Time to First Byte
+}
+
+let metrics: PerformanceMetrics = {};
+
+function sendToAnalytics(metric: Metric) {
+  // Store metrics
+  metrics[metric.name as keyof PerformanceMetrics] = metric.value;
+  
+  // Log to console in development
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`📊 Web Vital: ${metric.name}`, {
+      value: metric.value,
+      rating: metric.rating,
+      delta: metric.delta,
+    });
+  }
+
+  // Send to analytics service (implement based on your analytics provider)
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', metric.name, {
+      event_category: 'Web Vitals',
+      value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
+      event_label: metric.id,
+      non_interaction: true,
+    });
+  }
+}
+
+export function initWebVitals() {
+  if (typeof window !== 'undefined') {
+    getCLS(sendToAnalytics);
+    getFID(sendToAnalytics);
+    getFCP(sendToAnalytics);
+    getLCP(sendToAnalytics);
+    getTTFB(sendToAnalytics);
+  }
+}
+
+export function getWebVitals(): PerformanceMetrics {
+  return { ...metrics };
+}
+
+// ============================================================================
+// PERFORMANCE OBSERVER
+// ============================================================================
+
+export class PerformanceObserver {
+  private observers: PerformanceObserver[] = [];
+
+  init() {
+    if (typeof window === 'undefined') return;
+
+    // Long Tasks Observer
+    this.observeLongTasks();
+    
+    // Navigation Timing
+    this.observeNavigation();
+    
+    // Resource Timing
+    this.observeResources();
+  }
+
+  private observeLongTasks() {
+    if ('PerformanceObserver' in window) {
+      const observer = new window.PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          if (entry.duration > 50) { // Tasks longer than 50ms
+            console.warn('🐌 Long task detected:', {
+              duration: entry.duration,
+              startTime: entry.startTime,
+            });
+          }
+        }
+      });
+
+      try {
+        observer.observe({ entryTypes: ['longtask'] });
+        this.observers.push(observer);
+      } catch (e) {
+        console.warn('Long task observer not supported');
+      }
+    }
+  }
+
+  private observeNavigation() {
+    if (typeof window !== 'undefined' && 'performance' in window) {
+      window.addEventListener('load', () => {
+        const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+        
+        const metrics = {
+          dnsLookup: navigation.domainLookupEnd - navigation.domainLookupStart,
+          tcpConnect: navigation.connectEnd - navigation.connectStart,
+          tlsNegotiation: navigation.secureConnectionStart > 0 
+            ? navigation.connectEnd - navigation.secureConnectionStart 
+            : 0,
+          serverResponse: navigation.responseStart - navigation.requestStart,
+          domContentLoaded: navigation.domContentLoadedEventEnd - navigation.navigationStart,
+          windowLoad: navigation.loadEventEnd - navigation.navigationStart,
+        };
+
+        console.log('📈 Navigation metrics:', metrics);
+      });
+    }
+  }
+
+  private observeResources() {
+    if ('PerformanceObserver' in window) {
+      const observer = new window.PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          const resource = entry as PerformanceResourceTiming;
+          
+          // Log slow resources
+          if (resource.duration > 1000) { // Resources taking more than 1s
+            console.warn('🐌 Slow resource:', {
+              name: resource.name,
+              duration: resource.duration,
+              size: resource.transferSize,
+            });
+          }
+        }
+      });
+
+      try {
+        observer.observe({ entryTypes: ['resource'] });
+        this.observers.push(observer);
+      } catch (e) {
+        console.warn('Resource observer not supported');
+      }
+    }
+  }
+
+  cleanup() {
+    this.observers.forEach(observer => observer.disconnect());
+    this.observers = [];
+  }
+}
+
+// ============================================================================
+// API PERFORMANCE MONITORING
+// ============================================================================
+
+export class APIPerformanceMonitor {
+  private metrics = new Map<string, Array<{ duration: number; timestamp: number }>>();
+
+  trackRequest(endpoint: string, duration: number) {
+    const now = Date.now();
+    
+    if (!this.metrics.has(endpoint)) {
+      this.metrics.set(endpoint, []);
+    }
+    
+    const endpointMetrics = this.metrics.get(endpoint)!;
+    endpointMetrics.push({ duration, timestamp: now });
+    
+    // Keep only last 100 measurements per endpoint
+    if (endpointMetrics.length > 100) {
+      endpointMetrics.shift();
+    }
+    
+    // Log slow API calls
+    if (duration > 1000) {
+      console.warn(`🐌 Slow API call: ${endpoint} took ${duration}ms`);
+    }
+  }
+
+  getMetrics(endpoint?: string) {
+    if (endpoint) {
+      const endpointMetrics = this.metrics.get(endpoint) || [];
+      return this.calculateStats(endpointMetrics);
+    }
+    
+    const allMetrics: { [key: string]: any } = {};
+    for (const [ep, metrics] of this.metrics.entries()) {
+      allMetrics[ep] = this.calculateStats(metrics);
+    }
+    return allMetrics;
+  }
+
+  private calculateStats(metrics: Array<{ duration: number; timestamp: number }>) {
+    if (metrics.length === 0) return null;
+    
+    const durations = metrics.map(m => m.duration);
+    durations.sort((a, b) => a - b);
+    
+    return {
+      count: durations.length,
+      avg: durations.reduce((a, b) => a + b, 0) / durations.length,
+      min: durations[0],
+      max: durations[durations.length - 1],
+      p50: durations[Math.floor(durations.length * 0.5)],
+      p95: durations[Math.floor(durations.length * 0.95)],
+      p99: durations[Math.floor(durations.length * 0.99)],
+    };
+  }
+}
+
+export const apiMonitor = new APIPerformanceMonitor();
+
+// ============================================================================
+// PERFORMANCE MIDDLEWARE
+// ============================================================================
+
+export function withPerformanceTracking<T extends (...args: any[]) => any>(
+  fn: T,
+  label: string
+): T {
+  return ((...args: any[]) => {
+    const start = performance.now();
+    
+    try {
+      const result = fn(...args);
+      
+      // Handle async functions
+      if (result instanceof Promise) {
+        return result.finally(() => {
+          const duration = performance.now() - start;
+          console.log(`⏱️ ${label}: ${duration.toFixed(2)}ms`);
+        });
+      }
+      
+      const duration = performance.now() - start;
+      console.log(`⏱️ ${label}: ${duration.toFixed(2)}ms`);
+      return result;
+    } catch (error) {
+      const duration = performance.now() - start;
+      console.error(`❌ ${label} failed after ${duration.toFixed(2)}ms:`, error);
+      throw error;
+    }
+  }) as T;
+}
+
+// ============================================================================
+// INITIALIZATION
+// ============================================================================
+
+let performanceObserver: PerformanceObserver;
+
+export function initPerformanceMonitoring() {
+  if (typeof window !== 'undefined') {
+    initWebVitals();
+    
+    performanceObserver = new PerformanceObserver();
+    performanceObserver.init();
+    
+    console.log('📊 Performance monitoring initialized');
+  }
+}
+
+export function cleanupPerformanceMonitoring() {
+  if (performanceObserver) {
+    performanceObserver.cleanup();
+  }
 } 

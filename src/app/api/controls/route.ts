@@ -104,7 +104,7 @@ export const GET = withAPI(
     const search = parseSearch(searchParams);
 
     // Build where clause
-    let where: any = {
+    const where: any = {
       organizationId: user.organizationId, // Organization isolation
     };
 

@@ -334,18 +334,45 @@ export class SecurityMiddleware {
     role?: string;
     permissions: Permission[];
   }> {
-    // In production, this would check against a database
-    // For demo purposes, accept a test API key
-    if (apiKey === 'riscura-test-api-key-please-change-in-production') {
+    try {
+      // Import database connection
+      const { db } = await import('@/lib/database/connection');
+      
+      // Query database for valid API key
+      const apiKeyRecord = await db.aPIKey.findFirst({
+        where: {
+          key: apiKey,
+          isActive: true,
+          expiresAt: {
+            gt: new Date()
+          }
+        },
+        include: {
+          organization: true,
+          user: true
+        }
+      });
+
+      if (!apiKeyRecord) {
+        return { valid: false, permissions: [] };
+      }
+
+      // Update last used timestamp
+      await db.aPIKey.update({
+        where: { id: apiKeyRecord.id },
+        data: { lastUsedAt: new Date() }
+      });
+
       return {
         valid: true,
-        userId: 'api-user-id',
-        role: 'ADMIN',
-        permissions: ['*']
+        userId: apiKeyRecord.userId || undefined,
+        role: apiKeyRecord.user?.role || 'USER',
+        permissions: apiKeyRecord.permissions as Permission[]
       };
+    } catch (error) {
+      console.error('API key authentication error:', error);
+      return { valid: false, permissions: [] };
     }
-
-    return { valid: false, permissions: [] };
   }
 
   /**

@@ -186,7 +186,7 @@ export class ReportScheduler {
   // Calculate next run time
   private calculateNextRun(config: Pick<ScheduleConfig, 'frequency' | 'cronExpression' | 'timezone'>): Date {
     const now = new Date();
-    let nextRun = new Date(now);
+    const nextRun = new Date(now);
 
     switch (config.frequency) {
       case 'daily':

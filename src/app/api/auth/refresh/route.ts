@@ -3,8 +3,10 @@ import { verifyRefreshToken } from '@/lib/auth/jwt';
 import { refreshSession, getSessionByToken } from '@/lib/auth/session';
 import { generateCSRFToken } from '@/lib/auth/middleware';
 import { env } from '@/config/env';
+import { productionGuard, throwIfProduction } from '@/lib/security/production-guard';
+import { createSecureAPIHandler, SECURITY_PROFILES } from '@/lib/security/middleware-integration';
 
-export async function POST(request: NextRequest): Promise<NextResponse> {
+export const POST = createSecureAPIHandler(async (request: NextRequest): Promise<NextResponse> => {
   try {
     // Get refresh token from cookie or body
     let refreshToken = request.cookies.get('refreshToken')?.value;
@@ -15,14 +17,37 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     if (!refreshToken) {
+      productionGuard.logSecurityEvent('refresh_token_missing', {
+        ip: request.headers.get('x-forwarded-for') || 'unknown',
+        userAgent: request.headers.get('user-agent') || 'unknown'
+      });
+      
       return NextResponse.json(
         { error: 'Refresh token is required' },
         { status: 401 }
       );
     }
 
-    // Check if this is a demo refresh token
-    if (refreshToken.startsWith('demo-refresh-') || refreshToken === 'demo-refresh-token') {
+    // SECURITY: Block demo tokens in production
+    if (productionGuard.isProduction() && refreshToken.startsWith('demo-')) {
+      productionGuard.logSecurityEvent('blocked_demo_refresh_token', {
+        token: 'demo-***',
+        ip: request.headers.get('x-forwarded-for') || 'unknown',
+        userAgent: request.headers.get('user-agent') || 'unknown'
+      });
+      
+      return NextResponse.json(
+        { error: 'Demo authentication is not available in production' },
+        { status: 403 }
+      );
+    }
+
+    // DEVELOPMENT ONLY: Check if this is a demo refresh token
+    if (!productionGuard.isProduction() && productionGuard.isDemoMode() && 
+        refreshToken.startsWith('demo-refresh-')) {
+      
+      throwIfProduction('Demo token refresh');
+      
       const demoUserCookie = request.cookies.get('demo-user')?.value;
       
       if (!demoUserCookie) {
@@ -34,6 +59,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
       try {
         const demoUser = JSON.parse(demoUserCookie);
+        
+        // Validate demo user structure
+        if (!demoUser.id || !demoUser.email || !demoUser.role) {
+          throw new Error('Invalid demo user data');
+        }
         
         // Return fresh demo tokens
         const response = NextResponse.json({
@@ -48,7 +78,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             organizationId: 'demo-org-id',
           },
           tokens: {
-            accessToken: `demo-token-${demoUser.id}`,
+            accessToken: `demo-access-${demoUser.id}`,
             expiresIn: 3600,
           },
           demoMode: true,
@@ -63,9 +93,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           path: '/',
         });
 
+        // Log demo token refresh (development only)
+        console.log('🎭 Demo token refreshed for user:', demoUser.id);
+
         return response;
         
       } catch (parseError) {
+        productionGuard.logSecurityEvent('invalid_demo_refresh_token', {
+          error: parseError instanceof Error ? parseError.message : 'Unknown error'
+        });
+        
         return NextResponse.json(
           { error: 'Invalid demo session' },
           { status: 401 }
@@ -74,94 +111,124 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     // Regular JWT token refresh for non-demo users
-    // Verify refresh token
-    const payload = verifyRefreshToken(refreshToken);
+    try {
+      // Verify refresh token
+      const payload = verifyRefreshToken(refreshToken);
 
-    // Get session and refresh it
-    const result = await refreshSession(payload.sessionId);
-    
-    if (!result) {
-      return NextResponse.json(
-        { error: 'Invalid or expired session' },
-        { status: 401 }
+      // Get session and refresh it
+      const result = await refreshSession(payload.sessionId);
+      
+      if (!result) {
+        productionGuard.logSecurityEvent('session_refresh_failed', {
+          sessionId: payload.sessionId,
+          ip: request.headers.get('x-forwarded-for') || 'unknown'
+        });
+        
+        return NextResponse.json(
+          { error: 'Invalid or expired session' },
+          { status: 401 }
+        );
+      }
+
+      const { session, tokens } = result;
+
+      // Generate new CSRF token
+      const csrfToken = generateCSRFToken();
+
+      // Log refresh event
+      await logAuthEvent('TOKEN_REFRESHED', 
+        request.headers.get('x-forwarded-for') || 'unknown',
+        session.user.email,
+        {
+          userId: session.user.id,
+          sessionId: session.id,
+          userAgent: request.headers.get('user-agent'),
+        }
       );
-    }
 
-    const { session, tokens } = result;
+      // Prepare response
+      const response = NextResponse.json({
+        message: 'Token refreshed successfully',
+        user: {
+          id: session.user.id,
+          email: session.user.email,
+          firstName: session.user.firstName,
+          lastName: session.user.lastName,
+          role: session.user.role,
+          permissions: session.user.permissions,
+          organizationId: session.user.organizationId,
+        },
+        tokens: {
+          accessToken: tokens.accessToken,
+          expiresIn: tokens.expiresIn,
+        },
+        session: {
+          id: session.id,
+          expiresAt: session.expiresAt,
+        },
+      });
 
-    // Generate new CSRF token
-    const csrfToken = generateCSRFToken();
+      // Update cookies with secure settings
+      response.cookies.set('refreshToken', tokens.refreshToken, {
+        httpOnly: true,
+        secure: productionGuard.isProduction(),
+        sameSite: 'strict',
+        maxAge: tokens.refreshExpiresIn,
+        path: '/',
+      });
 
-    // Log refresh event
-    await logAuthEvent('TOKEN_REFRESHED', 
-      request.headers.get('x-forwarded-for') || 'unknown',
-      session.user.email,
-      {
+      response.cookies.set('csrf-token', csrfToken, {
+        httpOnly: false,
+        secure: productionGuard.isProduction(),
+        sameSite: 'strict',
+        maxAge: tokens.expiresIn,
+        path: '/',
+      });
+
+      productionGuard.logSecurityEvent('token_refreshed_success', {
         userId: session.user.id,
         sessionId: session.id,
-        userAgent: request.headers.get('user-agent'),
+        ip: request.headers.get('x-forwarded-for') || 'unknown'
+      });
+
+      return response;
+
+    } catch (jwtError) {
+      productionGuard.logSecurityEvent('refresh_token_validation_failed', {
+        error: jwtError instanceof Error ? jwtError.message : 'Unknown JWT error',
+        ip: request.headers.get('x-forwarded-for') || 'unknown'
+      });
+
+      if (jwtError instanceof Error) {
+        if (jwtError.message === 'Token expired' || jwtError.message === 'Invalid token') {
+          return NextResponse.json(
+            { error: 'Invalid or expired refresh token', code: 'INVALID_REFRESH_TOKEN' },
+            { status: 401 }
+          );
+        }
       }
-    );
 
-    // Prepare response
-    const response = NextResponse.json({
-      message: 'Token refreshed successfully',
-      user: {
-        id: session.user.id,
-        email: session.user.email,
-        firstName: session.user.firstName,
-        lastName: session.user.lastName,
-        role: session.user.role,
-        permissions: session.user.permissions,
-        organizationId: session.user.organizationId,
-      },
-      tokens: {
-        accessToken: tokens.accessToken,
-        expiresIn: tokens.expiresIn,
-      },
-      session: {
-        id: session.id,
-        expiresAt: session.expiresAt,
-      },
-    });
-
-    // Update cookies
-    response.cookies.set('refreshToken', tokens.refreshToken, {
-      httpOnly: true,
-      secure: env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: tokens.refreshExpiresIn,
-      path: '/',
-    });
-
-    response.cookies.set('csrf-token', csrfToken, {
-      httpOnly: false,
-      secure: env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: tokens.expiresIn,
-      path: '/',
-    });
-
-    return response;
+      return NextResponse.json(
+        { error: 'Failed to refresh token' },
+        { status: 500 }
+      );
+    }
 
   } catch (error) {
     console.error('Token refresh error:', error);
     
-    if (error instanceof Error) {
-      if (error.message === 'Token expired' || error.message === 'Invalid token') {
-        return NextResponse.json(
-          { error: 'Invalid or expired refresh token', code: 'INVALID_REFRESH_TOKEN' },
-          { status: 401 }
-        );
-      }
-    }
+    productionGuard.logSecurityEvent('token_refresh_error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      ip: request.headers.get('x-forwarded-for') || 'unknown'
+    });
 
     return NextResponse.json(
       { error: 'Failed to refresh token' },
       { status: 500 }
     );
   }
-}
+}, SECURITY_PROFILES.auth);
 
 /**
  * Log authentication events
@@ -198,18 +265,28 @@ async function logAuthEvent(
       userId,
       organizationId,
       timestamp: new Date(),
-      ...metadata,
+      metadata,
     });
+
+    // In production, this would typically go to a proper audit log system
+    productionGuard.logSecurityEvent(type.toLowerCase(), {
+      ipAddress,
+      email,
+      userId,
+      organizationId,
+      metadata
+    });
+
   } catch (error) {
     console.error('Failed to log auth event:', error);
   }
 }
 
-// Health check
+// Health check endpoint
 export async function GET(): Promise<NextResponse> {
-  return NextResponse.json({ 
-    status: 'ok', 
-    endpoint: 'refresh',
+  return NextResponse.json({
+    status: 'ok',
     timestamp: new Date().toISOString(),
+    service: 'auth-refresh'
   });
 } 

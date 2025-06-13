@@ -244,11 +244,20 @@ export class ValidationService {
     },
 
     uniqueEmail: async (email: string): Promise<boolean> => {
-      // This would typically check against a database
-      // For demo purposes, return true
-      return new Promise(resolve => {
-        setTimeout(() => resolve(true), 500);
-      });
+      try {
+        // Import database connection
+        const { db } = await import('@/lib/database/connection');
+        
+        // Check if email already exists
+        const existingUser = await db.user.findUnique({
+          where: { email: email.toLowerCase() }
+        });
+        
+        return !existingUser;
+      } catch (error) {
+        console.error('Email uniqueness check failed:', error);
+        return false;
+      }
     },
 
     validDateRange: (startDate: string, endDate: string): boolean => {

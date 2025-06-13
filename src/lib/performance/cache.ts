@@ -8,47 +8,62 @@ try {
 
 import { v4 as uuidv4 } from 'uuid';
 
-// In-memory cache fallback for demo mode
-class InMemoryCache {
+// Simple in-memory cache for development
+class MemoryCache {
   private cache = new Map<string, { value: any; expires: number }>();
+  private maxSize = 1000;
 
-  get(key: string): any {
-    const item = this.cache.get(key);
-    if (!item) return null;
-    
-    if (item.expires < Date.now()) {
+  set(key: string, value: any, ttl: number): void {
+    if (this.cache.size >= this.maxSize) {
+      this.cleanup();
+    }
+
+    const expires = Date.now() + (ttl * 1000);
+    this.cache.set(key, { value, expires });
+  }
+
+  get(key: string): any | null {
+    const entry = this.cache.get(key);
+    if (!entry) return null;
+
+    if (Date.now() > entry.expires) {
       this.cache.delete(key);
       return null;
     }
-    
-    return item.value;
+
+    return entry.value;
   }
 
-  set(key: string, value: any, ttl: number): boolean {
-    const expires = Date.now() + (ttl * 1000);
-    this.cache.set(key, { value, expires });
-    return true;
-  }
-
-  del(key: string): boolean {
-    return this.cache.delete(key);
-  }
-
-  exists(key: string): boolean {
-    const item = this.cache.get(key);
-    if (!item) return false;
-    
-    if (item.expires < Date.now()) {
-      this.cache.delete(key);
-      return false;
-    }
-    
-    return true;
+  delete(key: string): void {
+    this.cache.delete(key);
   }
 
   clear(): void {
     this.cache.clear();
   }
+
+  private cleanup(): void {
+    const now = Date.now();
+    for (const [key, entry] of this.cache.entries()) {
+      if (now > entry.expires) {
+        this.cache.delete(key);
+      }
+    }
+  }
+}
+
+export const cache = new MemoryCache();
+
+export async function cacheGet<T>(key: string): Promise<T | null> {
+  return cache.get(key);
+}
+
+export async function cacheSet(key: string, value: any, ttl = 300): Promise<void> {
+  cache.set(key, value, ttl);
+}
+
+export async function cacheDelete(key: string): Promise<void> {
+  cache.delete(key);
 }
 
 export class CacheService {

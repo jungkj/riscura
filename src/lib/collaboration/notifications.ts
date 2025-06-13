@@ -795,7 +795,7 @@ export class NotificationManager {
     const endTime = this.parseTime(preferences.quietHours.endTime);
     const currentTime = now.getHours() * 60 + now.getMinutes();
 
-    let scheduleTime = new Date(now);
+    const scheduleTime = new Date(now);
     
     if (currentTime > endTime) {
       // Schedule for next day

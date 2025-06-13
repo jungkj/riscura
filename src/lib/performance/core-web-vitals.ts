@@ -139,7 +139,7 @@ export class CoreWebVitalsMonitor {
     if (typeof window === 'undefined') return;
 
     // Simplified TTI calculation
-    let startTime = performance.now();
+    const startTime = performance.now();
     
     const checkInteractive = () => {
       if (document.readyState === 'complete') {
@@ -185,8 +185,8 @@ export class CoreWebVitalsMonitor {
     if (typeof window === 'undefined') return;
 
     // Simplified Speed Index calculation
-    let visualProgress: number[] = [];
-    let startTime = performance.now();
+    const visualProgress: number[] = [];
+    const startTime = performance.now();
 
     const measureVisualProgress = () => {
       const currentTime = performance.now() - startTime;

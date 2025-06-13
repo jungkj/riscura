@@ -1,49 +1,164 @@
 // Environment configuration with validation
 import { z } from 'zod';
 
-// Check if we're in demo mode first (before validation)
-const isDemoMode = process.env.MOCK_DATA === 'true' || process.env.NODE_ENV === 'development';
+// Production guard check
+const isProduction = process.env.NODE_ENV === 'production';
+const isDemoMode = process.env.DEMO_MODE === 'true' && !isProduction;
 
-// Define environment schema with Zod for validation
-const envSchema = z.object({
-  // Database - make optional in demo mode
-  DATABASE_URL: isDemoMode 
-    ? z.string().default('file:./dev.db')
-    : z.string().url('DATABASE_URL must be a valid PostgreSQL connection string'),
+// Helper to check if a value looks like a development/test secret
+function isInsecureSecret(value: string): boolean {
+  const insecurePatterns = [
+    'dev-',
+    'test-',
+    'demo-',
+    'localhost',
+    '12345',
+    'change-me',
+    'please-change',
+    'development',
+    'testing',
+    'secret-key'
+  ];
   
+  return insecurePatterns.some(pattern => 
+    value.toLowerCase().includes(pattern.toLowerCase())
+  );
+}
+
+// Custom secret validator for production
+const productionSecretSchema = z.string()
+  .min(32, 'Secret must be at least 32 characters in production')
+  .refine(
+    (value) => !isProduction || !isInsecureSecret(value),
+    'Development/test secrets are not allowed in production'
+  );
+
+// Environment schema with enhanced security
+const envSchema = z.object({
   // Application
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  APP_URL: z.string().url().default('http://localhost:3001'),
+  APP_URL: z.string().url().refine(
+    (url) => !isProduction || !url.includes('localhost'),
+    'localhost URLs not allowed in production'
+  ),
   APP_NAME: z.string().default('Riscura'),
   PORT: z.string().default('3001'),
-  
-  // API Configuration
   API_VERSION: z.string().default('v1'),
   
-  // Authentication & Security - make less strict in demo mode
-  JWT_SECRET: isDemoMode 
-    ? z.string().default('dev-jwt-secret-12345678901234567890123456789012')
-    : z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
+  // Database - enforce SSL in production
+  DATABASE_URL: isProduction
+    ? z.string()
+        .url()
+        .refine(
+          (url) => url.includes('ssl=true') || url.includes('sslmode=require') || url.includes('postgresql'),
+          'Database must use SSL in production'
+        )
+        .refine(
+          (url) => !url.includes('localhost') && !url.includes('127.0.0.1'),
+          'Database cannot be localhost in production'
+        )
+    : z.string().default('file:./dev.db'),
+  
+  // Authentication & Security - strict requirements in production
+  JWT_SECRET: isProduction
+    ? productionSecretSchema
+    : z.string().min(32).default('dev-jwt-secret-12345678901234567890123456789012'),
   JWT_EXPIRES_IN: z.string().default('7d'),
-  NEXTAUTH_SECRET: isDemoMode
-    ? z.string().default('dev-nextauth-secret-12345678901234567890123456789012')
-    : z.string().min(32, 'NEXTAUTH_SECRET must be at least 32 characters'),
+  
+  NEXTAUTH_SECRET: isProduction
+    ? productionSecretSchema
+    : z.string().min(32).default('dev-nextauth-secret-12345678901234567890123456789012'),
   NEXTAUTH_URL: z.string().url().optional(),
-  SESSION_SECRET: isDemoMode
-    ? z.string().default('dev-session-secret-12345678901234567890123456789012')
-    : z.string().min(32, 'SESSION_SECRET must be at least 32 characters'),
+  
+  SESSION_SECRET: isProduction
+    ? productionSecretSchema
+    : z.string().min(32).default('dev-session-secret-12345678901234567890123456789012'),
   BCRYPT_ROUNDS: z.string().transform(Number).default('12'),
   
   // Google OAuth
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
   
-  // OpenAI API - server-side only (removed client-side exposure)
+  // OpenAI API
   OPENAI_API_KEY: z.string().optional().default(''),
   OPENAI_ORG_ID: z.string().optional(),
   
-  // AI Security Configuration
-  AI_ENCRYPTION_KEY: z.string().default('dev-ai-encryption-key-12345678901234567890123456789012'),
+  // Enhanced Security Configuration
+  AI_ENCRYPTION_KEY: isProduction
+    ? productionSecretSchema
+    : z.string().min(32).default('dev-ai-encryption-key-12345678901234567890123456789012'),
+  
+  CSRF_SECRET: isProduction
+    ? productionSecretSchema
+    : z.string().min(32).default('dev-csrf-secret-12345678901234567890123456789012'),
+  
+  COOKIE_SECRET: isProduction
+    ? productionSecretSchema
+    : z.string().min(32).default('dev-cookie-secret-12345678901234567890123456789012'),
+  
+  INTERNAL_API_KEY: isProduction
+    ? productionSecretSchema
+    : z.string().min(32).default('dev-internal-api-key-12345678901234567890123456789012'),
+  
+  WEBHOOK_SECRET: isProduction
+    ? productionSecretSchema
+    : z.string().min(32).default('dev-webhook-secret-12345678901234567890123456789012'),
+  
+  DATABASE_ENCRYPTION_KEY: isProduction
+    ? productionSecretSchema
+    : z.string().min(32).default('dev-database-encryption-key-12345678901234567890123456789012'),
+  
+  FILE_ENCRYPTION_KEY: isProduction
+    ? productionSecretSchema
+    : z.string().min(32).default('dev-file-encryption-key-12345678901234567890123456789012'),
+  
+  // Security Feature Flags - forced on in production
+  ENABLE_CSRF_PROTECTION: z.string()
+    .transform(v => isProduction ? true : v !== 'false')
+    .default(isProduction ? 'true' : 'true'),
+  
+  ENABLE_RATE_LIMITING: z.string()
+    .transform(v => isProduction ? true : v !== 'false')
+    .default(isProduction ? 'true' : 'true'),
+  
+  ENABLE_SECURITY_HEADERS: z.string()
+    .transform(v => isProduction ? true : v !== 'false')
+    .default(isProduction ? 'true' : 'true'),
+  
+  ENABLE_EMAIL_VERIFICATION: z.string()
+    .transform(v => v === 'true')
+    .default(isProduction ? 'true' : 'false'),
+  
+  ENABLE_2FA: z.string()
+    .transform(v => v === 'true')
+    .default('false'),
+  
+  // Disable development features in production
+  DEBUG_MODE: z.string()
+    .transform(v => isProduction ? false : v === 'true')
+    .default('false'),
+  
+  MOCK_DATA: z.string()
+    .transform(v => isProduction ? false : v === 'true')
+    .default('false'),
+  
+  SKIP_EMAIL_VERIFICATION: z.string()
+    .transform(v => isProduction ? false : v === 'true')
+    .default('false'),
+  
+  // Demo mode - only allowed in development
+  DEMO_MODE: z.string()
+    .transform(v => isProduction ? false : v === 'true')
+    .default('false')
+    .refine(
+      (value) => !isProduction || !value,
+      'Demo mode is not allowed in production'
+    ),
+  
+  // Strict production mode
+  STRICT_PRODUCTION_MODE: z.string()
+    .transform(v => v !== 'false')
+    .default('true'),
   
   // Email Configuration
   SMTP_HOST: z.string().optional(),
@@ -61,16 +176,26 @@ const envSchema = z.object({
   AWS_ACCESS_KEY_ID: z.string().optional(),
   AWS_SECRET_ACCESS_KEY: z.string().optional(),
   
-  // Redis (optional for caching)
-  REDIS_URL: z.string().url().optional(),
+  // Redis (for rate limiting and sessions in production)
+  REDIS_URL: isProduction
+    ? z.string().url().optional()
+    : z.string().url().optional(),
   
-  // Rate Limiting
-  RATE_LIMIT_MAX: z.string().transform(Number).default('100'),
-  RATE_LIMIT_WINDOW: z.string().transform(Number).default('900000'), // 15 minutes
+  // Rate Limiting - stricter in production
+  RATE_LIMIT_MAX: z.string()
+    .transform(Number)
+    .default(isProduction ? '60' : '100'), // Lower limits in production
+  RATE_LIMIT_WINDOW: z.string()
+    .transform(Number)
+    .default('900000'), // 15 minutes
   
-  // Monitoring
-  SENTRY_DSN: z.string().url().optional(),
-  LOG_LEVEL: z.enum(['error', 'warn', 'info', 'debug']).default('info'),
+  // Monitoring - required in production
+  SENTRY_DSN: isProduction
+    ? z.string().url('SENTRY_DSN is required in production for error monitoring')
+    : z.string().url().optional(),
+  
+  LOG_LEVEL: z.enum(['error', 'warn', 'info', 'debug'])
+    .default(isProduction ? 'warn' : 'info'),
   
   // Feature Flags
   ENABLE_AI_FEATURES: z.string().transform(v => v !== 'false').default('true'),
@@ -78,86 +203,133 @@ const envSchema = z.object({
   ENABLE_REAL_TIME: z.string().transform(v => v === 'true').default('true'),
   ENABLE_EMAIL_NOTIFICATIONS: z.string().transform(v => v === 'true').default('true'),
   
-  // Development
-  DEBUG_MODE: z.string().transform(v => v === 'true').default('false'),
-  MOCK_DATA: z.string().transform(v => v === 'true').default('false'),
-  SKIP_EMAIL_VERIFICATION: z.string().transform(v => v === 'true').default('false'),
+  // Content Security Policy
+  CSP_REPORT_URI: z.string().url().optional(),
+  CSP_REPORT_ONLY: z.string().transform(v => v === 'true').default('false'),
+  
+  // Additional security headers
+  HSTS_MAX_AGE: z.string().transform(Number).default('31536000'), // 1 year
+  HSTS_INCLUDE_SUBDOMAINS: z.string().transform(v => v !== 'false').default('true'),
+  HSTS_PRELOAD: z.string().transform(v => v === 'true').default('false'),
+  
+  // Rate limiting for different endpoint types
+  AUTH_RATE_LIMIT_MAX: z.string().transform(Number).default('5'),
+  AUTH_RATE_LIMIT_WINDOW: z.string().transform(Number).default('900000'), // 15 minutes
+  
+  UPLOAD_RATE_LIMIT_MAX: z.string().transform(Number).default('10'),
+  UPLOAD_RATE_LIMIT_WINDOW: z.string().transform(Number).default('3600000'), // 1 hour
+  
+  API_RATE_LIMIT_MAX: z.string().transform(Number).default('1000'),
+  API_RATE_LIMIT_WINDOW: z.string().transform(Number).default('900000'), // 15 minutes
 });
 
-// Parse and validate environment variables
+// Parse and validate environment variables with enhanced error handling
 function validateEnv() {
   // Skip validation if explicitly requested (useful for builds)
   if (process.env.SKIP_ENV_VALIDATION === '1' || process.env.SKIP_ENV_VALIDATION === 'true') {
-    console.warn('Environment validation skipped due to SKIP_ENV_VALIDATION flag');
-    return {
-      DATABASE_URL: process.env.DATABASE_URL || 'file:./dev.db',
-      NODE_ENV: process.env.NODE_ENV || 'development',
-      APP_URL: process.env.APP_URL || 'http://localhost:3001',
-      APP_NAME: process.env.APP_NAME || 'Riscura',
-      PORT: process.env.PORT || '3001',
-      API_VERSION: process.env.API_VERSION || 'v1',
-      JWT_SECRET: process.env.JWT_SECRET || 'dev-jwt-secret-12345678901234567890123456789012',
-      JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '7d',
-      NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'dev-nextauth-secret-12345678901234567890123456789012',
-      NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-      SESSION_SECRET: process.env.SESSION_SECRET || 'dev-session-secret-12345678901234567890123456789012',
-      BCRYPT_ROUNDS: parseInt(process.env.BCRYPT_ROUNDS || '12'),
-      GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-      GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-      OPENAI_API_KEY: process.env.OPENAI_API_KEY || '',
-      OPENAI_ORG_ID: process.env.OPENAI_ORG_ID,
-      SMTP_HOST: process.env.SMTP_HOST,
-      SMTP_PORT: parseInt(process.env.SMTP_PORT || '587'),
-      SMTP_USER: process.env.SMTP_USER,
-      SMTP_PASS: process.env.SMTP_PASS,
-      SMTP_FROM: process.env.SMTP_FROM || 'noreply@riscura.com',
-      UPLOAD_MAX_SIZE: parseInt(process.env.UPLOAD_MAX_SIZE || '10485760'),
-      UPLOAD_ALLOWED_TYPES: process.env.UPLOAD_ALLOWED_TYPES || 'pdf,docx,xlsx,png,jpg,jpeg',
-      STORAGE_TYPE: process.env.STORAGE_TYPE || 'local',
-      AWS_S3_BUCKET: process.env.AWS_S3_BUCKET,
-      AWS_S3_REGION: process.env.AWS_S3_REGION || 'us-east-1',
-      AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
-      AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
-      REDIS_URL: process.env.REDIS_URL,
-      RATE_LIMIT_MAX: parseInt(process.env.RATE_LIMIT_MAX || '100'),
-      RATE_LIMIT_WINDOW: parseInt(process.env.RATE_LIMIT_WINDOW || '900000'),
-      SENTRY_DSN: process.env.SENTRY_DSN,
-      LOG_LEVEL: process.env.LOG_LEVEL || 'info',
-      ENABLE_AI_FEATURES: process.env.ENABLE_AI_FEATURES !== 'false',
-      ENABLE_COLLABORATION: process.env.ENABLE_COLLABORATION !== 'false',
-      ENABLE_REAL_TIME: process.env.ENABLE_REAL_TIME !== 'false',
-      ENABLE_EMAIL_NOTIFICATIONS: process.env.ENABLE_EMAIL_NOTIFICATIONS !== 'false',
-      DEBUG_MODE: process.env.DEBUG_MODE === 'true',
-      MOCK_DATA: process.env.MOCK_DATA === 'true',
-      SKIP_EMAIL_VERIFICATION: process.env.SKIP_EMAIL_VERIFICATION === 'true',
-    } as any;
+    console.warn('⚠️ Environment validation skipped due to SKIP_ENV_VALIDATION flag');
+    return createMinimalEnv();
   }
 
   try {
-    return envSchema.parse(process.env);
+    const parsed = envSchema.parse(process.env);
+    
+    // Additional production validations
+    if (isProduction) {
+      validateProductionEnvironment(parsed);
+    }
+    
+    return parsed;
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const missingVars = error.errors.map(err => `${err.path.join('.')}: ${err.message}`);
-      throw new Error(
-        `Environment validation failed:\n${missingVars.join('\n')}\n\n` +
-        'Please check your .env.local file and ensure all required variables are set.'
-      );
+      const missingVars = error.errors.map(err => {
+        const path = err.path.join('.');
+        return `❌ ${path}: ${err.message}`;
+      });
+      
+      console.error('🚨 Environment validation failed:');
+      console.error(missingVars.join('\n'));
+      console.error('\n📝 Please check your .env.local file and ensure all required variables are set.');
+      console.error('🔗 See env.example for reference values.');
+      
+      if (isProduction) {
+        console.error('\n🛡️ Production security requires all secrets to be properly configured.');
+        console.error('Run `npm run check:env` to validate your environment configuration.');
+      }
+      
+      throw new Error('Environment validation failed');
     }
     throw error;
+  }
+}
+
+// Create minimal environment for build processes
+function createMinimalEnv() {
+  return {
+    NODE_ENV: process.env.NODE_ENV || 'development',
+    APP_URL: process.env.APP_URL || 'http://localhost:3001',
+    DATABASE_URL: process.env.DATABASE_URL || 'file:./dev.db',
+    // Add other minimal required values
+    JWT_SECRET: process.env.JWT_SECRET || 'dev-jwt-secret-12345678901234567890123456789012',
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'dev-nextauth-secret-12345678901234567890123456789012',
+    // ... other defaults
+  } as any;
+}
+
+// Additional production environment validations
+function validateProductionEnvironment(env: any) {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  
+  // Check for required production services
+  if (!env.SMTP_HOST) {
+    warnings.push('SMTP_HOST not configured - email notifications will be disabled');
+  }
+  
+  if (!env.REDIS_URL) {
+    warnings.push('REDIS_URL not configured - using in-memory storage for sessions and rate limiting');
+  }
+  
+  if (!env.SENTRY_DSN) {
+    errors.push('SENTRY_DSN is required in production for error monitoring');
+  }
+  
+  // Check SSL/HTTPS configuration
+  if (env.APP_URL && env.APP_URL.startsWith('http://') && !env.APP_URL.includes('localhost')) {
+    errors.push('APP_URL must use HTTPS in production');
+  }
+  
+  if (env.NEXTAUTH_URL && env.NEXTAUTH_URL.startsWith('http://') && !env.NEXTAUTH_URL.includes('localhost')) {
+    errors.push('NEXTAUTH_URL must use HTTPS in production');
+  }
+  
+  // Log warnings
+  if (warnings.length > 0) {
+    console.warn('⚠️ Production warnings:');
+    warnings.forEach(warning => console.warn(`  • ${warning}`));
+  }
+  
+  // Throw on errors
+  if (errors.length > 0) {
+    console.error('❌ Production validation errors:');
+    errors.forEach(error => console.error(`  • ${error}`));
+    throw new Error('Production environment validation failed');
   }
 }
 
 // Export validated environment variables
 export const env = validateEnv();
 
-// Database configuration helper
+// Type for environment
+export type Environment = typeof env;
+
+// Configuration helpers with enhanced security
 export const databaseConfig = {
   url: env.DATABASE_URL,
-  logging: env.NODE_ENV === 'development',
+  logging: env.NODE_ENV === 'development' && env.DEBUG_MODE,
   ssl: env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
 };
 
-// Authentication configuration helper
 export const authConfig = {
   jwtSecret: env.JWT_SECRET,
   jwtExpiresIn: env.JWT_EXPIRES_IN,
@@ -167,21 +339,33 @@ export const authConfig = {
   bcryptRounds: env.BCRYPT_ROUNDS,
 };
 
-// Google OAuth configuration helper
+export const securityConfig = {
+  csrfSecret: env.CSRF_SECRET,
+  cookieSecret: env.COOKIE_SECRET,
+  internalApiKey: env.INTERNAL_API_KEY,
+  webhookSecret: env.WEBHOOK_SECRET,
+  databaseEncryptionKey: env.DATABASE_ENCRYPTION_KEY,
+  fileEncryptionKey: env.FILE_ENCRYPTION_KEY,
+  enableCsrfProtection: env.ENABLE_CSRF_PROTECTION,
+  enableRateLimiting: env.ENABLE_RATE_LIMITING,
+  enableSecurityHeaders: env.ENABLE_SECURITY_HEADERS,
+  enable2FA: env.ENABLE_2FA,
+  enableEmailVerification: env.ENABLE_EMAIL_VERIFICATION,
+};
+
 export const googleConfig = {
   clientId: env.GOOGLE_CLIENT_ID,
   clientSecret: env.GOOGLE_CLIENT_SECRET,
   enabled: !!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET),
 };
 
-// OpenAI configuration helper
 export const aiConfig = {
   apiKey: env.OPENAI_API_KEY || '',
   organizationId: env.OPENAI_ORG_ID || '',
+  encryptionKey: env.AI_ENCRYPTION_KEY,
   enabled: env.ENABLE_AI_FEATURES && !!env.OPENAI_API_KEY,
 };
 
-// Email configuration helper
 export const emailConfig = {
   host: env.SMTP_HOST,
   port: env.SMTP_PORT,
@@ -191,12 +375,11 @@ export const emailConfig = {
   enabled: env.ENABLE_EMAIL_NOTIFICATIONS && !!env.SMTP_HOST,
 };
 
-// File storage configuration helper
 export const storageConfig = {
-  maxSize: env.UPLOAD_MAX_SIZE,
-  allowedTypes: env.UPLOAD_ALLOWED_TYPES.split(','),
   type: env.STORAGE_TYPE,
-  aws: {
+  uploadMaxSize: env.UPLOAD_MAX_SIZE,
+  allowedTypes: env.UPLOAD_ALLOWED_TYPES.split(','),
+  s3: {
     bucket: env.AWS_S3_BUCKET,
     region: env.AWS_S3_REGION,
     accessKeyId: env.AWS_ACCESS_KEY_ID,
@@ -204,56 +387,32 @@ export const storageConfig = {
   },
 };
 
-// Rate limiting configuration helper
 export const rateLimitConfig = {
-  max: env.RATE_LIMIT_MAX,
-  windowMs: env.RATE_LIMIT_WINDOW,
+  default: {
+    max: env.RATE_LIMIT_MAX,
+    windowMs: env.RATE_LIMIT_WINDOW,
+  },
+  auth: {
+    max: env.AUTH_RATE_LIMIT_MAX,
+    windowMs: env.AUTH_RATE_LIMIT_WINDOW,
+  },
+  upload: {
+    max: env.UPLOAD_RATE_LIMIT_MAX,
+    windowMs: env.UPLOAD_RATE_LIMIT_WINDOW,
+  },
+  api: {
+    max: env.API_RATE_LIMIT_MAX,
+    windowMs: env.API_RATE_LIMIT_WINDOW,
+  },
 };
 
-// Feature flags helper
-export const features = {
-  ai: env.ENABLE_AI_FEATURES,
-  collaboration: env.ENABLE_COLLABORATION,
-  realTime: env.ENABLE_REAL_TIME,
-  emailNotifications: env.ENABLE_EMAIL_NOTIFICATIONS,
-  mockData: env.MOCK_DATA,
-  debugMode: env.DEBUG_MODE,
-  skipEmailVerification: env.SKIP_EMAIL_VERIFICATION,
-};
-
-// Application configuration helper
-export const appConfig = {
-  name: env.APP_NAME,
-  url: env.APP_URL,
-  port: env.PORT,
-  nodeEnv: env.NODE_ENV,
-  apiVersion: env.API_VERSION,
-  isDevelopment: env.NODE_ENV === 'development',
-  isProduction: env.NODE_ENV === 'production',
-  isTest: env.NODE_ENV === 'test',
-};
-
-// Logging configuration helper
-export const loggingConfig = {
-  level: env.LOG_LEVEL,
-  enableConsole: env.NODE_ENV !== 'production',
-  enableFile: env.NODE_ENV === 'production',
+export const monitoringConfig = {
   sentryDsn: env.SENTRY_DSN,
+  logLevel: env.LOG_LEVEL,
+  enabled: !!env.SENTRY_DSN,
 };
 
-// Redis configuration helper (if available)
-export const redisConfig = env.REDIS_URL ? {
-  url: env.REDIS_URL,
-  enabled: true,
-} : {
-  enabled: false,
-  url: '',
-};
-
-// Export type for TypeScript usage
-export type Environment = typeof env;
-
-// Environment validation check
+// Utility functions
 export function checkRequiredEnvironmentVariables(): {
   isValid: boolean;
   missing: string[];
@@ -261,22 +420,23 @@ export function checkRequiredEnvironmentVariables(): {
 } {
   const missing: string[] = [];
   const warnings: string[] = [];
-  
-  // Check critical variables
-  if (!env.DATABASE_URL) missing.push('DATABASE_URL');
-  if (!env.JWT_SECRET) missing.push('JWT_SECRET');
-  if (!env.NEXTAUTH_SECRET) missing.push('NEXTAUTH_SECRET');
-  if (!env.OPENAI_API_KEY && env.ENABLE_AI_FEATURES) missing.push('OPENAI_API_KEY (required when AI features are enabled)');
-  
-  // Check optional but recommended variables
-  if (!env.SMTP_HOST && env.ENABLE_EMAIL_NOTIFICATIONS) {
-    warnings.push('SMTP_HOST not configured - email notifications will be disabled');
+
+  // Critical variables
+  const critical = ['DATABASE_URL', 'JWT_SECRET', 'NEXTAUTH_SECRET'];
+  for (const key of critical) {
+    if (!process.env[key]) {
+      missing.push(key);
+    }
   }
-  
-  if (!env.REDIS_URL && env.NODE_ENV === 'production') {
-    warnings.push('REDIS_URL not configured - session storage will use database');
+
+  // Recommended variables
+  const recommended = ['SMTP_HOST', 'OPENAI_API_KEY'];
+  for (const key of recommended) {
+    if (!process.env[key]) {
+      warnings.push(key);
+    }
   }
-  
+
   return {
     isValid: missing.length === 0,
     missing,
@@ -284,17 +444,61 @@ export function checkRequiredEnvironmentVariables(): {
   };
 }
 
-// Development environment helper
 export function isDevelopmentEnvironment(): boolean {
   return env.NODE_ENV === 'development';
 }
 
-// Production environment helper
 export function isProductionEnvironment(): boolean {
   return env.NODE_ENV === 'production';
 }
 
-// Test environment helper
 export function isTestEnvironment(): boolean {
   return env.NODE_ENV === 'test';
+}
+
+export function isDemoModeEnabled(): boolean {
+  return env.DEMO_MODE && !isProductionEnvironment();
+}
+
+// Security validation function
+export function validateSecurityConfiguration(): {
+  isSecure: boolean;
+  issues: string[];
+  recommendations: string[];
+} {
+  const issues: string[] = [];
+  const recommendations: string[] = [];
+
+  if (isProductionEnvironment()) {
+    // Check for HTTPS
+    if (env.APP_URL && !env.APP_URL.startsWith('https://')) {
+      issues.push('APP_URL should use HTTPS in production');
+    }
+
+    // Check for secure database connection
+    if (!env.DATABASE_URL.includes('ssl')) {
+      issues.push('Database should use SSL in production');
+    }
+
+    // Check monitoring
+    if (!env.SENTRY_DSN) {
+      issues.push('Error monitoring (Sentry) should be configured in production');
+    }
+
+    // Check email configuration
+    if (!env.SMTP_HOST) {
+      recommendations.push('Configure SMTP for email notifications');
+    }
+
+    // Check Redis for sessions
+    if (!env.REDIS_URL) {
+      recommendations.push('Configure Redis for better session and rate limit storage');
+    }
+  }
+
+  return {
+    isSecure: issues.length === 0,
+    issues,
+    recommendations,
+  };
 } 

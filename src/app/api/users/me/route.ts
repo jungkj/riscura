@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { withAuth, getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/middleware';
+import { withAuth, type AuthenticatedRequest, getAuthenticatedUser } from '@/lib/auth/middleware';
 import { db } from '@/lib/db';
 import { z } from 'zod';
+import { productionGuard, throwIfProduction } from '@/lib/security/production-guard';
+import { sanitizeObject } from '@/lib/security/input-sanitizer';
+import { createSecureAPIHandler, SECURITY_PROFILES } from '@/lib/security/middleware-integration';
 import { hashPassword, checkPasswordStrength } from '@/lib/auth/password';
 
 // Profile update schema
 const updateProfileSchema = z.object({
-  firstName: z.string().min(1, 'First name is required').max(50, 'First name too long').optional(),
-  lastName: z.string().min(1, 'Last name is required').max(50, 'Last name too long').optional(),
-  avatar: z.string().url('Invalid avatar URL').optional(),
+  firstName: z.string().min(1).max(50).optional(),
+  lastName: z.string().min(1).max(50).optional(),
+  avatar: z.string().url().optional().nullable(),
 });
 
 // Password change schema
@@ -17,15 +20,14 @@ const changePasswordSchema = z.object({
   newPassword: z.string().min(8, 'New password must be at least 8 characters'),
 });
 
-// Get current user profile - with demo mode fallback
-export async function GET(req: NextRequest) {
+// Get user profile with security hardening
+export const GET = createSecureAPIHandler(async (req: NextRequest) => {
   try {
-    console.log('=== /api/users/me DEBUG ===');
-    console.log('Authorization header:', req.headers.get('authorization'));
+    console.log('🔍 Starting user profile retrieval');
     console.log('Demo user cookie:', req.cookies.get('demo-user')?.value);
     console.log('Refresh token cookie:', req.cookies.get('refreshToken')?.value);
     
-    // Check for demo authentication first - prioritize demo mode
+    // DEVELOPMENT ONLY: Check for demo authentication - BLOCKED IN PRODUCTION
     const demoUserCookie = req.cookies.get('demo-user')?.value;
     const authHeader = req.headers.get('authorization');
     
@@ -33,22 +35,46 @@ export async function GET(req: NextRequest) {
     console.log('- Has demo cookie:', !!demoUserCookie);
     console.log('- Demo cookie content:', demoUserCookie);
     
-    // If demo cookie exists, always use demo mode regardless of auth header
-    if (demoUserCookie) {
+    // SECURITY: Block demo authentication in production
+    if (productionGuard.isProduction() && demoUserCookie) {
+      productionGuard.logSecurityEvent('blocked_demo_auth_production', {
+        ip: req.headers.get('x-forwarded-for') || 'unknown',
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        path: '/api/users/me'
+      });
+      
+      return NextResponse.json(
+        { error: 'Demo authentication is not available in production' },
+        { status: 403 }
+      );
+    }
+
+    // DEVELOPMENT ONLY: Demo mode authentication
+    if (!productionGuard.isProduction() && productionGuard.isDemoMode() && demoUserCookie) {
+      throwIfProduction('Demo authentication in user profile');
+      
       console.log('Taking demo authentication path');
       try {
         const demoUser = JSON.parse(demoUserCookie);
         console.log('Parsed demo user:', demoUser);
         
+        // Validate demo user structure
+        if (!demoUser.id || !demoUser.email || !demoUser.role) {
+          throw new Error('Invalid demo user data structure');
+        }
+        
+        // Sanitize demo user data
+        const sanitizedDemoUser = sanitizeObject(demoUser, 'strict');
+        
         return NextResponse.json({
           user: {
-            id: demoUser.id,
-            email: demoUser.email,
+            id: sanitizedDemoUser.id,
+            email: sanitizedDemoUser.email,
             firstName: 'Demo',
             lastName: 'User',
             avatar: null,
-            role: demoUser.role,
-            permissions: demoUser.permissions || ['*'],
+            role: sanitizedDemoUser.role,
+            permissions: sanitizedDemoUser.permissions || ['*'],
             isActive: true,
             emailVerified: new Date(),
             lastLogin: new Date(),
@@ -67,6 +93,10 @@ export async function GET(req: NextRequest) {
         });
       } catch (parseError) {
         console.error('Failed to parse demo user cookie:', parseError);
+        productionGuard.logSecurityEvent('invalid_demo_user_cookie', {
+          error: parseError instanceof Error ? parseError.message : 'Unknown error'
+        });
+        
         return NextResponse.json(
           { error: 'Invalid demo session' },
           { status: 401 }
@@ -82,15 +112,34 @@ export async function GET(req: NextRequest) {
       console.log('Authenticated user:', user);
       
       if (!user) {
+        productionGuard.logSecurityEvent('user_profile_not_found', {
+          userId: user?.id || 'unknown'
+        });
+        
         return NextResponse.json(
           { error: 'User not found' },
           { status: 404 }
         );
       }
 
-      // In demo mode with no database, return demo user data
-      if (process.env.MOCK_DATA === 'true' || !process.env.DATABASE_URL) {
+      // DEVELOPMENT ONLY: Mock data mode - BLOCKED IN PRODUCTION
+      if (productionGuard.isProduction() && (process.env.MOCK_DATA === 'true' || !process.env.DATABASE_URL)) {
+        productionGuard.logSecurityEvent('blocked_mock_data_production', {
+          userId: user.id,
+          mockDataEnabled: process.env.MOCK_DATA === 'true',
+          noDatabaseUrl: !process.env.DATABASE_URL
+        });
+        
+        return NextResponse.json(
+          { error: 'Invalid configuration for production environment' },
+          { status: 500 }
+        );
+      }
+
+      // DEVELOPMENT ONLY: Mock data for development
+      if (!productionGuard.isProduction() && (process.env.MOCK_DATA === 'true' || !process.env.DATABASE_URL)) {
         console.log('Using mock data for authenticated user');
+        
         return NextResponse.json({
           user: {
             id: user.id,
@@ -118,73 +167,129 @@ export async function GET(req: NextRequest) {
         });
       }
 
-      // Get full user profile with organization details
-      const userProfile = await db.client.user.findUnique({
-        where: { id: user.id },
-        select: {
-          id: true,
-          email: true,
-          firstName: true,
-          lastName: true,
-          avatar: true,
-          role: true,
-          permissions: true,
-          isActive: true,
-          emailVerified: true,
-          lastLogin: true,
-          createdAt: true,
-          updatedAt: true,
-          organizationId: true,
-          organization: {
-            select: {
-              id: true,
-              name: true,
-              domain: true,
-              plan: true,
-              settings: true,
-              isActive: true,
+      // Production database query with enhanced security
+      try {
+        const userProfile = await db.client.user.findUnique({
+          where: { id: user.id },
+          select: {
+            id: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+            avatar: true,
+            role: true,
+            permissions: true,
+            isActive: true,
+            emailVerified: true,
+            lastLogin: true,
+            createdAt: true,
+            updatedAt: true,
+            organizationId: true,
+            organization: {
+              select: {
+                id: true,
+                name: true,
+                domain: true,
+                plan: true,
+                settings: true,
+                isActive: true,
+              },
             },
           },
-        },
-      });
+        });
 
-      if (!userProfile) {
+        if (!userProfile) {
+          productionGuard.logSecurityEvent('user_profile_not_found_db', {
+            userId: user.id
+          });
+          
+          return NextResponse.json(
+            { error: 'User profile not found' },
+            { status: 404 }
+          );
+        }
+
+        // Sanitize user profile data before returning
+        const sanitizedProfile = sanitizeObject(userProfile, 'basic');
+
+        productionGuard.logSecurityEvent('user_profile_accessed', {
+          userId: user.id,
+          organizationId: userProfile.organizationId
+        });
+
+        return NextResponse.json({
+          user: sanitizedProfile,
+        });
+
+      } catch (dbError) {
+        productionGuard.logSecurityEvent('user_profile_db_error', {
+          userId: user.id,
+          error: dbError instanceof Error ? dbError.message : 'Unknown database error'
+        });
+
         return NextResponse.json(
-          { error: 'User profile not found' },
-          { status: 404 }
+          { error: 'Failed to retrieve user profile' },
+          { status: 500 }
         );
       }
-
-      return NextResponse.json({
-        user: userProfile,
-      });
     })(req);
 
   } catch (error) {
     console.error('Get profile error:', error);
+    productionGuard.logSecurityEvent('user_profile_error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    });
+    
     return NextResponse.json(
       { error: 'Failed to retrieve user profile' },
       { status: 500 }
     );
   }
-}
+}, SECURITY_PROFILES.authenticated);
 
-// Update user profile
-export const PUT = withAuth(async (req: AuthenticatedRequest) => {
+// Update user profile with enhanced security
+export const PUT = createSecureAPIHandler(withAuth(async (req: AuthenticatedRequest) => {
   try {
     const user = getAuthenticatedUser(req);
     
     if (!user) {
+      productionGuard.logSecurityEvent('unauthorized_profile_update', {
+        ip: req.headers.get('x-forwarded-for') || 'unknown'
+      });
+      
       return NextResponse.json(
         { error: 'User not found' },
         { status: 404 }
       );
     }
 
+    // SECURITY: Block profile updates in demo mode for production
+    if (productionGuard.isProduction() && user.id.startsWith('demo-')) {
+      productionGuard.logSecurityEvent('blocked_demo_profile_update', {
+        userId: user.id,
+        ip: req.headers.get('x-forwarded-for') || 'unknown'
+      });
+      
+      return NextResponse.json(
+        { error: 'Demo profiles cannot be updated in production' },
+        { status: 403 }
+      );
+    }
+
     const body = await req.json();
-    const validationResult = updateProfileSchema.safeParse(body);
+    
+    // Sanitize input before validation
+    const sanitizedBody = sanitizeObject(body, 'strict');
+    
+    const validationResult = updateProfileSchema.safeParse(sanitizedBody);
 
     if (!validationResult.success) {
+      productionGuard.logSecurityEvent('invalid_profile_update_data', {
+        userId: user.id,
+        errors: validationResult.error.errors
+      });
+      
       return NextResponse.json(
         { 
           error: 'Invalid request data',
@@ -196,57 +301,93 @@ export const PUT = withAuth(async (req: AuthenticatedRequest) => {
 
     const updateData = validationResult.data;
 
-    // Update user profile
-    const updatedUser = await db.client.user.update({
-      where: { id: user.id },
-      data: {
-        ...updateData,
-        updatedAt: new Date(),
-      },
-      select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        avatar: true,
-        role: true,
-        permissions: true,
-        organizationId: true,
-        updatedAt: true,
-        organization: {
-          select: {
-            id: true,
-            name: true,
+    // DEVELOPMENT ONLY: Mock data mode
+    if (!productionGuard.isProduction() && (process.env.MOCK_DATA === 'true' || !process.env.DATABASE_URL)) {
+      console.log('Mock profile update for user:', user.id);
+      
+      return NextResponse.json({
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: updateData.firstName || user.firstName,
+          lastName: updateData.lastName || user.lastName,
+          avatar: updateData.avatar || null,
+          role: user.role,
+          permissions: user.permissions,
+          organizationId: user.organizationId,
+          updatedAt: new Date(),
+          organization: {
+            id: user.organizationId || 'demo-org-id',
+            name: 'Demo Organization',
           },
         },
-      },
-    });
+      });
+    }
 
-    // Log profile update
-    // NOTE: Activity logging for user events is temporarily disabled  
-    // since USER is not a valid EntityType in the schema
-    console.log('User Activity:', {
-      type: 'PROFILE_UPDATED',
-      userId: user.id,
-      description: 'User updated their profile',
-      metadata: { updatedFields: Object.keys(updateData) },
-      organizationId: user.organizationId,
-      timestamp: new Date(),
-    });
+    // Production database update with enhanced security
+    try {
+      const updatedUser = await db.client.user.update({
+        where: { id: user.id },
+        data: {
+          ...updateData,
+          updatedAt: new Date(),
+        },
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          avatar: true,
+          role: true,
+          permissions: true,
+          organizationId: true,
+          updatedAt: true,
+          organization: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      });
 
-    return NextResponse.json({
-      message: 'Profile updated successfully',
-      user: updatedUser,
-    });
+      // Sanitize response data
+      const sanitizedUser = sanitizeObject(updatedUser, 'basic');
+
+      productionGuard.logSecurityEvent('user_profile_updated', {
+        userId: user.id,
+        updatedFields: Object.keys(updateData),
+        organizationId: user.organizationId
+      });
+
+      return NextResponse.json({
+        user: sanitizedUser,
+      });
+
+    } catch (dbError) {
+      productionGuard.logSecurityEvent('user_profile_update_db_error', {
+        userId: user.id,
+        error: dbError instanceof Error ? dbError.message : 'Unknown database error'
+      });
+
+      return NextResponse.json(
+        { error: 'Failed to update user profile' },
+        { status: 500 }
+      );
+    }
 
   } catch (error) {
     console.error('Update profile error:', error);
+    productionGuard.logSecurityEvent('user_profile_update_error', {
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+    
     return NextResponse.json(
       { error: 'Failed to update user profile' },
       { status: 500 }
     );
   }
-});
+}), SECURITY_PROFILES.authenticated);
 
 // Change password endpoint
 export const PATCH = withAuth(async (req: AuthenticatedRequest) => {

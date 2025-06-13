@@ -1201,8 +1201,43 @@ export class RiskAnalysisAIService {
     industryFactors: IndustryFactorsResult,
     context: ContextData
   ): Promise<number> {
-    // Complex likelihood calculation
-    return risk.likelihood;
+    // Base likelihood from existing risk data
+    let likelihood = risk.likelihood || 1;
+    
+    // Text analysis factors (0.3 weight)
+    const textScore = Math.min(5, Math.max(1, 
+      1 + (textAnalysis.complexity * 2) + (textAnalysis.sentiment < 0 ? 2 : 0)
+    ));
+    
+    // Industry benchmark factors (0.4 weight)
+    const industryScore = Math.min(5, Math.max(1, industryFactors.benchmark));
+    
+    // Historical data factors (0.2 weight)
+    let historicalScore = 3; // default medium
+    if (context.historicalData && context.historicalData.length > 0) {
+      const similarRisks = context.historicalData.filter(r => 
+        r.category === risk.category && r.riskScore > 0
+      );
+      if (similarRisks.length > 0) {
+        const avgLikelihood = similarRisks.reduce((sum, r) => sum + r.likelihood, 0) / similarRisks.length;
+        historicalScore = Math.min(5, Math.max(1, avgLikelihood));
+      }
+    }
+    
+    // Organization size factor (0.1 weight)
+    const sizeMultiplier = context.organizationSize === 'large' ? 1.2 : 
+                          context.organizationSize === 'small' ? 0.8 : 1.0;
+    
+    // Calculate weighted likelihood
+    const weightedLikelihood = (
+      (likelihood * 0.0) + // Don't use existing score in calculation
+      (textScore * 0.3) +
+      (industryScore * 0.4) +
+      (historicalScore * 0.2) +
+      (3 * 0.1) // base organizational factor
+    ) * sizeMultiplier;
+    
+    return Math.min(5, Math.max(1, Math.round(weightedLikelihood)));
   }
 
   private async calculateImpact(
@@ -1211,8 +1246,47 @@ export class RiskAnalysisAIService {
     industryFactors: IndustryFactorsResult,
     context: ContextData
   ): Promise<number> {
-    // Complex impact calculation
-    return risk.impact;
+    // Base impact from existing risk data
+    let impact = risk.impact || 1;
+    
+    // Category-based impact multipliers
+    const categoryMultipliers = {
+      OPERATIONAL: 1.0,
+      FINANCIAL: 1.3,
+      STRATEGIC: 1.2,
+      COMPLIANCE: 1.4,
+      TECHNOLOGY: 1.1
+    };
+    
+    const categoryMultiplier = categoryMultipliers[risk.category] || 1.0;
+    
+    // Text analysis impact indicators
+    const impactKeywords = ['critical', 'severe', 'major', 'significant', 'catastrophic', 'material'];
+    const keywordMatches = textAnalysis.keywords.filter(k => 
+      impactKeywords.some(ik => k.toLowerCase().includes(ik.toLowerCase()))
+    ).length;
+    
+    const textImpactScore = Math.min(5, Math.max(1, 
+      2 + keywordMatches + (textAnalysis.complexity * 1.5)
+    ));
+    
+    // Industry benchmark impact
+    const industryImpactScore = Math.min(5, Math.max(1, 
+      industryFactors.benchmark * categoryMultiplier
+    ));
+    
+    // Organization size impact
+    const sizeImpactMultiplier = context.organizationSize === 'large' ? 1.3 : 
+                                context.organizationSize === 'small' ? 0.7 : 1.0;
+    
+    // Calculate weighted impact
+    const weightedImpact = (
+      (textImpactScore * 0.4) +
+      (industryImpactScore * 0.4) +
+      (impact * 0.2) // some weight to existing assessment
+    ) * sizeImpactMultiplier;
+    
+    return Math.min(5, Math.max(1, Math.round(weightedImpact)));
   }
 
   private applyFrameworkScoring(
@@ -1220,8 +1294,30 @@ export class RiskAnalysisAIService {
     impact: number,
     framework: RiskFramework
   ): number {
-    // Framework-specific scoring logic
-    return likelihood * impact;
+    switch (framework.scoringMethod) {
+      case 'matrix':
+        // Traditional risk matrix (likelihood × impact)
+        return likelihood * impact;
+        
+      case 'quantitative':
+        // Weighted quantitative approach
+        const likelihoodWeight = 0.6;
+        const impactWeight = 0.4;
+        return Math.round((likelihood * likelihoodWeight + impact * impactWeight) * 5);
+        
+      case 'qualitative':
+        // Qualitative assessment with non-linear scaling
+        if (likelihood >= 4 && impact >= 4) return 25; // Critical
+        if (likelihood >= 3 && impact >= 4) return 20; // High
+        if (likelihood >= 4 && impact >= 3) return 18; // High
+        if (likelihood >= 3 && impact >= 3) return 15; // Medium-High
+        if (likelihood >= 2 && impact >= 3) return 12; // Medium
+        if (likelihood >= 3 && impact >= 2) return 10; // Medium
+        return likelihood * impact; // Default matrix
+        
+      default:
+        return likelihood * impact;
+    }
   }
 
   private calculateScoringConfidence(
@@ -1232,6 +1328,134 @@ export class RiskAnalysisAIService {
   ): number {
     // Confidence calculation based on data quality
     return 0.85;
+  }
+
+  /**
+   * Calculate inherent vs residual risk scores
+   */
+  async calculateInherentVsResidualRisk(
+    risk: Risk,
+    controls?: Control[]
+  ): Promise<{
+    inherentRisk: number;
+    residualRisk: number;
+    controlEffectiveness: number;
+    riskReduction: number;
+  }> {
+    // Inherent risk is the risk without any controls
+    const inherentRisk = risk.likelihood * risk.impact;
+    
+    if (!controls || controls.length === 0) {
+      return {
+        inherentRisk,
+        residualRisk: inherentRisk,
+        controlEffectiveness: 0,
+        riskReduction: 0
+      };
+    }
+    
+    // Calculate overall control effectiveness
+    let totalEffectiveness = 0;
+    let weightedEffectiveness = 0;
+    
+    for (const control of controls) {
+      const controlWeight = this.getControlWeight(control.type);
+      let effectiveness = 0;
+      
+      if (typeof control.effectiveness === 'number') {
+        effectiveness = control.effectiveness;
+      } else if (typeof control.effectiveness === 'string') {
+        // Convert string effectiveness to number (0-100 scale)
+        switch (control.effectiveness) {
+          case 'high': effectiveness = 80; break;
+          case 'medium': effectiveness = 50; break;
+          case 'low': effectiveness = 20; break;
+          default: effectiveness = 0;
+        }
+      }
+      
+      totalEffectiveness += effectiveness * controlWeight;
+      weightedEffectiveness += controlWeight;
+    }
+    
+    const overallEffectiveness = weightedEffectiveness > 0 ? 
+      totalEffectiveness / weightedEffectiveness : 0;
+    
+    // Calculate residual risk
+    const riskReductionFactor = overallEffectiveness / 100; // Convert percentage to factor
+    const residualRisk = Math.max(1, inherentRisk * (1 - riskReductionFactor));
+    
+    return {
+      inherentRisk,
+      residualRisk: Math.round(residualRisk),
+      controlEffectiveness: Math.round(overallEffectiveness),
+      riskReduction: Math.round((inherentRisk - residualRisk) / inherentRisk * 100)
+    };
+  }
+
+  /**
+   * Get control type weighting for effectiveness calculation
+   */
+  private getControlWeight(controlType: string): number {
+    const weights = {
+      'PREVENTIVE': 1.0,
+      'DETECTIVE': 0.7,
+      'CORRECTIVE': 0.5,
+      'DIRECTIVE': 0.6,
+      'COMPENSATING': 0.4
+    };
+    return weights[controlType] || 0.5;
+  }
+
+  /**
+   * Categorize risk level based on score
+   */
+  categorizeRiskLevel(riskScore: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
+    if (riskScore >= 21) return 'CRITICAL';
+    if (riskScore >= 16) return 'HIGH';
+    if (riskScore >= 9) return 'MEDIUM';
+    return 'LOW';
+  }
+
+  /**
+   * Check risk against appetite and tolerance
+   */
+  async checkRiskAppetiteAndTolerance(
+    riskScore: number,
+    riskCategory: string,
+    organizationSettings: {
+      riskAppetite: Record<string, number>;
+      riskTolerance: Record<string, number>;
+    }
+  ): Promise<{
+    withinAppetite: boolean;
+    withinTolerance: boolean;
+    exceedsBy: number;
+    recommendedAction: 'accept' | 'monitor' | 'mitigate' | 'escalate';
+  }> {
+    const appetite = organizationSettings.riskAppetite[riskCategory] || 10;
+    const tolerance = organizationSettings.riskTolerance[riskCategory] || 15;
+    
+    const withinAppetite = riskScore <= appetite;
+    const withinTolerance = riskScore <= tolerance;
+    
+    let recommendedAction: 'accept' | 'monitor' | 'mitigate' | 'escalate';
+    if (withinAppetite) {
+      recommendedAction = 'accept';
+    } else if (withinTolerance) {
+      recommendedAction = 'monitor';
+    } else if (riskScore <= tolerance * 1.5) {
+      recommendedAction = 'mitigate';
+    } else {
+      recommendedAction = 'escalate';
+    }
+    
+    return {
+      withinAppetite,
+      withinTolerance,
+      exceedsBy: Math.max(0, riskScore - tolerance),
+      recommendedAction
+    };
   }
 }
 

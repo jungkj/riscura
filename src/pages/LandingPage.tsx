@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MacbookScroll } from '@/components/ui/aceternity/macbook-scroll';
+
 import { TypewriterEffectSmooth } from '@/components/ui/aceternity/typewriter-effect';
 import { 
   Navbar, 
@@ -89,7 +89,7 @@ function SingleWordTypewriter() {
         Risk management made{' '}
       </span>
       <span className="relative">
-        <span className="text-gray-900">
+        <span className="text-[#191919] bg-gradient-to-r from-[#10b981] to-[#059669] bg-clip-text text-transparent">
           {displayText}
         </span>
         <motion.span
@@ -143,18 +143,18 @@ export default function LandingPage() {
         <NavBody>
           <NavbarLogo />
           <NavItems items={navItems} />
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 flex-shrink-0">
             <NavbarButton 
               variant="secondary"
               onClick={() => router.push('/auth/login')}
-              className="px-4 py-2 text-sm"
+              className="px-3 py-2 text-sm whitespace-nowrap"
             >
               Login
             </NavbarButton>
             <NavbarButton 
               variant="gradient"
               onClick={handleGetStarted}
-              className="px-4 py-2 text-sm"
+              className="px-3 py-2 text-sm whitespace-nowrap"
             >
               Get Started
             </NavbarButton>
@@ -211,31 +211,8 @@ export default function LandingPage() {
       </Navbar>
 
       {/* Enhanced Hero Section */}
-      <section className="pt-20 pb-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-card to-background">
+      <section className="pt-48 pb-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-card to-background">
         <div className="max-w-7xl mx-auto">
-          {/* Trust Indicators */}
-          <motion.div 
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-sm text-[#A8A8A8] mb-8">
-              <span className="font-medium font-inter">Trusted by 500+ enterprises</span>
-              <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6">
-                <Badge variant="outline" className="px-3 py-2 sm:px-4 border-[#D8C3A5]/60 text-[#191919] bg-[#FAFAFA] font-inter shadow-sm text-xs sm:text-sm">
-                  SOC 2 Compliant
-                </Badge>
-                <Badge variant="outline" className="px-3 py-2 sm:px-4 border-[#D8C3A5]/60 text-[#191919] bg-[#FAFAFA] font-inter shadow-sm text-xs sm:text-sm">
-                  ISO 27001
-                </Badge>
-                <Badge variant="outline" className="px-3 py-2 sm:px-4 border-[#D8C3A5]/60 text-[#191919] bg-[#FAFAFA] font-inter shadow-sm text-xs sm:text-sm">
-                  Enterprise Ready
-                </Badge>
-              </div>
-            </div>
-          </motion.div>
-
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left Column - Content */}
             <motion.div
@@ -320,8 +297,6 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
-
 
       {/* Time Saving Chart Section - Keep as requested */}
       <TimeSavingChart />
@@ -439,53 +414,14 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Demo Section with MacbookScroll */}
-      <section className="py-24 bg-[#FAFAFA]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <Badge className="bg-[#191919] text-[#FAFAFA] px-4 py-2 mb-6 text-sm font-inter">
-              Platform Demo
-            </Badge>
-            <h2 className="text-4xl sm:text-5xl font-bold text-[#191919] mb-8 font-inter">
-              See Riscura in action
-            </h2>
-            <p className="text-xl text-[#A8A8A8] max-w-3xl mx-auto font-inter">
-              Experience the power of AI-driven risk management. Schedule a personalized demo 
-              and discover how Riscura can transform your organization's approach to risk.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="relative"
-          >
-            <MacbookScroll
-              title="Risk Management Dashboard"
-              badge="AI-Powered Analytics"
-              src="/api/placeholder/800/600"
-              showGradient={false}
-            />
-          </motion.div>
-        </div>
-      </section>
-
       {/* Enhanced CTA Section */}
-      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#191919] via-[#2a2a2a] to-[#191919] relative overflow-hidden">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#F5F1E9] via-[#FAFAFA] to-[#F5F1E9] relative overflow-hidden">
         {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 25% 25%, #D8C3A5 2px, transparent 2px),
+            backgroundImage: `radial-gradient(circle at 25% 25%, #199BEC 2px, transparent 2px),
                              radial-gradient(circle at 75% 75%, #D8C3A5 2px, transparent 2px)`,
-            backgroundSize: '50px 50px'
+            backgroundSize: '60px 60px'
           }}></div>
         </div>
         
@@ -496,49 +432,58 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-[#FAFAFA] mb-8 font-inter leading-tight">
+            <Badge className="bg-[#199BEC] text-white px-6 py-2 mb-8 text-sm font-inter rounded-full">
+              Get Started Today
+            </Badge>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#191919] mb-6 font-inter leading-tight">
               Ready to secure<br />your enterprise?
             </h2>
-            <p className="text-xl sm:text-2xl text-[#D8C3A5] mb-16 max-w-3xl mx-auto font-inter leading-relaxed">
+            <p className="text-xl text-[#A8A8A8] mb-12 max-w-3xl mx-auto font-inter leading-relaxed">
               Join thousands of organizations that trust Riscura to protect their business 
               and ensure compliance in an ever-changing risk landscape.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
               <ModernButton 
                 onClick={handleGetStarted}
                 variant="gradient"
                 size="lg" 
-                className="px-12 py-6 text-xl font-bold font-inter min-w-[250px] rounded-xl shadow-2xl"
+                className="px-12 py-4 text-lg font-semibold font-inter min-w-[220px] rounded-xl"
               >
                 Start free trial
-                <ChevronRight className="ml-3 h-6 w-6" />
+                <ChevronRight className="ml-2 h-5 w-5" />
               </ModernButton>
-              <Button 
+              <ModernButton 
                 onClick={handleRequestDemo}
                 variant="outline" 
                 size="lg"
-                className="border-2 border-[#D8C3A5] bg-transparent text-[#D8C3A5] hover:bg-[#D8C3A5] hover:text-[#191919] px-12 py-6 text-xl font-bold transition-all duration-300 font-inter min-w-[250px] rounded-xl"
+                className="px-12 py-4 text-lg font-semibold font-inter min-w-[220px] rounded-xl"
               >
                 Schedule demo
-              </Button>
+              </ModernButton>
             </div>
 
-            {/* Additional Trust Elements */}
+            {/* Trust Elements */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-2xl mx-auto">
               <div className="text-center">
-                <Lock className="w-8 h-8 text-[#D8C3A5] mx-auto mb-3" />
-                <p className="text-[#FAFAFA] font-semibold font-inter">Enterprise Security</p>
+                <div className="w-12 h-12 bg-[#199BEC]/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Lock className="w-6 h-6 text-[#199BEC]" />
+                </div>
+                <p className="text-[#191919] font-semibold font-inter">Enterprise Security</p>
                 <p className="text-[#A8A8A8] text-sm font-inter">SOC 2 & ISO 27001</p>
               </div>
               <div className="text-center">
-                <Users className="w-8 h-8 text-[#D8C3A5] mx-auto mb-3" />
-                <p className="text-[#FAFAFA] font-semibold font-inter">24/7 Support</p>
+                <div className="w-12 h-12 bg-[#199BEC]/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Users className="w-6 h-6 text-[#199BEC]" />
+                </div>
+                <p className="text-[#191919] font-semibold font-inter">24/7 Support</p>
                 <p className="text-[#A8A8A8] text-sm font-inter">Dedicated success team</p>
               </div>
               <div className="text-center">
-                <TrendingUp className="w-8 h-8 text-[#D8C3A5] mx-auto mb-3" />
-                <p className="text-[#FAFAFA] font-semibold font-inter">Proven ROI</p>
+                <div className="w-12 h-12 bg-[#199BEC]/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <TrendingUp className="w-6 h-6 text-[#199BEC]" />
+                </div>
+                <p className="text-[#191919] font-semibold font-inter">Proven ROI</p>
                 <p className="text-[#A8A8A8] text-sm font-inter">90% time savings</p>
               </div>
             </div>

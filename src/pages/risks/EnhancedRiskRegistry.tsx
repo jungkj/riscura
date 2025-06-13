@@ -564,7 +564,7 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
               subtitle="Real-time overview of your risk portfolio"
               spacing="tight"
             >
-                            <EnhancedGrid cols={4} gap="lg" responsive={true}>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                 {isLoading ? (
                   <>
                     {[1, 2, 3, 4].map((i) => (
@@ -592,68 +592,86 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
                     >
                       <EnhancedMetricCard
                         title="Total Risks"
-                value={stats.total}
-                icon={Shield}
-                variant="default"
-                trend={{
-                  value: 12,
-                  isPositive: true,
-                  period: "from last month"
-                }}
-                sparkline={{
-                  values: [8, 12, 15, 18, 22, 25, stats.total],
-                  trend: 'up'
-                }}
-                onClick={() => console.log('Navigate to all risks')}
-              />
+                        value={stats.total}
+                        icon={Shield}
+                        variant="default"
+                        trend={{
+                          value: 12,
+                          isPositive: true,
+                          period: "from last month"
+                        }}
+                        sparkline={{
+                          values: [8, 12, 15, 18, 22, 25, stats.total],
+                          trend: 'up'
+                        }}
+                        onClick={() => console.log('Navigate to all risks')}
+                      />
+                    </motion.div>
 
-              <EnhancedMetricCard
-                title="Critical Risks"
-                value={stats.byPriority.critical || 0}
-                icon={AlertTriangle}
-                variant="danger"
-                subtitle="Require immediate attention"
-                badge={{
-                  text: "High Priority",
-                  variant: "danger"
-                }}
-                onClick={() => console.log('Navigate to critical risks')}
-              />
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <EnhancedMetricCard
+                        title="Critical Risks"
+                        value={stats.byPriority.critical || 0}
+                        icon={AlertTriangle}
+                        variant="danger"
+                        subtitle="Require immediate attention"
+                        badge={{
+                          text: "High Priority",
+                          variant: "danger"
+                        }}
+                        onClick={() => console.log('Navigate to critical risks')}
+                      />
+                    </motion.div>
 
-              <EnhancedMetricCard
-                title="Average Score"
-                value={stats.avgScore.toFixed(1)}
-                icon={TrendingUp}
-                variant="info"
-                progress={{
-                  value: stats.avgScore,
-                  max: 25,
-                  showProgress: true
-                }}
-                trend={{
-                  value: 5,
-                  isPositive: false,
-                  period: "this quarter"
-                }}
-                onClick={() => console.log('Navigate to score analytics')}
-              />
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      <EnhancedMetricCard
+                        title="Average Score"
+                        value={stats.avgScore.toFixed(1)}
+                        icon={TrendingUp}
+                        variant="info"
+                        progress={{
+                          value: stats.avgScore,
+                          max: 25,
+                          showProgress: true
+                        }}
+                        trend={{
+                          value: 5,
+                          isPositive: false,
+                          period: "this quarter"
+                        }}
+                        onClick={() => console.log('Navigate to score analytics')}
+                      />
+                    </motion.div>
 
-              <EnhancedMetricCard
-                title="Mitigated Risks"
-                value={stats.byStatus.mitigated || 0}
-                icon={CheckCircle}
-                variant="success"
-                subtitle={`${stats.total > 0 ? Math.round(((stats.byStatus.mitigated || 0) / stats.total) * 100) : 0}% of total`}
-                sparkline={{
-                  values: [2, 4, 6, 8, 10, 12, stats.byStatus.mitigated || 0],
-                  trend: 'up'
-                }}
-                onClick={() => console.log('Navigate to mitigated risks')}
-              />
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 }}
+                    >
+                      <EnhancedMetricCard
+                        title="Mitigated Risks"
+                        value={stats.byStatus.mitigated || 0}
+                        icon={CheckCircle}
+                        variant="success"
+                        subtitle={`${stats.total > 0 ? Math.round(((stats.byStatus.mitigated || 0) / stats.total) * 100) : 0}% of total`}
+                        sparkline={{
+                          values: [2, 4, 6, 8, 10, 12, stats.byStatus.mitigated || 0],
+                          trend: 'up'
+                        }}
+                        onClick={() => console.log('Navigate to mitigated risks')}
+                      />
                     </motion.div>
                   </>
                 )}
-              </EnhancedGrid>
+              </div>
             </EnhancedSection>
             
             {/* Risk Distribution Charts */}

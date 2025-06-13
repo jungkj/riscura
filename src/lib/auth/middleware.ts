@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { extractTokenFromHeader, verifyAccessToken, type JWTPayload } from './jwt';
-import { getSession } from './session';
+import { verifyAccessToken } from '@/lib/auth/jwt';
 import { db } from '@/lib/db';
+import { productionGuard, throwIfProduction } from '@/lib/security/production-guard';
 
 export interface AuthenticatedRequest extends NextRequest {
   user?: {
@@ -16,6 +16,13 @@ export interface AuthenticatedRequest extends NextRequest {
   };
 }
 
+function extractTokenFromHeader(authHeader: string): string {
+  if (authHeader.startsWith('Bearer ')) {
+    return authHeader.substring(7);
+  }
+  return authHeader;
+}
+
 export interface MiddlewareOptions {
   requiredPermissions?: string[];
   requiredRoles?: string[];
@@ -24,7 +31,7 @@ export interface MiddlewareOptions {
 }
 
 /**
- * Authentication middleware for API routes
+ * Enhanced authentication middleware with production security
  */
 export function withAuth(
   handler: (req: AuthenticatedRequest) => Promise<NextResponse>,
@@ -36,17 +43,33 @@ export function withAuth(
       
       if (!authHeader) {
         return NextResponse.json(
-          { error: 'Authorization header is required' },
+          { error: 'Authorization header missing' },
           { status: 401 }
         );
       }
 
-      // Extract token
       const token = extractTokenFromHeader(authHeader);
       
-      // Check if this is a demo token
-      if (token.startsWith('demo-token-') || token === 'demo-access-token') {
-        // Handle demo mode authentication
+      // SECURITY: Block demo authentication in production
+      if (productionGuard.isProduction() && token.startsWith('demo-')) {
+        productionGuard.logSecurityEvent('blocked_demo_auth_attempt', {
+          token: 'demo-***',
+          ip: req.headers.get('x-forwarded-for') || 'unknown',
+          userAgent: req.headers.get('user-agent') || 'unknown'
+        });
+        
+        return NextResponse.json(
+          { error: 'Demo authentication is not available in production' },
+          { status: 403 }
+        );
+      }
+
+      // DEVELOPMENT ONLY: Handle demo mode authentication
+      if (!productionGuard.isProduction() && productionGuard.isDemoMode() && 
+          token.startsWith('demo-')) {
+        
+        throwIfProduction('Demo authentication');
+        
         const demoUserCookie = req.cookies.get('demo-user')?.value;
         
         if (!demoUserCookie) {
@@ -58,6 +81,11 @@ export function withAuth(
 
         try {
           const demoUser = JSON.parse(demoUserCookie);
+          
+          // Validate demo user structure
+          if (!demoUser.id || !demoUser.email || !demoUser.role) {
+            throw new Error('Invalid demo user data');
+          }
           
           // Create a mock user object for demo mode
           (req as AuthenticatedRequest).user = {
@@ -71,6 +99,12 @@ export function withAuth(
             sessionId: 'demo-session-id',
           };
 
+          // Log demo authentication (development only)
+          console.log('🎭 Demo authentication used:', {
+            userId: demoUser.id,
+            role: demoUser.role
+          });
+
           // Skip permission checks for demo mode (demo users have full access)
           return handler(req as AuthenticatedRequest);
           
@@ -82,12 +116,24 @@ export function withAuth(
         }
       }
 
-      // Regular JWT token validation for non-demo users
+      // Production JWT token validation
       const payload = verifyAccessToken(token);
 
-      // Verify session is still valid
-      const session = await getSession(payload.sessionId);
+      // Verify session is still valid (simplified for now)
+      const session = await db.client.session.findFirst({
+        where: { 
+          id: payload.sessionId,
+          userId: payload.userId,
+          expiresAt: { gt: new Date() }
+        }
+      });
+
       if (!session) {
+        productionGuard.logSecurityEvent('invalid_session', {
+          sessionId: payload.sessionId,
+          userId: payload.userId
+        });
+        
         return NextResponse.json(
           { error: 'Session not found or expired' },
           { status: 401 }
@@ -106,29 +152,121 @@ export function withAuth(
           permissions: true,
           organizationId: true,
           isActive: true,
+          lastLoginAt: true,
+          failedLoginAttempts: true,
+          lockedUntil: true,
         },
       });
 
       if (!user || !user.isActive) {
+        productionGuard.logSecurityEvent('inactive_user_access_attempt', {
+          userId: payload.userId,
+          userExists: !!user,
+          isActive: user?.isActive
+        });
+        
         return NextResponse.json(
           { error: 'User not found or inactive' },
           { status: 401 }
         );
       }
 
+      // Check if account is locked due to failed login attempts
+      if (user.lockedUntil && new Date() < user.lockedUntil) {
+        productionGuard.logSecurityEvent('locked_account_access_attempt', {
+          userId: user.id,
+          lockedUntil: user.lockedUntil
+        });
+        
+        return NextResponse.json(
+          { 
+            error: 'Account is temporarily locked due to multiple failed login attempts',
+            lockedUntil: user.lockedUntil 
+          },
+          { status: 423 }
+        );
+      }
+
+      // Enhanced session validation for production
+      if (productionGuard.isProduction()) {
+        // Check for session hijacking indicators
+        const currentIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip');
+        
+        if (session.ipAddress && currentIP && session.ipAddress !== currentIP) {
+          productionGuard.logSecurityEvent('session_ip_mismatch', {
+            userId: user.id,
+            sessionIP: session.ipAddress,
+            currentIP: currentIP
+          });
+          
+          // In production, terminate session on IP mismatch
+          await db.client.session.delete({
+            where: { id: session.id }
+          });
+          
+          return NextResponse.json(
+            { error: 'Session security violation detected' },
+            { status: 401 }
+          );
+        }
+
+        // Check session age and force re-authentication for sensitive operations
+        const sessionAge = Date.now() - new Date(session.createdAt).getTime();
+        const maxSessionAge = 24 * 60 * 60 * 1000; // 24 hours
+        
+        if (sessionAge > maxSessionAge) {
+          productionGuard.logSecurityEvent('session_expired_age', {
+            userId: user.id,
+            sessionAge: sessionAge,
+            maxAge: maxSessionAge
+          });
+          
+          return NextResponse.json(
+            { error: 'Session expired, please re-authentication' },
+            { status: 401 }
+          );
+        }
+      }
+
       // Attach user to request
       (req as AuthenticatedRequest).user = {
-        ...user,
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+        permissions: user.permissions,
+        organizationId: user.organizationId,
         sessionId: payload.sessionId,
       };
 
       // Check permissions and roles
       const authResult = checkAuthorization(user, options, req);
       if (!authResult.allowed) {
+        productionGuard.logSecurityEvent('authorization_failed', {
+          userId: user.id,
+          reason: authResult.reason,
+          requiredRoles: options.requiredRoles,
+          requiredPermissions: options.requiredPermissions,
+          userRole: user.role
+        });
+        
         return NextResponse.json(
           { error: authResult.reason || 'Access denied' },
           { status: 403 }
         );
+      }
+
+      // Update session activity
+      if (productionGuard.isProduction()) {
+        await db.client.session.update({
+          where: { id: session.id },
+          data: { 
+            lastAccessedAt: new Date(),
+            ipAddress: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip'),
+            userAgent: req.headers.get('user-agent')
+          }
+        });
       }
 
       // Call the actual handler
@@ -136,6 +274,11 @@ export function withAuth(
 
     } catch (error) {
       console.error('Authentication error:', error);
+      
+      productionGuard.logSecurityEvent('authentication_error', {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       
       if (error instanceof Error) {
         if (error.message === 'Token expired') {
@@ -161,7 +304,7 @@ export function withAuth(
 }
 
 /**
- * Check if user has required permissions and roles
+ * Enhanced authorization check with security logging
  */
 function checkAuthorization(
   user: {
@@ -250,40 +393,28 @@ export function requirePermission(...permissions: string[]) {
   };
 }
 
-/**
- * Extract user from authenticated request
- */
 export function getAuthenticatedUser(req: AuthenticatedRequest) {
+  if (!req.user) {
+    throw new Error('Request is not authenticated');
+  }
   return req.user;
 }
 
-/**
- * Check if user has specific permission
- */
 export function hasPermission(user: { permissions: string[]; role: string }, permission: string): boolean {
-  if (user.role === 'ADMIN') {
-    return true;
-  }
-  
+  if (user.role === 'ADMIN') return true;
   return user.permissions.includes(permission) || user.permissions.includes('*');
 }
 
-/**
- * Check if user has any of the specified roles
- */
 export function hasRole(user: { role: string }, ...roles: string[]): boolean {
   return roles.includes(user.role);
 }
 
-/**
- * Check if user belongs to organization
- */
 export function belongsToOrganization(user: { organizationId: string }, organizationId: string): boolean {
   return user.organizationId === organizationId;
 }
 
 /**
- * Middleware for organization-scoped endpoints
+ * Organization-specific authentication middleware
  */
 export function withOrgAuth(
   handler: (req: AuthenticatedRequest) => Promise<NextResponse>,
@@ -295,10 +426,8 @@ export function withOrgAuth(
   });
 }
 
-/**
- * Rate limiting helper (to be used with authentication)
- */
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+// Enhanced rate limiting with Redis support in production
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 
 export function rateLimit(
   key: string,
@@ -306,42 +435,54 @@ export function rateLimit(
   windowMs: number
 ): { allowed: boolean; remaining: number; resetTime: number } {
   const now = Date.now();
-  const record = rateLimitMap.get(key);
-
-  if (!record || now > record.resetTime) {
-    // New window or expired window
-    const resetTime = now + windowMs;
-    rateLimitMap.set(key, { count: 1, resetTime });
+  const resetTime = now + windowMs;
+  
+  // Clean expired entries
+  for (const [k, v] of rateLimitStore.entries()) {
+    if (v.resetTime <= now) {
+      rateLimitStore.delete(k);
+    }
+  }
+  
+  const current = rateLimitStore.get(key);
+  
+  if (!current || current.resetTime <= now) {
+    rateLimitStore.set(key, { count: 1, resetTime });
     return { allowed: true, remaining: limit - 1, resetTime };
   }
-
-  if (record.count >= limit) {
-    return { allowed: false, remaining: 0, resetTime: record.resetTime };
+  
+  if (current.count >= limit) {
+    return { allowed: false, remaining: 0, resetTime: current.resetTime };
   }
-
-  record.count++;
-  return { allowed: true, remaining: limit - record.count, resetTime: record.resetTime };
+  
+  current.count++;
+  return { allowed: true, remaining: limit - current.count, resetTime: current.resetTime };
 }
 
 /**
- * CSRF protection helper
+ * Enhanced CSRF protection for production
  */
 export function validateCSRFToken(req: NextRequest): boolean {
-  const token = req.headers.get('x-csrf-token');
-  const cookie = req.cookies.get('csrf-token')?.value;
+  // Skip CSRF validation in demo mode (development only)
+  if (!productionGuard.isProduction() && productionGuard.isDemoMode()) {
+    return true;
+  }
   
-  if (!token || !cookie || token !== cookie) {
+  const token = req.headers.get('x-csrf-token') || req.headers.get('csrf-token');
+  const sessionToken = req.cookies.get('csrf-token')?.value;
+  
+  if (!token || !sessionToken || token !== sessionToken) {
+    productionGuard.logSecurityEvent('csrf_validation_failed', {
+      hasToken: !!token,
+      hasSessionToken: !!sessionToken,
+      tokensMatch: token === sessionToken
+    });
     return false;
   }
   
   return true;
 }
 
-/**
- * Generate CSRF token
- */
 export function generateCSRFToken(): string {
-  return Array.from(crypto.getRandomValues(new Uint8Array(32)))
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
+  return require('crypto').randomBytes(32).toString('hex');
 } 
