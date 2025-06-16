@@ -97,17 +97,19 @@ const RiskBubble: React.FC<{
   const baseSize = (risk.bubble?.size || 40) * scale;
   const opacity = risk.bubble?.opacity || 0.7;
   
-  // Position based on impact (x) and likelihood (y) - align with grid lines
-  const x = (risk.likelihood - 1) * 20; // Grid lines are at 0%, 20%, 40%, 60%, 80%
-  const y = (5 - risk.impact) * 20; // Grid lines are at 0%, 20%, 40%, 60%, 80%
+  // Position based on impact (x) and likelihood (y) - center bubbles in grid cells
+  // Each cell is 20% wide, so centers are at 10%, 30%, 50%, 70%, 90%
+  const x = (risk.likelihood - 1) * 20 + 10; // Center of each likelihood column
+  // For y-axis, align with the bottom-positioned grid: impact 1 is at bottom, impact 5 is at top
+  const y = (risk.impact - 1) * 20 + 10; // Center of each impact row, measured from bottom
 
   return (
     <div
       className="absolute transition-all duration-300 cursor-pointer group"
       style={{
         left: `${x}%`,
-        top: `${y}%`,
-        transform: 'translate(-50%, -50%)',
+        bottom: `${y}%`,
+        transform: 'translate(-50%, 50%)',
       }}
       onClick={() => onClick(risk)}
     >
@@ -142,8 +144,8 @@ const RiskBubble: React.FC<{
 const HeatMapGrid: React.FC = () => {
   return (
     <div className="absolute inset-0 pointer-events-none">
-      {/* Vertical grid lines for likelihood (1-5) */}
-      {[0, 1, 2, 3, 4].map((line) => (
+      {/* Vertical grid lines for likelihood (1-5) - creating 5 equal sections */}
+      {[0, 1, 2, 3, 4, 5].map((line) => (
         <div
           key={`v-${line}`}
           className="absolute top-0 bottom-0 border-l border-gray-300/40"
@@ -151,12 +153,13 @@ const HeatMapGrid: React.FC = () => {
         />
       ))}
       
-      {/* Horizontal grid lines for impact (1-5) */}
+      {/* Horizontal grid lines for impact (1-5) - align with y-axis label borders */}
+      {/* The y-axis has 5 labels with h-1/5 each, so borders are at 0%, 20%, 40%, 60%, 80%, 100% */}
       {[0, 1, 2, 3, 4].map((line) => (
         <div
           key={`h-${line}`}
-          className="absolute left-0 right-0 border-t border-gray-300/40"
-          style={{ top: `${line * 20}%` }}
+          className="absolute left-0 right-0 border-b border-gray-300/40"
+          style={{ bottom: `${line * 20}%` }}
         />
       ))}
     </div>
