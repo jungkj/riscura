@@ -1,8 +1,6 @@
 'use client';
 
 import { Suspense } from 'react';
-import { motion } from 'framer-motion';
-import { EnhancedHeading } from '@/components/ui/enhanced-typography';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -14,7 +12,10 @@ import {
   TrendingUp, 
   Calendar,
   Users,
-  Target
+  Target,
+  Plus,
+  Filter,
+  Download
 } from 'lucide-react';
 
 export default function RiskAssessmentPage() {
@@ -71,160 +72,148 @@ export default function RiskAssessmentPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F1E9] p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="bg-white/60 border border-[#E5E1D8] rounded-lg p-6 backdrop-blur-sm"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <EnhancedHeading level="h1" className="text-[#2C1810] mb-2">
-                Risk Assessments
-              </EnhancedHeading>
-              <p className="text-[#6B5B47] text-sm">
-                Manage and track your organization's risk assessment processes and outcomes.
-              </p>
+    <div className="p-6 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Risk Assessments</h1>
+          <p className="text-gray-600">Manage and track your organization's risk assessment processes and outcomes.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" className="text-sm">
+            <Filter className="h-4 w-4 mr-2" />
+            Filters
+          </Button>
+          <Button variant="outline" className="text-sm">
+            <Download className="h-4 w-4 mr-2" />
+            Export
+          </Button>
+          <Button>
+            <FileCheck className="w-4 h-4 mr-2" />
+            New Assessment
+          </Button>
+        </div>
+      </div>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-blue-600">Total Assessments</p>
+                <p className="text-3xl font-bold text-blue-900">3</p>
+              </div>
+              <Target className="h-8 w-8 text-blue-600" />
             </div>
-            <Button className="bg-[#8B7355] hover:bg-[#6B5B47] text-white">
-              <FileCheck className="w-4 h-4 mr-2" />
-              New Assessment
-            </Button>
-          </div>
-        </motion.div>
+          </CardContent>
+        </Card>
 
-        {/* Stats Cards */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-4 gap-4"
-        >
-          <Card className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
-            <CardContent className="p-4">
-              <div className="flex items-center space-x-2">
-                <Target className="w-5 h-5 text-[#8B7355]" />
-                <div>
-                  <p className="text-sm text-[#6B5B47]">Total Assessments</p>
-                  <p className="text-2xl font-semibold text-[#2C1810]">3</p>
-                </div>
+        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-green-600">In Progress</p>
+                <p className="text-3xl font-bold text-green-900">1</p>
               </div>
-            </CardContent>
-          </Card>
+              <TrendingUp className="h-8 w-8 text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
-            <CardContent className="p-4">
-              <div className="flex items-center space-x-2">
-                <TrendingUp className="w-5 h-5 text-blue-600" />
-                <div>
-                  <p className="text-sm text-[#6B5B47]">In Progress</p>
-                  <p className="text-2xl font-semibold text-[#2C1810]">1</p>
-                </div>
+        <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-yellow-600">Pending</p>
+                <p className="text-3xl font-bold text-yellow-900">1</p>
               </div>
-            </CardContent>
-          </Card>
+              <AlertTriangle className="h-8 w-8 text-yellow-600" />
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
-            <CardContent className="p-4">
-              <div className="flex items-center space-x-2">
-                <AlertTriangle className="w-5 h-5 text-yellow-600" />
-                <div>
-                  <p className="text-sm text-[#6B5B47]">Pending</p>
-                  <p className="text-2xl font-semibold text-[#2C1810]">1</p>
-                </div>
+        <Card className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-emerald-600">Completed</p>
+                <p className="text-3xl font-bold text-emerald-900">1</p>
               </div>
-            </CardContent>
-          </Card>
+              <FileCheck className="h-8 w-8 text-emerald-600" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
-          <Card className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
-            <CardContent className="p-4">
-              <div className="flex items-center space-x-2">
-                <FileCheck className="w-5 h-5 text-green-600" />
-                <div>
-                  <p className="text-sm text-[#6B5B47]">Completed</p>
-                  <p className="text-2xl font-semibold text-[#2C1810]">1</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* Assessments List */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-white/60 border border-[#E5E1D8] rounded-lg backdrop-blur-sm"
-        >
-          <div className="p-6 border-b border-[#E5E1D8]">
-            <EnhancedHeading level="h2" className="text-[#2C1810]">
-              Assessment Overview
-            </EnhancedHeading>
-          </div>
-          
-          <div className="p-6 space-y-4">
-            <Suspense fallback={<LoadingSpinner />}>
-              {assessments.map((assessment) => (
-                <Card key={assessment.id} className="bg-white/40 border-[#E5E1D8]">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-3 mb-3">
-                          <h3 className="text-lg font-semibold text-[#2C1810]">
-                            {assessment.title}
-                          </h3>
-                          <Badge className={getStatusColor(assessment.status)}>
-                            {assessment.status}
-                          </Badge>
-                          <Badge className={getPriorityColor(assessment.priority)}>
-                            {assessment.priority}
-                          </Badge>
+      {/* Assessments List */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <FileCheck className="h-5 w-5 text-blue-600" />
+            Assessment Overview
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Suspense fallback={<LoadingSpinner />}>
+            {assessments.map((assessment) => (
+              <Card key={assessment.id} className="border-gray-200 hover:shadow-md transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-3 mb-3">
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          {assessment.title}
+                        </h3>
+                        <Badge className={getStatusColor(assessment.status)}>
+                          {assessment.status}
+                        </Badge>
+                        <Badge className={getPriorityColor(assessment.priority)}>
+                          {assessment.priority}
+                        </Badge>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                          <Calendar className="w-4 h-4" />
+                          <span>Due: {assessment.dueDate}</span>
                         </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                          <div className="flex items-center space-x-2 text-sm text-[#6B5B47]">
-                            <Calendar className="w-4 h-4" />
-                            <span>Due: {assessment.dueDate}</span>
-                          </div>
-                          <div className="flex items-center space-x-2 text-sm text-[#6B5B47]">
-                            <Users className="w-4 h-4" />
-                            <span>{assessment.assignee}</span>
-                          </div>
-                          <div className="flex items-center space-x-2 text-sm text-[#6B5B47]">
-                            <AlertTriangle className="w-4 h-4" />
-                            <span>{assessment.riskCount} risks identified</span>
-                          </div>
+                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                          <Users className="w-4 h-4" />
+                          <span>{assessment.assignee}</span>
                         </div>
-                        
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between text-sm">
-                            <span className="text-[#6B5B47]">Progress</span>
-                            <span className="text-[#2C1810] font-medium">{assessment.progress}%</span>
+                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                          <AlertTriangle className="w-4 h-4" />
+                          <span>{assessment.riskCount} risks identified</span>
+                        </div>
+                      </div>
+
+                      {assessment.status === 'In Progress' && (
+                        <div className="mb-4">
+                          <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+                            <span>Progress</span>
+                            <span>{assessment.progress}%</span>
                           </div>
                           <Progress value={assessment.progress} className="h-2" />
                         </div>
-                      </div>
-                      
-                      <div className="ml-4">
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          className="border-[#E5E1D8] text-[#6B5B47] hover:bg-[#F5F1E9]"
-                        >
-                          View Details
-                        </Button>
-                      </div>
+                      )}
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </Suspense>
-          </div>
-        </motion.div>
-      </div>
+                    
+                    <div className="flex items-center space-x-2 ml-4">
+                      <Button variant="outline" size="sm">
+                        View Details
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        Edit
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </Suspense>
+        </CardContent>
+      </Card>
     </div>
   );
 }

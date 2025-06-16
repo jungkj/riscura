@@ -50,96 +50,70 @@ const nextConfig = {
       config.externals.push('openai', 'exceljs');
     }
     
-    // Only apply optimization in production to avoid dev conflicts
-    if (!dev) {
-      // Optimize PDF library handling
-      config.optimization = {
-        ...config.optimization,
-        splitChunks: {
-          chunks: 'all',
-          cacheGroups: {
-            // PDF libraries - lazy load these heavy dependencies
-            pdf: {
-              test: /[\\/]node_modules[\\/](pdf-parse|pdf\.js-extract|jspdf)[\\/]/,
-              name: 'pdf-libs',
-              chunks: 'async', // Only load when needed
-              priority: 30,
-              reuseExistingChunk: true,
-            },
-            // Core React libraries
-            react: {
-              test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-              name: 'react',
-              priority: 20,
-              reuseExistingChunk: true,
-            },
-            // Next.js framework
-            framework: {
-              test: /[\\/]node_modules[\\/](@next|next)[\\/]/,
-              name: 'framework',
-              priority: 15,
-              reuseExistingChunk: true,
-            },
-            // Large UI libraries
-            ui: {
-              test: /[\\/]node_modules[\\/](@radix-ui|@headlessui|framer-motion)[\\/]/,
-              name: 'ui-libs',
-              priority: 10,
-              minSize: 20000,
-              reuseExistingChunk: true,
-            },
-            // Database and API libraries
-            database: {
-              test: /[\\/]node_modules[\\/](@prisma|prisma)[\\/]/,
-              name: 'database',
-              priority: 25,
-              reuseExistingChunk: true,
-            },
-            // Common vendor libraries
-            vendor: {
-              test: /[\\/]node_modules[\\/]/,
-              name: 'vendors',
-              priority: 5,
-              minSize: 30000,
-              reuseExistingChunk: true,
-            },
-            // Common shared code - FURTHER reduced fragmentation
-            common: {
-              name: 'common',
-              minChunks: 4, // Require 4+ references (was 3)
-              chunks: 'all',
-              priority: 1,
-              minSize: 20000, // Minimum 20KB chunks (was 10KB)
-              maxSize: 150000, // Maximum 150KB chunks
-              reuseExistingChunk: true,
-            },
+    // Optimize chunk loading
+    config.optimization = {
+      ...config.optimization,
+      runtimeChunk: 'single',
+      splitChunks: {
+        chunks: 'all',
+        maxInitialRequests: 25,
+        minSize: 20000,
+        cacheGroups: {
+          // Core React libraries
+          react: {
+            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+            name: 'react',
+            priority: 40,
+            enforce: true,
+          },
+          // Next.js framework
+          framework: {
+            test: /[\\/]node_modules[\\/](@next|next)[\\/]/,
+            name: 'framework',
+            priority: 30,
+            enforce: true,
+          },
+          // UI libraries
+          ui: {
+            test: /[\\/]node_modules[\\/](@radix-ui|@headlessui|framer-motion)[\\/]/,
+            name: 'ui-libs',
+            priority: 20,
+            enforce: true,
+          },
+          // Common vendor libraries
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            priority: 10,
+            enforce: true,
+          },
+          // Common shared code
+          common: {
+            name: 'common',
+            minChunks: 2,
+            priority: 5,
+            reuseExistingChunk: true,
+            enforce: true,
           },
         },
-        // Only apply tree shaking in production
-        usedExports: true,
-        sideEffects: false,
-      };
-    }
-    
-    // PDF library optimization - external when possible
-    if (!isServer) {
-      config.externals = {
-        ...config.externals,
-        // Externalize heavy PDF libraries in production
-        ...(process.env.NODE_ENV === 'production' && {
-          'pdf-parse': 'pdf-parse',
-          'pdf.js-extract': 'pdf.js-extract',
-        }),
-      };
-    }
+      },
+    };
 
-    // Ignore large PDF workers in client bundle
+    // Add chunk loading error handling
     config.plugins.push(
-      new webpack.IgnorePlugin({
-        resourceRegExp: /pdf\.worker\.js$/,
-        contextRegExp: /node_modules/,
+      new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 5,
       })
     );
+
+    // Add error handling for chunk loading
+    if (!isServer) {
+      config.plugins.push(
+        new webpack.ProvidePlugin({
+          process: 'process/browser',
+        })
+      );
+    }
     
     return config;
   },

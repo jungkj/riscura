@@ -198,9 +198,19 @@ const authService = {
 
     console.log('AuthContext: Login successful:', data);
 
-    // Store token in localStorage for persistence
+    // Store token based on rememberMe preference
     if (data.tokens?.accessToken) {
-      localStorage.setItem('accessToken', data.tokens.accessToken);
+      if (rememberMe) {
+        // Store in localStorage for persistent login
+        localStorage.setItem('accessToken', data.tokens.accessToken);
+        // Clear any existing sessionStorage token
+        sessionStorage.removeItem('accessToken');
+      } else {
+        // Store in sessionStorage for session-only login
+        sessionStorage.setItem('accessToken', data.tokens.accessToken);
+        // Clear any existing localStorage token
+        localStorage.removeItem('accessToken');
+      }
     }
 
     return {
@@ -230,9 +240,9 @@ const authService = {
       throw new Error('Please check your email to verify your account before logging in.');
     }
 
-    // Store token if login is immediate
+    // Store token if login is immediate (default to session storage for registration)
     if (data.tokens?.accessToken) {
-      localStorage.setItem('accessToken', data.tokens.accessToken);
+      sessionStorage.setItem('accessToken', data.tokens.accessToken);
     }
 
     return {
@@ -243,7 +253,7 @@ const authService = {
 
   // Logout user
   logout: async (logoutType: 'current' | 'all' = 'current'): Promise<void> => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
     
     try {
       await fetch('/api/auth/logout', {
@@ -255,8 +265,9 @@ const authService = {
         body: JSON.stringify({ logoutType }),
       });
     } finally {
-      // Always clear local storage, even if API call fails
+      // Always clear both storage locations, even if API call fails
       localStorage.removeItem('accessToken');
+      sessionStorage.removeItem('accessToken');
     }
   },
 
@@ -278,7 +289,13 @@ const authService = {
       const data = await response.json();
 
       if (data.tokens?.accessToken) {
-        localStorage.setItem('accessToken', data.tokens.accessToken);
+        // Check if user has remember me preference and store accordingly
+        const rememberMe = localStorage.getItem('remember-me') === 'true';
+        if (rememberMe) {
+          localStorage.setItem('accessToken', data.tokens.accessToken);
+        } else {
+          sessionStorage.setItem('accessToken', data.tokens.accessToken);
+        }
       }
 
       return {
@@ -292,7 +309,7 @@ const authService = {
 
   // Get current user profile
   getCurrentUser: async (): Promise<AuthUser | null> => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
     
     if (!token) {
       return null;
@@ -318,7 +335,7 @@ const authService = {
 
   // Update user profile
   updateProfile: async (userId: string, userData: Partial<AuthUser>): Promise<AuthUser> => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
 
     if (!token) {
       throw new Error('No access token found');
@@ -344,7 +361,7 @@ const authService = {
 
   // Change password
   changePassword: async (currentPassword: string, newPassword: string): Promise<void> => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
 
     if (!token) {
       throw new Error('No access token found');
@@ -373,7 +390,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Initialize authentication state on app load
   useEffect(() => {
     const initializeAuth = async () => {
-      const token = localStorage.getItem('accessToken');
+      // Check both localStorage and sessionStorage for token
+      const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
       
       if (!token) {
         dispatch({ type: 'AUTH_INITIALIZE', payload: null });
@@ -395,12 +413,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           } else {
             // Refresh failed, clear auth state
             localStorage.removeItem('accessToken');
+            sessionStorage.removeItem('accessToken');
             dispatch({ type: 'AUTH_INITIALIZE', payload: null });
           }
         }
       } catch (error) {
         console.error('Auth initialization error:', error);
         localStorage.removeItem('accessToken');
+        sessionStorage.removeItem('accessToken');
         dispatch({ type: 'AUTH_INITIALIZE', payload: null });
       }
     };

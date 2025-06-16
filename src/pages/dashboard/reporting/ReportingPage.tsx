@@ -617,335 +617,181 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="text-center space-y-4"
-        >
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full mx-auto"
-          />
-          <div className="space-y-2">
-            <h2 className="text-xl font-semibold text-foreground">
-              Loading Advanced Reporting
-            </h2>
-            <p className="text-muted-foreground">
-              Initializing AI-powered report generation engine...
-            </p>
-          </div>
-        </motion.div>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="p-6 space-y-6">
       {/* Header */}
-      <motion.header
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border"
-      >
-        <div className="flex items-center justify-between p-6">
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#191919] to-[#191919] rounded-lg flex items-center justify-center">
-                <BarChart3 className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-notion-text-primary">
-                  Advanced Reporting & Analytics
-                </h1>
-                <p className="text-sm text-notion-text-secondary">
-                  AI-powered insights and automated report generation
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowAIPanel(!showAIPanel)}
-              className={showAIPanel ? "bg-notion-bg-secondary" : ""}
-            >
-              <Brain className="w-4 h-4 mr-2" />
-              AI Insights
-            </Button>
-            
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              <Filter className="w-4 h-4 mr-2" />
-              Filters
-            </Button>
-
-            <Button onClick={handleCreateReport}>
-              <Plus className="w-4 h-4 mr-2" />
-              Create Report
-            </Button>
-          </div>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Reports & Analytics</h1>
+          <p className="text-gray-600">Generate insights and create custom reports for your risk management program.</p>
         </div>
-
-        {/* Filters */}
-        <AnimatePresence>
-          {showFilters && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="border-t border-notion-border bg-notion-bg-secondary px-6 py-4"
-            >
-              <div className="flex items-center space-x-4">
-                <div className="flex-1">
-                  <Input
-                    placeholder="Search reports..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="max-w-md"
-                  />
-                </div>
-                
-                <Select value={selectedCategory} onValueChange={(value) => 
-                  setSelectedCategory(value as ReportCategory | 'all')
-                }>
-                  <SelectTrigger className="w-48">
-                    <SelectValue placeholder="Category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="executive">Executive</SelectItem>
-                    <SelectItem value="operational">Operational</SelectItem>
-                    <SelectItem value="compliance">Compliance</SelectItem>
-                    <SelectItem value="risk_management">Risk Management</SelectItem>
-                    <SelectItem value="audit">Audit</SelectItem>
-                    <SelectItem value="performance">Performance</SelectItem>
-                    <SelectItem value="financial">Financial</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select value={selectedType} onValueChange={(value) =>
-                  setSelectedType(value as ReportType | 'all')
-                }>
-                  <SelectTrigger className="w-48">
-                    <SelectValue placeholder="Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="dashboard">Dashboard</SelectItem>
-                    <SelectItem value="detailed_report">Detailed Report</SelectItem>
-                    <SelectItem value="summary_report">Summary Report</SelectItem>
-                    <SelectItem value="trend_analysis">Trend Analysis</SelectItem>
-                    <SelectItem value="compliance_report">Compliance Report</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.header>
-
-      <div className="flex">
-        {/* Main Content */}
-        <main className="flex-1 p-6">
-          {/* Analytics Overview */}
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 mb-6"
-          >
-            <Card className="border-notion-border bg-white dark:bg-notion-bg-secondary">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-notion-text-secondary">Total Reports</p>
-                    <p className="text-2xl font-semibold text-notion-text-primary">
-                      {analytics.totalReports}
-                    </p>
-                  </div>
-                  <FileText className="w-8 h-8 text-notion-blue" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-notion-border bg-white dark:bg-notion-bg-secondary">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-notion-text-secondary">Active Generations</p>
-                    <p className="text-2xl font-semibold text-notion-text-primary">
-                      {analytics.activeGenerations}
-                    </p>
-                  </div>
-                  <Activity className="w-8 h-8 text-green-500" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-notion-border bg-white dark:bg-notion-bg-secondary">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-notion-text-secondary">Scheduled Reports</p>
-                    <p className="text-2xl font-semibold text-notion-text-primary">
-                      {analytics.scheduledReports}
-                    </p>
-                  </div>
-                  <Calendar className="w-8 h-8 text-blue-500" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-notion-border bg-white dark:bg-notion-bg-secondary">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-notion-text-secondary">Total Views</p>
-                    <p className="text-2xl font-semibold text-notion-text-primary">
-                      {analytics.totalViews}
-                    </p>
-                  </div>
-                  <Eye className="w-8 h-8 text-[#191919]" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-notion-border bg-white dark:bg-notion-bg-secondary">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-notion-text-secondary">AI Insights</p>
-                    <p className="text-2xl font-semibold text-notion-text-primary">
-                      {analytics.aiInsights}
-                    </p>
-                  </div>
-                  <Brain className="w-8 h-8 text-[#191919]" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-notion-border bg-white dark:bg-notion-bg-secondary">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-notion-text-secondary">Avg Gen Time</p>
-                    <p className="text-2xl font-semibold text-notion-text-primary">
-                      {analytics.avgGenerationTime}s
-                    </p>
-                  </div>
-                  <Clock className="w-8 h-8 text-red-500" />
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Main Content Tabs */}
-          <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
-            <TabsList className="grid w-full grid-cols-5">
-              <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-              <TabsTrigger value="library">Report Library</TabsTrigger>
-              <TabsTrigger value="builder">Report Builder</TabsTrigger>
-              <TabsTrigger value="scheduled">Scheduled Reports</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="dashboard" className="space-y-6">
-              <div className="text-center py-12">
-                <BarChart3 className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
-                  Interactive Dashboard Coming Soon
-                </h3>
-                <p className="text-notion-text-secondary">
-                  Real-time reporting dashboard will be available here
-                </p>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="library" className="space-y-6">
-              <div className="text-center py-12">
-                <FileText className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
-                  Report Library Coming Soon
-                </h3>
-                <p className="text-notion-text-secondary">
-                  Comprehensive report templates library will be available here
-                </p>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="builder" className="space-y-6">
-              <div className="text-center py-12">
-                <Plus className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
-                  Advanced Report Builder Coming Soon
-                </h3>
-                <p className="text-notion-text-secondary">
-                  Drag-and-drop report builder with AI assistance will be available here
-                </p>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="scheduled" className="space-y-6">
-              <div className="text-center py-12">
-                <Calendar className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
-                  Scheduled Reports Coming Soon
-                </h3>
-                <p className="text-notion-text-secondary">
-                  Automated report scheduling and distribution will be available here
-                </p>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="analytics" className="space-y-6">
-              <div className="text-center py-12">
-                <TrendingUp className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
-                  Advanced Analytics Coming Soon
-                </h3>
-                <p className="text-notion-text-secondary">
-                  Deep reporting analytics and usage insights will be available here
-                </p>
-              </div>
-            </TabsContent>
-          </Tabs>
-        </main>
-
-        {/* AI Panel */}
-        <AnimatePresence>
-          {showAIPanel && (
-            <motion.aside
-              initial={{ x: 300, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: 300, opacity: 0 }}
-              className="w-80 border-l border-notion-border bg-white dark:bg-notion-bg-secondary"
-            >
-              <div className="p-4 border-b border-notion-border">
-                <h3 className="font-semibold text-notion-text-primary">AI Report Assistant</h3>
-                <p className="text-sm text-notion-text-secondary">
-                  Intelligent insights and report generation
-                </p>
-              </div>
-              
-              <div className="p-4 text-center">
-                <Brain className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
-                <h4 className="font-semibold text-notion-text-primary mb-2">
-                  AI Assistant Coming Soon
-                </h4>
-                <p className="text-sm text-notion-text-secondary">
-                  AI-powered report recommendations and insights will be available here
-                </p>
-              </div>
-            </motion.aside>
-          )}
-        </AnimatePresence>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" className="text-sm">
+            <Filter className="h-4 w-4 mr-2" />
+            Filters
+          </Button>
+          <Button variant="outline" className="text-sm">
+            <Download className="h-4 w-4 mr-2" />
+            Export
+          </Button>
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            New Report
+          </Button>
+        </div>
       </div>
+
+      {/* Analytics Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
+        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-blue-600">Total Reports</p>
+                <p className="text-3xl font-bold text-blue-900">{analytics.totalReports}</p>
+              </div>
+              <FileText className="h-8 w-8 text-blue-600" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-green-600">Active Generations</p>
+                <p className="text-3xl font-bold text-green-900">{analytics.activeGenerations}</p>
+              </div>
+              <Activity className="h-8 w-8 text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-purple-600">Scheduled Reports</p>
+                <p className="text-3xl font-bold text-purple-900">{analytics.scheduledReports}</p>
+              </div>
+              <Calendar className="h-8 w-8 text-purple-600" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Total Views</p>
+                <p className="text-3xl font-bold text-gray-900">{analytics.totalViews}</p>
+              </div>
+              <Eye className="h-8 w-8 text-gray-600" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-indigo-600">AI Insights</p>
+                <p className="text-3xl font-bold text-indigo-900">{analytics.aiInsights}</p>
+              </div>
+              <Brain className="h-8 w-8 text-indigo-600" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-orange-600">Avg Gen Time</p>
+                <p className="text-3xl font-bold text-orange-900">{analytics.avgGenerationTime}s</p>
+              </div>
+              <Clock className="h-8 w-8 text-orange-600" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Main Content Tabs */}
+      <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+          <TabsTrigger value="library">Report Library</TabsTrigger>
+          <TabsTrigger value="builder">Report Builder</TabsTrigger>
+          <TabsTrigger value="scheduled">Scheduled Reports</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="dashboard" className="space-y-6">
+          <div className="text-center py-12">
+            <BarChart3 className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
+              Interactive Dashboard Coming Soon
+            </h3>
+            <p className="text-notion-text-secondary">
+              Real-time reporting dashboard will be available here
+            </p>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="library" className="space-y-6">
+          <div className="text-center py-12">
+            <FileText className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
+              Report Library Coming Soon
+            </h3>
+            <p className="text-notion-text-secondary">
+              Comprehensive report templates library will be available here
+            </p>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="builder" className="space-y-6">
+          <div className="text-center py-12">
+            <Plus className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
+              Advanced Report Builder Coming Soon
+            </h3>
+            <p className="text-notion-text-secondary">
+              Drag-and-drop report builder with AI assistance will be available here
+            </p>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="scheduled" className="space-y-6">
+          <div className="text-center py-12">
+            <Calendar className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
+              Scheduled Reports Coming Soon
+            </h3>
+            <p className="text-notion-text-secondary">
+              Automated report scheduling and distribution will be available here
+            </p>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="analytics" className="space-y-6">
+          <div className="text-center py-12">
+            <TrendingUp className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
+              Advanced Analytics Coming Soon
+            </h3>
+            <p className="text-notion-text-secondary">
+              Deep reporting analytics and usage insights will be available here
+            </p>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 } 

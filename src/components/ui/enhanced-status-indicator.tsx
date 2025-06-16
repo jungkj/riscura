@@ -38,13 +38,41 @@ export const EnhancedStatusBadge: React.FC<StatusBadgeProps> = ({
   };
   
   const getVariantClasses = () => {
-    const baseClasses = colorClasses.status[status.toLowerCase() as keyof typeof colorClasses.status] || colorClasses.status.neutral;
+    const statusLower = status.toLowerCase();
+    
+    // New color scheme: Low=Green, Medium=Yellow, High=Red, Critical=Red
+    const colorMapping = {
+      'low': 'bg-green-50 text-green-700 border-green-200',
+      'medium': 'bg-yellow-50 text-yellow-800 border-yellow-200', 
+      'high': 'bg-red-50 text-red-700 border-red-200',
+      'critical': 'bg-red-100 text-red-800 border-red-300',
+      'success': 'bg-green-50 text-green-700 border-green-200',
+      'mitigated': 'bg-green-50 text-green-700 border-green-200',
+      'identified': 'bg-blue-50 text-blue-700 border-blue-200',
+      'assessed': 'bg-blue-50 text-blue-700 border-blue-200',
+      'monitoring': 'bg-slate-50 text-slate-700 border-slate-200'
+    };
+    
+    const outlineMapping = {
+      'low': 'text-green-700 border-green-300 bg-transparent',
+      'medium': 'text-yellow-800 border-yellow-400 bg-transparent',
+      'high': 'text-red-700 border-red-300 bg-transparent', 
+      'critical': 'text-red-800 border-red-400 bg-transparent',
+      'success': 'text-green-700 border-green-300 bg-transparent',
+      'mitigated': 'text-green-700 border-green-300 bg-transparent',
+      'identified': 'text-blue-700 border-blue-300 bg-transparent',
+      'assessed': 'text-blue-700 border-blue-300 bg-transparent',
+      'monitoring': 'text-slate-700 border-slate-300 bg-transparent'
+    };
+    
+    const baseClasses = colorMapping[statusLower as keyof typeof colorMapping] || colorMapping['medium'];
+    const outlineClasses = outlineMapping[statusLower as keyof typeof outlineMapping] || outlineMapping['medium'];
     
     switch (variant) {
       case 'outline':
-        return baseClasses.replace('bg-', 'border-2 bg-transparent border-');
+        return `border-2 ${outlineClasses}`;
       case 'minimal':
-        return `text-${status === 'critical' ? 'red' : status === 'high' ? 'orange' : status === 'medium' ? 'yellow' : status === 'success' || status === 'low' ? 'green' : 'blue'}-600 bg-transparent`;
+        return `bg-transparent border-none ${statusLower === 'critical' || statusLower === 'high' ? 'text-red-700' : statusLower === 'medium' ? 'text-yellow-800' : statusLower === 'low' || statusLower === 'success' || statusLower === 'mitigated' ? 'text-green-700' : 'text-blue-700'}`;
       default:
         return baseClasses;
     }
@@ -88,7 +116,7 @@ export const EnhancedStatusBadge: React.FC<StatusBadgeProps> = ({
       `}
     >
       {showIcon && getStatusIcon()}
-      <span className="capitalize">{status}</span>
+      <span className="uppercase font-semibold tracking-wide">{status}</span>
     </Component>
   );
 };

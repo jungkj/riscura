@@ -255,24 +255,108 @@ function validateEnv() {
       if (isProduction) {
         console.error('\n🛡️ Production security requires all secrets to be properly configured.');
         console.error('Run `npm run check:env` to validate your environment configuration.');
+        throw new Error('Environment validation failed');
+      } else {
+        // In development mode, use minimal environment with defaults
+        console.warn('⚠️ Development mode: Using default environment values for missing variables.');
+        console.warn('💡 For full functionality, create a .env.local file with proper values.');
+        return createMinimalEnv();
       }
-      
-      throw new Error('Environment validation failed');
     }
     throw error;
   }
 }
 
-// Create minimal environment for build processes
+// Create minimal environment for build processes and development
 function createMinimalEnv() {
   return {
     NODE_ENV: process.env.NODE_ENV || 'development',
-    APP_URL: process.env.APP_URL || 'http://localhost:3001',
+    APP_URL: process.env.APP_URL || 'http://localhost:3000',
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'http://localhost:3000',
     DATABASE_URL: process.env.DATABASE_URL || 'file:./dev.db',
-    // Add other minimal required values
-    JWT_SECRET: process.env.JWT_SECRET || 'dev-jwt-secret-12345678901234567890123456789012',
-    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'dev-nextauth-secret-12345678901234567890123456789012',
-    // ... other defaults
+    
+    // JWT & Authentication Secrets (Development defaults)
+    JWT_SECRET: process.env.JWT_SECRET || 'dev-jwt-secret-12345678901234567890123456789012345678901234567890',
+    JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '1h',
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'dev-nextauth-secret-12345678901234567890123456789012345678901234567890',
+    
+    // Session & Security (Development defaults)
+    SESSION_SECRET: process.env.SESSION_SECRET || 'dev-session-secret-12345678901234567890123456789012345678901234567890',
+    CSRF_SECRET: process.env.CSRF_SECRET || 'dev-csrf-secret-12345678901234567890123456789012345678901234567890',
+    COOKIE_SECRET: process.env.COOKIE_SECRET || 'dev-cookie-secret-12345678901234567890123456789012345678901234567890',
+    
+    // Internal API & Webhook secrets
+    INTERNAL_API_KEY: process.env.INTERNAL_API_KEY || 'dev-internal-api-key-12345678901234567890123456789012345678901234567890',
+    WEBHOOK_SECRET: process.env.WEBHOOK_SECRET || 'dev-webhook-secret-12345678901234567890123456789012345678901234567890',
+    
+    // Encryption keys
+    DATABASE_ENCRYPTION_KEY: process.env.DATABASE_ENCRYPTION_KEY || 'dev-db-encryption-key-12345678901234567890123456789012345678901234567890',
+    FILE_ENCRYPTION_KEY: process.env.FILE_ENCRYPTION_KEY || 'dev-file-encryption-key-12345678901234567890123456789012345678901234567890',
+    AI_ENCRYPTION_KEY: process.env.AI_ENCRYPTION_KEY || 'dev-ai-encryption-key-12345678901234567890123456789012345678901234567890',
+    
+    // BCrypt settings
+    BCRYPT_ROUNDS: 10,
+    
+    // Debug and logging
+    DEBUG_MODE: true,
+    LOG_LEVEL: 'info',
+    
+    // Security features (development defaults)
+    ENABLE_CSRF_PROTECTION: true,
+    ENABLE_RATE_LIMITING: true,
+    ENABLE_SECURITY_HEADERS: true,
+    ENABLE_2FA: false,
+    ENABLE_EMAIL_VERIFICATION: false,
+    
+    // Feature flags
+    ENABLE_AI_FEATURES: false,
+    ENABLE_COLLABORATION: true,
+    ENABLE_REAL_TIME: true,
+    ENABLE_EMAIL_NOTIFICATIONS: false,
+    
+    // Rate limiting defaults
+    RATE_LIMIT_MAX: 100,
+    RATE_LIMIT_WINDOW: 900000,
+    AUTH_RATE_LIMIT_MAX: 10,
+    AUTH_RATE_LIMIT_WINDOW: 900000,
+    UPLOAD_RATE_LIMIT_MAX: 10,
+    UPLOAD_RATE_LIMIT_WINDOW: 3600000,
+    API_RATE_LIMIT_MAX: 1000,
+    API_RATE_LIMIT_WINDOW: 900000,
+    
+    // File upload settings
+    UPLOAD_MAX_SIZE: 10485760,
+    UPLOAD_ALLOWED_TYPES: 'pdf,docx,xlsx,png,jpg,jpeg',
+    STORAGE_TYPE: 'local',
+    
+    // Email settings (optional)
+    SMTP_PORT: 587,
+    SMTP_FROM: 'noreply@riscura.com',
+    
+    // AWS defaults
+    AWS_S3_REGION: 'us-east-1',
+    
+    // Security headers
+    HSTS_MAX_AGE: 31536000,
+    HSTS_INCLUDE_SUBDOMAINS: true,
+    HSTS_PRELOAD: false,
+    CSP_REPORT_ONLY: false,
+    
+    // Optional fields that can be undefined
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || '',
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY || '',
+    OPENAI_ORG_ID: process.env.OPENAI_ORG_ID || '',
+    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY || '',
+    SMTP_HOST: process.env.SMTP_HOST || '',
+    SMTP_USER: process.env.SMTP_USER || '',
+    SMTP_PASS: process.env.SMTP_PASS || '',
+    REDIS_URL: process.env.REDIS_URL || '',
+    SENTRY_DSN: process.env.SENTRY_DSN || '',
+    AWS_S3_BUCKET: process.env.AWS_S3_BUCKET || '',
+    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID || '',
+    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || '',
+    CSP_REPORT_URI: process.env.CSP_REPORT_URI || '',
   } as any;
 }
 
@@ -501,4 +585,14 @@ export function validateSecurityConfiguration(): {
     issues,
     recommendations,
   };
-} 
+}
+
+// TODO: Replace with your actual app config
+export const appConfig = {
+  APP_URL: process.env.APP_URL || 'http://localhost:3000',
+  DATABASE_URL: process.env.DATABASE_URL || '',
+  AI_ENCRYPTION_KEY: process.env.AI_ENCRYPTION_KEY || '',
+  WEBHOOK_SECRET: process.env.WEBHOOK_SECRET || '',
+};
+
+export default appConfig; 

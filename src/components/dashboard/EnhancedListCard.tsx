@@ -35,22 +35,22 @@ interface EnhancedListCardProps {
 
 const priorityStyles = {
   low: {
-    badge: 'bg-green-100 text-green-700 border-green-200',
+    badge: 'bg-green-50 text-green-700 border-green-200',
     indicator: 'bg-green-500',
     glow: 'shadow-green-500/20',
   },
   medium: {
-    badge: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+    badge: 'bg-yellow-50 text-yellow-800 border-yellow-200',
     indicator: 'bg-yellow-500',
     glow: 'shadow-yellow-500/20',
   },
   high: {
-    badge: 'bg-orange-100 text-orange-700 border-orange-200',
-    indicator: 'bg-orange-500',
-    glow: 'shadow-orange-500/20',
+    badge: 'bg-red-50 text-red-700 border-red-200',
+    indicator: 'bg-red-500',
+    glow: 'shadow-red-500/20',
   },
   critical: {
-    badge: 'bg-red-100 text-red-700 border-red-200',
+    badge: 'bg-red-100 text-red-800 border-red-300',
     indicator: 'bg-red-500',
     glow: 'shadow-red-500/20',
   },
@@ -137,7 +137,7 @@ const ListItemComponent: React.FC<{
           <div className="flex items-center gap-3 shrink-0">
             <Badge 
               className={cn(
-                "text-xs font-medium border",
+                "text-xs font-semibold border uppercase tracking-wider",
                 priorityStyle.badge
               )}
             >

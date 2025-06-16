@@ -1,15 +1,10 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { ThemeProvider } from '@/components/providers/theme-provider';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { AuthProvider } from '@/context/AuthContext';
-import { RiskProvider } from '@/context/RiskContext';
-import { ControlProvider } from '@/context/ControlContext';
-import { AIProvider } from '@/context/AIContext';
-import { Toaster } from '@/components/ui/sonner';
-import ClientProvider from '@/components/providers/ClientProvider';
-import { PerformanceProvider } from '@/components/providers/PerformanceProvider';
+import '../styles/accessibility.css';
+import '../styles/design-system.css';
+import Providers from './providers';
+import { AccessibilityAnnouncements } from '@/components/ui/HighContrastToggle';
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -21,6 +16,14 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'Riscura - AI-Powered Risk Management',
   description: 'Comprehensive risk management platform with AI-powered insights',
+  icons: {
+    icon: [
+      { url: '/images/logo/riscura.png', sizes: '32x32', type: 'image/png' },
+      { url: '/images/logo/riscura.png', sizes: '16x16', type: 'image/png' },
+    ],
+    shortcut: '/images/logo/riscura.png',
+    apple: { url: '/images/logo/riscura.png', sizes: '180x180', type: 'image/png' },
+  },
 };
 
 export default function RootLayout({
@@ -30,35 +33,31 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/images/logo/riscura.png" sizes="any" />
+        <link rel="icon" href="/images/logo/riscura.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/images/logo/riscura.png" />
+      </head>
       <body 
         className={`${inter.className} min-h-screen bg-background text-foreground antialiased font-semibold`}
         suppressHydrationWarning={true}
       >
-        <ClientProvider>
-          <PerformanceProvider>
-            <ThemeProvider 
-              attribute="class" 
-              defaultTheme="light" 
-              enableSystem={false}
-              storageKey="riscura-theme"
-            >
-              <TooltipProvider>
-                <AuthProvider>
-                  <RiskProvider>
-                    <ControlProvider>
-                      <AIProvider>
-                        <div className="relative min-h-screen bg-background">
-                          {children}
-                        </div>
-                        <Toaster />
-                      </AIProvider>
-                    </ControlProvider>
-                  </RiskProvider>
-                </AuthProvider>
-              </TooltipProvider>
-            </ThemeProvider>
-          </PerformanceProvider>
-        </ClientProvider>
+        {/* Skip Links for Keyboard Navigation */}
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
+        <a href="#navigation" className="skip-link">
+          Skip to navigation
+        </a>
+        
+        <Providers>
+          <div className="relative min-h-screen bg-background">
+            {children}
+          </div>
+        </Providers>
+        
+        {/* Accessibility Announcements */}
+        <AccessibilityAnnouncements />
       </body>
     </html>
   );

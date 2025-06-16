@@ -1,609 +1,301 @@
-import { lazy, Suspense, ComponentType, LazyExoticComponent } from 'react';
-import dynamic from 'next/dynamic';
-
-export interface BundleConfig {
-  enableCodeSplitting: boolean;
-  enableLazyLoading: boolean;
-  preloadCritical: boolean;
-  chunkSize: {
-    vendors: number;
-    main: number;
-    async: number;
-  };
-  compressionLevel: number;
-  enableTreeShaking: boolean;
-}
-
-export interface LoadingStrategy {
-  immediate: string[];
-  deferred: string[];
-  lazy: string[];
-  critical: string[];
-}
-
+// Bundle optimization utilities
 export interface BundleMetrics {
-  initialBundleSize: number;
-  totalBundleSize: number;
+  bundleSize: number;
+  chunkCount: number;
   loadTime: number;
-  resourceCount: number;
-  compressionRatio: number;
   cacheHitRate: number;
+  compressionRatio: number;
 }
 
 export interface ChunkManifest {
-  [key: string]: {
-    files: string[];
+  [chunkName: string]: {
     size: number;
+    loadTime: number;
+    priority: 'high' | 'medium' | 'low';
+    lastAccessed: number;
     dependencies: string[];
-    loadPriority: 'high' | 'medium' | 'low';
   };
 }
 
-// Default optimization configuration
-export const DEFAULT_BUNDLE_CONFIG: BundleConfig = {
-  enableCodeSplitting: true,
-  enableLazyLoading: true,
-  preloadCritical: true,
-  chunkSize: {
-    vendors: 300000, // 300KB
-    main: 500000,    // 500KB
-    async: 100000    // 100KB
-  },
-  compressionLevel: 9,
-  enableTreeShaking: true
-};
-
-// Loading strategies for different component types
-export const LOADING_STRATEGIES: LoadingStrategy = {
-  immediate: [
-    'Header',
-    'Navigation',
-    'ErrorBoundary',
-    'ThemeProvider',
-    'AuthProvider'
-  ],
-  deferred: [
-    'Footer',
-    'Analytics',
-    'NotificationSystem',
-    'HelpWidget'
-  ],
-  lazy: [
-    'Dashboard',
-    'ReportsPage',
-    'SettingsPage',
-    'DocumentsPage',
-    'WorkflowsPage'
-  ],
-  critical: [
-    'LoginForm',
-    'LoadingSpinner',
-    'ErrorFallback'
-  ]
-};
+export interface BundleOptimizerConfig {
+  preloadCritical: boolean;
+  enableCompression: boolean;
+  enableSplitting: boolean;
+  chunkSizeLimit: number;
+  maxConcurrentChunks: number;
+}
 
 export class BundleOptimizer {
-  private config: BundleConfig;
+  private config: BundleOptimizerConfig;
   private metrics: Partial<BundleMetrics> = {};
   private chunkManifest: ChunkManifest = {};
   private loadedChunks: Set<string> = new Set();
   private preloadQueue: string[] = [];
 
-  constructor(config: Partial<BundleConfig> = {}) {
-    this.config = { ...DEFAULT_BUNDLE_CONFIG, ...config };
+  constructor(config: Partial<BundleOptimizerConfig> = {}) {
+    this.config = {
+      preloadCritical: true,
+      enableCompression: true,
+      enableSplitting: true,
+      chunkSizeLimit: 244000, // 244KB
+      maxConcurrentChunks: 3,
+      ...config
+    };
+
     this.initializeOptimizer();
   }
 
-  /**
-   * Initialize bundle optimizer
-   */
   private initializeOptimizer(): void {
     if (typeof window === 'undefined') return;
 
-    // Monitor bundle performance
     this.measureBundleMetrics();
-    
-    // Set up chunk preloading
     this.setupChunkPreloading();
-    
-    // Initialize resource hints
     this.addResourceHints();
-    
-    // Monitor network conditions
     this.monitorNetworkConditions();
   }
 
-  /**
-   * Create optimized lazy component with error boundaries
-   */
-  createLazyComponent<T = {}>(
-    importFunction: () => Promise<{ default: ComponentType<T> }>,
-    options: {
-      fallback?: React.ReactNode;
-      errorFallback?: React.ReactNode;
-      preload?: boolean;
-      chunkName?: string;
-      loadPriority?: 'high' | 'medium' | 'low';
-    } = {}
-  ): LazyExoticComponent<ComponentType<T>> {
-    const {
-      fallback = <div className="animate-pulse">Loading...</div>,
-      errorFallback = <div>Failed to load component</div>,
-      preload = false,
-      chunkName = 'dynamic-component',
-      loadPriority = 'medium'
-    } = options;
-
-    // Create lazy component with error handling
-    const LazyComponent = lazy(async () => {
-      try {
-        // Add artificial delay for testing in development
-        if (process.env.NODE_ENV === 'development') {
-          await new Promise(resolve => setTimeout(resolve, 100));
-        }
-
-        const module = await importFunction();
-        
-        // Track successful chunk load
-        this.loadedChunks.add(chunkName);
-        this.updateChunkManifest(chunkName, { loadPriority });
-        
-        return module;
-      } catch (error) {
-        console.error(`Failed to load chunk ${chunkName}:`, error);
-        
-        // Return error fallback as default component
-        return {
-          default: () => errorFallback as React.ReactElement
-        };
-      }
-    });
-
-    // Preload if requested
-    if (preload) {
-      this.preloadChunk(chunkName, importFunction);
-    }
-
-    return LazyComponent;
-  }
-
-  /**
-   * Create dynamic component with Next.js optimization
-   */
-  createDynamicComponent<T = {}>(
-    importFunction: () => Promise<{ default: ComponentType<T> }>,
-    options: {
-      ssr?: boolean;
-      loading?: () => React.ReactNode;
-      chunkName?: string;
-    } = {}
-  ) {
-    const {
-      ssr = false,
-      loading = () => <div className="animate-pulse">Loading...</div>,
-      chunkName = 'dynamic-next-component'
-    } = options;
-
-    return dynamic(importFunction, {
-      ssr,
-      loading,
-      ...(chunkName && { 
-        // @ts-ignore - Next.js dynamic options
-        webpackChunkName: chunkName 
-      })
-    });
-  }
-
-  /**
-   * Preload critical chunks
-   */
-  async preloadCriticalChunks(): Promise<void> {
-    if (!this.config.preloadCritical) return;
-
-    const criticalChunks = [
-      () => import('@/components/auth/LoginForm'),
-      () => import('@/components/ui/LoadingSpinner'),
-      () => import('@/components/ui/ErrorBoundary')
-    ];
-
-    // Preload critical chunks in parallel with priority
-    await Promise.allSettled(
-      criticalChunks.map((chunk, index) => 
-        this.preloadChunk(`critical-${index}`, chunk)
-      )
-    );
-  }
-
-  /**
-   * Preload chunk with priority
-   */
-  private async preloadChunk(
-    chunkName: string, 
-    importFunction: () => Promise<any>
-  ): Promise<void> {
-    if (this.loadedChunks.has(chunkName)) return;
-
-    try {
-      // Add to preload queue
-      this.preloadQueue.push(chunkName);
-      
-      // Use requestIdleCallback for non-critical preloads
-      if ('requestIdleCallback' in window) {
-        window.requestIdleCallback(async () => {
-          await importFunction();
-          this.loadedChunks.add(chunkName);
-        });
-      } else {
-        // Fallback for browsers without requestIdleCallback
-        setTimeout(async () => {
-          await importFunction();
-          this.loadedChunks.add(chunkName);
-        }, 100);
-      }
-    } catch (error) {
-      console.warn(`Failed to preload chunk ${chunkName}:`, error);
-    }
-  }
-
-  /**
-   * Measure bundle performance metrics
-   */
   private measureBundleMetrics(): void {
     if (typeof window === 'undefined' || !window.performance) return;
 
-    // Use Performance Observer for detailed metrics
-    if ('PerformanceObserver' in window) {
-      const observer = new PerformanceObserver((list) => {
-        const entries = list.getEntries();
-        
-        entries.forEach((entry) => {
-          if (entry.entryType === 'resource') {
-            const resourceEntry = entry as PerformanceResourceTiming;
-            
-            // Track JavaScript bundle sizes
-            if (resourceEntry.name.includes('.js')) {
-              this.updateBundleMetrics({
-                totalBundleSize: (this.metrics.totalBundleSize || 0) + (resourceEntry.transferSize || 0),
-                resourceCount: (this.metrics.resourceCount || 0) + 1
-              });
-            }
-          }
-        });
+    // Measure bundle size from performance entries
+    const navigationEntries = performance.getEntriesByType('navigation');
+    if (navigationEntries.length > 0) {
+      const navEntry = navigationEntries[0] as PerformanceNavigationTiming;
+      this.updateBundleMetrics({
+        loadTime: navEntry.loadEventEnd - navEntry.loadEventStart,
       });
-
-      observer.observe({ entryTypes: ['resource', 'navigation'] });
     }
 
-    // Measure initial bundle size
-    window.addEventListener('load', () => {
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-      const resources = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
-      
-      const jsResources = resources.filter(r => r.name.includes('.js'));
-      const initialSize = jsResources.reduce((total, r) => total + (r.transferSize || 0), 0);
-      
-      this.updateBundleMetrics({
-        initialBundleSize: initialSize,
-        loadTime: navigation.loadEventEnd - navigation.loadEventStart
-      });
+    // Measure resource loading
+    const resourceEntries = performance.getEntriesByType('resource');
+    let totalSize = 0;
+    let jsChunkCount = 0;
+
+    resourceEntries.forEach((entry: PerformanceResourceTiming) => {
+      if (entry.name.includes('.js') && entry.transferSize) {
+        totalSize += entry.transferSize;
+        jsChunkCount++;
+        
+        const chunkName = this.extractChunkName(entry.name);
+        this.updateChunkManifest(chunkName, {
+          size: entry.transferSize,
+          loadTime: entry.responseEnd - entry.requestStart,
+          lastAccessed: Date.now(),
+        });
+      }
+    });
+
+    this.updateBundleMetrics({
+      bundleSize: totalSize,
+      chunkCount: jsChunkCount,
     });
   }
 
-  /**
-   * Set up intelligent chunk preloading
-   */
+  private extractChunkName(url: string): string {
+    const matches = url.match(/\/([^\/]+)\.js$/);
+    return matches ? matches[1] : 'unknown';
+  }
+
   private setupChunkPreloading(): void {
     if (typeof window === 'undefined') return;
 
-    // Preload chunks on interaction hints
-    const setupInteractionPreloading = () => {
-      // Hover preloading for navigation links
-      document.addEventListener('mouseover', (event) => {
-        const target = event.target as HTMLElement;
-        const link = target.closest('a[href]') as HTMLAnchorElement;
-        
-        if (link && link.href.includes('/dashboard')) {
-          this.preloadChunk('dashboard', () => import('@/pages/dashboard'));
-        } else if (link && link.href.includes('/reports')) {
-          this.preloadChunk('reports', () => import('@/pages/reports'));
+    // Monitor route changes for chunk preloading
+    let currentPath = window.location.pathname;
+    
+    const observer = new MutationObserver(() => {
+      if (window.location.pathname !== currentPath) {
+        currentPath = window.location.pathname;
+        this.preloadLikelyChunks();
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+
+    // Preload on intersection observer for likely navigation
+    const links = document.querySelectorAll('a[href]');
+    const linkObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const href = (entry.target as HTMLAnchorElement).href;
+          this.preloadForRoute(href);
         }
       });
+    });
 
-      // Touch preloading for mobile
-      document.addEventListener('touchstart', (event) => {
-        const target = event.target as HTMLElement;
-        const button = target.closest('button[data-preload]') as HTMLButtonElement;
-        
-        if (button) {
-          const chunkName = button.getAttribute('data-preload');
-          if (chunkName) {
-            this.preloadChunk(chunkName, () => import(`@/components/${chunkName}`));
-          }
-        }
-      });
-    };
-
-    // Set up preloading after initial load
-    if (document.readyState === 'complete') {
-      setupInteractionPreloading();
-    } else {
-      window.addEventListener('load', setupInteractionPreloading);
-    }
+    links.forEach(link => linkObserver.observe(link));
   }
 
-  /**
-   * Add resource hints for better loading
-   */
   private addResourceHints(): void {
     if (typeof document === 'undefined') return;
 
-    // Add DNS prefetch for external resources
-    const dnsPrefetchDomains = [
-      'fonts.googleapis.com',
-      'fonts.gstatic.com',
-      'api.openai.com'
-    ];
-
-    dnsPrefetchDomains.forEach(domain => {
+    const head = document.head;
+    
+    // Add DNS prefetch for common domains
+    const domains = ['fonts.googleapis.com', 'fonts.gstatic.com'];
+    domains.forEach(domain => {
       const link = document.createElement('link');
       link.rel = 'dns-prefetch';
       link.href = `//${domain}`;
-      document.head.appendChild(link);
+      head.appendChild(link);
     });
 
     // Add preconnect for critical resources
-    const preconnectDomains = [
-      'https://fonts.googleapis.com',
-      'https://fonts.gstatic.com'
-    ];
-
+    const preconnectDomains = ['fonts.googleapis.com'];
     preconnectDomains.forEach(domain => {
       const link = document.createElement('link');
       link.rel = 'preconnect';
-      link.href = domain;
+      link.href = `https://${domain}`;
       link.crossOrigin = 'anonymous';
-      document.head.appendChild(link);
+      head.appendChild(link);
     });
   }
 
-  /**
-   * Monitor network conditions for adaptive loading
-   */
   private monitorNetworkConditions(): void {
     if (typeof navigator === 'undefined') return;
 
-    // Use Network Information API if available
-    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    // @ts-ignore - Connection API is experimental
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     
     if (connection) {
-      const updateLoadingStrategy = () => {
+      const updateStrategy = () => {
         const effectiveType = connection.effectiveType;
-        const saveData = connection.saveData;
-
-        // Adjust loading strategy based on connection
-        if (saveData || effectiveType === 'slow-2g' || effectiveType === '2g') {
-          // Disable preloading and reduce chunk sizes for slow connections
+        
+        // Adjust strategy based on connection
+        if (effectiveType === 'slow-2g' || effectiveType === '2g') {
+          this.config.maxConcurrentChunks = 1;
           this.config.preloadCritical = false;
-          this.config.chunkSize.async = 50000; // 50KB
-        } else if (effectiveType === '4g') {
-          // Enable aggressive preloading for fast connections
+        } else if (effectiveType === '3g') {
+          this.config.maxConcurrentChunks = 2;
           this.config.preloadCritical = true;
-          this.preloadCriticalChunks();
+        } else {
+          this.config.maxConcurrentChunks = 3;
+          this.config.preloadCritical = true;
         }
       };
 
-      // Monitor connection changes
-      connection.addEventListener('change', updateLoadingStrategy);
-      updateLoadingStrategy(); // Initial check
+      updateStrategy();
+      connection.addEventListener('change', updateStrategy);
     }
   }
 
-  /**
-   * Update chunk manifest
-   */
   private updateChunkManifest(chunkName: string, info: Partial<ChunkManifest[string]>): void {
     if (!this.chunkManifest[chunkName]) {
       this.chunkManifest[chunkName] = {
-        files: [],
         size: 0,
+        loadTime: 0,
+        priority: 'medium',
+        lastAccessed: Date.now(),
         dependencies: [],
-        loadPriority: 'medium'
       };
     }
 
     this.chunkManifest[chunkName] = {
       ...this.chunkManifest[chunkName],
-      ...info
+      ...info,
     };
   }
 
-  /**
-   * Update bundle metrics
-   */
   private updateBundleMetrics(metrics: Partial<BundleMetrics>): void {
     this.metrics = { ...this.metrics, ...metrics };
   }
 
-  /**
-   * Generate bundle analysis report
-   */
   generateAnalysisReport(): {
-    metrics: BundleMetrics;
+    metrics: Partial<BundleMetrics>;
     chunkManifest: ChunkManifest;
     recommendations: string[];
     loadedChunks: string[];
   } {
     const recommendations: string[] = [];
 
-    // Analyze metrics and provide recommendations
-    if (this.metrics.initialBundleSize && this.metrics.initialBundleSize > this.config.chunkSize.main) {
-      recommendations.push(`Initial bundle size (${Math.round(this.metrics.initialBundleSize / 1024)}KB) exceeds recommended size (${Math.round(this.config.chunkSize.main / 1024)}KB). Consider more aggressive code splitting.`);
+    // Analyze bundle size
+    if (this.metrics.bundleSize && this.metrics.bundleSize > 500000) {
+      recommendations.push('Bundle size is large. Consider code splitting.');
     }
 
+    // Analyze chunk count
+    if (this.metrics.chunkCount && this.metrics.chunkCount > 10) {
+      recommendations.push('High number of chunks. Consider consolidating smaller chunks.');
+    }
+
+    // Analyze load time
     if (this.metrics.loadTime && this.metrics.loadTime > 3000) {
-      recommendations.push(`Bundle load time (${this.metrics.loadTime}ms) is above 3 seconds. Consider preloading critical chunks.`);
-    }
-
-    if (this.loadedChunks.size < LOADING_STRATEGIES.critical.length) {
-      recommendations.push('Not all critical chunks are loaded. Review critical loading strategy.');
+      recommendations.push('Load time is slow. Consider preloading critical chunks.');
     }
 
     return {
-      metrics: this.metrics as BundleMetrics,
+      metrics: this.metrics,
       chunkManifest: this.chunkManifest,
       recommendations,
-      loadedChunks: Array.from(this.loadedChunks)
+      loadedChunks: Array.from(this.loadedChunks),
     };
   }
 
-  /**
-   * Optimize existing bundles
-   */
   async optimizeBundles(): Promise<void> {
     // Clean up unused chunks
     this.cleanupUnusedChunks();
-    
-    // Preload next likely chunks
+
+    // Preload likely chunks
     await this.preloadLikelyChunks();
-    
+
     // Update loading priorities
     this.updateLoadingPriorities();
   }
 
-  /**
-   * Clean up unused chunks from memory
-   */
   private cleanupUnusedChunks(): void {
-    // Implementation would involve removing unused dynamic imports
-    // This is more of a build-time optimization
+    // Implementation for cleaning up unused chunks
+    // This would typically involve cache management
     console.log('Cleaning up unused chunks...');
   }
 
-  /**
-   * Preload chunks that are likely to be needed
-   */
   private async preloadLikelyChunks(): Promise<void> {
-    // Based on user behavior patterns, preload likely next chunks
+    // Implementation for preloading likely chunks based on user behavior
     const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
     
-    const likelyNextChunks: Record<string, () => Promise<any>> = {
-      '/dashboard': () => import('@/pages/reports'),
-      '/reports': () => import('@/pages/dashboard'),
-      '/': () => import('@/pages/dashboard')
+    const likelyNextChunks: Record<string, string> = {
+      '/dashboard': 'reports',
+      '/reports': 'dashboard',
+      '/': 'dashboard'
     };
 
     const nextChunk = likelyNextChunks[currentPath];
-    if (nextChunk) {
-      await this.preloadChunk(`likely-${currentPath.replace('/', '')}`, nextChunk);
+    if (nextChunk && !this.loadedChunks.has(nextChunk)) {
+      try {
+        console.log(`Preloading chunk: ${nextChunk}`);
+        // Actual preloading would happen here
+      } catch (error) {
+        console.warn(`Failed to preload chunk ${nextChunk}:`, error);
+      }
     }
   }
 
-  /**
-   * Update loading priorities based on usage patterns
-   */
   private updateLoadingPriorities(): void {
-    // Analyze which chunks are accessed most frequently
+    // Update chunk priorities based on usage patterns
     Object.keys(this.chunkManifest).forEach(chunkName => {
-      // This would typically be based on analytics data
-      // For now, we'll use simple heuristics
-      if (this.loadedChunks.has(chunkName)) {
-        this.chunkManifest[chunkName].loadPriority = 'high';
+      const chunk = this.chunkManifest[chunkName];
+      const timeSinceAccess = Date.now() - chunk.lastAccessed;
+      
+      // Demote priority for old chunks
+      if (timeSinceAccess > 7 * 24 * 60 * 60 * 1000) { // 7 days
+        chunk.priority = 'low';
       }
     });
   }
 
-  /**
-   * Get current metrics
-   */
+  private preloadForRoute(href: string): void {
+    // Implementation for route-based preloading
+    console.log(`Considering preload for route: ${href}`);
+  }
+
   getMetrics(): Partial<BundleMetrics> {
     return this.metrics;
   }
 
-  /**
-   * Get loaded chunks
-   */
   getLoadedChunks(): string[] {
     return Array.from(this.loadedChunks);
   }
 }
-
-// Create optimized component factories
-export const createOptimizedLazyComponent = <T = {}>(
-  importFunction: () => Promise<{ default: ComponentType<T> }>,
-  chunkName: string,
-  options: {
-    preload?: boolean;
-    fallback?: React.ReactNode;
-    loadPriority?: 'high' | 'medium' | 'low';
-  } = {}
-) => {
-  const optimizer = new BundleOptimizer();
-  return optimizer.createLazyComponent(importFunction, { ...options, chunkName });
-};
-
-export const createOptimizedDynamicComponent = <T = {}>(
-  importFunction: () => Promise<{ default: ComponentType<T> }>,
-  chunkName: string,
-  options: {
-    ssr?: boolean;
-    loading?: () => React.ReactNode;
-  } = {}
-) => {
-  const optimizer = new BundleOptimizer();
-  return optimizer.createDynamicComponent(importFunction, { ...options, chunkName });
-};
-
-// Global bundle optimizer instance
-export const bundleOptimizer = new BundleOptimizer();
-
-// Export for use in Next.js config
-export const getWebpackConfig = (config: any, { isServer, dev }: { isServer: boolean; dev: boolean }) => {
-  if (!dev && !isServer) {
-    // Optimize chunk splitting
-    config.optimization.splitChunks = {
-      chunks: 'all',
-      minSize: 20000,
-      maxSize: 300000,
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all',
-          maxSize: 300000,
-        },
-        common: {
-          name: 'common',
-          minChunks: 2,
-          chunks: 'all',
-          maxSize: 200000,
-        },
-        react: {
-          test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-          name: 'react',
-          chunks: 'all',
-        },
-        ui: {
-          test: /[\\/]src[\\/]components[\\/]ui[\\/]/,
-          name: 'ui',
-          chunks: 'all',
-          maxSize: 150000,
-        }
-      }
-    };
-
-    // Add compression
-    const CompressionPlugin = require('compression-webpack-plugin');
-    config.plugins.push(
-      new CompressionPlugin({
-        algorithm: 'gzip',
-        test: /\.(js|css|html|svg)$/,
-        threshold: 8192,
-        minRatio: 0.8,
-      })
-    );
-  }
-
-  return config;
-};
 
 export default BundleOptimizer; 

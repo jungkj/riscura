@@ -237,4 +237,7 @@ export function userHasAllPermissions(
   return requiredPermissions.every(permission => 
     userPermissions.includes(permission)
   );
-} 
+}
+
+export * from './auth-options';
+export { default } from './auth-options'; 
