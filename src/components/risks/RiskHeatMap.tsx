@@ -97,9 +97,9 @@ const RiskBubble: React.FC<{
   const baseSize = (risk.bubble?.size || 40) * scale;
   const opacity = risk.bubble?.opacity || 0.7;
   
-  // Position based on impact (x) and likelihood (y)
-  const x = ((risk.likelihood - 1) / 4) * 100;
-  const y = ((5 - risk.impact) / 4) * 100;
+  // Position based on impact (x) and likelihood (y) - align with grid lines
+  const x = (risk.likelihood - 1) * 20; // Grid lines are at 0%, 20%, 40%, 60%, 80%
+  const y = (5 - risk.impact) * 20; // Grid lines are at 0%, 20%, 40%, 60%, 80%
 
   return (
     <div
@@ -142,19 +142,21 @@ const RiskBubble: React.FC<{
 const HeatMapGrid: React.FC = () => {
   return (
     <div className="absolute inset-0 pointer-events-none">
-      {[1, 2, 3, 4, 5].map((line) => (
+      {/* Vertical grid lines for likelihood (1-5) */}
+      {[0, 1, 2, 3, 4].map((line) => (
         <div
           key={`v-${line}`}
           className="absolute top-0 bottom-0 border-l border-gray-300/40"
-          style={{ left: `${(line - 1) * 20}%` }}
+          style={{ left: `${line * 20}%` }}
         />
       ))}
       
-      {[1, 2, 3, 4, 5].map((line) => (
+      {/* Horizontal grid lines for impact (1-5) */}
+      {[0, 1, 2, 3, 4].map((line) => (
         <div
           key={`h-${line}`}
           className="absolute left-0 right-0 border-t border-gray-300/40"
-          style={{ top: `${(line - 1) * 20}%` }}
+          style={{ top: `${line * 20}%` }}
         />
       ))}
     </div>
