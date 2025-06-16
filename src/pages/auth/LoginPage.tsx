@@ -27,6 +27,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Loader2, Eye, EyeOff, Shield } from 'lucide-react';
 
 // Enhanced components
@@ -38,6 +39,7 @@ import { FormErrorBoundary } from '@/components/ui/error-boundary';
 const loginSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
   password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+  rememberMe: z.boolean().optional().default(false),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -54,13 +56,14 @@ export default function LoginPage() {
     defaultValues: {
       email: '',
       password: '',
+      rememberMe: false,
     },
   });
 
   const onSubmit = async (values: LoginFormValues) => {
     setIsLoading(true);
     try {
-      await login(values.email, values.password);
+      await login(values.email, values.password, values.rememberMe);
       toast({
         title: 'Welcome back!',
         description: 'You have successfully logged in.',
@@ -186,6 +189,27 @@ export default function LoginPage() {
                           </motion.div>
                         </FormControl>
                         <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="rememberMe"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            className="border-slate-300 dark:border-slate-600 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel className="text-sm text-slate-600 dark:text-slate-400 cursor-pointer">
+                            Stay logged in
+                          </FormLabel>
+                        </div>
                       </FormItem>
                     )}
                   />

@@ -440,4 +440,9 @@ export function isErrorResponse(
   response: ApiSuccessResponse<any> | ApiErrorResponse
 ): response is ApiErrorResponse {
   return response.success === false;
+}
+
+// TODO: Implement real versioned response formatting
+export function VersionedResponseFormatter(data: any) {
+  return data;
 } 

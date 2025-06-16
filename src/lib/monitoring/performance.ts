@@ -428,4 +428,11 @@ export const getPerformanceData = () => {
   return getPerformanceMonitor().getPerformanceSnapshot();
 };
 
-export { PERFORMANCE_THRESHOLDS, type BusinessMetrics, type PerformanceData }; 
+export { PERFORMANCE_THRESHOLDS, type BusinessMetrics, type PerformanceData };
+
+// TODO: Replace with real web-vitals metrics
+export function getCLS() { return 0; }
+export function getFID() { return 0; }
+export function getFCP() { return 0; }
+export function getLCP() { return 0; }
+export function getTTFB() { return 0; } 

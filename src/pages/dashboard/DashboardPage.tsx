@@ -1,42 +1,39 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
+import GuidedTour from '@/components/help/GuidedTour';
 
 import {
   Shield,
   CheckCircle,
   AlertTriangle,
+  AlertCircle,
   FileText,
-  Users,
-  TrendingUp,
-  ArrowRight,
-  Plus,
-  BarChart3,
   Clock,
-  Target,
-  Search,
-  Bell,
-  ChevronRight,
-  Home,
+  Settings,
   Activity,
   Zap,
   Brain,
-  Eye,
+  Upload,
+  Target,
+  Plus,
   Calendar,
-  Settings,
+  ArrowRight,
   MoreHorizontal,
-  ExternalLink,
-  BookOpen,
-  Upload
+  Lightbulb,
+  TrendingUp,
+  TrendingDown,
+  CheckCircle2
 } from 'lucide-react';
+
+// Import the interactive risk heat map component
+import { RiskHeatMap as InteractiveRiskHeatMap } from '@/components/ui/interactive-risk-heatmap';
 
 // Types
 interface DashboardStats {
@@ -54,6 +51,7 @@ interface QuickAction {
   icon: React.ComponentType<any>;
   href: string;
   color: string;
+  badge?: string;
 }
 
 interface RecentActivity {
@@ -61,8 +59,18 @@ interface RecentActivity {
   action: string;
   user: string;
   time: string;
-  type: 'success' | 'info' | 'warning';
+  type: 'success' | 'info' | 'warning' | 'error';
   module: string;
+  avatar?: string;
+}
+
+interface Insight {
+  id: string;
+  title: string;
+  description: string;
+  type: 'risk' | 'compliance' | 'opportunity' | 'alert';
+  priority: 'high' | 'medium' | 'low';
+  action?: string;
 }
 
 export default function DashboardPage() {
@@ -74,7 +82,26 @@ export default function DashboardPage() {
     activeControls: 18,
     pendingActions: 7
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [showTour, setShowTour] = useState(false);
+
+  // Simulate loading for demonstration
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Check if user is new and should see the tour
+  useEffect(() => {
+    const hasSeenTour = localStorage.getItem('hasSeenDashboardTour');
+    if (!hasSeenTour && !loading) {
+      // Auto-start tour for new users after a short delay
+      const tourTimer = setTimeout(() => {
+        setShowTour(true);
+      }, 2000);
+      return () => clearTimeout(tourTimer);
+    }
+  }, [loading]);
 
   const quickActions: QuickAction[] = [
     {
@@ -83,7 +110,8 @@ export default function DashboardPage() {
       description: 'Document and assess a new risk',
       icon: Shield,
       href: '/dashboard/risks/new',
-      color: 'text-red-600'
+      color: 'text-red-600',
+      badge: 'Quick'
     },
     {
       id: 'import-rcsa',
@@ -99,7 +127,8 @@ export default function DashboardPage() {
       description: 'Get AI-powered insights',
       icon: Brain,
       href: '/dashboard/aria',
-      color: 'text-purple-600'
+      color: 'text-purple-600',
+      badge: 'AI'
     },
     {
       id: 'generate-report',
@@ -108,6 +137,22 @@ export default function DashboardPage() {
       icon: FileText,
       href: '/dashboard/reporting',
       color: 'text-green-600'
+    },
+    {
+      id: 'risk-assessment',
+      title: 'Risk Assessment',
+      description: 'Conduct risk evaluation',
+      icon: Target,
+      href: '/dashboard/risks/assessment',
+      color: 'text-orange-600'
+    },
+    {
+      id: 'compliance-check',
+      title: 'Compliance Check',
+      description: 'Review framework status',
+      icon: CheckCircle2,
+      href: '/dashboard/compliance',
+      color: 'text-emerald-600'
     }
   ];
 
@@ -118,7 +163,8 @@ export default function DashboardPage() {
       user: 'Sarah Chen', 
       time: '2 hours ago', 
       type: 'success',
-      module: 'Risk Management'
+      module: 'Risk Management',
+      avatar: 'SC'
     },
     { 
       id: 2, 
@@ -126,416 +172,311 @@ export default function DashboardPage() {
       user: 'John Smith', 
       time: '4 hours ago', 
       type: 'info',
-      module: 'Controls'
+      module: 'Controls',
+      avatar: 'JS'
     },
     { 
       id: 3, 
-      action: 'High-risk item flagged in compliance review', 
-      user: 'Alex Johnson', 
+      action: 'Compliance report generated for SOC 2', 
+      user: 'Lisa Wang', 
       time: '6 hours ago', 
-      type: 'warning',
-      module: 'Compliance'
+      type: 'success',
+      module: 'Compliance',
+      avatar: 'LW'
     },
     { 
       id: 4, 
-      action: 'SOX compliance report generated successfully', 
-      user: 'Maria Garcia', 
-      time: '1 day ago', 
-      type: 'success',
-      module: 'Reports'
+      action: 'High-risk vulnerability detected in payment system', 
+      user: 'System Alert', 
+      time: '8 hours ago', 
+      type: 'warning',
+      module: 'Monitoring',
+      avatar: 'SA'
     },
     { 
       id: 5, 
-      action: 'ARIA provided 12 new risk recommendations', 
-      user: 'AI Assistant', 
+      action: 'Quarterly risk review meeting scheduled', 
+      user: 'Mike Johnson', 
       time: '1 day ago', 
       type: 'info',
-      module: 'AI Insights'
+      module: 'Planning',
+      avatar: 'MJ'
     }
   ];
 
-  const handleQuickAction = (href: string) => {
+  const insights: Insight[] = [
+    {
+      id: '1',
+      title: 'Critical Risk Trend',
+      description: 'High-risk incidents have increased by 15% this month. Consider reviewing security protocols.',
+      type: 'risk',
+      priority: 'high',
+      action: 'Review Security'
+    },
+    {
+      id: '2',
+      title: 'Compliance Opportunity',
+      description: 'Your SOC 2 compliance score has improved. Consider pursuing additional certifications.',
+      type: 'opportunity',
+      priority: 'medium',
+      action: 'Explore Certifications'
+    },
+    {
+      id: '3',
+      title: 'Control Effectiveness',
+      description: 'Multi-factor authentication controls are performing exceptionally well.',
+      type: 'compliance',
+      priority: 'low'
+    }
+  ];
+
+  const handleQuickAction = (href: string, actionId?: string) => {
+    if (actionId === 'guided-tour') {
+      setShowTour(true);
+      return;
+    }
+    
     router.push(href);
+    
+    // Show success toast for certain actions
+    if (actionId === 'new-risk') {
+      toast({
+        title: "Risk Creation",
+        description: "Opening risk creation form...",
+      });
+    }
   };
 
+  const handleTourComplete = () => {
+    setShowTour(false);
+    localStorage.setItem('hasSeenDashboardTour', 'true');
+    toast({
+      title: "Tour Complete!",
+      description: "You're ready to start managing risks effectively.",
+    });
+  };
+
+  const handleTourSkip = () => {
+    setShowTour(false);
+    localStorage.setItem('hasSeenDashboardTour', 'true');
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="p-6 space-y-6" data-tour="dashboard-main">
+      {/* Guided Tour Component */}
+      {showTour && (
+        <GuidedTour
+          tourId="platform-overview"
+          autoStart={true}
+          onComplete={handleTourComplete}
+          onSkip={handleTourSkip}
+          showProgress={true}
+          allowSkip={true}
+        />
+      )}
+
       {/* Header */}
-      <div className="border-b border-gray-100 bg-white sticky top-0 z-10">
-        <div className="px-8 py-4">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-4 font-inter">
-            <Home className="w-4 h-4" />
-            <ChevronRight className="w-3 h-3" />
-            <span className="text-[#191919] font-medium">Dashboard</span>
-          </div>
-
-          {/* Main Header */}
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-[#191919] font-inter mb-2">
-                Good morning, Sarah 👋
-              </h1>
-              <p className="text-gray-600 font-inter">
-                Here's what's happening with your risk management today.
-              </p>
-            </div>
-            
-            {/* Header Actions */}
-            <div className="flex items-center gap-4">
-              {/* Search */}
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <Input
-                  placeholder="Search anything..."
-                  className="pl-10 pr-4 py-2 w-80 bg-[#FAFAFA] border-gray-200 focus:border-[#199BEC] focus:ring-[#199BEC]/20 rounded-xl font-inter"
-                />
-              </div>
-
-              {/* Notifications */}
-              <Button variant="ghost" size="icon" className="relative text-gray-600 hover:text-[#191919] hover:bg-[#FAFAFA]">
-                <Bell className="w-5 h-5" />
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
-              </Button>
-
-              {/* Profile */}
-              <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-[#FAFAFA] transition-colors cursor-pointer">
-                <Avatar className="w-8 h-8">
-                  <AvatarImage src="/avatars/sarah.jpg" />
-                  <AvatarFallback className="bg-[#199BEC] text-white text-sm font-semibold">SC</AvatarFallback>
-                </Avatar>
-                <div className="text-left">
-                  <p className="text-sm font-semibold text-[#191919] font-inter">Sarah Chen</p>
-                  <p className="text-xs text-gray-500">Risk Analyst</p>
-                </div>
-                <ChevronRight className="w-4 h-4 text-gray-400" />
-              </div>
-            </div>
-          </div>
+      <div className="flex items-center justify-between" data-tour="dashboard-header">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+          <p className="text-gray-600">Welcome back! Here's your risk management overview.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <Button 
+            variant="outline" 
+            onClick={() => setShowTour(true)}
+            className="text-sm"
+          >
+            <Lightbulb className="h-4 w-4 mr-2" />
+            Take Tour
+          </Button>
+          <Button onClick={() => router.push('/dashboard/risks/new')}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Risk
+          </Button>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="px-8 py-8">
-        {/* Key Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-          <MetricCard
-            title="Total Risks"
-            value={stats.totalRisks}
-            icon={Shield}
-            color="text-blue-600"
-            trend="+2 this week"
-            onClick={() => handleQuickAction('/dashboard/risks')}
-          />
-          <MetricCard
-            title="High Risk Items"
-            value={stats.highRisks}
-            icon={AlertTriangle}
-            color="text-red-600"
-            urgent={stats.highRisks > 3}
-            trend="↑ 1 since yesterday"
-            onClick={() => handleQuickAction('/dashboard/risks?filter=high')}
-          />
-          <MetricCard
-            title="Compliance Score"
-            value={`${stats.complianceScore}%`}
-            icon={Target}
-            color="text-green-600"
-            trend="+3% this month"
-            onClick={() => handleQuickAction('/dashboard/compliance')}
-          />
-          <MetricCard
-            title="Active Controls"
-            value={stats.activeControls}
-            icon={CheckCircle}
-            color="text-green-600"
-            trend="All operational"
-            onClick={() => handleQuickAction('/dashboard/controls')}
-          />
-          <MetricCard
-            title="Pending Actions"
-            value={stats.pendingActions}
-            icon={Clock}
-            color="text-orange-600"
-            urgent={stats.pendingActions > 5}
-            trend="3 due today"
-            onClick={() => handleQuickAction('/dashboard/workflows')}
-          />
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6" data-tour="dashboard-stats">
+        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-blue-600">Total Risks</p>
+                <p className="text-3xl font-bold text-blue-900">{stats.totalRisks}</p>
+              </div>
+              <Shield className="h-8 w-8 text-blue-600" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-red-600">High Priority</p>
+                <p className="text-3xl font-bold text-red-900">{stats.highRisks}</p>
+              </div>
+              <AlertTriangle className="h-8 w-8 text-red-600" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-green-600">Compliance</p>
+                <p className="text-3xl font-bold text-green-900">{stats.complianceScore}%</p>
+              </div>
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-purple-600">Active Controls</p>
+                <p className="text-3xl font-bold text-purple-900">{stats.activeControls}</p>
+              </div>
+              <Settings className="h-8 w-8 text-purple-600" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-orange-600">Pending Actions</p>
+                <p className="text-3xl font-bold text-orange-900">{stats.pendingActions}</p>
+              </div>
+              <Clock className="h-8 w-8 text-orange-600" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Quick Actions */}
+        <div className="lg:col-span-1" data-tour="quick-actions">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="h-5 w-5 text-blue-600" />
+                Quick Actions
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {quickActions.map((action) => (
+                <QuickActionCard
+                  key={action.id}
+                  title={action.title}
+                  description={action.description}
+                  icon={action.icon}
+                  color={action.color}
+                  badge={action.badge}
+                  onClick={() => handleQuickAction(action.href, action.id)}
+                />
+              ))}
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
-          {/* Left Column - Quick Actions & AI Insights */}
-          <div className="space-y-6">
-            
-            {/* Quick Actions */}
-            <Card className="bg-[#FAFAFA] border-gray-200 shadow-sm">
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center gap-2 text-[#191919] font-inter font-bold">
-                  <Zap className="h-5 w-5 text-[#199BEC]" />
-                  Quick Actions
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {quickActions.map((action) => (
-                  <QuickActionCard key={action.id} {...action} onClick={() => handleQuickAction(action.href)} />
-                ))}
-              </CardContent>
-            </Card>
-
-            {/* AI Insights Panel */}
-            <Card className="bg-[#FAFAFA] border-gray-200 shadow-sm">
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center gap-2 text-[#191919] font-inter font-bold">
-                  <Brain className="h-5 w-5 text-[#199BEC]" />
-                  AI Insights
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="p-4 bg-blue-50 rounded-xl border border-blue-100">
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 bg-[#199BEC] rounded-lg flex items-center justify-center">
-                      <Brain className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-[#191919] font-inter mb-1">Risk Trend Alert</h4>
-                      <p className="text-sm text-gray-600 font-inter leading-relaxed">
-                        ARIA detected a 15% increase in cybersecurity risks this month. Consider reviewing access controls.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="p-4 bg-green-50 rounded-xl border border-green-100">
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-                      <CheckCircle className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-[#191919] font-inter mb-1">Compliance Improvement</h4>
-                      <p className="text-sm text-gray-600 font-inter leading-relaxed">
-                        Your SOX compliance score improved by 8% after implementing new controls.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <Button 
-                  onClick={() => handleQuickAction('/dashboard/aria')}
-                  className="w-full bg-[#199BEC] hover:bg-[#0f7dc7] text-white border-0 font-inter font-medium"
-                >
-                  Chat with ARIA
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Middle Column - Compliance Overview */}
-          <div className="space-y-6">
-            
-            {/* Compliance Overview */}
-            <Card className="bg-[#FAFAFA] border-gray-200 shadow-sm">
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center gap-2 text-[#191919] font-inter font-bold">
-                  <BarChart3 className="h-5 w-5 text-[#199BEC]" />
-                  Compliance Overview
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {/* Overall Score */}
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-[#191919] font-inter">Overall Score</span>
-                    <span className="text-2xl font-bold text-[#191919] font-inter">{stats.complianceScore}%</span>
-                  </div>
-                  <Progress value={stats.complianceScore} className="h-3 bg-gray-200" />
-                  <p className="text-xs text-gray-500 font-inter">+3% improvement from last month</p>
-                </div>
-                
-                {/* Framework Status */}
-                <div className="space-y-3">
-                  <h4 className="font-semibold text-[#191919] font-inter">Framework Status</h4>
-                  <div className="space-y-3">
-                    <ComplianceItem label="SOC 2 Type II" status="compliant" percentage={98} />
-                    <ComplianceItem label="ISO 27001" status="in-progress" percentage={85} />
-                    <ComplianceItem label="GDPR" status="compliant" percentage={96} />
-                    <ComplianceItem label="HIPAA" status="needs-review" percentage={78} />
-                  </div>
-                </div>
-
-                <Button 
-                  variant="outline" 
-                  className="w-full border-[#199BEC] text-[#199BEC] hover:bg-[#199BEC] hover:text-white font-inter font-medium"
-                  onClick={() => handleQuickAction('/dashboard/compliance')}
-                >
-                  View Detailed Reports
-                  <ExternalLink className="h-4 w-4 ml-2" />
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Risk Heatmap Preview */}
-            <Card className="bg-[#FAFAFA] border-gray-200 shadow-sm">
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center gap-2 text-[#191919] font-inter font-bold">
-                  <Activity className="h-5 w-5 text-[#199BEC]" />
-                  Risk Distribution
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-3 gap-4 mb-4">
-                  <div className="text-center p-3 bg-red-50 rounded-lg border border-red-100">
-                    <p className="text-2xl font-bold text-red-600 font-inter">4</p>
-                    <p className="text-xs text-red-600 font-medium font-inter">High Risk</p>
-                  </div>
-                  <div className="text-center p-3 bg-orange-50 rounded-lg border border-orange-100">
-                    <p className="text-2xl font-bold text-orange-600 font-inter">12</p>
-                    <p className="text-xs text-orange-600 font-medium font-inter">Medium Risk</p>
-                  </div>
-                  <div className="text-center p-3 bg-green-50 rounded-lg border border-green-100">
-                    <p className="text-2xl font-bold text-green-600 font-inter">7</p>
-                    <p className="text-xs text-green-600 font-medium font-inter">Low Risk</p>
-                  </div>
-                </div>
-                <Button 
-                  variant="ghost" 
-                  className="w-full text-[#191919] hover:bg-gray-100 font-inter font-medium"
-                  onClick={() => handleQuickAction('/dashboard/risks/heatmap')}
-                >
-                  View Risk Heatmap
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Right Column - Recent Activity */}
-          <div className="space-y-6">
-            
-            {/* Recent Activity */}
-            <Card className="bg-[#FAFAFA] border-gray-200 shadow-sm">
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center justify-between text-[#191919] font-inter font-bold">
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-5 w-5 text-[#199BEC]" />
-                    Recent Activity
-                  </div>
-                  <Button variant="ghost" size="sm" className="text-gray-500 hover:text-[#191919]">
-                    <MoreHorizontal className="w-4 h-4" />
-                  </Button>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {recentActivity.map((activity) => (
-                    <ActivityItem key={activity.id} {...activity} />
-                  ))}
-                </div>
-                <Button 
-                  variant="ghost" 
-                  className="w-full mt-4 text-[#191919] hover:bg-gray-100 font-inter font-medium"
-                  onClick={() => handleQuickAction('/dashboard/activity')}
-                >
-                  View All Activity
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Upcoming Tasks */}
-            <Card className="bg-[#FAFAFA] border-gray-200 shadow-sm">
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center gap-2 text-[#191919] font-inter font-bold">
-                  <Calendar className="h-5 w-5 text-[#199BEC]" />
-                  Upcoming Tasks
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-100">
-                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-[#191919] font-inter">Quarterly risk review</p>
-                      <p className="text-xs text-gray-500 font-inter">Due tomorrow</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-100">
-                    <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-[#191919] font-inter">Control testing for MFA</p>
-                      <p className="text-xs text-gray-500 font-inter">Due in 3 days</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-100">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-[#191919] font-inter">SOC 2 audit preparation</p>
-                      <p className="text-xs text-gray-500 font-inter">Due next week</p>
-                    </div>
-                  </div>
-                </div>
-                <Button 
-                  variant="ghost" 
-                  className="w-full mt-4 text-[#191919] hover:bg-gray-100 font-inter font-medium"
-                  onClick={() => handleQuickAction('/dashboard/workflows/tasks')}
-                >
-                  View All Tasks
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
+        {/* Risk Heat Map */}
+        <div className="lg:col-span-2" data-tour="risk-heatmap">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Activity className="h-5 w-5 text-blue-600" />
+                Risk Heat Map
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <InteractiveRiskHeatMap />
+            </CardContent>
+          </Card>
         </div>
+      </div>
+
+      {/* Bottom Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Recent Activity */}
+        <Card data-tour="recent-activity">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Clock className="h-5 w-5 text-blue-600" />
+              Recent Activity
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentActivity.map((activity) => (
+                <ActivityItem
+                  key={activity.id}
+                  action={activity.action}
+                  user={activity.user}
+                  time={activity.time}
+                  type={activity.type}
+                  module={activity.module}
+                  avatar={activity.avatar}
+                />
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* AI Insights */}
+        <Card data-tour="ai-insights">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Brain className="h-5 w-5 text-purple-600" />
+              AI Insights
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {insights.map((insight) => (
+                <div key={insight.id} className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h4 className="font-medium text-gray-900">{insight.title}</h4>
+                        <Badge 
+                          variant={insight.priority === 'high' ? 'destructive' : insight.priority === 'medium' ? 'default' : 'secondary'}
+                          className="text-xs"
+                        >
+                          {insight.priority}
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-gray-600 mb-3">{insight.description}</p>
+                      {insight.action && (
+                        <Button variant="outline" size="sm">
+                          {insight.action}
+                          <ArrowRight className="h-3 w-3 ml-1" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
-  );
-}
-
-// Enhanced Helper Components
-function MetricCard({ 
-  title, 
-  value, 
-  icon: Icon, 
-  color, 
-  urgent = false,
-  trend,
-  onClick 
-}: {
-  title: string;
-  value: string | number;
-  icon: React.ComponentType<any>;
-  color: string;
-  urgent?: boolean;
-  trend?: string;
-  onClick?: () => void;
-}) {
-  return (
-    <Card 
-      className={`cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] bg-[#FAFAFA] border-gray-200 ${
-        urgent ? 'ring-2 ring-red-200 border-red-300' : ''
-      }`}
-      onClick={onClick}
-    >
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between mb-4">
-          <div className="p-2 bg-white rounded-lg shadow-sm">
-            <Icon className={`h-5 w-5 ${color}`} />
-          </div>
-          {urgent && (
-            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-          )}
-        </div>
-        <div>
-          <p className="text-sm font-medium text-gray-600 font-inter mb-1">{title}</p>
-          <p className="text-3xl font-bold text-[#191919] font-inter mb-2">{value}</p>
-          {trend && (
-            <p className="text-xs text-gray-500 font-inter">{trend}</p>
-          )}
-        </div>
-      </CardContent>
-    </Card>
   );
 }
 
@@ -544,83 +485,36 @@ function QuickActionCard({
   description, 
   icon: Icon, 
   color, 
+  badge,
   onClick 
 }: {
   title: string;
   description: string;
   icon: React.ComponentType<any>;
   color: string;
+  badge?: string;
   onClick: () => void;
 }) {
   return (
     <div 
-      className="p-4 bg-white border border-gray-100 rounded-xl cursor-pointer transition-all duration-200 hover:shadow-md hover:border-[#199BEC]/30 hover:bg-gray-50"
+      className="p-4 border border-gray-200 rounded-lg hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group"
       onClick={onClick}
     >
-      <div className="flex items-start gap-3">
-        <div className="p-2 bg-gray-50 rounded-lg">
-          <Icon className={`h-4 w-4 ${color}`} />
+      <div className="flex items-start space-x-3">
+        <div className={`p-2 rounded-lg bg-gray-100 group-hover:bg-blue-50 transition-colors`}>
+          <Icon className={`w-5 h-5 ${color} group-hover:text-blue-600 transition-colors`} />
         </div>
         <div className="flex-1">
-          <h4 className="font-semibold text-[#191919] font-inter text-sm mb-1">{title}</h4>
-          <p className="text-xs text-gray-600 font-inter leading-relaxed">{description}</p>
+          <div className="flex items-center justify-between mb-1">
+            <h3 className="font-medium text-gray-900 group-hover:text-blue-900 transition-colors">{title}</h3>
+            {badge && (
+              <Badge variant="secondary" className="text-xs">
+                {badge}
+              </Badge>
+            )}
+          </div>
+          <p className="text-sm text-gray-600">{description}</p>
         </div>
-        <ChevronRight className="w-4 h-4 text-gray-400" />
-      </div>
-    </div>
-  );
-}
-
-function ComplianceItem({ 
-  label, 
-  status,
-  percentage 
-}: { 
-  label: string; 
-  status: 'compliant' | 'in-progress' | 'needs-review';
-  percentage: number;
-}) {
-  const getStatusConfig = () => {
-    switch (status) {
-      case 'compliant':
-        return { 
-          color: 'bg-green-50 text-green-700 border-green-200', 
-          text: 'Compliant',
-          progressColor: 'bg-green-500'
-        };
-      case 'in-progress':
-        return { 
-          color: 'bg-orange-50 text-orange-700 border-orange-200', 
-          text: 'In Progress',
-          progressColor: 'bg-orange-500'
-        };
-      case 'needs-review':
-        return { 
-          color: 'bg-red-50 text-red-700 border-red-200', 
-          text: 'Needs Review',
-          progressColor: 'bg-red-500'
-        };
-    }
-  };
-
-  const config = getStatusConfig();
-
-  return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-[#191919] font-inter">{label}</span>
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-bold text-[#191919] font-inter">{percentage}%</span>
-          <Badge className={`${config.color} border text-xs font-medium`}>
-            {config.text}
-          </Badge>
-        </div>
-      </div>
-      <div className="w-full bg-gray-200 rounded-full h-2">
-        <div 
-          className={`h-2 rounded-full ${config.progressColor} transition-all duration-300`}
-          style={{ width: `${percentage}%` }}
-        ></div>
       </div>
     </div>
   );
@@ -631,55 +525,66 @@ function ActivityItem({
   user, 
   time, 
   type,
-  module 
+  module,
+  avatar
 }: { 
   action: string; 
   user: string; 
   time: string; 
-  type: 'success' | 'info' | 'warning';
+  type: 'success' | 'info' | 'warning' | 'error';
   module: string;
+  avatar?: string;
 }) {
   const getTypeConfig = () => {
     switch (type) {
-      case 'success': 
-        return { 
-          color: 'bg-green-500', 
-          bgColor: 'bg-green-50',
-          borderColor: 'border-green-100'
-        };
-      case 'warning': 
-        return { 
-          color: 'bg-orange-500', 
-          bgColor: 'bg-orange-50',
-          borderColor: 'border-orange-100'
-        };
-      case 'info': 
-        return { 
-          color: 'bg-blue-500', 
-          bgColor: 'bg-blue-50',
-          borderColor: 'border-blue-100'
-        };
+      case 'success':
+        return { icon: CheckCircle, color: 'text-green-600', bg: 'bg-green-100' };
+      case 'warning':
+        return { icon: AlertTriangle, color: 'text-orange-600', bg: 'bg-orange-100' };
+      case 'error':
+        return { icon: AlertCircle, color: 'text-red-600', bg: 'bg-red-100' };
+      default:
+        return { icon: FileText, color: 'text-blue-600', bg: 'bg-blue-100' };
+    }
+  };
+
+  const getModuleBadgeColor = (module: string) => {
+    const moduleLower = module.toLowerCase();
+    switch (moduleLower) {
+      case 'risk management':
+        return 'bg-red-50 text-red-700 border-red-200';
+      case 'compliance':
+        return 'bg-green-50 text-green-700 border-green-200';
+      case 'monitoring':
+        return 'bg-blue-50 text-blue-700 border-blue-200';
+      case 'controls':
+        return 'bg-purple-50 text-purple-700 border-purple-200';
+      case 'planning':
+        return 'bg-orange-50 text-orange-700 border-orange-200';
+      default:
+        return 'bg-gray-50 text-gray-700 border-gray-200';
     }
   };
 
   const config = getTypeConfig();
+  const Icon = config.icon;
 
   return (
-    <div className={`p-4 bg-white rounded-lg border border-gray-100 transition-all duration-200 hover:shadow-sm`}>
-      <div className="flex items-start gap-3">
-        <div className={`w-2 h-2 rounded-full ${config.color} mt-2 flex-shrink-0`} />
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-[#191919] font-inter leading-relaxed mb-1">{action}</p>
-          <div className="flex items-center gap-2 text-xs text-gray-500 font-inter">
-            <span>by {user}</span>
-            <span>•</span>
-            <span>{time}</span>
-            <span>•</span>
-            <Badge variant="outline" className="text-xs font-medium">
-              {module}
-            </Badge>
-          </div>
+    <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+      <div className="flex-1 min-w-0">
+        <p className="text-sm text-gray-900 mb-1">{action}</p>
+        <div className="flex items-center space-x-2">
+          <p className="text-xs text-gray-500">{user}</p>
+          <span className="text-xs text-gray-400">•</span>
+          <p className="text-xs text-gray-500">{time}</p>
+          <span className="text-xs text-gray-400">•</span>
+          <Badge className={`text-xs border ${getModuleBadgeColor(module)}`}>
+            {module}
+          </Badge>
         </div>
+      </div>
+      <div className={`p-1 rounded-full ${config.bg} flex-shrink-0`}>
+        <Icon className={`w-3 h-3 ${config.color}`} />
       </div>
     </div>
   );

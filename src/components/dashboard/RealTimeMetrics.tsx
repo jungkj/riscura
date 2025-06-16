@@ -43,6 +43,7 @@ interface MetricItem {
 export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
   const [animatedValues, setAnimatedValues] = useState<Record<string, number>>({});
   const [isVisible, setIsVisible] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   // Define metrics configuration
   const metrics: MetricItem[] = [
@@ -122,17 +123,31 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
 
   // Animate values on mount and data changes
   useEffect(() => {
+    if (isAnimating) return; // Prevent multiple animations
+    
+    setIsAnimating(true);
     setIsVisible(true);
     
-    metrics.forEach((metric, index) => {
-      setTimeout(() => {
-        setAnimatedValues(prev => ({
-          ...prev,
-          [metric.id]: metric.value
-        }));
-      }, index * 200);
+    // Batch all animations together
+    const animationPromises = metrics.map((metric, index) => {
+      return new Promise<void>((resolve) => {
+        setTimeout(() => {
+          setAnimatedValues(prev => ({
+            ...prev,
+            [metric.id]: metric.value
+          }));
+          resolve();
+        }, index * 150); // Reduced delay between animations
+      });
     });
-  }, [data]);
+
+    // Wait for all animations to complete
+    Promise.all(animationPromises).then(() => {
+      setTimeout(() => {
+        setIsAnimating(false);
+      }, 100); // Small delay before allowing new animations
+    });
+  }, [data, isAnimating]);
 
   // Helper functions
   const formatValue = (value: number, format: string): string => {
@@ -184,12 +199,12 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
     <div className="space-y-4 font-inter">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+          <div className={`w-2 h-2 rounded-full ${isAnimating ? 'bg-green-500 animate-pulse' : 'bg-green-500'}`} />
           <h2 className="text-lg font-semibold text-[#191919] font-inter">
             Real-Time Metrics
           </h2>
           <Badge variant="outline" className="text-xs border-[#D8C3A5] text-[#191919] font-inter">
-            Live
+            {isAnimating ? 'Analyzing...' : 'Live'}
           </Badge>
         </div>
         
@@ -200,97 +215,63 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {metrics.map((metric, index) => {
-          const animatedValue = animatedValues[metric.id] || 0;
-          const trendPercentage = getTrendPercentage(metric.value, metric.previousValue);
-          const statusColor = getStatusColor(metric.value, metric.threshold);
-          const progressValue = getProgressValue(metric.value, metric.target);
-
-          return (
-            <motion.div
-              key={metric.id}
-              initial={{ opacity: 0, y: 20, scale: 0.9 }}
-              animate={{ 
-                opacity: isVisible ? 1 : 0, 
-                y: isVisible ? 0 : 20,
-                scale: isVisible ? 1 : 0.9
-              }}
-              transition={{ 
-                duration: 0.6, 
-                delay: index * 0.1,
-                type: "spring",
-                stiffness: 100
-              }}
-              whileHover={{ scale: 1.02 }}
-              className="h-full"
-            >
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Card className="h-full bg-[#FAFAFA] border-[#D8C3A5] hover:shadow-lg transition-all duration-300 cursor-pointer">
-                    <CardContent className="p-4 space-y-3">
-                      {/* Header */}
-                      <div className="flex items-center justify-between">
-                        <div className={`p-2 rounded-lg bg-[#D8C3A5]/20 ${statusColor}`}>
-                          {metric.icon}
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          {getTrendIcon(metric.value, metric.previousValue)}
-                          <span className={`text-xs font-medium font-inter ${
-                            metric.previousValue && metric.value > metric.previousValue 
-                              ? 'text-green-600' 
-                              : metric.previousValue && metric.value < metric.previousValue
-                              ? 'text-red-600'
-                              : 'text-[#A8A8A8]'
-                          }`}>
-                            {trendPercentage}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Value */}
-                      <div className="space-y-1">
-                        <div className="text-2xl font-bold text-[#191919] font-inter">
-                          <AnimatedNumber value={animatedValue} format={metric.format} />
-                        </div>
-                        <p className="text-xs font-medium text-[#A8A8A8] font-inter">
-                          {metric.label}
-                        </p>
-                      </div>
-
-                      {/* Progress Bar (if target exists) */}
-                      {metric.target && (
-                        <div className="space-y-1">
-                          <Progress 
-                            value={progressValue} 
-                            className="h-2 bg-[#D8C3A5]/30"
-                          />
-                          <div className="flex justify-between text-xs text-[#A8A8A8] font-inter">
-                            <span>Current</span>
-                            <span>Target: {formatValue(metric.target, metric.format)}</span>
-                          </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                </TooltipTrigger>
-                <TooltipContent className="bg-[#191919] text-[#FAFAFA] border-[#D8C3A5] font-inter">
-                  <div className="space-y-1">
-                    <p className="font-medium">{metric.label}</p>
-                    <p className="text-sm opacity-90">{metric.description}</p>
-                    {metric.threshold && (
-                      <div className="text-xs space-y-0.5 opacity-75">
-                        <p>Warning: {formatValue(metric.threshold.warning, metric.format)}</p>
-                        <p>Critical: {formatValue(metric.threshold.critical, metric.format)}</p>
-                      </div>
-                    )}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+      >
+        {metrics.map((metric) => (
+          <motion.div
+            key={metric.id}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+          >
+            <Card className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center space-x-2">
+                    {metric.icon}
+                    <span className="text-sm text-[#6B5B47]">{metric.label}</span>
                   </div>
-                </TooltipContent>
-              </Tooltip>
-            </motion.div>
-          );
-        })}
-      </div>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <div className="flex items-center space-x-1">
+                        {getTrendIcon(metric.value, metric.previousValue)}
+                        <span className={`text-xs ${getStatusColor(metric.value, metric.threshold)}`}>
+                          {getTrendPercentage(metric.value, metric.previousValue)}
+                        </span>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{metric.description}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                
+                <div className="flex items-baseline justify-between">
+                  <span className={`text-2xl font-semibold ${metric.color}`}>
+                    {formatValue(metric.value, metric.format)}
+                  </span>
+                  {metric.target && (
+                    <span className="text-xs text-[#A8A8A8]">
+                      Target: {formatValue(metric.target, metric.format)}
+                    </span>
+                  )}
+                </div>
+                
+                {metric.target && (
+                  <Progress
+                    value={getProgressValue(metric.value, metric.target)}
+                    className="mt-2 h-1"
+                  />
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </motion.div>
 
       {/* Summary Stats */}
       <motion.div

@@ -81,7 +81,7 @@ const HeroProcessCard = () => {
           </div>
 
           {/* Dynamic Content Area */}
-          <div className="h-80 relative overflow-hidden">
+          <div className="h-96 relative overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
@@ -148,13 +148,29 @@ const HeroProcessCard = () => {
                       <div className="space-y-3">
                         {currentStepData.processing?.map((process, index) => (
                           <motion.div
-                            key={process}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: index * 0.8, repeat: Infinity, repeatDelay: 2.4 }}
+                            key={`${process}-${currentStep}`}
+                            initial={{ opacity: 0.3 }}
+                            animate={{ 
+                              opacity: [0.3, 1, 0.3],
+                            }}
+                            transition={{ 
+                              duration: 2.4,
+                              delay: index * 0.8,
+                              repeat: Infinity,
+                              ease: "easeInOut"
+                            }}
                             className="flex items-center justify-center space-x-2 text-sm"
                           >
-                            <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+                            <motion.div 
+                              className="w-2 h-2 bg-purple-500 rounded-full"
+                              animate={{ scale: [1, 1.2, 1] }}
+                              transition={{
+                                duration: 1.2,
+                                delay: index * 0.8,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                              }}
+                            />
                             <span className="text-gray-700">{process}</span>
                           </motion.div>
                         ))}

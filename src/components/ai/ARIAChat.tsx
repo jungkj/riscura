@@ -1,525 +1,639 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
-import { 
-  X, 
-  Send, 
-  Search, 
-  Mic, 
-  MicOff, 
-  Paperclip, 
-  MoreVertical,
-  Download,
-  Trash2,
-  MessageSquare,
-  Bot,
-  Minimize2,
-  Maximize2,
-  Sparkles
-} from 'lucide-react';
+'use client';
 
-import { useARIAChat, RiskContext, ConversationTemplate } from '@/hooks/useARIAChat';
-import { AgentType } from '@/types/ai.types';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Progress } from '@/components/ui/progress';
-import { useToast } from '@/hooks/use-toast';
-import { useAI } from '@/context/AIContext';
+import React, { useState, useRef, useEffect } from 'react';
+import { designTokens } from '@/lib/design-system/tokens';
+import { 
+  ActionIcons, 
+  StatusIcons, 
+  AIIcons, 
+  RiskManagementIcons,
+  CommunicationIcons,
+  DataIcons,
+  TimeIcons
+} from '@/components/icons/IconLibrary';
+import { LoadingStates, DotsLoading } from '@/components/states/LoadingState';
+import { EmptyStates } from '@/components/states/EmptyState';
+
+// Smart features configuration
+const smartFeatures = {
+  suggestedPrompts: [
+    {
+      id: 'analyze-risks',
+      text: "Analyze current high-risk items",
+      category: 'risk-analysis',
+      icon: RiskManagementIcons.ShieldAlert,
+      description: "Get AI insights on your highest priority risks"
+    },
+    {
+      id: 'compliance-summary',
+      text: "Generate compliance summary",
+      category: 'compliance',
+      icon: RiskManagementIcons.ClipboardCheck,
+      description: "Review your compliance status across all frameworks"
+    },
+    {
+      id: 'control-improvements',
+      text: "Recommend control improvements",
+      category: 'controls',
+      icon: RiskManagementIcons.Target,
+      description: "Discover ways to strengthen your risk controls"
+    },
+    {
+      id: 'trend-analysis',
+      text: "Show risk trends over time",
+      category: 'analytics',
+      icon: DataIcons.TrendingUp,
+      description: "Analyze how your risk profile has changed"
+    },
+    {
+      id: 'audit-preparation',
+      text: "Help prepare for upcoming audit",
+      category: 'audit',
+      icon: RiskManagementIcons.FileCheck,
+      description: "Get guidance on audit readiness and documentation"
+    },
+    {
+      id: 'regulatory-updates',
+      text: "What are the latest regulatory changes?",
+      category: 'regulatory',
+      icon: StatusIcons.Info,
+      description: "Stay informed about relevant regulatory developments"
+    }
+  ],
+  contextualAssistance: {
+    riskAssessment: {
+      title: "Risk Assessment AI Assistant",
+      description: "AI can help assess impact and likelihood based on industry data and best practices",
+      capabilities: [
+        "Impact scoring based on business context",
+        "Likelihood assessment using historical data",
+        "Risk categorization and prioritization",
+        "Mitigation strategy recommendations"
+      ]
+    },
+    complianceReview: {
+      title: "Compliance Review AI Assistant", 
+      description: "AI can identify gaps and suggest improvements for regulatory compliance",
+      capabilities: [
+        "Gap analysis across frameworks",
+        "Control effectiveness evaluation",
+        "Remediation action planning",
+        "Evidence collection guidance"
+      ]
+    },
+    auditPreparation: {
+      title: "Audit Preparation AI Assistant",
+      description: "AI can help organize documentation and identify potential audit findings",
+      capabilities: [
+        "Documentation completeness check",
+        "Control testing preparation",
+        "Finding prediction and prevention",
+        "Audit trail optimization"
+      ]
+    }
+  },
+  quickActions: [
+    { id: 'export-chat', label: 'Export Chat', icon: ActionIcons.Download },
+    { id: 'share-insights', label: 'Share Insights', icon: ActionIcons.Share },
+    { id: 'save-analysis', label: 'Save Analysis', icon: ActionIcons.Save },
+    { id: 'schedule-followup', label: 'Schedule Follow-up', icon: TimeIcons.Calendar }
+  ]
+};
+
+// Message types
+interface ChatMessage {
+  id: string;
+  type: 'user' | 'assistant' | 'system';
+  content: string;
+  timestamp: Date;
+  metadata?: {
+    category?: string;
+    confidence?: number;
+    sources?: string[];
+    actions?: Array<{
+      id: string;
+      label: string;
+      action: () => void;
+    }>;
+  };
+}
 
 interface ARIAChatProps {
-  isOpen: boolean;
-  onClose: () => void;
-  initialContext?: RiskContext;
-  mode: 'floating' | 'sidebar' | 'fullscreen';
+  context?: 'dashboard' | 'risk-assessment' | 'compliance' | 'audit' | 'general';
+  initialPrompt?: string;
+  onInsightGenerated?: (insight: any) => void;
   className?: string;
 }
 
-interface TypingIndicatorProps {
-  isVisible: boolean;
-}
+export const ARIAChat: React.FC<ARIAChatProps> = ({
+  context = 'general',
+  initialPrompt,
+  onInsightGenerated,
+  className = ''
+}) => {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-const TypingIndicator: React.FC<TypingIndicatorProps> = ({ isVisible }) => {
-  if (!isVisible) return null;
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg border border-gray-100"
-    >
-      <div className="flex items-center gap-1">
-        <div className="w-2 h-2 bg-[#199BEC] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-        <div className="w-2 h-2 bg-[#199BEC] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-        <div className="w-2 h-2 bg-[#199BEC] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-      </div>
-      <span className="text-sm font-medium text-gray-600 font-inter">ARIA is thinking...</span>
-    </motion.div>
-  );
-};
+  // Initialize with welcome message
+  useEffect(() => {
+    if (messages.length === 0) {
+      const welcomeMessage: ChatMessage = {
+        id: 'welcome',
+        type: 'assistant',
+        content: getWelcomeMessage(context),
+        timestamp: new Date(),
+        metadata: {
+          category: 'welcome'
+        }
+      };
+      setMessages([welcomeMessage]);
+    }
+  }, [context, messages.length]);
 
-const ConversationTemplateCard: React.FC<{
-  template: ConversationTemplate;
-  onSelect: (template: ConversationTemplate) => void;
-}> = ({ template, onSelect }) => {
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'risk_analysis': return '🔍';
-      case 'control_design': return '🛡️';
-      case 'compliance': return '📋';
-      default: return '💬';
+  // Handle initial prompt
+  useEffect(() => {
+    if (initialPrompt && messages.length === 1) {
+      handleSendMessage(initialPrompt);
+    }
+  }, [initialPrompt, messages.length]);
+
+  const getWelcomeMessage = (context: string): string => {
+    const contextMessages = {
+      'risk-assessment': "Hi! I'm ARIA, your AI risk assessment assistant. I can help you analyze risks, assess impact and likelihood, and recommend mitigation strategies. What would you like to explore?",
+      'compliance': "Hello! I'm ARIA, your AI compliance assistant. I can help you review compliance status, identify gaps, and suggest improvements across your frameworks. How can I assist you today?",
+      'audit': "Welcome! I'm ARIA, your AI audit assistant. I can help you prepare for audits, organize documentation, and identify potential findings. What audit-related task can I help with?",
+      'dashboard': "Hi there! I'm ARIA, your AI risk management assistant. I can provide insights on your current risk posture, compliance status, and recommend actions. What insights would you like?",
+      'general': "Hello! I'm ARIA, your AI-powered risk management assistant. I'm here to help you with risk analysis, compliance reviews, audit preparation, and strategic insights. How can I help you today?"
+    };
+    return contextMessages[context] || contextMessages.general;
+  };
+
+  const handleSendMessage = async (message?: string) => {
+    const messageText = message || inputValue.trim();
+    if (!messageText) return;
+
+    // Add user message
+    const userMessage: ChatMessage = {
+      id: `user-${Date.now()}`,
+      type: 'user',
+      content: messageText,
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInputValue('');
+    setIsLoading(true);
+
+    try {
+      // Simulate AI response (replace with actual API call)
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      const aiResponse = await generateAIResponse(messageText, context);
+      
+      const assistantMessage: ChatMessage = {
+        id: `assistant-${Date.now()}`,
+        type: 'assistant',
+        content: aiResponse.content,
+        timestamp: new Date(),
+        metadata: aiResponse.metadata
+      };
+
+      setMessages(prev => [...prev, assistantMessage]);
+      
+      // Trigger insight callback if provided
+      if (onInsightGenerated && aiResponse.metadata?.category !== 'general') {
+        onInsightGenerated(aiResponse);
+      }
+    } catch (error) {
+      const errorMessage: ChatMessage = {
+        id: `error-${Date.now()}`,
+        type: 'system',
+        content: "I apologize, but I'm having trouble processing your request right now. Please try again in a moment.",
+        timestamp: new Date(),
+        metadata: { category: 'error' }
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  return (
-    <Card 
-      className="p-4 cursor-pointer hover:shadow-lg transition-all duration-200 border border-gray-200 bg-white hover:border-[#199BEC]/50"
-      onClick={() => onSelect(template)}
-    >
-      <div className="flex items-start gap-4">
-        <div className="text-2xl">{getCategoryIcon(template.category)}</div>
-        <div className="flex-1">
-          <h3 className="font-semibold text-sm text-[#191919] font-inter mb-1">{template.title}</h3>
-          <p className="text-xs text-gray-600 font-inter leading-relaxed mb-3">{template.description}</p>
-          <Badge variant="secondary" className="text-xs font-medium">
-            {template.category.replace('_', ' ')}
-          </Badge>
-        </div>
-      </div>
-    </Card>
-  );
-};
+  const generateAIResponse = async (prompt: string, context: string) => {
+    // This would be replaced with actual AI API integration
+    const responses = {
+      'analyze-risks': {
+        content: `Based on your current risk register, I've identified 3 high-priority risks that need immediate attention:
 
-const AgentSelector: React.FC<{
-  currentAgent: AgentType;
-  onAgentChange: (agent: AgentType) => void;
-}> = ({ currentAgent, onAgentChange }) => {
-  const agents = [
-    { value: 'general_assistant', label: 'General Assistant', icon: '🤖', description: 'General help and guidance' },
-    { value: 'risk_analyzer', label: 'Risk Analyzer', icon: '🔍', description: 'Risk assessment and analysis' },
-    { value: 'control_advisor', label: 'Control Advisor', icon: '🛡️', description: 'Control design and recommendations' },
-    { value: 'compliance_expert', label: 'Compliance Expert', icon: '📋', description: 'Regulatory compliance guidance' },
-  ] as const;
+**1. Data Security Risk (Critical)**
+- Current likelihood: High (85%)
+- Business impact: Severe ($2.5M potential loss)
+- Recommendation: Implement multi-factor authentication and conduct security audit
 
-  return (
-    <Select value={currentAgent} onValueChange={(value) => onAgentChange(value as AgentType)}>
-      <SelectTrigger className="w-full">
-        <SelectValue>
-          <div className="flex items-center gap-2">
-            <span>{agents.find(a => a.value === currentAgent)?.icon}</span>
-            <span className="text-sm font-medium">{agents.find(a => a.value === currentAgent)?.label}</span>
-          </div>
-        </SelectValue>
-      </SelectTrigger>
-      <SelectContent>
-        {agents.map((agent) => (
-          <SelectItem key={agent.value} value={agent.value}>
-            <div className="flex items-center gap-2">
-              <span>{agent.icon}</span>
-              <div>
-                <p className="font-medium">{agent.label}</p>
-                <p className="text-xs text-gray-500">{agent.description}</p>
-              </div>
-            </div>
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  );
-};
+**2. Regulatory Compliance Gap (High)**
+- Current status: 78% compliant with GDPR requirements
+- Key gaps: Data retention policies, consent management
+- Recommendation: Update privacy policies and implement consent tracking
 
-export const ARIAChat: React.FC<ARIAChatProps> = ({
-  isOpen,
-  onClose,
-  initialContext,
-  mode,
-  className,
-}) => {
-  const { state, actions, messagesEndRef } = useARIAChat(initialContext);
-  const { selectedAgent } = useAI();
-  const { toast } = useToast();
-  
-  // Local state
-  const [inputValue, setInputValue] = useState('');
-  const [isVoiceActive, setIsVoiceActive] = useState(false);
-  const [showTemplates, setShowTemplates] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  
-  // Refs
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+**3. Third-Party Vendor Risk (Medium-High)**
+- 12 vendors lack current security assessments
+- Potential supply chain disruption risk
+- Recommendation: Conduct vendor security reviews within 30 days
 
-  // Auto-focus input when opened
-  useEffect(() => {
-    if (isOpen && inputRef.current) {
-      inputRef.current.focus();
+Would you like me to dive deeper into any of these risks or help you create action plans?`,
+        metadata: {
+          category: 'risk-analysis',
+          confidence: 0.92,
+          sources: ['Risk Register', 'Compliance Dashboard', 'Vendor Database'],
+          actions: [
+            { id: 'create-action-plan', label: 'Create Action Plan', action: () => {} },
+            { id: 'schedule-review', label: 'Schedule Risk Review', action: () => {} }
+          ]
+        }
+      },
+      'compliance-summary': {
+        content: `Here's your current compliance status across all frameworks:
+
+**Overall Compliance Score: 82%** ⬆️ (+5% from last month)
+
+**Framework Breakdown:**
+- **ISO 27001**: 89% compliant ✅ (Target: 95%)
+- **GDPR**: 78% compliant ⚠️ (Target: 100%)
+- **SOX**: 85% compliant ✅ (Target: 90%)
+- **HIPAA**: 92% compliant ✅ (Target: 95%)
+
+**Priority Actions:**
+1. **GDPR Gaps** (Due: 2 weeks)
+   - Update data retention policies
+   - Implement consent management system
+   
+2. **ISO 27001 Improvements** (Due: 1 month)
+   - Complete security awareness training
+   - Update incident response procedures
+
+**Upcoming Deadlines:**
+- GDPR compliance review: March 15
+- SOX quarterly assessment: March 30
+
+Would you like detailed remediation plans for any specific framework?`,
+        metadata: {
+          category: 'compliance',
+          confidence: 0.95,
+          sources: ['Compliance Dashboard', 'Framework Assessments', 'Audit Reports'],
+          actions: [
+            { id: 'generate-report', label: 'Generate Full Report', action: () => {} },
+            { id: 'create-remediation-plan', label: 'Create Remediation Plan', action: () => {} }
+          ]
+        }
+      },
+      'control-improvements': {
+        content: `I've analyzed your current controls and identified several improvement opportunities:
+
+**High-Impact Improvements:**
+
+**1. Automated Monitoring Enhancement**
+- Current: Manual log reviews weekly
+- Recommended: Real-time SIEM implementation
+- Expected benefit: 75% faster threat detection
+- Investment: $15K, ROI: 6 months
+
+**2. Access Control Strengthening**
+- Current: Role-based access with annual reviews
+- Recommended: Privileged access management + quarterly reviews
+- Expected benefit: 60% reduction in access-related incidents
+- Investment: $25K, ROI: 8 months
+
+**3. Incident Response Automation**
+- Current: Manual incident escalation
+- Recommended: Automated workflow with AI triage
+- Expected benefit: 50% faster response times
+- Investment: $10K, ROI: 4 months
+
+**Quick Wins (Low Cost, High Impact):**
+- Enable MFA for all admin accounts (2 days)
+- Implement automated backup verification (1 week)
+- Update security awareness training content (1 week)
+
+Which improvements would you like to prioritize?`,
+        metadata: {
+          category: 'controls',
+          confidence: 0.88,
+          sources: ['Control Assessments', 'Industry Benchmarks', 'Cost-Benefit Analysis'],
+          actions: [
+            { id: 'prioritize-improvements', label: 'Create Priority Matrix', action: () => {} },
+            { id: 'estimate-costs', label: 'Get Cost Estimates', action: () => {} }
+          ]
+        }
+      }
+    };
+
+    // Simple keyword matching for demo (replace with actual AI)
+    const lowerPrompt = prompt.toLowerCase();
+    if (lowerPrompt.includes('risk') && lowerPrompt.includes('high')) {
+      return responses['analyze-risks'];
+    } else if (lowerPrompt.includes('compliance') || lowerPrompt.includes('summary')) {
+      return responses['compliance-summary'];
+    } else if (lowerPrompt.includes('control') || lowerPrompt.includes('improve')) {
+      return responses['control-improvements'];
     }
-  }, [isOpen]);
 
-  // Scroll to bottom when new messages arrive
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [state.messages]);
+    // Default response
+    return {
+      content: `I understand you're asking about "${prompt}". Let me help you with that.
 
-  // Handle message sending
-  const handleSendMessage = useCallback(async () => {
-    if (!inputValue.trim() || state.isLoading) return;
+Based on your current context, I can assist with:
+- Risk analysis and assessment
+- Compliance status reviews
+- Control effectiveness evaluation
+- Audit preparation guidance
+- Strategic recommendations
 
-    const message = inputValue;
-    setInputValue('');
+Could you provide more specific details about what you'd like to explore? For example:
+- Which risks are you most concerned about?
+- What compliance frameworks are you focusing on?
+- Are there specific controls you'd like to improve?`,
+      metadata: {
+        category: 'general',
+        confidence: 0.7,
+        sources: ['General Knowledge Base']
+      }
+    };
+  };
 
-    try {
-      await actions.sendMessage(message);
-    } catch (error) {
-      toast({
-        title: "Failed to send message",
-        description: "Please try again or check your connection.",
-        variant: "destructive",
-      });
-    }
-  }, [inputValue, state.isLoading, actions, toast]);
+  const handleSuggestedPrompt = (prompt: any) => {
+    setInputValue(prompt.text);
+    handleSendMessage(prompt.text);
+  };
 
-  // Handle keyboard shortcuts
-  const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
+  const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
-  }, [handleSendMessage]);
-
-  // Handle voice input
-  const toggleVoiceInput = useCallback(() => {
-    setIsVoiceActive(!isVoiceActive);
-    // TODO: Implement voice input logic
-  }, [isVoiceActive]);
-
-  // Handle file upload
-  const handleFileUpload = useCallback(async (files: FileList) => {
-    // TODO: Implement file upload logic
-    console.log('Files uploaded:', files);
-  }, []);
-
-  // Handle template selection
-  const handleTemplateSelect = useCallback((template: ConversationTemplate) => {
-    setInputValue(template.title);
-    setShowTemplates(false);
-    inputRef.current?.focus();
-  }, []);
-
-  // Get container classes based on mode
-  const getContainerClasses = () => {
-    switch (mode) {
-      case 'floating':
-        return 'fixed bottom-4 right-4 w-96 h-[600px] z-50';
-      case 'sidebar':
-        return 'w-full h-full';
-      case 'fullscreen':
-        return 'w-full h-screen';
-      default:
-        return 'w-full h-full';
-    }
   };
 
-  // Show empty state when no messages
-  const showEmptyState = state.messages.length === 0 && !showTemplates;
+  const filteredPrompts = selectedCategory 
+    ? smartFeatures.suggestedPrompts.filter(p => p.category === selectedCategory)
+    : smartFeatures.suggestedPrompts;
 
-  if (!isOpen) return null;
+  const categories = [...new Set(smartFeatures.suggestedPrompts.map(p => p.category))];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: mode === 'floating' ? 0.8 : 1, y: mode === 'floating' ? 20 : 0 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: mode === 'floating' ? 0.8 : 1, y: mode === 'floating' ? 20 : 0 }}
-      className={cn(
-        "flex flex-col bg-[#FAFAFA] border border-gray-200 rounded-xl overflow-hidden font-inter shadow-lg",
-        getContainerClasses(),
-        className
-      )}
-    >
+    <div className={`bg-white rounded-lg border border-gray-200 shadow-sm ${className}`}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-[#199BEC] shadow-sm">
-              <Bot className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <h2 className="font-bold text-[#191919] font-inter text-lg">ARIA</h2>
-              <p className="text-xs text-gray-500 font-inter">AI Risk Intelligence Assistant</p>
-            </div>
+      <div className="flex items-center justify-between p-4 border-b border-gray-200">
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+            <AIIcons.Brain size="sm" color="primary" />
           </div>
-          <div className="ml-2">
-            {state.isConnected ? (
-              <Badge variant="success" className="text-xs font-medium">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-2" />
-                Online
-              </Badge>
-            ) : (
-              <Badge variant="destructive" className="text-xs font-medium">
-                <div className="w-2 h-2 bg-red-500 rounded-full mr-2" />
-                Offline
-              </Badge>
-            )}
+          <div>
+            <h3 className="font-semibold text-gray-900">ARIA AI Assistant</h3>
+            <p className="text-xs text-gray-500">
+              {smartFeatures.contextualAssistance[context]?.title || 'AI-Powered Risk Management'}
+            </p>
           </div>
         </div>
-
-        <div className="flex items-center gap-2">
-          {mode === 'floating' && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsMinimized(!isMinimized)}
-              className="text-gray-500 hover:text-[#191919] hover:bg-gray-100 p-2"
-            >
-              {isMinimized ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
-            </Button>
-          )}
-          
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="text-gray-500 hover:text-[#191919] hover:bg-gray-100 p-2">
-                <MoreVertical className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-white border border-gray-200 shadow-lg">
-              <DropdownMenuItem onClick={() => actions.exportConversation('markdown')} className="hover:bg-gray-50 text-gray-700 font-inter font-medium">
-                <Download className="h-4 w-4 mr-2" />
-                Export Chat
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setShowTemplates(true)} className="hover:bg-gray-50 text-gray-700 font-inter font-medium">
-                <MessageSquare className="h-4 w-4 mr-2" />
-                Templates
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-gray-200" />
-              <DropdownMenuItem onClick={actions.clearMessages} className="text-red-600 hover:bg-red-50 font-inter font-medium">
-                <Trash2 className="h-4 w-4 mr-2" />
-                Clear Chat
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <Button variant="ghost" size="sm" onClick={onClose} className="text-gray-500 hover:text-[#191919] hover:bg-gray-100 p-2">
-            <X className="h-4 w-4" />
-          </Button>
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="p-2 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100 transition-colors"
+            aria-label={isExpanded ? 'Collapse chat' : 'Expand chat'}
+          >
+            {isExpanded ? (
+              <ActionIcons.Minimize size="sm" />
+            ) : (
+              <ActionIcons.Maximize size="sm" />
+            )}
+          </button>
         </div>
       </div>
 
-      {!isMinimized && (
-        <>
-          {/* Agent Selector and Search */}
-          <div className="p-4 border-b border-gray-200 space-y-3 bg-white">
-            <AgentSelector currentAgent={selectedAgent} onAgentChange={actions.switchAgent} />
-            
-            {state.messages.length > 0 && (
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Search messages..."
-                  value={state.searchQuery}
-                  onChange={(e) => actions.searchMessages(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-            )}
+      {/* Context Info */}
+      {smartFeatures.contextualAssistance[context] && (
+        <div className="p-4 bg-blue-50 border-b border-blue-100">
+          <p className="text-sm text-blue-800 mb-2">
+            {smartFeatures.contextualAssistance[context].description}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {smartFeatures.contextualAssistance[context].capabilities.map((capability, index) => (
+              <span
+                key={index}
+                className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+              >
+                {capability}
+              </span>
+            ))}
           </div>
-
-          {/* Error Display */}
-          {state.error && (
-            <Alert className="m-4 border border-red-200 bg-red-50 shadow-sm">
-              <AlertDescription className="text-red-600 font-inter text-sm font-medium">
-                {state.error.message}
-                {state.error.retryable && (
-                  <Button 
-                    variant="link" 
-                    size="sm" 
-                    onClick={actions.clearError}
-                    className="ml-2 p-0 h-auto text-red-600 hover:text-red-700 font-inter font-medium"
-                  >
-                    Dismiss
-                  </Button>
-                )}
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {/* Upload Progress */}
-          {uploadProgress > 0 && uploadProgress < 100 && (
-            <div className="p-4 bg-white">
-              <Progress value={uploadProgress} className="w-full h-2" />
-              <p className="text-xs text-gray-600 font-inter font-medium mt-2">Uploading files...</p>
-            </div>
-          )}
-
-          {/* Main Content */}
-          <div className="flex-1 overflow-hidden bg-white">
-            {showTemplates ? (
-              /* Templates View */
-              <div className="p-6 h-full overflow-y-auto">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h3 className="font-bold text-[#191919] font-inter text-xl mb-1">Conversation Templates</h3>
-                    <p className="text-sm text-gray-600 font-inter">Get started with pre-built prompts for common tasks</p>
-                  </div>
-                  <Button variant="ghost" size="sm" onClick={() => setShowTemplates(false)} className="text-gray-500 hover:text-[#191919] hover:bg-gray-100">
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-                <div className="grid gap-4">
-                  {state.conversationTemplates.map((template) => (
-                    <ConversationTemplateCard
-                      key={template.id}
-                      template={template}
-                      onSelect={handleTemplateSelect}
-                    />
-                  ))}
-                </div>
-              </div>
-            ) : showEmptyState ? (
-              /* Empty State */
-              <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-                <div className="p-6 rounded-2xl bg-gradient-to-br from-[#199BEC]/10 to-[#199BEC]/5 mb-6">
-                  <Bot className="h-16 w-16 text-[#199BEC] mx-auto" />
-                </div>
-                <h3 className="font-bold text-2xl mb-2 text-[#191919] font-inter">Welcome to ARIA</h3>
-                <p className="text-gray-600 font-inter text-sm mb-8 max-w-md leading-relaxed">
-                  Your AI Risk Intelligence Assistant is ready to help with risk management, compliance, and controls. Ask me anything or use a template to get started.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-3 w-full max-w-sm">
-                  <Button 
-                    onClick={() => setShowTemplates(true)} 
-                    variant="tertiary" 
-                    className="flex-1 font-inter font-medium"
-                  >
-                    <Sparkles className="h-4 w-4 mr-2" />
-                    Use Template
-                  </Button>
-                  <Button 
-                    onClick={() => inputRef.current?.focus()} 
-                    className="flex-1 font-inter font-medium"
-                  >
-                    Start Conversation
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              /* Messages View */
-              <ScrollArea className="h-full">
-                <div className="p-6 space-y-6">
-                  {(state.searchQuery ? state.filteredMessages : state.messages).map((message) => (
-                    <div key={message.id} className="flex gap-4">
-                      <div className={cn(
-                        "flex flex-col max-w-[85%]",
-                        message.role === 'user' ? "ml-auto" : "mr-auto"
-                      )}>
-                        <div className={cn(
-                          "p-4 rounded-xl font-inter shadow-sm border",
-                          message.role === 'user' 
-                            ? "bg-[#199BEC] text-white border-[#199BEC]" 
-                            : "bg-gray-50 text-[#191919] border-gray-200"
-                        )}>
-                          <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
-                          {message.usage && (
-                            <div className="text-xs opacity-70 mt-3 pt-3 border-t border-current/20 font-medium">
-                              Tokens: {message.usage.promptTokens + message.usage.completionTokens}
-                            </div>
-                          )}
-                        </div>
-                        <div className="text-xs text-gray-500 font-inter mt-2 px-1 font-medium">
-                          {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  
-                  {/* Typing Indicator */}
-                  <TypingIndicator isVisible={state.isLoading} />
-                  
-                  <div ref={messagesEndRef} />
-                </div>
-              </ScrollArea>
-            )}
-          </div>
-
-          {/* Input Area */}
-          {!showTemplates && (
-            <div className="border-t border-gray-200 bg-white p-4">
-              <div className="flex gap-3">
-                <div className="flex-1 relative">
-                  <Textarea
-                    ref={inputRef}
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    placeholder="Ask ARIA about risks, controls, or compliance..."
-                    className="min-h-[48px] max-h-32 resize-none pr-20 text-sm"
-                    disabled={state.isLoading}
-                  />
-                  <div className="absolute bottom-2 right-2 flex gap-1">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => fileInputRef.current?.click()}
-                      disabled={state.isLoading}
-                      className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-1.5 h-8 w-8"
-                    >
-                      <Paperclip className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={toggleVoiceInput}
-                      disabled={state.isLoading}
-                      className={cn(
-                        "text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-1.5 h-8 w-8",
-                        isVoiceActive && "text-red-500 hover:text-red-600"
-                      )}
-                    >
-                      {isVoiceActive ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-                    </Button>
-                  </div>
-                </div>
-                <Button 
-                  onClick={handleSendMessage}
-                  disabled={!inputValue.trim() || state.isLoading}
-                  size="default"
-                  className="px-4 font-inter font-medium self-end"
-                >
-                  <Send className="h-4 w-4" />
-                </Button>
-              </div>
-              
-              {/* Rate Limit Status */}
-              {state.rateLimitStatus && (
-                <div className="mt-3 text-xs text-gray-500 font-inter font-medium">
-                  {state.rateLimitStatus.requestsRemaining} requests remaining
-                </div>
-              )}
-            </div>
-          )}
-        </>
+        </div>
       )}
 
-      {/* Hidden File Input */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        multiple
-        className="hidden"
-        onChange={(e) => e.target.files && handleFileUpload(e.target.files)}
-        accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.csv,.png,.jpg,.jpeg"
-      />
-    </motion.div>
+      {/* Suggested Prompts */}
+      {messages.length <= 1 && (
+        <div className="p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="text-sm font-medium text-gray-900">Suggested Questions</h4>
+            <div className="flex space-x-1">
+              <button
+                onClick={() => setSelectedCategory(null)}
+                className={`px-2 py-1 text-xs rounded-md transition-colors ${
+                  !selectedCategory 
+                    ? 'bg-blue-100 text-blue-700' 
+                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                All
+              </button>
+              {categories.map(category => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-2 py-1 text-xs rounded-md transition-colors capitalize ${
+                    selectedCategory === category
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  {category.replace('-', ' ')}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-2">
+            {filteredPrompts.slice(0, 3).map((prompt) => (
+              <button
+                key={prompt.id}
+                onClick={() => handleSuggestedPrompt(prompt)}
+                className="flex items-start space-x-3 p-3 text-left rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors group"
+              >
+                                 <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                   <prompt.icon size="sm" color="secondary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 group-hover:text-blue-900">
+                    {prompt.text}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {prompt.description}
+                  </p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Messages */}
+      <div className={`${isExpanded ? 'h-96' : 'h-64'} overflow-y-auto p-4 space-y-4`}>
+        {messages.length === 0 ? (
+          <EmptyStates.NoData 
+            title="Start a conversation"
+            description="Ask me anything about risk management, compliance, or audit preparation."
+          />
+        ) : (
+          messages.map((message) => (
+            <div
+              key={message.id}
+              className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div
+                className={`max-w-[80%] rounded-lg px-4 py-2 ${
+                  message.type === 'user'
+                    ? 'bg-blue-600 text-white'
+                    : message.type === 'system'
+                    ? 'bg-red-50 text-red-800 border border-red-200'
+                    : 'bg-gray-100 text-gray-900'
+                }`}
+              >
+                <div className="whitespace-pre-wrap text-sm">
+                  {message.content}
+                </div>
+                
+                {/* Message metadata */}
+                {message.metadata && (
+                  <div className="mt-3 pt-3 border-t border-gray-200">
+                    {/* Confidence score */}
+                    {message.metadata.confidence && (
+                      <div className="flex items-center space-x-2 mb-2">
+                        <span className="text-xs text-gray-500">Confidence:</span>
+                        <div className="flex-1 bg-gray-200 rounded-full h-1.5">
+                          <div
+                            className="bg-green-500 h-1.5 rounded-full"
+                            style={{ width: `${message.metadata.confidence * 100}%` }}
+                          />
+                        </div>
+                        <span className="text-xs text-gray-500">
+                          {Math.round(message.metadata.confidence * 100)}%
+                        </span>
+                      </div>
+                    )}
+                    
+                    {/* Sources */}
+                    {message.metadata.sources && (
+                      <div className="mb-2">
+                        <span className="text-xs text-gray-500 block mb-1">Sources:</span>
+                        <div className="flex flex-wrap gap-1">
+                          {message.metadata.sources.map((source, index) => (
+                            <span
+                              key={index}
+                              className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-gray-200 text-gray-700"
+                            >
+                              {source}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Actions */}
+                    {message.metadata.actions && (
+                      <div className="flex flex-wrap gap-2">
+                        {message.metadata.actions.map((action) => (
+                          <button
+                            key={action.id}
+                            onClick={action.action}
+                            className="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 transition-colors"
+                          >
+                            {action.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+                
+                <div className="text-xs text-gray-400 mt-2">
+                  {message.timestamp.toLocaleTimeString()}
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+        
+                 {isLoading && (
+           <div className="flex justify-start">
+             <div className="bg-gray-100 rounded-lg px-4 py-2">
+               <DotsLoading size="sm" />
+             </div>
+           </div>
+         )}
+        
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Input */}
+      <div className="p-4 border-t border-gray-200">
+        <div className="flex space-x-2">
+          <div className="flex-1 relative">
+            <input
+              ref={inputRef}
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Ask me about risks, compliance, audits, or controls..."
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-12"
+              disabled={isLoading}
+            />
+            <button
+              onClick={() => handleSendMessage()}
+              disabled={!inputValue.trim() || isLoading}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 text-blue-600 hover:text-blue-700 disabled:text-gray-400 disabled:cursor-not-allowed"
+              aria-label="Send message"
+            >
+                             <CommunicationIcons.Message size="sm" />
+            </button>
+          </div>
+        </div>
+        
+        {/* Quick Actions */}
+        <div className="flex items-center justify-between mt-3">
+          <div className="flex space-x-2">
+            {smartFeatures.quickActions.map((action) => (
+              <button
+                key={action.id}
+                className="inline-flex items-center space-x-1 px-2 py-1 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+              >
+                <action.icon size="xs" />
+                <span>{action.label}</span>
+              </button>
+            ))}
+          </div>
+          <div className="text-xs text-gray-400">
+            Press Enter to send, Shift+Enter for new line
+          </div>
+        </div>
+      </div>
+    </div>
   );
-}; 
+};
+
+export default ARIAChat; 

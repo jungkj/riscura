@@ -108,18 +108,18 @@ const StatusCell: React.FC<{ value: string }> = ({ value }) => {
 };
 
 const RiskLevelCell: React.FC<{ value: string }> = ({ value }) => {
-  const riskConfig: Record<string, { variant: 'default' | 'secondary' | 'destructive' | 'success' | 'warning' }> = {
-    'critical': { variant: 'destructive' },
-    'high': { variant: 'warning' },
-    'medium': { variant: 'default' },
-    'low': { variant: 'success' },
+  const riskConfig: Record<string, { variant: 'default' | 'secondary' | 'destructive' | 'success' | 'warning'; className: string }> = {
+    'critical': { variant: 'destructive', className: 'bg-red-100 text-red-800 border-red-300' },
+    'high': { variant: 'destructive', className: 'bg-red-50 text-red-700 border-red-200' },
+    'medium': { variant: 'secondary', className: 'bg-yellow-50 text-yellow-800 border-yellow-200' },
+    'low': { variant: 'success', className: 'bg-green-50 text-green-700 border-green-200' },
   };
 
   const config = riskConfig[value] || riskConfig['medium'];
 
   return (
-    <Badge variant={config.variant} className="text-xs font-medium">
-      {value.charAt(0).toUpperCase() + value.slice(1)}
+    <Badge className={`text-xs font-semibold uppercase tracking-wider ${config.className}`}>
+      {value}
     </Badge>
   );
 };

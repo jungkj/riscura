@@ -8,6 +8,7 @@ import { createSession } from '@/lib/auth/session';
 const loginSchema = z.object({
   email: z.string().email('Invalid email format'),
   password: z.string().min(1, 'Password is required'),
+  rememberMe: z.boolean().optional().default(false),
 });
 
 // Simple rate limiting
@@ -88,8 +89,105 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const { email, password } = validationResult.data;
-    console.log('Login attempt for email:', email);
+    const { email, password, rememberMe } = validationResult.data;
+    console.log('Login attempt for email:', email, 'rememberMe:', rememberMe);
+
+    // Handle demo credentials first to avoid database calls
+    if (email === 'admin@riscura.com' && password === 'admin123') {
+      console.log('Demo login detected - bypassing database');
+      
+      const demoUser = {
+        id: 'demo-admin-id',
+        email: email,
+        firstName: 'Demo',
+        lastName: 'Admin',
+        role: 'ADMIN' as const,
+        permissions: ['*'],
+        organizationId: 'demo-org-id',
+        isActive: true,
+        emailVerified: new Date(),
+      };
+
+      // Set token expiration based on rememberMe flag
+      const accessTokenExpiry = rememberMe ? 7 * 24 * 3600 : 3600; // 7 days vs 1 hour
+      const refreshTokenExpiry = rememberMe ? 30 * 24 * 3600 : 86400; // 30 days vs 1 day
+      
+      const tokens = {
+        accessToken: `demo-access-token-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        refreshToken: `demo-refresh-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        expiresIn: accessTokenExpiry,
+        refreshExpiresIn: refreshTokenExpiry,
+      };
+
+      const csrfToken = generateCSRFToken();
+
+      const response = NextResponse.json({
+        message: 'Login successful',
+        user: {
+          id: demoUser.id,
+          email: demoUser.email,
+          firstName: demoUser.firstName,
+          lastName: demoUser.lastName,
+          role: demoUser.role,
+          permissions: demoUser.permissions,
+          organizationId: demoUser.organizationId,
+          organization: {
+            id: 'demo-org-id',
+            name: 'Demo Organization',
+            plan: 'enterprise',
+          },
+        },
+        tokens: {
+          accessToken: tokens.accessToken,
+          expiresIn: tokens.expiresIn,
+        },
+        demoMode: true,
+      });
+
+      // Set cookies
+      response.cookies.set('refreshToken', tokens.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: tokens.refreshExpiresIn,
+        path: '/',
+      });
+
+      response.cookies.set('csrf-token', csrfToken, {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: tokens.expiresIn,
+        path: '/',
+      });
+
+      // Demo user cookie for middleware
+      response.cookies.set('demo-user', JSON.stringify({
+        id: demoUser.id,
+        email: demoUser.email,
+        role: demoUser.role,
+        permissions: demoUser.permissions,
+      }), {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: tokens.expiresIn,
+        path: '/',
+      });
+
+      // Set remember me preference cookie
+      if (rememberMe) {
+        response.cookies.set('remember-me', 'true', {
+          httpOnly: false,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: tokens.refreshExpiresIn,
+          path: '/',
+        });
+      }
+
+      return response;
+    }
 
     try {
       // Check database connection
@@ -148,12 +246,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
               demoMode: false,
             });
 
+            // Set token expiration based on rememberMe flag
+            const accessTokenExpiry = rememberMe ? 7 * 24 * 3600 : 3600; // 7 days vs 1 hour
+            const refreshTokenExpiry = rememberMe ? 30 * 24 * 3600 : 86400; // 30 days vs 1 day
+
             // Set cookies
             response.cookies.set('refreshToken', tokens.refreshToken, {
               httpOnly: true,
               secure: process.env.NODE_ENV === 'production',
               sameSite: 'strict',
-              maxAge: 86400, // 24 hours
+              maxAge: refreshTokenExpiry,
               path: '/',
             });
 
@@ -161,9 +263,20 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
               httpOnly: false,
               secure: process.env.NODE_ENV === 'production',
               sameSite: 'strict',
-              maxAge: 3600, // 1 hour
+              maxAge: accessTokenExpiry,
               path: '/',
             });
+
+            // Set remember me preference cookie
+            if (rememberMe) {
+              response.cookies.set('remember-me', 'true', {
+                httpOnly: false,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict',
+                maxAge: refreshTokenExpiry,
+                path: '/',
+              });
+            }
 
             return response;
           }
@@ -171,87 +284,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       }
     } catch (dbError) {
       console.error('Database authentication error:', dbError);
-    }
-
-    // Fallback to demo mode if database is not available or user not found
-    if (email === 'admin@riscura.com' && password === 'admin123') {
-      console.log('Fallback demo login successful');
-      
-      const demoUser = {
-        id: 'demo-admin-id',
-        email: email,
-        firstName: 'Demo',
-        lastName: 'Admin',
-        role: 'ADMIN',
-        permissions: ['*'],
-        organizationId: 'demo-org-id',
-        isActive: true,
-        emailVerified: new Date(),
-      };
-
-      const tokens = {
-        accessToken: `demo-access-token-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        refreshToken: `demo-refresh-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        expiresIn: 3600,
-        refreshExpiresIn: 86400,
-      };
-
-      const csrfToken = generateCSRFToken();
-
-      const response = NextResponse.json({
-        message: 'Login successful',
-        user: {
-          id: demoUser.id,
-          email: demoUser.email,
-          firstName: demoUser.firstName,
-          lastName: demoUser.lastName,
-          role: demoUser.role,
-          permissions: demoUser.permissions,
-          organizationId: demoUser.organizationId,
-          organization: {
-            id: 'demo-org-id',
-            name: 'Demo Organization',
-          },
-        },
-        tokens: {
-          accessToken: tokens.accessToken,
-          expiresIn: tokens.expiresIn,
-        },
-        demoMode: true,
-      });
-
-      // Set cookies
-      response.cookies.set('refreshToken', tokens.refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: tokens.refreshExpiresIn,
-        path: '/',
-      });
-
-      response.cookies.set('csrf-token', csrfToken, {
-        httpOnly: false,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: tokens.expiresIn,
-        path: '/',
-      });
-
-      // Demo user cookie for middleware
-      response.cookies.set('demo-user', JSON.stringify({
-        id: demoUser.id,
-        email: demoUser.email,
-        role: demoUser.role,
-        permissions: demoUser.permissions,
-      }), {
-        httpOnly: false,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: tokens.expiresIn,
-        path: '/',
-      });
-
-      return response;
     }
 
     // Invalid credentials
@@ -263,8 +295,20 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   } catch (error) {
     console.error('Login API error:', error);
+    
+    // Provide more specific error information in development
+    const errorMessage = process.env.NODE_ENV === 'development' 
+      ? `Login error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      : 'An error occurred during login. Please try again.';
+    
     return NextResponse.json(
-      { error: 'An error occurred during login. Please try again.' },
+      { 
+        error: errorMessage,
+        debug: process.env.NODE_ENV === 'development' ? {
+          stack: error instanceof Error ? error.stack : undefined,
+          type: error instanceof Error ? error.constructor.name : 'Unknown'
+        } : undefined
+      },
       { status: 500 }
     );
   }

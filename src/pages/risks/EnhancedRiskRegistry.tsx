@@ -564,7 +564,13 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
               subtitle="Real-time overview of your risk portfolio"
               spacing="tight"
             >
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <style jsx>{`
+                  .metric-card-container > div {
+                    height: 100%;
+                    min-height: 200px;
+                  }
+                `}</style>
                 {isLoading ? (
                   <>
                     {[1, 2, 3, 4].map((i) => (
@@ -589,6 +595,7 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.1 }}
+                      className="metric-card-container h-full"
                     >
                       <EnhancedMetricCard
                         title="Total Risks"
@@ -605,6 +612,7 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
                           trend: 'up'
                         }}
                         onClick={() => console.log('Navigate to all risks')}
+                        className="h-full"
                       />
                     </motion.div>
 
@@ -612,6 +620,7 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
+                      className="metric-card-container h-full"
                     >
                       <EnhancedMetricCard
                         title="Critical Risks"
@@ -624,6 +633,7 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
                           variant: "danger"
                         }}
                         onClick={() => console.log('Navigate to critical risks')}
+                        className="h-full"
                       />
                     </motion.div>
 
@@ -631,6 +641,7 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 }}
+                      className="metric-card-container h-full"
                     >
                       <EnhancedMetricCard
                         title="Average Score"
@@ -648,6 +659,7 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
                           period: "this quarter"
                         }}
                         onClick={() => console.log('Navigate to score analytics')}
+                        className="h-full"
                       />
                     </motion.div>
 
@@ -655,6 +667,7 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4 }}
+                      className="metric-card-container h-full"
                     >
                       <EnhancedMetricCard
                         title="Mitigated Risks"
@@ -667,6 +680,7 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
                           trend: 'up'
                         }}
                         onClick={() => console.log('Navigate to mitigated risks')}
+                        className="h-full"
                       />
                     </motion.div>
                   </>
@@ -721,74 +735,89 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
               </EnhancedGrid>
             </EnhancedSection>
 
-            {/* Enhanced Color System Demo */}
+            {/* Risk Status Overview - Notion/Vanta Style */}
             <EnhancedSection 
               title="Risk Status Overview"
-              subtitle="Enhanced visual feedback with color-coded status indicators"
+              subtitle="Simple, clean overview of risk statuses and priorities"
               spacing="tight"
               separator="subtle"
             >
-              <EnhancedGrid cols={4} gap="md" responsive={true} className="mb-6">
-                {/* Status Badges Demo */}
-                <div className="space-y-3">
-                  <h4 className="text-sm font-medium text-slate-700">Priority Levels</h4>
-                  <div className="space-y-2">
-                    <EnhancedStatusBadge status="critical" showIcon={true} animated={true} />
-                    <EnhancedStatusBadge status="high" showIcon={true} animated={true} />
-                    <EnhancedStatusBadge status="medium" showIcon={true} animated={true} />
-                    <EnhancedStatusBadge status="low" showIcon={true} animated={true} />
+              <div className="bg-white rounded-xl border border-slate-200/60 p-6 shadow-sm">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Priority Levels */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-medium text-slate-900">Priority Levels</h4>
+                      <span className="text-sm text-slate-500">{stats.total} total</span>
+                    </div>
+                    <div className="space-y-3">
+                      {[
+                        { level: 'critical', count: stats.byPriority.critical || 0, color: 'red' },
+                        { level: 'high', count: stats.byPriority.high || 0, color: 'red' },
+                        { level: 'medium', count: stats.byPriority.medium || 0, color: 'yellow' },
+                        { level: 'low', count: stats.byPriority.low || 0, color: 'green' }
+                      ].map(({ level, count, color }) => (
+                        <div key={level} className="flex items-center justify-between p-3 rounded-lg bg-slate-50/50 hover:bg-slate-100/50 transition-colors">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-3 h-3 rounded-full ${
+                              color === 'red' ? 'bg-red-500' :
+                              color === 'yellow' ? 'bg-yellow-500' :
+                              'bg-green-500'
+                            }`} />
+                            <span className="text-sm font-medium text-slate-700 uppercase tracking-wider">
+                              {level}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg font-semibold text-slate-900">{count}</span>
+                            <span className="text-xs text-slate-500">
+                              {stats.total > 0 ? Math.round((count / stats.total) * 100) : 0}%
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Workflow Status */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-medium text-slate-900">Workflow Status</h4>
+                      <span className="text-sm text-slate-500">Current progress</span>
+                    </div>
+                    <div className="space-y-3">
+                      {[
+                        { status: 'identified', count: stats.byStatus.identified || 0, color: 'blue', description: 'Newly identified' },
+                        { status: 'assessed', count: stats.byStatus.assessed || 0, color: 'blue', description: 'Under assessment' },
+                        { status: 'mitigated', count: stats.byStatus.mitigated || 0, color: 'green', description: 'Successfully mitigated' },
+                        { status: 'monitoring', count: stats.byStatus.monitoring || 0, color: 'slate', description: 'Being monitored' }
+                      ].map(({ status, count, color, description }) => (
+                        <div key={status} className="flex items-center justify-between p-3 rounded-lg bg-slate-50/50 hover:bg-slate-100/50 transition-colors">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-3 h-3 rounded-full ${
+                              color === 'blue' ? 'bg-blue-500' :
+                              color === 'green' ? 'bg-green-500' :
+                              'bg-slate-400'
+                            }`} />
+                            <div>
+                              <span className="text-sm font-medium text-slate-700 uppercase tracking-wider block">
+                                {status}
+                              </span>
+                              <span className="text-xs text-slate-500">{description}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg font-semibold text-slate-900">{count}</span>
+                            <span className="text-xs text-slate-500">
+                              {stats.total > 0 ? Math.round((count / stats.total) * 100) : 0}%
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-                
-                {/* Workflow Status Demo */}
-                <div className="space-y-3">
-                  <h4 className="text-sm font-medium text-slate-700">Workflow Status</h4>
-                  <div className="space-y-2">
-                    <EnhancedStatusBadge status="identified" variant="outline" animated={true} />
-                    <EnhancedStatusBadge status="assessed" variant="outline" animated={true} />
-                    <EnhancedStatusBadge status="mitigated" variant="outline" animated={true} />
-                    <EnhancedStatusBadge status="monitoring" variant="outline" animated={true} />
-                  </div>
-                </div>
-                
-                {/* Progress Rings Demo */}
-                <div className="space-y-3">
-                  <h4 className="text-sm font-medium text-slate-700">Progress Indicators</h4>
-                  <div className="flex gap-3">
-                    <motion.div
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      whileTap={{ scale: 0.95 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <EnhancedProgressRing progress={85} status="critical" size={40} animated={true} />
-                    </motion.div>
-                    <motion.div
-                      whileHover={{ scale: 1.1, rotate: -5 }}
-                      whileTap={{ scale: 0.95 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <EnhancedProgressRing progress={65} status="warning" size={40} animated={true} />
-                    </motion.div>
-                    <motion.div
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      whileTap={{ scale: 0.95 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <EnhancedProgressRing progress={90} status="success" size={40} animated={true} />
-                    </motion.div>
-                  </div>
-                </div>
-                
-                {/* Trend Indicators Demo */}
-                <div className="space-y-3">
-                  <h4 className="text-sm font-medium text-slate-700">Trend Analysis</h4>
-                  <div className="space-y-2">
-                    <EnhancedTrendIndicator trend="up" value={12} size="sm" />
-                    <EnhancedTrendIndicator trend="down" value={-8} size="sm" />
-                    <EnhancedTrendIndicator trend="stable" value={2} size="sm" />
-                  </div>
-                </div>
-              </EnhancedGrid>
+              </div>
             </EnhancedSection>
 
             {/* Top Risks Table */}

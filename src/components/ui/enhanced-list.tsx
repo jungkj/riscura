@@ -113,10 +113,10 @@ const statusConfig = {
 
 // Priority Configuration
 const priorityConfig = {
-  low: { variant: 'success' as const, label: 'Low', color: 'text-green-600' },
-  medium: { variant: 'default' as const, label: 'Medium', color: 'text-blue-600' },
-  high: { variant: 'warning' as const, label: 'High', color: 'text-orange-600' },
-  critical: { variant: 'destructive' as const, label: 'Critical', color: 'text-red-600' },
+  low: { variant: 'success' as const, label: 'LOW', color: 'text-green-700' },
+  medium: { variant: 'default' as const, label: 'MEDIUM', color: 'text-yellow-800' },
+  high: { variant: 'destructive' as const, label: 'HIGH', color: 'text-red-700' },
+  critical: { variant: 'destructive' as const, label: 'CRITICAL', color: 'text-red-800' },
 };
 
 // Risk Level Configuration
@@ -158,7 +158,7 @@ const RiskBadge: React.FC<{ riskLevel: NonNullable<EnhancedListItem['riskLevel']
   return (
     <div className="flex items-center gap-1">
       <Shield className={cn("h-3 w-3", config.color)} />
-      <span className={cn("text-xs font-medium capitalize", config.color)}>
+      <span className={cn("text-xs font-semibold uppercase tracking-wider", config.color)}>
         {riskLevel}
       </span>
     </div>

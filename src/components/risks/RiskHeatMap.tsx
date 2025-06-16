@@ -71,7 +71,7 @@ const sampleHeatMapData: HeatMapRisk[] = [
     likelihood: 2,
     riskScore: 6,
     riskLevel: 'medium',
-    status: 'monitoring',
+    status: 'in-progress',
     owner: 'Emma Johnson',
     bubble: { size: 40, opacity: 0.7 }
   },
@@ -98,8 +98,8 @@ const RiskBubble: React.FC<{
   const opacity = risk.bubble?.opacity || 0.7;
   
   // Position based on impact (x) and likelihood (y)
-  const x = ((risk.likelihood - 1) / 4) * 80 + 10;
-  const y = ((5 - risk.impact) / 4) * 80 + 10;
+  const x = ((risk.likelihood - 1) / 4) * 100;
+  const y = ((5 - risk.impact) / 4) * 100;
 
   return (
     <div
@@ -145,16 +145,16 @@ const HeatMapGrid: React.FC = () => {
       {[1, 2, 3, 4, 5].map((line) => (
         <div
           key={`v-${line}`}
-          className="absolute top-0 bottom-0 border-l border-border/30"
-          style={{ left: `${(line - 1) * 20 + 10}%` }}
+          className="absolute top-0 bottom-0 border-l border-gray-300/40"
+          style={{ left: `${(line - 1) * 20}%` }}
         />
       ))}
       
       {[1, 2, 3, 4, 5].map((line) => (
         <div
           key={`h-${line}`}
-          className="absolute left-0 right-0 border-t border-border/30"
-          style={{ top: `${(line - 1) * 20 + 10}%` }}
+          className="absolute left-0 right-0 border-t border-gray-300/40"
+          style={{ top: `${(line - 1) * 20}%` }}
         />
       ))}
     </div>
@@ -208,32 +208,32 @@ export const RiskHeatMap: React.FC = () => {
   const scale = zoomLevel[0] / 100;
 
   return (
-    <div className="space-y-enterprise-6">
+    <div className="space-y-6">
       {/* Header & Controls */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-heading-base font-semibold text-text-primary">Risk Heat Map</h2>
-          <p className="text-body-sm text-text-secondary">
+          <h2 className="text-xl font-semibold text-gray-900">Risk Heat Map</h2>
+          <p className="text-sm text-gray-600">
             Interactive visualization of risk positioning and relationships
           </p>
         </div>
         
-        <div className="flex items-center space-x-enterprise-2">
+        <div className="flex items-center space-x-2">
           <Button variant="outline" size="sm" onClick={handleExport}>
-            <Download className="h-3 w-3 mr-enterprise-1" />
+            <Download className="h-3 w-3 mr-1" />
             Export
           </Button>
           <Button variant="outline" size="sm" onClick={handleReset}>
-            <RotateCcw className="h-3 w-3 mr-enterprise-1" />
+            <RotateCcw className="h-3 w-3 mr-1" />
             Reset
           </Button>
         </div>
       </div>
 
       {/* Control Panel */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-enterprise-4">
-        <ContentCard title="Zoom" className="p-enterprise-4">
-          <div className="space-y-enterprise-3">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+        <ContentCard title="Zoom" className="p-4">
+          <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Button
                 variant="outline"
@@ -243,7 +243,7 @@ export const RiskHeatMap: React.FC = () => {
               >
                 <ZoomOut className="h-3 w-3" />
               </Button>
-              <span className="text-caption text-text-secondary">
+              <span className="text-xs text-gray-600">
                 {zoomLevel[0]}%
               </span>
               <Button
@@ -266,7 +266,7 @@ export const RiskHeatMap: React.FC = () => {
           </div>
         </ContentCard>
 
-        <ContentCard title="Group By" className="p-enterprise-4">
+        <ContentCard title="Group By" className="p-4">
           <Select value={groupBy} onValueChange={(value: any) => setGroupBy(value)}>
             <SelectTrigger>
               <SelectValue />
@@ -280,7 +280,7 @@ export const RiskHeatMap: React.FC = () => {
           </Select>
         </ContentCard>
 
-        <ContentCard title="Category Filter" className="p-enterprise-4">
+        <ContentCard title="Category Filter" className="p-4">
           <Select value={filterCategory} onValueChange={setFilterCategory}>
             <SelectTrigger>
               <SelectValue />
@@ -294,7 +294,7 @@ export const RiskHeatMap: React.FC = () => {
           </Select>
         </ContentCard>
 
-        <ContentCard title="Framework Filter" className="p-enterprise-4">
+        <ContentCard title="Framework Filter" className="p-4">
           <Select value={filterFramework} onValueChange={setFilterFramework}>
             <SelectTrigger>
               <SelectValue />
@@ -311,58 +311,58 @@ export const RiskHeatMap: React.FC = () => {
 
       {/* Legend */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-enterprise-4">
-          <span className="text-caption font-medium text-text-primary">Risk Levels:</span>
+        <div className="flex items-center space-x-4">
+          <span className="text-xs font-medium text-gray-900">Risk Levels:</span>
           {['low', 'medium', 'high', 'critical'].map((level) => (
-            <div key={level} className="flex items-center space-x-enterprise-1">
+            <div key={level} className="flex items-center space-x-1">
               <div className={cn("h-4 w-4 rounded-full", getRiskColor(level))} />
-              <span className="text-caption text-text-secondary capitalize">{level}</span>
+              <span className="text-xs text-gray-600 capitalize">{level}</span>
             </div>
           ))}
         </div>
         
-        <div className="flex items-center space-x-enterprise-2">
+        <div className="flex items-center space-x-2">
           <Button
-            variant={showGrid ? 'default' : 'outline'}
+            variant={showGrid ? 'primary' : 'outline'}
             size="sm"
             onClick={() => setShowGrid(!showGrid)}
           >
-            <Grid3X3 className="h-3 w-3 mr-enterprise-1" />
+            <Grid3X3 className="h-3 w-3 mr-1" />
             Grid
           </Button>
-          <span className="text-caption text-text-secondary">
+          <span className="text-xs text-gray-600">
             {filteredRisks.length} risks shown
           </span>
         </div>
       </div>
 
       {/* Heat Map Container */}
-      <div className="border border-border rounded-lg overflow-hidden bg-white">
+      <div className="border border-gray-200 rounded-lg overflow-hidden bg-white">
         <div className="grid grid-cols-6 gap-0">
-          <div className="bg-surface-secondary p-enterprise-3 border-r border-b border-border">
-            <div className="text-caption font-semibold text-text-primary">Impact →</div>
-            <div className="text-caption text-text-secondary">Likelihood ↓</div>
+          <div className="bg-gray-50 p-3 border-r border-b border-gray-200">
+            <div className="text-xs font-semibold text-gray-900">Impact →</div>
+            <div className="text-xs text-gray-600">Likelihood ↓</div>
           </div>
           
           {['Very Low', 'Low', 'Medium', 'High', 'Very High'].map((label, index) => (
-            <div key={label} className="bg-surface-secondary p-enterprise-3 border-r border-b border-border text-center">
-              <div className="text-caption font-semibold text-text-primary">{index + 1}</div>
-              <div className="text-caption text-text-secondary">{label}</div>
+            <div key={label} className="bg-gray-50 p-3 border-r border-b border-gray-200 text-center">
+              <div className="text-xs font-semibold text-gray-900">{index + 1}</div>
+              <div className="text-xs text-gray-600">{label}</div>
             </div>
           ))}
         </div>
 
         <div className="relative">
-          <div className="absolute left-0 top-0 bottom-0 w-20 border-r border-border bg-surface-secondary">
+          <div className="absolute left-0 top-0 bottom-0 w-20 border-r border-gray-200 bg-gray-50">
             {['Very High', 'High', 'Medium', 'Low', 'Very Low'].map((label, index) => (
-              <div key={label} className="h-1/5 p-enterprise-2 border-b border-border flex flex-col justify-center">
-                <div className="text-caption font-semibold text-text-primary">{5 - index}</div>
-                <div className="text-caption text-text-secondary">{label}</div>
+              <div key={label} className="h-1/5 p-2 border-b border-gray-200 flex flex-col justify-center text-center">
+                <div className="text-xs font-semibold text-gray-900">{5 - index}</div>
+                <div className="text-xs text-gray-600">{label}</div>
               </div>
             ))}
           </div>
 
-          <div className="ml-20 relative bg-gradient-to-br from-semantic-success/5 via-semantic-warning/5 to-semantic-error/10" style={{ height: '400px' }}>
+          <div className="ml-20 relative bg-gradient-to-br from-green-50/50 via-yellow-50/50 to-red-50/50" style={{ height: '400px' }}>
             {showGrid && <HeatMapGrid />}
 
             {Object.entries(groupedRisks).map(([groupName, risks]) => (
@@ -381,8 +381,8 @@ export const RiskHeatMap: React.FC = () => {
             {groupBy !== 'none' && Object.keys(groupedRisks).length > 1 && (
               <div className="absolute top-2 right-2 space-y-1">
                 {Object.entries(groupedRisks).map(([groupName, risks]) => (
-                  <Badge key={groupName} variant="outline" className="text-caption">
-                    <Layers className="h-3 w-3 mr-enterprise-1" />
+                  <Badge key={groupName} variant="outline" className="text-xs">
+                    <Layers className="h-3 w-3 mr-1" />
                     {groupName} ({risks.length})
                   </Badge>
                 ))}
@@ -394,38 +394,38 @@ export const RiskHeatMap: React.FC = () => {
 
       {/* Selected Risk Details */}
       {selectedRisk && (
-        <ContentCard title={`Risk Details - ${selectedRisk.id}`} className="border-l-4 border-l-interactive-primary">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-enterprise-4">
+        <ContentCard title={`Risk Details - ${selectedRisk.id}`} className="border-l-4 border-l-blue-500">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <span className="text-caption text-text-secondary">Title:</span>
-              <div className="text-body-sm font-medium text-text-primary">
+              <span className="text-xs text-gray-600">Title:</span>
+              <div className="text-sm font-medium text-gray-900">
                 {selectedRisk.title}
               </div>
             </div>
             <div>
-              <span className="text-caption text-text-secondary">Category:</span>
-              <div className="text-body-sm font-medium text-text-primary">
+              <span className="text-xs text-gray-600">Category:</span>
+              <div className="text-sm font-medium text-gray-900">
                 {selectedRisk.category}
               </div>
             </div>
             <div>
-              <span className="text-caption text-text-secondary">Risk Score:</span>
-              <div className="text-body-sm font-medium text-text-primary">
+              <span className="text-xs text-gray-600">Risk Score:</span>
+              <div className="text-sm font-medium text-gray-900">
                 {selectedRisk.riskScore} ({selectedRisk.impact} × {selectedRisk.likelihood})
               </div>
             </div>
             <div>
-              <span className="text-caption text-text-secondary">Owner:</span>
-              <div className="text-body-sm font-medium text-text-primary">
+              <span className="text-xs text-gray-600">Owner:</span>
+              <div className="text-sm font-medium text-gray-900">
                 {selectedRisk.owner}
               </div>
             </div>
           </div>
           
-          <div className="flex items-center justify-between mt-enterprise-4">
-            <div className="flex items-center space-x-enterprise-2">
+          <div className="flex items-center justify-between mt-4">
+            <div className="flex items-center space-x-2">
               <div className={cn("h-3 w-3 rounded-full", getRiskColor(selectedRisk.riskLevel))} />
-              <span className="text-caption text-text-secondary">
+              <span className="text-xs text-gray-600">
                 {selectedRisk.riskLevel.charAt(0).toUpperCase() + selectedRisk.riskLevel.slice(1)} Risk
               </span>
             </div>
@@ -437,7 +437,7 @@ export const RiskHeatMap: React.FC = () => {
       )}
 
       {/* Summary Statistics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-enterprise-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {['critical', 'high', 'medium', 'low'].map((level) => {
           const count = filteredRisks.filter(r => r.riskLevel === level).length;
           const percentage = filteredRisks.length > 0 ? Math.round((count / filteredRisks.length) * 100) : 0;
@@ -447,11 +447,11 @@ export const RiskHeatMap: React.FC = () => {
               key={level}
               title={`${level.charAt(0).toUpperCase() + level.slice(1)} Risks`}
               className={cn("text-center", count > 0 ? "border-2" : "border", 
-                count > 0 ? getRiskColor(level).replace('bg-', 'border-') : "border-border")}
+                count > 0 ? getRiskColor(level).replace('bg-', 'border-') : "border-gray-200")}
             >
-              <div className="space-y-enterprise-1">
-                <div className="text-2xl font-bold text-text-primary">{count}</div>
-                <div className="text-caption text-text-secondary">{percentage}% of total</div>
+              <div className="space-y-1">
+                <div className="text-2xl font-bold text-gray-900">{count}</div>
+                <div className="text-xs text-gray-600">{percentage}% of total</div>
               </div>
             </ContentCard>
           );

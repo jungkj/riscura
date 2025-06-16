@@ -7,9 +7,7 @@ import React, {
   useState, 
   useRef, 
   useCallback, 
-  useMemo,
-  Suspense,
-  lazy 
+  useMemo
 } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -59,8 +57,8 @@ export const usePerformance = () => {
   return context;
 };
 
-export const useVirtualScrolling = <T>(
-  items: T[],
+export const useVirtualScrolling = (
+  items: any[],
   itemHeight: number,
   containerHeight: number,
   overscan: number = 5
@@ -101,156 +99,38 @@ export const useVirtualScrolling = <T>(
   };
 };
 
-export const useIntersectionObserver = (
-  callback: (entries: IntersectionObserverEntry[]) => void,
-  options: IntersectionObserverInit = {}
-) => {
-  const targetRef = useRef<HTMLElement>(null);
-  
-  useEffect(() => {
-    const target = targetRef.current;
-    if (!target) return;
-    
-    const observer = new IntersectionObserver(callback, {
-      threshold: 0.1,
-      rootMargin: '50px',
-      ...options,
-    });
-    
-    observer.observe(target);
-    
-    return () => {
-      observer.unobserve(target);
-    };
-  }, [callback, options]);
-  
-  return targetRef;
-};
-
-export const useLazyLoading = () => {
-  const [visibleElements, setVisibleElements] = useState<Set<string>>(new Set());
-  
-  const observeElement = useCallback((id: string, element: HTMLElement) => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisibleElements(prev => new Set(prev).add(id));
-          observer.unobserve(element);
-        }
-      },
-      { threshold: 0.1, rootMargin: '100px' }
-    );
-    
-    observer.observe(element);
-    
-    return () => observer.unobserve(element);
-  }, []);
-  
-  const isVisible = useCallback((id: string) => {
-    return visibleElements.has(id);
-  }, [visibleElements]);
-  
-  return { observeElement, isVisible };
-};
-
 export const useOfflineData = () => {
   const { isOnline, cacheData, getCachedData } = usePerformance();
   
-  const fetchWithCache = useCallback(async <T>(
-    key: string,
-    fetcher: () => Promise<T>,
-    ttl: number = 300000 // 5 minutes
-  ): Promise<T> => {
-    // Try cache first if offline
-    if (!isOnline) {
-      const cached = getCachedData(key);
-      if (cached) return cached;
-      throw new Error('No cached data available offline');
-    }
-    
-    try {
-      const data = await fetcher();
-      cacheData(key, data, ttl);
-      return data;
-    } catch (error) {
-      // Fallback to cache on network error
-      const cached = getCachedData(key);
-      if (cached) return cached;
-      throw error;
-    }
-  }, [isOnline, cacheData, getCachedData]);
+  const fetchWithCache = useCallback(
+    async (key: string, fetcher: () => Promise<any>, ttl: number = 300000) => {
+      // Try cache first if offline
+      if (!isOnline) {
+        const cached = getCachedData(key);
+        if (cached) return cached;
+        throw new Error('No cached data available offline');
+      }
+      
+      try {
+        const data = await fetcher();
+        cacheData(key, data, ttl);
+        return data;
+      } catch (error) {
+        // Fallback to cache on network error
+        const cached = getCachedData(key);
+        if (cached) return cached;
+        throw error;
+      }
+    },
+    [isOnline, cacheData, getCachedData]
+  );
   
   return { fetchWithCache, isOnline };
 };
 
-// Performance Monitoring
-const measureWebVitals = (): Promise<PerformanceMetrics> => {
-  return new Promise((resolve) => {
-    const metrics: Partial<PerformanceMetrics> = {};
-    
-    // Performance Observer for Core Web Vitals
-    if ('PerformanceObserver' in window) {
-      // LCP
-      new PerformanceObserver((list) => {
-        const entries = list.getEntries();
-        const lastEntry = entries[entries.length - 1];
-        metrics.largestContentfulPaint = lastEntry.startTime;
-      }).observe({ entryTypes: ['largest-contentful-paint'] });
-      
-      // FID
-      new PerformanceObserver((list) => {
-        const entries = list.getEntries();
-        entries.forEach((entry) => {
-          metrics.firstInputDelay = entry.processingStart - entry.startTime;
-        });
-      }).observe({ entryTypes: ['first-input'] });
-      
-      // CLS
-      new PerformanceObserver((list) => {
-        let clsValue = 0;
-        list.getEntries().forEach((entry) => {
-          if (!entry.hadRecentInput) {
-            clsValue += entry.value;
-          }
-        });
-        metrics.cumulativeLayoutShift = clsValue;
-      }).observe({ entryTypes: ['layout-shift'] });
-    }
-    
-    // Navigation Timing
-    if ('performance' in window && 'getEntriesByType' in performance) {
-      const navEntries = performance.getEntriesByType('navigation');
-      if (navEntries.length > 0) {
-        const navEntry = navEntries[0] as PerformanceNavigationTiming;
-        metrics.pageLoadTime = navEntry.loadEventEnd - navEntry.navigationStart;
-        metrics.firstContentfulPaint = navEntry.domContentLoadedEventEnd - navEntry.navigationStart;
-      }
-    }
-    
-    // Memory Usage
-    if ('memory' in performance) {
-      const memory = (performance as any).memory;
-      metrics.memoryUsage = memory.usedJSHeapSize / 1024 / 1024; // MB
-    }
-    
-    // Network Speed Detection
-    const connection = (navigator as any).connection;
-    if (connection) {
-      const effectiveType = connection.effectiveType;
-      metrics.networkSpeed = ['slow-2g', '2g'].includes(effectiveType) ? 'slow' : 'fast';
-    } else {
-      metrics.networkSpeed = 'unknown';
-    }
-    
-    setTimeout(() => {
-      resolve(metrics as PerformanceMetrics);
-    }, 1000);
-  });
-};
-
 // Cache Implementation
 class PerformanceCache {
-  private cache = new Map<string, { data: any; timestamp: number; ttl: number }>();
+  private cache = new Map();
   private maxSize: number;
   
   constructor(maxSize: number = 100) {
@@ -317,7 +197,7 @@ export const PerformanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
   
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const cacheRef = useRef(new PerformanceCache(settings.maxCacheSize));
-  const componentCacheRef = useRef(new Map<string, Promise<any>>());
+  const componentCacheRef = useRef(new Map());
   
   // Monitor online status
   useEffect(() => {
@@ -331,13 +211,6 @@ export const PerformanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, []);
-  
-  // Initialize performance metrics
-  useEffect(() => {
-    // Temporarily disable to fix console errors
-    // measureWebVitals().then(setMetrics);
-    console.log('Performance metrics monitoring disabled to prevent console errors');
   }, []);
   
   // Update cache size when settings change
@@ -359,7 +232,6 @@ export const PerformanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
   
   const clearCache = useCallback(() => {
     cacheRef.current.clear();
-    componentCacheRef.current.clear();
   }, []);
   
   const preloadComponent = useCallback(async (componentPath: string): Promise<any> => {
@@ -389,7 +261,7 @@ export const PerformanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
     }
   }, []);
   
-  const value: PerformanceContextType = {
+  const contextValue = {
     metrics,
     settings,
     updateSettings,
@@ -403,15 +275,13 @@ export const PerformanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
   };
   
   return (
-    <PerformanceContext.Provider value={value}>
+    <PerformanceContext.Provider value={contextValue}>
       {children}
     </PerformanceContext.Provider>
   );
 };
 
-// Performance Components
-
-// Lazy Image Component
+// Simplified Components
 export const LazyImage: React.FC<{
   src: string;
   alt: string;
@@ -427,7 +297,6 @@ export const LazyImage: React.FC<{
   const [isInView, setIsInView] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
   
-  // Intersection Observer for lazy loading
   useEffect(() => {
     const img = imgRef.current;
     if (!img) return;
@@ -457,41 +326,43 @@ export const LazyImage: React.FC<{
     onError?.();
   }, [onError]);
   
+  if (!isInView) {
+    return (
+      <div ref={imgRef} className={cn('bg-gray-200 animate-pulse', className)} style={{ width, height }}>
+        {placeholder}
+      </div>
+    );
+  }
+  
   if (hasError) {
     return (
-      <div className={cn("flex items-center justify-center bg-surface-secondary", className)}>
-        <span className="text-text-secondary text-sm">Failed to load image</span>
+      <div className={cn('bg-gray-200 flex items-center justify-center', className)} style={{ width, height }}>
+        <span className="text-gray-500 text-sm">Failed to load</span>
       </div>
     );
   }
   
   return (
-    <div className={cn("relative", className)} style={{ width, height }}>
-      {!isLoaded && placeholder && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          {placeholder}
+    <div className={cn('relative', className)}>
+      {!isLoaded && (
+        <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
+          {placeholder || <span className="text-gray-500 text-sm">Loading...</span>}
         </div>
       )}
       <img
         ref={imgRef}
-        src={isInView ? src : undefined}
+        src={src}
         alt={alt}
         width={width}
         height={height}
-        className={cn(
-          "transition-opacity duration-300",
-          isLoaded ? "opacity-100" : "opacity-0",
-          className
-        )}
         onLoad={handleLoad}
         onError={handleError}
-        loading="lazy"
+        className={cn('transition-opacity duration-300', isLoaded ? 'opacity-100' : 'opacity-0')}
       />
     </div>
   );
 };
 
-// Virtual Scrolling Component
 export const VirtualScrollContainer: React.FC<{
   items: any[];
   itemHeight: number;
@@ -508,9 +379,9 @@ export const VirtualScrollContainer: React.FC<{
   );
   
   return (
-    <div
+    <div 
       {...containerProps}
-      className={cn("overflow-auto", className)}
+      className={cn('overflow-auto', className)}
     >
       <div style={{ height: totalHeight, position: 'relative' }}>
         {visibleItems.map(({ item, index, top }) => (
@@ -532,83 +403,4 @@ export const VirtualScrollContainer: React.FC<{
   );
 };
 
-// Code Splitting Component
-export const LazyComponent: React.FC<{
-  componentPath: string;
-  fallback?: React.ReactNode;
-  onError?: (error: Error) => void;
-}> = ({ componentPath, fallback, onError }) => {
-  const LazyComponentImpl = useMemo(() => {
-    return lazy(() => import(componentPath).catch(error => {
-      onError?.(error);
-      // Return a fallback component
-      return { default: () => <div>Failed to load component</div> };
-    }));
-  }, [componentPath, onError]);
-  
-  return (
-    <Suspense fallback={fallback || <div>Loading...</div>}>
-      <LazyComponentImpl />
-    </Suspense>
-  );
-};
-
-// Preload Link Component
-export const PreloadLink: React.FC<{
-  href: string;
-  children: React.ReactNode;
-  strategy?: 'hover' | 'visible' | 'immediate';
-  className?: string;
-}> = ({ href, children, strategy = 'hover', className }) => {
-  const linkRef = useRef<HTMLAnchorElement>(null);
-  const [preloaded, setPreloaded] = useState(false);
-  
-  const preload = useCallback(() => {
-    if (preloaded) return;
-    
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
-    link.href = href;
-    document.head.appendChild(link);
-    setPreloaded(true);
-  }, [href, preloaded]);
-  
-  useEffect(() => {
-    if (strategy === 'immediate') {
-      preload();
-    } else if (strategy === 'visible' && linkRef.current) {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            preload();
-            observer.unobserve(linkRef.current!);
-          }
-        },
-        { threshold: 0.1 }
-      );
-      
-      observer.observe(linkRef.current);
-      
-      return () => observer.disconnect();
-    }
-  }, [strategy, preload]);
-  
-  const handleMouseEnter = useCallback(() => {
-    if (strategy === 'hover') {
-      preload();
-    }
-  }, [strategy, preload]);
-  
-  return (
-    <a
-      ref={linkRef}
-      href={href}
-      className={className}
-      onMouseEnter={handleMouseEnter}
-    >
-      {children}
-    </a>
-  );
-};
-
-export default PerformanceProvider;
+export default PerformanceProvider; 

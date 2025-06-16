@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import { Eye, EyeOff, Mail, Lock, AlertCircle, Shield, CheckCircle } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth } from '@/context/AuthContext';
 
 function LoginForm() {
@@ -22,15 +23,16 @@ function LoginForm() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    rememberMe: false,
   });
 
   const redirectTo = searchParams?.get('from') || '/dashboard';
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
     if (error) setError('');
     if (authError) {
@@ -38,12 +40,19 @@ function LoginForm() {
     }
   };
 
+  const handleCheckboxChange = (checked: boolean) => {
+    setFormData(prev => ({
+      ...prev,
+      rememberMe: checked,
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
     try {
-      await login(formData.email, formData.password);
+      await login(formData.email, formData.password, formData.rememberMe);
       // If login is successful, redirect to the intended page
       router.push(redirectTo);
     } catch (err: any) {
@@ -162,6 +171,20 @@ function LoginForm() {
               </div>
 
               <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="rememberMe"
+                    checked={formData.rememberMe}
+                    onCheckedChange={handleCheckboxChange}
+                    className="border-slate-300 dark:border-slate-600 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
+                  />
+                  <Label 
+                    htmlFor="rememberMe" 
+                    className="text-sm text-slate-600 dark:text-slate-400 cursor-pointer"
+                  >
+                    Stay logged in
+                  </Label>
+                </div>
                 <Link
                   href="/auth/forgot-password"
                   className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-500 hover:underline underline-offset-4"

@@ -89,7 +89,7 @@ function SingleWordTypewriter() {
         Risk management made{' '}
       </span>
       <span className="relative">
-        <span className="text-[#191919] bg-gradient-to-r from-[#10b981] to-[#059669] bg-clip-text text-transparent">
+        <span className="text-[#191919] font-bold">
           {displayText}
         </span>
         <motion.span
@@ -107,11 +107,11 @@ export default function LandingPage() {
   const router = useRouter();
 
   const handleGetStarted = () => {
-    router.push('/register');
+    router.push('/auth/register');
   };
 
   const handleRequestDemo = () => {
-    router.push('/register');
+    router.push('/auth/register');
   };
 
   // Navigation items
@@ -213,13 +213,13 @@ export default function LandingPage() {
       {/* Enhanced Hero Section */}
       <section className="pt-48 pb-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-card to-background">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
             {/* Left Column - Content */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-center lg:text-left"
+              className="text-center lg:text-left lg:pr-8"
             >
               {/* Enhanced Headline with Single Word Typewriter */}
               <div className="mb-8">
@@ -290,7 +290,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="relative"
+              className="relative lg:pl-8"
             >
               <HeroProcessCard />
             </motion.div>

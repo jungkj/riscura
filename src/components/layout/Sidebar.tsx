@@ -20,6 +20,7 @@ import {
   ShieldCheck,
   Lightbulb,
   ChevronRight,
+  ChevronLeft,
   ChevronDown,
   Plus,
   Search,
@@ -49,7 +50,13 @@ import {
   MapPin,
   Monitor,
   Bookmark,
-  Home
+  Home,
+  Star,
+  Layers,
+  Database,
+  BarChart,
+  FileBarChart,
+  Compass
 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
@@ -71,6 +78,7 @@ interface NavSection {
   emoji: string;
   items: NavItem[];
   collapsible?: boolean;
+  description?: string;
 }
 
 interface NavItem {
@@ -83,31 +91,55 @@ interface NavItem {
   isNew?: boolean;
   description?: string;
   shortcut?: string;
+  isFavorite?: boolean;
+  lastAccessed?: Date;
+}
+
+interface QuickAccessItem {
+  id: string;
+  title: string;
+  href: string;
+  icon: React.ComponentType<any>;
+  type: 'favorite' | 'recent';
+  timestamp?: Date;
 }
 
 export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
   const pathname = usePathname();
   const [expandedSections, setExpandedSections] = useState<string[]>([
     'overview', 
-    'risk-management', 
-    'controls', 
-    'assessments',
-    'compliance',
-    'documents',
-    'workflows',
-    'ai-insights',
-    'reports'
+    'risk-operations', 
+    'compliance-hub', 
+    'insights-reports'
   ]);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
+  const [favorites, setFavorites] = useState<QuickAccessItem[]>([
+    {
+      id: 'dashboard',
+      title: 'Dashboard',
+      href: '/dashboard',
+      icon: LayoutDashboard,
+      type: 'favorite'
+    },
+    {
+      id: 'risk-register',
+      title: 'Risk Register',
+      href: '/dashboard/risks',
+      icon: Shield,
+      type: 'favorite'
+    }
+  ]);
+
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Navigation structure matching the requirements
+  // New consolidated navigation structure - 4 main sections
   const navigationSections: NavSection[] = [
     {
       id: 'overview',
       title: 'Overview',
-      emoji: '📊',
+      emoji: '',
+      description: 'Dashboard and quick actions',
       collapsible: false,
       items: [
         {
@@ -116,7 +148,6 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           href: '/dashboard',
           icon: LayoutDashboard,
           description: 'Main dashboard overview',
-          shortcut: '⌘ D',
         },
         {
           id: 'quick-actions',
@@ -135,9 +166,10 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
       ]
     },
     {
-      id: 'risk-management',
-      title: 'Risk Management',
-      emoji: '🎯',
+      id: 'risk-operations',
+      title: 'Risk Operations',
+      emoji: '',
+      description: 'Risk management and monitoring',
       collapsible: true,
       items: [
         {
@@ -152,17 +184,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           title: 'Risk Register',
           href: '/dashboard/risks',
           icon: Shield,
-          badge: 23,
-          badgeVariant: 'critical',
           description: 'Comprehensive risk inventory',
-          shortcut: '⌘ R',
-        },
-        {
-          id: 'risk-heatmap',
-          title: 'Risk Heatmap',
-          href: '/dashboard/risks/heatmap',
-          icon: Activity,
-          description: 'Visual risk analysis',
         },
         {
           id: 'risk-monitoring',
@@ -170,274 +192,88 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           href: '/dashboard/risks/monitoring',
           icon: Monitor,
           description: 'Real-time risk tracking',
+        },
+        {
+          id: 'risk-heatmap',
+          title: 'Risk Heatmap',
+          href: '/dashboard/risks/heatmap',
+          icon: Activity,
+          description: 'Visual risk analysis',
         }
       ]
     },
     {
-      id: 'controls',
-      title: 'Controls',
-      emoji: '🛡️',
+      id: 'compliance-hub',
+      title: 'Compliance Hub',
+      emoji: '',
+      description: 'Compliance frameworks and controls',
       collapsible: true,
       items: [
         {
-          id: 'control-library',
-          title: 'Control Library',
-          href: '/dashboard/controls',
-          icon: ShieldCheck,
-          description: 'Control framework management',
-          shortcut: '⌘ C',
-        },
-        {
-          id: 'control-testing',
-          title: 'Control Testing',
-          href: '/dashboard/controls/testing',
-          icon: Calendar,
-          badge: 5,
-          badgeVariant: 'warning',
-          description: 'Control testing workflows',
-        },
-        {
-          id: 'control-mapping',
-          title: 'Control Mapping',
-          href: '/dashboard/controls/mapping',
-          icon: MapPin,
-          description: 'Risk-to-control mapping',
-        },
-        {
-          id: 'effectiveness-tracking',
-          title: 'Effectiveness Tracking',
-          href: '/dashboard/controls/effectiveness',
-          icon: TrendingUp,
-          description: 'Control performance metrics',
-        }
-      ]
-    },
-    {
-      id: 'assessments',
-      title: 'Assessments',
-      emoji: '📋',
-      collapsible: true,
-      items: [
-        {
-          id: 'self-assessments',
-          title: 'Self-Assessments',
-          href: '/dashboard/assessments/self',
-          icon: FileCheck,
-          description: 'Internal self-assessments',
-        },
-        {
-          id: 'third-party-reviews',
-          title: 'Third-Party Reviews',
-          href: '/dashboard/assessments/third-party',
-          icon: Users,
-          description: 'External assessment reviews',
-        },
-        {
-          id: 'questionnaires',
-          title: 'Questionnaires',
-          href: '/dashboard/questionnaires',
-          icon: ClipboardList,
-          badge: 12,
-          badgeVariant: 'info',
-          description: 'Assessment questionnaires',
-        },
-        {
-          id: 'rcsa-import',
-          title: 'RCSA Import',
-          href: '/dashboard/import/rcsa',
-          icon: Upload,
-          badge: 'New',
-          badgeVariant: 'success',
-          description: 'Import RCSA data',
-        }
-      ]
-    },
-    {
-      id: 'compliance',
-      title: 'Compliance',
-      emoji: '📚',
-      collapsible: true,
-      items: [
-        {
-          id: 'framework-library',
-          title: 'Framework Library',
-          href: '/dashboard/compliance/frameworks',
-          icon: BookOpen,
-          description: 'SOX, ISO27001, GDPR, HIPAA, etc.',
+          id: 'framework-status',
+          title: 'Framework Status',
+          href: '/dashboard/compliance',
+          icon: CheckCircle,
+          description: 'SOX, ISO27001, GDPR, HIPAA status',
         },
         {
           id: 'gap-analysis',
           title: 'Gap Analysis',
           href: '/dashboard/compliance/gaps',
           icon: AlertTriangle,
-          badge: 8,
-          badgeVariant: 'warning',
           description: 'Compliance gap identification',
         },
         {
-          id: 'compliance-mapping',
-          title: 'Compliance Mapping',
-          href: '/dashboard/compliance/mapping',
-          icon: Workflow,
-          description: 'Framework compliance mapping',
+          id: 'assessments',
+          title: 'Assessments',
+          href: '/dashboard/assessments',
+          icon: ClipboardList,
+          description: 'Self-assessments and questionnaires',
         },
         {
-          id: 'regulatory-monitoring',
-          title: 'Regulatory Monitoring',
-          href: '/dashboard/compliance/monitoring',
-          icon: Eye,
-          description: 'Regulatory change tracking',
+          id: 'controls',
+          title: 'Controls',
+          href: '/dashboard/controls',
+          icon: ShieldCheck,
+          description: 'Control library and testing',
         }
       ]
     },
     {
-      id: 'documents',
-      title: 'Documents',
-      emoji: '📄',
+      id: 'insights-reports',
+      title: 'Insights & Reports',
+      emoji: '',
+      description: 'AI insights and reporting',
       collapsible: true,
       items: [
         {
-          id: 'document-library',
-          title: 'Document Library',
+          id: 'ai-chat',
+          title: 'AI Chat',
+          href: '/dashboard/aria',
+          icon: Brain,
+          isNew: true,
+          description: 'ARIA assistant and predictions',
+        },
+        {
+          id: 'report-builder',
+          title: 'Report Builder',
+          href: '/dashboard/reporting',
+          icon: FileBarChart,
+          description: 'Custom report generation',
+        },
+        {
+          id: 'analytics',
+          title: 'Analytics',
+          href: '/dashboard/analytics',
+          icon: BarChart,
+          description: 'Trend analysis and metrics',
+        },
+        {
+          id: 'documents',
+          title: 'Documents',
           href: '/dashboard/documents',
           icon: Folder,
-          description: 'Document management',
-        },
-        {
-          id: 'policy-store',
-          title: 'Policy Store',
-          href: '/dashboard/documents/policies',
-          icon: FileText,
-          description: 'Policy management',
-        },
-        {
-          id: 'evidence-collection',
-          title: 'Evidence Collection',
-          href: '/dashboard/documents/evidence',
-          icon: Archive,
-          description: 'Audit evidence management',
-        },
-        {
-          id: 'templates',
-          title: 'Templates',
-          href: '/dashboard/documents/templates',
-          icon: Bookmark,
-          description: 'Document templates',
-        }
-      ]
-    },
-    {
-      id: 'workflows',
-      title: 'Workflows',
-      emoji: '🔄',
-      collapsible: true,
-      items: [
-        {
-          id: 'workflow-builder',
-          title: 'Workflow Builder',
-          href: '/dashboard/workflows',
-          icon: GitBranch,
-          description: 'Process automation',
-        },
-        {
-          id: 'approvals-queue',
-          title: 'Approvals Queue',
-          href: '/dashboard/workflows/approvals',
-          icon: CheckCircle,
-          badge: 8,
-          badgeVariant: 'warning',
-          description: 'Pending approvals',
-        },
-        {
-          id: 'process-automation',
-          title: 'Process Automation',
-          href: '/dashboard/workflows/automation',
-          icon: Zap,
-          description: 'Automated processes',
-        },
-        {
-          id: 'task-management',
-          title: 'Task Management',
-          href: '/dashboard/workflows/tasks',
-          icon: CheckCircle,
-          description: 'Task tracking and management',
-        }
-      ]
-    },
-    {
-      id: 'ai-insights',
-      title: 'AI Insights',
-      emoji: '🤖',
-      collapsible: true,
-      items: [
-        {
-          id: 'aria-assistant',
-          title: 'ARIA Assistant',
-          href: '/dashboard/aria',
-          icon: Bot,
-          isNew: true,
-          description: 'AI-powered assistant',
-          shortcut: '⌘ A',
-        },
-        {
-          id: 'risk-predictions',
-          title: 'Risk Predictions',
-          href: '/dashboard/ai-insights/predictions',
-          icon: Sparkles,
-          description: 'AI-powered risk forecasting',
-        },
-        {
-          id: 'smart-recommendations',
-          title: 'Smart Recommendations',
-          href: '/dashboard/ai-insights/recommendations',
-          icon: Lightbulb,
-          badge: 3,
-          badgeVariant: 'success',
-          description: 'Intelligent recommendations',
-        },
-        {
-          id: 'automated-analysis',
-          title: 'Automated Analysis',
-          href: '/dashboard/ai-insights/analysis',
-          icon: Brain,
-          description: 'Continuous monitoring',
-        }
-      ]
-    },
-    {
-      id: 'reports',
-      title: 'Reports & Analytics',
-      emoji: '📊',
-      collapsible: true,
-      items: [
-        {
-          id: 'executive-dashboard',
-          title: 'Executive Dashboard',
-          href: '/dashboard/reporting',
-          icon: BarChart3,
-          description: 'Executive reporting and insights',
-          shortcut: '⌘ E',
-        },
-        {
-          id: 'compliance-reports',
-          title: 'Compliance Reports',
-          href: '/dashboard/reporting/compliance',
-          icon: FileText,
-          description: 'Regulatory compliance reports',
-        },
-        {
-          id: 'trend-analysis',
-          title: 'Trend Analysis',
-          href: '/dashboard/reporting/trends',
-          icon: TrendingUp,
-          description: 'Historical analysis and trends',
-        },
-        {
-          id: 'custom-reports',
-          title: 'Custom Reports',
-          href: '/dashboard/reporting/custom',
-          icon: PieChart,
-          description: 'Custom report builder',
+          description: 'Document library and policies',
         }
       ]
     }
@@ -503,6 +339,44 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
     }
   };
 
+  const toggleFavorite = (item: NavItem) => {
+    const quickAccessItem: QuickAccessItem = {
+      id: item.id,
+      title: item.title,
+      href: item.href,
+      icon: item.icon,
+      type: 'favorite'
+    };
+
+    setFavorites(prev => {
+      const exists = prev.find(fav => fav.id === item.id);
+      if (exists) {
+        return prev.filter(fav => fav.id !== item.id);
+      } else {
+        return [...prev, quickAccessItem].slice(0, 5); // Limit to 5 favorites
+      }
+    });
+  };
+
+  const isFavorite = (itemId: string) => {
+    return favorites.some(fav => fav.id === itemId);
+  };
+
+  const formatTimeAgo = (timestamp: Date) => {
+    const now = new Date();
+    const diff = now.getTime() - timestamp.getTime();
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    
+    if (minutes < 60) {
+      return `${minutes}m ago`;
+    } else if (hours < 24) {
+      return `${hours}h ago`;
+    } else {
+      return timestamp.toLocaleDateString();
+    }
+  };
+
   // Filter items based on search
   const filteredSections = searchQuery 
     ? navigationSections.map(section => ({
@@ -514,24 +388,35 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
       })).filter(section => section.items.length > 0)
     : navigationSections;
 
+  // Collapsed sidebar view
   if (!isOpen) {
     return (
       <div className="flex flex-col h-full w-16 bg-[#FAFAFA] border-r border-gray-200">
-        {/* Collapsed Logo */}
-        <div className="flex items-center justify-center h-16 border-b border-gray-200">
-          <Image
-            src="/images/logo/riscura.png"
-            alt="Riscura"
-            width={32}
-            height={32}
-            className="object-contain"
-            priority
-          />
+        {/* Collapsed Header with Logo and Toggle */}
+        <div className="flex flex-col items-center h-20 border-b border-gray-200 py-2">
+          <div className="flex-1 flex items-center justify-center">
+            <Image
+              src="/images/logo/riscura.png"
+              alt="Riscura"
+              width={40}
+              height={40}
+              className="object-contain"
+              priority
+            />
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onToggle}
+            className="w-6 h-6 text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] transition-colors"
+          >
+            <ChevronRight className="w-3 h-3" />
+          </Button>
         </div>
 
         {/* Collapsed Navigation */}
         <div className="flex-1 py-4 space-y-2">
-          {navigationSections.slice(0, 8).map((section) => (
+          {navigationSections.map((section) => (
             <TooltipProvider key={section.id}>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -539,16 +424,22 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                     variant="ghost"
                     size="icon"
                     className={cn(
-                      "w-10 h-10 mx-auto text-[#191919] hover:bg-[#D8C3A5]/20",
-                      section.items.some(item => isItemActive(item.href)) && "bg-[#199BEC] text-white"
+                      "w-10 h-10 mx-auto text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] transition-all duration-200",
+                      section.items.some(item => isItemActive(item.href)) && "bg-[#199BEC] text-white shadow-md"
                     )}
                     onClick={() => onToggle?.()}
                   >
-                    <span className="text-lg">{section.emoji}</span>
+                    {section.items[0] && (() => {
+                      const IconComponent = section.items[0].icon;
+                      return <IconComponent className="w-5 h-5" />;
+                    })()}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="right" className="font-medium">
-                  {section.title}
+                  <div>
+                    <p className="font-semibold">{section.title}</p>
+                    <p className="text-xs text-gray-500">{section.description}</p>
+                  </div>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -578,16 +469,16 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
   }
 
   return (
-    <div className="flex flex-col h-full w-64 bg-[#FAFAFA] border-r border-gray-200">
+    <div className="flex flex-col h-full w-64 bg-[#FAFAFA] border-r border-gray-200" data-tour="sidebar">
       {/* Header */}
-      <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between h-20 px-4 border-b border-gray-200">
+        <div className="flex items-center gap-3 flex-1 min-w-0 py-2">
           <Image
             src="/images/logo/riscura.png"
             alt="Riscura Logo"
             width={120}
-            height={32}
-            className="object-contain"
+            height={40}
+            className="object-contain max-w-full h-auto"
             priority
           />
         </div>
@@ -595,14 +486,14 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           variant="ghost"
           size="icon"
           onClick={onToggle}
-          className="w-8 h-8 text-[#191919] hover:bg-[#D8C3A5]/20"
+          className="w-8 h-8 text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] transition-colors"
         >
-          <ChevronRight className="w-4 h-4" />
+          <ChevronLeft className="w-4 h-4" />
         </Button>
       </div>
 
       {/* Search */}
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-4 border-b border-gray-200" data-tour="global-search">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
           <Input
@@ -625,9 +516,41 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
         </div>
         <div className="mt-2 text-xs text-gray-500 flex items-center gap-1">
           <Command className="w-3 h-3" />
-          <span>⌘ K to search</span>
+          <span> K to search</span>
         </div>
       </div>
+
+      {/* Quick Access - Favorites */}
+      {!searchQuery && (
+        <div className="px-4 py-3 border-b border-gray-200 bg-white/30">
+          {/* Favorites */}
+          {favorites.length > 0 && (
+            <div className="mb-3">
+              <div className="flex items-center gap-2 mb-2">
+                <Star className="w-3 h-3 text-[#199BEC]" />
+                <span className="text-xs font-semibold text-[#191919] uppercase tracking-wide">Favorites</span>
+              </div>
+              <div className="space-y-1">
+                {favorites.slice(0, 3).map((item) => (
+                  <Link key={item.id} href={item.href}>
+                    <div
+                      className={cn(
+                        "flex items-center gap-2 px-2 py-1.5 rounded-md text-xs font-medium transition-all duration-200 group",
+                        "text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC]"
+                      )}
+                    >
+                      <item.icon className="w-3 h-3 flex-shrink-0" />
+                      <span className="flex-1 truncate">{item.title}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+
+        </div>
+      )}
 
       {/* Navigation */}
       <div className="flex-1 overflow-y-auto py-4">
@@ -637,17 +560,23 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
               {/* Section Header */}
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm">{section.emoji}</span>
-                  <h3 className="text-sm font-semibold text-[#191919] font-inter">
-                    {section.title}
-                  </h3>
+                  <div>
+                    <h3 className="text-sm font-semibold text-[#191919] font-inter">
+                      {section.title}
+                    </h3>
+                    {section.description && (
+                      <p className="text-xs text-gray-500 font-inter">
+                        {section.description}
+                      </p>
+                    )}
+                  </div>
                 </div>
                 {section.collapsible && (
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => toggleSection(section.id)}
-                    className="w-5 h-5 p-0 text-gray-500 hover:text-[#191919] hover:bg-[#D8C3A5]/20"
+                    className="w-5 h-5 p-0 text-gray-500 hover:text-[#191919] hover:bg-[#199BEC]/10 transition-colors"
                   >
                     {isExpanded(section.id) ? (
                       <ChevronDown className="w-3 h-3" />
@@ -662,50 +591,57 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
               {(!section.collapsible || isExpanded(section.id)) && (
                 <div className="space-y-1">
                   {section.items.map((item) => (
-                    <Link key={item.id} href={item.href}>
-                      <div
+                    <div key={item.id} className="group relative">
+                      <Link href={item.href}>
+                        <div
+                          className={cn(
+                            "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group",
+                            isItemActive(item.href)
+                              ? "bg-[#199BEC] text-white shadow-md shadow-[#199BEC]/25 scale-[1.02]"
+                              : "text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] hover:scale-[1.01]"
+                          )}
+                          {...(item.id === 'ai-chat' && { 'data-tour': 'aria-assistant' })}
+                        >
+                          <item.icon 
+                            className={cn(
+                              "w-4 h-4 flex-shrink-0 transition-colors",
+                              isItemActive(item.href) ? "text-white" : "text-gray-600 group-hover:text-[#199BEC]"
+                            )} 
+                          />
+                          <span className="flex-1 truncate font-inter">{item.title}</span>
+                          
+                          {/* Badges and Actions */}
+                          <div className="flex items-center gap-1">
+                            {item.isNew && (
+                              <Badge variant="secondary" className="px-1.5 py-0.5 text-xs bg-[#199BEC] text-white border-0">
+                                New
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      </Link>
+                      
+                      {/* Favorite Toggle */}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleFavorite(item);
+                        }}
                         className={cn(
-                          "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 group",
-                          isItemActive(item.href)
-                            ? "bg-[#199BEC] text-white shadow-md shadow-[#199BEC]/25 scale-[1.02]"
-                            : "text-[#191919] hover:bg-[#D8C3A5]/20 hover:text-[#191919]"
+                          "absolute right-1 top-1/2 transform -translate-y-1/2 w-6 h-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity",
+                          isFavorite(item.id) && "opacity-100"
                         )}
                       >
-                        <item.icon 
+                        <Star 
                           className={cn(
-                            "w-4 h-4 flex-shrink-0",
-                            isItemActive(item.href) ? "text-white" : "text-gray-600 group-hover:text-[#191919]"
+                            "w-3 h-3",
+                            isFavorite(item.id) ? "text-[#199BEC] fill-[#199BEC]" : "text-gray-400 hover:text-[#199BEC]"
                           )} 
                         />
-                        <span className="flex-1 truncate font-inter">{item.title}</span>
-                        
-                        {/* Badges */}
-                        <div className="flex items-center gap-1">
-                          {item.isNew && (
-                            <Badge variant="secondary" className="px-1.5 py-0.5 text-xs bg-[#199BEC] text-white border-0">
-                              New
-                            </Badge>
-                          )}
-                          {item.badge && (
-                            <Badge 
-                              variant={getBadgeVariant(item.badgeVariant)} 
-                              className={cn(
-                                "px-1.5 py-0.5 text-xs font-medium",
-                                item.badgeVariant === 'critical' && "bg-red-100 text-red-700 border-red-200",
-                                item.badgeVariant === 'warning' && "bg-orange-100 text-orange-700 border-orange-200",
-                                item.badgeVariant === 'success' && "bg-green-100 text-green-700 border-green-200",
-                                item.badgeVariant === 'info' && "bg-blue-100 text-blue-700 border-blue-200"
-                              )}
-                            >
-                              {item.badge}
-                            </Badge>
-                          )}
-                          {item.shortcut && !isItemActive(item.href) && (
-                            <span className="text-xs text-gray-400 font-mono">{item.shortcut}</span>
-                          )}
-                        </div>
-                      </div>
-                    </Link>
+                      </Button>
+                    </div>
                   ))}
                 </div>
               )}
@@ -715,8 +651,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
       </div>
 
       {/* User Profile */}
-      <div className="p-4 border-t border-gray-200">
-        <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#D8C3A5]/20 transition-colors cursor-pointer">
+      <div className="p-4 border-t border-gray-200" data-tour="user-profile">
+        <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#199BEC]/10 transition-colors cursor-pointer group">
           <Avatar className="w-8 h-8">
             <AvatarImage src={user?.avatar} />
             <AvatarFallback className="bg-[#199BEC] text-white text-sm">
@@ -729,7 +665,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
             </p>
             <p className="text-xs text-gray-600 truncate">{user?.email}</p>
           </div>
-          <Button variant="ghost" size="icon" className="w-6 h-6 text-gray-500 hover:text-[#191919]">
+          <Button variant="ghost" size="icon" className="w-6 h-6 text-gray-500 hover:text-[#199BEC] opacity-0 group-hover:opacity-100 transition-all" data-tour="help-menu">
             <Settings className="w-4 h-4" />
           </Button>
         </div>
