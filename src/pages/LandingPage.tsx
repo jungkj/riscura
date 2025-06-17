@@ -62,16 +62,16 @@ function SingleWordTypewriter() {
       if (!isDeleting) {
         // Typing
         setDisplayText(currentWord.substring(0, displayText.length + 1));
-        setTypingSpeed(100);
+        setTypingSpeed(120);
         
         if (displayText === currentWord) {
           // Start deleting after a pause
-          setTimeout(() => setIsDeleting(true), 2000);
+          setTimeout(() => setIsDeleting(true), 2500);
         }
       } else {
         // Deleting
         setDisplayText(currentWord.substring(0, displayText.length - 1));
-        setTypingSpeed(50);
+        setTypingSpeed(80);
         
         if (displayText === '') {
           setIsDeleting(false);
@@ -88,14 +88,15 @@ function SingleWordTypewriter() {
       <span className="text-gray-900">
         Risk management made{' '}
       </span>
-      <span className="relative">
+      <span className="relative inline-block min-w-[280px] sm:min-w-[320px] lg:min-w-[400px] text-left">
         <span className="text-[#191919] font-bold">
           {displayText}
         </span>
         <motion.span
-          className="absolute -right-1 top-0 w-1 h-full bg-gray-400 rounded-sm"
+          className="absolute top-0 w-0.5 h-full bg-[#199BEC] rounded-sm ml-1"
+          style={{ left: `${displayText.length * 0.6}em` }}
           animate={{ opacity: [0, 1, 0] }}
-          transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
         />
       </span>
     </div>

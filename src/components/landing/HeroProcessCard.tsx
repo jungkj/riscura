@@ -64,12 +64,12 @@ const HeroProcessCard = () => {
   const currentStepData = steps[currentStep];
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto">
+    <div className="relative w-full max-w-4xl mx-auto">
       {/* Main Process Card */}
       <Card className="bg-white/80 backdrop-blur-xl border border-gray-200/60 shadow-2xl overflow-hidden w-full">
         <CardContent className="p-0">
           {/* Header with Browser Chrome */}
-          <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
+          <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-red-500 rounded-full"></div>
@@ -81,7 +81,7 @@ const HeroProcessCard = () => {
           </div>
 
           {/* Dynamic Content Area */}
-          <div className="h-[480px] relative overflow-hidden w-full">
+          <div className="h-80 relative overflow-hidden w-full">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
@@ -89,17 +89,17 @@ const HeroProcessCard = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.5 }}
-                className={`absolute inset-0 ${currentStepData.bgColor} p-8`}
+                className={`absolute inset-0 ${currentStepData.bgColor} p-6`}
               >
                 {/* Step Indicator */}
-                <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center space-x-4">
-                    <div className={`w-12 h-12 rounded-xl ${currentStepData.bgColor} border border-gray-200 flex items-center justify-center`}>
-                      <currentStepData.icon className={`w-6 h-6 ${currentStepData.color}`} />
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-10 h-10 rounded-lg ${currentStepData.bgColor} border border-gray-200 flex items-center justify-center`}>
+                      <currentStepData.icon className={`w-5 h-5 ${currentStepData.color}`} />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 text-base">{currentStepData.title}</h3>
-                      <p className="text-sm text-gray-600">{currentStepData.subtitle}</p>
+                      <h3 className="font-semibold text-gray-900 text-sm">{currentStepData.title}</h3>
+                      <p className="text-xs text-gray-600">{currentStepData.subtitle}</p>
                     </div>
                   </div>
                   
@@ -107,27 +107,27 @@ const HeroProcessCard = () => {
 
                 {/* Step-Specific Content */}
                 {currentStep === 0 && (
-                  <div className="space-y-6">
-                    <div className="border-2 border-dashed border-[#199BEC]/50 rounded-xl p-8 bg-white/50 text-center">
+                  <div className="space-y-4">
+                    <div className="border-2 border-dashed border-[#199BEC]/50 rounded-lg p-6 bg-white/50 text-center">
                       <motion.div
                         animate={{ y: [0, -5, 0] }}
                         transition={{ duration: 2, repeat: Infinity }}
                       >
-                        <Upload className="w-10 h-10 text-[#199BEC] mx-auto mb-4" />
+                        <Upload className="w-8 h-8 text-[#199BEC] mx-auto mb-3" />
                       </motion.div>
-                      <p className="text-base text-gray-700 mb-4">Drag & drop your files</p>
-                      <div className="space-y-3">
+                      <p className="text-sm text-gray-700 mb-3">Drag & drop your files</p>
+                      <div className="grid grid-cols-3 gap-2">
                         {currentStepData.files?.map((file, index) => (
                           <motion.div
                             key={file}
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.3 }}
-                            className="bg-white border border-gray-200 rounded-lg p-3 flex items-center space-x-3 text-sm"
+                            className="bg-white border border-gray-200 rounded p-2 flex items-center space-x-2 text-xs"
                           >
-                            <FileText className="w-5 h-5 text-[#199BEC]" />
-                            <span className="text-gray-900 flex-1 text-left">{file}</span>
-                            <CheckCircle className="w-5 h-5 text-green-500" />
+                            <FileText className="w-4 h-4 text-[#199BEC] flex-shrink-0" />
+                            <span className="text-gray-900 truncate">{file}</span>
+                            <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                           </motion.div>
                         ))}
                       </div>
@@ -136,16 +136,16 @@ const HeroProcessCard = () => {
                 )}
 
                 {currentStep === 1 && (
-                  <div className="space-y-6">
-                    <div className="bg-white/50 rounded-xl p-8 text-center">
+                  <div className="space-y-4">
+                    <div className="bg-white/50 rounded-lg p-6 text-center">
                       <motion.div
                         animate={{ y: [0, -8, 0] }}
                         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                        className="mb-6"
+                        className="mb-4"
                       >
-                        <Brain className="w-12 h-12 text-purple-600 mx-auto" />
+                        <Brain className="w-10 h-10 text-purple-600 mx-auto" />
                       </motion.div>
-                      <div className="space-y-4">
+                      <div className="grid grid-cols-3 gap-4">
                         {currentStepData.processing?.map((process, index) => (
                           <motion.div
                             key={`${process}-${currentStep}`}
@@ -159,10 +159,10 @@ const HeroProcessCard = () => {
                               repeat: Infinity,
                               ease: "easeInOut"
                             }}
-                            className="flex items-center justify-center space-x-3 text-base"
+                            className="flex items-center justify-center space-x-2 text-sm"
                           >
                             <motion.div 
-                              className="w-2.5 h-2.5 bg-purple-500 rounded-full"
+                              className="w-2 h-2 bg-purple-500 rounded-full"
                               animate={{ scale: [1, 1.2, 1] }}
                               transition={{
                                 duration: 1.2,
@@ -180,37 +180,33 @@ const HeroProcessCard = () => {
                 )}
 
                 {currentStep === 2 && (
-                  <div className="space-y-6">
-                    <div className="bg-white/50 rounded-xl p-6">
-                      <div className="flex items-center justify-between mb-6">
-                        <h4 className="font-medium text-gray-900 text-base">Risk Assessment Results</h4>
-                        <Badge className="bg-green-100 text-green-800 text-sm">Complete</Badge>
+                  <div className="space-y-4">
+                    <div className="bg-white/50 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className="font-medium text-gray-900 text-sm">Risk Assessment Results</h4>
+                        <Badge className="bg-green-100 text-green-800 text-xs">Complete</Badge>
                       </div>
-                      <div className="space-y-4">
+                      <div className="grid grid-cols-3 gap-3">
                         {currentStepData.results?.map((result, index) => (
                           <motion.div
                             key={result.name}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.2 }}
-                            className="flex items-center justify-between bg-white border border-gray-200 rounded-lg p-4"
+                            className="bg-white border border-gray-200 rounded p-3 text-center"
                           >
-                            <div className="flex items-center space-x-4">
-                              <div className={`w-3 h-3 rounded-full ${
-                                result.level === 'high' ? 'bg-red-500' :
-                                result.level === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
-                              }`}></div>
-                              <span className="text-base text-gray-900">{result.name}</span>
-                            </div>
-                            <div className="flex items-center space-x-3">
-                              <Badge 
-                                variant={result.level === 'high' ? 'destructive' : result.level === 'medium' ? 'secondary' : 'default'}
-                                className="text-sm"
-                              >
-                                {result.level}
-                              </Badge>
-                              <span className="text-sm font-mono text-gray-600 font-bold">{result.score}</span>
-                            </div>
+                            <div className={`w-3 h-3 rounded-full mx-auto mb-2 ${
+                              result.level === 'high' ? 'bg-red-500' :
+                              result.level === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
+                            }`}></div>
+                            <div className="text-xs text-gray-900 font-medium mb-1">{result.name}</div>
+                            <Badge 
+                              variant={result.level === 'high' ? 'destructive' : result.level === 'medium' ? 'secondary' : 'default'}
+                              className="text-xs"
+                            >
+                              {result.level}
+                            </Badge>
+                            <div className="text-xs font-mono text-gray-600 mt-1">{result.score}</div>
                           </motion.div>
                         ))}
                       </div>
@@ -222,13 +218,13 @@ const HeroProcessCard = () => {
           </div>
 
           {/* Progress Bar */}
-          <div className="bg-gray-50 px-8 py-5 border-t border-gray-200">
+          <div className="bg-gray-50 px-6 py-3 border-t border-gray-200">
             <div className="flex items-center justify-center">
-              <div className="flex space-x-3">
+              <div className="flex space-x-2">
                 {steps.map((_, index) => (
                   <div
                     key={index}
-                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
                       currentStep === index ? 'bg-[#199BEC] scale-125' : 'bg-gray-300'
                     }`}
                   />
