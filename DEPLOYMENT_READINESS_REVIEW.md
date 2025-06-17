@@ -13,6 +13,8 @@ The application successfully builds for production with the following configurat
 - Production build generates 115 static pages
 - Build warnings are non-critical (OpenTelemetry instrumentation)
 - Environment validation system properly configured for build-time vs runtime
+- **Prisma Client generation fixed for Vercel deployment**
+- `postinstall` script ensures Prisma generates after dependency installation
 
 ## 🏗️ Core Application Architecture
 
