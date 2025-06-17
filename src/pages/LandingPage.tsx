@@ -137,7 +137,7 @@ export default function LandingPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background font-inter">
+    <div className="min-h-screen font-inter" style={{ backgroundColor: '#F5F1E9' }}>
       {/* Resizable Navigation */}
       <Navbar>
         <NavBody>

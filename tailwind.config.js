@@ -7,6 +7,14 @@ module.exports = {
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
+  safelist: [
+    'bg-background',
+    'bg-[#F5F1E9]',
+    'min-h-screen',
+    {
+      pattern: /bg-(background|card|primary|secondary|accent)/,
+    }
+  ],
   prefix: "",
   theme: {
     container: {
