@@ -470,14 +470,14 @@ export default function DashboardPage() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6" data-tour="dashboard-stats">
         <Card 
-          className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+          className="bg-white border-[#D8C3A5] cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
           onClick={() => handleStatsCardClick('totalRisks')}
         >
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-blue-600">Total Risks</p>
-                <p className="text-3xl font-bold text-blue-900">{stats.totalRisks}</p>
+                <p className="text-3xl font-bold text-[#191919]">{stats.totalRisks}</p>
               </div>
               <Shield className="h-8 w-8 text-blue-600" />
             </div>
@@ -485,14 +485,14 @@ export default function DashboardPage() {
         </Card>
 
         <Card 
-          className="bg-gradient-to-br from-red-50 to-red-100 border-red-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+          className="bg-white border-[#D8C3A5] cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
           onClick={() => handleStatsCardClick('highRisks')}
         >
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-red-600">High Priority</p>
-                <p className="text-3xl font-bold text-red-900">{stats.highRisks}</p>
+                <p className="text-3xl font-bold text-[#191919]">{stats.highRisks}</p>
               </div>
               <AlertTriangle className="h-8 w-8 text-red-600" />
             </div>
@@ -500,14 +500,14 @@ export default function DashboardPage() {
         </Card>
 
         <Card 
-          className="bg-gradient-to-br from-green-50 to-green-100 border-green-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+          className="bg-white border-[#D8C3A5] cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
           onClick={() => handleStatsCardClick('compliance')}
         >
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-green-600">Compliance</p>
-                <p className="text-3xl font-bold text-green-900">{stats.complianceScore}%</p>
+                <p className="text-3xl font-bold text-[#191919]">{stats.complianceScore}%</p>
               </div>
               <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
@@ -515,14 +515,14 @@ export default function DashboardPage() {
         </Card>
 
         <Card 
-          className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+          className="bg-white border-[#D8C3A5] cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
           onClick={() => handleStatsCardClick('activeControls')}
         >
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-purple-600">Active Controls</p>
-                <p className="text-3xl font-bold text-purple-900">{stats.activeControls}</p>
+                <p className="text-3xl font-bold text-[#191919]">{stats.activeControls}</p>
               </div>
               <Settings className="h-8 w-8 text-purple-600" />
             </div>
@@ -530,14 +530,14 @@ export default function DashboardPage() {
         </Card>
 
         <Card 
-          className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+          className="bg-white border-[#D8C3A5] cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
           onClick={() => handleStatsCardClick('pendingActions')}
         >
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-orange-600">Pending Actions</p>
-                <p className="text-3xl font-bold text-orange-900">{stats.pendingActions}</p>
+                <p className="text-3xl font-bold text-[#191919]">{stats.pendingActions}</p>
               </div>
               <Clock className="h-8 w-8 text-orange-600" />
             </div>
@@ -574,17 +574,7 @@ export default function DashboardPage() {
 
         {/* Risk Heat Map */}
         <div className="lg:col-span-2" data-tour="risk-heatmap">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Activity className="h-5 w-5 text-blue-600" />
-                Risk Heat Map
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <InteractiveRiskHeatMap />
-            </CardContent>
-          </Card>
+          <InteractiveRiskHeatMap />
         </div>
       </div>
 
