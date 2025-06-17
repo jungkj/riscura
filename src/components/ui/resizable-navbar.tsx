@@ -91,20 +91,20 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
         boxShadow: visible
           ? "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset"
           : "none",
-        width: visible ? "60%" : "100%",
+        width: visible ? "70%" : "100%",
         y: visible ? 20 : 0,
       }}
       transition={{
         type: "spring",
-        stiffness: 200,
-        damping: 50,
+        stiffness: 250,
+        damping: 40,
       }}
       style={{
-        minWidth: visible ? "850px" : "800px",
+        minWidth: visible ? "600px" : "700px",
       }}
       className={cn(
-        "relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-full bg-transparent py-3 lg:flex",
-        visible ? "px-4" : "px-6",
+        "relative z-[60] mx-auto hidden w-full max-w-6xl flex-row items-center justify-between self-start rounded-full bg-transparent py-2.5 lg:flex",
+        visible ? "px-3" : "px-5",
         visible && "bg-white/90",
         className,
       )}
@@ -121,7 +121,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
     <motion.div
       onMouseLeave={() => setHovered(null)}
       className={cn(
-        "hidden flex-1 flex-row items-center justify-center space-x-1 text-sm font-medium text-gray-600 transition duration-200 hover:text-gray-800 lg:flex lg:space-x-1 mx-8",
+        "hidden flex-1 flex-row items-center justify-center space-x-0.5 text-sm font-medium text-gray-600 transition duration-200 hover:text-gray-800 lg:flex mx-6",
         className,
       )}
     >
@@ -129,7 +129,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
         <a
           onMouseEnter={() => setHovered(idx)}
           onClick={onItemClick}
-          className="relative px-3 py-2 text-gray-700 font-medium hover:text-gray-900 transition-colors whitespace-nowrap"
+          className="relative px-2.5 py-1.5 text-gray-700 font-medium hover:text-gray-900 transition-colors whitespace-nowrap text-sm"
           key={`link-${idx}`}
           href={item.link}
         >
@@ -154,19 +154,19 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
         boxShadow: visible
           ? "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset"
           : "none",
-        width: visible ? "90%" : "100%",
-        paddingRight: visible ? "12px" : "0px",
-        paddingLeft: visible ? "12px" : "0px",
-        borderRadius: visible ? "16px" : "2rem",
-        y: visible ? 20 : 0,
+        width: visible ? "85%" : "100%",
+        paddingRight: visible ? "8px" : "0px",
+        paddingLeft: visible ? "8px" : "0px",
+        borderRadius: visible ? "12px" : "2rem",
+        y: visible ? 16 : 0,
       }}
       transition={{
         type: "spring",
-        stiffness: 200,
-        damping: 50,
+        stiffness: 250,
+        damping: 40,
       }}
       className={cn(
-        "relative z-50 mx-auto flex w-full max-w-[calc(100vw-2rem)] flex-col items-center justify-between bg-transparent px-4 py-3 lg:hidden",
+        "relative z-50 mx-auto flex w-full max-w-[calc(100vw-1.5rem)] flex-col items-center justify-between bg-transparent px-3 py-2.5 lg:hidden",
         visible && "bg-white/90",
         className,
       )}
