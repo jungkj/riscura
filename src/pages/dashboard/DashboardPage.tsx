@@ -30,7 +30,13 @@ import {
   TrendingUp,
   TrendingDown,
   CheckCircle2,
-  Grid3X3
+  Grid3X3,
+  Users,
+  MessageSquare,
+  UserPlus,
+  Share2,
+  Bell,
+  Briefcase
 } from 'lucide-react';
 import Image from 'next/image';
 
@@ -165,6 +171,24 @@ export default function DashboardPage() {
       href: '/dashboard/spreadsheets',
       color: 'text-indigo-600',
       badge: 'New'
+    },
+    {
+      id: 'team-assign',
+      title: 'Assign Team Member',
+      description: 'Delegate risk ownership',
+      icon: UserPlus,
+      href: '/dashboard/team/assign',
+      color: 'text-purple-600',
+      badge: 'Team'
+    },
+    {
+      id: 'team-share',
+      title: 'Share Risk Report',
+      description: 'Collaborate with team members',
+      icon: Share2,
+      href: '/dashboard/team/share',
+      color: 'text-teal-600',
+      badge: 'Team'
     }
   ];
 
@@ -478,7 +502,7 @@ export default function DashboardPage() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6" data-tour="dashboard-stats">
         <Card 
-          className="bg-white border-[#D8C3A5] cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+          className="bg-white border-gray-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105 hover:border-gray-300"
           onClick={() => handleStatsCardClick('totalRisks')}
         >
           <CardContent className="p-6">
@@ -493,7 +517,7 @@ export default function DashboardPage() {
         </Card>
 
         <Card 
-          className="bg-white border-[#D8C3A5] cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+          className="bg-white border-gray-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105 hover:border-gray-300"
           onClick={() => handleStatsCardClick('highRisks')}
         >
           <CardContent className="p-6">
@@ -508,7 +532,7 @@ export default function DashboardPage() {
         </Card>
 
         <Card 
-          className="bg-white border-[#D8C3A5] cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+          className="bg-white border-gray-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105 hover:border-gray-300"
           onClick={() => handleStatsCardClick('compliance')}
         >
           <CardContent className="p-6">
@@ -523,7 +547,7 @@ export default function DashboardPage() {
         </Card>
 
         <Card 
-          className="bg-white border-[#D8C3A5] cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+          className="bg-white border-gray-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105 hover:border-gray-300"
           onClick={() => handleStatsCardClick('activeControls')}
         >
           <CardContent className="p-6">
@@ -538,7 +562,7 @@ export default function DashboardPage() {
         </Card>
 
         <Card 
-          className="bg-white border-[#D8C3A5] cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+          className="bg-white border-gray-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105 hover:border-gray-300"
           onClick={() => handleStatsCardClick('pendingActions')}
         >
           <CardContent className="p-6">
@@ -554,10 +578,10 @@ export default function DashboardPage() {
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Quick Actions */}
-        <div className="lg:col-span-1" data-tour="quick-actions">
-          <Card className="bg-white border-[#D8C3A5]">
+        <div className="lg:col-span-4" data-tour="quick-actions">
+          <Card className="bg-white border-gray-200">
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -585,8 +609,8 @@ export default function DashboardPage() {
           </Card>
         </div>
 
-        {/* Risk Heat Map */}
-        <div className="lg:col-span-2" data-tour="risk-heatmap">
+        {/* Risk Heat Map - Expanded */}
+        <div className="lg:col-span-8" data-tour="risk-heatmap">
           <InteractiveRiskHeatMap />
         </div>
       </div>
@@ -594,7 +618,7 @@ export default function DashboardPage() {
       {/* Bottom Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Activity */}
-        <Card data-tour="recent-activity" className="bg-white border-[#D8C3A5]">
+        <Card data-tour="recent-activity" className="bg-white border-gray-200">
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -624,7 +648,7 @@ export default function DashboardPage() {
         </Card>
 
         {/* AI Insights */}
-        <Card data-tour="ai-insights" className="bg-white border-[#D8C3A5]">
+        <Card data-tour="ai-insights" className="bg-white border-gray-200">
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -658,7 +682,7 @@ export default function DashboardPage() {
                       </div>
                       <p className="text-sm text-gray-600 mb-3">{insight.description}</p>
                       {insight.action && (
-                        <Button variant="outline" size="sm">
+                        <Button variant="secondary" size="sm">
                           {insight.action}
                           <ArrowRight className="h-3 w-3 ml-1" />
                         </Button>
@@ -667,6 +691,163 @@ export default function DashboardPage() {
                   </div>
                 </div>
               ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Team Collaboration Section - Small Team Features */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Team Status */}
+        <Card className="bg-white border-gray-200">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Users className="h-5 w-5 text-blue-600" />
+              <span className="text-[#191919] font-bold">Team Status</span>
+              <Badge variant="secondary" className="bg-blue-100 text-blue-800 font-semibold text-xs">
+                Live
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between p-3 border border-gray-100 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm text-[#191919]">Sarah Chen</p>
+                    <p className="text-xs text-gray-500">Risk Manager • Online</p>
+                  </div>
+                </div>
+                <Badge className="bg-green-50 text-green-700 text-xs">3 Active</Badge>
+              </div>
+              <div className="flex items-center justify-between p-3 border border-gray-100 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm text-[#191919]">John Smith</p>
+                    <p className="text-xs text-gray-500">Compliance Officer • Away</p>
+                  </div>
+                </div>
+                <Badge className="bg-orange-50 text-orange-700 text-xs">2 Pending</Badge>
+              </div>
+              <div className="flex items-center justify-between p-3 border border-gray-100 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                    <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm text-[#191919]">Lisa Wang</p>
+                    <p className="text-xs text-gray-500">IT Security • Online</p>
+                  </div>
+                </div>
+                <Badge className="bg-blue-50 text-blue-700 text-xs">1 Review</Badge>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Quick Team Actions */}
+        <Card className="bg-white border-gray-200">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Briefcase className="h-5 w-5 text-purple-600" />
+              <span className="text-[#191919] font-bold">Team Actions</span>
+              <Badge variant="secondary" className="bg-purple-100 text-purple-800 font-semibold text-xs">
+                Small Team
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Button 
+              variant="ghost" 
+              className="w-full justify-start h-auto p-3 hover:bg-gray-50"
+              onClick={() => router.push('/dashboard/team/delegate')}
+            >
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-purple-50 rounded-lg">
+                  <UserPlus className="h-4 w-4 text-purple-600" />
+                </div>
+                <div className="text-left">
+                  <p className="font-medium text-sm text-[#191919]">Delegate Risk</p>
+                  <p className="text-xs text-gray-500">Assign ownership to team member</p>
+                </div>
+              </div>
+            </Button>
+            <Button 
+              variant="ghost" 
+              className="w-full justify-start h-auto p-3 hover:bg-gray-50"
+              onClick={() => router.push('/dashboard/team/chat')}
+            >
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-50 rounded-lg">
+                  <MessageSquare className="h-4 w-4 text-blue-600" />
+                </div>
+                <div className="text-left">
+                  <p className="font-medium text-sm text-[#191919]">Team Chat</p>
+                  <p className="text-xs text-gray-500">Discuss risks and controls</p>
+                </div>
+              </div>
+            </Button>
+            <Button 
+              variant="ghost" 
+              className="w-full justify-start h-auto p-3 hover:bg-gray-50"
+              onClick={() => router.push('/dashboard/team/notifications')}
+            >
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-orange-50 rounded-lg">
+                  <Bell className="h-4 w-4 text-orange-600" />
+                </div>
+                <div className="text-left">
+                  <p className="font-medium text-sm text-[#191919]">Team Alerts</p>
+                  <p className="text-xs text-gray-500">Set up notifications for team</p>
+                </div>
+              </div>
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Small Team Insights */}
+        <Card className="bg-white border-gray-200">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-green-600" />
+              <span className="text-[#191919] font-bold">Team Efficiency</span>
+              <Badge variant="secondary" className="bg-green-100 text-green-800 font-semibold text-xs">
+                Optimized
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-700">Risk Resolution Rate</span>
+                <span className="text-sm font-bold text-green-600">85%</span>
+              </div>
+              <Progress value={85} className="h-2" />
+              
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-700">Team Collaboration</span>
+                <span className="text-sm font-bold text-blue-600">92%</span>
+              </div>
+              <Progress value={92} className="h-2" />
+              
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-700">Response Time</span>
+                <span className="text-sm font-bold text-purple-600">2.1 hrs</span>
+              </div>
+              <Progress value={78} className="h-2" />
+            </div>
+            
+            <div className="pt-3 border-t border-gray-100">
+              <div className="flex items-center gap-2 text-xs text-green-600">
+                <TrendingUp className="h-3 w-3" />
+                <span>Team efficiency improved by 12% this month</span>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -699,11 +880,11 @@ function QuickActionCard({
 }) {
   return (
     <div 
-      className="p-4 border border-[#D8C3A5] rounded-lg hover:shadow-lg hover:border-[#191919] transition-all cursor-pointer group bg-white"
+      className="p-4 border border-gray-200 rounded-lg hover:shadow-lg hover:border-gray-300 transition-all cursor-pointer group bg-white"
       onClick={onClick}
     >
       <div className="flex items-start space-x-3">
-        <div className={`p-2 rounded-lg bg-[#FAFAFA] group-hover:bg-[#D8C3A5] transition-colors`}>
+        <div className={`p-2 rounded-lg bg-gray-50 group-hover:bg-gray-100 transition-colors`}>
           <Icon className={`w-5 h-5 ${color} transition-colors`} />
         </div>
         <div className="flex-1">
@@ -716,6 +897,7 @@ function QuickActionCard({
                   badge === 'Quick' ? 'bg-green-100 text-green-800' :
                   badge === 'AI' ? 'bg-blue-100 text-blue-800' :
                   badge === 'New' ? 'bg-orange-100 text-orange-800' :
+                  badge === 'Team' ? 'bg-purple-100 text-purple-800' :
                   'bg-gray-100 text-gray-800'
                 }`}
               >
