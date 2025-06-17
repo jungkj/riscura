@@ -8,6 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import GuidedTour from '@/components/help/GuidedTour';
+import { DashboardStatsModal } from '@/components/dashboard/DashboardStatsModal';
 
 import {
   Shield,
@@ -85,6 +86,7 @@ export default function DashboardPage() {
   });
   const [loading, setLoading] = useState(true);
   const [showTour, setShowTour] = useState(false);
+  const [selectedStatsModal, setSelectedStatsModal] = useState<any>(null);
 
   // Simulate loading for demonstration
   useEffect(() => {
@@ -271,6 +273,156 @@ export default function DashboardPage() {
     localStorage.setItem('hasSeenDashboardTour', 'true');
   };
 
+  const getStatsModalData = (type: string) => {
+    switch (type) {
+      case 'totalRisks':
+        return {
+          type: 'totalRisks' as const,
+          title: 'Total Risks',
+          value: stats.totalRisks,
+          description: 'Complete overview of all identified risks across your organization',
+          details: {
+            overview: 'Your organization currently has 23 identified risks spanning across various categories and business units. This represents a comprehensive risk landscape that requires ongoing monitoring and management.',
+            breakdown: [
+              { label: 'Critical Risks', value: 2, color: '#ef4444', percentage: 9 },
+              { label: 'High Risks', value: 4, color: '#f97316', percentage: 17 },
+              { label: 'Medium Risks', value: 12, color: '#eab308', percentage: 52 },
+              { label: 'Low Risks', value: 5, color: '#22c55e', percentage: 22 }
+            ],
+            recentItems: [
+              { id: 'RSK-001', title: 'Critical System Failure', status: 'Under Review', date: '2 hours ago', priority: 'high' as const },
+              { id: 'RSK-002', title: 'Data Privacy Compliance', status: 'Mitigated', date: '1 day ago', priority: 'medium' as const },
+              { id: 'RSK-003', title: 'Vendor Risk Assessment', status: 'In Progress', date: '3 days ago', priority: 'medium' as const }
+            ],
+            insights: [
+              { text: 'Risk count has decreased by 8% over the last quarter', type: 'positive' as const },
+              { text: 'Technology risks represent 35% of total risk exposure', type: 'neutral' as const },
+              { text: 'Three new risks identified in the last week', type: 'negative' as const }
+            ]
+          },
+          actions: [
+            { label: 'View All Risks', href: '/dashboard/risks', variant: 'default' as const },
+            { label: 'Add New Risk', href: '/dashboard/risks/new', variant: 'secondary' as const },
+            { label: 'Risk Reports', href: '/dashboard/reporting', variant: 'secondary' as const }
+          ]
+        };
+      case 'highRisks':
+        return {
+          type: 'highRisks' as const,
+          title: 'High Priority Risks',
+          value: stats.highRisks,
+          description: 'Critical and high-priority risks requiring immediate attention',
+          details: {
+            overview: 'You have 4 high-priority risks that require immediate attention and management. These risks pose significant threats to your organization and should be addressed promptly.',
+            breakdown: [
+              { label: 'Critical Risks', value: 2, color: '#dc2626', percentage: 50 },
+              { label: 'High Risks', value: 2, color: '#ea580c', percentage: 50 }
+            ],
+            recentItems: [
+              { id: 'RSK-001', title: 'Critical System Failure', status: 'Active', date: 'Today', priority: 'high' as const },
+              { id: 'RSK-004', title: 'Supply Chain Disruption', status: 'Escalated', date: 'Yesterday', priority: 'high' as const }
+            ],
+            insights: [
+              { text: 'Average resolution time for high-priority risks: 5.2 days', type: 'neutral' as const },
+              { text: 'Two critical risks require executive attention', type: 'negative' as const }
+            ]
+          },
+          actions: [
+            { label: 'View High Priority', href: '/dashboard/risks?priority=high', variant: 'default' as const },
+            { label: 'Risk Assessment', href: '/dashboard/risks/assessment', variant: 'secondary' as const }
+          ]
+        };
+      case 'compliance':
+        return {
+          type: 'compliance' as const,
+          title: 'Compliance Score',
+          value: `${stats.complianceScore}%`,
+          description: 'Overall compliance status across all regulatory frameworks',
+          details: {
+            overview: 'Your organization maintains a strong 94% compliance score across all applicable regulatory frameworks. This reflects excellent adherence to industry standards and regulations.',
+            breakdown: [
+              { label: 'SOC 2 Type II', value: 98, color: '#16a34a', percentage: 98 },
+              { label: 'ISO 27001', value: 95, color: '#16a34a', percentage: 95 },
+              { label: 'GDPR', value: 92, color: '#16a34a', percentage: 92 },
+              { label: 'HIPAA', value: 89, color: '#eab308', percentage: 89 }
+            ],
+            insights: [
+              { text: 'Compliance score improved by 3% this quarter', type: 'positive' as const },
+              { text: 'All major frameworks maintain >90% compliance', type: 'positive' as const },
+              { text: 'HIPAA compliance needs attention', type: 'negative' as const }
+            ]
+          },
+          actions: [
+            { label: 'Compliance Dashboard', href: '/dashboard/compliance', variant: 'default' as const },
+            { label: 'Generate Report', href: '/dashboard/reporting', variant: 'secondary' as const }
+          ]
+        };
+      case 'activeControls':
+        return {
+          type: 'activeControls' as const,
+          title: 'Active Controls',
+          value: stats.activeControls,
+          description: 'Security controls currently active and protecting your organization',
+          details: {
+            overview: 'Your organization has 18 active security controls deployed across various domains, providing comprehensive protection against identified risks.',
+            breakdown: [
+              { label: 'Preventive Controls', value: 8, color: '#3b82f6', percentage: 44 },
+              { label: 'Detective Controls', value: 6, color: '#8b5cf6', percentage: 33 },
+              { label: 'Corrective Controls', value: 4, color: '#06b6d4', percentage: 23 }
+            ],
+            recentItems: [
+              { id: 'CTL-001', title: 'Multi-Factor Authentication', status: 'Active', date: 'Running', priority: 'high' as const },
+              { id: 'CTL-002', title: 'Endpoint Detection', status: 'Active', date: 'Running', priority: 'high' as const },
+              { id: 'CTL-003', title: 'Access Reviews', status: 'Scheduled', date: 'Next week', priority: 'medium' as const }
+            ],
+            insights: [
+              { text: 'All critical controls are functioning properly', type: 'positive' as const },
+              { text: 'Control effectiveness rated at 92%', type: 'positive' as const }
+            ]
+          },
+          actions: [
+            { label: 'View Controls', href: '/dashboard/controls', variant: 'default' as const },
+            { label: 'Control Testing', href: '/dashboard/controls/testing', variant: 'secondary' as const }
+          ]
+        };
+      case 'pendingActions':
+        return {
+          type: 'pendingActions' as const,
+          title: 'Pending Actions',
+          value: stats.pendingActions,
+          description: 'Outstanding actions and tasks requiring completion',
+          details: {
+            overview: 'You have 7 pending actions that require attention. These include risk assessments, control implementations, and compliance reviews.',
+            breakdown: [
+              { label: 'Risk Assessments', value: 3, color: '#ef4444', percentage: 43 },
+              { label: 'Control Updates', value: 2, color: '#f97316', percentage: 29 },
+              { label: 'Compliance Reviews', value: 2, color: '#eab308', percentage: 28 }
+            ],
+            recentItems: [
+              { id: 'ACT-001', title: 'Quarterly Risk Review', status: 'Due Today', date: 'Today', priority: 'high' as const },
+              { id: 'ACT-002', title: 'Update Access Controls', status: 'Overdue', date: '2 days ago', priority: 'high' as const },
+              { id: 'ACT-003', title: 'Vendor Assessment', status: 'In Progress', date: 'Due Tomorrow', priority: 'medium' as const }
+            ],
+            insights: [
+              { text: 'Two actions are overdue and require immediate attention', type: 'negative' as const },
+              { text: 'Average completion time has improved by 15%', type: 'positive' as const }
+            ]
+          },
+          actions: [
+            { label: 'View All Actions', href: '/dashboard/actions', variant: 'default' as const },
+            { label: 'Create Action', href: '/dashboard/actions/new', variant: 'secondary' as const }
+          ]
+        };
+      default:
+        return null;
+    }
+  };
+
+  const handleStatsCardClick = (type: string) => {
+    const modalData = getStatsModalData(type);
+    setSelectedStatsModal(modalData);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -317,7 +469,10 @@ export default function DashboardPage() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6" data-tour="dashboard-stats">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+        <Card 
+          className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+          onClick={() => handleStatsCardClick('totalRisks')}
+        >
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -329,7 +484,10 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200">
+        <Card 
+          className="bg-gradient-to-br from-red-50 to-red-100 border-red-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+          onClick={() => handleStatsCardClick('highRisks')}
+        >
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -341,7 +499,10 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+        <Card 
+          className="bg-gradient-to-br from-green-50 to-green-100 border-green-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+          onClick={() => handleStatsCardClick('compliance')}
+        >
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -353,7 +514,10 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+        <Card 
+          className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+          onClick={() => handleStatsCardClick('activeControls')}
+        >
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -365,7 +529,10 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+        <Card 
+          className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+          onClick={() => handleStatsCardClick('pendingActions')}
+        >
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -491,6 +658,13 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Stats Modal */}
+      <DashboardStatsModal
+        isOpen={!!selectedStatsModal}
+        onClose={() => setSelectedStatsModal(null)}
+        data={selectedStatsModal}
+      />
     </div>
   );
 }

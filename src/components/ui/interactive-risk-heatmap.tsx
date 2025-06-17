@@ -332,7 +332,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
         <CardHeader>
           <CardTitle className="flex items-center">
             <Target className="w-5 h-5 mr-2 text-blue-600" />
-            Inherent Risk Heat Map
+            Risk Heat Map
           </CardTitle>
         </CardHeader>
         <CardContent>
