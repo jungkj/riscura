@@ -499,104 +499,92 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6" data-tour="dashboard-stats">
-        <Card 
-          className="bg-white border-gray-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105 hover:border-gray-300"
-          onClick={() => handleStatsCardClick('totalRisks')}
-        >
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-blue-600">Total Risks</p>
-                <p className="text-3xl font-bold text-[#191919]">{stats.totalRisks}</p>
-              </div>
-              <Shield className="h-8 w-8 text-blue-600" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card 
-          className="bg-white border-gray-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105 hover:border-gray-300"
-          onClick={() => handleStatsCardClick('highRisks')}
-        >
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-red-600">High Priority</p>
-                <p className="text-3xl font-bold text-[#191919]">{stats.highRisks}</p>
-              </div>
-              <AlertTriangle className="h-8 w-8 text-red-600" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card 
-          className="bg-white border-gray-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105 hover:border-gray-300"
-          onClick={() => handleStatsCardClick('compliance')}
-        >
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-green-600">Compliance</p>
-                <p className="text-3xl font-bold text-[#191919]">{stats.complianceScore}%</p>
-              </div>
-              <CheckCircle className="h-8 w-8 text-green-600" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card 
-          className="bg-white border-gray-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105 hover:border-gray-300"
-          onClick={() => handleStatsCardClick('activeControls')}
-        >
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-purple-600">Active Controls</p>
-                <p className="text-3xl font-bold text-[#191919]">{stats.activeControls}</p>
-              </div>
-              <Settings className="h-8 w-8 text-purple-600" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card 
-          className="bg-white border-gray-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105 hover:border-gray-300"
-          onClick={() => handleStatsCardClick('pendingActions')}
-        >
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-orange-600">Pending Actions</p>
-                <p className="text-3xl font-bold text-[#191919]">{stats.pendingActions}</p>
-              </div>
-              <Clock className="h-8 w-8 text-orange-600" />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Main Content Grid - Heat Map Showcase Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column - Quick Actions and Activity */}
-        <div className="lg:col-span-4 space-y-6">
-          {/* Quick Actions */}
-          <div data-tour="quick-actions">
-            <Card className="bg-white border-gray-200">
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Zap className="h-5 w-5 text-blue-600" />
-                    <span className="text-[#191919] font-bold">Quick Actions</span>
+      {/* Main Dashboard Grid - Enhanced Layout with Better Balance */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        {/* Left Column - Compact Stats & Quick Actions */}
+        <div className="lg:col-span-4 space-y-4">
+          {/* Quick Stats */}
+          <div className="grid grid-cols-2 gap-3">
+            <Card 
+              className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
+              onClick={() => handleStatsCardClick('totalRisks')}
+            >
+              <CardContent className="p-4">
+                <div className="flex items-center">
+                  <div className="p-2 bg-blue-50 rounded-lg">  
+                    <Shield className="h-5 w-5 text-blue-600" />
                   </div>
-                  <Badge variant="secondary" className="bg-green-100 text-green-800 font-semibold text-xs">
-                    {quickActions.length} Available
-                  </Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {quickActions.map((action) => (
+                  <div className="ml-3">
+                    <p className="text-2xl font-bold text-[#191919]">{stats.totalRisks}</p>
+                    <p className="text-xs text-gray-600">Total Risks</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card 
+              className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
+              onClick={() => handleStatsCardClick('highRisks')}
+            >
+              <CardContent className="p-4">
+                <div className="flex items-center">
+                  <div className="p-2 bg-red-50 rounded-lg">
+                    <AlertTriangle className="h-5 w-5 text-red-600" />
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-2xl font-bold text-red-600">{stats.highRisks}</p>
+                    <p className="text-xs text-gray-600">High Priority</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card 
+              className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
+              onClick={() => handleStatsCardClick('complianceScore')}
+            >
+              <CardContent className="p-4">
+                <div className="flex items-center">
+                  <div className="p-2 bg-green-50 rounded-lg">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-2xl font-bold text-green-600">{stats.complianceScore}%</p>
+                    <p className="text-xs text-gray-600">Compliance</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card 
+              className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
+              onClick={() => handleStatsCardClick('activeControls')}
+            >
+              <CardContent className="p-4">
+                <div className="flex items-center">
+                  <div className="p-2 bg-purple-50 rounded-lg">
+                    <Settings className="h-5 w-5 text-purple-600" />
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-2xl font-bold text-purple-600">{stats.activeControls}</p>
+                    <p className="text-xs text-gray-600">Controls</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Quick Actions - Simplified Card */}
+          <Card className="bg-white border-gray-200">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="h-5 w-5 text-[#199BEC]" />
+                <span className="text-[#191919] font-bold text-base">Quick Actions</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="grid grid-cols-2 gap-2">
+                {quickActions.slice(0, 4).map((action) => (
                   <QuickActionCard
                     key={action.id}
                     title={action.title}
@@ -605,36 +593,6 @@ export default function DashboardPage() {
                     color={action.color}
                     badge={action.badge}
                     onClick={() => handleQuickAction(action.href, action.id)}
-                  />
-                ))}
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Recent Activity */}
-          <Card data-tour="recent-activity" className="bg-white border-gray-200">
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-blue-600" />
-                  <span className="text-[#191919] font-bold">Recent Activity</span>
-                </div>
-                <Badge variant="secondary" className="bg-blue-100 text-blue-800 font-semibold text-xs">
-                  {recentActivity.length} Updates
-                </Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {recentActivity.map((activity) => (
-                  <ActivityItem
-                    key={activity.id}
-                    action={activity.action}
-                    user={activity.user}
-                    time={activity.time}
-                    type={activity.type}
-                    module={activity.module}
-                    avatar={activity.avatar}
                   />
                 ))}
               </div>

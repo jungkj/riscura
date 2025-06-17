@@ -195,14 +195,16 @@ const HeroProcessCard = () => {
                             transition={{ delay: index * 0.2 }}
                             className="bg-white border border-gray-200 rounded p-3 text-center"
                           >
-                            <div className={`w-3 h-3 rounded-full mx-auto mb-2 ${
-                              result.level === 'high' ? 'bg-red-500' :
-                              result.level === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
-                            }`}></div>
-                            <div className="text-xs text-gray-900 font-medium mb-1">{result.name}</div>
+                            <div className="flex items-center justify-center mb-2">
+                              <div className={`w-4 h-4 rounded-full shadow-sm ${
+                                result.level === 'high' ? 'bg-red-500' :
+                                result.level === 'medium' ? 'bg-orange-500' : 'bg-green-500'
+                              }`}></div>
+                            </div>
+                            <div className="text-xs text-gray-900 font-medium mb-2">{result.name}</div>
                             <Badge 
                               variant={result.level === 'high' ? 'destructive' : result.level === 'medium' ? 'secondary' : 'default'}
-                              className="text-xs"
+                              className="text-xs mb-1"
                             >
                               {result.level}
                             </Badge>

@@ -343,8 +343,8 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
             </Badge>
           </CardTitle>
         </CardHeader>
-        <CardContent className="pb-8">
-          <div className="space-y-6">
+        <CardContent className="pb-4">
+          <div className="space-y-4">
             {/* Heat Map Grid - Enhanced */}
             <div className="overflow-x-auto bg-white rounded-xl border border-gray-200 p-6">
               <div className="min-w-[700px] flex">
@@ -415,8 +415,8 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
             </div>
             
             {/* Enhanced Legend with Statistics */}
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <div className="flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0">
+            <div className="bg-white rounded-xl border border-gray-200 p-4">
+              <div className="flex flex-col lg:flex-row items-center justify-between space-y-3 lg:space-y-0">
                 <div className="flex items-center space-x-8">
                   <div className="flex items-center space-x-2">
                     <div className="w-5 h-5 bg-red-600 rounded-lg shadow-sm"></div>
