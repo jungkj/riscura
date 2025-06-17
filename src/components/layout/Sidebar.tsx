@@ -56,7 +56,8 @@ import {
   Database,
   BarChart,
   FileBarChart,
-  Compass
+  Compass,
+  Grid3X3
 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
@@ -185,6 +186,14 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           href: '/dashboard/risks',
           icon: Shield,
           description: 'Comprehensive risk inventory',
+        },
+        {
+          id: 'spreadsheets',
+          title: 'Spreadsheets',
+          href: '/dashboard/spreadsheets',
+          icon: Grid3X3,
+          description: 'RCSA matrices and risk spreadsheets',
+          isNew: true,
         },
         {
           id: 'risk-monitoring',

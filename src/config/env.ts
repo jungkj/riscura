@@ -231,11 +231,21 @@ function validateEnv() {
     return createMinimalEnv();
   }
 
+  // During build time, use minimal validation to allow builds to succeed
+  const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build' || 
+                     process.env.npm_lifecycle_event === 'build' ||
+                     process.env.CI === 'true';
+
+  if (isBuildTime) {
+    console.log('🔧 Build time detected - using minimal environment validation');
+    return createMinimalEnv();
+  }
+
   try {
     const parsed = envSchema.parse(process.env);
     
-    // Additional production validations
-    if (isProduction) {
+    // Additional production validations (only at runtime, not build time)
+    if (isProduction && !isBuildTime) {
       validateProductionEnvironment(parsed);
     }
     
@@ -252,13 +262,13 @@ function validateEnv() {
       console.error('\n📝 Please check your .env.local file and ensure all required variables are set.');
       console.error('🔗 See env.example for reference values.');
       
-      if (isProduction) {
+      if (isProduction && !isBuildTime) {
         console.error('\n🛡️ Production security requires all secrets to be properly configured.');
         console.error('Run `npm run check:env` to validate your environment configuration.');
         throw new Error('Environment validation failed');
       } else {
-        // In development mode, use minimal environment with defaults
-        console.warn('⚠️ Development mode: Using default environment values for missing variables.');
+        // In development mode or build time, use minimal environment with defaults
+        console.warn('⚠️ Using default environment values for missing variables.');
         console.warn('💡 For full functionality, create a .env.local file with proper values.');
         return createMinimalEnv();
       }

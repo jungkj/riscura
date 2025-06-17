@@ -13,13 +13,14 @@ class MemoryCache {
   private cache = new Map<string, { value: any; expires: number }>();
   private maxSize = 1000;
 
-  set(key: string, value: any, ttl: number): void {
+  set(key: string, value: any, ttl: number): boolean {
     if (this.cache.size >= this.maxSize) {
       this.cleanup();
     }
 
     const expires = Date.now() + (ttl * 1000);
     this.cache.set(key, { value, expires });
+    return true;
   }
 
   get(key: string): any | null {
@@ -36,6 +37,24 @@ class MemoryCache {
 
   delete(key: string): void {
     this.cache.delete(key);
+  }
+
+  del(key: string): boolean {
+    const existed = this.cache.has(key);
+    this.cache.delete(key);
+    return existed;
+  }
+
+  exists(key: string): boolean {
+    const entry = this.cache.get(key);
+    if (!entry) return false;
+
+    if (Date.now() > entry.expires) {
+      this.cache.delete(key);
+      return false;
+    }
+
+    return true;
   }
 
   clear(): void {
@@ -68,7 +87,7 @@ export async function cacheDelete(key: string): Promise<void> {
 
 export class CacheService {
   private redis: any = null;
-  private memoryCache: InMemoryCache = new InMemoryCache();
+  private memoryCache: MemoryCache = new MemoryCache();
   private defaultTTL = 3600; // 1 hour
   private keyPrefix = 'riscura:';
   private isRedisAvailable = false;

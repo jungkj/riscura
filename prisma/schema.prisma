@@ -6,8 +6,6 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  directUrl = env("DATABASE_DIRECT_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 // ============================================================================
@@ -43,6 +41,10 @@ model Organization {
   encryptionKeys          EncryptionKey[]
   billingEvents           BillingEvent[]
   apiKeys                 APIKey[]
+  
+  // Spreadsheet relationships
+  spreadsheets            Spreadsheet[]
+  spreadsheetTemplates    SpreadsheetTemplate[]  @relation("SpreadsheetTemplateOrg")
   
   @@map("organizations")
 }
@@ -108,6 +110,14 @@ model User {
   // AI & Billing
   aiConversations         AIConversation[]
   aiUsageLogs             AIUsageLog[]
+  
+  // Spreadsheet relationships
+  createdSpreadsheets     Spreadsheet[]          @relation("SpreadsheetCreatedBy")
+  modifiedCells           SpreadsheetCell[]      @relation("SpreadsheetCellModifier")
+  cellComments            SpreadsheetCellComment[] @relation("SpreadsheetCellCommentUser")
+  spreadsheetPermissions  SpreadsheetPermission[] @relation("SpreadsheetPermissionUser")
+  spreadsheetVersions     SpreadsheetVersion[]   @relation("SpreadsheetVersionUser")
+  createdTemplates        SpreadsheetTemplate[]  @relation("SpreadsheetTemplateCreator")
   
   @@index([organizationId])
   @@index([email])
@@ -175,6 +185,9 @@ model Risk {
   comments       Comment[]
   tasks          Task[]
   activities     Activity[]
+  
+  // Spreadsheet relationships
+  spreadsheetRows SpreadsheetRow[] @relation("SpreadsheetRowRisk")
   
   @@index([organizationId])
   @@index([category])
@@ -275,6 +288,9 @@ model Control {
   comments          Comment[]
   tasks             Task[]
   activities        Activity[]
+  
+  // Spreadsheet relationships
+  spreadsheetRows   SpreadsheetRow[] @relation("SpreadsheetRowControl")
   
   @@index([organizationId])
   @@index([type])
@@ -559,6 +575,9 @@ model Workflow {
   
   activities     Activity[]
   
+  // Spreadsheet relationships
+  spreadsheetIntegrations SpreadsheetWorkflow[] @relation("SpreadsheetWorkflowIntegration")
+  
   @@index([organizationId])
   @@index([status])
   @@index([type])
@@ -743,6 +762,9 @@ model Task {
   
   comments        Comment[]
   activities      Activity[]
+  
+  // Spreadsheet relationships
+  spreadsheetRows SpreadsheetRow[] @relation("SpreadsheetRowTask")
   
   @@index([organizationId])
   @@index([assigneeId])
@@ -1280,4 +1302,266 @@ model APIKey {
   @@index([organizationId])
   @@index([hashedKey])
   @@map("api_keys")
+}
+
+// ============================================================================
+// RISCURA INTEGRATED SPREADSHEET PLATFORM (RISP)
+// ============================================================================
+
+model Spreadsheet {
+  id              String   @id @default(cuid())
+  organizationId  String
+  name           String
+  description    String?
+  templateType   SpreadsheetType
+  isTemplate     Boolean  @default(false)
+  createdBy      String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  // Relationships
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  creator        User          @relation("SpreadsheetCreatedBy", fields: [createdBy], references: [id])
+  sheets         SpreadsheetSheet[]
+  permissions    SpreadsheetPermission[]
+  workflows      SpreadsheetWorkflow[]
+  versions       SpreadsheetVersion[]
+  
+  @@index([organizationId])
+  @@index([templateType])
+  @@index([createdBy])
+  @@map("spreadsheets")
+}
+
+model SpreadsheetSheet {
+  id              String   @id @default(cuid())
+  spreadsheetId   String
+  name           String
+  position       Int
+  isHidden       Boolean  @default(false)
+  settings       Json?    // Sheet-specific settings
+  
+  // Schema Definition
+  columns        SpreadsheetColumn[]
+  rows           SpreadsheetRow[]
+  
+  spreadsheet    Spreadsheet @relation(fields: [spreadsheetId], references: [id], onDelete: Cascade)
+  
+  @@index([spreadsheetId])
+  @@map("spreadsheet_sheets")
+}
+
+model SpreadsheetColumn {
+  id              String   @id @default(cuid())
+  sheetId         String
+  name           String
+  position       Int
+  dataType       ColumnDataType
+  isRequired     Boolean  @default(false)
+  isCalculated   Boolean  @default(false)
+  formula        String?
+  width          Int      @default(150)
+  
+  // Integration with Riscura entities
+  linkedEntity   String?  // "risk", "control", "user", etc.
+  linkedField    String?  // field name in the linked entity
+  
+  // Validation and constraints
+  validationRules Json?
+  dropdownOptions String[]
+  
+  // Formatting
+  formatSettings Json?
+  
+  sheet          SpreadsheetSheet @relation(fields: [sheetId], references: [id], onDelete: Cascade)
+  cells          SpreadsheetCell[]
+  
+  @@index([sheetId])
+  @@map("spreadsheet_columns")
+}
+
+model SpreadsheetRow {
+  id              String   @id @default(cuid())
+  sheetId         String
+  position       Int
+  isHidden       Boolean  @default(false)
+  height         Int      @default(40)
+  
+  // Links to actual Riscura entities
+  linkedRiskId    String?
+  linkedControlId String?
+  linkedTaskId    String?
+  
+  sheet          SpreadsheetSheet @relation(fields: [sheetId], references: [id], onDelete: Cascade)
+  cells          SpreadsheetCell[]
+  linkedRisk     Risk?            @relation("SpreadsheetRowRisk", fields: [linkedRiskId], references: [id])
+  linkedControl  Control?         @relation("SpreadsheetRowControl", fields: [linkedControlId], references: [id])
+  linkedTask     Task?            @relation("SpreadsheetRowTask", fields: [linkedTaskId], references: [id])
+  
+  @@index([sheetId])
+  @@index([linkedRiskId])
+  @@index([linkedControlId])
+  @@map("spreadsheet_rows")
+}
+
+model SpreadsheetCell {
+  id              String   @id @default(cuid())
+  rowId          String
+  columnId       String
+  value          Json?
+  displayValue   String?
+  isLocked       Boolean  @default(false)
+  lastModifiedBy String
+  lastModifiedAt DateTime @default(now())
+  
+  // Formatting
+  formatting     Json?
+  
+  row            SpreadsheetRow    @relation(fields: [rowId], references: [id], onDelete: Cascade)
+  column         SpreadsheetColumn @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  modifier       User             @relation("SpreadsheetCellModifier", fields: [lastModifiedBy], references: [id])
+  comments       SpreadsheetCellComment[]
+  
+  @@unique([rowId, columnId])
+  @@index([rowId])
+  @@index([columnId])
+  @@index([lastModifiedBy])
+  @@map("spreadsheet_cells")
+}
+
+model SpreadsheetCellComment {
+  id          String   @id @default(cuid())
+  cellId      String
+  userId      String
+  content     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  resolved    Boolean  @default(false)
+  parentId    String?  // For replies
+  
+  cell        SpreadsheetCell @relation(fields: [cellId], references: [id], onDelete: Cascade)
+  user        User           @relation("SpreadsheetCellCommentUser", fields: [userId], references: [id])
+  parent      SpreadsheetCellComment? @relation("CommentReplies", fields: [parentId], references: [id])
+  replies     SpreadsheetCellComment[] @relation("CommentReplies")
+  
+  @@index([cellId])
+  @@index([userId])
+  @@map("spreadsheet_cell_comments")
+}
+
+model SpreadsheetPermission {
+  id              String   @id @default(cuid())
+  spreadsheetId   String
+  userId          String
+  permission      SpreadsheetPermissionType
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  spreadsheet     Spreadsheet @relation(fields: [spreadsheetId], references: [id], onDelete: Cascade)
+  user            User        @relation("SpreadsheetPermissionUser", fields: [userId], references: [id])
+  
+  @@unique([spreadsheetId, userId])
+  @@index([spreadsheetId])
+  @@index([userId])
+  @@map("spreadsheet_permissions")
+}
+
+model SpreadsheetWorkflow {
+  id              String   @id @default(cuid())
+  spreadsheetId   String
+  workflowId      String
+  triggerType     String   // on_cell_change, on_row_complete, manual
+  triggerConfig   Json?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  spreadsheet     Spreadsheet @relation(fields: [spreadsheetId], references: [id], onDelete: Cascade)
+  workflow        Workflow    @relation("SpreadsheetWorkflowIntegration", fields: [workflowId], references: [id])
+  
+  @@index([spreadsheetId])
+  @@index([workflowId])
+  @@map("spreadsheet_workflows")
+}
+
+model SpreadsheetVersion {
+  id              String   @id @default(cuid())
+  spreadsheetId   String
+  version        Int
+  changedBy      String
+  changes        Json     // Array of changes made
+  createdAt      DateTime @default(now())
+  description    String?
+  
+  spreadsheet    Spreadsheet @relation(fields: [spreadsheetId], references: [id], onDelete: Cascade)
+  user           User        @relation("SpreadsheetVersionUser", fields: [changedBy], references: [id])
+  
+  @@index([spreadsheetId])
+  @@index([version])
+  @@map("spreadsheet_versions")
+}
+
+model SpreadsheetTemplate {
+  id              String   @id @default(cuid())
+  organizationId  String?  // null for system templates
+  name           String
+  description    String
+  category       String
+  templateType   SpreadsheetType
+  config         Json     // Template configuration
+  isPublic       Boolean  @default(false)
+  isActive       Boolean  @default(true)
+  usageCount     Int      @default(0)
+  createdBy      String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  organization   Organization? @relation("SpreadsheetTemplateOrg", fields: [organizationId], references: [id], onDelete: Cascade)
+  creator        User         @relation("SpreadsheetTemplateCreator", fields: [createdBy], references: [id])
+  
+  @@index([organizationId])
+  @@index([templateType])
+  @@index([category])
+  @@map("spreadsheet_templates")
+}
+
+// Enums for Spreadsheet Platform
+enum SpreadsheetType {
+  RCSA_ASSESSMENT
+  RISK_REGISTER
+  CONTROL_MATRIX
+  COMPLIANCE_TRACKER
+  VENDOR_ASSESSMENT
+  AUDIT_FINDINGS
+  INCIDENT_TRACKER
+  CUSTOM
+}
+
+enum ColumnDataType {
+  TEXT
+  NUMBER
+  DATE
+  DATETIME
+  BOOLEAN
+  DROPDOWN
+  MULTI_SELECT
+  USER_REFERENCE
+  RISK_REFERENCE
+  CONTROL_REFERENCE
+  TASK_REFERENCE
+  CALCULATED
+  RATING
+  CURRENCY
+  PERCENTAGE
+  EMAIL
+  URL
+  PHONE
+  FILE_ATTACHMENT
+}
+
+enum SpreadsheetPermissionType {
+  OWNER
+  EDITOR
+  COMMENTER
+  VIEWER
 } 

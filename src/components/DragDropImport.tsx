@@ -28,7 +28,6 @@ import {
   File,
   FileText,
   FileSpreadsheet,
-  Brain,
   CheckCircle,
   AlertCircle,
   Loader2,
@@ -37,6 +36,7 @@ import {
   Zap,
   ArrowRight
 } from 'lucide-react';
+import Image from 'next/image';
 
 interface ProcessedFile {
   file: File;
@@ -337,10 +337,19 @@ export default function DragDropImport({
                         {mode.description}
                       </p>
                       <div className="flex items-center gap-2 mt-2">
-                        <Badge variant={mode.aiEnabled ? "default" : "secondary"} className="text-xs">
+                        <Badge 
+                          variant={mode.aiEnabled ? "default" : "secondary"} 
+                          className={`text-xs ${mode.aiEnabled ? 'bg-[#199BEC]/10 text-[#199BEC] border-[#199BEC]/30' : ''}`}
+                        >
                           {mode.aiEnabled ? (
                             <>
-                              <Brain className="h-3 w-3 mr-1" />
+                              <Image 
+                                src="/images/logo/riscura.png" 
+                                alt="Riscura" 
+                                width={12} 
+                                height={12} 
+                                className="mr-1"
+                              />
                               AI Powered
                             </>
                           ) : (

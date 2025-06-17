@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { AuthStorage } from '@/lib/auth/storage';
 import { LoginStatus } from '@/components/auth/LoginStatus';
@@ -10,18 +10,31 @@ import { Badge } from '@/components/ui/badge';
 
 export default function TestLoginPage() {
   const { user, isAuthenticated, logout } = useAuth();
+  const [tokenInfo, setTokenInfo] = useState({
+    hasToken: false,
+    storageType: '',
+    hasRememberMe: false,
+    localStorageToken: null as string | null,
+    sessionStorageToken: null as string | null,
+    rememberMeCookie: null as string | null,
+  });
+
+  useEffect(() => {
+    // Only access storage on client side
+    if (typeof window !== 'undefined') {
+      setTokenInfo({
+        hasToken: !!AuthStorage.getAccessToken(),
+        storageType: AuthStorage.getStorageType() || '',
+        hasRememberMe: AuthStorage.hasRememberMe(),
+        localStorageToken: localStorage.getItem('accessToken'),
+        sessionStorageToken: sessionStorage.getItem('accessToken'),
+        rememberMeCookie: localStorage.getItem('remember-me'),
+      });
+    }
+  }, []);
 
   const handleLogout = async () => {
     await logout();
-  };
-
-  const tokenInfo = {
-    hasToken: !!AuthStorage.getAccessToken(),
-    storageType: AuthStorage.getStorageType(),
-    hasRememberMe: AuthStorage.hasRememberMe(),
-    localStorageToken: localStorage.getItem('accessToken'),
-    sessionStorageToken: sessionStorage.getItem('accessToken'),
-    rememberMeCookie: localStorage.getItem('remember-me'),
   };
 
   return (
