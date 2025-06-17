@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    /* Riscura Bold Black Lines & Cream Background Theme */
-    --background: 245 241 233; /* Cream Background #F5F1E9 */
+    /* Riscura Bold Black Lines & White Background Theme */
+    --background: 255 255 255; /* White Background #FFFFFF */
     --foreground: 25 25 25; /* Bold Black Text #191919 */
     
     --card: 250 250 250; /* Soft White Cards #FAFAFA */
@@ -52,7 +52,7 @@
     --notion-text-tertiary: 200 200 200; /* Lighter gray */
     
     /* Notion background colors mapped to new scheme */
-    --notion-bg-primary: 245 241 233; /* Background Beige */
+    --notion-bg-primary: 255 255 255; /* White Background */
     --notion-bg-secondary: 250 250 250; /* Soft White */
     --notion-bg-tertiary: 216 195 165; /* Warm Beige Accent */
     
@@ -111,12 +111,12 @@
   
   html {
     /* Explicit fallback background to prevent yellow default */
-    background-color: #F5F1E9 !important; /* Cream background as fallback */
+    background-color: #FFFFFF !important; /* White background as fallback */
   }
   
   body {
     /* Explicit background with fallback */
-    background-color: #F5F1E9 !important; /* Cream background as fallback */
+    background-color: #FFFFFF !important; /* White background as fallback */
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
     min-height: 100vh;
@@ -130,7 +130,7 @@
   #__next, 
   #__next > div,
   .min-h-screen {
-    background-color: #F5F1E9 !important; /* Cream background as fallback */
+    background-color: #FFFFFF !important; /* White background as fallback */
   }
   
   /* Bold Inter font for all headings and text */

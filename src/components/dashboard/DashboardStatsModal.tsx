@@ -99,7 +99,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[85vh]" style={{ backgroundColor: '#F5F1E9' }}>
+      <DialogContent className="max-w-4xl max-h-[85vh]" style={{ backgroundColor: '#FFFFFF' }}>
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-3 text-[#191919]">
             {getIcon()}

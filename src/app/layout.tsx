@@ -34,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" style={{ backgroundColor: '#F5F1E9' }} className={inter.variable} suppressHydrationWarning>
+    <html lang="en" style={{ backgroundColor: '#FFFFFF' }} className={inter.variable} suppressHydrationWarning>
       <head>
         <link rel="icon" href="/images/logo/riscura.png" sizes="any" />
         <link rel="icon" href="/images/logo/riscura.png" type="image/png" />
@@ -42,7 +42,7 @@ export default function RootLayout({
       </head>
       <body 
         className={`${inter.className} antialiased`}
-        style={{ backgroundColor: '#F5F1E9', minHeight: '100vh' }}
+        style={{ backgroundColor: '#FFFFFF', minHeight: '100vh' }}
         suppressHydrationWarning={true}
       >
         {/* Skip Links for Keyboard Navigation */}
@@ -53,9 +53,9 @@ export default function RootLayout({
           Skip to navigation
         </a>
         
-        <main style={{ backgroundColor: '#F5F1E9', minHeight: '100vh' }}>
+        <main style={{ backgroundColor: '#FFFFFF', minHeight: '100vh' }}>
           <Providers>
-            <div className="relative min-h-screen" style={{ backgroundColor: '#F5F1E9' }}>
+            <div className="relative min-h-screen" style={{ backgroundColor: '#FFFFFF' }}>
               {children}
             </div>
           </Providers>

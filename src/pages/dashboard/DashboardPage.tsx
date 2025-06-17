@@ -448,19 +448,27 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between" data-tour="dashboard-header">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600">Welcome back! Here's your risk management overview.</p>
+          <div className="flex items-center gap-3 mb-2">
+            <h1 className="text-3xl font-bold text-[#191919]">Dashboard</h1>
+            <Badge variant="secondary" className="bg-[#D8C3A5] text-[#191919] font-semibold">
+              Live
+            </Badge>
+          </div>
+          <p className="text-[#A8A8A8] font-semibold">Welcome back! Here's your risk management overview.</p>
         </div>
         <div className="flex items-center gap-3">
           <Button 
-            variant="outline" 
+            variant="secondary" 
             onClick={() => setShowTour(true)}
-            className="text-sm"
+            className="text-sm border-[#D8C3A5] text-[#191919] hover:bg-[#D8C3A5]"
           >
             <Lightbulb className="h-4 w-4 mr-2" />
             Take Tour
           </Button>
-          <Button onClick={() => router.push('/dashboard/risks/new')}>
+          <Button 
+            onClick={() => router.push('/dashboard/risks/new')}
+            className="bg-[#191919] text-white hover:bg-[#333333]"
+          >
             <Plus className="h-4 w-4 mr-2" />
             Add Risk
           </Button>
@@ -549,11 +557,16 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Quick Actions */}
         <div className="lg:col-span-1" data-tour="quick-actions">
-          <Card>
+          <Card className="bg-white border-[#D8C3A5]">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Zap className="h-5 w-5 text-blue-600" />
-                Quick Actions
+              <CardTitle className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Zap className="h-5 w-5 text-blue-600" />
+                  <span className="text-[#191919] font-bold">Quick Actions</span>
+                </div>
+                <Badge variant="secondary" className="bg-green-100 text-green-800 font-semibold text-xs">
+                  {quickActions.length} Available
+                </Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -581,11 +594,16 @@ export default function DashboardPage() {
       {/* Bottom Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Activity */}
-        <Card data-tour="recent-activity">
+        <Card data-tour="recent-activity" className="bg-white border-[#D8C3A5]">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-blue-600" />
-              Recent Activity
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Clock className="h-5 w-5 text-blue-600" />
+                <span className="text-[#191919] font-bold">Recent Activity</span>
+              </div>
+              <Badge variant="secondary" className="bg-blue-100 text-blue-800 font-semibold text-xs">
+                {recentActivity.length} Updates
+              </Badge>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -606,16 +624,21 @@ export default function DashboardPage() {
         </Card>
 
         {/* AI Insights */}
-        <Card data-tour="ai-insights">
+        <Card data-tour="ai-insights" className="bg-white border-[#D8C3A5]">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Image 
-                src="/images/logo/riscura.png" 
-                alt="Riscura" 
-                width={20} 
-                height={20}
-              />
-              AI Insights
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Image 
+                  src="/images/logo/riscura.png" 
+                  alt="Riscura" 
+                  width={20} 
+                  height={20}
+                />
+                <span className="text-[#191919] font-bold">AI Insights</span>
+              </div>
+              <Badge variant="secondary" className="bg-purple-100 text-purple-800 font-semibold text-xs">
+                {insights.length} Insights
+              </Badge>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -676,23 +699,31 @@ function QuickActionCard({
 }) {
   return (
     <div 
-      className="p-4 border border-gray-200 rounded-lg hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group"
+      className="p-4 border border-[#D8C3A5] rounded-lg hover:shadow-lg hover:border-[#191919] transition-all cursor-pointer group bg-white"
       onClick={onClick}
     >
       <div className="flex items-start space-x-3">
-        <div className={`p-2 rounded-lg bg-gray-100 group-hover:bg-blue-50 transition-colors`}>
-          <Icon className={`w-5 h-5 ${color} group-hover:text-blue-600 transition-colors`} />
+        <div className={`p-2 rounded-lg bg-[#FAFAFA] group-hover:bg-[#D8C3A5] transition-colors`}>
+          <Icon className={`w-5 h-5 ${color} transition-colors`} />
         </div>
         <div className="flex-1">
           <div className="flex items-center justify-between mb-1">
-            <h3 className="font-medium text-gray-900 group-hover:text-blue-900 transition-colors">{title}</h3>
+            <h3 className="font-bold text-[#191919] transition-colors">{title}</h3>
             {badge && (
-              <Badge variant="secondary" className="text-xs">
+              <Badge 
+                variant="secondary" 
+                className={`text-xs font-semibold ${
+                  badge === 'Quick' ? 'bg-green-100 text-green-800' :
+                  badge === 'AI' ? 'bg-blue-100 text-blue-800' :
+                  badge === 'New' ? 'bg-orange-100 text-orange-800' :
+                  'bg-gray-100 text-gray-800'
+                }`}
+              >
                 {badge}
               </Badge>
             )}
           </div>
-          <p className="text-sm text-gray-600">{description}</p>
+          <p className="text-sm text-[#A8A8A8] font-semibold">{description}</p>
         </div>
       </div>
     </div>
