@@ -643,7 +643,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Right Column - Expanded Risk Heat Map Showcase */}
-        <div className="lg:col-span-8 space-y-6">
+        <div className="lg:col-span-8">
           {/* Risk Heat Map - Extended */}
           <div data-tour="risk-heatmap" className="h-full">
             <InteractiveRiskHeatMap className="h-full" />
