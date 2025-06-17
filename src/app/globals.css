@@ -110,10 +110,13 @@
   }
   
   html {
-    background-color: rgb(245, 241, 233); /* Ensure no yellow background shows through */
+    /* Explicit fallback background to prevent yellow default */
+    background-color: #F5F1E9 !important; /* Cream background as fallback */
   }
   
   body {
+    /* Explicit background with fallback */
+    background-color: #F5F1E9 !important; /* Cream background as fallback */
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
     min-height: 100vh;
@@ -121,7 +124,13 @@
     font-optical-sizing: auto;
     font-variation-settings: "slnt" 0;
     font-weight: 600; /* Bold text by default */
-    background-color: rgb(245, 241, 233); /* Ensure consistent cream background */
+  }
+  
+  /* Ensure the main app container has proper background */
+  #__next, 
+  #__next > div,
+  .min-h-screen {
+    background-color: #F5F1E9 !important; /* Cream background as fallback */
   }
   
   /* Bold Inter font for all headings and text */

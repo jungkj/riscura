@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import './production-fix.css';
 import '../styles/accessibility.css';
 import '../styles/design-system.css';
 import Providers from './providers';
 import { AccessibilityAnnouncements } from '@/components/ui/HighContrastToggle';
+
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -32,14 +34,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang="en" style={{ backgroundColor: '#F5F1E9' }} className={inter.variable} suppressHydrationWarning>
       <head>
         <link rel="icon" href="/images/logo/riscura.png" sizes="any" />
         <link rel="icon" href="/images/logo/riscura.png" type="image/png" />
         <link rel="apple-touch-icon" href="/images/logo/riscura.png" />
       </head>
       <body 
-        className={`${inter.className} min-h-screen bg-background text-foreground antialiased font-semibold`}
+        className={`${inter.className} antialiased`}
+        style={{ backgroundColor: '#F5F1E9', minHeight: '100vh' }}
         suppressHydrationWarning={true}
       >
         {/* Skip Links for Keyboard Navigation */}
@@ -50,11 +53,13 @@ export default function RootLayout({
           Skip to navigation
         </a>
         
-        <Providers>
-          <div className="relative min-h-screen bg-background">
-            {children}
-          </div>
-        </Providers>
+        <main style={{ backgroundColor: '#F5F1E9', minHeight: '100vh' }}>
+          <Providers>
+            <div className="relative min-h-screen" style={{ backgroundColor: '#F5F1E9' }}>
+              {children}
+            </div>
+          </Providers>
+        </main>
         
         {/* Accessibility Announcements */}
         <AccessibilityAnnouncements />

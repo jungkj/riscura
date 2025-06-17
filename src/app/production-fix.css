@@ -1,0 +1,40 @@
+/* Production Background Fix */
+/* This file ensures the correct cream background is displayed in production */
+
+html, body, #__next, #__next > div, .min-h-screen {
+  background-color: #F5F1E9 !important;
+}
+
+/* Force background color for all main containers */
+body {
+  background: #F5F1E9 !important;
+  background-color: #F5F1E9 !important;
+}
+
+/* CSS variables fallback for production */
+:root {
+  --background-fallback: #F5F1E9;
+  --bg-cream: #F5F1E9;
+}
+
+/* Tailwind background overrides for production */
+.bg-background {
+  background-color: #F5F1E9 !important;
+}
+
+/* Ensure landing page has correct background */
+div[class*="min-h-screen"] {
+  background-color: #F5F1E9 !important;
+}
+
+/* Override any yellow backgrounds */
+*[style*="yellow"], 
+*[class*="yellow"],
+*[style*="background-color: yellow"] {
+  background-color: #F5F1E9 !important;
+}
+
+/* Production-specific gradient override */
+.bg-gradient-to-br {
+  background: #F5F1E9 !important;
+} 
