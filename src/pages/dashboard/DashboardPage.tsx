@@ -577,76 +577,82 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      {/* Main Content Grid */}
+      {/* Main Content Grid - Heat Map Showcase Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Quick Actions */}
-        <div className="lg:col-span-4" data-tour="quick-actions">
-          <Card className="bg-white border-gray-200">
+        {/* Left Column - Quick Actions and Activity */}
+        <div className="lg:col-span-4 space-y-6">
+          {/* Quick Actions */}
+          <div data-tour="quick-actions">
+            <Card className="bg-white border-gray-200">
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Zap className="h-5 w-5 text-blue-600" />
+                    <span className="text-[#191919] font-bold">Quick Actions</span>
+                  </div>
+                  <Badge variant="secondary" className="bg-green-100 text-green-800 font-semibold text-xs">
+                    {quickActions.length} Available
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {quickActions.map((action) => (
+                  <QuickActionCard
+                    key={action.id}
+                    title={action.title}
+                    description={action.description}
+                    icon={action.icon}
+                    color={action.color}
+                    badge={action.badge}
+                    onClick={() => handleQuickAction(action.href, action.id)}
+                  />
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Recent Activity */}
+          <Card data-tour="recent-activity" className="bg-white border-gray-200">
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Zap className="h-5 w-5 text-blue-600" />
-                  <span className="text-[#191919] font-bold">Quick Actions</span>
+                  <Clock className="h-5 w-5 text-blue-600" />
+                  <span className="text-[#191919] font-bold">Recent Activity</span>
                 </div>
-                <Badge variant="secondary" className="bg-green-100 text-green-800 font-semibold text-xs">
-                  {quickActions.length} Available
+                <Badge variant="secondary" className="bg-blue-100 text-blue-800 font-semibold text-xs">
+                  {recentActivity.length} Updates
                 </Badge>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
-              {quickActions.map((action) => (
-                <QuickActionCard
-                  key={action.id}
-                  title={action.title}
-                  description={action.description}
-                  icon={action.icon}
-                  color={action.color}
-                  badge={action.badge}
-                  onClick={() => handleQuickAction(action.href, action.id)}
-                />
-              ))}
+            <CardContent>
+              <div className="space-y-4">
+                {recentActivity.map((activity) => (
+                  <ActivityItem
+                    key={activity.id}
+                    action={activity.action}
+                    user={activity.user}
+                    time={activity.time}
+                    type={activity.type}
+                    module={activity.module}
+                    avatar={activity.avatar}
+                  />
+                ))}
+              </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Risk Heat Map - Expanded */}
-        <div className="lg:col-span-8" data-tour="risk-heatmap">
-          <InteractiveRiskHeatMap />
+        {/* Right Column - Expanded Risk Heat Map Showcase */}
+        <div className="lg:col-span-8 space-y-6">
+          {/* Risk Heat Map - Extended */}
+          <div data-tour="risk-heatmap" className="h-full">
+            <InteractiveRiskHeatMap className="h-full" />
+          </div>
         </div>
       </div>
 
-      {/* Bottom Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Activity */}
-        <Card data-tour="recent-activity" className="bg-white border-gray-200">
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-blue-600" />
-                <span className="text-[#191919] font-bold">Recent Activity</span>
-              </div>
-              <Badge variant="secondary" className="bg-blue-100 text-blue-800 font-semibold text-xs">
-                {recentActivity.length} Updates
-              </Badge>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {recentActivity.map((activity) => (
-                <ActivityItem
-                  key={activity.id}
-                  action={activity.action}
-                  user={activity.user}
-                  time={activity.time}
-                  type={activity.type}
-                  module={activity.module}
-                  avatar={activity.avatar}
-                />
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
+      {/* Bottom Section - AI Insights Only */}
+      <div className="grid grid-cols-1 gap-6">
         {/* AI Insights */}
         <Card data-tour="ai-insights" className="bg-white border-gray-200">
           <CardHeader>
@@ -666,7 +672,7 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {insights.map((insight) => (
                 <div key={insight.id} className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
                   <div className="flex items-start justify-between">
