@@ -82,12 +82,15 @@ function applySecurityHeaders(response: NextResponse, nonce?: string): NextRespo
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
-  // Skip middleware for static assets
+  // Skip middleware for static assets and specific API routes
   if (
     pathname.startsWith('/_next/') ||
     pathname.startsWith('/images/') ||
     pathname.startsWith('/favicon.ico') ||
-    pathname === '/api/health'
+    pathname === '/api/health' ||
+    pathname.startsWith('/api/test') ||
+    pathname.startsWith('/sw.js') ||
+    pathname.startsWith('/manifest.json')
   ) {
     return NextResponse.next();
   }
@@ -99,11 +102,20 @@ export async function middleware(request: NextRequest) {
   let response = NextResponse.next();
   
   try {
+    // Debug logging for API routes
+    if (pathname.startsWith('/api/')) {
+      console.log(`Middleware: Processing ${request.method} ${pathname}`);
+    }
+    
     // Apply rate limiting
     let rateLimitConfig = { windowMs: 15 * 60 * 1000, maxRequests: 100 }; // Default API limits
     
-    if (pathname.startsWith('/api/auth/')) {
-      rateLimitConfig = { windowMs: 15 * 60 * 1000, maxRequests: 5 };
+    if (pathname.startsWith('/api/auth/login')) {
+      rateLimitConfig = { windowMs: 15 * 60 * 1000, maxRequests: 10 }; // 10 login attempts per 15 minutes
+    } else if (pathname.startsWith('/api/auth/register')) {
+      rateLimitConfig = { windowMs: 60 * 60 * 1000, maxRequests: 3 }; // 3 registrations per hour
+    } else if (pathname.startsWith('/api/auth/')) {
+      rateLimitConfig = { windowMs: 15 * 60 * 1000, maxRequests: 20 }; // Other auth endpoints
     } else if (pathname.startsWith('/api/upload/')) {
       rateLimitConfig = { windowMs: 60 * 60 * 1000, maxRequests: 10 };
     }
