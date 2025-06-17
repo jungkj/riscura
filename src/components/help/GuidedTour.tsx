@@ -409,13 +409,31 @@ export default function GuidedTour({
     }
   }, [isActive, currentStep, isPlaying]);
 
-  // Position tour tooltip
+  // Position tour tooltip with dynamic responsive positioning
   const positionTour = useCallback(() => {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // Dynamic width based on screen size
+    let tourWidth = 400; // Default width
+    if (viewportWidth <= 640) {
+      tourWidth = viewportWidth - 32; // Mobile: full width with margins
+    } else if (viewportWidth <= 768) {
+      tourWidth = Math.min(380, viewportWidth - 48); // Tablet: smaller width
+    } else if (viewportWidth <= 1024) {
+      tourWidth = 420; // Desktop: standard width
+    } else {
+      tourWidth = 450; // Large desktop: wider
+    }
+
+    const tourHeight = 450; // Approximate height with padding
+    const minMargin = 16;
+
+    // For center position or no target, always center in viewport
     if (!currentStepData?.targetSelector || currentStepData.position === 'center') {
-      // For center position or no target, always center in viewport
       setTourPosition({ 
-        x: Math.max(16, (window.innerWidth - 400) / 2), 
-        y: Math.max(16, (window.innerHeight - 400) / 2) 
+        x: Math.max(minMargin, (viewportWidth - tourWidth) / 2), 
+        y: Math.max(minMargin, (viewportHeight - tourHeight) / 2) 
       });
       return;
     }
@@ -424,20 +442,20 @@ export default function GuidedTour({
     if (!targetElement) {
       // Fallback to center if target not found
       setTourPosition({ 
-        x: Math.max(16, (window.innerWidth - 400) / 2), 
-        y: Math.max(16, (window.innerHeight - 400) / 2) 
+        x: Math.max(minMargin, (viewportWidth - tourWidth) / 2), 
+        y: Math.max(minMargin, (viewportHeight - tourHeight) / 2) 
       });
       return;
     }
 
     const rect = targetElement.getBoundingClientRect();
-    const tourWidth = Math.min(400, window.innerWidth - 32); // Responsive width
-    const tourHeight = 400; // Approximate height
     const padding = 20;
     let x = 0;
     let y = 0;
+    let preferredPosition = currentStepData.position;
 
-    switch (currentStepData.position) {
+    // Calculate initial position based on preference
+    switch (preferredPosition) {
       case 'top':
         x = rect.left + rect.width / 2 - tourWidth / 2;
         y = rect.top - tourHeight - padding;
@@ -454,25 +472,74 @@ export default function GuidedTour({
         x = rect.right + padding;
         y = rect.top + rect.height / 2 - tourHeight / 2;
         break;
-      case 'center':
       default:
-        x = (window.innerWidth - tourWidth) / 2;
-        y = (window.innerHeight - tourHeight) / 2;
+        x = (viewportWidth - tourWidth) / 2;
+        y = (viewportHeight - tourHeight) / 2;
         break;
     }
 
-    // Ensure tour stays within viewport with proper margins
-    const minMargin = 16;
-    x = Math.max(minMargin, Math.min(x, window.innerWidth - tourWidth - minMargin));
-    y = Math.max(minMargin, Math.min(y, window.innerHeight - tourHeight - minMargin));
+    // Check if the preferred position fits in viewport
+    const wouldFitInViewport = (testX: number, testY: number) => {
+      return testX >= minMargin && 
+             testY >= minMargin && 
+             testX + tourWidth <= viewportWidth - minMargin && 
+             testY + tourHeight <= viewportHeight - minMargin;
+    };
 
-    // If positioned tour would be off-screen, fall back to center
-    if (x <= minMargin || y <= minMargin || 
-        x + tourWidth >= window.innerWidth - minMargin || 
-        y + tourHeight >= window.innerHeight - minMargin) {
-      x = (window.innerWidth - tourWidth) / 2;
-      y = (window.innerHeight - tourHeight) / 2;
+    // If preferred position doesn't fit, try alternative positions
+    if (!wouldFitInViewport(x, y)) {
+      const alternatives = [
+        // Try opposite positions first
+        ...(preferredPosition === 'top' ? ['bottom'] : []),
+        ...(preferredPosition === 'bottom' ? ['top'] : []),
+        ...(preferredPosition === 'left' ? ['right'] : []),
+        ...(preferredPosition === 'right' ? ['left'] : []),
+        // Then try adjacent positions
+        'top', 'bottom', 'left', 'right'
+      ].filter((pos, index, arr) => arr.indexOf(pos) === index && pos !== preferredPosition);
+
+      let foundGoodPosition = false;
+      
+      for (const altPosition of alternatives) {
+        let altX = 0, altY = 0;
+        
+        switch (altPosition) {
+          case 'top':
+            altX = rect.left + rect.width / 2 - tourWidth / 2;
+            altY = rect.top - tourHeight - padding;
+            break;
+          case 'bottom':
+            altX = rect.left + rect.width / 2 - tourWidth / 2;
+            altY = rect.bottom + padding;
+            break;
+          case 'left':
+            altX = rect.left - tourWidth - padding;
+            altY = rect.top + rect.height / 2 - tourHeight / 2;
+            break;
+          case 'right':
+            altX = rect.right + padding;
+            altY = rect.top + rect.height / 2 - tourHeight / 2;
+            break;
+        }
+
+        if (wouldFitInViewport(altX, altY)) {
+          x = altX;
+          y = altY;
+          foundGoodPosition = true;
+          break;
+        }
+      }
+
+      // If no position works well, center it and ensure it fits
+      if (!foundGoodPosition) {
+        x = (viewportWidth - tourWidth) / 2;
+        y = (viewportHeight - tourHeight) / 2;
+      }
     }
+
+    // Final boundary check and adjustment
+    x = Math.max(minMargin, Math.min(x, viewportWidth - tourWidth - minMargin));
+    y = Math.max(minMargin, Math.min(y, viewportHeight - tourHeight - minMargin));
 
     setTourPosition({ x, y });
 
@@ -638,19 +705,23 @@ export default function GuidedTour({
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        className="fixed z-50 w-full max-w-md mx-auto"
+        className="fixed z-50"
         style={{
           left: tourPosition.x,
           top: tourPosition.y,
-          transform: currentStepData?.position === 'center' ? 'translate(-50%, -50%)' : 'none',
-          ...(currentStepData?.position === 'center' && {
-            left: '50%',
-            top: '50%'
-          })
+          width: (() => {
+            const viewportWidth = window.innerWidth;
+            if (viewportWidth <= 640) return viewportWidth - 32;
+            if (viewportWidth <= 768) return Math.min(380, viewportWidth - 48);
+            if (viewportWidth <= 1024) return 420;
+            return 450;
+          })(),
+          maxWidth: '95vw',
+          maxHeight: '90vh'
         }}
       >
-        <Card className="bg-white border-2 border-blue-200 shadow-2xl rounded-xl overflow-hidden backdrop-blur-sm">
-          <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
+        <Card className="bg-white border-2 border-blue-200 shadow-2xl rounded-xl overflow-hidden backdrop-blur-sm h-fit max-h-[90vh] flex flex-col">
+          <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100 flex-shrink-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
@@ -686,7 +757,7 @@ export default function GuidedTour({
             )}
           </CardHeader>
 
-          <CardContent className="pb-6 px-6">
+          <CardContent className="pb-6 px-6 flex-1 overflow-y-auto">
             {/* Step Content */}
             <div className="mb-6">
               <p className="text-gray-700 font-inter leading-relaxed mb-4 text-base">
