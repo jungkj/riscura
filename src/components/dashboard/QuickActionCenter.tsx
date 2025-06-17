@@ -10,8 +10,9 @@ import { useRouter } from 'next/navigation';
 import {
   Plus, FileText, Shield, BarChart3, AlertTriangle, CheckCircle,
   Settings, Upload, Download, Eye, Target, Users, Calendar, Clock,
-  Zap, Brain, Search, Filter, RefreshCw
+  Zap, Search, Filter, RefreshCw
 } from 'lucide-react';
+import Image from 'next/image';
 
 interface QuickActionCenterProps {
   viewMode: 'executive' | 'analyst' | 'operator' | 'auditor';
@@ -96,8 +97,8 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
       id: 'ai-analysis',
       title: 'AI Analysis',
       description: 'Run intelligent assessment',
-      icon: <Brain className="w-5 h-5" />,
-      color: 'bg-secondary/20 hover:bg-secondary/30 border-border text-foreground',
+      icon: <Image src="/images/logo/riscura.png" alt="Riscura" width={20} height={20} />,
+      color: 'bg-[#199BEC]/10 hover:bg-[#199BEC]/20 border-[#199BEC]/30 text-[#199BEC]',
       href: '/dashboard/ai-insights',
       badge: 'New',
       roles: ['executive', 'analyst']

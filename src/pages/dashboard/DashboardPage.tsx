@@ -19,7 +19,6 @@ import {
   Settings,
   Activity,
   Zap,
-  Brain,
   Upload,
   Target,
   Plus,
@@ -29,8 +28,10 @@ import {
   Lightbulb,
   TrendingUp,
   TrendingDown,
-  CheckCircle2
+  CheckCircle2,
+  Grid3X3
 } from 'lucide-react';
+import Image from 'next/image';
 
 // Import the interactive risk heat map component
 import { RiskHeatMap as InteractiveRiskHeatMap } from '@/components/ui/interactive-risk-heatmap';
@@ -125,9 +126,9 @@ export default function DashboardPage() {
       id: 'ask-aria',
       title: 'Ask ARIA',
       description: 'Get AI-powered insights',
-      icon: Brain,
+      icon: () => <Image src="/images/logo/riscura.png" alt="Riscura" width={20} height={20} />,
       href: '/dashboard/aria',
-      color: 'text-purple-600',
+      color: 'text-[#199BEC]',
       badge: 'AI'
     },
     {
@@ -153,6 +154,15 @@ export default function DashboardPage() {
       icon: CheckCircle2,
       href: '/dashboard/compliance',
       color: 'text-emerald-600'
+    },
+    {
+      id: 'create-spreadsheet',
+      title: 'Create Spreadsheet',
+      description: 'Build RCSA matrix or risk register',
+      icon: Grid3X3,
+      href: '/dashboard/spreadsheets',
+      color: 'text-indigo-600',
+      badge: 'New'
     }
   ];
 
@@ -442,7 +452,12 @@ export default function DashboardPage() {
         <Card data-tour="ai-insights">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Brain className="h-5 w-5 text-purple-600" />
+              <Image 
+                src="/images/logo/riscura.png" 
+                alt="Riscura" 
+                width={20} 
+                height={20}
+              />
               AI Insights
             </CardTitle>
           </CardHeader>

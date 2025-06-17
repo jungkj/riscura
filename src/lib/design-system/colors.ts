@@ -34,6 +34,21 @@ export const baseColors = {
     800: '#1e40af',
     900: '#1e3a8a',
     950: '#172554'
+  },
+  
+  // Riscura Brand Blue
+  riscura: {
+    50: '#e6f7ff',
+    100: '#b3e9ff',
+    200: '#80dbff',
+    300: '#4dcdff',
+    400: '#26bfff',
+    500: '#199BEC', // Main Riscura blue
+    600: '#1487d1',
+    700: '#1073b6',
+    800: '#0c5f9b',
+    900: '#084b80',
+    950: '#043765'
   }
 };
 

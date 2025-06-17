@@ -274,6 +274,16 @@ export class ProductionGuard {
       return;
     }
 
+    // Skip during build time
+    const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build' || 
+                       process.env.npm_lifecycle_event === 'build' ||
+                       process.env.CI === 'true';
+    
+    if (isBuildTime) {
+      console.log('🔧 Build time detected - skipping production security initialization');
+      return;
+    }
+
     console.log('🛡️ Initializing production security...');
 
     // Block development features
@@ -368,14 +378,20 @@ export class ProductionGuard {
 // Singleton instance
 export const productionGuard = ProductionGuard.getInstance();
 
-// Auto-initialize in production
+// Auto-initialize in production (but not during build time)
 if (process.env.NODE_ENV === 'production') {
-  try {
-    productionGuard.initializeProduction();
-  } catch (error) {
-    console.error('Failed to initialize production security:', error);
-    if (process.env.STRICT_PRODUCTION_MODE !== 'false') {
-      process.exit(1);
+  const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build' || 
+                     process.env.npm_lifecycle_event === 'build' ||
+                     process.env.CI === 'true';
+  
+  if (!isBuildTime) {
+    try {
+      productionGuard.initializeProduction();
+    } catch (error) {
+      console.error('Failed to initialize production security:', error);
+      if (process.env.STRICT_PRODUCTION_MODE !== 'false') {
+        process.exit(1);
+      }
     }
   }
 }
