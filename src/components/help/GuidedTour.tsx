@@ -59,7 +59,8 @@ import {
   ChevronRight,
   ChevronLeft,
   ChevronUp,
-  ChevronDown
+  ChevronDown,
+  Clock
 } from 'lucide-react';
 
 // Types
@@ -410,50 +411,68 @@ export default function GuidedTour({
 
   // Position tour tooltip
   const positionTour = useCallback(() => {
-    if (!currentStepData?.targetSelector) {
-      setTourPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+    if (!currentStepData?.targetSelector || currentStepData.position === 'center') {
+      // For center position or no target, always center in viewport
+      setTourPosition({ 
+        x: Math.max(16, (window.innerWidth - 400) / 2), 
+        y: Math.max(16, (window.innerHeight - 400) / 2) 
+      });
       return;
     }
 
     const targetElement = document.querySelector(currentStepData.targetSelector);
     if (!targetElement) {
-      setTourPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+      // Fallback to center if target not found
+      setTourPosition({ 
+        x: Math.max(16, (window.innerWidth - 400) / 2), 
+        y: Math.max(16, (window.innerHeight - 400) / 2) 
+      });
       return;
     }
 
     const rect = targetElement.getBoundingClientRect();
-    const tourWidth = 400;
-    const tourHeight = 300;
+    const tourWidth = Math.min(400, window.innerWidth - 32); // Responsive width
+    const tourHeight = 400; // Approximate height
+    const padding = 20;
     let x = 0;
     let y = 0;
 
     switch (currentStepData.position) {
       case 'top':
         x = rect.left + rect.width / 2 - tourWidth / 2;
-        y = rect.top - tourHeight - 20;
+        y = rect.top - tourHeight - padding;
         break;
       case 'bottom':
         x = rect.left + rect.width / 2 - tourWidth / 2;
-        y = rect.bottom + 20;
+        y = rect.bottom + padding;
         break;
       case 'left':
-        x = rect.left - tourWidth - 20;
+        x = rect.left - tourWidth - padding;
         y = rect.top + rect.height / 2 - tourHeight / 2;
         break;
       case 'right':
-        x = rect.right + 20;
+        x = rect.right + padding;
         y = rect.top + rect.height / 2 - tourHeight / 2;
         break;
       case 'center':
       default:
-        x = window.innerWidth / 2 - tourWidth / 2;
-        y = window.innerHeight / 2 - tourHeight / 2;
+        x = (window.innerWidth - tourWidth) / 2;
+        y = (window.innerHeight - tourHeight) / 2;
         break;
     }
 
-    // Ensure tour stays within viewport
-    x = Math.max(20, Math.min(x, window.innerWidth - tourWidth - 20));
-    y = Math.max(20, Math.min(y, window.innerHeight - tourHeight - 20));
+    // Ensure tour stays within viewport with proper margins
+    const minMargin = 16;
+    x = Math.max(minMargin, Math.min(x, window.innerWidth - tourWidth - minMargin));
+    y = Math.max(minMargin, Math.min(y, window.innerHeight - tourHeight - minMargin));
+
+    // If positioned tour would be off-screen, fall back to center
+    if (x <= minMargin || y <= minMargin || 
+        x + tourWidth >= window.innerWidth - minMargin || 
+        y + tourHeight >= window.innerHeight - minMargin) {
+      x = (window.innerWidth - tourWidth) / 2;
+      y = (window.innerHeight - tourHeight) / 2;
+    }
 
     setTourPosition({ x, y });
 
@@ -616,27 +635,32 @@ export default function GuidedTour({
       {/* Tour Card */}
       <motion.div
         ref={tourRef}
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-        className="fixed z-50 w-96 max-w-[90vw]"
+        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.9, y: 20 }}
+        className="fixed z-50 w-full max-w-md mx-auto"
         style={{
           left: tourPosition.x,
-          top: tourPosition.y
+          top: tourPosition.y,
+          transform: currentStepData?.position === 'center' ? 'translate(-50%, -50%)' : 'none',
+          ...(currentStepData?.position === 'center' && {
+            left: '50%',
+            top: '50%'
+          })
         }}
       >
-        <Card className="bg-white border-2 border-blue-200 shadow-2xl">
-          <CardHeader className="pb-4">
+        <Card className="bg-white border-2 border-blue-200 shadow-2xl rounded-xl overflow-hidden backdrop-blur-sm">
+          <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Compass className="w-4 h-4 text-blue-600" />
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
+                  <Compass className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-lg font-semibold text-contrast-medium font-inter">
+                  <CardTitle className="text-xl font-bold text-gray-900 font-inter">
                     {currentStepData.title}
                   </CardTitle>
-                  <p className="text-sm text-contrast-low">
+                  <p className="text-sm text-blue-600 font-medium">
                     Step {currentStep + 1} of {steps.length}
                   </p>
                 </div>
@@ -662,10 +686,10 @@ export default function GuidedTour({
             )}
           </CardHeader>
 
-          <CardContent className="pb-6">
+          <CardContent className="pb-6 px-6">
             {/* Step Content */}
             <div className="mb-6">
-              <p className="text-contrast-medium font-inter leading-relaxed mb-4">
+              <p className="text-gray-700 font-inter leading-relaxed mb-4 text-base">
                 {currentStepData.content}
               </p>
 
@@ -705,14 +729,14 @@ export default function GuidedTour({
             </div>
 
             {/* Navigation Controls */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+              <div className="flex items-center gap-3">
                 <Button
-                  variant="secondary"
+                  variant="outline"
                   size="sm"
                   onClick={previousStep}
                   disabled={currentStep === 0}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 disabled:opacity-50"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   Previous
@@ -746,7 +770,7 @@ export default function GuidedTour({
                 )}
                 
                 <Button
-                  variant="default"
+                  variant="primary"
                   size="sm"
                   onClick={nextStep}
                   className="flex items-center gap-2"
@@ -942,7 +966,7 @@ export function TourLauncher({
                       </div>
                     </div>
                     <Button
-                      variant="default"
+                      variant="primary"
                       size="sm"
                       onClick={() => startTour(tourId)}
                       className="flex items-center gap-2"
