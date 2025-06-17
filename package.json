@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "next dev -p 3001",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "build:vercel": "next build",
+    "build:vercel": "prisma generate && next build",
     "type-check": "tsc --noEmit",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
@@ -87,7 +87,8 @@
     "config:verify": "node -e \"const fs = require('fs'); const env = fs.readFileSync('.env', 'utf8'); console.log('✅ Environment configuration verified'); console.log('Monitoring variables:', ['SENTRY_DSN', 'SLACK_WEBHOOK_URL'].filter(key => env.includes(key)).length + '/2 configured');\"",
     "production:monitoring": "npm run config:verify && npm run monitoring:init && npm run alerts:start",
     "production:support": "npm run support:init && npm run support:seed-kb",
-    "production:deploy": "npm run production:validate && npm run production:monitoring && npm run production:support"
+    "production:deploy": "npm run production:validate && npm run production:monitoring && npm run production:support",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.53.0",
