@@ -328,32 +328,40 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
 
   return (
     <>
-      <Card className={className}>
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Target className="w-5 h-5 mr-2 text-blue-600" />
-            Risk Heat Map
+      <Card className={`${className} bg-gradient-to-br from-white to-gray-50 shadow-lg border-gray-200`}>
+        <CardHeader className="pb-6">
+          <CardTitle className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Target className="w-6 h-6 mr-3 text-blue-600" />
+              <div>
+                <h2 className="text-xl font-bold text-[#191919]">Risk Heat Map</h2>
+                <p className="text-sm text-gray-600 font-normal">Interactive risk assessment matrix</p>
+              </div>
+            </div>
+            <Badge variant="secondary" className="bg-blue-100 text-blue-800 font-semibold">
+              {sampleRisks.length} Total Risks
+            </Badge>
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {/* Heat Map Grid */}
-            <div className="overflow-x-auto">
-              <div className="min-w-[600px] flex">
-                {/* Y-axis Label (Impact) - Minimal margin */}
-                <div className="flex items-center justify-center mr-1">
-                  <div className="transform -rotate-90 text-sm font-medium text-gray-600 whitespace-nowrap">
-                    Impact
+        <CardContent className="pb-8">
+          <div className="space-y-6">
+            {/* Heat Map Grid - Enhanced */}
+            <div className="overflow-x-auto bg-white rounded-xl border border-gray-200 p-6">
+              <div className="min-w-[700px] flex">
+                {/* Y-axis Label (Impact) */}
+                <div className="flex items-center justify-center mr-4">
+                  <div className="transform -rotate-90 text-base font-semibold text-gray-700 whitespace-nowrap">
+                    Impact Level
                   </div>
                 </div>
                 
                 {/* Grid Container */}
                 <div className="flex-1">
                   {/* Header Row - Likelihood */}
-                  <div className="grid grid-cols-6 gap-1 mb-2">
-                    <div className="p-2"></div>
+                  <div className="grid grid-cols-6 gap-2 mb-4">
+                    <div className="p-3"></div>
                     {likelihoodLevels.map((likelihood) => (
-                      <div key={likelihood} className="p-2 text-center text-sm font-medium text-gray-600">
+                      <div key={likelihood} className="p-3 text-center text-sm font-semibold text-gray-700 bg-gray-50 rounded-lg">
                         {likelihood}
                       </div>
                     ))}
@@ -361,28 +369,37 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
                   
                   {/* Data Rows */}
                   {impactLevels.map((impact) => (
-                    <div key={impact} className="grid grid-cols-6 gap-1 mb-1">
+                    <div key={impact} className="grid grid-cols-6 gap-2 mb-2">
                       {/* Impact Label */}
-                      <div className="p-2 text-right text-sm font-medium text-gray-600 flex items-center justify-end">
+                      <div className="p-3 text-right text-sm font-semibold text-gray-700 flex items-center justify-end bg-gray-50 rounded-lg">
                         {impact}
                       </div>
                       
-                      {/* Data Cells */}
+                      {/* Data Cells - Enhanced */}
                       {likelihoodLevels.map((likelihood) => {
                         const cellData = getCellData(impact, likelihood);
                         return (
                           <div
                             key={`${impact}-${likelihood}`}
                             className={`
-                              p-4 text-center font-bold text-lg rounded border border-white
-                              ${cellData ? getCellColor(cellData.level) : 'bg-gray-100 text-gray-400'}
-                              hover:opacity-80 hover:scale-105 transition-all duration-200 cursor-pointer
-                              ${cellData && cellData.count > 0 ? 'hover:shadow-lg' : ''}
+                              p-6 text-center font-bold text-xl rounded-xl border-2 border-white shadow-md
+                              ${cellData ? getCellColor(cellData.level) : 'bg-gray-100 text-gray-400 border-gray-200'}
+                              hover:opacity-90 hover:scale-110 hover:shadow-xl hover:z-10 
+                              transition-all duration-300 cursor-pointer transform
+                              ${cellData && cellData.count > 0 ? 'hover:border-gray-400' : ''}
+                              relative group
                             `}
                             title={`${impact} Impact, ${likelihood} Likelihood: ${cellData?.count || 0} risks - Click to view details`}
                             onClick={() => handleCellClick(impact, likelihood)}
                           >
-                            {cellData?.count || 0}
+                            <div className="relative">
+                              {cellData?.count || 0}
+                              {cellData && cellData.count > 0 && (
+                                <div className="absolute -top-1 -right-1 w-3 h-3 bg-white rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                  <div className="w-full h-full bg-blue-500 rounded-full animate-pulse"></div>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         );
                       })}
@@ -393,27 +410,50 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
             </div>
             
             {/* X-axis Label */}
-            <div className="text-center text-sm font-medium text-gray-600 mb-4">
-              Likelihood
+            <div className="text-center text-base font-semibold text-gray-700 -mt-2">
+              Likelihood Level
             </div>
             
-            {/* Legend */}
-            <div className="flex items-center justify-center space-x-6 pt-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 bg-red-600 rounded"></div>
-                <span className="text-sm font-medium">Critical</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 bg-red-400 rounded"></div>
-                <span className="text-sm font-medium">High</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 bg-yellow-400 rounded"></div>
-                <span className="text-sm font-medium">Medium</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 bg-green-500 rounded"></div>
-                <span className="text-sm font-medium">Low</span>
+            {/* Enhanced Legend with Statistics */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <div className="flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0">
+                <div className="flex items-center space-x-8">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-5 h-5 bg-red-600 rounded-lg shadow-sm"></div>
+                    <span className="text-sm font-semibold text-gray-700">Critical</span>
+                    <Badge variant="destructive" className="text-xs">
+                      {heatMapData.filter(d => d.level === 'critical').reduce((sum, d) => sum + d.count, 0)}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-5 h-5 bg-red-400 rounded-lg shadow-sm"></div>
+                    <span className="text-sm font-semibold text-gray-700">High</span>
+                    <Badge variant="secondary" className="text-xs bg-red-100 text-red-800">
+                      {heatMapData.filter(d => d.level === 'high').reduce((sum, d) => sum + d.count, 0)}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-5 h-5 bg-yellow-400 rounded-lg shadow-sm"></div>
+                    <span className="text-sm font-semibold text-gray-700">Medium</span>
+                    <Badge variant="secondary" className="text-xs bg-yellow-100 text-yellow-800">
+                      {heatMapData.filter(d => d.level === 'medium').reduce((sum, d) => sum + d.count, 0)}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-5 h-5 bg-green-500 rounded-lg shadow-sm"></div>
+                    <span className="text-sm font-semibold text-gray-700">Low</span>
+                    <Badge variant="secondary" className="text-xs bg-green-100 text-green-800">
+                      {heatMapData.filter(d => d.level === 'low').reduce((sum, d) => sum + d.count, 0)}
+                    </Badge>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-4 text-sm text-gray-600">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                    <span>Click any cell to view detailed risks</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
