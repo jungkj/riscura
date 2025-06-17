@@ -335,7 +335,11 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
     if (href === '/dashboard') {
       return pathname === '/dashboard';
     }
-    return pathname.startsWith(href);
+    
+    // For exact matching or when the href is followed by a slash or end of string
+    // This prevents '/dashboard/risks' from matching '/dashboard/risks/assessment'
+    const regex = new RegExp(`^${href.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(/|$)`);
+    return regex.test(pathname) || pathname === href;
   };
 
   const getBadgeVariant = (variant?: string) => {
