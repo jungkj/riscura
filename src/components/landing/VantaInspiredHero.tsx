@@ -30,16 +30,16 @@ export default function VantaInspiredHero() {
       <div className="absolute top-20 left-10 w-20 h-20 bg-[#199BEC]/10 rounded-full blur-xl"></div>
       <div className="absolute bottom-20 right-10 w-32 h-32 bg-purple-200/30 rounded-full blur-xl"></div>
       
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20">
         <div className={`text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           {/* Announcement Badge */}
-          <Badge className="bg-[#199BEC] text-white px-6 py-2 mb-8 text-sm rounded-full hover:bg-[#0f7dc7] transition-colors">
+          <Badge className="bg-[#199BEC] text-white px-6 py-2 mb-6 text-sm rounded-full hover:bg-[#0f7dc7] transition-colors">
             <Sparkles className="w-4 h-4 mr-2" />
             Introducing Riscura AI: Powering the future of risk management
           </Badge>
           
           {/* Large headline with colored accent */}
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-5 leading-tight">
             Risk Management that turns
             <br />
             <span className="text-[#199BEC] bg-gradient-to-r from-[#199BEC] to-blue-600 bg-clip-text text-transparent">
@@ -48,14 +48,14 @@ export default function VantaInspiredHero() {
           </h1>
           
           {/* Subtitle */}
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-gray-600 mb-6 max-w-3xl mx-auto leading-relaxed">
             Riscura helps you identify risk with AI-powered assessments, continuous monitoring, 
             and proactive risk management. Go from tedious, point-in-time reviews to collaborative 
             workflows—and do more with less.
           </p>
           
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-10">
             <Button 
               size="lg" 
               className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"

@@ -1,240 +1,460 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { appConfig } from '@/config/env';
+import { withAPI, createAPIResponse, ForbiddenError, ValidationError, NotFoundError } from '@/lib/api/middleware';
+import { getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/middleware';
+import { db } from '@/lib/db';
+import { riskUpdateSchema } from '@/lib/api/schemas';
+import { z } from 'zod';
 
-// GET /api/risks/[id] - Get risk by ID (demo mode)
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-): Promise<NextResponse> {
+interface RouteParams {
+  params: {
+    id: string;
+  };
+}
+
+// GET /api/risks/[id] - Get single risk with full details
+export const GET = withAPI(async (req: NextRequest, { params }: RouteParams) => {
+  const authReq = req as AuthenticatedRequest;
+  const user = getAuthenticatedUser(authReq);
+
+  if (!user) {
+    throw new ForbiddenError('Authentication required');
+  }
+
   try {
-    const { id } = await params;
+    const riskId = params.id;
 
-    // Mock risk data
-    const mockRisks: Record<string, any> = {
-      'risk_cyber_security': {
-        id: 'risk_cyber_security',
-        title: 'Cybersecurity Threat',
-        description: 'Potential data breach due to inadequate cybersecurity measures',
-        category: 'Operational',
-        type: 'Technology',
-        severity: 'High',
-        likelihood: 'Medium',
-        impact: 'High',
-        riskScore: 85,
-        status: 'Open',
-        ownerId: 'user_manager_demo',
-        department: 'IT',
-        businessUnit: 'Technology',
-        tags: ['cybersecurity', 'data-protection', 'IT'],
-        createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-        updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-        owner: {
-          id: 'user_manager_demo',
-          firstName: 'Maria',
-          lastName: 'Manager',
-          email: 'manager@riscura.demo',
+    if (!riskId) {
+      throw new ValidationError('Risk ID is required');
+    }
+
+    // Validate UUID format
+    const uuidSchema = z.string().uuid();
+    const validatedId = uuidSchema.parse(riskId);
+
+    const risk = await db.client.risk.findFirst({
+      where: {
+        id: validatedId,
+        organizationId: user.organizationId,
+      },
+      include: {
+        creator: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            avatar: true,
+          },
         },
-        controls: [
-          {
-            id: 'control_access_management',
-            title: 'Access Control Management',
-            category: 'Preventive',
-            type: 'Technical',
-            status: 'Implemented',
+        assignedUser: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            avatar: true,
           },
-        ],
-        assessments: [
-          {
-            id: 'assessment_1',
-            type: 'Qualitative',
-            likelihood: 3,
-            impact: 4,
-            score: 85,
-            notes: 'High-impact risk requiring immediate attention',
-            assessedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-            assessedBy: {
-              id: 'user_manager_demo',
-              firstName: 'Maria',
-              lastName: 'Manager',
+        },
+        controls: {
+          include: {
+            control: {
+              select: {
+                id: true,
+                title: true,
+                description: true,
+                category: true,
+                type: true,
+                status: true,
+                effectiveness: true,
+                implementationDate: true,
+                lastTestedDate: true,
+                nextTestDate: true,
+              },
             },
           },
-        ],
-        activities: [
-          {
-            id: 'activity_1',
-            type: 'UPDATED',
-            description: 'Risk severity updated to High',
-            timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+        },
+        evidence: {
+          select: {
+            id: true,
+            name: true,
+            type: true,
+            size: true,
+            uploadedAt: true,
+            uploadedBy: true,
+            path: true,
+          },
+          orderBy: {
+            uploadedAt: 'desc',
+          },
+        },
+        comments: {
+          include: {
             user: {
-              firstName: 'Maria',
-              lastName: 'Manager',
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                avatar: true,
+              },
             },
           },
-        ],
-        _count: {
-          controls: 1,
-          assessments: 1,
-          mitigations: 2,
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+        tasks: {
+          include: {
+            assignee: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+        activities: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+          take: 10,
         },
       },
-      'risk_regulatory_compliance': {
-        id: 'risk_regulatory_compliance',
-        title: 'GDPR Compliance Gap',
-        description: 'Non-compliance with GDPR data protection requirements',
-        category: 'Compliance',
-        type: 'Regulatory',
-        severity: 'Critical',
-        likelihood: 'High',
-        impact: 'Critical',
-        riskScore: 95,
-        status: 'In Progress',
-        ownerId: 'user_admin_demo',
-        department: 'Legal',
-        businessUnit: 'Compliance',
-        tags: ['gdpr', 'compliance', 'legal'],
-        createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
-        updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-        owner: {
-          id: 'user_admin_demo',
-          firstName: 'Alex',
-          lastName: 'Administrator',
-          email: 'admin@riscura.demo',
-        },
-        controls: [
-          {
-            id: 'control_data_encryption',
-            title: 'Data Encryption Standard',
-            category: 'Preventive',
-            type: 'Technical',
-            status: 'Planned',
-          },
-        ],
-        assessments: [
-          {
-            id: 'assessment_2',
-            type: 'Quantitative',
-            likelihood: 4,
-            impact: 5,
-            score: 95,
-            notes: 'Critical compliance gap requiring immediate action',
-            assessedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-            assessedBy: {
-              id: 'user_admin_demo',
-              firstName: 'Alex',
-              lastName: 'Administrator',
-            },
-          },
-        ],
-        activities: [
-          {
-            id: 'activity_2',
-            type: 'CREATED',
-            description: 'GDPR compliance gap identified',
-            timestamp: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
-            user: {
-              firstName: 'Alex',
-              lastName: 'Administrator',
-            },
-          },
-        ],
-        _count: {
-          controls: 1,
-          assessments: 1,
-          mitigations: 3,
-        },
-      },
-    };
-
-    const risk = mockRisks[id];
+    });
 
     if (!risk) {
-      return NextResponse.json(
-        { error: 'Risk not found' },
-        { status: 404 }
-      );
+      throw new NotFoundError('Risk not found');
     }
 
-    return NextResponse.json({
-      success: true,
-      data: risk,
-      meta: {
-        demoMode: true,
+    // Calculate additional metrics
+    const controlsCount = risk.controls.length;
+    const implementedControlsCount = risk.controls.filter(
+      c => c.control.status === 'OPERATIONAL' || c.control.status === 'IMPLEMENTED'
+    ).length;
+    const controlEffectiveness = controlsCount > 0 
+      ? risk.controls.reduce((sum, c) => sum + (c.control.effectiveness || 0), 0) / controlsCount 
+      : 0;
+
+    const openTasksCount = risk.tasks.filter(t => t.status !== 'COMPLETED').length;
+    const overdueTasks = risk.tasks.filter(t => 
+      t.status !== 'COMPLETED' && t.dueDate && new Date(t.dueDate) < new Date()
+    ).length;
+
+    // Calculate risk trend (simplified - would need historical data for accurate trend)
+    const recentActivities = risk.activities.filter(a => 
+      a.createdAt > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // Last 30 days
+    );
+    const riskTrend = recentActivities.length > 5 ? 'increasing' : 
+                     recentActivities.length > 2 ? 'stable' : 'decreasing';
+
+    const enrichedRisk = {
+      ...risk,
+      metrics: {
+        controlsCount,
+        implementedControlsCount,
+        controlCoverage: controlsCount > 0 ? Math.round((implementedControlsCount / controlsCount) * 100) : 0,
+        averageControlEffectiveness: Math.round(controlEffectiveness * 100) / 100,
+        openTasksCount,
+        overdueTasks,
+        evidenceCount: risk.evidence.length,
+        commentsCount: risk.comments.length,
+        activitiesCount: risk.activities.length,
+        riskTrend,
+      },
+      timeline: risk.activities.map(activity => ({
+        id: activity.id,
+        type: activity.type,
+        description: activity.description,
+        user: activity.user ? `${activity.user.firstName} ${activity.user.lastName}` : 'System',
+        createdAt: activity.createdAt,
+        metadata: activity.metadata,
+      })),
+    };
+
+    return createAPIResponse({
+      data: enrichedRisk,
+    });
+  } catch (error) {
+    console.error('Error fetching risk:', error);
+    if (error instanceof z.ZodError) {
+      throw new ValidationError('Invalid risk ID format', error.errors);
+    }
+    throw new Error(error instanceof Error ? error.message : 'Failed to fetch risk');
+  }
+});
+
+// PUT /api/risks/[id] - Update risk
+export const PUT = withAPI(async (req: NextRequest, { params }: RouteParams) => {
+  const authReq = req as AuthenticatedRequest;
+  const user = getAuthenticatedUser(authReq);
+
+  if (!user) {
+    throw new ForbiddenError('Authentication required');
+  }
+
+  try {
+    const riskId = params.id;
+
+    if (!riskId) {
+      throw new ValidationError('Risk ID is required');
+    }
+
+    // Validate UUID format
+    const uuidSchema = z.string().uuid();
+    const validatedId = uuidSchema.parse(riskId);
+
+    const body = await req.json();
+    const validatedData = riskUpdateSchema.parse(body);
+
+    // Check if risk exists and user has access
+    const existingRisk = await db.client.risk.findFirst({
+      where: {
+        id: validatedId,
+        organizationId: user.organizationId,
       },
     });
 
-  } catch (error) {
-    console.error('Risk detail API error:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve risk' },
-      { status: 500 }
-    );
-  }
-}
-
-// PUT /api/risks/[id] - Update risk (demo mode)
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-): Promise<NextResponse> {
-  try {
-    if (!appConfig.isDevelopment) {
-      return NextResponse.json(
-        { error: 'Risk updates only available in development mode' },
-        { status: 403 }
-      );
+    if (!existingRisk) {
+      throw new NotFoundError('Risk not found');
     }
 
-    const { id } = await params;
-    const body = await request.json();
+    // Validate assigned user if provided
+    if (validatedData.owner) {
+      const assignedUser = await db.client.user.findFirst({
+        where: {
+          id: validatedData.owner,
+          organizationId: user.organizationId,
+        },
+      });
 
-    // Simulate update
-    const updatedRisk = {
-      id,
-      ...body,
-      updatedAt: new Date(),
-    };
+      if (!assignedUser) {
+        throw new ValidationError('Invalid assigned user ID');
+      }
+    }
 
-    return NextResponse.json({
-      success: true,
-      message: 'Risk updated successfully (demo mode)',
+    // Calculate risk score if likelihood or impact changed
+    let riskScore = existingRisk.riskScore;
+    if (validatedData.likelihood !== undefined || validatedData.impact !== undefined) {
+      const likelihood = validatedData.likelihood ?? existingRisk.likelihood;
+      const impact = validatedData.impact ?? existingRisk.impact;
+      riskScore = likelihood * impact;
+    }
+
+    // Determine risk level based on score
+    let riskLevel = existingRisk.riskLevel;
+    if (riskScore !== existingRisk.riskScore) {
+      if (riskScore >= 20) riskLevel = 'CRITICAL';
+      else if (riskScore >= 12) riskLevel = 'HIGH';
+      else if (riskScore >= 6) riskLevel = 'MEDIUM';
+      else riskLevel = 'LOW';
+    }
+
+    // Update risk
+    const updatedRisk = await db.client.risk.update({
+      where: { id: validatedId },
+      data: {
+        title: validatedData.title,
+        description: validatedData.description,
+        category: validatedData.category,
+        likelihood: validatedData.likelihood,
+        impact: validatedData.impact,
+        riskScore,
+        riskLevel,
+        owner: validatedData.owner,
+        status: validatedData.status,
+        dateIdentified: validatedData.dateIdentified ? new Date(validatedData.dateIdentified) : undefined,
+        lastAssessed: validatedData.lastAssessed ? new Date(validatedData.lastAssessed) : undefined,
+        nextReview: validatedData.nextReview ? new Date(validatedData.nextReview) : undefined,
+        aiConfidence: validatedData.aiConfidence,
+      },
+      include: {
+        creator: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            avatar: true,
+          },
+        },
+        assignedUser: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            avatar: true,
+          },
+        },
+        controls: {
+          include: {
+            control: {
+              select: {
+                id: true,
+                title: true,
+                status: true,
+                type: true,
+                effectiveness: true,
+              },
+            },
+          },
+        },
+        _count: {
+          select: {
+            controls: true,
+            evidence: true,
+            comments: true,
+            tasks: true,
+          },
+        },
+      },
+    });
+
+    // Log activity
+    await db.client.activity.create({
+      data: {
+        type: 'RISK_UPDATED',
+        description: `Risk "${updatedRisk.title}" updated`,
+        userId: user.id,
+        organizationId: user.organizationId,
+        entityType: 'RISK',
+        entityId: updatedRisk.id,
+        metadata: {
+          changes: Object.keys(validatedData),
+          previousRiskScore: existingRisk.riskScore,
+          newRiskScore: riskScore,
+          previousRiskLevel: existingRisk.riskLevel,
+          newRiskLevel: riskLevel,
+        },
+      },
+    });
+
+    return createAPIResponse({
       data: updatedRisk,
+      message: 'Risk updated successfully',
     });
-
   } catch (error) {
-    console.error('Risk update error:', error);
-    return NextResponse.json(
-      { error: 'Failed to update risk' },
-      { status: 500 }
-    );
+    console.error('Error updating risk:', error);
+    if (error instanceof z.ZodError) {
+      throw new ValidationError('Invalid risk data', error.errors);
+    }
+    throw new Error(error instanceof Error ? error.message : 'Failed to update risk');
   }
-}
+});
 
-// DELETE /api/risks/[id] - Delete risk (demo mode)
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-): Promise<NextResponse> {
+// DELETE /api/risks/[id] - Delete risk
+export const DELETE = withAPI(async (req: NextRequest, { params }: RouteParams) => {
+  const authReq = req as AuthenticatedRequest;
+  const user = getAuthenticatedUser(authReq);
+
+  if (!user) {
+    throw new ForbiddenError('Authentication required');
+  }
+
   try {
-    if (!appConfig.isDevelopment) {
-      return NextResponse.json(
-        { error: 'Risk deletion only available in development mode' },
-        { status: 403 }
-      );
+    const riskId = params.id;
+
+    if (!riskId) {
+      throw new ValidationError('Risk ID is required');
     }
 
-    const { id } = await params;
+    // Validate UUID format
+    const uuidSchema = z.string().uuid();
+    const validatedId = uuidSchema.parse(riskId);
 
-    return NextResponse.json({
-      success: true,
-      message: 'Risk deleted successfully (demo mode)',
-      deletedId: id,
+    // Check if risk exists and user has access
+    const existingRisk = await db.client.risk.findFirst({
+      where: {
+        id: validatedId,
+        organizationId: user.organizationId,
+      },
+      include: {
+        controls: true,
+        evidence: true,
+        comments: true,
+        tasks: true,
+      },
     });
 
+    if (!existingRisk) {
+      throw new NotFoundError('Risk not found');
+    }
+
+    // Check if user has permission to delete (only creator or admin)
+    const canDelete = existingRisk.createdBy === user.id || 
+                     user.permissions.includes('risks:delete') ||
+                     user.role === 'ADMIN';
+
+    if (!canDelete) {
+      throw new ForbiddenError('Insufficient permissions to delete this risk');
+    }
+
+    // Check for dependencies
+    if (existingRisk.controls.length > 0) {
+      // Option 1: Prevent deletion if controls are linked
+      throw new ValidationError(
+        `Cannot delete risk with ${existingRisk.controls.length} linked control(s). Please remove control associations first.`
+      );
+      
+      // Option 2: Cascade delete (uncomment if preferred)
+      // await db.client.controlRiskMapping.deleteMany({
+      //   where: { riskId: validatedId },
+      // });
+    }
+
+    // Delete related records first (if not using cascade delete in schema)
+    await Promise.all([
+      db.client.comment.deleteMany({ where: { entityId: validatedId, entityType: 'RISK' } }),
+      db.client.task.deleteMany({ where: { riskId: validatedId } }),
+      db.client.activity.deleteMany({ where: { entityId: validatedId, entityType: 'RISK' } }),
+    ]);
+
+    // Delete the risk
+    await db.client.risk.delete({
+      where: { id: validatedId },
+    });
+
+    // Log activity
+    await db.client.activity.create({
+      data: {
+        type: 'RISK_DELETED',
+        description: `Risk "${existingRisk.title}" deleted`,
+        userId: user.id,
+        organizationId: user.organizationId,
+        entityType: 'RISK',
+        entityId: validatedId,
+        metadata: {
+          riskTitle: existingRisk.title,
+          riskCategory: existingRisk.category,
+          riskLevel: existingRisk.riskLevel,
+          linkedControls: existingRisk.controls.length,
+          evidenceCount: existingRisk.evidence.length,
+        },
+      },
+    });
+
+    return createAPIResponse({
+      data: { id: validatedId },
+      message: 'Risk deleted successfully',
+    });
   } catch (error) {
-    console.error('Risk deletion error:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete risk' },
-      { status: 500 }
-    );
+    console.error('Error deleting risk:', error);
+    if (error instanceof z.ZodError) {
+      throw new ValidationError('Invalid risk ID format', error.errors);
+    }
+    throw new Error(error instanceof Error ? error.message : 'Failed to delete risk');
   }
-} 
+}); 

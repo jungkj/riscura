@@ -1,6 +1,10 @@
 import nodemailer from 'nodemailer';
 import { emailConfig, env } from '@/config/env';
 import { generateId } from '@/lib/utils';
+import { db } from '@/lib/db';
+import { createTransporter } from 'nodemailer';
+import sgMail from '@sendgrid/mail';
+import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 
 export interface EmailOptions {
   to: string | string[];
@@ -39,16 +43,153 @@ export interface EmailResult {
   };
 }
 
+export interface EmailProvider {
+  sendEmail(options: EmailOptions): Promise<{ messageId: string; success: boolean }>;
+}
+
+// Mock email provider for development
+class MockEmailProvider implements EmailProvider {
+  async sendEmail(options: EmailOptions): Promise<{ messageId: string; success: boolean }> {
+    console.log('📧 Mock Email Sent:', {
+      to: options.to,
+      subject: options.subject,
+      template: options.template,
+    });
+    
+    return {
+      messageId: `mock-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      success: true,
+    };
+  }
+}
+
+// SendGrid email provider (production)
+class SendGridProvider implements EmailProvider {
+  private apiKey: string;
+
+  constructor(apiKey: string) {
+    this.apiKey = apiKey;
+  }
+
+  async sendEmail(options: EmailOptions): Promise<{ messageId: string; success: boolean }> {
+    // TODO: Implement actual SendGrid integration
+    throw new Error('SendGrid integration not implemented yet');
+  }
+}
+
+// AWS SES email provider (production)
+class SESProvider implements EmailProvider {
+  async sendEmail(options: EmailOptions): Promise<{ messageId: string; success: boolean }> {
+    // TODO: Implement actual AWS SES integration
+    throw new Error('AWS SES integration not implemented yet');
+  }
+}
+
+// Email templates
+const EMAIL_TEMPLATES: Record<string, EmailTemplate> = {
+  welcome: {
+    subject: 'Welcome to Riscura',
+    html: `
+      <h1>Welcome to Riscura!</h1>
+      <p>Hello {{firstName}},</p>
+      <p>Welcome to Riscura, your comprehensive risk management platform.</p>
+      <p>To get started:</p>
+      <ol>
+        <li>Complete your profile setup</li>
+        <li>Explore the dashboard</li>
+        <li>Create your first risk assessment</li>
+      </ol>
+      <p>If you have any questions, our support team is here to help.</p>
+      <p>Best regards,<br>The Riscura Team</p>
+    `,
+  },
+  emailVerification: {
+    subject: 'Verify your email address',
+    html: `
+      <h1>Verify Your Email</h1>
+      <p>Hello {{firstName}},</p>
+      <p>Please click the link below to verify your email address:</p>
+      <p><a href="{{verificationUrl}}" style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Verify Email</a></p>
+      <p>This link will expire in 24 hours.</p>
+      <p>If you didn't create an account, you can safely ignore this email.</p>
+    `,
+  },
+  passwordReset: {
+    subject: 'Reset your password',
+    html: `
+      <h1>Password Reset</h1>
+      <p>Hello {{firstName}},</p>
+      <p>You requested to reset your password. Click the link below:</p>
+      <p><a href="{{resetUrl}}" style="background: #dc3545; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a></p>
+      <p>This link will expire in 1 hour.</p>
+      <p>If you didn't request this, you can safely ignore this email.</p>
+    `,
+  },
+  riskAlert: {
+    subject: 'Risk Alert: {{riskTitle}}',
+    html: `
+      <h1>Risk Alert</h1>
+      <p>A {{riskLevel}} risk has been identified:</p>
+      <h2>{{riskTitle}}</h2>
+      <p><strong>Category:</strong> {{riskCategory}}</p>
+      <p><strong>Risk Score:</strong> {{riskScore}}</p>
+      <p><strong>Description:</strong> {{riskDescription}}</p>
+      <p><a href="{{riskUrl}}">View Risk Details</a></p>
+    `,
+  },
+  workflowNotification: {
+    subject: 'Action Required: {{workflowName}}',
+    html: `
+      <h1>Action Required</h1>
+      <p>Hello {{firstName}},</p>
+      <p>You have a pending action in the workflow: <strong>{{workflowName}}</strong></p>
+      <p><strong>Due Date:</strong> {{dueDate}}</p>
+      <p><strong>Description:</strong> {{description}}</p>
+      <p><a href="{{workflowUrl}}">Take Action</a></p>
+    `,
+  },
+  complianceReport: {
+    subject: 'Compliance Report - {{reportDate}}',
+    html: `
+      <h1>Compliance Report</h1>
+      <p>Your compliance report for {{reportDate}} is ready.</p>
+      <p><strong>Overall Score:</strong> {{complianceScore}}%</p>
+      <p><strong>Critical Issues:</strong> {{criticalIssues}}</p>
+      <p><strong>Recommendations:</strong> {{recommendations}}</p>
+      <p><a href="{{reportUrl}}">View Full Report</a></p>
+    `,
+  },
+};
+
 class EmailService {
   private transporter: nodemailer.Transporter | null = null;
   private templates: Map<string, EmailTemplate> = new Map();
   private queue: Array<{ id: string; email: EmailOptions; retryCount: number; scheduledAt: Date }> = [];
   private isProcessing = false;
+  private provider: EmailProvider;
+  private config: EmailConfig;
+  private sesClient?: SESClient;
+  private smtpTransporter?: any;
 
-  constructor() {
+  constructor(config: EmailConfig) {
+    this.config = config;
     this.initializeTransporter();
     this.loadTemplates();
     this.startQueueProcessor();
+
+    // Choose provider based on environment
+    if (env.NODE_ENV === 'production') {
+      if (env.SENDGRID_API_KEY) {
+        this.provider = new SendGridProvider(env.SENDGRID_API_KEY);
+      } else if (env.AWS_SES_REGION) {
+        this.provider = new SESProvider();
+      } else {
+        console.warn('No email provider configured for production');
+        this.provider = new MockEmailProvider();
+      }
+    } else {
+      this.provider = new MockEmailProvider();
+    }
   }
 
   private initializeTransporter() {
@@ -423,6 +564,184 @@ class EmailService {
 
   listTemplates(): string[] {
     return Array.from(this.templates.keys());
+  }
+
+  /**
+   * Send a single email
+   */
+  async sendEmail(options: EmailOptions): Promise<{ messageId: string; success: boolean }> {
+    try {
+      // Process template if specified
+      if (options.template && EMAIL_TEMPLATES[options.template]) {
+        const template = EMAIL_TEMPLATES[options.template];
+        options.subject = this.processTemplate(template.subject, options.templateData || {});
+        options.html = this.processTemplate(template.html, options.templateData || {});
+        if (template.text) {
+          options.text = this.processTemplate(template.text, options.templateData || {});
+        }
+      }
+
+      // Send email
+      const result = await this.provider.sendEmail(options);
+
+      // Log email in database
+      await this.logEmail(options, result);
+
+      return result;
+    } catch (error) {
+      console.error('Email send error:', error);
+      throw new Error('Failed to send email');
+    }
+  }
+
+  /**
+   * Send bulk emails
+   */
+  async sendBulkEmails(emails: EmailOptions[]): Promise<Array<{ messageId: string; success: boolean }>> {
+    const results = [];
+    
+    for (const email of emails) {
+      try {
+        const result = await this.sendEmail(email);
+        results.push(result);
+      } catch (error) {
+        console.error('Bulk email error:', error);
+        results.push({ messageId: '', success: false });
+      }
+    }
+
+    return results;
+  }
+
+  /**
+   * Send template email
+   */
+  async sendTemplateEmail(
+    template: string,
+    to: string | string[],
+    data: Record<string, any>
+  ): Promise<{ messageId: string; success: boolean }> {
+    return this.sendEmail({
+      to,
+      template,
+      templateData: data,
+      subject: '', // Will be set by template
+    });
+  }
+
+  /**
+   * Send welcome email
+   */
+  async sendWelcomeEmail(user: { email: string; firstName: string }): Promise<void> {
+    await this.sendTemplateEmail('welcome', user.email, {
+      firstName: user.firstName,
+    });
+  }
+
+  /**
+   * Send email verification
+   */
+  async sendEmailVerification(
+    user: { email: string; firstName: string },
+    verificationToken: string
+  ): Promise<void> {
+    const verificationUrl = `${env.APP_URL}/auth/verify-email?token=${verificationToken}`;
+    
+    await this.sendTemplateEmail('emailVerification', user.email, {
+      firstName: user.firstName,
+      verificationUrl,
+    });
+  }
+
+  /**
+   * Send password reset email
+   */
+  async sendPasswordReset(
+    user: { email: string; firstName: string },
+    resetToken: string
+  ): Promise<void> {
+    const resetUrl = `${env.APP_URL}/auth/reset-password?token=${resetToken}`;
+    
+    await this.sendTemplateEmail('passwordReset', user.email, {
+      firstName: user.firstName,
+      resetUrl,
+    });
+  }
+
+  /**
+   * Send risk alert
+   */
+  async sendRiskAlert(
+    users: Array<{ email: string; firstName: string }>,
+    risk: {
+      id: string;
+      title: string;
+      description: string;
+      category: string;
+      riskLevel: string;
+      riskScore: number;
+    }
+  ): Promise<void> {
+    const riskUrl = `${env.APP_URL}/dashboard/risks/${risk.id}`;
+    
+    for (const user of users) {
+      await this.sendTemplateEmail('riskAlert', user.email, {
+        firstName: user.firstName,
+        riskTitle: risk.title,
+        riskDescription: risk.description,
+        riskCategory: risk.category,
+        riskLevel: risk.riskLevel,
+        riskScore: risk.riskScore,
+        riskUrl,
+      });
+    }
+  }
+
+  /**
+   * Send workflow notification
+   */
+  async sendWorkflowNotification(
+    user: { email: string; firstName: string },
+    workflow: {
+      id: string;
+      name: string;
+      description: string;
+      dueDate: Date;
+    }
+  ): Promise<void> {
+    const workflowUrl = `${env.APP_URL}/dashboard/workflows/${workflow.id}`;
+    
+    await this.sendTemplateEmail('workflowNotification', user.email, {
+      firstName: user.firstName,
+      workflowName: workflow.name,
+      description: workflow.description,
+      dueDate: workflow.dueDate.toLocaleDateString(),
+      workflowUrl,
+    });
+  }
+
+  /**
+   * Log email in database
+   */
+  private async logEmail(
+    options: EmailOptions,
+    result: { messageId: string; success: boolean }
+  ): Promise<void> {
+    try {
+      await db.client.emailLog.create({
+        data: {
+          messageId: result.messageId,
+          to: Array.isArray(options.to) ? options.to.join(',') : options.to,
+          subject: options.subject,
+          template: options.template || null,
+          success: result.success,
+          sentAt: new Date(),
+        },
+      });
+    } catch (error) {
+      console.error('Email logging error:', error);
+      // Don't throw error, logging is optional
+    }
   }
 }
 

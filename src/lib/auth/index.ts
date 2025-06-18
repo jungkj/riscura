@@ -27,7 +27,7 @@ export {
   getPasswordStrengthDescription,
   getPasswordStrengthColor,
   PASSWORD_REQUIREMENTS,
-  type PasswordStrength,
+  type PasswordStrengthResult,
 } from './password';
 
 // Session management
@@ -35,10 +35,10 @@ export {
   createSession,
   getSession,
   getSessionByToken,
-  refreshSession,
-  deleteSession,
-  deleteAllUserSessions,
-  getUserSessions,
+  validateSession,
+  invalidateSession,
+  invalidateAllSessions,
+  getActiveSessions,
   cleanupExpiredSessions,
   updateSessionActivity,
   getSessionStatistics,
@@ -57,7 +57,6 @@ export {
   requireRole,
   requirePermission,
   getAuthenticatedUser,
-  hasPermission,
   hasRole,
   belongsToOrganization,
   rateLimit,
@@ -101,143 +100,220 @@ export const AUTH_CONSTANTS = {
 
 // Permission constants
 export const PERMISSIONS = {
-  // Risk management
-  RISKS_READ: 'risks:read',
-  RISKS_WRITE: 'risks:write',
-  RISKS_DELETE: 'risks:delete',
+  // Risk Management
+  RISK_CREATE: 'risk:create',
+  RISK_READ: 'risk:read',
+  RISK_UPDATE: 'risk:update',
+  RISK_DELETE: 'risk:delete',
   
-  // Control management
-  CONTROLS_READ: 'controls:read',
-  CONTROLS_WRITE: 'controls:write',
-  CONTROLS_DELETE: 'controls:delete',
+  // Control Management
+  CONTROL_CREATE: 'control:create',
+  CONTROL_READ: 'control:read',
+  CONTROL_UPDATE: 'control:update',
+  CONTROL_DELETE: 'control:delete',
   
-  // Document management
-  DOCUMENTS_READ: 'documents:read',
-  DOCUMENTS_WRITE: 'documents:write',
-  DOCUMENTS_DELETE: 'documents:delete',
+  // Document Management
+  DOCUMENT_CREATE: 'document:create',
+  DOCUMENT_READ: 'document:read',
+  DOCUMENT_UPDATE: 'document:update',
+  DOCUMENT_DELETE: 'document:delete',
   
-  // Task management
-  TASKS_READ: 'tasks:read',
-  TASKS_WRITE: 'tasks:write',
-  TASKS_DELETE: 'tasks:delete',
+  // Assessment Management
+  ASSESSMENT_CREATE: 'assessment:create',
+  ASSESSMENT_READ: 'assessment:read',
+  ASSESSMENT_UPDATE: 'assessment:update',
+  ASSESSMENT_DELETE: 'assessment:delete',
   
-  // Workflow management
-  WORKFLOWS_READ: 'workflows:read',
-  WORKFLOWS_WRITE: 'workflows:write',
-  WORKFLOWS_DELETE: 'workflows:delete',
+  // Workflow Management
+  WORKFLOW_CREATE: 'workflow:create',
+  WORKFLOW_READ: 'workflow:read',
+  WORKFLOW_UPDATE: 'workflow:update',
+  WORKFLOW_DELETE: 'workflow:delete',
   
-  // Reporting
-  REPORTS_READ: 'reports:read',
-  REPORTS_WRITE: 'reports:write',
-  REPORTS_DELETE: 'reports:delete',
+  // Report Management
+  REPORT_CREATE: 'report:create',
+  REPORT_READ: 'report:read',
+  REPORT_UPDATE: 'report:update',
+  REPORT_DELETE: 'report:delete',
   
-  // Questionnaires
-  QUESTIONNAIRES_READ: 'questionnaires:read',
-  QUESTIONNAIRES_WRITE: 'questionnaires:write',
-  QUESTIONNAIRES_DELETE: 'questionnaires:delete',
+  // User Management
+  USER_CREATE: 'user:create',
+  USER_READ: 'user:read',
+  USER_UPDATE: 'user:update',
+  USER_DELETE: 'user:delete',
   
-  // User management
-  USERS_READ: 'users:read',
-  USERS_WRITE: 'users:write',
-  USERS_DELETE: 'users:delete',
+  // Organization Management
+  ORG_ADMIN: 'org:admin',
+  ORG_SETTINGS: 'org:settings',
+  ORG_BILLING: 'org:billing',
   
-  // Organization management
-  ORGANIZATIONS_READ: 'organizations:read',
-  ORGANIZATIONS_WRITE: 'organizations:write',
-  ORGANIZATIONS_DELETE: 'organizations:delete',
+  // System Administration
+  SYSTEM_ADMIN: 'system:admin',
+  SYSTEM_MONITORING: 'system:monitoring',
+  SYSTEM_BACKUP: 'system:backup',
   
-  // Admin permissions
-  ALL: '*',
+  // AI Features
+  AI_CHAT: 'ai:chat',
+  AI_ANALYSIS: 'ai:analysis',
+  AI_GENERATION: 'ai:generation',
+  
+  // Bulk Operations
+  BULK_IMPORT: 'bulk:import',
+  BULK_EXPORT: 'bulk:export',
+  BULK_UPDATE: 'bulk:update',
+  BULK_DELETE: 'bulk:delete',
 } as const;
 
-// Role permission mappings
+// Role definitions with default permissions
 export const ROLE_PERMISSIONS = {
-  ADMIN: [PERMISSIONS.ALL],
+  ADMIN: ['*'] as string[], // All permissions
   RISK_MANAGER: [
-    PERMISSIONS.RISKS_READ,
-    PERMISSIONS.RISKS_WRITE,
-    PERMISSIONS.RISKS_DELETE,
-    PERMISSIONS.CONTROLS_READ,
-    PERMISSIONS.CONTROLS_WRITE,
-    PERMISSIONS.CONTROLS_DELETE,
-    PERMISSIONS.DOCUMENTS_READ,
-    PERMISSIONS.DOCUMENTS_WRITE,
-    PERMISSIONS.TASKS_READ,
-    PERMISSIONS.TASKS_WRITE,
-    PERMISSIONS.WORKFLOWS_READ,
-    PERMISSIONS.WORKFLOWS_WRITE,
-    PERMISSIONS.REPORTS_READ,
+    PERMISSIONS.RISK_CREATE,
+    PERMISSIONS.RISK_READ,
+    PERMISSIONS.RISK_UPDATE,
+    PERMISSIONS.RISK_DELETE,
+    PERMISSIONS.CONTROL_CREATE,
+    PERMISSIONS.CONTROL_READ,
+    PERMISSIONS.CONTROL_UPDATE,
+    PERMISSIONS.CONTROL_DELETE,
+    PERMISSIONS.DOCUMENT_CREATE,
+    PERMISSIONS.DOCUMENT_READ,
+    PERMISSIONS.DOCUMENT_UPDATE,
+    PERMISSIONS.ASSESSMENT_CREATE,
+    PERMISSIONS.ASSESSMENT_READ,
+    PERMISSIONS.ASSESSMENT_UPDATE,
+    PERMISSIONS.WORKFLOW_CREATE,
+    PERMISSIONS.WORKFLOW_READ,
+    PERMISSIONS.WORKFLOW_UPDATE,
+    PERMISSIONS.REPORT_CREATE,
+    PERMISSIONS.REPORT_READ,
+    PERMISSIONS.AI_CHAT,
+    PERMISSIONS.AI_ANALYSIS,
+    PERMISSIONS.BULK_IMPORT,
+    PERMISSIONS.BULK_EXPORT,
   ],
   AUDITOR: [
-    PERMISSIONS.RISKS_READ,
-    PERMISSIONS.CONTROLS_READ,
-    PERMISSIONS.DOCUMENTS_READ,
-    PERMISSIONS.TASKS_READ,
-    PERMISSIONS.WORKFLOWS_READ,
-    PERMISSIONS.REPORTS_READ,
-    PERMISSIONS.REPORTS_WRITE,
-    PERMISSIONS.QUESTIONNAIRES_READ,
-    PERMISSIONS.QUESTIONNAIRES_WRITE,
+    PERMISSIONS.RISK_READ,
+    PERMISSIONS.CONTROL_READ,
+    PERMISSIONS.DOCUMENT_READ,
+    PERMISSIONS.ASSESSMENT_READ,
+    PERMISSIONS.WORKFLOW_READ,
+    PERMISSIONS.REPORT_CREATE,
+    PERMISSIONS.REPORT_READ,
+    PERMISSIONS.AI_CHAT,
+    PERMISSIONS.BULK_EXPORT,
   ],
   USER: [
-    PERMISSIONS.RISKS_READ,
-    PERMISSIONS.CONTROLS_READ,
-    PERMISSIONS.DOCUMENTS_READ,
-    PERMISSIONS.TASKS_READ,
-    PERMISSIONS.WORKFLOWS_READ,
+    PERMISSIONS.RISK_READ,
+    PERMISSIONS.CONTROL_READ,
+    PERMISSIONS.DOCUMENT_READ,
+    PERMISSIONS.ASSESSMENT_READ,
+    PERMISSIONS.REPORT_READ,
+    PERMISSIONS.AI_CHAT,
   ],
 } as const;
 
-// Utility function to get permissions for a role
-export function getPermissionsForRole(role: keyof typeof ROLE_PERMISSIONS): string[] {
-  return [...ROLE_PERMISSIONS[role]];
+/**
+ * Check if user has specific permission
+ */
+export function hasPermission(userPermissions: string[], requiredPermission: string): boolean {
+  return userPermissions.includes('*') || userPermissions.includes(requiredPermission);
 }
 
-// Utility function to check if a user has permission
-export function userHasPermission(
-  userPermissions: string[],
-  requiredPermission: string,
-  userRole?: string
-): boolean {
-  // Admin has all permissions
-  if (userRole === 'ADMIN' || userPermissions.includes(PERMISSIONS.ALL)) {
-    return true;
-  }
-  
-  return userPermissions.includes(requiredPermission);
+/**
+ * Check if user has any of the required permissions
+ */
+export function hasAnyPermission(userPermissions: string[], requiredPermissions: string[]): boolean {
+  if (userPermissions.includes('*')) return true;
+  return requiredPermissions.some(permission => userPermissions.includes(permission));
 }
 
-// Utility function to check if user has any of multiple permissions
-export function userHasAnyPermission(
-  userPermissions: string[],
-  requiredPermissions: string[],
-  userRole?: string
-): boolean {
-  // Admin has all permissions
-  if (userRole === 'ADMIN' || userPermissions.includes(PERMISSIONS.ALL)) {
-    return true;
-  }
-  
-  return requiredPermissions.some(permission => 
-    userPermissions.includes(permission)
-  );
+/**
+ * Check if user has all of the required permissions
+ */
+export function hasAllPermissions(userPermissions: string[], requiredPermissions: string[]): boolean {
+  if (userPermissions.includes('*')) return true;
+  return requiredPermissions.every(permission => userPermissions.includes(permission));
 }
 
-// Utility function to check if user has all of multiple permissions
-export function userHasAllPermissions(
-  userPermissions: string[],
-  requiredPermissions: string[],
-  userRole?: string
-): boolean {
-  // Admin has all permissions
-  if (userRole === 'ADMIN' || userPermissions.includes(PERMISSIONS.ALL)) {
-    return true;
-  }
-  
-  return requiredPermissions.every(permission => 
-    userPermissions.includes(permission)
-  );
+/**
+ * Get default permissions for a role
+ */
+export function getDefaultPermissions(role: keyof typeof ROLE_PERMISSIONS): string[] {
+  return [...(ROLE_PERMISSIONS[role] || ROLE_PERMISSIONS.USER)];
 }
+
+/**
+ * Check if role exists
+ */
+export function isValidRole(role: string): role is keyof typeof ROLE_PERMISSIONS {
+  return role in ROLE_PERMISSIONS;
+}
+
+/**
+ * Get all available permissions
+ */
+export function getAllPermissions(): string[] {
+  return Object.values(PERMISSIONS);
+}
+
+/**
+ * Group permissions by category
+ */
+export function getPermissionsByCategory(): Record<string, string[]> {
+  const categories: Record<string, string[]> = {};
+  
+  Object.entries(PERMISSIONS).forEach(([key, permission]) => {
+    const category = permission.split(':')[0];
+    if (!categories[category]) {
+      categories[category] = [];
+    }
+    categories[category].push(permission);
+  });
+  
+  return categories;
+}
+
+/**
+ * Format permission for display
+ */
+export function formatPermission(permission: string): string {
+  const [category, action] = permission.split(':');
+  const capitalizedCategory = category.charAt(0).toUpperCase() + category.slice(1);
+  const capitalizedAction = action.charAt(0).toUpperCase() + action.slice(1);
+  
+  return `${capitalizedCategory} ${capitalizedAction}`;
+}
+
+/**
+ * Check if user can access resource
+ */
+export function canAccessResource(
+  userPermissions: string[],
+  resourceType: string,
+  action: string
+): boolean {
+  const permission = `${resourceType}:${action}`;
+  return hasPermission(userPermissions, permission);
+}
+
+/**
+ * Get user's effective permissions (including role-based)
+ */
+export function getEffectivePermissions(
+  userRole: string,
+  explicitPermissions: string[] = []
+): string[] {
+  const rolePermissions = getDefaultPermissions(userRole as keyof typeof ROLE_PERMISSIONS);
+  const allPermissions = [...rolePermissions, ...explicitPermissions];
+  
+  // Remove duplicates and return
+  return [...new Set(allPermissions)];
+}
+
+// Type exports
+export type Permission = typeof PERMISSIONS[keyof typeof PERMISSIONS];
+export type Role = keyof typeof ROLE_PERMISSIONS;
 
 export * from './auth-options';
 export { default } from './auth-options'; 

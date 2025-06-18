@@ -4,140 +4,150 @@ import { z } from 'zod';
 export const idSchema = z.string().uuid('Invalid ID format');
 
 export const paginationSchema = z.object({
-  page: z.string().optional(),
-  limit: z.string().optional(),
+  page: z.string().optional().default('1'),
+  limit: z.string().optional().default('10'),
+});
+
+export const sortingSchema = z.object({
+  sort: z.string().optional(),
+  order: z.enum(['asc', 'desc']).optional().default('desc'),
 });
 
 export const searchSchema = z.object({
   search: z.string().optional(),
-  sort: z.string().optional(),
 });
 
 // Risk schemas
 export const createRiskSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(200, 'Title too long'),
-  description: z.string().max(2000, 'Description too long').optional(),
-  category: z.enum(['operational', 'strategic', 'financial', 'compliance', 'technology', 'reputational', 'other']),
-  severity: z.enum(['low', 'medium', 'high', 'critical']),
-  likelihood: z.enum(['very_low', 'low', 'medium', 'high', 'very_high']),
-  impact: z.enum(['very_low', 'low', 'medium', 'high', 'very_high']),
-  status: z.enum(['identified', 'assessed', 'treatment_planned', 'treatment_implemented', 'monitored', 'closed']).default('identified'),
-  priority: z.enum(['low', 'medium', 'high', 'critical']).optional(),
-  tags: z.array(z.string()).optional().default([]),
-  ownerId: z.string().uuid('Invalid owner ID').optional(),
-  reviewDate: z.string().datetime().optional(),
-  mitigationStrategy: z.string().max(2000).optional(),
-  residualRisk: z.enum(['very_low', 'low', 'medium', 'high', 'very_high']).optional(),
-  businessUnit: z.string().max(100).optional(),
-  department: z.string().max(100).optional(),
-  location: z.string().max(100).optional(),
-  customFields: z.record(z.any()).optional().default({}),
+  title: z.string().min(1, 'Title is required'),
+  description: z.string().min(1, 'Description is required'),
+  category: z.string(),
+  likelihood: z.number().min(1).max(5),
+  impact: z.number().min(1).max(5),
+  status: z.string().optional(),
+  owner: z.string().optional(),
+  dateIdentified: z.string().optional(),
+  nextReview: z.string().optional(),
 });
 
 export const updateRiskSchema = createRiskSchema.partial();
+export const riskUpdateSchema = updateRiskSchema; // Alias for backward compatibility
 
-export const riskQuerySchema = paginationSchema.extend({
+export const riskQuerySchema = z.object({
+  ...paginationSchema.shape,
+  ...sortingSchema.shape,
   ...searchSchema.shape,
-  category: z.string().optional(),
+  category: z.union([z.string(), z.array(z.string())]).optional(),
+  status: z.union([z.string(), z.array(z.string())]).optional(),
   severity: z.string().optional(),
-  likelihood: z.string().optional(),
-  impact: z.string().optional(),
-  status: z.string().optional(),
-  priority: z.string().optional(),
   ownerId: z.string().optional(),
-  businessUnit: z.string().optional(),
-  department: z.string().optional(),
-  tags: z.string().optional(), // Comma-separated tags
   dateFrom: z.string().optional(),
   dateTo: z.string().optional(),
 });
 
 // Control schemas
 export const createControlSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(200, 'Title too long'),
-  description: z.string().max(2000, 'Description too long').optional(),
-  controlType: z.enum(['preventive', 'detective', 'corrective', 'directive', 'compensating']),
-  category: z.enum(['technical', 'administrative', 'physical', 'operational', 'management']),
-  frequency: z.enum(['continuous', 'daily', 'weekly', 'monthly', 'quarterly', 'annually', 'ad_hoc']),
-  automationLevel: z.enum(['manual', 'semi_automated', 'fully_automated']),
-  effectiveness: z.enum(['not_effective', 'partially_effective', 'largely_effective', 'fully_effective']).optional(),
-  status: z.enum(['planned', 'implemented', 'testing', 'operational', 'remediation', 'disabled']).default('planned'),
-  priority: z.enum(['low', 'medium', 'high', 'critical']).optional(),
-  ownerId: z.string().uuid('Invalid owner ID').optional(),
-  operatorId: z.string().uuid('Invalid operator ID').optional(),
-  reviewerId: z.string().uuid('Invalid reviewer ID').optional(),
-  lastTestDate: z.string().datetime().optional(),
-  nextTestDate: z.string().datetime().optional(),
-  testResults: z.string().max(1000).optional(),
-  riskIds: z.array(z.string().uuid()).optional().default([]),
-  tags: z.array(z.string()).optional().default([]),
-  businessUnit: z.string().max(100).optional(),
-  department: z.string().max(100).optional(),
-  location: z.string().max(100).optional(),
-  cost: z.number().min(0).optional(),
-  effort: z.enum(['low', 'medium', 'high']).optional(),
-  customFields: z.record(z.any()).optional().default({}),
+  name: z.string().min(1, 'Name is required'),
+  description: z.string().min(1, 'Description is required'),
+  category: z.string(),
+  type: z.string(),
+  status: z.string().optional(),
+  effectiveness: z.string().optional(),
+  frequency: z.string().optional(),
+  owner: z.string().optional(),
 });
 
 export const updateControlSchema = createControlSchema.partial();
 
-export const controlQuerySchema = paginationSchema.extend({
+export const controlQuerySchema = z.object({
+  ...paginationSchema.shape,
+  ...sortingSchema.shape,
   ...searchSchema.shape,
   controlType: z.string().optional(),
   category: z.string().optional(),
-  frequency: z.string().optional(),
-  automationLevel: z.string().optional(),
-  effectiveness: z.string().optional(),
   status: z.string().optional(),
-  priority: z.string().optional(),
+  effectiveness: z.string().optional(),
+  frequency: z.string().optional(),
   ownerId: z.string().optional(),
-  operatorId: z.string().optional(),
-  reviewerId: z.string().optional(),
   riskId: z.string().optional(),
-  businessUnit: z.string().optional(),
-  department: z.string().optional(),
-  tags: z.string().optional(),
-  testDue: z.string().optional(), // 'overdue', 'due_soon', 'upcoming'
+  testDue: z.enum(['overdue', 'due_soon', 'upcoming']).optional(),
+  // Enhanced filtering fields
+  type: z.string().optional(),
+  implementationStatus: z.string().optional(),
+  framework: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  createdAfter: z.string().datetime().optional(),
+  createdBefore: z.string().datetime().optional(),
+  reviewDue: z.boolean().optional(),
+  sortBy: z.string().optional(),
+  sortOrder: z.enum(['asc', 'desc']).optional(),
+}).transform((data) => ({
+  ...data,
+  skip: (parseInt(data.page) - 1) * parseInt(data.limit),
+  limit: parseInt(data.limit),
+}));
+
+export const controlCreateSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  description: z.string().optional(),
+  controlId: z.string().optional(),
+  category: z.enum(['TECHNICAL', 'ADMINISTRATIVE', 'PHYSICAL', 'OPERATIONAL', 'MANAGEMENT']),
+  type: z.enum(['PREVENTIVE', 'DETECTIVE', 'CORRECTIVE', 'DIRECTIVE', 'COMPENSATING']),
+  status: z.enum(['PLANNED', 'IMPLEMENTED', 'TESTING', 'OPERATIONAL', 'REMEDIATION', 'DISABLED']).default('PLANNED'),
+  implementationStatus: z.enum(['NOT_STARTED', 'IN_PROGRESS', 'COMPLETED', 'ON_HOLD']).default('NOT_STARTED'),
+  effectiveness: z.number().min(0).max(100).optional(),
+  frequency: z.enum(['CONTINUOUS', 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'ANNUALLY']).optional(),
+  automationLevel: z.enum(['MANUAL', 'SEMI_AUTOMATED', 'FULLY_AUTOMATED']).default('MANUAL'),
+  priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']).default('MEDIUM'),
+  effort: z.enum(['LOW', 'MEDIUM', 'HIGH']).default('MEDIUM'),
+  cost: z.number().min(0).optional(),
+  ownerId: z.string().uuid().optional(),
+  tags: z.array(z.string()).default([]),
+  nextReviewDate: z.string().datetime().optional(),
+  implementationDate: z.string().datetime().optional(),
+  lastTestedDate: z.string().datetime().optional(),
+  nextTestDate: z.string().datetime().optional(),
+  evidence: z.string().optional(),
+  notes: z.string().optional(),
+});
+
+export const controlUpdateSchema = controlCreateSchema.partial();
+
+export const controlBulkSchema = z.object({
+  create: z.array(controlCreateSchema).optional(),
+  update: z.array(z.object({
+    id: z.string().uuid(),
+  }).merge(controlUpdateSchema)).optional(),
+  delete: z.array(z.string().uuid()).optional(),
 });
 
 // Document schemas
 export const createDocumentSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(200, 'Title too long'),
-  description: z.string().max(1000, 'Description too long').optional(),
-  category: z.enum(['policy', 'procedure', 'guideline', 'form', 'report', 'evidence', 'other']),
-  type: z.enum(['internal', 'external', 'regulatory', 'standard']),
-  status: z.enum(['draft', 'review', 'approved', 'published', 'archived', 'expired']).default('draft'),
-  version: z.string().max(20).default('1.0'),
-  ownerId: z.string().uuid('Invalid owner ID').optional(),
-  approvedById: z.string().uuid('Invalid approver ID').optional(),
-  reviewDate: z.string().datetime().optional(),
-  expiryDate: z.string().datetime().optional(),
-  tags: z.array(z.string()).optional().default([]),
-  riskIds: z.array(z.string().uuid()).optional().default([]),
-  controlIds: z.array(z.string().uuid()).optional().default([]),
-  businessUnit: z.string().max(100).optional(),
-  department: z.string().max(100).optional(),
-  confidentiality: z.enum(['public', 'internal', 'confidential', 'restricted']).default('internal'),
-  customFields: z.record(z.any()).optional().default({}),
+  title: z.string().min(1, 'Title is required'),
+  description: z.string().min(1, 'Description is required'),
+  category: z.string(),
+  status: z.string().optional(),
+  version: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  confidentiality: z.string().optional(),
+  reviewDate: z.string().optional(),
+  linkedRiskIds: z.array(z.string()).optional(),
+  linkedControlIds: z.array(z.string()).optional(),
 });
 
 export const updateDocumentSchema = createDocumentSchema.partial();
 
-export const documentQuerySchema = paginationSchema.extend({
+export const documentQuerySchema = z.object({
+  ...paginationSchema.shape,
+  ...sortingSchema.shape,
   ...searchSchema.shape,
-  category: z.string().optional(),
+  category: z.union([z.string(), z.array(z.string())]).optional(),
+  status: z.union([z.string(), z.array(z.string())]).optional(),
   type: z.string().optional(),
-  status: z.string().optional(),
   ownerId: z.string().optional(),
-  approvedById: z.string().optional(),
-  businessUnit: z.string().optional(),
-  department: z.string().optional(),
-  confidentiality: z.string().optional(),
-  tags: z.string().optional(),
-  riskId: z.string().optional(),
-  controlId: z.string().optional(),
-  expiryFrom: z.string().datetime().optional(),
-  expiryTo: z.string().datetime().optional(),
+  tags: z.union([z.string(), z.array(z.string())]).optional(),
+  expiryFrom: z.string().optional(),
+  expiryTo: z.string().optional(),
 });
 
 // File upload schema
@@ -185,24 +195,12 @@ export const questionnaireQuerySchema = paginationSchema.extend({
 
 // Workflow schemas
 export const createWorkflowSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(200, 'Title too long'),
-  description: z.string().max(1000, 'Description too long').optional(),
-  category: z.enum(['risk_management', 'control_testing', 'document_approval', 'incident_response', 'compliance', 'other']),
-  type: z.enum(['approval', 'review', 'assessment', 'remediation', 'monitoring']),
-  status: z.enum(['draft', 'active', 'paused', 'completed', 'cancelled']).default('draft'),
-  priority: z.enum(['low', 'medium', 'high', 'critical']).optional(),
-  ownerId: z.string().uuid('Invalid owner ID').optional(),
-  assigneeIds: z.array(z.string().uuid()).optional().default([]),
-  approverIds: z.array(z.string().uuid()).optional().default([]),
-  dueDate: z.string().datetime().optional(),
-  startDate: z.string().datetime().optional(),
-  estimatedDuration: z.number().min(1).optional(), // Days
-  actualDuration: z.number().min(0).optional(), // Days
-  tags: z.array(z.string()).optional().default([]),
-  riskIds: z.array(z.string().uuid()).optional().default([]),
-  controlIds: z.array(z.string().uuid()).optional().default([]),
-  documentIds: z.array(z.string().uuid()).optional().default([]),
-  customFields: z.record(z.any()).optional().default({}),
+  name: z.string().min(1, 'Name is required'),
+  description: z.string().optional(),
+  type: z.string(),
+  status: z.string().optional(),
+  dueDate: z.string().optional(),
+  assigneeId: z.string().optional(),
 });
 
 export const updateWorkflowSchema = createWorkflowSchema.partial();
@@ -224,21 +222,11 @@ export const workflowQuerySchema = paginationSchema.extend({
 
 // Report schemas
 export const createReportSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(200, 'Title too long'),
-  description: z.string().max(1000, 'Description too long').optional(),
-  category: z.enum(['risk_register', 'control_status', 'compliance', 'audit', 'dashboard', 'custom']),
-  type: z.enum(['summary', 'detailed', 'executive', 'operational', 'regulatory']),
-  format: z.enum(['pdf', 'excel', 'csv', 'json', 'html']).default('pdf'),
-  status: z.enum(['draft', 'generating', 'ready', 'published', 'archived', 'failed']).default('draft'),
-  schedule: z.enum(['manual', 'daily', 'weekly', 'monthly', 'quarterly', 'annually']).default('manual'),
-  ownerId: z.string().uuid('Invalid owner ID').optional(),
-  recipientIds: z.array(z.string().uuid()).optional().default([]),
-  filters: z.record(z.any()).optional().default({}),
-  parameters: z.record(z.any()).optional().default({}),
-  tags: z.array(z.string()).optional().default([]),
-  isPublic: z.boolean().default(false),
-  expiryDate: z.string().datetime().optional(),
-  customFields: z.record(z.any()).optional().default({}),
+  title: z.string().min(1, 'Title is required'),
+  type: z.string(),
+  parameters: z.record(z.any()).optional(),
+  sharedWith: z.array(z.string()).optional(),
+  exportFormats: z.array(z.string()).optional(),
 });
 
 export const updateReportSchema = createReportSchema.partial();
@@ -257,10 +245,11 @@ export const reportQuerySchema = paginationSchema.extend({
 
 // Bulk operation schemas
 export const bulkOperationSchema = z.object({
-  operation: z.enum(['update', 'delete', 'archive', 'export']),
-  ids: z.array(z.string().uuid()).min(1, 'At least one ID is required'),
-  data: z.record(z.any()).optional(), // For bulk updates
-  confirm: z.boolean().default(false), // Confirmation for destructive operations
+  action: z.enum(['update', 'delete', 'archive', 'export']),
+  entityType: z.string(),
+  entityIds: z.array(z.string()),
+  data: z.record(z.any()).optional(),
+  confirm: z.boolean().default(false),
 });
 
 // Analytics schemas
@@ -276,11 +265,10 @@ export const analyticsQuerySchema = z.object({
 
 // Export schemas
 export const exportSchema = z.object({
-  entity: z.enum(['risks', 'controls', 'documents', 'questionnaires', 'workflows', 'reports']),
-  format: z.enum(['csv', 'excel', 'pdf', 'json']),
-  filters: z.record(z.any()).optional().default({}),
-  fields: z.array(z.string()).optional(), // Specific fields to export
-  includeRelated: z.boolean().default(false), // Include related entities
+  entityType: z.string(),
+  format: z.enum(['csv', 'xlsx', 'pdf', 'json']),
+  filters: z.record(z.any()).optional(),
+  includeRelated: z.boolean().optional().default(false),
 });
 
 // API Key schemas
@@ -355,4 +343,28 @@ export const healthCheckSchema = z.object({
     message: z.string().optional(),
     responseTime: z.number().optional(),
   })).optional(),
-}); 
+});
+
+// Validation helpers
+export function validatePagination(params: URLSearchParams) {
+  const page = Math.max(1, parseInt(params.get('page') || '1'));
+  const limit = Math.min(100, Math.max(1, parseInt(params.get('limit') || '10')));
+  const skip = (page - 1) * limit;
+  return { page, limit, skip, take: limit };
+}
+
+export function validateSorting(params: URLSearchParams, allowedFields: string[] = []) {
+  const sort = params.get('sort') || 'createdAt';
+  const order = params.get('order') === 'asc' ? 'asc' : 'desc';
+  
+  // Validate sort field if allowed fields are specified
+  if (allowedFields.length > 0 && !allowedFields.includes(sort)) {
+    return { [allowedFields[0]]: order };
+  }
+  
+  return { [sort]: order };
+}
+
+export function validateSearch(params: URLSearchParams) {
+  return params.get('search') || undefined;
+} 

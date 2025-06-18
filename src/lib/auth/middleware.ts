@@ -2,18 +2,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAccessToken } from '@/lib/auth/jwt';
 import { db } from '@/lib/db';
 import { productionGuard, throwIfProduction } from '@/lib/security/production-guard';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './auth-options';
+import { ROLE_PERMISSIONS } from './index';
 
 export interface AuthenticatedRequest extends NextRequest {
-  user?: {
-    id: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    role: string;
-    permissions: string[];
-    organizationId: string;
-    sessionId: string;
-  };
+  user?: AuthenticatedUser;
+}
+
+export interface AuthenticatedUser {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  organizationId: string;
+  permissions: string[];
+  avatar?: string;
+  isActive: boolean;
+  lastLoginAt?: Date;
 }
 
 function extractTokenFromHeader(authHeader: string): string {
@@ -33,271 +40,121 @@ export interface MiddlewareOptions {
 /**
  * Enhanced authentication middleware with production security
  */
-export function withAuth(
-  handler: (req: AuthenticatedRequest) => Promise<NextResponse>,
-  options: MiddlewareOptions = {}
+export async function withAuth(
+  handler: (req: AuthenticatedRequest) => Promise<NextResponse> | NextResponse,
+  options: {
+    requiredPermissions?: string[];
+    allowedRoles?: string[];
+    requireOrganization?: boolean;
+  } = {}
 ) {
   return async (req: NextRequest): Promise<NextResponse> => {
     try {
-      const authHeader = req.headers.get('authorization');
-      
-      if (!authHeader) {
+      // Get session from NextAuth
+      const session = await getServerSession(authOptions);
+
+      if (!session?.user?.email) {
         return NextResponse.json(
-          { error: 'Authorization header missing' },
+          { error: 'Authentication required' },
           { status: 401 }
         );
       }
 
-      const token = extractTokenFromHeader(authHeader);
-      
-      // SECURITY: Block demo authentication in production
-      if (productionGuard.isProduction() && token.startsWith('demo-')) {
-        productionGuard.logSecurityEvent('blocked_demo_auth_attempt', {
-          token: 'demo-***',
-          ip: req.headers.get('x-forwarded-for') || 'unknown',
-          userAgent: req.headers.get('user-agent') || 'unknown'
-        });
-        
-        return NextResponse.json(
-          { error: 'Demo authentication is not available in production' },
-          { status: 403 }
-        );
-      }
-
-      // DEVELOPMENT ONLY: Handle demo mode authentication
-      if (!productionGuard.isProduction() && productionGuard.isDemoMode() && 
-          token.startsWith('demo-')) {
-        
-        throwIfProduction('Demo authentication');
-        
-        const demoUserCookie = req.cookies.get('demo-user')?.value;
-        
-        if (!demoUserCookie) {
-          return NextResponse.json(
-            { error: 'Demo session not found' },
-            { status: 401 }
-          );
-        }
-
-        try {
-          const demoUser = JSON.parse(demoUserCookie);
-          
-          // Validate demo user structure
-          if (!demoUser.id || !demoUser.email || !demoUser.role) {
-            throw new Error('Invalid demo user data');
-          }
-          
-          // Create a mock user object for demo mode
-          (req as AuthenticatedRequest).user = {
-            id: demoUser.id,
-            email: demoUser.email,
-            firstName: 'Demo',
-            lastName: 'User',
-            role: demoUser.role,
-            permissions: demoUser.permissions || ['*'],
-            organizationId: 'demo-org-id',
-            sessionId: 'demo-session-id',
-          };
-
-          // Log demo authentication (development only)
-          console.log('🎭 Demo authentication used:', {
-            userId: demoUser.id,
-            role: demoUser.role
-          });
-
-          // Skip permission checks for demo mode (demo users have full access)
-          return handler(req as AuthenticatedRequest);
-          
-        } catch (parseError) {
-          return NextResponse.json(
-            { error: 'Invalid demo session' },
-            { status: 401 }
-          );
-        }
-      }
-
-      // Production JWT token validation
-      const payload = verifyAccessToken(token);
-
-      // Verify session is still valid (simplified for now)
-      const session = await db.client.session.findFirst({
-        where: { 
-          id: payload.sessionId,
-          userId: payload.userId,
-          expiresAt: { gt: new Date() }
-        }
-      });
-
-      if (!session) {
-        productionGuard.logSecurityEvent('invalid_session', {
-          sessionId: payload.sessionId,
-          userId: payload.userId
-        });
-        
-        return NextResponse.json(
-          { error: 'Session not found or expired' },
-          { status: 401 }
-        );
-      }
-
-      // Check if user is still active
+      // Get user from database with organization
       const user = await db.client.user.findUnique({
-        where: { id: payload.userId },
-        select: {
-          id: true,
-          email: true,
-          firstName: true,
-          lastName: true,
-          role: true,
-          permissions: true,
-          organizationId: true,
-          isActive: true,
-          lastLoginAt: true,
-          failedLoginAttempts: true,
-          lockedUntil: true,
+        where: { email: session.user.email },
+        include: {
+          organization: {
+            select: {
+              id: true,
+              name: true,
+              isActive: true,
+            },
+          },
         },
       });
 
-      if (!user || !user.isActive) {
-        productionGuard.logSecurityEvent('inactive_user_access_attempt', {
-          userId: payload.userId,
-          userExists: !!user,
-          isActive: user?.isActive
-        });
-        
+      if (!user) {
         return NextResponse.json(
-          { error: 'User not found or inactive' },
+          { error: 'User not found' },
           { status: 401 }
         );
       }
 
-      // Check if account is locked due to failed login attempts
-      if (user.lockedUntil && new Date() < user.lockedUntil) {
-        productionGuard.logSecurityEvent('locked_account_access_attempt', {
-          userId: user.id,
-          lockedUntil: user.lockedUntil
-        });
-        
+      if (!user.isActive) {
         return NextResponse.json(
-          { 
-            error: 'Account is temporarily locked due to multiple failed login attempts',
-            lockedUntil: user.lockedUntil 
-          },
-          { status: 423 }
-        );
-      }
-
-      // Enhanced session validation for production
-      if (productionGuard.isProduction()) {
-        // Check for session hijacking indicators
-        const currentIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip');
-        
-        if (session.ipAddress && currentIP && session.ipAddress !== currentIP) {
-          productionGuard.logSecurityEvent('session_ip_mismatch', {
-            userId: user.id,
-            sessionIP: session.ipAddress,
-            currentIP: currentIP
-          });
-          
-          // In production, terminate session on IP mismatch
-          await db.client.session.delete({
-            where: { id: session.id }
-          });
-          
-          return NextResponse.json(
-            { error: 'Session security violation detected' },
-            { status: 401 }
-          );
-        }
-
-        // Check session age and force re-authentication for sensitive operations
-        const sessionAge = Date.now() - new Date(session.createdAt).getTime();
-        const maxSessionAge = 24 * 60 * 60 * 1000; // 24 hours
-        
-        if (sessionAge > maxSessionAge) {
-          productionGuard.logSecurityEvent('session_expired_age', {
-            userId: user.id,
-            sessionAge: sessionAge,
-            maxAge: maxSessionAge
-          });
-          
-          return NextResponse.json(
-            { error: 'Session expired, please re-authentication' },
-            { status: 401 }
-          );
-        }
-      }
-
-      // Attach user to request
-      (req as AuthenticatedRequest).user = {
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        role: user.role,
-        permissions: user.permissions,
-        organizationId: user.organizationId,
-        sessionId: payload.sessionId,
-      };
-
-      // Check permissions and roles
-      const authResult = checkAuthorization(user, options, req);
-      if (!authResult.allowed) {
-        productionGuard.logSecurityEvent('authorization_failed', {
-          userId: user.id,
-          reason: authResult.reason,
-          requiredRoles: options.requiredRoles,
-          requiredPermissions: options.requiredPermissions,
-          userRole: user.role
-        });
-        
-        return NextResponse.json(
-          { error: authResult.reason || 'Access denied' },
+          { error: 'Account is inactive' },
           { status: 403 }
         );
       }
 
-      // Update session activity
-      if (productionGuard.isProduction()) {
-        await db.client.session.update({
-          where: { id: session.id },
-          data: { 
-            lastAccessedAt: new Date(),
-            ipAddress: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip'),
-            userAgent: req.headers.get('user-agent')
-          }
-        });
+      if (options.requireOrganization !== false && !user.organizationId) {
+        return NextResponse.json(
+          { error: 'Organization membership required' },
+          { status: 403 }
+        );
       }
 
-      // Call the actual handler
-      return handler(req as AuthenticatedRequest);
+      if (user.organization && !user.organization.isActive) {
+        return NextResponse.json(
+          { error: 'Organization is inactive' },
+          { status: 403 }
+        );
+      }
 
-    } catch (error) {
-      console.error('Authentication error:', error);
-      
-      productionGuard.logSecurityEvent('authentication_error', {
-        error: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
+             // Check role permissions
+       const userPermissions = [...(ROLE_PERMISSIONS[user.role as keyof typeof ROLE_PERMISSIONS] || [])];
+       
+       if (options.allowedRoles && !options.allowedRoles.includes(user.role)) {
+         return NextResponse.json(
+           { error: 'Insufficient role permissions' },
+           { status: 403 }
+         );
+       }
+
+       if (options.requiredPermissions) {
+         const hasPermission = options.requiredPermissions.every(permission =>
+           userPermissions.includes(permission) || userPermissions.includes('*')
+         );
+
+         if (!hasPermission) {
+           return NextResponse.json(
+             { error: 'Insufficient permissions' },
+             { status: 403 }
+           );
+         }
+       }
+
+       // Create authenticated user object
+       const authenticatedUser: AuthenticatedUser = {
+         id: user.id,
+         email: user.email,
+         firstName: user.firstName,
+         lastName: user.lastName,
+         role: user.role,
+         organizationId: user.organizationId!,
+         permissions: userPermissions,
+         avatar: user.avatar,
+         isActive: user.isActive,
+         lastLoginAt: user.lastLoginAt,
+       };
+
+      // Add user to request
+      const authReq = req as AuthenticatedRequest;
+      authReq.user = authenticatedUser;
+
+      // Update last activity
+      await db.client.user.update({
+        where: { id: user.id },
+        data: { lastLoginAt: new Date() },
       });
-      
-      if (error instanceof Error) {
-        if (error.message === 'Token expired') {
-          return NextResponse.json(
-            { error: 'Token expired', code: 'TOKEN_EXPIRED' },
-            { status: 401 }
-          );
-        }
-        if (error.message === 'Invalid token') {
-          return NextResponse.json(
-            { error: 'Invalid token', code: 'INVALID_TOKEN' },
-            { status: 401 }
-          );
-        }
-      }
 
+      return handler(authReq);
+    } catch (error) {
+      console.error('Authentication middleware error:', error);
       return NextResponse.json(
         { error: 'Authentication failed' },
-        { status: 401 }
+        { status: 500 }
       );
     }
   };
@@ -393,20 +250,16 @@ export function requirePermission(...permissions: string[]) {
   };
 }
 
-export function getAuthenticatedUser(req: AuthenticatedRequest) {
-  if (!req.user) {
-    throw new Error('Request is not authenticated');
-  }
-  return req.user;
+export function getAuthenticatedUser(req: AuthenticatedRequest): AuthenticatedUser | null {
+  return req.user || null;
 }
 
-export function hasPermission(user: { permissions: string[]; role: string }, permission: string): boolean {
-  if (user.role === 'ADMIN') return true;
+export function hasPermission(user: AuthenticatedUser, permission: string): boolean {
   return user.permissions.includes(permission) || user.permissions.includes('*');
 }
 
-export function hasRole(user: { role: string }, ...roles: string[]): boolean {
-  return roles.includes(user.role);
+export function hasRole(user: AuthenticatedUser, role: string): boolean {
+  return user.role === role;
 }
 
 export function belongsToOrganization(user: { organizationId: string }, organizationId: string): boolean {
@@ -485,4 +338,350 @@ export function validateCSRFToken(req: NextRequest): boolean {
 
 export function generateCSRFToken(): string {
   return require('crypto').randomBytes(32).toString('hex');
-} 
+}
+
+
+
+function getDefaultRateLimitKey(req: NextRequest): string {
+  // Try to get IP from various headers
+  const forwarded = req.headers.get('x-forwarded-for');
+  const realIp = req.headers.get('x-real-ip');
+  const ip = forwarded ? forwarded.split(',')[0] : realIp || req.ip || 'unknown';
+  
+  return `${ip}:${req.nextUrl.pathname}`;
+}
+
+// CORS middleware
+export interface CORSConfig {
+  origin?: string | string[] | ((origin: string) => boolean);
+  methods?: string[];
+  allowedHeaders?: string[];
+  credentials?: boolean;
+  maxAge?: number;
+}
+
+export function cors(config: CORSConfig = {}) {
+  return (req: NextRequest): NextResponse | null => {
+    const {
+      origin = '*',
+      methods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowedHeaders = ['Content-Type', 'Authorization'],
+      credentials = false,
+      maxAge = 86400,
+    } = config;
+
+    const requestOrigin = req.headers.get('origin') || '';
+
+    // Handle OPTIONS preflight request
+    if (req.method === 'OPTIONS') {
+      const response = new NextResponse(null, { status: 200 });
+      
+      // Set CORS headers
+      if (typeof origin === 'string') {
+        response.headers.set('Access-Control-Allow-Origin', origin);
+      } else if (Array.isArray(origin)) {
+        if (origin.includes(requestOrigin)) {
+          response.headers.set('Access-Control-Allow-Origin', requestOrigin);
+        }
+      } else if (typeof origin === 'function') {
+        if (origin(requestOrigin)) {
+          response.headers.set('Access-Control-Allow-Origin', requestOrigin);
+        }
+      }
+
+      response.headers.set('Access-Control-Allow-Methods', methods.join(', '));
+      response.headers.set('Access-Control-Allow-Headers', allowedHeaders.join(', '));
+      
+      if (credentials) {
+        response.headers.set('Access-Control-Allow-Credentials', 'true');
+      }
+      
+      response.headers.set('Access-Control-Max-Age', String(maxAge));
+      
+      return response;
+    }
+
+    return null; // Continue to next middleware
+  };
+}
+
+// Security headers middleware
+export function securityHeaders() {
+  return (req: NextRequest): NextResponse | null => {
+    // This will be applied to the response in the main handler
+    return null;
+  };
+}
+
+export function applySecurityHeaders(response: NextResponse): NextResponse {
+  // Security headers
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-XSS-Protection', '1; mode=block');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  
+  // Content Security Policy
+  const csp = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval'", // Adjust as needed
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: https:",
+    "font-src 'self'",
+    "connect-src 'self'",
+    "frame-ancestors 'none'",
+  ].join('; ');
+  
+  response.headers.set('Content-Security-Policy', csp);
+  
+  return response;
+}
+
+// Request logging middleware
+export function requestLogger() {
+  return (req: NextRequest): NextResponse | null => {
+    const start = Date.now();
+    const method = req.method;
+    const url = req.nextUrl.pathname;
+    const userAgent = req.headers.get('user-agent') || 'unknown';
+    const ip = req.headers.get('x-forwarded-for') || req.ip || 'unknown';
+
+    console.log(`[${new Date().toISOString()}] ${method} ${url} - ${ip} - ${userAgent}`);
+
+    // This would ideally be handled in a response interceptor
+    // For now, just log the request
+    return null;
+  };
+}
+
+// Combined middleware composer
+export function composeMiddleware(...middlewares: Array<(req: NextRequest) => Promise<NextResponse | null> | NextResponse | null>) {
+  return async (req: NextRequest): Promise<NextResponse | null> => {
+    for (const middleware of middlewares) {
+      const result = await middleware(req);
+      if (result) {
+        return result; // Middleware returned a response, stop processing
+      }
+    }
+    return null; // All middleware passed, continue to handler
+  };
+}
+
+// Organization isolation middleware
+export function requireOrganization() {
+  return async (req: AuthenticatedRequest): Promise<NextResponse | null> => {
+    const user = getAuthenticatedUser(req);
+    
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
+    if (!user.organizationId) {
+      return NextResponse.json(
+        { error: 'Organization membership required' },
+        { status: 403 }
+      );
+    }
+
+    return null; // Continue
+  };
+}
+
+// Permission checking utilities
+export function hasAnyPermission(user: AuthenticatedUser, permissions: string[]): boolean {
+  return permissions.some(permission => hasPermission(user, permission));
+}
+
+export function hasAllPermissions(user: AuthenticatedUser, permissions: string[]): boolean {
+  return permissions.every(permission => hasPermission(user, permission));
+}
+
+export function requirePermissions(...permissions: string[]) {
+  return async (req: AuthenticatedRequest): Promise<NextResponse | null> => {
+    const user = getAuthenticatedUser(req);
+    
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
+    if (!hasAllPermissions(user, permissions)) {
+      return NextResponse.json(
+        { error: 'Insufficient permissions' },
+        { status: 403 }
+      );
+    }
+
+    return null; // Continue
+  };
+}
+
+// Role checking utilities
+export function hasAnyRole(user: AuthenticatedUser, roles: string[]): boolean {
+  return roles.includes(user.role);
+}
+
+export function requireRoles(...roles: string[]) {
+  return async (req: AuthenticatedRequest): Promise<NextResponse | null> => {
+    const user = getAuthenticatedUser(req);
+    
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
+    if (!hasAnyRole(user, roles)) {
+      return NextResponse.json(
+        { error: 'Insufficient role permissions' },
+        { status: 403 }
+      );
+    }
+
+    return null; // Continue
+  };
+}
+
+// API key authentication (for external integrations)
+export async function withApiKey(
+  handler: (req: NextRequest) => Promise<NextResponse> | NextResponse,
+  options: {
+    requiredScopes?: string[];
+  } = {}
+) {
+  return async (req: NextRequest): Promise<NextResponse> => {
+    try {
+      const apiKey = req.headers.get('x-api-key') || req.headers.get('authorization')?.replace('Bearer ', '');
+
+      if (!apiKey) {
+        return NextResponse.json(
+          { error: 'API key required' },
+          { status: 401 }
+        );
+      }
+
+      // Validate API key
+      const apiKeyRecord = await db.client.aPIKey.findFirst({
+        where: {
+          key: apiKey,
+          isActive: true,
+          expiresAt: {
+            gt: new Date(),
+          },
+        },
+        include: {
+          organization: {
+            select: {
+              id: true,
+              isActive: true,
+            },
+          },
+        },
+      });
+
+      if (!apiKeyRecord || !apiKeyRecord.organization.isActive) {
+        return NextResponse.json(
+          { error: 'Invalid or expired API key' },
+          { status: 401 }
+        );
+      }
+
+      // Check scopes if required
+      if (options.requiredScopes) {
+        const hasRequiredScopes = options.requiredScopes.every(scope =>
+          apiKeyRecord.scopes.includes(scope) || apiKeyRecord.scopes.includes('*')
+        );
+
+        if (!hasRequiredScopes) {
+          return NextResponse.json(
+            { error: 'Insufficient API key scopes' },
+            { status: 403 }
+          );
+        }
+      }
+
+      // Update last used
+      await db.client.aPIKey.update({
+        where: { id: apiKeyRecord.id },
+        data: { lastUsedAt: new Date() },
+      });
+
+      // Add organization context to request
+      const authReq = req as AuthenticatedRequest;
+      authReq.user = {
+        id: 'api-key',
+        email: 'api@system.local',
+        firstName: 'API',
+        lastName: 'Key',
+        role: 'API',
+        organizationId: apiKeyRecord.organizationId,
+        permissions: apiKeyRecord.scopes,
+        isActive: true,
+      };
+
+      return handler(authReq);
+    } catch (error) {
+      console.error('API key authentication error:', error);
+      return NextResponse.json(
+        { error: 'Authentication failed' },
+        { status: 500 }
+      );
+    }
+  };
+}
+
+// Session validation
+export async function validateSession(sessionToken: string): Promise<AuthenticatedUser | null> {
+  try {
+    // This would typically validate a JWT or session token
+    // For now, we'll use NextAuth's session validation
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.email) {
+      return null;
+    }
+
+    const user = await db.client.user.findUnique({
+      where: { email: session.user.email },
+      include: {
+        organization: true,
+      },
+    });
+
+    if (!user || !user.isActive) {
+      return null;
+    }
+
+    const userPermissions = ROLE_PERMISSIONS[user.role as keyof typeof ROLE_PERMISSIONS] || [];
+
+    return {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
+      organizationId: user.organizationId!,
+      permissions: userPermissions,
+      avatar: user.avatar,
+      isActive: user.isActive,
+      lastLoginAt: user.lastLoginAt,
+    };
+  } catch (error) {
+    console.error('Session validation error:', error);
+    return null;
+  }
+}
+
+// Export types
+export type {
+  AuthenticatedRequest,
+  AuthenticatedUser,
+  RateLimitConfig,
+  CORSConfig,
+}; 

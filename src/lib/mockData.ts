@@ -1,368 +1,721 @@
 import { User, Risk, Control, Document, Questionnaire, Workflow, RiskCategory } from '@/types';
 import { calculateRiskScore } from './utils';
+import { toast } from 'sonner';
 
-// Generate realistic sample users
-export const generateMockUsers = (): User[] => [
-  {
-    id: '1',
-    email: 'admin@company.com',
-    firstName: 'Sarah',
-    lastName: 'Johnson',
-    role: 'admin',
-    organizationId: 'org-1',
-    permissions: ['*'], // All permissions
-    createdAt: '2024-01-15T10:00:00Z',
-    lastLogin: '2024-05-27T09:30:00Z'
-  },
-  {
-    id: '2',
-    email: 'risk.manager@company.com',
-    firstName: 'Michael',
-    lastName: 'Chen',
-    role: 'risk_manager',
-    organizationId: 'org-1',
-    permissions: ['read_risks', 'write_risks', 'read_controls', 'write_controls', 'read_reports'],
-    createdAt: '2024-02-01T14:20:00Z',
-    lastLogin: '2024-05-27T08:15:00Z'
-  },
-  {
-    id: '3',
-    email: 'auditor@company.com',
-    firstName: 'Emily',
-    lastName: 'Rodriguez',
-    role: 'auditor',
-    organizationId: 'org-1',
-    permissions: ['read_risks', 'read_controls', 'read_reports', 'read_workflows'],
-    createdAt: '2024-02-15T11:45:00Z',
-    lastLogin: '2024-05-26T16:30:00Z'
-  },
-  {
-    id: '4',
-    email: 'user@company.com',
-    firstName: 'David',
-    lastName: 'Thompson',
-    role: 'user',
-    organizationId: 'org-1',
-    permissions: ['read_risks', 'read_controls'],
-    createdAt: '2024-03-01T09:10:00Z',
-    lastLogin: '2024-05-25T13:45:00Z'
-  }
-];
+// API base configuration
+const API_BASE = '/api';
 
-// Generate realistic sample risks
-export const generateMockRisks = (): Risk[] => {
-  const riskTemplates = [
-    {
-      title: 'Cybersecurity Data Breach',
-      description: 'Risk of unauthorized access to customer data through system vulnerabilities, phishing attacks, or insider threats. Could result in significant financial losses, regulatory penalties, and reputational damage.',
-      category: 'technology' as RiskCategory,
-      likelihood: 3,
-      impact: 5,
-      owner: 'IT Security Team'
+// Generic API request function with error handling
+async function apiRequest<T>(
+  endpoint: string,
+  options: RequestInit = {}
+): Promise<T> {
+  const url = `${API_BASE}${endpoint}`;
+  
+  const defaultOptions: RequestInit = {
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
     },
-    {
-      title: 'Regulatory Compliance Violation',
-      description: 'Risk of non-compliance with industry regulations such as GDPR, SOX, or sector-specific requirements. Could lead to fines, legal action, and operational restrictions.',
-      category: 'compliance' as RiskCategory,
-      likelihood: 2,
-      impact: 4,
-      owner: 'Compliance Officer'
-    },
-    {
-      title: 'Supply Chain Disruption',
-      description: 'Risk of critical supplier failure or disruption due to natural disasters, geopolitical events, or financial instability. Could impact production and service delivery.',
-      category: 'operational' as RiskCategory,
-      likelihood: 3,
-      impact: 4,
-      owner: 'Supply Chain Manager'
-    },
-    {
-      title: 'Market Volatility Impact',
-      description: 'Risk of significant market fluctuations affecting investment portfolios, currency exchange rates, and overall financial performance.',
-      category: 'financial' as RiskCategory,
-      likelihood: 4,
-      impact: 3,
-      owner: 'CFO'
-    },
-    {
-      title: 'Key Personnel Departure',
-      description: 'Risk of losing critical employees with specialized knowledge or skills, potentially disrupting operations and strategic initiatives.',
-      category: 'operational' as RiskCategory,
-      likelihood: 3,
-      impact: 3,
-      owner: 'HR Director'
-    },
-    {
-      title: 'Technology Infrastructure Failure',
-      description: 'Risk of critical system failures, including servers, networks, or cloud services, that could halt business operations.',
-      category: 'technology' as RiskCategory,
-      likelihood: 2,
-      impact: 5,
-      owner: 'IT Operations Manager'
-    },
-    {
-      title: 'Competitive Market Pressure',
-      description: 'Risk of losing market share to competitors due to new technologies, pricing strategies, or superior products/services.',
-      category: 'strategic' as RiskCategory,
-      likelihood: 4,
-      impact: 3,
-      owner: 'Strategy Director'
-    },
-    {
-      title: 'Credit Risk Exposure',
-      description: 'Risk of customer defaults or counterparty failures leading to financial losses and cash flow problems.',
-      category: 'financial' as RiskCategory,
-      likelihood: 3,
-      impact: 4,
-      owner: 'Credit Risk Manager'
-    },
-    {
-      title: 'Environmental Compliance Risk',
-      description: 'Risk of environmental violations or accidents that could result in cleanup costs, fines, and reputational damage.',
-      category: 'compliance' as RiskCategory,
-      likelihood: 2,
-      impact: 4,
-      owner: 'Environmental Manager'
-    },
-    {
-      title: 'Product Quality Defects',
-      description: 'Risk of manufacturing defects or quality issues that could lead to recalls, customer dissatisfaction, and legal liability.',
-      category: 'operational' as RiskCategory,
-      likelihood: 2,
-      impact: 4,
-      owner: 'Quality Assurance Manager'
+    ...options,
+  };
+
+  try {
+    const response = await fetch(url, defaultOptions);
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+      throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
     }
-  ];
 
-  const statuses: Risk['status'][] = ['identified', 'assessed', 'mitigated', 'closed'];
+    const data = await response.json();
+    return data.data || data;
+  } catch (error) {
+    console.error(`API request failed for ${endpoint}:`, error);
+    toast.error(`Failed to ${options.method || 'fetch'} data: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw error;
+  }
+}
 
-  return riskTemplates.map((template, index) => ({
-    id: `risk-${index + 1}`,
-    ...template,
-    riskScore: calculateRiskScore(template.likelihood, template.impact),
-    status: statuses[index % statuses.length],
-    controls: [`ctrl-${index + 1}`, `ctrl-${index + 2}`],
-    evidence: [],
-    createdAt: new Date(2024, 4, index + 1, 10, 0, 0).toISOString(),
-    updatedAt: new Date(2024, 4, index + 15, 14, 30, 0).toISOString(),
-    aiConfidence: 0.75 + Math.random() * 0.2 // Random confidence between 0.75-0.95
-  }));
+// ============================================================================
+// RISK API INTEGRATION
+// ============================================================================
+
+export interface Risk {
+  id: string;
+  title: string;
+  description: string;
+  category: 'OPERATIONAL' | 'FINANCIAL' | 'STRATEGIC' | 'COMPLIANCE' | 'TECHNOLOGY';
+  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  status: 'IDENTIFIED' | 'ASSESSED' | 'MITIGATED' | 'CLOSED';
+  likelihood: number;
+  impact: number;
+  riskScore: number;
+  owner?: string;
+  dateIdentified?: string;
+  lastAssessed?: string;
+  nextReview?: string;
+  createdAt: string;
+  updatedAt: string;
+  organizationId: string;
+  createdBy?: string;
+  assignedUser?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+  controls?: Control[];
+  _count?: {
+    controls: number;
+    evidence: number;
+    comments: number;
+    tasks: number;
+  };
+}
+
+export interface Control {
+  id: string;
+  title: string;
+  description: string;
+  category: 'PREVENTIVE' | 'DETECTIVE' | 'CORRECTIVE' | 'COMPENSATING';
+  type: 'MANUAL' | 'AUTOMATED' | 'HYBRID';
+  status: 'PLANNED' | 'IMPLEMENTED' | 'OPERATIONAL' | 'NEEDS_IMPROVEMENT' | 'INEFFECTIVE';
+  effectiveness?: number;
+  implementationDate?: string;
+  lastTestedDate?: string;
+  nextTestDate?: string;
+  frequency: 'CONTINUOUS' | 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'QUARTERLY' | 'ANNUALLY' | 'AD_HOC';
+  createdAt: string;
+  updatedAt: string;
+  organizationId: string;
+  assignedUser?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+}
+
+export interface RiskQueryParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  category?: string;
+  status?: string;
+  riskLevel?: string;
+  owner?: string;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
+
+export interface ApiResponse<T> {
+  data: T;
+  pagination?: {
+    total: number;
+    page: number;
+    limit: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+    totalPages: number;
+  };
+  summary?: Record<string, any>;
+  message?: string;
+}
+
+// Risk API functions
+export const riskAPI = {
+  // Get all risks with filtering and pagination
+  async getRisks(params: RiskQueryParams = {}): Promise<ApiResponse<Risk[]>> {
+    const searchParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== '') {
+        searchParams.append(key, String(value));
+      }
+    });
+    
+    return apiRequest<ApiResponse<Risk[]>>(`/risks?${searchParams}`);
+  },
+
+  // Get single risk by ID
+  async getRisk(id: string): Promise<Risk> {
+    return apiRequest<Risk>(`/risks/${id}`);
+  },
+
+  // Create new risk
+  async createRisk(risk: Partial<Risk>): Promise<Risk> {
+    return apiRequest<Risk>('/risks', {
+      method: 'POST',
+      body: JSON.stringify(risk),
+    });
+  },
+
+  // Update risk
+  async updateRisk(id: string, updates: Partial<Risk>): Promise<Risk> {
+    return apiRequest<Risk>(`/risks/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
+
+  // Delete risk
+  async deleteRisk(id: string): Promise<{ id: string }> {
+    return apiRequest<{ id: string }>(`/risks/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
+  // Bulk operations
+  async bulkUpdateRisks(operations: {
+    create?: Partial<Risk>[];
+    update?: Array<{ id: string } & Partial<Risk>>;
+    delete?: string[];
+  }): Promise<{ created: number; updated: number; deleted: number; errors: string[] }> {
+    return apiRequest('/risks/bulk', {
+      method: 'PUT',
+      body: JSON.stringify(operations),
+    });
+  },
 };
 
-// Generate realistic sample controls
-export const generateMockControls = (): Control[] => {
-  const controlTemplates = [
+// ============================================================================
+// CONTROL API INTEGRATION
+// ============================================================================
+
+export const controlAPI = {
+  // Get all controls with filtering and pagination
+  async getControls(params: RiskQueryParams = {}): Promise<ApiResponse<Control[]>> {
+    const searchParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== '') {
+        searchParams.append(key, String(value));
+      }
+    });
+    
+    return apiRequest<ApiResponse<Control[]>>(`/controls?${searchParams}`);
+  },
+
+  // Get single control by ID
+  async getControl(id: string): Promise<Control> {
+    return apiRequest<Control>(`/controls/${id}`);
+  },
+
+  // Create new control
+  async createControl(control: Partial<Control>): Promise<Control> {
+    return apiRequest<Control>('/controls', {
+      method: 'POST',
+      body: JSON.stringify(control),
+    });
+  },
+
+  // Update control
+  async updateControl(id: string, updates: Partial<Control>): Promise<Control> {
+    return apiRequest<Control>(`/controls/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
+
+  // Delete control
+  async deleteControl(id: string): Promise<{ id: string }> {
+    return apiRequest<{ id: string }>(`/controls/${id}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
+// ============================================================================
+// DOCUMENT API INTEGRATION
+// ============================================================================
+
+export interface Document {
+  id: string;
+  title: string;
+  description?: string;
+  category: 'POLICY' | 'PROCEDURE' | 'GUIDELINE' | 'FRAMEWORK' | 'STANDARD' | 'TEMPLATE' | 'REPORT' | 'EVIDENCE' | 'CONTRACT' | 'OTHER';
+  type: string;
+  size: number;
+  mimeType: string;
+  path: string;
+  uploadedAt: string;
+  uploadedBy: string;
+  organizationId: string;
+  tags: string[];
+  confidentiality: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED';
+  version: string;
+  linkedRisks: string[];
+  linkedControls: string[];
+}
+
+export const documentAPI = {
+  // Get all documents
+  async getDocuments(params: RiskQueryParams = {}): Promise<ApiResponse<Document[]>> {
+    const searchParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== '') {
+        searchParams.append(key, String(value));
+      }
+    });
+    
+    return apiRequest<ApiResponse<Document[]>>(`/documents?${searchParams}`);
+  },
+
+  // Upload document
+  async uploadDocument(file: File, metadata: Partial<Document>): Promise<Document> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('metadata', JSON.stringify(metadata));
+
+    return apiRequest<Document>('/upload/documents', {
+      method: 'POST',
+      body: formData,
+      headers: {}, // Let browser set Content-Type for FormData
+    });
+  },
+
+  // Delete document
+  async deleteDocument(id: string): Promise<{ id: string }> {
+    return apiRequest<{ id: string }>(`/documents/${id}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
+// ============================================================================
+// ASSESSMENT API INTEGRATION
+// ============================================================================
+
+export interface Assessment {
+  id: string;
+  name: string;
+  description?: string;
+  type: 'ASSESSMENT';
+  status: 'DRAFT' | 'ACTIVE' | 'COMPLETED' | 'ARCHIVED';
+  priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  assignedTo: string[];
+  createdAt: string;
+  updatedAt: string;
+  completedAt?: string;
+  organizationId: string;
+  createdBy?: string;
+  steps: any[];
+  relatedEntities?: {
+    assessmentType: string;
+    framework?: string;
+    scope?: string;
+    objectives?: string[];
+    methodology?: string;
+  };
+}
+
+export const assessmentAPI = {
+  // Get all assessments
+  async getAssessments(params: RiskQueryParams = {}): Promise<ApiResponse<Assessment[]>> {
+    const searchParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== '') {
+        searchParams.append(key, String(value));
+      }
+    });
+    
+    return apiRequest<ApiResponse<Assessment[]>>(`/assessments?${searchParams}`);
+  },
+
+  // Create new assessment
+  async createAssessment(assessment: Partial<Assessment>): Promise<Assessment> {
+    return apiRequest<Assessment>('/assessments', {
+      method: 'POST',
+      body: JSON.stringify(assessment),
+    });
+  },
+
+  // Update assessment
+  async updateAssessment(id: string, updates: Partial<Assessment>): Promise<Assessment> {
+    return apiRequest<Assessment>(`/assessments/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
+};
+
+// ============================================================================
+// QUESTIONNAIRE API INTEGRATION
+// ============================================================================
+
+export interface Questionnaire {
+  id: string;
+  title: string;
+  description?: string;
+  type: 'RISK_ASSESSMENT' | 'CONTROL_EVALUATION' | 'COMPLIANCE_CHECK' | 'VENDOR_ASSESSMENT' | 'SELF_ASSESSMENT' | 'CUSTOM';
+  status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
+  isActive: boolean;
+  questions: any[];
+  createdAt: string;
+  updatedAt: string;
+  organizationId: string;
+  _count?: {
+    responses: number;
+  };
+}
+
+export const questionnaireAPI = {
+  // Get all questionnaires
+  async getQuestionnaires(params: RiskQueryParams = {}): Promise<ApiResponse<Questionnaire[]>> {
+    const searchParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== '') {
+        searchParams.append(key, String(value));
+      }
+    });
+    
+    return apiRequest<ApiResponse<Questionnaire[]>>(`/questionnaires?${searchParams}`);
+  },
+
+  // Create new questionnaire
+  async createQuestionnaire(questionnaire: Partial<Questionnaire>): Promise<Questionnaire> {
+    return apiRequest<Questionnaire>('/questionnaires', {
+      method: 'POST',
+      body: JSON.stringify(questionnaire),
+    });
+  },
+
+  // Submit questionnaire response
+  async submitResponse(questionnaireId: string, responses: any[]): Promise<any> {
+    return apiRequest('/questionnaires/responses', {
+      method: 'POST',
+      body: JSON.stringify({
+        questionnaireId,
+        responses,
+      }),
+    });
+  },
+};
+
+// ============================================================================
+// REPORT API INTEGRATION
+// ============================================================================
+
+export interface Report {
+  id: string;
+  title: string;
+  description?: string;
+  type: 'RISK_ASSESSMENT' | 'CONTROL_EFFECTIVENESS' | 'COMPLIANCE' | 'AUDIT' | 'EXECUTIVE_DASHBOARD' | 'CUSTOM';
+  status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
+  parameters?: any;
+  data?: any;
+  createdAt: string;
+  updatedAt: string;
+  organizationId: string;
+}
+
+export const reportAPI = {
+  // Get all reports
+  async getReports(params: RiskQueryParams = {}): Promise<ApiResponse<Report[]>> {
+    const searchParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== '') {
+        searchParams.append(key, String(value));
+      }
+    });
+    
+    return apiRequest<ApiResponse<Report[]>>(`/reports?${searchParams}`);
+  },
+
+  // Generate report
+  async generateReport(type: string, parameters: any, format = 'PDF'): Promise<any> {
+    return apiRequest('/reports/generate', {
+      method: 'POST',
+      body: JSON.stringify({
+        type,
+        parameters,
+        format,
+      }),
+    });
+  },
+
+  // Create new report
+  async createReport(report: Partial<Report>): Promise<Report> {
+    return apiRequest<Report>('/reports', {
+      method: 'POST',
+      body: JSON.stringify(report),
+    });
+  },
+};
+
+// ============================================================================
+// NOTIFICATION API INTEGRATION
+// ============================================================================
+
+export interface Notification {
+  id: string;
+  type: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR' | 'REMINDER';
+  title: string;
+  message: string;
+  read: boolean;
+  priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
+  entityType?: string;
+  entityId?: string;
+  actionUrl?: string;
+  createdAt: string;
+  userId: string;
+  organizationId: string;
+}
+
+export const notificationAPI = {
+  // Get user notifications
+  async getNotifications(params: { page?: number; limit?: number; unreadOnly?: boolean } = {}): Promise<ApiResponse<Notification[]>> {
+    const searchParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== '') {
+        searchParams.append(key, String(value));
+      }
+    });
+    
+    return apiRequest<ApiResponse<Notification[]>>(`/notifications?${searchParams}`);
+  },
+
+  // Mark notification as read
+  async markAsRead(id: string): Promise<Notification> {
+    return apiRequest<Notification>(`/notifications/${id}/read`, {
+      method: 'POST',
+    });
+  },
+
+  // Mark all notifications as read
+  async markAllAsRead(): Promise<{ updated: number }> {
+    return apiRequest('/notifications/read-all', {
+      method: 'POST',
+    });
+  },
+
+  // Delete notification
+  async deleteNotification(id: string): Promise<{ id: string }> {
+    return apiRequest<{ id: string }>(`/notifications/${id}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
+// ============================================================================
+// USER API INTEGRATION
+// ============================================================================
+
+export interface User {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  avatar?: string;
+  isActive: boolean;
+  organizationId: string;
+  permissions: string[];
+  lastLoginAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const userAPI = {
+  // Get current user
+  async getCurrentUser(): Promise<{ user: User; organization: any }> {
+    return apiRequest<{ user: User; organization: any }>('/users/me');
+  },
+
+  // Update user profile
+  async updateProfile(updates: Partial<User>): Promise<User> {
+    return apiRequest<User>('/users/me', {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
+
+  // Change password
+  async changePassword(currentPassword: string, newPassword: string): Promise<{ success: boolean }> {
+    return apiRequest('/users/me/password', {
+      method: 'POST',
+      body: JSON.stringify({
+        currentPassword,
+        newPassword,
+      }),
+    });
+  },
+};
+
+// ============================================================================
+// ANALYTICS API INTEGRATION
+// ============================================================================
+
+export const analyticsAPI = {
+  // Get dashboard metrics
+  async getDashboardMetrics(dateRange?: { start: string; end: string }): Promise<any> {
+    const params = dateRange ? `?start=${dateRange.start}&end=${dateRange.end}` : '';
+    return apiRequest(`/analytics/dashboard${params}`);
+  },
+
+  // Get risk trends
+  async getRiskTrends(period: string = '30d'): Promise<any> {
+    return apiRequest(`/analytics/risks/trends?period=${period}`);
+  },
+
+  // Get control effectiveness metrics
+  async getControlEffectiveness(): Promise<any> {
+    return apiRequest('/analytics/controls/effectiveness');
+  },
+};
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+// Format date for API
+export function formatDateForAPI(date: Date | string): string {
+  if (typeof date === 'string') return date;
+  return date.toISOString();
+}
+
+// Handle API errors consistently
+export function handleAPIError(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return 'An unexpected error occurred';
+}
+
+// Cache management for better performance
+const cache = new Map<string, { data: any; timestamp: number; ttl: number }>();
+
+export function getCachedData<T>(key: string): T | null {
+  const cached = cache.get(key);
+  if (cached && Date.now() - cached.timestamp < cached.ttl) {
+    return cached.data;
+  }
+  cache.delete(key);
+  return null;
+}
+
+export function setCachedData<T>(key: string, data: T, ttl: number = 5 * 60 * 1000): void {
+  cache.set(key, {
+    data,
+    timestamp: Date.now(),
+    ttl,
+  });
+}
+
+// Export all APIs as a single object for convenience
+export const api = {
+  risks: riskAPI,
+  controls: controlAPI,
+  documents: documentAPI,
+  assessments: assessmentAPI,
+  questionnaires: questionnaireAPI,
+  reports: reportAPI,
+  notifications: notificationAPI,
+  users: userAPI,
+  analytics: analyticsAPI,
+};
+
+// ============================================================================
+// LEGACY MOCK DATA GENERATORS (for backward compatibility)
+// ============================================================================
+
+export function generateMockRisks(): any[] {
+  return [
     {
-      title: 'Multi-Factor Authentication',
-      description: 'Implementation of MFA for all user accounts accessing critical systems to prevent unauthorized access.',
-      type: 'preventive' as const,
-      effectiveness: 'high' as const,
-      owner: 'IT Security Team',
-      frequency: 'Continuous'
+      id: '1',
+      title: 'Data Breach Risk',
+      description: 'Risk of unauthorized access to sensitive customer data',
+      category: 'TECHNOLOGY',
+      riskLevel: 'HIGH',
+      probability: 3,
+      impact: 5,
+      riskScore: 15,
+      status: 'IDENTIFIED',
+      owner: 'Security Team',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      organizationId: 'demo-org',
     },
     {
-      title: 'Regular Security Audits',
-      description: 'Quarterly security assessments and penetration testing to identify vulnerabilities.',
-      type: 'detective' as const,
-      effectiveness: 'high' as const,
-      owner: 'Internal Audit',
-      frequency: 'Quarterly'
+      id: '2',
+      title: 'Regulatory Compliance Risk',
+      description: 'Risk of non-compliance with GDPR regulations',
+      category: 'COMPLIANCE',
+      riskLevel: 'MEDIUM',
+      probability: 2,
+      impact: 4,
+      riskScore: 8,
+      status: 'ASSESSED',
+      owner: 'Compliance Team',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      organizationId: 'demo-org',
     },
     {
-      title: 'Incident Response Plan',
-      description: 'Documented procedures for responding to security incidents and data breaches.',
-      type: 'corrective' as const,
-      effectiveness: 'medium' as const,
-      owner: 'IT Security Team',
-      frequency: 'As needed'
-    },
-    {
-      title: 'Compliance Monitoring System',
-      description: 'Automated system to monitor and report on regulatory compliance requirements.',
-      type: 'detective' as const,
-      effectiveness: 'high' as const,
-      owner: 'Compliance Officer',
-      frequency: 'Continuous'
-    },
-    {
-      title: 'Supplier Due Diligence',
-      description: 'Comprehensive evaluation process for new suppliers including financial stability and risk assessment.',
-      type: 'preventive' as const,
-      effectiveness: 'medium' as const,
-      owner: 'Procurement Team',
-      frequency: 'Annual'
-    },
-    {
-      title: 'Backup and Recovery Procedures',
-      description: 'Regular data backups and tested recovery procedures to ensure business continuity.',
-      type: 'corrective' as const,
-      effectiveness: 'high' as const,
-      owner: 'IT Operations',
-      frequency: 'Daily'
-    },
-    {
-      title: 'Employee Training Program',
-      description: 'Regular training on security awareness, compliance requirements, and operational procedures.',
-      type: 'preventive' as const,
-      effectiveness: 'medium' as const,
-      owner: 'HR Department',
-      frequency: 'Annual'
-    },
-    {
-      title: 'Financial Controls Review',
-      description: 'Monthly review of financial transactions and controls to detect anomalies.',
-      type: 'detective' as const,
-      effectiveness: 'high' as const,
+      id: '3',
+      title: 'Market Volatility Risk',
+      description: 'Risk from fluctuating market conditions affecting revenue',
+      category: 'FINANCIAL',
+      riskLevel: 'MEDIUM',
+      probability: 4,
+      impact: 3,
+      riskScore: 12,
+      status: 'MITIGATED',
       owner: 'Finance Team',
-      frequency: 'Monthly'
-    }
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      organizationId: 'demo-org',
+    },
   ];
+}
 
-  const statuses: Control['status'][] = ['active', 'inactive', 'planned'];
-
-  return controlTemplates.map((template, index) => ({
-    id: `ctrl-${index + 1}`,
-    ...template,
-    status: statuses[index % statuses.length],
-    linkedRisks: [`risk-${index + 1}`],
-    evidence: [],
-    createdAt: new Date(2024, 3, index + 1, 9, 0, 0).toISOString(),
-    updatedAt: new Date(2024, 4, index + 10, 11, 15, 0).toISOString()
-  }));
-};
-
-// Generate sample documents
-export const generateMockDocuments = (): Document[] => [
-  {
-    id: 'doc-1',
-    name: 'Risk Management Policy.pdf',
-    type: 'application/pdf',
-    size: 2048576,
-    content: 'base64encodedcontent1',
-    extractedText: 'Risk management policy document content...',
-    aiAnalysis: {
-      risks: ['Operational risk', 'Compliance risk'],
-      controls: ['Risk assessment procedures', 'Monitoring controls'],
-      confidence: 0.87
+export function generateMockControls(): any[] {
+  return [
+    {
+      id: '1',
+      title: 'Multi-Factor Authentication',
+      description: 'MFA system for all user accounts',
+      category: 'PREVENTIVE',
+      type: 'AUTOMATED',
+      status: 'OPERATIONAL',
+      effectiveness: 85,
+      implementationDate: new Date().toISOString(),
+      lastTestedDate: new Date().toISOString(),
+      frequency: 'CONTINUOUS',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      organizationId: 'demo-org',
     },
-    uploadedBy: 'risk.manager@company.com',
-    uploadedAt: '2024-05-01T10:30:00Z'
-  },
-  {
-    id: 'doc-2',
-    name: 'Security Procedures.docx',
-    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    size: 1536000,
-    content: 'base64encodedcontent2',
-    extractedText: 'Security procedures and guidelines...',
-    aiAnalysis: {
-      risks: ['Cybersecurity threats', 'Data breach'],
-      controls: ['Access controls', 'Encryption'],
-      confidence: 0.92
+    {
+      id: '2',
+      title: 'Data Encryption',
+      description: 'End-to-end encryption for all data transmission',
+      category: 'PREVENTIVE',
+      type: 'AUTOMATED',
+      status: 'OPERATIONAL',
+      effectiveness: 95,
+      implementationDate: new Date().toISOString(),
+      lastTestedDate: new Date().toISOString(),
+      frequency: 'CONTINUOUS',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      organizationId: 'demo-org',
     },
-    uploadedBy: 'admin@company.com',
-    uploadedAt: '2024-05-05T14:20:00Z'
-  },
-  {
-    id: 'doc-3',
-    name: 'Compliance Checklist.xlsx',
-    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    size: 512000,
-    content: 'base64encodedcontent3',
-    extractedText: 'Compliance requirements checklist...',
-    aiAnalysis: {
-      risks: ['Regulatory violations', 'Legal penalties'],
-      controls: ['Compliance monitoring', 'Regular audits'],
-      confidence: 0.79
+    {
+      id: '3',
+      title: 'Regular Security Audits',
+      description: 'Quarterly security assessments and penetration testing',
+      category: 'DETECTIVE',
+      type: 'MANUAL',
+      status: 'OPERATIONAL',
+      effectiveness: 78,
+      implementationDate: new Date().toISOString(),
+      lastTestedDate: new Date().toISOString(),
+      frequency: 'QUARTERLY',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      organizationId: 'demo-org',
     },
-    uploadedBy: 'auditor@company.com',
-    uploadedAt: '2024-05-10T09:45:00Z'
-  }
-];
+  ];
+}
 
-// Generate sample questionnaires
-export const generateMockQuestionnaires = (): Questionnaire[] => [
-  {
-    id: 'quest-1',
-    title: 'Annual Risk Assessment Survey',
-    description: 'Comprehensive risk assessment questionnaire for all departments',
-    questions: [
-      {
-        id: 'q1',
-        text: 'What are the top 3 risks facing your department?',
-        type: 'text',
-        required: true,
-        aiGenerated: false,
-        order: 1
-      },
-      {
-        id: 'q2',
-        text: 'How would you rate the current risk management maturity?',
-        type: 'rating',
-        required: true,
-        aiGenerated: true,
-        order: 2
-      },
-      {
-        id: 'q3',
-        text: 'Are you aware of the incident reporting procedures?',
-        type: 'yes_no',
-        required: true,
-        aiGenerated: false,
-        order: 3
-      }
-    ],
-    targetRoles: ['risk_manager', 'user'],
-    status: 'active',
-    responses: [],
-    createdAt: '2024-04-01T10:00:00Z',
-    dueDate: '2024-06-30T23:59:59Z',
-    createdBy: 'admin@company.com'
-  }
-];
-
-// Generate sample workflows
-export const generateMockWorkflows = (): Workflow[] => [
-  {
-    id: 'wf-1',
-    name: 'Risk Assessment Approval',
-    description: 'Workflow for approving new risk assessments',
-    type: 'approval',
-    steps: [
-      {
-        id: 'step-1',
-        name: 'Initial Review',
-        type: 'review',
-        assignee: 'risk.manager@company.com',
-        status: 'completed',
-        dueDate: '2024-05-15T17:00:00Z',
-        completedAt: '2024-05-14T16:30:00Z',
-        order: 1
-      },
-      {
-        id: 'step-2',
-        name: 'Management Approval',
-        type: 'approval',
-        assignee: 'admin@company.com',
-        status: 'pending',
-        dueDate: '2024-05-20T17:00:00Z',
-        order: 2
-      }
-    ],
-    status: 'active',
-    assignedTo: ['risk.manager@company.com', 'admin@company.com'],
-    createdAt: '2024-05-10T09:00:00Z',
-    createdBy: 'admin@company.com',
-    priority: 'medium'
-  }
-];
-
-// Utility function to generate all mock data
-export const generateAllMockData = () => ({
-  users: generateMockUsers(),
-  risks: generateMockRisks(),
-  controls: generateMockControls(),
-  documents: generateMockDocuments(),
-  questionnaires: generateMockQuestionnaires(),
-  workflows: generateMockWorkflows()
-}); 
+export default api; 

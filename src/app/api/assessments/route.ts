@@ -1,442 +1,563 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { riskAnalysisAIService } from '@/services/RiskAnalysisAIService';
-import { controlEffectivenessService } from '@/services/ControlEffectivenessService';
-import { cosoFrameworkService } from '@/lib/compliance/coso-framework';
-import { iso31000FrameworkService } from '@/lib/compliance/iso31000-framework';
-import { nistFrameworkService } from '@/lib/compliance/nist-framework';
+import { withAPI, createAPIResponse, ForbiddenError, ValidationError } from '@/lib/api/middleware';
+import { getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/middleware';
+import { db } from '@/lib/db';
+import { z } from 'zod';
+import { Prisma } from '@prisma/client';
 
-export interface CreateAssessmentRequest {
-  name: string;
-  description: string;
-  assessmentType: 'self' | 'third-party' | 'regulatory';
-  framework: 'coso' | 'iso31000' | 'nist';
-  scope: string;
-  dueDate: string;
-  stakeholders: string[];
-  riskCategories: string[];
-  complianceFrameworks: string[];
-  documents?: {
-    name: string;
-    type: string;
-    content: string;
-  }[];
-}
+// Assessment validation schemas - Using Workflow model as base for assessments
+const assessmentCreateSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  description: z.string().optional(),
+  assessmentType: z.enum(['RISK_ASSESSMENT', 'CONTROL_ASSESSMENT', 'COMPLIANCE_ASSESSMENT', 'VENDOR_ASSESSMENT', 'SELF_ASSESSMENT']),
+  category: z.string().optional(),
+  framework: z.string().optional(),
+  scope: z.string().optional(),
+  objectives: z.array(z.string()).default([]),
+  methodology: z.string().optional(),
+  assigneeId: z.string().uuid().optional(),
+  approverId: z.string().uuid().optional(),
+  dueDate: z.string().datetime().optional(),
+  priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']).default('MEDIUM'),
+  tags: z.array(z.string()).default([]),
+  riskIds: z.array(z.string().uuid()).optional(),
+  controlIds: z.array(z.string().uuid()).optional(),
+  questionnaireIds: z.array(z.string().uuid()).optional(),
+});
 
-export interface AssessmentResponse {
-  id: string;
-  name: string;
-  description: string;
-  assessmentType: string;
-  framework: string;
-  scope: string;
-  status: string;
-  progress: number;
-  dueDate: string;
-  createdAt: string;
-  updatedAt: string;
-  organizationId: string;
-  createdBy: string;
-  results?: {
-    riskAssessment?: any;
-    controlEffectiveness?: any;
-    complianceGaps?: any;
-    recommendations?: any[];
-  };
-  documents?: any[];
-  auditTrail?: any[];
-}
+const assessmentUpdateSchema = assessmentCreateSchema.partial();
 
-// GET /api/assessments - List assessments
-export async function GET(request: NextRequest) {
+const assessmentQuerySchema = z.object({
+  page: z.coerce.number().min(1).default(1),
+  limit: z.coerce.number().min(1).max(100).default(20),
+  search: z.string().optional(),
+  type: z.string().optional(),
+  status: z.string().optional(),
+  priority: z.string().optional(),
+  framework: z.string().optional(),
+  assigneeId: z.string().uuid().optional(),
+  approverId: z.string().uuid().optional(),
+  tags: z.array(z.string()).optional(),
+  dueDateFrom: z.string().datetime().optional(),
+  dueDateTo: z.string().datetime().optional(),
+  createdAfter: z.string().datetime().optional(),
+  createdBefore: z.string().datetime().optional(),
+  sortBy: z.string().optional(),
+  sortOrder: z.enum(['asc', 'desc']).default('desc'),
+}).transform((data) => ({
+  ...data,
+  skip: (data.page - 1) * data.limit,
+}));
+
+const assessmentBulkSchema = z.object({
+  create: z.array(assessmentCreateSchema).optional(),
+  update: z.array(z.object({
+    id: z.string().uuid(),
+  }).merge(assessmentUpdateSchema)).optional(),
+  delete: z.array(z.string().uuid()).optional(),
+});
+
+// GET /api/assessments - List assessments using Workflow model
+export const GET = withAPI(async (req: NextRequest) => {
+  const authReq = req as AuthenticatedRequest;
+  const user = getAuthenticatedUser(authReq);
+
+  if (!user) {
+    throw new ForbiddenError('Authentication required');
+  }
+
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { searchParams } = new URL(req.url);
+    const queryParams = Object.fromEntries(searchParams.entries());
+    const validatedQuery = assessmentQuerySchema.parse(queryParams);
 
-    const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '10');
-    const status = searchParams.get('status');
-    const framework = searchParams.get('framework');
-    const search = searchParams.get('search');
-
-    // Get user's organization
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { organizationId: true }
-    });
-
-    if (!user?.organizationId) {
-      return NextResponse.json({ error: 'Organization not found' }, { status: 404 });
-    }
-
-    // Build where clause
-    const where: any = {
-      organizationId: user.organizationId
+    // Build where clause for workflows that represent assessments
+    const where: Prisma.WorkflowWhereInput = {
+      organizationId: user.organizationId,
+      type: 'ASSESSMENT', // Filter for assessment workflows
     };
 
-    if (status) {
-      where.status = status;
-    }
-
-    if (framework) {
-      where.framework = framework;
-    }
-
-    if (search) {
+    // Text search across multiple fields
+    if (validatedQuery.search) {
       where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } }
+        { name: { contains: validatedQuery.search, mode: 'insensitive' } },
+        { description: { contains: validatedQuery.search, mode: 'insensitive' } },
       ];
     }
 
-    // Get assessments with pagination
-    const [assessments, total] = await Promise.all([
-      prisma.assessment.findMany({
-        where,
-        include: {
-          creator: {
-            select: { id: true, name: true, email: true }
-          },
-          documents: {
-            select: { id: true, name: true, type: true, uploadedAt: true }
-          },
-          _count: {
-            select: { risks: true, controls: true }
-          }
-        },
-        orderBy: { createdAt: 'desc' },
-        skip: (page - 1) * limit,
-        take: limit
-      }),
-      prisma.assessment.count({ where })
-    ]);
+    // Apply filters
+    if (validatedQuery.status) {
+      where.status = validatedQuery.status as any;
+    }
 
-    const response = {
-      assessments: assessments.map(assessment => ({
-        id: assessment.id,
-        name: assessment.name,
-        description: assessment.description,
-        assessmentType: assessment.assessmentType,
-        framework: assessment.framework,
-        scope: assessment.scope,
-        status: assessment.status,
-        progress: assessment.progress,
-        dueDate: assessment.dueDate?.toISOString(),
-        createdAt: assessment.createdAt.toISOString(),
-        updatedAt: assessment.updatedAt.toISOString(),
-        organizationId: assessment.organizationId,
-        createdBy: assessment.createdBy,
-        creator: assessment.creator,
-        documentCount: assessment.documents.length,
-        riskCount: assessment._count.risks,
-        controlCount: assessment._count.controls
-      })),
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit)
+    if (validatedQuery.priority) {
+      where.priority = validatedQuery.priority as any;
+    }
+
+    if (validatedQuery.assigneeId) {
+      where.assignedTo = {
+        has: validatedQuery.assigneeId,
+      };
+    }
+
+    if (validatedQuery.tags && validatedQuery.tags.length > 0) {
+      where.tags = {
+        hasSome: validatedQuery.tags,
+      };
+    }
+
+    if (validatedQuery.createdAfter || validatedQuery.createdBefore) {
+      where.createdAt = {};
+      if (validatedQuery.createdAfter) {
+        where.createdAt.gte = new Date(validatedQuery.createdAfter);
       }
-    };
+      if (validatedQuery.createdBefore) {
+        where.createdAt.lte = new Date(validatedQuery.createdBefore);
+      }
+    }
 
-    return NextResponse.json(response);
+    // Count total records
+    const total = await db.client.workflow.count({ where });
 
+    // Build orderBy
+    const orderBy: Prisma.WorkflowOrderByWithRelationInput = {};
+    if (validatedQuery.sortBy) {
+      orderBy[validatedQuery.sortBy as keyof Prisma.WorkflowOrderByWithRelationInput] = validatedQuery.sortOrder;
+    } else {
+      orderBy.updatedAt = 'desc';
+    }
+
+    // Execute query
+    const workflows = await db.client.workflow.findMany({
+      where,
+      orderBy,
+      skip: validatedQuery.skip,
+      take: validatedQuery.limit,
+      include: {
+        creator: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+        activities: {
+          select: {
+            id: true,
+            type: true,
+            description: true,
+            createdAt: true,
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+          take: 5,
+        },
+      },
+    });
+
+         // Calculate additional metrics for each assessment
+     const enrichedAssessments = workflows.map(workflow => {
+       // Since steps are stored as JSON, parse them if they exist
+       const steps = Array.isArray(workflow.steps) ? workflow.steps : [];
+       const completedSteps = steps.filter((step: any) => step.status === 'COMPLETED').length;
+       const totalSteps = steps.length;
+       const progress = totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0;
+
+       return {
+         ...workflow,
+         assessmentType: workflow.relatedEntities?.assessmentType || 'SELF_ASSESSMENT',
+         framework: workflow.relatedEntities?.framework,
+         scope: workflow.relatedEntities?.scope,
+         objectives: workflow.relatedEntities?.objectives || [],
+         methodology: workflow.relatedEntities?.methodology,
+         progress,
+         completedSteps,
+         totalSteps,
+         assignedUsers: workflow.assignedTo || [],
+       };
+     });
+
+    return createAPIResponse({
+      data: enrichedAssessments,
+      pagination: {
+        total,
+        page: validatedQuery.page,
+        limit: validatedQuery.limit,
+        hasNextPage: validatedQuery.skip + validatedQuery.limit < total,
+        hasPreviousPage: validatedQuery.skip > 0,
+        totalPages: Math.ceil(total / validatedQuery.limit),
+      },
+      summary: {
+        totalAssessments: total,
+        activeAssessments: workflows.filter(w => w.status === 'ACTIVE').length,
+        completedAssessments: workflows.filter(w => w.status === 'COMPLETED').length,
+        overdueAssessments: workflows.filter(w => w.completedAt === null && w.status === 'ACTIVE').length,
+      },
+    });
   } catch (error) {
     console.error('Error fetching assessments:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch assessments' },
-      { status: 500 }
-    );
+    if (error instanceof z.ZodError) {
+      throw new ValidationError('Invalid query parameters', error.errors);
+    }
+    throw new Error('Failed to fetch assessments');
   }
-}
+});
 
-// POST /api/assessments - Create new assessment
-export async function POST(request: NextRequest) {
+// POST /api/assessments - Create new assessment using Workflow model
+export const POST = withAPI(async (req: NextRequest) => {
+  const authReq = req as AuthenticatedRequest;
+  const user = getAuthenticatedUser(authReq);
+
+  if (!user) {
+    throw new ForbiddenError('Authentication required');
+  }
+
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const body = await req.json();
+    const validatedData = assessmentCreateSchema.parse(body);
+
+    // Validate assignee exists
+    if (validatedData.assigneeId) {
+      const assignee = await db.client.user.findFirst({
+        where: {
+          id: validatedData.assigneeId,
+          organizationId: user.organizationId,
+        },
+      });
+
+      if (!assignee) {
+        throw new ValidationError('Invalid assignee ID');
+      }
     }
 
-    const body: CreateAssessmentRequest = await request.json();
+    // Validate approver exists
+    if (validatedData.approverId) {
+      const approver = await db.client.user.findFirst({
+        where: {
+          id: validatedData.approverId,
+          organizationId: user.organizationId,
+        },
+      });
 
-    // Validate required fields
-    if (!body.name || !body.framework || !body.assessmentType) {
-      return NextResponse.json(
-        { error: 'Missing required fields: name, framework, assessmentType' },
-        { status: 400 }
-      );
+      if (!approver) {
+        throw new ValidationError('Invalid approver ID');
+      }
     }
 
-    // Get user's organization
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { organizationId: true }
-    });
+    // Validate linked entities exist
+    if (validatedData.riskIds && validatedData.riskIds.length > 0) {
+      const risks = await db.client.risk.findMany({
+        where: {
+          id: { in: validatedData.riskIds },
+          organizationId: user.organizationId,
+        },
+        select: { id: true },
+      });
 
-    if (!user?.organizationId) {
-      return NextResponse.json({ error: 'Organization not found' }, { status: 404 });
+      if (risks.length !== validatedData.riskIds.length) {
+        throw new ValidationError('One or more risk IDs are invalid');
+      }
     }
 
-    // Create assessment in database
-    const assessment = await prisma.assessment.create({
+    if (validatedData.controlIds && validatedData.controlIds.length > 0) {
+      const controls = await db.client.control.findMany({
+        where: {
+          id: { in: validatedData.controlIds },
+          organizationId: user.organizationId,
+        },
+        select: { id: true },
+      });
+
+      if (controls.length !== validatedData.controlIds.length) {
+        throw new ValidationError('One or more control IDs are invalid');
+      }
+    }
+
+    // Create assessment workflow
+    const { riskIds, controlIds, questionnaireIds, assigneeId, approverId, ...workflowData } = validatedData;
+    
+    const workflow = await db.client.workflow.create({
       data: {
-        name: body.name,
-        description: body.description,
-        assessmentType: body.assessmentType,
-        framework: body.framework,
-        scope: body.scope || 'Organization-wide',
+        name: workflowData.name,
+        description: workflowData.description || '',
+        type: 'ASSESSMENT',
         status: 'DRAFT',
-        progress: 0,
-        dueDate: body.dueDate ? new Date(body.dueDate) : null,
+        priority: workflowData.priority,
+        tags: workflowData.tags,
+        assignedTo: assigneeId ? [assigneeId] : [],
         organizationId: user.organizationId,
-        createdBy: session.user.id,
-        metadata: {
-          stakeholders: body.stakeholders || [],
-          riskCategories: body.riskCategories || [],
-          complianceFrameworks: body.complianceFrameworks || []
-        }
+        createdBy: user.id,
+        steps: getWorkflowStepsForAssessmentType(validatedData.assessmentType),
+        relatedEntities: {
+          assessmentType: validatedData.assessmentType,
+          framework: validatedData.framework,
+          scope: validatedData.scope,
+          objectives: validatedData.objectives,
+          methodology: validatedData.methodology,
+          linkedRisks: riskIds,
+          linkedControls: controlIds,
+          linkedQuestionnaires: questionnaireIds,
+          assigneeId,
+          approverId,
+        },
       },
       include: {
         creator: {
-          select: { id: true, name: true, email: true }
-        }
-      }
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+      },
     });
 
-    // Process uploaded documents if any
-    if (body.documents && body.documents.length > 0) {
-      const documentPromises = body.documents.map(doc =>
-        prisma.document.create({
-          data: {
-            name: doc.name,
-            type: doc.type,
-            content: doc.content,
-            organizationId: user.organizationId,
-            uploadedBy: session.user.id,
-            assessmentId: assessment.id
-          }
-        })
-      );
+    // Workflow steps are already created as JSON in the workflow
 
-      await Promise.all(documentPromises);
-    }
-
-    // Create audit trail entry
-    await prisma.activity.create({
+    // Log activity
+    await db.client.activity.create({
       data: {
-        type: 'ASSESSMENT_CREATED',
-        description: `Assessment "${body.name}" created`,
-        userId: session.user.id,
+        type: 'WORKFLOW_CREATED',
+        description: `Assessment "${workflow.name}" created`,
+        userId: user.id,
         organizationId: user.organizationId,
+        entityType: 'WORKFLOW',
+        entityId: workflow.id,
         metadata: {
-          assessmentId: assessment.id,
-          framework: body.framework,
-          assessmentType: body.assessmentType
-        }
-      }
+          assessmentType: validatedData.assessmentType,
+          priority: workflow.priority,
+          linkedRisks: riskIds?.length || 0,
+          linkedControls: controlIds?.length || 0,
+        },
+      },
     });
 
-    const response: AssessmentResponse = {
-      id: assessment.id,
-      name: assessment.name,
-      description: assessment.description,
-      assessmentType: assessment.assessmentType,
-      framework: assessment.framework,
-      scope: assessment.scope,
-      status: assessment.status,
-      progress: assessment.progress,
-      dueDate: assessment.dueDate?.toISOString() || '',
-      createdAt: assessment.createdAt.toISOString(),
-      updatedAt: assessment.updatedAt.toISOString(),
-      organizationId: assessment.organizationId,
-      createdBy: assessment.createdBy
-    };
-
-    return NextResponse.json(response, { status: 201 });
-
+    return createAPIResponse({
+      data: {
+        ...workflow,
+        assessmentType: validatedData.assessmentType,
+        framework: validatedData.framework,
+        scope: validatedData.scope,
+        objectives: validatedData.objectives,
+        methodology: validatedData.methodology,
+      },
+      message: 'Assessment created successfully',
+    });
   } catch (error) {
     console.error('Error creating assessment:', error);
-    return NextResponse.json(
-      { error: 'Failed to create assessment' },
-      { status: 500 }
-    );
+    if (error instanceof z.ZodError) {
+      throw new ValidationError('Invalid assessment data', error.errors);
+    }
+    throw new Error(error instanceof Error ? error.message : 'Failed to create assessment');
   }
-}
+});
 
-// PUT /api/assessments/[id] - Update assessment
-export async function PUT(request: NextRequest) {
+// PUT /api/assessments/bulk - Bulk operations on assessments
+export const PUT = withAPI(async (req: NextRequest) => {
+  const authReq = req as AuthenticatedRequest;
+  const user = getAuthenticatedUser(authReq);
+
+  if (!user) {
+    throw new ForbiddenError('Authentication required');
+  }
+
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const body = await req.json();
+    const validatedData = assessmentBulkSchema.parse(body);
 
-    const { searchParams } = new URL(request.url);
-    const assessmentId = searchParams.get('id');
-
-    if (!assessmentId) {
-      return NextResponse.json({ error: 'Assessment ID required' }, { status: 400 });
-    }
-
-    const body = await request.json();
-
-    // Get user's organization
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { organizationId: true }
-    });
-
-    if (!user?.organizationId) {
-      return NextResponse.json({ error: 'Organization not found' }, { status: 404 });
-    }
-
-    // Check if assessment exists and user has access
-    const existingAssessment = await prisma.assessment.findFirst({
-      where: {
-        id: assessmentId,
-        organizationId: user.organizationId
-      }
-    });
-
-    if (!existingAssessment) {
-      return NextResponse.json({ error: 'Assessment not found' }, { status: 404 });
-    }
-
-    // Update assessment
-    const updatedAssessment = await prisma.assessment.update({
-      where: { id: assessmentId },
-      data: {
-        name: body.name || existingAssessment.name,
-        description: body.description || existingAssessment.description,
-        scope: body.scope || existingAssessment.scope,
-        status: body.status || existingAssessment.status,
-        progress: body.progress !== undefined ? body.progress : existingAssessment.progress,
-        dueDate: body.dueDate ? new Date(body.dueDate) : existingAssessment.dueDate,
-        results: body.results || existingAssessment.results,
-        metadata: body.metadata || existingAssessment.metadata
-      },
-      include: {
-        creator: {
-          select: { id: true, name: true, email: true }
-        },
-        documents: {
-          select: { id: true, name: true, type: true, uploadedAt: true }
-        }
-      }
-    });
-
-    // Create audit trail entry
-    await prisma.activity.create({
-      data: {
-        type: 'ASSESSMENT_UPDATED',
-        description: `Assessment "${updatedAssessment.name}" updated`,
-        userId: session.user.id,
-        organizationId: user.organizationId,
-        metadata: {
-          assessmentId: assessmentId,
-          changes: Object.keys(body)
-        }
-      }
-    });
-
-    const response: AssessmentResponse = {
-      id: updatedAssessment.id,
-      name: updatedAssessment.name,
-      description: updatedAssessment.description,
-      assessmentType: updatedAssessment.assessmentType,
-      framework: updatedAssessment.framework,
-      scope: updatedAssessment.scope,
-      status: updatedAssessment.status,
-      progress: updatedAssessment.progress,
-      dueDate: updatedAssessment.dueDate?.toISOString() || '',
-      createdAt: updatedAssessment.createdAt.toISOString(),
-      updatedAt: updatedAssessment.updatedAt.toISOString(),
-      organizationId: updatedAssessment.organizationId,
-      createdBy: updatedAssessment.createdBy,
-      results: updatedAssessment.results as any,
-      documents: updatedAssessment.documents
+    const results = {
+      created: 0,
+      updated: 0,
+      deleted: 0,
+      errors: [] as string[],
     };
 
-    return NextResponse.json(response);
+    // Handle bulk create
+    if (validatedData.create && validatedData.create.length > 0) {
+      for (const assessmentData of validatedData.create) {
+        try {
+          const validatedAssessment = assessmentCreateSchema.parse(assessmentData);
+          
+          const { riskIds, controlIds, questionnaireIds, assigneeId, approverId, ...workflowData } = validatedAssessment;
+          
+          await db.client.workflow.create({
+            data: {
+              name: workflowData.name,
+              description: workflowData.description || '',
+              type: 'ASSESSMENT',
+              status: 'DRAFT',
+              priority: workflowData.priority,
+              tags: workflowData.tags,
+              assignedTo: assigneeId ? [assigneeId] : [],
+              organizationId: user.organizationId,
+              createdBy: user.id,
+              steps: getWorkflowStepsForAssessmentType(validatedAssessment.assessmentType),
+              relatedEntities: {
+                assessmentType: validatedAssessment.assessmentType,
+                framework: validatedAssessment.framework,
+                scope: validatedAssessment.scope,
+                objectives: validatedAssessment.objectives,
+                methodology: validatedAssessment.methodology,
+                linkedRisks: riskIds,
+                linkedControls: controlIds,
+                linkedQuestionnaires: questionnaireIds,
+                assigneeId,
+                approverId,
+              },
+            },
+          });
 
-  } catch (error) {
-    console.error('Error updating assessment:', error);
-    return NextResponse.json(
-      { error: 'Failed to update assessment' },
-      { status: 500 }
-    );
-  }
-}
-
-// DELETE /api/assessments/[id] - Delete assessment
-export async function DELETE(request: NextRequest) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const { searchParams } = new URL(request.url);
-    const assessmentId = searchParams.get('id');
-
-    if (!assessmentId) {
-      return NextResponse.json({ error: 'Assessment ID required' }, { status: 400 });
-    }
-
-    // Get user's organization
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { organizationId: true }
-    });
-
-    if (!user?.organizationId) {
-      return NextResponse.json({ error: 'Organization not found' }, { status: 404 });
-    }
-
-    // Check if assessment exists and user has access
-    const existingAssessment = await prisma.assessment.findFirst({
-      where: {
-        id: assessmentId,
-        organizationId: user.organizationId
-      }
-    });
-
-    if (!existingAssessment) {
-      return NextResponse.json({ error: 'Assessment not found' }, { status: 404 });
-    }
-
-    // Delete assessment (cascade will handle related records)
-    await prisma.assessment.delete({
-      where: { id: assessmentId }
-    });
-
-    // Create audit trail entry
-    await prisma.activity.create({
-      data: {
-        type: 'ASSESSMENT_DELETED',
-        description: `Assessment "${existingAssessment.name}" deleted`,
-        userId: session.user.id,
-        organizationId: user.organizationId,
-        metadata: {
-          assessmentId: assessmentId,
-          assessmentName: existingAssessment.name
+          results.created++;
+        } catch (error) {
+          results.errors.push(`Failed to create assessment: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
       }
+    }
+
+    // Handle bulk update
+    if (validatedData.update && validatedData.update.length > 0) {
+      for (const updateData of validatedData.update) {
+        try {
+          const { id, ...assessmentData } = updateData;
+          const validatedAssessment = assessmentUpdateSchema.parse(assessmentData);
+
+          const existing = await db.client.workflow.findFirst({
+            where: {
+              id,
+              organizationId: user.organizationId,
+              type: 'ASSESSMENT',
+            },
+          });
+
+          if (!existing) {
+            results.errors.push(`Assessment with ID ${id} not found`);
+            continue;
+          }
+
+          const { riskIds, controlIds, questionnaireIds, assigneeId, approverId, ...workflowData } = validatedAssessment;
+
+          await db.client.workflow.update({
+            where: { id },
+            data: {
+              name: workflowData.name,
+              description: workflowData.description,
+              priority: workflowData.priority,
+              tags: workflowData.tags,
+              assignedTo: assigneeId ? [assigneeId] : existing.assignedTo,
+              relatedEntities: {
+                ...existing.relatedEntities,
+                assessmentType: validatedAssessment.assessmentType,
+                framework: validatedAssessment.framework,
+                scope: validatedAssessment.scope,
+                objectives: validatedAssessment.objectives,
+                methodology: validatedAssessment.methodology,
+                linkedRisks: riskIds,
+                linkedControls: controlIds,
+                linkedQuestionnaires: questionnaireIds,
+                assigneeId,
+                approverId,
+              },
+            },
+          });
+
+          results.updated++;
+        } catch (error) {
+          results.errors.push(`Failed to update assessment: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
+      }
+    }
+
+    // Handle bulk delete
+    if (validatedData.delete && validatedData.delete.length > 0) {
+      for (const assessmentId of validatedData.delete) {
+        try {
+          const existing = await db.client.workflow.findFirst({
+            where: {
+              id: assessmentId,
+              organizationId: user.organizationId,
+              type: 'ASSESSMENT',
+            },
+          });
+
+          if (!existing) {
+            results.errors.push(`Assessment with ID ${assessmentId} not found`);
+            continue;
+          }
+
+          await db.client.workflow.delete({
+            where: { id: assessmentId },
+          });
+
+          results.deleted++;
+        } catch (error) {
+          results.errors.push(`Failed to delete assessment: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
+      }
+    }
+
+    // Log bulk activity
+    await db.client.activity.create({
+      data: {
+        type: 'WORKFLOW_BULK_OPERATION',
+        description: `Bulk assessment operation: ${results.created} created, ${results.updated} updated, ${results.deleted} deleted`,
+        userId: user.id,
+        organizationId: user.organizationId,
+        metadata: {
+          created: results.created,
+          updated: results.updated,
+          deleted: results.deleted,
+          errors: results.errors.length,
+        },
+      },
     });
 
-    return NextResponse.json({ message: 'Assessment deleted successfully' });
-
+    return createAPIResponse({
+      data: results,
+      message: `Bulk operation completed: ${results.created + results.updated + results.deleted} assessments processed`,
+    });
   } catch (error) {
-    console.error('Error deleting assessment:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete assessment' },
-      { status: 500 }
-    );
+    console.error('Error in bulk assessments operation:', error);
+    if (error instanceof z.ZodError) {
+      throw new ValidationError('Invalid bulk operation data', error.errors);
+    }
+    throw new Error('Failed to perform bulk operation');
+  }
+});
+
+// Helper function to get workflow steps as JSON objects
+function getWorkflowStepsForAssessmentType(assessmentType: string) {
+  const baseSteps = [
+    { name: 'Planning', description: 'Define assessment scope and objectives', type: 'PLANNING', daysFromStart: 0 },
+    { name: 'Data Collection', description: 'Gather required information and evidence', type: 'EXECUTION', daysFromStart: 3 },
+    { name: 'Analysis', description: 'Analyze collected data and identify findings', type: 'ANALYSIS', daysFromStart: 7 },
+    { name: 'Reporting', description: 'Prepare assessment report', type: 'REPORTING', daysFromStart: 14 },
+    { name: 'Review', description: 'Review and validate findings', type: 'REVIEW', daysFromStart: 16 },
+    { name: 'Closure', description: 'Finalize assessment and document lessons learned', type: 'CLOSURE', daysFromStart: 18 },
+  ];
+
+  switch (assessmentType) {
+    case 'RISK_ASSESSMENT':
+      return [
+        ...baseSteps,
+        { name: 'Risk Identification', description: 'Identify and catalog risks', type: 'EXECUTION', daysFromStart: 5 },
+        { name: 'Risk Analysis', description: 'Assess likelihood and impact', type: 'ANALYSIS', daysFromStart: 9 },
+      ];
+    case 'CONTROL_ASSESSMENT':
+      return [
+        ...baseSteps,
+        { name: 'Control Testing', description: 'Test control effectiveness', type: 'EXECUTION', daysFromStart: 5 },
+        { name: 'Gap Analysis', description: 'Identify control gaps', type: 'ANALYSIS', daysFromStart: 10 },
+      ];
+    case 'COMPLIANCE_ASSESSMENT':
+      return [
+        ...baseSteps,
+        { name: 'Compliance Mapping', description: 'Map requirements to controls', type: 'PLANNING', daysFromStart: 2 },
+        { name: 'Evidence Collection', description: 'Collect compliance evidence', type: 'EXECUTION', daysFromStart: 6 },
+      ];
+    default:
+      return baseSteps;
   }
 } 

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { deleteSession, deleteAllUserSessions } from '@/lib/auth/session';
+import { invalidateSession, invalidateAllSessions } from '@/lib/auth/session';
 import { extractTokenFromHeader, verifyAccessToken } from '@/lib/auth/jwt';
 import { db } from '@/lib/db';
 
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (logoutType === 'all' && userId) {
       // Logout from all devices
-      await deleteAllUserSessions(userId);
+      await invalidateAllSessions(userId);
       
       await logAuthEvent('LOGOUT_ALL_DEVICES', 
         request.headers.get('x-forwarded-for') || 'unknown',
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     } else if (sessionId) {
       // Logout from current session only
-      await deleteSession(sessionId);
+              await invalidateSession(sessionId);
       
       await logAuthEvent('LOGOUT_SUCCESS', 
         request.headers.get('x-forwarded-for') || 'unknown',
