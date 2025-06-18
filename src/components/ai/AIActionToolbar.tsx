@@ -1,267 +1,664 @@
-import React, { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { 
-  Brain, 
-  RefreshCw, 
-  Sparkles, 
-  Lightbulb, 
-  Shield, 
-  Search, 
-  AlertTriangle,
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { toast } from 'sonner';
+import {
+  Bot,
+  Sparkles,
+  Brain,
+  Search,
+  FileText,
+  BarChart3,
+  Shield,
+  Lightbulb,
   Zap,
-  HelpCircle
+  Settings,
+  ChevronDown,
+  Loader2,
+  CheckCircle,
+  AlertTriangle,
+  TrendingUp,
+  Target,
+  Eye,
+  MessageSquare,
 } from 'lucide-react';
 
-import { AIAction } from './SelectableContent';
-import { TextSelection } from '@/hooks/useTextSelection';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+// Import our AI services
+import { aiService, AIAgent } from '@/lib/mockAI';
 
-export interface AIActionToolbarProps {
-  selection: TextSelection;
-  position: { x: number; y: number };
-  onAction: (action: AIAction) => void;
-  availableActions: AIAction[];
-  isProcessing?: boolean;
-  className?: string;
-}
+// ============================================================================
+// TYPES AND INTERFACES
+// ============================================================================
 
-interface ActionConfig {
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
+interface AIAction {
+  id: string;
+  name: string;
   description: string;
-  shortcut?: string;
-  color: string;
-  priority: number;
+  icon: React.ComponentType<{ className?: string }>;
+  category: 'ANALYSIS' | 'GENERATION' | 'OPTIMIZATION' | 'INSIGHTS';
+  agentType: 'RISK_ANALYST' | 'COMPLIANCE_EXPERT' | 'CONTROL_AUDITOR' | 'POLICY_REVIEWER' | 'GENERAL_ASSISTANT';
+  requiresData: boolean;
+  estimatedTime: string;
+  action: (context?: any) => Promise<void>;
 }
 
-const actionConfigs: Record<AIAction, ActionConfig> = {
-  explain: {
-    icon: HelpCircle,
-    label: 'Explain',
-    description: 'Get AI explanation of selected content',
-    shortcut: 'E',
-    color: 'text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30',
-    priority: 1,
-  },
-  regenerate: {
-    icon: RefreshCw,
-    label: 'Regenerate',
-    description: 'Generate alternative version using AI',
-    shortcut: 'R',
-    color: 'text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/30',
-    priority: 2,
-  },
-  improve: {
-    icon: Sparkles,
-    label: 'Improve',
-    description: 'Enhance content with AI suggestions',
-    shortcut: 'I',
-    color: 'text-green-600 hover:bg-green-50 dark:hover:bg-green-900/30',
-    priority: 3,
-  },
-  alternatives: {
-    icon: Lightbulb,
-    label: 'Alternatives',
-    description: 'Generate alternative approaches',
-    shortcut: 'A',
-    color: 'text-yellow-600 hover:bg-yellow-50 dark:hover:bg-yellow-900/30',
-    priority: 4,
-  },
-  'compliance-check': {
+interface AIActionResult {
+  id: string;
+  actionId: string;
+  status: 'RUNNING' | 'COMPLETED' | 'FAILED';
+  result?: any;
+  error?: string;
+  startTime: string;
+  endTime?: string;
+  confidence?: number;
+}
+
+// ============================================================================
+// AI ACTION DEFINITIONS
+// ============================================================================
+
+const createAIActions = (
+  onAnalyzeRisk: (context: any) => Promise<void>,
+  onGenerateReport: (context: any) => Promise<void>,
+  onOptimizeControls: (context: any) => Promise<void>,
+  onGetInsights: (context: any) => Promise<void>,
+  onAnalyzeCompliance: (context: any) => Promise<void>,
+  onGenerateQuestions: (context: any) => Promise<void>,
+  onAnalyzeDocument: (context: any) => Promise<void>,
+  onPredictTrends: (context: any) => Promise<void>
+): AIAction[] => [
+  {
+    id: 'analyze-risk',
+    name: 'Analyze Risk',
+    description: 'AI-powered risk analysis with scoring and recommendations',
     icon: Shield,
-    label: 'Compliance',
-    description: 'Check against compliance requirements',
-    shortcut: 'C',
-    color: 'text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30',
-    priority: 5,
+    category: 'ANALYSIS',
+    agentType: 'RISK_ANALYST',
+    requiresData: true,
+    estimatedTime: '30-60s',
+    action: onAnalyzeRisk,
   },
-  'find-related': {
+  {
+    id: 'generate-report',
+    name: 'Generate Report',
+    description: 'Create comprehensive risk or compliance reports',
+    icon: FileText,
+    category: 'GENERATION',
+    agentType: 'GENERAL_ASSISTANT',
+    requiresData: true,
+    estimatedTime: '45-90s',
+    action: onGenerateReport,
+  },
+  {
+    id: 'optimize-controls',
+    name: 'Optimize Controls',
+    description: 'Analyze and suggest control improvements',
+    icon: Target,
+    category: 'OPTIMIZATION',
+    agentType: 'CONTROL_AUDITOR',
+    requiresData: true,
+    estimatedTime: '60-120s',
+    action: onOptimizeControls,
+  },
+  {
+    id: 'get-insights',
+    name: 'Get Insights',
+    description: 'Extract key insights from your risk data',
+    icon: Lightbulb,
+    category: 'INSIGHTS',
+    agentType: 'RISK_ANALYST',
+    requiresData: true,
+    estimatedTime: '30-45s',
+    action: onGetInsights,
+  },
+  {
+    id: 'analyze-compliance',
+    name: 'Compliance Analysis',
+    description: 'Assess compliance gaps and requirements',
+    icon: CheckCircle,
+    category: 'ANALYSIS',
+    agentType: 'COMPLIANCE_EXPERT',
+    requiresData: true,
+    estimatedTime: '45-75s',
+    action: onAnalyzeCompliance,
+  },
+  {
+    id: 'generate-questions',
+    name: 'Generate Questions',
+    description: 'Create assessment questionnaires',
+    icon: MessageSquare,
+    category: 'GENERATION',
+    agentType: 'GENERAL_ASSISTANT',
+    requiresData: false,
+    estimatedTime: '20-30s',
+    action: onGenerateQuestions,
+  },
+  {
+    id: 'analyze-document',
+    name: 'Document Analysis',
+    description: 'Extract risks and controls from documents',
     icon: Search,
-    label: 'Find Related',
-    description: 'Find related content and dependencies',
-    shortcut: 'F',
-    color: 'text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30',
-    priority: 6,
+    category: 'ANALYSIS',
+    agentType: 'POLICY_REVIEWER',
+    requiresData: true,
+    estimatedTime: '60-90s',
+    action: onAnalyzeDocument,
   },
-  'analyze-risk': {
-    icon: AlertTriangle,
-    label: 'Analyze Risk',
-    description: 'Perform detailed risk analysis',
-    shortcut: 'T',
-    color: 'text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/30',
-    priority: 7,
+  {
+    id: 'predict-trends',
+    name: 'Predict Trends',
+    description: 'Generate predictive risk insights',
+    icon: TrendingUp,
+    category: 'INSIGHTS',
+    agentType: 'RISK_ANALYST',
+    requiresData: true,
+    estimatedTime: '90-120s',
+    action: onPredictTrends,
   },
-  'suggest-controls': {
-    icon: Zap,
-    label: 'Controls',
-    description: 'Suggest risk control measures',
-    shortcut: 'S',
-    color: 'text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/30',
-    priority: 8,
-  },
-};
+];
 
-export const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
-  selection,
-  position,
-  onAction,
-  availableActions,
-  isProcessing = false,
-  className,
+// ============================================================================
+// AI ACTION TOOLBAR COMPONENT
+// ============================================================================
+
+interface AIActionToolbarProps {
+  context?: any;
+  selectedData?: any[];
+  onActionComplete?: (result: any) => void;
+}
+
+const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
+  context,
+  selectedData,
+  onActionComplete,
 }) => {
-  const toolbarRef = useRef<HTMLDivElement>(null);
+  const [availableAgents, setAvailableAgents] = useState<AIAgent[]>([]);
+  const [selectedAgent, setSelectedAgent] = useState<string>('');
+  const [runningActions, setRunningActions] = useState<Map<string, AIActionResult>>(new Map());
+  const [usageStats, setUsageStats] = useState<any>(null);
+  const [isAIEnabled, setIsAIEnabled] = useState(false);
 
-  // Sort actions by priority and filter available ones
-  const sortedActions = availableActions
-    .sort((a, b) => actionConfigs[a].priority - actionConfigs[b].priority)
-    .slice(0, 6); // Limit to 6 actions for UI space
-
-  // Handle keyboard shortcuts
+  // Check if AI is enabled and load agents
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (isProcessing) return;
-
-      // Handle shortcuts
-      const key = event.key.toLowerCase();
-      const action = Object.entries(actionConfigs).find(
-        ([actionKey, config]) => 
-          availableActions.includes(actionKey as AIAction) && 
-          config.shortcut?.toLowerCase() === key
-      );
-
-      if (action && (event.ctrlKey || event.metaKey)) {
-        event.preventDefault();
-        onAction(action[0] as AIAction);
-      }
-
-      // Handle Escape to close toolbar
-      if (event.key === 'Escape') {
-        // This would be handled by parent component
+    const checkAIStatus = async () => {
+      const enabled = aiService.isEnabled();
+      setIsAIEnabled(enabled);
+      
+      if (enabled) {
+        try {
+          const agents = await aiService.agents.getAvailableAgents();
+          setAvailableAgents(agents);
+          
+          if (agents.length > 0) {
+            setSelectedAgent(agents[0].id);
+          }
+          
+          const stats = await aiService.usage.getUsageStats('30d');
+          setUsageStats(stats);
+        } catch (error) {
+          console.error('Failed to load AI agents:', error);
+        }
       }
     };
+    
+    checkAIStatus();
+  }, []);
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [availableActions, isProcessing, onAction]);
-
-  // Calculate toolbar position with boundary checks
-  const getToolbarStyle = (): React.CSSProperties => {
-    const baseStyle: React.CSSProperties = {
-      position: 'absolute',
-      left: position.x,
-      top: position.y,
-      zIndex: 50,
-    };
-
-    // Adjust position if toolbar would go off-screen
-    if (toolbarRef.current) {
-      const rect = toolbarRef.current.getBoundingClientRect();
-      const viewportWidth = window.innerWidth;
-
-      // Adjust horizontal position
-      if (position.x + rect.width > viewportWidth - 20) {
-        baseStyle.left = viewportWidth - rect.width - 20;
-      }
-
-      // Adjust vertical position
-      if (position.y < 0) {
-        baseStyle.top = position.y + selection.boundingRect.height + 10;
-      }
+  // AI Action Handlers
+  const handleAnalyzeRisk = async (actionContext?: any) => {
+    const riskData = actionContext || context;
+    if (!riskData) {
+      toast.error('No risk data available for analysis');
+      return;
     }
 
-    return baseStyle;
+    try {
+      const analysis = await aiService.risk.analyzeRisk({
+        title: riskData.title || 'Untitled Risk',
+        description: riskData.description || '',
+        category: riskData.category,
+        context: riskData,
+      });
+
+      toast.success('Risk analysis completed');
+      onActionComplete?.(analysis);
+    } catch (error) {
+      toast.error('Failed to analyze risk');
+      throw error;
+    }
   };
 
-  return (
-    <TooltipProvider>
-      <motion.div
-        ref={toolbarRef}
-        initial={{ opacity: 0, scale: 0.8, y: 10 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.8, y: 10 }}
-        transition={{ duration: 0.2 }}
-        style={getToolbarStyle()}
-        className={cn(
-          'bg-card border border-border rounded-lg shadow-lg p-1',
-          'flex items-center gap-1',
-          'backdrop-blur-sm',
-          className
-        )}
-        data-toolbar
-      >
-        {/* Selection Info */}
-        <div className="px-2 py-1 text-xs text-muted-foreground border-r border-border">
-          {selection.text.length} chars
-        </div>
+  const handleGenerateReport = async (actionContext?: any) => {
+    const reportData = actionContext || { risks: selectedData, context };
+    
+    try {
+      // For now, we'll create a simple report structure
+      // In a real implementation, this would call a report generation service
+      const report = {
+        title: 'AI-Generated Risk Report',
+        generatedAt: new Date().toISOString(),
+        summary: 'Comprehensive risk analysis report generated by AI',
+        sections: [
+          {
+            title: 'Executive Summary',
+            content: 'AI-generated executive summary of risk landscape...',
+          },
+          {
+            title: 'Risk Analysis',
+            content: 'Detailed analysis of identified risks...',
+          },
+          {
+            title: 'Recommendations',
+            content: 'AI-generated recommendations for risk mitigation...',
+          },
+        ],
+        data: reportData,
+      };
 
-        {/* Action Buttons */}
-        {sortedActions.map((action) => {
-          const config = actionConfigs[action];
-          const Icon = config.icon;
+      toast.success('Report generated successfully');
+      onActionComplete?.(report);
+    } catch (error) {
+      toast.error('Failed to generate report');
+      throw error;
+    }
+  };
 
-          return (
-            <Tooltip key={action}>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => onAction(action)}
-                  disabled={isProcessing}
-                  className={cn(
-                    'h-8 w-8 p-0 transition-colors',
-                    config.color,
-                    isProcessing && 'opacity-50 cursor-not-allowed'
-                  )}
-                >
-                  <Icon className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="max-w-xs">
-                <div className="text-center">
-                  <div className="font-medium">{config.label}</div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    {config.description}
-                  </div>
-                  {config.shortcut && (
-                    <div className="text-xs mt-1 opacity-70">
-                      {navigator.platform.includes('Mac') ? '⌘' : 'Ctrl'} + {config.shortcut}
-                    </div>
-                  )}
-                </div>
-              </TooltipContent>
-            </Tooltip>
-          );
-        })}
+  const handleOptimizeControls = async (actionContext?: any) => {
+    const controlData = actionContext || context;
+    
+    try {
+      if (controlData?.id) {
+        const optimization = await aiService.control.suggestControlImprovements(
+          controlData.id,
+          controlData
+        );
+        
+        toast.success('Control optimization completed');
+        onActionComplete?.(optimization);
+      } else {
+        throw new Error('No control data available');
+      }
+    } catch (error) {
+      toast.error('Failed to optimize controls');
+      throw error;
+    }
+  };
 
-        {/* AI Brain Icon */}
-        <div className="px-2 py-1 border-l border-border">
-          <motion.div
-            animate={isProcessing ? { rotate: 360 } : {}}
-            transition={isProcessing ? { duration: 2, repeat: Infinity, ease: "linear" } : {}}
-          >
-            <Brain className={cn(
-              'h-4 w-4',
-              isProcessing ? 'text-blue-500' : 'text-muted-foreground'
-            )} />
-          </motion.div>
-        </div>
+  const handleGetInsights = async (actionContext?: any) => {
+    const dashboardData = actionContext || { context, selectedData };
+    
+    try {
+      const insights = await aiService.insights.generateDashboardInsights(dashboardData);
+      
+      toast.success('Insights generated successfully');
+      onActionComplete?.(insights);
+    } catch (error) {
+      toast.error('Failed to generate insights');
+      throw error;
+    }
+  };
 
-        {/* Processing Indicator */}
-        {isProcessing && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="absolute inset-0 bg-card/80 backdrop-blur-sm rounded-lg flex items-center justify-center"
-          >
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <div className="animate-spin rounded-full h-3 w-3 border-2 border-primary border-t-transparent" />
-              Processing...
-            </div>
-          </motion.div>
-        )}
-      </motion.div>
-    </TooltipProvider>
+  const handleAnalyzeCompliance = async (actionContext?: any) => {
+    const complianceData = actionContext || context;
+    
+    try {
+      const analysis = await aiService.compliance.analyzeComplianceGaps(
+        complianceData?.framework || 'ISO27001',
+        complianceData
+      );
+      
+      toast.success('Compliance analysis completed');
+      onActionComplete?.(analysis);
+    } catch (error) {
+      toast.error('Failed to analyze compliance');
+      throw error;
+    }
+  };
+
+  const handleGenerateQuestions = async (actionContext?: any) => {
+    const questionContext = actionContext || context;
+    
+    try {
+      const questions = await aiService.risk.generateRiskQuestions(
+        questionContext?.category || 'OPERATIONAL',
+        questionContext
+      );
+      
+      toast.success('Questions generated successfully');
+      onActionComplete?.(questions);
+    } catch (error) {
+      toast.error('Failed to generate questions');
+      throw error;
+    }
+  };
+
+  const handleAnalyzeDocument = async (actionContext?: any) => {
+    const documentData = actionContext || context;
+    
+    if (!documentData?.content) {
+      toast.error('No document content available for analysis');
+      return;
+    }
+
+    try {
+      const analysis = await aiService.document.extractDocumentMetadata(documentData.content);
+      
+      toast.success('Document analysis completed');
+      onActionComplete?.(analysis);
+    } catch (error) {
+      toast.error('Failed to analyze document');
+      throw error;
+    }
+  };
+
+  const handlePredictTrends = async (actionContext?: any) => {
+    const trendData = actionContext || { historicalData: selectedData, context };
+    
+    try {
+      const predictions = await aiService.insights.generatePredictiveInsights(
+        trendData.historicalData || [],
+        '3months'
+      );
+      
+      toast.success('Trend predictions generated');
+      onActionComplete?.(predictions);
+    } catch (error) {
+      toast.error('Failed to predict trends');
+      throw error;
+    }
+  };
+
+  // Create AI actions with handlers
+  const aiActions = createAIActions(
+    handleAnalyzeRisk,
+    handleGenerateReport,
+    handleOptimizeControls,
+    handleGetInsights,
+    handleAnalyzeCompliance,
+    handleGenerateQuestions,
+    handleAnalyzeDocument,
+    handlePredictTrends
   );
-}; 
+
+  // Execute AI action
+  const executeAction = async (action: AIAction) => {
+    if (!isAIEnabled) {
+      toast.error('AI features are not enabled');
+      return;
+    }
+
+    const actionResult: AIActionResult = {
+      id: `${action.id}-${Date.now()}`,
+      actionId: action.id,
+      status: 'RUNNING',
+      startTime: new Date().toISOString(),
+    };
+
+    setRunningActions(prev => new Map(prev.set(actionResult.id, actionResult)));
+
+    try {
+      await action.action(context);
+      
+      const completedResult = {
+        ...actionResult,
+        status: 'COMPLETED' as const,
+        endTime: new Date().toISOString(),
+      };
+      
+      setRunningActions(prev => new Map(prev.set(actionResult.id, completedResult)));
+      
+      // Remove completed action after 3 seconds
+      setTimeout(() => {
+        setRunningActions(prev => {
+          const newMap = new Map(prev);
+          newMap.delete(actionResult.id);
+          return newMap;
+        });
+      }, 3000);
+      
+    } catch (error) {
+      const failedResult = {
+        ...actionResult,
+        status: 'FAILED' as const,
+        endTime: new Date().toISOString(),
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+      
+      setRunningActions(prev => new Map(prev.set(actionResult.id, failedResult)));
+      
+      // Remove failed action after 5 seconds
+      setTimeout(() => {
+        setRunningActions(prev => {
+          const newMap = new Map(prev);
+          newMap.delete(actionResult.id);
+          return newMap;
+        });
+      }, 5000);
+    }
+  };
+
+  // Get actions by category
+  const actionsByCategory = aiActions.reduce((acc, action) => {
+    if (!acc[action.category]) {
+      acc[action.category] = [];
+    }
+    acc[action.category].push(action);
+    return acc;
+  }, {} as Record<string, AIAction[]>);
+
+  // Check if action is currently running
+  const isActionRunning = (actionId: string) => {
+    return Array.from(runningActions.values()).some(
+      result => result.actionId === actionId && result.status === 'RUNNING'
+    );
+  };
+
+  if (!isAIEnabled) {
+    return (
+      <Card className="border-dashed">
+        <CardContent className="flex items-center justify-center py-6">
+          <div className="text-center">
+            <Bot className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+            <p className="text-sm text-gray-600">AI features are not enabled</p>
+            <p className="text-xs text-gray-500 mt-1">
+              Contact your administrator to enable AI capabilities
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* AI Toolbar Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Sparkles className="h-5 w-5 text-blue-500" />
+          <h3 className="font-medium">AI Assistant</h3>
+          <Badge variant="secondary" className="text-xs">
+            {availableAgents.length} agents
+          </Badge>
+        </div>
+        
+        <div className="flex items-center gap-2">
+          {/* Agent Selector */}
+          <Select value={selectedAgent} onValueChange={setSelectedAgent}>
+            <SelectTrigger className="w-40">
+              <SelectValue placeholder="Select agent" />
+            </SelectTrigger>
+            <SelectContent>
+              {availableAgents.map((agent) => (
+                <SelectItem key={agent.id} value={agent.id}>
+                  <div className="flex items-center gap-2">
+                    <Brain className="h-4 w-4" />
+                    <span>{agent.name}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Usage Stats */}
+          {usageStats && (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <BarChart3 className="h-4 w-4 mr-2" />
+                  Usage
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80">
+                <div className="space-y-3">
+                  <h4 className="font-medium">AI Usage (30 days)</h4>
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <div className="text-gray-600">Requests</div>
+                      <div className="font-medium">{usageStats.totalRequests?.toLocaleString()}</div>
+                    </div>
+                    <div>
+                      <div className="text-gray-600">Tokens</div>
+                      <div className="font-medium">{usageStats.totalTokens?.toLocaleString()}</div>
+                    </div>
+                    <div>
+                      <div className="text-gray-600">Cost</div>
+                      <div className="font-medium">${usageStats.totalCost?.toFixed(2)}</div>
+                    </div>
+                    <div>
+                      <div className="text-gray-600">Avg Response</div>
+                      <div className="font-medium">
+                        {usageStats.avgResponseTime ? `${usageStats.avgResponseTime}ms` : 'N/A'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          )}
+        </div>
+      </div>
+
+      {/* Running Actions Status */}
+      {runningActions.size > 0 && (
+        <Card>
+          <CardContent className="py-3">
+            <div className="space-y-2">
+              {Array.from(runningActions.values()).map((result) => {
+                const action = aiActions.find(a => a.id === result.actionId);
+                if (!action) return null;
+
+                return (
+                  <div key={result.id} className="flex items-center gap-3">
+                    {result.status === 'RUNNING' && (
+                      <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+                    )}
+                    {result.status === 'COMPLETED' && (
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                    )}
+                    {result.status === 'FAILED' && (
+                      <AlertTriangle className="h-4 w-4 text-red-500" />
+                    )}
+                    
+                    <div className="flex-1">
+                      <div className="text-sm font-medium">{action.name}</div>
+                      {result.status === 'RUNNING' && (
+                        <div className="text-xs text-gray-600">
+                          Running... (est. {action.estimatedTime})
+                        </div>
+                      )}
+                      {result.status === 'FAILED' && result.error && (
+                        <div className="text-xs text-red-600">{result.error}</div>
+                      )}
+                    </div>
+                    
+                    <Badge 
+                      variant={
+                        result.status === 'RUNNING' ? 'secondary' :
+                        result.status === 'COMPLETED' ? 'default' : 'destructive'
+                      }
+                    >
+                      {result.status.toLowerCase()}
+                    </Badge>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* AI Actions Grid */}
+      <div className="space-y-4">
+        {Object.entries(actionsByCategory).map(([category, actions]) => (
+          <div key={category}>
+            <h4 className="text-sm font-medium text-gray-700 mb-2 capitalize">
+              {category.toLowerCase().replace('_', ' ')}
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+              {actions.map((action) => {
+                const IconComponent = action.icon;
+                const isRunning = isActionRunning(action.id);
+                const requiresDataAndMissing = action.requiresData && !context && !selectedData?.length;
+                
+                return (
+                  <Button
+                    key={action.id}
+                    variant="outline"
+                    className="h-auto p-3 flex flex-col items-start gap-2"
+                    onClick={() => executeAction(action)}
+                    disabled={isRunning || requiresDataAndMissing}
+                  >
+                    <div className="flex items-center gap-2 w-full">
+                      {isRunning ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <IconComponent className="h-4 w-4" />
+                      )}
+                      <span className="font-medium text-sm">{action.name}</span>
+                    </div>
+                    <p className="text-xs text-gray-600 text-left">
+                      {action.description}
+                    </p>
+                    <div className="flex items-center gap-2 w-full mt-1">
+                      <Badge variant="outline" className="text-xs">
+                        {action.estimatedTime}
+                      </Badge>
+                      {requiresDataAndMissing && (
+                        <Badge variant="secondary" className="text-xs">
+                          No data
+                        </Badge>
+                      )}
+                    </div>
+                  </Button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* AI Tips */}
+      <Card className="bg-blue-50 border-blue-200">
+        <CardContent className="py-3">
+          <div className="flex items-start gap-3">
+            <Lightbulb className="h-5 w-5 text-blue-500 mt-0.5" />
+            <div>
+              <h4 className="text-sm font-medium text-blue-900">AI Tips</h4>
+              <p className="text-xs text-blue-700 mt-1">
+                Select specific risks or controls to get more targeted AI analysis. 
+                The AI works best with detailed context and clear objectives.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default AIActionToolbar;
+export { AIActionToolbar }; 

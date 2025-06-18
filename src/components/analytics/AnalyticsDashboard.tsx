@@ -34,6 +34,34 @@ import {
   Share,
   Settings,
 } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { toast } from 'sonner';
+import { CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
+import {
+  BarChart,
+  Bar,
+  Line,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  Area,
+  AreaChart,
+  RadialBarChart,
+  RadialBar,
+  ComposedChart,
+} from 'recharts';
+
+// Import our API services
+import { api, analyticsAPI } from '@/lib/mockData';
 
 // ========== TYPES ==========
 export interface ChartData {

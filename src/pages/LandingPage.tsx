@@ -212,9 +212,9 @@ export default function LandingPage() {
       </Navbar>
 
       {/* Enhanced Hero Section */}
-      <section className="pt-48 pb-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-card to-background">
+      <section className="pt-36 pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-card to-background">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-24 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 items-center">
             {/* Left Column - Content */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -223,13 +223,13 @@ export default function LandingPage() {
               className="text-center lg:text-left lg:col-span-2"
             >
               {/* Enhanced Headline with Single Word Typewriter */}
-              <div className="mb-8">
+              <div className="mb-6">
                 <SingleWordTypewriter />
               </div>
 
               {/* Strong Value Proposition */}
               <motion.p 
-                className="text-xl sm:text-2xl text-[#A8A8A8] mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-inter"
+                className="text-xl sm:text-2xl text-[#A8A8A8] mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-inter"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.8 }}
@@ -240,7 +240,7 @@ export default function LandingPage() {
 
               {/* Primary CTA */}
               <motion.div 
-                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-12"
+                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-10"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 1.0 }}

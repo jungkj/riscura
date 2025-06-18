@@ -1,334 +1,136 @@
-import { NextRequest } from 'next/server';
-import { withAPI, withValidation, createAPIResponse, parsePagination, parseFilters, parseSorting, parseSearch, createPaginationMeta, NotFoundError, ForbiddenError } from '@/lib/api/middleware';
-import { createControlSchema, controlQuerySchema } from '@/lib/api/schemas';
+import { NextRequest, NextResponse } from 'next/server';
+import { withAPI, createAPIResponse, ForbiddenError, ValidationError } from '@/lib/api/middleware';
 import { getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/middleware';
 import { db } from '@/lib/db';
-import { PERMISSIONS } from '@/lib/auth';
+import { controlCreateSchema, controlUpdateSchema, controlBulkSchema, controlQuerySchema } from '@/lib/api/schemas';
+import { Prisma } from '@prisma/client';
+import { z } from 'zod';
 
-// Mapping functions for API <-> DB enum conversions
-const mapControlType = (apiType: string): any => {
-  const mapping: Record<string, string> = {
-    'preventive': 'PREVENTIVE',
-    'detective': 'DETECTIVE',
-    'corrective': 'CORRECTIVE',
-    'directive': 'DIRECTIVE',
-    'compensating': 'COMPENSATING',
-  };
-  return mapping[apiType] || 'PREVENTIVE';
-};
+// GET /api/controls - List controls with advanced filtering
+export const GET = withAPI(async (req: NextRequest) => {
+  const authReq = req as AuthenticatedRequest;
+  const user = getAuthenticatedUser(authReq);
 
-const mapControlStatus = (apiStatus: string): any => {
-  const mapping: Record<string, string> = {
-    'planned': 'PLANNED',
-    'implemented': 'IMPLEMENTED',
-    'testing': 'TESTING',
-    'operational': 'OPERATIONAL',
-    'remediation': 'REMEDIATION',
-    'disabled': 'DISABLED',
-  };
-  return mapping[apiStatus] || 'PLANNED';
-};
+  if (!user) {
+    throw new ForbiddenError('Authentication required');
+  }
 
-const mapControlCategory = (apiCategory: string): any => {
-  const mapping: Record<string, string> = {
-    'technical': 'TECHNICAL',
-    'administrative': 'ADMINISTRATIVE',
-    'physical': 'PHYSICAL',
-    'operational': 'OPERATIONAL',
-    'management': 'MANAGEMENT',
-  };
-  return mapping[apiCategory] || 'OPERATIONAL';
-};
-
-const mapAutomationLevel = (apiLevel: string): any => {
-  const mapping: Record<string, string> = {
-    'manual': 'MANUAL',
-    'semi_automated': 'SEMI_AUTOMATED',
-    'fully_automated': 'FULLY_AUTOMATED',
-  };
-  return mapping[apiLevel] || 'MANUAL';
-};
-
-const mapEffectivenessRating = (apiRating: string): any => {
-  const mapping: Record<string, string> = {
-    'not_effective': 'NOT_EFFECTIVE',
-    'partially_effective': 'PARTIALLY_EFFECTIVE',
-    'largely_effective': 'LARGELY_EFFECTIVE',
-    'fully_effective': 'FULLY_EFFECTIVE',
-  };
-  return mapping[apiRating] || 'PARTIALLY_EFFECTIVE';
-};
-
-const mapControlEffort = (apiEffort: string): any => {
-  const mapping: Record<string, string> = {
-    'low': 'LOW',
-    'medium': 'MEDIUM',
-    'high': 'HIGH',
-  };
-  return mapping[apiEffort] || 'MEDIUM';
-};
-
-const mapPriority = (apiPriority: string): any => {
-  const mapping: Record<string, string> = {
-    'low': 'LOW',
-    'medium': 'MEDIUM',
-    'high': 'HIGH',
-    'critical': 'CRITICAL',
-  };
-  return mapping[apiPriority] || 'MEDIUM';
-};
-
-// GET /api/controls - List controls with pagination and filtering
-export const GET = withAPI(
-  withValidation(controlQuerySchema)(async (req: NextRequest, query) => {
-    const authReq = req as AuthenticatedRequest;
-    const user = getAuthenticatedUser(authReq);
-
-    if (!user) {
-      throw new ForbiddenError('Authentication required');
-    }
-
-    const url = new URL(req.url);
-    const searchParams = url.searchParams;
-
-    // Parse pagination
-    const { skip, take, page, limit } = parsePagination(searchParams, { maxLimit: 100 });
-
-    // Parse filters
-    const filters = parseFilters(searchParams);
-
-    // Parse sorting
-    const orderBy = parseSorting(searchParams);
-
-    // Parse search
-    const search = parseSearch(searchParams);
+  try {
+    const { searchParams } = new URL(req.url);
+    const queryParams = Object.fromEntries(searchParams.entries());
+    const validatedQuery = controlQuerySchema.parse(queryParams);
 
     // Build where clause
-    const where: any = {
-      organizationId: user.organizationId, // Organization isolation
+    const where: Prisma.ControlWhereInput = {
+      organizationId: user.organizationId,
     };
 
-    // Add search functionality
-    if (search) {
+    // Text search across multiple fields
+    if (validatedQuery.search) {
       where.OR = [
-        { title: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
-        // { testResults: { contains: search, mode: 'insensitive' } },
+        { title: { contains: validatedQuery.search, mode: 'insensitive' } },
+        { description: { contains: validatedQuery.search, mode: 'insensitive' } },
+        { controlId: { contains: validatedQuery.search, mode: 'insensitive' } },
+        { category: { contains: validatedQuery.search, mode: 'insensitive' } },
       ];
     }
 
-    // Add filters
-    if (query.controlType) {
-      where.controlType = query.controlType;
+    // Filter by category
+    if (validatedQuery.category) {
+      where.category = validatedQuery.category;
     }
-    if (query.frequency) {
-      where.frequency = query.frequency;
+
+    // Filter by type
+    if (validatedQuery.type) {
+      where.type = validatedQuery.type;
     }
-    if (query.effectiveness) {
-      where.effectiveness = query.effectiveness;
+
+    // Filter by status
+    if (validatedQuery.status) {
+      where.status = validatedQuery.status;
     }
-    if (query.status) {
-      where.status = query.status;
+
+    // Filter by effectiveness
+    if (validatedQuery.effectiveness) {
+      where.effectiveness = validatedQuery.effectiveness;
     }
-    if (query.ownerId) {
-      where.owner = query.ownerId;
+
+    // Filter by implementation status
+    if (validatedQuery.implementationStatus) {
+      where.implementationStatus = validatedQuery.implementationStatus;
     }
-    if (query.riskId) {
-      where.risks = {
+
+    // Filter by owner
+    if (validatedQuery.ownerId) {
+      where.ownerId = validatedQuery.ownerId;
+    }
+
+    // Filter by framework
+    if (validatedQuery.framework) {
+      where.frameworks = {
         some: {
-          riskId: query.riskId
-        }
+          name: validatedQuery.framework,
+        },
       };
     }
 
-    // Test due date filters
-    if (query.testDue) {
-      const now = new Date();
-      const thirtyDaysFromNow = new Date();
-      thirtyDaysFromNow.setDate(now.getDate() + 30);
-
-      switch (query.testDue) {
-        case 'overdue':
-          where.nextTestDate = { lt: now };
-          break;
-        case 'due_soon':
-          where.nextTestDate = { 
-            gte: now,
-            lte: thirtyDaysFromNow 
-          };
-          break;
-        case 'upcoming':
-          where.nextTestDate = { gt: thirtyDaysFromNow };
-          break;
-      }
+    // Filter by tags
+    if (validatedQuery.tags && validatedQuery.tags.length > 0) {
+      where.tags = {
+        hasSome: validatedQuery.tags,
+      };
     }
 
-    // Execute queries
-    const [controls, total] = await Promise.all([
-      db.client.control.findMany({
-        where,
-        skip,
-        take,
-        orderBy,
-        include: {
-          assignedUser: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              email: true,
-            },
-          },
-          creator: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              email: true,
-            },
-          },
-          risks: {
-            include: {
-              risk: {
-                select: {
-                  id: true,
-                  title: true,
-                  riskLevel: true,
-                  status: true,
-                },
-              },
-            },
-          },
-          // controlTests: {
-          //   select: {
-          //     id: true,
-          //     testDate: true,
-          //     result: true,
-          //     effectiveness: true,
-          //   },
-          //   orderBy: { testDate: 'desc' },
-          //   take: 1,
-          // },
-          _count: {
-            select: {
-              risks: true,
-              // controlTests: true,
-              evidence: true,
-            },
-          },
-        },
-      }),
-      db.client.control.count({ where }),
-    ]);
-
-    // Log activity
-    await db.client.activity.create({
-      data: {
-        type: 'READ' as const,
-        entityType: 'CONTROL',
-        entityId: 'list',
-        description: `Retrieved ${controls.length} controls`,
-        userId: user.id,
-        organizationId: user.organizationId,
-        metadata: {
-          query: query,
-          resultCount: controls.length,
-          filters: Object.keys(filters),
-        },
-        isPublic: false,
-      },
-    });
-
-    return createAPIResponse(controls, {
-      pagination: createPaginationMeta(page, limit, total),
-    });
-  }),
-  {
-    requiredPermissions: [PERMISSIONS.CONTROLS_READ],
-    rateLimit: { limit: 100, windowMs: 15 * 60 * 1000 },
-  }
-);
-
-// POST /api/controls - Create new control
-export const POST = withAPI(
-  withValidation(createControlSchema)(async (req: NextRequest, data) => {
-    const authReq = req as AuthenticatedRequest;
-    const user = getAuthenticatedUser(authReq);
-
-    if (!user) {
-      throw new ForbiddenError('Authentication required');
+    // Date range filters
+    if (validatedQuery.createdAfter) {
+      where.createdAt = {
+        ...where.createdAt,
+        gte: new Date(validatedQuery.createdAfter),
+      };
     }
 
-    // Validate owner if specified
-    if (data.ownerId) {
-      const owner = await db.client.user.findFirst({
-        where: { 
-          id: data.ownerId, 
-          organizationId: user.organizationId, 
-          isActive: true 
-        },
-      });
-      
-      if (!owner) {
-        throw new NotFoundError('Specified owner not found in organization');
-      }
-    }
-    
-    // Remove operatorId and reviewerId validation as these fields don't exist
-    
-    // Validate risk IDs if specified
-    if (data.riskIds && data.riskIds.length > 0) {
-      const risks = await db.client.risk.findMany({
-        where: {
-          id: { in: data.riskIds },
-          organizationId: user.organizationId,
-        },
-        select: { id: true },
-      });
-
-      if (risks.length !== data.riskIds.length) {
-        throw new NotFoundError('One or more specified risks not found in organization');
-      }
+    if (validatedQuery.createdBefore) {
+      where.createdAt = {
+        ...where.createdAt,
+        lte: new Date(validatedQuery.createdBefore),
+      };
     }
 
-    // Create control with proper field mappings
-    const { 
-      ownerId, 
-      riskIds, 
-      controlType, 
-      category,
-      status,
-      automationLevel,
-      effectiveness,
-      priority,
-      effort,
-      description,
-      ...controlData 
-    } = data;
-    
-    const control = await db.client.control.create({
-      data: {
-        ...controlData,
-        description: description || '', // Ensure description is not undefined
-        type: mapControlType(controlType),
-        category: mapControlCategory(category),
-        status: status ? mapControlStatus(status) : 'PLANNED',
-        automationLevel: automationLevel ? mapAutomationLevel(automationLevel) : 'MANUAL',
-        effectivenessRating: effectiveness ? mapEffectivenessRating(effectiveness) : undefined,
-        priority: priority ? mapPriority(priority) : undefined,
-        effort: effort ? mapControlEffort(effort) : undefined,
-        owner: ownerId,
-        organizationId: user.organizationId,
-        createdBy: user.id,
-        // Create risk mappings if riskIds provided
-        risks: riskIds ? {
-          create: riskIds.map((riskId: string) => ({
-            riskId,
-          }))
-        } : undefined,
-      },
+    // Review date filters
+    if (validatedQuery.reviewDue) {
+      where.nextReviewDate = {
+        lte: new Date(),
+      };
+    }
+
+    // Count total records for pagination
+    const total = await db.client.control.count({ where });
+
+    // Build orderBy
+    const orderBy: Prisma.ControlOrderByWithRelationInput = {};
+    if (validatedQuery.sortBy) {
+      orderBy[validatedQuery.sortBy as keyof Prisma.ControlOrderByWithRelationInput] = validatedQuery.sortOrder || 'asc';
+    } else {
+      orderBy.updatedAt = 'desc';
+    }
+
+    // Execute query
+    const controls = await db.client.control.findMany({
+      where,
+      orderBy,
+      skip: validatedQuery.skip,
+      take: validatedQuery.limit,
       include: {
-        assignedUser: {
+        owner: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            avatar: true,
+          },
+        },
+        createdBy: {
           select: {
             id: true,
             firstName: true,
@@ -336,23 +138,156 @@ export const POST = withAPI(
             email: true,
           },
         },
-        creator: {
+        frameworks: {
           select: {
             id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
+            name: true,
+            version: true,
           },
         },
         risks: {
-          include: {
-            risk: {
-              select: {
-                id: true,
-                title: true,
-                riskLevel: true,
-              },
-            },
+          select: {
+            id: true,
+            title: true,
+            category: true,
+            level: true,
+          },
+        },
+        documents: {
+          select: {
+            id: true,
+            title: true,
+            category: true,
+          },
+        },
+        assessments: {
+          select: {
+            id: true,
+            status: true,
+            score: true,
+            assessedAt: true,
+          },
+          orderBy: {
+            assessedAt: 'desc',
+          },
+          take: 1,
+        },
+        _count: {
+          select: {
+            risks: true,
+            documents: true,
+            assessments: true,
+          },
+        },
+      },
+    });
+
+    // Calculate pagination info
+    const hasNextPage = validatedQuery.skip + validatedQuery.limit < total;
+    const hasPreviousPage = validatedQuery.skip > 0;
+
+    return createAPIResponse({
+      data: controls,
+      pagination: {
+        total,
+        page: Math.floor(validatedQuery.skip / validatedQuery.limit) + 1,
+        limit: validatedQuery.limit,
+        hasNextPage,
+        hasPreviousPage,
+        totalPages: Math.ceil(total / validatedQuery.limit),
+      },
+      filters: {
+        search: validatedQuery.search,
+        category: validatedQuery.category,
+        type: validatedQuery.type,
+        status: validatedQuery.status,
+        effectiveness: validatedQuery.effectiveness,
+        implementationStatus: validatedQuery.implementationStatus,
+        framework: validatedQuery.framework,
+        tags: validatedQuery.tags,
+      },
+    });
+  } catch (error) {
+    console.error('Error fetching controls:', error);
+    if (error instanceof z.ZodError) {
+      throw new ValidationError('Invalid query parameters', error.errors);
+    }
+    throw new Error('Failed to fetch controls');
+  }
+});
+
+// POST /api/controls - Create new control
+export const POST = withAPI(async (req: NextRequest) => {
+  const authReq = req as AuthenticatedRequest;
+  const user = getAuthenticatedUser(authReq);
+
+  if (!user) {
+    throw new ForbiddenError('Authentication required');
+  }
+
+  try {
+    const body = await req.json();
+    const validatedData = controlCreateSchema.parse(body);
+
+    // Check if control ID already exists
+    if (validatedData.controlId) {
+      const existingControl = await db.client.control.findFirst({
+        where: {
+          controlId: validatedData.controlId,
+          organizationId: user.organizationId,
+        },
+      });
+
+      if (existingControl) {
+        throw new ValidationError('Control ID already exists');
+      }
+    }
+
+    // Validate owner exists
+    if (validatedData.ownerId) {
+      const owner = await db.client.user.findFirst({
+        where: {
+          id: validatedData.ownerId,
+          organizationId: user.organizationId,
+        },
+      });
+
+      if (!owner) {
+        throw new ValidationError('Invalid owner ID');
+      }
+    }
+
+    // Create control
+    const control = await db.client.control.create({
+      data: {
+        ...validatedData,
+        organizationId: user.organizationId,
+        createdById: user.id,
+      },
+      include: {
+        owner: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            avatar: true,
+          },
+        },
+        createdBy: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+        frameworks: true,
+        _count: {
+          select: {
+            risks: true,
+            documents: true,
+            assessments: true,
           },
         },
       },
@@ -361,26 +296,237 @@ export const POST = withAPI(
     // Log activity
     await db.client.activity.create({
       data: {
-        type: 'CREATED' as const,
-        entityType: 'CONTROL',
-        entityId: control.id,
-        description: `Created control: ${control.title}`,
+        type: 'CONTROL_CREATED',
+        description: `Control "${control.title}" created`,
         userId: user.id,
         organizationId: user.organizationId,
+        entityType: 'CONTROL',
+        entityId: control.id,
         metadata: {
-          controlId: control.id,
-          controlType: control.type,
-          frequency: control.frequency,
-          linkedRisks: data.riskIds?.length || 0,
+          controlId: control.controlId,
+          category: control.category,
+          type: control.type,
         },
-        isPublic: false,
       },
     });
 
-    return createAPIResponse(control, { statusCode: 201 });
-  }),
-  {
-    requiredPermissions: [PERMISSIONS.CONTROLS_WRITE],
-    rateLimit: { limit: 50, windowMs: 15 * 60 * 1000 },
+    return createAPIResponse({
+      data: control,
+      message: 'Control created successfully',
+    }, 201);
+  } catch (error) {
+    console.error('Error creating control:', error);
+    if (error instanceof z.ZodError) {
+      throw new ValidationError('Invalid control data', error.errors);
+    }
+    throw new Error(error instanceof Error ? error.message : 'Failed to create control');
   }
-); 
+});
+
+// PUT /api/controls/bulk - Bulk operations on controls
+export const PUT = withAPI(async (req: NextRequest) => {
+  const authReq = req as AuthenticatedRequest;
+  const user = getAuthenticatedUser(authReq);
+
+  if (!user) {
+    throw new ForbiddenError('Authentication required');
+  }
+
+  try {
+    const body = await req.json();
+    const validatedData = controlBulkSchema.parse(body);
+
+    const results = {
+      created: 0,
+      updated: 0,
+      deleted: 0,
+      errors: [] as string[],
+    };
+
+    // Handle bulk create
+    if (validatedData.create && validatedData.create.length > 0) {
+      for (const controlData of validatedData.create) {
+        try {
+          const validatedControl = controlCreateSchema.parse(controlData);
+          
+          // Check for duplicate control ID
+          if (validatedControl.controlId) {
+            const existing = await db.client.control.findFirst({
+              where: {
+                controlId: validatedControl.controlId,
+                organizationId: user.organizationId,
+              },
+            });
+
+            if (existing) {
+              results.errors.push(`Control ID ${validatedControl.controlId} already exists`);
+              continue;
+            }
+          }
+
+          await db.client.control.create({
+            data: {
+              ...validatedControl,
+              organizationId: user.organizationId,
+              createdById: user.id,
+            },
+          });
+
+          results.created++;
+        } catch (error) {
+          results.errors.push(`Failed to create control: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
+      }
+    }
+
+    // Handle bulk update
+    if (validatedData.update && validatedData.update.length > 0) {
+      for (const updateData of validatedData.update) {
+        try {
+          const { id, ...controlData } = updateData;
+          const validatedControl = controlUpdateSchema.parse(controlData);
+
+          const existing = await db.client.control.findFirst({
+            where: {
+              id,
+              organizationId: user.organizationId,
+            },
+          });
+
+          if (!existing) {
+            results.errors.push(`Control with ID ${id} not found`);
+            continue;
+          }
+
+          await db.client.control.update({
+            where: { id },
+            data: validatedControl,
+          });
+
+          results.updated++;
+        } catch (error) {
+          results.errors.push(`Failed to update control: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
+      }
+    }
+
+    // Handle bulk delete
+    if (validatedData.delete && validatedData.delete.length > 0) {
+      for (const controlId of validatedData.delete) {
+        try {
+          const existing = await db.client.control.findFirst({
+            where: {
+              id: controlId,
+              organizationId: user.organizationId,
+            },
+          });
+
+          if (!existing) {
+            results.errors.push(`Control with ID ${controlId} not found`);
+            continue;
+          }
+
+          await db.client.control.delete({
+            where: { id: controlId },
+          });
+
+          results.deleted++;
+        } catch (error) {
+          results.errors.push(`Failed to delete control: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
+      }
+    }
+
+    // Log bulk activity
+    await db.client.activity.create({
+      data: {
+        type: 'CONTROLS_BULK_OPERATION',
+        description: `Bulk operation: ${results.created} created, ${results.updated} updated, ${results.deleted} deleted`,
+        userId: user.id,
+        organizationId: user.organizationId,
+        metadata: {
+          created: results.created,
+          updated: results.updated,
+          deleted: results.deleted,
+          errors: results.errors.length,
+        },
+      },
+    });
+
+    return createAPIResponse({
+      data: results,
+      message: `Bulk operation completed: ${results.created + results.updated + results.deleted} controls processed`,
+    });
+  } catch (error) {
+    console.error('Error in bulk controls operation:', error);
+    if (error instanceof z.ZodError) {
+      throw new ValidationError('Invalid bulk operation data', error.errors);
+    }
+    throw new Error('Failed to perform bulk operation');
+  }
+});
+
+// DELETE /api/controls - Bulk delete controls
+export const DELETE = withAPI(async (req: NextRequest) => {
+  const authReq = req as AuthenticatedRequest;
+  const user = getAuthenticatedUser(authReq);
+
+  if (!user) {
+    throw new ForbiddenError('Authentication required');
+  }
+
+  try {
+    const { searchParams } = new URL(req.url);
+    const ids = searchParams.get('ids')?.split(',') || [];
+
+    if (ids.length === 0) {
+      throw new ValidationError('No control IDs provided');
+    }
+
+    // Validate all controls exist and belong to organization
+    const controls = await db.client.control.findMany({
+      where: {
+        id: { in: ids },
+        organizationId: user.organizationId,
+      },
+      select: { id: true, title: true },
+    });
+
+    if (controls.length !== ids.length) {
+      const foundIds = controls.map(c => c.id);
+      const missingIds = ids.filter(id => !foundIds.includes(id));
+      throw new ValidationError(`Controls not found: ${missingIds.join(', ')}`);
+    }
+
+    // Delete controls (cascade will handle related records)
+    const deleteResult = await db.client.control.deleteMany({
+      where: {
+        id: { in: ids },
+        organizationId: user.organizationId,
+      },
+    });
+
+    // Log activity
+    await db.client.activity.create({
+      data: {
+        type: 'CONTROLS_BULK_DELETE',
+        description: `Bulk deleted ${deleteResult.count} controls`,
+        userId: user.id,
+        organizationId: user.organizationId,
+        metadata: {
+          deletedCount: deleteResult.count,
+          controlIds: ids,
+          controlTitles: controls.map(c => c.title),
+        },
+      },
+    });
+
+    return createAPIResponse({
+      data: { deletedCount: deleteResult.count },
+      message: `${deleteResult.count} controls deleted successfully`,
+    });
+  } catch (error) {
+    console.error('Error deleting controls:', error);
+    throw new Error(error instanceof Error ? error.message : 'Failed to delete controls');
+  }
+}); 

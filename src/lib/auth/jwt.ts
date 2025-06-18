@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { env } from '@/config/env';
+import { createHash, randomBytes } from 'crypto';
 
 export interface JWTPayload {
   userId: string;
@@ -22,9 +23,62 @@ const ACCESS_TOKEN_EXPIRES_IN = '15m'; // 15 minutes
 const REFRESH_TOKEN_EXPIRES_IN = '7d'; // 7 days
 
 /**
+ * Generate a secure random token
+ */
+export function generateSecureToken(length: number = 32): string {
+  return randomBytes(length).toString('hex');
+}
+
+/**
+ * Generate access token (simplified for demo)
+ */
+export function generateAccessToken(payload: any): string {
+  const timestamp = Date.now();
+  const data = JSON.stringify({ ...payload, iat: timestamp });
+  const signature = createHash('sha256')
+    .update(data + env.JWT_SECRET)
+    .digest('hex');
+  
+  return Buffer.from(`${data}.${signature}`).toString('base64url');
+}
+
+/**
+ * Verify access token (simplified for demo)
+ */
+export function verifyAccessToken(token: string): any {
+  try {
+    const decoded = Buffer.from(token, 'base64url').toString();
+    const [data, signature] = decoded.split('.');
+    
+    // Verify signature
+    const expectedSignature = createHash('sha256')
+      .update(data + env.JWT_SECRET)
+      .digest('hex');
+    
+    if (signature !== expectedSignature) {
+      throw new Error('Invalid token signature');
+    }
+    
+    const payload = JSON.parse(data);
+    
+    // Check expiration (1 hour default)
+    const now = Date.now();
+    const maxAge = 3600000; // 1 hour
+    
+    if (now - payload.iat > maxAge) {
+      throw new Error('Token expired');
+    }
+    
+    return payload;
+  } catch (error) {
+    throw new Error('Invalid token');
+  }
+}
+
+/**
  * Generate JWT access token
  */
-export function generateAccessToken(payload: Omit<JWTPayload, 'tokenType'>): string {
+export function generateAccessTokenJWT(payload: Omit<JWTPayload, 'tokenType'>): string {
   return jwt.sign(
     {
       ...payload,
@@ -61,7 +115,7 @@ export function generateRefreshToken(payload: Omit<JWTPayload, 'tokenType'>): st
  * Generate both access and refresh tokens
  */
 export function generateTokenPair(payload: Omit<JWTPayload, 'tokenType'>): TokenPair {
-  const accessToken = generateAccessToken(payload);
+  const accessToken = generateAccessTokenJWT(payload);
   const refreshToken = generateRefreshToken(payload);
 
   return {
@@ -102,7 +156,7 @@ export function verifyToken(token: string): JWTPayload {
 /**
  * Verify access token specifically
  */
-export function verifyAccessToken(token: string): JWTPayload {
+export function verifyAccessTokenJWT(token: string): JWTPayload {
   const payload = verifyToken(token);
   
   if (payload.tokenType !== 'access') {
@@ -171,4 +225,18 @@ export function getTokenRemainingTime(token: string): number {
   } catch {
     return 0;
   }
+}
+
+/**
+ * Create CSRF token
+ */
+export function generateCSRFToken(): string {
+  return generateSecureToken(16);
+}
+
+/**
+ * Verify CSRF token
+ */
+export function verifyCSRFToken(token: string, expected: string): boolean {
+  return token === expected;
 } 

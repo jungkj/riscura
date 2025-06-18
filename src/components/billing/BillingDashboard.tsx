@@ -6,6 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { toast } from 'sonner';
 import { 
   CreditCard, 
   Calendar, 
@@ -16,388 +19,717 @@ import {
   AlertCircle,
   CheckCircle,
   Clock,
-  DollarSign
+  DollarSign,
+  Download,
+  AlertTriangle,
+  Settings,
+  ExternalLink,
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
+import { format } from 'date-fns';
 
-interface SubscriptionPlan {
+interface BillingData {
+  subscription: {
+    id: string;
+    plan: 'STARTER' | 'PROFESSIONAL' | 'ENTERPRISE' | 'CUSTOM';
+    status: 'ACTIVE' | 'CANCELLED' | 'PAST_DUE' | 'INCOMPLETE';
+    currentPeriodStart: string;
+    currentPeriodEnd: string;
+    cancelAtPeriodEnd: boolean;
+    amount: number;
+    currency: string;
+    interval: 'month' | 'year';
+    nextBillingDate: string;
+  };
+  usage: {
+    users: { current: number; limit: number };
+    risks: { current: number; limit: number };
+    controls: { current: number; limit: number };
+    documents: { current: number; limit: number };
+    apiCalls: { current: number; limit: number };
+    storage: { current: number; limit: number }; // in MB
+    aiRequests: { current: number; limit: number };
+  };
+  invoices: Array<{
+    id: string;
+    number: string;
+    status: 'PAID' | 'PENDING' | 'FAILED' | 'DRAFT';
+    amount: number;
+    currency: string;
+    created: string;
+    dueDate: string;
+    paidAt?: string;
+    downloadUrl?: string;
+  }>;
+  paymentMethods: Array<{
+    id: string;
+    type: 'card' | 'bank_account';
+    brand?: string;
+    last4: string;
+    expiryMonth?: number;
+    expiryYear?: number;
+    isDefault: boolean;
+  }>;
+  upcomingInvoice?: {
+    amount: number;
+    currency: string;
+    periodStart: string;
+    periodEnd: string;
+    dueDate: string;
+  };
+}
+
+interface PlanFeature {
+  name: string;
+  included: boolean;
+  limit?: number;
+  description?: string;
+}
+
+interface PricingPlan {
   id: string;
   name: string;
-  description: string;
-  type: string;
   price: number;
   currency: string;
-  billingInterval: 'monthly' | 'yearly';
-  features: Array<{
-    name: string;
-    included: boolean;
-    limit?: number;
-    unlimited?: boolean;
-  }>;
-  limits: {
-    users: number;
-    risks: number;
-    controls: number;
-    aiQueries: number;
-    storageGB: number;
-  };
+  interval: 'month' | 'year';
+  features: PlanFeature[];
   popular?: boolean;
+  description: string;
 }
 
-interface OrganizationSubscription {
-  id: string;
-  planId: string;
-  status: string;
-  currentPeriodStart: string;
-  currentPeriodEnd: string;
-  trialEnd?: string;
-  cancelAtPeriodEnd: boolean;
-  billingCycle: string;
-  unitPrice: number;
-  plan: SubscriptionPlan;
-}
+class BillingService {
+  private static instance: BillingService;
 
-interface UsageData {
-  type: string;
-  current: number;
-  limit: number;
-  percentage: number;
-}
+  static getInstance(): BillingService {
+    if (!BillingService.instance) {
+      BillingService.instance = new BillingService();
+    }
+    return BillingService.instance;
+  }
 
-interface Invoice {
-  id: string;
-  invoiceNumber: string;
-  status: string;
-  total: number;
-  currency: string;
-  dueDate: string;
-  paidAt?: string;
-  type: string;
-}
+  // Get billing data
+  async getBillingData(): Promise<BillingData> {
+    try {
+      const response = await fetch('/api/billing/data');
+      if (!response.ok) {
+        throw new Error('Failed to fetch billing data');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Billing service error:', error);
+      // Return mock data for development
+      return this.getMockBillingData();
+    }
+  }
 
-interface PaymentMethod {
-  id: string;
-  type: string;
-  card?: {
-    brand: string;
-    last4: string;
-    expMonth: number;
-    expYear: number;
-  };
-  isDefault: boolean;
+  // Get available plans
+  async getAvailablePlans(): Promise<PricingPlan[]> {
+    try {
+      const response = await fetch('/api/billing/plans');
+      if (!response.ok) {
+        throw new Error('Failed to fetch plans');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Plans service error:', error);
+      return this.getMockPlans();
+    }
+  }
+
+  // Update subscription
+  async updateSubscription(planId: string): Promise<{ success: boolean; clientSecret?: string }> {
+    try {
+      const response = await fetch('/api/billing/subscription', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ planId }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update subscription');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Subscription update error:', error);
+      throw error;
+    }
+  }
+
+  // Cancel subscription
+  async cancelSubscription(): Promise<{ success: boolean }> {
+    try {
+      const response = await fetch('/api/billing/subscription', {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to cancel subscription');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Subscription cancellation error:', error);
+      throw error;
+    }
+  }
+
+  // Add payment method
+  async addPaymentMethod(paymentMethodId: string): Promise<{ success: boolean }> {
+    try {
+      const response = await fetch('/api/billing/payment-methods', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentMethodId }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to add payment method');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Payment method error:', error);
+      throw error;
+    }
+  }
+
+  // Download invoice
+  async downloadInvoice(invoiceId: string): Promise<void> {
+    try {
+      const response = await fetch(`/api/billing/invoices/${invoiceId}/download`);
+      if (!response.ok) {
+        throw new Error('Failed to download invoice');
+      }
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `invoice-${invoiceId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Invoice download error:', error);
+      throw error;
+    }
+  }
+
+  // Mock data for development
+  private getMockBillingData(): BillingData {
+    return {
+      subscription: {
+        id: 'sub_mock123',
+        plan: 'PROFESSIONAL',
+        status: 'ACTIVE',
+        currentPeriodStart: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+        currentPeriodEnd: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
+        cancelAtPeriodEnd: false,
+        amount: 99,
+        currency: 'USD',
+        interval: 'month',
+        nextBillingDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      usage: {
+        users: { current: 8, limit: 25 },
+        risks: { current: 145, limit: 500 },
+        controls: { current: 89, limit: 300 },
+        documents: { current: 234, limit: 1000 },
+        apiCalls: { current: 12500, limit: 50000 },
+        storage: { current: 2048, limit: 10240 }, // 2GB of 10GB
+        aiRequests: { current: 850, limit: 2000 },
+      },
+      invoices: [
+        {
+          id: 'inv_001',
+          number: 'INV-2024-001',
+          status: 'PAID',
+          amount: 99,
+          currency: 'USD',
+          created: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+          dueDate: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString(),
+          paidAt: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString(),
+        },
+        {
+          id: 'inv_002',
+          number: 'INV-2024-002',
+          status: 'PAID',
+          amount: 99,
+          currency: 'USD',
+          created: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
+          dueDate: new Date(Date.now() - 55 * 24 * 60 * 60 * 1000).toISOString(),
+          paidAt: new Date(Date.now() - 55 * 24 * 60 * 60 * 1000).toISOString(),
+        },
+      ],
+      paymentMethods: [
+        {
+          id: 'pm_001',
+          type: 'card',
+          brand: 'visa',
+          last4: '4242',
+          expiryMonth: 12,
+          expiryYear: 2025,
+          isDefault: true,
+        },
+      ],
+      upcomingInvoice: {
+        amount: 99,
+        currency: 'USD',
+        periodStart: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
+        periodEnd: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000).toISOString(),
+        dueDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+    };
+  }
+
+  private getMockPlans(): PricingPlan[] {
+    return [
+      {
+        id: 'starter',
+        name: 'Starter',
+        price: 29,
+        currency: 'USD',
+        interval: 'month',
+        description: 'Perfect for small teams getting started with risk management',
+        features: [
+          { name: 'Up to 5 users', included: true, limit: 5 },
+          { name: 'Up to 100 risks', included: true, limit: 100 },
+          { name: 'Up to 50 controls', included: true, limit: 50 },
+          { name: 'Basic reporting', included: true },
+          { name: '1GB storage', included: true, limit: 1024 },
+          { name: 'Email support', included: true },
+          { name: 'AI features', included: false },
+          { name: 'Advanced analytics', included: false },
+          { name: 'Custom integrations', included: false },
+        ],
+      },
+      {
+        id: 'professional',
+        name: 'Professional',
+        price: 99,
+        currency: 'USD',
+        interval: 'month',
+        description: 'Ideal for growing organizations with comprehensive risk management needs',
+        popular: true,
+        features: [
+          { name: 'Up to 25 users', included: true, limit: 25 },
+          { name: 'Up to 500 risks', included: true, limit: 500 },
+          { name: 'Up to 300 controls', included: true, limit: 300 },
+          { name: 'Advanced reporting', included: true },
+          { name: '10GB storage', included: true, limit: 10240 },
+          { name: 'Priority support', included: true },
+          { name: 'AI features', included: true, limit: 2000 },
+          { name: 'Advanced analytics', included: true },
+          { name: 'API access', included: true, limit: 50000 },
+        ],
+      },
+      {
+        id: 'enterprise',
+        name: 'Enterprise',
+        price: 299,
+        currency: 'USD',
+        interval: 'month',
+        description: 'For large organizations requiring enterprise-grade features and support',
+        features: [
+          { name: 'Unlimited users', included: true },
+          { name: 'Unlimited risks', included: true },
+          { name: 'Unlimited controls', included: true },
+          { name: 'Custom reporting', included: true },
+          { name: 'Unlimited storage', included: true },
+          { name: '24/7 dedicated support', included: true },
+          { name: 'Unlimited AI features', included: true },
+          { name: 'Advanced analytics', included: true },
+          { name: 'Custom integrations', included: true },
+          { name: 'SSO & SAML', included: true },
+          { name: 'On-premise deployment', included: true },
+        ],
+      },
+    ];
+  }
 }
 
 const BillingDashboard: React.FC = () => {
-  const [subscription, setSubscription] = useState<OrganizationSubscription | null>(null);
-  const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
-  const [usage, setUsage] = useState<UsageData[]>([]);
-  const [invoices, setInvoices] = useState<Invoice[]>([]);
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [billingData, setBillingData] = useState<BillingData | null>(null);
+  const [availablePlans, setAvailablePlans] = useState<PricingPlan[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [selectedTab, setSelectedTab] = useState('overview');
 
-  useEffect(() => {
-    loadBillingData();
-  }, []);
+  const billingService = BillingService.getInstance();
 
+  // Load billing data
   const loadBillingData = async () => {
-    setLoading(true);
     try {
-      // Load subscription
-      const subResponse = await fetch('/api/billing/subscriptions');
-      const subData = await subResponse.json();
-      setSubscription(subData.subscription);
-
-      // Load plans
-      const plansResponse = await fetch('/api/billing/plans');
-      const plansData = await plansResponse.json();
-      setPlans(plansData.plans);
-
-      // Mock usage data
-      setUsage([
-        { type: 'Users', current: 8, limit: 25, percentage: 32 },
-        { type: 'AI Queries', current: 340, limit: 500, percentage: 68 },
-        { type: 'Storage (GB)', current: 12, limit: 25, percentage: 48 },
-        { type: 'API Calls', current: 2400, limit: 10000, percentage: 24 },
+      setLoading(true);
+      const [billing, plans] = await Promise.all([
+        billingService.getBillingData(),
+        billingService.getAvailablePlans(),
       ]);
-
-      // Mock invoices
-      setInvoices([
-        {
-          id: '1',
-          invoiceNumber: 'INV-2024-001',
-          status: 'paid',
-          total: 149,
-          currency: 'USD',
-          dueDate: '2024-01-15',
-          paidAt: '2024-01-14',
-          type: 'subscription',
-        },
-        {
-          id: '2',
-          invoiceNumber: 'INV-2024-002',
-          status: 'open',
-          total: 149,
-          currency: 'USD',
-          dueDate: '2024-02-15',
-          type: 'subscription',
-        },
-      ]);
-
-      // Mock payment methods
-      setPaymentMethods([
-        {
-          id: '1',
-          type: 'card',
-          card: {
-            brand: 'visa',
-            last4: '4242',
-            expMonth: 12,
-            expYear: 2025,
-          },
-          isDefault: true,
-        },
-      ]);
+      
+      setBillingData(billing);
+      setAvailablePlans(plans);
     } catch (error) {
       console.error('Failed to load billing data:', error);
+      toast.error('Failed to load billing information');
     } finally {
       setLoading(false);
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    const variants: Record<string, { variant: any; text: string }> = {
-      active: { variant: 'default', text: 'Active' },
-      trialing: { variant: 'secondary', text: 'Trial' },
-      past_due: { variant: 'destructive', text: 'Past Due' },
-      canceled: { variant: 'outline', text: 'Canceled' },
-      paid: { variant: 'default', text: 'Paid' },
-      open: { variant: 'destructive', text: 'Unpaid' },
-    };
-
-    const config = variants[status] || { variant: 'outline', text: status };
-    return <Badge variant={config.variant}>{config.text}</Badge>;
+  // Handle plan upgrade
+  const handlePlanUpgrade = async (planId: string) => {
+    try {
+      const result = await billingService.updateSubscription(planId);
+      if (result.success) {
+        toast.success('Subscription updated successfully');
+        loadBillingData();
+      } else {
+        toast.error('Failed to update subscription');
+      }
+    } catch (error) {
+      toast.error('Failed to update subscription');
+    }
   };
 
-  const formatCurrency = (amount: number, currency: string = 'USD') => {
+  // Handle subscription cancellation
+  const handleCancelSubscription = async () => {
+    if (!confirm('Are you sure you want to cancel your subscription? You will lose access to premium features at the end of your billing period.')) {
+      return;
+    }
+
+    try {
+      const result = await billingService.cancelSubscription();
+      if (result.success) {
+        toast.success('Subscription cancelled successfully');
+        loadBillingData();
+      } else {
+        toast.error('Failed to cancel subscription');
+      }
+    } catch (error) {
+      toast.error('Failed to cancel subscription');
+    }
+  };
+
+  // Handle invoice download
+  const handleDownloadInvoice = async (invoiceId: string) => {
+    try {
+      await billingService.downloadInvoice(invoiceId);
+      toast.success('Invoice downloaded successfully');
+    } catch (error) {
+      toast.error('Failed to download invoice');
+    }
+  };
+
+  // Format currency
+  const formatCurrency = (amount: number, currency: string = 'USD'): string => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency,
     }).format(amount);
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
+  // Get usage percentage
+  const getUsagePercentage = (current: number, limit: number): number => {
+    if (limit === 0) return 0;
+    return Math.min((current / limit) * 100, 100);
   };
 
-  const usageChartData = usage.map(item => ({
-    name: item.type,
-    current: item.current,
-    limit: item.limit,
-    percentage: item.percentage,
-  }));
+  // Get usage color
+  const getUsageColor = (percentage: number): string => {
+    if (percentage >= 90) return 'text-red-600';
+    if (percentage >= 75) return 'text-yellow-600';
+    return 'text-green-600';
+  };
 
-  const billingHistoryData = [
-    { month: 'Jan', amount: 149 },
-    { month: 'Feb', amount: 149 },
-    { month: 'Mar', amount: 149 },
-    { month: 'Apr', amount: 149 },
-    { month: 'May', amount: 149 },
-    { month: 'Jun', amount: 149 },
-  ];
+  useEffect(() => {
+    loadBillingData();
+  }, []);
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="flex items-center justify-center h-96">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
   }
 
+  if (!billingData) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="text-center">
+          <AlertTriangle className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
+          <p>Failed to load billing information</p>
+          <Button onClick={loadBillingData} className="mt-2">
+            Retry
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const currentPlan = availablePlans.find(plan => plan.name.toUpperCase() === billingData.subscription.plan);
+
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Billing & Subscription</h1>
-          <p className="text-gray-600 mt-1">Manage your subscription, usage, and billing information</p>
+          <h1 className="text-2xl font-bold text-gray-900">Billing & Subscription</h1>
+          <p className="text-sm text-gray-600 mt-1">
+            Manage your subscription, usage, and billing information
+          </p>
         </div>
-        <Button>
-          <CreditCard className="w-4 h-4 mr-2" />
-          Manage Billing
-        </Button>
+        
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm">
+            <Settings className="h-4 w-4 mr-2" />
+            Billing Settings
+          </Button>
+        </div>
       </div>
 
-      {/* Current Subscription Overview */}
-      {subscription && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-green-500" />
-              Current Subscription
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div>
-                <p className="text-sm text-gray-600">Plan</p>
-                <p className="text-lg font-semibold">{subscription.plan.name}</p>
-                {subscription.plan.popular && (
-                  <Badge variant="secondary" className="mt-1">Popular</Badge>
-                )}
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Status</p>
-                <div className="mt-1">
-                  {getStatusBadge(subscription.status)}
-                </div>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Billing Cycle</p>
-                <p className="text-lg font-semibold capitalize">{subscription.billingCycle}</p>
-                <p className="text-sm text-gray-500">
-                  {formatCurrency(subscription.unitPrice)} / {subscription.billingCycle}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Next Billing</p>
-                <p className="text-lg font-semibold">{formatDate(subscription.currentPeriodEnd)}</p>
-                {subscription.trialEnd && (
-                  <p className="text-sm text-orange-600">
-                    Trial ends {formatDate(subscription.trialEnd)}
-                  </p>
-                )}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      {/* Subscription Status Alert */}
+      {billingData.subscription.status !== 'ACTIVE' && (
+        <Alert variant="destructive">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle>Subscription Issue</AlertTitle>
+          <AlertDescription>
+            Your subscription is {billingData.subscription.status.toLowerCase()}. 
+            Please update your payment method to continue using premium features.
+          </AlertDescription>
+        </Alert>
       )}
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-5">
+      {/* Current Subscription */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <CreditCard className="h-5 w-5" />
+            Current Subscription
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <h3 className="text-lg font-semibold">{billingData.subscription.plan}</h3>
+                <Badge variant={billingData.subscription.status === 'ACTIVE' ? 'default' : 'destructive'}>
+                  {billingData.subscription.status}
+                </Badge>
+              </div>
+              <p className="text-2xl font-bold">
+                {formatCurrency(billingData.subscription.amount)}
+                <span className="text-sm font-normal text-gray-600">/{billingData.subscription.interval}</span>
+              </p>
+              <p className="text-sm text-gray-600 mt-1">
+                Next billing: {format(new Date(billingData.subscription.nextBillingDate), 'MMM dd, yyyy')}
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-medium mb-2">Billing Period</h4>
+              <p className="text-sm text-gray-600">
+                {format(new Date(billingData.subscription.currentPeriodStart), 'MMM dd, yyyy')} - 
+                {format(new Date(billingData.subscription.currentPeriodEnd), 'MMM dd, yyyy')}
+              </p>
+              {billingData.subscription.cancelAtPeriodEnd && (
+                <Badge variant="secondary" className="mt-2">
+                  Cancels at period end
+                </Badge>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Button variant="outline" size="sm">
+                Change Plan
+              </Button>
+              {!billingData.subscription.cancelAtPeriodEnd && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleCancelSubscription}
+                  className="text-red-600 hover:text-red-700"
+                >
+                  Cancel Subscription
+                </Button>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Usage Overview */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <TrendingUp className="h-5 w-5" />
+            Usage Overview
+          </CardTitle>
+          <CardDescription>
+            Current usage across all features in your billing period
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {Object.entries(billingData.usage).map(([key, usage]) => {
+              const percentage = getUsagePercentage(usage.current, usage.limit);
+              const isUnlimited = usage.limit === -1;
+              
+              return (
+                <div key={key} className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-medium capitalize">
+                      {key.replace(/([A-Z])/g, ' $1').trim()}
+                    </span>
+                    <span className={`text-sm font-medium ${getUsageColor(percentage)}`}>
+                      {isUnlimited ? '∞' : `${usage.current}/${usage.limit}`}
+                    </span>
+                  </div>
+                  {!isUnlimited && (
+                    <Progress 
+                      value={percentage} 
+                      className="h-2"
+                    />
+                  )}
+                  {!isUnlimited && percentage >= 90 && (
+                    <p className="text-xs text-red-600">
+                      Approaching limit
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Tabs */}
+      <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-4">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="usage">Usage</TabsTrigger>
           <TabsTrigger value="invoices">Invoices</TabsTrigger>
-          <TabsTrigger value="payment">Payment</TabsTrigger>
           <TabsTrigger value="plans">Plans</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-6">
-          {/* Usage Overview */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {usage.map((item) => (
-              <Card key={item.type}>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-sm font-medium text-gray-600">{item.type}</p>
-                    <span className="text-xs text-gray-500">
-                      {item.current} / {item.limit === -1 ? '∞' : item.limit}
-                    </span>
-                  </div>
-                  <Progress value={item.percentage} className="h-2" />
-                  <p className="text-xs text-gray-500 mt-1">{item.percentage}% used</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {/* Billing History Chart */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Billing History</CardTitle>
-              <CardDescription>Your billing charges over the last 6 months</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={billingHistoryData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip formatter={(value) => [formatCurrency(value as number), 'Amount']} />
-                  <Line type="monotone" dataKey="amount" stroke="#3b82f6" strokeWidth={2} />
-                </LineChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="usage" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Usage Details</CardTitle>
-              <CardDescription>Current usage across all features and limits</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                {usage.map((item) => (
-                  <div key={item.type} className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">{item.type}</span>
-                      <span className="text-sm text-gray-600">
-                        {item.current} / {item.limit === -1 ? 'Unlimited' : item.limit}
+        <TabsContent value="overview" className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* Upcoming Invoice */}
+            {billingData.upcomingInvoice && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Calendar className="h-5 w-5" />
+                    Upcoming Invoice
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span>Amount:</span>
+                      <span className="font-medium">
+                        {formatCurrency(billingData.upcomingInvoice.amount, billingData.upcomingInvoice.currency)}
                       </span>
                     </div>
-                    <Progress value={item.percentage} className="h-3" />
-                    <div className="flex justify-between text-xs text-gray-500">
-                      <span>{item.percentage}% used</span>
-                      {item.percentage > 80 && (
-                        <span className="text-orange-600 flex items-center gap-1">
-                          <AlertCircle className="w-3 h-3" />
-                          Approaching limit
-                        </span>
-                      )}
+                    <div className="flex justify-between">
+                      <span>Due Date:</span>
+                      <span className="font-medium">
+                        {format(new Date(billingData.upcomingInvoice.dueDate), 'MMM dd, yyyy')}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Period:</span>
+                      <span className="font-medium">
+                        {format(new Date(billingData.upcomingInvoice.periodStart), 'MMM dd')} - 
+                        {format(new Date(billingData.upcomingInvoice.periodEnd), 'MMM dd, yyyy')}
+                      </span>
                     </div>
                   </div>
-                ))}
-              </div>
+                </CardContent>
+              </Card>
+            )}
 
-              <div className="mt-6">
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={usageChartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="percentage" fill="#3b82f6" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
+            {/* Payment Methods */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CreditCard className="h-5 w-5" />
+                  Payment Methods
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {billingData.paymentMethods.map((method) => (
+                    <div key={method.id} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <CreditCard className="h-5 w-5 text-gray-400" />
+                        <div>
+                          <p className="font-medium">
+                            {method.brand?.toUpperCase()} •••• {method.last4}
+                          </p>
+                          {method.expiryMonth && method.expiryYear && (
+                            <p className="text-sm text-gray-600">
+                              Expires {method.expiryMonth}/{method.expiryYear}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      {method.isDefault && (
+                        <Badge variant="secondary">Default</Badge>
+                      )}
+                    </div>
+                  ))}
+                  <Button variant="outline" size="sm" className="w-full">
+                    Add Payment Method
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
 
-        <TabsContent value="invoices" className="space-y-6">
+        <TabsContent value="invoices" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Recent Invoices</CardTitle>
-              <CardDescription>Your billing history and upcoming charges</CardDescription>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Invoice History
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {invoices.map((invoice) => (
-                  <div key={invoice.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-4">
-                      <FileText className="w-5 h-5 text-gray-400" />
+              <div className="space-y-3">
+                {billingData.invoices.map((invoice) => (
+                  <div key={invoice.id} className="flex items-center justify-between p-3 border rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <FileText className="h-5 w-5 text-gray-400" />
                       <div>
-                        <p className="font-medium">{invoice.invoiceNumber}</p>
+                        <p className="font-medium">{invoice.number}</p>
                         <p className="text-sm text-gray-600">
-                          Due: {formatDate(invoice.dueDate)}
-                          {invoice.paidAt && ` • Paid: ${formatDate(invoice.paidAt)}`}
+                          {format(new Date(invoice.created), 'MMM dd, yyyy')}
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3">
                       <div className="text-right">
-                        <p className="font-semibold">{formatCurrency(invoice.total)}</p>
-                        <div className="mt-1">
-                          {getStatusBadge(invoice.status)}
-                        </div>
+                        <p className="font-medium">
+                          {formatCurrency(invoice.amount, invoice.currency)}
+                        </p>
+                        <Badge 
+                          variant={
+                            invoice.status === 'PAID' ? 'default' :
+                            invoice.status === 'PENDING' ? 'secondary' :
+                            'destructive'
+                          }
+                        >
+                          {invoice.status}
+                        </Badge>
                       </div>
-                      <Button variant="outline" size="sm">
-                        Download
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handleDownloadInvoice(invoice.id)}
+                      >
+                        <Download className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
@@ -407,92 +739,54 @@ const BillingDashboard: React.FC = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="payment" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Payment Methods</CardTitle>
-              <CardDescription>Manage your payment methods and billing information</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {paymentMethods.map((method) => (
-                  <div key={method.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-4">
-                      <CreditCard className="w-5 h-5 text-gray-400" />
-                      <div>
-                        <p className="font-medium">
-                          {method.card ? (
-                            <>
-                              {method.card.brand.toUpperCase()} •••• {method.card.last4}
-                            </>
-                          ) : (
-                            method.type
-                          )}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          {method.card && `Expires ${method.card.expMonth}/${method.card.expYear}`}
-                          {method.isDefault && (
-                            <Badge variant="secondary" className="ml-2">Default</Badge>
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">Edit</Button>
-                      <Button variant="outline" size="sm">Remove</Button>
-                    </div>
-                  </div>
-                ))}
-                <Button variant="outline" className="w-full">
-                  <CreditCard className="w-4 h-4 mr-2" />
-                  Add Payment Method
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="plans" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {plans.map((plan) => (
-              <Card key={plan.id} className={`relative ${plan.popular ? 'border-blue-500 border-2' : ''}`}>
+        <TabsContent value="plans" className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {availablePlans.map((plan) => (
+              <Card 
+                key={plan.id} 
+                className={`relative ${plan.popular ? 'border-blue-500 shadow-lg' : ''}`}
+              >
                 {plan.popular && (
-                  <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                     <Badge className="bg-blue-500">Most Popular</Badge>
                   </div>
                 )}
                 <CardHeader>
-                  <CardTitle className="flex justify-between items-start">
-                    <span>{plan.name}</span>
-                    <span className="text-sm text-gray-500 capitalize">{plan.type}</span>
+                  <CardTitle className="flex items-center justify-between">
+                    {plan.name}
+                    {billingData.subscription.plan === plan.name.toUpperCase() && (
+                      <Badge variant="secondary">Current</Badge>
+                    )}
                   </CardTitle>
                   <CardDescription>{plan.description}</CardDescription>
+                  <div className="text-3xl font-bold">
+                    {formatCurrency(plan.price)}
+                    <span className="text-sm font-normal text-gray-600">/{plan.interval}</span>
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="mb-4">
-                    <span className="text-3xl font-bold">{formatCurrency(plan.price)}</span>
-                    <span className="text-gray-600">/{plan.billingInterval}</span>
-                  </div>
-                  
-                  <div className="space-y-2 mb-4">
-                    {plan.features.slice(0, 4).map((feature, index) => (
-                      <div key={index} className="flex items-center gap-2 text-sm">
-                        <CheckCircle className="w-4 h-4 text-green-500" />
-                        <span>
+                  <div className="space-y-3">
+                    {plan.features.map((feature, index) => (
+                      <div key={index} className="flex items-center gap-2">
+                        {feature.included ? (
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                        ) : (
+                          <div className="h-4 w-4 rounded-full border border-gray-300" />
+                        )}
+                        <span className={`text-sm ${feature.included ? '' : 'text-gray-500'}`}>
                           {feature.name}
-                          {feature.limit && ` (${feature.limit})`}
-                          {feature.unlimited && ' (Unlimited)'}
+                          {feature.limit && ` (${feature.limit.toLocaleString()})`}
                         </span>
                       </div>
                     ))}
                   </div>
-
                   <Button 
-                    className="w-full" 
-                    variant={subscription?.planId === plan.id ? "outline" : "default"}
-                    disabled={subscription?.planId === plan.id}
+                    className="w-full mt-6"
+                    variant={billingData.subscription.plan === plan.name.toUpperCase() ? 'outline' : 'default'}
+                    disabled={billingData.subscription.plan === plan.name.toUpperCase()}
+                    onClick={() => handlePlanUpgrade(plan.id)}
                   >
-                    {subscription?.planId === plan.id ? 'Current Plan' : 'Upgrade'}
+                    {billingData.subscription.plan === plan.name.toUpperCase() ? 'Current Plan' : 'Upgrade'}
                   </Button>
                 </CardContent>
               </Card>
