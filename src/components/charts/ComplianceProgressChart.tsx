@@ -907,4 +907,6 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
       </CardContent>
     </Card>
   );
-}; 
+};
+
+export default ComplianceProgressChart; 

@@ -628,4 +628,47 @@ export const NotificationTemplates = {
     silent: true,
     data: { type: 'system' }
   })
+};
+
+// Default export for backward compatibility
+export default usePushNotifications;
+
+// Template utilities for easy access
+export const useNotificationTemplates = () => {
+  return {
+    createRiskAlert: (riskData: any) => ({
+      ...NOTIFICATION_TEMPLATES.RISK_ALERT,
+      body: `Risk "${riskData.title}" requires attention`,
+      data: { ...NOTIFICATION_TEMPLATES.RISK_ALERT.data, ...riskData }
+    }),
+    createSystemUpdate: (updateData: any) => ({
+      ...NOTIFICATION_TEMPLATES.SYSTEM_UPDATE,
+      body: updateData.message || NOTIFICATION_TEMPLATES.SYSTEM_UPDATE.body,
+      data: { ...NOTIFICATION_TEMPLATES.SYSTEM_UPDATE.data, ...updateData }
+    }),
+    createComplianceReminder: (reminderData: any) => ({
+      ...NOTIFICATION_TEMPLATES.COMPLIANCE_REMINDER,
+      body: reminderData.message || NOTIFICATION_TEMPLATES.COMPLIANCE_REMINDER.body,
+      data: { ...NOTIFICATION_TEMPLATES.COMPLIANCE_REMINDER.data, ...reminderData }
+    })
+  };
+};
+
+export const useNotificationScheduler = () => {
+  return {
+    scheduleNotification: (notification: NotificationConfig, delay: number) => {
+      setTimeout(() => {
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification(notification.title, notification);
+        }
+      }, delay);
+    },
+    scheduleRecurring: (notification: NotificationConfig, interval: number) => {
+      return setInterval(() => {
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification(notification.title, notification);
+        }
+      }, interval);
+    }
+  };
 }; 

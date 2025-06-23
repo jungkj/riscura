@@ -17,7 +17,7 @@ import {
   Tablet,
   Monitor,
   Accessibility,
-  Gesture,
+  Hand,
   Wifi,
   WifiOff,
   Bell,
@@ -29,7 +29,7 @@ import {
   Vibrate,
   Download,
   Upload,
-  Refresh,
+  RotateCcw,
   Settings,
   CheckCircle,
   AlertCircle,
@@ -352,7 +352,7 @@ export default function MobileAccessibilityDemo() {
             variant={gestureEnabled ? "default" : "outline"}
             size="sm"
           >
-            <Gesture className="h-4 w-4 mr-2" />
+            <Hand className="h-4 w-4 mr-2" />
             Gestures
           </Button>
 
@@ -384,7 +384,7 @@ export default function MobileAccessibilityDemo() {
               <span className="hidden sm:inline">PWA</span>
             </TabsTrigger>
             <TabsTrigger value="gestures" className="flex items-center gap-2">
-              <Gesture className="h-4 w-4" />
+              <Hand className="h-4 w-4" />
               <span className="hidden sm:inline">Gestures</span>
             </TabsTrigger>
             <TabsTrigger value="offline" className="flex items-center gap-2">
@@ -617,7 +617,7 @@ export default function MobileAccessibilityDemo() {
                       </Button>
                     )}
                     <Button onClick={() => clearCache()} variant="outline" className="w-full">
-                      <Refresh className="h-4 w-4 mr-2" />
+                      <RotateCcw className="h-4 w-4 mr-2" />
                       Clear Cache
                     </Button>
                   </div>
@@ -680,7 +680,7 @@ export default function MobileAccessibilityDemo() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Gesture className="h-5 w-5" />
+                  <Hand className="h-5 w-5" />
                   Touch Gestures Demo
                 </CardTitle>
                 <CardDescription>
@@ -699,7 +699,7 @@ export default function MobileAccessibilityDemo() {
                     </div>
                     {isRefreshing && (
                       <div className="flex items-center justify-center gap-2">
-                        <Refresh className="h-4 w-4 animate-spin" />
+                        <RotateCcw className="h-4 w-4 animate-spin" />
                         <span>Refreshing...</span>
                       </div>
                     )}
