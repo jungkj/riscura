@@ -116,11 +116,24 @@ export default function RiskDetailPageWithSelection() {
             Back to Risks
           </Button>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => {
+                // Navigate to risk history page
+                window.location.href = `/dashboard/risks/${risk.id}/history`;
+              }}
+            >
               <Eye className="w-4 h-4 mr-2" />
               View History
             </Button>
-            <Button size="sm">
+            <Button 
+              size="sm"
+              onClick={() => {
+                // Navigate to edit risk page
+                window.location.href = `/dashboard/risks/${risk.id}/edit`;
+              }}
+            >
               <Edit3 className="w-4 h-4 mr-2" />
               Edit Risk
             </Button>

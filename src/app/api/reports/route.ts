@@ -4,6 +4,9 @@ import { getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/midd
 import { db } from '@/lib/db';
 import { z } from 'zod';
 import { Prisma } from '@prisma/client';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/auth-config';
+import { ReportingService, ReportType } from '@/services/ReportingService';
 
 // Report validation schemas
 const reportCreateSchema = z.object({
@@ -1093,4 +1096,200 @@ function calculateNextScheduledRun(schedule: any): Date | null {
   }
 
   return nextRun;
+}
+
+export async function GET_REPORT_HISTORY(request: NextRequest) {
+  try {
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    // Get user's organization
+    const user = await db.client.user.findUnique({
+      where: { id: session.user.id },
+      select: { organizationId: true, role: true },
+    });
+
+    if (!user?.organizationId) {
+      return NextResponse.json(
+        { error: 'User organization not found' },
+        { status: 400 }
+      );
+    }
+
+    // Parse query parameters
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '20');
+    const type = searchParams.get('type') as ReportType;
+    const dateFrom = searchParams.get('dateFrom');
+    const dateTo = searchParams.get('dateTo');
+    const createdBy = searchParams.get('createdBy');
+
+    // Validate pagination parameters
+    if (page < 1 || limit < 1 || limit > 100) {
+      return NextResponse.json(
+        { error: 'Invalid pagination parameters' },
+        { status: 400 }
+      );
+    }
+
+    // Validate report type if provided
+    if (type && !Object.values(ReportType).includes(type)) {
+      return NextResponse.json(
+        { error: `Invalid report type: ${type}` },
+        { status: 400 }
+      );
+    }
+
+    // Build filters
+    const filters: any = {};
+    if (type) filters.type = type;
+    if (dateFrom) filters.dateFrom = new Date(dateFrom);
+    if (dateTo) filters.dateTo = new Date(dateTo);
+    if (createdBy) {
+      // Only allow filtering by creator if user is admin or owner
+      if (['ADMIN', 'OWNER'].includes(user.role)) {
+        filters.createdBy = createdBy;
+      }
+    }
+
+    // Calculate pagination
+    const skip = (page - 1) * limit;
+    const pagination = { skip, take: limit };
+
+    // Initialize reporting service
+    const reportingService = new ReportingService();
+
+    // Get report history
+    const { reports, total } = await reportingService.getReportHistory(
+      user.organizationId,
+      filters,
+      pagination
+    );
+
+    // Calculate pagination metadata
+    const totalPages = Math.ceil(total / limit);
+    const hasNextPage = page < totalPages;
+    const hasPreviousPage = page > 1;
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        reports,
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages,
+          hasNextPage,
+          hasPreviousPage,
+        },
+      },
+    });
+
+  } catch (error) {
+    console.error('Error fetching report history:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch report history', details: (error as Error).message },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE_REPORT(request: NextRequest) {
+  try {
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    // Get user's organization and role
+    const user = await db.client.user.findUnique({
+      where: { id: session.user.id },
+      select: { organizationId: true, role: true },
+    });
+
+    if (!user?.organizationId) {
+      return NextResponse.json(
+        { error: 'User organization not found' },
+        { status: 400 }
+      );
+    }
+
+    // Only allow admins and owners to delete reports
+    if (!['ADMIN', 'OWNER'].includes(user.role)) {
+      return NextResponse.json(
+        { error: 'Insufficient permissions' },
+        { status: 403 }
+      );
+    }
+
+    // Parse request body
+    const body = await request.json();
+    const { reportIds } = body;
+
+    if (!reportIds || !Array.isArray(reportIds) || reportIds.length === 0) {
+      return NextResponse.json(
+        { error: 'Report IDs are required' },
+        { status: 400 }
+      );
+    }
+
+    // Validate that all reports belong to the user's organization
+    const reports = await db.client.report.findMany({
+      where: {
+        id: { in: reportIds },
+        organizationId: user.organizationId,
+      },
+      select: { id: true, filePath: true },
+    });
+
+    if (reports.length !== reportIds.length) {
+      return NextResponse.json(
+        { error: 'Some reports not found or access denied' },
+        { status: 404 }
+      );
+    }
+
+    // Delete files from filesystem
+    const fs = require('fs/promises');
+    for (const report of reports) {
+      try {
+        await fs.unlink(report.filePath);
+      } catch (error) {
+        console.warn(`Failed to delete file: ${report.filePath}`, error);
+      }
+    }
+
+    // Delete from database
+    await db.client.report.deleteMany({
+      where: {
+        id: { in: reportIds },
+        organizationId: user.organizationId,
+      },
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: `Successfully deleted ${reports.length} report(s)`,
+      deletedCount: reports.length,
+    });
+
+  } catch (error) {
+    console.error('Error deleting reports:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete reports', details: (error as Error).message },
+      { status: 500 }
+    );
+  }
 } 

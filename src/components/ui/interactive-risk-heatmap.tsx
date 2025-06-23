@@ -418,7 +418,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
               </div>
             </div>
             
-            {/* X-axis Label */}
+            {/* X-axis Label - Centered */}
               <div className="text-center mt-3">
                 <div className="inline-block text-sm font-bold text-gray-800">
               Likelihood Level
@@ -426,40 +426,42 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
               </div>
             </div>
             
-            {/* Compact Legend */}
+            {/* Risk Level Legend - Moved to Bottom */}
             <div className="bg-gray-50 rounded-lg border border-gray-200 p-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center space-x-1">
-                    <div className="w-3 h-3 bg-red-500 rounded border border-red-600"></div>
-                    <span className="text-xs font-medium text-gray-700">Critical</span>
-                    <Badge variant="destructive" className="text-xs px-1 py-0 h-4">
-                      {heatMapData.filter(d => d.level === 'critical').reduce((sum, d) => sum + d.count, 0)}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <div className="w-3 h-3 bg-red-300 rounded border border-red-400"></div>
-                    <span className="text-xs font-medium text-gray-700">High</span>
-                    <Badge variant="secondary" className="text-xs px-1 py-0 h-4 bg-red-100 text-red-800">
-                      {heatMapData.filter(d => d.level === 'high').reduce((sum, d) => sum + d.count, 0)}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <div className="w-3 h-3 bg-orange-400 rounded border border-orange-500"></div>
-                    <span className="text-xs font-medium text-gray-700">Medium</span>
-                    <Badge variant="secondary" className="text-xs px-1 py-0 h-4 bg-orange-100 text-orange-800">
-                      {heatMapData.filter(d => d.level === 'medium').reduce((sum, d) => sum + d.count, 0)}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <div className="w-3 h-3 bg-green-400 rounded border border-green-500"></div>
-                    <span className="text-xs font-medium text-gray-700">Low</span>
-                    <Badge variant="secondary" className="text-xs px-1 py-0 h-4 bg-green-100 text-green-800">
-                      {heatMapData.filter(d => d.level === 'low').reduce((sum, d) => sum + d.count, 0)}
-                    </Badge>
-                  </div>
+              <div className="text-center mb-3">
+                <div className="text-sm font-bold text-gray-800">Risk Levels</div>
+              </div>
+              <div className="flex items-center justify-center space-x-6">
+                <div className="flex items-center space-x-1">
+                  <div className="w-3 h-3 bg-green-400 rounded border border-green-500"></div>
+                  <span className="text-xs font-medium text-gray-700">Low</span>
+                  <Badge variant="secondary" className="text-xs px-1 py-0 h-4 bg-green-100 text-green-800">
+                    {heatMapData.filter(d => d.level === 'low').reduce((sum, d) => sum + d.count, 0)}
+                  </Badge>
                 </div>
-                
+                <div className="flex items-center space-x-1">
+                  <div className="w-3 h-3 bg-orange-400 rounded border border-orange-500"></div>
+                  <span className="text-xs font-medium text-gray-700">Medium</span>
+                  <Badge variant="secondary" className="text-xs px-1 py-0 h-4 bg-orange-100 text-orange-800">
+                    {heatMapData.filter(d => d.level === 'medium').reduce((sum, d) => sum + d.count, 0)}
+                  </Badge>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <div className="w-3 h-3 bg-red-300 rounded border border-red-400"></div>
+                  <span className="text-xs font-medium text-gray-700">High</span>
+                  <Badge variant="secondary" className="text-xs px-1 py-0 h-4 bg-red-100 text-red-800">
+                    {heatMapData.filter(d => d.level === 'high').reduce((sum, d) => sum + d.count, 0)}
+                  </Badge>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <div className="w-3 h-3 bg-red-500 rounded border border-red-600"></div>
+                  <span className="text-xs font-medium text-gray-700">Critical</span>
+                  <Badge variant="destructive" className="text-xs px-1 py-0 h-4">
+                    {heatMapData.filter(d => d.level === 'critical').reduce((sum, d) => sum + d.count, 0)}
+                  </Badge>
+                </div>
+              </div>
+              <div className="text-center mt-2">
                 <div className="text-xs text-gray-500">
                   Click any cell to view risks
                 </div>

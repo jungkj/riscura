@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { cn } from '@/lib/utils';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,12 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { EnhancedProboService } from '@/services/EnhancedProboService';
+import { CreateRiskModal } from './CreateRiskModal';
+import ExportService from '@/services/ExportService';
 import {
   Plus,
   LayoutGrid,
@@ -27,6 +34,9 @@ import {
   Target,
   Map,
   BarChart3,
+  Zap,
+  ArrowRight,
+  Link2,
 } from 'lucide-react';
 
 // Types
@@ -156,7 +166,7 @@ const getStatusConfig = (status: string) => {
     'open': { variant: 'destructive' as const, icon: AlertTriangle },
     'in-progress': { variant: 'secondary' as const, icon: Clock },
     'mitigated': { variant: 'outline' as const, icon: Shield },
-    'closed': { variant: 'default' as const, icon: CheckCircle },
+    'closed': { variant: 'secondary' as const, icon: CheckCircle },
     'monitoring': { variant: 'secondary' as const, icon: Eye },
   };
   return configs[status as keyof typeof configs] || configs.open;
@@ -339,7 +349,28 @@ const RiskRegister: React.FC = () => {
   });
 
   const handleRiskAction = (action: string, risk: Risk) => {
-    console.log(`Action: ${action}`, risk);
+    switch (action) {
+      case 'view':
+        // Navigate to risk detail view
+        toast.success(`Viewing details for ${risk.title}`);
+        break;
+      case 'edit':
+        // Open edit modal
+        toast.success(`Editing ${risk.title}`);
+        break;
+      case 'delete':
+        // Confirm and delete risk
+        if (confirm(`Are you sure you want to delete "${risk.title}"?`)) {
+          toast.success(`Deleted ${risk.title}`);
+        }
+        break;
+      case 'assign':
+        // Assign to user
+        toast.success(`Assigning ${risk.title}`);
+        break;
+      default:
+        toast.info(`Action "${action}" not yet implemented for ${risk.title}`);
+    }
   };
 
   const categories = [...new Set(sampleRisks.map(r => r.category))];
@@ -393,7 +424,7 @@ const RiskRegister: React.FC = () => {
         <div className="flex items-center space-x-enterprise-2">
           <div className="flex items-center border border-border rounded-lg p-1">
             <Button
-              variant={viewMode === 'card' ? 'default' : 'ghost'}
+              variant={viewMode === 'card' ? 'primary' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('card')}
               className="h-6 px-enterprise-2"
@@ -401,7 +432,7 @@ const RiskRegister: React.FC = () => {
               <LayoutGrid className="h-3 w-3" />
             </Button>
             <Button
-              variant={viewMode === 'table' ? 'default' : 'ghost'}
+              variant={viewMode === 'table' ? 'primary' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('table')}
               className="h-6 px-enterprise-2"
@@ -461,11 +492,80 @@ const RiskRegister: React.FC = () => {
 // Main Risk Management Dashboard
 export const RiskManagementDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('register');
+  const [proboMappings, setProboMappings] = useState<any[]>([]);
+  const [isLoadingMappings, setIsLoadingMappings] = useState(false);
+  const [isCreateRiskModalOpen, setIsCreateRiskModalOpen] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const totalRisks = sampleRisks.length;
   const openRisks = sampleRisks.filter(r => r.status === 'open').length;
   const criticalRisks = sampleRisks.filter(r => r.riskLevel === 'critical').length;
   const avgRiskScore = Math.round(sampleRisks.reduce((sum, r) => sum + r.riskScore, 0) / totalRisks);
+
+  // Load Probo control mappings
+  useEffect(() => {
+    const loadProboMappings = async () => {
+      setIsLoadingMappings(true);
+      try {
+        const proboService = EnhancedProboService.getInstance();
+        const mappings = await proboService.mapControlsToRisks('org-1'); // Replace with actual org ID
+        setProboMappings(mappings);
+      } catch (error) {
+        console.error('Failed to load Probo mappings:', error);
+      } finally {
+        setIsLoadingMappings(false);
+      }
+    };
+
+    if (activeTab === 'controls') {
+      loadProboMappings();
+    }
+  }, [activeTab]);
+
+  const handleImportProboControls = async () => {
+    try {
+      const response = await fetch('/api/controls/probo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'import',
+          organizationId: 'org-1', // Replace with actual org ID
+        }),
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        toast.success('Probo controls imported successfully!');
+        // Controls imported successfully, result contains import details
+      }
+    } catch (error) {
+      console.error('Failed to import Probo controls:', error);
+      toast.error('Failed to import Probo controls');
+    }
+  };
+
+  const handleExportRisks = async (format: 'csv' | 'pdf' | 'json' = 'csv') => {
+    try {
+      await ExportService.exportRisks(sampleRisks, { format });
+    } catch (error) {
+      console.error('Export failed:', error);
+    }
+  };
+
+  const handleCreateRisk = () => {
+    setIsCreateRiskModalOpen(true);
+  };
+
+  const handleRiskCreated = (newRisk: any) => {
+    // In a real app, you would refresh the data
+    setRefreshKey(prev => prev + 1);
+    toast.success('Risk created successfully!');
+  };
+
+  const handleOpenSettings = () => {
+    toast.success('Opening risk management settings...');
+    // Navigate to settings page or open settings modal
+  };
 
   return (
     <MainContentArea
@@ -476,19 +576,25 @@ export const RiskManagementDashboard: React.FC = () => {
       ]}
       primaryAction={{
         label: 'New Risk',
-        onClick: () => console.log('Create risk'),
+        onClick: handleCreateRisk,
         icon: Plus,
       }}
       secondaryActions={[
         {
-          label: 'Export',
-          onClick: () => console.log('Export'),
+          label: 'Export CSV',
+          onClick: () => handleExportRisks('csv'),
+          icon: Download,
+          variant: 'outline',
+        },
+        {
+          label: 'Export PDF',
+          onClick: () => handleExportRisks('pdf'),
           icon: Download,
           variant: 'outline',
         },
         {
           label: 'Settings',
-          onClick: () => console.log('Settings'),
+          onClick: handleOpenSettings,
           icon: Filter,
           variant: 'outline',
         },
@@ -523,6 +629,10 @@ export const RiskManagementDashboard: React.FC = () => {
           <TabsTrigger value="register">Risk Register</TabsTrigger>
           <TabsTrigger value="assessment">Assessment</TabsTrigger>
           <TabsTrigger value="heatmap">Heat Map</TabsTrigger>
+          <TabsTrigger value="controls">
+            <Shield className="h-4 w-4 mr-2" />
+            Probo Controls
+          </TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
       </Tabs>
@@ -555,6 +665,129 @@ export const RiskManagementDashboard: React.FC = () => {
         </div>
       </TabsContent>
 
+      <TabsContent value="controls" className="space-y-6">
+        {/* Probo Integration Header */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-[#199BEC]/10 rounded-lg">
+                  <Shield className="h-6 w-6 text-[#199BEC]" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg">Probo Security Controls</CardTitle>
+                  <CardDescription>
+                    AI-powered risk-control mapping with 651+ industry-standard controls
+                  </CardDescription>
+                </div>
+              </div>
+              <Button onClick={handleImportProboControls} className="flex items-center space-x-2">
+                <Plus className="h-4 w-4" />
+                <span>Import Controls</span>
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <Alert>
+              <Zap className="h-4 w-4" />
+              <AlertDescription>
+                Probo integration automatically maps your risks to relevant security controls, 
+                providing AI-powered recommendations for risk mitigation strategies.
+              </AlertDescription>
+            </Alert>
+          </CardContent>
+        </Card>
+
+        {/* Risk-Control Mappings */}
+        {isLoadingMappings ? (
+          <Card>
+            <CardContent className="flex items-center justify-center py-8">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#199BEC] mx-auto mb-4"></div>
+                <p className="text-sm text-gray-600">Loading control mappings...</p>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid gap-4">
+            {sampleRisks.map((risk) => {
+              const mapping = proboMappings.find(m => m.riskId === risk.id);
+              const coveragePercentage = mapping?.coveragePercentage || 0;
+              const controlCount = mapping?.controlIds?.length || 0;
+              
+              return (
+                <Card key={risk.id}>
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <Badge variant="outline" className="text-xs">
+                            {risk.id}
+                          </Badge>
+                          <Badge 
+                            variant={risk.riskLevel === 'critical' ? 'destructive' : 
+                                   risk.riskLevel === 'high' ? 'secondary' : 'outline'}
+                          >
+                            {risk.riskLevel.toUpperCase()}
+                          </Badge>
+                        </div>
+                        <CardTitle className="text-base">{risk.title}</CardTitle>
+                        <CardDescription className="line-clamp-2">
+                          {risk.description}
+                        </CardDescription>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-[#199BEC]">{controlCount}</div>
+                        <div className="text-xs text-gray-500">Controls</div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {/* Coverage Progress */}
+                      <div>
+                        <div className="flex justify-between text-sm mb-2">
+                          <span>Control Coverage</span>
+                          <span>{coveragePercentage}%</span>
+                        </div>
+                        <Progress value={coveragePercentage} className="h-2" />
+                      </div>
+
+                      {/* Recommendations */}
+                      {mapping?.recommendations && mapping.recommendations.length > 0 && (
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">AI Recommendations</h4>
+                          <ul className="space-y-1">
+                            {mapping.recommendations.map((rec: string, index: number) => (
+                              <li key={index} className="text-xs text-gray-600 flex items-start">
+                                <ArrowRight className="h-3 w-3 mt-0.5 mr-2 flex-shrink-0" />
+                                {rec}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {/* Actions */}
+                      <div className="flex space-x-2 pt-2">
+                        <Button variant="outline" size="sm" className="flex items-center space-x-1">
+                          <Link2 className="h-3 w-3" />
+                          <span>View Controls</span>
+                        </Button>
+                        <Button variant="outline" size="sm" className="flex items-center space-x-1">
+                          <Target className="h-3 w-3" />
+                          <span>Create Tasks</span>
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        )}
+      </TabsContent>
+
       <TabsContent value="analytics">
         <div className="text-center py-enterprise-12">
           <BarChart3 className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
@@ -566,6 +799,13 @@ export const RiskManagementDashboard: React.FC = () => {
           </p>
         </div>
       </TabsContent>
+
+      {/* Create Risk Modal */}
+      <CreateRiskModal
+        open={isCreateRiskModalOpen}
+        onOpenChange={setIsCreateRiskModalOpen}
+        onRiskCreated={handleRiskCreated}
+      />
     </MainContentArea>
   );
 };

@@ -42,7 +42,8 @@ import {
   TrendingUp,
   Lock,
   Globe,
-  ArrowRight
+  ArrowRight,
+  Sparkles
 } from 'lucide-react';
 
 // New single-word typewriter effect
@@ -329,6 +330,14 @@ export default function LandingPage() {
             {/* Enhanced Feature Cards */}
             {[
               {
+                icon: Brain,
+                title: "AI-Powered Control Generation",
+                description: "Automatically generate intelligent security controls for any risk using Probo's open-source compliance framework. Deploy SOC-2 ready controls in minutes.",
+                features: ["Instant control generation", "Probo integration", "SOC-2 compliance", "Smart risk mapping"],
+                color: "blue",
+                highlight: true
+              },
+              {
                 icon: Shield,
                 title: "Advanced Risk Assessment",
                 description: "AI-powered threat detection with real-time monitoring and automated compliance tracking across all enterprise systems.",
@@ -336,10 +345,10 @@ export default function LandingPage() {
                 color: "black"
               },
               {
-                icon: Brain,
-                title: "AI-Driven Intelligence",
-                description: "Machine learning algorithms analyze patterns, predict risks, and provide actionable insights for proactive security management.",
-                features: ["Predictive analytics", "Pattern recognition", "Smart recommendations", "Behavioral analysis"],
+                icon: Target,
+                title: "Smart Risk-Control Mapping",
+                description: "Intelligent mapping between risks and controls with AI-powered suggestions and automated effectiveness tracking.",
+                features: ["AI suggestions", "Automated mapping", "Effectiveness tracking", "Visual analytics"],
                 color: "black"
               },
               {
@@ -378,18 +387,32 @@ export default function LandingPage() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-white border border-[#D8C3A5]/30 h-full hover:shadow-xl hover:border-[#D8C3A5]/60 transition-all duration-300 group rounded-2xl">
+                <Card className={`${
+                  feature.highlight 
+                    ? 'bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-200 shadow-lg' 
+                    : 'bg-white border border-[#D8C3A5]/30'
+                } h-full hover:shadow-xl ${
+                  feature.highlight 
+                    ? 'hover:border-blue-300' 
+                    : 'hover:border-[#D8C3A5]/60'
+                } transition-all duration-300 group rounded-2xl`}>
                   <CardContent className="p-8">
+                    {feature.highlight && (
+                      <div className="flex items-center gap-2 mb-4">
+                        <Badge className="bg-blue-100 text-blue-800 border-blue-200">
+                          <Brain className="h-3 w-3 mr-1" />
+                          Powered by Probo AI
+                        </Badge>
+                      </div>
+                    )}
                     <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 ${
+                      feature.color === 'blue' ? 'bg-blue-100' :
                       feature.color === 'black' ? 'bg-secondary/20' :
-                      feature.color === 'black' ? 'bg-secondary/20' :
-                      feature.color === 'blue' ? 'bg-[#e6f4fd]' :
                       'bg-gray-50'
                     }`}>
                       <feature.icon className={`h-7 w-7 ${
+                        feature.color === 'blue' ? 'text-blue-600' :
                         feature.color === 'black' ? 'text-[#191919]' :
-                        feature.color === 'black' ? 'text-[#191919]' :
-                        feature.color === 'blue' ? 'text-[#199BEC]' :
                         'text-gray-600'
                       }`} />
                     </div>
@@ -412,6 +435,158 @@ export default function LandingPage() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* AI-Powered Probo Integration Section */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 via-purple-50 to-blue-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <Badge className="bg-blue-100 text-blue-800 border-blue-200 px-4 py-2 mb-6 text-sm font-inter">
+                <Brain className="h-4 w-4 mr-2" />
+                Powered by Probo Open Source
+              </Badge>
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#191919] mb-8 font-inter leading-tight">
+                AI-Generated Security Controls<br />
+                <span className="text-blue-600">in Minutes, Not Months</span>
+              </h2>
+              <p className="text-xl text-[#A8A8A8] max-w-4xl mx-auto font-inter leading-relaxed">
+                Leverage the power of <a href="https://github.com/getprobo/probo" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 underline">Probo's open-source compliance platform</a> to automatically generate intelligent security controls tailored to your specific risks and organizational context.
+              </p>
+            </motion.div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <Card className="bg-white border-2 border-blue-200 shadow-xl rounded-2xl">
+                <CardContent className="p-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                      <Brain className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-[#191919] font-inter">Smart Control Generation</h3>
+                      <p className="text-sm text-blue-600 font-inter">Powered by Probo AI</p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-xs font-bold text-blue-600">1</span>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-[#191919] font-inter">Analyze Risk Context</h4>
+                        <p className="text-sm text-[#A8A8A8] font-inter">AI analyzes your risk profile, industry, and organizational context</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-xs font-bold text-blue-600">2</span>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-[#191919] font-inter">Generate Tailored Controls</h4>
+                        <p className="text-sm text-[#A8A8A8] font-inter">Automatically create controls from Probo's compliance library</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-xs font-bold text-blue-600">3</span>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-[#191919] font-inter">Smart Risk Mapping</h4>
+                        <p className="text-sm text-[#A8A8A8] font-inter">Intelligent mapping with effectiveness tracking and coverage analysis</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
+              <div className="grid grid-cols-2 gap-4">
+                <Card className="bg-white border border-blue-200 p-6 text-center">
+                  <div className="text-3xl font-bold text-blue-600 mb-2">20h</div>
+                  <div className="text-sm text-[#A8A8A8] font-inter">SOC-2 Ready Time</div>
+                </Card>
+                <Card className="bg-white border border-blue-200 p-6 text-center">
+                  <div className="text-3xl font-bold text-blue-600 mb-2">95%</div>
+                  <div className="text-sm text-[#A8A8A8] font-inter">AI Accuracy</div>
+                </Card>
+                <Card className="bg-white border border-blue-200 p-6 text-center">
+                  <div className="text-3xl font-bold text-blue-600 mb-2">5min</div>
+                  <div className="text-sm text-[#A8A8A8] font-inter">Control Generation</div>
+                </Card>
+                <Card className="bg-white border border-blue-200 p-6 text-center">
+                  <div className="text-3xl font-bold text-blue-600 mb-2">100+</div>
+                  <div className="text-sm text-[#A8A8A8] font-inter">Control Templates</div>
+                </Card>
+              </div>
+
+              <Card className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <Sparkles className="h-6 w-6" />
+                  <h3 className="text-xl font-bold font-inter">Key Benefits</h3>
+                </div>
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 flex-shrink-0" />
+                    <span>Instant SOC-2, ISO27001, GDPR compliance controls</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 flex-shrink-0" />
+                    <span>Context-aware control recommendations</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 flex-shrink-0" />
+                    <span>Automated risk-control effectiveness tracking</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 flex-shrink-0" />
+                    <span>Open-source transparency and customization</span>
+                  </li>
+                </ul>
+              </Card>
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <h3 className="text-2xl font-bold text-[#191919] mb-6 font-inter">
+              Supported Compliance Frameworks
+            </h3>
+            <div className="flex flex-wrap justify-center gap-4">
+              {['SOC 2', 'ISO 27001', 'GDPR', 'HIPAA', 'PCI-DSS'].map((framework) => (
+                <Badge key={framework} className="bg-white border border-blue-200 text-blue-700 px-4 py-2 text-sm font-inter">
+                  {framework}
+                </Badge>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </section>
 

@@ -6,6 +6,7 @@ import { AuthProvider } from '@/context/AuthContext';
 import { RiskProvider } from '@/context/RiskContext';
 import { ControlProvider } from '@/context/ControlContext';
 import { AIProvider } from '@/context/AIContext';
+import { RCSAProvider } from '@/context/RCSAContext';
 import { Toaster } from '@/components/ui/sonner';
 import ClientProvider from '@/components/providers/ClientProvider';
 import { PerformanceProvider } from '@/components/providers/PerformanceProvider';
@@ -22,14 +23,16 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         >
           <TooltipProvider>
             <AuthProvider>
-              <RiskProvider>
-                <ControlProvider>
-                  <AIProvider>
-                    {children}
-                    <Toaster />
-                  </AIProvider>
-                </ControlProvider>
-              </RiskProvider>
+              <RCSAProvider>
+                <RiskProvider>
+                  <ControlProvider>
+                    <AIProvider>
+                      {children}
+                      <Toaster />
+                    </AIProvider>
+                  </ControlProvider>
+                </RiskProvider>
+              </RCSAProvider>
             </AuthProvider>
           </TooltipProvider>
         </ThemeProvider>

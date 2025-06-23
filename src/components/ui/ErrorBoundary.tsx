@@ -1,283 +1,439 @@
+'use client';
+
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertTriangle, RefreshCw, Home, Bug, Copy, CheckCircle } from 'lucide-react';
+import { AlertTriangle, RefreshCw, Home, Bug, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from './button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card';
-import { Alert, AlertDescription } from './alert';
+import { Badge } from './badge';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './collapsible';
 
-interface Props {
-  children: ReactNode;
-  fallback?: ReactNode;
-  onError?: (error: Error, errorInfo: ErrorInfo) => void;
-  showDetails?: boolean;
-  enableRecovery?: boolean;
-}
-
-interface State {
+interface ErrorBoundaryState {
   hasError: boolean;
   error: Error | null;
   errorInfo: ErrorInfo | null;
   errorId: string;
+  isReporting: boolean;
+  reportSent: boolean;
+  showDetails: boolean;
   retryCount: number;
-  copied: boolean;
 }
 
-export class ErrorBoundary extends Component<Props, State> {
-  private maxRetries = 3;
+interface ErrorBoundaryProps {
+  children: ReactNode;
+  fallback?: ReactNode;
+  onError?: (error: Error, errorInfo: ErrorInfo) => void;
+  showReportButton?: boolean;
+  maxRetries?: number;
+  level?: 'page' | 'component' | 'critical';
+}
 
-  public state: State = {
-    hasError: false,
-    error: null,
-    errorInfo: null,
-    errorId: '',
-    retryCount: 0,
-    copied: false
-  };
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  private retryTimeouts: NodeJS.Timeout[] = [];
 
-  public static getDerivedStateFromError(error: Error): Partial<State> {
-    // Update state so the next render will show the fallback UI
-    return {
-      hasError: true,
-      error,
-      errorId: `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    
+    this.state = {
+      hasError: false,
+      error: null,
+      errorInfo: null,
+      errorId: '',
+      isReporting: false,
+      reportSent: false,
+      showDetails: false,
+      retryCount: 0
     };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
-
-    this.setState({
+  static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
+    const errorId = `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    return {
+      hasError: true,
       error,
-      errorInfo
-    });
+      errorId,
+      showDetails: false
+    };
+  }
 
-    // Call custom error handler if provided
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    this.setState({ errorInfo });
+
+    // Log error to console in development
+    if (process.env.NODE_ENV === 'development') {
+      console.group('🚨 Error Boundary Caught Error');
+      console.error('Error:', error);
+      console.error('Error Info:', errorInfo);
+      console.error('Component Stack:', errorInfo.componentStack);
+      console.groupEnd();
+    }
+
+    // Call custom error handler
     if (this.props.onError) {
       this.props.onError(error, errorInfo);
     }
 
-    // Report error to monitoring service
-    this.reportError(error, errorInfo);
+    // Auto-report critical errors
+    if (this.props.level === 'critical') {
+      this.reportError();
+    }
+
+    // Track error in analytics
+    this.trackError(error, errorInfo);
   }
 
-  private reportError = (error: Error, errorInfo: ErrorInfo) => {
-    const errorReport = {
-      message: error.message,
-      stack: error.stack,
-      componentStack: errorInfo.componentStack,
-      timestamp: new Date().toISOString(),
-      userAgent: navigator.userAgent,
-      url: window.location.href,
-      errorId: this.state.errorId
-    };
+  componentWillUnmount() {
+    // Clear any pending timeouts
+    this.retryTimeouts.forEach(timeout => clearTimeout(timeout));
+  }
 
-    // This would typically send to your error monitoring service
-    console.error('Error Report:', errorReport);
-
-    // Store error locally for debugging
+  private trackError = (error: Error, errorInfo: ErrorInfo) => {
     try {
-      const existingErrors = JSON.parse(localStorage.getItem('riscura_errors') || '[]');
-      existingErrors.push(errorReport);
-      
-      // Keep only last 10 errors
-      const recentErrors = existingErrors.slice(-10);
-      localStorage.setItem('riscura_errors', JSON.stringify(recentErrors));
-    } catch (e) {
-      console.error('Failed to store error locally:', e);
+      // Send to analytics service
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'exception', {
+          description: error.message,
+          fatal: this.props.level === 'critical',
+          error_id: this.state.errorId
+        });
+      }
+
+      // Send to monitoring service (e.g., Sentry)
+      if (typeof window !== 'undefined' && (window as any).Sentry) {
+        (window as any).Sentry.withScope((scope: any) => {
+          scope.setTag('errorBoundary', true);
+          scope.setTag('level', this.props.level || 'component');
+          scope.setExtra('componentStack', errorInfo.componentStack);
+          scope.setExtra('errorId', this.state.errorId);
+          (window as any).Sentry.captureException(error);
+        });
+      }
+    } catch (trackingError) {
+      console.warn('Failed to track error:', trackingError);
+    }
+  };
+
+  private reportError = async () => {
+    if (this.state.isReporting || this.state.reportSent) return;
+
+    this.setState({ isReporting: true });
+
+    try {
+      const errorReport = {
+        errorId: this.state.errorId,
+        message: this.state.error?.message,
+        stack: this.state.error?.stack,
+        componentStack: this.state.errorInfo?.componentStack,
+        userAgent: navigator.userAgent,
+        timestamp: new Date().toISOString(),
+        url: window.location.href,
+        level: this.props.level || 'component',
+        retryCount: this.state.retryCount
+      };
+
+      const response = await fetch('/api/errors/report', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(errorReport)
+      });
+
+      if (response.ok) {
+        this.setState({ reportSent: true, isReporting: false });
+      } else {
+        throw new Error('Failed to send error report');
+      }
+    } catch (reportError) {
+      console.error('Failed to report error:', reportError);
+      this.setState({ isReporting: false });
     }
   };
 
   private handleRetry = () => {
-    if (this.state.retryCount < this.maxRetries) {
-      this.setState(prevState => ({
+    const { maxRetries = 3 } = this.props;
+    const { retryCount } = this.state;
+
+    if (retryCount >= maxRetries) {
+      return;
+    }
+
+    // Exponential backoff for retries
+    const delay = Math.min(1000 * Math.pow(2, retryCount), 10000);
+    
+    const timeout = setTimeout(() => {
+      this.setState({
         hasError: false,
         error: null,
         errorInfo: null,
-        retryCount: prevState.retryCount + 1,
-        copied: false
-      }));
-    }
-  };
+        retryCount: retryCount + 1,
+        showDetails: false
+      });
+    }, delay);
 
-  private handleReload = () => {
-    window.location.reload();
+    this.retryTimeouts.push(timeout);
   };
 
   private handleGoHome = () => {
     window.location.href = '/dashboard';
   };
 
-  private copyErrorDetails = async () => {
-    const errorDetails = this.getErrorDetails();
+  private handleReload = () => {
+    window.location.reload();
+  };
+
+  private toggleDetails = () => {
+    this.setState({ showDetails: !this.state.showDetails });
+  };
+
+  private getErrorMessage = (): string => {
+    const { error } = this.state;
+    const { level } = this.props;
+
+    if (!error) return 'An unexpected error occurred';
+
+    // Provide user-friendly messages for common errors
+    if (error.message.includes('ChunkLoadError')) {
+      return 'Failed to load application resources. This usually happens after an update.';
+    }
+
+    if (error.message.includes('Network Error')) {
+      return 'Unable to connect to the server. Please check your internet connection.';
+    }
+
+    if (error.message.includes('Permission denied')) {
+      return 'You don\'t have permission to access this resource.';
+    }
+
+    if (level === 'critical') {
+      return 'A critical error occurred that prevented the application from working properly.';
+    }
+
+    return error.message || 'An unexpected error occurred';
+  };
+
+  private getErrorSeverity = (): 'low' | 'medium' | 'high' | 'critical' => {
+    const { level } = this.props;
+    const { error } = this.state;
+
+    if (level === 'critical') return 'critical';
     
-    try {
-      await navigator.clipboard.writeText(errorDetails);
-      this.setState({ copied: true });
-      
-      setTimeout(() => {
-        this.setState({ copied: false });
-      }, 2000);
-    } catch (err) {
-      console.error('Failed to copy error details:', err);
+    if (error?.message.includes('ChunkLoadError') || 
+        error?.message.includes('Network Error')) {
+      return 'high';
+    }
+
+    if (error?.message.includes('Permission denied') || 
+        error?.message.includes('Unauthorized')) {
+      return 'medium';
+    }
+
+    return 'low';
+  };
+
+  private getSeverityColor = (severity: string): string => {
+    switch (severity) {
+      case 'critical': return 'destructive';
+      case 'high': return 'destructive';
+      case 'medium': return 'secondary';
+      case 'low': return 'outline';
+      default: return 'outline';
     }
   };
 
-  private getErrorDetails = (): string => {
-    const { error, errorInfo, errorId } = this.state;
-    
-    return `
-Error ID: ${errorId}
-Timestamp: ${new Date().toISOString()}
-URL: ${window.location.href}
-User Agent: ${navigator.userAgent}
+  private getRecoveryActions = () => {
+    const { error, retryCount } = this.state;
+    const { maxRetries = 3, level } = this.props;
+    const severity = this.getErrorSeverity();
 
-Error Message: ${error?.message || 'Unknown error'}
+    const actions = [];
 
-Stack Trace:
-${error?.stack || 'No stack trace available'}
-
-Component Stack:
-${errorInfo?.componentStack || 'No component stack available'}
-    `.trim();
-  };
-
-  private renderErrorDetails = () => {
-    if (!this.props.showDetails) return null;
-
-    const { error, errorInfo, errorId } = this.state;
-
-    return (
-      <Card className="mt-4 border-red-200">
-        <CardHeader>
-          <CardTitle className="text-sm flex items-center gap-2">
-            <Bug className="h-4 w-4" />
-            Error Details
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">Error ID</p>
-            <code className="text-xs bg-muted p-1 rounded">{errorId}</code>
-          </div>
-          
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">Message</p>
-            <code className="text-xs bg-muted p-2 rounded block">{error?.message}</code>
-          </div>
-
-          {error?.stack && (
-            <div>
-              <p className="text-xs text-muted-foreground mb-1">Stack Trace</p>
-              <pre className="text-xs bg-muted p-2 rounded overflow-auto max-h-32">
-                {error.stack}
-              </pre>
-            </div>
-          )}
-
-          {errorInfo?.componentStack && (
-            <div>
-              <p className="text-xs text-muted-foreground mb-1">Component Stack</p>
-              <pre className="text-xs bg-muted p-2 rounded overflow-auto max-h-32">
-                {errorInfo.componentStack}
-              </pre>
-            </div>
-          )}
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={this.copyErrorDetails}
-            className="w-full"
-          >
-            {this.state.copied ? (
-              <>
-                <CheckCircle className="h-4 w-4 mr-2" />
-                Copied!
-              </>
-            ) : (
-              <>
-                <Copy className="h-4 w-4 mr-2" />
-                Copy Error Details
-              </>
-            )}
-          </Button>
-        </CardContent>
-      </Card>
-    );
-  };
-
-  public render() {
-    if (this.state.hasError) {
-      // Custom fallback UI
-      if (this.props.fallback) {
-        return this.props.fallback;
-      }
-
-      // Default error UI
-      return (
-        <div className="min-h-screen bg-background flex items-center justify-center p-4">
-          <Card className="w-full max-w-md">
-            <CardHeader className="text-center">
-              <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
-                <AlertTriangle className="h-6 w-6 text-red-600" />
-              </div>
-              <CardTitle className="text-xl">Something went wrong</CardTitle>
-              <CardDescription>
-                We encountered an unexpected error. This has been logged and we'll look into it.
-              </CardDescription>
-            </CardHeader>
-            
-            <CardContent className="space-y-4">
-              {this.state.retryCount > 0 && (
-                <Alert>
-                  <AlertDescription>
-                    Retry attempt {this.state.retryCount} of {this.maxRetries}
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              <div className="grid gap-2">
-                {this.props.enableRecovery && this.state.retryCount < this.maxRetries && (
-                  <Button onClick={this.handleRetry} className="w-full">
-                    <RefreshCw className="h-4 w-4 mr-2" />
-                    Try Again
-                  </Button>
-                )}
-                
-                <Button 
-                  variant="outline" 
-                  onClick={this.handleReload}
-                  className="w-full"
-                >
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Reload Page
-                </Button>
-                
-                <Button 
-                  variant="outline" 
-                  onClick={this.handleGoHome}
-                  className="w-full"
-                >
-                  <Home className="h-4 w-4 mr-2" />
-                  Go to Dashboard
-                </Button>
-              </div>
-
-              {this.renderErrorDetails()}
-            </CardContent>
-          </Card>
-        </div>
+    // Retry action (if not at max retries)
+    if (retryCount < maxRetries && severity !== 'critical') {
+      actions.push(
+        <Button
+          key="retry"
+          onClick={this.handleRetry}
+          variant="default"
+          className="min-w-[120px]"
+        >
+          <RefreshCw className="w-4 h-4 mr-2" />
+          Try Again {retryCount > 0 && `(${retryCount}/${maxRetries})`}
+        </Button>
       );
     }
 
-    return this.props.children;
+    // Reload page action
+    if (error?.message.includes('ChunkLoadError') || severity === 'high') {
+      actions.push(
+        <Button
+          key="reload"
+          onClick={this.handleReload}
+          variant="outline"
+          className="min-w-[120px]"
+        >
+          <RefreshCw className="w-4 h-4 mr-2" />
+          Reload Page
+        </Button>
+      );
+    }
+
+    // Go to home action
+    if (level === 'page' || severity === 'high') {
+      actions.push(
+        <Button
+          key="home"
+          onClick={this.handleGoHome}
+          variant="outline"
+          className="min-w-[120px]"
+        >
+          <Home className="w-4 h-4 mr-2" />
+          Go to Dashboard
+        </Button>
+      );
+    }
+
+    return actions;
+  };
+
+  render() {
+    if (!this.state.hasError) {
+      return this.props.children;
+    }
+
+    // Use custom fallback if provided
+    if (this.props.fallback) {
+      return this.props.fallback;
+    }
+
+    const severity = this.getErrorSeverity();
+    const errorMessage = this.getErrorMessage();
+    const recoveryActions = this.getRecoveryActions();
+
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl">
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              <div className="p-3 rounded-full bg-destructive/10">
+                <AlertTriangle className="w-8 h-8 text-destructive" />
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <CardTitle className="text-xl">Something went wrong</CardTitle>
+              <Badge variant={this.getSeverityColor(severity) as any}>
+                {severity}
+              </Badge>
+            </div>
+            
+            <CardDescription className="text-base">
+              {errorMessage}
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="space-y-6">
+            {/* Error ID for support */}
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">
+                Error ID: <code className="text-xs bg-muted px-2 py-1 rounded">{this.state.errorId}</code>
+              </p>
+            </div>
+
+            {/* Recovery Actions */}
+            {recoveryActions.length > 0 && (
+              <div className="flex flex-wrap gap-3 justify-center">
+                {recoveryActions}
+              </div>
+            )}
+
+            {/* Report Error Button */}
+            {this.props.showReportButton !== false && (
+              <div className="text-center">
+                {!this.state.reportSent ? (
+                  <Button
+                    onClick={this.reportError}
+                    disabled={this.state.isReporting}
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Bug className="w-4 h-4 mr-2" />
+                    {this.state.isReporting ? 'Sending Report...' : 'Report This Error'}
+                  </Button>
+                ) : (
+                  <p className="text-sm text-green-600 dark:text-green-400">
+                    ✓ Error report sent successfully
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Technical Details (Collapsible) */}
+            {process.env.NODE_ENV === 'development' && (
+              <Collapsible>
+                <CollapsibleTrigger
+                  onClick={this.toggleDetails}
+                  className="flex items-center justify-center w-full text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <span>Technical Details</span>
+                  {this.state.showDetails ? (
+                    <ChevronUp className="w-4 h-4 ml-1" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4 ml-1" />
+                  )}
+                </CollapsibleTrigger>
+                
+                <CollapsibleContent className="mt-4">
+                  <div className="bg-muted p-4 rounded-lg space-y-3">
+                    {this.state.error && (
+                      <div>
+                        <h4 className="font-medium text-sm mb-2">Error Message:</h4>
+                        <pre className="text-xs bg-background p-2 rounded border overflow-auto">
+                          {this.state.error.message}
+                        </pre>
+                      </div>
+                    )}
+                    
+                    {this.state.error?.stack && (
+                      <div>
+                        <h4 className="font-medium text-sm mb-2">Stack Trace:</h4>
+                        <pre className="text-xs bg-background p-2 rounded border overflow-auto max-h-32">
+                          {this.state.error.stack}
+                        </pre>
+                      </div>
+                    )}
+                    
+                    {this.state.errorInfo?.componentStack && (
+                      <div>
+                        <h4 className="font-medium text-sm mb-2">Component Stack:</h4>
+                        <pre className="text-xs bg-background p-2 rounded border overflow-auto max-h-32">
+                          {this.state.errorInfo.componentStack}
+                        </pre>
+                      </div>
+                    )}
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+            )}
+
+            {/* Help Text */}
+            <div className="text-center text-sm text-muted-foreground">
+              <p>
+                If this problem persists, please contact support with the error ID above.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 }
 
-// Higher-order component for wrapping components with error boundary
-export function withErrorBoundary<P extends object>(
+// Higher-order component for wrapping specific components
+export const withErrorBoundary = <P extends object>(
   Component: React.ComponentType<P>,
-  errorBoundaryProps?: Omit<Props, 'children'>
-) {
+  errorBoundaryProps?: Partial<ErrorBoundaryProps>
+) => {
   const WrappedComponent = (props: P) => (
     <ErrorBoundary {...errorBoundaryProps}>
       <Component {...props} />
@@ -285,136 +441,44 @@ export function withErrorBoundary<P extends object>(
   );
 
   WrappedComponent.displayName = `withErrorBoundary(${Component.displayName || Component.name})`;
-  
   return WrappedComponent;
-}
+};
 
-// Hook for error handling in functional components
-export function useErrorHandler() {
-  const [error, setError] = React.useState<Error | null>(null);
+// Specialized error boundaries for different use cases
+export const PageErrorBoundary: React.FC<{ children: ReactNode }> = ({ children }) => (
+  <ErrorBoundary level="page" showReportButton={true} maxRetries={2}>
+    {children}
+  </ErrorBoundary>
+);
 
-  const resetError = React.useCallback(() => {
-    setError(null);
-  }, []);
+export const ComponentErrorBoundary: React.FC<{ 
+  children: ReactNode;
+  fallback?: ReactNode;
+}> = ({ children, fallback }) => (
+  <ErrorBoundary 
+    level="component" 
+    showReportButton={false} 
+    maxRetries={3}
+    fallback={fallback || (
+      <div className="p-4 border border-destructive/20 bg-destructive/5 rounded-lg">
+        <div className="flex items-center gap-2 text-destructive">
+          <AlertTriangle className="w-4 h-4" />
+          <span className="text-sm font-medium">Component Error</span>
+        </div>
+        <p className="text-sm text-muted-foreground mt-1">
+          This component failed to load. Please refresh the page.
+        </p>
+      </div>
+    )}
+  >
+    {children}
+  </ErrorBoundary>
+);
 
-  const handleError = React.useCallback((error: Error) => {
-    console.error('Error caught by useErrorHandler:', error);
-    setError(error);
-  }, []);
+export const CriticalErrorBoundary: React.FC<{ children: ReactNode }> = ({ children }) => (
+  <ErrorBoundary level="critical" showReportButton={true} maxRetries={0}>
+    {children}
+  </ErrorBoundary>
+);
 
-  // Throw error to be caught by ErrorBoundary
-  React.useEffect(() => {
-    if (error) {
-      throw error;
-    }
-  }, [error]);
-
-  return { handleError, resetError };
-}
-
-// Custom error types
-export class ValidationError extends Error {
-  constructor(message: string, public field?: string) {
-    super(message);
-    this.name = 'ValidationError';
-  }
-}
-
-export class NetworkError extends Error {
-  constructor(message: string, public status?: number) {
-    super(message);
-    this.name = 'NetworkError';
-  }
-}
-
-export class AuthenticationError extends Error {
-  constructor(message: string = 'Authentication required') {
-    super(message);
-    this.name = 'AuthenticationError';
-  }
-}
-
-export class PermissionError extends Error {
-  constructor(message: string = 'Permission denied') {
-    super(message);
-    this.name = 'PermissionError';
-  }
-}
-
-// Error utility functions
-export const errorUtils = {
-  isNetworkError: (error: unknown): error is NetworkError => {
-    return error instanceof NetworkError;
-  },
-
-  isValidationError: (error: unknown): error is ValidationError => {
-    return error instanceof ValidationError;
-  },
-
-  isAuthError: (error: unknown): error is AuthenticationError => {
-    return error instanceof AuthenticationError;
-  },
-
-  isPermissionError: (error: unknown): error is PermissionError => {
-    return error instanceof PermissionError;
-  },
-
-  getErrorMessage: (error: unknown): string => {
-    if (error instanceof Error) {
-      return error.message;
-    }
-    return String(error);
-  },
-
-  formatError: (error: unknown): {
-    message: string;
-    type: string;
-    recoverable: boolean;
-  } => {
-    if (error instanceof ValidationError) {
-      return {
-        message: error.message,
-        type: 'Validation Error',
-        recoverable: true
-      };
-    }
-
-    if (error instanceof NetworkError) {
-      return {
-        message: error.message,
-        type: 'Network Error',
-        recoverable: true
-      };
-    }
-
-    if (error instanceof AuthenticationError) {
-      return {
-        message: error.message,
-        type: 'Authentication Error',
-        recoverable: false
-      };
-    }
-
-    if (error instanceof PermissionError) {
-      return {
-        message: error.message,
-        type: 'Permission Error',
-        recoverable: false
-      };
-    }
-
-    if (error instanceof Error) {
-      return {
-        message: error.message,
-        type: 'Application Error',
-        recoverable: true
-      };
-    }
-
-    return {
-      message: String(error),
-      type: 'Unknown Error',
-      recoverable: true
-    };
-  }
-}; 
+export default ErrorBoundary; 

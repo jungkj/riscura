@@ -1,6 +1,7 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,10 +16,15 @@ import {
   Target,
   Plus,
   Filter,
-  Download
+  Download,
+  Eye,
+  Edit
 } from 'lucide-react';
 
 export default function RiskAssessmentPage() {
+  const router = useRouter();
+  const [selectedAssessment, setSelectedAssessment] = useState<number | null>(null);
+
   // Mock data for assessments
   const assessments = [
     {
@@ -71,6 +77,32 @@ export default function RiskAssessmentPage() {
     }
   };
 
+  const handleViewDetails = (assessmentId: number) => {
+    // Navigate to assessment detail page
+    router.push(`/dashboard/risks/assessment/${assessmentId}`);
+  };
+
+  const handleEditAssessment = (assessmentId: number) => {
+    // Navigate to assessment edit page
+    router.push(`/dashboard/risks/assessment/${assessmentId}/edit`);
+  };
+
+  const handleNewAssessment = () => {
+    router.push('/dashboard/risks/assessment/new');
+  };
+
+  const handleExportAssessments = () => {
+    // Mock export functionality
+    console.log('Exporting assessments...');
+    // In a real app, this would trigger a download
+  };
+
+  const handleFilterAssessments = () => {
+    // Mock filter functionality
+    console.log('Opening filter modal...');
+    // In a real app, this would open a filter modal
+  };
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -80,15 +112,15 @@ export default function RiskAssessmentPage() {
           <p className="text-gray-600">Manage and track your organization's risk assessment processes and outcomes.</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" className="text-sm">
+          <Button variant="outline" className="text-sm" onClick={handleFilterAssessments}>
             <Filter className="h-4 w-4 mr-2" />
             Filters
           </Button>
-          <Button variant="outline" className="text-sm">
+          <Button variant="outline" className="text-sm" onClick={handleExportAssessments}>
             <Download className="h-4 w-4 mr-2" />
             Export
           </Button>
-          <Button>
+          <Button onClick={handleNewAssessment}>
             <FileCheck className="w-4 h-4 mr-2" />
             New Assessment
           </Button>
@@ -200,10 +232,20 @@ export default function RiskAssessmentPage() {
                     </div>
                     
                     <div className="flex items-center space-x-2 ml-4">
-                      <Button variant="outline" size="sm">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handleViewDetails(assessment.id)}
+                      >
+                        <Eye className="h-4 w-4 mr-2" />
                         View Details
                       </Button>
-                      <Button variant="outline" size="sm">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handleEditAssessment(assessment.id)}
+                      >
+                        <Edit className="h-4 w-4 mr-2" />
                         Edit
                       </Button>
                     </div>

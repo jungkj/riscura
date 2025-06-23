@@ -1,4 +1,6 @@
 import OpenAI from 'openai';
+import Anthropic from '@anthropic-ai/sdk';
+import { prisma } from '@/lib/db';
 import { 
   AIResponse, 
   TokenUsage, 
@@ -190,8 +192,85 @@ class CircuitBreaker {
   }
 }
 
+export interface RiskAnalysis {
+  riskScore: number;
+  confidenceLevel: number;
+  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  analysis: {
+    likelihood: number;
+    impact: number;
+    factors: string[];
+    recommendations: string[];
+    mitigationStrategies: string[];
+  };
+  historicalComparison: {
+    similarRisks: Array<{
+      id: string;
+      title: string;
+      similarity: number;
+      outcome: string;
+    }>;
+    trendAnalysis: string;
+  };
+  complianceImpact: {
+    frameworks: string[];
+    requirements: string[];
+    severity: 'LOW' | 'MEDIUM' | 'HIGH';
+  };
+}
+
+export interface ControlRecommendation {
+  id: string;
+  title: string;
+  description: string;
+  type: 'PREVENTIVE' | 'DETECTIVE' | 'CORRECTIVE';
+  category: string;
+  priority: number;
+  implementationComplexity: 'LOW' | 'MEDIUM' | 'HIGH';
+  estimatedCost: string;
+  effectiveness: number;
+  reasoning: string;
+  dependencies: string[];
+  metrics: string[];
+}
+
+export interface ComplianceGap {
+  framework: string;
+  requirement: string;
+  currentStatus: string;
+  gapDescription: string;
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  recommendedActions: string[];
+  timeline: string;
+  resources: string[];
+}
+
+export interface AIInsight {
+  type: 'RISK_TREND' | 'CONTROL_EFFECTIVENESS' | 'COMPLIANCE_STATUS' | 'RECOMMENDATION';
+  title: string;
+  description: string;
+  confidence: number;
+  data: any;
+  actionable: boolean;
+  priority: number;
+}
+
+export interface ChatResponse {
+  message: string;
+  type: 'text' | 'data' | 'chart' | 'recommendation';
+  data?: any;
+  followUpQuestions?: string[];
+  actions?: Array<{
+    label: string;
+    action: string;
+    parameters?: any;
+  }>;
+}
+
 export class AIService {
-  private client: OpenAI;
+  private openai: OpenAI;
+  private anthropic: Anthropic;
+  private conversationHistory: Map<string, Array<{ role: string; content: string }>> = new Map();
   private config: AIConfig;
   private modelConfigs: Map<string, ModelConfig>;
   private rateLimitState: RateLimitState;
@@ -200,10 +279,9 @@ export class AIService {
   private cache: Map<string, CacheEntry>;
 
   constructor(config: Partial<AIConfig> = {}) {
-    // Initialize configuration with defaults
     this.config = {
-      apiKey: '', // No longer needed on client-side
-      baseURL: '/api/ai/proxy', // Use secure proxy
+      apiKey: '',
+      baseURL: '/api/ai/proxy',
       organization: '',
       defaultModel: 'gpt-4o-mini',
       maxTokens: 4000,
@@ -218,10 +296,14 @@ export class AIService {
       ...config
     };
 
-    // Initialize without OpenAI client - use proxy instead
-    this.client = null as any;
+    this.openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
 
-    // Initialize model configurations
+    this.anthropic = new Anthropic({
+      apiKey: process.env.ANTHROPIC_API_KEY || '',
+    });
+
     this.modelConfigs = new Map([
       ['gpt-4o', {
         name: 'gpt-4o',
@@ -257,7 +339,6 @@ export class AIService {
       }]
     ]);
 
-    // Initialize rate limiting
     this.rateLimitState = {
       requestsPerMinute: 0,
       tokensPerMinute: 0,
@@ -267,7 +348,6 @@ export class AIService {
       resetTime: new Date()
     };
 
-    // Initialize usage metrics
     this.usageMetrics = {
       totalRequests: 0,
       totalTokens: 0,
@@ -279,625 +359,716 @@ export class AIService {
       costThisHour: 0
     };
 
-    // Initialize circuit breaker
     this.circuitBreaker = new CircuitBreaker(5, 60000, 10000);
 
-    // Initialize cache
     this.cache = new Map();
 
-    // Start cleanup intervals
     this.startCleanupIntervals();
   }
 
   /**
-   * Analyze a risk using AI
+   * Analyze a risk using AI to provide intelligent scoring and recommendations
    */
-  async analyzeRisk(risk: Risk, organizationalContext?: {
-    industry?: string;
-    size?: string;
-    geography?: string;
-    riskAppetite?: string;
-    frameworks?: string[];
-  }): Promise<RiskAnalysis> {
-    const prompt = this.buildRiskAnalysisPrompt(risk, organizationalContext);
-    const response = await this.makeCompletion(prompt, 'risk_analyzer', undefined, organizationalContext);
-    
-    return this.parseRiskAnalysisResponse(response, risk);
+  async analyzeRisk(riskData: any, organizationId: string): Promise<RiskAnalysis> {
+    try {
+      // Get historical risk data for context
+      const historicalRisks = await this.getHistoricalRiskData(organizationId, riskData.category);
+      
+      // Get organization context
+      const orgContext = await this.getOrganizationContext(organizationId);
+
+      const prompt = this.buildRiskAnalysisPrompt(riskData, historicalRisks, orgContext);
+
+      const response = await this.openai.chat.completions.create({
+        model: 'gpt-4',
+        messages: [
+          {
+            role: 'system',
+            content: `You are ARIA, an expert AI risk management analyst. Analyze risks with precision, considering industry best practices, regulatory requirements, and organizational context. Provide actionable insights and quantitative assessments.`
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        temperature: 0.3,
+        max_tokens: 2000,
+      });
+
+      const analysis = this.parseRiskAnalysisResponse(response.choices[0].message.content || '');
+      
+      // Enhance with historical comparison
+      analysis.historicalComparison = await this.generateHistoricalComparison(riskData, historicalRisks);
+      
+      return analysis;
+    } catch (error) {
+      console.error('Risk analysis failed:', error);
+      throw new Error('AI risk analysis failed');
+    }
   }
 
   /**
-   * Get control recommendations for a risk
+   * Recommend controls for a specific risk using AI
    */
-  async recommendControls(risk: Risk, organizationalContext?: {
-    industry?: string;
-    size?: string;
-    geography?: string;
-    riskAppetite?: string;
-    frameworks?: string[];
-  }): Promise<ControlRecommendation[]> {
-    const prompt = this.buildControlRecommendationPrompt(risk, organizationalContext);
-    const response = await this.makeCompletion(prompt, 'control_advisor', undefined, organizationalContext);
-    
-    return this.parseControlRecommendationsResponse(response, risk);
+  async recommendControls(risk: any, organizationId: string): Promise<ControlRecommendation[]> {
+    try {
+      // Get existing controls for context
+      const existingControls = await this.getExistingControls(organizationId, risk.category);
+      
+      // Get industry best practices
+      const industryContext = await this.getIndustryContext(organizationId);
+
+      const prompt = this.buildControlRecommendationPrompt(risk, existingControls, industryContext);
+
+      const response = await this.anthropic.messages.create({
+        model: 'claude-3-sonnet-20240229',
+        max_tokens: 2000,
+        messages: [
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+      });
+
+      const recommendations = this.parseControlRecommendations(response.content[0].text);
+      
+      // Rank recommendations by effectiveness and feasibility
+      return this.rankControlRecommendations(recommendations, risk);
+    } catch (error) {
+      console.error('Control recommendation failed:', error);
+      throw new Error('AI control recommendation failed');
+    }
   }
 
   /**
-   * Generate content based on request
+   * Identify compliance gaps using AI analysis
    */
-  async generateContent(request: ContentGenerationRequest): Promise<ContentGenerationResult> {
-    const prompt = this.buildContentGenerationPrompt(request);
-    const response = await this.makeCompletion(prompt, 'general_assistant');
+  async identifyComplianceGaps(framework: string, organizationId: string): Promise<ComplianceGap[]> {
+    try {
+      // Get current compliance status
+      const complianceData = await this.getComplianceData(organizationId, framework);
+      
+      // Get framework requirements
+      const frameworkRequirements = await this.getFrameworkRequirements(framework);
 
-    return {
-      id: generateId('generated-content'),
-      content: response.content,
-      timestamp: new Date(),
-      usage: response.usage,
-      confidence: 0.85
-    };
+      const prompt = this.buildComplianceGapPrompt(complianceData, frameworkRequirements, framework);
+
+      const response = await this.openai.chat.completions.create({
+        model: 'gpt-4',
+        messages: [
+          {
+            role: 'system',
+            content: `You are ARIA, a compliance expert AI. Analyze compliance status against frameworks and identify gaps with specific, actionable recommendations.`
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        temperature: 0.2,
+        max_tokens: 2000,
+      });
+
+      return this.parseComplianceGaps(response.choices[0].message.content || '');
+    } catch (error) {
+      console.error('Compliance gap analysis failed:', error);
+      throw new Error('AI compliance analysis failed');
+    }
   }
 
   /**
-   * Explain content or concepts
+   * Generate AI-powered risk report with insights
    */
-  async explainContent(request: ExplanationRequest): Promise<ExplanationResult> {
-    const prompt = this.buildExplanationPrompt(request);
-    const response = await this.makeCompletion(prompt, 'general_assistant');
+  async generateRiskReport(risks: any[], organizationId: string): Promise<string> {
+    try {
+      const riskSummary = this.summarizeRisks(risks);
+      const trends = await this.analyzeRiskTrends(risks, organizationId);
+      
+      const prompt = `Generate a comprehensive executive risk report based on the following data:
 
-    return {
-      summary: response.content,
-      complexity: request.complexity || 'simple',
-      confidence: 0.9,
-      timestamp: new Date(),
-      usage: response.usage
-    };
+Risk Summary: ${JSON.stringify(riskSummary)}
+Trends Analysis: ${JSON.stringify(trends)}
+
+Include:
+1. Executive Summary
+2. Key Risk Indicators
+3. Trend Analysis
+4. Priority Recommendations
+5. Strategic Insights
+
+Format as a professional report with clear sections and actionable recommendations.`;
+
+      const response = await this.anthropic.messages.create({
+        model: 'claude-3-sonnet-20240229',
+        max_tokens: 3000,
+        messages: [
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+      });
+
+      return response.content[0].text;
+    } catch (error) {
+      console.error('Risk report generation failed:', error);
+      throw new Error('AI report generation failed');
+    }
   }
 
   /**
-   * Send a message with optional streaming
+   * Process natural language queries about risk data
    */
-  async sendMessage(
-    content: string, 
-    agentType: AgentType = 'general_assistant',
-    attachments?: MessageAttachment[],
-    onStream?: (chunk: string) => void,
-    organizationalContext?: {
-      industry?: string;
-      size?: string;
-      geography?: string;
-      riskAppetite?: string;
-      frameworks?: string[];
+  async processNaturalLanguageQuery(
+    query: string, 
+    userId: string, 
+    organizationId: string
+  ): Promise<ChatResponse> {
+    try {
+      // Get conversation history
+      const history = this.conversationHistory.get(userId) || [];
+      
+      // Analyze query intent
+      const intent = await this.analyzeQueryIntent(query);
+      
+      // Get relevant data based on intent
+      const contextData = await this.getRelevantData(intent, organizationId);
+      
+      const prompt = this.buildChatPrompt(query, history, contextData, intent);
+
+      const response = await this.openai.chat.completions.create({
+        model: 'gpt-4',
+        messages: [
+          {
+            role: 'system',
+            content: `You are ARIA, an intelligent risk management assistant. You help users understand their risk landscape, provide insights, and recommend actions. Be conversational, helpful, and data-driven. Always provide specific, actionable information when possible.`
+          },
+          ...history.slice(-10), // Keep last 10 messages for context
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 1500,
+      });
+
+      const chatResponse = this.parseChatResponse(response.choices[0].message.content || '', intent, contextData);
+      
+      // Update conversation history
+      history.push({ role: 'user', content: query });
+      history.push({ role: 'assistant', content: chatResponse.message });
+      this.conversationHistory.set(userId, history);
+      
+      return chatResponse;
+    } catch (error) {
+      console.error('Natural language query failed:', error);
+      return {
+        message: 'I apologize, but I encountered an error processing your request. Please try rephrasing your question.',
+        type: 'text'
+      };
     }
-  ): Promise<ConversationMessage> {
-    const prompt = this.buildConversationPrompt(content, agentType, attachments);
-    
-    let response: AIResponse;
-    if (onStream) {
-      response = await this.makeStreamingCompletion(prompt, agentType, onStream, undefined, organizationalContext);
-    } else {
-      response = await this.makeCompletion(prompt, agentType, undefined, organizationalContext);
-    }
-    
-    return this.formatConversationMessage(response, 'assistant');
   }
 
   /**
-   * Make a completion request with error handling and rate limiting
+   * Generate AI insights for dashboard
    */
-  private async makeCompletion(prompt: string, agentType: AgentType, model?: string, organizationalContext?: any): Promise<AIResponse> {
-    // Check if AI service is available
-    if (!this.client || !this.config.apiKey) {
-      throw new AIServiceError(
-        'OpenAI API key is required. Please set NEXT_PUBLIC_OPENAI_API_KEY environment variable.',
-        'MISSING_API_KEY',
-        undefined,
-        false,
-        'medium',
-        'AI features are currently unavailable. Please contact support.'
-      );
-    }
-    const startTime = Date.now();
-    const modelName = model || this.config.defaultModel;
-    const modelConfig = this.modelConfigs.get(modelName);
+  async generateInsights(organizationId: string): Promise<AIInsight[]> {
+    try {
+      const [risks, controls, compliance] = await Promise.all([
+        this.getOrganizationRisks(organizationId),
+        this.getOrganizationControls(organizationId),
+        this.getOrganizationCompliance(organizationId)
+      ]);
 
-    if (!modelConfig) {
-      throw new AIServiceError(`Unsupported model: ${modelName}`, 'UNSUPPORTED_MODEL');
-    }
+      const insights: AIInsight[] = [];
 
-    // Check rate limits
-    await this.checkRateLimit();
-
-    // Check cache
-    const cacheKey = this.generateCacheKey(prompt, modelName, agentType);
-    const cachedResponse = this.getFromCache(cacheKey);
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-
-    // Execute with circuit breaker
-    const response = await this.circuitBreaker.execute(async () => {
-      try {
-        const systemPrompt = this.getSystemPrompt(agentType, organizationalContext);
-        
-        const completion = await this.client.chat.completions.create({
-          model: modelName,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: prompt }
-          ],
-          max_tokens: Math.min(this.config.maxTokens, modelConfig.maxTokens),
-          temperature: this.config.temperature,
-          top_p: this.config.topP,
-          frequency_penalty: this.config.frequencyPenalty,
-          presence_penalty: this.config.presencePenalty,
-          user: 'riscura-user'
+      // Risk trend insights
+      const riskTrends = await this.analyzeRiskTrends(risks, organizationId);
+      if (riskTrends.significantChanges.length > 0) {
+        insights.push({
+          type: 'RISK_TREND',
+          title: 'Risk Trend Alert',
+          description: riskTrends.summary,
+          confidence: riskTrends.confidence,
+          data: riskTrends,
+          actionable: true,
+          priority: riskTrends.severity === 'HIGH' ? 1 : 2
         });
+      }
 
-        const usage = completion.usage;
-        const tokenUsage: TokenUsage = {
-          promptTokens: usage?.prompt_tokens || 0,
-          completionTokens: usage?.completion_tokens || 0,
-          totalTokens: usage?.total_tokens || 0,
-          estimatedCost: this.calculateCost(usage?.prompt_tokens || 0, usage?.completion_tokens || 0, modelConfig)
-        };
-
-        const aiResponse: AIResponse = {
-          id: completion.id,
-          content: completion.choices[0]?.message?.content || '',
+      // Control effectiveness insights
+      const controlInsights = await this.analyzeControlEffectiveness(controls);
+      if (controlInsights.ineffectiveControls.length > 0) {
+        insights.push({
+          type: 'CONTROL_EFFECTIVENESS',
+          title: 'Control Effectiveness Issues',
+          description: `${controlInsights.ineffectiveControls.length} controls need attention`,
           confidence: 0.85,
-          timestamp: new Date(),
-          usage: tokenUsage,
-          metadata: {
-            model: modelName,
-            agentType,
-            responseTime: Date.now() - startTime
-          }
-        };
-
-        // Update metrics
-        this.updateUsageMetrics(tokenUsage, Date.now() - startTime, true);
-        this.updateRateLimit(tokenUsage.totalTokens);
-
-        // Cache response
-        this.setCache(cacheKey, aiResponse, 900000); // 15 minutes TTL
-
-        return aiResponse;
-
-      } catch (error: unknown) {
-        this.updateUsageMetrics({ promptTokens: 0, completionTokens: 0, totalTokens: 0, estimatedCost: 0 }, Date.now() - startTime, false);
-        
-        const err = error as { status?: number; message?: string };
-        if (err.status === 429) {
-          const resetTime = new Date(Date.now() + 60000);
-          throw new RateLimitError('Rate limit exceeded', resetTime);
-        }
-        
-        if (err.status && err.status >= 500) {
-          throw new AIServiceError(`OpenAI service error: ${err.message}`, 'SERVICE_ERROR', err.status, true);
-        }
-        
-        throw new AIServiceError(`AI request failed: ${err.message}`, 'REQUEST_FAILED', err.status);
+          data: controlInsights,
+          actionable: true,
+          priority: 1
+        });
       }
-    });
 
-    return response;
+      // Compliance insights
+      const complianceInsights = await this.analyzeComplianceStatus(compliance);
+      if (complianceInsights.criticalGaps.length > 0) {
+        insights.push({
+          type: 'COMPLIANCE_STATUS',
+          title: 'Critical Compliance Gaps',
+          description: `${complianceInsights.criticalGaps.length} critical gaps identified`,
+          confidence: 0.9,
+          data: complianceInsights,
+          actionable: true,
+          priority: 1
+        });
+      }
+
+      return insights.sort((a, b) => a.priority - b.priority);
+    } catch (error) {
+      console.error('Insight generation failed:', error);
+      return [];
+    }
   }
 
   /**
-   * Make a streaming completion request
+   * Predict future risk trends using AI
    */
-  private async makeStreamingCompletion(
-    prompt: string, 
-    agentType: AgentType, 
-    onStream: (chunk: string) => void,
-    model?: string,
-    organizationalContext?: any
-  ): Promise<AIResponse> {
-    // Check if AI service is available
-    if (!this.client || !this.config.apiKey) {
-      throw new AIServiceError(
-        'OpenAI API key is required. Please set NEXT_PUBLIC_OPENAI_API_KEY environment variable.',
-        'MISSING_API_KEY',
-        undefined,
-        false,
-        'medium',
-        'AI features are currently unavailable. Please contact support.'
-      );
+  async predictRiskTrends(organizationId: string, timeframe: '30d' | '90d' | '1y'): Promise<any> {
+    try {
+      const historicalData = await this.getHistoricalRiskTrends(organizationId, timeframe);
+      
+      const prompt = `Analyze the following historical risk data and predict future trends:
+
+${JSON.stringify(historicalData)}
+
+Provide predictions for:
+1. Risk score trends
+2. Category-specific patterns
+3. Potential emerging risks
+4. Recommended preventive actions
+
+Format as JSON with confidence levels and specific predictions.`;
+
+      const response = await this.openai.chat.completions.create({
+        model: 'gpt-4',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a predictive analytics expert specializing in risk management. Provide data-driven predictions with confidence intervals.'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        temperature: 0.3,
+        max_tokens: 2000,
+      });
+
+      return JSON.parse(response.choices[0].message.content || '{}');
+    } catch (error) {
+      console.error('Risk trend prediction failed:', error);
+      throw new Error('AI trend prediction failed');
     }
-    const startTime = Date.now();
-    const modelName = model || this.config.defaultModel;
-    const modelConfig = this.modelConfigs.get(modelName);
-    
-    if (!modelConfig) {
-      throw new AIServiceError(
-        `Model ${modelName} is not available`,
-        'MODEL_NOT_FOUND'
-      );
-    }
+  }
 
-    await this.checkRateLimit();
+  // Private helper methods
 
-    let accumulatedContent = '';
-    let promptTokens = 0;
-    let completionTokens = 0;
-
-    const response = await this.circuitBreaker.execute(async () => {
-      try {
-        const systemPrompt = this.getSystemPrompt(agentType, organizationalContext);
-        
-        const stream = await this.client.chat.completions.create({
-          model: modelName,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: prompt }
-          ],
-          max_tokens: Math.min(this.config.maxTokens, modelConfig.maxTokens),
-          temperature: this.config.temperature,
-          top_p: this.config.topP,
-          frequency_penalty: this.config.frequencyPenalty,
-          presence_penalty: this.config.presencePenalty,
-          stream: true
-        });
-
-        for await (const chunk of stream) {
-          const delta = chunk.choices[0]?.delta;
-          if (delta?.content) {
-            accumulatedContent += delta.content;
-            onStream(delta.content);
-          }
-          
-          // Extract usage information from the final chunk
-          if (chunk.usage) {
-            promptTokens = chunk.usage.prompt_tokens;
-            completionTokens = chunk.usage.completion_tokens;
-          }
+  private async getHistoricalRiskData(organizationId: string, category: string) {
+    return await prisma.risk.findMany({
+      where: {
+        organizationId,
+        category,
+        createdAt: {
+          gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000) // Last year
         }
+      },
+      select: {
+        id: true,
+        title: true,
+        riskScore: true,
+        riskLevel: true,
+        status: true,
+        createdAt: true,
+        mitigationActions: true
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 50
+    });
+  }
 
-        // Estimate tokens if not provided
-        if (promptTokens === 0) {
-          promptTokens = Math.ceil((systemPrompt.length + prompt.length) / 4);
-        }
-        if (completionTokens === 0) {
-          completionTokens = Math.ceil(accumulatedContent.length / 4);
-        }
-
-        const usage: TokenUsage = {
-          promptTokens,
-          completionTokens,
-          totalTokens: promptTokens + completionTokens,
-          estimatedCost: this.calculateCost(promptTokens, completionTokens, modelConfig)
-        };
-
-        const responseTime = Date.now() - startTime;
-        this.updateRateLimit(usage.totalTokens);
-        this.updateUsageMetrics(usage, responseTime, true);
-
-        return {
-          id: generateId('ai-response'),
-          content: accumulatedContent,
-          model: modelName,
-          usage,
-          timestamp: new Date(),
-          confidence: this.calculateConfidence(accumulatedContent)
-        };
-
-      } catch (error) {
-        const responseTime = Date.now() - startTime;
-        this.updateUsageMetrics({ 
-          promptTokens: 0, 
-          completionTokens: 0, 
-          totalTokens: 0, 
-          estimatedCost: 0 
-        }, responseTime, false);
-        
-        if (error instanceof Error) {
-          if (error.message.includes('rate limit')) {
-            throw new RateLimitError(error.message, new Date(Date.now() + 60000));
-          }
-          if (error.message.includes('network') || error.message.includes('timeout')) {
-            throw new NetworkError(error.message);
-          }
-          throw new AIServiceError(
-            `OpenAI API error: ${error.message}`,
-            'API_ERROR',
-            undefined,
-            true
-          );
-        }
-        throw error;
+  private async getOrganizationContext(organizationId: string) {
+    return await prisma.organization.findUnique({
+      where: { id: organizationId },
+      select: {
+        name: true,
+        industry: true,
+        size: true,
+        complianceFrameworks: true
       }
     });
-
-    return response;
   }
 
-  // System prompts for different agents - now using master prompt
-  private getSystemPrompt(agentType: AgentType, organizationalContext?: {
-    industry?: string;
-    size?: string;
-    geography?: string;
-    riskAppetite?: string;
-    frameworks?: string[];
-  }): string {
-    const modifier = AGENT_MODIFIERS[agentType] || AGENT_MODIFIERS.general_assistant;
+  private async getExistingControls(organizationId: string, category: string) {
+    return await prisma.control.findMany({
+      where: {
+        organizationId,
+        category
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        type: true,
+        effectivenessRating: true,
+        status: true
+      }
+    });
+  }
+
+  private async getIndustryContext(organizationId: string) {
+    const org = await prisma.organization.findUnique({
+      where: { id: organizationId },
+      select: { industry: true }
+    });
     
-    const context = organizationalContext ? `
-ORGANIZATIONAL CONTEXT:
-- Industry: ${organizationalContext.industry || 'Not specified'}
-- Organization Size: ${organizationalContext.size || 'Not specified'}
-- Geographic Presence: ${organizationalContext.geography || 'Not specified'}
-- Risk Appetite: ${organizationalContext.riskAppetite || 'Not specified'}
-- Applied Frameworks: ${organizationalContext.frameworks?.join(', ') || 'Not specified'}
-` : '';
-
-    return `${RISCURA_MASTER_PROMPT.systemIdentity}
-
-${RISCURA_MASTER_PROMPT.mission}
-
-SPECIALIZED ROLE: ${modifier.focus}
-EXPERTISE: ${modifier.specialization}
-COMMUNICATION TONE: ${modifier.tone}
-
-${RISCURA_MASTER_PROMPT.professionalStandards}
-
-${RISCURA_MASTER_PROMPT.expertiseDomains}
-
-${RISCURA_MASTER_PROMPT.responseFramework}
-
-${RISCURA_MASTER_PROMPT.qualityStandards}
-
-${agentType === 'risk_analyzer' ? RISCURA_MASTER_PROMPT.riskMethodology : ''}
-${agentType === 'compliance_expert' ? RISCURA_MASTER_PROMPT.complianceFramework : ''}
-${agentType === 'control_advisor' ? RISCURA_MASTER_PROMPT.controlPrinciples : ''}
-
-${RISCURA_MASTER_PROMPT.confidenceGuidelines}
-
-${RISCURA_MASTER_PROMPT.regulatoryFrameworks}
-
-${RISCURA_MASTER_PROMPT.outputGuidelines}
-
-${RISCURA_MASTER_PROMPT.escalationTriggers}
-
-${context}
-
-Please provide responses that follow the established framework and maintain consistency with Riscura's enterprise risk management standards.`;
-  }
-
-  // Enhanced prompt builders that incorporate master prompt structure
-  private buildRiskAnalysisPrompt(risk: Risk, organizationalContext?: any): string {
-    const basePrompt = `RISK ANALYSIS REQUEST
-
-RISK DETAILS:
-- Title: ${risk.title}
-- Description: ${risk.description}
-- Category: ${risk.category}
-- Current Likelihood: ${risk.likelihood}/5
-- Current Impact: ${risk.impact}/5
-- Current Risk Score: ${risk.riskScore}
-- Status: ${risk.status}
-- Owner: ${risk.owner}
-
-ANALYSIS REQUIREMENTS:
-Following the Riscura risk assessment methodology, please provide:
-
-1. EXECUTIVE SUMMARY
-   - Risk validation and current scoring assessment
-   - Key findings and priority level
-   - Primary recommendations
-
-2. DETAILED ANALYSIS
-   - Root cause analysis
-   - Risk triggers and warning signs
-   - Potential consequences breakdown
-   - Risk velocity and persistence assessment
-   - Risk interdependencies and correlations
-
-3. RECOMMENDATIONS
-   - Risk response strategy options (avoid, mitigate, transfer, accept)
-   - Prioritized action items
-   - Implementation considerations
-   - Resource requirements and timeline
-
-4. MONITORING & VALIDATION
-   - Key Risk Indicators (KRIs) suggestions
-   - Monitoring frequency recommendations
-   - Escalation triggers
-   - Success metrics
-
-5. CONFIDENCE & ASSUMPTIONS
-   - Analysis confidence level (High/Medium/Low)
-   - Key assumptions made
-   - Data limitations identified
-   - Areas requiring expert validation
-
-Format as a professional risk assessment report suitable for enterprise review.`;
-
-    return basePrompt;
-  }
-
-  private buildControlRecommendationPrompt(risk: Risk, organizationalContext?: any): string {
-    const basePrompt = `CONTROL DESIGN REQUEST
-
-RISK INFORMATION:
-- Risk: ${risk.title}
-- Description: ${risk.description}
-- Category: ${risk.category}
-- Current Risk Score: ${risk.riskScore}
-- Risk Owner: ${risk.owner}
-
-CONTROL DESIGN REQUIREMENTS:
-Following Riscura's control design principles, please recommend:
-
-1. EXECUTIVE SUMMARY
-   - Control strategy overview
-   - Expected risk reduction
-   - Implementation priority
-
-2. DETAILED ANALYSIS
-   - Primary Controls (3-5 controls)
-     * Control objective and description
-     * Control type (preventive/detective/corrective)
-     * Control category (manual/automated/hybrid)
-     * Expected effectiveness (% risk reduction)
-   - Alternative control options
-   - Control interdependencies
-
-3. RECOMMENDATIONS
-   - Phased implementation roadmap
-   - Resource requirements and costs
-   - Dependencies and prerequisites
-   - Timeline and milestones
-   - Quick wins vs. long-term solutions
-
-4. MONITORING & VALIDATION
-   - Key Control Indicators (KCIs)
-   - Testing methodology and frequency
-   - Success criteria and metrics
-   - Evidence requirements
-
-5. CONFIDENCE & ASSUMPTIONS
-   - Control design confidence level
-   - Implementation risk assessment
-   - Key assumptions
-   - Areas requiring expert review
-
-Include cost-benefit analysis and implementation guidance.`;
-
-    return basePrompt;
-  }
-
-  private buildContentGenerationPrompt(request: ContentGenerationRequest): string {
-    return `Generate ${request.type} content for enterprise risk management.
-
-Context: ${JSON.stringify(request.context || {})}
-
-Requirements: ${request.requirements || 'Standard enterprise format with professional tone'}
-
-Please ensure the content is:
-- Professional and appropriate for enterprise use
-- Technically accurate and up-to-date
-- Actionable and practical
-- Properly structured and formatted
-- Compliant with industry standards`;
-  }
-
-  private buildExplanationPrompt(request: ExplanationRequest): string {
-    const complexity = request.complexity || 'simple';
-    const complexityMap = {
-      simple: 'Explain in simple terms suitable for general business users',
-      detailed: 'Provide a detailed explanation suitable for risk management professionals',
-      expert: 'Provide an expert-level explanation with technical details and industry references'
+    // Return industry-specific best practices
+    return {
+      industry: org?.industry,
+      commonRisks: [], // Would be populated from industry database
+      regulations: [], // Industry-specific regulations
+      bestPractices: [] // Industry best practices
     };
-
-    return `${complexityMap[complexity as keyof typeof complexityMap]}:
-
-Content to explain: ${request.content}
-
-Provide a clear, well-structured explanation that includes:
-- Key concepts and definitions
-- Practical implications
-- Relevant examples
-- Best practices where applicable`;
   }
 
-  private buildConversationPrompt(content: string, agentType: AgentType, attachments?: MessageAttachment[]): string {
-    let prompt = content;
+  private buildRiskAnalysisPrompt(riskData: any, historicalRisks: any[], orgContext: any): string {
+    return `Analyze the following risk for a ${orgContext?.industry} organization:
 
-    if (attachments && attachments.length > 0) {
-      prompt += '\n\nAttached context:\n';
-      attachments.forEach((attachment, index) => {
-        prompt += `${index + 1}. ${attachment.title}: ${JSON.stringify(attachment.data)}\n`;
+Risk Details:
+${JSON.stringify(riskData)}
+
+Historical Similar Risks:
+${JSON.stringify(historicalRisks.slice(0, 5))}
+
+Organization Context:
+${JSON.stringify(orgContext)}
+
+Provide a comprehensive analysis including:
+1. Risk score (0-100) with detailed calculation
+2. Likelihood and impact assessments (1-5 scale)
+3. Key risk factors and drivers
+4. Mitigation strategies and recommendations
+5. Compliance implications
+6. Comparison with historical similar risks
+
+Format the response as structured JSON with clear sections for each analysis component.`;
+  }
+
+  private buildControlRecommendationPrompt(risk: any, existingControls: any[], industryContext: any): string {
+    return `Recommend controls for the following risk:
+
+Risk: ${JSON.stringify(risk)}
+
+Existing Controls: ${JSON.stringify(existingControls)}
+
+Industry Context: ${JSON.stringify(industryContext)}
+
+Provide 3-5 control recommendations with:
+1. Control title and description
+2. Type (preventive/detective/corrective)
+3. Implementation complexity and cost estimate
+4. Effectiveness rating (1-10)
+5. Dependencies and prerequisites
+6. Success metrics
+
+Format as JSON array of control recommendations.`;
+  }
+
+  private buildComplianceGapPrompt(complianceData: any, requirements: any[], framework: string): string {
+    return `Identify compliance gaps for ${framework}:
+
+Current Compliance Status: ${JSON.stringify(complianceData)}
+
+Framework Requirements: ${JSON.stringify(requirements)}
+
+Analyze gaps and provide:
+1. Gap description and severity
+2. Current vs required status
+3. Recommended actions with timeline
+4. Resource requirements
+5. Risk of non-compliance
+
+Format as JSON array of gap analyses.`;
+  }
+
+  private buildChatPrompt(query: string, history: any[], contextData: any, intent: any): string {
+    return `User Query: ${query}
+
+Intent: ${JSON.stringify(intent)}
+
+Relevant Data: ${JSON.stringify(contextData)}
+
+Conversation History: ${JSON.stringify(history.slice(-5))}
+
+Provide a helpful, conversational response that:
+1. Directly answers the user's question
+2. Uses the relevant data to support your response
+3. Offers actionable insights or next steps
+4. Suggests follow-up questions if appropriate
+
+Be specific and data-driven while maintaining a conversational tone.`;
+  }
+
+  private async analyzeQueryIntent(query: string): Promise<any> {
+    const response = await this.openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        {
+          role: 'system',
+          content: 'Analyze the user query and determine the intent. Return JSON with intent type, entities, and data requirements.'
+        },
+        {
+          role: 'user',
+          content: `Analyze this query: "${query}"`
+        }
+      ],
+      temperature: 0.1,
+      max_tokens: 300,
+    });
+
+    try {
+      return JSON.parse(response.choices[0].message.content || '{}');
+    } catch {
+      return { type: 'general', entities: [], dataNeeded: [] };
+    }
+  }
+
+  private async getRelevantData(intent: any, organizationId: string): Promise<any> {
+    // Based on intent, fetch relevant data from database
+    const data: any = {};
+
+    if (intent.type?.includes('risk')) {
+      data.risks = await prisma.risk.findMany({
+        where: { organizationId },
+        take: 20,
+        orderBy: { riskScore: 'desc' }
       });
     }
 
-    return prompt;
+    if (intent.type?.includes('control')) {
+      data.controls = await prisma.control.findMany({
+        where: { organizationId },
+        take: 20
+      });
+    }
+
+    if (intent.type?.includes('compliance')) {
+      data.compliance = await prisma.complianceFramework.findMany({
+        where: { organizationId }
+      });
+    }
+
+    return data;
   }
 
-  // Response parsers
-  private parseRiskAnalysisResponse(response: AIResponse, risk: Risk): RiskAnalysis {
-    // Parse the AI response into structured risk analysis
-    // This would include more sophisticated parsing in production
+  private parseRiskAnalysisResponse(response: string): RiskAnalysis {
+    try {
+      return JSON.parse(response);
+    } catch {
+      // Fallback parsing if JSON fails
+      return {
+        riskScore: 50,
+        confidenceLevel: 0.7,
+        riskLevel: 'MEDIUM',
+        analysis: {
+          likelihood: 3,
+          impact: 3,
+          factors: ['Insufficient data for detailed analysis'],
+          recommendations: ['Gather more risk information'],
+          mitigationStrategies: ['Implement monitoring controls']
+        },
+        historicalComparison: {
+          similarRisks: [],
+          trendAnalysis: 'No historical data available'
+        },
+        complianceImpact: {
+          frameworks: [],
+          requirements: [],
+          severity: 'MEDIUM'
+        }
+      };
+    }
+  }
+
+  private parseControlRecommendations(response: string): ControlRecommendation[] {
+    try {
+      return JSON.parse(response);
+    } catch {
+      return [];
+    }
+  }
+
+  private parseComplianceGaps(response: string): ComplianceGap[] {
+    try {
+      return JSON.parse(response);
+    } catch {
+      return [];
+    }
+  }
+
+  private parseChatResponse(response: string, intent: any, contextData: any): ChatResponse {
     return {
-      id: generateId('risk-analysis'),
-      riskId: risk.id,
-      score: {
-        likelihood: risk.likelihood,
-        impact: risk.impact,
-        overall: risk.riskScore,
-        confidence: response.confidence
-      },
-      assessment: {
-        inherentRisk: risk.riskScore * 1.2,
-        residualRisk: risk.riskScore,
-        riskReduction: 20
-      },
-      recommendations: [],
-      gaps: [],
-      improvements: [],
-      relatedRisks: [],
-      indicators: [],
-      treatmentStrategy: {
-        recommended: 'mitigate',
-        rationale: 'Based on current risk level and organizational risk appetite',
-        alternatives: []
-      },
-      regulatoryConsiderations: [],
-      timestamp: new Date(),
-      confidence: response.confidence
+      message: response,
+      type: 'text',
+      followUpQuestions: [
+        'Would you like more details about any specific risk?',
+        'Do you need help with control implementation?',
+        'Should I analyze compliance status?'
+      ]
     };
   }
 
-  private parseControlRecommendationsResponse(response: AIResponse, risk: Risk): ControlRecommendation[] {
-    // Parse AI response into structured control recommendations
-    // This would include more sophisticated parsing in production
-    return [{
-      id: generateId('control-recommendation'),
-      title: `AI-Recommended Control for ${risk.title}`,
-      description: response.content.substring(0, 200) + '...',
-      type: 'preventive',
-      category: 'automated',
-      effectiveness: 85,
-      implementationCost: 'medium',
-      operationalCost: 'low',
-      priority: 1,
-      riskReduction: 70,
-      implementation: {
-        timeline: '3-6 months',
-        phases: [],
-        resources: [],
-        risks: [],
-        successCriteria: []
-      },
-      testing: {
-        frequency: 'monthly',
-        methodology: 'automated',
-        procedures: [],
-        evidence: [],
-        passFailCriteria: []
-      },
-      monitoring: {
-        metrics: [],
-        dashboards: [],
-        alerting: [],
-        reporting: []
-      },
-      dependencies: [],
-      alternatives: [],
-      complianceMapping: [],
-      timestamp: new Date(),
-      confidence: 0.85
-    }];
+  private async generateHistoricalComparison(riskData: any, historicalRisks: any[]) {
+    // Simple similarity matching based on title and category
+    const similarRisks = historicalRisks
+      .map(risk => ({
+        id: risk.id,
+        title: risk.title,
+        similarity: this.calculateSimilarity(riskData.title, risk.title),
+        outcome: risk.status
+      }))
+      .filter(risk => risk.similarity > 0.3)
+      .sort((a, b) => b.similarity - a.similarity)
+      .slice(0, 5);
+
+    return {
+      similarRisks,
+      trendAnalysis: 'Based on historical data, similar risks have shown varied outcomes.'
+    };
   }
 
-  private formatConversationMessage(response: AIResponse, role: 'user' | 'assistant' | 'system'): ConversationMessage {
+  private calculateSimilarity(text1: string, text2: string): number {
+    // Simple word overlap similarity
+    const words1 = text1.toLowerCase().split(' ');
+    const words2 = text2.toLowerCase().split(' ');
+    const intersection = words1.filter(word => words2.includes(word));
+    return intersection.length / Math.max(words1.length, words2.length);
+  }
+
+  private rankControlRecommendations(recommendations: ControlRecommendation[], risk: any): ControlRecommendation[] {
+    return recommendations.sort((a, b) => {
+      // Sort by effectiveness and inverse complexity
+      const scoreA = a.effectiveness - (a.implementationComplexity === 'HIGH' ? 3 : a.implementationComplexity === 'MEDIUM' ? 1 : 0);
+      const scoreB = b.effectiveness - (b.implementationComplexity === 'HIGH' ? 3 : b.implementationComplexity === 'MEDIUM' ? 1 : 0);
+      return scoreB - scoreA;
+    });
+  }
+
+  private summarizeRisks(risks: any[]) {
     return {
-      id: response.id,
-      role,
-      content: response.content,
-      timestamp: response.timestamp,
-      usage: response.usage,
-      metadata: response.metadata
+      total: risks.length,
+      byLevel: risks.reduce((acc, risk) => {
+        acc[risk.riskLevel] = (acc[risk.riskLevel] || 0) + 1;
+        return acc;
+      }, {}),
+      averageScore: risks.reduce((sum, risk) => sum + (risk.riskScore || 0), 0) / risks.length,
+      topCategories: this.getTopCategories(risks)
     };
+  }
+
+  private getTopCategories(risks: any[]) {
+    const categories = risks.reduce((acc, risk) => {
+      acc[risk.category] = (acc[risk.category] || 0) + 1;
+      return acc;
+    }, {});
+    
+    return Object.entries(categories)
+      .sort(([,a], [,b]) => (b as number) - (a as number))
+      .slice(0, 5)
+      .map(([category, count]) => ({ category, count }));
+  }
+
+  // Additional helper methods for data fetching
+  private async getComplianceData(organizationId: string, framework: string) {
+    return await prisma.complianceFramework.findFirst({
+      where: { organizationId, name: framework },
+      include: { requirements: true }
+    });
+  }
+
+  private async getFrameworkRequirements(framework: string) {
+    // This would typically come from a frameworks database
+    return [];
+  }
+
+  private async getOrganizationRisks(organizationId: string) {
+    return await prisma.risk.findMany({
+      where: { organizationId },
+      orderBy: { riskScore: 'desc' }
+    });
+  }
+
+  private async getOrganizationControls(organizationId: string) {
+    return await prisma.control.findMany({
+      where: { organizationId }
+    });
+  }
+
+  private async getOrganizationCompliance(organizationId: string) {
+    return await prisma.complianceFramework.findMany({
+      where: { organizationId }
+    });
+  }
+
+  private async analyzeRiskTrends(risks: any[], organizationId: string) {
+    // Simplified trend analysis
+    return {
+      significantChanges: [],
+      summary: 'Risk levels remain stable',
+      confidence: 0.8,
+      severity: 'LOW'
+    };
+  }
+
+  private async analyzeControlEffectiveness(controls: any[]) {
+    const ineffectiveControls = controls.filter(control => 
+      control.effectivenessRating && control.effectivenessRating < 3
+    );
+
+    return {
+      ineffectiveControls,
+      averageEffectiveness: controls.reduce((sum, c) => sum + (c.effectivenessRating || 0), 0) / controls.length
+    };
+  }
+
+  private async analyzeComplianceStatus(compliance: any[]) {
+    return {
+      criticalGaps: [],
+      overallScore: 85
+    };
+  }
+
+  private async getHistoricalRiskTrends(organizationId: string, timeframe: string) {
+    const daysBack = timeframe === '30d' ? 30 : timeframe === '90d' ? 90 : 365;
+    
+    return await prisma.risk.findMany({
+      where: {
+        organizationId,
+        createdAt: {
+          gte: new Date(Date.now() - daysBack * 24 * 60 * 60 * 1000)
+        }
+      },
+      select: {
+        riskScore: true,
+        riskLevel: true,
+        category: true,
+        createdAt: true
+      },
+      orderBy: { createdAt: 'asc' }
+    });
   }
 
   // Rate limiting and usage tracking

@@ -46,6 +46,19 @@ model Organization {
   spreadsheets            Spreadsheet[]
   spreadsheetTemplates    SpreadsheetTemplate[]  @relation("SpreadsheetTemplateOrg")
   
+  // Probo integration relationships
+  complianceFrameworks    ComplianceFramework[]
+  complianceAssessments   ComplianceAssessment[]
+  vendors                 Vendor[]
+  vendorAssessments       VendorAssessment[]
+  mitigationControls      MitigationControl[]
+  
+  // New Probo models
+  proboControls           ProboControl[]
+  proboEvidences          ProboEvidence[]
+  proboTasks              ProboTask[]
+  proboMeasures           ProboMeasure[]
+  
   @@map("organizations")
 }
 
@@ -118,6 +131,14 @@ model User {
   spreadsheetPermissions  SpreadsheetPermission[] @relation("SpreadsheetPermissionUser")
   spreadsheetVersions     SpreadsheetVersion[]   @relation("SpreadsheetVersionUser")
   createdTemplates        SpreadsheetTemplate[]  @relation("SpreadsheetTemplateCreator")
+  
+  // Probo integration relationships
+  complianceAssessments   ComplianceAssessment[] @relation("ComplianceAssessmentAssessor")
+  controlAssessments      ControlAssessmentResult[] @relation("ControlAssessmentAssessor")
+  evidenceUploads         AssessmentEvidence[]   @relation("AssessmentEvidenceUploader")
+  assignedFindings        AssessmentFinding[]    @relation("AssessmentFindingAssignee")
+  vendorAssessments       VendorAssessment[]     @relation("VendorAssessmentAssessor")
+  vendorDocuments         VendorDocument[]       @relation("VendorDocumentUploader")
   
   @@index([organizationId])
   @@index([email])
@@ -288,6 +309,12 @@ model Control {
   comments          Comment[]
   tasks             Task[]
   activities        Activity[]
+  
+  // Probo integration relationships
+  frameworkControls      FrameworkControl[]
+  controlAssessments     ControlAssessmentResult[]
+  assessmentEvidence     AssessmentEvidence[]
+  assessmentFindings     AssessmentFinding[]
   
   // Spreadsheet relationships
   spreadsheetRows   SpreadsheetRow[] @relation("SpreadsheetRowControl")
@@ -1564,4 +1591,640 @@ enum SpreadsheetPermissionType {
   EDITOR
   COMMENTER
   VIEWER
+}
+
+// ============================================================================
+// PROBO INTEGRATION MODELS - SOC 2 & COMPLIANCE
+// ============================================================================
+
+model ComplianceFramework {
+  id           String @id @default(cuid())
+  name         String
+  version      String
+  description  String?
+  isActive     Boolean @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Multi-tenant isolation
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  // Relationships
+  controls     FrameworkControl[]
+  requirements FrameworkRequirement[]
+  assessments  ComplianceAssessment[]
+  
+  @@index([organizationId])
+  @@map("compliance_frameworks")
+}
+
+model FrameworkControl {
+  id            String @id @default(cuid())
+  frameworkId   String
+  controlId     String
+  requirement   String
+  description   String
+  category      String
+  isRequired    Boolean @default(true)
+  orderIndex    Int?
+  
+  framework     ComplianceFramework @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
+  control       Control @relation(fields: [controlId], references: [id], onDelete: Cascade)
+  
+  @@unique([frameworkId, controlId])
+  @@index([frameworkId])
+  @@index([controlId])
+  @@map("framework_controls")
+}
+
+model FrameworkRequirement {
+  id           String @id @default(cuid())
+  frameworkId  String
+  title        String
+  description  String
+  category     String
+  controls     String[] // Array of control IDs
+  priority     String @default("MEDIUM") // HIGH, MEDIUM, LOW
+  
+  framework    ComplianceFramework @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
+  
+  @@index([frameworkId])
+  @@map("framework_requirements")
+}
+
+model ComplianceAssessment {
+  id              String @id @default(cuid())
+  frameworkId     String
+  name            String
+  description     String?
+  status          ComplianceAssessmentStatus @default(PLANNING)
+  progress        Int @default(0) // 0-100%
+  startDate       DateTime?
+  targetDate      DateTime?
+  completedDate   DateTime?
+  assessor        String // User ID
+  
+  // Multi-tenant isolation
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  framework       ComplianceFramework @relation(fields: [frameworkId], references: [id])
+  assessorUser    User @relation("ComplianceAssessmentAssessor", fields: [assessor], references: [id])
+  
+  // Assessment results
+  controlAssessments ControlAssessmentResult[]
+  evidenceItems      AssessmentEvidence[]
+  findings           AssessmentFinding[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([organizationId])
+  @@index([frameworkId])
+  @@index([status])
+  @@map("compliance_assessments")
+}
+
+model ControlAssessmentResult {
+  id              String @id @default(cuid())
+  assessmentId    String
+  controlId       String
+  status          ControlAssessmentStatus @default(NOT_ASSESSED)
+  effectiveness   EffectivenessRating?
+  implementationStatus String? // IMPLEMENTED, PARTIALLY_IMPLEMENTED, NOT_IMPLEMENTED
+  evidence        String?
+  notes           String?
+  assessedBy      String
+  assessedDate    DateTime?
+  
+  assessment      ComplianceAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  control         Control @relation(fields: [controlId], references: [id])
+  assessor        User @relation("ControlAssessmentAssessor", fields: [assessedBy], references: [id])
+  
+  @@unique([assessmentId, controlId])
+  @@index([assessmentId])
+  @@index([controlId])
+  @@map("control_assessment_results")
+}
+
+model AssessmentEvidence {
+  id            String @id @default(cuid())
+  assessmentId  String
+  controlId     String?
+  name          String
+  description   String?
+  evidenceType  String // DOCUMENT, SCREENSHOT, CONFIGURATION, INTERVIEW
+  fileUrl       String?
+  uploadedBy    String
+  uploadedAt    DateTime @default(now())
+  
+  assessment    ComplianceAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  control       Control? @relation(fields: [controlId], references: [id])
+  uploader      User @relation("AssessmentEvidenceUploader", fields: [uploadedBy], references: [id])
+  
+  @@index([assessmentId])
+  @@index([controlId])
+  @@map("assessment_evidence")
+}
+
+model AssessmentFinding {
+  id            String @id @default(cuid())
+  assessmentId  String
+  controlId     String?
+  title         String
+  description   String
+  severity      FindingSeverity
+  status        FindingStatus @default(OPEN)
+  remediation   String?
+  dueDate       DateTime?
+  assignedTo    String?
+  
+  assessment    ComplianceAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  control       Control? @relation(fields: [controlId], references: [id])
+  assignee      User? @relation("AssessmentFindingAssignee", fields: [assignedTo], references: [id])
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@index([assessmentId])
+  @@index([status])
+  @@index([severity])
+  @@map("assessment_findings")
+}
+
+// ============================================================================
+// VENDOR RISK ASSESSMENT MODELS
+// ============================================================================
+
+model Vendor {
+  id              String @id @default(cuid())
+  name            String
+  legalName       String?
+  description     String?
+  category        VendorCategory
+  websiteUrl      String?
+  
+  // Contact Information
+  primaryContact  String?
+  email           String?
+  phone           String?
+  address         String?
+  
+  // Risk Information
+  riskTier        VendorRiskTier @default(MEDIUM)
+  criticality     VendorCriticality @default(MEDIUM)
+  dataAccess      String[] // Types of data vendor has access to
+  
+  // Compliance Information
+  certifications  String[] // SOC2, ISO27001, etc.
+  lastReviewed    DateTime?
+  nextReview      DateTime?
+  
+  // Multi-tenant isolation
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  // Relationships
+  assessments     VendorAssessment[]
+  contracts       VendorContract[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([organizationId])
+  @@index([category])
+  @@index([riskTier])
+  @@map("vendors")
+}
+
+model VendorAssessment {
+  id                String @id @default(cuid())
+  vendorId          String
+  assessmentType    VendorAssessmentType @default(INITIAL)
+  riskScore         Int
+  complianceStatus  VendorComplianceStatus
+  assessmentDate    DateTime @default(now())
+  assessedBy        String
+  
+  // Vendor Information (captured at time of assessment)
+  vendorSnapshot    Json // Snapshot of vendor info at time of assessment
+  
+  // Assessment Results
+  securityScore     Int?
+  privacyScore      Int?
+  complianceScore   Int?
+  
+  // Multi-tenant isolation
+  organizationId    String
+  organization      Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  vendor            Vendor @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  assessor          User @relation("VendorAssessmentAssessor", fields: [assessedBy], references: [id])
+  
+  // Assessment artifacts
+  findings          VendorFinding[]
+  documents         VendorDocument[]
+  
+  @@index([organizationId])
+  @@index([vendorId])
+  @@index([assessmentDate])
+  @@map("vendor_assessments")
+}
+
+model VendorFinding {
+  id           String @id @default(cuid())
+  assessmentId String
+  category     String
+  severity     FindingSeverity
+  title        String
+  description  String
+  remediation  String?
+  status       FindingStatus @default(OPEN)
+  dueDate      DateTime?
+  
+  assessment   VendorAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  @@index([assessmentId])
+  @@index([severity])
+  @@index([status])
+  @@map("vendor_findings")
+}
+
+model VendorDocument {
+  id           String @id @default(cuid())
+  assessmentId String
+  name         String
+  documentType String // SECURITY_POLICY, SOC2_REPORT, PRIVACY_POLICY, etc.
+  fileUrl      String?
+  externalUrl  String?
+  uploadedBy   String
+  uploadedAt   DateTime @default(now())
+  
+  assessment   VendorAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  uploader     User @relation("VendorDocumentUploader", fields: [uploadedBy], references: [id])
+  
+  @@index([assessmentId])
+  @@map("vendor_documents")
+}
+
+model VendorContract {
+  id              String @id @default(cuid())
+  vendorId        String
+  contractType    String // MSA, DPA, BAA, SLA, etc.
+  startDate       DateTime
+  endDate         DateTime?
+  renewalDate     DateTime?
+  value           Float?
+  currency        String @default("USD")
+  status          ContractStatus @default(ACTIVE)
+  
+  // Security clauses
+  hasSecurityClause Boolean @default(false)
+  hasDataClause     Boolean @default(false)
+  hasIncidentClause Boolean @default(false)
+  
+  vendor          Vendor @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([vendorId])
+  @@index([status])
+  @@index([endDate])
+  @@map("vendor_contracts")
+}
+
+// ============================================================================
+// MITIGATION CONTROLS LIBRARY
+// ============================================================================
+
+model MitigationControl {
+  id          String @id @default(cuid())
+  name        String
+  category    String
+  importance  MitigationImportance
+  standards   String // ISO27001:2022-A.5.16;SOC2-CC6.1;etc.
+  description String
+  
+  // Implementation guidance
+  implementation String?
+  evidence       String?
+  frequency      String? // CONTINUOUS, DAILY, WEEKLY, MONTHLY, QUARTERLY, ANNUALLY
+  
+  // Relationships to existing controls
+  linkedControls String[] // Array of Control IDs
+  
+  // Multi-tenant (can be global or organization-specific)
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  @@index([organizationId])
+  @@index([category])
+  @@index([importance])
+  @@map("mitigation_controls")
+}
+
+// ============================================================================
+// ENUMS FOR PROBO INTEGRATION
+// ============================================================================
+
+enum ComplianceAssessmentStatus {
+  PLANNING
+  IN_PROGRESS
+  UNDER_REVIEW
+  COMPLETED
+  PAUSED
+  CANCELLED
+}
+
+enum ControlAssessmentStatus {
+  NOT_ASSESSED
+  IN_PROGRESS
+  NEEDS_EVIDENCE
+  UNDER_REVIEW
+  PASSED
+  FAILED
+  NOT_APPLICABLE
+}
+
+enum FindingSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum FindingStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  ACCEPTED_RISK
+  FALSE_POSITIVE
+}
+
+enum VendorCategory {
+  ANALYTICS
+  CLOUD_MONITORING
+  CLOUD_PROVIDER
+  COLLABORATION
+  CUSTOMER_SUPPORT
+  DATA_STORAGE_AND_PROCESSING
+  DOCUMENT_MANAGEMENT
+  EMPLOYEE_MANAGEMENT
+  ENGINEERING
+  FINANCE
+  IDENTITY_PROVIDER
+  IT
+  MARKETING
+  OFFICE_OPERATIONS
+  OTHER
+  PASSWORD_MANAGEMENT
+  PRODUCT_AND_DESIGN
+  PROFESSIONAL_SERVICES
+  RECRUITING
+  SALES
+  SECURITY
+  VERSION_CONTROL
+}
+
+enum VendorRiskTier {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum VendorCriticality {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum VendorAssessmentType {
+  INITIAL
+  ANNUAL
+  CHANGE_TRIGGERED
+  INCIDENT_TRIGGERED
+  AD_HOC
+}
+
+enum VendorComplianceStatus {
+  COMPLIANT
+  MODERATE_RISK
+  HIGH_RISK
+  CRITICAL_RISK
+  NOT_ASSESSED
+}
+
+enum ContractStatus {
+  DRAFT
+  ACTIVE
+  EXPIRED
+  TERMINATED
+  UNDER_REVIEW
+}
+
+enum MitigationImportance {
+  MANDATORY
+  PREFERRED
+  ADVANCED
+}
+
+// Probo Integration Models
+model ProboControl {
+  id            String   @id @default(cuid())
+  controlId     String   @unique // Probo control ID (e.g., "enforce-sso")
+  name          String
+  category      String
+  importance    ProboImportance
+  standards     String[] // Array of standards (ISO27001, SOC2, etc.)
+  description   String   @db.Text
+  
+  // Implementation tracking
+  status        ControlStatus @default(PLANNED)
+  assignedTo    String?
+  dueDate       DateTime?
+  completedDate DateTime?
+  
+  // Evidence and documentation
+  evidences     ProboEvidence[]
+  tasks         ProboTask[]
+  measures      ProboMeasure[]
+  
+  // Relationships
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@map("probo_controls")
+}
+
+model ProboEvidence {
+  id            String   @id @default(cuid())
+  title         String
+  description   String?  @db.Text
+  type          EvidenceType
+  status        EvidenceStatus @default(DRAFT)
+  
+  // File/document details
+  fileName      String?
+  fileUrl       String?
+  fileSize      Int?
+  mimeType      String?
+  
+  // Metadata
+  collectedBy   String
+  collectedDate DateTime @default(now())
+  validUntil    DateTime?
+  
+  // Relationships
+  controlId     String
+  control       ProboControl @relation(fields: [controlId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@map("probo_evidences")
+}
+
+model ProboTask {
+  id            String   @id @default(cuid())
+  title         String
+  description   String?  @db.Text
+  status        TaskStatus @default(TODO)
+  priority      TaskPriority @default(MEDIUM)
+  
+  // Scheduling
+  dueDate       DateTime?
+  estimatedHours Int?
+  actualHours   Int?
+  
+  // Assignment
+  assignedTo    String?
+  assignedBy    String
+  completedBy   String?
+  completedDate DateTime?
+  
+  // Relationships
+  controlId     String?
+  control       ProboControl? @relation(fields: [controlId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@map("probo_tasks")
+}
+
+model ProboMeasure {
+  id            String   @id @default(cuid())
+  name          String
+  description   String?  @db.Text
+  type          MeasureType
+  status        MeasureStatus @default(PLANNED)
+  
+  // Implementation details
+  implementationDate DateTime?
+  reviewDate    DateTime?
+  nextReviewDate DateTime?
+  
+  // Effectiveness
+  effectivenessScore Int? // 1-100
+  lastTestDate  DateTime?
+  testResults   String? @db.Text
+  
+  // Relationships
+  controlId     String
+  control       ProboControl @relation(fields: [controlId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@map("probo_measures")
+}
+
+// Enums for Probo Integration
+enum ProboImportance {
+  MANDATORY
+  PREFERRED
+  ADVANCED
+}
+
+enum EvidenceType {
+  DOCUMENT
+  SCREENSHOT
+  POLICY
+  PROCEDURE
+  CERTIFICATE
+  LOG_FILE
+  CONFIGURATION
+  OTHER
+}
+
+enum EvidenceStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  EXPIRED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum MeasureType {
+  PREVENTIVE
+  DETECTIVE
+  CORRECTIVE
+  COMPENSATING
+}
+
+enum MeasureStatus {
+  PLANNED
+  IMPLEMENTED
+  TESTING
+  ACTIVE
+  INACTIVE
+  FAILED
+}
+
+enum AssessmentMethod {
+  AUTOMATED
+  MANUAL
+  HYBRID
+  AI_POWERED
+}
+
+enum AssessmentStatus {
+  DRAFT
+  IN_PROGRESS
+  COMPLETED
+  APPROVED
+  REJECTED
+}
+
+enum RequirementStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  IMPLEMENTED
+  TESTED
+  APPROVED
 } 
