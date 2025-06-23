@@ -374,10 +374,8 @@ export class ProboService {
    * Get Probo's mitigation controls library
    */
   async getMitigationControls(): Promise<MitigationControl[]> {
-    // Load from Probo's mitigations.json data
     try {
-      const mitigationsData = await import('../../probo/data/mitigations.json');
-      return mitigationsData.default.map((mitigation: any) => ({
+      return mitigationsData.map((mitigation: any) => ({
         id: mitigation.id,
         name: mitigation.name,
         category: mitigation.category,

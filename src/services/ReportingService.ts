@@ -779,4 +779,7 @@ export class ReportingService {
       });
     }
   }
-} 
+}
+
+// Create and export a singleton instance
+export const reportingService = new ReportingService(); 
