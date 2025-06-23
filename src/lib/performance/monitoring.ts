@@ -2,7 +2,7 @@ import { cacheService } from './cache';
 import { databaseOptimizer } from './database';
 import { compressionService } from './compression';
 import { env } from '@/config/env';
-import { getCLS, getFID, getFCP, getLCP, getTTFB, Metric } from 'web-vitals';
+import { getCLS, getFID, getFCP, getLCP, getTTFB, Metric, onINP } from 'web-vitals';
 
 export class MonitoringService {
   private metrics = new Map<string, Metric[]>();
@@ -725,373 +725,604 @@ export interface PerformanceReport {
 // Global monitoring service instance
 export const monitoringService = new MonitoringService();
 
-// Performance Monitoring Service for Riscura RCSA Platform
+// Performance Monitoring System
 export interface PerformanceMetric {
   name: string;
   value: number;
-  unit: string;
-  timestamp: Date;
-  tags?: Record<string, string>;
-  metadata?: Record<string, any>;
+  delta: number;
+  id: string;
+  timestamp: number;
+  url: string;
+  userAgent: string;
+  connectionType?: string;
+  deviceType?: string;
+  userId?: string;
+  sessionId?: string;
 }
 
-export interface SystemMetrics {
-  memoryUsage: {
-    used: number;
-    total: number;
-    percentage: number;
+export interface PerformanceReport {
+  metrics: PerformanceMetric[];
+  summary: {
+    lcp: number;
+    fid: number;
+    cls: number;
+    fcp: number;
+    ttfb: number;
+    inp?: number;
   };
-  cpuUsage?: number;
-  uptime: number;
-  nodeVersion: string;
-  environment: string;
+  timestamp: number;
+  url: string;
+  loadTime: number;
+  renderTime: number;
+  domInteractive: number;
+  domComplete: number;
+  resourceTiming: PerformanceResourceTiming[];
 }
 
-export interface UserMetrics {
-  activeUsers: number;
-  totalSessions: number;
-  averageSessionDuration: number;
-  bounceRate: number;
-  pageViews: number;
+export interface ResourcePerformance {
+  name: string;
+  type: string;
+  duration: number;
+  size: number;
+  transferSize: number;
+  cached: boolean;
+  timing: {
+    dns: number;
+    tcp: number;
+    ssl: number;
+    request: number;
+    response: number;
+  };
 }
 
 class PerformanceMonitor {
+  private static instance: PerformanceMonitor;
   private metrics: PerformanceMetric[] = [];
-  private apiMetrics: Map<string, { times: number[]; errors: number }> = new Map();
-  private dbMetrics: { queries: number; totalTime: number; slowQueries: number } = {
-    queries: 0,
-    totalTime: 0,
-    slowQueries: 0,
-  };
-  private isEnabled: boolean;
-  private metricsBuffer: PerformanceMetric[] = [];
-  private flushInterval: NodeJS.Timeout | null = null;
+  private observers: PerformanceObserver[] = [];
+  private sessionId: string;
+  private userId?: string;
+  private reportingEndpoint: string;
+  private batchSize: number = 10;
+  private reportingInterval: number = 30000; // 30 seconds
+  private isEnabled: boolean = true;
 
-  constructor() {
-    this.isEnabled = env.NODE_ENV === 'production' || env.DEBUG_MODE;
-    this.startMetricsCollection();
+  private constructor() {
+    this.sessionId = this.generateSessionId();
+    this.reportingEndpoint = process.env.NEXT_PUBLIC_PERFORMANCE_ENDPOINT || '/api/performance';
+    this.setupWebVitals();
+    this.setupResourceTiming();
+    this.setupNavigationTiming();
+    this.setupLongTaskObserver();
+    this.setupLayoutShiftObserver();
+    this.startReporting();
   }
 
-  /**
-   * Record a performance metric
-   */
-  recordMetric(metric: PerformanceMetric): void {
+  public static getInstance(): PerformanceMonitor {
+    if (!PerformanceMonitor.instance) {
+      PerformanceMonitor.instance = new PerformanceMonitor();
+    }
+    return PerformanceMonitor.instance;
+  }
+
+  private generateSessionId(): string {
+    return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  public setUserId(userId: string): void {
+    this.userId = userId;
+  }
+
+  public enable(): void {
+    this.isEnabled = true;
+  }
+
+  public disable(): void {
+    this.isEnabled = false;
+  }
+
+  private setupWebVitals(): void {
+    if (typeof window === 'undefined') return;
+
+    // Largest Contentful Paint
+    getLCP((metric) => {
+      this.recordMetric({
+        name: 'LCP',
+        value: metric.value,
+        delta: metric.delta,
+        id: metric.id,
+        timestamp: Date.now(),
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        connectionType: this.getConnectionType(),
+        deviceType: this.getDeviceType(),
+        userId: this.userId,
+        sessionId: this.sessionId,
+      });
+    });
+
+    // First Input Delay
+    getFID((metric) => {
+      this.recordMetric({
+        name: 'FID',
+        value: metric.value,
+        delta: metric.delta,
+        id: metric.id,
+        timestamp: Date.now(),
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        connectionType: this.getConnectionType(),
+        deviceType: this.getDeviceType(),
+        userId: this.userId,
+        sessionId: this.sessionId,
+      });
+    });
+
+    // Cumulative Layout Shift
+    getCLS((metric) => {
+      this.recordMetric({
+        name: 'CLS',
+        value: metric.value,
+        delta: metric.delta,
+        id: metric.id,
+        timestamp: Date.now(),
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        connectionType: this.getConnectionType(),
+        deviceType: this.getDeviceType(),
+        userId: this.userId,
+        sessionId: this.sessionId,
+      });
+    });
+
+    // First Contentful Paint
+    getFCP((metric) => {
+      this.recordMetric({
+        name: 'FCP',
+        value: metric.value,
+        delta: metric.delta,
+        id: metric.id,
+        timestamp: Date.now(),
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        connectionType: this.getConnectionType(),
+        deviceType: this.getDeviceType(),
+        userId: this.userId,
+        sessionId: this.sessionId,
+      });
+    });
+
+    // Time to First Byte
+    getTTFB((metric) => {
+      this.recordMetric({
+        name: 'TTFB',
+        value: metric.value,
+        delta: metric.delta,
+        id: metric.id,
+        timestamp: Date.now(),
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        connectionType: this.getConnectionType(),
+        deviceType: this.getDeviceType(),
+        userId: this.userId,
+        sessionId: this.sessionId,
+      });
+    });
+
+    // Interaction to Next Paint (INP)
+    onINP((metric) => {
+      this.recordMetric({
+        name: 'INP',
+        value: metric.value,
+        delta: metric.delta,
+        id: metric.id,
+        timestamp: Date.now(),
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        connectionType: this.getConnectionType(),
+        deviceType: this.getDeviceType(),
+        userId: this.userId,
+        sessionId: this.sessionId,
+      });
+    });
+  }
+
+  private setupResourceTiming(): void {
+    if (typeof window === 'undefined' || !window.PerformanceObserver) return;
+
+    const observer = new PerformanceObserver((list) => {
+      const entries = list.getEntries();
+      entries.forEach((entry) => {
+        if (entry.entryType === 'resource') {
+          this.recordResourceTiming(entry as PerformanceResourceTiming);
+        }
+      });
+    });
+
+    observer.observe({ entryTypes: ['resource'] });
+    this.observers.push(observer);
+  }
+
+  private setupNavigationTiming(): void {
+    if (typeof window === 'undefined' || !window.PerformanceObserver) return;
+
+    const observer = new PerformanceObserver((list) => {
+      const entries = list.getEntries();
+      entries.forEach((entry) => {
+        if (entry.entryType === 'navigation') {
+          this.recordNavigationTiming(entry as PerformanceNavigationTiming);
+        }
+      });
+    });
+
+    observer.observe({ entryTypes: ['navigation'] });
+    this.observers.push(observer);
+  }
+
+  private setupLongTaskObserver(): void {
+    if (typeof window === 'undefined' || !window.PerformanceObserver) return;
+
+    try {
+      const observer = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        entries.forEach((entry) => {
+          this.recordMetric({
+            name: 'LONG_TASK',
+            value: entry.duration,
+            delta: entry.duration,
+            id: `long-task-${Date.now()}`,
+            timestamp: Date.now(),
+            url: window.location.href,
+            userAgent: navigator.userAgent,
+            connectionType: this.getConnectionType(),
+            deviceType: this.getDeviceType(),
+            userId: this.userId,
+            sessionId: this.sessionId,
+          });
+        });
+      });
+
+      observer.observe({ entryTypes: ['longtask'] });
+      this.observers.push(observer);
+    } catch (error) {
+      console.warn('Long task observer not supported:', error);
+    }
+  }
+
+  private setupLayoutShiftObserver(): void {
+    if (typeof window === 'undefined' || !window.PerformanceObserver) return;
+
+    try {
+      const observer = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        entries.forEach((entry) => {
+          if ((entry as any).hadRecentInput) return; // Ignore shifts with recent input
+          
+          this.recordMetric({
+            name: 'LAYOUT_SHIFT',
+            value: (entry as any).value,
+            delta: (entry as any).value,
+            id: `layout-shift-${Date.now()}`,
+            timestamp: Date.now(),
+            url: window.location.href,
+            userAgent: navigator.userAgent,
+            connectionType: this.getConnectionType(),
+            deviceType: this.getDeviceType(),
+            userId: this.userId,
+            sessionId: this.sessionId,
+          });
+        });
+      });
+
+      observer.observe({ entryTypes: ['layout-shift'] });
+      this.observers.push(observer);
+    } catch (error) {
+      console.warn('Layout shift observer not supported:', error);
+    }
+  }
+
+  private recordMetric(metric: PerformanceMetric): void {
     if (!this.isEnabled) return;
 
     this.metrics.push(metric);
-    this.metricsBuffer.push(metric);
-
-    // Keep only last 1000 metrics in memory
-    if (this.metrics.length > 1000) {
-      this.metrics = this.metrics.slice(-1000);
-    }
-  }
-
-  /**
-   * Track API request performance
-   */
-  trackAPIRequest(endpoint: string, duration: number, success: boolean): void {
-    if (!this.isEnabled) return;
-
-    const key = this.normalizeEndpoint(endpoint);
     
-    if (!this.apiMetrics.has(key)) {
-      this.apiMetrics.set(key, { times: [], errors: 0 });
+    // Emit custom event for real-time monitoring
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('performance-metric', {
+        detail: metric
+      }));
     }
+  }
 
-    const metrics = this.apiMetrics.get(key)!;
-    metrics.times.push(duration);
+  private recordResourceTiming(entry: PerformanceResourceTiming): void {
+    const resource: ResourcePerformance = {
+      name: entry.name,
+      type: this.getResourceType(entry.name),
+      duration: entry.duration,
+      size: entry.decodedBodySize || 0,
+      transferSize: entry.transferSize || 0,
+      cached: entry.transferSize === 0 && entry.decodedBodySize > 0,
+      timing: {
+        dns: entry.domainLookupEnd - entry.domainLookupStart,
+        tcp: entry.connectEnd - entry.connectStart,
+        ssl: entry.secureConnectionStart > 0 ? entry.connectEnd - entry.secureConnectionStart : 0,
+        request: entry.responseStart - entry.requestStart,
+        response: entry.responseEnd - entry.responseStart,
+      },
+    };
+
+    this.recordMetric({
+      name: 'RESOURCE_TIMING',
+      value: resource.duration,
+      delta: resource.duration,
+      id: `resource-${Date.now()}-${Math.random()}`,
+      timestamp: Date.now(),
+      url: window.location.href,
+      userAgent: navigator.userAgent,
+      connectionType: this.getConnectionType(),
+      deviceType: this.getDeviceType(),
+      userId: this.userId,
+      sessionId: this.sessionId,
+    });
+  }
+
+  private recordNavigationTiming(entry: PerformanceNavigationTiming): void {
+    const navigation = {
+      loadTime: entry.loadEventEnd - entry.navigationStart,
+      renderTime: entry.domContentLoadedEventEnd - entry.navigationStart,
+      domInteractive: entry.domInteractive - entry.navigationStart,
+      domComplete: entry.domComplete - entry.navigationStart,
+      redirectTime: entry.redirectEnd - entry.redirectStart,
+      dnsTime: entry.domainLookupEnd - entry.domainLookupStart,
+      tcpTime: entry.connectEnd - entry.connectStart,
+      requestTime: entry.responseStart - entry.requestStart,
+      responseTime: entry.responseEnd - entry.responseStart,
+    };
+
+    Object.entries(navigation).forEach(([name, value]) => {
+      if (value > 0) {
+        this.recordMetric({
+          name: `NAVIGATION_${name.toUpperCase()}`,
+          value,
+          delta: value,
+          id: `navigation-${name}-${Date.now()}`,
+          timestamp: Date.now(),
+          url: window.location.href,
+          userAgent: navigator.userAgent,
+          connectionType: this.getConnectionType(),
+          deviceType: this.getDeviceType(),
+          userId: this.userId,
+          sessionId: this.sessionId,
+        });
+      }
+    });
+  }
+
+  private getResourceType(url: string): string {
+    const extension = url.split('.').pop()?.toLowerCase();
     
-    if (!success) {
-      metrics.errors++;
-    }
-
-    // Keep only last 100 measurements per endpoint
-    if (metrics.times.length > 100) {
-      metrics.times = metrics.times.slice(-100);
-    }
-
-    this.recordMetric({
-      name: 'api_request_duration',
-      value: duration,
-      unit: 'ms',
-      timestamp: new Date(),
-      tags: {
-        endpoint: key,
-        success: success.toString(),
-      },
-    });
-  }
-
-  /**
-   * Track database query performance
-   */
-  trackDatabaseQuery(query: string, duration: number, success: boolean): void {
-    if (!this.isEnabled) return;
-
-    this.dbMetrics.queries++;
-    this.dbMetrics.totalTime += duration;
-
-    if (duration > 1000) { // Slow query threshold: 1 second
-      this.dbMetrics.slowQueries++;
-    }
-
-    this.recordMetric({
-      name: 'db_query_duration',
-      value: duration,
-      unit: 'ms',
-      timestamp: new Date(),
-      tags: {
-        success: success.toString(),
-        slow: (duration > 1000).toString(),
-      },
-      metadata: {
-        query: query.substring(0, 100), // First 100 chars for privacy
-      },
-    });
-  }
-
-  /**
-   * Track memory usage
-   */
-  trackMemoryUsage(): void {
-    if (!this.isEnabled) return;
-
-    const memoryUsage = process.memoryUsage();
+    if (['js', 'mjs'].includes(extension || '')) return 'script';
+    if (['css'].includes(extension || '')) return 'stylesheet';
+    if (['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'].includes(extension || '')) return 'image';
+    if (['woff', 'woff2', 'ttf', 'otf'].includes(extension || '')) return 'font';
+    if (url.includes('/api/')) return 'api';
     
-    this.recordMetric({
-      name: 'memory_heap_used',
-      value: memoryUsage.heapUsed,
-      unit: 'bytes',
-      timestamp: new Date(),
-    });
-
-    this.recordMetric({
-      name: 'memory_heap_total',
-      value: memoryUsage.heapTotal,
-      unit: 'bytes',
-      timestamp: new Date(),
-    });
-
-    this.recordMetric({
-      name: 'memory_rss',
-      value: memoryUsage.rss,
-      unit: 'bytes',
-      timestamp: new Date(),
-    });
+    return 'other';
   }
 
-  /**
-   * Track user activity
-   */
-  trackUserActivity(userId: string, action: string, duration?: number): void {
-    if (!this.isEnabled) return;
-
-    this.recordMetric({
-      name: 'user_activity',
-      value: duration || 1,
-      unit: duration ? 'ms' : 'count',
-      timestamp: new Date(),
-      tags: {
-        userId,
-        action,
-      },
-    });
-  }
-
-  /**
-   * Get API metrics summary
-   */
-  getAPIMetrics(): APIMetrics {
-    const endpointMetrics: Record<string, any> = {};
-    let totalRequests = 0;
-    let totalTime = 0;
-    let totalErrors = 0;
-
-    for (const [endpoint, data] of this.apiMetrics.entries()) {
-      const count = data.times.length;
-      const averageTime = count > 0 ? data.times.reduce((a, b) => a + b, 0) / count : 0;
-      
-      endpointMetrics[endpoint] = {
-        count,
-        averageTime: Math.round(averageTime),
-        errorCount: data.errors,
-      };
-
-      totalRequests += count;
-      totalTime += data.times.reduce((a, b) => a + b, 0);
-      totalErrors += data.errors;
-    }
-
-    const values = Array.from(this.apiMetrics.values()).flatMap(d => d.times);
-
-    return {
-      requestCount: totalRequests,
-      averageResponseTime: totalRequests > 0 ? Math.round(totalTime / totalRequests) : 0,
-      errorRate: totalRequests > 0 ? (totalErrors / totalRequests) * 100 : 0,
-      slowRequests: this.countSlowRequests(),
-      endpointMetrics,
-      totalRequests,
-      totalErrors,
-      p95ResponseTime: this.calculatePercentile(values, 95),
-      p99ResponseTime: this.calculatePercentile(values, 99),
-    };
-  }
-
-  /**
-   * Get database metrics summary
-   */
-  getDatabaseMetrics(): DatabaseMetrics {
-    return {
-      queryCount: this.dbMetrics.queries,
-      averageQueryTime: this.dbMetrics.queries > 0 
-        ? Math.round(this.dbMetrics.totalTime / this.dbMetrics.queries) 
-        : 0,
-      slowQueries: this.dbMetrics.slowQueries,
-      connectionPoolSize: 10, // This would come from your DB pool configuration
-      activeConnections: 5, // This would come from your DB pool status
-      totalQueries: this.dbMetrics.queries,
-    };
-  }
-
-  /**
-   * Get system metrics
-   */
-  getSystemMetrics(): SystemMetrics {
-    const memoryUsage = process.memoryUsage();
+  private getConnectionType(): string {
+    if (typeof navigator === 'undefined') return 'unknown';
     
-    return {
-      memoryUsage: {
-        used: Math.round(memoryUsage.heapUsed / 1024 / 1024), // MB
-        total: Math.round(memoryUsage.heapTotal / 1024 / 1024), // MB
-        percentage: Math.round((memoryUsage.heapUsed / memoryUsage.heapTotal) * 100),
-      },
-      uptime: Math.round(process.uptime()),
-      nodeVersion: process.version,
-      environment: env.NODE_ENV,
-    };
+    const connection = (navigator as any).connection || 
+                      (navigator as any).mozConnection || 
+                      (navigator as any).webkitConnection;
+    
+    return connection ? connection.effectiveType || connection.type : 'unknown';
   }
 
-  /**
-   * Get performance summary
-   */
-  getPerformanceSummary(): {
-    api: APIMetrics;
-    database: DatabaseMetrics;
-    system: SystemMetrics;
-    timestamp: Date;
-  } {
-    return {
-      api: this.getAPIMetrics(),
-      database: this.getDatabaseMetrics(),
-      system: this.getSystemMetrics(),
-      timestamp: new Date(),
-    };
+  private getDeviceType(): string {
+    if (typeof navigator === 'undefined') return 'unknown';
+    
+    const userAgent = navigator.userAgent;
+    
+    if (/tablet|ipad|playbook|silk/i.test(userAgent)) return 'tablet';
+    if (/mobile|iphone|ipod|android|blackberry|opera|mini|windows\sce|palm|smartphone|iemobile/i.test(userAgent)) return 'mobile';
+    
+    return 'desktop';
   }
 
-  /**
-   * Get metrics for a specific time range
-   */
-  getMetricsInRange(startTime: Date, endTime: Date): PerformanceMetric[] {
-    return this.metrics.filter(
-      metric => metric.timestamp >= startTime && metric.timestamp <= endTime
-    );
+  // Manual performance measurement
+  public mark(name: string): void {
+    if (typeof performance !== 'undefined' && performance.mark) {
+      performance.mark(name);
+    }
   }
 
-  /**
-   * Clear all metrics
-   */
-  clearMetrics(): void {
-    this.metrics = [];
-    this.metricsBuffer = [];
-    this.apiMetrics.clear();
-    this.dbMetrics = { queries: 0, totalTime: 0, slowQueries: 0 };
-  }
-
-  /**
-   * Start automatic metrics collection
-   */
-  private startMetricsCollection(): void {
-    if (!this.isEnabled) return;
-
-    // Collect memory metrics every 30 seconds
-    setInterval(() => {
-      this.trackMemoryUsage();
-    }, 30000);
-
-    // Flush metrics buffer every 60 seconds
-    this.flushInterval = setInterval(() => {
-      this.flushMetrics();
-    }, 60000);
-  }
-
-  /**
-   * Flush metrics to external service (if configured)
-   */
-  private async flushMetrics(): Promise<void> {
-    if (this.metricsBuffer.length === 0) return;
+  public measure(name: string, startMark: string, endMark?: string): number | null {
+    if (typeof performance === 'undefined' || !performance.measure) return null;
 
     try {
-      // In production, you would send these to a monitoring service
-      // like DataDog, New Relic, or CloudWatch
-      if (env.NODE_ENV === 'development') {
-        console.log(`Flushing ${this.metricsBuffer.length} metrics`);
+      if (endMark) {
+        performance.measure(name, startMark, endMark);
+      } else {
+        performance.measure(name, startMark);
       }
 
-      // Clear the buffer after successful flush
-      this.metricsBuffer = [];
+      const entries = performance.getEntriesByName(name, 'measure');
+      const entry = entries[entries.length - 1];
+      
+      if (entry) {
+        this.recordMetric({
+          name: `CUSTOM_${name.toUpperCase()}`,
+          value: entry.duration,
+          delta: entry.duration,
+          id: `custom-${name}-${Date.now()}`,
+          timestamp: Date.now(),
+          url: typeof window !== 'undefined' ? window.location.href : '',
+          userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
+          connectionType: this.getConnectionType(),
+          deviceType: this.getDeviceType(),
+          userId: this.userId,
+          sessionId: this.sessionId,
+        });
+
+        return entry.duration;
+      }
     } catch (error) {
-      console.error('Failed to flush metrics:', error);
+      console.warn('Performance measurement failed:', error);
+    }
+
+    return null;
+  }
+
+  // Time a function execution
+  public async timeFunction<T>(
+    name: string,
+    fn: () => Promise<T> | T
+  ): Promise<T> {
+    const startTime = Date.now();
+    const startMark = `${name}-start`;
+    const endMark = `${name}-end`;
+
+    this.mark(startMark);
+
+    try {
+      const result = await fn();
+      this.mark(endMark);
+      this.measure(name, startMark, endMark);
+      return result;
+    } catch (error) {
+      this.mark(endMark);
+      this.measure(name, startMark, endMark);
+      throw error;
     }
   }
 
-  /**
-   * Normalize API endpoint for consistent tracking
-   */
-  private normalizeEndpoint(endpoint: string): string {
-    // Remove query parameters and normalize dynamic segments
-    return endpoint
-      .split('?')[0]
-      .replace(/\/\d+/g, '/:id')
-      .replace(/\/[a-f0-9-]{36}/g, '/:uuid');
+  private startReporting(): void {
+    if (typeof window === 'undefined') return;
+
+    setInterval(() => {
+      this.sendMetrics();
+    }, this.reportingInterval);
+
+    // Send metrics before page unload
+    window.addEventListener('beforeunload', () => {
+      this.sendMetrics(true);
+    });
+
+    // Send metrics on visibility change
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') {
+        this.sendMetrics(true);
+      }
+    });
   }
 
-  /**
-   * Count slow API requests
-   */
-  private countSlowRequests(): number {
-    let slowCount = 0;
-    for (const data of this.apiMetrics.values()) {
-      slowCount += data.times.filter(time => time > 2000).length; // 2 second threshold
+  private async sendMetrics(immediate: boolean = false): Promise<void> {
+    if (!this.isEnabled || this.metrics.length === 0) return;
+
+    const metricsToSend = immediate 
+      ? [...this.metrics] 
+      : this.metrics.splice(0, this.batchSize);
+
+    if (metricsToSend.length === 0) return;
+
+    try {
+      const payload = {
+        metrics: metricsToSend,
+        sessionId: this.sessionId,
+        userId: this.userId,
+        timestamp: Date.now(),
+        url: window.location.href,
+      };
+
+      if (immediate && navigator.sendBeacon) {
+        // Use sendBeacon for reliable delivery during page unload
+        navigator.sendBeacon(
+          this.reportingEndpoint,
+          JSON.stringify(payload)
+        );
+      } else {
+        // Use fetch for regular reporting
+        await fetch(this.reportingEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+      }
+
+      // Remove sent metrics from the array
+      if (!immediate) {
+        this.metrics = this.metrics.slice(metricsToSend.length);
+      }
+    } catch (error) {
+      console.warn('Failed to send performance metrics:', error);
+      // Put metrics back if sending failed (unless it's immediate)
+      if (!immediate) {
+        this.metrics.unshift(...metricsToSend);
+      }
     }
-    return slowCount;
   }
 
-  /**
-   * Calculate percentile for an array of values
-   */
-  private calculatePercentile(values: number[], percentile: number): number {
-    if (values.length === 0) return 0;
-    
-    const sorted = values.sort((a, b) => a - b);
-    const index = Math.ceil(sorted.length * (percentile / 100)) - 1;
-    return sorted[Math.max(0, index)];
+  // Generate performance report
+  public generateReport(): PerformanceReport {
+    const webVitalsMetrics = this.metrics.filter(m => 
+      ['LCP', 'FID', 'CLS', 'FCP', 'TTFB', 'INP'].includes(m.name)
+    );
+
+    const summary = {
+      lcp: webVitalsMetrics.find(m => m.name === 'LCP')?.value || 0,
+      fid: webVitalsMetrics.find(m => m.name === 'FID')?.value || 0,
+      cls: webVitalsMetrics.find(m => m.name === 'CLS')?.value || 0,
+      fcp: webVitalsMetrics.find(m => m.name === 'FCP')?.value || 0,
+      ttfb: webVitalsMetrics.find(m => m.name === 'TTFB')?.value || 0,
+      inp: webVitalsMetrics.find(m => m.name === 'INP')?.value,
+    };
+
+    const navigationMetrics = this.metrics.filter(m => 
+      m.name.startsWith('NAVIGATION_')
+    );
+
+    return {
+      metrics: [...this.metrics],
+      summary,
+      timestamp: Date.now(),
+      url: typeof window !== 'undefined' ? window.location.href : '',
+      loadTime: navigationMetrics.find(m => m.name === 'NAVIGATION_LOADTIME')?.value || 0,
+      renderTime: navigationMetrics.find(m => m.name === 'NAVIGATION_RENDERTIME')?.value || 0,
+      domInteractive: navigationMetrics.find(m => m.name === 'NAVIGATION_DOMINTERACTIVE')?.value || 0,
+      domComplete: navigationMetrics.find(m => m.name === 'NAVIGATION_DOMCOMPLETE')?.value || 0,
+      resourceTiming: typeof performance !== 'undefined' 
+        ? performance.getEntriesByType('resource') as PerformanceResourceTiming[]
+        : [],
+    };
   }
 
-  /**
-   * Cleanup resources
-   */
-  destroy(): void {
-    if (this.flushInterval) {
-      clearInterval(this.flushInterval);
-      this.flushInterval = null;
-    }
+  // Get current metrics
+  public getMetrics(): PerformanceMetric[] {
+    return [...this.metrics];
+  }
+
+  // Clear metrics
+  public clearMetrics(): void {
+    this.metrics = [];
+  }
+
+  // Cleanup
+  public destroy(): void {
+    this.observers.forEach(observer => observer.disconnect());
+    this.observers = [];
     this.clearMetrics();
+    this.isEnabled = false;
   }
 }
 
 // Export singleton instance
-export const performanceMonitor = new PerformanceMonitor();
+export const performanceMonitor = PerformanceMonitor.getInstance();
+
+// Export class for testing
+export { PerformanceMonitor };
 
 // Middleware helper for Express/Next.js
 export function createPerformanceMiddleware() {

@@ -1,170 +1,48 @@
-import bundleAnalyzer from '@next/bundle-analyzer';
-
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
-  openAnalyzer: true,
-});
+// Next.js Configuration with Performance Optimizations
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Enable experimental features
   experimental: {
-    optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
+    optimizeCss: true,
+    scrollRestoration: true,
   },
-  
-  // Server external packages (moved from experimental)
-  serverExternalPackages: ['prisma', '@prisma/client'],
-  
+
+  // Compiler optimizations
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+    reactRemoveProperties: process.env.NODE_ENV === 'production' ? { properties: ['^data-test'] } : false,
+  },
+
   // Image optimization
   images: {
-    domains: ['localhost'],
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
-    formats: ['image/webp', 'image/avif'],
-    minimumCacheTTL: 60,
-    dangerouslyAllowSVG: true,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 768, 1024, 1280, 1600],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 86400, // 24 hours
+    dangerouslyAllowSVG: false,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
-  
-  // Webpack optimizations
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-    // Handle canvas for charting libraries
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        canvas: false,
-        fs: false,
-        net: false,
-        tls: false,
-      };
-    }
-    
-    // Optimize for AI/ML libraries
-    config.externals = config.externals || [];
-    if (isServer) {
-      config.externals.push('openai', 'exceljs');
-    }
-    
-    // Optimize chunk loading
-    config.optimization = {
-      ...config.optimization,
-      runtimeChunk: 'single',
-      splitChunks: {
-        chunks: 'all',
-        maxInitialRequests: 25,
-        minSize: 20000,
-        cacheGroups: {
-          // Core React libraries
-          react: {
-            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-            name: 'react',
-            priority: 40,
-            enforce: true,
-          },
-          // Next.js framework
-          framework: {
-            test: /[\\/]node_modules[\\/](@next|next)[\\/]/,
-            name: 'framework',
-            priority: 30,
-            enforce: true,
-          },
-          // UI libraries
-          ui: {
-            test: /[\\/]node_modules[\\/](@radix-ui|@headlessui|framer-motion)[\\/]/,
-            name: 'ui-libs',
-            priority: 20,
-            enforce: true,
-          },
-          // Common vendor libraries
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            priority: 10,
-            enforce: true,
-          },
-          // Common shared code
-          common: {
-            name: 'common',
-            minChunks: 2,
-            priority: 5,
-            reuseExistingChunk: true,
-            enforce: true,
-          },
-        },
-      },
-    };
 
-    // Add chunk loading error handling
-    config.plugins.push(
-      new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 5,
-      })
-    );
-
-    // Add error handling for chunk loading
-    if (!isServer) {
-      config.plugins.push(
-        new webpack.ProvidePlugin({
-          process: 'process/browser',
-        })
-      );
-    }
-    
-    return config;
-  },
-  
-  // Transpile packages for better performance
-  transpilePackages: ['@radix-ui'],
-  
-  // TypeScript and ESLint configuration
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  
-  // Environment variables
-  env: {
-    CUSTOM_KEY: process.env.CUSTOM_KEY,
-  },
-  
-  // Security headers
+  // Headers for performance and security
   async headers() {
     return [
-      {
-        source: '/api/:path*',
-        headers: [
-          { key: 'Access-Control-Allow-Origin', value: process.env.NODE_ENV === 'production' ? process.env.APP_URL || 'https://riscura.com' : '*' },
-          { key: 'Access-Control-Allow-Methods', value: 'GET,POST,PUT,DELETE,OPTIONS' },
-          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization, X-CSRF-Token' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'X-Frame-Options', value: 'DENY' },
-          { key: 'X-XSS-Protection', value: '1; mode=block' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-        ],
-      },
-      {
-        source: '/(.*)',
-        headers: [
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'X-Frame-Options', value: 'DENY' },
-          { key: 'X-XSS-Protection', value: '1; mode=block' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-        ],
-      },
       {
         source: '/(.*)',
         headers: [
           {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on'
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
           },
         ],
       },
@@ -177,39 +55,162 @@ const nextConfig = {
           },
         ],
       },
+      {
+        source: '/_next/static/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/api/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=300, s-maxage=300, stale-while-revalidate=86400',
+          },
+        ],
+      },
+      {
+        source: '/images/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, stale-while-revalidate=604800',
+          },
+        ],
+      },
     ];
   },
-  
-  // Redirects and rewrites
+
+  // Webpack configuration for performance
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    // Bundle analyzer
+    if (process.env.ANALYZE === 'true') {
+      try {
+        const { BundleAnalyzerPlugin } = require('@next/bundle-analyzer')();
+        config.plugins.push(
+          new BundleAnalyzerPlugin({
+            analyzerMode: 'server',
+            openAnalyzer: true,
+          })
+        );
+      } catch (error) {
+        console.warn('Bundle analyzer not available:', error.message);
+      }
+    }
+
+    // Optimize chunks
+    if (config.optimization) {
+      config.optimization.splitChunks = {
+        ...config.optimization.splitChunks,
+        chunks: 'all',
+        cacheGroups: {
+          ...config.optimization.splitChunks?.cacheGroups,
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            priority: 10,
+            reuseExistingChunk: true,
+          },
+          common: {
+            name: 'common',
+            minChunks: 2,
+            priority: 5,
+            reuseExistingChunk: true,
+          },
+          ui: {
+            test: /[\\/]src[\\/]components[\\/]ui[\\/]/,
+            name: 'ui',
+            priority: 15,
+            reuseExistingChunk: true,
+          },
+          charts: {
+            test: /[\\/](recharts|chart\.js|d3)[\\/]/,
+            name: 'charts',
+            priority: 20,
+            reuseExistingChunk: true,
+          },
+          icons: {
+            test: /[\\/](lucide-react|@heroicons|react-icons)[\\/]/,
+            name: 'icons',
+            priority: 25,
+            reuseExistingChunk: true,
+          },
+        },
+      };
+    }
+
+    // Compression for production
+    if (!dev && !isServer) {
+      try {
+        const CompressionPlugin = require('compression-webpack-plugin');
+        config.plugins.push(
+          new CompressionPlugin({
+            algorithm: 'gzip',
+            test: /\.(js|css|html|svg)$/,
+            threshold: 8192,
+            minRatio: 0.8,
+          })
+        );
+      } catch (error) {
+        console.warn('Compression plugin not available:', error.message);
+      }
+    }
+
+    // CSS optimization
+    if (!dev && !isServer) {
+      try {
+        const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+        if (!config.optimization.minimizer) {
+          config.optimization.minimizer = [];
+        }
+        config.optimization.minimizer.push(new CssMinimizerPlugin());
+      } catch (error) {
+        console.warn('CSS minimizer plugin not available:', error.message);
+      }
+    }
+
+    return config;
+  },
+
+  // Output configuration
+  output: 'standalone',
+
+  // Environment variables
+  env: {
+    NEXT_TELEMETRY_DISABLED: '1',
+  },
+
+  // Redirects and rewrites for performance
+  async redirects() {
+    return [];
+  },
+
   async rewrites() {
-    return [
-      {
-        source: '/dashboard/:path*',
-        destination: '/dashboard/:path*',
-      },
-      {
-        source: '/api/health',
-        destination: '/api/health',
-      },
-    ];
+    return [];
   },
-  
-  // Compression and optimization
-  compress: true,
+
+  // PoweredByHeader
   poweredByHeader: false,
-  
-  // Output configuration for deployment
-  output: process.env.BUILD_STANDALONE === 'true' ? 'standalone' : undefined,
-  
-  // Logging
-  logging: {
-    fetches: {
-      fullUrl: process.env.NODE_ENV === 'development',
-    },
+
+  // React strict mode
+  reactStrictMode: true,
+
+  // Trailing slash
+  trailingSlash: false,
+
+  // TypeScript configuration
+  typescript: {
+    ignoreBuildErrors: false,
   },
-  
-  // PWA optimizations (if using)
-  generateEtags: false,
+
+  // ESLint configuration
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
 };
 
-export default withBundleAnalyzer(nextConfig); 
+export default nextConfig; 

@@ -336,10 +336,18 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
       return pathname === '/dashboard';
     }
     
-    // For exact matching or when the href is followed by a slash or end of string
+    // Exact match first
+    if (pathname === href) return true;
+    
+    // For nested routes, only match if the current path is a direct child
     // This prevents '/dashboard/risks' from matching '/dashboard/risks/assessment'
-    const regex = new RegExp(`^${href.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(/|$)`);
-    return regex.test(pathname) || pathname === href;
+    if (pathname.startsWith(href + '/')) {
+      // Check if it's a direct child (no additional slashes after the href)
+      const remainder = pathname.slice(href.length + 1);
+      return !remainder.includes('/');
+    }
+    
+    return false;
   };
 
   const getBadgeVariant = (variant?: string) => {
@@ -491,7 +499,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
             alt="Riscura Logo"
             width={120}
             height={40}
-            className="object-contain max-w-full h-auto"
+            className="object-contain"
+            style={{ width: 'auto', height: 'auto', maxWidth: '120px', maxHeight: '40px' }}
             priority
           />
         </div>

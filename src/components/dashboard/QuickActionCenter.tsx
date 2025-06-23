@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import {
   Plus, FileText, Shield, BarChart3, AlertTriangle, CheckCircle,
   Settings, Upload, Download, Eye, Target, Users, Calendar, Clock,
-  Zap, Search, Filter, RefreshCw
+  Zap, Search, Filter, RefreshCw, Activity
 } from 'lucide-react';
 import Image from 'next/image';
 
@@ -46,6 +46,27 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
       roles: ['executive', 'analyst', 'operator']
     },
     {
+      id: 'probo-vendor-assessment',
+      title: 'Assess Vendor',
+      description: 'AI-powered vendor security assessment',
+      icon: <Shield className="w-5 h-5" />,
+      color: 'bg-[#199BEC]/10 hover:bg-[#199BEC]/20 border-[#199BEC]/30 text-[#199BEC]',
+      href: '/probo?tab=vendor-assessment',
+      badge: 'Probo',
+      shortcut: 'Ctrl+V',
+      roles: ['executive', 'analyst', 'operator']
+    },
+    {
+      id: 'probo-controls-library',
+      title: 'Browse Controls',
+      description: 'Access 650+ security controls',
+      icon: <Target className="w-5 h-5" />,
+      color: 'bg-emerald-50 hover:bg-emerald-100 border-emerald-200 text-emerald-700',
+      href: '/probo?tab=controls-library',
+      badge: '650+',
+      roles: ['executive', 'analyst', 'operator']
+    },
+    {
       id: 'create-control',
       title: 'Add Control',
       description: 'Register new control',
@@ -54,6 +75,16 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
       href: '/dashboard/controls/new',
       shortcut: 'Ctrl+C',
       roles: ['executive', 'analyst', 'operator']
+    },
+    {
+      id: 'probo-soc2-assessment',
+      title: 'SOC 2 Assessment',
+      description: 'Framework compliance tracking',
+      icon: <CheckCircle className="w-5 h-5" />,
+      color: 'bg-purple-50 hover:bg-purple-100 border-purple-200 text-purple-700',
+      href: '/probo?tab=soc2-assessment',
+      badge: 'SOC 2',
+      roles: ['executive', 'analyst', 'auditor']
     },
     {
       id: 'upload-document',
@@ -73,6 +104,16 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
       href: '/dashboard/reporting',
       badge: 'AI',
       roles: ['executive', 'analyst', 'auditor']
+    },
+    {
+      id: 'probo-integration-dashboard',
+      title: 'Probo Dashboard',
+      description: 'Risk & compliance hub',
+      icon: <Activity className="w-5 h-5" />,
+      color: 'bg-indigo-50 hover:bg-indigo-100 border-indigo-200 text-indigo-700',
+      href: '/probo',
+      badge: 'Hub',
+      roles: ['executive', 'analyst', 'operator', 'auditor']
     },
     {
       id: 'schedule-audit',
@@ -157,13 +198,13 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
     action.roles.includes(viewMode)
   );
 
-  // Prioritize actions based on role
+  // Prioritize actions based on role with Probo integration
   const getPrioritizedActions = () => {
     const roleBasedOrder = {
-      executive: ['generate-report', 'ai-analysis', 'review-alerts', 'schedule-audit', 'team-management'],
-      analyst: ['create-risk', 'control-testing', 'ai-analysis', 'generate-report', 'review-alerts'],
-      operator: ['create-control', 'control-testing', 'upload-document', 'create-risk', 'review-alerts'],
-      auditor: ['generate-report', 'upload-document', 'schedule-audit', 'export-data', 'dashboard-config']
+      executive: ['probo-integration-dashboard', 'probo-vendor-assessment', 'generate-report', 'ai-analysis', 'review-alerts', 'schedule-audit', 'team-management'],
+      analyst: ['probo-controls-library', 'probo-soc2-assessment', 'create-risk', 'control-testing', 'ai-analysis', 'generate-report', 'review-alerts'],
+      operator: ['probo-controls-library', 'create-control', 'control-testing', 'upload-document', 'create-risk', 'review-alerts'],
+      auditor: ['probo-soc2-assessment', 'generate-report', 'upload-document', 'schedule-audit', 'export-data', 'dashboard-config']
     };
 
     const priority = roleBasedOrder[viewMode] || [];
@@ -207,15 +248,15 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
             >
               <Button
                 variant="outline"
-                className={`h-auto p-4 border-2 transition-all duration-200 hover:shadow-md ${action.color}`}
+                className={`h-auto p-2 border-2 transition-all duration-200 hover:shadow-md ${action.color}`}
                 onClick={() => handleActionClick(action)}
               >
-                <div className="flex flex-col items-center space-y-2 text-center">
+                <div className="flex flex-col items-center space-y-1 text-center">
                   <div className="relative">
                     {action.icon}
                     {action.badge && (
                       <Badge 
-                        className="absolute -top-2 -right-2 text-xs px-1 py-0 h-4 min-w-4"
+                        className="absolute -top-1 -right-1 text-xs px-1 py-0 h-3 min-w-3"
                         variant={action.badge === 'AI' ? 'default' : action.badge === 'New' ? 'secondary' : 'destructive'}
                       >
                         {action.badge}
@@ -223,14 +264,14 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
                     )}
                   </div>
                   <div>
-                    <div className="font-medium text-sm leading-tight">
+                    <div className="font-medium text-xs leading-tight">
                       {action.title}
                     </div>
-                    <div className="text-xs opacity-75 mt-1">
+                    <div className="text-xs opacity-75 mt-0.5">
                       {action.description}
                     </div>
                     {action.shortcut && (
-                      <div className="text-xs opacity-60 mt-1 font-mono">
+                      <div className="text-xs opacity-60 mt-0.5 font-mono">
                         {action.shortcut}
                       </div>
                     )}

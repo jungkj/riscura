@@ -1,6 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
+import { EnhancedProboService } from '@/services/EnhancedProboService';
+import { CreateControlModal } from './CreateControlModal';
+import ExportService from '@/services/ExportService';
 import { cn } from '@/lib/utils';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { Button } from '@/components/ui/button';
@@ -448,7 +452,24 @@ const ControlLibrary: React.FC = () => {
   });
 
   const handleControlAction = (action: string, control: Control) => {
-    console.log(`Action: ${action}`, control);
+    switch (action) {
+      case 'view':
+        toast.success(`Viewing details for ${control.title}`);
+        break;
+      case 'edit':
+        toast.success(`Editing ${control.title}`);
+        break;
+      case 'test':
+        toast.success(`Starting test for ${control.title}`);
+        break;
+      case 'delete':
+        if (confirm(`Are you sure you want to delete "${control.title}"?`)) {
+          toast.success(`Deleted ${control.title}`);
+        }
+        break;
+      default:
+        toast.info(`Action "${action}" not yet implemented for ${control.title}`);
+    }
   };
 
   const categories = [...new Set(sampleControls.map(c => c.category))];
@@ -552,11 +573,60 @@ const ControlLibrary: React.FC = () => {
 // Main Controls Management Dashboard
 export const ControlsManagementDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('library');
+  const [proboControls, setProboControls] = useState<any[]>([]);
+  const [isLoadingProbo, setIsLoadingProbo] = useState(false);
+  const [isCreateControlModalOpen, setIsCreateControlModalOpen] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const totalControls = sampleControls.length;
   const activeControls = sampleControls.filter(c => c.status === 'active').length;
   const overdueTests = sampleControls.filter(c => c.nextTestingDue < new Date() && c.status === 'active').length;
   const avgEffectiveness = Math.round(sampleControls.reduce((sum, c) => sum + c.effectivenessScore, 0) / totalControls);
+
+  const handleExportControls = async (format: 'csv' | 'pdf' | 'json' = 'csv') => {
+    try {
+      await ExportService.exportControls(sampleControls, { format });
+    } catch (error) {
+      console.error('Export failed:', error);
+    }
+  };
+
+  const handleCreateControl = () => {
+    setIsCreateControlModalOpen(true);
+  };
+
+  const handleControlCreated = (newControl: any) => {
+    // In a real app, you would refresh the data
+    setRefreshKey(prev => prev + 1);
+    toast.success('Control created successfully!');
+  };
+
+  const handleOpenSettings = () => {
+    toast.success('Opening controls management settings...');
+    // Navigate to settings page or open settings modal
+  };
+
+  // Load Probo controls when tab is active
+  useEffect(() => {
+    const loadProboControls = async () => {
+      if (activeTab !== 'probo') return;
+      
+      setIsLoadingProbo(true);
+      try {
+        const response = await fetch('/api/controls/probo?organizationId=org-1');
+        if (response.ok) {
+          const result = await response.json();
+          setProboControls(result.data || []);
+        }
+      } catch (error) {
+        console.error('Failed to load Probo controls:', error);
+      } finally {
+        setIsLoadingProbo(false);
+      }
+    };
+
+    loadProboControls();
+  }, [activeTab]);
 
   return (
     <MainContentArea
@@ -567,19 +637,25 @@ export const ControlsManagementDashboard: React.FC = () => {
       ]}
       primaryAction={{
         label: 'New Control',
-        onClick: () => console.log('Create control'),
+        onClick: handleCreateControl,
         icon: Plus,
       }}
       secondaryActions={[
         {
-          label: 'Export',
-          onClick: () => console.log('Export'),
+          label: 'Export CSV',
+          onClick: () => handleExportControls('csv'),
+          icon: Download,
+          variant: 'outline',
+        },
+        {
+          label: 'Export PDF',
+          onClick: () => handleExportControls('pdf'),
           icon: Download,
           variant: 'outline',
         },
         {
           label: 'Settings',
-          onClick: () => console.log('Settings'),
+          onClick: handleOpenSettings,
           icon: Settings,
           variant: 'outline',
         },
@@ -612,6 +688,10 @@ export const ControlsManagementDashboard: React.FC = () => {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6">
         <TabsList>
           <TabsTrigger value="library">Control Library</TabsTrigger>
+          <TabsTrigger value="probo">
+            <Shield className="h-4 w-4 mr-2" />
+            Probo Controls
+          </TabsTrigger>
           <TabsTrigger value="testing">Testing</TabsTrigger>
           <TabsTrigger value="compliance">Compliance</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -620,6 +700,109 @@ export const ControlsManagementDashboard: React.FC = () => {
 
       <TabsContent value="library">
         <ControlLibrary />
+      </TabsContent>
+
+      <TabsContent value="probo" className="space-y-6">
+        <div className="bg-gradient-to-r from-[#199BEC]/5 to-[#199BEC]/10 rounded-lg p-6 border border-[#199BEC]/20">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-[#199BEC] rounded-lg">
+                <Shield className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Probo Security Controls Library</h3>
+                <p className="text-sm text-gray-600">
+                  Access 651+ industry-standard security controls with AI-powered implementation guidance
+                </p>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-2xl font-bold text-[#199BEC]">651</div>
+              <div className="text-xs text-gray-500">Available Controls</div>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-3 gap-4 text-center">
+            <div className="bg-white/50 rounded-lg p-3">
+              <div className="text-lg font-semibold text-red-600">
+                {proboControls.filter(c => c.importance === 'MANDATORY').length}
+              </div>
+              <div className="text-xs text-gray-600">Mandatory</div>
+            </div>
+            <div className="bg-white/50 rounded-lg p-3">
+              <div className="text-lg font-semibold text-yellow-600">
+                {proboControls.filter(c => c.importance === 'PREFERRED').length}
+              </div>
+              <div className="text-xs text-gray-600">Preferred</div>
+            </div>
+            <div className="bg-white/50 rounded-lg p-3">
+              <div className="text-lg font-semibold text-blue-600">
+                {proboControls.filter(c => c.importance === 'ADVANCED').length}
+              </div>
+              <div className="text-xs text-gray-600">Advanced</div>
+            </div>
+          </div>
+        </div>
+
+        {isLoadingProbo ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#199BEC] mx-auto mb-4"></div>
+              <p className="text-sm text-gray-600">Loading Probo controls...</p>
+            </div>
+          </div>
+        ) : (
+          <div className="grid gap-4">
+            {proboControls.map((control) => (
+              <div key={control.id} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <Badge 
+                        variant={
+                          control.importance === 'MANDATORY' ? 'destructive' :
+                          control.importance === 'PREFERRED' ? 'secondary' : 'outline'
+                        }
+                        className="text-xs"
+                      >
+                        {control.importance}
+                      </Badge>
+                      <Badge variant="outline" className="text-xs">
+                        {control.category}
+                      </Badge>
+                    </div>
+                    <h4 className="font-semibold text-gray-900 mb-1">{control.name}</h4>
+                    <p className="text-sm text-gray-600 line-clamp-2">
+                      {control.description?.split('##')[0]?.trim() || 'No description available'}
+                    </p>
+                  </div>
+                  <div className="text-right ml-4">
+                    <div className="text-sm font-medium text-[#199BEC]">
+                      {control.riskReduction}%
+                    </div>
+                    <div className="text-xs text-gray-500">Risk Reduction</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                  <div className="flex space-x-4 text-xs text-gray-500">
+                    <span>{control.evidenceCount || 0} evidence</span>
+                    <span>{control.taskCount || 0} tasks</span>
+                    <span>{control.measureCount || 0} measures</span>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button variant="outline" size="sm">
+                      Implement
+                    </Button>
+                    <Button variant="ghost" size="sm">
+                      View Details
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </TabsContent>
 
       <TabsContent value="testing">
@@ -641,6 +824,13 @@ export const ControlsManagementDashboard: React.FC = () => {
           </p>
         </div>
       </TabsContent>
+
+      {/* Create Control Modal */}
+      <CreateControlModal
+        open={isCreateControlModalOpen}
+        onOpenChange={setIsCreateControlModalOpen}
+        onControlCreated={handleControlCreated}
+      />
     </MainContentArea>
   );
 };

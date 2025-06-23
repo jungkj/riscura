@@ -42,6 +42,7 @@ import Image from 'next/image';
 
 // Import the interactive risk heat map component
 import { RiskHeatMap as InteractiveRiskHeatMap } from '@/components/ui/interactive-risk-heatmap';
+import ProboIntegrationWidget from '@/components/dashboard/ProboIntegrationWidget';
 
 // Types
 interface DashboardStats {
@@ -114,6 +115,24 @@ export default function DashboardPage() {
 
   const quickActions: QuickAction[] = [
     {
+      id: 'probo-hub',
+      title: 'Probo Hub',
+      description: 'Access integrated risk & compliance platform',
+      icon: Briefcase,
+      href: '/dashboard/probo',
+      color: 'text-[#199BEC]',
+      badge: 'Hub'
+    },
+    {
+      id: 'probo-vendor-assessment',
+      title: 'Assess Vendor',
+      description: 'AI-powered vendor security assessment',
+      icon: Shield,
+      href: '/dashboard/probo?tab=vendor-assessment',
+      color: 'text-[#199BEC]',
+      badge: 'Probo'
+    },
+    {
       id: 'new-risk',
       title: 'Add New Risk',
       description: 'Document and assess a new risk',
@@ -121,6 +140,15 @@ export default function DashboardPage() {
       href: '/dashboard/risks/new',
       color: 'text-red-600',
       badge: 'Quick'
+    },
+    {
+      id: 'probo-controls',
+      title: 'Browse Controls',
+      description: 'Access 650+ security controls',
+      icon: Target,
+      href: '/dashboard/probo?tab=controls-library',
+      color: 'text-emerald-600',
+      badge: '650+'
     },
     {
       id: 'import-rcsa',
@@ -140,6 +168,15 @@ export default function DashboardPage() {
       badge: 'AI'
     },
     {
+      id: 'probo-soc2',
+      title: 'SOC 2 Assessment',
+      description: 'Framework compliance tracking',
+      icon: CheckCircle2,
+      href: '/dashboard/probo?tab=soc2-assessment',
+      color: 'text-purple-600',
+      badge: 'SOC 2'
+    },
+    {
       id: 'generate-report',
       title: 'Generate Report',
       description: 'Create compliance reports',
@@ -154,41 +191,6 @@ export default function DashboardPage() {
       icon: Target,
       href: '/dashboard/risks/assessment',
       color: 'text-orange-600'
-    },
-    {
-      id: 'compliance-check',
-      title: 'Compliance Check',
-      description: 'Review framework status',
-      icon: CheckCircle2,
-      href: '/dashboard/compliance',
-      color: 'text-emerald-600'
-    },
-    {
-      id: 'create-spreadsheet',
-      title: 'Create Spreadsheet',
-      description: 'Build RCSA matrix or risk register',
-      icon: Grid3X3,
-      href: '/dashboard/spreadsheets',
-      color: 'text-indigo-600',
-      badge: 'New'
-    },
-    {
-      id: 'team-assign',
-      title: 'Assign Team Member',
-      description: 'Delegate risk ownership',
-      icon: UserPlus,
-      href: '/dashboard/team/assign',
-      color: 'text-purple-600',
-      badge: 'Team'
-    },
-    {
-      id: 'team-share',
-      title: 'Share Risk Report',
-      description: 'Collaborate with team members',
-      icon: Share2,
-      href: '/dashboard/team/share',
-      color: 'text-teal-600',
-      badge: 'Team'
     }
   ];
 
@@ -243,28 +245,31 @@ export default function DashboardPage() {
   const insights: Insight[] = [
     {
       id: '1',
-      title: 'Critical Risk Trend',
-      description: 'High-risk incidents have increased by 15% this month. Consider reviewing security protocols.',
-      type: 'risk',
+      title: 'Vendor Risk Assessment Due',
+      description: 'CloudSecure Inc. assessment expires in 15 days. Schedule renewal to maintain compliance.',
+      type: 'alert',
       priority: 'high',
-      action: 'Review Security'
+      action: 'Schedule Assessment'
     },
     {
       id: '2',
-      title: 'Compliance Opportunity',
-      description: 'Your SOC 2 compliance score has improved. Consider pursuing additional certifications.',
+      title: 'Control Optimization Opportunity',
+      description: 'AI analysis suggests consolidating 3 access controls to improve efficiency by 25%.',
       type: 'opportunity',
       priority: 'medium',
-      action: 'Explore Certifications'
+      action: 'Review Suggestion'
     },
     {
       id: '3',
-      title: 'Control Effectiveness',
-      description: 'Multi-factor authentication controls are performing exceptionally well.',
+      title: 'Compliance Score Improvement',
+      description: 'Your SOC 2 compliance score increased by 8% this quarter through automated controls.',
       type: 'compliance',
-      priority: 'low'
+      priority: 'low',
+      action: 'View Report'
     }
   ];
+
+
 
   const handleQuickAction = (href: string, actionId?: string) => {
     if (actionId === 'guided-tour') {
@@ -583,7 +588,7 @@ export default function DashboardPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-3 h-full">
                 {quickActions.slice(0, 4).map((action) => (
                   <QuickActionCard
                     key={action.id}
@@ -606,6 +611,17 @@ export default function DashboardPage() {
           <div data-tour="risk-heatmap" className="h-full">
             <InteractiveRiskHeatMap className="h-full" />
           </div>
+        </div>
+      </div>
+
+      {/* Probo Integration Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <ProboIntegrationWidget variant="detailed" showActions={true} />
+        </div>
+        <div className="space-y-4">
+          <ProboIntegrationWidget variant="metrics-only" showActions={false} />
+          <ProboIntegrationWidget variant="compact" showActions={false} />
         </div>
       </div>
 
@@ -844,33 +860,35 @@ function QuickActionCard({
 }) {
   return (
     <div 
-      className="p-4 border border-gray-200 rounded-lg hover:shadow-lg hover:border-gray-300 transition-all cursor-pointer group bg-white"
+      className="p-3 border border-gray-200 rounded-lg hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group bg-white h-full flex flex-col"
       onClick={onClick}
     >
-      <div className="flex items-start space-x-3">
-        <div className={`p-2 rounded-lg bg-gray-50 group-hover:bg-gray-100 transition-colors`}>
-          <Icon className={`w-5 h-5 ${color} transition-colors`} />
+      <div className="flex items-center gap-3 mb-2">
+        <div className={`p-2 rounded-lg bg-gray-50 group-hover:bg-blue-50 transition-colors flex-shrink-0`}>
+          <Icon className={`w-4 h-4 ${color} group-hover:text-blue-600 transition-colors`} />
         </div>
-        <div className="flex-1">
-          <div className="flex items-center justify-between mb-1">
-            <h3 className="font-bold text-[#191919] transition-colors">{title}</h3>
-            {badge && (
-              <Badge 
-                variant="secondary" 
-                className={`text-xs font-semibold ${
-                  badge === 'Quick' ? 'bg-green-100 text-green-800' :
-                  badge === 'AI' ? 'bg-blue-100 text-blue-800' :
-                  badge === 'New' ? 'bg-orange-100 text-orange-800' :
-                  badge === 'Team' ? 'bg-purple-100 text-purple-800' :
-                  'bg-gray-100 text-gray-800'
-                }`}
-              >
-                {badge}
-              </Badge>
-            )}
-          </div>
-          <p className="text-sm text-[#A8A8A8] font-semibold">{description}</p>
-        </div>
+        {badge && (
+          <Badge 
+            variant="secondary" 
+            className={`text-xs font-semibold ml-auto ${
+              badge === 'Quick' ? 'bg-green-100 text-green-800' :
+              badge === 'AI' ? 'bg-blue-100 text-blue-800' :
+              badge === 'Probo' ? 'bg-[#199BEC]/10 text-[#199BEC]' :
+              badge === 'Hub' ? 'bg-[#199BEC]/10 text-[#199BEC]' :
+              badge === 'SOC 2' ? 'bg-purple-100 text-purple-800' :
+              badge === '650+' ? 'bg-emerald-100 text-emerald-800' :
+              badge === 'New' ? 'bg-orange-100 text-orange-800' :
+              badge === 'Team' ? 'bg-purple-100 text-purple-800' :
+              'bg-gray-100 text-gray-800'
+            }`}
+          >
+            {badge}
+          </Badge>
+        )}
+      </div>
+      <div className="flex-1">
+        <h3 className="font-semibold text-sm text-gray-900 mb-1 leading-tight">{title}</h3>
+        <p className="text-xs text-gray-600 leading-tight">{description}</p>
       </div>
     </div>
   );

@@ -1,178 +1,415 @@
-// Riscura Enterprise Service Worker
-// Provides offline capability, caching strategies, and performance optimization
+// Riscura PWA Service Worker
+const CACHE_VERSION = 'v1.0.0';
+const STATIC_CACHE = `riscura-static-${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `riscura-dynamic-${CACHE_VERSION}`;
+const API_CACHE = `riscura-api-${CACHE_VERSION}`;
+const IMAGE_CACHE = `riscura-images-${CACHE_VERSION}`;
 
-const CACHE_NAME = 'riscura-v1.0.0';
-const STATIC_CACHE = `${CACHE_NAME}-static`;
-const DYNAMIC_CACHE = `${CACHE_NAME}-dynamic`;
-const API_CACHE = `${CACHE_NAME}-api`;
-const IMAGE_CACHE = `${CACHE_NAME}-images`;
-
-// Cache versioning for updates
-const CACHE_VERSION = '1.0.0';
-const CACHE_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours
-
-// Assets to cache immediately on install
-const STATIC_ASSETS = [
-  '/',
-  '/offline',
-  '/favicon.ico',
-  '/logo.svg',
-  '/manifest.json',
-  '/_next/static/css/',
-  '/_next/static/js/',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap'
-];
-
-// API routes to cache with specific strategies
-const API_ROUTES = {
-  critical: [
-    '/api/auth/me',
-    '/api/dashboard/insights',
-    '/api/health'
-  ],
-  cacheable: [
-    '/api/controls',
-    '/api/risks',
-    '/api/compliance/frameworks',
-    '/api/documents'
-  ],
-  networkFirst: [
-    '/api/ai/',
-    '/api/billing/',
-    '/api/collaboration/'
-  ]
+// Cache strategies configuration
+const CACHE_STRATEGIES = {
+  static: {
+    name: STATIC_CACHE,
+    patterns: [
+      /\/_next\/static\//,
+      /\/images\/logo\//,
+      /\/fonts\//,
+      /\.css$/,
+      /\.js$/,
+      /\.woff2?$/,
+      /\.ttf$/,
+      /\.eot$/
+    ]
+  },
+  api: {
+    name: API_CACHE,
+    patterns: [
+      /\/api\//,
+      /\/graphql/
+    ]
+  },
+  images: {
+    name: IMAGE_CACHE,
+    patterns: [
+      /\.(?:png|jpg|jpeg|svg|gif|webp)$/
+    ]
+  },
+  dynamic: {
+    name: DYNAMIC_CACHE,
+    patterns: [
+      /\//
+    ]
+  }
 };
 
-// Network timeout settings
-const NETWORK_TIMEOUT = 3000; // 3 seconds
-const FALLBACK_TIMEOUT = 1000; // 1 second
+// Files to cache on install
+const STATIC_ASSETS = [
+  '/',
+  '/manifest.json',
+  '/offline',
+  '/_next/static/css/',
+  '/_next/static/js/',
+  '/images/logo/icon-192x192.png',
+  '/images/logo/icon-512x512.png'
+];
+
+// Maximum cache sizes
+const MAX_CACHE_SIZES = {
+  [STATIC_CACHE]: 50,
+  [DYNAMIC_CACHE]: 100,
+  [API_CACHE]: 50,
+  [IMAGE_CACHE]: 60
+};
+
+// Cache expiration times (in milliseconds)
+const CACHE_EXPIRATION = {
+  [STATIC_CACHE]: 30 * 24 * 60 * 60 * 1000, // 30 days
+  [DYNAMIC_CACHE]: 7 * 24 * 60 * 60 * 1000,  // 7 days
+  [API_CACHE]: 1 * 60 * 60 * 1000,           // 1 hour
+  [IMAGE_CACHE]: 14 * 24 * 60 * 60 * 1000    // 14 days
+};
 
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing service worker...');
+  console.log('Service Worker installing...');
   
   event.waitUntil(
-    Promise.all([
-      // Cache static assets
-      caches.open(STATIC_CACHE).then((cache) => {
-        console.log('[SW] Caching static assets');
+    caches.open(STATIC_CACHE)
+      .then((cache) => {
+        console.log('Caching static assets');
         return cache.addAll(STATIC_ASSETS);
-      }),
-      
-      // Initialize other caches
-      caches.open(DYNAMIC_CACHE),
-      caches.open(API_CACHE),
-      caches.open(IMAGE_CACHE)
-    ]).then(() => {
-      console.log('[SW] Static assets cached successfully');
-      self.skipWaiting(); // Activate immediately
-    }).catch((error) => {
-      console.error('[SW] Failed to cache static assets:', error);
-    })
+      })
+      .then(() => {
+        console.log('Static assets cached successfully');
+        return self.skipWaiting();
+      })
+      .catch((error) => {
+        console.error('Failed to cache static assets:', error);
+      })
   );
 });
 
-// Activate event - clean old caches
+// Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating service worker...');
+  console.log('Service Worker activating...');
   
   event.waitUntil(
-    Promise.all([
-      // Clean old caches
-      caches.keys().then((cacheNames) => {
+    caches.keys()
+      .then((cacheNames) => {
+        const validCaches = Object.values(CACHE_STRATEGIES).map(strategy => strategy.name);
+        
         return Promise.all(
-          cacheNames
-            .filter((cacheName) => {
-              return cacheName.startsWith('riscura-') && 
-                     !cacheName.includes(CACHE_VERSION);
-            })
-            .map((cacheName) => {
-              console.log('[SW] Deleting old cache:', cacheName);
+          cacheNames.map((cacheName) => {
+            if (!validCaches.includes(cacheName)) {
+              console.log('Deleting old cache:', cacheName);
               return caches.delete(cacheName);
-            })
+            }
+          })
         );
-      }),
-      
-      // Clean expired cache entries
-      cleanExpiredCaches(),
-      
-      // Take control of all pages
-      self.clients.claim()
-    ]).then(() => {
-      console.log('[SW] Service worker activated successfully');
-    })
+      })
+      .then(() => {
+        console.log('Old caches cleaned up');
+        return self.clients.claim();
+      })
+      .catch((error) => {
+        console.error('Failed to clean up caches:', error);
+      })
   );
 });
 
-// Fetch event - handle all network requests
+// Fetch event - handle network requests with caching strategies
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
-  
+
   // Skip non-GET requests
   if (request.method !== 'GET') {
     return;
   }
-  
-  // Skip chrome-extension and other non-http(s) requests
+
+  // Skip chrome-extension and other non-http requests
   if (!url.protocol.startsWith('http')) {
     return;
   }
-  
-  // Route to appropriate strategy
-  if (url.pathname.startsWith('/api/')) {
-    event.respondWith(handleApiRequest(request));
-  } else if (isImageRequest(request)) {
-    event.respondWith(handleImageRequest(request));
-  } else if (isStaticAsset(request)) {
-    event.respondWith(handleStaticAsset(request));
-  } else {
-    event.respondWith(handlePageRequest(request));
-  }
+
+  event.respondWith(handleFetch(request));
 });
 
-// Background sync for offline actions
+// Handle fetch requests with appropriate caching strategy
+async function handleFetch(request) {
+  const url = new URL(request.url);
+  
+  try {
+    // Determine cache strategy
+    const strategy = getCacheStrategy(request);
+    
+    switch (strategy.name) {
+      case STATIC_CACHE:
+        return await cacheFirst(request, strategy.name);
+      
+      case API_CACHE:
+        return await networkFirst(request, strategy.name);
+      
+      case IMAGE_CACHE:
+        return await cacheFirst(request, strategy.name);
+      
+      case DYNAMIC_CACHE:
+        return await staleWhileRevalidate(request, strategy.name);
+      
+      default:
+        return await networkFirst(request, strategy.name);
+    }
+  } catch (error) {
+    console.error('Fetch failed:', error);
+    return await handleOfflineFallback(request);
+  }
+}
+
+// Determine which cache strategy to use
+function getCacheStrategy(request) {
+  const url = request.url;
+  
+  for (const [key, strategy] of Object.entries(CACHE_STRATEGIES)) {
+    if (strategy.patterns.some(pattern => pattern.test(url))) {
+      return strategy;
+    }
+  }
+  
+  return CACHE_STRATEGIES.dynamic;
+}
+
+// Cache-first strategy
+async function cacheFirst(request, cacheName) {
+  const cache = await caches.open(cacheName);
+  const cachedResponse = await cache.match(request);
+  
+  if (cachedResponse && !isExpired(cachedResponse, cacheName)) {
+    return cachedResponse;
+  }
+  
+  try {
+    const networkResponse = await fetch(request);
+    
+    if (networkResponse.ok) {
+      await cache.put(request, networkResponse.clone());
+      await limitCacheSize(cacheName);
+    }
+    
+    return networkResponse;
+  } catch (error) {
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+    throw error;
+  }
+}
+
+// Network-first strategy
+async function networkFirst(request, cacheName) {
+  try {
+    const networkResponse = await fetch(request);
+    
+    if (networkResponse.ok) {
+      const cache = await caches.open(cacheName);
+      await cache.put(request, networkResponse.clone());
+      await limitCacheSize(cacheName);
+    }
+    
+    return networkResponse;
+  } catch (error) {
+    const cache = await caches.open(cacheName);
+    const cachedResponse = await cache.match(request);
+    
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+    
+    throw error;
+  }
+}
+
+// Stale-while-revalidate strategy
+async function staleWhileRevalidate(request, cacheName) {
+  const cache = await caches.open(cacheName);
+  const cachedResponse = await cache.match(request);
+  
+  // Start network request in background
+  const networkPromise = fetch(request)
+    .then(async (networkResponse) => {
+      if (networkResponse.ok) {
+        await cache.put(request, networkResponse.clone());
+        await limitCacheSize(cacheName);
+      }
+      return networkResponse;
+    })
+    .catch(() => null);
+  
+  // Return cached response immediately if available
+  if (cachedResponse && !isExpired(cachedResponse, cacheName)) {
+    // Update cache in background
+    networkPromise.catch(() => {});
+    return cachedResponse;
+  }
+  
+  // Wait for network response if no cache or expired
+  return await networkPromise || cachedResponse || handleOfflineFallback(request);
+}
+
+// Check if cached response is expired
+function isExpired(response, cacheName) {
+  const dateHeader = response.headers.get('date');
+  if (!dateHeader) return false;
+  
+  const responseDate = new Date(dateHeader);
+  const now = new Date();
+  const expiration = CACHE_EXPIRATION[cacheName] || CACHE_EXPIRATION[DYNAMIC_CACHE];
+  
+  return (now - responseDate) > expiration;
+}
+
+// Limit cache size
+async function limitCacheSize(cacheName) {
+  const maxSize = MAX_CACHE_SIZES[cacheName];
+  if (!maxSize) return;
+  
+  const cache = await caches.open(cacheName);
+  const keys = await cache.keys();
+  
+  if (keys.length > maxSize) {
+    // Remove oldest entries
+    const keysToDelete = keys.slice(0, keys.length - maxSize);
+    await Promise.all(keysToDelete.map(key => cache.delete(key)));
+  }
+}
+
+// Handle offline fallback
+async function handleOfflineFallback(request) {
+  const url = new URL(request.url);
+  
+  // Return offline page for navigation requests
+  if (request.mode === 'navigate') {
+    const cache = await caches.open(DYNAMIC_CACHE);
+    const offlinePage = await cache.match('/offline');
+    
+    if (offlinePage) {
+      return offlinePage;
+    }
+  }
+  
+  // Return placeholder for images
+  if (request.destination === 'image') {
+    return new Response(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="#f3f4f6"/><text x="100" y="100" text-anchor="middle" dy=".3em" fill="#6b7280">Image unavailable</text></svg>',
+      { headers: { 'Content-Type': 'image/svg+xml' } }
+    );
+  }
+  
+  // Return error response
+  return new Response(
+    JSON.stringify({ error: 'Network unavailable', offline: true }),
+    { 
+      status: 503,
+      headers: { 'Content-Type': 'application/json' }
+    }
+  );
+}
+
+// Background sync
 self.addEventListener('sync', (event) => {
-  console.log('[SW] Background sync triggered:', event.tag);
+  console.log('Background sync triggered:', event.tag);
   
-  if (event.tag === 'upload-data') {
-    event.waitUntil(uploadPendingData());
-  } else if (event.tag === 'download-updates') {
-    event.waitUntil(downloadUpdates());
+  if (event.tag === 'background-sync') {
+    event.waitUntil(handleBackgroundSync());
   }
 });
 
-// Handle push notifications
+// Handle background sync
+async function handleBackgroundSync() {
+  try {
+    // Get sync data from IndexedDB or other storage
+    const syncData = await getSyncData();
+    
+    for (const item of syncData) {
+      try {
+        await syncItem(item);
+        await removeSyncItem(item.id);
+      } catch (error) {
+        console.error('Sync failed for item:', item.id, error);
+      }
+    }
+    
+    // Notify clients about sync completion
+    const clients = await self.clients.matchAll();
+    clients.forEach(client => {
+      client.postMessage({
+        type: 'BACKGROUND_SYNC',
+        payload: { completed: true }
+      });
+    });
+  } catch (error) {
+    console.error('Background sync failed:', error);
+  }
+}
+
+// Sync individual item
+async function syncItem(item) {
+  const response = await fetch('/api/sync', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(item.data)
+  });
+  
+  if (!response.ok) {
+    throw new Error(`Sync failed: ${response.statusText}`);
+  }
+  
+  return response.json();
+}
+
+// Get sync data (placeholder - implement with IndexedDB)
+async function getSyncData() {
+  // This would typically read from IndexedDB
+  return [];
+}
+
+// Remove sync item (placeholder - implement with IndexedDB)
+async function removeSyncItem(id) {
+  // This would typically remove from IndexedDB
+  console.log('Removing sync item:', id);
+}
+
+// Push notifications
 self.addEventListener('push', (event) => {
-  console.log('[SW] Push message received');
+  console.log('Push notification received');
   
   const options = {
-    body: 'You have new updates in Riscura',
-    icon: '/logo.svg',
-    badge: '/logo.svg',
-    vibrate: [100, 50, 100],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: 1
-    },
+    body: 'New notification from Riscura',
+    icon: '/images/logo/icon-192x192.png',
+    badge: '/images/logo/icon-72x72.png',
+    vibrate: [200, 100, 200],
+    data: {},
     actions: [
       {
-        action: 'explore',
-        title: 'View Updates',
-        icon: '/icons/checkmark.png'
+        action: 'view',
+        title: 'View',
+        icon: '/images/icons/view.png'
       },
       {
-        action: 'close',
-        title: 'Close',
-        icon: '/icons/xmark.png'
+        action: 'dismiss',
+        title: 'Dismiss',
+        icon: '/images/icons/dismiss.png'
       }
     ]
   };
   
   if (event.data) {
-    const data = event.data.json();
-    options.body = data.body || options.body;
-    options.data = { ...options.data, ...data };
+    try {
+      const payload = event.data.json();
+      Object.assign(options, payload);
+    } catch (error) {
+      console.error('Failed to parse push payload:', error);
+    }
   }
   
   event.waitUntil(
@@ -180,474 +417,82 @@ self.addEventListener('push', (event) => {
   );
 });
 
-// Handle notification clicks
+// Notification click
 self.addEventListener('notificationclick', (event) => {
-  console.log('[SW] Notification click received');
+  console.log('Notification clicked:', event.action);
   
   event.notification.close();
   
-  if (event.action === 'explore') {
+  if (event.action === 'view') {
+    // Open the app
     event.waitUntil(
-      clients.openWindow('/dashboard')
+      clients.openWindow('/')
+    );
+  } else if (event.action === 'dismiss') {
+    // Just close the notification
+    return;
+  } else {
+    // Default action - open the app
+    event.waitUntil(
+      clients.openWindow('/')
     );
   }
 });
 
-// Message handling for communication with main thread
+// Message handling
 self.addEventListener('message', (event) => {
-  console.log('[SW] Message received:', event.data);
+  const { type, payload } = event.data;
   
-  if (event.data && event.data.type) {
-    switch (event.data.type) {
-      case 'SKIP_WAITING':
-        self.skipWaiting();
-        break;
+  switch (type) {
+    case 'SKIP_WAITING':
+      self.skipWaiting();
+      break;
       
-      case 'CACHE_URLS':
-        event.waitUntil(
-          cacheUrls(event.data.urls)
-        );
-        break;
+    case 'CLEAR_CACHE':
+      handleClearCache(payload.cacheName);
+      break;
       
-      case 'CLEAR_CACHE':
-        event.waitUntil(
-          clearCache(event.data.cacheName)
-        );
-        break;
+    case 'GET_CACHE_SIZE':
+      handleGetCacheSize(event);
+      break;
       
-      case 'GET_CACHE_STATUS':
-        event.waitUntil(
-          getCacheStatus().then((status) => {
-            event.ports[0].postMessage(status);
-          })
-        );
-        break;
-    }
+    default:
+      console.log('Unknown message type:', type);
   }
 });
 
-// Strategy: Cache First (for static assets)
-async function handleStaticAsset(request) {
+// Handle cache clearing
+async function handleClearCache(cacheName) {
   try {
-    const cache = await caches.open(STATIC_CACHE);
-    const cachedResponse = await cache.match(request);
-    
-    if (cachedResponse) {
-      // Return cached version immediately
-      refreshCacheInBackground(request, cache);
-      return cachedResponse;
+    if (cacheName) {
+      await caches.delete(cacheName);
+    } else {
+      const cacheNames = await caches.keys();
+      await Promise.all(cacheNames.map(name => caches.delete(name)));
     }
-    
-    // If not in cache, fetch from network
-    const networkResponse = await fetchWithTimeout(request, NETWORK_TIMEOUT);
-    
-    // Cache the response for future use
-    if (networkResponse.ok) {
-      cache.put(request, networkResponse.clone());
-    }
-    
-    return networkResponse;
+    console.log('Cache cleared:', cacheName || 'all');
   } catch (error) {
-    console.error('[SW] Static asset fetch failed:', error);
-    return createErrorResponse('Static asset unavailable offline');
+    console.error('Failed to clear cache:', error);
   }
 }
 
-// Strategy: Network First with Cache Fallback (for pages)
-async function handlePageRequest(request) {
+// Handle cache size request
+async function handleGetCacheSize(event) {
   try {
-    // Try network first
-    const networkResponse = await fetchWithTimeout(request, NETWORK_TIMEOUT);
+    const cacheNames = await caches.keys();
+    let totalSize = 0;
     
-    if (networkResponse.ok) {
-      // Cache successful responses
-      const cache = await caches.open(DYNAMIC_CACHE);
-      cache.put(request, networkResponse.clone());
-      return networkResponse;
-    }
-    
-    throw new Error('Network response not ok');
-  } catch (error) {
-    // Fallback to cache
-    const cache = await caches.open(DYNAMIC_CACHE);
-    const cachedResponse = await cache.match(request);
-    
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-    
-    // If no cache, return offline page
-    return caches.match('/offline') || createOfflineResponse();
-  }
-}
-
-// Strategy: Stale While Revalidate (for API requests)
-async function handleApiRequest(request) {
-  const url = new URL(request.url);
-  const pathname = url.pathname;
-  
-  // Critical API routes - Network First
-  if (API_ROUTES.critical.some(route => pathname.startsWith(route))) {
-    return handleCriticalApiRequest(request);
-  }
-  
-  // Cacheable API routes - Stale While Revalidate
-  if (API_ROUTES.cacheable.some(route => pathname.startsWith(route))) {
-    return handleCacheableApiRequest(request);
-  }
-  
-  // Network first routes
-  if (API_ROUTES.networkFirst.some(route => pathname.startsWith(route))) {
-    return handleNetworkFirstApiRequest(request);
-  }
-  
-  // Default: Network only
-  return fetch(request);
-}
-
-// Critical API requests (user auth, health checks)
-async function handleCriticalApiRequest(request) {
-  try {
-    const networkResponse = await fetchWithTimeout(request, FALLBACK_TIMEOUT);
-    
-    if (networkResponse.ok) {
-      const cache = await caches.open(API_CACHE);
-      cache.put(request, networkResponse.clone());
-    }
-    
-    return networkResponse;
-  } catch (error) {
-    // Quick fallback to cache for critical requests
-    const cache = await caches.open(API_CACHE);
-    const cachedResponse = await cache.match(request);
-    
-    if (cachedResponse) {
-      // Add stale indicator header
-      const staleResponse = new Response(cachedResponse.body, {
-        status: cachedResponse.status,
-        statusText: cachedResponse.statusText,
-        headers: {
-          ...cachedResponse.headers,
-          'X-Cached': 'true',
-          'X-Cache-Date': new Date().toISOString()
-        }
-      });
-      return staleResponse;
-    }
-    
-    return createApiErrorResponse(request.url);
-  }
-}
-
-// Cacheable API requests (controls, risks, etc.)
-async function handleCacheableApiRequest(request) {
-  const cache = await caches.open(API_CACHE);
-  const cachedResponse = await cache.match(request);
-  
-  // Return cached version immediately if available
-  if (cachedResponse && !isExpired(cachedResponse)) {
-    // Update cache in background
-    refreshApiCacheInBackground(request, cache);
-    return cachedResponse;
-  }
-  
-  try {
-    // Fetch fresh data
-    const networkResponse = await fetchWithTimeout(request, NETWORK_TIMEOUT);
-    
-    if (networkResponse.ok) {
-      // Add timestamp for expiry checking
-      const responseToCache = new Response(networkResponse.body, {
-        status: networkResponse.status,
-        statusText: networkResponse.statusText,
-        headers: {
-          ...networkResponse.headers,
-          'X-Cache-Timestamp': Date.now().toString()
-        }
-      });
-      
-      cache.put(request, responseToCache.clone());
-      return networkResponse;
-    }
-    
-    throw new Error('Network response not ok');
-  } catch (error) {
-    // Return stale cache if network fails
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-    
-    return createApiErrorResponse(request.url);
-  }
-}
-
-// Network first API requests (AI, billing, etc.)
-async function handleNetworkFirstApiRequest(request) {
-  try {
-    return await fetchWithTimeout(request, NETWORK_TIMEOUT);
-  } catch (error) {
-    // Only cache specific GET requests as fallback
-    if (request.method === 'GET') {
-      const cache = await caches.open(API_CACHE);
-      const cachedResponse = await cache.match(request);
-      
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-    }
-    
-    return createApiErrorResponse(request.url);
-  }
-}
-
-// Strategy: Cache First with Network Update (for images)
-async function handleImageRequest(request) {
-  try {
-    const cache = await caches.open(IMAGE_CACHE);
-    const cachedResponse = await cache.match(request);
-    
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-    
-    // Fetch from network
-    const networkResponse = await fetchWithTimeout(request, NETWORK_TIMEOUT);
-    
-    if (networkResponse.ok) {
-      cache.put(request, networkResponse.clone());
-    }
-    
-    return networkResponse;
-  } catch (error) {
-    console.error('[SW] Image fetch failed:', error);
-    return createPlaceholderImageResponse();
-  }
-}
-
-// Utility Functions
-
-function fetchWithTimeout(request, timeout) {
-  return new Promise((resolve, reject) => {
-    const timeoutId = setTimeout(() => {
-      reject(new Error('Request timeout'));
-    }, timeout);
-    
-    fetch(request)
-      .then((response) => {
-        clearTimeout(timeoutId);
-        resolve(response);
-      })
-      .catch((error) => {
-        clearTimeout(timeoutId);
-        reject(error);
-      });
-  });
-}
-
-function isImageRequest(request) {
-  return request.destination === 'image' || 
-         /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(request.url);
-}
-
-function isStaticAsset(request) {
-  return request.url.includes('/_next/static/') ||
-         request.url.includes('/static/') ||
-         request.url.includes('.js') ||
-         request.url.includes('.css') ||
-         request.url.includes('/fonts/');
-}
-
-function isExpired(response) {
-  const timestamp = response.headers.get('X-Cache-Timestamp');
-  if (!timestamp) return true;
-  
-  const cacheTime = parseInt(timestamp, 10);
-  const now = Date.now();
-  
-  return (now - cacheTime) > CACHE_EXPIRY;
-}
-
-async function refreshCacheInBackground(request, cache) {
-  try {
-    const networkResponse = await fetch(request);
-    if (networkResponse.ok) {
-      cache.put(request, networkResponse.clone());
-    }
-  } catch (error) {
-    console.log('[SW] Background cache refresh failed:', error);
-  }
-}
-
-async function refreshApiCacheInBackground(request, cache) {
-  try {
-    const networkResponse = await fetch(request);
-    if (networkResponse.ok) {
-      const responseToCache = new Response(networkResponse.body, {
-        status: networkResponse.status,
-        statusText: networkResponse.statusText,
-        headers: {
-          ...networkResponse.headers,
-          'X-Cache-Timestamp': Date.now().toString()
-        }
-      });
-      
-      cache.put(request, responseToCache);
-    }
-  } catch (error) {
-    console.log('[SW] Background API cache refresh failed:', error);
-  }
-}
-
-function createErrorResponse(message) {
-  return new Response(
-    JSON.stringify({ error: message, offline: true }),
-    {
-      status: 503,
-      statusText: 'Service Unavailable',
-      headers: { 'Content-Type': 'application/json' }
-    }
-  );
-}
-
-function createApiErrorResponse(url) {
-  return new Response(
-    JSON.stringify({
-      error: 'API unavailable offline',
-      url,
-      offline: true,
-      timestamp: new Date().toISOString()
-    }),
-    {
-      status: 503,
-      statusText: 'Service Unavailable',
-      headers: { 'Content-Type': 'application/json' }
-    }
-  );
-}
-
-function createOfflineResponse() {
-  const offlineHtml = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Riscura - Offline</title>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <style>
-        body {
-          font-family: 'Inter', sans-serif;
-          text-align: center;
-          padding: 2rem;
-          background: #f8fafc;
-          color: #334155;
-        }
-        .container {
-          max-width: 500px;
-          margin: 0 auto;
-          padding: 2rem;
-          background: white;
-          border-radius: 0.5rem;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .logo { width: 64px; height: 64px; margin: 0 auto 1rem; }
-        h1 { color: #1e293b; margin-bottom: 1rem; }
-        p { margin-bottom: 1.5rem; }
-        .retry-btn {
-          background: #3b82f6;
-          color: white;
-          border: none;
-          padding: 0.75rem 1.5rem;
-          border-radius: 0.375rem;
-          cursor: pointer;
-          font-weight: 500;
-        }
-        .retry-btn:hover { background: #2563eb; }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <div class="logo">📊</div>
-        <h1>You're Offline</h1>
-        <p>Riscura is currently unavailable. Please check your internet connection and try again.</p>
-        <button class="retry-btn" onclick="window.location.reload()">
-          Try Again
-        </button>
-      </div>
-    </body>
-    </html>
-  `;
-  
-  return new Response(offlineHtml, {
-    headers: { 'Content-Type': 'text/html' }
-  });
-}
-
-function createPlaceholderImageResponse() {
-  // Simple 1x1 transparent pixel
-  const pixel = new Uint8Array([
-    0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00, 0x01, 0x00, 0x80, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0x21, 0xF9, 0x04, 0x01, 0x00, 
-    0x00, 0x00, 0x00, 0x2C, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 
-    0x00, 0x02, 0x02, 0x44, 0x01, 0x00, 0x3B
-  ]);
-  
-  return new Response(pixel, {
-    headers: { 'Content-Type': 'image/gif' }
-  });
-}
-
-async function cleanExpiredCaches() {
-  const cacheNames = await caches.keys();
-  
-  for (const cacheName of cacheNames) {
-    if (cacheName.startsWith('riscura-')) {
-      const cache = await caches.open(cacheName);
-      const requests = await cache.keys();
-      
-      for (const request of requests) {
-        const response = await cache.match(request);
-        if (response && isExpired(response)) {
-          await cache.delete(request);
-        }
-      }
-    }
-  }
-}
-
-async function cacheUrls(urls) {
-  const cache = await caches.open(DYNAMIC_CACHE);
-  return cache.addAll(urls);
-}
-
-async function clearCache(cacheName) {
-  return caches.delete(cacheName);
-}
-
-async function getCacheStatus() {
-  const cacheNames = await caches.keys();
-  const status = {};
-  
-  for (const cacheName of cacheNames) {
-    if (cacheName.startsWith('riscura-')) {
+    for (const cacheName of cacheNames) {
       const cache = await caches.open(cacheName);
       const keys = await cache.keys();
-      status[cacheName] = keys.length;
+      totalSize += keys.length;
     }
+    
+    event.ports[0].postMessage({ size: totalSize });
+  } catch (error) {
+    console.error('Failed to get cache size:', error);
+    event.ports[0].postMessage({ size: 0 });
   }
-  
-  return status;
 }
 
-async function uploadPendingData() {
-  // Handle background data upload when online
-  console.log('[SW] Uploading pending data...');
-  // Implementation would depend on specific offline data storage strategy
-}
-
-async function downloadUpdates() {
-  // Handle background updates download
-  console.log('[SW] Downloading updates...');
-  // Implementation would fetch latest critical data
-}
-
-console.log('[SW] Service worker script loaded'); 
+console.log('Service Worker loaded successfully'); 

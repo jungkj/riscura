@@ -118,3 +118,30 @@ temp/
 # documentation
 /docs/.docusaurus
 /docs/build
+
+# Additional development artifacts
+PROMPT_*_IMPLEMENTATION_COMPLETE.md
+.secrets.tmp.json
+*.old
+.env.bak
+.env.*.backup.*
+start-node-env.bat
+test-*.xlsx
+
+# Additional development artifacts
+PROMPT_*_IMPLEMENTATION_COMPLETE.md
+.secrets.tmp.json
+*.old
+.env.bak
+.env.*.backup.*
+start-node-env.bat
+test-*.xlsx
+
+# Additional development artifacts
+PROMPT_*_IMPLEMENTATION_COMPLETE.md
+.secrets.tmp.json
+*.old
+.env.bak
+.env.*.backup.*
+start-node-env.bat
+test-*.xlsx

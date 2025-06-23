@@ -1,9 +1,9 @@
 'use client';
 
-import DashboardPage from '@/pages/dashboard/DashboardPage';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import DashboardPage from '@/pages/dashboard/DashboardPage';
 
-export default function DashboardPageRoute() {
+export default function Dashboard() {
   return (
     <ProtectedRoute>
       <DashboardPage />

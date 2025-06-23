@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -362,12 +362,12 @@ export default function GuidedTour({
   };
 
   // Get current tour configuration
-  const currentTour = customSteps ? 
+  const currentTour = useMemo(() => customSteps ? 
     { id: 'custom', title: 'Custom Tour', description: '', category: '', estimatedTime: '', difficulty: 'beginner' as const, steps: customSteps } :
-    tourConfigs[tourId];
+    tourConfigs[tourId], [customSteps, tourId]);
 
   const steps = currentTour?.steps || [];
-  const currentStepData = steps[currentStep];
+  const currentStepData = useMemo(() => steps[currentStep], [steps, currentStep]);
 
   // Auto-start tour
   useEffect(() => {
@@ -411,6 +411,8 @@ export default function GuidedTour({
 
   // Position tour tooltip with dynamic responsive positioning
   const positionTour = useCallback(() => {
+    if (!currentStepData) return;
+    
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     
@@ -430,7 +432,7 @@ export default function GuidedTour({
     const minMargin = 16;
 
     // For center position or no target, always center in viewport
-    if (!currentStepData?.targetSelector || currentStepData.position === 'center') {
+    if (!currentStepData.targetSelector || currentStepData.position === 'center') {
       setTourPosition({ 
         x: Math.max(minMargin, (viewportWidth - tourWidth) / 2), 
         y: Math.max(minMargin, (viewportHeight - tourHeight) / 2) 
@@ -549,7 +551,7 @@ export default function GuidedTour({
     } else {
       setHighlightedElement(null);
     }
-  }, [currentStepData]);
+  }, [currentStepData?.targetSelector, currentStepData?.position, currentStepData?.highlightElement]);
 
   // Update tour position when step changes
   useEffect(() => {
@@ -578,6 +580,27 @@ export default function GuidedTour({
     return () => window.removeEventListener('resize', handleResize);
   }, [isActive, positionTour]);
 
+  // Tour control functions
+  const completeTour = useCallback(() => {
+    setCompletedSteps(prev => [...prev, currentStepData?.id || '']);
+    stopTour();
+    onComplete?.();
+    
+    toast({
+      title: 'Tour Completed!',
+      description: 'Great job! You\'ve completed the guided tour.',
+    });
+  }, [currentStepData?.id, onComplete, stopTour]);
+
+  const nextStep = useCallback(() => {
+    if (currentStep < steps.length - 1) {
+      setCompletedSteps(prev => [...prev, currentStepData?.id || '']);
+      setCurrentStep(currentStep + 1);
+    } else {
+      completeTour();
+    }
+  }, [currentStep, steps.length, currentStepData?.id, completeTour]);
+
   // Auto-play functionality
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -585,11 +608,7 @@ export default function GuidedTour({
     if (isActive && isPlaying && currentStepData) {
       const delay = currentStepData.nextStepDelay || 5000; // Default 5 seconds
       interval = setTimeout(() => {
-        if (currentStep < steps.length - 1) {
-          nextStep();
-        } else {
-          completeTour();
-        }
+        nextStep();
       }, delay);
     }
 
@@ -598,10 +617,10 @@ export default function GuidedTour({
         clearTimeout(interval);
       }
     };
-  }, [isActive, isPlaying, currentStep, currentStepData]);
+  }, [isActive, isPlaying, currentStepData?.nextStepDelay, nextStep]);
 
-  // Tour control functions
-  const startTour = () => {
+  // Additional tour control functions
+  const startTour = useCallback(() => {
     setIsActive(true);
     setCurrentStep(0);
     setIsPlaying(false);
@@ -611,16 +630,16 @@ export default function GuidedTour({
       title: 'Tour Started',
       description: `Starting ${currentTour?.title || 'guided tour'}`,
     });
-  };
+  }, [currentTour?.title]);
 
-  const stopTour = () => {
+  const stopTour = useCallback(() => {
     setIsActive(false);
     setIsPlaying(false);
     setHighlightedElement(null);
     setShowTooltip(false);
-  };
+  }, []);
 
-  const skipTour = () => {
+  const skipTour = useCallback(() => {
     stopTour();
     onSkip?.();
     
@@ -628,43 +647,23 @@ export default function GuidedTour({
       title: 'Tour Skipped',
       description: 'You can restart the tour anytime from the Help menu',
     });
-  };
+  }, [onSkip, stopTour]);
 
-  const completeTour = () => {
-    setCompletedSteps([...completedSteps, currentStepData?.id || '']);
-    stopTour();
-    onComplete?.();
-    
-    toast({
-      title: 'Tour Completed!',
-      description: 'Great job! You\'ve completed the guided tour.',
-    });
-  };
-
-  const nextStep = () => {
-    if (currentStep < steps.length - 1) {
-      setCompletedSteps([...completedSteps, currentStepData?.id || '']);
-      setCurrentStep(currentStep + 1);
-    } else {
-      completeTour();
-    }
-  };
-
-  const previousStep = () => {
+  const previousStep = useCallback(() => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
-  };
+  }, [currentStep]);
 
-  const goToStep = (stepIndex: number) => {
+  const goToStep = useCallback((stepIndex: number) => {
     if (stepIndex >= 0 && stepIndex < steps.length) {
       setCurrentStep(stepIndex);
     }
-  };
+  }, [steps.length]);
 
-  const togglePlayPause = () => {
+  const togglePlayPause = useCallback(() => {
     setIsPlaying(!isPlaying);
-  };
+  }, [isPlaying]);
 
   // Calculate progress
   const progressPercentage = ((currentStep + 1) / steps.length) * 100;

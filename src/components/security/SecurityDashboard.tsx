@@ -14,6 +14,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { SecuritySettingsModal } from './SecuritySettingsModal';
+import ExportService from '@/services/ExportService';
 import {
   Shield,
   AlertTriangle,
@@ -68,6 +70,8 @@ interface ComplianceFramework {
   };
   lastAssessment: Date;
   nextAssessment: Date;
+  proboIntegrated?: boolean;
+  proboControlsAvailable?: number;
 }
 
 // ========== SAMPLE DATA ==========
@@ -167,7 +171,9 @@ const complianceFrameworks: ComplianceFramework[] = [
     status: 'compliant',
     controls: { total: 67, implemented: 65, tested: 62, exceptions: 2 },
     lastAssessment: new Date('2024-01-01'),
-    nextAssessment: new Date('2024-07-01')
+    nextAssessment: new Date('2024-07-01'),
+    proboIntegrated: true,
+    proboControlsAvailable: 180
   },
   {
     id: 'iso27001',
@@ -177,7 +183,9 @@ const complianceFrameworks: ComplianceFramework[] = [
     status: 'partial',
     controls: { total: 93, implemented: 85, tested: 78, exceptions: 8 },
     lastAssessment: new Date('2023-12-15'),
-    nextAssessment: new Date('2024-06-15')
+    nextAssessment: new Date('2024-06-15'),
+    proboIntegrated: true,
+    proboControlsAvailable: 220
   },
   {
     id: 'gdpr',
@@ -187,7 +195,9 @@ const complianceFrameworks: ComplianceFramework[] = [
     status: 'compliant',
     controls: { total: 42, implemented: 42, tested: 40, exceptions: 0 },
     lastAssessment: new Date('2024-01-10'),
-    nextAssessment: new Date('2024-04-10')
+    nextAssessment: new Date('2024-04-10'),
+    proboIntegrated: false,
+    proboControlsAvailable: 0
   },
   {
     id: 'nist',
@@ -197,7 +207,9 @@ const complianceFrameworks: ComplianceFramework[] = [
     status: 'compliant',
     controls: { total: 108, implemented: 102, tested: 95, exceptions: 6 },
     lastAssessment: new Date('2023-12-01'),
-    nextAssessment: new Date('2024-03-01')
+    nextAssessment: new Date('2024-03-01'),
+    proboIntegrated: true,
+    proboControlsAvailable: 251
   }
 ];
 
@@ -301,7 +313,10 @@ const ThreatAlertsPanel: React.FC = () => {
       subtitle="Real-time threat detection and incident alerts"
       action={{
         label: 'View All',
-        onClick: () => console.log('View all alerts'),
+        onClick: () => {
+          // Navigate to alerts page or show alerts modal
+          // This would typically use router.push('/security/alerts')
+        },
         variant: 'outline',
       }}
       className="shadow-notion-sm"
@@ -371,7 +386,10 @@ const ComplianceFrameworksPanel: React.FC = () => {
       subtitle="Framework compliance status and control implementation"
       action={{
         label: 'Manage',
-        onClick: () => console.log('Manage frameworks'),
+        onClick: () => {
+          // Navigate to compliance frameworks management page
+          // This would typically use router.push('/security/compliance')
+        },
         variant: 'outline',
       }}
       className="shadow-notion-sm"
@@ -526,6 +544,30 @@ const SecurityControlsMonitoring: React.FC = () => {
 // ========== MAIN SECURITY DASHBOARD ==========
 export const SecurityDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+
+  const handleOpenSettings = () => {
+    setIsSettingsModalOpen(true);
+  };
+
+  const handleGenerateReport = async () => {
+    try {
+      await ExportService.exportSecurityReport({ format: 'pdf' });
+    } catch (error) {
+      console.error('Report generation failed:', error);
+    }
+  };
+
+  const handleRefreshData = () => {
+    // TODO: Implement data refresh logic
+    // This would typically trigger a data refresh from the backend
+    // For now, we'll just show a toast notification
+  };
+
+  const handleSettingsUpdated = (settings: any) => {
+    // Settings have been updated successfully
+    // The SecuritySettingsModal will handle the toast notification
+  };
 
   return (
     <MainContentArea
@@ -536,19 +578,19 @@ export const SecurityDashboard: React.FC = () => {
       ]}
       primaryAction={{
         label: 'Security Settings',
-        onClick: () => console.log('Security settings'),
+        onClick: handleOpenSettings,
         icon: Settings,
       }}
       secondaryActions={[
         {
           label: 'Generate Report',
-          onClick: () => console.log('Generate report'),
+          onClick: handleGenerateReport,
           icon: Download,
           variant: 'outline',
         },
         {
           label: 'Refresh Data',
-          onClick: () => console.log('Refresh'),
+          onClick: handleRefreshData,
           icon: RefreshCw,
           variant: 'outline',
         },
@@ -657,6 +699,13 @@ export const SecurityDashboard: React.FC = () => {
           </p>
         </div>
       </TabsContent>
+
+      {/* Security Settings Modal */}
+      <SecuritySettingsModal
+        open={isSettingsModalOpen}
+        onOpenChange={setIsSettingsModalOpen}
+        onSettingsUpdated={handleSettingsUpdated}
+      />
     </MainContentArea>
   );
 };

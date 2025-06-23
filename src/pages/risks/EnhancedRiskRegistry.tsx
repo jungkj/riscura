@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { EnhancedRisk, AdvancedRiskFilters, RiskAnalytics, RiskTemplate, BulkOperation } from '@/types/enhanced-risk.types';
 import { Risk } from '@/types';
 import { useRisks } from '@/context/RiskContext';
@@ -122,6 +123,8 @@ interface EnhancedRiskRegistryProps {
 }
 
 const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className = '' }) => {
+  const router = useRouter();
+  const { success, error, info } = useToastHelpers();
   const { risks: baseRisks, getRiskStats, createRisk, updateRisk, deleteRisk } = useRisks();
   const [enhancedRiskService] = useState(() => new EnhancedRiskService());
 
@@ -257,7 +260,7 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
       );
 
       // Show suggestions in a modal or notification
-      console.log('AI Analysis completed:', aiSuggestions);
+      success('AI analysis completed successfully');
     } catch (error) {
       console.error('AI analysis failed:', error);
     } finally {
@@ -271,7 +274,7 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
     try {
       const result = await enhancedRiskService.performBulkOperation(operation);
       if (result.success) {
-        console.log('Bulk operation completed successfully');
+        success('Bulk operation completed successfully');
         setSelectedRisks([]);
       } else {
         console.error('Bulk operation failed:', result.errors);
@@ -291,6 +294,44 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
   const getPriorityColor = (priority: string) => {
     return colorClasses.status[priority as keyof typeof colorClasses.status] || colorClasses.status.neutral;
   };
+
+  // Navigation handlers
+  const handleNavigateToCriticalRisks = useCallback(() => {
+    setFilters({ priority: ['critical', 'high'] });
+    setActiveTab('list');
+    success('Filtered to show critical and high priority risks');
+  }, [success]);
+
+  const handleNavigateToScoreAnalytics = useCallback(() => {
+    setActiveTab('analytics');
+    setViewMode('analytics');
+    info('Switched to risk score analytics view');
+  }, [info]);
+
+  const handleNavigateToMitigatedRisks = useCallback(() => {
+    setFilters({ status: ['mitigated'] });
+    setActiveTab('list');
+    success('Filtered to show mitigated risks');
+  }, [success]);
+
+  // Filtering handlers
+  const handleFilterByCategory = useCallback((category: string) => {
+    setFilters(prev => ({
+      ...prev,
+      category: [category]
+    }));
+    setActiveTab('list');
+    success(`Filtered risks by category: ${category}`);
+  }, [success]);
+
+  const handleFilterByStatus = useCallback((status: string) => {
+    setFilters(prev => ({
+      ...prev,
+      status: [status]
+    }));
+    setActiveTab('list');
+    success(`Filtered risks by status: ${status}`);
+  }, [success]);
 
   // Risk statistics
   const stats = useMemo(() => {
@@ -611,7 +652,7 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
                           values: [8, 12, 15, 18, 22, 25, stats.total],
                           trend: 'up'
                         }}
-                        onClick={() => console.log('Navigate to all risks')}
+                        onClick={() => window.location.href = '/dashboard/risks'}
                         className="h-full"
                       />
                     </motion.div>
@@ -632,7 +673,7 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
                           text: "High Priority",
                           variant: "danger"
                         }}
-                        onClick={() => console.log('Navigate to critical risks')}
+                        onClick={handleNavigateToCriticalRisks}
                         className="h-full"
                       />
                     </motion.div>
@@ -658,7 +699,7 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
                           isPositive: false,
                           period: "this quarter"
                         }}
-                        onClick={() => console.log('Navigate to score analytics')}
+                        onClick={handleNavigateToScoreAnalytics}
                         className="h-full"
                       />
                     </motion.div>
@@ -679,7 +720,7 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
                           values: [2, 4, 6, 8, 10, 12, stats.byStatus.mitigated || 0],
                           trend: 'up'
                         }}
-                        onClick={() => console.log('Navigate to mitigated risks')}
+                        onClick={handleNavigateToMitigatedRisks}
                         className="h-full"
                       />
                     </motion.div>
@@ -710,7 +751,7 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
                   }
                 }))}
                 totalValue={stats.total}
-                onItemClick={(item) => console.log('Filter by category:', item.label)}
+                onItemClick={(item) => handleFilterByCategory(item.label)}
               />
 
               <EnhancedChartCard
@@ -730,7 +771,7 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
                   }
                 }))}
                 totalValue={stats.total}
-                onItemClick={(item) => console.log('Filter by status:', item.label)}
+                onItemClick={(item) => handleFilterByStatus(item.label)}
               />
               </EnhancedGrid>
             </EnhancedSection>
@@ -983,7 +1024,10 @@ const EnhancedRiskRegistry: React.FC<EnhancedRiskRegistryProps> = ({ className =
                                       <Eye className="w-4 h-4 mr-2" />
                                       View Details
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => {
+                                      // Navigate to edit risk page
+                                      window.location.href = `/dashboard/risks/${risk.id}/edit`;
+                                    }}>
                                       <Edit className="w-4 h-4 mr-2" />
                                       Edit Risk
                                     </DropdownMenuItem>

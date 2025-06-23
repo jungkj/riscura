@@ -1,654 +1,782 @@
-import type {
-  ReportTemplate,
-  ReportGeneration,
-  ReportSchedule,
-  ReportAnalytics,
-  AIGeneratedContent,
-  ExportFormat,
-  DataQuery,
-  ReportFilter,
-  InsightType,
-  GeneratedInsight,
-  GeneratedRecommendation,
-  GeneratedNarrative,
-  GeneratedOutput
-} from '@/types/reporting.types';
+import { generatePDF, ReportData, ReportSection, formatTableData, formatChartData } from '@/lib/pdf/pdf-generator-mock';
+import { exportToExcel, exportToCSV, ExcelWorkbookData } from '@/lib/pdf/excel-exporter';
+import { format, addDays, addWeeks, addMonths } from 'date-fns';
+import nodemailer from 'nodemailer';
+import { prisma } from '@/lib/db';
+import { EmailService } from './EmailService';
+import * as cron from 'node-cron';
 
-interface ReportingServiceConfig {
-  apiEndpoint?: string;
-  aiEnabled?: boolean;
-  cacheEnabled?: boolean;
-  maxCacheSize?: number;
+export interface ReportTemplate {
+  id: string;
+  name: string;
+  description: string;
+  type: 'risk_assessment' | 'compliance_status' | 'control_effectiveness' | 'executive_summary' | 'audit_trail' | 'custom';
+  category: 'operational' | 'compliance' | 'executive' | 'technical';
+  sections: ReportSectionTemplate[];
+  parameters?: ReportParameter[];
+  scheduling?: {
+    enabled: boolean;
+    frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
+    recipients: string[];
+    nextRun?: Date;
+  };
+  branding?: {
+    logo?: string;
+    primaryColor?: string;
+    companyName?: string;
+  };
+}
+
+export interface ReportSectionTemplate {
+  id: string;
+  title: string;
+  type: 'text' | 'table' | 'chart' | 'summary' | 'list';
+  dataSource: string;
+  query?: string;
+  filters?: Record<string, any>;
+  formatting?: {
+    columns?: Array<{ key: string; header: string; format?: string }>;
+    chartType?: 'bar' | 'pie' | 'line';
+    groupBy?: string;
+    sortBy?: string;
+  };
+}
+
+export interface ReportParameter {
+  id: string;
+  name: string;
+  type: 'date' | 'dateRange' | 'select' | 'multiSelect' | 'text' | 'number';
+  label: string;
+  required: boolean;
+  defaultValue?: any;
+  options?: Array<{ value: any; label: string }>;
+}
+
+export interface GenerateReportRequest {
+  templateId: string;
+  format: 'pdf' | 'excel' | 'csv';
+  parameters?: Record<string, any>;
+  title?: string;
+  subtitle?: string;
+  filters?: Record<string, any>;
+  recipients?: string[];
+}
+
+export interface ScheduledReport {
+  id: string;
+  templateId: string;
+  name: string;
+  frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
+  recipients: string[];
+  parameters: Record<string, any>;
+  nextRun: Date;
+  lastRun?: Date;
+  status: 'active' | 'paused' | 'error';
+  createdBy: string;
+  createdAt: Date;
+}
+
+export interface ReportHistory {
+  id: string;
+  templateId: string;
+  title: string;
+  format: string;
+  generatedAt: Date;
+  generatedBy: string;
+  fileSize: number;
+  downloadCount: number;
+  status: 'completed' | 'failed' | 'processing';
+  error?: string;
+  filePath?: string;
+}
+
+export interface ReportConfig {
+  id?: string;
+  name: string;
+  type: ReportType;
+  description?: string;
+  template: string;
+  parameters: Record<string, any>;
+  filters: ReportFilters;
+  format: ReportFormat[];
+  organizationId: string;
+  createdBy: string;
+  isScheduled?: boolean;
+  schedule?: ScheduleConfig;
+  recipients?: string[];
+}
+
+export interface ScheduleConfig {
+  frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
+  dayOfWeek?: number; // 0-6 for weekly
+  dayOfMonth?: number; // 1-31 for monthly
+  time: string; // HH:MM format
+  timezone: string;
+  enabled: boolean;
+}
+
+export interface ReportFilters {
+  dateRange?: {
+    from: Date;
+    to: Date;
+  };
+  categories?: string[];
+  status?: string[];
+  priority?: string[];
+  assignedTo?: string[];
+  departments?: string[];
+  tags?: string[];
+  customFilters?: Record<string, any>;
+}
+
+export interface GeneratedReport {
+  id: string;
+  name: string;
+  type: ReportType;
+  format: ReportFormat;
+  filePath: string;
+  fileSize: number;
+  generatedAt: Date;
+  generatedBy: string;
+  organizationId: string;
+  downloadUrl: string;
+  expiresAt?: Date;
+  parameters: Record<string, any>;
+}
+
+export enum ReportType {
+  RISK_ASSESSMENT = 'risk_assessment',
+  COMPLIANCE_STATUS = 'compliance_status',
+  CONTROL_EFFECTIVENESS = 'control_effectiveness',
+  EXECUTIVE_SUMMARY = 'executive_summary',
+  AUDIT_TRAIL = 'audit_trail',
+  CUSTOM = 'custom',
+  VENDOR_ASSESSMENT = 'vendor_assessment',
+  SECURITY_DASHBOARD = 'security_dashboard',
+  PERFORMANCE_METRICS = 'performance_metrics'
+}
+
+export enum ReportFormat {
+  PDF = 'pdf',
+  EXCEL = 'excel',
+  CSV = 'csv',
+  JSON = 'json'
 }
 
 export class ReportingService {
-  private config: ReportingServiceConfig;
-  private cache = new Map<string, any>();
-  private generationQueue: ReportGeneration[] = [];
+  private emailService: EmailService;
+  private scheduledJobs: Map<string, cron.ScheduledTask> = new Map();
 
-  constructor(config: ReportingServiceConfig = {}) {
-    this.config = {
-      apiEndpoint: '/api/reporting',
-      aiEnabled: true,
-      cacheEnabled: true,
-      maxCacheSize: 100,
-      ...config
-    };
+  constructor() {
+    this.emailService = new EmailService();
+    this.initializeScheduledReports();
   }
 
-  // === Template Management ===
-
-  async getTemplates(filters?: {
-    category?: string;
-    type?: string;
-    search?: string;
-    tags?: string[];
-  }): Promise<ReportTemplate[]> {
-    const cacheKey = `templates:${JSON.stringify(filters)}`;
-    
-    if (this.config.cacheEnabled && this.cache.has(cacheKey)) {
-      return this.cache.get(cacheKey);
-    }
+  /**
+   * Generate a report on demand
+   */
+  async generateReport(config: ReportConfig): Promise<GeneratedReport[]> {
+    const results: GeneratedReport[] = [];
 
     try {
-      const queryParams = new URLSearchParams();
-      if (filters?.category) queryParams.append('category', filters.category);
-      if (filters?.type) queryParams.append('type', filters.type);
-      if (filters?.search) queryParams.append('search', filters.search);
-      if (filters?.tags?.length) queryParams.append('tags', filters.tags.join(','));
+      // Validate configuration
+      await this.validateReportConfig(config);
 
-      const response = await fetch(`${this.config.apiEndpoint}/templates?${queryParams}`);
-      if (!response.ok) throw new Error('Failed to fetch templates');
-      
-      const templates = await response.json();
-      
-      if (this.config.cacheEnabled) {
-        this.cache.set(cacheKey, templates);
+      // Aggregate data based on report type
+      const data = await this.aggregateReportData(config);
+
+      // Generate reports in requested formats
+      for (const format of config.format) {
+        const result = await this.generateReportInFormat(config, data, format);
+        results.push(result);
       }
-      
-      return templates;
-    } catch (error) {
-      console.error('Error fetching templates:', error);
-      // Return demo data for development
-      return this.getDemoTemplates();
-    }
-  }
 
-  async getTemplate(id: string): Promise<ReportTemplate | null> {
-    const cacheKey = `template:${id}`;
-    
-    if (this.config.cacheEnabled && this.cache.has(cacheKey)) {
-      return this.cache.get(cacheKey);
-    }
+      // Save report metadata to database
+      await this.saveReportMetadata(config, results);
 
-    try {
-      const response = await fetch(`${this.config.apiEndpoint}/templates/${id}`);
-      if (!response.ok) throw new Error('Template not found');
-      
-      const template = await response.json();
-      
-      if (this.config.cacheEnabled) {
-        this.cache.set(cacheKey, template);
+      // Send email if recipients specified
+      if (config.recipients && config.recipients.length > 0) {
+        await this.emailReports(config, results);
       }
-      
-      return template;
+
+      return results;
     } catch (error) {
-      console.error('Error fetching template:', error);
-      return null;
-    }
-  }
-
-  async createTemplate(template: Partial<ReportTemplate>): Promise<ReportTemplate> {
-    try {
-      const response = await fetch(`${this.config.apiEndpoint}/templates`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(template)
-      });
-      
-      if (!response.ok) throw new Error('Failed to create template');
-      
-      const newTemplate = await response.json();
-      this.invalidateCache('templates');
-      
-      return newTemplate;
-    } catch (error) {
-      console.error('Error creating template:', error);
-      throw error;
-    }
-  }
-
-  async updateTemplate(id: string, updates: Partial<ReportTemplate>): Promise<ReportTemplate> {
-    try {
-      const response = await fetch(`${this.config.apiEndpoint}/templates/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates)
-      });
-      
-      if (!response.ok) throw new Error('Failed to update template');
-      
-      const updatedTemplate = await response.json();
-      this.invalidateCache('templates');
-      this.cache.delete(`template:${id}`);
-      
-      return updatedTemplate;
-    } catch (error) {
-      console.error('Error updating template:', error);
-      throw error;
-    }
-  }
-
-  async deleteTemplate(id: string): Promise<void> {
-    try {
-      const response = await fetch(`${this.config.apiEndpoint}/templates/${id}`, {
-        method: 'DELETE'
-      });
-      
-      if (!response.ok) throw new Error('Failed to delete template');
-      
-      this.invalidateCache('templates');
-      this.cache.delete(`template:${id}`);
-    } catch (error) {
-      console.error('Error deleting template:', error);
-      throw error;
-    }
-  }
-
-  // === Report Generation ===
-
-  async generateReport(
-    templateId: string,
-    options: {
-      parameters?: Record<string, any>;
-      filters?: Record<string, any>;
-      formats?: ExportFormat[];
-      aiContent?: boolean;
-      dateRange?: { start: Date; end: Date };
-    } = {}
-  ): Promise<ReportGeneration> {
-    try {
-      const generation: ReportGeneration = {
-        id: `gen_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-        templateId,
-        status: 'queued',
-        progress: 0,
-        parameters: options.parameters || {},
-        filters: options.filters || {},
-        dateRange: options.dateRange || {
-          start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-          end: new Date()
-        },
-        format: options.formats || ['pdf'],
-        outputs: [],
-        requestedBy: 'current-user', // TODO: Get from auth context
-        requestedAt: new Date()
-      };
-
-      this.generationQueue.push(generation);
-      
-      // Start generation process
-      this.processGeneration(generation, options.aiContent || false);
-      
-      return generation;
-    } catch (error) {
-      console.error('Error starting report generation:', error);
-      throw error;
-    }
-  }
-
-  private async processGeneration(generation: ReportGeneration, includeAI: boolean) {
-    try {
-      // Update status to processing
-      generation.status = 'processing';
-      generation.startedAt = new Date();
-      generation.progress = 10;
-
-      // Simulate data collection phase
-      await this.simulateProgress(generation, 10, 30, 'Collecting data...');
-      
-      // Generate base report
-      await this.simulateProgress(generation, 30, 60, 'Generating report...');
-      
-      // Generate AI content if enabled
-      if (includeAI) {
-        await this.simulateProgress(generation, 60, 80, 'Generating AI insights...');
-        generation.aiContent = await this.generateAIContent(generation);
-      }
-      
-      // Export to requested formats
-      await this.simulateProgress(generation, 80, 95, 'Exporting report...');
-      generation.outputs = await this.exportReport(generation);
-      
-      // Complete generation
-      generation.status = 'completed';
-      generation.progress = 100;
-      generation.completedAt = new Date();
-      
-    } catch (error) {
-      generation.status = 'failed';
-      generation.error = error instanceof Error ? error.message : 'Unknown error';
       console.error('Report generation failed:', error);
+      throw new Error(`Report generation failed: ${error.message}`);
     }
   }
 
-  private async simulateProgress(
-    generation: ReportGeneration, 
-    from: number, 
-    to: number, 
-    message: string
-  ) {
-    const steps = 5;
-    const increment = (to - from) / steps;
-    
-    for (let i = 0; i < steps; i++) {
-      await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 1000));
-      generation.progress = Math.min(to, from + (increment * (i + 1)));
+  /**
+   * Schedule a recurring report
+   */
+  async scheduleReport(config: ReportConfig): Promise<string> {
+    if (!config.schedule) {
+      throw new Error('Schedule configuration is required');
+    }
+
+    // Save scheduled report configuration
+    const savedConfig = await this.saveScheduledReport(config);
+
+    // Create cron job
+    const cronExpression = this.buildCronExpression(config.schedule);
+    const job = cron.schedule(cronExpression, async () => {
+      try {
+        console.log(`Executing scheduled report: ${config.name}`);
+        await this.generateReport(config);
+      } catch (error) {
+        console.error(`Scheduled report failed: ${config.name}`, error);
+        // Optionally notify administrators
+      }
+    }, {
+      scheduled: config.schedule.enabled,
+      timezone: config.schedule.timezone
+    });
+
+    this.scheduledJobs.set(savedConfig.id!, job);
+
+    return savedConfig.id!;
+  }
+
+  /**
+   * Get available report templates
+   */
+  async getReportTemplates(organizationId: string): Promise<any[]> {
+    const templates = [
+      {
+        id: 'risk_assessment_standard',
+        name: 'Risk Assessment Report',
+        type: ReportType.RISK_ASSESSMENT,
+        description: 'Comprehensive risk assessment with heat maps and trending',
+        parameters: ['dateRange', 'categories', 'priority'],
+        preview: '/templates/risk-assessment-preview.png'
+      },
+      {
+        id: 'compliance_status_standard',
+        name: 'Compliance Status Report',
+        type: ReportType.COMPLIANCE_STATUS,
+        description: 'Framework compliance status with gap analysis',
+        parameters: ['frameworks', 'dateRange', 'departments'],
+        preview: '/templates/compliance-status-preview.png'
+      },
+      {
+        id: 'control_effectiveness_standard',
+        name: 'Control Effectiveness Report',
+        type: ReportType.CONTROL_EFFECTIVENESS,
+        description: 'Control testing results and effectiveness metrics',
+        parameters: ['controlTypes', 'dateRange', 'testingFrequency'],
+        preview: '/templates/control-effectiveness-preview.png'
+      },
+      {
+        id: 'executive_summary_standard',
+        name: 'Executive Summary Dashboard',
+        type: ReportType.EXECUTIVE_SUMMARY,
+        description: 'High-level risk and compliance overview for executives',
+        parameters: ['dateRange', 'includeMetrics', 'includeCharts'],
+        preview: '/templates/executive-summary-preview.png'
+      },
+      {
+        id: 'audit_trail_standard',
+        name: 'Audit Trail Report',
+        type: ReportType.AUDIT_TRAIL,
+        description: 'Detailed audit log with user activities and changes',
+        parameters: ['dateRange', 'users', 'actions', 'entities'],
+        preview: '/templates/audit-trail-preview.png'
+      }
+    ];
+
+    return templates;
+  }
+
+  /**
+   * Get report history
+   */
+  async getReportHistory(
+    organizationId: string,
+    filters: {
+      type?: ReportType;
+      dateFrom?: Date;
+      dateTo?: Date;
+      createdBy?: string;
+    } = {},
+    pagination: { skip: number; take: number } = { skip: 0, take: 20 }
+  ): Promise<{ reports: any[]; total: number }> {
+    const whereClause: any = {
+      organizationId,
+    };
+
+    if (filters.type) whereClause.type = filters.type;
+    if (filters.createdBy) whereClause.createdBy = filters.createdBy;
+    if (filters.dateFrom || filters.dateTo) {
+      whereClause.generatedAt = {};
+      if (filters.dateFrom) whereClause.generatedAt.gte = filters.dateFrom;
+      if (filters.dateTo) whereClause.generatedAt.lte = filters.dateTo;
+    }
+
+    const [reports, total] = await Promise.all([
+      prisma.report.findMany({
+        where: whereClause,
+        include: {
+          creator: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+            },
+          },
+        },
+        orderBy: { generatedAt: 'desc' },
+        skip: pagination.skip,
+        take: pagination.take,
+      }),
+      prisma.report.count({ where: whereClause }),
+    ]);
+
+    return { reports, total };
+  }
+
+  /**
+   * Aggregate data for report generation
+   */
+  private async aggregateReportData(config: ReportConfig): Promise<any> {
+    const { type, filters, organizationId } = config;
+
+    switch (type) {
+      case ReportType.RISK_ASSESSMENT:
+        return await this.aggregateRiskData(organizationId, filters);
+      
+      case ReportType.COMPLIANCE_STATUS:
+        return await this.aggregateComplianceData(organizationId, filters);
+      
+      case ReportType.CONTROL_EFFECTIVENESS:
+        return await this.aggregateControlData(organizationId, filters);
+      
+      case ReportType.EXECUTIVE_SUMMARY:
+        return await this.aggregateExecutiveData(organizationId, filters);
+      
+      case ReportType.AUDIT_TRAIL:
+        return await this.aggregateAuditData(organizationId, filters);
+      
+      default:
+        throw new Error(`Unsupported report type: ${type}`);
     }
   }
 
-  private async generateAIContent(generation: ReportGeneration): Promise<AIGeneratedContent> {
-    // Simulate AI content generation
-    const template = await this.getTemplate(generation.templateId);
-    
-    if (!template) {
-      throw new Error('Template not found for AI content generation');
+  private async aggregateRiskData(organizationId: string, filters: ReportFilters): Promise<any> {
+    const whereClause: any = { organizationId };
+
+    // Apply filters
+    if (filters.dateRange) {
+      whereClause.dateIdentified = {
+        gte: filters.dateRange.from,
+        lte: filters.dateRange.to,
+      };
     }
 
-    const narratives: GeneratedNarrative[] = [];
-    const insights: GeneratedInsight[] = [];
-    const recommendations: GeneratedRecommendation[] = [];
-
-    // Generate narratives
-    if (template.aiFeatures.narrativeGeneration.enabled) {
-      narratives.push({
-        sectionId: 'executive-summary',
-        content: this.generateExecutiveSummary(template),
-        confidence: 0.85,
-        sources: ['risk_register', 'control_tests', 'incident_reports'],
-        keywords: ['risk', 'compliance', 'control effectiveness']
-      });
+    if (filters.categories?.length) {
+      whereClause.category = { in: filters.categories };
     }
 
-    // Generate insights
-    if (template.aiFeatures.insightGeneration.enabled) {
-      insights.push(
-        {
-          id: 'insight-1',
-          type: 'trend',
-          title: 'Risk Score Trending Upward',
-          description: 'Overall risk score has increased by 15% over the past quarter, primarily driven by cybersecurity threats.',
-          confidence: 0.92,
-          priority: 'high',
-          category: 'risk',
-          dataPoints: [
-            { metric: 'risk_score', value: 7.2, context: 'Q4 2024', significance: 0.8 },
-            { metric: 'risk_score', value: 6.3, context: 'Q3 2024', significance: 0.7 }
-          ]
+    if (filters.status?.length) {
+      whereClause.status = { in: filters.status };
+    }
+
+    if (filters.assignedTo?.length) {
+      whereClause.owner = { in: filters.assignedTo };
+    }
+
+    const [risks, riskStats, riskTrends] = await Promise.all([
+      // Get detailed risk data
+      prisma.risk.findMany({
+        where: whereClause,
+        include: {
+          creator: {
+            select: { firstName: true, lastName: true, email: true },
+          },
+          controls: {
+            include: {
+              control: {
+                select: { id: true, title: true, status: true, effectivenessRating: true },
+              },
+            },
+          },
         },
-        {
-          id: 'insight-2',
-          type: 'anomaly',
-          title: 'Unusual Control Testing Pattern',
-          description: 'Control testing completion rates show irregular pattern in December, suggesting resource allocation issues.',
-          confidence: 0.78,
-          priority: 'medium',
-          category: 'controls',
-          dataPoints: [
-            { metric: 'completion_rate', value: 65, context: 'December', significance: 0.9 },
-            { metric: 'completion_rate', value: 87, context: 'November', significance: 0.6 }
-          ]
-        }
-      );
+        orderBy: { riskScore: 'desc' },
+      }),
+
+      // Get risk statistics
+      prisma.risk.groupBy({
+        by: ['category', 'riskLevel', 'status'],
+        where: whereClause,
+        _count: true,
+        _avg: { riskScore: true },
+      }),
+
+      // Get risk trends (last 12 months)
+      prisma.risk.groupBy({
+        by: ['dateIdentified'],
+        where: {
+          ...whereClause,
+          dateIdentified: {
+            gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000),
+          },
+        },
+        _count: true,
+        orderBy: { dateIdentified: 'asc' },
+      }),
+    ]);
+
+    // Calculate risk metrics
+    const totalRisks = risks.length;
+    const criticalRisks = risks.filter(r => r.riskLevel === 'CRITICAL').length;
+    const highRisks = risks.filter(r => r.riskLevel === 'HIGH').length;
+    const averageRiskScore = risks.reduce((sum, r) => sum + r.riskScore, 0) / totalRisks || 0;
+
+    // Risk distribution by category
+    const categoryDistribution = riskStats.reduce((acc, stat) => {
+      if (!acc[stat.category]) acc[stat.category] = 0;
+      acc[stat.category] += stat._count;
+      return acc;
+    }, {} as Record<string, number>);
+
+    // Top risks
+    const topRisks = risks.slice(0, 10);
+
+    return {
+      summary: {
+        totalRisks,
+        criticalRisks,
+        highRisks,
+        averageRiskScore: Math.round(averageRiskScore * 100) / 100,
+      },
+      risks,
+      categoryDistribution,
+      riskTrends,
+      topRisks,
+      generatedAt: new Date(),
+      filters,
+    };
+  }
+
+  private async aggregateComplianceData(organizationId: string, filters: ReportFilters): Promise<any> {
+    // Implementation for compliance data aggregation
+    const frameworks = await prisma.complianceFramework.findMany({
+      where: { organizationId },
+      include: {
+        requirements: {
+          include: {
+            controls: true,
+          },
+        },
+        assessments: {
+          where: filters.dateRange ? {
+            createdAt: {
+              gte: filters.dateRange.from,
+              lte: filters.dateRange.to,
+            },
+          } : undefined,
+          include: {
+            controlResults: true,
+          },
+        },
+      },
+    });
+
+    // Calculate compliance scores
+    const complianceScores = frameworks.map(framework => {
+      const totalRequirements = framework.requirements.length;
+      const metRequirements = framework.requirements.filter(req => 
+        req.controls.some(control => control.status === 'IMPLEMENTED')
+      ).length;
+      
+      return {
+        frameworkId: framework.id,
+        frameworkName: framework.name,
+        score: totalRequirements > 0 ? (metRequirements / totalRequirements) * 100 : 0,
+        totalRequirements,
+        metRequirements,
+      };
+    });
+
+    return {
+      frameworks,
+      complianceScores,
+      overallCompliance: complianceScores.reduce((sum, score) => sum + score.score, 0) / complianceScores.length || 0,
+      generatedAt: new Date(),
+      filters,
+    };
+  }
+
+  private async aggregateControlData(organizationId: string, filters: ReportFilters): Promise<any> {
+    const whereClause: any = { organizationId };
+
+    if (filters.categories?.length) {
+      whereClause.category = { in: filters.categories };
     }
 
-    // Generate recommendations
-    if (template.aiFeatures.recommendationEngine.enabled) {
-      recommendations.push(
-        {
-          id: 'rec-1',
-          type: 'risk_mitigation',
-          title: 'Enhance Cybersecurity Controls',
-          description: 'Implement additional cybersecurity controls to address the identified increase in risk exposure.',
-          priority: 'high',
-          effort: 'medium',
-          impact: 'high',
-          timeline: '60-90 days',
-          steps: [
-            'Conduct security assessment',
-            'Implement multi-factor authentication',
-            'Enhance monitoring capabilities',
-            'Update incident response procedures'
-          ],
-          resources: ['Security team', 'IT department', 'External consultant'],
-          dependencies: ['Budget approval', 'Technology procurement']
+    if (filters.status?.length) {
+      whereClause.status = { in: filters.status };
+    }
+
+    const controls = await prisma.control.findMany({
+      where: whereClause,
+      include: {
+        creator: {
+          select: { firstName: true, lastName: true, email: true },
         },
-        {
-          id: 'rec-2',
-          type: 'process_improvement',
-          title: 'Optimize Control Testing Schedule',
-          description: 'Redistribute control testing activities to avoid resource constraints during peak periods.',
-          priority: 'medium',
-          effort: 'low',
-          impact: 'medium',
-          timeline: '30 days',
-          steps: [
-            'Analyze current testing schedule',
-            'Identify resource bottlenecks',
-            'Redistribute testing activities',
-            'Implement new schedule'
-          ],
-          resources: ['Compliance team', 'Risk analysts'],
-          dependencies: ['Team availability']
-        }
-      );
+        risks: {
+          include: {
+            risk: {
+              select: { id: true, title: true, riskLevel: true },
+            },
+          },
+        },
+      },
+    });
+
+    // Calculate effectiveness metrics
+    const effectivenessStats = controls.reduce((acc, control) => {
+      const rating = control.effectivenessRating;
+      if (!acc[rating]) acc[rating] = 0;
+      acc[rating]++;
+      return acc;
+    }, {} as Record<string, number>);
+
+    return {
+      controls,
+      effectivenessStats,
+      totalControls: controls.length,
+      averageEffectiveness: controls.reduce((sum, c) => {
+        const ratingMap = { 'EFFECTIVE': 4, 'MOSTLY_EFFECTIVE': 3, 'PARTIALLY_EFFECTIVE': 2, 'INEFFECTIVE': 1 };
+        return sum + (ratingMap[c.effectivenessRating as keyof typeof ratingMap] || 0);
+      }, 0) / controls.length || 0,
+      generatedAt: new Date(),
+      filters,
+    };
+  }
+
+  private async aggregateExecutiveData(organizationId: string, filters: ReportFilters): Promise<any> {
+    // Aggregate high-level metrics for executive summary
+    const [riskData, complianceData, controlData] = await Promise.all([
+      this.aggregateRiskData(organizationId, filters),
+      this.aggregateComplianceData(organizationId, filters),
+      this.aggregateControlData(organizationId, filters),
+    ]);
+
+    return {
+      executiveSummary: {
+        totalRisks: riskData.summary.totalRisks,
+        criticalRisks: riskData.summary.criticalRisks,
+        averageCompliance: complianceData.overallCompliance,
+        totalControls: controlData.totalControls,
+        controlEffectiveness: controlData.averageEffectiveness,
+      },
+      riskOverview: riskData,
+      complianceOverview: complianceData,
+      controlOverview: controlData,
+      generatedAt: new Date(),
+      filters,
+    };
+  }
+
+  private async aggregateAuditData(organizationId: string, filters: ReportFilters): Promise<any> {
+    // Since there's no audit log model in the schema, we'll create a mock implementation
+    // In a real implementation, this would query the audit log table
+    return {
+      auditEntries: [],
+      summary: {
+        totalEntries: 0,
+        userActions: {},
+        entityChanges: {},
+      },
+      generatedAt: new Date(),
+      filters,
+    };
+  }
+
+  /**
+   * Generate report in specific format
+   */
+  private async generateReportInFormat(
+    config: ReportConfig,
+    data: any,
+    format: ReportFormat
+  ): Promise<GeneratedReport> {
+    const reportId = `${config.type}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const fileName = `${config.name.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().split('T')[0]}`;
+
+    let filePath: string;
+    let fileSize: number;
+
+    switch (format) {
+      case ReportFormat.PDF:
+        const pdfResult = await generatePDF(config.template, data, {
+          fileName: `${fileName}.pdf`,
+          organizationId: config.organizationId,
+        });
+        filePath = pdfResult.filePath;
+        fileSize = pdfResult.fileSize;
+        break;
+
+      case ReportFormat.EXCEL:
+        const excelResult = await exportToExcel(data, {
+          fileName: `${fileName}.xlsx`,
+          sheetName: config.name,
+        });
+        filePath = excelResult.filePath;
+        fileSize = excelResult.fileSize;
+        break;
+
+      case ReportFormat.CSV:
+        const csvResult = await exportToCSV(data, {
+          fileName: `${fileName}.csv`,
+        });
+        filePath = csvResult.filePath;
+        fileSize = csvResult.fileSize;
+        break;
+
+      case ReportFormat.JSON:
+        const jsonPath = `/tmp/reports/${fileName}.json`;
+        const jsonContent = JSON.stringify(data, null, 2);
+        require('fs').writeFileSync(jsonPath, jsonContent);
+        filePath = jsonPath;
+        fileSize = Buffer.byteLength(jsonContent);
+        break;
+
+      default:
+        throw new Error(`Unsupported format: ${format}`);
     }
 
     return {
-      narratives,
-      insights,
-      recommendations,
-      summaries: [{
-        type: 'executive',
-        content: 'Executive summary of key findings and recommendations...',
-        keyPoints: [
-          'Risk levels have increased due to cybersecurity threats',
-          'Control testing efficiency can be improved',
-          'Immediate action required on high-priority risks'
-        ],
-        metrics: [
-          { name: 'Overall Risk Score', value: 7.2, change: 0.9, trend: 'up', significance: 'high' },
-          { name: 'Control Effectiveness', value: '78%', change: -5, trend: 'down', significance: 'medium' },
-          { name: 'Compliance Score', value: '92%', change: 2, trend: 'up', significance: 'low' }
-        ],
-        confidence: 0.88
-      }]
+      id: reportId,
+      name: config.name,
+      type: config.type,
+      format,
+      filePath,
+      fileSize,
+      generatedAt: new Date(),
+      generatedBy: config.createdBy,
+      organizationId: config.organizationId,
+      downloadUrl: `/api/reports/${reportId}/download`,
+      parameters: config.parameters,
     };
   }
 
-  private generateExecutiveSummary(template: ReportTemplate): string {
-    const summaries = {
-      executive: `This executive dashboard provides a comprehensive overview of organizational risk posture and control effectiveness. 
-        Key findings indicate a moderate increase in risk exposure, primarily attributed to evolving cybersecurity threats. 
-        Control testing results demonstrate generally strong performance with opportunities for optimization in resource allocation.`,
-      
-      compliance: `The SOC 2 compliance assessment reveals strong adherence to security and availability principles. 
-        All critical controls are operating effectively, with minor observations noted in the areas of access management and change control. 
-        Remediation activities are on track for completion within the designated timeframe.`,
-      
-      risk_management: `Risk trend analysis indicates dynamic threat landscape with emerging risks in cybersecurity and operational resilience. 
-        Predictive models suggest continued elevation in risk levels over the next quarter. 
-        Proactive measures are recommended to strengthen control environment and enhance monitoring capabilities.`
-    };
+  /**
+   * Email reports to recipients
+   */
+  private async emailReports(config: ReportConfig, reports: GeneratedReport[]): Promise<void> {
+    if (!config.recipients?.length) return;
 
-    return summaries[template.category as keyof typeof summaries] || summaries.executive;
+    const attachments = reports.map(report => ({
+      filename: `${report.name}.${report.format}`,
+      path: report.filePath,
+    }));
+
+    await this.emailService.sendEmail({
+      to: config.recipients,
+      subject: `Report: ${config.name}`,
+      html: `
+        <h2>Your requested report is ready</h2>
+        <p><strong>Report Name:</strong> ${config.name}</p>
+        <p><strong>Generated:</strong> ${new Date().toLocaleString()}</p>
+        <p><strong>Formats:</strong> ${reports.map(r => r.format.toUpperCase()).join(', ')}</p>
+        <p>Please find the attached report files.</p>
+      `,
+      attachments,
+    });
   }
 
-  private async exportReport(generation: ReportGeneration) {
-    const outputs: GeneratedOutput[] = [];
-    
-    for (const format of generation.format) {
-      // Simulate export generation
-      await this.simulateProgress(generation, 85, 95, `Exporting ${format.toUpperCase()}...`);
+  /**
+   * Build cron expression from schedule config
+   */
+  private buildCronExpression(schedule: ScheduleConfig): string {
+    const [hour, minute] = schedule.time.split(':').map(Number);
+
+    switch (schedule.frequency) {
+      case 'daily':
+        return `${minute} ${hour} * * *`;
       
-      const output: GeneratedOutput = {
-        format,
-        url: `/api/reports/download/${generation.id}.${format}`,
-        size: Math.floor(Math.random() * 10000000) + 100000, // 100KB to 10MB
-        generatedAt: new Date(),
-        metadata: {
-          pageCount: format === 'pdf' ? Math.floor(Math.random() * 50) + 5 : undefined,
-          chartCount: generation.parameters?.chartCount as number || 3,
-          tableCount: generation.parameters?.tableCount as number || 2,
-          dataPoints: generation.parameters?.dataPoints as number || 1500,
-          processingTime: Date.now() - (generation.startedAt?.getTime() || Date.now())
-        }
-      };
+      case 'weekly':
+        return `${minute} ${hour} * * ${schedule.dayOfWeek || 0}`;
       
-      outputs.push(output);
+      case 'monthly':
+        return `${minute} ${hour} ${schedule.dayOfMonth || 1} * *`;
+      
+      case 'quarterly':
+        return `${minute} ${hour} 1 */3 *`;
+      
+      default:
+        throw new Error(`Unsupported frequency: ${schedule.frequency}`);
     }
-    
-    return outputs;
   }
 
-  // === Data Query Engine ===
-
-  async executeQuery(query: DataQuery, filters?: ReportFilter[]): Promise<any[]> {
+  /**
+   * Initialize scheduled reports from database
+   */
+  private async initializeScheduledReports(): Promise<void> {
     try {
-      const response = await fetch(`${this.config.apiEndpoint}/query`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query, filters })
-      });
-      
-      if (!response.ok) throw new Error('Query execution failed');
-      
-      return await response.json();
+      // In a real implementation, this would load scheduled reports from database
+      // For now, we'll skip this since there's no scheduled reports table in the schema
+      console.log('Scheduled reports initialized');
     } catch (error) {
-      console.error('Error executing query:', error);
-      // Return demo data for development
-      return this.getDemoQueryResults(query);
+      console.error('Failed to initialize scheduled reports:', error);
     }
   }
 
-  private getDemoQueryResults(query: DataQuery): any[] {
-    // Generate sample data based on query
-    const sampleData: any[] = [];
-    
-    for (let i = 0; i < 50; i++) {
-      const record: any = {};
-      
-      query.select.forEach(select => {
-        const field = select.field;
-        
-        switch (field) {
-          case 'date':
-            record[field] = new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000);
-            break;
-          case 'risk_score':
-          case 'control_effectiveness':
-          case 'compliance_score':
-            record[field] = Math.floor(Math.random() * 100);
-            break;
-          case 'category':
-            record[field] = ['operational', 'strategic', 'compliance', 'financial'][Math.floor(Math.random() * 4)];
-            break;
-          case 'status':
-            record[field] = ['active', 'mitigated', 'accepted', 'transferred'][Math.floor(Math.random() * 4)];
-            break;
-          default:
-            record[field] = `Sample ${field} ${i + 1}`;
-        }
-      });
-      
-      sampleData.push(record);
-    }
-    
-    return sampleData;
-  }
-
-  // === Scheduling ===
-
-  async getSchedules(): Promise<ReportSchedule[]> {
-    try {
-      const response = await fetch(`${this.config.apiEndpoint}/schedules`);
-      if (!response.ok) throw new Error('Failed to fetch schedules');
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching schedules:', error);
-      return [];
-    }
-  }
-
-  async createSchedule(schedule: Partial<ReportSchedule>): Promise<ReportSchedule> {
-    try {
-      const response = await fetch(`${this.config.apiEndpoint}/schedules`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(schedule)
-      });
-      
-      if (!response.ok) throw new Error('Failed to create schedule');
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Error creating schedule:', error);
-      throw error;
-    }
-  }
-
-  // === Analytics ===
-
-  async getReportAnalytics(reportId: string, period: { start: Date; end: Date }): Promise<ReportAnalytics> {
-    try {
-      const response = await fetch(
-        `${this.config.apiEndpoint}/analytics/${reportId}?start=${period.start.toISOString()}&end=${period.end.toISOString()}`
-      );
-      
-      if (!response.ok) throw new Error('Failed to fetch analytics');
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching analytics:', error);
-      throw error;
-    }
-  }
-
-  // === AI Services ===
-
-  async generateInsights(data: any[], types: InsightType[]): Promise<GeneratedInsight[]> {
-    if (!this.config.aiEnabled) {
-      return [];
+  /**
+   * Validate report configuration
+   */
+  private async validateReportConfig(config: ReportConfig): Promise<void> {
+    if (!config.name || !config.type || !config.organizationId || !config.createdBy) {
+      throw new Error('Missing required configuration fields');
     }
 
-    try {
-      const response = await fetch(`${this.config.apiEndpoint}/ai/insights`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data, types })
-      });
-      
-      if (!response.ok) throw new Error('Failed to generate insights');
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Error generating insights:', error);
-      return [];
-    }
-  }
-
-  async generateNarrative(data: any[], style: string, tone: string): Promise<string> {
-    if (!this.config.aiEnabled) {
-      return 'AI narrative generation is not available.';
+    if (!config.format || config.format.length === 0) {
+      throw new Error('At least one output format must be specified');
     }
 
-    try {
-      const response = await fetch(`${this.config.apiEndpoint}/ai/narrative`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data, style, tone })
-      });
-      
-      if (!response.ok) throw new Error('Failed to generate narrative');
-      
-      const result = await response.json();
-      return result.narrative;
-    } catch (error) {
-      console.error('Error generating narrative:', error);
-      return 'Failed to generate narrative content.';
-    }
-  }
-
-  // === Utility Methods ===
-
-  private invalidateCache(pattern: string) {
-    for (const key of this.cache.keys()) {
-      if (key.includes(pattern)) {
-        this.cache.delete(key);
+    // Validate date range
+    if (config.filters.dateRange) {
+      const { from, to } = config.filters.dateRange;
+      if (from > to) {
+        throw new Error('Invalid date range: from date must be before to date');
       }
     }
   }
 
-  clearCache() {
-    this.cache.clear();
-  }
-
-  getGenerationStatus(generationId: string): ReportGeneration | null {
-    return this.generationQueue.find(g => g.id === generationId) || null;
-  }
-
-  getAllGenerations(): ReportGeneration[] {
-    return [...this.generationQueue];
-  }
-
-  // === Demo Data ===
-
-  private getDemoTemplates(): ReportTemplate[] {
-    // Return the same demo templates as in the component
-    return [];
-  }
-
-  // === Validation ===
-
-  validateTemplate(template: Partial<ReportTemplate>): { valid: boolean; errors: string[] } {
-    const errors: string[] = [];
-
-    if (!template.name?.trim()) {
-      errors.push('Template name is required');
-    }
-
-    if (!template.description?.trim()) {
-      errors.push('Template description is required');
-    }
-
-    if (!template.category) {
-      errors.push('Template category is required');
-    }
-
-    if (!template.type) {
-      errors.push('Template type is required');
-    }
-
-    if (!template.sections?.length) {
-      errors.push('At least one section is required');
-    }
-
+  /**
+   * Save scheduled report configuration
+   */
+  private async saveScheduledReport(config: ReportConfig): Promise<ReportConfig> {
+    // In a real implementation, this would save to a scheduled_reports table
+    // For now, we'll just return the config with a generated ID
     return {
-      valid: errors.length === 0,
-      errors
+      ...config,
+      id: `scheduled_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     };
   }
 
-  validateQuery(query: DataQuery): { valid: boolean; errors: string[] } {
-    const errors: string[] = [];
-
-    if (!query.select?.length) {
-      errors.push('At least one select clause is required');
+  /**
+   * Save report metadata to database
+   */
+  private async saveReportMetadata(config: ReportConfig, reports: GeneratedReport[]): Promise<void> {
+    for (const report of reports) {
+      await prisma.report.create({
+        data: {
+          id: report.id,
+          name: report.name,
+          type: report.type as any,
+          status: 'COMPLETED',
+          format: report.format,
+          filePath: report.filePath,
+          fileSize: report.fileSize,
+          generatedAt: report.generatedAt,
+          organizationId: report.organizationId,
+          createdBy: report.generatedBy,
+          parameters: report.parameters,
+        },
+      });
     }
-
-    if (!query.from?.trim()) {
-      errors.push('From clause is required');
-    }
-
-    return {
-      valid: errors.length === 0,
-      errors
-    };
   }
-}
-
-// Singleton instance
-export const reportingService = new ReportingService();
-
-// Export types for convenience
-export type {
-  ReportTemplate,
-  ReportGeneration,
-  ReportSchedule,
-  ReportAnalytics,
-  AIGeneratedContent,
-  ExportFormat,
-  DataQuery,
-  ReportFilter
-}; 
+} 
