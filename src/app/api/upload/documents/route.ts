@@ -43,7 +43,7 @@ export const POST = withAPI(async (req: NextRequest) => {
     const metadata = JSON.parse(metadataStr);
     const validatedMetadata = fileUploadSchema.parse(metadata);
 
-    const uploadedDocuments = [];
+    const uploadedDocuments: Array<{ document: any; file: any }> = [];
 
     for (const file of files) {
       // Validate file
@@ -159,8 +159,8 @@ export const POST = withAPI(async (req: NextRequest) => {
   }
 });
 
-// GET /api/upload/documents/progress/[uploadId] - Get upload progress
-export async function getUploadProgress(req: NextRequest) {
+// GET /api/upload/documents - Get upload progress (when uploadId is provided as query param)
+export const GET = withAPI(async (req: NextRequest) => {
   const authReq = req as AuthenticatedRequest;
   const user = getAuthenticatedUser(authReq);
 
@@ -170,7 +170,7 @@ export async function getUploadProgress(req: NextRequest) {
 
   try {
     const url = new URL(req.url);
-    const uploadId = url.pathname.split('/').pop();
+    const uploadId = url.searchParams.get('uploadId');
 
     if (!uploadId) {
       throw new Error('Upload ID is required');
@@ -187,7 +187,7 @@ export async function getUploadProgress(req: NextRequest) {
     console.error('Error getting upload progress:', error);
     throw new Error('Failed to get upload progress');
   }
-}
+});
 
 // Helper function to get upload progress (would use Redis in production)
 async function getUploadProgressFromCache(uploadId: string, organizationId: string) {
@@ -241,7 +241,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
 
     // Extract and process ZIP file
     const extractedFiles = await extractZipFile(zipFile);
-    const uploadedDocuments = [];
+    const uploadedDocuments: Array<{ document: any; file: any }> = [];
 
     for (const extractedFile of extractedFiles) {
       // Validate each extracted file
