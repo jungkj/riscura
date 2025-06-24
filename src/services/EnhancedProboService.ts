@@ -125,7 +125,8 @@ export class EnhancedProboService {
     skipped: number;
   }> {
     const proboMitigations = await this.proboService.getMitigations();
-    let imported = 0, updated = 0, skipped = 0;
+    let imported = 0, updated = 0;
+    const skipped = 0;
 
     for (const mitigation of proboMitigations) {
       const existingControl = await prisma.proboControl.findFirst({

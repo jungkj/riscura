@@ -454,7 +454,7 @@ export default function GuidedTour({
     const padding = 20;
     let x = 0;
     let y = 0;
-    let preferredPosition = currentStepData.position;
+    const preferredPosition = currentStepData.position;
 
     // Calculate initial position based on preference
     switch (preferredPosition) {

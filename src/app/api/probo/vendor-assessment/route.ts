@@ -142,7 +142,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    let whereClause: any = { organizationId };
+    const whereClause: any = { organizationId };
     if (vendorId) {
       whereClause.vendorId = vendorId;
     }

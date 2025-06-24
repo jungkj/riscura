@@ -199,6 +199,13 @@ const nextConfig = {
   // React strict mode
   reactStrictMode: true,
 
+  // ESLint configuration for build
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: false,
+  },
+
   // Trailing slash
   trailingSlash: false,
 

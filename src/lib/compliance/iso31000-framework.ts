@@ -526,7 +526,7 @@ export class ISO31000FrameworkService {
     
     const phases: ImprovementPhase[] = [];
     let currentPhase = 1;
-    let currentDuration = 0;
+    const currentDuration = 0;
     
     sortedGaps.forEach(gap => {
       if (gap.gap > 0) {
