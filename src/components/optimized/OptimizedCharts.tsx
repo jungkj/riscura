@@ -84,7 +84,7 @@ export interface ChartConfig {
   enableVirtualization?: boolean;
   lazyLoad?: boolean;
   threshold?: number;
-  series: ChartSeries[];
+  series?: any[];
   margin?: { top: number; right: number; bottom: number; left: number };
   xAxisKey?: string;
   yAxisKeys?: string[];
@@ -211,6 +211,7 @@ const OptimizedLineChart = React.memo<{
     </ResponsiveContainer>
   );
 });
+OptimizedLineChart.displayName = 'OptimizedLineChart';
 
 const OptimizedAreaChart = React.memo<{
   config: ChartConfig;
@@ -257,6 +258,7 @@ const OptimizedAreaChart = React.memo<{
     </ResponsiveContainer>
   );
 });
+OptimizedAreaChart.displayName = 'OptimizedAreaChart';
 
 const OptimizedBarChart = React.memo<{
   config: ChartConfig;
@@ -299,6 +301,7 @@ const OptimizedBarChart = React.memo<{
     </ResponsiveContainer>
   );
 });
+OptimizedBarChart.displayName = 'OptimizedBarChart';
 
 const OptimizedPieChart = React.memo<{
   config: ChartConfig;
@@ -341,6 +344,7 @@ const OptimizedPieChart = React.memo<{
     </ResponsiveContainer>
   );
 });
+OptimizedPieChart.displayName = 'OptimizedPieChart';
 
 const OptimizedScatterChart = React.memo<{
   config: ChartConfig;
@@ -382,6 +386,7 @@ const OptimizedScatterChart = React.memo<{
     </ResponsiveContainer>
   );
 });
+OptimizedScatterChart.displayName = 'OptimizedScatterChart';
 
 const ChartSkeleton: React.FC<{ height?: number }> = ({ height = 300 }) => (
   <div className="animate-pulse" style={{ height }}>
