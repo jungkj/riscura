@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Force deployment - all Next.js 15 parameter typing issues fixed
 // Mock authentication - replace with actual auth
 const getCurrentUser = (request: NextRequest) => {
   // In production, extract from JWT token or session
