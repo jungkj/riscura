@@ -1,5 +1,6 @@
 // Performance Analytics System for Production Monitoring
 import { getCLS, getFID, getFCP, getLCP, getTTFB, Metric } from 'web-vitals';
+import React from 'react';
 
 export interface PerformanceMetric {
   name: string;
@@ -600,12 +601,16 @@ export const withPerformanceTracking = <T extends React.ComponentType<any>>(
 ): T => {
   const componentName = name || Component.displayName || Component.name || 'Component';
   
-  return React.forwardRef<any, React.ComponentProps<T>>((props, ref) => {
+  const WrappedComponent = React.forwardRef<any, React.ComponentProps<T>>((props, ref) => {
     React.useEffect(() => {
       const endTiming = performanceAnalytics.startTiming(`render_${componentName}`);
       return endTiming;
     });
 
     return React.createElement(Component, { ...props, ref });
-  }) as T;
+  });
+  
+  WrappedComponent.displayName = `withPerformanceTracking(${componentName})`;
+  
+  return WrappedComponent as unknown as T;
 }; 
