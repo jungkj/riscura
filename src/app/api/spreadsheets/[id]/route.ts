@@ -229,7 +229,7 @@ export async function GET(
     }
 
     // If specific sheet requested, filter to that sheet
-    let responseData: Spreadsheet = { ...spreadsheet };
+    const responseData: Spreadsheet = { ...spreadsheet };
     if (sheetId && includeSheets) {
       responseData.sheets = spreadsheet.sheets.filter(sheet => sheet.id === sheetId);
     } else if (!includeSheets) {

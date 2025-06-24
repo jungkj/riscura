@@ -594,7 +594,7 @@ export const useToast = () => {
   }, []);
 
   const ToastContainer = useMemo(() => {
-    return ({ className }: { className?: string }) => (
+    const Component = ({ className }: { className?: string }) => (
       <div className={cn('fixed top-4 right-4 z-50 space-y-2', className)}>
         {toasts.map(toast => (
           <Toast
@@ -607,6 +607,8 @@ export const useToast = () => {
         ))}
       </div>
     );
+    Component.displayName = 'ToastContainer';
+    return Component;
   }, [toasts, removeToast]);
 
   return {

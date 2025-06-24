@@ -1202,7 +1202,7 @@ export class RiskAnalysisAIService {
     context: ContextData
   ): Promise<number> {
     // Base likelihood from existing risk data
-    let likelihood = risk.likelihood || 1;
+    const likelihood = risk.likelihood || 1;
     
     // Text analysis factors (0.3 weight)
     const textScore = Math.min(5, Math.max(1, 
@@ -1247,7 +1247,7 @@ export class RiskAnalysisAIService {
     context: ContextData
   ): Promise<number> {
     // Base impact from existing risk data
-    let impact = risk.impact || 1;
+    const impact = risk.impact || 1;
     
     // Category-based impact multipliers
     const categoryMultipliers = {
