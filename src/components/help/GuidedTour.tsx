@@ -580,7 +580,36 @@ export default function GuidedTour({
     return () => window.removeEventListener('resize', handleResize);
   }, [isActive, positionTour]);
 
-  // Tour control functions
+  // Tour control functions - Define stopTour first since it's used by other functions
+  const stopTour = useCallback(() => {
+    setIsActive(false);
+    setIsPlaying(false);
+    setHighlightedElement(null);
+    setShowTooltip(false);
+  }, []);
+
+  const startTour = useCallback(() => {
+    setIsActive(true);
+    setCurrentStep(0);
+    setIsPlaying(false);
+    setCompletedSteps([]);
+    
+    toast({
+      title: 'Tour Started',
+      description: `Starting ${currentTour?.title || 'guided tour'}`,
+    });
+  }, [currentTour?.title]);
+
+  const skipTour = useCallback(() => {
+    stopTour();
+    onSkip?.();
+    
+    toast({
+      title: 'Tour Skipped',
+      description: 'You can restart the tour anytime from the Help menu',
+    });
+  }, [onSkip, stopTour]);
+
   const completeTour = useCallback(() => {
     setCompletedSteps(prev => [...prev, currentStepData?.id || '']);
     stopTour();
@@ -618,36 +647,6 @@ export default function GuidedTour({
       }
     };
   }, [isActive, isPlaying, currentStepData?.nextStepDelay, nextStep]);
-
-  // Additional tour control functions
-  const startTour = useCallback(() => {
-    setIsActive(true);
-    setCurrentStep(0);
-    setIsPlaying(false);
-    setCompletedSteps([]);
-    
-    toast({
-      title: 'Tour Started',
-      description: `Starting ${currentTour?.title || 'guided tour'}`,
-    });
-  }, [currentTour?.title]);
-
-  const stopTour = useCallback(() => {
-    setIsActive(false);
-    setIsPlaying(false);
-    setHighlightedElement(null);
-    setShowTooltip(false);
-  }, []);
-
-  const skipTour = useCallback(() => {
-    stopTour();
-    onSkip?.();
-    
-    toast({
-      title: 'Tour Skipped',
-      description: 'You can restart the tour anytime from the Help menu',
-    });
-  }, [onSkip, stopTour]);
 
   const previousStep = useCallback(() => {
     if (currentStep > 0) {

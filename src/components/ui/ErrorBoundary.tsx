@@ -136,16 +136,21 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(errorReport)
+        body: JSON.stringify(errorReport),
+        // Add timeout to prevent hanging requests
+        signal: AbortSignal.timeout(5000)
       });
 
       if (response.ok) {
         this.setState({ reportSent: true, isReporting: false });
       } else {
-        throw new Error('Failed to send error report');
+        // Log the error but don't throw to prevent cascading errors
+        console.warn('Error report failed with status:', response.status);
+        this.setState({ isReporting: false });
       }
     } catch (reportError) {
-      console.error('Failed to report error:', reportError);
+      // Silently handle reporting errors to prevent error cascades
+      console.warn('Error reporting failed:', reportError instanceof Error ? reportError.message : 'Unknown error');
       this.setState({ isReporting: false });
     }
   };
@@ -254,7 +259,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         <Button
           key="retry"
           onClick={this.handleRetry}
-          variant="default"
+          variant="primary"
           className="min-w-[120px]"
         >
           <RefreshCw className="w-4 h-4 mr-2" />

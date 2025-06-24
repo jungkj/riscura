@@ -22,6 +22,11 @@ interface DatabaseConfig {
 
 // Get database configuration from environment
 function getDatabaseConfig(): DatabaseConfig {
+  // Skip database configuration on client side
+  if (typeof window !== 'undefined') {
+    throw new Error('Database operations are not available on the client side');
+  }
+
   const databaseUrl = process.env.DATABASE_URL;
   
   // Validate required environment variables
@@ -125,9 +130,14 @@ async function withRetry<T>(
 }
 
 // Global Prisma instance (singleton pattern)
-let prisma: PrismaClient;
+let prisma: PrismaClient | undefined;
 
 function getPrismaClient(): PrismaClient {
+  // Prevent client-side initialization
+  if (typeof window !== 'undefined') {
+    throw new Error('Prisma client cannot be initialized on the client side');
+  }
+
   if (!prisma) {
     prisma = createPrismaClient();
     
@@ -141,14 +151,29 @@ function getPrismaClient(): PrismaClient {
   return prisma;
 }
 
-// Development hot reloading support
-if (process.env.NODE_ENV !== 'production') {
-  if (!globalThis.prisma) {
-    globalThis.prisma = getPrismaClient();
+// Safe prisma client getter
+function getSafePrismaClient(): PrismaClient {
+  if (typeof window !== 'undefined') {
+    throw new Error('Database operations are not available on the client side');
   }
-  prisma = globalThis.prisma;
-} else {
-  prisma = getPrismaClient();
+  
+  if (!prisma) {
+    prisma = getPrismaClient();
+  }
+  
+  return prisma;
+}
+
+// Development hot reloading support (server-side only)
+if (typeof window === 'undefined') {
+  if (process.env.NODE_ENV !== 'production') {
+    if (!globalThis.prisma) {
+      globalThis.prisma = getPrismaClient();
+    }
+    prisma = globalThis.prisma;
+  } else {
+    prisma = getPrismaClient();
+  }
 }
 
 // Database connection health check
@@ -160,8 +185,9 @@ export async function checkDatabaseConnection(): Promise<{
   const startTime = Date.now();
   
   try {
+    const client = getSafePrismaClient();
     await withRetry(async () => {
-      await prisma.$queryRaw`SELECT 1 as health_check`;
+      await client.$queryRaw`SELECT 1 as health_check`;
     }, 2, 500, 'database health check');
     
     const responseTime = Date.now() - startTime;
@@ -199,12 +225,13 @@ export async function checkDatabaseConnectionDetailed(): Promise<{
   const startTime = Date.now();
   
   try {
+    const client = getSafePrismaClient();
     const [versionResult, connectionResult] = await Promise.all([
       withRetry(async () => {
-        return await prisma.$queryRaw<{ version: string }[]>`SELECT version() as version`;
+        return await client.$queryRaw<{ version: string }[]>`SELECT version() as version`;
       }, 2, 500, 'version check'),
       withRetry(async () => {
-        return await prisma.$queryRaw<{ max_connections: number; active_connections: number }[]>`
+        return await client.$queryRaw<{ max_connections: number; active_connections: number }[]>`
           SELECT 
             current_setting('max_connections')::int as max_connections,
             (SELECT count(*) FROM pg_stat_activity WHERE state = 'active') as active_connections
@@ -244,7 +271,9 @@ export async function disconnectDatabase(): Promise<void> {
   
   try {
     console.log('🔌 Disconnecting from database...');
-    await prisma.$disconnect();
+    if (prisma) {
+      await prisma.$disconnect();
+    }
     console.log('✅ Database disconnected successfully');
   } catch (error) {
     console.error('❌ Error disconnecting from database:', error);

@@ -53,6 +53,23 @@ export class MonitoringService {
 // Export singleton instance
 export const monitoringService = new MonitoringService();
 
+// Add apiMonitor export for middleware compatibility
+export const apiMonitor = {
+  recordRequest: async (method: string, path: string, duration: number, statusCode: number) => {
+    await monitoringService.recordMetric('api_request_duration', duration, {
+      method,
+      path,
+      status: statusCode.toString(),
+    });
+  },
+  recordError: async (error: Error, context: Record<string, any> = {}) => {
+    await monitoringService.recordMetric('api_error', 1, {
+      error: error.message,
+      ...context,
+    });
+  },
+};
+
 // Simplified web vitals functions for build compatibility
 export function initWebVitals() {
   // Mock implementation for build compatibility
