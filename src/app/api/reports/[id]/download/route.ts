@@ -98,7 +98,7 @@ export async function POST(
 // HEAD method to get file metadata without downloading
 export async function HEAD(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = getCurrentUser(request);
@@ -106,7 +106,8 @@ export async function HEAD(
       return new NextResponse(null, { status: 401 });
     }
 
-    const reportId = params.id;
+    const resolvedParams = await params;
+    const reportId = resolvedParams.id;
     if (!reportId) {
       return new NextResponse(null, { status: 400 });
     }
