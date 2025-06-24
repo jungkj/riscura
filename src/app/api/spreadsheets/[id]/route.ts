@@ -208,13 +208,14 @@ const mockSpreadsheetData: Record<string, Spreadsheet> = {
   }
 };
 
-// GET /api/spreadsheets/[id] - Get individual spreadsheet
+// GET /api/spreadsheets/[id] - Get spreadsheet by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
-    const { id } = params;
+    const resolvedParams = await params;
+    const { id } = resolvedParams;
     const { searchParams } = new URL(request.url);
     const includeSheets = searchParams.get('includeSheets') === 'true';
     const sheetId = searchParams.get('sheetId');
@@ -263,10 +264,11 @@ export async function GET(
 // PUT /api/spreadsheets/[id] - Update spreadsheet
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
-    const { id } = params;
+    const resolvedParams = await params;
+    const { id } = resolvedParams;
     const body = await request.json();
     const { name, description } = body;
 
@@ -305,10 +307,11 @@ export async function PUT(
 // DELETE /api/spreadsheets/[id] - Delete spreadsheet
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
-    const { id } = params;
+    const resolvedParams = await params;
+    const { id } = resolvedParams;
 
     const spreadsheet = mockSpreadsheetData[id as keyof typeof mockSpreadsheetData];
     
