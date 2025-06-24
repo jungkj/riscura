@@ -45,50 +45,51 @@ const hasReportAccess = (userId: string, reportId: string): boolean => {
   return true;
 };
 
+// GET report download (stub implementation)
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = getCurrentUser(request);
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const resolvedParams = await params;
+    const { id } = resolvedParams;
 
-    const reportId = params.id;
-    if (!reportId) {
-      return NextResponse.json({ error: 'Report ID is required' }, { status: 400 });
-    }
-
-    // Check if user has access to this report
-    if (!hasReportAccess(user.id, reportId)) {
-      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
-    }
-
-    // Retrieve the report file
-    const reportData = getStoredReport(reportId);
-    if (!reportData) {
-      return NextResponse.json({ error: 'Report not found or expired' }, { status: 404 });
-    }
-
-    // Set appropriate headers for file download
-    const headers = new Headers();
-    headers.set('Content-Type', reportData.mimeType);
-    headers.set('Content-Disposition', `attachment; filename="${reportData.filename}"`);
-    headers.set('Content-Length', reportData.buffer.length.toString());
-    headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
-    headers.set('Pragma', 'no-cache');
-    headers.set('Expires', '0');
-
-    // Return the file as a response
-    return new NextResponse(reportData.buffer, {
-      status: 200,
-      headers,
-    });
-  } catch (error) {
-    console.error('Error downloading report:', error);
     return NextResponse.json(
-      { error: 'Failed to download report' },
+      { 
+        error: 'Report download not implemented',
+        reportId: id
+      },
+      { status: 501 }
+    );
+  } catch (error) {
+    console.error('Report download error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+// POST report download (stub implementation)
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const resolvedParams = await params;
+    const { id } = resolvedParams;
+
+    return NextResponse.json(
+      { 
+        error: 'Report download not implemented',
+        reportId: id
+      },
+      { status: 501 }
+    );
+  } catch (error) {
+    console.error('Report download error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }
