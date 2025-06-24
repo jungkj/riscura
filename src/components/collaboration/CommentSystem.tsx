@@ -316,6 +316,8 @@ const MentionInput: React.FC<{
   );
 };
 
+MentionInput.displayName = 'MentionInput';
+
 // Comment Component
 const CommentComponent: React.FC<{
   comment: Comment;
@@ -584,6 +586,8 @@ const CommentComponent: React.FC<{
     </div>
   );
 };
+
+CommentComponent.displayName = 'CommentComponent';
 
 // Main Comment System Component
 export const CommentSystem: React.FC<{

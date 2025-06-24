@@ -170,13 +170,13 @@ const LogoShowcase: React.FC = () => {
               <div>
                 <h4 className="font-medium text-[#191919] font-inter mb-2">2. Basic Usage</h4>
                 <div className="bg-gray-900 text-gray-300 p-4 rounded-lg font-mono text-sm space-y-2">
-                  <div><div className="text-gray-500">// Default logo (medium size)</div></div>
+                  <div><div className="text-gray-500">{/* Default logo (medium size) */}</div></div>
                   <div>&lt;<span className="text-blue-400">Logo</span> /&gt;</div>
                   <div></div>
-                  <div><div className="text-gray-500">// Icon only for mobile</div></div>
+                  <div><div className="text-gray-500">{/* Icon only for mobile */}</div></div>
                   <div>&lt;<span className="text-blue-400">Logo</span> <span className="text-yellow-400">variant</span>=<span className="text-green-400">"icon"</span> <span className="text-yellow-400">size</span>=<span className="text-green-400">"sm"</span> /&gt;</div>
                   <div></div>
-                  <div><div className="text-gray-500">// Large logo for hero sections</div></div>
+                  <div><div className="text-gray-500">{/* Large logo for hero sections */}</div></div>
                   <div>&lt;<span className="text-blue-400">Logo</span> <span className="text-yellow-400">size</span>=<span className="text-green-400">"xl"</span> <span className="text-yellow-400">priority</span> /&gt;</div>
                 </div>
               </div>

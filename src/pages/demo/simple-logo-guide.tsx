@@ -69,7 +69,7 @@ const SimpleLogoGuide: React.FC = () => {
               <div>&nbsp;&nbsp;<span className="text-yellow-400">alt</span>=<span className="text-green-400">"Riscura Logo"</span></div>
               <div>&nbsp;&nbsp;<span className="text-yellow-400">width</span>={<span className="text-orange-400">120</span>}</div>
               <div>&nbsp;&nbsp;<span className="text-yellow-400">height</span>={<span className="text-orange-400">40</span>}</div>
-              <div>&nbsp;&nbsp;<span className="text-yellow-400">priority</span> <span className="text-gray-500">// For above-the-fold logos</span></div>
+              <div>&nbsp;&nbsp;<span className="text-yellow-400">priority</span> <span className="text-gray-500">{/* For above-the-fold logos */}</span></div>
               <div>/&gt;</div>
             </div>
           </div>
