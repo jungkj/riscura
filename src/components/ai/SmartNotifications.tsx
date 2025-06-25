@@ -397,7 +397,7 @@ const NotificationCard: React.FC<{
               <Button
                 key={action.id}
                 size="sm"
-                variant={action.type === 'primary' ? 'default' : 'outline'}
+                variant={action.type === 'primary' ? 'primary' : 'outline'}
                 className={cn(
                   "h-6 px-enterprise-2",
                   action.type === 'primary' && notification.aiGenerated && "bg-purple-600 hover:bg-purple-700"
@@ -478,7 +478,7 @@ const NotificationSettings: React.FC<{
                     </div>
                     <div className="flex items-center space-x-enterprise-2">
                       <Button
-                        variant={settings.enabled ? "default" : "outline"}
+                        variant={settings.enabled ? "primary" : "outline"}
                         size="sm"
                         onClick={() => setChannels(prev => ({
                           ...prev,
@@ -523,7 +523,7 @@ const NotificationSettings: React.FC<{
                     <div className="flex items-center space-x-enterprise-2">
                       <Badge variant="outline" className="capitalize">{settings.priority}</Badge>
                       <Button
-                        variant={settings.enabled ? "default" : "outline"}
+                        variant={settings.enabled ? "primary" : "outline"}
                         size="sm"
                         onClick={() => setCategories(prev => ({
                           ...prev,

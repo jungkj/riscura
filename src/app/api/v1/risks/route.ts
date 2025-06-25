@@ -55,8 +55,9 @@ export async function GET(request: NextRequest) {
     const queryValidation = validateQueryParams(RiskQuerySchema, request.nextUrl.searchParams);
 
     if (!queryValidation.success) {
+      const errors = (queryValidation as { success: false; errors: any[] }).errors;
       return ApiResponseFormatter.validationError(
-        queryValidation.errors.map(error => ({
+        errors.map((error: any) => ({
           field: error.path.join('.'),
           message: error.message,
           code: error.code
@@ -256,8 +257,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validation = parseAndValidate(RiskCreateSchema, body);
     if (!validation.success) {
+      const errors = (validation as { success: false; errors: any[] }).errors;
       return ApiResponseFormatter.validationError(
-        validation.errors.map(error => ({
+        errors.map((error: any) => ({
           field: error.path.join('.'),
           message: error.message,
           code: error.code

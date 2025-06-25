@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { designTokens } from '@/lib/design-system/tokens';
 import { 
-  AIIcons, 
   StatusIcons, 
   RiskManagementIcons,
   DataIcons,
+  NavigationIcons,
   ActionIcons
 } from '@/components/icons/IconLibrary';
 import { LoadingStates } from '@/components/states/LoadingState';
@@ -244,13 +244,13 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'risk': return RiskManagementIcons.ShieldAlert;
-      case 'compliance': return RiskManagementIcons.ClipboardCheck;
-      case 'control': return RiskManagementIcons.Shield;
+      case 'risk': return RiskManagementIcons.Risk;
+      case 'compliance': return RiskManagementIcons.Compliance;
+      case 'control': return RiskManagementIcons.Control;
       case 'trend': return DataIcons.TrendingUp;
-      case 'recommendation': return AIIcons.Lightbulb;
+      case 'recommendation': return StatusIcons.Info;
       case 'alert': return StatusIcons.AlertTriangle;
-      default: return AIIcons.Brain;
+      default: return DataIcons.BarChart3;
     }
   };
 
@@ -293,7 +293,7 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-              <AIIcons.Brain size="md" color="primary" />
+                              <DataIcons.BarChart3 size="md" color="primary" />
             </div>
             <div>
               <h2 className="text-lg font-semibold text-gray-900">Smart Insights</h2>
@@ -393,7 +393,7 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
                       className="text-gray-400 hover:text-gray-600 p-1"
                       aria-label="Dismiss insight"
                     >
-                      <ActionIcons.Close size="xs" />
+                      <NavigationIcons.Close size="xs" />
                     </button>
                   </div>
 
@@ -495,7 +495,7 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
                     className="text-gray-400 hover:text-gray-600 p-1"
                     aria-label="Dismiss insight"
                   >
-                    <ActionIcons.Close size="xs" />
+                    <NavigationIcons.Close size="xs" />
                   </button>
                 </div>
               );
