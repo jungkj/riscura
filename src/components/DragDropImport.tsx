@@ -198,7 +198,7 @@ export default function DragDropImport({
     setProcessingResults([]);
 
     try {
-      const results = [];
+      const results: any[] = [];
 
       for (const fileObj of files) {
         // Update file status
