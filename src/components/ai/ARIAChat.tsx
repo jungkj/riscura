@@ -5,6 +5,7 @@ import { designTokens } from '@/lib/design-system/tokens';
 import { 
   ActionIcons, 
   StatusIcons, 
+  NavigationIcons,
   RiskManagementIcons,
   CommunicationIcons,
   DataIcons,
@@ -20,21 +21,21 @@ const smartFeatures = {
       id: 'analyze-risks',
       text: "Analyze current high-risk items",
       category: 'risk-analysis',
-      icon: RiskManagementIcons.ShieldAlert,
+      icon: RiskManagementIcons.Risk,
       description: "Get AI insights on your highest priority risks"
     },
     {
       id: 'compliance-summary',
       text: "Generate compliance summary",
       category: 'compliance',
-      icon: RiskManagementIcons.ClipboardCheck,
+      icon: RiskManagementIcons.Compliance,
       description: "Review your compliance status across all frameworks"
     },
     {
       id: 'control-improvements',
       text: "Recommend control improvements",
       category: 'controls',
-      icon: RiskManagementIcons.Target,
+      icon: RiskManagementIcons.Control,
       description: "Discover ways to strengthen your risk controls"
     },
     {
@@ -48,7 +49,7 @@ const smartFeatures = {
       id: 'audit-preparation',
       text: "Help prepare for upcoming audit",
       category: 'audit',
-      icon: RiskManagementIcons.FileCheck,
+      icon: RiskManagementIcons.Audit,
       description: "Get guidance on audit readiness and documentation"
     },
     {
@@ -93,7 +94,7 @@ const smartFeatures = {
   },
   quickActions: [
     { id: 'export-chat', label: 'Export Chat', icon: ActionIcons.Download },
-    { id: 'share-insights', label: 'Share Insights', icon: ActionIcons.Share },
+    { id: 'share-insights', label: 'Share Insights', icon: CommunicationIcons.Share },
     { id: 'save-analysis', label: 'Save Analysis', icon: ActionIcons.Save },
     { id: 'schedule-followup', label: 'Schedule Follow-up', icon: TimeIcons.Calendar }
   ]
@@ -408,9 +409,9 @@ Could you provide more specific details about what you'd like to explore? For ex
             aria-label={isExpanded ? 'Collapse chat' : 'Expand chat'}
           >
             {isExpanded ? (
-              <ActionIcons.Minimize size="sm" />
+              <NavigationIcons.ChevronUp size="sm" />
             ) : (
-              <ActionIcons.Maximize size="sm" />
+              <NavigationIcons.ChevronDown size="sm" />
             )}
           </button>
         </div>
@@ -608,7 +609,7 @@ Could you provide more specific details about what you'd like to explore? For ex
               className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 text-blue-600 hover:text-blue-700 disabled:text-gray-400 disabled:cursor-not-allowed"
               aria-label="Send message"
             >
-                             <CommunicationIcons.Message size="sm" />
+                             <CommunicationIcons.MessageSquare size="sm" />
             </button>
           </div>
         </div>
