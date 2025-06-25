@@ -31,7 +31,7 @@ import OptimizedChart from '@/components/optimized/OptimizedCharts';
 import ImageOptimizer from '@/components/optimized/ImageOptimizer';
 
 // Import performance utilities
-import { performanceMonitor } from '@/lib/performance/monitoring';
+import { monitoringService } from '@/lib/performance/monitoring';
 // import { queryCache } from '@/lib/cache/query-cache';
 import { apiCache } from '@/lib/cache/api-cache';
 import { redisClient } from '@/lib/cache/redis-client';

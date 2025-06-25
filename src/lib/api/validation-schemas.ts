@@ -63,16 +63,12 @@ export const RiskCreateSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters').max(255),
   description: z.string().min(10, 'Description must be at least 10 characters').max(2000),
   category: z.enum([
-    'OPERATIONAL', 'FINANCIAL', 'STRATEGIC', 'COMPLIANCE', 'TECHNOLOGY', 
-    'REPUTATIONAL', 'MARKET', 'CREDIT', 'LIQUIDITY', 'ENVIRONMENTAL'
+    'OPERATIONAL', 'FINANCIAL', 'STRATEGIC', 'COMPLIANCE', 'TECHNOLOGY'
   ]),
   likelihood: z.number().int().min(1).max(5),
   impact: z.number().int().min(1).max(5),
   riskOwner: z.string().uuid().optional(),
-  tags: z.array(z.string().max(50)).max(10).optional(),
-  dueDate: z.string().datetime().optional(),
-  linkedControls: z.array(z.string().uuid()).optional(),
-  metadata: z.record(z.any()).optional()
+  linkedControls: z.array(z.string().uuid()).optional()
 });
 
 export const RiskUpdateSchema = RiskCreateSchema.partial().extend({
@@ -81,8 +77,7 @@ export const RiskUpdateSchema = RiskCreateSchema.partial().extend({
 
 export const RiskFilterSchema = z.object({
   category: z.enum([
-    'OPERATIONAL', 'FINANCIAL', 'STRATEGIC', 'COMPLIANCE', 'TECHNOLOGY', 
-    'REPUTATIONAL', 'MARKET', 'CREDIT', 'LIQUIDITY', 'ENVIRONMENTAL'
+    'OPERATIONAL', 'FINANCIAL', 'STRATEGIC', 'COMPLIANCE', 'TECHNOLOGY'
   ]).optional(),
   likelihood: z.object({
     min: z.number().int().min(1).max(5).optional(),
@@ -98,7 +93,6 @@ export const RiskFilterSchema = z.object({
   }).optional(),
   riskLevel: z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']).optional(),
   owner: z.string().uuid().optional(),
-  tags: z.array(z.string()).optional(),
   dateRange: z.object({
     start: z.string().datetime().optional(),
     end: z.string().datetime().optional()
@@ -156,8 +150,7 @@ export const AssessmentCreateSchema = z.object({
   dueDate: z.string().datetime().optional(),
   stakeholders: z.array(z.string().uuid()).optional(),
   riskCategories: z.array(z.enum([
-    'OPERATIONAL', 'FINANCIAL', 'STRATEGIC', 'COMPLIANCE', 'TECHNOLOGY', 
-    'REPUTATIONAL', 'MARKET', 'CREDIT', 'LIQUIDITY', 'ENVIRONMENTAL'
+    'OPERATIONAL', 'FINANCIAL', 'STRATEGIC', 'COMPLIANCE', 'TECHNOLOGY'
   ])).optional(),
   complianceFrameworks: z.array(z.string()).optional(),
   documents: z.array(z.object({

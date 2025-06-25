@@ -12,7 +12,7 @@ interface RouteParams {
 }
 
 // GET /api/risks/[id] - Get single risk with full details
-export const GET = withAPI(async (req: NextRequest, { params }: RouteParams) => {
+export const GET = withAPI(async (req: NextRequest) => {
   const authReq = req as AuthenticatedRequest;
   const user = getAuthenticatedUser(authReq);
 
@@ -21,7 +21,9 @@ export const GET = withAPI(async (req: NextRequest, { params }: RouteParams) => 
   }
 
   try {
-    const riskId = params.id;
+    // Extract risk ID from URL pathname
+    const pathname = req.nextUrl.pathname;
+    const riskId = pathname.split('/').pop();
 
     if (!riskId) {
       throw new ValidationError('Risk ID is required');
@@ -65,9 +67,7 @@ export const GET = withAPI(async (req: NextRequest, { params }: RouteParams) => 
                 category: true,
                 type: true,
                 status: true,
-                effectiveness: true,
-                implementationDate: true,
-                lastTestedDate: true,
+                lastTestDate: true,
                 nextTestDate: true,
               },
             },
@@ -81,7 +81,6 @@ export const GET = withAPI(async (req: NextRequest, { params }: RouteParams) => 
             size: true,
             uploadedAt: true,
             uploadedBy: true,
-            path: true,
           },
           orderBy: {
             uploadedAt: 'desc',
@@ -89,7 +88,7 @@ export const GET = withAPI(async (req: NextRequest, { params }: RouteParams) => 
         },
         comments: {
           include: {
-            user: {
+            author: {
               select: {
                 id: true,
                 firstName: true,
@@ -142,10 +141,10 @@ export const GET = withAPI(async (req: NextRequest, { params }: RouteParams) => 
     // Calculate additional metrics
     const controlsCount = risk.controls.length;
     const implementedControlsCount = risk.controls.filter(
-      c => c.control.status === 'OPERATIONAL' || c.control.status === 'IMPLEMENTED'
+      c => c.control.status === 'IMPLEMENTED' || c.control.status === 'OPERATIONAL'
     ).length;
     const controlEffectiveness = controlsCount > 0 
-      ? risk.controls.reduce((sum, c) => sum + (c.control.effectiveness || 0), 0) / controlsCount 
+      ? risk.controls.reduce((sum, c) => sum + (c.effectiveness || 0), 0) / controlsCount 
       : 0;
 
     const openTasksCount = risk.tasks.filter(t => t.status !== 'COMPLETED').length;
@@ -157,8 +156,30 @@ export const GET = withAPI(async (req: NextRequest, { params }: RouteParams) => 
     const recentActivities = risk.activities.filter(a => 
       a.createdAt > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // Last 30 days
     );
-    const riskTrend = recentActivities.length > 5 ? 'increasing' : 
-                     recentActivities.length > 2 ? 'stable' : 'decreasing';
+    
+    // Map activity types to trend indicators
+    const trendIndicators = {
+      CREATED: 1,
+      UPDATED: 1,
+      DELETED: -1,
+      APPROVED: 1,
+      REJECTED: -1,
+      SUBMITTED: 1,
+      COMPLETED: 1,
+      ASSIGNED: 0,
+      COMMENTED: 0,
+      UPLOADED: 1,
+      DOWNLOADED: 0,
+      EXPORTED: 0,
+      IMPORTED: 1,
+    };
+    
+    const trendScore = recentActivities.reduce((score, activity) => {
+      return score + (trendIndicators[activity.type as keyof typeof trendIndicators] || 0);
+    }, 0);
+    
+    const riskTrend = trendScore > 2 ? 'increasing' : 
+                     trendScore < -2 ? 'decreasing' : 'stable';
 
     const enrichedRisk = {
       ...risk,
@@ -197,7 +218,7 @@ export const GET = withAPI(async (req: NextRequest, { params }: RouteParams) => 
 });
 
 // PUT /api/risks/[id] - Update risk
-export const PUT = withAPI(async (req: NextRequest, { params }: RouteParams) => {
+export const PUT = withAPI(async (req: NextRequest) => {
   const authReq = req as AuthenticatedRequest;
   const user = getAuthenticatedUser(authReq);
 
@@ -206,7 +227,9 @@ export const PUT = withAPI(async (req: NextRequest, { params }: RouteParams) => 
   }
 
   try {
-    const riskId = params.id;
+    // Extract risk ID from URL pathname
+    const pathname = req.nextUrl.pathname;
+    const riskId = pathname.split('/').pop();
 
     if (!riskId) {
       throw new ValidationError('Risk ID is required');
@@ -268,17 +291,15 @@ export const PUT = withAPI(async (req: NextRequest, { params }: RouteParams) => 
       data: {
         title: validatedData.title,
         description: validatedData.description,
-        category: validatedData.category,
+        category: validatedData.category as any,
         likelihood: validatedData.likelihood,
         impact: validatedData.impact,
         riskScore,
         riskLevel,
         owner: validatedData.owner,
-        status: validatedData.status,
+        status: validatedData.status as any,
         dateIdentified: validatedData.dateIdentified ? new Date(validatedData.dateIdentified) : undefined,
-        lastAssessed: validatedData.lastAssessed ? new Date(validatedData.lastAssessed) : undefined,
         nextReview: validatedData.nextReview ? new Date(validatedData.nextReview) : undefined,
-        aiConfidence: validatedData.aiConfidence,
       },
       include: {
         creator: {
@@ -326,7 +347,7 @@ export const PUT = withAPI(async (req: NextRequest, { params }: RouteParams) => 
     // Log activity
     await db.client.activity.create({
       data: {
-        type: 'RISK_UPDATED',
+        type: 'UPDATED',
         description: `Risk "${updatedRisk.title}" updated`,
         userId: user.id,
         organizationId: user.organizationId,
@@ -356,7 +377,7 @@ export const PUT = withAPI(async (req: NextRequest, { params }: RouteParams) => 
 });
 
 // DELETE /api/risks/[id] - Delete risk
-export const DELETE = withAPI(async (req: NextRequest, { params }: RouteParams) => {
+export const DELETE = withAPI(async (req: NextRequest) => {
   const authReq = req as AuthenticatedRequest;
   const user = getAuthenticatedUser(authReq);
 
@@ -365,7 +386,9 @@ export const DELETE = withAPI(async (req: NextRequest, { params }: RouteParams) 
   }
 
   try {
-    const riskId = params.id;
+    // Extract risk ID from URL pathname
+    const pathname = req.nextUrl.pathname;
+    const riskId = pathname.split('/').pop();
 
     if (!riskId) {
       throw new ValidationError('Risk ID is required');
@@ -430,7 +453,7 @@ export const DELETE = withAPI(async (req: NextRequest, { params }: RouteParams) 
     // Log activity
     await db.client.activity.create({
       data: {
-        type: 'RISK_DELETED',
+        type: 'DELETED',
         description: `Risk "${existingRisk.title}" deleted`,
         userId: user.id,
         organizationId: user.organizationId,

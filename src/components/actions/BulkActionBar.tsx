@@ -8,7 +8,7 @@ import {
   DataIcons,
   RiskManagementIcons
 } from '@/components/icons/IconLibrary';
-import { LoadingStates } from '@/components/states/LoadingState';
+import { LoadingStates, Spinner } from '@/components/states/LoadingState';
 
 // Bulk action types and interfaces
 interface BulkAction {
@@ -156,7 +156,7 @@ const ProgressModal: React.FC<ProgressModalProps> = ({
             {isComplete ? (
               <StatusIcons.CheckCircle size="md" color="success" />
             ) : (
-              <LoadingStates.Spinner size="md" />
+              <Spinner size="md" />
             )}
           </div>
           <h2 className="text-lg font-semibold text-gray-900">
@@ -188,7 +188,7 @@ const ProgressModal: React.FC<ProgressModalProps> = ({
         {progress.errors.length > 0 && (
           <div className="mb-4 p-3 bg-red-50 rounded-md">
             <div className="flex items-center space-x-2 mb-2">
-              <StatusIcons.AlertCircle size="xs" color="danger" />
+              <StatusIcons.AlertCircle size="xs" color="error" />
               <span className="text-sm font-medium text-red-800">
                 {progress.errors.length} Error{progress.errors.length !== 1 ? 's' : ''}
               </span>

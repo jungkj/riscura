@@ -349,7 +349,7 @@ export default function TeamNotificationsPage() {
     setPreferences(prev => ({
       ...prev,
       [type]: {
-        ...prev[type],
+        ...(prev[type] as Record<string, boolean> || {}),
         [category]: value,
       },
     }));

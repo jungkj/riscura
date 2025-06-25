@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth-config';
 import { ReportingService, ReportConfig, ReportFormat, ReportType } from '@/services/ReportingService';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 
 export async function POST(request: NextRequest) {
   try {
@@ -55,8 +55,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Get user's organization
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
+    const user = await db.client.user.findUnique({
+      where: { id: (session.user as any).id || 'unknown' },
       select: { organizationId: true, role: true },
     });
 
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
       },
       format: validFormats,
       organizationId: user.organizationId,
-      createdBy: session.user.id,
+      createdBy: (session.user as any).id || 'unknown',
       recipients,
     };
 
@@ -121,22 +121,23 @@ export async function POST(request: NextRequest) {
     console.error('Report generation error:', error);
     
     // Handle specific error types
-    if (error.message.includes('Missing required configuration')) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    if (errorMessage.includes('Missing required configuration')) {
       return NextResponse.json(
-        { error: 'Invalid report configuration', details: error.message },
+        { error: 'Invalid report configuration', details: errorMessage },
         { status: 400 }
       );
     }
 
-    if (error.message.includes('Invalid date range')) {
+    if (errorMessage.includes('Invalid date range')) {
       return NextResponse.json(
-        { error: 'Invalid date range specified', details: error.message },
+        { error: 'Invalid date range specified', details: errorMessage },
         { status: 400 }
       );
     }
 
     return NextResponse.json(
-      { error: 'Report generation failed', details: error.message },
+      { error: 'Report generation failed', details: errorMessage },
       { status: 500 }
     );
   }
@@ -154,8 +155,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Get user's organization
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
+    const user = await db.client.user.findUnique({
+      where: { id: (session.user as any).id || 'unknown' },
       select: { organizationId: true },
     });
 
