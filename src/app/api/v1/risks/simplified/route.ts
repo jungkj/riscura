@@ -1,176 +1,178 @@
-import { NextRequest } from 'next/server';
-import { prisma } from '@/lib/database/prisma';
-import { 
-  withApiMiddleware,
-  riskManagerApiMiddleware,
-  ApiRequestContext 
-} from '@/lib/api/middleware';
-import { 
-  RiskCreateSchema, 
-  RiskQuerySchema 
-} from '@/lib/api/validation-schemas';
+import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/auth-options';
+import { db } from '@/lib/db';
 
 /**
  * GET /api/v1/risks/simplified
- * List risks with automatic handling of rate limiting, auth, validation, etc.
+ * List risks with basic functionality
  */
-export const GET = withApiMiddleware({
-  requireAuth: true,
-  allowedRoles: ['ADMIN', 'RISK_MANAGER', 'AUDITOR'],
-  querySchema: RiskQuerySchema,
-  rateLimiters: ['standard']
-})(async (context: ApiRequestContext, validatedData: any) => {
-  const { user } = context;
-  const { 
-    page, 
-    limit, 
-    search, 
-    category, 
-    likelihood,
-    impact,
-    riskLevel 
-  } = validatedData.query;
+export async function GET(request: NextRequest): Promise<NextResponse> {
+  try {
+    // Basic authentication check
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
 
-  // Build database query
-  const where: any = {
-    organizationId: user.organizationId
-  };
+    // Get user from database
+    const user = await db.client.user.findUnique({
+      where: { email: session.user.email },
+    });
 
-  // Apply search filter
-  if (search) {
-    where.OR = [
-      { title: { contains: search, mode: 'insensitive' } },
-      { description: { contains: search, mode: 'insensitive' } }
-    ];
-  }
+    if (!user || !user.isActive || !user.organizationId) {
+      return NextResponse.json(
+        { error: 'User not found or inactive' },
+        { status: 401 }
+      );
+    }
 
-  // Apply other filters
-  if (category) where.category = category;
-  if (riskLevel) where.riskLevel = riskLevel;
-  
-  if (likelihood) {
-    where.likelihood = {};
-    if (likelihood.min) where.likelihood.gte = likelihood.min;
-    if (likelihood.max) where.likelihood.lte = likelihood.max;
-  }
+    // Parse query parameters
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = Math.min(parseInt(searchParams.get('limit') || '10'), 100);
+    const search = searchParams.get('search') || '';
 
-  if (impact) {
-    where.impact = {};
-    if (impact.min) where.impact.gte = impact.min;
-    if (impact.max) where.impact.lte = impact.max;
-  }
+    // Build database query
+    const where: any = {
+      organizationId: user.organizationId
+    };
 
-  // Execute database queries
-  const [risks, total] = await Promise.all([
-    prisma.risk.findMany({
-      where,
-      include: {
-        riskOwner: {
-          select: { id: true, name: true, email: true }
-        },
-        controls: {
-          select: { 
-            id: true, 
-            title: true, 
-            type: true, 
-            effectiveness: true 
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } }
+      ];
+    }
+
+    // Execute database queries
+    const [risks, total] = await Promise.all([
+      db.client.risk.findMany({
+        where,
+        include: {
+          riskOwner: {
+            select: { id: true, firstName: true, lastName: true, email: true }
+          },
+          controls: {
+            select: { 
+              id: true, 
+              title: true, 
+              type: true, 
+              effectiveness: true 
+            }
+          },
+          _count: {
+            select: { controls: true, assessments: true }
           }
         },
-        _count: {
-          select: { controls: true, assessments: true }
-        }
-      },
-      orderBy: { updatedAt: 'desc' },
-      skip: (page - 1) * limit,
-      take: limit
-    }),
-    prisma.risk.count({ where })
-  ]);
+        orderBy: { updatedAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: limit
+      }),
+      db.client.risk.count({ where })
+    ]);
 
-  // Transform data
-  const transformedRisks = risks.map(risk => ({
-    id: risk.id,
-    title: risk.title,
-    description: risk.description,
-    category: risk.category,
-    likelihood: risk.likelihood,
-    impact: risk.impact,
-    riskScore: risk.likelihood * risk.impact,
-    riskLevel: risk.riskLevel,
-    tags: risk.tags,
-    owner: risk.riskOwner,
-    controls: risk.controls,
-    controlCount: risk._count.controls,
-    assessmentCount: risk._count.assessments,
-    createdAt: risk.createdAt,
-    updatedAt: risk.updatedAt
-  }));
+    // Transform data
+    const transformedRisks = risks.map(risk => ({
+      id: risk.id,
+      title: risk.title,
+      description: risk.description,
+      category: risk.category,
+      likelihood: risk.likelihood,
+      impact: risk.impact,
+      riskScore: risk.likelihood * risk.impact,
+      riskLevel: risk.riskLevel,
+      tags: risk.tags,
+      owner: risk.riskOwner ? {
+        id: risk.riskOwner.id,
+        name: `${risk.riskOwner.firstName} ${risk.riskOwner.lastName}`,
+        email: risk.riskOwner.email
+      } : null,
+      controls: risk.controls,
+      controlCount: risk._count.controls,
+      assessmentCount: risk._count.assessments,
+      createdAt: risk.createdAt,
+      updatedAt: risk.updatedAt
+    }));
 
-  // Return paginated response (middleware handles formatting)
-  return {
-    data: transformedRisks,
-    pagination: { page, limit, total }
-  };
-});
+    return NextResponse.json({
+      success: true,
+      data: transformedRisks,
+      pagination: { 
+        page, 
+        limit, 
+        total,
+        pages: Math.ceil(total / limit),
+        hasNextPage: page * limit < total,
+        hasPreviousPage: page > 1
+      }
+    });
+
+  } catch (error) {
+    console.error('Error fetching risks:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch risks' },
+      { status: 500 }
+    );
+  }
+}
 
 /**
  * POST /api/v1/risks/simplified
- * Create a new risk with automatic validation and error handling
+ * Create a new risk
  */
-export const POST = withApiMiddleware({
-  requireAuth: true,
-  allowedRoles: ['ADMIN', 'RISK_MANAGER'],
-  bodySchema: RiskCreateSchema,
-  rateLimiters: ['standard', 'bulk']
-})(async (context: ApiRequestContext, validatedData: any) => {
-  const { user } = context;
-  const {
-    title,
-    description,
-    category,
-    likelihood,
-    impact,
-    riskOwner,
-    tags,
-    dueDate,
-    linkedControls,
-    metadata
-  } = validatedData.body;
-
-  // Calculate risk metrics
-  const riskScore = likelihood * impact;
-  const riskLevel = calculateRiskLevel(riskScore);
-
-  // Validate risk owner exists if provided
-  if (riskOwner) {
-    const ownerExists = await prisma.user.findFirst({
-      where: {
-        id: riskOwner,
-        organizationId: user.organizationId
-      }
-    });
-    if (!ownerExists) {
-      throw new Error('Risk owner not found');
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  try {
+    // Basic authentication check
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
     }
-  }
 
-  // Validate linked controls if provided
-  if (linkedControls && linkedControls.length > 0) {
-    const controlsCount = await prisma.control.count({
-      where: {
-        id: { in: linkedControls },
-        organizationId: user.organizationId
-      }
+    // Get user from database
+    const user = await db.client.user.findUnique({
+      where: { email: session.user.email },
     });
-    if (controlsCount !== linkedControls.length) {
-      throw new Error('One or more linked controls do not exist');
-    }
-  }
 
-  // Create risk in database transaction
-  const risk = await prisma.$transaction(async (tx) => {
-    // Create the risk
-    const newRisk = await tx.risk.create({
+    if (!user || !user.isActive || !user.organizationId) {
+      return NextResponse.json(
+        { error: 'User not found or inactive' },
+        { status: 401 }
+      );
+    }
+
+    const body = await request.json();
+    const {
+      title,
+      description,
+      category,
+      likelihood,
+      impact,
+      riskOwnerId,
+      tags,
+      dueDate
+    } = body;
+
+    // Basic validation
+    if (!title || !description || !category || !likelihood || !impact) {
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      );
+    }
+
+    // Calculate risk metrics
+    const riskScore = likelihood * impact;
+    const riskLevel = calculateRiskLevel(riskScore);
+
+    // Create risk
+    const risk = await db.client.risk.create({
       data: {
         title,
         description,
@@ -179,96 +181,41 @@ export const POST = withApiMiddleware({
         impact,
         riskScore,
         riskLevel,
-        riskOwnerId: riskOwner,
+        riskOwnerId: riskOwnerId || null,
         tags: tags || [],
         dueDate: dueDate ? new Date(dueDate) : null,
-        metadata: metadata || {},
         organizationId: user.organizationId,
         createdById: user.id,
         updatedById: user.id
       },
       include: {
         riskOwner: {
-          select: { id: true, name: true, email: true }
+          select: { id: true, firstName: true, lastName: true, email: true }
         },
         createdBy: {
-          select: { id: true, name: true, email: true }
+          select: { id: true, firstName: true, lastName: true, email: true }
         }
       }
     });
 
-    // Link controls if provided
-    if (linkedControls && linkedControls.length > 0) {
-      await tx.riskControl.createMany({
-        data: linkedControls.map(controlId => ({
-          riskId: newRisk.id,
-          controlId,
-          createdById: user.id
-        }))
-      });
-    }
+    return NextResponse.json({
+      success: true,
+      data: risk,
+      message: 'Risk created successfully'
+    }, { status: 201 });
 
-    return newRisk;
-  });
+  } catch (error) {
+    console.error('Error creating risk:', error);
+    return NextResponse.json(
+      { error: 'Failed to create risk' },
+      { status: 500 }
+    );
+  }
+}
 
-  // Fetch complete risk data with controls
-  const completeRisk = await prisma.risk.findUnique({
-    where: { id: risk.id },
-    include: {
-      riskOwner: {
-        select: { id: true, name: true, email: true }
-      },
-      controls: {
-        select: { 
-          id: true, 
-          title: true, 
-          type: true, 
-          effectiveness: true 
-        }
-      },
-      createdBy: {
-        select: { id: true, name: true, email: true }
-      },
-      _count: {
-        select: { controls: true, assessments: true }
-      }
-    }
-  });
-
-  // Transform response data
-  const responseData = {
-    id: completeRisk!.id,
-    title: completeRisk!.title,
-    description: completeRisk!.description,
-    category: completeRisk!.category,
-    likelihood: completeRisk!.likelihood,
-    impact: completeRisk!.impact,
-    riskScore: completeRisk!.riskScore,
-    riskLevel: completeRisk!.riskLevel,
-    tags: completeRisk!.tags,
-    dueDate: completeRisk!.dueDate,
-    owner: completeRisk!.riskOwner,
-    controls: completeRisk!.controls,
-    controlCount: completeRisk!._count.controls,
-    assessmentCount: completeRisk!._count.assessments,
-    createdBy: completeRisk!.createdBy,
-    createdAt: completeRisk!.createdAt,
-    updatedAt: completeRisk!.updatedAt
-  };
-
-  // Return created resource (middleware handles 201 status and formatting)
-  return {
-    data: responseData,
-    status: 201
-  };
-});
-
-/**
- * Helper function to calculate risk level from risk score
- */
 function calculateRiskLevel(riskScore: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
-  if (riskScore <= 8) return 'LOW';
-  if (riskScore <= 15) return 'MEDIUM';
+  if (riskScore <= 6) return 'LOW';
+  if (riskScore <= 12) return 'MEDIUM';
   if (riskScore <= 20) return 'HIGH';
   return 'CRITICAL';
 } 

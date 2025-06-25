@@ -165,13 +165,16 @@ export const GET = withAPI(async (req: NextRequest) => {
        const totalSteps = steps.length;
        const progress = totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0;
 
+       // Type cast relatedEntities as it's a JSON field
+       const relatedEntities = workflow.relatedEntities as any;
+
        return {
          ...workflow,
-         assessmentType: workflow.relatedEntities?.assessmentType || 'SELF_ASSESSMENT',
-         framework: workflow.relatedEntities?.framework,
-         scope: workflow.relatedEntities?.scope,
-         objectives: workflow.relatedEntities?.objectives || [],
-         methodology: workflow.relatedEntities?.methodology,
+         assessmentType: relatedEntities?.assessmentType || 'SELF_ASSESSMENT',
+         framework: relatedEntities?.framework,
+         scope: relatedEntities?.scope,
+         objectives: relatedEntities?.objectives || [],
+         methodology: relatedEntities?.methodology,
          progress,
          completedSteps,
          totalSteps,
@@ -320,7 +323,7 @@ export const POST = withAPI(async (req: NextRequest) => {
     // Log activity
     await db.client.activity.create({
       data: {
-        type: 'WORKFLOW_CREATED',
+        type: 'CREATED',
         description: `Assessment "${workflow.name}" created`,
         userId: user.id,
         organizationId: user.organizationId,
@@ -448,7 +451,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
               tags: workflowData.tags,
               assignedTo: assigneeId ? [assigneeId] : existing.assignedTo,
               relatedEntities: {
-                ...existing.relatedEntities,
+                ...(existing.relatedEntities as any || {}),
                 assessmentType: validatedAssessment.assessmentType,
                 framework: validatedAssessment.framework,
                 scope: validatedAssessment.scope,
@@ -501,10 +504,12 @@ export const PUT = withAPI(async (req: NextRequest) => {
     // Log bulk activity
     await db.client.activity.create({
       data: {
-        type: 'WORKFLOW_BULK_OPERATION',
+        type: 'UPDATED',
         description: `Bulk assessment operation: ${results.created} created, ${results.updated} updated, ${results.deleted} deleted`,
         userId: user.id,
         organizationId: user.organizationId,
+        entityType: 'WORKFLOW',
+        entityId: user.organizationId, // Use organization ID as a generic entity reference for bulk operations
         metadata: {
           created: results.created,
           updated: results.updated,

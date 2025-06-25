@@ -127,7 +127,7 @@ export async function GET(request: NextRequest) {
     };
 
     // Include historical data if requested
-    let historicalData = null;
+    let historicalData: any = null;
     if (includeHistorical) {
       historicalData = await getHistoricalMetrics(timeRange);
     }

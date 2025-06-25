@@ -279,4 +279,65 @@ async function handleRCSAUpload(request: AuthenticatedRequest): Promise<NextResp
 }
 
 // Export the authenticated handler
-export const POST = withAuth(handleRCSAUpload); 
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  // Apply authentication middleware manually
+  try {
+    const session = await (await import('next-auth')).getServerSession((await import('@/lib/auth/auth-options')).authOptions);
+
+    if (!session?.user?.email) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
+    // Get user from database
+    const user = await db.client.user.findUnique({
+      where: { email: session.user.email },
+      include: {
+        organization: {
+          select: {
+            id: true,
+            name: true,
+            isActive: true,
+          },
+        },
+      },
+    });
+
+    if (!user || !user.isActive) {
+      return NextResponse.json(
+        { error: 'User not found or inactive' },
+        { status: 401 }
+      );
+    }
+
+    if (!user.organizationId) {
+      return NextResponse.json(
+        { error: 'Organization membership required' },
+        { status: 403 }
+      );
+    }
+
+    // Create authenticated request
+    const authReq = request as AuthenticatedRequest;
+    authReq.user = {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
+      organizationId: user.organizationId,
+      permissions: [],
+      isActive: user.isActive,
+    };
+
+    return await handleRCSAUpload(authReq);
+  } catch (error) {
+    console.error('Authentication error:', error);
+    return NextResponse.json(
+      { error: 'Authentication failed' },
+      { status: 500 }
+    );
+  }
+} 
