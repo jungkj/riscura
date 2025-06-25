@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAccessToken } from '@/lib/auth/jwt';
 import { db } from '@/lib/db';
 import { productionGuard, throwIfProduction } from '@/lib/security/production-guard';
-import { getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from './auth-options';
 import { ROLE_PERMISSIONS } from './index';
 
@@ -51,7 +51,7 @@ export async function withAuth(
   return async (req: NextRequest): Promise<NextResponse> => {
     try {
       // Get session from NextAuth
-      const session = await getServerSession(authOptions);
+      const session = await getServerSession(authOptions) as any;
 
       if (!session?.user?.email) {
         return NextResponse.json(
@@ -641,7 +641,7 @@ export async function validateSession(sessionToken: string): Promise<Authenticat
   try {
     // This would typically validate a JWT or session token
     // For now, we'll use NextAuth's session validation
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions) as any;
     
     if (!session?.user?.email) {
       return null;
