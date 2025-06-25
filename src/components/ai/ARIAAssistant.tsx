@@ -92,7 +92,7 @@ export default function ARIAAssistant({
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(false);
-  const [speechRecognition, setSpeechRecognition] = useState<SpeechRecognition | null>(null);
+  const [speechRecognition, setSpeechRecognition] = useState<any | null>(null);
   const [speechSynthesis, setSpeechSynthesis] = useState<SpeechSynthesis | null>(null);
   
   // Refs
@@ -104,7 +104,7 @@ export default function ARIAAssistant({
   useEffect(() => {
     if (typeof window !== 'undefined') {
       // Initialize Speech Recognition
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
         recognition.continuous = false;
