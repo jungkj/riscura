@@ -248,7 +248,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 4. Authorization - check if user can create risks
-    if (!['ADMIN', 'RISK_MANAGER'].includes(session.user.role)) {
+    if (!['ADMIN', 'RISK_MANAGER'].includes((session.user as any).role)) {
       throw createForbiddenError('Insufficient permissions to create risks');
     }
 
