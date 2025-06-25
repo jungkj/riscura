@@ -73,47 +73,11 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { action, framework, riskId } = body;
-    
-    const proboService = ProboIntegrationService.getInstance();
-
-    switch (action) {
-      case 'getFrameworkRecommendations':
-        if (!framework) {
-          return NextResponse.json(
-            { success: false, error: 'Framework parameter required' },
-            { status: 400 }
-          );
-        }
-        
-        const recommendations = await proboService.getFrameworkRecommendations(framework);
-        return NextResponse.json({
-          success: true,
-          data: recommendations
-        });
-
-      case 'enhanceRiskWithControls':
-        if (!riskId) {
-          return NextResponse.json(
-            { success: false, error: 'Risk ID parameter required' },
-            { status: 400 }
-          );
-        }
-        
-        const riskEnhancement = await proboService.enhanceRiskWithProboControls(riskId);
-        return NextResponse.json({
-          success: true,
-          data: riskEnhancement
-        });
-
-      default:
-        return NextResponse.json(
-          { success: false, error: 'Invalid action' },
-          { status: 400 }
-        );
-    }
-
+    // TODO: Implement ProboIntegrationService when available
+    return NextResponse.json(
+      { success: false, error: 'Probo integration not yet implemented' },
+      { status: 501 }
+    );
   } catch (error) {
     console.error('Probo insights POST API error:', error);
     return NextResponse.json(

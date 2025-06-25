@@ -9,7 +9,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       authenticated: !!session,
       user: session?.user ? {
-        id: session.user.id,
         email: session.user.email,
         name: session.user.name,
       } : null,

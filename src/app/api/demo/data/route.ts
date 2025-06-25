@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDemoData, getTestUserByEmail, hasPermission } from '@/lib/demo/testUser';
-import { appConfig } from '@/config/env';
+import { isDemoModeEnabled, isDevelopmentEnvironment } from '@/config/env';
 
 // GET /api/demo/data - Get demo data for testing
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     // Only allow in development or demo mode
-    if (!appConfig.isDevelopment) {
+    if (!isDevelopmentEnvironment() && !isDemoModeEnabled()) {
       return NextResponse.json(
         { error: 'Demo data only available in development mode' },
         { status: 403 }
@@ -160,7 +160,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 // POST /api/demo/data - Simulate data operations for testing
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    if (!appConfig.isDevelopment) {
+    if (!isDevelopmentEnvironment() && !isDemoModeEnabled()) {
       return NextResponse.json(
         { error: 'Demo operations only available in development mode' },
         { status: 403 }

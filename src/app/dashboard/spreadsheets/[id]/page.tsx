@@ -1,5 +1,6 @@
 import NotionSpreadsheet from '@/components/spreadsheet/NotionSpreadsheet';
 
-export default function SpreadsheetPage({ params }: { params: { id: string } }) {
+export default async function SpreadsheetPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   return <NotionSpreadsheet />;
 } 

@@ -5,36 +5,8 @@ import { getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/midd
 import { db } from '@/lib/db';
 import { PERMISSIONS } from '@/lib/auth';
 import { uploadFile, deleteFile } from '@/lib/storage/files';
-import { DocumentCategory, DocumentStatus } from '@prisma/client';
 
-// Enum mapping functions
-const mapDocumentCategory = (apiCategory: string): DocumentCategory => {
-  const mapping: Record<string, DocumentCategory> = {
-    'policy': 'POLICY',
-    'procedure': 'PROCEDURE',
-    'guideline': 'GUIDELINE',
-    'framework': 'FRAMEWORK',
-    'standard': 'STANDARD',
-    'template': 'TEMPLATE',
-    'report': 'REPORT',
-    'evidence': 'EVIDENCE',
-    'contract': 'CONTRACT',
-    'other': 'OTHER',
-  };
-  return mapping[apiCategory] || 'OTHER';
-};
 
-const mapDocumentStatus = (apiStatus: string): DocumentStatus => {
-  const mapping: Record<string, DocumentStatus> = {
-    'draft': 'DRAFT',
-    'review': 'REVIEW',
-    'approved': 'APPROVED',
-    'published': 'PUBLISHED',
-    'archived': 'ARCHIVED',
-    'expired': 'EXPIRED',
-  };
-  return mapping[apiStatus] || 'DRAFT';
-};
 
 // GET /api/documents - List documents with pagination and filtering
 export const GET = withAPI(
@@ -54,13 +26,16 @@ export const GET = withAPI(
 
     // Parse sorting
     const orderBy = parseSorting(searchParams, {
-      defaultSort: 'updatedAt',
-      defaultOrder: 'desc',
       allowedFields: ['title', 'category', 'status', 'createdAt', 'updatedAt', 'version'],
+      defaultField: 'updatedAt',
+      defaultOrder: 'desc'
     });
 
     // Parse search
     const search = parseSearch(searchParams);
+
+    // Parse filters
+    const filters = parseFilters(searchParams);
 
     // Build where clause with organization isolation
     const where: any = {
@@ -70,39 +45,28 @@ export const GET = withAPI(
     // Add search functionality
     if (search) {
       where.OR = [
-        { title: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
-        { tags: { hasSome: [search] } },
+        { name: { contains: search, mode: 'insensitive' } },
+        { type: { contains: search, mode: 'insensitive' } },
+        { extractedText: { contains: search, mode: 'insensitive' } },
       ];
     }
 
     // Add filters from query parameters
-    if (query.category) {
-      where.category = Array.isArray(query.category) 
-        ? { in: query.category.map(mapDocumentCategory) }
-        : mapDocumentCategory(query.category);
+    if (filters.type) {
+      where.type = Array.isArray(filters.type) 
+        ? { in: filters.type }
+        : filters.type;
     }
 
-    if (query.status) {
-      where.status = Array.isArray(query.status)
-        ? { in: query.status.map(mapDocumentStatus) }
-        : mapDocumentStatus(query.status);
-    }
-
-    if (query.owner) {
-      where.createdBy = query.owner;
-    }
-
-    if (query.tags) {
-      const tags = Array.isArray(query.tags) ? query.tags : [query.tags];
-      where.tags = { hasSome: tags };
+    if (filters.owner) {
+      where.uploadedBy = filters.owner;
     }
 
     // Date range filtering
-    if (query.dateFrom || query.dateTo) {
-      where.createdAt = {};
-      if (query.dateFrom) where.createdAt.gte = new Date(query.dateFrom);
-      if (query.dateTo) where.createdAt.lte = new Date(query.dateTo);
+    if (filters.dateFrom || filters.dateTo) {
+      where.uploadedAt = {};
+      if (filters.dateFrom) where.uploadedAt.gte = new Date(filters.dateFrom);
+      if (filters.dateTo) where.uploadedAt.lte = new Date(filters.dateTo);
     }
 
     try {
@@ -114,7 +78,7 @@ export const GET = withAPI(
           take,
           orderBy,
           include: {
-            creator: {
+            uploader: {
               select: {
                 id: true,
                 firstName: true,
@@ -122,43 +86,24 @@ export const GET = withAPI(
                 email: true,
               },
             },
-            files: {
+            riskEvidence: {
               select: {
                 id: true,
-                filename: true,
-                mimeType: true,
-                size: true,
-                uploadedAt: true,
-                url: true,
+                title: true,
+                riskLevel: true,
               },
             },
-            linkedRisks: {
-              include: {
-                risk: {
-                  select: {
-                    id: true,
-                    title: true,
-                    riskLevel: true,
-                  },
-                },
-              },
-            },
-            linkedControls: {
-              include: {
-                control: {
-                  select: {
-                    id: true,
-                    name: true,
-                    status: true,
-                  },
-                },
+            controlEvidence: {
+              select: {
+                id: true,
+                title: true,
+                status: true,
               },
             },
             _count: {
               select: {
-                versions: true,
                 comments: true,
-                files: true,
+                activities: true,
               },
             },
           },
@@ -169,37 +114,28 @@ export const GET = withAPI(
       // Transform data for API response
       const transformedDocuments = documents.map(doc => ({
         id: doc.id,
-        title: doc.title,
-        description: doc.description,
-        category: doc.category,
-        status: doc.status,
-        version: doc.version,
-        tags: doc.tags,
-        confidentiality: doc.confidentiality,
-        retentionDate: doc.retentionDate,
-        reviewDate: doc.reviewDate,
-        approvedAt: doc.approvedAt,
+        name: doc.name,
+        type: doc.type,
+        size: doc.size,
+        content: doc.content,
+        extractedText: doc.extractedText,
+        aiAnalysis: doc.aiAnalysis,
+        uploadedAt: doc.uploadedAt,
         createdAt: doc.createdAt,
         updatedAt: doc.updatedAt,
-        creator: doc.creator,
-        files: doc.files,
-        linkedRisks: doc.linkedRisks.map(lr => lr.risk),
-        linkedControls: doc.linkedControls.map(lc => lc.control),
+        uploader: doc.uploader,
+        riskEvidence: doc.riskEvidence,
+        controlEvidence: doc.controlEvidence,
         _count: doc._count,
       }));
 
-      const paginationMeta = createPaginationMeta({
-        page,
-        limit,
-        total,
-        itemCount: documents.length,
-      });
+      const paginationMeta = createPaginationMeta(page, limit, total);
 
       return createAPIResponse({
         data: transformedDocuments,
         meta: {
           pagination: paginationMeta,
-          filters: query,
+          filters,
           search,
         },
       });
@@ -229,109 +165,63 @@ export const POST = withAPI(async (req: NextRequest) => {
     const formData = await req.formData();
     
     // Extract document metadata
-    const title = formData.get('title') as string;
-    const description = formData.get('description') as string;
-    const category = formData.get('category') as string;
-    const status = formData.get('status') as string || 'draft';
-    const tags = formData.get('tags') ? JSON.parse(formData.get('tags') as string) : [];
-    const confidentiality = formData.get('confidentiality') as string || 'internal';
-    const version = formData.get('version') as string || '1.0';
-    const reviewDate = formData.get('reviewDate') ? new Date(formData.get('reviewDate') as string) : null;
-    const linkedRiskIds = formData.get('linkedRiskIds') ? JSON.parse(formData.get('linkedRiskIds') as string) : [];
-    const linkedControlIds = formData.get('linkedControlIds') ? JSON.parse(formData.get('linkedControlIds') as string) : [];
+    const name = formData.get('name') as string;
+    const type = formData.get('type') as string;
+    const content = formData.get('content') as string;
+    const extractedText = formData.get('extractedText') as string;
 
     // Validate required fields
-    if (!title || !description || !category) {
-      throw new Error('Title, description, and category are required');
+    if (!name || !type) {
+      throw new Error('Name and type are required');
     }
 
     // Create document record
     const document = await db.client.document.create({
       data: {
-        title,
-        description,
-        category: mapDocumentCategory(category),
-        status: mapDocumentStatus(status),
-        version,
-        tags,
-        confidentiality,
-        reviewDate,
+        name,
+        type,
+        size: content ? content.length : 0,
+        content,
+        extractedText,
         organizationId: user.organizationId,
-        createdBy: user.id,
+        uploadedBy: user.id,
       },
     });
 
-    // Handle file uploads
-    const uploadedFiles = [];
+    // Handle file uploads (simplified for basic Document model)
     const files = formData.getAll('files') as File[];
+    let fileContent = '';
     
-    for (const file of files) {
+    if (files.length > 0) {
+      const file = files[0]; // Take first file only
       if (file.size > 0) {
         try {
-          // Upload file to storage
-          const uploadResult = await uploadFile(file, {
-            organizationId: user.organizationId,
-            documentId: document.id,
-            userId: user.id,
-          });
-
-          // Create file record
-          const fileRecord = await db.client.documentFile.create({
+          const buffer = await file.arrayBuffer();
+          fileContent = Buffer.from(buffer).toString('base64');
+          
+          // Update document with file content
+          await db.client.document.update({
+            where: { id: document.id },
             data: {
-              filename: file.name,
-              originalName: file.name,
-              mimeType: file.type,
+              content: fileContent,
               size: file.size,
-              url: uploadResult.url,
-              path: uploadResult.path,
-              documentId: document.id,
-              uploadedBy: user.id,
             },
           });
-
-          uploadedFiles.push(fileRecord);
         } catch (uploadError) {
-          console.error('File upload error:', uploadError);
-          // Continue with other files, but log the error
+          console.error('File processing error:', uploadError);
         }
       }
-    }
-
-    // Link to risks
-    if (linkedRiskIds.length > 0) {
-      await db.client.documentRisk.createMany({
-        data: linkedRiskIds.map((riskId: string) => ({
-          documentId: document.id,
-          riskId,
-        })),
-        skipDuplicates: true,
-      });
-    }
-
-    // Link to controls
-    if (linkedControlIds.length > 0) {
-      await db.client.documentControl.createMany({
-        data: linkedControlIds.map((controlId: string) => ({
-          documentId: document.id,
-          controlId,
-        })),
-        skipDuplicates: true,
-      });
     }
 
     // Create activity log
     await db.client.activity.create({
       data: {
-        type: 'DOCUMENT_CREATED',
-        description: `Document "${document.title}" was created`,
+        type: 'CREATED',
+        description: `Document "${document.name}" was created`,
+        entityType: 'DOCUMENT',
+        entityId: document.id,
         userId: user.id,
         organizationId: user.organizationId,
-        metadata: {
-          documentId: document.id,
-          documentTitle: document.title,
-          category: document.category,
-          filesCount: uploadedFiles.length,
-        },
       },
     });
 
@@ -339,7 +229,7 @@ export const POST = withAPI(async (req: NextRequest) => {
     const completeDocument = await db.client.document.findUnique({
       where: { id: document.id },
       include: {
-        creator: {
+        uploader: {
           select: {
             id: true,
             firstName: true,
@@ -347,43 +237,10 @@ export const POST = withAPI(async (req: NextRequest) => {
             email: true,
           },
         },
-        files: {
-          select: {
-            id: true,
-            filename: true,
-            mimeType: true,
-            size: true,
-            uploadedAt: true,
-            url: true,
-          },
-        },
-        linkedRisks: {
-          include: {
-            risk: {
-              select: {
-                id: true,
-                title: true,
-                riskLevel: true,
-              },
-            },
-          },
-        },
-        linkedControls: {
-          include: {
-            control: {
-              select: {
-                id: true,
-                name: true,
-                status: true,
-              },
-            },
-          },
-        },
         _count: {
           select: {
-            versions: true,
             comments: true,
-            files: true,
+            activities: true,
           },
         },
       },
@@ -392,20 +249,16 @@ export const POST = withAPI(async (req: NextRequest) => {
     return createAPIResponse({
       data: {
         id: completeDocument!.id,
-        title: completeDocument!.title,
-        description: completeDocument!.description,
-        category: completeDocument!.category,
-        status: completeDocument!.status,
-        version: completeDocument!.version,
-        tags: completeDocument!.tags,
-        confidentiality: completeDocument!.confidentiality,
-        reviewDate: completeDocument!.reviewDate,
+        name: completeDocument!.name,
+        type: completeDocument!.type,
+        size: completeDocument!.size,
+        content: completeDocument!.content,
+        extractedText: completeDocument!.extractedText,
+        aiAnalysis: completeDocument!.aiAnalysis,
+        uploadedAt: completeDocument!.uploadedAt,
         createdAt: completeDocument!.createdAt,
         updatedAt: completeDocument!.updatedAt,
-        creator: completeDocument!.creator,
-        files: completeDocument!.files,
-        linkedRisks: completeDocument!.linkedRisks.map(lr => lr.risk),
-        linkedControls: completeDocument!.linkedControls.map(lc => lc.control),
+        uploader: completeDocument!.uploader,
         _count: completeDocument!._count,
       },
       message: 'Document created successfully',

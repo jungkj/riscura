@@ -409,7 +409,9 @@ export function buildSearchQuery(
 // Database utilities
 export const db = {
   // Core Prisma client
-  client: prisma,
+  get client() {
+    return getSafePrismaClient();
+  },
   
   // Connection management
   connect: connectDatabase,

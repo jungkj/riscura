@@ -3,7 +3,6 @@ import { withAPI, createAPIResponse, ForbiddenError, ValidationError } from '@/l
 import { getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/middleware';
 import { db } from '@/lib/db';
 import { controlCreateSchema, controlUpdateSchema, controlBulkSchema, controlQuerySchema } from '@/lib/api/schemas';
-import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
 // GET /api/controls - List controls with advanced filtering
@@ -21,7 +20,7 @@ export const GET = withAPI(async (req: NextRequest) => {
     const validatedQuery = controlQuerySchema.parse(queryParams);
 
     // Build where clause
-    const where: Prisma.ControlWhereInput = {
+    const where: any = {
       organizationId: user.organizationId,
     };
 
@@ -30,46 +29,43 @@ export const GET = withAPI(async (req: NextRequest) => {
       where.OR = [
         { title: { contains: validatedQuery.search, mode: 'insensitive' } },
         { description: { contains: validatedQuery.search, mode: 'insensitive' } },
-        { controlId: { contains: validatedQuery.search, mode: 'insensitive' } },
-        { category: { contains: validatedQuery.search, mode: 'insensitive' } },
       ];
     }
 
     // Filter by category
     if (validatedQuery.category) {
-      where.category = validatedQuery.category;
+      where.category = validatedQuery.category as any;
     }
 
     // Filter by type
     if (validatedQuery.type) {
-      where.type = validatedQuery.type;
+      where.type = validatedQuery.type as any;
     }
 
     // Filter by status
     if (validatedQuery.status) {
-      where.status = validatedQuery.status;
+      where.status = validatedQuery.status as any;
     }
 
     // Filter by effectiveness
     if (validatedQuery.effectiveness) {
-      where.effectiveness = validatedQuery.effectiveness;
+      where.effectiveness = Number(validatedQuery.effectiveness);
     }
 
-    // Filter by implementation status
-    if (validatedQuery.implementationStatus) {
-      where.implementationStatus = validatedQuery.implementationStatus;
-    }
+    // Note: implementationStatus field not available in Control model
 
     // Filter by owner
     if (validatedQuery.ownerId) {
-      where.ownerId = validatedQuery.ownerId;
+      where.owner = validatedQuery.ownerId;
     }
 
     // Filter by framework
     if (validatedQuery.framework) {
-      where.frameworks = {
+      where.frameworkControls = {
         some: {
-          name: validatedQuery.framework,
+          framework: {
+            name: validatedQuery.framework,
+          },
         },
       };
     }
@@ -84,21 +80,21 @@ export const GET = withAPI(async (req: NextRequest) => {
     // Date range filters
     if (validatedQuery.createdAfter) {
       where.createdAt = {
-        ...where.createdAt,
+        ...(where.createdAt as any || {}),
         gte: new Date(validatedQuery.createdAfter),
       };
     }
 
     if (validatedQuery.createdBefore) {
       where.createdAt = {
-        ...where.createdAt,
+        ...(where.createdAt as any || {}),
         lte: new Date(validatedQuery.createdBefore),
       };
     }
 
-    // Review date filters
+    // Review date filters (using nextTestDate instead of nextReviewDate)
     if (validatedQuery.reviewDue) {
-      where.nextReviewDate = {
+      where.nextTestDate = {
         lte: new Date(),
       };
     }
@@ -107,9 +103,9 @@ export const GET = withAPI(async (req: NextRequest) => {
     const total = await db.client.control.count({ where });
 
     // Build orderBy
-    const orderBy: Prisma.ControlOrderByWithRelationInput = {};
+    const orderBy: any = {};
     if (validatedQuery.sortBy) {
-      orderBy[validatedQuery.sortBy as keyof Prisma.ControlOrderByWithRelationInput] = validatedQuery.sortOrder || 'asc';
+      orderBy[validatedQuery.sortBy as any] = validatedQuery.sortOrder || 'asc';
     } else {
       orderBy.updatedAt = 'desc';
     }
@@ -121,7 +117,7 @@ export const GET = withAPI(async (req: NextRequest) => {
       skip: validatedQuery.skip,
       take: validatedQuery.limit,
       include: {
-        owner: {
+        assignedUser: {
           select: {
             id: true,
             firstName: true,
@@ -130,7 +126,7 @@ export const GET = withAPI(async (req: NextRequest) => {
             avatar: true,
           },
         },
-        createdBy: {
+        creator: {
           select: {
             id: true,
             firstName: true,
@@ -138,45 +134,54 @@ export const GET = withAPI(async (req: NextRequest) => {
             email: true,
           },
         },
-        frameworks: {
+        frameworkControls: {
           select: {
             id: true,
-            name: true,
-            version: true,
+            framework: {
+              select: {
+                id: true,
+                name: true,
+                version: true,
+              },
+            },
           },
         },
         risks: {
           select: {
-            id: true,
-            title: true,
-            category: true,
-            level: true,
+            risk: {
+              select: {
+                id: true,
+                title: true,
+                category: true,
+                riskLevel: true,
+              },
+            },
           },
         },
-        documents: {
+        evidence: {
           select: {
             id: true,
-            title: true,
-            category: true,
+            name: true,
+            type: true,
           },
         },
-        assessments: {
+        controlAssessments: {
           select: {
             id: true,
             status: true,
-            score: true,
-            assessedAt: true,
+            effectiveness: true,
+            assessedDate: true,
           },
           orderBy: {
-            assessedAt: 'desc',
+            assessedDate: 'desc',
           },
           take: 1,
         },
         _count: {
           select: {
             risks: true,
-            documents: true,
-            assessments: true,
+            evidence: true,
+            controlAssessments: true,
           },
         },
       },
@@ -229,17 +234,17 @@ export const POST = withAPI(async (req: NextRequest) => {
     const body = await req.json();
     const validatedData = controlCreateSchema.parse(body);
 
-    // Check if control ID already exists
-    if (validatedData.controlId) {
+    // Note: Control model doesn't have controlId field, using title for uniqueness check
+    if (validatedData.title) {
       const existingControl = await db.client.control.findFirst({
         where: {
-          controlId: validatedData.controlId,
+          title: validatedData.title,
           organizationId: user.organizationId,
         },
       });
 
       if (existingControl) {
-        throw new ValidationError('Control ID already exists');
+        throw new ValidationError('Control with this title already exists');
       }
     }
 
@@ -258,14 +263,19 @@ export const POST = withAPI(async (req: NextRequest) => {
     }
 
     // Create control
+    const { evidence, implementationStatus, ownerId, nextReviewDate, implementationDate, lastTestedDate, nextTestDate, ...controlData } = validatedData;
     const control = await db.client.control.create({
       data: {
-        ...validatedData,
+        ...controlData,
+        description: controlData.description || '',
+        frequency: controlData.frequency || 'Annual',
+        owner: ownerId,
+        nextTestDate: nextTestDate,
         organizationId: user.organizationId,
-        createdById: user.id,
+        createdBy: user.id,
       },
       include: {
-        owner: {
+        assignedUser: {
           select: {
             id: true,
             firstName: true,
@@ -274,7 +284,7 @@ export const POST = withAPI(async (req: NextRequest) => {
             avatar: true,
           },
         },
-        createdBy: {
+        creator: {
           select: {
             id: true,
             firstName: true,
@@ -282,12 +292,12 @@ export const POST = withAPI(async (req: NextRequest) => {
             email: true,
           },
         },
-        frameworks: true,
+        frameworkControls: true,
         _count: {
           select: {
             risks: true,
-            documents: true,
-            assessments: true,
+            evidence: true,
+            controlAssessments: true,
           },
         },
       },
@@ -296,14 +306,13 @@ export const POST = withAPI(async (req: NextRequest) => {
     // Log activity
     await db.client.activity.create({
       data: {
-        type: 'CONTROL_CREATED',
+        type: 'CREATED',
         description: `Control "${control.title}" created`,
         userId: user.id,
         organizationId: user.organizationId,
         entityType: 'CONTROL',
         entityId: control.id,
         metadata: {
-          controlId: control.controlId,
           category: control.category,
           type: control.type,
         },
@@ -313,7 +322,8 @@ export const POST = withAPI(async (req: NextRequest) => {
     return createAPIResponse({
       data: control,
       message: 'Control created successfully',
-    }, 201);
+      statusCode: 201,
+    });
   } catch (error) {
     console.error('Error creating control:', error);
     if (error instanceof z.ZodError) {
@@ -349,26 +359,29 @@ export const PUT = withAPI(async (req: NextRequest) => {
         try {
           const validatedControl = controlCreateSchema.parse(controlData);
           
-          // Check for duplicate control ID
-          if (validatedControl.controlId) {
-            const existing = await db.client.control.findFirst({
-              where: {
-                controlId: validatedControl.controlId,
-                organizationId: user.organizationId,
-              },
-            });
+          // Check for duplicate control title
+          const existing = await db.client.control.findFirst({
+            where: {
+              title: validatedControl.title,
+              organizationId: user.organizationId,
+            },
+          });
 
-            if (existing) {
-              results.errors.push(`Control ID ${validatedControl.controlId} already exists`);
-              continue;
-            }
+          if (existing) {
+            results.errors.push(`Control with title "${validatedControl.title}" already exists`);
+            continue;
           }
 
+          const { evidence, implementationStatus, ownerId, nextReviewDate, implementationDate, lastTestedDate, nextTestDate, ...bulkControlData } = validatedControl;
           await db.client.control.create({
             data: {
-              ...validatedControl,
+              ...bulkControlData,
+              description: bulkControlData.description || '',
+              frequency: bulkControlData.frequency || 'Annual',
+              owner: ownerId,
+              nextTestDate: nextTestDate,
               organizationId: user.organizationId,
-              createdById: user.id,
+              createdBy: user.id,
             },
           });
 
@@ -385,6 +398,9 @@ export const PUT = withAPI(async (req: NextRequest) => {
         try {
           const { id, ...controlData } = updateData;
           const validatedControl = controlUpdateSchema.parse(controlData);
+          
+          // Remove fields that don't exist in the Prisma model or are relationships
+          const { evidence, implementationStatus, ownerId, nextReviewDate, implementationDate, lastTestedDate, nextTestDate, ...updateControlData } = validatedControl;
 
           const existing = await db.client.control.findFirst({
             where: {
@@ -400,7 +416,11 @@ export const PUT = withAPI(async (req: NextRequest) => {
 
           await db.client.control.update({
             where: { id },
-            data: validatedControl,
+            data: {
+              ...updateControlData,
+              owner: ownerId,
+              nextTestDate: nextTestDate,
+            },
           });
 
           results.updated++;
@@ -440,10 +460,12 @@ export const PUT = withAPI(async (req: NextRequest) => {
     // Log bulk activity
     await db.client.activity.create({
       data: {
-        type: 'CONTROLS_BULK_OPERATION',
+        type: 'UPDATED',
         description: `Bulk operation: ${results.created} created, ${results.updated} updated, ${results.deleted} deleted`,
         userId: user.id,
         organizationId: user.organizationId,
+        entityType: 'CONTROL',
+        entityId: '',
         metadata: {
           created: results.created,
           updated: results.updated,
@@ -509,10 +531,12 @@ export const DELETE = withAPI(async (req: NextRequest) => {
     // Log activity
     await db.client.activity.create({
       data: {
-        type: 'CONTROLS_BULK_DELETE',
+        type: 'DELETED',
         description: `Bulk deleted ${deleteResult.count} controls`,
         userId: user.id,
         organizationId: user.organizationId,
+        entityType: 'CONTROL',
+        entityId: '',
         metadata: {
           deletedCount: deleteResult.count,
           controlIds: ids,

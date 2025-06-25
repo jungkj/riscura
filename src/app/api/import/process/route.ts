@@ -263,35 +263,12 @@ async function processRiskData(
     // Calculate risk score
     risk.riskScore = risk.likelihood * risk.impact;
 
-    // AI enhancement if enabled
+    // AI enhancement if enabled (temporarily disabled)
     if (options.aiAnalysis && risk.description) {
       try {
-        const aiService = new AIService();
-        const enhancement = await aiService.generateContent({
-          type: 'risk_analysis',
-          context: {
-            title: risk.title,
-            description: risk.description,
-            category: risk.category
-          }
-        });
-
-        if (enhancement && enhancement.content) {
-          const enhancementData = typeof enhancement.content === 'string' 
-            ? JSON.parse(enhancement.content) 
-            : enhancement.content;
-          
-          if (enhancementData.suggestedCategory) {
-            risk.category = enhancementData.suggestedCategory;
-          }
-          if (enhancementData.suggestedLikelihood) {
-            risk.likelihood = enhancementData.suggestedLikelihood;
-          }
-          if (enhancementData.suggestedImpact) {
-            risk.impact = enhancementData.suggestedImpact;
-          }
-          risk.aiConfidence = enhancementData.confidence || 0.8;
-        }
+        // TODO: Re-implement AI enhancement when AIService is available
+        console.log('AI enhancement requested but not available');
+        risk.aiConfidence = 0.5; // Default confidence
       } catch (error) {
         console.error('AI enhancement failed for risk:', error);
       }
@@ -325,35 +302,12 @@ async function processControlData(
       aiConfidence: 0.8
     };
 
-    // AI enhancement if enabled
+    // AI enhancement if enabled (temporarily disabled)
     if (options.aiAnalysis && control.description) {
       try {
-        const aiService = new AIService();
-        const enhancement = await aiService.generateContent({
-          type: 'control_assessment',
-          context: {
-            title: control.title,
-            description: control.description,
-            type: control.type
-          }
-        });
-
-        if (enhancement && enhancement.content) {
-          const enhancementData = typeof enhancement.content === 'string' 
-            ? JSON.parse(enhancement.content) 
-            : enhancement.content;
-          
-          if (enhancementData.suggestedType) {
-            control.type = enhancementData.suggestedType;
-          }
-          if (enhancementData.suggestedCategory) {
-            control.category = enhancementData.suggestedCategory;
-          }
-          if (enhancementData.suggestedEffectiveness) {
-            control.effectiveness = enhancementData.suggestedEffectiveness;
-          }
-          control.aiConfidence = enhancementData.confidence || 0.8;
-        }
+        // TODO: Re-implement AI enhancement when AIService is available
+        console.log('AI enhancement requested but not available');
+        control.aiConfidence = 0.5; // Default confidence
       } catch (error) {
         console.error('AI enhancement failed for control:', error);
       }
@@ -420,24 +374,16 @@ async function extractRisksAndControls(textContent: string): Promise<{
   `;
 
   try {
-    const aiService = new AIService();
-    const response = await aiService.generateContent({
-      type: 'document_analysis',
-      context: { prompt, format: 'json' }
-    });
-
-    if (response && response.content) {
-      const result = typeof response.content === 'string' 
-        ? JSON.parse(response.content) 
-        : response.content;
-      
-      return {
-        risks: result.risks || [],
-        controls: result.controls || [],
-        confidence: result.confidence || 0.7,
-        summary: result.summary || 'Document analysis completed'
-      };
-    }
+    // TODO: Re-implement AI document analysis when AIService is available
+    console.log('AI document analysis requested but not available');
+    
+    // Return empty results for now
+    return {
+      risks: [],
+      controls: [],
+      confidence: 0.0,
+      summary: 'AI document analysis not available'
+    };
   } catch (error) {
     console.error('AI extraction failed:', error);
   }
