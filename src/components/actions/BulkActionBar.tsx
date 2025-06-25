@@ -6,6 +6,8 @@ import {
   ActionIcons, 
   StatusIcons, 
   DataIcons,
+  FileIcons,
+  UserIcons,
   RiskManagementIcons
 } from '@/components/icons/IconLibrary';
 import { LoadingStates, Spinner } from '@/components/states/LoadingState';
@@ -393,7 +395,7 @@ export function BulkActionBar<T = any>({
 
             {showItemCount && (
               <div className="flex items-center space-x-2">
-                <DataIcons.List size="xs" color="secondary" />
+                <DataIcons.Database size="xs" color="secondary" />
                 <span className="text-sm font-medium text-gray-900">
                   {selectedCount} of {totalItems} {selectedCount === 1 ? itemName : itemNamePlural} selected
                 </span>
@@ -480,7 +482,7 @@ export const commonBulkActions = {
     {
       id: 'archive',
       label: 'Archive',
-      icon: ActionIcons.Archive,
+      icon: FileIcons.Archive,
       color: 'secondary' as const,
       requiresConfirmation: true
     },
@@ -494,7 +496,7 @@ export const commonBulkActions = {
     {
       id: 'assign',
       label: 'Assign Owner',
-      icon: DataIcons.Users,
+      icon: UserIcons.Users,
       color: 'primary' as const,
       requiresConfirmation: false
     }
@@ -547,7 +549,7 @@ export const commonBulkActions = {
     {
       id: 'move',
       label: 'Move to Folder',
-      icon: ActionIcons.Move,
+      icon: FileIcons.Folder,
       color: 'secondary' as const,
       requiresConfirmation: false
     },

@@ -342,7 +342,6 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                {...getRootProps()}
                 className={`
                   border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200
                   ${isDragActive 
@@ -350,6 +349,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                     : 'border-gray-300 hover:border-gray-400 dark:border-gray-600 dark:hover:border-gray-500'
                   }
                 `}
+                {...getRootProps()}
               >
                 <input {...getInputProps()} />
                 <motion.div

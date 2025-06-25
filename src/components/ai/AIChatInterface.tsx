@@ -128,8 +128,8 @@ const sampleResponses = {
 
 Would you like me to analyze mitigation strategies for any of these risks?`,
     actions: [
-      { id: 'act-1', label: 'Analyze Mitigations', type: 'primary', action: 'analyze_mitigations' },
-      { id: 'act-2', label: 'Export Report', type: 'secondary', action: 'export_risks' },
+      { id: 'act-1', label: 'Analyze Mitigations', type: 'primary' as const, action: 'analyze_mitigations' },
+      { id: 'act-2', label: 'Export Report', type: 'secondary' as const, action: 'export_risks' },
     ],
   },
   'controls': {
@@ -155,8 +155,8 @@ Would you like me to analyze mitigation strategies for any of these risks?`,
 
 I recommend prioritizing CTL-001 and CTL-003 immediately due to their critical nature and overdue status.`,
     actions: [
-      { id: 'act-3', label: 'Schedule Testing', type: 'primary', action: 'schedule_testing' },
-      { id: 'act-4', label: 'View Calendar', type: 'secondary', action: 'view_calendar' },
+      { id: 'act-3', label: 'Schedule Testing', type: 'primary' as const, action: 'schedule_testing' },
+      { id: 'act-4', label: 'View Calendar', type: 'secondary' as const, action: 'view_calendar' },
     ],
   },
   'compliance': {
@@ -184,8 +184,8 @@ Current SOC 2 compliance score: **67%** (Needs Improvement)
 
 **Timeline to Full Compliance:** 6-8 weeks with recommended actions`,
     actions: [
-      { id: 'act-5', label: 'Download Report', type: 'primary', action: 'download_report' },
-      { id: 'act-6', label: 'View Action Plan', type: 'secondary', action: 'view_actions' },
+      { id: 'act-5', label: 'Download Report', type: 'primary' as const, action: 'download_report' },
+      { id: 'act-6', label: 'View Action Plan', type: 'secondary' as const, action: 'view_actions' },
     ],
   },
   'trends': {
@@ -218,8 +218,8 @@ Based on current trends, I predict:
 2. Accelerate compliance gap remediation
 3. Implement enhanced vendor risk monitoring`,
     actions: [
-      { id: 'act-7', label: 'Detailed Analysis', type: 'primary', action: 'detailed_analysis' },
-      { id: 'act-8', label: 'Export Trends', type: 'secondary', action: 'export_trends' },
+      { id: 'act-7', label: 'Detailed Analysis', type: 'primary' as const, action: 'detailed_analysis' },
+      { id: 'act-8', label: 'Export Trends', type: 'secondary' as const, action: 'export_trends' },
     ],
   },
 };
@@ -275,7 +275,7 @@ const ChatMessageComponent: React.FC<{
               <Button
                 key={action.id}
                 size="sm"
-                variant={action.type === 'primary' ? 'default' : 'outline'}
+                variant={action.type === 'primary' ? 'primary' : 'outline'}
                 className={cn(
                   "h-6 px-enterprise-2",
                   action.type === 'primary' && "bg-purple-600 hover:bg-purple-700"

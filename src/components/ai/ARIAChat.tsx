@@ -5,7 +5,6 @@ import { designTokens } from '@/lib/design-system/tokens';
 import { 
   ActionIcons, 
   StatusIcons, 
-  AIIcons, 
   RiskManagementIcons,
   CommunicationIcons,
   DataIcons,
@@ -393,7 +392,7 @@ Could you provide more specific details about what you'd like to explore? For ex
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-            <AIIcons.Brain size="sm" color="primary" />
+            <StatusIcons.Info size="sm" color="primary" />
           </div>
           <div>
             <h3 className="font-semibold text-gray-900">ARIA AI Assistant</h3>
