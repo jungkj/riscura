@@ -196,11 +196,8 @@ export const ContentSelectionProvider: React.FC<ContentSelectionProviderProps> =
       {/* AI Action Toolbar */}
       {isToolbarVisible && currentSelection && toolbarPosition && (
         <AIActionToolbar
-          selection={currentSelection}
-          position={toolbarPosition}
-          availableActions={availableActions}
-          onAction={(action) => handleAIAction(action, currentSelection)}
-          isProcessing={isProcessing}
+          context={currentSelection}
+          onActionComplete={(result) => console.log('Action completed:', result)}
         />
       )}
       

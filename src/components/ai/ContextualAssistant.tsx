@@ -3,10 +3,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { designTokens } from '@/lib/design-system/tokens';
 import { 
-  AIIcons, 
   StatusIcons, 
   RiskManagementIcons,
   ActionIcons,
+  NavigationIcons,
   CommunicationIcons
 } from '@/components/icons/IconLibrary';
 import { LoadingStates } from '@/components/states/LoadingState';
@@ -274,12 +274,12 @@ export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'tip': return AIIcons.Lightbulb;
-      case 'action': return ActionIcons.Play;
+      case 'tip': return StatusIcons.Info;
+      case 'action': return ActionIcons.Plus;
       case 'warning': return StatusIcons.AlertTriangle;
       case 'info': return StatusIcons.Info;
-      case 'shortcut': return ActionIcons.Zap;
-      default: return AIIcons.Brain;
+      case 'shortcut': return ActionIcons.Plus;
+      default: return StatusIcons.Info;
     }
   };
 
@@ -305,7 +305,7 @@ export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
         className="fixed bottom-4 right-4 w-12 h-12 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-colors z-50 flex items-center justify-center"
         aria-label="Show contextual assistant"
       >
-        <AIIcons.Brain size="sm" />
+        <StatusIcons.Info size="sm" />
       </button>
     );
   }
@@ -325,7 +325,7 @@ export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-            <AIIcons.Brain size="sm" color="primary" />
+            <StatusIcons.Info size="sm" color="primary" />
           </div>
           <div>
             <h3 className="font-semibold text-gray-900 text-sm">AI Assistant</h3>
@@ -344,7 +344,7 @@ export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
                   className="p-1 text-gray-400 hover:text-gray-600 rounded"
                   aria-label="Minimize assistant"
                 >
-                  <ActionIcons.Minimize size="xs" />
+                  <ActionIcons.Minus size="xs" />
                 </button>
               )}
               <button
@@ -352,7 +352,7 @@ export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
                 className="p-1 text-gray-400 hover:text-gray-600 rounded"
                 aria-label="Hide assistant"
               >
-                <ActionIcons.Close size="xs" />
+                <NavigationIcons.Close size="xs" />
               </button>
             </>
           )}
@@ -363,12 +363,12 @@ export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
       <div className="max-h-80 overflow-y-auto">
         {isLoading ? (
           <div className="p-4">
-            <LoadingStates.InlineLoading />
+            <div className="animate-pulse">Loading...</div>
           </div>
         ) : activeSuggestions.length === 0 ? (
           <div className="p-4 text-center">
             <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <AIIcons.Brain size="md" color="secondary" />
+              <StatusIcons.Info size="md" color="secondary" />
             </div>
             <p className="text-sm text-gray-500">
               No contextual suggestions available right now.
@@ -399,7 +399,7 @@ export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
                             className="ml-2 text-gray-400 hover:text-gray-600 flex-shrink-0"
                             aria-label="Dismiss suggestion"
                           >
-                            <ActionIcons.Close size="xs" />
+                            <NavigationIcons.Close size="xs" />
                           </button>
                         )}
                       </div>

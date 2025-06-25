@@ -375,7 +375,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
                         {isPaused ? <Play className="h-4 w-4 mr-2" /> : <Pause className="h-4 w-4 mr-2" />}
                         {isPaused ? 'Resume' : 'Pause'}
                       </Button>
-                      <Button onClick={stopProcessing} variant="destructive">
+                      <Button onClick={stopProcessing} variant="danger">
                         <Square className="h-4 w-4 mr-2" />
                         Stop
                       </Button>

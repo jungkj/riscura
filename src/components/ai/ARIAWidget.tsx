@@ -278,10 +278,7 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
         <AnimatePresence>
           {isOpen && (
             <ARIAChat
-              isOpen={isOpen}
-              onClose={() => setIsOpen(false)}
-              initialContext={initialContext}
-              mode="floating"
+              context="general"
               className="mb-4"
             />
           )}

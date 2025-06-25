@@ -3,7 +3,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { designTokens } from '@/lib/design-system/tokens';
 import { 
-  AIIcons, 
   StatusIcons, 
   RiskManagementIcons,
   ActionIcons,
@@ -54,7 +53,7 @@ const queryCategories = {
       text: 'Show me all high-risk items',
       category: 'Risk Analysis',
       description: 'Display risks with high severity scores',
-      icon: RiskManagementIcons.ShieldAlert,
+      icon: RiskManagementIcons.Risk,
       popularity: 95
     },
     {
@@ -362,7 +361,7 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
         <div className="flex items-start justify-between mb-3">
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-1">
-              <AIIcons.Brain size="sm" color="primary" />
+                              <StatusIcons.Info size="sm" color="primary" />
               <span className="text-sm font-medium text-gray-900">AI Analysis</span>
               <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
                 result.confidence > 0.9 ? 'bg-green-100 text-green-800' :

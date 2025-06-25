@@ -338,10 +338,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
         <CardContent>
           <AnimatePresence>
             {files.length === 0 ? (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
+              <div
                 className={`
                   border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200
                   ${isDragActive 
@@ -373,7 +370,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                     </p>
                   </div>
                 </motion.div>
-              </motion.div>
+              </div>
             ) : (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -609,7 +606,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                                 )}
                               </Button>
                               <Button
-                                variant={risk.approved ? "default" : "outline"}
+                                variant={risk.approved ? "primary" : "outline"}
                                 size="sm"
                                 onClick={() => toggleRiskApproval(risk.id)}
                                 className={risk.approved ? "bg-green-600 hover:bg-green-700" : ""}
@@ -711,7 +708,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                                 )}
                               </Button>
                               <Button
-                                variant={control.approved ? "default" : "outline"}
+                                variant={control.approved ? "primary" : "outline"}
                                 size="sm"
                                 onClick={() => toggleControlApproval(control.id)}
                                 className={control.approved ? "bg-green-600 hover:bg-green-700" : ""}

@@ -122,7 +122,7 @@ const ContextModeSelector: React.FC<{
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                variant={currentMode === mode.value ? 'default' : 'ghost'}
+                variant={currentMode === mode.value ? 'primary' : 'ghost'}
                 size="sm"
                 onClick={() => onModeChange(mode.value)}
                 className="flex-1 text-xs px-2 py-1"
