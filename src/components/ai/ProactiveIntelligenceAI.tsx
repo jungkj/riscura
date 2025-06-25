@@ -731,7 +731,7 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
                     </div>
                     <Button 
                       onClick={handleToggleMonitoring}
-                      variant={isMonitoringActive ? "destructive" : "default"}
+                      variant={isMonitoringActive ? "danger" : "primary"}
                       className="gap-2"
                     >
                       {isMonitoringActive ? (

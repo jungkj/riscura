@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
-import { CommunicationIcons, StatusIcons, ActionIcons } from '@/components/icons/IconLibrary';
+import { CommunicationIcons, StatusIcons, ActionIcons, NavigationIcons } from '@/components/icons/IconLibrary';
 
 // Voice interface configuration
 interface VoiceSettings {
@@ -286,7 +286,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       <Card className={className}>
         <CardContent className="p-4">
           <div className="text-center text-gray-500">
-            <CommunicationIcons.MicrophoneOff className="h-8 w-8 mx-auto mb-2" />
+            <StatusIcons.XCircle className="h-8 w-8 mx-auto mb-2" />
             <p>Voice interface is not supported in this browser</p>
           </div>
         </CardContent>

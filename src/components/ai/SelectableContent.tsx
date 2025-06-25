@@ -283,11 +283,17 @@ export const SelectableContent: React.FC<SelectableContentProps> = ({
       <AnimatePresence>
         {showToolbar && currentSelection && aiActionsEnabled && (
           <AIActionToolbar
-            selection={currentSelection}
-            position={toolbarPosition}
-            onAction={handleAIAction}
-            availableActions={getAvailableActions()}
-            isProcessing={isProcessing}
+            context={{
+              selection: currentSelection,
+              position: toolbarPosition,
+              availableActions: getAvailableActions(),
+              isProcessing
+            }}
+            selectedData={currentSelection ? [currentSelection] : []}
+            onActionComplete={async (result) => {
+              // Handle action completion
+              console.log('AI Action completed:', result);
+            }}
           />
         )}
       </AnimatePresence>

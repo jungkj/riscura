@@ -7,9 +7,12 @@ import {
   RiskManagementIcons,
   ActionIcons,
   DataIcons,
-  CommunicationIcons
+  CommunicationIcons,
+  TimeIcons,
+  UserIcons,
+  FileIcons
 } from '@/components/icons/IconLibrary';
-import { LoadingStates } from '@/components/states/LoadingState';
+import { LoadingStates, Spinner, InlineLoading } from '@/components/states/LoadingState';
 import { EmptyStates } from '@/components/states/EmptyState';
 
 // Query types and interfaces
@@ -79,7 +82,7 @@ const queryCategories = {
       text: 'What is our overall compliance status?',
       category: 'Compliance',
       description: 'Summary of compliance across all frameworks',
-      icon: RiskManagementIcons.ClipboardCheck,
+      icon: RiskManagementIcons.Compliance,
       popularity: 91
     },
     {
@@ -95,7 +98,7 @@ const queryCategories = {
       text: 'What compliance deadlines are coming up?',
       category: 'Compliance',
       description: 'List upcoming compliance review dates',
-      icon: ActionIcons.Calendar,
+      icon: TimeIcons.Calendar,
       popularity: 79
     }
   ],
@@ -105,7 +108,7 @@ const queryCategories = {
       text: 'How effective are our security controls?',
       category: 'Controls',
       description: 'Analyze control performance and effectiveness',
-      icon: RiskManagementIcons.Shield,
+      icon: UserIcons.Shield,
       popularity: 84
     },
     {
@@ -113,7 +116,7 @@ const queryCategories = {
       text: 'Which areas lack adequate controls?',
       category: 'Controls',
       description: 'Identify risks without sufficient controls',
-      icon: RiskManagementIcons.Target,
+      icon: RiskManagementIcons.Risk,
       popularity: 76
     }
   ],
@@ -123,7 +126,7 @@ const queryCategories = {
       text: 'Generate an executive risk summary',
       category: 'Reporting',
       description: 'Create a high-level risk overview for leadership',
-      icon: DataIcons.FileText,
+      icon: FileIcons.FileText,
       popularity: 93
     },
     {
@@ -131,7 +134,7 @@ const queryCategories = {
       text: 'Show risks by department',
       category: 'Reporting',
       description: 'Break down risk exposure by organizational unit',
-      icon: DataIcons.Users,
+      icon: UserIcons.Users,
       popularity: 71
     }
   ]
@@ -507,7 +510,7 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-            <CommunicationIcons.Message size="sm" color="primary" />
+            <CommunicationIcons.MessageSquare size="sm" color="primary" />
           </div>
           <div>
             <h2 className="font-semibold text-gray-900">Natural Language Query</h2>
@@ -541,9 +544,9 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
               aria-label="Submit query"
             >
               {isLoading ? (
-                <LoadingStates.Spinner size="sm" />
+                <Spinner size="sm" />
               ) : (
-                <CommunicationIcons.Message size="sm" />
+                <CommunicationIcons.MessageSquare size="sm" />
               )}
             </button>
           </div>
@@ -634,7 +637,7 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
       <div className="p-4">
         {isLoading && (
           <div className="text-center py-8">
-            <LoadingStates.InlineLoading />
+            <InlineLoading />
             <p className="text-sm text-gray-500 mt-2">Processing your query...</p>
           </div>
         )}

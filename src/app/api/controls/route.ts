@@ -262,18 +262,32 @@ export const POST = withAPI(async (req: NextRequest) => {
       }
     }
 
-    // Create control
+        // Create control
     const { evidence, implementationStatus, ownerId, nextReviewDate, implementationDate, lastTestedDate, nextTestDate, ...controlData } = validatedData;
+    
+    // Prepare data for Prisma create operation
+    const createData = {
+      title: controlData.title,
+      description: controlData.description || '',
+      type: controlData.type,
+      category: controlData.category,
+      frequency: controlData.frequency || 'Annual',
+      automationLevel: controlData.automationLevel || 'MANUAL',
+      effectiveness: controlData.effectiveness ? controlData.effectiveness / 100 : 0,
+      status: controlData.status || 'PLANNED',
+      priority: controlData.priority,
+      effort: controlData.effort,
+      cost: controlData.cost,
+      tags: controlData.tags || [],
+      customFields: {},
+      owner: ownerId,
+      nextTestDate: nextTestDate ? new Date(nextTestDate) : undefined,
+      organizationId: user.organizationId,
+      createdBy: user.id,
+    };
+
     const control = await db.client.control.create({
-      data: {
-        ...controlData,
-        description: controlData.description || '',
-        frequency: controlData.frequency || 'Annual',
-        owner: ownerId,
-        nextTestDate: nextTestDate,
-        organizationId: user.organizationId,
-        createdBy: user.id,
-      },
+      data: createData,
       include: {
         assignedUser: {
           select: {
@@ -373,16 +387,30 @@ export const PUT = withAPI(async (req: NextRequest) => {
           }
 
           const { evidence, implementationStatus, ownerId, nextReviewDate, implementationDate, lastTestedDate, nextTestDate, ...bulkControlData } = validatedControl;
+          
+          // Prepare data for Prisma create operation
+          const bulkCreateData = {
+            title: bulkControlData.title,
+            description: bulkControlData.description || '',
+            type: bulkControlData.type,
+            category: bulkControlData.category,
+            frequency: bulkControlData.frequency || 'Annual',
+            automationLevel: bulkControlData.automationLevel || 'MANUAL',
+            effectiveness: bulkControlData.effectiveness ? bulkControlData.effectiveness / 100 : 0,
+            status: bulkControlData.status || 'PLANNED',
+            priority: bulkControlData.priority,
+            effort: bulkControlData.effort,
+            cost: bulkControlData.cost,
+            tags: bulkControlData.tags || [],
+            customFields: {},
+            owner: ownerId,
+            nextTestDate: nextTestDate ? new Date(nextTestDate) : undefined,
+            organizationId: user.organizationId,
+            createdBy: user.id,
+          };
+
           await db.client.control.create({
-            data: {
-              ...bulkControlData,
-              description: bulkControlData.description || '',
-              frequency: bulkControlData.frequency || 'Annual',
-              owner: ownerId,
-              nextTestDate: nextTestDate,
-              organizationId: user.organizationId,
-              createdBy: user.id,
-            },
+            data: bulkCreateData,
           });
 
           results.created++;
