@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-config';
 import { ReportingService, ReportConfig, ReportFormat, ReportType } from '@/services/ReportingService';
 import { db } from '@/lib/db';
@@ -7,7 +7,7 @@ import { db } from '@/lib/db';
 export async function POST(request: NextRequest) {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions) as any;
     if (!session?.user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
@@ -146,7 +146,7 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions) as any;
     if (!session?.user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
