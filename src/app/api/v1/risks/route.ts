@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
 
     // 5. Build database query
     const where: any = {
-      organizationId: session.user.organizationId
+      organizationId: (session.user as any).organizationId
     };
 
     // Apply filters
@@ -285,7 +285,7 @@ export async function POST(request: NextRequest) {
       const ownerExists = await prisma.user.findFirst({
         where: {
           id: riskOwner,
-          organizationId: session.user.organizationId
+          organizationId: (session.user as any).organizationId
         }
       });
       if (!ownerExists) {
@@ -298,7 +298,7 @@ export async function POST(request: NextRequest) {
       const controlsCount = await prisma.control.count({
         where: {
           id: { in: linkedControls },
-          organizationId: session.user.organizationId
+          organizationId: (session.user as any).organizationId
         }
       });
       if (controlsCount !== linkedControls.length) {
@@ -325,8 +325,8 @@ export async function POST(request: NextRequest) {
         riskLevel,
         owner: riskOwner,
 
-        organizationId: session.user.organizationId,
-        createdBy: session.user.id,
+        organizationId: (session.user as any).organizationId,
+        createdBy: (session.user as any).id,
       },
       include: {
         assignedUser: {
