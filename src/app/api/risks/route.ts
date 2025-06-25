@@ -4,11 +4,10 @@ import { createRiskSchema, riskQuerySchema } from '@/lib/api/schemas';
 import { getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/middleware';
 import { db } from '@/lib/db';
 import { PERMISSIONS } from '@/lib/auth';
-import { RiskCategory, RiskStatus, RiskLevel } from '@prisma/client';
 
 // Enum mapping functions with proper validation
-const mapRiskCategory = (apiCategory: string): RiskCategory => {
-  const mapping: Record<string, RiskCategory> = {
+const mapRiskCategory = (apiCategory: string): string => {
+  const mapping: Record<string, string> = {
     'operational': 'OPERATIONAL',
     'financial': 'FINANCIAL', 
     'strategic': 'STRATEGIC',
@@ -18,8 +17,8 @@ const mapRiskCategory = (apiCategory: string): RiskCategory => {
   return mapping[apiCategory.toLowerCase()] || 'OPERATIONAL';
 };
 
-const mapRiskStatus = (apiStatus: string): RiskStatus => {
-  const mapping: Record<string, RiskStatus> = {
+const mapRiskStatus = (apiStatus: string): string => {
+  const mapping: Record<string, string> = {
     'identified': 'IDENTIFIED',
     'assessed': 'ASSESSED', 
     'mitigated': 'MITIGATED',
@@ -32,7 +31,7 @@ const calculateRiskScore = (likelihood: number, impact: number): number => {
   return likelihood * impact;
 };
 
-const calculateRiskLevel = (riskScore: number): RiskLevel => {
+const calculateRiskLevel = (riskScore: number): string => {
   if (riskScore <= 4) return 'LOW';
   if (riskScore <= 8) return 'MEDIUM';
   if (riskScore <= 12) return 'HIGH';
@@ -41,7 +40,7 @@ const calculateRiskLevel = (riskScore: number): RiskLevel => {
 
 // GET /api/risks - List risks with pagination and filtering
 export const GET = withAPI(
-  withValidation(riskQuerySchema)(async (req: NextRequest, query) => {
+  withValidation(riskQuerySchema)(async (req: NextRequest, query = {}) => {
     const authReq = req as AuthenticatedRequest;
     const user = getAuthenticatedUser(authReq);
 
@@ -57,7 +56,7 @@ export const GET = withAPI(
 
     // Parse sorting
     const orderBy = parseSorting(searchParams, {
-      defaultSort: 'createdAt',
+      defaultField: 'createdAt',
       defaultOrder: 'desc',
       allowedFields: ['title', 'riskScore', 'riskLevel', 'status', 'category', 'createdAt', 'updatedAt'],
     });
@@ -132,7 +131,7 @@ export const GET = withAPI(
                 control: {
                   select: {
                     id: true,
-                    name: true,
+                    title: true,
                     status: true,
                     effectiveness: true,
                   },
@@ -142,8 +141,7 @@ export const GET = withAPI(
             evidence: {
               select: {
                 id: true,
-                title: true,
-                category: true,
+                name: true,
                 createdAt: true,
               },
               take: 5, // Limit evidence to avoid payload bloat
@@ -185,25 +183,14 @@ export const GET = withAPI(
         _count: risk._count,
       }));
 
-      const paginationMeta = createPaginationMeta({
-        page,
-        limit,
-        total,
-        itemCount: risks.length,
-      });
+      const paginationMeta = createPaginationMeta(page, limit, total);
 
-      return createAPIResponse({
-        data: transformedRisks,
-                  meta: {
-            pagination: paginationMeta,
-            total,
-            filters: {
-              category: query.category,
-              status: query.status,
-              search,
-            },
-          },
-      });
+      return createAPIResponse(
+        transformedRisks,
+        {
+          pagination: paginationMeta,
+        }
+      );
     } catch (error) {
       console.error('Error fetching risks:', error);
       throw new Error('Failed to fetch risks');
@@ -221,6 +208,8 @@ export const POST = withAPI(
       throw new ForbiddenError('Authentication required');
     }
 
+    if (!data) throw new Error('Request body is required');
+
     try {
       // Calculate risk score and level
       const riskScore = calculateRiskScore(data.likelihood, data.impact);
@@ -230,12 +219,12 @@ export const POST = withAPI(
         data: {
           title: data.title,
           description: data.description,
-          category: mapRiskCategory(data.category),
+          category: mapRiskCategory(data.category) as any,
           likelihood: data.likelihood,
           impact: data.impact,
           riskScore,
-          riskLevel,
-          status: data.status ? mapRiskStatus(data.status) : 'IDENTIFIED',
+          riskLevel: riskLevel as any,
+          status: data.status ? mapRiskStatus(data.status) as any : 'IDENTIFIED' as any,
           dateIdentified: data.dateIdentified ? new Date(data.dateIdentified) : new Date(),
           owner: data.owner,
           organizationId: user.organizationId,

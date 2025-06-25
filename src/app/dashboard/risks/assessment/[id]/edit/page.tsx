@@ -23,7 +23,7 @@ import {
 export default function EditAssessmentPage() {
   const router = useRouter();
   const params = useParams();
-  const assessmentId = params.id;
+  const assessmentId = params?.id;
 
   // Mock form state
   const [formData, setFormData] = useState({

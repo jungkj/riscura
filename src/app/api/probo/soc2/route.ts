@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ProboService } from '@/services/ProboService';
 import { db } from '@/lib/db';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
+import { authOptions } from '@/lib/auth/auth.config';
 
 export async function GET(request: NextRequest) {
   try {
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     const framework = await proboService.getSOC2Framework();
     
     // Import SOC 2 framework into the organization
-    const existingFramework = await db.complianceFramework.findFirst({
+    const existingFramework = await db.client.complianceFramework.findFirst({
       where: {
         organizationId,
         name: framework.name,
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create compliance framework
-    const createdFramework = await db.complianceFramework.create({
+    const createdFramework = await db.client.complianceFramework.create({
       data: {
         name: framework.name,
         version: framework.version,
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
 
     // Create framework requirements
     for (const requirement of framework.requirements) {
-      await db.frameworkRequirement.create({
+      await db.client.frameworkRequirement.create({
         data: {
           frameworkId: createdFramework.id,
           title: requirement.title,
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
     // Link existing controls or create new ones
     for (const control of framework.controls) {
       // Check if control exists
-      let existingControl = await db.control.findFirst({
+      let existingControl = await db.client.control.findFirst({
         where: {
           organizationId,
           title: control.name
@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
 
       // Create control if it doesn't exist
       if (!existingControl) {
-        existingControl = await db.control.create({
+        existingControl = await db.client.control.create({
           data: {
             title: control.name,
             description: control.description,
@@ -103,14 +103,14 @@ export async function POST(request: NextRequest) {
             category: 'TECHNICAL',
             frequency: 'QUARTERLY',
             organizationId,
-            createdBy: session.user.id,
+            createdBy: (session.user as any).id || 'system',
             status: 'PLANNED'
           }
         });
       }
 
       // Create framework control mapping
-      await db.frameworkControl.create({
+      await db.client.frameworkControl.create({
         data: {
           frameworkId: createdFramework.id,
           controlId: existingControl.id,
@@ -121,7 +121,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const completeFramework = await db.complianceFramework.findUnique({
+    const completeFramework = await db.client.complianceFramework.findUnique({
       where: { id: createdFramework.id },
       include: {
         controls: {

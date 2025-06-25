@@ -239,7 +239,7 @@ function ARIAChat() {
                     {quickQuestions.map((question, index) => (
                       <Button
                         key={index}
-                        variant="tertiary"
+                        variant="ghost"
                         size="sm"
                         className="text-left justify-start text-sm h-auto py-3 px-4"
                         onClick={() => setInput(question)}

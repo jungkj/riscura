@@ -74,10 +74,7 @@ async function handler(request: NextRequest) {
 
 // Apply CSRF protection to POST, PUT, DELETE, PATCH methods
 export const GET = handler;
-export const POST = withCSRFProtection(handler, { 
-  method: 'token',
-  excludePaths: [] // Don't exclude this test endpoint
-});
+export const POST = withCSRFProtection(handler);
 export const PUT = withCSRFProtection(handler);
 export const DELETE = withCSRFProtection(handler);
 export const PATCH = withCSRFProtection(handler); 

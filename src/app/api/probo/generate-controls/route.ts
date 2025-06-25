@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     const config: ProboIntegrationConfig = {
       apiEndpoint: process.env.PROBO_API_ENDPOINT || 'https://api.probo.com',
       apiKey: process.env.PROBO_API_KEY || 'demo-key',
-      organizationId: session.user.organizationId || 'default-org',
+      organizationId: (session.user as any).organizationId || 'default-org',
       enableAI: process.env.PROBO_ENABLE_AI === 'true',
       autoApplyRecommendations: false,
       confidenceThreshold: 0.8,
@@ -45,13 +45,14 @@ export async function POST(request: NextRequest) {
       customCategories: []
     };
 
-    const proboService = new ProboIntegrationService(config);
+    // Get Probo service instance
+    const proboService = ProboIntegrationService.getInstance();
 
     // Generate controls
     const response = await proboService.generateControlsForRisk(body);
 
     // Log the generation for analytics
-    console.log(`Generated ${response.controls.length} controls for risk ${body.riskId} by user ${session.user.id}`);
+    console.log(`Generated ${response.controls.length} controls for risk ${body.riskId} by user ${(session.user as any).id || session.user.email}`);
 
     return NextResponse.json(response);
 
@@ -86,11 +87,17 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const riskId = searchParams.get('riskId');
 
-    // Mock response for demonstration
-    const response = {
-      status: 'ready',
-      lastGeneration: null,
-      availableFrameworks: ['SOC2', 'ISO27001', 'GDPR', 'HIPAA'],
+    // Get Probo service instance
+    const proboService = ProboIntegrationService.getInstance();
+
+    // Get integration status and metrics
+    const status = await proboService.getIntegrationStatus();
+    const metrics = await proboService.getIntegrationMetrics();
+
+    return NextResponse.json({
+      status: status.health,
+      lastGeneration: status.usage.lastActivity,
+      availableFrameworks: ['SOC2', 'ISO27001', 'GDPR', 'HIPAA', 'PCI-DSS'],
       supportedCategories: [
         'Access Control',
         'Data Protection',
@@ -100,13 +107,11 @@ export async function GET(request: NextRequest) {
         'Vendor Management'
       ],
       usage: {
-        controlsGenerated: 0,
-        mappingsCreated: 0,
-        lastActivity: new Date().toISOString()
+        controlsGenerated: metrics.totalControls,
+        mappingsCreated: metrics.implementedControls,
+        lastActivity: metrics.lastUpdated.toISOString()
       }
-    };
-
-    return NextResponse.json(response);
+    });
 
   } catch (error) {
     console.error('Error getting generation status:', error);

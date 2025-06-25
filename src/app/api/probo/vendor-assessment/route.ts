@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ProboService, VendorAssessment } from '@/services/ProboService';
 import { db } from '@/lib/db';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
+import { authOptions } from '@/lib/auth/auth.config';
 
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     const assessment: VendorAssessment = await proboService.assessVendor(websiteUrl);
     
     // Check if vendor already exists
-    let vendor = await db.vendor.findFirst({
+    let vendor = await db.client.vendor.findFirst({
       where: {
         organizationId,
         OR: [
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
 
     // Create vendor if it doesn't exist
     if (!vendor) {
-      vendor = await db.vendor.create({
+      vendor = await db.client.vendor.create({
         data: {
           name: assessment.vendorInfo.name,
           legalName: assessment.vendorInfo.legalName,
@@ -66,13 +66,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Create vendor assessment record
-    const vendorAssessment = await db.vendorAssessment.create({
+    const vendorAssessment = await db.client.vendorAssessment.create({
       data: {
         vendorId: vendor.id,
         assessmentType: 'INITIAL',
         riskScore: assessment.riskScore,
         complianceStatus: assessment.complianceStatus as any,
-        assessedBy: session.user.id,
+        assessedBy: (session.user as any).id || 'system',
         vendorSnapshot: assessment.vendorInfo as any,
         securityScore: Math.max(0, 100 - assessment.riskScore),
         privacyScore: assessment.vendorInfo.privacyPolicyURL ? 85 : 40,
@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
 
     // Create vendor findings
     for (const finding of assessment.findings) {
-      await db.vendorFinding.create({
+      await db.client.vendorFinding.create({
         data: {
           assessmentId: vendorAssessment.id,
           category: finding.category,
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get complete assessment with relationships
-    const completeAssessment = await db.vendorAssessment.findUnique({
+    const completeAssessment = await db.client.vendorAssessment.findUnique({
       where: { id: vendorAssessment.id },
       include: {
         vendor: true,
@@ -127,7 +127,7 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -147,7 +147,7 @@ export async function GET(request: NextRequest) {
       whereClause.vendorId = vendorId;
     }
 
-    const assessments = await db.vendorAssessment.findMany({
+    const assessments = await db.client.vendorAssessment.findMany({
       where: whereClause,
       include: {
         vendor: true,

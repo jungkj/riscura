@@ -72,7 +72,7 @@ interface DashboardMetrics {
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    const timeRange = searchParams.get('timeRange') || '1h';
+    const timeRange: string = searchParams.get('timeRange') ?? '1h';
     const includeHistorical = searchParams.get('historical') === 'true';
 
     // Collect current metrics
@@ -164,7 +164,7 @@ export async function GET(request: NextRequest) {
       {
         success: false,
         error: 'Failed to retrieve dashboard metrics',
-        details: process.env.NODE_ENV === 'development' ? error.message : undefined,
+        details: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.message : String(error)) : undefined,
       },
       { status: 500 }
     );
@@ -274,11 +274,16 @@ async function getBusinessTrends(timeRange: string) {
  * Get system health status
  */
 async function getSystemHealth() {
-  const health = {
-    overall: 'healthy' as const,
-    database: 'healthy' as const,
-    redis: 'healthy' as const,
-    externalServices: 'healthy' as const,
+  const health: {
+    overall: 'healthy' | 'degraded' | 'unhealthy';
+    database: 'healthy' | 'degraded' | 'unhealthy';
+    redis: 'healthy' | 'degraded' | 'unhealthy';
+    externalServices: 'healthy' | 'degraded' | 'unhealthy';
+  } = {
+    overall: 'healthy',
+    database: 'healthy',
+    redis: 'healthy',
+    externalServices: 'healthy',
   };
 
   try {
@@ -383,7 +388,7 @@ async function getHistoricalMetrics(timeRange: string) {
  */
 function getTimeIntervals(timeRange: string): number[] {
   const now = Date.now();
-  const intervals = [];
+  const intervals: number[] = [];
   
   let duration: number;
   let step: number;

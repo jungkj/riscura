@@ -35,7 +35,7 @@ interface EmailResponse {
 const createTransporter = () => {
   if (process.env.SENDGRID_API_KEY) {
     // Use SendGrid if available
-    return nodemailer.createTransporter({
+    return nodemailer.createTransport({
       service: 'SendGrid',
       auth: {
         user: 'apikey',
@@ -44,7 +44,7 @@ const createTransporter = () => {
     });
   } else if (process.env.SMTP_HOST) {
     // Use custom SMTP
-    return nodemailer.createTransporter({
+    return nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT || '587'),
       secure: process.env.SMTP_PORT === '465', // true for 465, false for other ports
@@ -150,7 +150,7 @@ export async function POST(request: NextRequest) {
           },
           extra: {
             subject: payload.subject,
-            error: emailError.message,
+            error: emailError instanceof Error ? emailError.message : String(emailError),
           },
         });
       }
@@ -181,7 +181,7 @@ export async function POST(request: NextRequest) {
       {
         success: false,
         error: 'Failed to send email notification',
-        details: process.env.NODE_ENV === 'development' ? error.message : undefined,
+        details: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.message : String(error)) : undefined,
       },
       { status: 500 }
     );

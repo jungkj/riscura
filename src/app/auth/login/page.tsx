@@ -74,6 +74,7 @@ function LoginForm() {
     setFormData({
       email: 'admin@riscura.com',
       password: 'admin123',
+      rememberMe: false,
     });
   };
 

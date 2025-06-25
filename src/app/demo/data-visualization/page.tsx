@@ -126,7 +126,39 @@ export default function DataVisualizationDemo() {
                 </div>
               </CardHeader>
               <CardContent>
-                <InteractiveRiskHeatmap height={400} />
+                <InteractiveRiskHeatmap 
+                  height={400} 
+                  data={[
+                    {
+                      id: '1',
+                      title: 'Data Breach Risk',
+                      category: 'Security',
+                      likelihood: 3,
+                      impact: 5,
+                      riskScore: 15,
+                      owner: 'Security Team',
+                      status: 'Open',
+                      lastAssessed: new Date(),
+                      trend: 'increasing',
+                      controlsCount: 5,
+                      residualRisk: 12
+                    },
+                    {
+                      id: '2',
+                      title: 'System Downtime',
+                      category: 'Operational',
+                      likelihood: 2,
+                      impact: 4,
+                      riskScore: 8,
+                      owner: 'IT Team',
+                      status: 'In Progress',
+                      lastAssessed: new Date(),
+                      trend: 'stable',
+                      controlsCount: 3,
+                      residualRisk: 6
+                    }
+                  ]}
+                />
               </CardContent>
             </Card>
             
@@ -147,7 +179,56 @@ export default function DataVisualizationDemo() {
                 </div>
               </CardHeader>
               <CardContent>
-                <TrendAnalysisChart height={400} />
+                <TrendAnalysisChart 
+                  height={400}
+                  data={[
+                    {
+                      date: '2024-01-01',
+                      totalRisks: 120,
+                      criticalRisks: 12,
+                      highRisks: 24,
+                      mediumRisks: 48,
+                      lowRisks: 36,
+                      newRisks: 5,
+                      closedRisks: 3,
+                      averageRiskScore: 7.2,
+                      residualRisk: 5.8,
+                      mitigationEffectiveness: 78.5,
+                      complianceScore: 87.3,
+                      controlEffectiveness: 82.1
+                    },
+                    {
+                      date: '2024-01-15',
+                      totalRisks: 118,
+                      criticalRisks: 10,
+                      highRisks: 26,
+                      mediumRisks: 46,
+                      lowRisks: 36,
+                      newRisks: 3,
+                      closedRisks: 5,
+                      averageRiskScore: 7.0,
+                      residualRisk: 5.6,
+                      mitigationEffectiveness: 80.2,
+                      complianceScore: 88.1,
+                      controlEffectiveness: 83.4
+                    },
+                    {
+                      date: '2024-02-01',
+                      totalRisks: 115,
+                      criticalRisks: 8,
+                      highRisks: 25,
+                      mediumRisks: 47,
+                      lowRisks: 35,
+                      newRisks: 4,
+                      closedRisks: 7,
+                      averageRiskScore: 6.8,
+                      residualRisk: 5.4,
+                      mitigationEffectiveness: 82.1,
+                      complianceScore: 89.2,
+                      controlEffectiveness: 84.7
+                    }
+                  ]}
+                />
               </CardContent>
             </Card>
             

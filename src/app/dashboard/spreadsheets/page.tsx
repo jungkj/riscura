@@ -394,7 +394,7 @@ export default function SpreadsheetsPage() {
           </Select>
           <div className="flex items-center border rounded-md">
             <Button
-              variant={viewMode === 'grid' ? 'default' : 'ghost'}
+              variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('grid')}
               className="rounded-r-none"
@@ -402,7 +402,7 @@ export default function SpreadsheetsPage() {
               <Grid className="h-4 w-4" />
             </Button>
             <Button
-              variant={viewMode === 'list' ? 'default' : 'ghost'}
+              variant={viewMode === 'list' ? 'secondary' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('list')}
               className="rounded-l-none"

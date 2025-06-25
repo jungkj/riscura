@@ -4,10 +4,7 @@ import { z } from 'zod';
 
 import { authOptions } from '@/lib/auth/auth-options';
 import { prisma } from '@/lib/database/prisma';
-import { 
-  ApiResponseFormatter, 
-  VersionedResponseFormatter 
-} from '@/lib/api/response-formatter';
+import { ApiResponseFormatter } from '@/lib/api/response-formatter';
 import { 
   globalErrorHandler, 
   createAuthError, 
@@ -54,9 +51,9 @@ export async function GET(request: NextRequest) {
       throw createAuthError();
     }
 
-    // 4. Input validation
-    const url = new URL(request.url);
-    const queryValidation = validateQueryParams(RiskQuerySchema, url.searchParams);
+    // 4. Parse and validate query parameters
+    const queryValidation = validateQueryParams(RiskQuerySchema, request.nextUrl.searchParams);
+
     if (!queryValidation.success) {
       return ApiResponseFormatter.validationError(
         queryValidation.errors.map(error => ({
@@ -69,12 +66,12 @@ export async function GET(request: NextRequest) {
     }
 
     const {
-      page,
-      limit,
-      sort,
-      order,
+      page = 1,
+      limit = 10,
       search,
       category,
+      sort,
+      order,
       likelihood,
       impact,
       riskScore,
@@ -118,7 +115,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (owner) {
-      where.riskOwnerId = owner;
+      where.owner = owner;
     }
 
     if (tags && tags.length > 0) {
@@ -137,22 +134,37 @@ export async function GET(request: NextRequest) {
     const [risks, total] = await Promise.all([
       prisma.risk.findMany({
         where,
-        include: {
-          riskOwner: {
-            select: { id: true, name: true, email: true }
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          category: true,
+          likelihood: true,
+          impact: true,
+          riskScore: true,
+          riskLevel: true,
+          owner: true,
+          status: true,
+          createdAt: true,
+          updatedAt: true,
+          assignedUser: {
+            select: { id: true, firstName: true, lastName: true, email: true }
           },
           controls: {
-            select: { 
-              id: true, 
-              title: true, 
-              type: true, 
-              effectiveness: true 
+            include: {
+              control: {
+                select: {
+                  id: true,
+                  title: true,
+                  type: true,
+                  effectiveness: true
+                }
+              }
             }
           },
           _count: {
             select: {
               controls: true,
-              assessments: true
             }
           }
         },
@@ -173,21 +185,26 @@ export async function GET(request: NextRequest) {
       impact: risk.impact,
       riskScore: risk.likelihood * risk.impact,
       riskLevel: calculateRiskLevel(risk.likelihood * risk.impact),
-      tags: risk.tags,
-      owner: risk.riskOwner,
-      controls: risk.controls,
+      status: risk.status,
+      owner: risk.assignedUser,
+      controls: risk.controls.map(c => c.control),
       controlCount: risk._count.controls,
-      assessmentCount: risk._count.assessments,
       createdAt: risk.createdAt,
       updatedAt: risk.updatedAt
     }));
 
     // 8. Return paginated response with rate limit headers
-    const response = VersionedResponseFormatter.paginated(
+    const response = ApiResponseFormatter.paginated(
       transformedRisks,
-      { page, limit, total },
-      version,
-      ApiResponseFormatter.createResponseOptions(request)
+      {
+        page,
+        limit,
+        total
+      },
+      {
+        version,
+        ...ApiResponseFormatter.createResponseOptions(request)
+      }
     );
 
     // Add rate limit headers
@@ -256,10 +273,7 @@ export async function POST(request: NextRequest) {
       likelihood,
       impact,
       riskOwner,
-      tags,
-      dueDate,
-      linkedControls,
-      metadata
+      linkedControls
     } = validation.data;
 
     // 6. Business logic validation
@@ -309,31 +323,27 @@ export async function POST(request: NextRequest) {
         impact,
         riskScore,
         riskLevel,
-        riskOwnerId: riskOwner,
-        tags: tags || [],
-        dueDate: dueDate ? new Date(dueDate) : null,
-        metadata: metadata || {},
+        owner: riskOwner,
+
         organizationId: session.user.organizationId,
-        createdById: session.user.id,
-        updatedById: session.user.id
+        createdBy: session.user.id,
       },
       include: {
-        riskOwner: {
-          select: { id: true, name: true, email: true }
+        assignedUser: {
+          select: { id: true, firstName: true, lastName: true, email: true }
         },
-        createdBy: {
-          select: { id: true, name: true, email: true }
+        creator: {
+          select: { id: true, firstName: true, lastName: true, email: true }
         }
       }
     });
 
     // 8. Link controls if provided
     if (linkedControls && linkedControls.length > 0) {
-      await prisma.riskControl.createMany({
+      await prisma.controlRiskMapping.createMany({
         data: linkedControls.map(controlId => ({
           riskId: risk.id,
           controlId,
-          createdById: session.user.id
         }))
       });
     }
@@ -342,55 +352,56 @@ export async function POST(request: NextRequest) {
     const completeRisk = await prisma.risk.findUnique({
       where: { id: risk.id },
       include: {
-        riskOwner: {
-          select: { id: true, name: true, email: true }
+        assignedUser: {
+          select: { id: true, firstName: true, lastName: true, email: true }
         },
         controls: {
-          select: { 
-            id: true, 
-            title: true, 
-            type: true, 
-            effectiveness: true 
+          include: {
+            control: {
+              select: {
+                id: true,
+                title: true,
+                type: true,
+                effectiveness: true
+              }
+            }
           }
-        },
-        createdBy: {
-          select: { id: true, name: true, email: true }
         },
         _count: {
           select: {
             controls: true,
-            assessments: true
           }
+        },
+        creator: {
+          select: { id: true, firstName: true, lastName: true, email: true }
         }
       }
     });
 
-    // 10. Transform response data
-    const responseData = {
+    // 10. Transform and return response
+    const transformedRisk = {
       id: completeRisk!.id,
       title: completeRisk!.title,
       description: completeRisk!.description,
       category: completeRisk!.category,
       likelihood: completeRisk!.likelihood,
       impact: completeRisk!.impact,
-      riskScore: completeRisk!.riskScore,
-      riskLevel: completeRisk!.riskLevel,
-      tags: completeRisk!.tags,
-      dueDate: completeRisk!.dueDate,
-      owner: completeRisk!.riskOwner,
+      riskScore: completeRisk!.likelihood * completeRisk!.impact,
+      riskLevel: calculateRiskLevel(completeRisk!.likelihood * completeRisk!.impact),
+      status: completeRisk!.status,
+      owner: completeRisk!.assignedUser,
       controls: completeRisk!.controls,
       controlCount: completeRisk!._count.controls,
-      assessmentCount: completeRisk!._count.assessments,
-      createdBy: completeRisk!.createdBy,
+      createdBy: completeRisk!.creator,
       createdAt: completeRisk!.createdAt,
       updatedAt: completeRisk!.updatedAt
     };
 
     // 11. Return success response
-    const response = VersionedResponseFormatter.success(
-      responseData,
-      version,
+    const response = ApiResponseFormatter.success(
+      transformedRisk,
       {
+        version,
         status: 201,
         ...ApiResponseFormatter.createResponseOptions(request)
       }

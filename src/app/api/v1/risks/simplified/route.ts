@@ -53,19 +53,23 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       db.client.risk.findMany({
         where,
         include: {
-          riskOwner: {
+          assignedUser: {
             select: { id: true, firstName: true, lastName: true, email: true }
           },
           controls: {
-            select: { 
-              id: true, 
-              title: true, 
-              type: true, 
-              effectiveness: true 
+            include: {
+              control: {
+                select: { 
+                  id: true, 
+                  title: true, 
+                  type: true, 
+                  effectiveness: true 
+                }
+              }
             }
           },
           _count: {
-            select: { controls: true, assessments: true }
+            select: { controls: true }
           }
         },
         orderBy: { updatedAt: 'desc' },
@@ -85,15 +89,14 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       impact: risk.impact,
       riskScore: risk.likelihood * risk.impact,
       riskLevel: risk.riskLevel,
-      tags: risk.tags,
-      owner: risk.riskOwner ? {
-        id: risk.riskOwner.id,
-        name: `${risk.riskOwner.firstName} ${risk.riskOwner.lastName}`,
-        email: risk.riskOwner.email
+      status: risk.status,
+      owner: risk.assignedUser ? {
+        id: risk.assignedUser.id,
+        name: `${risk.assignedUser.firstName} ${risk.assignedUser.lastName}`,
+        email: risk.assignedUser.email
       } : null,
-      controls: risk.controls,
+      controls: risk.controls.map(c => c.control),
       controlCount: risk._count.controls,
-      assessmentCount: risk._count.assessments,
       createdAt: risk.createdAt,
       updatedAt: risk.updatedAt
     }));
@@ -181,18 +184,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         impact,
         riskScore,
         riskLevel,
-        riskOwnerId: riskOwnerId || null,
-        tags: tags || [],
-        dueDate: dueDate ? new Date(dueDate) : null,
+        owner: riskOwnerId || null,
         organizationId: user.organizationId,
-        createdById: user.id,
-        updatedById: user.id
+        createdBy: user.id,
       },
       include: {
-        riskOwner: {
+        assignedUser: {
           select: { id: true, firstName: true, lastName: true, email: true }
         },
-        createdBy: {
+        creator: {
           select: { id: true, firstName: true, lastName: true, email: true }
         }
       }

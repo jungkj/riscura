@@ -38,12 +38,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Process each metric
+    const ip = request.headers.get('x-forwarded-for') || 
+              request.headers.get('x-real-ip') || 
+              'unknown';
+    
     const processedMetrics = payload.metrics.map(metric => ({
       ...metric,
       receivedAt: Date.now(),
-      ip: request.ip || 'unknown',
-      country: request.geo?.country || 'unknown',
-      city: request.geo?.city || 'unknown',
+      ip,
+      country: (request as any).geo?.country || 'unknown',
+      city: (request as any).geo?.city || 'unknown',
     }));
 
     // Store metrics in Redis with TTL
@@ -184,7 +188,7 @@ async function storeAggregatedMetrics(metrics: any[]) {
 
 // Check for performance alerts
 async function checkPerformanceAlerts(metrics: any[]) {
-  const alerts = [];
+  const alerts: any[] = [];
   const thresholds = {
     LCP: 2500,
     FID: 100,

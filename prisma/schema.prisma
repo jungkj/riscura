@@ -715,6 +715,13 @@ model Report {
   sharedWith     String[]     @default([])
   exportFormats  String[]     @default([])
   
+  // Scheduling fields
+  isScheduled    Boolean      @default(false)
+  frequency      String?      // daily, weekly, monthly, quarterly
+  recipients     String[]     @default([])
+  nextRun        DateTime?
+  lastRun        DateTime?
+  
   // Multi-tenant isolation
   organizationId String
   
@@ -732,6 +739,7 @@ model Report {
   @@index([organizationId])
   @@index([type])
   @@index([status])
+  @@index([isScheduled])
   @@map("reports")
 }
 

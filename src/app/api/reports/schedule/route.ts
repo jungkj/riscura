@@ -1,21 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { reportingService } from '@/services/ReportingService';
-
-// Mock authentication - replace with actual auth
-const getCurrentUser = (request: NextRequest) => {
-  // In production, extract from JWT token or session
-  return {
-    id: 'user_123',
-    email: 'user@example.com',
-    name: 'John Doe',
-  };
-};
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/auth-config';
+import { ReportingService, ReportType, ReportFormat } from '@/services/ReportingService';
+import { db } from '@/lib/db';
 
 export async function POST(request: NextRequest) {
   try {
-    const user = getCurrentUser(request);
-    if (!user) {
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Get user's organization
+    const user = await db.client.user.findUnique({
+      where: { id: (session.user as any).id || 'unknown' },
+      select: { organizationId: true },
+    });
+
+    if (!user?.organizationId) {
+      return NextResponse.json(
+        { error: 'User organization not found' },
+        { status: 400 }
+      );
     }
 
     const body = await request.json();
@@ -56,28 +63,29 @@ export async function POST(request: NextRequest) {
     }
 
     // Create scheduled report
+    const reportingService = new ReportingService();
     const scheduledReport = await reportingService.scheduleReport({
-      templateId,
       name,
-      frequency,
-      recipients,
+      type: ReportType.RISK_ASSESSMENT,
+      template: templateId,
       parameters: parameters || {},
-      userId: user.id,
+      filters: {},
+      format: [ReportFormat.PDF],
+      organizationId: user.organizationId,
+      createdBy: (session.user as any).id || 'unknown',
+      isScheduled: true,
+      schedule: {
+        frequency,
+        time: '00:00',
+        timezone: 'UTC',
+        enabled: true
+      },
+      recipients,
     });
 
     return NextResponse.json({
       success: true,
-      scheduledReport: {
-        id: scheduledReport.id,
-        templateId: scheduledReport.templateId,
-        name: scheduledReport.name,
-        frequency: scheduledReport.frequency,
-        recipients: scheduledReport.recipients,
-        parameters: scheduledReport.parameters,
-        nextRun: scheduledReport.nextRun,
-        status: scheduledReport.status,
-        createdAt: scheduledReport.createdAt,
-      },
+      scheduledReport,
     });
   } catch (error) {
     console.error('Error creating scheduled report:', error);
@@ -90,27 +98,38 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const user = getCurrentUser(request);
-    if (!user) {
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const scheduledReports = await reportingService.getScheduledReports(user.id);
+    // Get user's organization
+    const user = await db.client.user.findUnique({
+      where: { id: (session.user as any).id || 'unknown' },
+      select: { organizationId: true },
+    });
 
-    // Enrich with template information
-    const templates = await reportingService.getReportTemplates();
-    const enrichedReports = scheduledReports.map(report => {
-      const template = templates.find(t => t.id === report.templateId);
-      return {
-        ...report,
-        templateName: template?.name || 'Unknown Template',
-        templateDescription: template?.description || '',
-      };
+    if (!user?.organizationId) {
+      return NextResponse.json(
+        { error: 'User organization not found' },
+        { status: 400 }
+      );
+    }
+
+    const scheduledReports = await db.client.report.findMany({
+      where: {
+        organizationId: user.organizationId,
+        isScheduled: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     return NextResponse.json({
       success: true,
-      scheduledReports: enrichedReports,
+      scheduledReports,
     });
   } catch (error) {
     console.error('Error fetching scheduled reports:', error);
@@ -123,9 +142,23 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const user = getCurrentUser(request);
-    if (!user) {
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Get user's organization
+    const user = await db.client.user.findUnique({
+      where: { id: (session.user as any).id || 'unknown' },
+      select: { organizationId: true },
+    });
+
+    if (!user?.organizationId) {
+      return NextResponse.json(
+        { error: 'User organization not found' },
+        { status: 400 }
+      );
     }
 
     const body = await request.json();
@@ -182,16 +215,18 @@ export async function PUT(request: NextRequest) {
     if (parameters !== undefined) updates.parameters = parameters;
     if (status !== undefined) updates.status = status;
 
-    // Note: This would need to be implemented in the ReportingService
-    // For now, we'll return a mock response
+    const updatedReport = await db.client.report.update({
+      where: {
+        id,
+        organizationId: user.organizationId,
+      },
+      data: updates,
+    });
+
     return NextResponse.json({
       success: true,
       message: 'Scheduled report updated successfully',
-      scheduledReport: {
-        id,
-        ...updates,
-        updatedAt: new Date().toISOString(),
-      },
+      scheduledReport: updatedReport,
     });
   } catch (error) {
     console.error('Error updating scheduled report:', error);
@@ -204,9 +239,23 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const user = getCurrentUser(request);
-    if (!user) {
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Get user's organization
+    const user = await db.client.user.findUnique({
+      where: { id: (session.user as any).id || 'unknown' },
+      select: { organizationId: true },
+    });
+
+    if (!user?.organizationId) {
+      return NextResponse.json(
+        { error: 'User organization not found' },
+        { status: 400 }
+      );
     }
 
     const { searchParams } = new URL(request.url);
@@ -219,8 +268,13 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    // Note: This would need to be implemented in the ReportingService
-    // For now, we'll return a mock response
+    await db.client.report.delete({
+      where: {
+        id,
+        organizationId: user.organizationId,
+      },
+    });
+
     return NextResponse.json({
       success: true,
       message: 'Scheduled report deleted successfully',

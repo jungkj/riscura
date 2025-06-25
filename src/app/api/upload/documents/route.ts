@@ -18,8 +18,8 @@ const fileUploadSchema = z.object({
   retentionDate: z.string().datetime().optional(),
 });
 
-// POST /api/upload/documents - Upload document files
-export const POST = withAPI(async (req: NextRequest) => {
+// POST /api/upload/documents - Upload one or more documents
+export const POST = withAPI(async (req: NextRequest): Promise<NextResponse> => {
   const authReq = req as AuthenticatedRequest;
   const user = getAuthenticatedUser(authReq);
 
@@ -43,7 +43,7 @@ export const POST = withAPI(async (req: NextRequest) => {
     const metadata = JSON.parse(metadataStr);
     const validatedMetadata = fileUploadSchema.parse(metadata);
 
-    const uploadedDocuments: Array<{ document: any; file: any }> = [];
+    const uploadedDocuments: Array<{ document: any }> = [];
 
     for (const file of files) {
       // Validate file
@@ -75,62 +75,45 @@ export const POST = withAPI(async (req: NextRequest) => {
       // Create document record in database
       const document = await db.client.document.create({
         data: {
-          title: validatedMetadata.title,
-          description: validatedMetadata.description,
-          category: validatedMetadata.category,
-          status: 'DRAFT',
-          version: '1.0',
-          tags: validatedMetadata.tags,
-          confidentiality: validatedMetadata.confidentiality,
-          reviewDate: validatedMetadata.reviewDate ? new Date(validatedMetadata.reviewDate) : null,
-          retentionDate: validatedMetadata.retentionDate ? new Date(validatedMetadata.retentionDate) : null,
-          organizationId: user.organizationId,
-          createdBy: user.id,
-        },
-      });
-
-      // Create file record
-      const fileRecord = await db.client.documentFile.create({
-        data: {
-          documentId: document.id,
-          filename: file.name,
-          originalName: file.name,
-          mimeType: file.type,
+          name: file.name,
+          type: file.type,
           size: file.size,
-          path: uploadResult.path,
-          url: uploadResult.url,
-          checksum: uploadResult.checksum,
-          uploadedBy: user.id,
+          content: uploadResult.path,
+          extractedText: null,
+          uploadedAt: new Date(),
           organizationId: user.organizationId,
+          uploadedBy: user.id,
         },
       });
 
       // Link to risks and controls
       if (validatedMetadata.linkedRiskIds.length > 0) {
-        await db.client.documentRiskLink.createMany({
-          data: validatedMetadata.linkedRiskIds.map((riskId: string) => ({
-            documentId: document.id,
-            riskId,
-            organizationId: user.organizationId,
-          })),
+        await db.client.document.update({
+          where: { id: document.id },
+          data: {
+            riskEvidence: {
+              connect: validatedMetadata.linkedRiskIds.map((riskId: string) => ({ id: riskId })),
+            },
+          },
         });
       }
 
       if (validatedMetadata.linkedControlIds.length > 0) {
-        await db.client.documentControlLink.createMany({
-          data: validatedMetadata.linkedControlIds.map((controlId: string) => ({
-            documentId: document.id,
-            controlId,
-            organizationId: user.organizationId,
-          })),
+        await db.client.document.update({
+          where: { id: document.id },
+          data: {
+            controlEvidence: {
+              connect: validatedMetadata.linkedControlIds.map((controlId: string) => ({ id: controlId })),
+            },
+          },
         });
       }
 
       // Log activity
       await db.client.activity.create({
         data: {
-          type: 'DOCUMENT_UPLOADED',
-          description: `Document "${document.title}" uploaded`,
+          type: 'UPLOADED',
+          description: `Document "${document.name}" uploaded`,
           userId: user.id,
           organizationId: user.organizationId,
           entityType: 'DOCUMENT',
@@ -138,14 +121,13 @@ export const POST = withAPI(async (req: NextRequest) => {
           metadata: {
             filename: file.name,
             size: file.size,
-            category: document.category,
+            type: file.type,
           },
         },
       });
 
       uploadedDocuments.push({
         document,
-        file: fileRecord,
       });
     }
 
@@ -241,7 +223,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
 
     // Extract and process ZIP file
     const extractedFiles = await extractZipFile(zipFile);
-    const uploadedDocuments: Array<{ document: any; file: any }> = [];
+    const uploadedDocuments: Array<{ document: any }> = [];
 
     for (const extractedFile of extractedFiles) {
       // Validate each extracted file
@@ -276,52 +258,35 @@ export const PUT = withAPI(async (req: NextRequest) => {
       // Create document record
       const document = await db.client.document.create({
         data: {
-          title: extractedFile.name.replace(/\.[^/.]+$/, ''), // Remove extension
-          description: `Bulk uploaded from ${zipFile.name}`,
-          category: metadata.defaultCategory || 'OTHER',
-          status: 'DRAFT',
-          version: '1.0',
-          tags: metadata.defaultTags || [],
-          confidentiality: metadata.defaultConfidentiality || 'INTERNAL',
-          organizationId: user.organizationId,
-          createdBy: user.id,
-        },
-      });
-
-      // Create file record
-      const fileRecord = await db.client.documentFile.create({
-        data: {
-          documentId: document.id,
-          filename: extractedFile.name,
-          originalName: extractedFile.name,
-          mimeType: extractedFile.file.type,
+          name: extractedFile.name.replace(/\.[^/.]+$/, ''), // Remove extension
+          type: extractedFile.file.type,
           size: extractedFile.file.size,
-          path: uploadResult.path,
-          url: uploadResult.url,
-          checksum: uploadResult.checksum,
-          uploadedBy: user.id,
+          content: uploadResult.path,
+          extractedText: null,
+          uploadedAt: new Date(),
           organizationId: user.organizationId,
+          uploadedBy: user.id,
         },
       });
 
       uploadedDocuments.push({
         document,
-        file: fileRecord,
       });
     }
 
     // Log bulk upload activity
     await db.client.activity.create({
       data: {
-        type: 'BULK_DOCUMENT_UPLOAD',
+        type: 'UPLOADED',
         description: `Bulk upload: ${uploadedDocuments.length} documents from ${zipFile.name}`,
         userId: user.id,
         organizationId: user.organizationId,
+        entityType: 'DOCUMENT',
+        entityId: uploadedDocuments[0].document.id,
         metadata: {
-          zipFilename: zipFile.name,
-          zipSize: zipFile.size,
-          documentsUploaded: uploadedDocuments.length,
-          totalFilesInZip: extractedFiles.length,
+          filename: zipFile.name,
+          size: zipFile.size,
+          documentCount: uploadedDocuments.length,
         },
       },
     });
@@ -375,14 +340,10 @@ export const DELETE = withAPI(async (req: NextRequest) => {
       throw new Error('Document ID is required');
     }
 
-    // Get document with files
+    // Get document details
     const document = await db.client.document.findUnique({
       where: {
         id: documentId,
-        organizationId: user.organizationId,
-      },
-      include: {
-        files: true,
       },
     });
 
@@ -390,12 +351,12 @@ export const DELETE = withAPI(async (req: NextRequest) => {
       throw new Error('Document not found');
     }
 
-    // Delete files from storage
-    for (const file of document.files) {
+    // Delete file from storage
+    if (document.content) {
       try {
-        await deleteFileFromStorage(file.path);
+        await deleteFileFromStorage(document.content);
       } catch (error) {
-        console.warn(`Failed to delete file from storage: ${file.path}`, error);
+        console.warn(`Failed to delete file from storage: ${document.content}`, error);
       }
     }
 
@@ -407,13 +368,14 @@ export const DELETE = withAPI(async (req: NextRequest) => {
     // Log activity
     await db.client.activity.create({
       data: {
-        type: 'DOCUMENT_DELETED',
-        description: `Document "${document.title}" deleted`,
+        type: 'DELETED',
+        description: `Document "${document.name}" deleted`,
         userId: user.id,
         organizationId: user.organizationId,
+        entityType: 'DOCUMENT',
+        entityId: document.id,
         metadata: {
-          documentTitle: document.title,
-          filesDeleted: document.files.length,
+          documentName: document.name,
         },
       },
     });
