@@ -86,12 +86,12 @@ export const POST = withAPI(async (req: NextRequest) => {
       data: {
         organizationId: user.organizationId,
         type: 'CHECKOUT_CREATED',
-        amount: (selectedPlan.price || 0) * 100, // Store in cents
-        currency: 'USD',
-        metadata: {
+        eventData: {
           plan,
           isTrial,
-          sessionId: session.id
+          sessionId: session.id,
+          amount: (selectedPlan.price || 0) * 100, // Store in cents
+          currency: 'USD'
         }
       }
     });

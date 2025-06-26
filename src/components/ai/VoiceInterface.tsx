@@ -299,7 +299,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold flex items-center space-x-2">
-            <CommunicationIcons.Microphone className="h-5 w-5" />
+            <CommunicationIcons.Bell className="h-5 w-5" />
             <span>Voice Interface</span>
           </CardTitle>
           <div className="flex items-center space-x-2">
