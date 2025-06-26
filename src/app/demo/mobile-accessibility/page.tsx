@@ -218,7 +218,7 @@ export default function MobileAccessibilityDemo() {
 
   // Demo actions
   const handleOfflineDataUpdate = () => {
-    updateOfflineData(prev => ({
+    updateOfflineData((prev: { count: number; lastUpdate: number }) => ({
       count: prev.count + 1,
       lastUpdate: Date.now()
     }));
