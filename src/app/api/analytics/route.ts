@@ -95,7 +95,7 @@ async function getDashboardAnalytics(organizationId: string, startDate: Date) {
     db.client.control.aggregate({
       where: { 
         organizationId, 
-        effectiveness: { not: null }
+        effectiveness: { gt: 0 }
       },
       _avg: { effectiveness: true },
       _count: { id: true }
@@ -242,7 +242,7 @@ async function getControlAnalytics(organizationId: string, startDate: Date) {
     db.client.control.aggregate({
       where: { 
         organizationId,
-        effectiveness: { not: null }
+        effectiveness: { gt: 0 }
       },
       _avg: { effectiveness: true },
       _min: { effectiveness: true },
@@ -263,9 +263,9 @@ async function getControlAnalytics(organizationId: string, startDate: Date) {
       }))
     },
     effectiveness: {
-      average: effectivenessStats._avg.effectiveness || 0,
-      min: effectivenessStats._min.effectiveness || 0,
-      max: effectivenessStats._max.effectiveness || 0,
+      average: effectivenessStats._avg?.effectiveness || 0,
+      min: effectivenessStats._min?.effectiveness || 0,
+      max: effectivenessStats._max?.effectiveness || 0,
       total: effectivenessStats._count || 0
     }
   };
