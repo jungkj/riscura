@@ -140,7 +140,7 @@ export default function RiskDetailPage({ riskId }: RiskDetailPageProps) {
             <Edit className="h-4 w-4 mr-2" />
             Edit
           </Button>
-          <Button variant="destructive" size="sm">
+          <Button variant="danger" size="sm">
             <Trash2 className="h-4 w-4 mr-2" />
             Delete
           </Button>

@@ -449,7 +449,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                   <Download className="mr-2 h-4 w-4" />
                   Export
                 </Button>
-                <Button variant="destructive" size="sm" onClick={handleBulkDelete}>
+                <Button variant="danger" size="sm" onClick={handleBulkDelete}>
                   <Trash2 className="mr-2 h-4 w-4" />
                   Delete
                 </Button>
@@ -611,7 +611,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                     <Button
                       key={page}
-                      variant={currentPage === page ? 'default' : 'outline'}
+                      variant={currentPage === page ? 'primary' : 'outline'}
                       size="sm"
                       onClick={() => setCurrentPage(page)}
                       className="w-8 h-8 p-0"

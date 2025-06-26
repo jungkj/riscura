@@ -253,7 +253,7 @@ export default function CollaborativeQuestionnairePage({
               {/* Mode switcher */}
               <div className="flex items-center bg-gray-100 rounded-lg p-1">
                 <Button
-                  variant={currentMode === 'view' ? 'default' : 'ghost'}
+                  variant={currentMode === 'view' ? 'primary' : 'ghost'}
                   size="sm"
                   onClick={() => setCurrentMode('view')}
                   className="h-8 px-3"
@@ -262,7 +262,7 @@ export default function CollaborativeQuestionnairePage({
                   View
                 </Button>
                 <Button
-                  variant={currentMode === 'edit' ? 'default' : 'ghost'}
+                  variant={currentMode === 'edit' ? 'primary' : 'ghost'}
                   size="sm"
                   onClick={() => setCurrentMode('edit')}
                   className="h-8 px-3"
@@ -271,7 +271,7 @@ export default function CollaborativeQuestionnairePage({
                   Edit
                 </Button>
                 <Button
-                  variant={currentMode === 'collaborate' ? 'default' : 'ghost'}
+                  variant={currentMode === 'collaborate' ? 'primary' : 'ghost'}
                   size="sm"
                   onClick={() => setCurrentMode('collaborate')}
                   className="h-8 px-3"

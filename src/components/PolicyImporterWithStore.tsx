@@ -388,7 +388,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                                   </Button>
                                   <Button
                                     size="sm"
-                                    variant={isApproved ? "default" : "outline"}
+                                    variant={isApproved ? "primary" : "outline"}
                                     onClick={() => toggleApproval(itemId)}
                                   >
                                     {isApproved ? (
@@ -474,7 +474,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                                   </Button>
                                   <Button
                                     size="sm"
-                                    variant={isApproved ? "default" : "outline"}
+                                    variant={isApproved ? "primary" : "outline"}
                                     onClick={() => toggleApproval(itemId)}
                                   >
                                     {isApproved ? (

@@ -782,7 +782,7 @@ const BillingDashboard: React.FC = () => {
                   </div>
                   <Button 
                     className="w-full mt-6"
-                    variant={billingData.subscription.plan === plan.name.toUpperCase() ? 'outline' : 'default'}
+                    variant={billingData.subscription.plan === plan.name.toUpperCase() ? 'outline' : 'primary'}
                     disabled={billingData.subscription.plan === plan.name.toUpperCase()}
                     onClick={() => handlePlanUpgrade(plan.id)}
                   >

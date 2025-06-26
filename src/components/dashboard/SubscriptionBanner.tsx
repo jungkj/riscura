@@ -41,7 +41,7 @@ export function SubscriptionBanner() {
               <strong>Free Plan:</strong> You're using the free plan with limited features. 
               Upgrade to unlock advanced risk management capabilities.
             </div>
-            <Button asChild size="sm" variant="default" className="ml-4">
+            <Button asChild size="sm" variant="primary" className="ml-4">
               <Link href="/billing/upgrade">
                 <Crown className="h-4 w-4 mr-2" />
                 Upgrade Plan
@@ -59,7 +59,7 @@ export function SubscriptionBanner() {
               <strong>Payment Past Due:</strong> Your subscription payment is overdue. 
               Please update your payment method to continue accessing premium features.
             </div>
-            <Button asChild size="sm" variant="destructive" className="ml-4">
+            <Button asChild size="sm" variant="danger" className="ml-4">
               <Link href="/billing/manage">
                 Update Payment
               </Link>

@@ -166,6 +166,7 @@ export default function TrendAnalysisChart({
   const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d' | '1y'>('30d');
   const [showMovingAverage, setShowMovingAverage] = useState(true);
   const [showTrendLine, setShowTrendLine] = useState(true);
+  const [localShowForecast, setShowForecast] = useState(showForecast);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [selectedTab, setSelectedTab] = useState('overview');
   
@@ -194,9 +195,9 @@ export default function TrendAnalysisChart({
   
   // Generate forecast data
   const forecastData = useMemo(() => {
-    if (!showForecast) return [];
+    if (!localShowForecast) return [];
     return generateForecast(filteredData, selectedMetric, forecastPeriod);
-  }, [filteredData, selectedMetric, showForecast, forecastPeriod]);
+  }, [filteredData, selectedMetric, localShowForecast, forecastPeriod]);
   
   // Combine historical and forecast data for display
   const combinedData = useMemo(() => {
@@ -326,13 +327,13 @@ export default function TrendAnalysisChart({
       },
       trendStats,
       historicalData: filteredData,
-      forecastData: showForecast ? forecastData : [],
-      settings: {
-        showMovingAverage,
-        showTrendLine,
-        showForecast,
-        forecastPeriod
-      }
+      forecastData: localShowForecast ? forecastData : [],
+              settings: {
+          showMovingAverage,
+          showTrendLine,
+          showForecast: localShowForecast,
+          forecastPeriod
+        }
     };
     
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
@@ -555,28 +556,28 @@ export default function TrendAnalysisChart({
           
           <div className="flex items-center space-x-2">
             <Button
-              variant={chartType === 'line' ? 'default' : 'outline'}
+              variant={chartType === 'line' ? 'primary' : 'outline'}
               size="sm"
               onClick={() => setChartType('line')}
             >
               <LineChartIcon className="w-4 h-4" />
             </Button>
             <Button
-              variant={chartType === 'area' ? 'default' : 'outline'}
+              variant={chartType === 'area' ? 'primary' : 'outline'}
               size="sm"
               onClick={() => setChartType('area')}
             >
               <AreaChartIcon className="w-4 h-4" />
             </Button>
             <Button
-              variant={chartType === 'bar' ? 'default' : 'outline'}
+              variant={chartType === 'bar' ? 'primary' : 'outline'}
               size="sm"
               onClick={() => setChartType('bar')}
             >
               <BarChart3 className="w-4 h-4" />
             </Button>
             <Button
-              variant={chartType === 'composed' ? 'default' : 'outline'}
+              variant={chartType === 'composed' ? 'primary' : 'outline'}
               size="sm"
               onClick={() => setChartType('composed')}
             >
@@ -597,7 +598,7 @@ export default function TrendAnalysisChart({
             <div className="flex items-center space-x-2">
               <Switch
                 id="forecast"
-                checked={showForecast}
+                checked={localShowForecast}
                 onCheckedChange={setShowForecast}
               />
               <Label htmlFor="forecast" className="text-sm">Forecast</Label>

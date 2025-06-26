@@ -468,7 +468,7 @@ const ControlLibrary: React.FC = () => {
         }
         break;
       default:
-        toast.info(`Action "${action}" not yet implemented for ${control.title}`);
+        toast(`Action "${action}" not yet implemented for ${control.title}`);
     }
   };
 

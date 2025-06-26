@@ -7,9 +7,11 @@ import {
   AIRequest, 
   AgentType,
   ConversationMessage,
-  RiskAnalysis,
-  ControlRecommendation,
   MessageAttachment
+} from '@/types/ai.types';
+import type { 
+  RiskAnalysis as ImportedRiskAnalysis,
+  ControlRecommendation as ImportedControlRecommendation
 } from '@/types/ai.types';
 import { Risk } from '@/types';
 import { generateId } from '@/lib/utils';
@@ -192,7 +194,7 @@ class CircuitBreaker {
   }
 }
 
-export interface RiskAnalysis {
+export interface LocalRiskAnalysis {
   riskScore: number;
   confidenceLevel: number;
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -369,7 +371,7 @@ export class AIService {
   /**
    * Analyze a risk using AI to provide intelligent scoring and recommendations
    */
-  async analyzeRisk(riskData: any, organizationId: string): Promise<RiskAnalysis> {
+  async analyzeRisk(riskData: any, organizationId: string): Promise<ImportedRiskAnalysis> {
     try {
       // Get historical risk data for context
       const historicalRisks = await this.getHistoricalRiskData(organizationId, riskData.category);
@@ -693,7 +695,7 @@ Format as JSON with confidence levels and specific predictions.`;
         riskLevel: true,
         status: true,
         createdAt: true,
-        mitigationActions: true
+        description: true
       },
       orderBy: { createdAt: 'desc' },
       take: 50
@@ -705,9 +707,9 @@ Format as JSON with confidence levels and specific predictions.`;
       where: { id: organizationId },
       select: {
         name: true,
-        industry: true,
-        size: true,
-        complianceFrameworks: true
+        domain: true,
+        plan: true,
+        settings: true
       }
     });
   }
@@ -732,7 +734,7 @@ Format as JSON with confidence levels and specific predictions.`;
   private async getIndustryContext(organizationId: string) {
     const org = await prisma.organization.findUnique({
       where: { id: organizationId },
-      select: { industry: true }
+      select: { name: true, domain: true }
     });
     
     // Return industry-specific best practices

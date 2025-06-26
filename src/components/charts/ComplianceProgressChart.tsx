@@ -584,7 +584,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="flex items-center space-x-2">
-              <RiskManagementIcons.ClipboardCheck className="h-5 w-5" />
+              <RiskManagementIcons.Audit className="h-5 w-5" />
               <span>{title}</span>
             </CardTitle>
             {description && (
@@ -714,7 +714,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                       <p className="text-sm text-gray-600">Critical Gaps</p>
                       <p className="text-2xl font-bold">{summaryStats.criticalGaps}</p>
                     </div>
-                    <StatusIcons.Warning className="h-8 w-8 text-red-600" />
+                    <StatusIcons.AlertTriangle className="h-8 w-8 text-red-600" />
                   </div>
                 </CardContent>
               </Card>
@@ -726,7 +726,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                       <p className="text-sm text-gray-600">Avg Score</p>
                       <p className="text-2xl font-bold">{summaryStats.averageScore.toFixed(1)}%</p>
                     </div>
-                    <DataIcons.BarChart className="h-8 w-8 text-blue-600" />
+                    <DataIcons.BarChart3 className="h-8 w-8 text-blue-600" />
                   </div>
                 </CardContent>
               </Card>

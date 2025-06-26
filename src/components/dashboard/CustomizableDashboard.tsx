@@ -6,8 +6,7 @@ import {
   ActionIcons, 
   StatusIcons, 
   DataIcons,
-  RiskManagementIcons,
-  AIIcons
+  RiskManagementIcons
 } from '@/components/icons/IconLibrary';
 import { LoadingStates } from '@/components/states/LoadingState';
 import { EmptyStates } from '@/components/states/EmptyState';
@@ -81,7 +80,7 @@ const sampleWidgets: DashboardWidget[] = [
     maxSize: { width: 12, height: 4 },
     configurable: true,
     category: 'Risk Management',
-    icon: RiskManagementIcons.ShieldAlert,
+    icon: RiskManagementIcons.Risk,
     priority: 1,
     userTypes: ['risk-manager', 'executive', 'admin']
   },
@@ -96,7 +95,7 @@ const sampleWidgets: DashboardWidget[] = [
     maxSize: { width: 8, height: 4 },
     configurable: true,
     category: 'Compliance',
-    icon: RiskManagementIcons.ClipboardCheck,
+    icon: RiskManagementIcons.Compliance,
     priority: 2,
     userTypes: ['compliance-officer', 'executive', 'admin']
   },

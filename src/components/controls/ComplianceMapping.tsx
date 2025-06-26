@@ -122,6 +122,7 @@ const sampleFrameworks: ComplianceFramework[] = [
             mandatory: true,
             mappedControls: [],
             status: 'gap',
+            evidence: [],
             gaps: ['No formal communication process documented'],
             priority: 'high',
           },
