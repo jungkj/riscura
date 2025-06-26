@@ -650,7 +650,7 @@ export default function ReportLibrary({
             <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleDelete}>
+                            <Button variant="danger" onClick={handleDelete}>
               Delete
             </Button>
           </div>

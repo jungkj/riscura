@@ -335,7 +335,7 @@ const ComponentVariations: React.FC = () => {
             <div className="space-y-2">
               <Button variant="ghost">Ghost Button</Button>
               <Button variant="link">Link Button</Button>
-              <Button variant="destructive">Destructive</Button>
+                              <Button variant="danger">Danger</Button>
             </div>
           </div>
         </div>

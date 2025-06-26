@@ -112,11 +112,11 @@ export const GET = withAPI(async (req: NextRequest) => {
 
     // Execute query
     const controls = await db.client.control.findMany({
-      where,
-      orderBy,
+        where,
+        orderBy,
       skip: validatedQuery.skip,
       take: validatedQuery.limit,
-      include: {
+        include: {
         assignedUser: {
           select: {
             id: true,
@@ -126,34 +126,34 @@ export const GET = withAPI(async (req: NextRequest) => {
             avatar: true,
           },
         },
-        creator: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
+          creator: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+            },
           },
-        },
         frameworkControls: {
           select: {
             id: true,
             framework: {
-              select: {
-                id: true,
+            select: {
+              id: true,
                 name: true,
                 version: true,
               },
             },
+            },
           },
-        },
-        risks: {
+          risks: {
           select: {
-            risk: {
-              select: {
-                id: true,
-                title: true,
+              risk: {
+                select: {
+                  id: true,
+                  title: true,
                 category: true,
-                riskLevel: true,
+                  riskLevel: true,
               },
             },
           },
@@ -176,11 +176,11 @@ export const GET = withAPI(async (req: NextRequest) => {
             assessedDate: 'desc',
           },
           take: 1,
-        },
-        _count: {
-          select: {
-            risks: true,
-            evidence: true,
+          },
+          _count: {
+            select: {
+              risks: true,
+              evidence: true,
             controlAssessments: true,
           },
         },
@@ -262,7 +262,7 @@ export const POST = withAPI(async (req: NextRequest) => {
       }
     }
 
-        // Create control
+    // Create control
     const { evidence, implementationStatus, ownerId, nextReviewDate, implementationDate, lastTestedDate, nextTestDate, ...controlData } = validatedData;
     
     // Prepare data for Prisma create operation
@@ -374,16 +374,16 @@ export const PUT = withAPI(async (req: NextRequest) => {
           const validatedControl = controlCreateSchema.parse(controlData);
           
           // Check for duplicate control title
-          const existing = await db.client.control.findFirst({
-            where: {
+            const existing = await db.client.control.findFirst({
+              where: {
               title: validatedControl.title,
-              organizationId: user.organizationId,
-            },
-          });
+                organizationId: user.organizationId,
+              },
+            });
 
-          if (existing) {
+            if (existing) {
             results.errors.push(`Control with title "${validatedControl.title}" already exists`);
-            continue;
+              continue;
           }
 
           const { evidence, implementationStatus, ownerId, nextReviewDate, implementationDate, lastTestedDate, nextTestDate, ...bulkControlData } = validatedControl;

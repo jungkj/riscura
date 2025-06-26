@@ -6,8 +6,10 @@ import {
   ActionIcons, 
   StatusIcons, 
   DataIcons,
-  RiskManagementIcons
+  RiskManagementIcons,
+  NavigationIcons
 } from '@/components/icons/IconLibrary';
+import { Brain, X, Plus } from 'lucide-react';
 import { LoadingStates } from '@/components/states/LoadingState';
 import { EmptyStates } from '@/components/states/EmptyState';
 
@@ -125,7 +127,7 @@ const sampleWidgets: DashboardWidget[] = [
     maxSize: { width: 12, height: 4 },
     configurable: true,
     category: 'AI & Analytics',
-    icon: AIIcons.Brain,
+    icon: Brain,
     priority: 4,
     userTypes: ['risk-manager', 'executive']
   },
@@ -140,7 +142,7 @@ const sampleWidgets: DashboardWidget[] = [
     maxSize: { width: 6, height: 3 },
     configurable: true,
     category: 'Productivity',
-    icon: ActionIcons.Zap,
+    icon: ActionIcons.Settings,
     priority: 5,
     userTypes: ['risk-manager', 'compliance-officer', 'auditor', 'admin']
   },
@@ -155,7 +157,7 @@ const sampleWidgets: DashboardWidget[] = [
     maxSize: { width: 12, height: 6 },
     configurable: true,
     category: 'Analytics',
-    icon: DataIcons.BarChart,
+    icon: DataIcons.BarChart3,
     priority: 6,
     userTypes: ['executive', 'risk-manager']
   }
@@ -297,7 +299,7 @@ function MetricsChartWidget({ config, onConfigChange, size, isEditing }: WidgetP
     <div className="p-4">
       <div className="h-32 bg-gray-100 rounded flex items-center justify-center">
         <div className="text-center">
-          <DataIcons.BarChart size="lg" color="secondary" />
+          <DataIcons.BarChart3 size="lg" color="secondary" />
           <div className="text-sm text-gray-600 mt-2">Chart Visualization</div>
         </div>
       </div>
@@ -539,7 +541,7 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
                 className="p-1 text-gray-400 hover:text-red-600 rounded"
                 title="Remove widget"
               >
-                <ActionIcons.Close size="xs" />
+                <X className="w-3 h-3" />
               </button>
             </div>
           )}
@@ -624,7 +626,7 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
               onClick={() => setShowWidgetLibrary(true)}
               className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
             >
-              <ActionIcons.Add size="xs" className="mr-2" />
+              <Plus className="w-3 h-3 mr-2" />
               Add Widget
             </button>
           )}
@@ -663,7 +665,7 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
               onClick={() => setShowWidgetLibrary(true)}
               className="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200 transition-colors"
             >
-              <ActionIcons.Add size="xs" className="mr-2" />
+              <Plus className="w-3 h-3 mr-2" />
               Add Your First Widget
             </button>
           )}
@@ -680,7 +682,7 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
                 onClick={() => setShowWidgetLibrary(false)}
                 className="text-gray-400 hover:text-gray-600"
               >
-                <ActionIcons.Close size="md" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 

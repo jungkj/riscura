@@ -332,7 +332,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                   <Download className="mr-2 h-4 w-4" />
                   Export
                 </Button>
-                <Button variant="destructive" size="sm" onClick={handleBulkDelete}>
+                <Button variant="danger" size="sm" onClick={handleBulkDelete}>
                   <Trash2 className="mr-2 h-4 w-4" />
                   Delete
                 </Button>

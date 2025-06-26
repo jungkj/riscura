@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDropzone } from 'react-dropzone';
 import { toast } from '@/hooks/use-toast';
@@ -818,7 +818,10 @@ export default function RiskAssessmentWizard({
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            {React.createElement(steps[currentStep].icon, { className: "h-6 w-6 text-blue-600" })}
+            {(() => {
+              const IconComponent = steps[currentStep].icon;
+              return <IconComponent className="h-6 w-6 text-blue-600" />;
+            })()}
             {steps[currentStep].title}
           </CardTitle>
         </CardHeader>

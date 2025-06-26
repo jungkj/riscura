@@ -27,7 +27,7 @@ interface BulkAction {
   id: string;
   label: string;
   icon?: React.ReactNode;
-  variant?: 'default' | 'destructive' | 'outline';
+  variant?: 'primary' | 'danger' | 'outline';
   action: (selectedRows: TableData[]) => void;
 }
 
@@ -262,7 +262,9 @@ export default function EnterpriseDataTable<T extends TableData>({
                     <Checkbox
                       checked={isAllSelected}
                       ref={(el) => {
-                        if (el) el.indeterminate = isIndeterminate;
+                        if (el && el instanceof HTMLInputElement) {
+                          el.indeterminate = isIndeterminate;
+                        }
                       }}
                       onCheckedChange={handleSelectAll}
                       aria-label="Select all"
@@ -404,7 +406,7 @@ export default function EnterpriseDataTable<T extends TableData>({
                   return (
                     <Button
                       key={page}
-                      variant={currentPage === page ? 'default' : 'outline'}
+                      variant={currentPage === page ? 'primary' : 'outline'}
                       size="sm"
                       onClick={() => setCurrentPage(page)}
                       className="w-8 h-8 p-0"
@@ -524,7 +526,7 @@ export function RiskDataTableExample() {
       label: 'Delete',
       icon: <Trash2 className="h-4 w-4 mr-2" />,
       action: (rows) => console.log('Deleting:', rows),
-      variant: 'destructive'
+      variant: 'danger'
     }
   ];
   
