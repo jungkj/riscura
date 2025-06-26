@@ -281,7 +281,10 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
             <div className="flex items-center gap-2">
               <div className="text-sm text-slate-600">Total Risks:</div>
               <div className={`flex items-center gap-1 text-sm ${getTrendColor(trendMetrics.total.change)}`}>
-                {React.createElement(getTrendIcon(trendMetrics.total.change), { className: 'h-4 w-4' })}
+                {(() => {
+                  const TrendIcon = getTrendIcon(trendMetrics.total.change);
+                  return <TrendIcon className="h-4 w-4" />;
+                })()}
                 <span className="font-medium">
                   {trendMetrics.total.change > 0 ? '+' : ''}{trendMetrics.total.change}
                 </span>
@@ -294,7 +297,10 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
             <div className="flex items-center gap-2">
               <div className="text-sm text-slate-600">Avg Score:</div>
               <div className={`flex items-center gap-1 text-sm ${getTrendColor(trendMetrics.avgScore.change)}`}>
-                {React.createElement(getTrendIcon(trendMetrics.avgScore.change), { className: 'h-4 w-4' })}
+                {(() => {
+                  const TrendIcon = getTrendIcon(trendMetrics.avgScore.change);
+                  return <TrendIcon className="h-4 w-4" />;
+                })()}
                 <span className="font-medium">
                   {trendMetrics.avgScore.change > 0 ? '+' : ''}{trendMetrics.avgScore.change.toFixed(1)}
                 </span>

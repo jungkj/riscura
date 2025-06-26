@@ -665,7 +665,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
                   return (
                     <Button
                       key={pageNum}
-                      variant={currentPage === pageNum ? 'default' : 'outline'}
+                      variant={currentPage === pageNum ? 'primary' : 'outline'}
                       size="sm"
                       onClick={() => setCurrentPage(pageNum)}
                       className="w-8 h-8 p-0"

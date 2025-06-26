@@ -56,7 +56,7 @@ interface StatsModalData {
   actions: Array<{
     label: string;
     href: string;
-    variant: 'default' | 'secondary' | 'destructive';
+    variant: 'primary' | 'secondary' | 'danger';
   }>;
 }
 
@@ -251,7 +251,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
               variant={action.variant}
               onClick={() => handleNavigation(action.href)}
               className={`font-semibold ${
-                action.variant === 'default' ? 'bg-[#191919] text-[#FAFAFA] hover:bg-[#333333]' :
+                action.variant === 'primary' ? 'bg-[#191919] text-[#FAFAFA] hover:bg-[#333333]' :
                 action.variant === 'secondary' ? 'border-[#191919] text-[#191919] hover:bg-[#D8C3A5]' :
                 ''
               }`}
