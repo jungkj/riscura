@@ -7,7 +7,7 @@ interface AnalyticsParams {
 }
 
 // GET /api/analytics/[type] - Get specific analytics data
-export async function GET(req: NextRequest, { params }: { params: AnalyticsParams }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<AnalyticsParams> }) {
   const authReq = req as AuthenticatedRequest;
   const user = getAuthenticatedUser(authReq);
 
@@ -16,7 +16,8 @@ export async function GET(req: NextRequest, { params }: { params: AnalyticsParam
   }
 
   try {
-    const { type } = params;
+    const resolvedParams = await params;
+    const { type } = resolvedParams;
     const { searchParams } = new URL(req.url);
     
     // Forward the request to the main analytics endpoint with type parameter
@@ -37,9 +38,10 @@ export async function GET(req: NextRequest, { params }: { params: AnalyticsParam
     return NextResponse.json(data, { status: response.status });
 
   } catch (error) {
-    console.error(`Error fetching ${params.type} analytics:`, error);
+    const resolvedParams = await params;
+    console.error(`Error fetching ${resolvedParams.type} analytics:`, error);
     return NextResponse.json(
-      { error: `Failed to fetch ${params.type} analytics data` },
+      { error: `Failed to fetch ${resolvedParams.type} analytics data` },
       { status: 500 }
     );
   }
