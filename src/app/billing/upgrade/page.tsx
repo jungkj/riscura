@@ -172,7 +172,7 @@ export default function UpgradePage() {
                    <Button 
                      className="w-full" 
                      onClick={() => handleUpgrade(plan.name.toLowerCase())}
-                     variant={plan.popular ? 'default' : 'secondary'}
+                     variant={plan.popular ? 'primary' : 'secondary'}
                    >
                      {isUpgrade ? 'Upgrade' : 'Choose'} {plan.name}
                    </Button>

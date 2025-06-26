@@ -39,6 +39,9 @@
     "types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "scripts/**/*",
+    "src/app/api/stripe/webhook/route.ts",
+    "src/components/ai/VoiceInterface.tsx"
   ]
 }

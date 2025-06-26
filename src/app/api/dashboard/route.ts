@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-options';
 import { createAPIResponse } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
@@ -7,7 +7,7 @@ import { db } from '@/lib/db';
 // Helper function to get user from either NextAuth session or Bearer token
 async function getAuthenticatedUser(req: NextRequest) {
   // Try NextAuth session first
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions) as any;
   if (session?.user) {
     return session.user;
   }
@@ -231,7 +231,7 @@ export async function GET(req: NextRequest) {
           })),
           controls: recentControls.map(control => ({
             id: control.id,
-            name: control.name,
+            name: control.title,
             status: control.status,
             category: control.category,
             createdAt: control.createdAt,

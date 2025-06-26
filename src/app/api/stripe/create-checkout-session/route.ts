@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-options';
 import { db } from '@/lib/db';
 import { stripe } from '@/lib/stripe';
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions) as any;
     
     if (!session?.user) {
       return NextResponse.json(

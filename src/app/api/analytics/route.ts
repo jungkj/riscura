@@ -291,11 +291,17 @@ async function getComplianceAnalytics(organizationId: string, startDate: Date) {
       _count: { id: true }
     }),
 
-    db.client.document.groupBy({
-      by: ['category'],
-      where: { organizationId },
-      _count: { id: true }
-    })
+    (async () => {
+      const documents = await db.client.document.findMany({
+        where: { organizationId },
+        select: { type: true }
+      });
+      return documents.reduce((acc, doc) => {
+        const type = doc.type || 'Other';
+        acc[type] = (acc[type] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+    })()
   ]);
 
   return {
@@ -310,9 +316,9 @@ async function getComplianceAnalytics(organizationId: string, startDate: Date) {
         count: item._count.id
       }))
     },
-    documentation: documentsByCategory.map(item => ({
-      category: item.category,
-      count: item._count.id
+    documentation: Object.entries(documentsByCategory).map(([type, count]) => ({
+      category: type,
+      count: count
     }))
   };
 } 

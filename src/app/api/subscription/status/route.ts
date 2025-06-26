@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-options';
 import { db } from '@/lib/db';
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions) as any;
     
     if (!session?.user) {
       return NextResponse.json(
@@ -74,11 +74,12 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // Determine plan from Stripe price ID or organization plan
+    // Determine plan from metadata or organization plan
     let plan = organization.plan || 'free';
-    if (subscription.stripePriceId) {
-      if (subscription.stripePriceId.includes('pro')) plan = 'pro';
-      else if (subscription.stripePriceId.includes('enterprise')) plan = 'enterprise';
+    const stripePriceId = (subscription.metadata as any)?.stripePriceId;
+    if (stripePriceId) {
+      if (stripePriceId.includes('pro')) plan = 'pro';
+      else if (stripePriceId.includes('enterprise')) plan = 'enterprise';
     }
 
     return NextResponse.json({
