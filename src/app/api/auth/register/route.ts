@@ -115,6 +115,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             { status: 400 }
           );
         }
+      } else {
+        return NextResponse.json(
+          { error: 'Organization ID is required when using invite token' },
+          { status: 400 }
+        );
       }
     } else if (organizationId) {
       // Joining existing organization (requires approval or open registration)
@@ -148,6 +153,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         { error: 'Organization name or ID is required' },
         { status: 400 }
       );
+    }
+
+    // Ensure organization is defined at this point
+    if (!organization) {
+      throw new Error('Organization not found - this should not happen');
     }
 
     // Hash password
