@@ -42,7 +42,7 @@ const envSchema = z.object({
     'localhost URLs not allowed in production'
   ),
   APP_NAME: z.string().default('Riscura'),
-  PORT: z.string().default('3001'),
+  PORT: z.string().default('3000'),
   API_VERSION: z.string().default('v1'),
   
   // Database - enforce SSL in production
@@ -63,6 +63,9 @@ const envSchema = z.object({
   JWT_SECRET: isProduction
     ? productionSecretSchema
     : z.string().min(32).default('dev-jwt-secret-12345678901234567890123456789012'),
+  JWT_ACCESS_SECRET: isProduction
+    ? productionSecretSchema
+    : z.string().min(32).default('dev-jwt-access-secret-12345678901234567890123456789012'),
   JWT_EXPIRES_IN: z.string().default('7d'),
   
   NEXTAUTH_SECRET: isProduction
@@ -221,6 +224,13 @@ const envSchema = z.object({
   
   API_RATE_LIMIT_MAX: z.string().transform(Number).default('1000'),
   API_RATE_LIMIT_WINDOW: z.string().transform(Number).default('900000'), // 15 minutes
+  
+  // Stripe Configuration
+  STRIPE_SECRET_KEY: z.string().min(1, "Stripe secret key is required"),
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1, "Stripe publishable key is required"),
+  STRIPE_WEBHOOK_SECRET: z.string().optional(),
+  STRIPE_PRICE_ID_PRO: z.string().optional(),
+  STRIPE_PRICE_ID_ENTERPRISE: z.string().optional(),
 });
 
 // Parse and validate environment variables with enhanced error handling
@@ -257,10 +267,10 @@ function validateEnv() {
         return `❌ ${path}: ${err.message}`;
       });
       
-      console.error('🚨 Environment validation failed:');
-      console.error(missingVars.join('\n'));
-      console.error('\n📝 Please check your .env.local file and ensure all required variables are set.');
-      console.error('🔗 See env.example for reference values.');
+      console.error('Environment validation failed:');
+      console.error('Missing required variables:', missingVars);
+      console.error('Please check your .env.local file and ensure all required variables are set.');
+      console.error('See env.example for reference values.');
       
       if (isProduction && !isBuildTime) {
         console.error('\n🛡️ Production security requires all secrets to be properly configured.');
@@ -287,6 +297,7 @@ function createMinimalEnv() {
     
     // JWT & Authentication Secrets (Development defaults)
     JWT_SECRET: process.env.JWT_SECRET || 'dev-jwt-secret-12345678901234567890123456789012345678901234567890',
+    JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET || 'dev-jwt-access-secret-12345678901234567890123456789012345678901234567890',
     JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '1h',
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'dev-nextauth-secret-12345678901234567890123456789012345678901234567890',
     
@@ -367,6 +378,13 @@ function createMinimalEnv() {
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID || '',
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || '',
     CSP_REPORT_URI: process.env.CSP_REPORT_URI || '',
+    
+    // Stripe Configuration (Development defaults)
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder_key_for_development',
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder_key_for_development',
+    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET || '',
+    STRIPE_PRICE_ID_PRO: process.env.STRIPE_PRICE_ID_PRO || '',
+    STRIPE_PRICE_ID_ENTERPRISE: process.env.STRIPE_PRICE_ID_ENTERPRISE || '',
   } as any;
 }
 
@@ -426,6 +444,7 @@ export const databaseConfig = {
 
 export const authConfig = {
   jwtSecret: env.JWT_SECRET,
+  jwtAccessSecret: env.JWT_ACCESS_SECRET,
   jwtExpiresIn: env.JWT_EXPIRES_IN,
   nextAuthSecret: env.NEXTAUTH_SECRET,
   nextAuthUrl: env.NEXTAUTH_URL || env.APP_URL,

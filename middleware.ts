@@ -149,9 +149,11 @@ export async function middleware(request: NextRequest) {
     
     // Authentication check for protected routes
     if (pathname.startsWith('/dashboard') || pathname.startsWith('/admin')) {
-      const token = request.cookies.get('auth-token')?.value;
+      // Check for NextAuth session token
+      const sessionToken = request.cookies.get('next-auth.session-token')?.value || 
+                          request.cookies.get('__Secure-next-auth.session-token')?.value;
       
-      if (!token) {
+      if (!sessionToken) {
         const url = request.nextUrl.clone();
         url.pathname = '/auth/login';
         url.searchParams.set('redirect', pathname);
