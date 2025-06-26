@@ -92,7 +92,7 @@ export async function GET(req: NextRequest) {
         by: ['riskLevel'],
         where: { 
           organizationId: userObj.organizationId,
-          riskLevel: { not: null }
+          NOT: { riskLevel: null }
         },
         _count: { id: true }
       }),
