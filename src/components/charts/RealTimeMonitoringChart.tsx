@@ -152,18 +152,18 @@ export default function RealTimeMonitoringChart({
   
   // Metric configurations
   const metricConfigs = {
-    riskScore: { label: 'Risk Score', color: '#ef4444', unit: '', format: (v: number) => v.toFixed(1) },
-    activeIncidents: { label: 'Active Incidents', color: '#f97316', unit: '', format: (v: number) => v.toString() },
-    controlFailures: { label: 'Control Failures', color: '#dc2626', unit: '', format: (v: number) => v.toString() },
-    systemLoad: { label: 'System Load', color: '#3b82f6', unit: '%', format: (v: number) => `${v}%` },
-    responseTime: { label: 'Response Time', color: '#8b5cf6', unit: 'ms', format: (v: number) => `${v}ms` },
-    complianceScore: { label: 'Compliance Score', color: '#22c55e', unit: '%', format: (v: number) => `${v}%` },
-    threatLevel: { label: 'Threat Level', color: '#f59e0b', unit: '', format: (v: number) => v.toString() },
-    userActivity: { label: 'User Activity', color: '#06b6d4', unit: '', format: (v: number) => v.toString() },
-    networkTraffic: { label: 'Network Traffic', color: '#84cc16', unit: 'MB/s', format: (v: number) => `${v}MB/s` },
-    errorRate: { label: 'Error Rate', color: '#ec4899', unit: '%', format: (v: number) => `${v}%` },
-    timestamp: { label: 'Timestamp', color: '#6b7280', unit: '', format: (v: number) => v.toString() },
-    time: { label: 'Time', color: '#6b7280', unit: '', format: (v: string) => v }
+    riskScore: { label: 'Risk Score', color: '#ef4444', unit: '', format: (v: any) => typeof v === 'number' ? v.toFixed(1) : v.toString() },
+    activeIncidents: { label: 'Active Incidents', color: '#f97316', unit: '', format: (v: any) => v.toString() },
+    controlFailures: { label: 'Control Failures', color: '#dc2626', unit: '', format: (v: any) => v.toString() },
+    systemLoad: { label: 'System Load', color: '#3b82f6', unit: '%', format: (v: any) => `${v}%` },
+    responseTime: { label: 'Response Time', color: '#8b5cf6', unit: 'ms', format: (v: any) => `${v}ms` },
+    complianceScore: { label: 'Compliance Score', color: '#22c55e', unit: '%', format: (v: any) => `${v}%` },
+    threatLevel: { label: 'Threat Level', color: '#f59e0b', unit: '', format: (v: any) => v.toString() },
+    userActivity: { label: 'User Activity', color: '#06b6d4', unit: '', format: (v: any) => v.toString() },
+    networkTraffic: { label: 'Network Traffic', color: '#84cc16', unit: 'MB/s', format: (v: any) => `${v}MB/s` },
+    errorRate: { label: 'Error Rate', color: '#ec4899', unit: '%', format: (v: any) => `${v}%` },
+    timestamp: { label: 'Timestamp', color: '#6b7280', unit: '', format: (v: any) => v.toString() },
+    time: { label: 'Time', color: '#6b7280', unit: '', format: (v: any) => v.toString() }
   };
   
   // Start monitoring
@@ -391,7 +391,7 @@ export default function RealTimeMonitoringChart({
             {/* Control Buttons */}
             {!isConnected ? (
               <Button
-                variant="default"
+                variant="primary"
                 size="sm"
                 onClick={startMonitoring}
                 className="p-2"
@@ -455,7 +455,7 @@ export default function RealTimeMonitoringChart({
           {Object.keys(metricConfigs).filter(key => !['timestamp', 'time'].includes(key)).map(metric => (
             <Button
               key={metric}
-              variant={selectedMetrics.includes(metric as keyof MonitoringDataPoint) ? 'default' : 'outline'}
+              variant={selectedMetrics.includes(metric as keyof MonitoringDataPoint) ? 'primary' : 'outline'}
               size="sm"
               onClick={() => {
                 const metricKey = metric as keyof MonitoringDataPoint;

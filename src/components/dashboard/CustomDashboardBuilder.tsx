@@ -246,7 +246,7 @@ const DraggableWidget = ({ widget }: { widget: WidgetConfig }) => {
 
   return (
     <div
-      ref={drag}
+      ref={drag as any}
       className={`p-3 border rounded-lg cursor-move hover:shadow-md transition-shadow ${
         isDragging ? 'opacity-50' : ''
       }`}
@@ -591,7 +591,7 @@ export default function CustomDashboardBuilder({
           </div>
           
           {/* Dashboard Canvas */}
-          <div ref={drop} className="flex-1 p-4 overflow-auto">
+          <div ref={drop as any} className="flex-1 p-4 overflow-auto">
             {currentLayout.widgets.length === 0 ? (
               <div className="h-full flex items-center justify-center">
                 <div className="text-center text-gray-500">

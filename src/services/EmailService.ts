@@ -48,7 +48,7 @@ export class EmailService {
 
   private async initializeTransporter(): Promise<void> {
     try {
-      this.transporter = nodemailer.createTransporter({
+      this.transporter = nodemailer.createTransport({
         host: this.config.host,
         port: this.config.port,
         secure: this.config.secure,
@@ -61,7 +61,7 @@ export class EmailService {
     } catch (error) {
       console.error('Email service initialization failed:', error);
       // Create a mock transporter for development
-      this.transporter = nodemailer.createTransporter({
+      this.transporter = nodemailer.createTransport({
         jsonTransport: true,
       });
     }

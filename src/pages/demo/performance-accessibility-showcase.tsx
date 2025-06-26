@@ -457,7 +457,7 @@ const LoadingStatesDemo: React.FC = () => {
             {Object.entries(loadingStates).map(([state, isActive]) => (
               <Button
                 key={state}
-                variant={isActive ? 'default' : 'secondary'}
+                variant={isActive ? 'primary' : 'secondary'}
                 size="sm"
                 onClick={() => toggleState(state as keyof typeof loadingStates)}
               >

@@ -275,7 +275,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium text-gray-700">Category:</span>
               <Button
-                variant={filterCategory === null ? "default" : "outline"}
+                variant={filterCategory === null ? "primary" : "outline"}
                 size="sm"
                 onClick={() => setFilterCategory(null)}
               >
@@ -284,7 +284,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
               {categories.map(category => (
                 <Button
                   key={category}
-                  variant={filterCategory === category ? "default" : "outline"}
+                  variant={filterCategory === category ? "primary" : "outline"}
                   size="sm"
                   onClick={() => setFilterCategory(category)}
                   className="capitalize"
@@ -303,7 +303,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium text-gray-700">Status:</span>
               <Button
-                variant={filterStatus === null ? "default" : "outline"}
+                variant={filterStatus === null ? "primary" : "outline"}
                 size="sm"
                 onClick={() => setFilterStatus(null)}
               >
@@ -312,7 +312,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
               {statuses.map(status => (
                 <Button
                   key={status}
-                  variant={filterStatus === status ? "default" : "outline"}
+                  variant={filterStatus === status ? "primary" : "outline"}
                   size="sm"
                   onClick={() => setFilterStatus(status)}
                   className="capitalize"

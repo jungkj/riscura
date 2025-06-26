@@ -496,14 +496,14 @@ export default function InteractiveRiskHeatmap({
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-600">View:</span>
             <Button
-              variant={viewMode === 'heatmap' ? 'default' : 'outline'}
+              variant={viewMode === 'heatmap' ? 'primary' : 'outline'}
               size="sm"
               onClick={() => setViewMode('heatmap')}
             >
               Heatmap
             </Button>
             <Button
-              variant={viewMode === 'scatter' ? 'default' : 'outline'}
+              variant={viewMode === 'scatter' ? 'primary' : 'outline'}
               size="sm"
               onClick={() => setViewMode('scatter')}
             >
