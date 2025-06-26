@@ -369,7 +369,7 @@ const RiskRegister: React.FC = () => {
         toast.success(`Assigning ${risk.title}`);
         break;
       default:
-        toast.info(`Action "${action}" not yet implemented for ${risk.title}`);
+        toast(`Action "${action}" not yet implemented for ${risk.title}`);
     }
   };
 

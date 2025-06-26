@@ -214,7 +214,7 @@ export default function DocumentLibrary({
   const handleDocumentShare = (documentId: string) => {
     // TODO: Open share dialog
     console.log('Share document:', documentId);
-    toast.info('Share functionality coming soon');
+          toast('Share functionality coming soon');
   };
 
   const handleBulkDownload = async () => {
@@ -224,7 +224,7 @@ export default function DocumentLibrary({
     }
 
     // TODO: Implement bulk download
-    toast.info('Bulk download functionality coming soon');
+          toast('Bulk download functionality coming soon');
   };
 
   const handleBulkDelete = async () => {
