@@ -180,7 +180,7 @@ export function MatrixQuestionComponent({
                       />
                     ) : config.style === 'scale' ? (
                       <Button
-                        variant={responses[row.id] === column.id ? "default" : "outline"}
+                        variant={responses[row.id] === column.id ? "primary" : "outline"}
                         size="sm"
                         onClick={() => handleResponse(row.id, column.id, true)}
                         disabled={readonly}

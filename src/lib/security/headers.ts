@@ -237,7 +237,10 @@ export class SecurityHeaders {
   /**
    * Get current nonce
    */
-  getCurrentNonce(): string | undefined {
+  getCurrentNonce(): string {
+    if (!this.nonce) {
+      this.nonce = this.generateNonce();
+    }
     return this.nonce;
   }
 

@@ -293,6 +293,11 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
       let aVal = a[sortField];
       let bVal = b[sortField];
 
+      // Handle undefined values
+      if (aVal === undefined && bVal === undefined) return 0;
+      if (aVal === undefined) return sortDirection === 'asc' ? 1 : -1;
+      if (bVal === undefined) return sortDirection === 'asc' ? -1 : 1;
+
       // Handle different data types
       if (aVal instanceof Date && bVal instanceof Date) {
         aVal = aVal.getTime();
@@ -305,9 +310,9 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
       }
 
       if (sortDirection === 'asc') {
-        return aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+        return aVal! < bVal! ? -1 : aVal! > bVal! ? 1 : 0;
       } else {
-        return aVal > bVal ? -1 : aVal < bVal ? 1 : 0;
+        return aVal! > bVal! ? -1 : aVal! < bVal! ? 1 : 0;
       }
     });
   }, [filteredQuestionnaires, sortField, sortDirection]);
@@ -718,14 +723,14 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
 
         <div className="flex items-center space-x-2">
           <Button
-            variant={viewMode === 'grid' ? 'default' : 'outline'}
+            variant={viewMode === 'grid' ? 'primary' : 'outline'}
             size="sm"
             onClick={() => setViewMode('grid')}
           >
             <Grid className="w-4 h-4" />
           </Button>
           <Button
-            variant={viewMode === 'list' ? 'default' : 'outline'}
+            variant={viewMode === 'list' ? 'primary' : 'outline'}
             size="sm"
             onClick={() => setViewMode('list')}
           >

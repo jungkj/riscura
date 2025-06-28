@@ -9,6 +9,7 @@ const KEY_DERIVATION_ITERATIONS = 100000;
 const SALT_LENGTH = 32;
 const IV_LENGTH = 16;
 const TAG_LENGTH = 16;
+const KEY_LENGTH = 32; // 256 bits / 8 = 32 bytes
 
 // Get encryption key from environment or generate one
 function getEncryptionKey(): Buffer {
@@ -74,7 +75,7 @@ export class EncryptionService {
       const key = crypto.pbkdf2Sync(this.masterKey, salt, KEY_DERIVATION_ITERATIONS, 32, 'sha512');
       
       // Create cipher
-      const cipher = crypto.createCipherGCM(ENCRYPTION_ALGORITHM, key, iv);
+      const cipher = crypto.createCipheriv(ENCRYPTION_ALGORITHM, key, iv);
       
       // Add additional authenticated data if provided
       if (additionalData) {
@@ -122,7 +123,7 @@ export class EncryptionService {
       const key = crypto.pbkdf2Sync(this.masterKey, saltBuffer, KEY_DERIVATION_ITERATIONS, 32, 'sha512');
       
       // Create decipher
-      const decipher = crypto.createDecipherGCM(ENCRYPTION_ALGORITHM, key, ivBuffer);
+      const decipher = crypto.createDecipheriv(ENCRYPTION_ALGORITHM, key, ivBuffer);
       decipher.setAuthTag(tagBuffer);
       
       // Add additional authenticated data if provided
@@ -174,7 +175,10 @@ export class EncryptionService {
     const encryptionResult = await this.encryptData(fileBuffer, aad);
     
     return {
-      ...encryptionResult,
+      encryptedContent: encryptionResult.encrypted,
+      iv: encryptionResult.iv,
+      tag: encryptionResult.tag,
+      salt: encryptionResult.salt,
       hash: originalHash,
       metadata: {
         originalSize: fileBuffer.length,
@@ -328,6 +332,7 @@ export class EncryptionService {
     try {
       const plaintext = Buffer.isBuffer(data) ? data : Buffer.from(data, 'utf8');
       const key = keyId ? await this.getDataKey(keyId) : this.masterKey;
+      const salt = crypto.randomBytes(32);
       
       // Generate random IV for each encryption
       const iv = crypto.randomBytes(12);
@@ -341,9 +346,10 @@ export class EncryptionService {
       const authTag = cipher.getAuthTag();
       
       return {
-        data: encrypted,
-        iv,
-        authTag,
+        encrypted: encrypted.toString('base64'),
+        iv: iv.toString('base64'),
+        tag: authTag.toString('base64'),
+        salt: salt.toString('base64'),
         algorithm: this.algorithm,
         keyId: keyId || 'master',
         timestamp: new Date(),
@@ -357,13 +363,17 @@ export class EncryptionService {
     try {
       const key = encryptedData.keyId === 'master' 
         ? this.masterKey 
-        : await this.getDataKey(encryptedData.keyId);
+        : await this.getDataKey(encryptedData.keyId!);
       
-      const decipher = crypto.createDecipheriv(encryptedData.algorithm, key, encryptedData.iv) as crypto.DecipherGCM;
-      decipher.setAuthTag(encryptedData.authTag);
+      const ivBuffer = Buffer.from(encryptedData.iv, 'base64');
+      const encryptedBuffer = Buffer.from(encryptedData.encrypted, 'base64');
+      const tagBuffer = Buffer.from(encryptedData.tag, 'base64');
+      
+      const decipher = crypto.createDecipheriv(encryptedData.algorithm || this.algorithm, key, ivBuffer) as crypto.DecipherGCM;
+      decipher.setAuthTag(tagBuffer);
       
       const decrypted = Buffer.concat([
-        decipher.update(encryptedData.data),
+        decipher.update(encryptedBuffer),
         decipher.final()
       ]);
       
@@ -696,12 +706,13 @@ export class EncryptionService {
 
 // Types
 export interface EncryptedData {
-  data: Buffer;
-  iv: Buffer;
-  authTag: Buffer;
-  algorithm: string;
-  keyId: string;
-  timestamp: Date;
+  encrypted: string;
+  iv: string;
+  tag: string;
+  salt: string;
+  algorithm?: string;
+  keyId?: string;
+  timestamp?: Date;
 }
 
 export interface DataKey {
@@ -882,7 +893,7 @@ export async function encrypt(plaintext: string): Promise<string> {
     const key = getEncryptionKey();
     const iv = crypto.randomBytes(IV_LENGTH);
     
-    const cipher = crypto.createCipher(ENCRYPTION_ALGORITHM, key);
+    const cipher = crypto.createCipheriv(ENCRYPTION_ALGORITHM, key, iv);
     cipher.setAAD(Buffer.from('riscura-mfa', 'utf8'));
     
     let encrypted = cipher.update(plaintext, 'utf8', 'hex');
@@ -911,7 +922,7 @@ export async function decrypt(encryptedData: string): Promise<string> {
     const tag = combined.slice(IV_LENGTH, IV_LENGTH + TAG_LENGTH);
     const encrypted = combined.slice(IV_LENGTH + TAG_LENGTH);
     
-    const decipher = crypto.createDecipher(ENCRYPTION_ALGORITHM, key);
+    const decipher = crypto.createDecipheriv(ENCRYPTION_ALGORITHM, key, iv);
     decipher.setAAD(Buffer.from('riscura-mfa', 'utf8'));
     decipher.setAuthTag(tag);
     
