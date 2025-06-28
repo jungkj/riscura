@@ -129,6 +129,10 @@ export class EnhancedFileManager {
     }
 
     // Save document metadata to database
+    if (!prisma) {
+      throw new Error('Database connection not available');
+    }
+    
     const document = await prisma.document.create({
       data: {
         id: uuidv4(),
@@ -251,6 +255,10 @@ export class EnhancedFileManager {
     changeLog?: string
   ): Promise<FileUploadResult> {
     // Get existing document
+    if (!prisma) {
+      throw new Error('Database connection not available');
+    }
+    
     const existingDocument = await prisma.document.findUnique({
       where: { id: documentId },
     });
@@ -270,7 +278,7 @@ export class EnhancedFileManager {
     );
 
     // Update document with new version
-    await prisma.document.update({
+    await prisma!.document.update({
       where: { id: documentId },
       data: {
         name: fileName,
@@ -349,6 +357,10 @@ export class EnhancedFileManager {
       if (filters.dateTo) whereClause.uploadedAt.lte = filters.dateTo;
     }
 
+    if (!prisma) {
+      throw new Error('Database connection not available');
+    }
+    
     const [documents, total] = await Promise.all([
       prisma.document.findMany({
         where: whereClause,
@@ -366,7 +378,7 @@ export class EnhancedFileManager {
         skip: pagination.skip,
         take: pagination.take,
       }),
-      prisma.document.count({ where: whereClause }),
+      prisma!.document.count({ where: whereClause }),
     ]);
 
     return { documents, total };
@@ -376,6 +388,10 @@ export class EnhancedFileManager {
    * Get document with access control
    */
   async getDocument(documentId: string, userId: string): Promise<any> {
+    if (!prisma) {
+      throw new Error('Database connection not available');
+    }
+    
     const document = await prisma.document.findUnique({
       where: { id: documentId },
       include: {
@@ -420,6 +436,10 @@ export class EnhancedFileManager {
    * Delete document with proper cleanup
    */
   async deleteDocument(documentId: string, userId: string): Promise<void> {
+    if (!prisma) {
+      throw new Error('Database connection not available');
+    }
+    
     const document = await prisma.document.findUnique({
       where: { id: documentId },
     });
@@ -480,6 +500,10 @@ export class EnhancedFileManager {
 
   // Helper methods
   private async findDuplicateDocument(hash: string, organizationId: string): Promise<any> {
+    if (!prisma) {
+      throw new Error('Database connection not available');
+    }
+    
     return await prisma.document.findFirst({
       where: {
         organizationId,
@@ -494,6 +518,10 @@ export class EnhancedFileManager {
   private async checkDocumentAccess(document: any, userId: string): Promise<boolean> {
     // Owner can always access
     if (document.uploadedBy === userId) return true;
+
+    if (!prisma) {
+      throw new Error('Database connection not available');
+    }
 
     // Get user role
     const user = await prisma.user.findUnique({
@@ -514,6 +542,10 @@ export class EnhancedFileManager {
   private async checkDeletePermission(document: any, userId: string): Promise<boolean> {
     // Only owner or admin can delete
     if (document.uploadedBy === userId) return true;
+
+    if (!prisma) {
+      throw new Error('Database connection not available');
+    }
 
     const user = await prisma.user.findUnique({
       where: { id: userId },

@@ -610,12 +610,10 @@ export class ReportingService {
 
     switch (format) {
       case ReportFormat.PDF:
-        const pdfResult = await generatePDF(config.template, data, {
-          fileName: `${fileName}.pdf`,
-          organizationId: config.organizationId,
-        });
-        filePath = pdfResult.filePath;
-        fileSize = pdfResult.fileSize;
+        const pdfBuffer = await generatePDF(data);
+        filePath = `/tmp/reports/${fileName}.pdf`;
+        require('fs').writeFileSync(filePath, pdfBuffer);
+        fileSize = pdfBuffer.length;
         break;
 
       case ReportFormat.EXCEL:
@@ -761,13 +759,17 @@ export class ReportingService {
    * Save report metadata to database
    */
   private async saveReportMetadata(config: ReportConfig, reports: GeneratedReport[]): Promise<void> {
+    if (!prisma) {
+      throw new Error('Database connection not available');
+    }
+    
     for (const report of reports) {
       await prisma.report.create({
         data: {
           id: report.id,
           name: report.name,
           type: report.type as any,
-          status: 'COMPLETED',
+          status: 'COMPLETED' as any,
           format: report.format,
           filePath: report.filePath,
           fileSize: report.fileSize,

@@ -1258,7 +1258,7 @@ export class RiskAnalysisAIService {
       TECHNOLOGY: 1.1
     };
     
-    const categoryMultiplier = categoryMultipliers[risk.category] || 1.0;
+    const categoryMultiplier = categoryMultipliers[risk.category as keyof typeof categoryMultipliers] || 1.0;
     
     // Text analysis impact indicators
     const impactKeywords = ['critical', 'severe', 'major', 'significant', 'catastrophic', 'material'];
@@ -1404,7 +1404,7 @@ export class RiskAnalysisAIService {
       'DIRECTIVE': 0.6,
       'COMPENSATING': 0.4
     };
-    return weights[controlType] || 0.5;
+    return weights[controlType as keyof typeof weights] || 0.5;
   }
 
   /**
