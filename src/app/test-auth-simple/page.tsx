@@ -43,7 +43,7 @@ export default function TestAuthSimple() {
     try {
       const response = await fetch(endpoint);
       const data = await response.json();
-      toast.info(`${endpoint}: ${response.status} - ${JSON.stringify(data).substring(0, 100)}...`);
+              toast(`${endpoint}: ${response.status} - ${JSON.stringify(data).substring(0, 100)}...`);
     } catch (error) {
       toast.error(`${endpoint}: Error - ${(error as Error).message}`);
     }
