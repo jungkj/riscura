@@ -437,7 +437,7 @@ export class ProboIntegrationService {
       return response;
     } catch (error) {
       console.error('Error generating controls for risk:', error);
-      throw new Error(`Failed to generate controls: ${error.message}`);
+      throw new Error(`Failed to generate controls: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 
@@ -1096,6 +1096,91 @@ export class ProboIntegrationService {
 
   private calculateRiskCoverage(control: ProboControl): number {
     return Math.round(control.riskMitigationScore * 10);
+  }
+
+  // Missing helper methods implementation
+  private findControlCategoryForMitigation(mitigation: any): ProboControlCategory {
+    const categories = this.getProboControlCategories();
+    // Map mitigation category to ProboControlCategory based on mitigation.category
+    const categoryMap: { [key: string]: string } = {
+      'access-control': 'access-control',
+      'data-protection': 'data-protection',
+      'network-security': 'network-security',
+      'incident-response': 'incident-response',
+      'compliance': 'compliance-monitoring',
+      'vendor': 'vendor-management'
+    };
+    
+    const categoryId = categoryMap[mitigation.category] || 'access-control';
+    return categories.find(c => c.id === categoryId) || categories[0];
+  }
+
+  private determineFrameworkFromStandards(standards: string): ComplianceFramework {
+    const frameworks = this.getSupportedFrameworks();
+    if (standards.includes('SOC2')) return frameworks.find(f => f.id === 'soc2') || frameworks[0];
+    if (standards.includes('ISO27001')) return frameworks.find(f => f.id === 'iso27001') || frameworks[0];
+    if (standards.includes('GDPR')) return frameworks.find(f => f.id === 'gdpr') || frameworks[0];
+    return frameworks[0];
+  }
+
+  private mapImportanceToPriority(importance: string): 'Critical' | 'High' | 'Medium' | 'Low' {
+    switch (importance?.toUpperCase()) {
+      case 'MANDATORY': return 'Critical';
+      case 'PREFERRED': return 'High';
+      case 'ADVANCED': return 'Medium';
+      default: return 'Low';
+    }
+  }
+
+  private estimateImplementationHours(mitigation: any): number {
+    // Simple estimation based on category and importance
+    const baseHours = mitigation.importance === 'MANDATORY' ? 24 : 
+                     mitigation.importance === 'PREFERRED' ? 16 : 8;
+    return baseHours;
+  }
+
+  private assessComplexity(mitigation: any): 'Low' | 'Medium' | 'High' {
+    if (mitigation.importance === 'MANDATORY') return 'High';
+    if (mitigation.importance === 'PREFERRED') return 'Medium';
+    return 'Low';
+  }
+
+  private generateTags(mitigation: any): string[] {
+    const tags = [mitigation.category];
+    if (mitigation.standards) {
+      tags.push(...mitigation.standards.split(';').filter(Boolean));
+    }
+    return tags;
+  }
+
+  private generateImplementationChecklist(mitigation: any): Array<{id: string; task: string; completed: boolean}> {
+    return [
+      { id: '1', task: 'Review implementation requirements', completed: false },
+      { id: '2', task: 'Assign responsible team member', completed: false },
+      { id: '3', task: 'Configure control implementation', completed: false },
+      { id: '4', task: 'Test and validate control', completed: false },
+      { id: '5', task: 'Document evidence', completed: false }
+    ];
+  }
+
+  private determineTestingFrequency(mitigation: any): 'Daily' | 'Weekly' | 'Monthly' | 'Quarterly' | 'Annually' {
+    if (mitigation.importance === 'MANDATORY') return 'Monthly';
+    if (mitigation.importance === 'PREFERRED') return 'Quarterly';
+    return 'Annually';
+  }
+
+  private extractFrameworksFromStandards(standards: string): ComplianceFramework[] {
+    const frameworks = this.getSupportedFrameworks();
+    const standardList = standards.split(';').filter(Boolean);
+    return frameworks.filter(f => 
+      standardList.some(s => s.toUpperCase().includes(f.name.toUpperCase()))
+    );
+  }
+
+  private extractRequirementsFromStandards(standards: string): string[] {
+    // Extract requirement IDs from standards string
+    const standardList = standards.split(';').filter(Boolean);
+    return standardList.map(s => s.trim()).filter(s => s.length > 0);
   }
 }
 
