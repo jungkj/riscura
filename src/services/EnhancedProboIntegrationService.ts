@@ -46,12 +46,11 @@ export class EnhancedProboIntegrationService {
       const defaultConfig: ProboIntegrationConfig = {
         apiEndpoint: 'https://api.probo.com',
         apiKey: process.env.PROBO_API_KEY || 'demo-key',
+        organizationId: 'default-org',
         enableAI: true,
-        enableVendorAssessment: true,
-        enableRealTimeSync: true,
-        maxConcurrentOperations: 5,
-        timeoutMs: 30000,
-        retryAttempts: 3,
+        autoApplyRecommendations: false,
+        confidenceThreshold: 0.8,
+        frameworks: [],
         customCategories: []
       };
       EnhancedProboIntegrationService.instance = new EnhancedProboIntegrationService(defaultConfig);
