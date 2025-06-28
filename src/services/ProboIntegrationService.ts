@@ -580,8 +580,28 @@ export class ProboIntegrationService {
       description: `Controls related to ${category.toLowerCase()}`,
       controlCount: this.proboMitigations.filter(m => m.category === category).length,
       frameworks: this.getFrameworksForCategory(category),
-      color: this.getCategoryColor(category)
+      color: this.getCategoryColor(category),
+      icon: 'Shield' // Default icon
     }));
+  }
+
+  private getFrameworksForCategory(category: string): any {
+    // Return default frameworks for now
+    return ['SOC2', 'ISO27001'];
+  }
+
+  private getCategoryColor(category: string): string {
+    // Return default colors based on category
+    const colors: Record<string, string> = {
+      'access': '#3B82F6',
+      'data': '#10B981',
+      'network': '#F59E0B',
+      'incident': '#EF4444',
+      'compliance': '#8B5CF6',
+      'vendor': '#06B6D4'
+    };
+    const key = category.toLowerCase().split(' ')[0];
+    return colors[key] || '#6B7280';
   }
 
   /**
