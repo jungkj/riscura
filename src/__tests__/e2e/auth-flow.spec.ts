@@ -1,37 +1,4 @@
-/// <reference types="cypress" />
-
-import { defineConfig } from 'cypress'
 import { test, expect, Page } from '@playwright/test';
-
-// Custom commands for authentication
-declare global {
-  namespace Cypress {
-    interface Chainable {
-      login(email?: string, password?: string): Chainable<Element>
-      logout(): Chainable<Element>
-    }
-  }
-}
-
-// Add custom commands
-Cypress.Commands.add('login', (email?: string, password?: string) => {
-  const testEmail = email || Cypress.env('TEST_USER_EMAIL') || 'test@example.com';
-  const testPassword = password || Cypress.env('TEST_USER_PASSWORD') || 'password123';
-  
-  cy.session([testEmail, testPassword], () => {
-    cy.visit('/auth/login');
-    cy.get('[data-testid="email-input"]').type(testEmail);
-    cy.get('[data-testid="password-input"]').type(testPassword);
-    cy.get('[data-testid="login-button"]').click();
-    cy.url().should('include', '/dashboard');
-  });
-});
-
-Cypress.Commands.add('logout', () => {
-  cy.get('[data-testid="user-menu"]').click();
-  cy.get('[data-testid="logout-button"]').click();
-  cy.url().should('include', '/auth/login');
-});
 
 // Helper function for authentication
 async function login(page: Page, email?: string, password?: string) {
@@ -305,6 +272,4 @@ test.describe('Authentication Flow', () => {
       expect(response.status()).toBe(403);
     });
   });
-}); 
-}); 
-}); 
+});
