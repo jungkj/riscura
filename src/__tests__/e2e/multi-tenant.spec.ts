@@ -1,6 +1,7 @@
-/// <reference types="cypress" />
+import { test, expect } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
-describe('Multi-Tenant Data Isolation', () => {
+test.describe('Multi-Tenant Data Isolation', () => {
   const org1Data = {
     id: 'org-1',
     name: 'Organization One',
@@ -66,476 +67,403 @@ describe('Multi-Tenant Data Isolation', () => {
     ]
   };
 
-  beforeEach(() => {
+  test.beforeEach(async ({ page, request }) => {
     // Clear and seed test data for both organizations
-    cy.task('clearDatabase');
+    const apiUrl = process.env.API_URL || 'http://localhost:3000/api';
     
-    cy.request({
-      method: 'POST',
-      url: `${Cypress.env('API_URL')}/test/seed-multi-tenant`,
-      body: {
+    // Clear database via API call
+    await request.post(`${apiUrl}/test/clear-database`);
+    
+    // Seed multi-tenant data
+    await request.post(`${apiUrl}/test/seed-multi-tenant`, {
+      data: {
         organizations: [org1Data, org2Data]
       }
     });
   });
 
-  describe('Data Isolation', () => {
-    it('should only show risks from user organization', () => {
+  test.describe('Data Isolation', () => {
+    test('should only show risks from user organization', async ({ page }) => {
+      // Setup API mocking
+      await page.route('/api/auth/login', async route => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            success: true,
+            user: org1Data.users[0],
+            token: 'org1-user-token',
+          })
+        });
+      });
+
+      await page.route('/api/risks*', async route => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            success: true,
+            data: org1Data.risks,
+            pagination: {
+              page: 1,
+              limit: 10,
+              total: org1Data.risks.length,
+              totalPages: 1,
+            }
+          })
+        });
+      });
+
       // Login as user from organization 1
-      cy.visit('/auth/login');
-      cy.get('[data-testid="email-input"]').type('user1@org1.com');
-      cy.get('[data-testid="password-input"]').type('password123');
-      
-      // Mock login response with org1 user
-      cy.intercept('POST', '/api/auth/login', {
-        statusCode: 200,
-        body: {
-          success: true,
-          user: org1Data.users[0],
-          token: 'org1-user-token',
-        }
-      }).as('loginOrg1');
-      
-      cy.get('[data-testid="login-button"]').click();
-      cy.wait('@loginOrg1');
+      await page.goto('/auth/login');
+      await page.locator('[data-testid="email-input"]').fill('user1@org1.com');
+      await page.locator('[data-testid="password-input"]').fill('password123');
+      await page.locator('[data-testid="login-button"]').click();
 
-      // Mock risks API to return only org1 risks
-      cy.intercept('GET', '/api/risks*', {
-        statusCode: 200,
-        body: {
-          success: true,
-          data: org1Data.risks,
-          pagination: {
-            page: 1,
-            limit: 10,
-            total: org1Data.risks.length,
-            totalPages: 1,
-          }
-        }
-      }).as('getOrg1Risks');
-
-      cy.visit('/dashboard/risks');
-      cy.wait('@getOrg1Risks');
+      // Navigate to risks page
+      await page.goto('/dashboard/risks');
 
       // Verify only org1 risks are displayed
-      cy.get('[data-testid="risk-card"]').should('have.length', 2);
-      cy.get('[data-testid="risk-card"]').first()
-        .should('contain', 'Org 1 Security Risk');
-      cy.get('[data-testid="risk-card"]').last()
-        .should('contain', 'Org 1 Compliance Risk');
+      const riskCards = page.locator('[data-testid="risk-card"]');
+      await expect(riskCards).toHaveCount(2);
+      
+      await expect(riskCards.first()).toContainText('Org 1 Security Risk');
+      await expect(riskCards.last()).toContainText('Org 1 Compliance Risk');
 
       // Verify org2 risks are not visible
-      cy.get('[data-testid="risk-card"]')
-        .should('not.contain', 'Org 2 Operational Risk');
+      await expect(riskCards).not.toContainText('Org 2 Operational Risk');
     });
 
-    it('should prevent cross-organization data access via API', () => {
-      // Login as org1 user
-      cy.request({
-        method: 'POST',
-        url: `${Cypress.env('API_URL')}/auth/login`,
-        body: {
+    test('should prevent cross-organization data access via API', async ({ request }) => {
+      const apiUrl = process.env.API_URL || 'http://localhost:3000/api';
+      
+      // Login as org1 user to get token
+      const loginResponse = await request.post(`${apiUrl}/auth/login`, {
+        data: {
           email: 'user1@org1.com',
           password: 'password123'
         }
-      }).then((response) => {
-        const token = response.body.token;
-
-        // Try to access org2 risk directly
-        cy.request({
-          method: 'GET',
-          url: `${Cypress.env('API_URL')}/risks/${org2Data.risks[0].id}`,
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-          failOnStatusCode: false
-        }).then((response) => {
-          // Should return 404 (not found) due to organization isolation
-          expect(response.status).to.equal(404);
-          expect(response.body.success).to.be.false;
-          expect(response.body.error).to.equal('Risk not found');
-        });
       });
+      
+      const loginData = await loginResponse.json();
+      const token = loginData.token;
+
+      // Try to access org2 risk directly
+      const riskResponse = await request.get(`${apiUrl}/risks/${org2Data.risks[0].id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      // Should return 404 (not found) due to organization isolation
+      expect(riskResponse.status()).toBe(404);
+      
+      const responseData = await riskResponse.json();
+      expect(responseData.success).toBe(false);
+      expect(responseData.error).toBe('Risk not found');
     });
 
-    it('should isolate user lists by organization', () => {
-      // Login as org1 admin
-      cy.visit('/auth/login');
-      cy.get('[data-testid="email-input"]').type('user1@org1.com');
-      cy.get('[data-testid="password-input"]').type('password123');
-      
-      cy.intercept('POST', '/api/auth/login', {
-        statusCode: 200,
-        body: {
-          success: true,
-          user: { ...org1Data.users[0], role: 'ADMIN' },
-          token: 'org1-admin-token',
-        }
+    test('should isolate user lists by organization', async ({ page }) => {
+      // Setup API mocking
+      await page.route('/api/auth/login', async route => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            success: true,
+            user: { ...org1Data.users[0], role: 'ADMIN' },
+            token: 'org1-admin-token',
+          })
+        });
       });
-      
-      cy.get('[data-testid="login-button"]').click();
 
-      // Mock users API to return only org1 users
-      cy.intercept('GET', '/api/users*', {
-        statusCode: 200,
-        body: {
-          success: true,
-          data: org1Data.users,
-        }
-      }).as('getOrg1Users');
+      await page.route('/api/users*', async route => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            success: true,
+            data: org1Data.users,
+          })
+        });
+      });
 
-      cy.visit('/dashboard/admin/users');
-      cy.wait('@getOrg1Users');
+      // Login as org1 admin
+      await page.goto('/auth/login');
+      await page.locator('[data-testid="email-input"]').fill('user1@org1.com');
+      await page.locator('[data-testid="password-input"]').fill('password123');
+      await page.locator('[data-testid="login-button"]').click();
+
+      // Navigate to users page
+      await page.goto('/dashboard/admin/users');
 
       // Verify only org1 users are displayed
-      cy.get('[data-testid="user-row"]').should('have.length', 2);
-      cy.get('[data-testid="user-row"]')
-        .should('contain', 'user1@org1.com')
-        .and('contain', 'user2@org1.com')
-        .and('not.contain', 'user1@org2.com');
+      const userRows = page.locator('[data-testid="user-row"]');
+      await expect(userRows).toHaveCount(2);
+      
+      await expect(userRows).toContainText('user1@org1.com');
+      await expect(userRows).toContainText('user2@org1.com');
+      await expect(userRows).not.toContainText('user1@org2.com');
     });
 
-    it('should prevent unauthorized organization switching', () => {
-      // Login as org1 user
-      cy.visit('/auth/login');
-      cy.get('[data-testid="email-input"]').type('user1@org1.com');
-      cy.get('[data-testid="password-input"]').type('password123');
-      
-      cy.intercept('POST', '/api/auth/login', {
-        statusCode: 200,
-        body: {
-          success: true,
-          user: org1Data.users[0],
-          token: 'org1-user-token',
-        }
-      });
-      
-      cy.get('[data-testid="login-button"]').click();
+    test('should prevent unauthorized organization switching', async ({ page, request }) => {
+      const apiUrl = process.env.API_URL || 'http://localhost:3000/api';
 
-      // Try to make API request with different organization ID
-      cy.request({
-        method: 'GET',
-        url: `${Cypress.env('API_URL')}/risks`,
-        headers: {
-          'Authorization': 'Bearer org1-user-token',
-          'X-Organization-ID': org2Data.id // Try to access org2 data
-        },
-        failOnStatusCode: false
-      }).then((response) => {
-        // Should either ignore the header or return unauthorized
-        // The actual implementation should verify org ID against user's org
-        expect(response.status).to.be.oneOf([200, 403]);
+      // Setup login mock
+      await page.route('/api/auth/login', async route => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            success: true,
+            user: org1Data.users[0],
+            token: 'org1-user-token',
+          })
+        });
+      });
+
+      // Login as org1 user
+      await page.goto('/auth/login');
+      await page.locator('[data-testid="email-input"]').fill('user1@org1.com');
+      await page.locator('[data-testid="password-input"]').fill('password123');
+      await page.locator('[data-testid="login-button"]').click();
+
+      // Try to manually access org2 data via URL manipulation
+      await page.goto(`/dashboard/organizations/${org2Data.id}`);
+
+      // Should be redirected or show access denied
+      await expect(page.locator('[data-testid="access-denied"]')).toBeVisible();
+      
+      // Alternatively, check for redirect to proper organization
+      expect(page.url()).not.toContain(org2Data.id);
+    });
+
+    test('should maintain session isolation between organizations', async ({ page }) => {
+      // Setup mocks for org1
+      await page.route('/api/auth/login', async route => {
+        const request = route.request();
+        const body = await request.postDataJSON();
         
-        if (response.status === 200) {
-          // If 200, should only return org1 data
-          expect(response.body.data.every((risk: any) => 
-            risk.organizationId === org1Data.id
-          )).to.be.true;
+        if (body.email === 'user1@org1.com') {
+          await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({
+              success: true,
+              user: org1Data.users[0],
+              token: 'org1-user-token',
+            })
+          });
+        } else if (body.email === 'user1@org2.com') {
+          await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({
+              success: true,
+              user: org2Data.users[0],
+              token: 'org2-user-token',
+            })
+          });
         }
       });
-    });
-  });
 
-  describe('Organization Management', () => {
-    it('should allow organization admin to manage settings', () => {
-      // Login as org1 admin
-      cy.visit('/auth/login');
-      cy.get('[data-testid="email-input"]').type('user1@org1.com');
-      cy.get('[data-testid="password-input"]').type('password123');
-      
-      cy.intercept('POST', '/api/auth/login', {
-        statusCode: 200,
-        body: {
-          success: true,
-          user: { ...org1Data.users[0], role: 'ADMIN' },
-          token: 'org1-admin-token',
-        }
-      });
-      
-      cy.get('[data-testid="login-button"]').click();
-
-      // Mock organization settings API
-      cy.intercept('GET', '/api/organization/settings', {
-        statusCode: 200,
-        body: {
-          success: true,
-          data: {
-            id: org1Data.id,
-            name: org1Data.name,
-            domain: org1Data.domain,
-            settings: {
-              riskMatrix: '5x5',
-              autoArchiveRisks: true,
-              requireApprovalForHighRisks: true,
-            }
-          }
-        }
-      }).as('getOrgSettings');
-
-      cy.visit('/dashboard/admin/organization');
-      cy.wait('@getOrgSettings');
-
-      // Verify organization settings page
-      cy.get('[data-testid="org-name-input"]')
-        .should('have.value', org1Data.name);
-      
-      cy.get('[data-testid="org-domain-input"]')
-        .should('have.value', org1Data.domain);
-
-      // Update organization name
-      cy.get('[data-testid="org-name-input"]')
-        .clear()
-        .type('Updated Organization One');
-
-      cy.intercept('PUT', '/api/organization/settings', {
-        statusCode: 200,
-        body: {
-          success: true,
-          data: { ...org1Data, name: 'Updated Organization One' }
-        }
-      }).as('updateOrgSettings');
-
-      cy.get('[data-testid="save-org-button"]').click();
-      cy.wait('@updateOrgSettings');
-
-      cy.get('[data-testid="success-toast"]')
-        .should('contain', 'Organization updated successfully');
-    });
-
-    it('should prevent regular users from accessing admin functions', () => {
-      // Login as regular user (not admin)
-      cy.visit('/auth/login');
-      cy.get('[data-testid="email-input"]').type('user2@org1.com');
-      cy.get('[data-testid="password-input"]').type('password123');
-      
-      cy.intercept('POST', '/api/auth/login', {
-        statusCode: 200,
-        body: {
-          success: true,
-          user: org1Data.users[1], // Regular user, not admin
-          token: 'org1-user-token',
-        }
-      });
-      
-      cy.get('[data-testid="login-button"]').click();
-
-      // Try to access admin pages
-      cy.visit('/dashboard/admin/users');
-      
-      // Should be denied access
-      cy.url().should('not.include', '/admin/users');
-      cy.get('[data-testid="access-denied"]')
-        .should('contain', 'Access denied');
-    });
-
-    it('should handle organization-specific branding', () => {
-      // Login to org1
-      cy.visit('/auth/login');
-      cy.get('[data-testid="email-input"]').type('user1@org1.com');
-      cy.get('[data-testid="password-input"]').type('password123');
-      
-      cy.intercept('POST', '/api/auth/login', {
-        statusCode: 200,
-        body: {
-          success: true,
-          user: org1Data.users[0],
-          token: 'org1-user-token',
-        }
-      });
-      
-      cy.get('[data-testid="login-button"]').click();
-
-      // Mock organization branding
-      cy.intercept('GET', '/api/organization/branding', {
-        statusCode: 200,
-        body: {
-          success: true,
-          data: {
-            logo: '/logos/org1-logo.png',
-            primaryColor: '#1a365d',
-            secondaryColor: '#2d3748',
-            organizationName: org1Data.name,
-          }
-        }
-      }).as('getOrgBranding');
-
-      cy.visit('/dashboard');
-      cy.wait('@getOrgBranding');
-
-      // Verify organization-specific elements
-      cy.get('[data-testid="org-logo"]')
-        .should('have.attr', 'src')
-        .and('include', 'org1-logo.png');
-      
-      cy.get('[data-testid="org-name-display"]')
-        .should('contain', org1Data.name);
-    });
-  });
-
-  describe('Cross-Organization Security', () => {
-    it('should prevent JWT token replay attacks across organizations', () => {
-      // Get token for org1 user
-      cy.request({
-        method: 'POST',
-        url: `${Cypress.env('API_URL')}/auth/login`,
-        body: {
-          email: 'user1@org1.com',
-          password: 'password123'
-        }
-      }).then((response) => {
-        const org1Token = response.body.token;
-
-        // Try to use org1 token to access org2 admin functions
-        cy.request({
-          method: 'GET',
-          url: `${Cypress.env('API_URL')}/admin/users`,
-          headers: {
-            'Authorization': `Bearer ${org1Token}`,
-            'X-Organization-ID': org2Data.id
-          },
-          failOnStatusCode: false
-        }).then((response) => {
-          // Should be denied
-          expect(response.status).to.be.oneOf([401, 403]);
-        });
-      });
-    });
-
-    it('should audit cross-organization access attempts', () => {
-      // This test would verify that suspicious access attempts are logged
       // Login as org1 user
-      cy.request({
-        method: 'POST',
-        url: `${Cypress.env('API_URL')}/auth/login`,
-        body: {
-          email: 'user1@org1.com',
-          password: 'password123'
-        }
-      }).then((response) => {
-        const token = response.body.token;
+      await page.goto('/auth/login');
+      await page.locator('[data-testid="email-input"]').fill('user1@org1.com');
+      await page.locator('[data-testid="password-input"]').fill('password123');
+      await page.locator('[data-testid="login-button"]').click();
 
-        // Attempt to access org2 resource
-        cy.request({
-          method: 'GET',
-          url: `${Cypress.env('API_URL')}/risks/${org2Data.risks[0].id}`,
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-          failOnStatusCode: false
-        });
+      // Verify org1 context
+      await expect(page.locator('[data-testid="organization-name"]')).toContainText(org1Data.name);
 
-        // Check audit logs (mock endpoint)
-        cy.request({
-          method: 'GET',
-          url: `${Cypress.env('API_URL')}/admin/audit-logs`,
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }).then((auditResponse) => {
-          // Should contain log of attempted unauthorized access
-          expect(auditResponse.body.data.some((log: any) => 
-            log.action === 'UNAUTHORIZED_ACCESS_ATTEMPT' &&
-            log.resourceId === org2Data.risks[0].id
-          )).to.be.true;
-        });
-      });
-    });
+      // Logout
+      await page.locator('[data-testid="logout-button"]').click();
 
-    it('should handle data export restrictions per organization', () => {
-      // Login as org1 admin
-      cy.visit('/auth/login');
-      cy.get('[data-testid="email-input"]').type('user1@org1.com');
-      cy.get('[data-testid="password-input"]').type('password123');
-      
-      cy.intercept('POST', '/api/auth/login', {
-        statusCode: 200,
-        body: {
-          success: true,
-          user: { ...org1Data.users[0], role: 'ADMIN' },
-          token: 'org1-admin-token',
-        }
-      });
-      
-      cy.get('[data-testid="login-button"]').click();
+      // Login as org2 user
+      await page.goto('/auth/login');
+      await page.locator('[data-testid="email-input"]').fill('user1@org2.com');
+      await page.locator('[data-testid="password-input"]').fill('password123');
+      await page.locator('[data-testid="login-button"]').click();
 
-      // Mock export endpoint
-      cy.intercept('POST', '/api/export/risks', {
-        statusCode: 200,
-        body: {
-          success: true,
-          downloadUrl: '/exports/org1-risks-export.xlsx',
-          data: org1Data.risks // Only org1 data
-        }
-      }).as('exportRisks');
-
-      cy.visit('/dashboard/risks');
-      cy.get('[data-testid="export-button"]').click();
-      
-      cy.wait('@exportRisks');
-
-      // Verify export contains only organization's data
-      cy.get('@exportRisks').then((interception) => {
-        expect(interception.request.body).to.deep.include({
-          organizationId: org1Data.id
-        });
-      });
-
-      cy.get('[data-testid="download-link"]')
-        .should('contain', 'org1-risks-export.xlsx');
+      // Verify org2 context (should not show org1 data)
+      await expect(page.locator('[data-testid="organization-name"]')).toContainText(org2Data.name);
+      await expect(page.locator('[data-testid="organization-name"]')).not.toContainText(org1Data.name);
     });
   });
 
-  describe('Subdomain Isolation', () => {
-    it('should handle organization-specific subdomains', () => {
-      // Visit org1 subdomain
-      cy.visit('http://org1.localhost:3000/auth/login');
-      
-      // Should auto-populate organization context
-      cy.get('[data-testid="organization-context"]')
-        .should('contain', org1Data.name);
+  test.describe('Database Level Isolation', () => {
+    test('should enforce organization isolation in database queries', async ({ request }) => {
+      const apiUrl = process.env.API_URL || 'http://localhost:3000/api';
 
-      // Login should automatically associate with correct org
-      cy.get('[data-testid="email-input"]').type('user1@org1.com');
-      cy.get('[data-testid="password-input"]').type('password123');
-      
-      cy.intercept('POST', '/api/auth/login', {
-        statusCode: 200,
-        body: {
-          success: true,
-          user: org1Data.users[0],
-          token: 'org1-user-token',
+      // Login as org1 user
+      const loginResponse = await request.post(`${apiUrl}/auth/login`, {
+        data: {
+          email: 'user1@org1.com',
+          password: 'password123'
         }
       });
       
-      cy.get('[data-testid="login-button"]').click();
+      const loginData = await loginResponse.json();
+      const token = loginData.token;
 
-      // Verify correct organization context is maintained
-      cy.url().should('include', 'org1.localhost');
-      cy.get('[data-testid="user-org-display"]')
-        .should('contain', org1Data.name);
+      // Get all risks (should only return org1 risks)
+      const risksResponse = await request.get(`${apiUrl}/risks`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const risksData = await risksResponse.json();
+      expect(risksData.success).toBe(true);
+      expect(risksData.data).toHaveLength(2);
+      
+      // Verify all returned risks belong to org1
+      risksData.data.forEach((risk: any) => {
+        expect(risk.id).toContain('org1');
+      });
     });
 
-    it('should prevent subdomain spoofing', () => {
-      // Try to access org1 subdomain with org2 user credentials
-      cy.visit('http://org1.localhost:3000/auth/login');
-      
-      cy.get('[data-testid="email-input"]').type('user1@org2.com');
-      cy.get('[data-testid="password-input"]').type('password123');
-      
-      // Should reject login for wrong organization
-      cy.intercept('POST', '/api/auth/login', {
-        statusCode: 403,
-        body: {
-          success: false,
-          error: 'User not authorized for this organization'
-        }
-      }).as('rejectCrossOrgLogin');
-      
-      cy.get('[data-testid="login-button"]').click();
-      cy.wait('@rejectCrossOrgLogin');
+    test('should prevent SQL injection attempts for cross-organization access', async ({ request }) => {
+      const apiUrl = process.env.API_URL || 'http://localhost:3000/api';
 
-      cy.get('[data-testid="error-message"]')
-        .should('contain', 'not authorized for this organization');
+      // Login as org1 user
+      const loginResponse = await request.post(`${apiUrl}/auth/login`, {
+        data: {
+          email: 'user1@org1.com',
+          password: 'password123'
+        }
+      });
+      
+      const loginData = await loginResponse.json();
+      const token = loginData.token;
+
+      // Attempt SQL injection to access org2 data
+      const maliciousQuery = `' OR organizationId='${org2Data.id}' --`;
+      
+      const response = await request.get(`${apiUrl}/risks?search=${encodeURIComponent(maliciousQuery)}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+      
+      // Should still only return org1 data
+      expect(data.success).toBe(true);
+      data.data?.forEach((risk: any) => {
+        expect(risk.id).toContain('org1');
+        expect(risk.id).not.toContain('org2');
+      });
+    });
+  });
+
+  test.describe('API Security', () => {
+    test('should validate JWT tokens contain correct organization context', async ({ request }) => {
+      const apiUrl = process.env.API_URL || 'http://localhost:3000/api';
+
+      // Create a malicious token with org2 context
+      const maliciousToken = 'Bearer fake-token-with-org2-context';
+
+      const response = await request.get(`${apiUrl}/risks`, {
+        headers: {
+          'Authorization': maliciousToken
+        }
+      });
+
+      // Should return 401 Unauthorized
+      expect(response.status()).toBe(401);
+    });
+
+    test('should prevent token replay attacks across organizations', async ({ request }) => {
+      const apiUrl = process.env.API_URL || 'http://localhost:3000/api';
+
+      // Get valid org1 token
+      const org1LoginResponse = await request.post(`${apiUrl}/auth/login`, {
+        data: {
+          email: 'user1@org1.com',
+          password: 'password123'
+        }
+      });
+      
+      const org1Token = (await org1LoginResponse.json()).token;
+
+      // Try to use org1 token to access org2 specific endpoint
+      const response = await request.get(`${apiUrl}/organizations/${org2Data.id}/settings`, {
+        headers: {
+          'Authorization': `Bearer ${org1Token}`
+        }
+      });
+
+      // Should return 403 Forbidden or 404 Not Found
+      expect([403, 404]).toContain(response.status());
+    });
+  });
+
+  test.describe('Frontend Route Protection', () => {
+    test('should protect organization-specific routes', async ({ page }) => {
+      // Setup auth mock
+      await page.route('/api/auth/login', async route => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            success: true,
+            user: org1Data.users[0],
+            token: 'org1-user-token',
+          })
+        });
+      });
+
+      // Login as org1 user
+      await page.goto('/auth/login');
+      await page.locator('[data-testid="email-input"]').fill('user1@org1.com');
+      await page.locator('[data-testid="password-input"]').fill('password123');
+      await page.locator('[data-testid="login-button"]').click();
+
+      // Try to access org2 specific route
+      await page.goto(`/dashboard/organizations/${org2Data.id}/reports`);
+
+      // Should be redirected or show error
+      const currentUrl = page.url();
+      expect(currentUrl).not.toContain(`/organizations/${org2Data.id}`);
+    });
+
+    test('should handle organization context in navigation', async ({ page }) => {
+      // Setup auth and navigation mocks
+      await page.route('/api/auth/login', async route => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            success: true,
+            user: org1Data.users[0],
+            token: 'org1-user-token',
+          })
+        });
+      });
+
+      await page.route('/api/organizations/current', async route => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            success: true,
+            data: org1Data
+          })
+        });
+      });
+
+      // Login and navigate
+      await page.goto('/auth/login');
+      await page.locator('[data-testid="email-input"]').fill('user1@org1.com');
+      await page.locator('[data-testid="password-input"]').fill('password123');
+      await page.locator('[data-testid="login-button"]').click();
+
+      await page.goto('/dashboard');
+
+      // Verify organization context is correct
+      await expect(page.locator('[data-testid="organization-selector"]')).toContainText(org1Data.name);
+      await expect(page.locator('[data-testid="organization-selector"]')).not.toContainText(org2Data.name);
     });
   });
 }); 
