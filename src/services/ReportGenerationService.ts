@@ -1,4 +1,11 @@
-import { AssessmentResults } from '@/app/api/assessments/[id]/execute/route';
+// import { AssessmentResults } from '@/app/api/assessments/[id]/execute/route'; // Temporarily disabled - interface not implemented yet
+interface AssessmentResults {
+  riskAssessment: any;
+  complianceAssessment: any;
+  controlEffectiveness: any;
+  recommendations: any[];
+  actionPlan: any[];
+}
 
 export interface ReportTemplate {
   id: string;

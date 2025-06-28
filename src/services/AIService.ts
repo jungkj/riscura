@@ -878,7 +878,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
     return data;
   }
 
-  private parseRiskAnalysisResponse(response: string): RiskAnalysis {
+  private parseRiskAnalysisResponse(response: string): ImportedRiskAnalysis {
     try {
       return JSON.parse(response);
     } catch {
