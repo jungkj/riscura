@@ -523,7 +523,7 @@ export default function DocumentLibrary({
           <div className="flex items-center border rounded-lg">
             <Button
               size="sm"
-              variant={viewMode === 'GRID' ? 'default' : 'ghost'}
+              variant={viewMode === 'GRID' ? 'primary' : 'ghost'}
               onClick={() => setViewMode('GRID')}
               className="rounded-r-none"
             >
@@ -531,7 +531,7 @@ export default function DocumentLibrary({
             </Button>
             <Button
               size="sm"
-              variant={viewMode === 'LIST' ? 'default' : 'ghost'}
+              variant={viewMode === 'LIST' ? 'primary' : 'ghost'}
               onClick={() => setViewMode('LIST')}
               className="rounded-l-none"
             >
