@@ -298,7 +298,7 @@ const PerformanceDashboard: React.FC = () => {
       monitorRef.current.destroy();
       monitorRef.current = null;
       setIsMonitoring(false);
-      toast.info('Performance monitoring stopped');
+              toast('Performance monitoring stopped');
     }
   };
 
