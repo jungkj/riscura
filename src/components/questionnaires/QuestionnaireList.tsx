@@ -466,7 +466,7 @@ export function QuestionnaireList({
         
         <div className="flex items-center bg-notion-bg-tertiary rounded-lg p-1">
           <Button
-            variant={currentView === 'grid' ? 'default' : 'ghost'}
+            variant={currentView === 'grid' ? 'primary' : 'ghost'}
             size="sm"
             onClick={() => setView('grid')}
             className={currentView === 'grid' 
@@ -478,7 +478,7 @@ export function QuestionnaireList({
             Grid
           </Button>
           <Button
-            variant={currentView === 'list' ? 'default' : 'ghost'}
+            variant={currentView === 'list' ? 'primary' : 'ghost'}
             size="sm"
             onClick={() => setView('list')}
             className={currentView === 'list' 

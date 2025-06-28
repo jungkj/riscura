@@ -365,7 +365,7 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
                             Preview
                           </Button>
                           <Button 
-                            variant="default" 
+                            variant="primary" 
                             size="sm" 
                             onClick={() => handleCloneTemplate(template)} 
                             className="flex-1"

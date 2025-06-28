@@ -561,7 +561,8 @@ class InputValidator {
         purifyConfig.FORBID_ATTR = ['style', 'onload', 'onerror'];
       }
 
-      return DOMPurify.sanitize(input, purifyConfig);
+      const sanitized = DOMPurify.sanitize(input, purifyConfig);
+      return typeof sanitized === 'string' ? sanitized : sanitized.toString();
     } catch (error) {
       console.error('HTML sanitization error:', error);
       // Fallback: strip all HTML tags

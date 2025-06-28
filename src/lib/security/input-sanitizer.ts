@@ -190,12 +190,15 @@ export class InputSanitizer {
 
       const sanitized = DOMPurify.sanitize(input, purifyConfig);
 
+      // Convert TrustedHTML to string
+      const sanitizedString = typeof sanitized === 'string' ? sanitized : sanitized.toString();
+
       // Encode entities if requested
       if (config.encodeEntities) {
-        return validator.escape(sanitized);
+        return validator.escape(sanitizedString);
       }
 
-      return sanitized;
+      return sanitizedString;
 
     } catch (error) {
       productionGuard.logSecurityEvent('sanitization_error', {
