@@ -399,8 +399,10 @@ export class AIService {
 
       const analysis = this.parseRiskAnalysisResponse(response.choices[0].message.content || '');
       
-      // Enhance with historical comparison
-      analysis.historicalComparison = await this.generateHistoricalComparison(riskData, historicalRisks);
+      // Note: historicalComparison is part of LocalRiskAnalysis but not ImportedRiskAnalysis
+      // For now, we'll use a cast to maintain compatibility
+      const localAnalysis = analysis as any;
+      localAnalysis.historicalComparison = await this.generateHistoricalComparison(riskData, historicalRisks);
       
       return analysis;
     } catch (error) {
@@ -682,10 +684,13 @@ Format as JSON with confidence levels and specific predictions.`;
   // Private helper methods
 
   private async getHistoricalRiskData(organizationId: string, category: string) {
+    if (!prisma) {
+      throw new Error('Prisma client not initialized');
+    }
     return await prisma.risk.findMany({
       where: {
         organizationId,
-        category,
+        category: category as any, // Cast to avoid enum type issues
         createdAt: {
           gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000) // Last year
         }
@@ -705,6 +710,9 @@ Format as JSON with confidence levels and specific predictions.`;
   }
 
   private async getOrganizationContext(organizationId: string) {
+    if (!prisma) {
+      throw new Error('Prisma client not initialized');
+    }
     return await prisma.organization.findUnique({
       where: { id: organizationId },
       select: {
@@ -717,10 +725,13 @@ Format as JSON with confidence levels and specific predictions.`;
   }
 
   private async getExistingControls(organizationId: string, category: string) {
+    if (!prisma) {
+      throw new Error('Prisma client not initialized');
+    }
     return await prisma.control.findMany({
       where: {
         organizationId,
-        category
+        category: category as any // Cast to avoid enum type issues
       },
       select: {
         id: true,
@@ -734,14 +745,18 @@ Format as JSON with confidence levels and specific predictions.`;
   }
 
   private async getIndustryContext(organizationId: string) {
+    if (!prisma) {
+      throw new Error('Prisma client not initialized');
+    }
     const org = await prisma.organization.findUnique({
       where: { id: organizationId },
       select: { name: true, domain: true }
     });
     
     // Return industry-specific best practices
+    // Note: industry field doesn't exist in organization model, using domain as fallback
     return {
-      industry: org?.industry,
+      industry: org?.domain || 'unknown',
       commonRisks: [], // Would be populated from industry database
       regulations: [], // Industry-specific regulations
       bestPractices: [] // Industry best practices
@@ -882,27 +897,34 @@ Be specific and data-driven while maintaining a conversational tone.`;
     try {
       return JSON.parse(response);
     } catch {
-      // Fallback parsing if JSON fails
+      // Fallback parsing if JSON fails - using ImportedRiskAnalysis structure
       return {
-        riskScore: 50,
-        confidenceLevel: 0.7,
-        riskLevel: 'MEDIUM',
-        analysis: {
+        id: 'fallback-analysis',
+        riskId: 'unknown',
+        score: {
           likelihood: 3,
           impact: 3,
-          factors: ['Insufficient data for detailed analysis'],
-          recommendations: ['Gather more risk information'],
-          mitigationStrategies: ['Implement monitoring controls']
+          overall: 50,
+          confidence: 0.7
         },
-        historicalComparison: {
-          similarRisks: [],
-          trendAnalysis: 'No historical data available'
+        assessment: {
+          inherentRisk: 50,
+          residualRisk: 50,
+          riskReduction: 0
         },
-        complianceImpact: {
-          frameworks: [],
-          requirements: [],
-          severity: 'MEDIUM'
-        }
+        recommendations: [],
+        gaps: [],
+        improvements: [],
+        relatedRisks: [],
+        indicators: [],
+        treatmentStrategy: {
+          recommended: 'mitigate',
+          rationale: 'Default mitigation strategy',
+          alternatives: []
+        },
+        regulatoryConsiderations: [],
+        timestamp: new Date(),
+        confidence: 0.7
       };
     }
   }
