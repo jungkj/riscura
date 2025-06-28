@@ -7,15 +7,16 @@ import { cn } from '@/lib/utils';
 import { Progress } from './progress';
 import { Card, CardContent, CardHeader } from './card';
 import { Badge } from './badge';
+// Using unique component names to avoid conflicts with skeleton.tsx and loading-spinner.tsx
 
-// Base Loading Spinner
-interface LoadingSpinnerProps {
+// Enhanced Loading Spinner (unique from the simple one in loading-spinner.tsx)
+interface EnhancedLoadingSpinnerProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   variant?: 'default' | 'secondary' | 'destructive';
 }
 
-export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+export const EnhancedLoadingSpinner: React.FC<EnhancedLoadingSpinnerProps> = ({
   size = 'md',
   className,
   variant = 'default'
@@ -45,33 +46,35 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   );
 };
 
-// Skeleton Components
-interface SkeletonProps {
+// Enhanced Skeleton Components (unique from the simple one in skeleton.tsx)
+interface EnhancedSkeletonProps {
   className?: string;
   children?: React.ReactNode;
+  style?: React.CSSProperties;
 }
 
-export const Skeleton: React.FC<SkeletonProps> = ({ className, children }) => {
+export const EnhancedSkeleton: React.FC<EnhancedSkeletonProps> = ({ className, children, style }) => {
   return (
     <div
       className={cn(
         'animate-pulse rounded-md bg-muted',
         className
       )}
+      style={style}
     >
       {children}
     </div>
   );
 };
 
-// Skeleton Variants
+// Skeleton Variants (using EnhancedSkeleton component)
 export const SkeletonText: React.FC<{ lines?: number; className?: string }> = ({ 
   lines = 1, 
   className 
 }) => (
   <div className={cn('space-y-2', className)}>
     {Array.from({ length: lines }).map((_, i) => (
-      <Skeleton 
+      <EnhancedSkeleton 
         key={i}
         className={cn(
           'h-4',
@@ -91,13 +94,13 @@ export const SkeletonAvatar: React.FC<{ size?: 'sm' | 'md' | 'lg' }> = ({
     lg: 'w-12 h-12'
   };
 
-  return <Skeleton className={cn('rounded-full', sizeClasses[size])} />;
+  return <EnhancedSkeleton className={cn('rounded-full', sizeClasses[size])} />;
 };
 
 export const SkeletonButton: React.FC<{ variant?: 'default' | 'wide' }> = ({ 
   variant = 'default' 
 }) => (
-  <Skeleton 
+  <EnhancedSkeleton 
     className={cn(
       'h-10 rounded-md',
       variant === 'wide' ? 'w-full' : 'w-24'
@@ -124,8 +127,8 @@ export const LoadingCard: React.FC<LoadingCardProps> = ({
   <Card className={className}>
     {(title || description) && (
       <CardHeader>
-        {title && <Skeleton className="h-6 w-1/2 mb-2" />}
-        {description && <Skeleton className="h-4 w-3/4" />}
+        {title && <EnhancedSkeleton className="h-6 w-1/2 mb-2" />}
+        {description && <EnhancedSkeleton className="h-4 w-3/4" />}
       </CardHeader>
     )}
     {content && (
@@ -160,7 +163,7 @@ export const LoadingTable: React.FC<LoadingTableProps> = ({
     {showHeader && (
       <div className="flex gap-4 p-4 border-b">
         {Array.from({ length: columns }).map((_, i) => (
-          <Skeleton key={i} className="h-5 flex-1" />
+          <EnhancedSkeleton key={i} className="h-5 flex-1" />
         ))}
       </div>
     )}
@@ -168,7 +171,7 @@ export const LoadingTable: React.FC<LoadingTableProps> = ({
       {Array.from({ length: rows }).map((_, rowIndex) => (
         <div key={rowIndex} className="flex gap-4 p-4">
           {Array.from({ length: columns }).map((_, colIndex) => (
-            <Skeleton 
+            <EnhancedSkeleton 
               key={colIndex} 
               className={cn(
                 'h-4 flex-1',
@@ -192,38 +195,55 @@ export const LoadingChart: React.FC<{
     <div className="h-full relative">
       {type === 'pie' ? (
         <div className="flex items-center justify-center h-full">
-          <Skeleton className="w-40 h-40 rounded-full" />
+          <EnhancedSkeleton className="w-40 h-40 rounded-full" />
         </div>
       ) : (
         <>
           {/* Y-axis labels */}
           <div className="absolute left-0 top-0 bottom-8 flex flex-col justify-between text-right pr-2">
             {Array.from({ length: 5 }).map((_, i) => (
-              <Skeleton key={i} className="h-3 w-8" />
+              <EnhancedSkeleton key={i} className="h-3 w-8" />
             ))}
           </div>
           
           {/* Chart area */}
-          <div className="ml-12 mb-8 h-full relative">
-            {type === 'line' || type === 'area' ? (
-              <Skeleton className="w-full h-full rounded" />
-            ) : (
+          <div className="ml-12 mr-4 h-full pb-8">
+            {type === 'bar' ? (
               <div className="flex items-end justify-between h-full gap-2">
                 {Array.from({ length: 8 }).map((_, i) => (
-                  <Skeleton 
+                  <EnhancedSkeleton 
                     key={i} 
-                    className="flex-1 rounded-t"
-                    style={{ height: `${Math.random() * 80 + 20}%` }}
+                    className="w-full"
+                    style={{ height: `${20 + Math.random() * 60}%` }}
                   />
                 ))}
+              </div>
+            ) : (
+              <div className="relative h-full">
+                <EnhancedSkeleton className="w-full h-full" />
+                {/* Simulate data points */}
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full h-px bg-muted-foreground/20 relative">
+                    {Array.from({ length: 6 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="absolute w-2 h-2 bg-primary rounded-full"
+                        style={{ 
+                          left: `${i * 20}%`, 
+                          top: `${-4 + Math.random() * 8}px` 
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </div>
           
           {/* X-axis labels */}
-          <div className="ml-12 flex justify-between">
+          <div className="absolute bottom-0 left-12 right-4 flex justify-between">
             {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className="h-3 w-12" />
+              <EnhancedSkeleton key={i} className="h-3 w-12" />
             ))}
           </div>
         </>
@@ -232,21 +252,21 @@ export const LoadingChart: React.FC<{
   </div>
 );
 
-// Dashboard Loading State
+// Dashboard Loading Layout
 export const LoadingDashboard: React.FC = () => (
   <div className="space-y-6">
     {/* Header */}
     <div className="flex justify-between items-center">
       <div>
-        <Skeleton className="h-8 w-48 mb-2" />
-        <Skeleton className="h-4 w-32" />
+        <EnhancedSkeleton className="h-8 w-48 mb-2" />
+        <EnhancedSkeleton className="h-4 w-64" />
       </div>
       <div className="flex gap-2">
         <SkeletonButton />
         <SkeletonButton />
       </div>
     </div>
-
+    
     {/* Stats Cards */}
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {Array.from({ length: 4 }).map((_, i) => (
@@ -254,50 +274,32 @@ export const LoadingDashboard: React.FC = () => (
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <Skeleton className="h-4 w-20 mb-2" />
-                <Skeleton className="h-8 w-16" />
+                <EnhancedSkeleton className="h-4 w-24 mb-2" />
+                <EnhancedSkeleton className="h-8 w-16" />
               </div>
-              <Skeleton className="w-8 h-8 rounded" />
+              <EnhancedSkeleton className="h-8 w-8 rounded" />
             </div>
           </CardContent>
         </Card>
       ))}
     </div>
-
-    {/* Charts */}
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <Card>
-        <CardHeader>
-          <Skeleton className="h-6 w-32" />
-        </CardHeader>
-        <CardContent>
-          <LoadingChart type="area" />
-        </CardContent>
-      </Card>
-      
-      <Card>
-        <CardHeader>
-          <Skeleton className="h-6 w-32" />
-        </CardHeader>
-        <CardContent>
-          <LoadingChart type="bar" />
-        </CardContent>
-      </Card>
+    
+    {/* Main Content */}
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="lg:col-span-2">
+        <LoadingChart />
+      </div>
+      <div>
+        <LoadingCard />
+      </div>
     </div>
-
+    
     {/* Data Table */}
-    <Card>
-      <CardHeader>
-        <Skeleton className="h-6 w-40" />
-      </CardHeader>
-      <CardContent className="p-0">
-        <LoadingTable rows={8} columns={5} />
-      </CardContent>
-    </Card>
+    <LoadingTable />
   </div>
 );
 
-// List Loading State
+// List Loading Skeleton
 interface LoadingListProps {
   items?: number;
   showAvatar?: boolean;
@@ -311,18 +313,19 @@ export const LoadingList: React.FC<LoadingListProps> = ({
   showActions = true,
   className
 }) => (
-  <div className={cn('space-y-3', className)}>
+  <div className={cn('divide-y', className)}>
     {Array.from({ length: items }).map((_, i) => (
-      <div key={i} className="flex items-center gap-3 p-3 border rounded-lg">
-        {showAvatar && <SkeletonAvatar />}
-        <div className="flex-1">
-          <Skeleton className="h-5 w-1/3 mb-2" />
-          <Skeleton className="h-4 w-2/3" />
+      <div key={i} className="flex items-center justify-between p-4">
+        <div className="flex items-center gap-3">
+          {showAvatar && <SkeletonAvatar />}
+          <div>
+            <EnhancedSkeleton className="h-4 w-32 mb-2" />
+            <EnhancedSkeleton className="h-3 w-48" />
+          </div>
         </div>
         {showActions && (
           <div className="flex gap-2">
-            <Skeleton className="w-8 h-8 rounded" />
-            <Skeleton className="w-8 h-8 rounded" />
+            <SkeletonButton variant="default" />
           </div>
         )}
       </div>
@@ -330,23 +333,23 @@ export const LoadingList: React.FC<LoadingListProps> = ({
   </div>
 );
 
-// Form Loading State
+// Form Loading Skeleton
 export const LoadingForm: React.FC<{ fields?: number }> = ({ fields = 4 }) => (
-  <div className="space-y-4">
+  <div className="space-y-6">
     {Array.from({ length: fields }).map((_, i) => (
       <div key={i} className="space-y-2">
-        <Skeleton className="h-4 w-24" />
-        <Skeleton className="h-10 w-full rounded-md" />
+        <EnhancedSkeleton className="h-4 w-24" />
+        <EnhancedSkeleton className="h-10 w-full" />
       </div>
     ))}
-    <div className="flex gap-2 pt-4">
-      <SkeletonButton variant="wide" />
+    <div className="flex justify-end gap-2 pt-4">
+      <SkeletonButton />
       <SkeletonButton />
     </div>
   </div>
 );
 
-// Progress Loading States
+// Progress Loading
 interface LoadingProgressProps {
   label?: string;
   progress?: number;
@@ -451,7 +454,7 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
         blur ? 'backdrop-blur-sm' : ''
       )}>
         <div className="flex flex-col items-center gap-3">
-          <LoadingSpinner size="lg" />
+          <EnhancedLoadingSpinner size="lg" />
           <p className="text-sm text-muted-foreground">{message}</p>
         </div>
       </div>
@@ -472,7 +475,7 @@ export const ComponentLoadingFallback: React.FC<{ height?: string }> = ({
   height = 'h-32' 
 }) => (
   <div className={cn('flex items-center justify-center', height)}>
-    <LoadingSpinner />
+    <EnhancedLoadingSpinner />
   </div>
 );
 
@@ -523,7 +526,7 @@ export const InfiniteScrollLoading: React.FC<{
   if (isLoading) {
     return (
       <div className="flex justify-center py-8">
-        <LoadingSpinner />
+        <EnhancedLoadingSpinner />
       </div>
     );
   }
@@ -539,24 +542,5 @@ export const InfiniteScrollLoading: React.FC<{
   return null;
 };
 
-// Export all components
-export {
-  LoadingSpinner as Spinner,
-  Skeleton,
-  SkeletonText,
-  SkeletonAvatar,
-  SkeletonButton,
-  LoadingCard,
-  LoadingTable,
-  LoadingChart,
-  LoadingDashboard,
-  LoadingList,
-  LoadingForm,
-  LoadingProgress,
-  NetworkLoading,
-  LoadingOverlay,
-  PageLoadingFallback,
-  ComponentLoadingFallback,
-  LazyLoading,
-  InfiniteScrollLoading
-}; 
+// All components are already exported individually above
+// Removed duplicate export block to fix TypeScript errors 
