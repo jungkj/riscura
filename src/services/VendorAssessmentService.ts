@@ -140,34 +140,10 @@ export class VendorAssessmentService {
     `;
 
     try {
-      const response = await this.aiService.generateContent({
-        type: 'analysis',
-        context: {
-          prompt,
-          format: 'json'
-        }
-      });
-
-      const riskProfileData = typeof response.content === 'string' 
-        ? JSON.parse(response.content) 
-        : response.content;
-
-      return {
-        id: `risk-profile-${Date.now()}`,
-        vendorId: assessment.id,
-        overallRiskScore: riskProfileData.overallRiskScore || assessment.riskScore,
-        riskCategories: riskProfileData.riskCategories || {
-          security: Math.max(0, 100 - assessment.riskScore),
-          privacy: assessment.vendorInfo.privacyPolicyURL ? 80 : 40,
-          compliance: assessment.vendorInfo.certifications.length > 0 ? 75 : 35,
-          operational: 60,
-          financial: 65
-        },
-        riskFactors: riskProfileData.riskFactors || this.extractRiskFactors(assessment),
-        recommendations: riskProfileData.recommendations || this.generateBasicRecommendations(assessment),
-        complianceGaps: riskProfileData.complianceGaps || this.identifyComplianceGaps(assessment),
-        mitigationStrategies: riskProfileData.mitigationStrategies || this.generateMitigationStrategies(assessment)
-      };
+      // For now, use fallback since generateContent method doesn't exist
+      // In the future, this could be replaced with a proper AI analysis method
+      console.log('AI risk profile generation requested but not implemented');
+      return this.generateFallbackRiskProfile(assessment);
     } catch (error) {
       console.error('Risk profile generation failed:', error);
       return this.generateFallbackRiskProfile(assessment);

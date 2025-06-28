@@ -125,7 +125,23 @@ interface KnowledgeBaseArticle {
 
 // SLA configuration
 interface SLAConfig {
-  [key in TicketPriority]: {
+  [TicketPriority.LOW]: {
+    firstResponseTime: number; // minutes
+    resolutionTime: number; // minutes
+  };
+  [TicketPriority.MEDIUM]: {
+    firstResponseTime: number; // minutes
+    resolutionTime: number; // minutes
+  };
+  [TicketPriority.HIGH]: {
+    firstResponseTime: number; // minutes
+    resolutionTime: number; // minutes
+  };
+  [TicketPriority.URGENT]: {
+    firstResponseTime: number; // minutes
+    resolutionTime: number; // minutes
+  };
+  [TicketPriority.CRITICAL]: {
     firstResponseTime: number; // minutes
     resolutionTime: number; // minutes
   };
