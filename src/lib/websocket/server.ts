@@ -454,7 +454,7 @@ export class CollaborationServer {
       // Log activity
       await db.client.activity.create({
         data: {
-          type: 'COMMENT_CREATED',
+          type: 'COMMENTED',
           entityType: payload.entityType.toUpperCase(),
           entityId: payload.entityId,
           description: `${user.firstName} ${user.lastName} added a comment`,

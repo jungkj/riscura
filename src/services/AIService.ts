@@ -433,7 +433,9 @@ export class AIService {
         ],
       });
 
-      const recommendations = this.parseControlRecommendations(response.content[0].text);
+      const recommendations = this.parseControlRecommendations(
+        response.content[0].type === 'text' ? response.content[0].text : JSON.stringify(response.content[0])
+      );
       
       // Rank recommendations by effectiveness and feasibility
       return this.rankControlRecommendations(recommendations, risk);
@@ -512,7 +514,7 @@ Format as a professional report with clear sections and actionable recommendatio
         ],
       });
 
-      return response.content[0].text;
+      return response.content[0].type === 'text' ? response.content[0].text : JSON.stringify(response.content[0]);
     } catch (error) {
       console.error('Risk report generation failed:', error);
       throw new Error('AI report generation failed');
