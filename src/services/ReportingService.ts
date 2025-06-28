@@ -176,8 +176,6 @@ export class ReportingService {
    * Generate a report on demand
    */
   async generateReport(config: ReportConfig): Promise<GeneratedReport[]> {
-    const results: GeneratedReport[] = [];
-
     try {
       // Validate configuration
       await this.validateReportConfig(config);
@@ -186,28 +184,30 @@ export class ReportingService {
       const data = await this.aggregateReportData(config);
 
       // Generate reports in requested formats
+      const reports: GeneratedReport[] = [];
+      
       for (const format of config.format) {
-        const result = await this.generateReportInFormat(config, data, format);
-        results.push(result);
+        const report = await this.generateReportInFormat(config, data, format);
+        reports.push(report);
       }
 
-      // Save report metadata to database
-      await this.saveReportMetadata(config, results);
+      // Save metadata
+      await this.saveReportMetadata(config, reports);
 
-      // Send email if recipients specified
-      if (config.recipients && config.recipients.length > 0) {
-        await this.emailReports(config, results);
+      // Email if configured
+      if (config.recipients?.length) {
+        await this.emailReports(config, reports);
       }
 
-      return results;
+      return reports;
     } catch (error) {
-      console.error('Report generation failed:', error);
-      throw new Error(`Report generation failed: ${error.message}`);
+      console.error('Error generating report:', error);
+      throw new Error(`Failed to generate report: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
   /**
-   * Schedule a recurring report
+   * Schedule a report for regular generation
    */
   async scheduleReport(config: ReportConfig): Promise<string> {
     if (!config.schedule) {
@@ -216,23 +216,27 @@ export class ReportingService {
 
     // Save scheduled report configuration
     const savedConfig = await this.saveScheduledReport(config);
-
+    
     // Create cron job
     const cronExpression = this.buildCronExpression(config.schedule);
     const job = cron.schedule(cronExpression, async () => {
       try {
-        console.log(`Executing scheduled report: ${config.name}`);
-        await this.generateReport(config);
+        await this.generateReport(savedConfig);
+        console.log(`Scheduled report generated: ${savedConfig.name}`);
       } catch (error) {
-        console.error(`Scheduled report failed: ${config.name}`, error);
-        // Optionally notify administrators
+        console.error(`Failed to generate scheduled report: ${savedConfig.name}`, error);
       }
-    }, {
-      scheduled: config.schedule.enabled,
-      timezone: config.schedule.timezone
-    });
+                }, {
+        timezone: config.schedule.timezone,
+      });
 
-    this.scheduledJobs.set(savedConfig.id!, job);
+      // Start the job if enabled
+      if (config.schedule.enabled) {
+        job.start();
+      }
+
+      // Store job reference
+      this.scheduledJobs.set(savedConfig.id!, job);
 
     return savedConfig.id!;
   }
@@ -241,54 +245,41 @@ export class ReportingService {
    * Get available report templates
    */
   async getReportTemplates(organizationId: string): Promise<any[]> {
-    const templates = [
+    // Mock implementation - in real app, this would query a templates table
+    return [
       {
-        id: 'risk_assessment_standard',
+        id: 'risk-assessment-template',
         name: 'Risk Assessment Report',
-        type: ReportType.RISK_ASSESSMENT,
-        description: 'Comprehensive risk assessment with heat maps and trending',
-        parameters: ['dateRange', 'categories', 'priority'],
-        preview: '/templates/risk-assessment-preview.png'
+        description: 'Comprehensive risk analysis report',
+        type: 'risk_assessment',
+        category: 'operational',
       },
       {
-        id: 'compliance_status_standard',
+        id: 'compliance-status-template',
         name: 'Compliance Status Report',
-        type: ReportType.COMPLIANCE_STATUS,
-        description: 'Framework compliance status with gap analysis',
-        parameters: ['frameworks', 'dateRange', 'departments'],
-        preview: '/templates/compliance-status-preview.png'
+        description: 'Current compliance framework status',
+        type: 'compliance_status',
+        category: 'compliance',
       },
       {
-        id: 'control_effectiveness_standard',
+        id: 'control-effectiveness-template',
         name: 'Control Effectiveness Report',
-        type: ReportType.CONTROL_EFFECTIVENESS,
-        description: 'Control testing results and effectiveness metrics',
-        parameters: ['controlTypes', 'dateRange', 'testingFrequency'],
-        preview: '/templates/control-effectiveness-preview.png'
+        description: 'Analysis of control implementation and effectiveness',
+        type: 'control_effectiveness',
+        category: 'operational',
       },
       {
-        id: 'executive_summary_standard',
-        name: 'Executive Summary Dashboard',
-        type: ReportType.EXECUTIVE_SUMMARY,
-        description: 'High-level risk and compliance overview for executives',
-        parameters: ['dateRange', 'includeMetrics', 'includeCharts'],
-        preview: '/templates/executive-summary-preview.png'
+        id: 'executive-summary-template',
+        name: 'Executive Summary',
+        description: 'High-level summary for executive stakeholders',
+        type: 'executive_summary',
+        category: 'executive',
       },
-      {
-        id: 'audit_trail_standard',
-        name: 'Audit Trail Report',
-        type: ReportType.AUDIT_TRAIL,
-        description: 'Detailed audit log with user activities and changes',
-        parameters: ['dateRange', 'users', 'actions', 'entities'],
-        preview: '/templates/audit-trail-preview.png'
-      }
     ];
-
-    return templates;
   }
 
   /**
-   * Get report history
+   * Get report generation history
    */
   async getReportHistory(
     organizationId: string,
@@ -300,37 +291,41 @@ export class ReportingService {
     } = {},
     pagination: { skip: number; take: number } = { skip: 0, take: 20 }
   ): Promise<{ reports: any[]; total: number }> {
-    const whereClause: any = {
-      organizationId,
-    };
-
-    if (filters.type) whereClause.type = filters.type;
-    if (filters.createdBy) whereClause.createdBy = filters.createdBy;
-    if (filters.dateFrom || filters.dateTo) {
-      whereClause.generatedAt = {};
-      if (filters.dateFrom) whereClause.generatedAt.gte = filters.dateFrom;
-      if (filters.dateTo) whereClause.generatedAt.lte = filters.dateTo;
+    if (!prisma) {
+      throw new Error('Prisma client not initialized');
     }
 
-    const [reports, total] = await Promise.all([
-      prisma.report.findMany({
-        where: whereClause,
-        include: {
-          creator: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              email: true,
-            },
-          },
+    const whereClause: any = { organizationId };
+
+    if (filters.type) {
+      whereClause.type = filters.type;
+    }
+
+    if (filters.dateFrom || filters.dateTo) {
+      whereClause.createdAt = {};
+      if (filters.dateFrom) whereClause.createdAt.gte = filters.dateFrom;
+      if (filters.dateTo) whereClause.createdAt.lte = filters.dateTo;
+    }
+
+    if (filters.createdBy) {
+      whereClause.createdBy = filters.createdBy;
+    }
+
+    const reports = await prisma.report.findMany({
+      where: whereClause,
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip: pagination.skip,
+      take: pagination.take,
+      include: {
+        creator: {
+          select: { firstName: true, lastName: true, email: true },
         },
-        orderBy: { generatedAt: 'desc' },
-        skip: pagination.skip,
-        take: pagination.take,
-      }),
-      prisma.report.count({ where: whereClause }),
-    ]);
+      },
+    });
+
+    const total = await prisma.report.count({ where: whereClause });
 
     return { reports, total };
   }
@@ -363,15 +358,11 @@ export class ReportingService {
   }
 
   private async aggregateRiskData(organizationId: string, filters: ReportFilters): Promise<any> {
-    const whereClause: any = { organizationId };
-
-    // Apply filters
-    if (filters.dateRange) {
-      whereClause.dateIdentified = {
-        gte: filters.dateRange.from,
-        lte: filters.dateRange.to,
-      };
+    if (!prisma) {
+      throw new Error('Prisma client not initialized');
     }
+
+    const whereClause: any = { organizationId };
 
     if (filters.categories?.length) {
       whereClause.category = { in: filters.categories };
@@ -381,93 +372,77 @@ export class ReportingService {
       whereClause.status = { in: filters.status };
     }
 
-    if (filters.assignedTo?.length) {
-      whereClause.owner = { in: filters.assignedTo };
+    if (filters.dateRange) {
+      whereClause.dateIdentified = {
+        gte: filters.dateRange.from,
+        lte: filters.dateRange.to,
+      };
     }
 
-    const [risks, riskStats, riskTrends] = await Promise.all([
-      // Get detailed risk data
-      prisma.risk.findMany({
-        where: whereClause,
-        include: {
-          creator: {
-            select: { firstName: true, lastName: true, email: true },
-          },
-          controls: {
-            include: {
-              control: {
-                select: { id: true, title: true, status: true, effectivenessRating: true },
-              },
+    const risks = await prisma.risk.findMany({
+      where: whereClause,
+      include: {
+        creator: {
+          select: { firstName: true, lastName: true, email: true },
+        },
+        controls: {
+          include: {
+            control: {
+              select: { id: true, title: true, status: true },
             },
           },
         },
-        orderBy: { riskScore: 'desc' },
-      }),
+        evidence: true,
+      },
+    });
 
-      // Get risk statistics
-      prisma.risk.groupBy({
-        by: ['category', 'riskLevel', 'status'],
-        where: whereClause,
-        _count: true,
-        _avg: { riskScore: true },
-      }),
+    // Risk summary calculations
+    const summary = {
+      totalRisks: risks.length,
+      criticalRisks: risks.filter(r => r.riskLevel === 'CRITICAL').length,
+      highRisks: risks.filter(r => r.riskLevel === 'HIGH').length,
+      mediumRisks: risks.filter(r => r.riskLevel === 'MEDIUM').length,
+      lowRisks: risks.filter(r => r.riskLevel === 'LOW').length,
+      averageScore: risks.reduce((sum, r) => sum + r.riskScore, 0) / risks.length || 0,
+    };
 
-      // Get risk trends (last 12 months)
-      prisma.risk.groupBy({
-        by: ['dateIdentified'],
-        where: {
-          ...whereClause,
-          dateIdentified: {
-            gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000),
-          },
-        },
-        _count: true,
-        orderBy: { dateIdentified: 'asc' },
-      }),
-    ]);
-
-    // Calculate risk metrics
-    const totalRisks = risks.length;
-    const criticalRisks = risks.filter(r => r.riskLevel === 'CRITICAL').length;
-    const highRisks = risks.filter(r => r.riskLevel === 'HIGH').length;
-    const averageRiskScore = risks.reduce((sum, r) => sum + r.riskScore, 0) / totalRisks || 0;
-
-    // Risk distribution by category
-    const categoryDistribution = riskStats.reduce((acc, stat) => {
-      if (!acc[stat.category]) acc[stat.category] = 0;
-      acc[stat.category] += stat._count;
+    // Risk by category
+    const risksByCategory = risks.reduce((acc, risk) => {
+      if (!acc[risk.category]) acc[risk.category] = 0;
+      acc[risk.category]++;
       return acc;
     }, {} as Record<string, number>);
 
-    // Top risks
-    const topRisks = risks.slice(0, 10);
-
     return {
-      summary: {
-        totalRisks,
-        criticalRisks,
-        highRisks,
-        averageRiskScore: Math.round(averageRiskScore * 100) / 100,
-      },
       risks,
-      categoryDistribution,
-      riskTrends,
-      topRisks,
+      summary,
+      risksByCategory,
+      topRisks: risks
+        .sort((a, b) => b.riskScore - a.riskScore)
+        .slice(0, 10),
       generatedAt: new Date(),
       filters,
     };
   }
 
   private async aggregateComplianceData(organizationId: string, filters: ReportFilters): Promise<any> {
-    // Implementation for compliance data aggregation
+    if (!prisma) {
+      throw new Error('Prisma client not initialized');
+    }
+
+    const whereClause: any = { organizationId };
+    
+    if (filters.dateRange) {
+      whereClause.createdAt = {
+        gte: filters.dateRange.from,
+        lte: filters.dateRange.to,
+      };
+    }
+
     const frameworks = await prisma.complianceFramework.findMany({
-      where: { organizationId },
+      where: whereClause,
       include: {
-        requirements: {
-          include: {
-            controls: true,
-          },
-        },
+        requirements: true,
         assessments: {
           where: filters.dateRange ? {
             createdAt: {
@@ -476,18 +451,25 @@ export class ReportingService {
             },
           } : undefined,
           include: {
-            controlResults: true,
+            controlAssessments: true,
           },
         },
       },
     });
 
     // Calculate compliance scores
-    const complianceScores = frameworks.map(framework => {
-      const totalRequirements = framework.requirements.length;
-      const metRequirements = framework.requirements.filter(req => 
-        req.controls.some(control => control.status === 'IMPLEMENTED')
-      ).length;
+    const complianceScores = frameworks.map((framework: any) => {
+      const totalRequirements = framework.requirements?.length || 0;
+      const metRequirements = framework.requirements?.filter((req: any) => 
+        req.controls && req.controls.length > 0 && req.controls.some((controlId: string) => {
+          // Check if any control referenced in the requirement is implemented
+          return framework.assessments.some((assessment: any) => 
+            assessment.controlAssessments.some((result: any) => 
+              result.controlId === controlId && result.status === 'EFFECTIVE'
+            )
+          );
+        })
+      ).length || 0;
       
       return {
         frameworkId: framework.id,
@@ -501,13 +483,17 @@ export class ReportingService {
     return {
       frameworks,
       complianceScores,
-      overallCompliance: complianceScores.reduce((sum, score) => sum + score.score, 0) / complianceScores.length || 0,
+      overallCompliance: complianceScores.reduce((sum: number, score: any) => sum + score.score, 0) / complianceScores.length || 0,
       generatedAt: new Date(),
       filters,
     };
   }
 
   private async aggregateControlData(organizationId: string, filters: ReportFilters): Promise<any> {
+    if (!prisma) {
+      throw new Error('Prisma client not initialized');
+    }
+
     const whereClause: any = { organizationId };
 
     if (filters.categories?.length) {
@@ -536,7 +522,7 @@ export class ReportingService {
 
     // Calculate effectiveness metrics
     const effectivenessStats = controls.reduce((acc, control) => {
-      const rating = control.effectivenessRating;
+      const rating = control.effectivenessRating || 'INEFFECTIVE';
       if (!acc[rating]) acc[rating] = 0;
       acc[rating]++;
       return acc;
@@ -781,25 +767,32 @@ export class ReportingService {
    */
   private async saveReportMetadata(config: ReportConfig, reports: GeneratedReport[]): Promise<void> {
     if (!prisma) {
-      throw new Error('Database connection not available');
+      throw new Error('Prisma client not initialized');
     }
-    
-    for (const report of reports) {
+
+    try {
       await prisma.report.create({
         data: {
-          id: report.id,
-          name: report.name,
-          type: report.type as any,
-          status: 'COMPLETED' as any,
-          format: report.format,
-          filePath: report.filePath,
-          fileSize: report.fileSize,
-          generatedAt: report.generatedAt,
-          organizationId: report.organizationId,
-          createdBy: report.generatedBy,
-          parameters: report.parameters,
+          title: config.name,
+          type: config.type as any,
+          status: 'PUBLISHED' as any,
+          organizationId: config.organizationId,
+          createdBy: config.createdBy,
+          parameters: config.parameters,
+          data: {
+            reports: reports.map(r => ({
+              id: r.id,
+              format: r.format,
+              filePath: r.filePath,
+              fileSize: r.fileSize,
+              generatedAt: r.generatedAt,
+            }))
+          },
         },
       });
+    } catch (error) {
+      console.error('Error saving report metadata:', error);
+      throw new Error(`Failed to save report metadata: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 }
