@@ -169,8 +169,7 @@ export class EnhancedProboService {
   async mapControlsToRisks(organizationId: string): Promise<RiskControlMapping[]> {
     // Get all risks and controls for the organization
     const risks = await prisma.risk.findMany({
-      where: { organizationId },
-      include: { category: true }
+      where: { organizationId }
     });
 
     const controls = await prisma.proboControl.findMany({
@@ -281,7 +280,7 @@ export class EnhancedProboService {
     const aiAnalysis = await this.analyzeVendorWithAI(vendorUrl, vendorName);
     
     // Store assessment in database
-    const assessment = await prisma.vendorRiskAssessment.create({
+    const assessment = await prisma.vendorAssessment.create({
       data: {
         vendorName,
         vendorUrl,
@@ -307,7 +306,7 @@ export class EnhancedProboService {
           severity: finding.severity,
           title: finding.title,
           description: finding.description,
-          recommendation: finding.recommendation,
+          remediation: finding.recommendation,
           assessmentId: assessment.id,
         }
       });
@@ -323,7 +322,7 @@ export class EnhancedProboService {
     trendData: Array<{ date: string; averageRisk: number; assessmentCount: number }>;
     topRisks: Array<{ vendor: string; riskScore: number; criticalFindings: number }>;
   }> {
-    const assessments = await prisma.vendorRiskAssessment.findMany({
+    const assessments = await prisma.vendorAssessment.findMany({
       where: { organizationId },
       include: { findings: true },
       orderBy: { assessmentDate: 'desc' }
