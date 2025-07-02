@@ -643,8 +643,8 @@ const ActivityItem: React.FC<{
             {/* Expandable Details */}
             {(showDetails || isExpanded) && (
               <div className="mt-enterprise-4 pt-enterprise-3 border-t border-border">
-                {renderChanges(activity.changes)}
-                {renderMetadata(activity.metadata)}
+                {renderChanges(activity.changes || [])}
+                {renderMetadata(activity.metadata || {})}
               </div>
             )}
 

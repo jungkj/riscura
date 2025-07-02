@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import crypto from 'crypto';
+import React from 'react';
 
 export interface CSRFConfig {
   tokenLength: number;
@@ -316,7 +317,8 @@ class CSRFProtection {
     if (realIP) return realIP;
     if (forwarded) return forwarded.split(',')[0].trim();
     
-    return request.ip || '127.0.0.1';
+    // NextRequest doesn't have ip property, use a fallback
+    return request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '127.0.0.1';
   }
 
   // Create error response
@@ -585,7 +587,7 @@ export function useCSRFToken(): {
     try {
       const response = await fetch('/api/csrf-token', {
         method: 'GET',
-        credentials: 'same-origin',
+        credentials: 'include',
       });
       
       if (!response.ok) {
@@ -602,14 +604,18 @@ export function useCSRFToken(): {
   };
 
   const validateToken = (tokenToValidate: string): boolean => {
-    return csrfProtection.validateToken(tokenToValidate);
+    return csrfProtection.validateTokenFromAPI(tokenToValidate).isValid;
   };
 
   React.useEffect(() => {
     generateToken().catch(console.error);
   }, []);
 
-  return { token, generateToken, validateToken };
+  return {
+    token,
+    generateToken,
+    validateToken,
+  };
 }
 
 // Export class for custom instances

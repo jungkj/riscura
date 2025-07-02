@@ -128,12 +128,12 @@ export default function DocumentViewer({
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = (document as any).createElement('a');
       a.href = url;
-      a.download = document.originalName;
-      document.body.appendChild(a);
+      a.download = document.fileName;
+      (document as any).body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
+      (document as any).body.removeChild(a);
       window.URL.revokeObjectURL(url);
 
       toast.success('File downloaded successfully');

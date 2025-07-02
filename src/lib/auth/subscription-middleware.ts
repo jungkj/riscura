@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from './auth-options';
 import { db } from '@/lib/db';
 
@@ -176,7 +176,7 @@ export async function withSubscription(
   requirements: SubscriptionRequirement = {}
 ) {
   try {
-    const session = await getServerSession(authOptions);
+    import { unstable_getServerSession } from 'next-auth/next';
     
     if (!session?.user) {
       return NextResponse.json(

@@ -408,14 +408,14 @@ export const convertAIControlsToControlObjects = (
   }) => ({
     title: aiControl.title,
     description: aiControl.description,
-    type: 'preventive' as const, // Default type, can be adjusted
-    effectiveness: aiControl.confidence > 0.8 ? 'high' as const : 
-                  aiControl.confidence > 0.6 ? 'medium' as const : 'low' as const,
+    type: 'PREVENTIVE' as const, // Default type, can be adjusted
+    effectiveness: aiControl.confidence > 0.8 ? 'HIGH' as const : 
+                  aiControl.confidence > 0.6 ? 'MEDIUM' as const : 'LOW' as const, // Convert confidence to effectiveness rating
     owner,
     frequency: 'Monthly', // Default frequency
     evidence: [],
     linkedRisks: [],
-    status: 'planned' as const
+    status: 'PLANNED' as const
   }));
 };
 

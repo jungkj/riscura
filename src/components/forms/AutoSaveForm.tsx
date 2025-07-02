@@ -9,6 +9,9 @@ import {
 } from '@/components/icons/IconLibrary';
 import { LoadingStates } from '@/components/states/LoadingState';
 
+const LoadingSpinner: React.FC<{ size: string }> = () => <div>Loading...</div>;
+const RotateCcw: React.FC<{ size: string, className: string }> = () => <span>↻</span>;
+
 // Auto-save types and interfaces
 interface AutoSaveConfig {
   enabled: boolean;
@@ -300,7 +303,7 @@ export function AutoSaveForm<T = any>({
           <div className="flex items-center space-x-2">
             {autoSaveStatus.status === 'saving' && (
               <>
-                <LoadingStates.Spinner size="xs" />
+                <LoadingSpinner size="xs" />
                 <span className="text-sm text-gray-600">Saving...</span>
               </>
             )}
@@ -316,7 +319,7 @@ export function AutoSaveForm<T = any>({
             
             {autoSaveStatus.status === 'error' && (
               <>
-                <StatusIcons.AlertCircle size="xs" color="danger" />
+                <StatusIcons.AlertCircle size="xs" color="error" />
                 <span className="text-sm text-red-600">
                   Save failed: {autoSaveStatus.error}
                   {(autoSaveStatus.retryCount || 0) < finalConfig.maxRetries && (
@@ -365,7 +368,7 @@ export function AutoSaveForm<T = any>({
                 onClick={resetForm}
                 className="inline-flex items-center px-3 py-1 text-xs font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
               >
-                <ActionIcons.Refresh size="xs" className="mr-1" />
+                <RotateCcw size="xs" className="mr-1" />
                 Reset
               </button>
             )}

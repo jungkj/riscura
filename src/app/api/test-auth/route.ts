@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/middleware';
-import { getServerSession } from 'next-auth/next';
+import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-options';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {

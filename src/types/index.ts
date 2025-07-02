@@ -14,7 +14,7 @@ export interface User {
 }
 
 // Risk Types
-export type RiskCategory = 'operational' | 'financial' | 'strategic' | 'compliance' | 'technology';
+export type RiskCategory = 'OPERATIONAL' | 'FINANCIAL' | 'STRATEGIC' | 'COMPLIANCE' | 'TECHNOLOGY';
 
 export interface Risk {
   id: string;

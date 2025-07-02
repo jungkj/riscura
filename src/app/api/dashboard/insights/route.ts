@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
         impact: 5,
         riskScore: 15,
         status: 'identified' as const,
-        category: 'technology' as const,
+        category: 'TECHNOLOGY' as const,
         owner: 'IT Security Team',
         controls: ['1'],
         evidence: [],

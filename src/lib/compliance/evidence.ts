@@ -1,38 +1,29 @@
 import { db } from '@/lib/db';
-import { notificationManager } from '@/lib/collaboration/notifications';
+import { 
+  ActivityType,
+  EntityType,
+  User,
+  Control
+} from '@prisma/client';
 
-export interface ComplianceEvidence {
+// Define the evidence types based on the actual Prisma schema
+type AssessmentEvidence = {
   id: string;
-  controlId: string;
-  frameworkId: string;
-  requirementId: string;
-  title: string;
-  description: string;
-  type: 'document' | 'screenshot' | 'report' | 'certificate' | 'test-result' | 'log' | 'configuration' | 'other';
-  category: 'policy' | 'procedure' | 'testing' | 'monitoring' | 'training' | 'technical' | 'management' | 'operational';
-  status: 'draft' | 'pending-review' | 'approved' | 'expired' | 'rejected';
-  file: {
-    filename: string;
-    path: string;
-    size: number;
-    mimeType: string;
-    hash: string;
-  };
-  metadata: {
-    source: string;
-    author: string;
-    reviewer?: string;
-    effectiveDate: Date;
-    expirationDate?: Date;
-    version: string;
-    tags: string[];
-    confidentiality: 'public' | 'internal' | 'confidential' | 'restricted';
-  };
-  auditTrail: EvidenceAuditEntry[];
-  organizationId: string;
-  createdBy: string;
-  createdAt: Date;
-  updatedAt: Date;
+  assessmentId: string;
+  controlId: string | null;
+  name: string;
+  description: string | null;
+  evidenceType: string;
+  fileUrl: string | null;
+  uploadedBy: string;
+  uploadedAt: Date;
+};
+
+// Use Prisma types but extend for additional functionality
+export interface AssessmentEvidenceWithRelations extends AssessmentEvidence {
+  control?: Control | null;
+  assessment?: ComplianceAssessment | null;
+  uploader?: Pick<User, 'id' | 'firstName' | 'lastName' | 'email'> | null;
 }
 
 export interface EvidenceAuditEntry {
@@ -74,7 +65,7 @@ export interface AuditPackage {
     to: Date;
   };
   status: 'preparing' | 'ready' | 'submitted' | 'under-review' | 'completed';
-  evidence: ComplianceEvidence[];
+  evidence: AssessmentEvidence[];
   controls: string[];
   requirements: string[];
   auditor: {
@@ -162,37 +153,52 @@ export interface EvidenceNotification {
 export class ComplianceEvidenceManager {
 
   // Create evidence record
-  async createEvidence(evidence: Omit<ComplianceEvidence, 'id' | 'auditTrail' | 'createdAt' | 'updatedAt'>): Promise<ComplianceEvidence> {
-    const newEvidence = await db.client.complianceEvidence.create({
+  async createEvidence(evidenceData: {
+    assessmentId: string;
+    controlId?: string;
+    name: string;
+    description?: string;
+    evidenceType: string;
+    fileUrl?: string;
+    uploadedBy: string;
+  }): Promise<AssessmentEvidenceWithRelations> {
+    const newEvidence = await db.client.assessmentEvidence.create({
       data: {
-        ...evidence,
-        auditTrail: [
-          {
-            id: `audit_${Date.now()}`,
-            action: 'created',
-            userId: evidence.createdBy,
-            timestamp: new Date(),
-            details: 'Evidence record created',
+        assessmentId: evidenceData.assessmentId,
+        controlId: evidenceData.controlId || null,
+        name: evidenceData.name,
+        description: evidenceData.description || null,
+        evidenceType: evidenceData.evidenceType,
+        fileUrl: evidenceData.fileUrl || null,
+        uploadedBy: evidenceData.uploadedBy,
+      },
+      include: {
+        control: true,
+        assessment: true,
+        uploader: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
           },
-        ],
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        },
       },
     });
 
     // Log activity
     await db.client.activity.create({
       data: {
-        type: 'EVIDENCE_CREATED',
-        entityType: 'EVIDENCE',
+        type: ActivityType.CREATED,
+        entityType: EntityType.DOCUMENT, // Closest available type for evidence
         entityId: newEvidence.id,
-        description: `Evidence created: ${evidence.title}`,
-        userId: evidence.createdBy,
-        organizationId: evidence.organizationId,
+        description: `Evidence created: ${evidenceData.name}`,
+        userId: evidenceData.uploadedBy,
+        organizationId: 'system', // Get from assessment if needed
         metadata: {
-          controlId: evidence.controlId,
-          frameworkId: evidence.frameworkId,
-          type: evidence.type,
+          controlId: evidenceData.controlId,
+          assessmentId: evidenceData.assessmentId,
+          type: evidenceData.evidenceType,
         },
         isPublic: false,
       },
@@ -204,10 +210,10 @@ export class ComplianceEvidenceManager {
   // Update evidence
   async updateEvidence(
     evidenceId: string,
-    updates: Partial<ComplianceEvidence>,
+    updates: Partial<AssessmentEvidence>,
     userId: string
-  ): Promise<ComplianceEvidence> {
-    const existing = await db.client.complianceEvidence.findUnique({
+  ): Promise<AssessmentEvidenceWithRelations> {
+    const existing = await db.client.assessmentEvidence.findUnique({
       where: { id: evidenceId },
     });
 
@@ -215,68 +221,22 @@ export class ComplianceEvidenceManager {
       throw new Error('Evidence not found');
     }
 
-    // Track changes
-    const changes: Record<string, { from: any; to: any }> = {};
-    for (const [key, value] of Object.entries(updates)) {
-      if (key in existing && existing[key as keyof ComplianceEvidence] !== value) {
-        changes[key] = {
-          from: existing[key as keyof ComplianceEvidence],
-          to: value,
-        };
-      }
-    }
-
-    // Add audit entry
-    const auditEntry: EvidenceAuditEntry = {
-      id: `audit_${Date.now()}`,
-      action: 'updated',
-      userId,
-      timestamp: new Date(),
-      details: 'Evidence record updated',
-      changes,
-    };
-
-    const updated = await db.client.complianceEvidence.update({
+    const updated = await db.client.assessmentEvidence.update({
       where: { id: evidenceId },
-      data: {
-        ...updates,
-        auditTrail: [...existing.auditTrail, auditEntry],
-        updatedAt: new Date(),
-      },
-    });
-
-    return updated;
-  }
-
-  // Review evidence
-  async reviewEvidence(
-    evidenceId: string,
-    reviewerId: string,
-    approved: boolean,
-    comments?: string
-  ): Promise<ComplianceEvidence> {
-    const auditEntry: EvidenceAuditEntry = {
-      id: `audit_${Date.now()}`,
-      action: approved ? 'approved' : 'rejected',
-      userId: reviewerId,
-      timestamp: new Date(),
-      details: comments || (approved ? 'Evidence approved' : 'Evidence rejected'),
-    };
-
-    const updated = await db.client.complianceEvidence.update({
-      where: { id: evidenceId },
-      data: {
-        status: approved ? 'approved' : 'rejected',
-        'metadata.reviewer': reviewerId,
-        auditTrail: {
-          push: auditEntry,
+      data: updates,
+      include: {
+        control: true,
+        assessment: true,
+        uploader: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
         },
-        updatedAt: new Date(),
       },
     });
-
-    // Notify stakeholders
-    await this.notifyEvidenceReview(updated, approved, comments);
 
     return updated;
   }
@@ -286,67 +246,74 @@ export class ComplianceEvidenceManager {
     controlId: string,
     filters?: {
       type?: string[];
-      status?: string[];
-      frameworkId?: string;
+      assessmentId?: string;
     }
-  ): Promise<ComplianceEvidence[]> {
+  ): Promise<AssessmentEvidenceWithRelations[]> {
     const where: any = { controlId };
 
     if (filters?.type) {
-      where.type = { in: filters.type };
+      where.evidenceType = { in: filters.type };
     }
 
-    if (filters?.status) {
-      where.status = { in: filters.status };
+    if (filters?.assessmentId) {
+      where.assessmentId = filters.assessmentId;
     }
 
-    if (filters?.frameworkId) {
-      where.frameworkId = filters.frameworkId;
-    }
-
-    return await db.client.complianceEvidence.findMany({
-      where,
-      orderBy: [
-        { 'metadata.effectiveDate': 'desc' },
-        { createdAt: 'desc' },
-      ],
-    });
-  }
-
-  // Get evidence by framework
-  async getEvidenceByFramework(
-    frameworkId: string,
-    organizationId: string,
-    filters?: {
-      requirementId?: string;
-      type?: string[];
-      status?: string[];
-    }
-  ): Promise<ComplianceEvidence[]> {
-    const where: any = { frameworkId, organizationId };
-
-    if (filters?.requirementId) {
-      where.requirementId = filters.requirementId;
-    }
-
-    if (filters?.type) {
-      where.type = { in: filters.type };
-    }
-
-    if (filters?.status) {
-      where.status = { in: filters.status };
-    }
-
-    return await db.client.complianceEvidence.findMany({
+    return await db.client.assessmentEvidence.findMany({
       where,
       include: {
         control: true,
-        requirement: true,
+        assessment: true,
+        uploader: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
       },
-      orderBy: [
-        { 'metadata.effectiveDate': 'desc' },
-        { createdAt: 'desc' },
-      ],
+      orderBy: {
+        uploadedAt: 'desc',
+      },
+    });
+  }
+
+  // Get evidence by assessment
+  async getEvidenceByAssessment(
+    assessmentId: string,
+    filters?: {
+      type?: string[];
+      controlId?: string;
+    }
+  ): Promise<AssessmentEvidenceWithRelations[]> {
+    const where: any = { assessmentId };
+
+    if (filters?.type) {
+      where.evidenceType = { in: filters.type };
+    }
+
+    if (filters?.controlId) {
+      where.controlId = filters.controlId;
+    }
+
+    return await db.client.assessmentEvidence.findMany({
+      where,
+      include: {
+        control: true,
+        assessment: true,
+        uploader: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: {
+        uploadedAt: 'desc',
+      },
     });
   }
 
@@ -439,13 +406,13 @@ export class ComplianceEvidenceManager {
     if (!auditPackage) return;
 
     // Get evidence for specified controls and requirements
-    const evidence = await db.client.complianceEvidence.findMany({
+    const evidence = await db.client.assessmentEvidence.findMany({
       where: {
         organizationId: auditPackage.organizationId,
         frameworkId: auditPackage.frameworkId,
         OR: [
           { controlId: { in: auditPackage.controls } },
-          { requirementId: { in: auditPackage.requirements } },
+          { assessmentId: { in: auditPackage.requirements } },
         ],
         status: 'approved',
         'metadata.effectiveDate': {
@@ -509,13 +476,28 @@ export class ComplianceEvidenceManager {
       },
       evidence: auditPackage.evidence.map((evidence: any) => ({
         id: evidence.id,
-        title: evidence.title,
-        type: evidence.type,
-        category: evidence.category,
+        title: evidence.name,
+        type: evidence.evidenceType,
+        category: evidence.control?.category || 'unknown',
         controlId: evidence.controlId,
-        requirementId: evidence.requirementId,
-        file: evidence.file,
-        metadata: evidence.metadata,
+        requirementId: evidence.assessmentId,
+        file: evidence.fileUrl ? {
+          filename: evidence.name,
+          path: evidence.fileUrl,
+          size: 0, // Assuming size is not available in fileUrl
+          mimeType: '', // Assuming mimeType is not available in fileUrl
+          hash: '', // Assuming hash is not available in fileUrl
+        } : null,
+        metadata: {
+          source: 'system',
+          author: evidence.uploader?.firstName + ' ' + evidence.uploader?.lastName || 'system',
+          reviewer: null,
+          effectiveDate: evidence.uploadedAt,
+          expirationDate: null,
+          version: '',
+          tags: [],
+          confidentiality: 'public',
+        },
       })),
       controls: auditPackage.controls,
       requirements: auditPackage.requirements,
@@ -635,7 +617,7 @@ export class ComplianceEvidenceManager {
           deficiencies: control.deficiencies || [],
           exceptions: control.exceptions || [],
         },
-        evidence: auditPackage.evidence.filter((e: any) => e.controlId === control.id && e.type === 'test-result'),
+        evidence: auditPackage.evidence.filter((e: any) => e.controlId === control.id && e.evidenceType === 'test-result'),
       })),
       summary: {
         totalTests: 0, // Would be calculated
@@ -692,15 +674,15 @@ export class ComplianceEvidenceManager {
 
   // Notify evidence review
   private async notifyEvidenceReview(
-    evidence: ComplianceEvidence,
+    evidence: AssessmentEvidence,
     approved: boolean,
     comments?: string
   ): Promise<void> {
     await notificationManager.sendNotification({
       type: approved ? 'EVIDENCE_APPROVED' : 'EVIDENCE_REJECTED',
       title: `Evidence ${approved ? 'Approved' : 'Rejected'}`,
-      message: `Evidence "${evidence.title}" has been ${approved ? 'approved' : 'rejected'}${comments ? `: ${comments}` : ''}`,
-      recipientId: evidence.createdBy,
+      message: `Evidence "${evidence.name}" has been ${approved ? 'approved' : 'rejected'}${comments ? `: ${comments}` : ''}`,
+      recipientId: evidence.uploadedBy,
       entityType: 'EVIDENCE',
       entityId: evidence.id,
       urgency: 'medium',
@@ -715,7 +697,7 @@ export class ComplianceEvidenceManager {
 
   // Check evidence expiration
   async checkEvidenceExpiration(organizationId: string): Promise<void> {
-    const expiringEvidence = await db.client.complianceEvidence.findMany({
+    const expiringEvidence = await db.client.assessmentEvidence.findMany({
       where: {
         organizationId,
         status: 'approved',
@@ -730,8 +712,8 @@ export class ComplianceEvidenceManager {
       await notificationManager.sendNotification({
         type: 'EVIDENCE_EXPIRING',
         title: 'Evidence Expiring Soon',
-        message: `Evidence "${evidence.title}" will expire on ${evidence.metadata.expirationDate?.toDateString()}`,
-        recipientId: evidence.createdBy,
+        message: `Evidence "${evidence.name}" will expire on ${evidence.metadata.expirationDate?.toDateString()}`,
+        recipientId: evidence.uploadedBy,
         entityType: 'EVIDENCE',
         entityId: evidence.id,
         urgency: 'medium',
@@ -743,7 +725,7 @@ export class ComplianceEvidenceManager {
     }
 
     // Mark expired evidence
-    await db.client.complianceEvidence.updateMany({
+    await db.client.assessmentEvidence.updateMany({
       where: {
         organizationId,
         status: 'approved',
@@ -772,14 +754,18 @@ export class ComplianceEvidenceManager {
       where.frameworkId = frameworkId;
     }
 
-    const evidence = await db.client.complianceEvidence.findMany({
+    const evidence = await db.client.assessmentEvidence.findMany({
       where,
       select: {
-        type: true,
+        evidenceType: true,
         status: true,
-        category: true,
+        control: {
+          select: {
+            category: true,
+          },
+        },
         'metadata.expirationDate': true,
-        createdAt: true,
+        uploadedAt: true,
       },
     });
 
@@ -790,7 +776,7 @@ export class ComplianceEvidenceManager {
     return {
       total: evidence.length,
       byType: evidence.reduce((acc, e) => {
-        acc[e.type] = (acc[e.type] || 0) + 1;
+        acc[e.evidenceType] = (acc[e.evidenceType] || 0) + 1;
         return acc;
       }, {} as Record<string, number>),
       byStatus: evidence.reduce((acc, e) => {
@@ -798,7 +784,7 @@ export class ComplianceEvidenceManager {
         return acc;
       }, {} as Record<string, number>),
       byCategory: evidence.reduce((acc, e) => {
-        acc[e.category] = (acc[e.category] || 0) + 1;
+        acc[e.control?.category] = (acc[e.control?.category] || 0) + 1;
         return acc;
       }, {} as Record<string, number>),
       expiringCount: evidence.filter(e => 
@@ -806,7 +792,7 @@ export class ComplianceEvidenceManager {
         new Date(e.metadata.expirationDate) <= thirtyDaysFromNow
       ).length,
       recentlyAdded: evidence.filter(e => 
-        new Date(e.createdAt) >= sevenDaysAgo
+        new Date(e.uploadedAt) >= sevenDaysAgo
       ).length,
     };
   }

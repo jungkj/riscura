@@ -8,8 +8,6 @@ import {
   StatusIcons, 
   DataIcons,
   UserIcons,
-  SecurityIcons,
-  ToolIcons,
   RiskManagementIcons
 } from '@/components/icons/IconLibrary';
 
@@ -183,7 +181,7 @@ export const EmptyStates = {
     className?: string;
   }) => (
     <EmptyState
-      icon={DataIcons.BarChart}
+      icon={DataIcons.BarChart3}
       title={title}
       description={description}
       action={onRefresh ? {
@@ -316,7 +314,7 @@ export const EmptyStates = {
     className?: string;
   }) => (
     <EmptyState
-      icon={StatusIcons.Check}
+      icon={StatusIcons.CheckCircle}
       title={title}
       description={description}
       className={className}
@@ -364,7 +362,7 @@ export const EmptyStates = {
     className?: string;
   }) => (
     <EmptyState
-      icon={StatusIcons.Error}
+      icon={StatusIcons.XCircle}
       title={title}
       description={description}
       action={onRetry ? {
@@ -392,7 +390,7 @@ export const EmptyStates = {
     className?: string;
   }) => (
     <EmptyState
-      icon={StatusIcons.Alert}
+      icon={StatusIcons.AlertCircle}
       title={title}
       description={description}
       action={onRetry ? {
@@ -417,7 +415,7 @@ export const EmptyStates = {
     className?: string;
   }) => (
     <EmptyState
-      icon={RiskManagementIcons.ShieldAlert}
+      icon={RiskManagementIcons.Shield}
       title={title}
       description={description}
       action={onStartAssessment ? {
@@ -440,7 +438,7 @@ export const EmptyStates = {
     className?: string;
   }) => (
     <EmptyState
-      icon={RiskManagementIcons.ClipboardCheck}
+      icon={RiskManagementIcons.Clipboard}
       title={title}
       description={description}
       action={onSetupFramework ? {
@@ -463,7 +461,7 @@ export const EmptyStates = {
     className?: string;
   }) => (
     <EmptyState
-      icon={RiskManagementIcons.FileCheck}
+      icon={RiskManagementIcons.File}
       title={title}
       description={description}
       action={onScheduleAudit ? {

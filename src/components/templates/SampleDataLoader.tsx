@@ -393,7 +393,7 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
                         <div className={`p-2 rounded-lg ${getCategoryColor(template.category)}`}>
                           <CategoryIcon className="w-4 h-4" />
                         </div>
-                        <Checkbox checked={isSelected} readOnly />
+                        <Checkbox checked={isSelected} />
                       </div>
                       <Badge variant="secondary" className="text-xs">
                         {template.items} items

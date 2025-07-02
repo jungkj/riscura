@@ -473,7 +473,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
                 <Grid
                   ref={gridRef}
                   columnCount={finalColumns.length}
-                  columnWidth={(index) => columnWidths[finalColumns[index].key] || finalColumns[index].width}
+                  columnWidth={index => columnWidths[finalColumns[index].key] || finalColumns[index].width}
                   height={autoHeight}
                   rowCount={processedData.length}
                   rowHeight={typeof rowHeight === 'number' ? rowHeight : estimatedRowHeight}
@@ -482,8 +482,8 @@ const VirtualizedTable = <T extends Record<string, any>>({
                   onScroll={handleScroll}
                   overscanRowCount={overscanCount}
                   overscanColumnCount={2}
-                  scrollToRow={scrollToIndex}
-                  scrollToAlignment={scrollToAlignment}
+                  initialScrollToRow={scrollToIndex}
+                  initialScrollToColumn={0}
                 >
                   {GridCell}
                 </Grid>
@@ -501,8 +501,8 @@ const VirtualizedTable = <T extends Record<string, any>>({
                   onScroll={handleScroll}
                   overscanCount={overscanCount}
                   estimatedItemSize={estimatedRowHeight}
-                  scrollToIndex={scrollToIndex}
-                  scrollToAlignment={scrollToAlignment}
+                  itemKey={(index: number) => processedData[index].id || index}
+                  width={autoWidth}
                 >
                   {ListRow}
                 </VariableSizeList>
@@ -518,8 +518,8 @@ const VirtualizedTable = <T extends Record<string, any>>({
                 itemData={itemData}
                 onScroll={handleScroll}
                 overscanCount={overscanCount}
-                scrollToIndex={scrollToIndex}
-                scrollToAlignment={scrollToAlignment}
+                itemKey={(index: number) => processedData[index].id || index}
+                width={autoWidth}
               >
                 {ListRow}
               </List>
