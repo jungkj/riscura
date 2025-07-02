@@ -113,8 +113,8 @@ export default function ARIAAssistant({
         
         recognition.onstart = () => setIsListening(true);
         recognition.onend = () => setIsListening(false);
-        recognition.onerror = (event) => {
-          console.error('Speech recognition error:', event.error);
+        recognition.onerror = (event: Event) => {
+          console.error('Speech recognition error:', event);
           setIsListening(false);
           toast({
             title: 'Voice Recognition Error',
@@ -122,7 +122,7 @@ export default function ARIAAssistant({
             variant: 'destructive',
           });
         };
-        recognition.onresult = (event) => {
+        recognition.onresult = (event: any) => {
           const transcript = event.results[0][0].transcript;
           setInputMessage(transcript);
           setIsListening(false);

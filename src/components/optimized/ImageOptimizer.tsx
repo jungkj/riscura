@@ -91,7 +91,7 @@ export interface ImageOptimizerRef {
 // Image format detection utility
 const supportsWebP = (): Promise<boolean> => {
   return new Promise((resolve) => {
-    const webP = new Image();
+    const webP = new (window as any).Image();
     webP.onload = webP.onerror = () => resolve(webP.height === 2);
     webP.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
   });
@@ -99,7 +99,7 @@ const supportsWebP = (): Promise<boolean> => {
 
 const supportsAvif = (): Promise<boolean> => {
   return new Promise((resolve) => {
-    const avif = new Image();
+    const avif = new (window as any).Image();
     avif.onload = avif.onerror = () => resolve(avif.height === 2);
     avif.src = 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgABogQEAwgMg8f8D///8WfhwB8+ErK42A=';
   });

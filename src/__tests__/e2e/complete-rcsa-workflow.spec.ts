@@ -38,7 +38,7 @@ const createTestData = () => ({
 
 // Page Object Model for better maintainability
 class RiscuraApp {
-  constructor(private page: Page) {}
+  constructor(public page: Page) {}
 
   // Authentication flows
   async registerUser(userData: any) {
@@ -104,7 +104,7 @@ class RiscuraApp {
     
     // Get the assessment ID from URL or element
     const assessmentId = await this.page.locator('[data-testid="assessment-id"]').textContent();
-    return assessmentId;
+    return assessmentId!;
   }
 
   // Document upload and AI analysis
@@ -158,7 +158,7 @@ class RiscuraApp {
     await expect(this.page.locator('[data-testid="risk-score"]')).toBeVisible();
     
     const riskId = await this.page.locator('[data-testid="risk-id"]').textContent();
-    return riskId;
+    return riskId!;
   }
 
   // Control management
@@ -181,7 +181,7 @@ class RiscuraApp {
     await expect(this.page.locator('[data-testid="control-saved"]')).toBeVisible();
     
     const controlId = await this.page.locator('[data-testid="control-id"]').textContent();
-    return controlId;
+    return controlId!;
   }
 
   // Control testing
@@ -224,7 +224,7 @@ class RiscuraApp {
   }
 
   // Report generation and export
-  async generateAssessmentReport() {
+  async generateAssessmentReport(): Promise<string> {
     await this.page.click('[data-testid="reports-tab"]');
     await this.page.click('[data-testid="generate-report-button"]');
     
@@ -245,7 +245,11 @@ class RiscuraApp {
     // Verify download link is available
     await expect(this.page.locator('[data-testid="download-report"]')).toBeVisible();
     
-    return this.page.locator('[data-testid="download-report"]').getAttribute('href');
+    const reportUrl = await this.page.locator('[data-testid="download-report"]').getAttribute('href');
+    if (!reportUrl) {
+      throw new Error("Report URL not found");
+    }
+    return reportUrl;
   }
 
   // Stakeholder sharing

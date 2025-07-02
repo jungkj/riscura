@@ -3,7 +3,7 @@ import { z, ZodError } from 'zod';
 import { withAuth, rateLimit, type AuthenticatedRequest } from '@/lib/auth/middleware';
 import { db } from '@/lib/db';
 import { env } from '@/config/env';
-import { getServerSession } from 'next-auth/next';
+import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-options';
 import { 
   ApiResponseFormatter, 

@@ -156,7 +156,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
 
   // Handle completion callback
   useEffect(() => {
-    if (success && policyExtraction && onComplete) {
+    if (success === true && policyExtraction && onComplete) {
       onComplete(policyExtraction);
     }
   }, [success, policyExtraction, onComplete]);
@@ -262,7 +262,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
 
           {/* Success Message */}
           {success && hasResults && (
-            <Alert className="mt-4" variant="default">
+            <Alert className="mt-4" variant={success ? 'default' : 'destructive'}>
               <CheckCircle2 className="h-4 w-4" />
               <AlertDescription>
                 Analysis complete! Found {policyExtraction?.risks.length} risks and {policyExtraction?.controls.length} controls.
@@ -388,7 +388,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                                   </Button>
                                   <Button
                                     size="sm"
-                                    variant={isApproved ? "primary" : "outline"}
+                                    variant={isApproved ? "default" : "outline"}
                                     onClick={() => toggleApproval(itemId)}
                                   >
                                     {isApproved ? (
@@ -474,7 +474,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                                   </Button>
                                   <Button
                                     size="sm"
-                                    variant={isApproved ? "primary" : "outline"}
+                                    variant={isApproved ? "default" : "outline"}
                                     onClick={() => toggleApproval(itemId)}
                                   >
                                     {isApproved ? (
@@ -499,4 +499,4 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
       </AnimatePresence>
     </div>
   );
-} 
+}

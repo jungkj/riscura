@@ -15,7 +15,7 @@ import { Separator } from '@/components/ui/separator';
 import {
   Brain, Lightbulb, Target, TrendingUp, Shield, AlertTriangle,
   CheckCircle, Star, Zap, Search, Plus, RefreshCw, Send,
-  MessageSquare, FileText, BarChart3, Settings, Help,
+  MessageSquare, FileText, BarChart3, Settings, HelpCircle,
   Sparkles, Eye, ThumbsUp, ThumbsDown, Copy, Download,
   ArrowRight, ChevronRight, Info, Clock
 } from 'lucide-react';

@@ -4,99 +4,82 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  // Base styles with proper Tailwind classes
-  `inline-flex items-center justify-center whitespace-nowrap font-medium transition-all duration-200 
-   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 
-   disabled:pointer-events-none disabled:cursor-not-allowed select-none
-   border border-solid`,
+  // Base styles
+  `inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background 
+   transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring 
+   focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50`,
   {
     variants: {
       variant: {
         // Primary variant - main brand color
         primary: `
-          bg-[#199BEC] text-white border-[#199BEC]
-          shadow-sm hover:bg-[#1785d1] hover:border-[#1785d1]
-          hover:shadow-md active:bg-[#146bb8] active:border-[#146bb8]
-          active:scale-[0.98] focus-visible:ring-blue-500/50
-          disabled:bg-gray-300 disabled:border-gray-300 disabled:text-gray-500
+          bg-blue-600 text-white shadow hover:bg-blue-700 active:bg-blue-800
+          border-transparent focus:ring-blue-500
+          disabled:bg-blue-300 disabled:text-white
         `,
         
-        // Secondary variant - outlined style
+        // Secondary variant - subtle background
         secondary: `
-          bg-white text-gray-900 border-gray-300
-          shadow-sm hover:bg-gray-50 hover:border-gray-300
-          hover:shadow-md active:bg-gray-100 active:scale-[0.98]
-          focus-visible:ring-blue-500/50
-          disabled:bg-gray-100 disabled:border-gray-200 disabled:text-gray-400
+          bg-slate-100 text-slate-900 shadow-sm hover:bg-slate-200 active:bg-slate-300
+          border border-slate-200 focus:ring-slate-500
+          disabled:bg-slate-50 disabled:text-slate-400
         `,
         
-        // Outline variant - transparent with border
+        // Success variant - green theme
+        success: `
+          bg-green-600 text-white shadow hover:bg-green-700 active:bg-green-800
+          border-transparent focus:ring-green-500
+          disabled:bg-green-300 disabled:text-white
+        `,
+        
+        // Danger variant - red theme
+        danger: `
+          bg-red-600 text-white shadow hover:bg-red-700 active:bg-red-800
+          border-transparent focus:ring-red-500
+          disabled:bg-red-300 disabled:text-white
+        `,
+        
+        // Outline variant - border only
         outline: `
-          bg-transparent text-[#199BEC] border-[#199BEC]
-          hover:bg-blue-50 hover:border-[#1785d1] hover:text-[#1785d1]
-          active:bg-blue-100 active:border-[#146bb8] active:text-[#146bb8]
-          active:scale-[0.98] focus-visible:ring-blue-500/50
-          disabled:bg-transparent disabled:border-gray-300 disabled:text-gray-400
+          border border-slate-300 bg-transparent text-slate-700 shadow-sm 
+          hover:bg-slate-50 hover:text-slate-900 active:bg-slate-100
+          focus:ring-slate-500
+          disabled:border-slate-200 disabled:text-slate-400
         `,
         
         // Ghost variant - minimal styling
         ghost: `
-          bg-transparent text-gray-700 border-transparent
-          hover:bg-gray-100 hover:text-gray-900
-          active:bg-gray-200 active:scale-[0.98]
-          focus-visible:ring-blue-500/50
-          disabled:bg-transparent disabled:text-gray-400
+          bg-transparent text-slate-700 hover:bg-slate-100 hover:text-slate-900
+          active:bg-slate-200 focus:ring-slate-500
+          disabled:text-slate-400
         `,
         
-        // Danger variant - destructive actions
-        danger: `
-          bg-red-600 text-white border-red-600
-          shadow-sm hover:bg-red-700 hover:border-red-700
-          hover:shadow-md active:bg-red-800 active:border-red-800
-          active:scale-[0.98] focus-visible:ring-red-500/50
-          disabled:bg-gray-300 disabled:border-gray-300 disabled:text-gray-500
-        `,
-        
-        // Success variant - positive actions
-        success: `
-          bg-green-600 text-white border-green-600
-          shadow-sm hover:bg-green-700 hover:border-green-700
-          hover:shadow-md active:bg-green-800 active:border-green-800
-          active:scale-[0.98] focus-visible:ring-green-500/50
-          disabled:bg-gray-300 disabled:border-gray-300 disabled:text-gray-500
-        `,
-        
-        // Link variant - text-only styling
+        // Link variant - looks like a link
         link: `
-          bg-transparent text-[#199BEC] border-transparent
-          underline-offset-4 hover:underline hover:text-[#1785d1]
-          focus-visible:ring-blue-500/50 disabled:text-gray-400
-          p-0 h-auto font-medium
+          text-blue-600 underline-offset-4 hover:underline hover:text-blue-700
+          active:text-blue-800 focus:ring-blue-500
+          disabled:text-blue-300
+        `,
+        
+        // Default variant - alias for primary
+        default: `
+          bg-blue-600 text-white shadow hover:bg-blue-700 active:bg-blue-800
+          border-transparent focus:ring-blue-500
+          disabled:bg-blue-300 disabled:text-white
         `,
       },
       size: {
-        // Extra small
-        xs: `h-7 px-2 text-xs rounded-md`,
-        
-        // Small
-        sm: `h-8 px-3 text-sm rounded-md`,
-        
-        // Medium (default)
-        md: `h-10 px-4 text-sm rounded-md`,
-        
-        // Large
-        lg: `h-11 px-6 text-base rounded-md`,
-        
-        // Extra large
-        xl: `h-12 px-8 text-lg rounded-md`,
-        
-        // Icon only - square aspect ratio
-        icon: `h-10 w-10 p-0 rounded-md`,
+        xs: "h-7 px-2 text-xs",
+        sm: "h-8 px-3 text-sm",
+        md: "h-9 px-4 text-sm",
+        lg: "h-10 px-6 text-base",
+        xl: "h-11 px-8 text-base",
+        icon: "h-9 w-9 p-0",
       },
     },
     defaultVariants: {
-      variant: 'primary',
-      size: 'md',
+      variant: "primary",
+      size: "md",
     },
   }
 );

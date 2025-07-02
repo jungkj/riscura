@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { DatePickerWithRange } from '@/components/ui/date-range-picker';
+// import { DatePickerWithRange } from '@/components/ui/date-range-picker';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -405,10 +405,10 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
               {/* Date Range */}
               <div className="space-y-2">
                 <Label>Date Range</Label>
-                <DatePickerWithRange
+                {/* <DatePickerWithRange
                   date={config.filters.dateRange}
                   onDateChange={(range) => handleFilterChange('dateRange', range)}
-                />
+                /> */}
               </div>
 
               {/* Categories */}
@@ -521,7 +521,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                           onValueChange={(value) => 
                             setConfig(prev => ({
                               ...prev,
-                              schedule: { ...prev.schedule, frequency: value as any }
+                              schedule: { ...prev.schedule, frequency: value as any, time: prev.schedule?.time || '', timezone: prev.schedule?.timezone || 'UTC', enabled: prev.schedule?.enabled || false }
                             }))
                           }
                         >
@@ -544,7 +544,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                           onChange={(e) => 
                             setConfig(prev => ({
                               ...prev,
-                              schedule: { ...prev.schedule, time: e.target.value }
+                              schedule: { ...prev.schedule, time: e.target.value, frequency: prev.schedule?.frequency || 'daily', timezone: prev.schedule?.timezone || 'UTC', enabled: prev.schedule?.enabled || false }
                             }))
                           }
                         />
@@ -557,7 +557,10 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                         onValueChange={(value) => 
                           setConfig(prev => ({
                             ...prev,
-                            schedule: { ...prev.schedule, timezone: value }
+                            schedule: { 
+                              ...(prev.schedule || { frequency: 'daily', time: '', timezone: 'UTC', enabled: false }), 
+                              timezone: value 
+                            }
                           }))
                         }
                       >

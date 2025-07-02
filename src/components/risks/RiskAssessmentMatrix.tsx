@@ -100,7 +100,7 @@ interface RiskAssessment {
   likelihood: number;
   impact: number;
   riskScore: number;
-  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
   factors: RiskFactor[];
   mitigatingControls: string[];
   residualLikelihood: number;
@@ -287,7 +287,7 @@ const RiskAssessmentMatrix: React.FC = () => {
     likelihood: 1,
     impact: 1,
     riskScore: 1,
-    riskLevel: 'LOW',
+    riskLevel: 'low',
     factors: [],
     mitigatingControls: [],
     residualLikelihood: 1,
@@ -330,7 +330,7 @@ const RiskAssessmentMatrix: React.FC = () => {
     const loadRisks = async () => {
       try {
         const response = await api.risks.getRisks({ limit: 1000 });
-        setExistingRisks(response.data || []);
+        setExistingRisks(response.data as Risk[] || []);
       } catch (error) {
         console.error('Failed to load risks:', error);
       }
@@ -348,7 +348,7 @@ const RiskAssessmentMatrix: React.FC = () => {
       likelihood,
       impact,
       riskScore: score,
-      riskLevel,
+      riskLevel: riskLevel.toLowerCase() as 'low' | 'medium' | 'high' | 'critical',
     }));
   }, [assessment.factors]);
 
@@ -439,7 +439,7 @@ const RiskAssessmentMatrix: React.FC = () => {
         impact: assessment.impact,
         riskScore: assessment.riskScore,
         riskLevel: assessment.riskLevel,
-        status: 'ASSESSED' as any,
+        status: 'assessed',
         dateIdentified: assessment.assessmentDate,
         nextReview: assessment.nextReviewDate,
         owner: assessment.assessor,
@@ -559,13 +559,13 @@ const RiskAssessmentMatrix: React.FC = () => {
             <div className="text-center">
               <Badge 
                 style={{ 
-                  backgroundColor: RiskScoringEngine.getRiskColor(assessment.riskLevel),
+                  backgroundColor: RiskScoringEngine.getRiskColor(assessment.riskLevel.toUpperCase() as 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'),
                   color: 'white',
                   fontSize: '14px',
                   padding: '8px 16px'
                 }}
               >
-                {assessment.riskLevel}
+                {assessment.riskLevel.toUpperCase()}
               </Badge>
               <div className="text-sm text-gray-600 mt-1">Risk Level</div>
             </div>

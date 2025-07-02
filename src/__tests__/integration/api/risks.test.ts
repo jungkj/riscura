@@ -1,19 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GET, POST, PUT, DELETE } from '@/app/api/risks/route';
+import { GET, POST } from '@/app/api/risks/route';
 import { GET as GetSingle, PUT as PutSingle, DELETE as DeleteSingle } from '@/app/api/risks/[id]/route';
 import { RiskFactory, testRisks } from '../../factories/risk-factory';
 import { UserFactory, testUsers } from '../../factories/user-factory';
 import { OrganizationFactory, testOrganizations } from '../../factories/organization-factory';
-import { db } from '@/lib/database/connection';
+import { db } from '@/lib/db';
+import { CreateRiskOptions } from '@/services/RiskService';
+import { RiskCategory } from '@prisma/client';
 
 // Mock the database
-jest.mock('@/lib/database/connection');
+jest.mock('@/lib/db', () => ({
+  db: {
+    risk: {
+      findMany: jest.fn(),
+      count: jest.fn(),
+      create: jest.fn(),
+      findUnique: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+    },
+  },
+}));
+
 const mockDb = db as jest.Mocked<typeof db>;
 
 // Mock authentication
-jest.mock('@/lib/auth/auth-utils', () => ({
-  verifyToken: jest.fn(),
-  getCurrentUser: jest.fn(),
+jest.mock('@/lib/auth/auth-options', () => ({
+  authOptions: {},
+}));
+
+jest.mock('next-auth/next', () => ({
+  getServerSession: jest.fn(),
 }));
 
 describe('/api/risks', () => {
@@ -29,14 +46,14 @@ describe('/api/risks', () => {
     mockRisk = testRisks.operational;
 
     // Setup default auth mock
-    const { getCurrentUser } = require('@/lib/auth/auth-utils');
-    getCurrentUser.mockResolvedValue(mockUser);
+    const { getServerSession } = require('next-auth/next');
+    getServerSession.mockResolvedValue({ user: mockUser });
   });
 
   describe('GET /api/risks', () => {
     it('should return all risks for the user organization', async () => {
       const mockRisks = RiskFactory.createForOrganization(mockOrganization.id, 5);
-      mockDb.risk.findMany.mockResolvedValue(mockRisks);
+      (mockDb.risk.findMany as jest.Mock).mockResolvedValue(mockRisks);
 
       const request = new NextRequest('http://localhost:3000/api/risks');
       const response = await GET(request);
@@ -67,8 +84,8 @@ describe('/api/risks', () => {
 
     it('should support pagination', async () => {
       const mockRisks = RiskFactory.createBatch(3);
-      mockDb.risk.findMany.mockResolvedValue(mockRisks);
-      mockDb.risk.count.mockResolvedValue(10);
+      (mockDb.risk.findMany as jest.Mock).mockResolvedValue(mockRisks);
+      (mockDb.risk.count as jest.Mock).mockResolvedValue(10);
 
       const request = new NextRequest('http://localhost:3000/api/risks?page=2&limit=3');
       const response = await GET(request);
@@ -93,8 +110,8 @@ describe('/api/risks', () => {
     });
 
     it('should support filtering by category', async () => {
-      const operationalRisks = RiskFactory.createByCategory('OPERATIONAL', 2);
-      mockDb.risk.findMany.mockResolvedValue(operationalRisks);
+      const operationalRisks = RiskFactory.createByCategory(RiskCategory.OPERATIONAL, 2);
+      (mockDb.risk.findMany as jest.Mock).mockResolvedValue(operationalRisks);
 
       const request = new NextRequest('http://localhost:3000/api/risks?category=OPERATIONAL');
       const response = await GET(request);
@@ -115,7 +132,7 @@ describe('/api/risks', () => {
 
     it('should support search functionality', async () => {
       const searchRisks = [RiskFactory.create({ title: 'Data Security Risk' })];
-      mockDb.risk.findMany.mockResolvedValue(searchRisks);
+            (mockDb.risk.findMany as jest.Mock).mockResolvedValue(searchRisks);
 
       const request = new NextRequest('http://localhost:3000/api/risks?search=security');
       const response = await GET(request);
@@ -137,8 +154,8 @@ describe('/api/risks', () => {
     });
 
     it('should handle unauthorized access', async () => {
-      const { getCurrentUser } = require('@/lib/auth/auth-utils');
-      getCurrentUser.mockResolvedValue(null);
+      const { getServerSession } = require('next-auth/next');
+      getServerSession.mockResolvedValue(null);
 
       const request = new NextRequest('http://localhost:3000/api/risks');
       const response = await GET(request);
@@ -150,7 +167,7 @@ describe('/api/risks', () => {
     });
 
     it('should handle database errors gracefully', async () => {
-      mockDb.risk.findMany.mockRejectedValue(new Error('Database connection failed'));
+      (mockDb.risk.findMany as jest.Mock).mockRejectedValue(new Error('Database connection failed'));
 
       const request = new NextRequest('http://localhost:3000/api/risks');
       const response = await GET(request);
@@ -163,10 +180,10 @@ describe('/api/risks', () => {
   });
 
   describe('POST /api/risks', () => {
-    const validRiskData = {
+    const validRiskData: CreateRiskOptions = {
       title: 'New Test Risk',
       description: 'A new risk for testing',
-      category: 'OPERATIONAL',
+      category: RiskCategory.OPERATIONAL,
       likelihood: 3,
       impact: 4,
       owner: mockUser.id,
@@ -178,9 +195,9 @@ describe('/api/risks', () => {
         id: 'new-risk-id',
         organizationId: mockUser.organizationId,
         createdBy: mockUser.id,
-      });
+      } as any);
 
-      mockDb.risk.create.mockResolvedValue(createdRisk);
+      (mockDb.risk.create as jest.Mock).mockResolvedValue(createdRisk);
 
       const request = new NextRequest('http://localhost:3000/api/risks', {
         method: 'POST',
@@ -216,7 +233,7 @@ describe('/api/risks', () => {
       const invalidData = {
         title: '', // Empty title
         description: 'Valid description',
-        category: 'INVALID_CATEGORY',
+        category: 'OPERATIONAL' as const,
         likelihood: 6, // Out of range
         impact: 0, // Out of range
       };
@@ -244,9 +261,9 @@ describe('/api/risks', () => {
       const createdRisk = RiskFactory.create({
         ...riskData,
         riskScore: expectedScore,
-      });
+      } as any);
 
-      mockDb.risk.create.mockResolvedValue(createdRisk);
+      (mockDb.risk.create as jest.Mock).mockResolvedValue(createdRisk);
 
       const request = new NextRequest('http://localhost:3000/api/risks', {
         method: 'POST',
@@ -298,7 +315,7 @@ describe('/api/risks', () => {
         assignedUser: mockUser,
       };
 
-      mockDb.risk.findUnique.mockResolvedValue(mockRiskWithDetails);
+      (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(mockRiskWithDetails);
 
       const request = new NextRequest(`http://localhost:3000/api/risks/${riskId}`);
       const response = await GetSingle(request, { params: { id: riskId } });
@@ -328,7 +345,7 @@ describe('/api/risks', () => {
 
     it('should return 404 for non-existent risk', async () => {
       const riskId = 'non-existent-risk';
-      mockDb.risk.findUnique.mockResolvedValue(null);
+      (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(null);
 
       const request = new NextRequest(`http://localhost:3000/api/risks/${riskId}`);
       const response = await GetSingle(request, { params: { id: riskId } });
@@ -341,7 +358,7 @@ describe('/api/risks', () => {
 
     it('should enforce organization isolation', async () => {
       const riskId = 'other-org-risk';
-      mockDb.risk.findUnique.mockResolvedValue(null); // Risk exists but not in user's org
+      (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(null); // Risk exists but not in user's org
 
       const request = new NextRequest(`http://localhost:3000/api/risks/${riskId}`);
       const response = await GetSingle(request, { params: { id: riskId } });
@@ -379,8 +396,8 @@ describe('/api/risks', () => {
         updatedAt: new Date(),
       };
 
-      mockDb.risk.findUnique.mockResolvedValue(mockRisk);
-      mockDb.risk.update.mockResolvedValue(updatedRisk);
+      (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(mockRisk);
+      (mockDb.risk.update as jest.Mock).mockResolvedValue(updatedRisk);
 
       const request = new NextRequest(`http://localhost:3000/api/risks/${riskId}`, {
         method: 'PUT',
@@ -414,7 +431,7 @@ describe('/api/risks', () => {
         status: 'INVALID_STATUS',
       };
 
-      mockDb.risk.findUnique.mockResolvedValue(mockRisk);
+      (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(mockRisk);
 
       const request = new NextRequest(`http://localhost:3000/api/risks/${riskId}`, {
         method: 'PUT',
@@ -432,7 +449,7 @@ describe('/api/risks', () => {
 
     it('should return 404 for non-existent risk', async () => {
       const riskId = 'non-existent-risk';
-      mockDb.risk.findUnique.mockResolvedValue(null);
+      (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(null);
 
       const request = new NextRequest(`http://localhost:3000/api/risks/${riskId}`, {
         method: 'PUT',
@@ -453,8 +470,8 @@ describe('/api/risks', () => {
     it('should delete an existing risk', async () => {
       const riskId = 'test-risk-id';
       
-      mockDb.risk.findUnique.mockResolvedValue(mockRisk);
-      mockDb.risk.delete.mockResolvedValue(mockRisk);
+      (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(mockRisk);
+      (mockDb.risk.delete as jest.Mock).mockResolvedValue(mockRisk);
 
       const request = new NextRequest(`http://localhost:3000/api/risks/${riskId}`, {
         method: 'DELETE',
@@ -474,7 +491,7 @@ describe('/api/risks', () => {
 
     it('should return 404 for non-existent risk', async () => {
       const riskId = 'non-existent-risk';
-      mockDb.risk.findUnique.mockResolvedValue(null);
+      (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(null);
 
       const request = new NextRequest(`http://localhost:3000/api/risks/${riskId}`, {
         method: 'DELETE',
@@ -491,8 +508,8 @@ describe('/api/risks', () => {
     it('should handle foreign key constraints', async () => {
       const riskId = 'risk-with-dependencies';
       
-      mockDb.risk.findUnique.mockResolvedValue(mockRisk);
-      mockDb.risk.delete.mockRejectedValue({
+      (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(mockRisk);
+      (mockDb.risk.delete as jest.Mock).mockRejectedValue({
         code: 'P2003', // Prisma foreign key constraint error
         message: 'Foreign key constraint failed',
       });
@@ -516,7 +533,7 @@ describe('/api/risks', () => {
       const otherOrgRisks = RiskFactory.createForOrganization('other-org-id', 2);
       
       // Mock should only return risks from user's organization
-      mockDb.risk.findMany.mockResolvedValue(userOrgRisks);
+      (mockDb.risk.findMany as jest.Mock).mockResolvedValue(userOrgRisks);
 
       const request = new NextRequest('http://localhost:3000/api/risks');
       const response = await GET(request);
@@ -539,7 +556,7 @@ describe('/api/risks', () => {
       const otherOrgRiskId = 'other-org-risk-id';
       
       // Risk exists but in different organization
-      mockDb.risk.findUnique.mockResolvedValue(null);
+      (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(null);
 
       const request = new NextRequest(`http://localhost:3000/api/risks/${otherOrgRiskId}`);
       const response = await GetSingle(request, { params: { id: otherOrgRiskId } });
@@ -557,4 +574,5 @@ describe('/api/risks', () => {
       });
     });
   });
-}); 
+});
+ 

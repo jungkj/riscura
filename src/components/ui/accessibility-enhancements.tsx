@@ -100,7 +100,7 @@ export const useScreenReaderAnnouncements = () => {
     liveRegion.setAttribute('aria-atomic', 'true');
     liveRegion.className = 'sr-only';
     document.body.appendChild(liveRegion);
-    liveRegionRef.current = liveRegion;
+    (liveRegionRef as React.MutableRefObject<HTMLDivElement | null>).current = liveRegion;
 
     return () => {
       if (liveRegionRef.current && document.body.contains(liveRegionRef.current)) {

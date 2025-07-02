@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ProboService } from '@/services/ProboService';
 import { db } from '@/lib/db';
-import { getServerSession } from 'next-auth/next';
+import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth.config';
 
 export async function GET(request: NextRequest) {

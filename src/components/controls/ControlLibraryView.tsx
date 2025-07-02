@@ -205,12 +205,21 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
   // Effectiveness indicator component
   const EffectivenessIndicator: React.FC<{ effectiveness: Control['effectiveness'] }> = ({ effectiveness }) => {
     const effectivenessConfig = {
-      high: { value: 90, color: 'text-green-600', bgColor: 'bg-green-100' },
-      medium: { value: 60, color: 'text-yellow-600', bgColor: 'bg-yellow-100' },
-      low: { value: 30, color: 'text-red-600', bgColor: 'bg-red-100' },
+      high: { value: 85, color: 'text-green-600', bgColor: 'bg-green-50' },
+      medium: { value: 65, color: 'text-yellow-600', bgColor: 'bg-yellow-50' },
+      low: { value: 35, color: 'text-red-600', bgColor: 'bg-red-50' },
     };
-    
-    const config = effectivenessConfig[effectiveness];
+
+    let config;
+    if (typeof effectiveness === 'string' && effectiveness in effectivenessConfig) {
+      config = effectivenessConfig[effectiveness as keyof typeof effectivenessConfig];
+    } else if (typeof effectiveness === 'number') {
+      if (effectiveness >= 80) config = effectivenessConfig.high;
+      else if (effectiveness >= 60) config = effectivenessConfig.medium;
+      else config = effectivenessConfig.low;
+    } else {
+      config = effectivenessConfig.low;
+    }
     
     return (
       <div className="flex items-center space-x-2">
@@ -235,7 +244,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
       );
     }
     
-    if (control.status === 'active') {
+    if (control.status === 'ACTIVE') {
       return (
         <div className="flex items-center space-x-1 text-green-600">
           <CheckCircle className="w-4 h-4" />

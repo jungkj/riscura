@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+import { unstable_getServerSession }m from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-config';
 import { ReportingService, ReportType, ReportFormat } from '@/services/ReportingService';
 import { db } from '@/lib/db';
