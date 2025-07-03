@@ -473,7 +473,29 @@ export function withAPI(
       // Authentication
       if (options.requireAuth) {
         try {
-          const user = getAuthenticatedUser(req as any);
+          let user = getAuthenticatedUser(req as any);
+          
+          // Development mode bypass: Create a mock user for testing
+          if (!user && process.env.NODE_ENV === 'development') {
+            console.log('🔧 Development mode: Using mock authentication');
+            const mockUser = {
+              id: 'dev-user-123',
+              email: 'dev@riscura.com',
+              firstName: 'Development',
+              lastName: 'User',
+              role: 'ADMIN',
+              organizationId: 'dev-org-123',
+              permissions: ['*'], // All permissions for development
+              avatar: '',
+              isActive: true,
+              lastLoginAt: new Date()
+            };
+            
+            // Add mock user to request
+            (req as any).user = mockUser;
+            user = mockUser;
+          }
+          
           if (!user) {
             throw new AuthenticationError();
           }
