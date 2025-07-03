@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAccessToken } from '@/lib/auth/jwt';
 import { db } from '@/lib/db';
 import { productionGuard, throwIfProduction } from '@/lib/security/production-guard';
-import { unstable_getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from './auth-options';
 import { ROLE_PERMISSIONS } from './index';
 
