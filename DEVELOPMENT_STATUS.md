@@ -174,11 +174,68 @@ npm run lint
 ## 🎯 **Development Best Practices**
 
 ### During Technical Debt Phase
-- Use `// @ts-ignore` judiciously for new features
+- **TypeScript Suppressions**: Follow strict `// @ts-ignore` guidelines (see below)
 - Focus on functionality over perfect types
 - Write comprehensive tests for new code
 - Document architectural decisions
 - Prioritize user-facing improvements
+
+### 🚨 **TypeScript Suppression Guidelines**
+
+#### **When `// @ts-ignore` is Acceptable**
+1. **Temporary Workarounds for Known Issues**
+   - Third-party library type conflicts (e.g., version mismatches)
+   - Prisma client regeneration delays
+   - Legacy code integration during migration
+
+2. **Complex Type Inference Issues**
+   - Generic type constraints that TypeScript cannot resolve
+   - Advanced mapped types causing compiler issues
+   - Recursive type definitions causing infinite loops
+
+3. **External API Integration**
+   - Dynamic API responses with inconsistent schemas
+   - Third-party services with incomplete type definitions
+   - Legacy backend integration requiring gradual typing
+
+#### **Required Documentation Format**
+```typescript
+// @ts-ignore - [REASON]: [DESCRIPTION] - [TRACKING_ID]
+// TODO: [CLEANUP_PLAN] - Target: [DATE/MILESTONE]
+// Related: [ISSUE_LINK] or [TECH_DEBT_ITEM]
+```
+
+#### **Example Usage**
+```typescript
+// @ts-ignore - PRISMA_SCHEMA_MISMATCH: User model missing 'organizationId' property - TD-001
+// TODO: Update Prisma schema and regenerate client - Target: Week 1 cleanup
+// Related: High Priority Database Model Updates
+const user = await prisma.user.findUnique({
+  where: { id: userId },
+  select: { organizationId: true }
+});
+```
+
+#### **Tracking Requirements**
+All `// @ts-ignore` instances must be tracked in:
+- **GitHub Issues**: Create dedicated issue for each suppression
+- **Tech Debt Backlog**: Include in weekly cleanup targets
+- **Code Review**: Mandatory discussion during PR reviews
+- **Documentation**: Update this status document monthly
+
+#### **Cleanup Strategy**
+1. **Weekly Audit**: Search codebase for all `// @ts-ignore` instances
+2. **Priority Assignment**: Categorize by impact and complexity
+3. **Removal Targets**: Set specific deadlines for each instance
+4. **Review Process**: Require approval for new suppressions
+
+#### **Forbidden Uses**
+❌ **Never use `// @ts-ignore` for:**
+- Avoiding proper type definitions for new code
+- Bypassing legitimate TypeScript errors in new features
+- Shortcuts during initial development
+- Undefined or null reference errors
+- Missing property errors that can be fixed immediately
 
 ### Quality Gates
 - All new features must pass linting
