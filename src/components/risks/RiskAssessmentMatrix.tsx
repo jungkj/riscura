@@ -350,7 +350,7 @@ const RiskAssessmentMatrix: React.FC = () => {
       likelihood,
       impact,
       riskScore: score,
-      riskLevel: riskLevel.toLowerCase() as 'low' | 'medium' | 'high' | 'critical',
+      riskLevel: riskLevel,
     }));
   }, [assessment.factors]);
 
@@ -440,10 +440,10 @@ const RiskAssessmentMatrix: React.FC = () => {
         likelihood: assessment.likelihood,
         impact: assessment.impact,
         riskScore: assessment.riskScore,
-        riskLevel: assessment.riskLevel,
+        riskLevel: assessment.riskLevel.toLowerCase() as 'low' | 'medium' | 'high' | 'critical',
         status: 'assessed' as const,
         dateIdentified: assessment.assessmentDate,
-        nextReview: assessment.nextReviewDate,
+        nextReview: new Date(assessment.nextReviewDate),
         owner: assessment.assessor,
       };
 

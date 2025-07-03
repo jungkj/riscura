@@ -67,6 +67,20 @@ const buttonVariants = cva(
           border-transparent focus:ring-blue-500
           disabled:bg-blue-300 disabled:text-white
         `,
+        
+        // Tertiary variant - subtle styling
+        tertiary: `
+          bg-slate-50 text-slate-600 shadow-sm hover:bg-slate-100 active:bg-slate-200
+          border border-slate-200 focus:ring-slate-500
+          disabled:bg-slate-25 disabled:text-slate-400
+        `,
+        
+        // Destructive variant - alias for danger
+        destructive: `
+          bg-red-600 text-white shadow hover:bg-red-700 active:bg-red-800
+          border-transparent focus:ring-red-500
+          disabled:bg-red-300 disabled:text-white
+        `,
       },
       size: {
         xs: "h-7 px-2 text-xs",
@@ -75,6 +89,7 @@ const buttonVariants = cva(
         lg: "h-10 px-6 text-base",
         xl: "h-11 px-8 text-base",
         icon: "h-9 w-9 p-0",
+        default: "h-9 px-4 text-sm", // alias for md
       },
     },
     defaultVariants: {
