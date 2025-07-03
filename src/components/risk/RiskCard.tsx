@@ -28,7 +28,7 @@ export interface RiskData {
   description: string;
   category: string;
   severity: 'Critical' | 'High' | 'Medium' | 'Low';
-  status: 'Open' | 'In Progress' | 'Mitigated' | 'Accepted' | 'Closed';
+  status: 'Open' | 'In Progress' | 'Mitigated' | 'Accepted' | 'Closed' | 'Active';
   likelihood: number;
   impact: number;
   riskScore: number;
@@ -39,8 +39,15 @@ export interface RiskData {
   progress: number;
   tags: string[];
   trend: 'up' | 'down' | 'stable';
-  mitigationActions: number;
+  mitigationActions: string[] | number;
   completedActions: number;
+  // Optional additional properties
+  controls?: string[];
+  treatmentPlan?: string;
+  linkedVendors?: string[];
+  createdDate?: string;
+  attachments?: number;
+  comments?: number;
 }
 
 interface RiskCardProps {
@@ -67,6 +74,7 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Open': return 'bg-red-50 text-red-700 border-red-200';
+      case 'Active': return 'bg-orange-50 text-orange-700 border-orange-200';
       case 'In Progress': return 'bg-blue-50 text-blue-700 border-blue-200';
       case 'Mitigated': return 'bg-green-50 text-green-700 border-green-200';
       case 'Accepted': return 'bg-purple-50 text-purple-700 border-purple-200';
@@ -205,7 +213,7 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
                 <Progress value={risk.progress} className="h-2" />
                 <div className="flex justify-between items-center text-xs text-gray-600">
                   <span>Actions</span>
-                  <span>{risk.completedActions}/{risk.mitigationActions}</span>
+                  <span>{risk.completedActions}/{Array.isArray(risk.mitigationActions) ? risk.mitigationActions.length : risk.mitigationActions}</span>
                 </div>
               </div>
             </div>
