@@ -127,9 +127,9 @@ npm run lint
 
 ### Development Workflow
 1. **Feature Branches**: Create from `main`
-2. **TypeScript**: Use `// @ts-ignore` for quick development
-3. **Testing**: Focus on functionality over type safety initially
-4. **Code Review**: Emphasize feature correctness
+2. **TypeScript**: Use `// @ts-ignore` sparingly and only with proper justification (see strict guidelines below)
+3. **Testing**: Focus on functionality while maintaining reasonable type safety
+4. **Code Review**: Emphasize feature correctness AND type safety compliance
 5. **Deployment**: Staging environment available
 
 ## 📈 **Next Features Ready for Implementation**
