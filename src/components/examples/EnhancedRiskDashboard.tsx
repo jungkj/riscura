@@ -20,12 +20,10 @@ import {
   PerformanceProvider,
   usePerformance,
   useVirtualScrolling,
-  useLazyLoading,
   useOfflineData,
-  LazyImage,
-  VirtualScrollContainer,
-  PreloadLink
+  LazyImage
 } from '@/lib/performance/PerformanceProvider';
+import Link from 'next/link';
 
 // UX Enhancements
 import {
@@ -460,6 +458,20 @@ const RiskItem: React.FC<{ risk: Risk; index: number }> = ({ risk, index }) => {
   );
 };
 
+const VirtualScrollContainer: React.FC<{
+  items: Risk[];
+  itemHeight: number;
+  height: number;
+  renderItem: (risk: Risk, index: number) => JSX.Element;
+  className?: string;
+}> = ({ items, renderItem }) => (
+  <div>
+    {items.map((item, index) => (
+      <div key={item.id}>{renderItem(item, index)}</div>
+    ))}
+  </div>
+);
+
 // Main Dashboard Component
 const EnhancedRiskDashboard: React.FC = () => {
   const [risks] = useState(() => generateSampleRisks(1000));
@@ -637,7 +649,7 @@ const EnhancedRiskDashboard: React.FC = () => {
                 items={filteredRisks}
                 itemHeight={140}
                 height={600}
-                renderItem={(risk, index) => (
+                renderItem={(risk: Risk, index: number) => (
                   <div className="px-6 py-2">
                     <RiskItem risk={risk} index={index} />
                   </div>

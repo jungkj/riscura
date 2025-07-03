@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import * as ExcelJS from 'exceljs';
 import { withAuth, type AuthenticatedRequest } from '@/lib/auth/middleware';
 import { db } from '@/lib/db';
+import { unstable_getServerSession } from 'next-auth/next';
+import { authOptions } from '@/lib/auth/auth-options';
 
 interface RCSARow {
   riskId?: string;
@@ -282,7 +284,7 @@ async function handleRCSAUpload(request: AuthenticatedRequest): Promise<NextResp
 export async function POST(request: NextRequest): Promise<NextResponse> {
   // Apply authentication middleware manually
   try {
-    const session = await (await import('next-auth/next')).getServerSession((await import('@/lib/auth/auth-options')).authOptions) as any;
+    const session = await getServerSession(authOptions) as any;
 
     if (!session?.user?.email) {
       return NextResponse.json(

@@ -404,7 +404,7 @@ export default function ReportLibrary({
             <span>{selectedReports.length} report(s) selected</span>
             <div className="flex items-center gap-2">
               <Button
-                variant="destructive"
+                variant="danger"
                 size="sm"
                 onClick={() => setIsDeleteDialogOpen(true)}
               >

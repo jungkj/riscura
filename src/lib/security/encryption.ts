@@ -361,22 +361,17 @@ export class EncryptionService {
 
   async decryptDataRest(encryptedData: EncryptedData): Promise<Buffer> {
     try {
-      const key = encryptedData.keyId === 'master' 
-        ? this.masterKey 
-        : await this.getDataKey(encryptedData.keyId!);
-      
-      const ivBuffer = Buffer.from(encryptedData.iv, 'base64');
-      const encryptedBuffer = Buffer.from(encryptedData.encrypted, 'base64');
-      const tagBuffer = Buffer.from(encryptedData.tag, 'base64');
-      
-      const decipher = crypto.createDecipheriv(encryptedData.algorithm || this.algorithm, key, ivBuffer) as crypto.DecipherGCM;
-      decipher.setAuthTag(tagBuffer);
-      
-      const decrypted = Buffer.concat([
-        decipher.update(encryptedBuffer),
-        decipher.final()
-      ]);
-      
+      // Get the appropriate key
+      const keyId = encryptedData.keyId || 'default';
+      const keyMaterial = keyId === 'default' ? this.masterKey : await this.getDataKey(keyId);
+
+      // Decrypt the data
+      const decipher = crypto.createDecipherGCM(encryptedData.algorithm || this.algorithm, keyMaterial, encryptedData.iv);
+      decipher.setAuthTag(encryptedData.tag);
+
+      let decrypted = decipher.update(encryptedData.data);
+      decipher.final();
+
       return decrypted;
     } catch (error) {
       throw new Error(`Decryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -462,10 +457,10 @@ export class EncryptionService {
   }
 
   // Key Management
-  async generateDataKey(keyId: string, purpose: string): Promise<DataKey> {
+  async generateDataKey(keyId: string, purpose: string, organizationId: string): Promise<DataKey> {
     const keyMaterial = crypto.randomBytes(32);
-    const encryptedKey = await this.encryptData(keyMaterial, 'master');
-    
+    const encryptedKey = await this.encryptDataRest(keyMaterial);
+
     const dataKey: DataKey = {
       id: keyId,
       purpose,
@@ -473,19 +468,38 @@ export class EncryptionService {
       algorithm: this.algorithm,
       createdAt: new Date(),
       rotatedAt: new Date(),
-      status: 'active',
+      status: 'active' as const,
       metadata: {},
+      organizationId,
     };
 
-    // Store in database
-    await db.client.encryptionKey.create({
-      data: dataKey,
-    });
+    // Store in database - caller needs to provide organizationId
+    if (db.client) {
+      await db.client.encryptionKey.create({
+        data: {
+          id: dataKey.id,
+          purpose: dataKey.purpose,
+          encryptedKey: dataKey.encryptedKey,
+          algorithm: dataKey.algorithm,
+          status: dataKey.status,
+          version: 1,
+          metadata: dataKey.metadata,
+          organizationId: dataKey.organizationId,
+          createdAt: dataKey.createdAt,
+          updatedAt: dataKey.createdAt,
+          rotatedAt: dataKey.rotatedAt,
+        },
+      });
+    }
 
     return dataKey;
   }
 
   async getDataKey(keyId: string): Promise<Buffer> {
+    if (!db.client) {
+      throw new Error('Database client not initialized');
+    }
+
     const keyRecord = await db.client.encryptionKey.findUnique({
       where: { id: keyId },
     });
@@ -499,12 +513,16 @@ export class EncryptionService {
     }
 
     const encryptedKey = this.deserializeEncryptedData(keyRecord.encryptedKey);
-    const keyMaterial = await this.decryptData(encryptedKey);
+    const keyMaterial = await this.decryptDataRest(encryptedKey);
     
     return keyMaterial;
   }
 
   async rotateKey(keyId: string): Promise<DataKey> {
+    if (!db.client) {
+      throw new Error('Database client not initialized');
+    }
+
     const oldKey = await db.client.encryptionKey.findUnique({
       where: { id: keyId },
     });
@@ -515,7 +533,7 @@ export class EncryptionService {
 
     // Generate new key
     const newKeyMaterial = crypto.randomBytes(32);
-    const encryptedKey = await this.encryptData(newKeyMaterial, 'master');
+    const encryptedKey = await this.encryptDataRest(newKeyMaterial);
 
     // Update key record
     const updatedKey = await db.client.encryptionKey.update({
@@ -538,7 +556,18 @@ export class EncryptionService {
       },
     });
 
-    return updatedKey;
+    return {
+      id: updatedKey.id,
+      purpose: updatedKey.purpose,
+      encryptedKey: updatedKey.encryptedKey,
+      algorithm: updatedKey.algorithm,
+      createdAt: updatedKey.createdAt,
+      rotatedAt: updatedKey.rotatedAt,
+      status: updatedKey.status as 'active' | 'rotated' | 'revoked',
+      version: updatedKey.version,
+      metadata: updatedKey.metadata as Record<string, any>,
+      organizationId: updatedKey.organizationId,
+    };
   }
 
   // Batch operations for performance
@@ -655,7 +684,7 @@ export class EncryptionService {
       authTag: encrypted.authTag.toString('base64'),
       algorithm: encrypted.algorithm,
       keyId: encrypted.keyId,
-      timestamp: encrypted.timestamp.toISOString(),
+      timestamp: encrypted.timestamp?.toISOString(),
     });
   }
 
@@ -667,7 +696,7 @@ export class EncryptionService {
       authTag: Buffer.from(parsed.authTag, 'base64'),
       algorithm: parsed.algorithm,
       keyId: parsed.keyId,
-      timestamp: new Date(parsed.timestamp),
+      timestamp: parsed.timestamp ? new Date(parsed.timestamp) : undefined,
     };
   }
 
@@ -706,10 +735,9 @@ export class EncryptionService {
 
 // Types
 export interface EncryptedData {
-  encrypted: string;
-  iv: string;
-  tag: string;
-  salt: string;
+  data: Buffer;
+  iv: Buffer;
+  authTag: Buffer;
   algorithm?: string;
   keyId?: string;
   timestamp?: Date;
@@ -725,6 +753,7 @@ export interface DataKey {
   status: 'active' | 'rotated' | 'revoked';
   version?: number;
   metadata: Record<string, any>;
+  organizationId: string;
 }
 
 export interface EncryptionMetrics {

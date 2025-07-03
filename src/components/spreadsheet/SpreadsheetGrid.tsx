@@ -234,7 +234,7 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
                           }}
                           column={column}
                           rowId={row.id}
-                          isEditing={isEditing}
+                          isEditing={isEditing || false}
                           isSelected={isSelected}
                           isReadOnly={isReadOnly || column.isLocked}
                           onClick={handleCellClick}

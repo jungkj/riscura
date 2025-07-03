@@ -102,11 +102,10 @@ export class RiskFactory {
   }
 
   private static calculateRiskLevel(riskScore: number): RiskLevel {
-    if (riskScore >= 15) return RiskLevel.CRITICAL;
-    if (riskScore >= 10) return RiskLevel.HIGH;
-    if (riskScore >= 6) return RiskLevel.MEDIUM;
-    if (riskScore >= 3) return RiskLevel.LOW;
-    return RiskLevel.VERY_LOW;
+    if (riskScore >= 20) return RiskLevel.CRITICAL;
+    if (riskScore >= 15) return RiskLevel.HIGH;
+    if (riskScore >= 10) return RiskLevel.MEDIUM;
+    return RiskLevel.LOW;
   }
 
   static reset(): void {

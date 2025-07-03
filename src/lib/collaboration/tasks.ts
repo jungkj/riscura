@@ -1,40 +1,27 @@
 import { db } from '@/lib/db';
-import { collaborationServer } from '@/lib/websocket/server';
+import { 
+  Task, 
+  TaskType, 
+  TaskStatus, 
+  Priority,
+  ActivityType,
+  EntityType,
+  NotificationType,
+  User,
+  Comment,
+  Activity
+} from '@prisma/client';
+import { collaborationServer } from './websocket';
 
-export interface Task {
-  id: string;
-  title: string;
-  description: string;
-  status: 'todo' | 'in_progress' | 'review' | 'completed' | 'cancelled';
-  priority: 'low' | 'medium' | 'high' | 'urgent';
-  type: 'review' | 'approval' | 'action' | 'information' | 'escalation';
-  assigneeId: string;
-  creatorId: string;
-  organizationId: string;
-  entityType: string;
-  entityId: string;
-  dueDate?: Date;
-  completedAt?: Date;
-  metadata: Record<string, any>;
-  dependencies: string[];
-  attachments: string[];
-  tags: string[];
-  watchers: string[];
-  estimatedHours?: number;
-  actualHours?: number;
-  createdAt: Date;
-  updatedAt: Date;
+// Use Prisma types but extend for additional functionality
+export interface TaskWithRelations extends Task {
+  assignee?: Pick<User, 'id' | 'firstName' | 'lastName' | 'email' | 'avatar'> | null;
+  creator?: Pick<User, 'id' | 'firstName' | 'lastName' | 'email' | 'avatar'> | null;
+  comments?: Comment[];
 }
 
-export interface TaskComment {
-  id: string;
-  taskId: string;
-  authorId: string;
-  content: string;
-  mentions: string[];
-  attachments: string[];
-  createdAt: Date;
-  updatedAt: Date;
+export interface TaskComment extends Comment {
+  author: Pick<User, 'id' | 'firstName' | 'lastName' | 'email' | 'avatar'>;
 }
 
 export interface TaskUpdate {
@@ -106,12 +93,35 @@ export interface ApprovalAction {
 export class TaskManager {
   
   // Create a new task
-  async createTask(task: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>): Promise<Task> {
+  async createTask(taskData: {
+    title: string;
+    description?: string;
+    type: TaskType;
+    priority?: Priority;
+    assigneeId?: string;
+    createdBy?: string;
+    organizationId: string;
+    riskId?: string;
+    controlId?: string;
+    dueDate?: Date;
+    estimatedHours?: number;
+    tags?: string[];
+  }): Promise<TaskWithRelations> {
     const createdTask = await db.client.task.create({
       data: {
-        ...task,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        title: taskData.title,
+        description: taskData.description || null,
+        type: taskData.type,
+        status: TaskStatus.TODO,
+        priority: taskData.priority || Priority.MEDIUM,
+        assigneeId: taskData.assigneeId || null,
+        createdBy: taskData.createdBy || null,
+        organizationId: taskData.organizationId,
+        riskId: taskData.riskId || null,
+        controlId: taskData.controlId || null,
+        dueDate: taskData.dueDate || null,
+        estimatedHours: taskData.estimatedHours || null,
+        tags: taskData.tags || [],
       },
       include: {
         assignee: {
@@ -132,56 +142,51 @@ export class TaskManager {
             avatar: true,
           },
         },
-        watchers: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
-            avatar: true,
-          },
-        },
       },
     });
 
     // Create activity log
     await db.client.activity.create({
       data: {
-        type: 'TASK_CREATED',
-        entityType: task.entityType.toUpperCase(),
-        entityId: task.entityId,
-        description: `Task created: ${task.title}`,
-        userId: task.creatorId,
-        organizationId: task.organizationId,
+        type: ActivityType.ASSIGNED,
+        entityType: EntityType.TASK,
+        entityId: createdTask.id,
+        description: `Task created: ${taskData.title}`,
+        userId: taskData.createdBy || 'system',
+        organizationId: taskData.organizationId,
         metadata: {
           taskId: createdTask.id,
-          assigneeId: task.assigneeId,
-          priority: task.priority,
-          dueDate: task.dueDate,
+          assigneeId: taskData.assigneeId,
+          priority: taskData.priority,
+          dueDate: taskData.dueDate,
         },
         isPublic: true,
       },
     });
 
     // Send real-time notification to assignee
-    if (collaborationServer) {
-      collaborationServer.sendToUser(task.assigneeId, {
-        type: 'task:assigned',
-        payload: { task: createdTask },
-        timestamp: new Date(),
-        userId: task.creatorId,
-      });
+    if (typeof collaborationServer !== 'undefined' && collaborationServer && taskData.assigneeId) {
+      try {
+        collaborationServer.sendToUser(taskData.assigneeId, {
+          type: 'task:assigned',
+          payload: { task: createdTask },
+          timestamp: new Date(),
+          userId: taskData.createdBy || 'system',
+        });
+      } catch (error) {
+        console.warn('Failed to send real-time notification:', error);
+      }
     }
 
-    // Send notifications to watchers
-    for (const watcherId of task.watchers) {
+    // Send notification to assignee
+    if (taskData.assigneeId && createdTask.creator) {
       await this.createTaskNotification({
-        type: 'TASK_CREATED',
-        recipientId: watcherId,
-        senderId: task.creatorId,
+        type: NotificationType.TASK_ASSIGNED,
+        recipientId: taskData.assigneeId,
+        senderId: taskData.createdBy || 'system',
         taskId: createdTask.id,
-        title: 'New Task Created',
-        message: `${createdTask.creator.firstName} ${createdTask.creator.lastName} created a new task: ${task.title}`,
+        title: 'New Task Assigned',
+        message: `${createdTask.creator.firstName} ${createdTask.creator.lastName} assigned you a new task: ${taskData.title}`,
       });
     }
 
@@ -189,7 +194,7 @@ export class TaskManager {
   }
 
   // Update task status and fields
-  async updateTask(taskId: string, updates: Partial<Task>, updatedBy: string): Promise<Task> {
+  async updateTask(taskId: string, updates: Partial<Task>, updatedBy: string): Promise<TaskWithRelations> {
     const existingTask = await db.client.task.findUnique({
       where: { id: taskId },
     });
@@ -218,8 +223,7 @@ export class TaskManager {
       where: { id: taskId },
       data: {
         ...updates,
-        updatedAt: new Date(),
-        completedAt: updates.status === 'completed' ? new Date() : existingTask.completedAt,
+        completedAt: updates.status === TaskStatus.COMPLETED ? new Date() : existingTask.completedAt,
       },
       include: {
         assignee: {
@@ -240,31 +244,15 @@ export class TaskManager {
             avatar: true,
           },
         },
-        watchers: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
-            avatar: true,
-          },
-        },
       },
     });
-
-    // Log changes
-    for (const change of changes) {
-      await db.client.taskUpdate.create({
-        data: change,
-      });
-    }
 
     // Create activity log
     await db.client.activity.create({
       data: {
-        type: 'TASK_UPDATED',
-        entityType: existingTask.entityType.toUpperCase(),
-        entityId: existingTask.entityId,
+        type: ActivityType.WORKFLOW_UPDATE,
+        entityType: EntityType.TASK,
+        entityId: taskId,
         description: `Task updated: ${existingTask.title}`,
         userId: updatedBy,
         organizationId: existingTask.organizationId,
@@ -295,25 +283,13 @@ export class TaskManager {
     // Send notifications for assignee changes
     if (updates.assigneeId && updates.assigneeId !== existingTask.assigneeId) {
       await this.createTaskNotification({
-        type: 'TASK_REASSIGNED',
+        type: NotificationType.TASK_ASSIGNED,
         recipientId: updates.assigneeId,
         senderId: updatedBy,
-        taskId,
-        title: 'Task Assigned to You',
+        taskId: taskId,
+        title: 'Task Reassigned',
         message: `You have been assigned to task: ${existingTask.title}`,
       });
-
-      // Notify previous assignee
-      if (existingTask.assigneeId) {
-        await this.createTaskNotification({
-          type: 'TASK_REASSIGNED',
-          recipientId: existingTask.assigneeId,
-          senderId: updatedBy,
-          taskId,
-          title: 'Task Reassigned',
-          message: `Task "${existingTask.title}" has been reassigned`,
-        });
-      }
     }
 
     return updatedTask;
@@ -419,7 +395,7 @@ export class TaskManager {
     completedTo?: Date;
     limit?: number;
     offset?: number;
-  } = {}): Promise<{ tasks: Task[]; total: number }> {
+  } = {}): Promise<{ tasks: TaskWithRelations[]; total: number }> {
     
     const where: any = {
       organizationId,
@@ -544,7 +520,7 @@ export class TaskManager {
   }
 
   // Handle status change notifications
-  private async handleStatusChangeNotifications(task: Task, oldStatus: string, newStatus: string, updatedBy: string): Promise<void> {
+  private async handleStatusChangeNotifications(task: TaskWithRelations, oldStatus: string, newStatus: string, updatedBy: string): Promise<void> {
     const statusMessages = {
       'todo': 'Task is ready to start',
       'in_progress': 'Task is now in progress',
@@ -586,7 +562,7 @@ export class TaskManager {
   }
 
   // Handle task completion logic
-  private async handleTaskCompletion(task: Task, completedBy: string): Promise<void> {
+  private async handleTaskCompletion(task: TaskWithRelations, completedBy: string): Promise<void> {
     // Check for dependent tasks
     const dependentTasks = await db.client.task.findMany({
       where: {
@@ -613,7 +589,7 @@ export class TaskManager {
   }
 
   // Check if task completion triggers workflow completion
-  private async checkWorkflowCompletion(task: Task): Promise<void> {
+  private async checkWorkflowCompletion(task: TaskWithRelations): Promise<void> {
     // Get all tasks for the same entity
     const entityTasks = await db.client.task.findMany({
       where: {

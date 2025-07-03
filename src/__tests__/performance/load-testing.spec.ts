@@ -15,6 +15,10 @@ interface PerformanceMetrics {
   networkLatency: number;
   errorRate: number;
   throughput: number;
+  domContentLoaded: number;
+  firstByte: number;
+  url: string;
+  timestamp: number;
 }
 
 interface LoadTestResult {
@@ -43,22 +47,23 @@ class PerformanceTestUtils {
     // Get performance metrics from browser
     const metrics = await page.evaluate(() => {
       const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-      const memory = (performance as any).memory;
       
       return {
-        responseTime: nav.responseEnd - nav.requestStart,
-        loadTime: nav.loadEventEnd - nav.navigationStart,
-        memoryUsage: memory ? memory.usedJSHeapSize : 0,
-        networkLatency: nav.responseStart - nav.requestStart
+        url: window.location.href,
+        loadTime: nav.loadEventEnd - nav.fetchStart,
+        domContentLoaded: nav.domContentLoadedEventEnd - nav.fetchStart,
+        firstByte: nav.responseStart - nav.fetchStart,
+        timestamp: Date.now(),
+        cpuUsage: 0, // Would need external monitoring
+        errorRate: 0,
+        throughput: 0,
+        responseTime: 0,
+        memoryUsage: 0,
+        networkLatency: 0,
       };
     });
     
-    return {
-      ...metrics,
-      cpuUsage: 0, // Would need external monitoring
-      errorRate: 0,
-      throughput: 0
-    };
+    return { ...metrics, loadTime };
   }
 
   static async simulateUserWorkflow(page: Page, userIndex: number): Promise<number[]> {
@@ -188,7 +193,7 @@ class LoadTestOrchestrator {
           // Short delay between workflows
           await new Promise(resolve => setTimeout(resolve, 1000));
         } catch (error) {
-          errors.push({ user: index, error: error.message, timestamp: Date.now() });
+          errors.push({ user: index, error: (error as Error).message, timestamp: Date.now() });
         }
       }
       
@@ -506,7 +511,7 @@ test.describe('Performance and Load Testing', () => {
       await page.click('[data-testid="upload-document-button"]');
       
       // Create blob and upload
-      await page.evaluate((content, size) => {
+      await page.evaluate(({ content, size }) => {
         const blob = new Blob([content], { type: 'application/pdf' });
         const file = new File([blob], `test-${size}mb.pdf`, { type: 'application/pdf' });
         
@@ -515,7 +520,7 @@ test.describe('Performance and Load Testing', () => {
         dataTransfer.items.add(file);
         input.files = dataTransfer.files;
         input.dispatchEvent(new Event('change', { bubbles: true }));
-      }, fileContent, sizeInMB);
+      }, { content: fileContent, size: fileSize });
       
       await page.fill('[data-testid="document-title"]', `Test ${sizeInMB}MB File`);
       await page.click('[data-testid="upload-submit-button"]');

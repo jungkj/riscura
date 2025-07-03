@@ -1,43 +1,82 @@
 import '@testing-library/jest-dom';
 import { TextEncoder, TextDecoder } from 'util';
 
-// Polyfill for Node.js environment
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
+// Mock DOM APIs
+(global as any).TextDecoder = TextDecoder;
+(global as any).TextEncoder = TextEncoder;
 
 // Mock Next.js router
+const mockPush = jest.fn();
+const mockReplace = jest.fn();
+const mockBack = jest.fn();
+
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    push: mockPush,
+    replace: mockReplace,
+    back: mockBack,
+    pathname: '/',
+    query: {},
+    asPath: '/',
+  }),
+}));
+
+// Mock Next.js navigation
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
-    push: jest.fn(),
-    replace: jest.fn(),
-    back: jest.fn(),
-    forward: jest.fn(),
-    refresh: jest.fn(),
-    prefetch: jest.fn(),
+    push: mockPush,
+    replace: mockReplace,
+    back: mockBack,
   }),
-  useSearchParams: () => ({
-    get: jest.fn(),
-    set: jest.fn(),
-    has: jest.fn(),
-  }),
-  usePathname: () => '/dashboard',
+  usePathname: () => '/',
+  useSearchParams: () => new URLSearchParams(),
 }));
 
-// Mock Next.js cookies
-jest.mock('next/headers', () => ({
-  cookies: () => ({
-    get: jest.fn(),
-    set: jest.fn(),
-    has: jest.fn(),
-    delete: jest.fn(),
-  }),
-}));
+// Set environment for testing - need to use Object.defineProperty for readonly properties
+Object.defineProperty(process.env, 'NODE_ENV', {
+  value: 'test',
+  writable: true,
+  configurable: true
+});
 
 // Mock environment variables
-process.env.NODE_ENV = 'test';
 process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test_db';
 process.env.JWT_SECRET = 'test-jwt-secret-for-testing-purposes-only';
-process.env.NEXTAUTH_SECRET = 'test-nextauth-secret-for-testing-purposes-only';
+process.env.ENCRYPTION_KEY = 'test-encryption-key-32-chars-long!';
+
+// Mock Prisma
+jest.mock('@/lib/db', () => ({
+  default: {
+    user: {
+      findMany: jest.fn(),
+      findUnique: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+    },
+    organization: {
+      findMany: jest.fn(),
+      findUnique: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+    },
+    risk: {
+      findMany: jest.fn(),
+      findUnique: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+    },
+    control: {
+      findMany: jest.fn(),
+      findUnique: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+    },
+  },
+}));
 
 // Mock console methods in tests
 const originalError = console.error;

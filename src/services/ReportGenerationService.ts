@@ -492,25 +492,14 @@ export class ReportGenerationService {
     results: AssessmentResults,
     format: string
   ): string {
+    let content = section.content;
     
-    switch (section.id) {
-      case 'methodology':
-        return this.formatContent(this.generateMethodologyContent(), format);
-      
-      case 'risk-overview':
-      case 'risk-analysis':
-        return this.formatContent(this.generateRiskAnalysisContent(results.riskAssessment), format);
-      
-      case 'control-effectiveness':
-        return this.formatContent(this.generateControlAnalysisContent(results.controlEffectiveness), format);
-      
-      case 'compliance-assessment':
-      case 'framework-assessment':
-        return this.formatContent(this.generateComplianceAnalysisContent(results.complianceAssessment), format);
-      
-      default:
-        return this.formatContent('Analysis content not available.', format);
-    }
+    // Replace placeholders with actual data
+    content = content.replace('{{riskAnalysis}}', this.generateRiskAnalysisContent(results.riskAssessment));
+    content = content.replace('{{controlAnalysis}}', this.generateControlAnalysisContent(results.controlEffectiveness));
+    content = content.replace('{{complianceAnalysis}}', this.generateComplianceAnalysisContent(results.complianceAssessment));
+    
+    return this.formatContent(content, format);
   }
 
   private generateFindingsContent(
@@ -518,20 +507,14 @@ export class ReportGenerationService {
     results: AssessmentResults,
     format: string
   ): string {
+    const keyFindings = this.generateKeyFindings(results);
+    const detailedFindings = this.generateDetailedFindings(results);
     
-    switch (section.id) {
-      case 'key-findings':
-        return this.formatContent(this.generateKeyFindings(results), format);
-      
-      case 'detailed-findings':
-        return this.formatContent(this.generateDetailedFindings(results), format);
-      
-      case 'material-weaknesses':
-        return this.formatContent(this.generateMaterialWeaknessesContent(results.complianceAssessment), format);
-      
-      default:
-        return this.formatContent('Findings content not available.', format);
-    }
+    let content = section.content;
+    content = content.replace('{{keyFindings}}', keyFindings);
+    content = content.replace('{{detailedFindings}}', detailedFindings);
+    
+    return this.formatContent(content, format);
   }
 
   private generateRecommendationsContent(
@@ -539,21 +522,14 @@ export class ReportGenerationService {
     results: AssessmentResults,
     format: string
   ): string {
+    const recommendations = this.generateRecommendationsText(results.recommendations);
+    const actionPlan = this.generateActionPlanContent(results.actionPlan);
     
-    switch (section.id) {
-      case 'recommendations':
-      case 'recommendations-detailed':
-        return this.formatContent(this.generateRecommendationsText(results.recommendations), format);
-      
-      case 'action-plan':
-        return this.formatContent(this.generateActionPlanContent(results.actionPlan), format);
-      
-      case 'remediation-plan':
-        return this.formatContent(this.generateRemediationPlanContent(results), format);
-      
-      default:
-        return this.formatContent('Recommendations content not available.', format);
-    }
+    let content = section.content;
+    content = content.replace('{{recommendations}}', recommendations);
+    content = content.replace('{{actionPlan}}', actionPlan);
+    
+    return this.formatContent(content, format);
   }
 
   private generateAppendixContent(
@@ -561,106 +537,30 @@ export class ReportGenerationService {
     results: AssessmentResults,
     format: string
   ): string {
+    const materialWeaknesses = this.generateMaterialWeaknessesContent(results.complianceAssessment);
+    const remediationPlan = this.generateRemediationPlanContent(results);
     
-    return this.formatContent(
-      'Appendix content includes detailed risk register, control documentation, and supporting evidence.',
-      format
-    );
+    let content = section.content;
+    content = content.replace('{{materialWeaknesses}}', materialWeaknesses);
+    content = content.replace('{{remediationPlan}}', remediationPlan);
+    
+    return this.formatContent(content, format);
   }
 
   private generateChart(chart: ChartConfig, results: AssessmentResults, format: string): string {
-    // Populate chart data based on chart type and results
-    switch (chart.id) {
-      case 'risk-by-level':
-        chart.data = [
-          { label: 'Critical', value: results.riskAssessment.risksByLevel.CRITICAL || 0 },
-          { label: 'High', value: results.riskAssessment.risksByLevel.HIGH || 0 },
-          { label: 'Medium', value: results.riskAssessment.risksByLevel.MEDIUM || 0 },
-          { label: 'Low', value: results.riskAssessment.risksByLevel.LOW || 0 }
-        ];
-        break;
-      
-      case 'control-effectiveness':
-        chart.data = [
-          { label: 'High', value: results.controlEffectiveness.controlsByEffectiveness.high || 0 },
-          { label: 'Medium', value: results.controlEffectiveness.controlsByEffectiveness.medium || 0 },
-          { label: 'Low', value: results.controlEffectiveness.controlsByEffectiveness.low || 0 }
-        ];
-        break;
-      
-      case 'compliance-scores':
-        chart.data = results.complianceAssessment.componentScores.map(comp => ({
-          label: comp.componentName,
-          value: comp.score
-        }));
-        break;
-    }
-
-    // Generate chart HTML/content based on format
     if (format === 'html') {
       return this.generateHTMLChart(chart);
-    } else {
-      return this.generateChartPlaceholder(chart);
     }
+    
+    return this.generateChartPlaceholder(chart);
   }
 
   private generateTable(table: TableConfig, results: AssessmentResults, format: string): string {
-    // Populate table data based on table type and results
-    switch (table.id) {
-      case 'risk-register':
-        table.rows = results.riskAssessment.riskScores.map(risk => [
-          risk.riskId,
-          risk.title,
-          risk.category,
-          risk.likelihood,
-          risk.impact,
-          risk.riskScore,
-          risk.riskLevel
-        ]);
-        break;
-      
-      case 'control-assessment':
-        table.rows = results.controlEffectiveness.controlAssessments?.map(control => [
-          control.controlId,
-          control.title,
-          control.type,
-          `${control.effectivenessScore}%`,
-          `${control.coveragePercentage}%`,
-          control.gapCount
-        ]) || [];
-        break;
-      
-      case 'recommendations-table':
-        table.rows = results.recommendations.map(rec => [
-          rec.id,
-          rec.title,
-          rec.priority,
-          rec.type,
-          `${rec.timeline} days`,
-          `$${rec.cost?.toLocaleString() || 'TBD'}`,
-          rec.expectedBenefit
-        ]);
-        break;
-      
-      case 'action-items':
-        table.rows = results.actionPlan.map(action => [
-          action.id,
-          action.title,
-          action.owner,
-          new Date(action.dueDate).toLocaleDateString(),
-          action.priority,
-          action.status,
-          `${action.progress}%`
-        ]);
-        break;
-    }
-
-    // Generate table HTML/content based on format
     if (format === 'html') {
       return this.generateHTMLTable(table);
-    } else {
-      return this.generateTablePlaceholder(table);
     }
+    
+    return this.generateTablePlaceholder(table);
   }
 
   // Content generation helper methods
@@ -752,11 +652,11 @@ risk mitigation capabilities.
     return `
 Control Effectiveness Assessment:
 
-Total Controls Evaluated: ${controlEffectiveness.totalControls}
-Average Effectiveness: ${controlEffectiveness.averageEffectiveness}%
+Total Controls Assessed: ${controlEffectiveness.totalControls}
+Average Effectiveness Rating: ${controlEffectiveness.averageEffectiveness}%
 
 Control Distribution by Effectiveness:
-- High (≥80%): ${controlEffectiveness.controlsByEffectiveness.high || 0}
+- High (80%+): ${controlEffectiveness.controlsByEffectiveness.high || 0}
 - Medium (60-79%): ${controlEffectiveness.controlsByEffectiveness.medium || 0}
 - Low (<60%): ${controlEffectiveness.controlsByEffectiveness.low || 0}
 
@@ -767,7 +667,7 @@ overall control performance. ${controlEffectiveness.gaps.length} significant gap
 that require remediation to improve the overall control environment.
 
 Key areas for improvement include:
-${controlEffectiveness.gaps.slice(0, 5).map(gap => `- ${gap.description}`).join('\n')}
+${controlEffectiveness.gaps.slice(0, 5).map((gap: any) => `- ${gap.description}`).join('\n')}
     `.trim();
   }
 
@@ -779,7 +679,7 @@ Overall Score: ${complianceAssessment.overallScore}%
 Overall Rating: ${complianceAssessment.overallRating.toUpperCase()}
 
 Component Scores:
-${complianceAssessment.componentScores.map(comp => 
+${complianceAssessment.componentScores.map((comp: any) => 
   `- ${comp.componentName}: ${comp.score}% (${comp.rating})`
 ).join('\n')}
 
@@ -886,7 +786,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
       findings.push(`• ${complianceAssessment.gaps.length} compliance gaps requiring attention`);
     }
     
-    const lowestComponent = complianceAssessment.componentScores.reduce((min, comp) => 
+    const lowestComponent = complianceAssessment.componentScores.reduce((min: any, comp: any) => 
       comp.score < min.score ? comp : min, complianceAssessment.componentScores[0]
     );
     
@@ -902,14 +802,14 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
       return 'No specific recommendations generated.';
     }
     
-    const criticalRecs = recommendations.filter(r => r.priority === 'critical');
-    const highRecs = recommendations.filter(r => r.priority === 'high');
+    const criticalRecs = recommendations.filter((r: any) => r.priority === 'critical');
+    const highRecs = recommendations.filter((r: any) => r.priority === 'high');
     
     let content = `Priority Recommendations:\n\n`;
     
     if (criticalRecs.length > 0) {
       content += `CRITICAL PRIORITY (${criticalRecs.length}):\n`;
-      criticalRecs.slice(0, 5).forEach((rec, index) => {
+      criticalRecs.slice(0, 5).forEach((rec: any, index: number) => {
         content += `${index + 1}. ${rec.title}\n`;
         content += `   ${rec.description}\n`;
         content += `   Timeline: ${rec.timeline} days | Cost: $${rec.cost?.toLocaleString() || 'TBD'}\n\n`;
@@ -918,7 +818,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
     
     if (highRecs.length > 0) {
       content += `HIGH PRIORITY (${highRecs.length}):\n`;
-      highRecs.slice(0, 5).forEach((rec, index) => {
+      highRecs.slice(0, 5).forEach((rec: any, index: number) => {
         content += `${index + 1}. ${rec.title}\n`;
         content += `   ${rec.description}\n`;
         content += `   Timeline: ${rec.timeline} days | Cost: $${rec.cost?.toLocaleString() || 'TBD'}\n\n`;
@@ -933,13 +833,13 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
       return 'No action items generated.';
     }
     
-    const criticalActions = actionPlan.filter(a => a.priority === 'critical');
-    const highActions = actionPlan.filter(a => a.priority === 'high');
+    const criticalActions = actionPlan.filter((a: any) => a.priority === 'critical');
+    const highActions = actionPlan.filter((a: any) => a.priority === 'high');
     
     let content = `Implementation Action Plan:\n\n`;
     
     content += `IMMEDIATE ACTIONS (Critical Priority - ${criticalActions.length}):\n`;
-    criticalActions.slice(0, 5).forEach((action, index) => {
+    criticalActions.slice(0, 5).forEach((action: any, index: number) => {
       content += `${index + 1}. ${action.title}\n`;
       content += `   Owner: ${action.owner}\n`;
       content += `   Due Date: ${new Date(action.dueDate).toLocaleDateString()}\n`;
@@ -947,16 +847,16 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
     });
     
     content += `SHORT-TERM ACTIONS (High Priority - ${highActions.length}):\n`;
-    highActions.slice(0, 5).forEach((action, index) => {
+    highActions.slice(0, 5).forEach((action: any, index: number) => {
       content += `${index + 1}. ${action.title}\n`;
       content += `   Owner: ${action.owner}\n`;
       content += `   Due Date: ${new Date(action.dueDate).toLocaleDateString()}\n`;
       content += `   Estimated Cost: $${action.estimatedCost?.toLocaleString() || 'TBD'}\n\n`;
     });
     
-    const totalCost = actionPlan.reduce((sum, action) => sum + (action.estimatedCost || 0), 0);
+    const totalCost = actionPlan.reduce((sum: number, action: any) => sum + (action.estimatedCost || 0), 0);
     content += `Total Estimated Implementation Cost: $${totalCost.toLocaleString()}\n`;
-    
+
     return content.trim();
   }
 

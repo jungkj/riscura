@@ -116,7 +116,7 @@ class PerformanceMonitor {
 
       // FID Observer
       const fidObserver = new PerformanceObserver((entryList) => {
-        for (const entry of entryList.getEntries()) {
+        for (const entry of entryList.getEntries() as any[]) {
           this.metrics.fid = entry.processingStart - entry.startTime;
           this.notifyListeners();
         }
@@ -127,7 +127,7 @@ class PerformanceMonitor {
       // CLS Observer
       let clsValue = 0;
       const clsObserver = new PerformanceObserver((entryList) => {
-        for (const entry of entryList.getEntries()) {
+        for (const entry of entryList.getEntries() as any[]) {
           if (!entry.hadRecentInput) {
             clsValue += entry.value;
             this.metrics.cls = clsValue;

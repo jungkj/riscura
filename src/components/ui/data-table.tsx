@@ -498,7 +498,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
               {bulkActions.map(action => (
                 <Button
                   key={action.key}
-                  variant={action.variant === 'destructive' ? 'destructive' : 'outline'}
+                  variant={action.variant === 'destructive' ? 'destructive' : 'outline' as any}
                   size="sm"
                   onClick={() => {
                     const selectedData = Array.from(selectedRows).map(index => filteredData[index]);

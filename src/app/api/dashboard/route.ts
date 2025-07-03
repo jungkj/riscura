@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-options';
 import { createAPIResponse } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
@@ -204,7 +204,7 @@ export async function GET(req: NextRequest) {
       testing: controlsByStatus.find(c => c.status === 'TESTING')?._count.id || 0,
       breakdown: controlsByStatus.map(c => ({
         status: c.status,
-        count: c._count.id
+        count: c._count?.id || 0
       }))
     };
 

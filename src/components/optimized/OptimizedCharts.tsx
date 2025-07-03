@@ -687,7 +687,7 @@ const OptimizedCharts: React.FC<OptimizedChartsProps> = ({
         {charts.map((chart, index) => (
           <div
             key={index}
-            ref={(el) => (observerRefs.current[index] = el)}
+            ref={(el: HTMLDivElement | null) => { observerRefs.current[index] = el; }}
           >
             <LazyChart
               config={chart}

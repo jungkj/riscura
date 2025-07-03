@@ -118,6 +118,8 @@ interface ChatMessage {
   };
 }
 
+type ARIAContext = 'dashboard' | 'risk-assessment' | 'compliance' | 'audit' | 'general';
+
 interface ARIAChatProps {
   context?: 'dashboard' | 'risk-assessment' | 'compliance' | 'audit' | 'general';
   initialPrompt?: string;
@@ -167,7 +169,7 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
     }
   }, [initialPrompt, messages.length]);
 
-  const getWelcomeMessage = (context: string): string => {
+  const getWelcomeMessage = (context: ARIAContext): string => {
     const contextMessages = {
       'risk-assessment': "Hi! I'm ARIA, your AI risk assessment assistant. I can help you analyze risks, assess impact and likelihood, and recommend mitigation strategies. What would you like to explore?",
       'compliance': "Hello! I'm ARIA, your AI compliance assistant. I can help you review compliance status, identify gaps, and suggest improvements across your frameworks. How can I assist you today?",
@@ -387,6 +389,30 @@ Could you provide more specific details about what you'd like to explore? For ex
 
   const categories = [...new Set(smartFeatures.suggestedPrompts.map(p => p.category))];
 
+  const getContextualGreeting = (context: ARIAContext): string => {
+    const contextMessages: { [key in ARIAContext]: string } = {
+      'risk-assessment': 'Welcome! I can help you with risk identification, assessment, and mitigation strategies.',
+      'compliance': 'Hi! I\'m here to assist with compliance frameworks, requirements, and assessment questions.',
+      'audit': 'Hello! I can help you prepare for audits, understand requirements, and track findings.',
+      'dashboard': 'Welcome! I can help you interpret your dashboard data and provide insights.',
+      'general': 'Hello! I\'m ARIA, your AI assistant for risk management and compliance. How can I help you today?'
+    };
+    
+    return contextMessages[context] || contextMessages.general;
+  };
+
+  const getContextKey = (context: ARIAContext): keyof typeof smartFeatures.contextualAssistance => {
+    const contextMap: Record<ARIAContext, keyof typeof smartFeatures.contextualAssistance> = {
+      'risk-assessment': 'riskAssessment',
+      'compliance': 'complianceReview',
+      'audit': 'auditPreparation',
+      'dashboard': 'riskAssessment', // fallback
+      'general': 'riskAssessment' // fallback
+    };
+    
+    return contextMap[context] || 'riskAssessment';
+  };
+
   return (
     <div className={`bg-white rounded-lg border border-gray-200 shadow-sm ${className}`}>
       {/* Header */}
@@ -398,7 +424,7 @@ Could you provide more specific details about what you'd like to explore? For ex
           <div>
             <h3 className="font-semibold text-gray-900">ARIA AI Assistant</h3>
             <p className="text-xs text-gray-500">
-              {smartFeatures.contextualAssistance[context]?.title || 'AI-Powered Risk Management'}
+              {smartFeatures.contextualAssistance[getContextKey(context)]?.title || 'AI-Powered Risk Management'}
             </p>
           </div>
         </div>
@@ -418,13 +444,13 @@ Could you provide more specific details about what you'd like to explore? For ex
       </div>
 
       {/* Context Info */}
-      {smartFeatures.contextualAssistance[context] && (
+      {smartFeatures.contextualAssistance[getContextKey(context)] && (
         <div className="p-4 bg-blue-50 border-b border-blue-100">
           <p className="text-sm text-blue-800 mb-2">
-            {smartFeatures.contextualAssistance[context].description}
+            {smartFeatures.contextualAssistance[getContextKey(context)].description}
           </p>
           <div className="flex flex-wrap gap-2">
-            {smartFeatures.contextualAssistance[context].capabilities.map((capability, index) => (
+            {smartFeatures.contextualAssistance[getContextKey(context)].capabilities.map((capability: string, index: number) => (
               <span
                 key={index}
                 className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"

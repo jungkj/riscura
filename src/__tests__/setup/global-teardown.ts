@@ -44,7 +44,7 @@ async function globalTeardown(config: FullConfig) {
         
         console.log('  ✅ Performance metrics saved to test-results/performance-metrics.json');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.warn('⚠️  Could not collect performance metrics:', error.message);
     }
     
@@ -73,7 +73,7 @@ async function globalTeardown(config: FullConfig) {
         
         console.log('  ✅ Test coverage data saved to test-results/test-coverage.json');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.warn('⚠️  Could not collect coverage data:', error.message);
     }
     
@@ -120,7 +120,7 @@ async function globalTeardown(config: FullConfig) {
         
         console.log('  ✅ Test summary saved to test-results/test-summary.json');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.warn('⚠️  Could not generate test summary:', error.message);
     }
     
@@ -144,7 +144,7 @@ async function globalTeardown(config: FullConfig) {
         } else {
           console.warn('  ⚠️  Test data cleanup failed');
         }
-      } catch (error) {
+      } catch (error: any) {
         console.warn('⚠️  Could not clean up test data:', error.message);
       }
     } else {
@@ -174,7 +174,7 @@ async function globalTeardown(config: FullConfig) {
           console.warn(`⚠️  Critical issues detected: ${criticalIssues.join(', ')}`);
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.warn('⚠️  Could not validate environment health:', error.message);
     }
     
@@ -207,7 +207,7 @@ async function globalTeardown(config: FullConfig) {
     
     console.log('✅ Global test teardown completed successfully');
     
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('❌ Global test teardown failed:', error);
     // Don't throw error to avoid failing the test suite
   } finally {

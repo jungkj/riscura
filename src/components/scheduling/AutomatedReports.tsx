@@ -18,7 +18,6 @@ import {
   Settings,
   Play,
   Pause,
-  Stop,
   Edit,
   Trash2,
   Copy,

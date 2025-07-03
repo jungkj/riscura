@@ -13,11 +13,11 @@ import {
   BarChart,
   CheckCircle,
   Target,
-  Swipe,
+  Move,
   Keyboard,
   Eye,
   Layout,
-  Touch
+  Hand
 } from 'lucide-react';
 
 export const ResponsiveDesignSummary: React.FC = () => {
@@ -119,7 +119,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
           <CardContent className="space-y-4">
             <div className="space-y-3">
               <div className="flex items-start gap-3">
-                <Menu className="h-4 w-4 text-[#199BEC] mt-0.5" />
+                <Move className="h-4 w-4 text-[#199BEC] mt-0.5" />
                 <div>
                   <h4 className="font-medium text-[#191919] font-inter">Collapsible Sidebar</h4>
                   <p className="text-sm text-gray-600 font-inter">
@@ -129,7 +129,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
               </div>
 
               <div className="flex items-start gap-3">
-                <Touch className="h-4 w-4 text-[#199BEC] mt-0.5" />
+                <Hand className="h-4 w-4 text-[#199BEC] mt-0.5" />
                 <div>
                   <h4 className="font-medium text-[#191919] font-inter">Touch Interactions</h4>
                   <p className="text-sm text-gray-600 font-inter">
@@ -212,7 +212,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
               </div>
 
               <div className="flex items-start gap-3">
-                <Touch className="h-4 w-4 text-[#199BEC] mt-0.5" />
+                <Hand className="h-4 w-4 text-[#199BEC] mt-0.5" />
                 <div>
                   <h4 className="font-medium text-[#191919] font-inter">Touch & Mouse</h4>
                   <p className="text-sm text-gray-600 font-inter">
@@ -403,14 +403,14 @@ export const ResponsiveDesignSummary: React.FC = () => {
           <div className="grid md:grid-cols-3 gap-4">
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <Swipe className="h-4 w-4 text-[#199BEC]" />
-                <h4 className="font-medium text-[#191919] font-inter">Gesture Support</h4>
+                <Keyboard className="h-4 w-4 text-[#199BEC]" />
+                <h4 className="font-medium text-[#191919] font-inter">Keyboard Navigation</h4>
               </div>
               <ul className="text-sm text-gray-600 font-inter space-y-1">
-                <li>• Swipe right to open sidebar</li>
-                <li>• Swipe left to close sidebar</li>
-                <li>• Touch-friendly interactions</li>
-                <li>• Optimized for one-handed use</li>
+                <li>• Ctrl/Cmd + B to toggle sidebar</li>
+                <li>• Ctrl/Cmd + K for command palette</li>
+                <li>• Escape to close modals</li>
+                <li>• Tab navigation support</li>
               </ul>
             </div>
 

@@ -856,7 +856,7 @@ export class DashboardIntelligenceService {
   }
 
   private extractComplianceMetrics(controls: Control[]): { trend: boolean; change: number; current: number } {
-    const activeControls = controls.filter(c => c.status === 'active').length;
+    const activeControls = controls.filter(c => c.status === 'ACTIVE').length;
     const totalControls = controls.length;
     const current = totalControls > 0 ? activeControls / totalControls : 0;
     const change = Math.random() * 0.1 - 0.05; // Simulate change

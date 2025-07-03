@@ -91,7 +91,7 @@ export const useAccessibility = () => {
 
 // Screen Reader Announcements
 export const useScreenReaderAnnouncements = () => {
-  const liveRegionRef = useRef<HTMLDivElement>(null);
+  const liveRegionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     // Create live region for announcements
