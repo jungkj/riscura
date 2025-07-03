@@ -11,7 +11,7 @@ import {
   Comment,
   Activity
 } from '@prisma/client';
-// import { collaborationServer } from './websocket';
+import { collaborationServer } from './websocket';
 
 // Use Prisma types but extend for additional functionality
 export interface TaskWithRelations extends Task {
@@ -165,13 +165,17 @@ export class TaskManager {
     });
 
     // Send real-time notification to assignee
-    if (collaborationServer && taskData.assigneeId) {
-      collaborationServer.sendToUser(taskData.assigneeId, {
-        type: 'task:assigned',
-        payload: { task: createdTask },
-        timestamp: new Date(),
-        userId: taskData.createdBy || 'system',
-      });
+    if (typeof collaborationServer !== 'undefined' && collaborationServer && taskData.assigneeId) {
+      try {
+        collaborationServer.sendToUser(taskData.assigneeId, {
+          type: 'task:assigned',
+          payload: { task: createdTask },
+          timestamp: new Date(),
+          userId: taskData.createdBy || 'system',
+        });
+      } catch (error) {
+        console.warn('Failed to send real-time notification:', error);
+      }
     }
 
     // Send notification to assignee

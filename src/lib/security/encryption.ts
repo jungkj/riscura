@@ -457,11 +457,11 @@ export class EncryptionService {
   }
 
   // Key Management
-  async generateDataKey(keyId: string, purpose: string): Promise<DataKey> {
+  async generateDataKey(keyId: string, purpose: string, organizationId: string): Promise<DataKey> {
     const keyMaterial = crypto.randomBytes(32);
     const encryptedKey = await this.encryptDataRest(keyMaterial);
 
-    const dataKey: Omit<DataKey, 'organizationId'> & { organizationId: string } = {
+    const dataKey: DataKey = {
       id: keyId,
       purpose,
       encryptedKey: this.serializeEncryptedData(encryptedKey),
@@ -470,7 +470,7 @@ export class EncryptionService {
       rotatedAt: new Date(),
       status: 'active' as const,
       metadata: {},
-      organizationId: '', // This should be set by the caller
+      organizationId,
     };
 
     // Store in database - caller needs to provide organizationId

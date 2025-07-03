@@ -335,7 +335,7 @@ export const EmptyStates = {
     className?: string;
   }) => (
     <EmptyState
-      icon={SecurityIcons.Lock}
+      icon={UserIcons.Lock}
       title={title}
       description={description}
       action={onRequestAccess ? {
@@ -415,7 +415,7 @@ export const EmptyStates = {
     className?: string;
   }) => (
     <EmptyState
-      icon={RiskManagementIcons.Shield}
+      icon={UserIcons.Shield}
       title={title}
       description={description}
       action={onStartAssessment ? {
@@ -438,7 +438,7 @@ export const EmptyStates = {
     className?: string;
   }) => (
     <EmptyState
-      icon={RiskManagementIcons.Clipboard}
+      icon={FileIcons.File}
       title={title}
       description={description}
       action={onSetupFramework ? {
@@ -461,7 +461,7 @@ export const EmptyStates = {
     className?: string;
   }) => (
     <EmptyState
-      icon={RiskManagementIcons.File}
+      icon={FileIcons.File}
       title={title}
       description={description}
       action={onScheduleAudit ? {
@@ -555,7 +555,7 @@ export const EmptyStates = {
     className?: string;
   }) => (
     <EmptyState
-      icon={ToolIcons.Wrench}
+      icon={ActionIcons.Settings}
       title={title}
       description={description}
       className={className}
