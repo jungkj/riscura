@@ -73,7 +73,6 @@ const sampleListData: EnhancedListItem[] = [
   {
     id: '1',
     title: 'Q4 Risk Assessment',
-    subtitle: 'Quarterly risk evaluation across all business units',
     description: 'Comprehensive assessment of operational, financial, and strategic risks for Q4 2024.',
     status: 'active',
     priority: 'high',
@@ -84,7 +83,6 @@ const sampleListData: EnhancedListItem[] = [
   {
     id: '2',
     title: 'Compliance Audit Preparation',
-    subtitle: 'Preparing documentation for upcoming SOX audit',
     description: 'Gathering evidence and documentation to support internal controls testing.',
     status: 'pending',
     priority: 'critical',
@@ -95,7 +93,6 @@ const sampleListData: EnhancedListItem[] = [
   {
     id: '3',
     title: 'Vendor Security Review',
-    subtitle: 'Security assessment of new cloud provider',
     description: 'Evaluating security controls and data protection measures of potential vendor.',
     status: 'completed',
     priority: 'medium',
@@ -346,7 +343,6 @@ export const DataTablesDemo = () => {
             subtitle="Latest risk management activities and updates"
             items={sampleListData}
             variant="detailed"
-            onItemClick={handleListItemClick}
             onItemAction={handleListItemAction}
             showStatus={true}
             showAssignee={true}

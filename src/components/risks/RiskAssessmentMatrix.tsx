@@ -54,7 +54,7 @@ interface RiskPosition {
   y: number; // Grid position
   category: string;
   status: string;
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 }
 
 interface RiskEvaluation {
@@ -330,7 +330,9 @@ const RiskAssessmentMatrix: React.FC = () => {
     const loadRisks = async () => {
       try {
         const response = await api.risks.getRisks({ limit: 1000 });
-        setExistingRisks(response.data || []);
+        // Validate and ensure data is an array of Risk objects
+        const risks = Array.isArray(response.data) ? response.data : [];
+        setExistingRisks(risks);
       } catch (error) {
         console.error('Failed to load risks:', error);
       }
@@ -348,7 +350,7 @@ const RiskAssessmentMatrix: React.FC = () => {
       likelihood,
       impact,
       riskScore: score,
-      riskLevel,
+      riskLevel: riskLevel.toLowerCase() as 'low' | 'medium' | 'high' | 'critical',
     }));
   }, [assessment.factors]);
 
@@ -439,7 +441,7 @@ const RiskAssessmentMatrix: React.FC = () => {
         impact: assessment.impact,
         riskScore: assessment.riskScore,
         riskLevel: assessment.riskLevel,
-        status: 'ASSESSED' as any,
+        status: 'assessed' as const,
         dateIdentified: assessment.assessmentDate,
         nextReview: assessment.nextReviewDate,
         owner: assessment.assessor,
@@ -559,13 +561,13 @@ const RiskAssessmentMatrix: React.FC = () => {
             <div className="text-center">
               <Badge 
                 style={{ 
-                  backgroundColor: RiskScoringEngine.getRiskColor(assessment.riskLevel),
+                  backgroundColor: RiskScoringEngine.getRiskColor(assessment.riskLevel.toUpperCase() as 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'),
                   color: 'white',
                   fontSize: '14px',
                   padding: '8px 16px'
                 }}
               >
-                {assessment.riskLevel}
+                {assessment.riskLevel.toUpperCase()}
               </Badge>
               <div className="text-sm text-gray-600 mt-1">Risk Level</div>
             </div>

@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { RefreshCw, AlertTriangle, Eye, EyeOff } from 'lucide-react';
+import { ReactNode } from 'react';
 
 export interface DashboardWidget {
   id: string;
@@ -105,33 +106,7 @@ const WidgetSkeleton: React.FC<SkeletonProps> = ({ size, className }) => {
   );
 };
 
-const ErrorBoundary: React.FC<{
-  children: React.ReactNode;
-  fallback: React.ComponentType<{ error: Error; retry: () => void }>;
-  onError: (error: Error) => void;
-}> = ({ children, fallback: Fallback, onError }) => {
-  const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    const handleError = (event: ErrorEvent) => {
-      setError(new Error(event.message));
-      onError(new Error(event.message));
-    };
-
-    window.addEventListener('error', handleError);
-    return () => window.removeEventListener('error', handleError);
-  }, [onError]);
-
-  const retry = useCallback(() => {
-    setError(null);
-  }, []);
-
-  if (error) {
-    return <Fallback error={error} retry={retry} />;
-  }
-
-  return <>{children}</>;
-};
 
 const DefaultErrorComponent: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }) => (
   <div className="flex flex-col items-center justify-center h-32 bg-red-50 border border-red-200 rounded-lg">
@@ -251,7 +226,7 @@ const LazyWidget: React.FC<{
         className={cn('bg-white rounded-lg shadow-sm border', sizeClasses[widget.size])}
       >
         <ErrorBoundary
-          fallback={ErrorComponent}
+          fallback={ErrorComponent as unknown as ReactNode}
           onError={onError}
         >
           <ErrorComponent 
@@ -274,7 +249,7 @@ const LazyWidget: React.FC<{
         className={cn('bg-white rounded-lg shadow-sm border', sizeClasses[widget.size])}
       >
         <ErrorBoundary
-          fallback={ErrorComponent}
+          fallback={ErrorComponent as unknown as ReactNode}
           onError={onError}
         >
           <WidgetComponent {...widget.props} />
@@ -330,7 +305,7 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Intersection observer for widgets
-  const { ref: intersectionRef, inView } = useIntersectionObserver({
+  const { ref: intersectionRef, isIntersecting: inView } = useIntersectionObserver({
     threshold: 0.1,
     rootMargin: '100px',
   });
@@ -474,7 +449,7 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ delay: index * 0.1 }}
-              ref={enableIntersectionLoading ? intersectionRef : undefined}
+              ref={enableIntersectionLoading ? intersectionRef as any : undefined}
             >
               <LazyWidget
                 widget={widget}

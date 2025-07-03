@@ -18,6 +18,15 @@ export class AuditService {
   private processingQueue = false;
   private siemClients: Map<string, SIEMClient> = new Map();
 
+  // Class-level constants for severity multipliers
+  private static readonly severityMultipliers: Record<string, number> = {
+    info: 1,
+    low: 1.2,
+    medium: 1.5,
+    high: 2,
+    critical: 3,
+  };
+
   constructor(config: AuditConfiguration) {
     this.config = config;
     this.initializeSIEMClients();
@@ -835,6 +844,148 @@ export class AuditService {
       ),
       averageRiskScore: riskScoreAvg._avg.risk_score || 0,
     };
+  }
+
+  // Analyze entity access patterns
+  private analyzeEntityAccessPatterns(groupedData: SecurityAuditEvent[]): Record<string, any> {
+    return groupedData.reduce((patterns: Record<string, any>, event: any) => {
+      if (event.entityType && event.entityId) {
+        const key = `${event.entityType}:${event.entityId}`;
+        if (!patterns[key]) {
+          patterns[key] = {
+            entityType: event.entityType,
+            entityId: event.entityId,
+            accessCount: 0,
+            uniqueUsers: new Set(),
+            actions: new Set(),
+            lastAccessed: event.timestamp,
+            riskScore: 0
+          };
+        }
+        
+        patterns[key].accessCount++;
+        patterns[key].uniqueUsers.add(event.userId);
+        patterns[key].actions.add(event.action);
+        
+        if (new Date(event.timestamp) > new Date(patterns[key].lastAccessed)) {
+          patterns[key].lastAccessed = event.timestamp;
+        }
+      }
+      return patterns;
+    }, {});
+  }
+
+  // Convert Sets to arrays and calculate risk scores
+  private calculateEntityRiskScore(pattern: any): number {
+    const accessCount = pattern.accessCount;
+    const uniqueUsers = pattern.uniqueUsers.size;
+    const actions = pattern.actions.size;
+    const lastAccessed = new Date(pattern.lastAccessed);
+    const currentTime = new Date();
+    const age = (currentTime - lastAccessed) / (1000 * 60 * 60); // Age in hours
+
+    let score = 1;
+
+    // Base score by access count
+    score += accessCount * 0.5;
+
+    // Severity multiplier
+    const severityMultipliers: Record<string, number> = {
+      info: 1,
+      low: 1.2,
+      medium: 1.5,
+      high: 2,
+      critical: 3,
+    };
+
+    // Use severity from pattern if available, default to 'low'
+    const severity = pattern.severity || 'low';
+    score *= severityMultipliers[severity] || 1;
+
+    // Age multiplier
+    if (age > 24) {
+      score *= 0.5;
+    }
+
+    // External access check removed - pattern.entityId is not a valid IP address property
+    // TODO: Implement proper external access detection based on actual IP data
+
+    return Math.min(Math.round(score * 10) / 10, 10); // Cap at 10
+  }
+
+  // User behavior analysis
+  private analyzeUserBehavior(groupedData: SecurityAuditEvent[]): Record<string, any> {
+    return groupedData.reduce((patterns: Record<string, any>, event: any) => {
+      if (!patterns[event.userId]) {
+        patterns[event.userId] = {
+          userId: event.userId,
+          totalActions: 0,
+          uniqueEntities: new Set(),
+          actions: {},
+          timeDistribution: {},
+          riskScore: 0,
+          anomalies: []
+        };
+      }
+      
+      const userPattern = patterns[event.userId];
+      userPattern.totalActions++;
+      userPattern.uniqueEntities.add(`${event.entityType}:${event.entityId}`);
+      
+      // Track action types
+      if (!userPattern.actions[event.action]) {
+        userPattern.actions[event.action] = 0;
+      }
+      userPattern.actions[event.action]++;
+      
+      // Track time distribution
+      const hour = new Date(event.timestamp).getHours();
+      if (!userPattern.timeDistribution[hour]) {
+        userPattern.timeDistribution[hour] = 0;
+      }
+      userPattern.timeDistribution[hour]++;
+      
+      return patterns;
+    }, {});
+  }
+
+  // Convert Sets to arrays and calculate user risk scores
+  private calculateUserRiskScore(pattern: any): number {
+    const totalActions = pattern.totalActions;
+    const uniqueEntities = pattern.uniqueEntities.size;
+    const actions = Object.keys(pattern.actions).length;
+    const timeDistribution = Object.values(pattern.timeDistribution).reduce((total: number, count: number) => total + count, 0);
+
+    let score = 1;
+
+    // Base score by action count
+    score += actions * 0.5;
+
+    // Severity multiplier
+    const severityMultipliers: Record<string, number> = {
+      info: 1,
+      low: 1.2,
+      medium: 1.5,
+      high: 2,
+      critical: 3,
+    };
+
+    score *= severityMultipliers[pattern.severity] || 1;
+
+    // External access - removed invalid pattern.entityId reference
+    // TODO: Add proper IP address validation when IP data is available
+
+    return Math.min(Math.round(score * 10) / 10, 10); // Cap at 10
+  }
+
+  // Detect user anomalies
+  private detectUserAnomalies(pattern: any, groupedData: SecurityAuditEvent[]): string[] {
+    const anomalies: string[] = [];
+
+    // Implement anomaly detection logic based on user behavior patterns
+    // This is a placeholder and should be replaced with actual implementation
+
+    return anomalies;
   }
 }
 

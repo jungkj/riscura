@@ -25,7 +25,7 @@ import {
 interface WorkflowStep {
   id: string;
   name: string;
-  type: 'review' | 'approval' | 'assignment' | 'notification' | 'completion';
+  type: 'review' | 'approval' | 'assignment' | 'notification' | 'completion' | 'assessment';
   assignees: string[];
   deadline?: string;
   status: 'pending' | 'in_progress' | 'completed' | 'blocked' | 'overdue';

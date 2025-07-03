@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -49,29 +49,6 @@ import {
 } from 'lucide-react';
 import RiskCard, { RiskData } from './RiskCard';
 
-interface Risk {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  severity: 'Critical' | 'High' | 'Medium' | 'Low';
-  likelihood: number;
-  impact: number;
-  riskScore: number;
-  status: 'Active' | 'Mitigated' | 'Accepted' | 'In Progress' | 'Closed';
-  owner: string;
-  assignee: string;
-  createdDate: string;
-  dueDate: string;
-  lastUpdated: string;
-  controls: string[];
-  attachments: number;
-  comments: number;
-  linkedVendors: string[];
-  treatmentPlan: string;
-  progress: number;
-}
-
 interface RiskScenario {
   id: string;
   scenario: string;
@@ -79,18 +56,16 @@ interface RiskScenario {
   addedToRegister: boolean;
 }
 
-export default function VantaInspiredRiskInterface() {
-  const [selectedRisk, setSelectedRisk] = useState<Risk | null>(null);
-  const [showAddRisk, setShowAddRisk] = useState(false);
+const VantaInspiredRiskInterface = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterSeverity, setFilterSeverity] = useState<string>('all');
-  const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [activeTab, setActiveTab] = useState('register');
+  const [filterSeverity, setFilterSeverity] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [viewMode, setViewMode] = useState('grid');
   const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [activeTab, setActiveTab] = useState('register');
+  const [selectedRisk, setSelectedRisk] = useState<RiskData | null>(null);
 
-  // Sample risk data matching Vanta's patterns
-  const risks: Risk[] = [
+  const risks: RiskData[] = [
     {
       id: 'R-001',
       title: 'Segregation of duties has not been established',
@@ -111,7 +86,11 @@ export default function VantaInspiredRiskInterface() {
       comments: 5,
       linkedVendors: ['TaskNimbus'],
       treatmentPlan: 'Mitigate risk through enhanced controls and monitoring',
-      progress: 65
+      progress: 65,
+      tags: ['financial', 'fraud'],
+      trend: 'up',
+      mitigationActions: ['Implement new approval workflow', 'Conduct user access review'],
+      completedActions: 1,
     },
     {
       id: 'R-002',
@@ -122,7 +101,7 @@ export default function VantaInspiredRiskInterface() {
       likelihood: 3,
       impact: 4,
       riskScore: 12,
-      status: 'Active',
+      status: 'Open',
       owner: 'Sarah Chen',
       assignee: 'Mike Johnson',
       createdDate: '2024-01-05',
@@ -133,7 +112,11 @@ export default function VantaInspiredRiskInterface() {
       comments: 8,
       linkedVendors: [],
       treatmentPlan: 'Accept risk with enhanced monitoring',
-      progress: 30
+      progress: 30,
+      tags: ['availability', 'revenue'],
+      trend: 'stable',
+      mitigationActions: ['Increase server capacity', 'Improve monitoring alerts'],
+      completedActions: 0,
     },
     {
       id: 'R-003',
@@ -155,7 +138,11 @@ export default function VantaInspiredRiskInterface() {
       comments: 3,
       linkedVendors: [],
       treatmentPlan: 'Transfer risk through insurance coverage',
-      progress: 100
+      progress: 100,
+      tags: ['compliance', 'response'],
+      trend: 'down',
+      mitigationActions: ['Update contact list quarterly'],
+      completedActions: 1,
     }
   ];
 
@@ -279,20 +266,20 @@ export default function VantaInspiredRiskInterface() {
 
   const stats = getRiskStats();
 
-  const handleRiskView = (risk: Risk) => {
+  const handleRiskView = useCallback((risk: RiskData) => {
     console.log('View risk:', risk);
     setSelectedRisk(risk);
-  };
+  }, []);
 
-  const handleRiskEdit = (risk: Risk) => {
+  const handleRiskEdit = useCallback((risk: RiskData) => {
     console.log('Edit risk:', risk);
     setSelectedRisk(risk);
-  };
+  }, []);
 
-  const handleRiskArchive = (risk: Risk) => {
+  const handleRiskArchive = useCallback((risk: RiskData) => {
     console.log('Archive risk:', risk);
     // TODO: Archive risk
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -618,7 +605,7 @@ export default function VantaInspiredRiskInterface() {
               {selectedRisk.linkedVendors.length > 0 && (
                 <div>
                   <h4 className="font-medium text-gray-900 mb-2">Linked Vendors</h4>
-                  <div className="flex space-x-2">
+                  <div className="flex flex-wrap gap-2">
                     {selectedRisk.linkedVendors.map((vendor, index) => (
                       <Badge key={index} variant="outline" className="text-xs">
                         {vendor}
@@ -633,4 +620,7 @@ export default function VantaInspiredRiskInterface() {
       )}
     </div>
   );
-} 
+};
+
+export default VantaInspiredRiskInterface;
+             

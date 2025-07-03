@@ -156,6 +156,7 @@ export function VirtualizedDataTable<T extends Record<string, any>>({
           itemCount={processedData.length}
           itemSize={itemHeight}
           itemData={processedData}
+          width="100%"
         >
           {Row}
         </List>

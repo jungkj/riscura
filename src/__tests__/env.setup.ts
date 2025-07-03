@@ -1,5 +1,5 @@
 // Test environment setup
-process.env.NODE_ENV = 'test';
+
 process.env.MOCK_DATA = 'true';
 process.env.SKIP_ENV_VALIDATION = 'true';
 

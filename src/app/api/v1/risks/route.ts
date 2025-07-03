@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+import { unstable_getServerSession } from 'next-auth/next';
 import { z } from 'zod';
 
 import { authOptions } from '@/lib/auth/auth-options';

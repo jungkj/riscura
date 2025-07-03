@@ -62,6 +62,9 @@ class MultiTenantRiscuraApp {
     
     // Get organization ID for tenant validation
     const orgId = await this.page.locator('[data-testid="organization-id"]').textContent();
+    if (!orgId) {
+      throw new Error("Organization ID not found");
+    }
     return orgId;
   }
 
@@ -109,6 +112,9 @@ class MultiTenantRiscuraApp {
     await this.page.click('[data-testid="save-risk-button"]');
     
     const riskId = await this.page.locator('[data-testid="risk-id"]').textContent();
+    if (!riskId) {
+      throw new Error("Risk ID not found");
+    }
     return riskId;
   }
 
@@ -127,6 +133,9 @@ class MultiTenantRiscuraApp {
     await this.page.click('[data-testid="upload-submit-button"]');
     
     const docId = await this.page.locator('[data-testid="document-id"]').textContent();
+    if (!docId) {
+      throw new Error("Document ID not found");
+    }
     return docId;
   }
 

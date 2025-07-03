@@ -5,9 +5,11 @@ import { designTokens } from '@/lib/design-system/tokens';
 import { 
   StatusIcons, 
   ActionIcons,
-  TimeIcons
+  TimeIcons,
+  DataIcons
 } from '@/components/icons/IconLibrary';
 import { LoadingStates } from '@/components/states/LoadingState';
+import { RotateCcw } from 'lucide-react';
 
 // Auto-save types and interfaces
 interface AutoSaveConfig {
@@ -300,7 +302,7 @@ export function AutoSaveForm<T = any>({
           <div className="flex items-center space-x-2">
             {autoSaveStatus.status === 'saving' && (
               <>
-                <LoadingStates.Spinner size="xs" />
+                <DataIcons.Activity size="xs" color="secondary" />
                 <span className="text-sm text-gray-600">Saving...</span>
               </>
             )}
@@ -316,7 +318,7 @@ export function AutoSaveForm<T = any>({
             
             {autoSaveStatus.status === 'error' && (
               <>
-                <StatusIcons.AlertCircle size="xs" color="danger" />
+                <StatusIcons.AlertCircle size="xs" color="error" />
                 <span className="text-sm text-red-600">
                   Save failed: {autoSaveStatus.error}
                   {(autoSaveStatus.retryCount || 0) < finalConfig.maxRetries && (
@@ -365,7 +367,7 @@ export function AutoSaveForm<T = any>({
                 onClick={resetForm}
                 className="inline-flex items-center px-3 py-1 text-xs font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
               >
-                <ActionIcons.Refresh size="xs" className="mr-1" />
+                <RotateCcw className="w-3 h-3 mr-1" />
                 Reset
               </button>
             )}

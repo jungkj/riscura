@@ -55,8 +55,7 @@ import {
   ChevronDown,
   ChevronUp,
   Command,
-  Enter,
-  Escape,
+  CornerDownLeft,
   ArrowUp,
   ArrowDown,
   Hash,
@@ -753,11 +752,11 @@ export default function GlobalSearch({
                   <span>Navigate</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <kbd className="px-1.5 py-0.5 bg-white border border-gray-300 rounded text-xs">Enter</kbd>
+                  <kbd className="px-1.5 py-0.5 bg-white border border-gray-300 rounded text-xs">CornerDownLeft</kbd>
                   <span>Select</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <kbd className="px-1.5 py-0.5 bg-white border border-gray-300 rounded text-xs">Esc</kbd>
+                  <kbd className="px-1.5 py-0.5 bg-white border border-gray-300 rounded text-xs">X</kbd>
                   <span>Close</span>
                 </div>
               </div>

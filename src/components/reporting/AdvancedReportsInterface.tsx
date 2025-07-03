@@ -536,7 +536,7 @@ const DataTable: React.FC<{
           </div>
           
           <div className="flex items-center space-x-enterprise-2">
-            {config.selection?.selectedRows.length > 0 && (
+            {config.selection?.selectedRows && config.selection.selectedRows.length > 0 && (
               <div className="flex items-center space-x-enterprise-2">
                 <span className="text-body-sm text-text-secondary">
                   {config.selection.selectedRows.length} selected
@@ -604,7 +604,7 @@ const DataTable: React.FC<{
                         <input
                           type="checkbox"
                           className="rounded border-border"
-                          checked={config.selection.selectedRows.includes(row.id)}
+                          checked={config.selection?.selectedRows?.includes(row.id)}
                           onChange={(e) => onRowSelect(row.id, e.target.checked)}
                         />
                       </td>

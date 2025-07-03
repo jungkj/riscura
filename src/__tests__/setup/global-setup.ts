@@ -68,7 +68,7 @@ async function globalSetup(config: FullConfig) {
       }
     ];
     
-    const createdOrgs = [];
+    const createdOrgs: any[] = [];
     for (const org of organizations) {
       const response = await page.request.post(`${baseURL}/api/test/organizations`, {
         data: org
@@ -89,7 +89,7 @@ async function globalSetup(config: FullConfig) {
         firstName: 'Admin',
         lastName: 'UserA',
         role: 'admin',
-        organizationId: createdOrgs[0].id
+        organizationId: createdOrgs[0]?.id || 'default-org-id'
       },
       {
         email: 'admin@tenantb.test.com',
@@ -97,7 +97,7 @@ async function globalSetup(config: FullConfig) {
         firstName: 'Admin',
         lastName: 'UserB',
         role: 'admin',
-        organizationId: createdOrgs[1].id
+        organizationId: createdOrgs[1]?.id || 'default-org-id'
       },
       
       // Regular users for each tenant
@@ -107,7 +107,7 @@ async function globalSetup(config: FullConfig) {
         firstName: 'Regular',
         lastName: 'UserA',
         role: 'risk_manager',
-        organizationId: createdOrgs[0].id
+        organizationId: createdOrgs[0]?.id || 'default-org-id'
       },
       {
         email: 'user@tenantb.test.com',
@@ -115,7 +115,7 @@ async function globalSetup(config: FullConfig) {
         firstName: 'Regular',
         lastName: 'UserB',
         role: 'risk_manager',
-        organizationId: createdOrgs[1].id
+        organizationId: createdOrgs[1]?.id || 'default-org-id'
       },
       
       // Load testing users
@@ -125,7 +125,7 @@ async function globalSetup(config: FullConfig) {
         firstName: `LoadTest`,
         lastName: `User${i}`,
         role: 'risk_manager',
-        organizationId: createdOrgs[2].id
+        organizationId: createdOrgs[2]?.id || 'default-org-id'
       })),
       
       // Specialized test users
@@ -135,7 +135,7 @@ async function globalSetup(config: FullConfig) {
         firstName: 'API',
         lastName: 'Tester',
         role: 'admin',
-        organizationId: createdOrgs[2].id
+        organizationId: createdOrgs[2]?.id || 'default-org-id'
       },
       {
         email: 'upload-test@test.com',
@@ -143,7 +143,7 @@ async function globalSetup(config: FullConfig) {
         firstName: 'Upload',
         lastName: 'Tester',
         role: 'risk_manager',
-        organizationId: createdOrgs[2].id
+        organizationId: createdOrgs[2]?.id || 'default-org-id'
       }
     ];
     

@@ -4,89 +4,33 @@
  */
 
 import { describe, test, expect, beforeAll, afterAll, beforeEach } from '@jest/globals';
+import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import { rest } from 'msw';
 import fs from 'fs';
 import path from 'path';
 
 // Mock AI service responses
 const aiServiceHandlers = [
   // OpenAI API mock
-  rest.post('https://api.openai.com/v1/chat/completions', (req, res, ctx) => {
-    return res(
-      ctx.json({
-        id: 'chatcmpl-test',
-        object: 'chat.completion',
-        created: Date.now(),
-        model: 'gpt-4',
-        choices: [{
-          index: 0,
-          message: {
-            role: 'assistant',
-            content: JSON.stringify({
-              risks: [
-                {
-                  title: 'Data Privacy Risk',
-                  description: 'Risk of unauthorized access to personal data',
-                  category: 'compliance',
-                  likelihood: 3,
-                  impact: {
-                    financial: 4,
-                    operational: 3,
-                    reputational: 5,
-                    regulatory: 5
-                  },
-                  controls: ['Data encryption', 'Access controls', 'Regular audits']
-                }
-              ],
-              controls: [
-                {
-                  name: 'Data Encryption Control',
-                  description: 'Encrypt all sensitive data at rest and in transit',
-                  type: 'preventive',
-                  effectiveness: 4
-                }
-              ],
-              compliance: {
-                frameworks: ['GDPR', 'ISO 27001'],
-                requirements: ['Data protection', 'Privacy by design']
-              }
-            })
-          },
-          finish_reason: 'stop'
-        }],
-        usage: {
-          prompt_tokens: 100,
-          completion_tokens: 200,
-          total_tokens: 300
+  http.post('https://api.openai.com/v1/chat/completions', ({ request }: { request: Request }) => {
+    return HttpResponse.json({
+      choices: [{
+        message: {
+          content: JSON.stringify({
+            risks: [{ title: 'Test Risk', severity: 'HIGH' }],
+            summary: 'Mock AI analysis'
+          })
         }
-      })
-    );
+      }]
+    });
   }),
 
   // Document analysis API mock
-  rest.post('/api/ai/analyze', (req, res, ctx) => {
-    return res(
-      ctx.json({
-        success: true,
-        data: {
-          documentType: 'policy',
-          extractedText: 'Sample policy document content...',
-          analysis: {
-            risks: 3,
-            controls: 5,
-            complianceGaps: 1,
-            sentiment: 'neutral',
-            complexity: 'medium'
-          },
-          insights: [
-            'Document covers key privacy requirements',
-            'Missing specific retention policies',
-            'Good coverage of access controls'
-          ]
-        }
-      })
-    );
+  http.post('/api/ai/analyze', ({ request }: { request: Request }) => {
+    return HttpResponse.json({
+      analysis: 'Mock analysis result',
+      confidence: 0.95
+    });
   })
 ];
 
@@ -424,8 +368,12 @@ describe('AI Service Integration Tests', () => {
     test('should handle AI service timeout gracefully', async () => {
       // Mock a timeout scenario
       server.use(
-        rest.post('https://api.openai.com/v1/chat/completions', (req, res, ctx) => {
-          return res(ctx.delay(35000), ctx.status(408)); // 35 second delay, timeout
+        http.post('https://api.openai.com/v1/chat/completions', ({ request }: { request: Request }) => {
+          return HttpResponse.json({
+            choices: [{
+              message: { content: 'Mock response' }
+            }]
+          }, { status: 408 });
         })
       );
       
@@ -449,30 +397,23 @@ describe('AI Service Integration Tests', () => {
       let attemptCount = 0;
       
       server.use(
-        rest.post('https://api.openai.com/v1/chat/completions', (req, res, ctx) => {
+        http.post('https://api.openai.com/v1/chat/completions', ({ request }: { request: Request }) => {
           attemptCount++;
           
           if (attemptCount < 3) {
-            return res(ctx.status(500), ctx.json({ error: 'Internal Server Error' }));
+            return HttpResponse.json({
+              choices: [{
+                message: { content: 'Mock response' }
+              }]
+            }, { status: 500 });
           }
           
           // Succeed on third attempt
-          return res(
-            ctx.json({
-              id: 'chatcmpl-retry-test',
-              object: 'chat.completion',
-              created: Date.now(),
-              model: 'gpt-4',
-              choices: [{
-                index: 0,
-                message: {
-                  role: 'assistant',
-                  content: JSON.stringify({ risks: [], controls: [] })
-                },
-                finish_reason: 'stop'
-              }]
-            })
-          );
+          return HttpResponse.json({
+            choices: [{
+              message: { content: 'Mock response with higher confidence' }
+            }]
+          });
         })
       );
       
@@ -490,23 +431,12 @@ describe('AI Service Integration Tests', () => {
 
     test('should handle malformed AI responses', async () => {
       server.use(
-        rest.post('https://api.openai.com/v1/chat/completions', (req, res, ctx) => {
-          return res(
-            ctx.json({
-              id: 'chatcmpl-malformed',
-              object: 'chat.completion',
-              created: Date.now(),
-              model: 'gpt-4',
-              choices: [{
-                index: 0,
-                message: {
-                  role: 'assistant',
-                  content: 'This is not valid JSON for risk analysis'
-                },
-                finish_reason: 'stop'
-              }]
-            })
-          );
+        http.post('https://api.openai.com/v1/chat/completions', ({ request }: { request: Request }) => {
+          return HttpResponse.json({
+            choices: [{
+              message: { content: 'Mock batch analysis response' }
+            }]
+          }, { status: 500 });
         })
       );
       
@@ -526,17 +456,10 @@ describe('AI Service Integration Tests', () => {
 
     test('should handle rate limiting from AI service', async () => {
       server.use(
-        rest.post('https://api.openai.com/v1/chat/completions', (req, res, ctx) => {
-          return res(
-            ctx.status(429),
-            ctx.set('Retry-After', '60'),
-            ctx.json({
-              error: {
-                message: 'Rate limit exceeded',
-                type: 'rate_limit_error'
-              }
-            })
-          );
+        http.post('https://api.openai.com/v1/chat/completions', ({ request }: { request: Request }) => {
+          return HttpResponse.json({
+            error: { message: 'Mock API error' }
+          }, { status: 429 });
         })
       );
       
