@@ -94,7 +94,7 @@ const CATEGORY_COLORS = {
 };
 
 export default function DocumentViewer({
-  document,
+  document: documentData,
   onEdit,
   onDelete,
   onShare,
@@ -120,7 +120,7 @@ export default function DocumentViewer({
   const handleDownload = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/documents/${document.id}/download`);
+      const response = await fetch(`/api/documents/${documentData.id}/download`);
       
       if (!response.ok) {
         throw new Error('Download failed');
@@ -128,12 +128,12 @@ export default function DocumentViewer({
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = (document as any).createElement('a');
+      const a = globalThis.document.createElement('a');
       a.href = url;
-      a.download = document.fileName;
-      (document as any).body.appendChild(a);
+      a.download = documentData.fileName;
+      globalThis.document.body.appendChild(a);
       a.click();
-      (document as any).body.removeChild(a);
+      globalThis.document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
 
       toast.success('File downloaded successfully');
@@ -146,14 +146,14 @@ export default function DocumentViewer({
   };
 
   const handlePreview = async () => {
-    if (!document.isImage && document.detectedFileType !== 'pdf') {
+    if (!documentData.isImage && documentData.detectedFileType !== 'pdf') {
       toast.error('Preview not available for this file type');
       return;
     }
 
     try {
       setLoading(true);
-      const response = await fetch(`/api/documents/${document.id}/download?inline=true`);
+      const response = await fetch(`/api/documents/${documentData.id}/download?inline=true`);
       
       if (!response.ok) {
         throw new Error('Preview failed');
@@ -172,17 +172,17 @@ export default function DocumentViewer({
   };
 
   const handleEdit = () => {
-    onEdit?.(document);
+    onEdit?.(documentData);
   };
 
   const handleDelete = () => {
-    if (window.confirm(`Are you sure you want to delete "${document.originalName}"?`)) {
-      onDelete?.(document.id);
+    if (window.confirm(`Are you sure you want to delete "${documentData.originalName}"?`)) {
+      onDelete?.(documentData.id);
     }
   };
 
   const handleShare = () => {
-    onShare?.(document.id);
+    onShare?.(documentData.id);
   };
 
   const getCategoryColor = (category: string) => {
@@ -192,12 +192,12 @@ export default function DocumentViewer({
   const renderPreviewContent = () => {
     if (!previewUrl) return null;
 
-    if (document.isImage) {
+    if (documentData.isImage) {
       return (
         <div className="flex items-center justify-center h-full bg-gray-100 rounded">
           <img
             src={previewUrl}
-            alt={document.originalName}
+            alt={documentData.originalName}
             className="max-w-full max-h-full object-contain"
             style={{
               transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
@@ -208,13 +208,13 @@ export default function DocumentViewer({
       );
     }
 
-    if (document.detectedFileType === 'pdf') {
+    if (documentData.detectedFileType === 'pdf') {
       return (
         <div className="w-full h-full">
           <iframe
             src={previewUrl}
             className="w-full h-full border-0"
-            title={document.originalName}
+            title={documentData.originalName}
           />
         </div>
       );
@@ -227,7 +227,7 @@ export default function DocumentViewer({
     );
   };
 
-  const canPreview = document.isImage || document.detectedFileType === 'pdf';
+  const canPreview = documentData.isImage || documentData.detectedFileType === 'pdf';
 
   return (
     <>
@@ -241,15 +241,15 @@ export default function DocumentViewer({
                 </div>
               </div>
               <div className="flex-1 min-w-0">
-                <CardTitle className="text-lg truncate" title={document.originalName}>
-                  {document.originalName}
+                <CardTitle className="text-lg truncate" title={documentData.originalName}>
+                  {documentData.originalName}
                 </CardTitle>
                 <div className="flex items-center gap-2 mt-1">
-                  <Badge className={getCategoryColor(document.category)}>
-                    {document.category}
+                  <Badge className={getCategoryColor(documentData.category)}>
+                    {documentData.category}
                   </Badge>
                   <span className="text-sm text-gray-500">
-                    v{document.version}
+                    v{documentData.version}
                   </span>
                 </div>
               </div>
@@ -308,17 +308,17 @@ export default function DocumentViewer({
 
         <CardContent className="space-y-4">
           {/* Description */}
-          {document.description && (
+          {documentData.description && (
             <div>
-              <p className="text-sm text-gray-700">{document.description}</p>
+              <p className="text-sm text-gray-700">{documentData.description}</p>
             </div>
           )}
 
           {/* Tags */}
-          {document.tags && document.tags.length > 0 && (
+          {documentData.tags && documentData.tags.length > 0 && (
             <div className="flex items-center gap-2 flex-wrap">
               <Tag className="w-4 h-4 text-gray-400" />
-              {document.tags.map((tag, index) => (
+              {documentData.tags.map((tag, index) => (
                 <Badge key={index} variant="outline" className="text-xs">
                   {tag}
                 </Badge>
@@ -342,7 +342,7 @@ export default function DocumentViewer({
                   <User className="w-4 h-4 text-gray-400" />
                   <div>
                     <p className="font-medium">Uploaded by</p>
-                    <p className="text-gray-600">{document.uploadedBy.name}</p>
+                    <p className="text-gray-600">{documentData.uploadedBy.name}</p>
                   </div>
                 </div>
 
@@ -351,44 +351,44 @@ export default function DocumentViewer({
                   <div>
                     <p className="font-medium">Upload date</p>
                     <p className="text-gray-600">
-                      {format(new Date(document.uploadedAt), 'MMM dd, yyyy HH:mm')}
+                      {format(new Date(documentData.uploadedAt), 'MMM dd, yyyy HH:mm')}
                     </p>
                   </div>
                 </div>
 
                 <div>
                   <p className="font-medium">File size</p>
-                  <p className="text-gray-600">{formatFileSize(document.fileSize)}</p>
+                  <p className="text-gray-600">{formatFileSize(documentData.fileSize)}</p>
                 </div>
 
                 <div>
                   <p className="font-medium">File type</p>
-                  <p className="text-gray-600">{document.mimeType}</p>
+                  <p className="text-gray-600">{documentData.mimeType}</p>
                 </div>
 
                 <div>
                   <p className="font-medium">Downloads</p>
-                  <p className="text-gray-600">{document.downloadCount}</p>
+                  <p className="text-gray-600">{documentData.downloadCount}</p>
                 </div>
 
-                {document.lastDownloadedAt && (
+                {documentData.lastDownloadedAt && (
                   <div>
                     <p className="font-medium">Last downloaded</p>
                     <p className="text-gray-600">
-                      {format(new Date(document.lastDownloadedAt), 'MMM dd, yyyy HH:mm')}
+                      {format(new Date(documentData.lastDownloadedAt), 'MMM dd, yyyy HH:mm')}
                     </p>
                   </div>
                 )}
               </div>
 
               {/* Linked Entity */}
-              {document.linkedEntityType && document.linkedEntityId && (
+              {documentData.linkedEntityType && documentData.linkedEntityId && (
                 <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
                   <Link className="w-4 h-4 text-gray-400" />
                   <div>
                     <p className="font-medium text-sm">Linked to</p>
                     <p className="text-sm text-gray-600">
-                      {document.linkedEntityType}: {document.linkedEntityId}
+                      {documentData.linkedEntityType}: {documentData.linkedEntityId}
                     </p>
                   </div>
                 </div>

@@ -54,7 +54,7 @@ interface RiskPosition {
   y: number; // Grid position
   category: string;
   status: string;
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 }
 
 interface RiskEvaluation {
@@ -100,7 +100,7 @@ interface RiskAssessment {
   likelihood: number;
   impact: number;
   riskScore: number;
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   factors: RiskFactor[];
   mitigatingControls: string[];
   residualLikelihood: number;
@@ -287,7 +287,7 @@ const RiskAssessmentMatrix: React.FC = () => {
     likelihood: 1,
     impact: 1,
     riskScore: 1,
-    riskLevel: 'low',
+    riskLevel: 'LOW',
     factors: [],
     mitigatingControls: [],
     residualLikelihood: 1,
@@ -330,7 +330,9 @@ const RiskAssessmentMatrix: React.FC = () => {
     const loadRisks = async () => {
       try {
         const response = await api.risks.getRisks({ limit: 1000 });
-        setExistingRisks(response.data as Risk[] || []);
+        // Validate and ensure data is an array of Risk objects
+        const risks = Array.isArray(response.data) ? response.data : [];
+        setExistingRisks(risks);
       } catch (error) {
         console.error('Failed to load risks:', error);
       }
@@ -439,7 +441,7 @@ const RiskAssessmentMatrix: React.FC = () => {
         impact: assessment.impact,
         riskScore: assessment.riskScore,
         riskLevel: assessment.riskLevel,
-        status: 'assessed',
+        status: 'assessed' as const,
         dateIdentified: assessment.assessmentDate,
         nextReview: assessment.nextReviewDate,
         owner: assessment.assessor,

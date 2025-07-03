@@ -7,28 +7,35 @@ describe('RiskAnalysisAIService', () => {
   let service: RiskAnalysisAIService;
   let mockRisk: AppRisk;
 
-  beforeEach(() => {
-    service = new RiskAnalysisAIService();
-    mockRisk = {
-      ...RiskFactory.create({
-        id: 'test-risk-1',
-        title: 'Test Risk',
-        description: 'Test risk for scoring',
-        category: RiskCategory.TECHNOLOGY as RiskCategory,
-        likelihood: 3,
-        impact: 4,
-        riskScore: 12,
-        riskLevel: RiskLevel.HIGH,
-        status: RiskStatus.IDENTIFIED,
-        organizationId: 'test-org',
-        createdBy: 'test-user',
-      }),
+  // Helper function to create properly typed AppRisk objects
+  const createAppRisk = (overrides: any = {}): AppRisk => {
+    const baseRisk = RiskFactory.create(overrides);
+    return {
+      ...baseRisk,
       controls: [],
       evidence: [],
       comments: [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-    };
+      riskLevel: baseRisk.riskLevel || 'medium',
+    } as AppRisk;
+  };
+
+  beforeEach(() => {
+    service = new RiskAnalysisAIService();
+    mockRisk = createAppRisk({
+      id: 'test-risk-1',
+      title: 'Test Risk',
+      description: 'Test risk for scoring',
+      category: RiskCategory.TECHNOLOGY as RiskCategory,
+      likelihood: 3,
+      impact: 4,
+      riskScore: 12,
+      riskLevel: RiskLevel.HIGH,
+      status: RiskStatus.IDENTIFIED,
+      organizationId: 'test-org',
+      createdBy: 'test-user',
+    });
   });
 
   afterEach(() => {
@@ -59,16 +66,11 @@ describe('RiskAnalysisAIService', () => {
           impact: 1,
         });
 
-        const highResult = await service.generateAutomatedRiskScore({
-          ...highImpactRisk,
-          controls: [],
-          evidence: [],
-        } as unknown as AppRisk, 'coso');
-        const lowResult = await service.generateAutomatedRiskScore({
-          ...lowImpactRisk,
-          controls: [],
-          evidence: [],
-        } as unknown as AppRisk, 'coso');
+        const highAppRisk = createAppRisk(highImpactRisk);
+        const lowAppRisk = createAppRisk(lowImpactRisk);
+        
+        const highResult = await service.generateAutomatedRiskScore(highAppRisk, 'coso');
+        const lowResult = await service.generateAutomatedRiskScore(lowAppRisk, 'coso');
 
         expect(highResult.score).toBeGreaterThan(lowResult.score);
         expect(highResult.likelihood).toBeGreaterThanOrEqual(lowResult.likelihood);

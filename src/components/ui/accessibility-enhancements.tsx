@@ -91,7 +91,7 @@ export const useAccessibility = () => {
 
 // Screen Reader Announcements
 export const useScreenReaderAnnouncements = () => {
-  const liveRegionRef = useRef<HTMLDivElement>(null);
+  const liveRegionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     // Create live region for announcements
@@ -100,7 +100,7 @@ export const useScreenReaderAnnouncements = () => {
     liveRegion.setAttribute('aria-atomic', 'true');
     liveRegion.className = 'sr-only';
     document.body.appendChild(liveRegion);
-    (liveRegionRef as React.MutableRefObject<HTMLDivElement | null>).current = liveRegion;
+    liveRegionRef.current = liveRegion;
 
     return () => {
       if (liveRegionRef.current && document.body.contains(liveRegionRef.current)) {

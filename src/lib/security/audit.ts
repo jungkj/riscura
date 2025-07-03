@@ -18,6 +18,15 @@ export class AuditService {
   private processingQueue = false;
   private siemClients: Map<string, SIEMClient> = new Map();
 
+  // Class-level constants for severity multipliers
+  private static readonly severityMultipliers: Record<string, number> = {
+    info: 1,
+    low: 1.2,
+    medium: 1.5,
+    high: 2,
+    critical: 3,
+  };
+
   constructor(config: AuditConfiguration) {
     this.config = config;
     this.initializeSIEMClients();
@@ -889,17 +898,17 @@ export class AuditService {
       critical: 3,
     };
 
-    score *= severityMultipliers[pattern.entityType] || 1;
+    // Use severity from pattern if available, default to 'low'
+    const severity = pattern.severity || 'low';
+    score *= severityMultipliers[severity] || 1;
 
     // Age multiplier
     if (age > 24) {
       score *= 0.5;
     }
 
-    // External access
-    if (pattern.entityType === 'data_access' && !this.isInternalIP(pattern.entityId)) {
-      score *= 1.2;
-    }
+    // External access check removed - pattern.entityId is not a valid IP address property
+    // TODO: Implement proper external access detection based on actual IP data
 
     return Math.min(Math.round(score * 10) / 10, 10); // Cap at 10
   }
@@ -961,12 +970,10 @@ export class AuditService {
       critical: 3,
     };
 
-    score *= severityMultipliers[pattern.entityType] || 1;
+    score *= severityMultipliers[pattern.severity] || 1;
 
-    // External access
-    if (pattern.entityType === 'data_access' && !this.isInternalIP(pattern.entityId)) {
-      score *= 1.2;
-    }
+    // External access - removed invalid pattern.entityId reference
+    // TODO: Add proper IP address validation when IP data is available
 
     return Math.min(Math.round(score * 10) / 10, 10); // Cap at 10
   }

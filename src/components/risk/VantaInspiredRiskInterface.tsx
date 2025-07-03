@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -266,20 +266,20 @@ const VantaInspiredRiskInterface = () => {
 
   const stats = getRiskStats();
 
-  const handleRiskView = (risk: RiskData) => {
+  const handleRiskView = useCallback((risk: RiskData) => {
     console.log('View risk:', risk);
     setSelectedRisk(risk);
-  };
+  }, []);
 
-  const handleRiskEdit = (risk: RiskData) => {
+  const handleRiskEdit = useCallback((risk: RiskData) => {
     console.log('Edit risk:', risk);
     setSelectedRisk(risk);
-  };
+  }, []);
 
-  const handleRiskArchive = (risk: RiskData) => {
+  const handleRiskArchive = useCallback((risk: RiskData) => {
     console.log('Archive risk:', risk);
     // TODO: Archive risk
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -446,9 +446,9 @@ const VantaInspiredRiskInterface = () => {
                 <RiskCard
                   key={risk.id}
                   risk={risk}
-                  onView={() => handleRiskView(risk)}
-                  onEdit={() => handleRiskEdit(risk)}
-                  onArchive={() => handleRiskArchive(risk)}
+                  onView={handleRiskView}
+                  onEdit={handleRiskEdit}
+                  onArchive={handleRiskArchive}
                   className={`transition-all duration-300 transform opacity-0 translate-y-4 animate-in`}
                   style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'forwards' }}
                 />
