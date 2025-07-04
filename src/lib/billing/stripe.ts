@@ -177,6 +177,11 @@ export class StripeService {
     });
   }
 
+  async getPaymentMethod(paymentMethodId: string): Promise<Stripe.PaymentMethod> {
+    this.ensureStripeEnabled();
+    return await this.stripe.paymentMethods.retrieve(paymentMethodId);
+  }
+
   async listPaymentMethods(customerId: string, type?: Stripe.PaymentMethodListParams.Type): Promise<Stripe.PaymentMethod[]> {
     this.ensureStripeEnabled();
     const paymentMethods = await this.stripe.paymentMethods.list({
@@ -422,15 +427,14 @@ export class StripeService {
     const organizationId = subscription.metadata.organizationId;
     if (!organizationId) return;
 
-    // TODO: Implement organizationSubscription model in Prisma schema
-    // await db.client.organizationSubscription.update({
-    //   where: { stripeSubscriptionId: subscription.id },
-    //   data: {
-    //     status: 'canceled',
-    //     canceledAt: new Date(),
-    //     updatedAt: new Date(),
-    //   },
-    // });
+    await db.client.organizationSubscription.updateMany({
+      where: { stripeSubscriptionId: subscription.id },
+      data: {
+        status: 'canceled',
+        canceledAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
 
     console.log('Subscription canceled:', {
       stripeSubscriptionId: subscription.id,
@@ -466,16 +470,15 @@ export class StripeService {
 
     if (!organization) return;
 
-    // TODO: Implement invoice model in Prisma schema
     // Update invoice status
-    // await db.client.invoice.updateMany({
-    //   where: { stripeInvoiceId: invoice.id },
-    //   data: {
-    //     status: 'paid',
-    //     paidAt: new Date(),
-    //     updatedAt: new Date(),
-    //   },
-    // });
+    await db.client.invoice.updateMany({
+      where: { stripeInvoiceId: invoice.id },
+      data: {
+        status: 'paid',
+        paidAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
 
     console.log('Payment succeeded:', {
       stripeInvoiceId: invoice.id,
@@ -501,15 +504,14 @@ export class StripeService {
 
     if (!organization) return;
 
-    // TODO: Implement invoice model in Prisma schema
     // Update invoice status
-    // await db.client.invoice.updateMany({
-    //   where: { stripeInvoiceId: invoice.id },
-    //   data: {
-    //     status: 'open',
-    //     updatedAt: new Date(),
-    //   },
-    // });
+    await db.client.invoice.updateMany({
+      where: { stripeInvoiceId: invoice.id },
+      data: {
+        status: 'open',
+        updatedAt: new Date(),
+      },
+    });
 
     console.log('Payment failed:', {
       stripeInvoiceId: invoice.id,
@@ -574,7 +576,6 @@ export class StripeService {
 
   // Helper Methods
   private async storeSubscription(subscription: Stripe.Subscription, organizationId: string): Promise<void> {
-    // TODO: Implement organizationSubscription model in Prisma schema
     const planId = subscription.items.data[0]?.price.id;
     const sub = subscription as any; // Use any to avoid type issues
     
@@ -585,40 +586,42 @@ export class StripeService {
       status: subscription.status,
     });
 
-    // await db.client.organizationSubscription.upsert({
-    //   where: { stripeSubscriptionId: subscription.id },
-    //   update: {
-    //     status: subscription.status as any,
-    //     currentPeriodStart: new Date(sub.current_period_start * 1000),
-    //     currentPeriodEnd: new Date(sub.current_period_end * 1000),
-    //     cancelAtPeriodEnd: sub.cancel_at_period_end,
-    //     canceledAt: sub.canceled_at ? new Date(sub.canceled_at * 1000) : null,
-    //     trialStart: sub.trial_start ? new Date(sub.trial_start * 1000) : null,
-    //     trialEnd: sub.trial_end ? new Date(sub.trial_end * 1000) : null,
-    //     quantity: subscription.items.data[0]?.quantity || 1,
-    //     metadata: subscription.metadata,
-    //     updatedAt: new Date(),
-    //   },
-    //   create: {
-    //     organizationId,
-    //     planId: planId || 'unknown',
-    //     stripeSubscriptionId: subscription.id,
-    //     status: subscription.status as any,
-    //     currentPeriodStart: new Date(sub.current_period_start * 1000),
-    //     currentPeriodEnd: new Date(sub.current_period_end * 1000),
-    //     cancelAtPeriodEnd: sub.cancel_at_period_end,
-    //     billingCycle: subscription.items.data[0]?.price.recurring?.interval === 'year' ? 'yearly' : 'monthly',
-    //     quantity: subscription.items.data[0]?.quantity || 1,
-    //     unitPrice: subscription.items.data[0]?.price.unit_amount || 0,
-    //     metadata: subscription.metadata,
-    //     createdAt: new Date(),
-    //     updatedAt: new Date(),
-    //   },
-    // });
+    // Find the plan ID based on Stripe price ID
+    const plan = await db.client.subscriptionPlan.findFirst({
+      where: { stripePriceId: planId },
+    });
+
+    await db.client.organizationSubscription.upsert({
+      where: { stripeSubscriptionId: subscription.id },
+      update: {
+        status: subscription.status as any,
+        currentPeriodStart: new Date(sub.current_period_start * 1000),
+        currentPeriodEnd: new Date(sub.current_period_end * 1000),
+        cancelAtPeriodEnd: sub.cancel_at_period_end,
+        canceledAt: sub.canceled_at ? new Date(sub.canceled_at * 1000) : null,
+        trialStart: sub.trial_start ? new Date(sub.trial_start * 1000) : null,
+        trialEnd: sub.trial_end ? new Date(sub.trial_end * 1000) : null,
+        quantity: subscription.items.data[0]?.quantity || 1,
+        metadata: subscription.metadata,
+        updatedAt: new Date(),
+      },
+      create: {
+        organizationId,
+        planId: plan?.id || 'unknown',
+        stripeSubscriptionId: subscription.id,
+        status: subscription.status as any,
+        currentPeriodStart: new Date(sub.current_period_start * 1000),
+        currentPeriodEnd: new Date(sub.current_period_end * 1000),
+        cancelAtPeriodEnd: sub.cancel_at_period_end,
+        billingCycle: subscription.items.data[0]?.price.recurring?.interval === 'year' ? 'yearly' : 'monthly',
+        quantity: subscription.items.data[0]?.quantity || 1,
+        unitPrice: (subscription.items.data[0]?.price.unit_amount || 0) / 100, // Convert from cents
+        metadata: subscription.metadata,
+      },
+    });
   }
 
   private async storeInvoice(invoice: Stripe.Invoice, organizationId: string): Promise<void> {
-    // TODO: Implement invoice model in Prisma schema
     console.log('Storing invoice:', {
       stripeInvoiceId: invoice.id,
       organizationId,
@@ -626,73 +629,99 @@ export class StripeService {
       total: invoice.total,
     });
     
-    // const inv = invoice as any; // Use any to avoid type issues
-    // const lineItems = invoice.lines.data.map(line => {
-    //   const lineAny = line as any;
-    //   return {
-    //     id: line.id,
-    //     type: lineAny.type || 'subscription',
-    //     description: line.description || '',
-    //     quantity: line.quantity || 1,
-    //     unitPrice: lineAny.price?.unit_amount || 0,
-    //     amount: line.amount,
-    //     period: lineAny.period ? {
-    //       start: new Date(lineAny.period.start * 1000),
-    //       end: new Date(lineAny.period.end * 1000),
-    //     } : undefined,
-    //     metadata: line.metadata,
-    //   };
-    // });
+    const inv = invoice as any; // Use any to avoid type issues
+    const lineItems = invoice.lines.data.map(line => {
+      const lineAny = line as any;
+      return {
+        id: line.id,
+        type: lineAny.type || 'subscription',
+        description: line.description || '',
+        quantity: line.quantity || 1,
+        unitPrice: (lineAny.price?.unit_amount || 0) / 100, // Convert from cents
+        amount: line.amount / 100, // Convert from cents
+        period: lineAny.period ? {
+          start: new Date(lineAny.period.start * 1000),
+          end: new Date(lineAny.period.end * 1000),
+        } : undefined,
+        metadata: line.metadata,
+      };
+    });
 
-    // await db.client.invoice.upsert({
-    //   where: { stripeInvoiceId: invoice.id },
-    //   update: {
-    //     status: invoice.status as any,
-    //     subtotal: invoice.subtotal,
-    //     taxAmount: inv.tax || 0,
-    //     discountAmount: inv.discount?.amount || inv.discounts?.[0]?.amount || 0,
-    //     total: invoice.total,
-    //     paidAt: inv.status_transitions?.paid_at ? new Date(inv.status_transitions.paid_at * 1000) : null,
-    //     lineItems,
-    //     updatedAt: new Date(),
-    //   },
-    //   create: {
-    //     organizationId,
-    //     stripeInvoiceId: invoice.id,
-    //     invoiceNumber: invoice.number || '',
-    //     status: invoice.status as any,
-    //     type: 'subscription',
-    //     subtotal: invoice.subtotal,
-    //     taxAmount: inv.tax || 0,
-    //     discountAmount: inv.discount?.amount || inv.discounts?.[0]?.amount || 0,
-    //     total: invoice.total,
-    //     currency: invoice.currency,
-    //     billingPeriod: {
-    //       start: new Date(inv.period_start * 1000),
-    //       end: new Date(inv.period_end * 1000),
-    //     },
-    //     lineItems,
-    //     dueDate: inv.due_date ? new Date(inv.due_date * 1000) : new Date(),
-    //     paidAt: inv.status_transitions?.paid_at ? new Date(inv.status_transitions.paid_at * 1000) : null,
-    //     metadata: invoice.metadata,
-    //     createdAt: new Date(),
-    //     updatedAt: new Date(),
-    //   },
-    // });
+    // Find subscription if this is a subscription invoice
+    const subscription = await db.client.organizationSubscription.findFirst({
+      where: {
+        organizationId,
+        stripeSubscriptionId: invoice.subscription as string,
+      },
+    });
+
+    await db.client.invoice.upsert({
+      where: { stripeInvoiceId: invoice.id },
+      update: {
+        status: invoice.status as any,
+        subtotal: invoice.subtotal / 100, // Convert from cents
+        taxAmount: (inv.tax || 0) / 100,
+        discountAmount: ((inv.discount?.amount || inv.discounts?.[0]?.amount || 0) / 100),
+        total: invoice.total / 100,
+        paidAt: inv.status_transitions?.paid_at ? new Date(inv.status_transitions.paid_at * 1000) : null,
+        lineItems,
+        updatedAt: new Date(),
+      },
+      create: {
+        organizationId,
+        subscriptionId: subscription?.id,
+        stripeInvoiceId: invoice.id,
+        invoiceNumber: invoice.number || `INV-${Date.now()}`,
+        status: invoice.status as any,
+        type: 'subscription',
+        subtotal: invoice.subtotal / 100,
+        taxAmount: (inv.tax || 0) / 100,
+        discountAmount: ((inv.discount?.amount || inv.discounts?.[0]?.amount || 0) / 100),
+        total: invoice.total / 100,
+        currency: invoice.currency.toUpperCase(),
+        billingPeriod: inv.period_start && inv.period_end ? {
+          start: new Date(inv.period_start * 1000),
+          end: new Date(inv.period_end * 1000),
+        } : null,
+        lineItems,
+        dueDate: inv.due_date ? new Date(inv.due_date * 1000) : new Date(),
+        paidAt: inv.status_transitions?.paid_at ? new Date(inv.status_transitions.paid_at * 1000) : null,
+        metadata: invoice.metadata,
+      },
+    });
   }
 
   private async logBillingEvent(eventData: Partial<BillingEvent>): Promise<void> {
-    // TODO: Implement billingEvent model in Prisma schema
     console.log('Billing event:', eventData);
     
-    // await db.client.billingEvent.create({
-    //   data: {
-    //     organizationId: 'system', // Would determine from event data
-    //     retryCount: 0,
-    //     createdAt: new Date(),
-    //     ...eventData,
-    //   } as any,
-    // });
+    // Determine organization ID from event data
+    let organizationId = 'system';
+    if (eventData.eventData && typeof eventData.eventData === 'object' && 'object' in eventData.eventData) {
+      const stripeObject = eventData.eventData.object as any;
+      if (stripeObject.metadata?.organizationId) {
+        organizationId = stripeObject.metadata.organizationId;
+      } else if (stripeObject.customer) {
+        // Find organization by Stripe customer ID
+        const org = await db.client.organization.findFirst({
+          where: { stripeCustomerId: stripeObject.customer },
+        });
+        if (org) organizationId = org.id;
+      }
+    }
+    
+    await db.client.billingEvent.create({
+      data: {
+        organizationId,
+        type: eventData.type || 'unknown',
+        eventData: eventData.eventData || {},
+        stripeEventId: eventData.stripeEventId,
+        processed: eventData.processed ?? false,
+        processedAt: eventData.processedAt,
+        errorMessage: eventData.errorMessage,
+        retryCount: eventData.retryCount ?? 0,
+        nextRetryAt: eventData.nextRetryAt,
+      },
+    });
   }
 
   private formatAmount(amount: number, currency: string): string {

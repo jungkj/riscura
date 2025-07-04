@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import * as ExcelJS from 'exceljs';
 import { withAuth, type AuthenticatedRequest } from '@/lib/auth/middleware';
 import { db } from '@/lib/db';
-import { unstable_getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-options';
 
 interface RCSARow {

@@ -14,27 +14,62 @@ import type {
 
 export class BillingManager {
 
+  // Organization Subscription Queries
+  async getOrganizationSubscription(organizationId: string): Promise<OrganizationSubscription | null> {
+    const subscription = await db.client.organizationSubscription.findFirst({
+      where: { organizationId },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (!subscription) return null;
+
+    return {
+      ...subscription,
+      metadata: subscription.metadata as any,
+    };
+  }
+
+  async getActiveSubscription(organizationId: string): Promise<OrganizationSubscription | null> {
+    const subscription = await db.client.organizationSubscription.findFirst({
+      where: {
+        organizationId,
+        status: 'active',
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (!subscription) return null;
+
+    return {
+      ...subscription,
+      metadata: subscription.metadata as any,
+    };
+  }
+
   // Subscription Plan Management
   async createSubscriptionPlan(plan: Omit<SubscriptionPlan, 'id' | 'createdAt' | 'updatedAt'>): Promise<SubscriptionPlan> {
-    // TODO: Implement subscription plan model in Prisma schema
-    // const newPlan = await db.client.subscriptionPlan.create({
-    //   data: {
-    //     ...plan,
-    //     id: uuidv4(),
-    //     createdAt: new Date(),
-    //     updatedAt: new Date(),
-    //   },
-    // });
+    const newPlan = await db.client.subscriptionPlan.create({
+      data: {
+        name: plan.name,
+        description: plan.description,
+        type: plan.type,
+        price: plan.price,
+        currency: plan.currency,
+        billingInterval: plan.billingInterval,
+        features: plan.features as any,
+        limits: plan.limits as any,
+        isActive: plan.isActive,
+        trialDays: plan.trialDays,
+        stripeProductId: plan.stripeProductId,
+        stripePriceId: plan.stripePriceId,
+      },
+    });
 
-    // Return mock plan for now
-    const newPlan: SubscriptionPlan = {
-      ...plan,
-      id: uuidv4(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
+    return {
+      ...newPlan,
+      features: newPlan.features as any,
+      limits: newPlan.limits as any,
     };
-
-    return newPlan;
   }
 
   async getSubscriptionPlans(filters?: {
@@ -42,69 +77,30 @@ export class BillingManager {
     active?: boolean;
     currency?: string;
   }): Promise<SubscriptionPlan[]> {
-    // TODO: Implement subscription plan model in Prisma schema
-    // Return mock plans for now
-    return [
-      {
-        id: 'plan_free',
-        name: 'Free',
-        description: 'Basic features for small teams',
-        type: 'freemium',
-        price: 0,
-        currency: 'USD',
-        billingInterval: 'monthly',
-        features: [
-          { id: 'f1', name: '5 users', description: 'Up to 5 team members', category: 'core', included: true },
-          { id: 'f2', name: '10 risks', description: 'Track up to 10 risks', category: 'core', included: true },
-          { id: 'f3', name: 'Basic reports', description: 'Basic reporting features', category: 'reporting', included: true },
-        ],
-        limits: {
-          users: 5,
-          risks: 10,
-          controls: 20,
-          documents: 50,
-          aiQueries: 100,
-          storageGB: 1,
-          apiCalls: 1000,
-          frameworks: 2,
-          reports: 10,
-        },
-        isActive: true,
-        trialDays: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: 'plan_pro',
-        name: 'Professional',
-        description: 'Advanced features for growing teams',
-        type: 'professional',
-        price: 99,
-        currency: 'USD',
-        billingInterval: 'monthly',
-        features: [
-          { id: 'f1', name: 'Unlimited users', description: 'No limit on team members', category: 'core', included: true },
-          { id: 'f2', name: 'Unlimited risks', description: 'Track unlimited risks', category: 'core', included: true },
-          { id: 'f3', name: 'Advanced reports', description: 'Advanced analytics and reporting', category: 'reporting', included: true },
-          { id: 'f4', name: 'API access', description: 'Full API access', category: 'core', included: true },
-        ],
-        limits: {
-          users: -1,
-          risks: -1,
-          controls: -1,
-          documents: -1,
-          aiQueries: 10000,
-          storageGB: 10,
-          apiCalls: 100000,
-          frameworks: -1,
-          reports: -1,
-        },
-        isActive: true,
-        trialDays: 14,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ];
+    const where: any = {};
+    
+    if (filters?.type?.length) {
+      where.type = { in: filters.type };
+    }
+    
+    if (filters?.active !== undefined) {
+      where.isActive = filters.active;
+    }
+    
+    if (filters?.currency) {
+      where.currency = filters.currency;
+    }
+
+    const plans = await db.client.subscriptionPlan.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return plans.map(plan => ({
+      ...plan,
+      features: plan.features as any,
+      limits: plan.limits as any,
+    }));
   }
 
   // Organization Subscription Management
@@ -125,117 +121,131 @@ export class BillingManager {
       throw new Error('Organization not found');
     }
 
-    // TODO: Implement subscription model in Prisma schema
-    // Return mock subscription for now
-    const subscription: OrganizationSubscription = {
-      id: uuidv4(),
-      organizationId,
-      planId,
-      stripeSubscriptionId: undefined,
-      stripeCustomerId: organization.stripeCustomerId || undefined,
-      status: 'active',
-      currentPeriodStart: new Date(),
-      currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
-      trialStart: options?.trialDays ? new Date() : undefined,
-      trialEnd: options?.trialDays 
-        ? new Date(Date.now() + options.trialDays * 24 * 60 * 60 * 1000) 
-        : undefined,
-      cancelAtPeriodEnd: false,
-      billingCycle: 'monthly',
-      quantity: 1,
-      unitPrice: 0,
-      metadata: {},
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    const plan = await db.client.subscriptionPlan.findUnique({
+      where: { id: planId },
+    });
 
-    return subscription;
+    if (!plan) {
+      throw new Error('Subscription plan not found');
+    }
+
+    const now = new Date();
+    const periodEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
+
+    const subscription = await db.client.organizationSubscription.create({
+      data: {
+        organizationId,
+        planId,
+        stripeCustomerId: organization.stripeCustomerId,
+        status: 'active',
+        currentPeriodStart: now,
+        currentPeriodEnd: periodEnd,
+        trialStart: options?.trialDays ? now : undefined,
+        trialEnd: options?.trialDays 
+          ? new Date(now.getTime() + options.trialDays * 24 * 60 * 60 * 1000) 
+          : undefined,
+        cancelAtPeriodEnd: false,
+        billingCycle: 'monthly',
+        quantity: 1,
+        unitPrice: plan.price,
+        metadata: options?.coupon ? { coupon: options.coupon } : {},
+      },
+    });
+
+    return {
+      ...subscription,
+      metadata: subscription.metadata as any,
+    };
   }
 
   async changeSubscriptionPlan(
     subscriptionId: string,
     newPlanId: string
   ): Promise<OrganizationSubscription> {
-    // TODO: Implement with real database operations
-    // Return mock updated subscription for now
-    const subscription: OrganizationSubscription = {
-      id: subscriptionId,
-      organizationId: 'org_123',
-      planId: newPlanId,
-      stripeSubscriptionId: undefined,
-      stripeCustomerId: undefined,
-      status: 'active',
-      currentPeriodStart: new Date(),
-      currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-      trialStart: undefined,
-      trialEnd: undefined,
-      cancelAtPeriodEnd: false,
-      billingCycle: 'monthly',
-      quantity: 1,
-      unitPrice: 0,
-      metadata: {},
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    const existingSubscription = await db.client.organizationSubscription.findUnique({
+      where: { id: subscriptionId },
+    });
 
-    return subscription;
+    if (!existingSubscription) {
+      throw new Error('Subscription not found');
+    }
+
+    const newPlan = await db.client.subscriptionPlan.findUnique({
+      where: { id: newPlanId },
+    });
+
+    if (!newPlan) {
+      throw new Error('New subscription plan not found');
+    }
+
+    const subscription = await db.client.organizationSubscription.update({
+      where: { id: subscriptionId },
+      data: {
+        planId: newPlanId,
+        unitPrice: newPlan.price,
+        updatedAt: new Date(),
+      },
+    });
+
+    return {
+      ...subscription,
+      metadata: subscription.metadata as any,
+    };
   }
 
   async cancelSubscription(
     subscriptionId: string,
     immediately: boolean = false
   ): Promise<OrganizationSubscription> {
-    // TODO: Implement with real database operations
-    // Return mock canceled subscription for now
-    const subscription: OrganizationSubscription = {
-      id: subscriptionId,
-      organizationId: 'org_123',
-      planId: 'plan_free',
-      stripeSubscriptionId: undefined,
-      stripeCustomerId: undefined,
-      status: immediately ? 'canceled' : 'active',
-      currentPeriodStart: new Date(),
-      currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-      trialStart: undefined,
-      trialEnd: undefined,
-      cancelAtPeriodEnd: !immediately,
-      billingCycle: 'monthly',
-      quantity: 1,
-      unitPrice: 0,
-      metadata: {},
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    const existingSubscription = await db.client.organizationSubscription.findUnique({
+      where: { id: subscriptionId },
+    });
 
-    return subscription;
+    if (!existingSubscription) {
+      throw new Error('Subscription not found');
+    }
+
+    const subscription = await db.client.organizationSubscription.update({
+      where: { id: subscriptionId },
+      data: {
+        status: immediately ? 'canceled' : 'active',
+        cancelAtPeriodEnd: !immediately,
+        canceledAt: immediately ? new Date() : undefined,
+        updatedAt: new Date(),
+      },
+    });
+
+    return {
+      ...subscription,
+      metadata: subscription.metadata as any,
+    };
   }
 
   async reactivateSubscription(
     subscriptionId: string
   ): Promise<OrganizationSubscription> {
-    // TODO: Implement with real database operations
-    // Return mock reactivated subscription for now
-    const subscription: OrganizationSubscription = {
-      id: subscriptionId,
-      organizationId: 'org_123',
-      planId: 'plan_pro',
-      stripeSubscriptionId: undefined,
-      stripeCustomerId: undefined,
-      status: 'active',
-      currentPeriodStart: new Date(),
-      currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-      trialStart: undefined,
-      trialEnd: undefined,
-      cancelAtPeriodEnd: false,
-      billingCycle: 'monthly',
-      quantity: 1,
-      unitPrice: 0,
-      metadata: {},
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    const existingSubscription = await db.client.organizationSubscription.findUnique({
+      where: { id: subscriptionId },
+    });
 
-    return subscription;
+    if (!existingSubscription) {
+      throw new Error('Subscription not found');
+    }
+
+    const subscription = await db.client.organizationSubscription.update({
+      where: { id: subscriptionId },
+      data: {
+        status: 'active',
+        cancelAtPeriodEnd: false,
+        canceledAt: null,
+        updatedAt: new Date(),
+      },
+    });
+
+    return {
+      ...subscription,
+      metadata: subscription.metadata as any,
+    };
   }
 
   // Usage Tracking
@@ -245,12 +255,32 @@ export class BillingManager {
     quantity: number,
     metadata?: Record<string, any>
   ): Promise<void> {
-    // TODO: Implement usage tracking when models are available
-    console.log('Usage tracked:', {
-      organizationId,
-      type,
-      quantity,
-      metadata,
+    const subscription = await db.client.organizationSubscription.findFirst({
+      where: {
+        organizationId,
+        status: 'active',
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (!subscription) {
+      throw new Error('No active subscription found for organization');
+    }
+
+    const now = new Date();
+    const period = new Date(now.getFullYear(), now.getMonth(), 1); // Start of current month
+
+    await db.client.usageRecord.create({
+      data: {
+        organizationId,
+        subscriptionId: subscription.id,
+        metricType: type,
+        quantity,
+        unitPrice: 0, // Will be calculated based on plan
+        total: 0, // Will be calculated based on plan
+        period,
+        metadata: metadata || {},
+      },
     });
   }
 
@@ -268,28 +298,52 @@ export class BillingManager {
       throw new Error('Organization not found');
     }
 
-    // TODO: Implement payment method model in Prisma schema
-    // Return mock payment method for now
-    const paymentMethod: PaymentMethod = {
-      id: uuidv4(),
-      organizationId,
-      stripePaymentMethodId,
-      type: 'card',
-      card: {
-        brand: 'visa',
-        last4: '4242',
-        expMonth: 12,
-        expYear: 2025,
-        fingerprint: 'mock_fingerprint',
-      },
-      isDefault: setAsDefault,
-      isActive: true,
-      metadata: {},
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    // If setting as default, unset other default payment methods
+    if (setAsDefault) {
+      await db.client.paymentMethod.updateMany({
+        where: {
+          organizationId,
+          isDefault: true,
+        },
+        data: {
+          isDefault: false,
+        },
+      });
+    }
 
-    return paymentMethod;
+    // Get payment method details from Stripe
+    const stripePaymentMethod = await stripeService.getPaymentMethod(stripePaymentMethodId);
+    
+    const paymentMethod = await db.client.paymentMethod.create({
+      data: {
+        organizationId,
+        stripePaymentMethodId,
+        type: stripePaymentMethod.type,
+        card: stripePaymentMethod.card ? {
+          brand: stripePaymentMethod.card.brand,
+          last4: stripePaymentMethod.card.last4,
+          expMonth: stripePaymentMethod.card.exp_month,
+          expYear: stripePaymentMethod.card.exp_year,
+          fingerprint: stripePaymentMethod.card.fingerprint,
+        } : undefined,
+        bankAccount: stripePaymentMethod.us_bank_account ? {
+          routingNumber: stripePaymentMethod.us_bank_account.routing_number,
+          last4: stripePaymentMethod.us_bank_account.last4,
+          accountType: stripePaymentMethod.us_bank_account.account_type,
+          bankName: stripePaymentMethod.us_bank_account.bank_name,
+        } : undefined,
+        isDefault: setAsDefault,
+        isActive: true,
+        metadata: {},
+      },
+    });
+
+    return {
+      ...paymentMethod,
+      card: paymentMethod.card as any,
+      bankAccount: paymentMethod.bankAccount as any,
+      metadata: paymentMethod.metadata as any,
+    };
   }
 
   // Analytics
@@ -300,37 +354,84 @@ export class BillingManager {
       end: new Date(),
     }
   ): Promise<BillingAnalytics> {
-    // Simple analytics implementation
+    const subscriptionWhere: any = {
+      createdAt: {
+        gte: period.start,
+        lte: period.end,
+      },
+    };
+
+    if (organizationId) {
+      subscriptionWhere.organizationId = organizationId;
+    }
+
+    const [subscriptions, invoices, plans] = await Promise.all([
+      db.client.organizationSubscription.findMany({
+        where: subscriptionWhere,
+        include: { plan: true },
+      }),
+      db.client.invoice.findMany({
+        where: {
+          createdAt: {
+            gte: period.start,
+            lte: period.end,
+          },
+        },
+      }),
+      db.client.subscriptionPlan.findMany({
+        include: {
+          subscriptions: {
+            where: { status: 'active' },
+          },
+        },
+      }),
+    ]);
+
+    const totalRevenue = invoices.reduce((sum, invoice) => sum + invoice.total, 0);
+    const recurringRevenue = invoices.filter(i => i.type === 'subscription').reduce((sum, invoice) => sum + invoice.total, 0);
+    const oneTimeRevenue = invoices.filter(i => i.type === 'one_time').reduce((sum, invoice) => sum + invoice.total, 0);
+
+    const activeSubscriptions = subscriptions.filter(s => s.status === 'active');
+    const trialSubscriptions = subscriptions.filter(s => s.trialEnd && s.trialEnd > new Date());
+    const canceledSubscriptions = subscriptions.filter(s => s.status === 'canceled');
+
+    const planDistribution = plans.map(plan => ({
+      planId: plan.id,
+      planName: plan.name,
+      count: plan.subscriptions.length,
+      revenue: plan.subscriptions.reduce((sum, sub) => sum + sub.unitPrice, 0),
+    }));
+
     return {
       period,
       revenue: {
-        total: 0,
-        recurring: 0,
-        oneTime: 0,
-        usage: 0,
+        total: totalRevenue,
+        recurring: recurringRevenue,
+        oneTime: oneTimeRevenue,
+        usage: 0, // Calculate from usage records if needed
         currency: 'USD',
       },
       subscriptions: {
-        total: 0,
-        active: 0,
-        trial: 0,
-        canceled: 0,
-        churnRate: 0,
+        total: subscriptions.length,
+        active: activeSubscriptions.length,
+        trial: trialSubscriptions.length,
+        canceled: canceledSubscriptions.length,
+        churnRate: canceledSubscriptions.length / Math.max(subscriptions.length, 1),
       },
       customers: {
-        total: 0,
-        new: 0,
-        churned: 0,
+        total: new Set(subscriptions.map(s => s.organizationId)).size,
+        new: subscriptions.length,
+        churned: canceledSubscriptions.length,
       },
       metrics: {
-        mrr: 0,
-        arr: 0,
-        ltv: 0,
-        cac: 0,
-        arpu: 0,
+        mrr: activeSubscriptions.reduce((sum, sub) => sum + sub.unitPrice, 0),
+        arr: activeSubscriptions.reduce((sum, sub) => sum + sub.unitPrice, 0) * 12,
+        ltv: 0, // Calculate lifetime value if needed
+        cac: 0, // Calculate customer acquisition cost if needed
+        arpu: totalRevenue / Math.max(subscriptions.length, 1),
       },
-      planDistribution: [],
-      paymentMethods: [],
+      planDistribution,
+      paymentMethods: [], // Load payment methods if needed
     };
   }
 }

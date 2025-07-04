@@ -100,34 +100,51 @@ export const GET = withAPI(
                 status: true,
               },
             },
-            _count: {
-              select: {
-                comments: true,
-                activities: true,
-              },
-            },
           },
         }),
         db.client.document.count({ where }),
       ]);
 
-      // Transform data for API response
-      const transformedDocuments = documents.map(doc => ({
-        id: doc.id,
-        name: doc.name,
-        type: doc.type,
-        size: doc.size,
-        content: doc.content,
-        extractedText: doc.extractedText,
-        aiAnalysis: doc.aiAnalysis,
-        uploadedAt: doc.uploadedAt,
-        createdAt: doc.createdAt,
-        updatedAt: doc.updatedAt,
-        uploader: doc.uploader,
-        riskEvidence: doc.riskEvidence,
-        controlEvidence: doc.controlEvidence,
-        _count: doc._count,
-      }));
+      // Transform data for API response with counts
+      const transformedDocuments = await Promise.all(
+        documents.map(async (doc) => {
+          // Get counts for comments and activities
+          const [commentsCount, activitiesCount] = await Promise.all([
+            db.client.comment.count({
+              where: {
+                entityType: 'DOCUMENT',
+                entityId: doc.id,
+              },
+            }),
+            db.client.activity.count({
+              where: {
+                entityType: 'DOCUMENT',
+                entityId: doc.id,
+              },
+            }),
+          ]);
+
+          return {
+            id: doc.id,
+            name: doc.name,
+            type: doc.type,
+            size: doc.size,
+            content: doc.content,
+            extractedText: doc.extractedText,
+            aiAnalysis: doc.aiAnalysis,
+            uploadedAt: doc.uploadedAt,
+            createdAt: doc.createdAt,
+            updatedAt: doc.updatedAt,
+            uploader: doc.uploader,
+            riskEvidence: doc.riskEvidence,
+            controlEvidence: doc.controlEvidence,
+            _count: {
+              comments: commentsCount,
+              activities: activitiesCount,
+            },
+          };
+        })
+      );
 
       const paginationMeta = createPaginationMeta(page, limit, total);
 
@@ -237,14 +254,24 @@ export const POST = withAPI(async (req: NextRequest) => {
             email: true,
           },
         },
-        _count: {
-          select: {
-            comments: true,
-            activities: true,
-          },
-        },
       },
     });
+
+    // Get initial counts (should be 0 for new document except for the creation activity)
+    const [commentsCount, activitiesCount] = await Promise.all([
+      db.client.comment.count({
+        where: {
+          entityType: 'DOCUMENT',
+          entityId: document.id,
+        },
+      }),
+      db.client.activity.count({
+        where: {
+          entityType: 'DOCUMENT',
+          entityId: document.id,
+        },
+      }),
+    ]);
 
     return createAPIResponse({
       data: {
@@ -259,7 +286,10 @@ export const POST = withAPI(async (req: NextRequest) => {
         createdAt: completeDocument!.createdAt,
         updatedAt: completeDocument!.updatedAt,
         uploader: completeDocument!.uploader,
-        _count: completeDocument!._count,
+        _count: {
+          comments: commentsCount,
+          activities: activitiesCount,
+        },
       },
       message: 'Document created successfully',
     });

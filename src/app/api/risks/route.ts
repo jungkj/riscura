@@ -150,7 +150,6 @@ export const GET = withAPI(
               select: {
                 controls: true,
                 evidence: true,
-                comments: true,
                 tasks: true,
               },
             },
