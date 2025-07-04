@@ -132,8 +132,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         accessLevel: sensitivity,
         downloadable: true,
         printable: false,
-        expiresAt: null,
-        accessLog: []
+        expiresAt: null as any,
+        accessLog: [] as any[]
       },
       _count: {
         versions: 1,
@@ -396,7 +396,7 @@ async function getSecureDocuments(
     sensitivity?: string | null;
     search?: string | null;
   }
-) {
+): Promise<any> {
   // Mock secure documents with proper access control
   const mockDocuments = [
     {

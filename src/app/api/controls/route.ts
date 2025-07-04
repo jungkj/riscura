@@ -59,16 +59,7 @@ export const GET = withAPI(async (req: NextRequest) => {
       where.owner = validatedQuery.ownerId;
     }
 
-    // Filter by framework
-    if (validatedQuery.framework) {
-      where.frameworkControls = {
-        some: {
-          framework: {
-            name: validatedQuery.framework,
-          },
-        },
-      };
-    }
+    // Note: Framework filtering not available without frameworkControls relation
 
     // Filter by tags
     if (validatedQuery.tags && validatedQuery.tags.length > 0) {
@@ -134,18 +125,6 @@ export const GET = withAPI(async (req: NextRequest) => {
               email: true,
             },
           },
-        frameworkControls: {
-          select: {
-            id: true,
-            framework: {
-            select: {
-              id: true,
-                name: true,
-                version: true,
-              },
-            },
-            },
-          },
           risks: {
           select: {
               risk: {
@@ -165,23 +144,10 @@ export const GET = withAPI(async (req: NextRequest) => {
             type: true,
           },
         },
-        controlAssessments: {
-          select: {
-            id: true,
-            status: true,
-            effectiveness: true,
-            assessedDate: true,
-          },
-          orderBy: {
-            assessedDate: 'desc',
-          },
-          take: 1,
-          },
           _count: {
             select: {
               risks: true,
               evidence: true,
-            controlAssessments: true,
           },
         },
       },
@@ -306,12 +272,10 @@ export const POST = withAPI(async (req: NextRequest) => {
             email: true,
           },
         },
-        frameworkControls: true,
         _count: {
           select: {
             risks: true,
             evidence: true,
-            controlAssessments: true,
           },
         },
       },

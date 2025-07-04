@@ -142,23 +142,39 @@ export const GET = withAPI(async (req: NextRequest) => {
             email: true,
           },
         },
-        activities: {
-          select: {
-            id: true,
-            type: true,
-            description: true,
-            createdAt: true,
-          },
-          orderBy: {
-            createdAt: 'desc',
-          },
-          take: 5,
-        },
       },
     });
 
-         // Calculate additional metrics for each assessment
-     const enrichedAssessments = workflows.map(workflow => {
+    // Fetch activities for all workflows
+    const workflowIds = workflows.map(w => w.id);
+    const activities = await db.client.activity.findMany({
+      where: {
+        entityType: 'WORKFLOW',
+        entityId: { in: workflowIds },
+      },
+      select: {
+        id: true,
+        type: true,
+        description: true,
+        createdAt: true,
+        entityId: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    // Group activities by workflow ID
+    const activitiesByWorkflow = activities.reduce((acc, activity) => {
+      if (!acc[activity.entityId]) {
+        acc[activity.entityId] = [];
+      }
+      acc[activity.entityId].push(activity);
+      return acc;
+    }, {} as Record<string, typeof activities>);
+
+    // Calculate additional metrics for each assessment
+    const enrichedAssessments = workflows.map(workflow => {
        // Since steps are stored as JSON, parse them if they exist
        const steps = Array.isArray(workflow.steps) ? workflow.steps : [];
        const completedSteps = steps.filter((step: any) => step.status === 'COMPLETED').length;
@@ -167,6 +183,10 @@ export const GET = withAPI(async (req: NextRequest) => {
 
        // Type cast relatedEntities as it's a JSON field
        const relatedEntities = workflow.relatedEntities as any;
+
+       // Get activities for this workflow (take only the first 5)
+       const workflowActivities = activitiesByWorkflow[workflow.id] || [];
+       const recentActivities = workflowActivities.slice(0, 5);
 
        return {
          ...workflow,
@@ -179,6 +199,7 @@ export const GET = withAPI(async (req: NextRequest) => {
          completedSteps,
          totalSteps,
          assignedUsers: workflow.assignedTo || [],
+         activities: recentActivities,
        };
      });
 

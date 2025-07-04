@@ -120,7 +120,6 @@ const getAnimationVariants = (
         visible: { opacity: 1, rotate: 0, transition: baseTransition },
       };
 
-    case 'none':
     default:
       return {
         hidden: {},
