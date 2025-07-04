@@ -96,6 +96,9 @@ model User {
   assignedWorkflowSteps    WorkflowStep[]           @relation("WorkflowStepAssignedTo")
   createdWorkflows         Workflow[]               @relation("WorkflowCreatedBy")
   receivedMessages         Message[]                @relation("MessageRecipient")
+  assignedProboTasks       ProboTask[]              @relation("ProboTaskAssignedTo")
+  createdProboTasks        ProboTask[]              @relation("ProboTaskAssignedBy")
+  vendorAssessments        VendorAssessment[]       @relation("VendorAssessmentAssessor")
 
   @@index([organizationId])
   @@index([email])
@@ -202,6 +205,7 @@ model Control {
   spreadsheetRows     SpreadsheetRow[]     @relation("SpreadsheetRowControl")
   tasks               Task[]
   evidence            Document[]           @relation("ControlEvidence")
+  linkedProboControls ProboControl[]       @relation("ProboControlLinked")
 
   @@index([organizationId])
   @@index([type])
@@ -1034,6 +1038,7 @@ model ProboControl {
   updatedAt                DateTime               @updatedAt
   
   organization             Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  linkedControl            Control?               @relation("ProboControlLinked", fields: [controlId], references: [id])
   tasks                    ProboTask[]
   evidences                ProboEvidence[]
   measures                 ProboMeasure[]
@@ -1060,9 +1065,13 @@ model ProboTask {
   
   control        ProboControl @relation(fields: [controlId], references: [id], onDelete: Cascade)
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assignedUser   User?        @relation("ProboTaskAssignedTo", fields: [assignedTo], references: [id])
+  assignedByUser User?        @relation("ProboTaskAssignedBy", fields: [assignedBy], references: [id])
 
   @@index([controlId])
   @@index([organizationId])
+  @@index([assignedTo])
+  @@index([assignedBy])
   @@map("probo_tasks")
 }
 
@@ -1107,7 +1116,7 @@ model VendorAssessment {
   complianceScore   Int
   financialScore    Int
   operationalScore  Int
-  assessmentMethod  String            @default("MANUAL")
+  assessmentMethod  AssessmentMethod  @default(MANUAL)
   assessorId        String
   aiFindings        Json?
   recommendations   String[]          @default([])
@@ -1117,10 +1126,12 @@ model VendorAssessment {
   updatedAt         DateTime          @updatedAt
   
   organization      Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assessor          User              @relation("VendorAssessmentAssessor", fields: [assessorId], references: [id])
   findings          VendorFinding[]
 
   @@index([organizationId])
   @@index([vendorName])
+  @@index([assessorId])
   @@map("vendor_assessments")
 }
 
@@ -1155,6 +1166,7 @@ model ComplianceFramework {
   organization   Organization                @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   requirements   ComplianceFrameworkRequirement[]
 
+  @@unique([organizationId, name, version])
   @@index([organizationId])
   @@index([name])
   @@map("compliance_frameworks")
@@ -1172,6 +1184,7 @@ model ComplianceFrameworkRequirement {
   
   framework             ComplianceFramework @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
 
+  @@unique([frameworkId, requirementId])
   @@index([frameworkId])
   @@index([requirementId])
   @@map("compliance_framework_requirements")
@@ -1423,4 +1436,10 @@ enum SpreadsheetPermissionType {
   EDITOR
   COMMENTER
   VIEWER
+}
+
+enum AssessmentMethod {
+  MANUAL
+  AUTOMATED
+  HYBRID
 }
