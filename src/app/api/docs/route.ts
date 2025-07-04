@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withAPI } from '@/lib/api/middleware';
 import { apiRegistry } from '@/lib/api/documentation';
+import { stringify as yamlStringify } from 'yaml';
 
 // ============================================================================
 // GET /api/docs - Serve OpenAPI Specification
@@ -20,7 +21,7 @@ async function handleGet(req: NextRequest) {
 
     if (format === 'yaml') {
       // Convert to YAML if requested
-      const yaml = convertToYAML(openApiSpec);
+      const yaml = yamlStringify(openApiSpec);
       return new NextResponse(yaml, {
         headers: {
           'Content-Type': 'application/yaml',
@@ -50,32 +51,7 @@ async function handleGet(req: NextRequest) {
   }
 }
 
-// ============================================================================
-// YAML CONVERSION UTILITY
-// ============================================================================
-
-function convertToYAML(obj: any, indent = 0): string {
-  const spaces = '  '.repeat(indent);
-  let yaml = '';
-
-  if (Array.isArray(obj)) {
-    for (const item of obj) {
-      yaml += `${spaces}- ${convertToYAML(item, indent + 1)}\n`;
-    }
-  } else if (typeof obj === 'object' && obj !== null) {
-    for (const [key, value] of Object.entries(obj)) {
-      if (typeof value === 'object' && value !== null) {
-        yaml += `${spaces}${key}:\n${convertToYAML(value, indent + 1)}`;
-      } else {
-        yaml += `${spaces}${key}: ${JSON.stringify(value)}\n`;
-      }
-    }
-  } else {
-    return JSON.stringify(obj);
-  }
-
-  return yaml;
-}
+// YAML conversion is now handled by the yaml library
 
 // ============================================================================
 // EXPORT

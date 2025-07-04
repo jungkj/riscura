@@ -2,6 +2,7 @@ import { db } from '@/lib/db';
 import { stripeService } from './stripe';
 import { notificationManager } from '@/lib/collaboration/notifications';
 import { v4 as uuidv4 } from 'uuid';
+import { addMonths, addDays } from 'date-fns';
 import type {
   SubscriptionPlan,
   OrganizationSubscription,
@@ -130,7 +131,7 @@ export class BillingManager {
     }
 
     const now = new Date();
-    const periodEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
+    const periodEnd = plan.billingCycle === 'yearly' ? addMonths(now, 12) : addMonths(now, 1);
 
     const subscription = await db.client.organizationSubscription.create({
       data: {
@@ -142,7 +143,7 @@ export class BillingManager {
         currentPeriodEnd: periodEnd,
         trialStart: options?.trialDays ? now : undefined,
         trialEnd: options?.trialDays 
-          ? new Date(now.getTime() + options.trialDays * 24 * 60 * 60 * 1000) 
+          ? addDays(now, options.trialDays) 
           : undefined,
         cancelAtPeriodEnd: false,
         billingCycle: 'monthly',
