@@ -109,12 +109,11 @@ function getDeviceInfo(): DeviceInfo {
   else if (/android/.test(userAgent)) platform = 'android';
 
   // Calculate safe area (for notch support)
-  const safeAreaTop = parseInt(
-    getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-top') || '0'
-  );
-  const safeAreaBottom = parseInt(
-    getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-bottom') || '0'
-  );
+  const safeAreaTopValue = getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-top') || '0';
+  const safeAreaBottomValue = getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-bottom') || '0';
+  
+  const safeAreaTop = parseInt(safeAreaTopValue, 10) || 0;
+  const safeAreaBottom = parseInt(safeAreaBottomValue, 10) || 0;
 
   return {
     type,

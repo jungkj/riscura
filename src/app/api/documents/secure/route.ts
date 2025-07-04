@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { securityMiddleware, RATE_LIMITS, CORS_CONFIGS } from '@/lib/security/middleware';
 import { accessControl, Permission } from '@/lib/security/access-control';
 import { documentEncryption } from '@/lib/security/document-encryption';
+import { SecureDocumentResponse, DocumentUploadResponse, DocumentDownloadResponse } from '@/types/api/documents';
 
 // Secure document upload with comprehensive security
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -132,8 +133,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         accessLevel: sensitivity,
         downloadable: true,
         printable: false,
-        expiresAt: null as any,
-        accessLog: [] as any[]
+        expiresAt: null,
+        accessLog: []
       },
       _count: {
         versions: 1,
@@ -396,7 +397,7 @@ async function getSecureDocuments(
     sensitivity?: string | null;
     search?: string | null;
   }
-): Promise<any> {
+): Promise<{ documents: SecureDocumentResponse[]; totalCount: number; hasNextPage: boolean }> {
   // Mock secure documents with proper access control
   const mockDocuments = [
     {
