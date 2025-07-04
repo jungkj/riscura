@@ -1,58 +1,65 @@
 /**
  * Typography Design System
+ * Apple-inspired typography with 48px line spacing and Notion-like hierarchy
  * Provides consistent text styles, hierarchy, and spacing for the application
  */
 
 export const typography = {
-  // Heading Hierarchy
+  // Heading Hierarchy (48px spacing based)
   headings: {
     h1: {
-      size: 'text-4xl lg:text-5xl',
+      size: 'text-4xl lg:text-5xl xl:text-6xl',
       weight: 'font-bold',
       tracking: 'tracking-tight',
       leading: 'leading-tight',
       color: 'text-slate-900',
-      spacing: 'mb-4'
+      spacing: 'mb-12', // 48px Apple-like spacing
+      lineHeight: '1.2'
     },
     h2: {
-      size: 'text-2xl lg:text-3xl',
+      size: 'text-2xl lg:text-3xl xl:text-4xl',
       weight: 'font-bold',
       tracking: 'tracking-tight',
       leading: 'leading-tight',
       color: 'text-slate-800',
-      spacing: 'mb-3'
+      spacing: 'mb-8', // 32px spacing
+      lineHeight: '1.25'
     },
     h3: {
-      size: 'text-xl lg:text-2xl',
+      size: 'text-xl lg:text-2xl xl:text-3xl',
       weight: 'font-semibold',
       tracking: 'tracking-tight',
       leading: 'leading-snug',
       color: 'text-slate-800',
-      spacing: 'mb-3'
+      spacing: 'mb-6', // 24px spacing
+      lineHeight: '1.3'
     },
     h4: {
-      size: 'text-lg',
+      size: 'text-lg lg:text-xl',
       weight: 'font-semibold',
       tracking: 'tracking-tight',
       leading: 'leading-normal',
       color: 'text-slate-700',
-      spacing: 'mb-2'
+      spacing: 'mb-4', // 16px spacing
+      lineHeight: '1.4'
     },
     h5: {
-      size: 'text-base',
+      size: 'text-base lg:text-lg',
       weight: 'font-semibold',
       tracking: 'tracking-normal',
       leading: 'leading-normal',
       color: 'text-slate-700',
-      spacing: 'mb-2'
+      spacing: 'mb-3', // 12px spacing
+      lineHeight: '1.5'
     },
     h6: {
-      size: 'text-sm',
+      size: 'text-sm lg:text-base',
       weight: 'font-semibold',
       tracking: 'tracking-wide',
       leading: 'leading-normal',
       color: 'text-slate-600',
-      spacing: 'mb-1'
+      spacing: 'mb-2', // 8px spacing
+      lineHeight: '1.5'
     }
   },
 
@@ -164,25 +171,26 @@ export const getCaptionClasses = (variant: keyof typeof typography.captions) => 
   return `${caption.size} ${caption.weight} ${caption.color} ${tracking} ${transform}`.trim();
 };
 
-// Spacing Scale for consistent vertical rhythm
-export const spacing = {
+// Spacing Scale for consistent vertical rhythm (48px primary line spacing)
+export const typographySpacing = {
   sections: {
-    large: 'space-y-12',
-    default: 'space-y-8',
-    small: 'space-y-6',
-    tight: 'space-y-4'
+    hero: 'space-y-16', // 64px for hero sections
+    large: 'space-y-12', // 48px PRIMARY LINE SPACING (Apple-like)
+    default: 'space-y-8', // 32px for standard sections
+    small: 'space-y-6', // 24px for compact sections
+    tight: 'space-y-4' // 16px for tight sections
   },
   content: {
-    large: 'space-y-6',
-    default: 'space-y-4',
-    small: 'space-y-3',
-    tight: 'space-y-2'
+    large: 'space-y-6', // 24px for generous content
+    default: 'space-y-4', // 16px for standard content
+    small: 'space-y-3', // 12px for compact content
+    tight: 'space-y-2' // 8px for tight content
   },
   inline: {
-    large: 'gap-4',
-    default: 'gap-3',
-    small: 'gap-2',
-    tight: 'gap-1'
+    large: 'gap-6', // 24px for large inline elements
+    default: 'gap-4', // 16px for standard inline
+    small: 'gap-2', // 8px for compact inline
+    tight: 'gap-1' // 4px for tight inline
   }
 };
 

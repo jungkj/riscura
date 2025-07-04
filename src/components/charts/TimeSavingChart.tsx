@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { AnimatedWrapper, SlideUp, SlideLeft, SlideRight } from '@/components/ui/AnimatedWrapper';
+import { semanticSpacing } from '@/lib/design-system/spacing';
 
 const data = [
   { quarter: 'Q1', excel: 120, riscura: 12 },
@@ -23,87 +24,33 @@ export const TimeSavingChart = ({ animated = false }: TimeSavingChartProps) => {
     setIsClient(true);
   }, []);
 
-  const HeaderContent = ({ children, className }: { children: React.ReactNode; className?: string }) => {
-    if (animated) {
-      return (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className={className}
-        >
-          {children}
-        </motion.div>
-      );
-    }
-    return <div className={className}>{children}</div>;
-  };
-
-  const LeftContent = ({ children }: { children: React.ReactNode }) => {
-    if (animated) {
-      return (
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          {children}
-        </motion.div>
-      );
-    }
-    return <div>{children}</div>;
-  };
-
-  const RightContent = ({ children, className }: { children: React.ReactNode; className?: string }) => {
-    if (animated) {
-      return (
-        <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
-          className={className}
-        >
-          {children}
-        </motion.div>
-      );
-    }
-    return <div className={className}>{children}</div>;
-  };
-
-  const CTAButton = ({ children, className }: { children: React.ReactNode; className?: string }) => {
-    if (animated) {
-      return (
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className={className}
-        >
-          {children}
-        </motion.button>
-      );
-    }
-    return <button className={className}>{children}</button>;
-  };
-
   return (
-    <section className="py-16 bg-[#F5F1E9]">
+    <section className="py-16 bg-[#F5F1E9]" style={{ paddingTop: semanticSpacing.section.sm, paddingBottom: semanticSpacing.section.sm }}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Excel Hook Section */}
-        <HeaderContent className="text-center mb-12">
+        <AnimatedWrapper
+          animationType={animated ? "slide-up" : "none"}
+          whileInView={animated}
+          once={true}
+          className="text-center"
+          style={{ marginBottom: semanticSpacing.section.sm }}
+        >
           <p className="text-2xl sm:text-3xl lg:text-4xl text-[#191919] font-inter leading-relaxed">
             Still using <span className="font-bold text-green-600">Excel</span> to track your RCSA?{" "}
             <span className="text-[#A8A8A8]">
               It's time to upgrade to AI-powered automation that actually works.
             </span>
           </p>
-        </HeaderContent>
+        </AnimatedWrapper>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Text content */}
-          <LeftContent>
+          <AnimatedWrapper
+            animationType={animated ? "slide-left" : "none"}
+            whileInView={animated}
+            once={true}
+            duration={0.8}
+          >
             <div className="mb-6">
               <span className="inline-block px-3 py-1 bg-[#191919] text-[#FAFAFA] text-sm font-medium rounded-full mb-4 font-inter">
                 Efficiency Comparison
@@ -118,13 +65,26 @@ export const TimeSavingChart = ({ animated = false }: TimeSavingChartProps) => {
             </div>
 
             {/* CTA Button */}
-            <CTAButton className="bg-[#199BEC] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#0f7dc7] transition-colors font-inter hover:scale-105 transform transition-transform">
-              Start Your Transformation
-            </CTAButton>
-          </LeftContent>
+            <AnimatedWrapper
+              animationType="none"
+              onHover={animated}
+              onTap={animated}
+            >
+              <button className="bg-[#199BEC] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#0f7dc7] transition-colors font-inter">
+                Start Your Transformation
+              </button>
+            </AnimatedWrapper>
+          </AnimatedWrapper>
 
           {/* Right side - Chart */}
-          <RightContent className="bg-[#FAFAFA] rounded-2xl p-8 shadow-lg border border-[#D8C3A5]">
+          <AnimatedWrapper
+            animationType={animated ? "slide-right" : "none"}
+            whileInView={animated}
+            once={true}
+            duration={0.8}
+            delay={0.2}
+            className="bg-[#FAFAFA] rounded-2xl p-8 shadow-lg border border-[#D8C3A5]"
+          >
             <div className="mb-4">
               <h3 className="text-lg font-semibold text-[#191919] mb-2 font-inter">Risk Assessment Completion Time</h3>
               <p className="text-sm text-[#A8A8A8] font-inter">Hours required per quarterly risk assessment</p>
@@ -189,7 +149,7 @@ export const TimeSavingChart = ({ animated = false }: TimeSavingChartProps) => {
                 <span className="text-sm text-[#A8A8A8] font-medium font-inter">Excel-based RCSA</span>
               </div>
             </div>
-          </RightContent>
+          </AnimatedWrapper>
         </div>
       </div>
     </section>

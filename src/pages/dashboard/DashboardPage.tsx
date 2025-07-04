@@ -461,7 +461,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="p-6 space-y-6" data-tour="dashboard-main">
+    <div className="p-6 space-y-6 md:space-y-8" data-tour="dashboard-main">
       {/* Guided Tour Component */}
       {showTour && (
         <GuidedTour
@@ -615,18 +615,18 @@ export default function DashboardPage() {
       </div>
 
       {/* Probo Integration Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         <div className="lg:col-span-2">
           <ProboIntegrationWidget variant="detailed" showActions={true} />
         </div>
-        <div className="space-y-4">
+        <div className="space-y-4 md:space-y-6">
           <ProboIntegrationWidget variant="metrics-only" showActions={false} />
           <ProboIntegrationWidget variant="compact" showActions={false} />
         </div>
       </div>
 
       {/* Bottom Section - AI Insights Only */}
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:gap-8">
         {/* AI Insights */}
         <Card data-tour="ai-insights" className="bg-white border-gray-200">
           <CardHeader>
@@ -677,7 +677,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Team Collaboration Section - Small Team Features */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         {/* Team Status */}
         <Card className="bg-white border-gray-200">
           <CardHeader>

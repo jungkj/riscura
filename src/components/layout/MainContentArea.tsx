@@ -248,7 +248,7 @@ export const MainContentArea: React.FC<MainContentAreaProps> = ({
           "bg-white border-b border-gray-200 px-6 py-6",
           headerClassName
         )}>
-          <div className="space-y-4">
+          <div className="space-y-4 md:space-y-6">
             {/* Breadcrumbs */}
             {breadcrumbs.length > 0 && (
               <Breadcrumbs items={breadcrumbs} />
@@ -324,9 +324,9 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
   const getSpacingClass = (spacing: string) => {
     switch (spacing) {
       case 'tight': return 'space-y-4';
-      case 'normal': return 'space-y-6';
-      case 'loose': return 'space-y-8';
-      default: return 'space-y-6';
+      case 'normal': return 'space-y-6 md:space-y-8';
+      case 'loose': return 'space-y-8 md:space-y-10';
+      default: return 'space-y-6 md:space-y-8';
     }
   };
 
