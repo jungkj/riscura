@@ -16,19 +16,19 @@ function getOpenAIClient() {
 
 // Mock security service for build time
 const mockSecurityService = {
-  async processSecureAIRequest(request: any) {
+  async processSecureAIRequest(request: any): Promise<any> {
     return {
       securityApproved: true,
       sanitizedContent: request.content,
       auditLogId: 'mock-audit-id',
-      warnings: []
+      warnings: [] as any[]
     };
   },
-  async processSecureAIResponse(auditLogId: string, response: string, confidence: number, sources: string[]) {
+  async processSecureAIResponse(auditLogId: string, response: string, confidence: number, sources: string[]): Promise<any> {
     return {
       approved: true,
       filteredResponse: response,
-      warnings: []
+      warnings: [] as any[]
     };
   }
 };

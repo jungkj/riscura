@@ -382,20 +382,20 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left Column - Content */}
-            <div className="text-center lg:text-left">
+            <div className="text-center lg:text-left space-y-6 md:space-y-8">
               {/* Enhanced Headline with Single Word Typewriter */}
-              <div className="mb-6">
+              <div>
                 <SingleWordTypewriter />
               </div>
 
               {/* Strong Value Proposition */}
-              <p className="text-xl sm:text-2xl text-[#A8A8A8] mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-inter">
+              <p className="text-xl sm:text-2xl text-[#A8A8A8] max-w-2xl mx-auto lg:mx-0 leading-relaxed font-inter">
                 Identify, assess, and mitigate enterprise risks with AI-powered intelligence. 
                 <span className="text-[#191919] font-semibold"> Deploy in minutes, not months.</span>
               </p>
 
               {/* Primary CTA */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-10">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
                 <Button 
                   onClick={handleGetStarted}
                   size="lg" 
@@ -415,7 +415,7 @@ export default function HomePage() {
                 </div>
 
               {/* Social Proof Stats */}
-              <div className="grid grid-cols-3 gap-8 max-w-md mx-auto lg:mx-0">
+              <div className="grid grid-cols-3 gap-6 md:gap-8 max-w-md mx-auto lg:mx-0">
                 <div className="text-center lg:text-left">
                   <p className="text-3xl font-bold text-[#191919] font-inter">99.9%</p>
                   <p className="text-sm text-[#A8A8A8] font-inter">Uptime SLA</p>
@@ -450,17 +450,18 @@ export default function HomePage() {
       {/* Enhanced Features Section */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-[#FAFAFA]">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-20">
+            <div className="text-center mb-16 md:mb-20">
               <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
+              className="space-y-6 md:space-y-8"
             >
-              <Badge className="bg-[#191919] text-[#FAFAFA] px-4 py-2 mb-6 text-sm font-inter">
+              <Badge className="bg-[#191919] text-[#FAFAFA] px-4 py-2 text-sm font-inter">
                 Enterprise Platform
               </Badge>
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#191919] mb-8 font-inter leading-tight">
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#191919] font-inter leading-tight">
                 Built for modern<br />enterprise security
               </h2>
               <p className="text-xl text-[#A8A8A8] max-w-3xl mx-auto font-inter leading-relaxed">
@@ -470,7 +471,7 @@ export default function HomePage() {
             </motion.div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {[
               {
                 icon: Shield,
@@ -551,19 +552,20 @@ export default function HomePage() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
+            className="space-y-6 md:space-y-8"
           >
-            <Badge className="bg-[#199BEC] text-white px-6 py-2 mb-8 text-sm font-inter rounded-full">
+            <Badge className="bg-[#199BEC] text-white px-6 py-2 text-sm font-inter rounded-full">
               Get Started Today
             </Badge>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#191919] mb-6 font-inter leading-tight">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#191919] font-inter leading-tight">
               Ready to secure<br />your enterprise?
             </h2>
-            <p className="text-xl text-[#A8A8A8] mb-12 max-w-3xl mx-auto font-inter leading-relaxed">
+            <p className="text-xl text-[#A8A8A8] max-w-3xl mx-auto font-inter leading-relaxed">
               Join thousands of organizations that trust Riscura to protect their business 
               and ensure compliance in an ever-changing risk landscape.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button 
                 onClick={handleGetStarted}
                 size="lg" 
@@ -583,7 +585,7 @@ export default function HomePage() {
             </div>
 
             {/* Trust Elements */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-2xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 max-w-2xl mx-auto">
               <div className="text-center">
                 <div className="w-12 h-12 bg-[#199BEC]/10 rounded-xl flex items-center justify-center mx-auto mb-3">
                   <Lock className="w-6 h-6 text-[#199BEC]" />

@@ -86,21 +86,6 @@ export const GET = withAPI(async (req: NextRequest) => {
             uploadedAt: 'desc',
           },
         },
-        comments: {
-          include: {
-            author: {
-              select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                avatar: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: 'desc',
-          },
-        },
         tasks: {
           include: {
             assignee: {
@@ -116,27 +101,54 @@ export const GET = withAPI(async (req: NextRequest) => {
             createdAt: 'desc',
           },
         },
-        activities: {
-          include: {
-            user: {
-              select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: 'desc',
-          },
-          take: 10,
-        },
       },
     });
 
     if (!risk) {
       throw new NotFoundError('Risk not found');
     }
+
+    // Fetch comments and activities separately
+    const [comments, activities] = await Promise.all([
+      db.client.comment.findMany({
+        where: {
+          entityType: 'RISK',
+          entityId: validatedId,
+        },
+        include: {
+          author: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              avatar: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      }),
+      db.client.activity.findMany({
+        where: {
+          entityType: 'RISK',
+          entityId: validatedId,
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+        take: 10,
+      }),
+    ]);
 
     // Calculate additional metrics
     const controlsCount = risk.controls.length;
@@ -153,7 +165,7 @@ export const GET = withAPI(async (req: NextRequest) => {
     ).length;
 
     // Calculate risk trend (simplified - would need historical data for accurate trend)
-    const recentActivities = risk.activities.filter(a => 
+    const recentActivities = activities.filter(a => 
       a.createdAt > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // Last 30 days
     );
     
@@ -183,6 +195,8 @@ export const GET = withAPI(async (req: NextRequest) => {
 
     const enrichedRisk = {
       ...risk,
+      comments,
+      activities,
       metrics: {
         controlsCount,
         implementedControlsCount,
@@ -191,11 +205,11 @@ export const GET = withAPI(async (req: NextRequest) => {
         openTasksCount,
         overdueTasks,
         evidenceCount: risk.evidence.length,
-        commentsCount: risk.comments.length,
-        activitiesCount: risk.activities.length,
+        commentsCount: comments.length,
+        activitiesCount: activities.length,
         riskTrend,
       },
-      timeline: risk.activities.map(activity => ({
+      timeline: activities.map(activity => ({
         id: activity.id,
         type: activity.type,
         description: activity.description,
@@ -337,7 +351,6 @@ export const PUT = withAPI(async (req: NextRequest) => {
           select: {
             controls: true,
             evidence: true,
-            comments: true,
             tasks: true,
           },
         },
@@ -407,7 +420,6 @@ export const DELETE = withAPI(async (req: NextRequest) => {
       include: {
         controls: true,
         evidence: true,
-        comments: true,
         tasks: true,
       },
     });
@@ -464,7 +476,7 @@ export const DELETE = withAPI(async (req: NextRequest) => {
           riskCategory: existingRisk.category,
           riskLevel: existingRisk.riskLevel,
           linkedControls: existingRisk.controls.length,
-          evidenceCount: existingRisk.evidence.length,
+          evidenceCount: existingRisk.evidence?.length || 0,
         },
       },
     });

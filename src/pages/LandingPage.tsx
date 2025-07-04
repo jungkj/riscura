@@ -20,7 +20,7 @@ import {
   NavbarLogo, 
   NavbarButton 
 } from '@/components/ui/resizable-navbar';
-import { TimeSavingChart } from '@/components/landing/TimeSavingChart';
+import { TimeSavingChart } from '@/components/charts/TimeSavingChart';
 
 import HeroProcessCard from '@/components/landing/HeroProcessCard';
 import { ModernButton } from '@/components/ui/modern-button';

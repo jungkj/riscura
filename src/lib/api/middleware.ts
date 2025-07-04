@@ -30,6 +30,7 @@ import {
   ApiVersion 
 } from './versioning';
 import { getAuthenticatedUser } from '@/lib/auth/middleware';
+import { billingManager } from '@/lib/billing/manager';
 
 // ============================================================================
 // ERROR CLASSES
@@ -87,6 +88,18 @@ export class RateLimitError extends APIError {
 export class InternalServerError extends APIError {
   constructor(message: string = 'Internal server error') {
     super(message, 500, 'INTERNAL_SERVER_ERROR');
+  }
+}
+
+export class SubscriptionError extends APIError {
+  constructor(message: string = 'Subscription required') {
+    super(message, 402, 'SUBSCRIPTION_ERROR');
+  }
+}
+
+export class PlanLimitError extends APIError {
+  constructor(message: string = 'Plan limit exceeded') {
+    super(message, 402, 'PLAN_LIMIT_ERROR');
   }
 }
 
@@ -407,6 +420,136 @@ export function parseSearch(searchParams: URLSearchParams): string | undefined {
 }
 
 // ============================================================================
+// SUBSCRIPTION ENFORCEMENT
+// ============================================================================
+
+async function enforceSubscriptionLimits(
+  organizationId: string,
+  subscriptionOptions: NonNullable<MiddlewareOptions['subscription']>
+): Promise<void> {
+  // Check if organization has an active subscription
+  if (subscriptionOptions.requireActive) {
+    const subscription = await billingManager.getActiveSubscription(organizationId);
+    
+    if (!subscription) {
+      throw new SubscriptionError('Active subscription required');
+    }
+
+    // Check if subscription is in trial and expired
+    if (subscription.trialEnd && subscription.trialEnd < new Date() && subscription.status !== 'active') {
+      throw new SubscriptionError('Trial period has ended. Please subscribe to continue.');
+    }
+
+    // Check if subscription is canceled and past period end
+    if (subscription.cancelAtPeriodEnd && subscription.currentPeriodEnd < new Date()) {
+      throw new SubscriptionError('Subscription has ended. Please renew to continue.');
+    }
+  }
+
+  // Check feature availability
+  if (subscriptionOptions.requiredFeatures?.length) {
+    const subscription = await billingManager.getActiveSubscription(organizationId);
+    
+    if (!subscription) {
+      throw new SubscriptionError('Subscription required for this feature');
+    }
+
+    const plans = await billingManager.getSubscriptionPlans();
+    const currentPlan = plans.find(p => p.id === subscription.planId);
+    
+    if (!currentPlan) {
+      throw new SubscriptionError('Invalid subscription plan');
+    }
+
+    // Check if all required features are included in the plan
+    const missingFeatures = subscriptionOptions.requiredFeatures.filter(feature => {
+      return !currentPlan.features.some(f => f.id === feature && f.included);
+    });
+
+    if (missingFeatures.length > 0) {
+      throw new PlanLimitError(`This feature requires a higher plan. Missing features: ${missingFeatures.join(', ')}`);
+    }
+  }
+
+  // Check usage limits
+  if (subscriptionOptions.checkLimits) {
+    const subscription = await billingManager.getActiveSubscription(organizationId);
+    
+    if (!subscription) {
+      throw new SubscriptionError('Subscription required for limit checking');
+    }
+
+    const plans = await billingManager.getSubscriptionPlans();
+    const currentPlan = plans.find(p => p.id === subscription.planId);
+    
+    if (!currentPlan) {
+      throw new SubscriptionError('Invalid subscription plan');
+    }
+
+    // Check each limit
+    for (const [limitType, requestedQuantity] of Object.entries(subscriptionOptions.checkLimits)) {
+      const planLimit = currentPlan.limits[limitType];
+      
+      // -1 means unlimited
+      if (planLimit === -1) continue;
+      
+      if (typeof planLimit === 'number' && planLimit > 0) {
+        // Get current usage (simplified - in production you'd query actual usage)
+        const currentUsage = await getCurrentUsage(organizationId, limitType);
+        
+        if (currentUsage + requestedQuantity > planLimit) {
+          throw new PlanLimitError(`${limitType} limit exceeded. Current: ${currentUsage}, Limit: ${planLimit}`);
+        }
+      }
+    }
+  }
+}
+
+async function getCurrentUsage(organizationId: string, limitType: string): Promise<number> {
+  // This is a simplified implementation. In production, you'd have more sophisticated usage tracking
+  switch (limitType) {
+    case 'users':
+      const userCount = await db.client.user.count({
+        where: { organizationId, isActive: true }
+      });
+      return userCount;
+      
+    case 'risks':
+      const riskCount = await db.client.risk.count({
+        where: { organizationId }
+      });
+      return riskCount;
+      
+    case 'controls':
+      const controlCount = await db.client.control.count({
+        where: { organizationId }
+      });
+      return controlCount;
+      
+    case 'documents':
+      const documentCount = await db.client.document.count({
+        where: { organizationId }
+      });
+      return documentCount;
+      
+    case 'aiQueries':
+      // Get AI queries for current month
+      const now = new Date();
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const aiQueryCount = await db.client.aIUsageLog.count({
+        where: {
+          organizationId,
+          createdAt: { gte: startOfMonth }
+        }
+      });
+      return aiQueryCount;
+      
+    default:
+      return 0;
+  }
+}
+
+// ============================================================================
 // MAIN MIDDLEWARE WRAPPER
 // ============================================================================
 
@@ -420,6 +563,18 @@ export interface MiddlewareOptions {
     origin?: string | string[];
     methods?: string[];
     headers?: string[];
+  };
+  subscription?: {
+    requireActive?: boolean;
+    requiredFeatures?: string[];
+    trackUsage?: {
+      type: string;
+      quantity?: number;
+      metadata?: Record<string, any>;
+    };
+    checkLimits?: {
+      [key: string]: number; // e.g., { users: 1, risks: 1, aiQueries: 1 }
+    };
   };
 }
 
@@ -473,7 +628,29 @@ export function withAPI(
       // Authentication
       if (options.requireAuth) {
         try {
-          const user = getAuthenticatedUser(req as any);
+          let user = getAuthenticatedUser(req as any);
+          
+          // Development mode bypass: Create a mock user for testing
+          if (!user && process.env.NODE_ENV === 'development') {
+            console.log('🔧 Development mode: Using mock authentication');
+            const mockUser = {
+              id: 'dev-user-123',
+              email: 'dev@riscura.com',
+              firstName: 'Development',
+              lastName: 'User',
+              role: 'ADMIN',
+              organizationId: 'dev-org-123',
+              permissions: ['*'], // All permissions for development
+              avatar: '',
+              isActive: true,
+              lastLoginAt: new Date()
+            };
+            
+            // Add mock user to request
+            (req as any).user = mockUser;
+            user = mockUser;
+          }
+          
           if (!user) {
             throw new AuthenticationError();
           }
@@ -514,8 +691,40 @@ export function withAPI(
         }
       }
 
+      // Subscription enforcement
+      if (options.subscription && options.requireAuth) {
+        try {
+          const user = (req as any).user;
+          if (!user || !user.organizationId) {
+            throw new SubscriptionError('Organization required for subscription check');
+          }
+
+          await enforceSubscriptionLimits(user.organizationId, options.subscription);
+        } catch (error) {
+          return createErrorResponse(error as APIError, requestId);
+        }
+      }
+
       // Execute handler
       const response = await handler(req);
+
+      // Track usage after successful request
+      if (options.subscription?.trackUsage && options.requireAuth) {
+        try {
+          const user = (req as any).user;
+          if (user?.organizationId && response.status < 400) {
+            await billingManager.trackUsage(
+              user.organizationId,
+              options.subscription.trackUsage.type,
+              options.subscription.trackUsage.quantity || 1,
+              options.subscription.trackUsage.metadata
+            );
+          }
+        } catch (error) {
+          // Log but don't fail the request for usage tracking errors
+          console.error('Failed to track usage:', error);
+        }
+      }
 
       // Add CORS headers to response
       if (options.cors) {
@@ -607,6 +816,58 @@ export function withCORS(corsOptions: MiddlewareOptions['cors']) {
     handler: (req: NextRequest) => Promise<NextResponse> | NextResponse
   ) => {
     return withAPI(handler, { cors: corsOptions });
+  };
+}
+
+export function withSubscription(subscriptionOptions: MiddlewareOptions['subscription']) {
+  return (
+    handler: (req: NextRequest) => Promise<NextResponse> | NextResponse
+  ) => {
+    return withAPI(handler, {
+      requireAuth: true,
+      subscription: subscriptionOptions,
+    });
+  };
+}
+
+export function withFeatureGate(requiredFeatures: string[]) {
+  return (
+    handler: (req: NextRequest) => Promise<NextResponse> | NextResponse
+  ) => {
+    return withAPI(handler, {
+      requireAuth: true,
+      subscription: {
+        requireActive: true,
+        requiredFeatures,
+      },
+    });
+  };
+}
+
+export function withUsageTracking(type: string, quantity?: number, metadata?: Record<string, any>) {
+  return (
+    handler: (req: NextRequest) => Promise<NextResponse> | NextResponse
+  ) => {
+    return withAPI(handler, {
+      requireAuth: true,
+      subscription: {
+        trackUsage: { type, quantity, metadata },
+      },
+    });
+  };
+}
+
+export function withPlanLimits(limits: Record<string, number>) {
+  return (
+    handler: (req: NextRequest) => Promise<NextResponse> | NextResponse
+  ) => {
+    return withAPI(handler, {
+      requireAuth: true,
+      subscription: {
+        requireActive: true,
+        checkLimits: limits,
+      },
+    });
   };
 }
 

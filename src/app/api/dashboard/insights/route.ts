@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
           start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
           end: new Date()
         },
-        selectedEntities: []
+        selectedEntities: [] as any[]
       }
     };
 
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
         category: 'TECHNOLOGY' as const,
         owner: 'IT Security Team',
         controls: ['1'],
-        evidence: [],
+        evidence: [] as any[],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       }
@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
         status: 'active' as const,
         owner: 'Security Team',
         frequency: 'monthly',
-        evidence: [],
+        evidence: [] as any[],
         linkedRisks: ['1'],
         lastTested: new Date(),
         createdAt: new Date().toISOString(),
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
           start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
           end: new Date()
         },
-        selectedEntities: []
+        selectedEntities: [] as any[]
       }
     };
 

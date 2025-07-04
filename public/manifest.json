@@ -14,50 +14,14 @@
   "categories": ["business", "productivity", "finance"],
   "icons": [
     {
-      "src": "/images/logo/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/images/logo/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/images/logo/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/images/logo/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/images/logo/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/images/logo/icon-192x192.png",
+      "src": "/images/logo/riscura.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/images/logo/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/images/logo/icon-512x512.png",
-      "sizes": "512x512",
+      "src": "/images/logo/riscura.png",
+      "sizes": "512x512", 
       "type": "image/png",
       "purpose": "any maskable"
     }
@@ -65,55 +29,27 @@
   "shortcuts": [
     {
       "name": "Risk Dashboard",
-      "short_name": "Risks",
+      "short_name": "Risks", 
       "description": "View and manage organizational risks",
-      "url": "/risks",
-      "icons": [
-        {
-          "src": "/images/shortcuts/risks-96x96.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
+      "url": "/risks"
     },
     {
       "name": "Compliance Dashboard",
       "short_name": "Compliance",
-      "description": "Monitor compliance status and requirements",
-      "url": "/compliance-dashboard",
-      "icons": [
-        {
-          "src": "/images/shortcuts/compliance-96x96.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
+      "description": "Monitor compliance status and requirements", 
+      "url": "/compliance-dashboard"
     },
     {
       "name": "Documents",
       "short_name": "Docs",
       "description": "Access document management system",
-      "url": "/documents",
-      "icons": [
-        {
-          "src": "/images/shortcuts/documents-96x96.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
+      "url": "/documents"
     },
     {
-      "name": "Reports",
+      "name": "Reports", 
       "short_name": "Reports",
       "description": "Generate and view reports",
-      "url": "/reports",
-      "icons": [
-        {
-          "src": "/images/shortcuts/reports-96x96.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
+      "url": "/reports"
     }
   ],
   "share_target": {
@@ -140,7 +76,7 @@
   },
   "protocol_handlers": [
     {
-      "protocol": "riscura",
+      "protocol": "web+riscura",
       "url": "/protocol-handler?url=%s"
     }
   ],
@@ -159,36 +95,7 @@
       "url": "https://riscura.com/manifest.json"
     }
   ],
-  "screenshots": [
-    {
-      "src": "/images/screenshots/desktop-dashboard.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Risk Management Dashboard"
-    },
-    {
-      "src": "/images/screenshots/mobile-dashboard.png",
-      "sizes": "390x844",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Mobile Risk Dashboard"
-    },
-    {
-      "src": "/images/screenshots/desktop-compliance.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Compliance Management"
-    },
-    {
-      "src": "/images/screenshots/mobile-compliance.png",
-      "sizes": "390x844",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Mobile Compliance View"
-    }
-  ],
+
   "display_override": ["window-controls-overlay", "minimal-ui", "standalone", "browser"],
   "file_handlers": [
     {

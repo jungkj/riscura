@@ -22,6 +22,8 @@ interface ContentGenerationRequest {
   type: string;
   context?: Record<string, unknown>;
   requirements?: string;
+  userId?: string;
+  organizationId?: string;
 }
 
 interface ContentGenerationResult {
@@ -984,6 +986,42 @@ Be specific and data-driven while maintaining a conversational tone.`;
     return intersection.length / Math.max(words1.length, words2.length);
   }
 
+  /**
+   * Build a meaningful prompt for content generation from request requirements and type
+   */
+  private buildContentGenerationPrompt(request: ContentGenerationRequest): string {
+    const { type, requirements, context } = request;
+    
+    let prompt = `Generate ${type} content based on the following requirements:\n\n`;
+    prompt += `Requirements: ${requirements}\n\n`;
+    
+    if (context) {
+      // Extract relevant context information
+      if (context.domain) {
+        prompt += `Domain/Industry: ${context.domain}\n`;
+      }
+      if (context.audience) {
+        prompt += `Target Audience: ${context.audience}\n`;
+      }
+      if (context.tone) {
+        prompt += `Tone: ${context.tone}\n`;
+      }
+      if (context.format) {
+        prompt += `Format: ${context.format}\n`;
+      }
+      if (context.length) {
+        prompt += `Length: ${context.length}\n`;
+      }
+      if (context.additionalContext) {
+        prompt += `Additional Context: ${context.additionalContext}\n`;
+      }
+    }
+    
+    prompt += '\nPlease provide high-quality, relevant content that meets these requirements.';
+    
+    return prompt;
+  }
+
   private rankControlRecommendations(recommendations: ControlRecommendation[], risk: any): ControlRecommendation[] {
     return recommendations.sort((a, b) => {
       // Sort by effectiveness and inverse complexity
@@ -1268,5 +1306,75 @@ Be specific and data-driven while maintaining a conversational tone.`;
     
     // Ensure confidence is within bounds
     return Math.max(0.3, Math.min(0.95, confidence));
+  }
+
+  /**
+   * Generate content based on a request
+   */
+  async generateContent(request: ContentGenerationRequest): Promise<ContentGenerationResult> {
+    try {
+      // Validate required fields
+      if (!request.context || Object.keys(request.context).length === 0) {
+        throw new AIServiceError(
+          'Missing context in content generation request',
+          'INVALID_REQUEST',
+          400,
+          false,
+          'medium',
+          'Request context is required'
+        );
+      }
+
+      if (!request.requirements || request.requirements.trim().length === 0) {
+        throw new AIServiceError(
+          'Missing requirements in content generation request',
+          'INVALID_REQUEST',
+          400,
+          false,
+          'medium',
+          'Requirements field is required'
+        );
+      }
+
+      // Build meaningful prompt from requirements and type
+      const prompt = this.buildContentGenerationPrompt(request);
+      
+      // Use provided userId and organizationId, or generate defaults if not provided
+      const userId = request.userId || generateId();
+      const organizationId = request.organizationId || generateId();
+      
+      const response = await this.processNaturalLanguageQuery(
+        prompt,
+        userId,
+        organizationId
+      );
+
+      // Calculate dynamic confidence based on response content
+      const confidence = this.calculateConfidence(response.message);
+
+      return {
+        id: generateId(),
+        content: response.message,
+        timestamp: new Date(),
+        usage: response.usage || { promptTokens: 0, completionTokens: 0, totalTokens: 0 },
+        confidence
+      };
+    } catch (error) {
+      console.error('Content generation failed:', error);
+      
+      // Re-throw AIServiceError instances
+      if (error instanceof AIServiceError) {
+        throw error;
+      }
+      
+      throw new AIServiceError(
+        'Failed to generate content',
+        'CONTENT_GENERATION_FAILED',
+        500,
+        false,
+        'high',
+        'Unable to generate content at this time'
+      );
+    }
   }
 } 
