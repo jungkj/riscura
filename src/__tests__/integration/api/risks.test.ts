@@ -8,34 +8,28 @@ import { db } from '@/lib/db';
 import { CreateRiskOptions } from '@/services/RiskService';
 import { RiskCategory } from '@prisma/client';
 
-// Mock the database
+// Mock the database with unified mock object
+const mockRiskOperations = {
+  findMany: jest.fn(),
+  count: jest.fn(),
+  create: jest.fn(),
+  findUnique: jest.fn(),
+  update: jest.fn(),
+  delete: jest.fn(),
+};
+
 jest.mock('@/lib/db', () => ({
   db: {
-    risk: {
-      findMany: jest.fn(),
-      count: jest.fn(),
-      create: jest.fn(),
-      findUnique: jest.fn(),
-      update: jest.fn(),
-      delete: jest.fn(),
-    },
+    risk: mockRiskOperations,
   },
-}));
-
-jest.mock('@/lib/db', () => ({
   prisma: {
-    risk: {
-      findMany: jest.fn(),
-      count: jest.fn(),
-      create: jest.fn(),
-      findUnique: jest.fn(),
-      update: jest.fn(),
-      delete: jest.fn(),
-    },
+    risk: mockRiskOperations,
   },
 }));
 
-const mockDb = db as jest.Mocked<typeof db>;
+const mockDb = {
+  risk: mockRiskOperations
+} as any;
 
 // Mock authentication
 jest.mock('@/lib/auth/auth-options', () => ({

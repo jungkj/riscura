@@ -11,29 +11,99 @@ const data = [
   { quarter: 'Q4', excel: 75, riscura: 4 },
 ];
 
-export const TimeSavingChart = () => {
+interface TimeSavingChartProps {
+  /** Enable animations for the component */
+  animated?: boolean;
+}
+
+export const TimeSavingChart = ({ animated = false }: TimeSavingChartProps) => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
+  const HeaderContent = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+    if (animated) {
+      return (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className={className}
+        >
+          {children}
+        </motion.div>
+      );
+    }
+    return <div className={className}>{children}</div>;
+  };
+
+  const LeftContent = ({ children }: { children: React.ReactNode }) => {
+    if (animated) {
+      return (
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          {children}
+        </motion.div>
+      );
+    }
+    return <div>{children}</div>;
+  };
+
+  const RightContent = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+    if (animated) {
+      return (
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true }}
+          className={className}
+        >
+          {children}
+        </motion.div>
+      );
+    }
+    return <div className={className}>{children}</div>;
+  };
+
+  const CTAButton = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+    if (animated) {
+      return (
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className={className}
+        >
+          {children}
+        </motion.button>
+      );
+    }
+    return <button className={className}>{children}</button>;
+  };
+
   return (
     <section className="py-16 bg-[#F5F1E9]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Excel Hook Section */}
-        <div className="text-center mb-12">
+        <HeaderContent className="text-center mb-12">
           <p className="text-2xl sm:text-3xl lg:text-4xl text-[#191919] font-inter leading-relaxed">
             Still using <span className="font-bold text-green-600">Excel</span> to track your RCSA?{" "}
             <span className="text-[#A8A8A8]">
               It's time to upgrade to AI-powered automation that actually works.
             </span>
           </p>
-        </div>
+        </HeaderContent>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Text content */}
-          <div>
+          <LeftContent>
             <div className="mb-6">
               <span className="inline-block px-3 py-1 bg-[#191919] text-[#FAFAFA] text-sm font-medium rounded-full mb-4 font-inter">
                 Efficiency Comparison
@@ -48,13 +118,13 @@ export const TimeSavingChart = () => {
             </div>
 
             {/* CTA Button */}
-            <button className="bg-[#199BEC] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#0f7dc7] transition-colors font-inter hover:scale-105 transform transition-transform">
+            <CTAButton className="bg-[#199BEC] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#0f7dc7] transition-colors font-inter hover:scale-105 transform transition-transform">
               Start Your Transformation
-            </button>
-          </div>
+            </CTAButton>
+          </LeftContent>
 
           {/* Right side - Chart */}
-          <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-lg border border-[#D8C3A5]">
+          <RightContent className="bg-[#FAFAFA] rounded-2xl p-8 shadow-lg border border-[#D8C3A5]">
             <div className="mb-4">
               <h3 className="text-lg font-semibold text-[#191919] mb-2 font-inter">Risk Assessment Completion Time</h3>
               <p className="text-sm text-[#A8A8A8] font-inter">Hours required per quarterly risk assessment</p>
@@ -119,7 +189,7 @@ export const TimeSavingChart = () => {
                 <span className="text-sm text-[#A8A8A8] font-medium font-inter">Excel-based RCSA</span>
               </div>
             </div>
-          </div>
+          </RightContent>
         </div>
       </div>
     </section>
