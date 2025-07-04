@@ -6,6 +6,7 @@
 import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
 import { enhancedCache } from '@/lib/cache/enhanced-cache-layer';
+import { v4 as uuidv4 } from 'uuid';
 
 // ============================================================================
 // TYPES AND INTERFACES
@@ -205,7 +206,7 @@ export class DataExportService {
 
     // Create export job
     const job: ExportJob = {
-      id: `export_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: uuidv4(),
       organizationId,
       userId,
       type: validatedRequest.type,
@@ -860,7 +861,7 @@ export class DataExportService {
       case 'CONTROLS':
         totalRecords = await this.prisma.control.count({ where: { organizationId } });
         break;
-      case 'ALL_DATA':
+      case 'ALL_DATA': {
         const [riskCount, controlCount, userCount] = await Promise.all([
           this.prisma.risk.count({ where: { organizationId } }),
           this.prisma.control.count({ where: { organizationId } }),
@@ -868,6 +869,7 @@ export class DataExportService {
         ]);
         totalRecords = riskCount + controlCount + userCount;
         break;
+      }
       default:
         totalRecords = 1000; // Default estimate
     }
