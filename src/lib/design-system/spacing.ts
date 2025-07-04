@@ -1,60 +1,60 @@
 /**
  * Spacing Design System
- * Comprehensive spacing scale and layout utilities for consistent, modern design
- * Based on 4px baseline grid for optimal visual rhythm
+ * Apple-inspired spacing scale with 8px base unit and 48px primary line spacing
+ * Notion-like clean, minimal interface with consistent rhythm
  */
 
-// Core Spacing Scale (4px baseline)
+// Core Spacing Scale (8px baseline - Apple/Notion inspired)
 export const spacing = {
   // Micro spacing
-  xs: '4px',    // 1 unit
-  sm: '8px',    // 2 units
-  md: '16px',   // 4 units
-  lg: '24px',   // 6 units
-  xl: '32px',   // 8 units
-  '2xl': '40px', // 10 units
-  '3xl': '48px', // 12 units
-  '4xl': '64px', // 16 units
-  '5xl': '80px', // 20 units
-  '6xl': '96px', // 24 units
+  xs: '4px',    // 0.5 unit - micro elements
+  sm: '8px',    // 1 unit - base unit
+  md: '16px',   // 2 units - standard spacing
+  lg: '24px',   // 3 units - comfortable spacing
+  xl: '32px',   // 4 units - section spacing
+  '2xl': '48px', // 6 units - PRIMARY LINE SPACING (Apple-like)
+  '3xl': '64px', // 8 units - major sections
+  '4xl': '80px', // 10 units - page sections
+  '5xl': '96px', // 12 units - large sections
+  '6xl': '128px', // 16 units - hero sections
 } as const;
 
-// Semantic Spacing (context-aware)
+// Semantic Spacing (context-aware) - Apple/Notion inspired
 export const semanticSpacing = {
   // Component internal spacing
   component: {
-    xs: spacing.xs,      // 4px - tight internal spacing
-    sm: spacing.sm,      // 8px - compact components
+    xs: spacing.xs,      // 4px - micro spacing
+    sm: spacing.sm,      // 8px - base unit, compact components
     md: spacing.md,      // 16px - standard components
     lg: spacing.lg,      // 24px - comfortable components
     xl: spacing.xl,      // 32px - spacious components
   },
   
-  // Section spacing
+  // Section spacing (48px primary line spacing)
   section: {
-    xs: spacing.lg,      // 24px - tight sections
-    sm: spacing.xl,      // 32px - standard sections
-    md: spacing['3xl'],  // 48px - comfortable sections
-    lg: spacing['4xl'],  // 64px - major sections
-    xl: spacing['5xl'],  // 80px - page sections
+    xs: spacing.xl,      // 32px - tight sections
+    sm: spacing['2xl'],  // 48px - PRIMARY LINE SPACING (Apple-like)
+    md: spacing['3xl'],  // 64px - comfortable sections
+    lg: spacing['4xl'],  // 80px - major sections
+    xl: spacing['5xl'],  // 96px - page sections
   },
   
   // Content spacing
   content: {
     xs: spacing.xs,      // 4px - inline elements
-    sm: spacing.sm,      // 8px - related elements
+    sm: spacing.sm,      // 8px - base unit, related elements
     md: spacing.md,      // 16px - paragraph spacing
     lg: spacing.lg,      // 24px - content blocks
-    xl: spacing.xl,      // 32px - major content
+    xl: spacing.xl,      // 32px - major content sections
   },
   
-  // Layout spacing
+  // Layout spacing (48px as standard)
   layout: {
-    xs: spacing.md,      // 16px - tight layouts
-    sm: spacing.lg,      // 24px - standard layouts
-    md: spacing.xl,      // 32px - comfortable layouts
-    lg: spacing['3xl'],  // 48px - generous layouts
-    xl: spacing['4xl'],  // 64px - spacious layouts
+    xs: spacing.lg,      // 24px - tight layouts
+    sm: spacing.xl,      // 32px - standard layouts
+    md: spacing['2xl'],  // 48px - PRIMARY LINE SPACING (Apple-like)
+    lg: spacing['3xl'],  // 64px - generous layouts
+    xl: spacing['4xl'],  // 80px - spacious layouts
   }
 } as const;
 

@@ -1016,7 +1016,7 @@ model SpreadsheetTemplate {
 
 model ProboControl {
   id                        String                 @id @default(cuid())
-  controlId                 String
+  controlId                 String?
   title                     String
   name                      String
   category                  String
@@ -1129,6 +1129,7 @@ model VendorAssessment {
   assessor          User              @relation("VendorAssessmentAssessor", fields: [assessorId], references: [id])
   findings          VendorFinding[]
 
+  @@unique([organizationId, vendorName])
   @@index([organizationId])
   @@index([vendorName])
   @@index([assessorId])
