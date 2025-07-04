@@ -41,6 +41,7 @@ model Organization {
   proboEvidence        ProboEvidence[]
   vendorAssessments    VendorAssessment[]
   complianceFrameworks ComplianceFramework[]
+  auditLogs            AuditLog[]
 
   @@map("organizations")
 }
@@ -99,6 +100,7 @@ model User {
   assignedProboTasks       ProboTask[]              @relation("ProboTaskAssignedTo")
   createdProboTasks        ProboTask[]              @relation("ProboTaskAssignedBy")
   vendorAssessments        VendorAssessment[]       @relation("VendorAssessmentAssessor")
+  auditLogs                AuditLog[]               @relation("AuditLogUser")
 
   @@index([organizationId])
   @@index([email])
@@ -1443,4 +1445,67 @@ enum AssessmentMethod {
   MANUAL
   AUTOMATED
   HYBRID
+}
+
+// ============================================================================
+// AUDIT LOGGING MODELS
+// ============================================================================
+
+model AuditLog {
+  id              String       @id @default(cuid())
+  timestamp       DateTime     @default(now())
+  userId          String?
+  organizationId  String
+  action          String
+  entity          String
+  entityId        String?
+  resource        String
+  method          String
+  path            String
+  userAgent       String?
+  ipAddress       String?
+  sessionId       String?
+  changes         String?      // JSON string of changes
+  metadata        String?      // JSON string of metadata
+  severity        AuditSeverity
+  status          AuditStatus
+  errorMessage    String?
+  duration        Int?         // Duration in milliseconds
+  requestId       String?
+  apiVersion      String?
+  clientType      String?
+  geolocation     String?      // JSON string of geolocation data
+  complianceFlags String?      // JSON array of compliance flags
+  retentionPeriod Int?         // Retention period in days
+  encrypted       Boolean      @default(false)
+  createdAt       DateTime     @default(now())
+
+  // Relations
+  user         User?         @relation("AuditLogUser", fields: [userId], references: [id], onDelete: SetNull)
+  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([userId])
+  @@index([timestamp])
+  @@index([action])
+  @@index([entity])
+  @@index([severity])
+  @@index([status])
+  @@index([timestamp, organizationId])
+  @@index([action, entity])
+  @@map("audit_logs")
+}
+
+enum AuditSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum AuditStatus {
+  SUCCESS
+  FAILURE
+  WARNING
+  INFO
 }
