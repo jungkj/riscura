@@ -1269,4 +1269,36 @@ Be specific and data-driven while maintaining a conversational tone.`;
     // Ensure confidence is within bounds
     return Math.max(0.3, Math.min(0.95, confidence));
   }
+
+  /**
+   * Generate content based on a request
+   */
+  async generateContent(request: ContentGenerationRequest): Promise<ContentGenerationResult> {
+    try {
+      const prompt = request.context?.prompt || 'Generate content';
+      const response = await this.processNaturalLanguageQuery(
+        prompt,
+        'system',
+        'system'
+      );
+
+      return {
+        id: generateId(),
+        content: response.message,
+        timestamp: new Date(),
+        usage: response.usage || { promptTokens: 0, completionTokens: 0, totalTokens: 0 },
+        confidence: 0.8
+      };
+    } catch (error) {
+      console.error('Content generation failed:', error);
+      throw new AIServiceError(
+        'Failed to generate content',
+        'CONTENT_GENERATION_FAILED',
+        500,
+        false,
+        'high',
+        'Unable to generate content at this time'
+      );
+    }
+  }
 } 

@@ -22,6 +22,19 @@ jest.mock('@/lib/db', () => ({
   },
 }));
 
+jest.mock('@/lib/db', () => ({
+  prisma: {
+    risk: {
+      findMany: jest.fn(),
+      count: jest.fn(),
+      create: jest.fn(),
+      findUnique: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+    },
+  },
+}));
+
 const mockDb = db as jest.Mocked<typeof db>;
 
 // Mock authentication
@@ -183,10 +196,13 @@ describe('/api/risks', () => {
     const validRiskData: CreateRiskOptions = {
       title: 'New Test Risk',
       description: 'A new risk for testing',
-      category: RiskCategory.OPERATIONAL,
+      category: 'OPERATIONAL' as RiskCategory,
       likelihood: 3,
       impact: 4,
       owner: mockUser.id,
+      status: 'identified' as const,
+      controls: [],
+      evidence: [],
     };
 
     it('should create a new risk with valid data', async () => {

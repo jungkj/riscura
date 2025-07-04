@@ -380,7 +380,7 @@ export class EnhancedRiskService {
 
   private calculateComplianceScore(risks: EnhancedRisk[]): number {
     const complianceRisks = risks.filter(risk => 
-      risk.category === 'compliance' || 
+      risk.category === 'COMPLIANCE' || 
       risk.regulatoryFrameworks.length > 0
     );
     
