@@ -5,7 +5,7 @@ import { ControlType } from '@/types/rcsa.types';
 import mitigationsData from '@/data/mitigations.json';
 
 // Testing guidance interfaces
-export interface TestStep {
+export interface ControlTestStep {
   description: string;
   expectedResult: string;
   dataRequired: string;
@@ -13,7 +13,7 @@ export interface TestStep {
 }
 
 export interface ControlTestingGuidance {
-  testSteps: TestStep[];
+  testSteps: ControlTestStep[];
   suggestions: string[];
 }
 
