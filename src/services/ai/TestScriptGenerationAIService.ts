@@ -12,6 +12,12 @@ import {
   ControlCategory,
   AutomationLevel
 } from '@/types/rcsa.types';
+import {
+  ParsedTestScript,
+  RawTestStep,
+  ProboIntegrationResponse,
+  ProboEnhancedTestData
+} from '@/types/test-script-generation.types';
 
 // Interface for AI generation context
 interface TestScriptGenerationContext {
@@ -26,6 +32,10 @@ interface TestScriptGenerationContext {
   relatedRisks: string;
 }
 
+/**
+ * Service for generating test scripts using AI with comprehensive type safety
+ * Integrates with Probo service for enhanced control testing guidance
+ */
 export class TestScriptGenerationAIService {
   private aiService: AIService;
   private proboService: ProboService;
@@ -35,6 +45,13 @@ export class TestScriptGenerationAIService {
     this.proboService = new ProboService();
   }
 
+  /**
+   * Generate a comprehensive test script using AI
+   * @param request - Test script generation request parameters
+   * @param organizationId - Organization ID for multi-tenant isolation
+   * @param userId - User ID for tracking and permissions
+   * @returns Promise<GenerateTestScriptResponse> with generated test script and metadata
+   */
   async generateTestScript(
     request: GenerateTestScriptRequest,
     organizationId: string,
@@ -200,7 +217,12 @@ Key principles:
 Always provide practical, implementable test scripts that auditors and control owners can execute effectively.`;
   }
 
-  private parseAIResponse(content: string): any {
+  /**
+   * Parse AI response content into a structured test script
+   * @param content - Raw AI response content
+   * @returns ParsedTestScript - Normalized and validated test script
+   */
+  private parseAIResponse(content: string): ParsedTestScript {
     try {
       // Try to parse as JSON first
       const jsonMatch = content.match(/\{[\s\S]*\}/);
@@ -217,18 +239,50 @@ Always provide practical, implementable test scripts that auditors and control o
     }
   }
 
-  private validateAndNormalizeTestScript(parsed: any): any {
+  private validateAndNormalizeTestScript(parsed: any): ParsedTestScript {
+    // Validate required fields
+    if (!parsed || typeof parsed !== 'object') {
+      throw new Error('Invalid test script data: expected object');
+    }
+
+    // Validate and normalize steps
+    const rawSteps: RawTestStep[] = Array.isArray(parsed.steps) 
+      ? parsed.steps.map((step: any) => ({
+          order: step.order,
+          description: step.description,
+          expectedResult: step.expectedResult,
+          dataRequired: step.dataRequired,
+          notes: step.notes,
+          duration: step.duration,
+          assignee: step.assignee,
+          validationCriteria: step.validationCriteria,
+          riskLevel: step.riskLevel,
+          isOptional: step.isOptional,
+          dependencies: step.dependencies
+        }))
+      : [];
+
     return {
-      title: parsed.title || 'Generated Test Script',
-      description: parsed.description || 'AI-generated test script',
+      title: this.validateString(parsed.title, 'Generated Test Script'),
+      description: this.validateString(parsed.description, 'AI-generated test script'),
+      objective: parsed.objective,
       testType: this.normalizeTestType(parsed.testType),
       frequency: this.normalizeFrequency(parsed.frequency),
-      estimatedDuration: parsed.estimatedDuration || 30,
-      steps: this.normalizeSteps(parsed.steps || []),
-      expectedResults: parsed.expectedResults || 'Control operating effectively',
-      automationCapable: parsed.automationCapable || false,
-      tags: ['ai-generated'],
-      suggestions: parsed.suggestions || []
+      estimatedDuration: this.validateNumber(parsed.estimatedDuration, 30),
+      steps: this.normalizeSteps(rawSteps),
+      expectedResults: this.validateString(parsed.expectedResults, 'Control operating effectively'),
+      automationCapable: Boolean(parsed.automationCapable),
+      automationScript: parsed.automationScript,
+      tags: this.validateTags(parsed.tags),
+      prerequisites: this.validateStringArray(parsed.prerequisites),
+      assumptions: this.validateStringArray(parsed.assumptions),
+      scope: parsed.scope,
+      expectedOutcomes: this.validateStringArray(parsed.expectedOutcomes),
+      successCriteria: this.validateStringArray(parsed.successCriteria),
+      dataRequirements: this.validateStringArray(parsed.dataRequirements),
+      tools: this.validateStringArray(parsed.tools),
+      timeline: parsed.timeline,
+      suggestions: this.validateStringArray(parsed.suggestions)
     };
   }
 
@@ -261,7 +315,12 @@ Always provide practical, implementable test scripts that auditors and control o
     return freqMap[frequency?.toUpperCase()] || TestFrequency.MONTHLY;
   }
 
-  private normalizeSteps(steps: any[]): Omit<TestStep, 'id'>[] {
+  /**
+   * Normalize raw test steps into standardized format
+   * @param steps - Raw steps from AI response
+   * @returns Array of normalized test steps without IDs
+   */
+  private normalizeSteps(steps: RawTestStep[]): Omit<TestStep, 'id'>[] {
     if (!Array.isArray(steps) || steps.length === 0) {
       return this.getDefaultSteps();
     }
@@ -275,7 +334,7 @@ Always provide practical, implementable test scripts that auditors and control o
     }));
   }
 
-  private extractFromText(content: string): any {
+  private extractFromText(content: string): ParsedTestScript {
     // Basic text extraction logic
     const lines = content.split('\n');
     const title = lines.find(l => l.includes('Title:'))?.replace(/Title:/i, '').trim() || 'Generated Test Script';
@@ -295,7 +354,7 @@ Always provide practical, implementable test scripts that auditors and control o
     };
   }
 
-  private getDefaultTestScript(): any {
+  private getDefaultTestScript(): ParsedTestScript {
     return {
       title: 'Generated Test Script',
       description: 'Please review and customize this AI-generated test script',
@@ -343,30 +402,66 @@ Always provide practical, implementable test scripts that auditors and control o
     ];
   }
 
-  private async enhanceWithProboData(control: Control, testScript: any): Promise<any> {
+  /**
+   * Enhance test script with Probo control testing guidance
+   * @param control - Control to enhance test script for
+   * @param testScript - Base test script to enhance
+   * @returns ProboEnhancedTestData with additional steps and recommendations
+   */
+  private async enhanceWithProboData(control: Control, testScript: ParsedTestScript): Promise<ProboEnhancedTestData | null> {
     try {
+      // Validate inputs
+      if (!control || !control.type) {
+        console.warn('Invalid control data for Probo enhancement');
+        return null;
+      }
+      
       // Fetch Probo control recommendations
       const proboData = await this.proboService.getControlTestingGuidance(control.type);
       
       if (!proboData) return null;
       
       return {
-        additionalSteps: proboData.testSteps?.map((step: any, index: number) => ({
+        additionalSteps: proboData.testSteps?.map((step, index) => ({
+          id: `probo-step-${index}`,
           order: testScript.steps.length + index + 1,
           description: step.description,
           expectedResult: step.expectedResult,
           dataRequired: step.dataRequired,
           notes: `Probo recommended: ${step.notes || ''}`
         })) || [],
-        suggestions: proboData.suggestions || []
+        suggestions: proboData.suggestions || [],
+        complianceMappings: [`SOC2-${control.type}`, `ISO27001-${control.category}`],
+        automationRecommendations: control.automationLevel === 'MANUAL' 
+          ? 'Consider implementing automated testing for this control type'
+          : 'Control is suitable for automated testing',
+        bestPractices: [
+          'Document all test evidence',
+          'Maintain test execution history',
+          'Review test effectiveness quarterly'
+        ]
       };
     } catch (error) {
       console.error('Failed to enhance with Probo data:', error);
-      return null;
+      
+      // Return minimal enhancement data on error
+      return {
+        additionalSteps: [],
+        suggestions: [
+          'Probo integration temporarily unavailable',
+          'Manual review of control testing requirements recommended'
+        ],
+        complianceMappings: [],
+        automationRecommendations: 'Unable to determine automation suitability',
+        bestPractices: [
+          'Follow standard testing procedures for this control type',
+          'Document all test evidence thoroughly'
+        ]
+      };
     }
   }
 
-  private calculateConfidence(testScript: any, control: Control | null): number {
+  private calculateConfidence(testScript: ParsedTestScript, control: Control | null): number {
     let confidence = 0.5; // Base confidence
     
     // Increase confidence based on completeness
@@ -380,6 +475,13 @@ Always provide practical, implementable test scripts that auditors and control o
     return Math.min(confidence, 0.95);
   }
 
+  /**
+   * Track AI token usage for cost monitoring and analytics
+   * @param userId - User who initiated the request
+   * @param organizationId - Organization for billing
+   * @param usage - Token usage statistics from AI service
+   * @param context - Context of the AI usage
+   */
   private async trackTokenUsage(
     userId: string,
     organizationId: string,
@@ -409,6 +511,30 @@ Always provide practical, implementable test scripts that auditors and control o
       console.error('Failed to track AI token usage:', error);
       // Don't throw - token tracking failure shouldn't break the main flow
     }
+  }
+
+  private validateString(value: any, defaultValue: string): string {
+    return typeof value === 'string' && value.trim() ? value : defaultValue;
+  }
+
+  private validateNumber(value: any, defaultValue: number): number {
+    const num = Number(value);
+    return !isNaN(num) && num > 0 ? num : defaultValue;
+  }
+
+  private validateTags(tags: any): string[] {
+    const validTags = Array.isArray(tags) 
+      ? tags.filter(tag => typeof tag === 'string' && tag.trim())
+      : [];
+    validTags.push('ai-generated');
+    return [...new Set(validTags)]; // Remove duplicates
+  }
+
+  private validateStringArray(value: any): string[] | undefined {
+    if (!value) return undefined;
+    if (!Array.isArray(value)) return undefined;
+    const filtered = value.filter(item => typeof item === 'string' && item.trim());
+    return filtered.length > 0 ? filtered : undefined;
   }
 
   private calculateCost(usage: {

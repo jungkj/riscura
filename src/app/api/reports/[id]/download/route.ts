@@ -1,142 +1,98 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { withApiMiddleware } from '@/lib/api/middleware';
+import { getAuthenticatedUser } from '@/lib/auth/auth-middleware';
+import ReportService from '@/services/ReportService';
+import CloudStorageService from '@/services/CloudStorageService';
 
-// Force deployment - all Next.js 15 parameter typing issues fixed
-// Mock authentication - replace with actual auth
-const getCurrentUser = (request: NextRequest) => {
-  // In production, extract from JWT token or session
-  return {
-    id: 'user_123',
-    email: 'user@example.com',
-    name: 'John Doe',
-  };
-};
+// GET /api/reports/[id]/download - Download report file
+export const GET = withApiMiddleware(async (
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) => {
+  const { user, organization } = await getAuthenticatedUser(req);
 
-// Mock report storage - replace with actual storage service
-const getStoredReport = (reportId: string): { buffer: Buffer; filename: string; mimeType: string } | null => {
-  // In production, retrieve from file system, S3, or database
-  const storage = (global as any).reportStorage;
-  if (!storage || !storage.has(reportId)) {
-    return null;
-  }
+  // Get report details
+  const report = await ReportService.getReportById(params.id, organization.id);
 
-  const buffer = storage.get(reportId);
-  
-  // Determine file type from reportId or store metadata separately
-  let mimeType = 'application/octet-stream';
-  let filename = `report_${reportId}`;
-  
-  if (reportId.includes('pdf')) {
-    mimeType = 'application/pdf';
-    filename += '.pdf';
-  } else if (reportId.includes('excel')) {
-    mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-    filename += '.xlsx';
-  } else if (reportId.includes('csv')) {
-    mimeType = 'text/csv';
-    filename += '.csv';
-  }
-
-  return { buffer, filename, mimeType };
-};
-
-// Check if user has access to the report
-const hasReportAccess = (userId: string, reportId: string): boolean => {
-  // In production, check database for report ownership or permissions
-  // For now, allow access to all reports for demo purposes
-  return true;
-};
-
-// GET report download (stub implementation)
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const resolvedParams = await params;
-    const { id } = resolvedParams;
-
+  if (!report) {
     return NextResponse.json(
-      { 
-        error: 'Report download not implemented',
-        reportId: id
+      { error: 'Report not found' },
+      { status: 404 }
+    );
+  }
+
+  if (!report.fileUrl) {
+    return NextResponse.json(
+      { error: 'Report file not available. Please generate the report first.' },
+      { status: 404 }
+    );
+  }
+
+  try {
+    // Download file from storage
+    const buffer = await CloudStorageService.downloadFile(report.fileUrl);
+    const metadata = await CloudStorageService.getFileMetadata(report.fileUrl);
+
+    if (!metadata) {
+      return NextResponse.json(
+        { error: 'Failed to get file metadata' },
+        { status: 500 }
+      );
+    }
+
+    // Determine filename
+    const filename = report.fileUrl.split('/').pop() || `report_${report.id}.${report.format || 'pdf'}`;
+
+    // Return file with appropriate headers
+    return new NextResponse(buffer, {
+      headers: {
+        'Content-Type': metadata.mimeType,
+        'Content-Length': metadata.size.toString(),
+        'Content-Disposition': `attachment; filename="${filename}"`,
+        'Last-Modified': metadata.lastModified.toUTCString(),
+        'Cache-Control': 'private, max-age=3600',
       },
-      { status: 501 }
-    );
-  } catch (error) {
-    console.error('Report download error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
-}
-
-// POST report download (stub implementation)
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const resolvedParams = await params;
-    const { id } = resolvedParams;
-
-    return NextResponse.json(
-      { 
-        error: 'Report download not implemented',
-        reportId: id
-      },
-      { status: 501 }
-    );
-  } catch (error) {
-    console.error('Report download error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
-}
-
-// HEAD method to get file metadata without downloading
-export async function HEAD(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const user = getCurrentUser(request);
-    if (!user) {
-      return new NextResponse(null, { status: 401 });
-    }
-
-    const resolvedParams = await params;
-    const reportId = resolvedParams.id;
-    if (!reportId) {
-      return new NextResponse(null, { status: 400 });
-    }
-
-    // Check if user has access to this report
-    if (!hasReportAccess(user.id, reportId)) {
-      return new NextResponse(null, { status: 403 });
-    }
-
-    // Retrieve the report metadata
-    const reportData = getStoredReport(reportId);
-    if (!reportData) {
-      return new NextResponse(null, { status: 404 });
-    }
-
-    // Return headers without body
-    const headers = new Headers();
-    headers.set('Content-Type', reportData.mimeType);
-    headers.set('Content-Length', reportData.buffer.length.toString());
-    headers.set('Last-Modified', new Date().toUTCString());
-    headers.set('Cache-Control', 'no-cache');
-
-    return new NextResponse(null, {
-      status: 200,
-      headers,
     });
   } catch (error) {
-    console.error('Error getting report metadata:', error);
-    return new NextResponse(null, { status: 500 });
+    console.error('Error downloading report:', error);
+    return NextResponse.json(
+      { error: 'Failed to download report file' },
+      { status: 500 }
+    );
   }
-} 
+});
+
+// POST /api/reports/[id]/download - Generate and download report
+export const POST = withApiMiddleware(async (
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) => {
+  const { user, organization } = await getAuthenticatedUser(req);
+
+  const body = await req.json();
+  const { format = 'pdf' } = body;
+
+  // Generate report if not already generated
+  const report = await ReportService.generateReport(
+    params.id,
+    format,
+    organization.id
+  );
+
+  if (!report.fileUrl) {
+    return NextResponse.json(
+      { error: 'Failed to generate report file' },
+      { status: 500 }
+    );
+  }
+
+  // Return download URL
+  return NextResponse.json({
+    data: {
+      downloadUrl: report.fileUrl,
+      format: report.format,
+      generatedAt: report.generatedAt,
+    },
+    message: 'Report ready for download',
+  });
+}); 
