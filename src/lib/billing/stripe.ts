@@ -591,6 +591,11 @@ export class StripeService {
       where: { stripePriceId: planId },
     });
 
+    if (!plan) {
+      console.error(`No plan found for Stripe price ID: ${planId}`);
+      throw new Error(`Unable to process subscription: Plan not found for price ID ${planId}`);
+    }
+
     await db.client.organizationSubscription.upsert({
       where: { stripeSubscriptionId: subscription.id },
       update: {
@@ -607,7 +612,7 @@ export class StripeService {
       },
       create: {
         organizationId,
-        planId: plan?.id || 'unknown',
+        planId: plan.id,
         stripeSubscriptionId: subscription.id,
         status: subscription.status as any,
         currentPeriodStart: new Date(sub.current_period_start * 1000),

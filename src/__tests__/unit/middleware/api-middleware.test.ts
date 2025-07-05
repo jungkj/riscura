@@ -44,11 +44,14 @@ jest.mock('@/lib/billing/manager', () => ({
   billingManager: mockBillingManager
 }));
 
+import type { TestUser, TestOrganization } from '@/__tests__/utils/test-helpers';
+import type { SubscriptionPlan, OrganizationSubscription } from '@/lib/billing/types';
+
 describe('API Middleware', () => {
-  let testUser: any;
-  let testOrg: any;
-  let testPlan: any;
-  let testSubscription: any;
+  let testUser: TestUser;
+  let testOrg: TestOrganization;
+  let testPlan: SubscriptionPlan;
+  let testSubscription: OrganizationSubscription;
   let mockHandler: jest.Mock;
 
   beforeEach(() => {

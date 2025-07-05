@@ -6,6 +6,8 @@
 import { PrismaClient } from '@prisma/client';
 import { NextRequest } from 'next/server';
 import { enhancedCache } from '@/lib/cache/enhanced-cache-layer';
+import { v4 as uuidv4 } from 'uuid';
+import { extractIpAddress, getEntityComplianceFlags, generateEventId } from './audit-utils';
 
 // ============================================================================
 // TYPES AND INTERFACES
@@ -175,7 +177,7 @@ export class AuditLogger {
   async log(event: Omit<AuditEvent, 'id' | 'timestamp'>): Promise<void> {
     const fullEvent: AuditEvent = {
       ...event,
-      id: this.generateEventId(),
+      id: generateEventId(),
       timestamp: new Date(),
       retentionPeriod: this.getRetentionPeriod(event.action),
       encrypted: this.shouldEncrypt(event.action, event.entity),
@@ -214,7 +216,7 @@ export class AuditLogger {
       method: request.method,
       path: request.nextUrl.pathname,
       userAgent: request.headers.get('user-agent') || undefined,
-      ipAddress: this.extractIpAddress(request),
+      ipAddress: extractIpAddress(request),
       severity: action === 'LOGIN_FAILED' ? 'HIGH' : 'MEDIUM',
       status: action === 'LOGIN_FAILED' ? 'FAILURE' : 'SUCCESS',
       metadata: {
@@ -250,7 +252,7 @@ export class AuditLogger {
       severity: this.calculateSeverity(action, entity, changes),
       status: 'SUCCESS',
       metadata,
-      complianceFlags: this.getComplianceFlags(entity),
+      complianceFlags: getEntityComplianceFlags(entity),
     });
   }
 
@@ -276,11 +278,11 @@ export class AuditLogger {
       method: request.method,
       path: request.nextUrl.pathname,
       userAgent: request.headers.get('user-agent') || undefined,
-      ipAddress: this.extractIpAddress(request),
+      ipAddress: extractIpAddress(request),
       severity: action === 'ACCESS_DENIED' ? 'HIGH' : 'LOW',
       status: action === 'ACCESS_DENIED' ? 'FAILURE' : 'SUCCESS',
       metadata,
-      complianceFlags: this.getComplianceFlags(entity),
+      complianceFlags: getEntityComplianceFlags(entity),
     });
   }
 
@@ -547,7 +549,7 @@ export class AuditLogger {
     };
 
     const report: AuditReport = {
-      id: this.generateEventId(),
+      id: generateEventId(),
       organizationId,
       reportType,
       title: `${reportType} Audit Report`,
@@ -579,18 +581,7 @@ export class AuditLogger {
   // UTILITY METHODS
   // ============================================================================
 
-  private generateEventId(): string {
-    return `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
 
-  private extractIpAddress(request: NextRequest): string {
-    return (
-      request.headers.get('x-forwarded-for')?.split(',')[0] ||
-      request.headers.get('x-real-ip') ||
-      request.ip ||
-      'unknown'
-    );
-  }
 
   private actionToMethod(action: AuditAction): string {
     const methodMap: Record<string, string> = {
@@ -628,19 +619,6 @@ export class AuditLogger {
     return 'MEDIUM';
   }
 
-  private getComplianceFlags(entity: AuditEntity): string[] {
-    const complianceMap: Record<string, string[]> = {
-      USER: ['SOX', 'GDPR', 'SOC2', 'HIPAA'],
-      RISK: ['SOX', 'SOC2', 'ISO27001'],
-      CONTROL: ['SOC2', 'ISO27001', 'NIST'],
-      COMPLIANCE_FRAMEWORK: ['SOX', 'SOC2', 'ISO27001'],
-      DOCUMENT: ['GDPR', 'SOC2', 'HIPAA'],
-      PAYMENT: ['PCI_DSS', 'SOX'],
-      SYSTEM: ['SOC2', 'ISO27001'],
-    };
-
-    return complianceMap[entity] || ['SOC2'];
-  }
 
   private getRetentionPeriod(action: AuditAction): number {
     // Compliance-related events need longer retention
