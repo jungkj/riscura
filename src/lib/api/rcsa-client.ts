@@ -14,8 +14,18 @@ import {
   ControlQueryParams,
   PaginatedResponse,
   ApiResponse,
-  RCSAAnalytics
+  RCSAAnalytics,
+  TestScript,
+  CreateTestScriptRequest,
+  UpdateTestScriptRequest,
+  TestScriptQueryParams,
+  ExecuteTestRequest,
+  TestExecution,
+  GenerateTestScriptRequest,
+  GenerateTestScriptResponse,
+  TestScriptControl
 } from '@/types/rcsa.types';
+import { getSession } from 'next-auth/react';
 
 export class RCSAApiClient {
   private baseUrl: string;
@@ -28,18 +38,62 @@ export class RCSAApiClient {
     };
   }
 
+  /**
+   * Get authenticated headers with NextAuth session
+   */
+  private async getAuthenticatedHeaders(): Promise<HeadersInit> {
+    try {
+      const session = await getSession();
+      const headers: HeadersInit = {
+        ...this.headers,
+      };
+
+      // Add organization context if available
+      if (session?.user?.organizationId) {
+        headers['organization-id'] = session.user.organizationId;
+      }
+
+      // Add request tracking
+      headers['x-request-id'] = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      return headers;
+    } catch (error) {
+      console.warn('Failed to get session for API request:', error);
+      return this.headers;
+    }
+  }
+
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
     try {
+      // Get authenticated headers with session
+      const authenticatedHeaders = await this.getAuthenticatedHeaders();
+      
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
-        headers: this.headers,
+        headers: {
+          ...authenticatedHeaders,
+          ...options.headers, // Allow override of specific headers
+        },
+        credentials: 'include', // Include cookies for NextAuth session
         ...options,
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
+        
+        // Handle authentication errors specifically
+        if (response.status === 401) {
+          console.error('Authentication required for API request:', endpoint);
+          throw new Error(errorData.message || 'Authentication required. Please sign in again.');
+        }
+        
+        if (response.status === 403) {
+          console.error('Insufficient permissions for API request:', endpoint);
+          throw new Error(errorData.message || 'Insufficient permissions for this operation.');
+        }
+        
         throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
       }
 
@@ -407,6 +461,95 @@ export class RCSAApiClient {
 
   async getRiskTemplates(): Promise<ApiResponse<Risk[]>> {
     return this.request<Risk[]>('/risks/templates');
+  }
+
+  // ============================================================================
+  // TEST SCRIPTS
+  // ============================================================================
+
+  async getTestScripts(
+    params?: TestScriptQueryParams
+  ): Promise<ApiResponse<PaginatedResponse<TestScript>>> {
+    const queryParams = params ? new URLSearchParams(params as any).toString() : '';
+    return this.request<PaginatedResponse<TestScript>>(
+      `/test-scripts${queryParams ? `?${queryParams}` : ''}`
+    );
+  }
+
+  async getTestScript(id: string): Promise<ApiResponse<TestScript>> {
+    return this.request<TestScript>(`/test-scripts/${id}`);
+  }
+
+  async createTestScript(
+    data: CreateTestScriptRequest
+  ): Promise<ApiResponse<TestScript>> {
+    return this.request<TestScript>('/test-scripts', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateTestScript(
+    id: string,
+    data: UpdateTestScriptRequest
+  ): Promise<ApiResponse<TestScript>> {
+    return this.request<TestScript>(`/test-scripts/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteTestScript(id: string): Promise<ApiResponse<{ id: string }>> {
+    return this.request<{ id: string }>(`/test-scripts/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Test Script Control associations
+  async getTestScriptControls(testScriptId: string): Promise<ApiResponse<TestScriptControl[]>> {
+    return this.request<TestScriptControl[]>(`/test-scripts/${testScriptId}/controls`);
+  }
+
+  async associateTestScriptControls(
+    testScriptId: string,
+    controlIds: string[],
+    isMandatory: boolean = true
+  ): Promise<ApiResponse<{ associated: number; alreadyAssociated: number }>> {
+    return this.request(`/test-scripts/${testScriptId}/controls`, {
+      method: 'POST',
+      body: JSON.stringify({ controlIds, isMandatory }),
+    });
+  }
+
+  async disassociateTestScriptControls(
+    testScriptId: string,
+    controlIds: string[]
+  ): Promise<ApiResponse<{ removed: number }>> {
+    return this.request(`/test-scripts/${testScriptId}/controls`, {
+      method: 'DELETE',
+      body: JSON.stringify({ controlIds }),
+    });
+  }
+
+  // Test execution
+  async executeTest(
+    testScriptId: string,
+    data: ExecuteTestRequest
+  ): Promise<ApiResponse<TestExecution>> {
+    return this.request<TestExecution>(`/test-scripts/${testScriptId}/execute`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  // AI generation
+  async generateTestScript(
+    data: GenerateTestScriptRequest
+  ): Promise<ApiResponse<GenerateTestScriptResponse>> {
+    return this.request<GenerateTestScriptResponse>('/test-scripts/generate', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
   }
 
   // ============================================================================

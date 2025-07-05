@@ -1,7 +1,21 @@
 import { AIService } from './AIService';
+import { ControlType } from '@/types/rcsa.types';
 
 // Import actual Probo data
 import mitigationsData from '@/data/mitigations.json';
+
+// Testing guidance interfaces
+export interface ControlTestStep {
+  description: string;
+  expectedResult: string;
+  dataRequired: string;
+  notes: string;
+}
+
+export interface ControlTestingGuidance {
+  testSteps: ControlTestStep[];
+  suggestions: string[];
+}
 
 export interface VendorInfo {
   name: string;
@@ -462,5 +476,138 @@ export class ProboService {
       m.description.toLowerCase().includes(lowerQuery) ||
       m.category.toLowerCase().includes(lowerQuery)
     );
+  }
+
+  // Get control testing guidance
+  async getControlTestingGuidance(controlType: ControlType): Promise<ControlTestingGuidance | null> {
+    try {
+      // Map control types to testing approaches
+      const testingGuidance: Record<ControlType, ControlTestingGuidance> = {
+        'PREVENTIVE': {
+          testSteps: [
+            {
+              description: 'Verify control is configured to prevent unauthorized actions',
+              expectedResult: 'Control blocks unauthorized attempts',
+              dataRequired: 'Access logs, configuration settings',
+              notes: 'Test both positive and negative scenarios'
+            },
+            {
+              description: 'Test control bypass scenarios',
+              expectedResult: 'No unauthorized bypass methods exist',
+              dataRequired: 'Security testing tools, bypass attempts log',
+              notes: 'Document any potential weaknesses'
+            }
+          ],
+          suggestions: [
+            'Test control effectiveness under various load conditions',
+            'Verify control configuration against security baselines',
+            'Assess control performance impact'
+          ]
+        },
+        'DETECTIVE': {
+          testSteps: [
+            {
+              description: 'Verify control detects and logs security events',
+              expectedResult: 'All test events are detected and logged',
+              dataRequired: 'Test event data, detection logs',
+              notes: 'Include both true positives and false positive testing'
+            },
+            {
+              description: 'Test alert generation and notification',
+              expectedResult: 'Alerts generated within defined thresholds',
+              dataRequired: 'Alert configuration, notification logs',
+              notes: 'Verify alert recipients and escalation paths'
+            }
+          ],
+          suggestions: [
+            'Measure detection accuracy and false positive rates',
+            'Test detection timeliness against SLAs',
+            'Verify log retention and integrity'
+          ]
+        },
+        'CORRECTIVE': {
+          testSteps: [
+            {
+              description: 'Test control response to identified issues',
+              expectedResult: 'Control corrects issues within defined parameters',
+              dataRequired: 'Issue scenarios, correction logs',
+              notes: 'Document correction time and effectiveness'
+            },
+            {
+              description: 'Verify rollback and recovery procedures',
+              expectedResult: 'System restored to secure state',
+              dataRequired: 'Backup data, recovery procedures',
+              notes: 'Test various failure scenarios'
+            }
+          ],
+          suggestions: [
+            'Measure mean time to recovery (MTTR)',
+            'Test correction procedures under stress',
+            'Verify data integrity after correction'
+          ]
+        },
+        'COMPENSATING': {
+          testSteps: [
+            {
+              description: 'Verify compensating control effectiveness',
+              expectedResult: 'Control provides equivalent protection',
+              dataRequired: 'Risk assessment data, control mapping',
+              notes: 'Compare with primary control objectives'
+            },
+            {
+              description: 'Test control integration and dependencies',
+              expectedResult: 'No gaps in control coverage',
+              dataRequired: 'Control matrix, integration points',
+              notes: 'Document any residual risks'
+            }
+          ],
+          suggestions: [
+            'Assess control overlap and redundancy',
+            'Evaluate cost-effectiveness of compensation',
+            'Plan for primary control restoration'
+          ]
+        },
+        'DIRECTIVE': {
+          testSteps: [
+            {
+              description: 'Verify control provides clear guidance and direction',
+              expectedResult: 'Policies and procedures are comprehensive and current',
+              dataRequired: 'Policy documents, procedure manuals',
+              notes: 'Check for version control and approval status'
+            },
+            {
+              description: 'Test awareness and compliance with directives',
+              expectedResult: 'Staff understand and follow documented procedures',
+              dataRequired: 'Training records, compliance assessments',
+              notes: 'Sample testing of staff knowledge'
+            }
+          ],
+          suggestions: [
+            'Assess clarity and completeness of guidance',
+            'Verify accessibility of documentation',
+            'Measure compliance rates and understanding'
+          ]
+        }
+      };
+
+      return testingGuidance[controlType] || {
+        testSteps: [
+          {
+            description: 'Perform general control testing',
+            expectedResult: 'Control operates as designed',
+            dataRequired: 'Control documentation, test data',
+            notes: 'Customize based on control specifics'
+          }
+        ],
+        suggestions: [
+          'Define specific test objectives',
+          'Establish clear pass/fail criteria',
+          'Document all test results'
+        ]
+      };
+    } catch (error) {
+      console.error('Failed to get control testing guidance:', error);
+      return null;
+    }
   }
 } 
