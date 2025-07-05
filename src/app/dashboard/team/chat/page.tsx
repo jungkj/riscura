@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { Button } from '@/components/ui/button';
@@ -12,8 +12,14 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-import toast from 'react-hot-toast';
+import { useToast } from '@/hooks/use-toast';
+import { useWebSocket } from '@/hooks/useWebSocket';
+import { useSession } from 'next-auth/react';
+import { ChannelType, ChatMessageType } from '@prisma/client';
 import {
   MessageSquare,
   Send,
@@ -46,214 +52,82 @@ import {
 interface ChatChannel {
   id: string;
   name: string;
-  description: string;
-  type: 'public' | 'private' | 'direct';
-  memberCount: number;
-  unreadCount: number;
-  lastMessage?: string;
-  lastMessageTime?: Date;
+  description?: string;
+  type: ChannelType;
+  organizationId: string;
+  createdBy: string;
   isActive: boolean;
-  isPinned: boolean;
+  createdAt: string;
+  updatedAt: string;
+  members: {
+    userId: string;
+    role: string;
+    user: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      avatar?: string;
+    };
+  }[];
+  _count?: {
+    messages: number;
+  };
+  lastMessage?: any;
+  unreadCount?: number;
 }
 
 interface ChatMessage {
   id: string;
   channelId: string;
   userId: string;
-  userName: string;
-  userAvatar?: string;
   content: string;
-  timestamp: Date;
-  type: 'text' | 'file' | 'image' | 'system';
+  type: ChatMessageType;
+  attachments?: any;
   isEdited: boolean;
-  reactions: { emoji: string; count: number; users: string[] }[];
-  attachments?: ChatAttachment[];
-  replyTo?: string;
-  status: 'sending' | 'sent' | 'delivered' | 'read' | 'failed';
-}
-
-interface ChatAttachment {
-  id: string;
-  name: string;
-  size: number;
-  type: string;
-  url: string;
+  editedAt?: string;
+  isDeleted: boolean;
+  deletedAt?: string;
+  parentId?: string;
+  createdAt: string;
+  updatedAt: string;
+  user: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    avatar?: string;
+  };
+  reactions?: {
+    messageId: string;
+    userId: string;
+    emoji: string;
+    user: {
+      id: string;
+      firstName: string;
+      lastName: string;
+    };
+  }[];
+  readReceipts?: {
+    userId: string;
+    readAt: string;
+  }[];
+  parent?: any;
+  _count?: {
+    replies: number;
+  };
 }
 
 interface TeamMember {
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   avatar?: string;
   status: 'online' | 'away' | 'busy' | 'offline';
   role: string;
-  lastSeen?: Date;
 }
 
-// Sample data
-const sampleChannels: ChatChannel[] = [
-  {
-    id: 'general',
-    name: 'general',
-    description: 'General team discussions',
-    type: 'public',
-    memberCount: 12,
-    unreadCount: 3,
-    lastMessage: 'The SOC 2 audit is scheduled for next week',
-    lastMessageTime: new Date('2024-01-30T14:30:00'),
-    isActive: true,
-    isPinned: true,
-  },
-  {
-    id: 'compliance',
-    name: 'compliance',
-    description: 'Compliance and regulatory discussions',
-    type: 'public',
-    memberCount: 8,
-    unreadCount: 0,
-    lastMessage: 'Updated the GDPR assessment checklist',
-    lastMessageTime: new Date('2024-01-30T11:15:00'),
-    isActive: false,
-    isPinned: false,
-  },
-  {
-    id: 'security',
-    name: 'security',
-    description: 'Security team coordination',
-    type: 'private',
-    memberCount: 5,
-    unreadCount: 7,
-    lastMessage: 'New vulnerability detected in the payment system',
-    lastMessageTime: new Date('2024-01-30T16:45:00'),
-    isActive: false,
-    isPinned: true,
-  },
-  {
-    id: 'dm-sarah',
-    name: 'Sarah Chen',
-    description: 'Direct message',
-    type: 'direct',
-    memberCount: 2,
-    unreadCount: 1,
-    lastMessage: 'Can you review the access control documentation?',
-    lastMessageTime: new Date('2024-01-30T13:20:00'),
-    isActive: false,
-    isPinned: false,
-  },
-];
-
-const sampleMessages: ChatMessage[] = [
-  {
-    id: 'msg-1',
-    channelId: 'general',
-    userId: 'user-1',
-    userName: 'Sarah Chen',
-    content: 'Good morning team! Just a reminder that the SOC 2 audit is scheduled for next week. Please make sure all your documentation is up to date.',
-    timestamp: new Date('2024-01-30T09:00:00'),
-    type: 'text',
-    isEdited: false,
-    reactions: [
-      { emoji: '👍', count: 3, users: ['user-2', 'user-3', 'user-4'] },
-      { emoji: '✅', count: 2, users: ['user-5', 'user-6'] },
-    ],
-    status: 'read',
-  },
-  {
-    id: 'msg-2',
-    channelId: 'general',
-    userId: 'user-2',
-    userName: 'Michael Rodriguez',
-    content: 'Thanks for the reminder! I\'ve completed the GDPR documentation review. The updated files are ready for audit.',
-    timestamp: new Date('2024-01-30T09:15:00'),
-    type: 'text',
-    isEdited: false,
-    reactions: [],
-    status: 'read',
-  },
-  {
-    id: 'msg-3',
-    channelId: 'general',
-    userId: 'user-3',
-    userName: 'Emma Johnson',
-    content: 'I\'ve uploaded the latest risk assessment report to the shared drive. Let me know if you need any clarifications.',
-    timestamp: new Date('2024-01-30T10:30:00'),
-    type: 'text',
-    isEdited: false,
-    reactions: [{ emoji: '📄', count: 1, users: ['user-1'] }],
-    attachments: [
-      {
-        id: 'att-1',
-        name: 'Risk_Assessment_Q1_2024.pdf',
-        size: 2547832,
-        type: 'application/pdf',
-        url: '/files/risk-assessment.pdf',
-      },
-    ],
-    status: 'read',
-  },
-  {
-    id: 'msg-4',
-    channelId: 'general',
-    userId: 'user-4',
-    userName: 'David Kim',
-    content: 'The network security controls testing is complete. All systems passed the vulnerability scans.',
-    timestamp: new Date('2024-01-30T11:45:00'),
-    type: 'text',
-    isEdited: false,
-    reactions: [{ emoji: '🔒', count: 2, users: ['user-1', 'user-2'] }],
-    status: 'read',
-  },
-  {
-    id: 'msg-5',
-    channelId: 'general',
-    userId: 'user-1',
-    userName: 'Sarah Chen',
-    content: 'Excellent work everyone! The audit preparation is going smoothly. Let\'s have a quick standup at 2 PM to review the final checklist.',
-    timestamp: new Date('2024-01-30T14:30:00'),
-    type: 'text',
-    isEdited: false,
-    reactions: [],
-    status: 'delivered',
-  },
-];
-
-const sampleTeamMembers: TeamMember[] = [
-  {
-    id: 'user-1',
-    name: 'Sarah Chen',
-    email: 'sarah.chen@company.com',
-    status: 'online',
-    role: 'Security Manager',
-  },
-  {
-    id: 'user-2',
-    name: 'Michael Rodriguez',
-    email: 'michael.rodriguez@company.com',
-    status: 'online',
-    role: 'Compliance Analyst',
-  },
-  {
-    id: 'user-3',
-    name: 'Emma Johnson',
-    email: 'emma.johnson@company.com',
-    status: 'away',
-    role: 'Risk Auditor',
-  },
-  {
-    id: 'user-4',
-    name: 'David Kim',
-    email: 'david.kim@company.com',
-    status: 'online',
-    role: 'IT Security Specialist',
-  },
-  {
-    id: 'user-5',
-    name: 'Lisa Wang',
-    email: 'lisa.wang@company.com',
-    status: 'busy',
-    role: 'Privacy Officer',
-  },
-];
 
 const getStatusConfig = (status: string) => {
   const configs = {
@@ -265,17 +139,6 @@ const getStatusConfig = (status: string) => {
   return configs[status as keyof typeof configs] || configs.offline;
 };
 
-const getMessageStatusIcon = (status: string) => {
-  const icons = {
-    sending: Clock,
-    sent: Check,
-    delivered: CheckCheck,
-    read: CheckCheck,
-    failed: AlertCircle,
-  };
-  return icons[status as keyof typeof icons] || Clock;
-};
-
 const formatFileSize = (bytes: number) => {
   if (bytes === 0) return '0 Bytes';
   const k = 1024;
@@ -284,50 +147,226 @@ const formatFileSize = (bytes: number) => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 };
 
+const formatTimestamp = (timestamp: string) => {
+  const date = new Date(timestamp);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffHours = diffMs / (1000 * 60 * 60);
+  
+  if (diffHours < 24) {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  } else if (diffHours < 48) {
+    return 'Yesterday';
+  } else {
+    return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+  }
+};
+
 export default function TeamChatPage() {
-  const [activeChannel, setActiveChannel] = useState('general');
+  const { data: session } = useSession();
+  const { toast } = useToast();
+  const [channels, setChannels] = useState<ChatChannel[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [activeChannel, setActiveChannel] = useState<string | null>(null);
   const [messageInput, setMessageInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const [onlineMembers, setOnlineMembers] = useState(sampleTeamMembers.filter(m => m.status === 'online'));
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSending, setIsSending] = useState(false);
+  const [isCreateChannelOpen, setIsCreateChannelOpen] = useState(false);
+  const [newChannelData, setNewChannelData] = useState({
+    name: '',
+    description: '',
+    type: ChannelType.PUBLIC,
+  });
+  const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const activeChannelData = sampleChannels.find(c => c.id === activeChannel);
-  const channelMessages = sampleMessages.filter(m => m.channelId === activeChannel);
+  // WebSocket handlers
+  const handleWebSocketMessage = useCallback((message: any) => {
+    switch (message.type) {
+      case 'new_message':
+        if (message.payload.channelId === activeChannel) {
+          setMessages(prev => [...prev, message.payload]);
+          scrollToBottom();
+        }
+        // Update unread count for inactive channels
+        if (message.payload.channelId !== activeChannel) {
+          setChannels(prev => prev.map(ch => 
+            ch.id === message.payload.channelId 
+              ? { ...ch, unreadCount: (ch.unreadCount || 0) + 1 }
+              : ch
+          ));
+        }
+        break;
+      
+      case 'typing':
+        if (message.payload.channelId === activeChannel) {
+          if (message.payload.isTyping) {
+            setTypingUsers(prev => [...new Set([...prev, message.payload.userId])]);
+          } else {
+            setTypingUsers(prev => prev.filter(id => id !== message.payload.userId));
+          }
+        }
+        break;
+      
+      case 'user_joined':
+      case 'user_left':
+        // Refresh channel members
+        if (message.payload.channelId === activeChannel) {
+          fetchChannel(activeChannel);
+        }
+        break;
+      
+      case 'reaction':
+        setMessages(prev => prev.map(msg => {
+          if (msg.id === message.payload.messageId) {
+            const reactions = [...(msg.reactions || [])];
+            const existingReaction = reactions.find(r => r.emoji === message.payload.emoji);
+            if (existingReaction) {
+              if (!existingReaction.user.some(u => u.id === message.payload.userId)) {
+                existingReaction.user.push({ id: message.payload.userId } as any);
+              }
+            } else {
+              reactions.push({
+                messageId: msg.id,
+                userId: message.payload.userId,
+                emoji: message.payload.emoji,
+                user: { id: message.payload.userId } as any,
+              });
+            }
+            return { ...msg, reactions };
+          }
+          return msg;
+        }));
+        break;
+    }
+  }, [activeChannel]);
 
+  const ws = useWebSocket(handleWebSocketMessage);
+
+  // Fetch channels on mount
+  useEffect(() => {
+    fetchChannels();
+  }, []);
+
+  // Fetch messages when channel changes
+  useEffect(() => {
+    if (activeChannel) {
+      fetchMessages(activeChannel);
+      ws.joinChannel(activeChannel);
+      
+      return () => {
+        ws.leaveChannel(activeChannel);
+      };
+    }
+  }, [activeChannel, ws]);
+
+  // Auto-scroll to bottom when messages change
   useEffect(() => {
     scrollToBottom();
-  }, [channelMessages]);
+  }, [messages]);
+
+  const fetchChannels = async () => {
+    try {
+      const response = await fetch('/api/chat/channels');
+      const data = await response.json();
+      if (data.success) {
+        setChannels(data.data);
+        if (data.data.length > 0 && !activeChannel) {
+          setActiveChannel(data.data[0].id);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to fetch channels:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load channels',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchChannel = async (channelId: string) => {
+    try {
+      const response = await fetch(`/api/chat/channels/${channelId}`);
+      const data = await response.json();
+      if (data.success) {
+        setChannels(prev => prev.map(ch => ch.id === channelId ? data.data : ch));
+      }
+    } catch (error) {
+      console.error('Failed to fetch channel:', error);
+    }
+  };
+
+  const fetchMessages = async (channelId: string) => {
+    try {
+      const response = await fetch(`/api/chat/channels/${channelId}/messages`);
+      const data = await response.json();
+      if (data.success) {
+        setMessages(data.data);
+        // Mark messages as read
+        if (data.data.length > 0) {
+          const lastMessage = data.data[data.data.length - 1];
+          ws.markAsRead(channelId, lastMessage.id);
+        }
+        // Clear unread count
+        setChannels(prev => prev.map(ch => 
+          ch.id === channelId ? { ...ch, unreadCount: 0 } : ch
+        ));
+      }
+    } catch (error) {
+      console.error('Failed to fetch messages:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load messages',
+        variant: 'destructive',
+      });
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleSendMessage = () => {
-    if (!messageInput.trim()) return;
+  const handleSendMessage = async () => {
+    if (!messageInput.trim() || !activeChannel || isSending) return;
 
-    const newMessage: ChatMessage = {
-      id: `msg-${Date.now()}`,
-      channelId: activeChannel,
-      userId: 'current-user',
-      userName: 'You',
-      content: messageInput,
-      timestamp: new Date(),
-      type: 'text',
-      isEdited: false,
-      reactions: [],
-      status: 'sending',
-    };
-
-    // Simulate sending message
-    toast.success('Message sent!');
+    setIsSending(true);
+    const messageContent = messageInput;
     setMessageInput('');
-    
-    // Simulate message status updates
-    setTimeout(() => {
-      toast.success('Message delivered');
-    }, 1000);
+
+    try {
+      const response = await fetch(`/api/chat/channels/${activeChannel}/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content: messageContent,
+          type: ChatMessageType.TEXT,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        // Message will be added via WebSocket
+        ws.sendChatMessage(activeChannel, messageContent);
+      } else {
+        throw new Error(data.error || 'Failed to send message');
+      }
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to send message',
+        variant: 'destructive',
+      });
+      setMessageInput(messageContent); // Restore message on error
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -337,43 +376,146 @@ export default function TeamChatPage() {
     }
   };
 
+  const handleTyping = () => {
+    if (!activeChannel || !ws.connected) return;
+    
+    // Send typing indicator
+    ws.sendTyping(activeChannel, true);
+    
+    // Clear previous timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    
+    // Stop typing after 3 seconds
+    typingTimeoutRef.current = setTimeout(() => {
+      ws.sendTyping(activeChannel, false);
+    }, 3000);
+  };
+
   const handleFileUpload = () => {
     fileInputRef.current?.click();
   };
 
-  const handleFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (files && files.length > 0) {
+    if (files && files.length > 0 && activeChannel) {
       const file = files[0];
-      toast.success(`Uploading ${file.name}...`);
-      // Simulate file upload
-      setTimeout(() => {
-        toast.success('File uploaded successfully!');
-      }, 2000);
-    }
-  };
+      
+      toast({
+        title: 'Uploading',
+        description: `Uploading ${file.name}...`,
+      });
+      
+      try {
+        // Upload file to Supabase Storage
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('bucket', 'attachments');
+        formData.append('metadata', JSON.stringify({
+          channelId: activeChannel,
+          originalName: file.name,
+        }));
 
-  const handleReaction = (messageId: string, emoji: string) => {
-    toast.success(`Added ${emoji} reaction`);
-  };
+        const uploadResponse = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
 
-  const handleChannelAction = (action: string, channelId: string) => {
-    switch (action) {
-      case 'pin':
-        toast.success('Channel pinned');
-        break;
-      case 'mute':
-        toast.success('Channel muted');
-        break;
-      case 'leave':
-        if (confirm('Are you sure you want to leave this channel?')) {
-          toast.success('Left channel');
+        const uploadData = await uploadResponse.json();
+        if (!uploadData.success) {
+          throw new Error(uploadData.error || 'Upload failed');
         }
-        break;
-      default:
-        toast(`Action "${action}" not yet implemented for channel ${channelId}`);
+
+        // Send message with file attachment
+        const response = await fetch(`/api/chat/channels/${activeChannel}/messages`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            content: `Shared file: ${file.name}`,
+            type: ChatMessageType.FILE,
+            attachments: [{
+              id: uploadData.data.id,
+              name: file.name,
+              size: file.size,
+              type: file.type,
+              url: uploadData.data.signedUrl,
+              path: uploadData.data.path,
+            }],
+          }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          toast({
+            title: 'Success',
+            description: 'File shared successfully',
+          });
+        }
+      } catch (error) {
+        console.error('Failed to upload file:', error);
+        toast({
+          title: 'Error',
+          description: 'Failed to upload file',
+          variant: 'destructive',
+        });
+      }
     }
   };
+
+  const handleReaction = async (messageId: string, emoji: string) => {
+    try {
+      const response = await fetch(`/api/chat/messages/${messageId}/reactions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emoji }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        ws.addReaction(messageId, emoji);
+      }
+    } catch (error) {
+      console.error('Failed to add reaction:', error);
+    }
+  };
+
+  const handleCreateChannel = async () => {
+    if (!newChannelData.name.trim()) return;
+
+    try {
+      const response = await fetch('/api/chat/channels', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newChannelData),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        toast({
+          title: 'Success',
+          description: 'Channel created successfully',
+        });
+        setIsCreateChannelOpen(false);
+        setNewChannelData({ name: '', description: '', type: ChannelType.PUBLIC });
+        fetchChannels();
+        setActiveChannel(data.data.id);
+      } else {
+        throw new Error(data.error || 'Failed to create channel');
+      }
+    } catch (error) {
+      console.error('Failed to create channel:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to create channel',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const activeChannelData = channels.find(c => c.id === activeChannel);
+  const channelMessages = messages;
+  const onlineMembers = activeChannelData?.members.filter(m => m.user.id !== session?.user?.id) || [];
 
   return (
     <ProtectedRoute>
@@ -387,7 +529,7 @@ export default function TeamChatPage() {
         ]}
         primaryAction={{
           label: 'New Channel',
-          onClick: () => toast.success('Opening channel creation...'),
+          onClick: () => setIsCreateChannelOpen(true),
           icon: Plus,
         }}
         secondaryActions={[
@@ -449,8 +591,8 @@ export default function TeamChatPage() {
               <CardContent>
                 <ScrollArea className="h-64">
                   <div className="space-y-1">
-                    {sampleChannels
-                      .filter(c => c.type !== 'direct')
+                    {channels
+                      .filter(c => c.type !== ChannelType.DIRECT)
                       .map((channel) => (
                         <div
                           key={channel.id}
@@ -466,16 +608,16 @@ export default function TeamChatPage() {
                               <div className="text-sm font-medium">{channel.name}</div>
                               {channel.lastMessage && (
                                 <div className="text-xs text-gray-500 truncate">
-                                  {channel.lastMessage}
+                                  {channel.lastMessage.content}
                                 </div>
                               )}
                             </div>
                           </div>
                           <div className="flex items-center space-x-1">
-                            {channel.isPinned && (
-                              <Pin className="h-3 w-3 text-gray-400" />
+                            {channel.type === ChannelType.PRIVATE && (
+                              <Shield className="h-3 w-3 text-orange-500" />
                             )}
-                            {channel.unreadCount > 0 && (
+                            {channel.unreadCount && channel.unreadCount > 0 && (
                               <Badge variant="destructive" className="text-xs">
                                 {channel.unreadCount}
                               </Badge>
@@ -803,6 +945,71 @@ export default function TeamChatPage() {
             </Card>
           </div>
         </div>
+
+        {/* Create Channel Dialog */}
+        <Dialog open={isCreateChannelOpen} onOpenChange={setIsCreateChannelOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Create New Channel</DialogTitle>
+              <DialogDescription>
+                Create a new channel for your team to collaborate
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="channel-name">Channel Name</Label>
+                <Input
+                  id="channel-name"
+                  placeholder="e.g., project-alpha"
+                  value={newChannelData.name}
+                  onChange={(e) => setNewChannelData(prev => ({ ...prev, name: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="channel-description">Description (optional)</Label>
+                <Input
+                  id="channel-description"
+                  placeholder="What's this channel about?"
+                  value={newChannelData.description}
+                  onChange={(e) => setNewChannelData(prev => ({ ...prev, description: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="channel-type">Channel Type</Label>
+                <Select
+                  value={newChannelData.type}
+                  onValueChange={(value) => setNewChannelData(prev => ({ ...prev, type: value as ChannelType }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={ChannelType.PUBLIC}>
+                      <div className="flex items-center">
+                        <Hash className="h-4 w-4 mr-2" />
+                        Public - Anyone in the organization can join
+                      </div>
+                    </SelectItem>
+                    <SelectItem value={ChannelType.PRIVATE}>
+                      <div className="flex items-center">
+                        <Shield className="h-4 w-4 mr-2" />
+                        Private - Invite only
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsCreateChannelOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleCreateChannel} disabled={!newChannelData.name.trim()}>
+                Create Channel
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </MainContentArea>
     </ProtectedRoute>
   );

@@ -15,7 +15,7 @@ import {
   DollarSign, CreditCard, ShoppingCart, Package, Truck, Globe,
   Building, Car, Plane, Ship, Sun, Moon, CloudRain, Snowflake,
   Thermometer, Droplets, Wind, Leaf, Flower, TreePine, Mountain,
-  Camera, Mic, Speaker, Volume, VolumeX, Play, Pause, Square,
+  Camera, Mic, MicOff, Speaker, Volume, Volume2, VolumeX, Play, Pause, Square,
   SkipBack, SkipForward, Repeat, Shuffle, Radio, Tv, Monitor,
   Smartphone, Tablet, Laptop, Mouse, Keyboard, Printer, Scan,
   Wifi as WifiIcon, Bluetooth, Usb, HardDrive, Cpu, MemoryStick,
@@ -124,6 +124,7 @@ export const ActionIcons = {
 export const StatusIcons = {
   CheckCircle: createIcon(CheckCircle),
   XCircle: createIcon(XCircle),
+  X: createIcon(X),
   AlertTriangle: createIcon(AlertTriangle),
   AlertCircle: createIcon(AlertCircle),
   Info: createIcon(Info),
@@ -148,6 +149,10 @@ export const CommunicationIcons = {
   Share: createIcon(Share),
   ExternalLink: createIcon(ExternalLink),
   Link: createIcon(Link),
+  Microphone: createIcon(Mic),
+  MicrophoneOff: createIcon(MicOff),
+  Volume: createIcon(Volume2),
+  Speaker: createIcon(Speaker),
 };
 
 export const FileIcons = {

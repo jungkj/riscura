@@ -37,6 +37,10 @@ model Organization {
   workflows            Workflow[]
   workflows_v2         WorkflowV2[]
   testScripts          TestScript[]
+  reportTemplates      ReportTemplate[]
+  reportSchedules      ReportSchedule[]
+  proboIntegration     ProboIntegration?
+  chatChannels         ChatChannel[]
 
   @@map("organizations")
 }
@@ -94,6 +98,13 @@ model User {
   receivedMessages         Message[]                @relation("MessageRecipient")
   createdTestScripts       TestScript[]             @relation("TestScriptCreatedBy")
   testExecutions           TestExecution[]          @relation("TestExecutionExecutor")
+  createdReportTemplates   ReportTemplate[]         @relation("ReportTemplateCreatedBy")
+  createdReportSchedules   ReportSchedule[]         @relation("ReportScheduleCreatedBy")
+  createdChatChannels      ChatChannel[]            @relation("ChatChannelCreatedBy")
+  chatChannelMemberships   ChatChannelMember[]
+  chatMessages             ChatMessage[]            @relation("ChatMessageAuthor")
+  chatReactions            ChatReaction[]
+  chatReadReceipts         ChatReadReceipt[]
 
   @@index([organizationId])
   @@index([email])
@@ -426,25 +437,31 @@ model WorkflowStep {
 }
 
 model Report {
-  id             String       @id @default(cuid())
-  title          String
-  type           ReportType
-  status         ReportStatus @default(DRAFT)
-  data           Json?
-  parameters     Json?
-  sharedWith     String[]     @default([])
-  exportFormats  String[]     @default([])
-  organizationId String
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  createdBy      String?
-  activities     Activity[]
-  creator        User?        @relation("ReportCreatedBy", fields: [createdBy], references: [id])
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  id               String       @id @default(cuid())
+  title            String
+  description      String?
+  type             ReportType
+  status           ReportStatus @default(DRAFT)
+  templateId       String?
+  data             Json?        // Report content data
+  parameters       Json?        // Filters and parameters used
+  generatedAt      DateTime?    // When the report was generated
+  fileUrl          String?      // URL to generated file (PDF/Excel)
+  format           String?      // Format of generated file (pdf, excel, etc)
+  sharedWith       String[]     @default([])
+  exportFormats    String[]     @default([])
+  organizationId   String
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  createdBy        String?
+  activities       Activity[]
+  creator          User?        @relation("ReportCreatedBy", fields: [createdBy], references: [id])
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@index([organizationId])
   @@index([type])
   @@index([status])
+  @@index([templateId])
   @@map("reports")
 }
 
@@ -1378,4 +1395,225 @@ enum TestStatus {
   NOT_APPLICABLE
   IN_PROGRESS
   PENDING
+}
+
+model ReportTemplate {
+  id                   String              @id @default(cuid())
+  name                 String
+  description          String?
+  type                 ReportType
+  templateConfig       Json                // Contains report structure, sections, fields
+  defaultParameters    Json?               // Default filter parameters
+  isActive             Boolean             @default(true)
+  organizationId       String
+  createdBy            String?
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  reportSchedules      ReportSchedule[]
+  creator              User?               @relation("ReportTemplateCreatedBy", fields: [createdBy], references: [id])
+  organization         Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([type])
+  @@map("report_templates")
+}
+
+model ReportSchedule {
+  id                   String              @id @default(cuid())
+  reportTemplateId     String
+  name                 String
+  description          String?
+  frequency            ScheduleFrequency
+  scheduleConfig       Json                // Cron expression or detailed schedule config
+  recipients           String[]            @default([]) // Email addresses
+  isActive             Boolean             @default(true)
+  lastRunAt            DateTime?
+  nextRunAt            DateTime?
+  organizationId       String
+  createdBy            String?
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  reportTemplate       ReportTemplate      @relation(fields: [reportTemplateId], references: [id], onDelete: Cascade)
+  creator              User?               @relation("ReportScheduleCreatedBy", fields: [createdBy], references: [id])
+  organization         Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([reportTemplateId])
+  @@index([nextRunAt])
+  @@map("report_schedules")
+}
+
+enum ScheduleFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  ANNUALLY
+  CUSTOM
+}
+
+model ChatChannel {
+  id                   String              @id @default(cuid())
+  name                 String
+  description          String?
+  type                 ChannelType         @default(PUBLIC)
+  isPrivate            Boolean             @default(false)
+  organizationId       String
+  createdBy            String?
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  lastActivityAt       DateTime            @default(now())
+  members              ChatChannelMember[]
+  messages             ChatMessage[]
+  creator              User?               @relation("ChatChannelCreatedBy", fields: [createdBy], references: [id])
+  organization         Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([type])
+  @@index([lastActivityAt])
+  @@map("chat_channels")
+}
+
+model ChatChannelMember {
+  id                   String              @id @default(cuid())
+  channelId            String
+  userId               String
+  role                 ChannelMemberRole   @default(MEMBER)
+  joinedAt             DateTime            @default(now())
+  lastReadAt           DateTime            @default(now())
+  notificationSettings Json?
+  channel              ChatChannel         @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  user                 User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([channelId, userId])
+  @@index([userId])
+  @@index([channelId])
+  @@map("chat_channel_members")
+}
+
+model ChatMessage {
+  id                   String              @id @default(cuid())
+  channelId            String
+  userId               String
+  content              String
+  type                 ChatMessageType     @default(TEXT)
+  attachments          Json?               // Array of attachment objects
+  metadata             Json?               // Additional message data
+  isEdited             Boolean             @default(false)
+  editedAt             DateTime?
+  isDeleted            Boolean             @default(false)
+  deletedAt            DateTime?
+  parentId             String?             // For threaded messages
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  channel              ChatChannel         @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  user                 User                @relation("ChatMessageAuthor", fields: [userId], references: [id])
+  parent               ChatMessage?        @relation("MessageReplies", fields: [parentId], references: [id])
+  replies              ChatMessage[]       @relation("MessageReplies")
+  reactions            ChatReaction[]
+  readReceipts         ChatReadReceipt[]
+
+  @@index([channelId])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([parentId])
+  @@map("chat_messages")
+}
+
+model ChatReaction {
+  id                   String              @id @default(cuid())
+  messageId            String
+  userId               String
+  emoji                String
+  createdAt            DateTime            @default(now())
+  message              ChatMessage         @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user                 User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId, emoji])
+  @@index([messageId])
+  @@index([userId])
+  @@map("chat_reactions")
+}
+
+model ChatReadReceipt {
+  id                   String              @id @default(cuid())
+  messageId            String
+  userId               String
+  readAt               DateTime            @default(now())
+  message              ChatMessage         @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user                 User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId])
+  @@index([messageId])
+  @@index([userId])
+  @@map("chat_read_receipts")
+}
+
+enum ChannelType {
+  PUBLIC
+  PRIVATE
+  DIRECT
+  ANNOUNCEMENT
+}
+
+enum ChannelMemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+  GUEST
+}
+
+enum ChatMessageType {
+  TEXT
+  FILE
+  IMAGE
+  SYSTEM
+  ANNOUNCEMENT
+}
+
+model ProboIntegration {
+  id                   String              @id @default(cuid())
+  organizationId       String              @unique
+  apiKeyEncrypted      String?
+  webhookUrl           String?
+  webhookSecret        String?
+  config               Json?               // Integration configuration
+  isActive             Boolean             @default(true)
+  lastSyncAt           DateTime?
+  lastSyncStatus       String?
+  lastSyncError        String?
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  organization         Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  metrics              ProboMetric[]
+
+  @@map("probo_integrations")
+}
+
+model ProboMetric {
+  id                   String              @id @default(cuid())
+  integrationId        String
+  metricType           String              // vulnerability_score, security_posture, etc.
+  metricValue          Json                // Flexible JSON for different metric types
+  metadata             Json?               // Additional context
+  timestamp            DateTime            @default(now())
+  integration          ProboIntegration    @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+
+  @@index([integrationId])
+  @@index([metricType])
+  @@index([timestamp])
+  @@map("probo_metrics")
+}
+
+model Cache {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   @db.Text
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([key])
+  @@index([expiresAt])
+  @@map("cache")
 }
