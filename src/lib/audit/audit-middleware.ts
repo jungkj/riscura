@@ -6,8 +6,62 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { getAuditLogger, AuditAction, AuditEntity, AuditEvent } from './audit-logger';
+import { extractIpAddress, getEntityComplianceFlags, inferActionFromMethod, inferClientType, extractAuditContext, createAuditMetadata } from './audit-utils';
 import { authOptions } from '@/lib/auth/auth-options';
 import { prisma } from '@/lib/prisma';
+
+// ============================================================================
+// TYPE GUARDS
+// ============================================================================
+
+/**
+ * Type guard to validate AuditAction values
+ */
+function isValidAuditAction(value: string): value is AuditAction {
+  const validActions: AuditAction[] = [
+    // Authentication Actions
+    'LOGIN', 'LOGOUT', 'LOGIN_FAILED', 'PASSWORD_CHANGE', 'PASSWORD_RESET',
+    'MFA_ENABLE', 'MFA_DISABLE', 'SESSION_EXPIRE', 'ACCOUNT_LOCK',
+    // Data Actions
+    'CREATE', 'READ', 'UPDATE', 'DELETE', 'EXPORT', 'IMPORT', 'BULK_UPDATE',
+    'BULK_DELETE', 'RESTORE', 'ARCHIVE', 'MERGE', 'CLONE', 'SHARE',
+    // Permission Actions
+    'PERMISSION_GRANT', 'PERMISSION_REVOKE', 'ROLE_ASSIGN', 'ROLE_REMOVE',
+    'ACCESS_DENIED', 'ESCALATION_REQUEST', 'ESCALATION_APPROVE',
+    // System Actions
+    'SYSTEM_START', 'SYSTEM_STOP', 'BACKUP_CREATE', 'BACKUP_RESTORE',
+    'CONFIG_CHANGE', 'MAINTENANCE_START', 'MAINTENANCE_END',
+    // Compliance Actions
+    'AUDIT_START', 'AUDIT_END', 'POLICY_UPDATE', 'VIOLATION_DETECTED',
+    'COMPLIANCE_CHECK', 'RISK_ASSESSMENT', 'CONTROL_TEST',
+    // Document Actions
+    'DOCUMENT_UPLOAD', 'DOCUMENT_DOWNLOAD', 'DOCUMENT_VIEW', 'DOCUMENT_EDIT',
+    'DOCUMENT_DELETE', 'DOCUMENT_SHARE', 'DOCUMENT_APPROVE',
+    // Billing Actions
+    'SUBSCRIPTION_CREATE', 'SUBSCRIPTION_UPDATE', 'SUBSCRIPTION_CANCEL',
+    'PAYMENT_SUCCESS', 'PAYMENT_FAILED', 'INVOICE_GENERATE',
+    // AI Actions
+    'AI_QUERY', 'AI_RESPONSE', 'AI_TRAINING', 'AI_MODEL_UPDATE',
+    'PROBO_ANALYSIS', 'RISK_PREDICTION', 'CONTROL_GENERATION'
+  ];
+  return validActions.includes(value as AuditAction);
+}
+
+/**
+ * Type guard to validate AuditEntity values
+ */
+function isValidAuditEntity(value: string): value is AuditEntity {
+  const validEntities: AuditEntity[] = [
+    'USER', 'ORGANIZATION', 'ROLE', 'PERMISSION', 'SESSION',
+    'RISK', 'CONTROL', 'ASSESSMENT', 'COMPLIANCE_FRAMEWORK',
+    'DOCUMENT', 'REPORT', 'DASHBOARD', 'NOTIFICATION',
+    'SUBSCRIPTION', 'INVOICE', 'PAYMENT', 'WEBHOOK',
+    'API_KEY', 'INTEGRATION', 'BACKUP', 'SYSTEM',
+    'POLICY', 'PROCEDURE', 'INCIDENT', 'QUESTIONNAIRE',
+    'AI_MODEL', 'ANALYTICS', 'EXPORT', 'IMPORT'
+  ];
+  return validEntities.includes(value as AuditEntity);
+}
 
 // ============================================================================
 // MIDDLEWARE FUNCTION
@@ -71,8 +125,14 @@ export function withAuditLogging<T extends any[]>(
     const baseEvent = {
       userId,
       organizationId,
-      action: options.action || inferActionFromMethod(method),
-      entity: options.entity || 'API',
+      action: options.action || (() => {
+        const inferredAction = inferActionFromMethod(method);
+        return isValidAuditAction(inferredAction) ? inferredAction : 'READ';
+      })(),
+      entity: options.entity || (() => {
+        const defaultEntity = 'API_KEY';
+        return isValidAuditEntity(defaultEntity) ? defaultEntity : 'SYSTEM';
+      })(),
       entityId: typeof entityId === 'string' ? entityId : undefined,
       resource: options.resource || path.split('/')[2] || 'unknown',
       method,
@@ -172,7 +232,7 @@ export function withDataAudit(
     handler: (req: NextRequest, ...args: T) => Promise<NextResponse>
   ) {
     return withAuditLogging(handler, {
-      action: action || inferActionFromMethod(req.method),
+      action: action || 'READ',
       entity,
       entityId: entityIdExtractor,
       resource: entity.toLowerCase(),
@@ -193,7 +253,7 @@ export function withDataAudit(
  */
 export function withPermissionAudit(
   requiredPermission: string,
-  entity: AuditEntity = 'API'
+  entity: AuditEntity = 'API_KEY'
 ) {
   return function<T extends any[]>(
     handler: (req: NextRequest, ...args: T) => Promise<NextResponse>
@@ -263,97 +323,15 @@ export function withComplianceAudit(
   };
 }
 
-// ============================================================================
-// UTILITY FUNCTIONS
-// ============================================================================
 
-function extractIpAddress(request: NextRequest): string {
-  return (
-    request.headers.get('x-forwarded-for')?.split(',')[0] ||
-    request.headers.get('x-real-ip') ||
-    request.ip ||
-    'unknown'
-  );
-}
 
-function inferActionFromMethod(method: string): AuditAction {
-  const methodMap: Record<string, AuditAction> = {
-    GET: 'READ',
-    POST: 'CREATE',
-    PUT: 'UPDATE',
-    PATCH: 'UPDATE',
-    DELETE: 'DELETE',
-  };
-  return methodMap[method.toUpperCase()] || 'READ';
-}
 
-function inferClientType(userAgent?: string): AuditEvent['clientType'] {
-  if (!userAgent) return 'unknown' as any;
-  
-  if (userAgent.includes('Mobile') || userAgent.includes('Android') || userAgent.includes('iPhone')) {
-    return 'mobile';
-  }
-  
-  if (userAgent.includes('curl') || userAgent.includes('Postman') || userAgent.includes('axios')) {
-    return 'api';
-  }
-  
-  return 'web';
-}
 
-function getEntityComplianceFlags(entity: AuditEntity): string[] {
-  const complianceMap: Record<string, string[]> = {
-    USER: ['SOX', 'GDPR', 'SOC2', 'HIPAA'],
-    RISK: ['SOX', 'SOC2', 'ISO27001'],
-    CONTROL: ['SOC2', 'ISO27001', 'NIST'],
-    COMPLIANCE_FRAMEWORK: ['SOX', 'SOC2', 'ISO27001'],
-    DOCUMENT: ['GDPR', 'SOC2', 'HIPAA'],
-    PAYMENT: ['PCI_DSS', 'SOX'],
-    SUBSCRIPTION: ['SOX', 'PCI_DSS'],
-    SYSTEM: ['SOC2', 'ISO27001'],
-    ORGANIZATION: ['SOX', 'GDPR', 'SOC2'],
-    API_KEY: ['SOC2', 'ISO27001'],
-    INTEGRATION: ['SOC2'],
-    ASSESSMENT: ['SOC2', 'ISO27001'],
-    REPORT: ['SOC2'],
-  };
-
-  return complianceMap[entity] || ['SOC2'];
-}
 
 // ============================================================================
 // AUDIT QUERY HELPERS
 // ============================================================================
 
-/**
- * Helper to extract common audit context from requests
- */
-export function extractAuditContext(req: NextRequest) {
-  return {
-    userAgent: req.headers.get('user-agent') || undefined,
-    ipAddress: extractIpAddress(req),
-    organizationId: req.headers.get('organization-id') || 'unknown',
-    sessionId: req.headers.get('x-session-id') || undefined,
-    requestId: req.headers.get('x-request-id') || `req_${Date.now()}`,
-    clientType: inferClientType(req.headers.get('user-agent') || undefined),
-    timestamp: new Date(),
-  };
-}
-
-/**
- * Helper to create audit metadata for specific operations
- */
-export function createAuditMetadata(
-  operation: string,
-  additionalData?: Record<string, any>
-): Record<string, any> {
-  return {
-    operation,
-    timestamp: new Date().toISOString(),
-    auditVersion: '1.0',
-    ...additionalData,
-  };
-}
 
 // ============================================================================
 // BATCH AUDIT OPERATIONS
@@ -416,8 +394,6 @@ export {
   withPermissionAudit,
   withSystemAudit,
   withComplianceAudit,
-  extractAuditContext,
-  createAuditMetadata,
   logBatchAuditEvents,
   logBulkOperation,
 };
