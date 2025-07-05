@@ -1346,6 +1346,7 @@ model TestExecution {
   @@index([controlId])
   @@index([executedBy])
   @@index([status])
+  @@index([executionDate])
   @@map("test_executions")
 }
 
