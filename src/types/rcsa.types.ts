@@ -9,7 +9,10 @@ import {
   AutomationLevel as PrismaAutomationLevel,
   EffectivenessRating as PrismaEffectivenessRating,
   Priority as PrismaPriority,
-  ControlEffort as PrismaControlEffort
+  ControlEffort as PrismaControlEffort,
+  TestScriptType as PrismaTestScriptType,
+  TestFrequency as PrismaTestFrequency,
+  TestStatus as PrismaTestStatus
 } from '@prisma/client';
 
 // Re-export Prisma enums for consistency
@@ -23,6 +26,9 @@ export const AutomationLevel = PrismaAutomationLevel;
 export const EffectivenessRating = PrismaEffectivenessRating;
 export const Priority = PrismaPriority;
 export const ControlEffort = PrismaControlEffort;
+export const TestScriptType = PrismaTestScriptType;
+export const TestFrequency = PrismaTestFrequency;
+export const TestStatus = PrismaTestStatus;
 
 export type RiskCategory = PrismaRiskCategory;
 export type RiskStatus = PrismaRiskStatus;
@@ -34,6 +40,9 @@ export type AutomationLevel = PrismaAutomationLevel;
 export type EffectivenessRating = PrismaEffectivenessRating;
 export type Priority = PrismaPriority;
 export type ControlEffort = PrismaControlEffort;
+export type TestScriptType = PrismaTestScriptType;
+export type TestFrequency = PrismaTestFrequency;
+export type TestStatus = PrismaTestStatus;
 
 // Standardized Risk interface
 export interface Risk {
@@ -109,6 +118,7 @@ export interface Control {
   comments?: Comment[];
   tasks?: Task[];
   activities?: Activity[];
+  testScripts?: TestScript[];
 }
 
 // Standardized ControlRiskMapping interface
@@ -414,4 +424,146 @@ export interface Activity {
   description: string;
   metadata?: Record<string, any>;
   createdAt: Date;
+}
+
+// Test Script interfaces
+export interface TestStep {
+  id: string;
+  order: number;
+  description: string;
+  expectedResult: string;
+  dataRequired?: string;
+  notes?: string;
+}
+
+export interface TestScript {
+  id: string;
+  title: string;
+  description: string;
+  steps: TestStep[];
+  expectedResults: string;
+  testType: TestScriptType;
+  frequency: TestFrequency;
+  estimatedDuration?: number;
+  automationCapable: boolean;
+  automationScript?: string;
+  tags: string[];
+  organizationId: string;
+  createdBy?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  
+  // Relations
+  controls?: ControlTestScript[];
+  testExecutions?: TestExecution[];
+}
+
+export interface ControlTestScript {
+  id: string;
+  controlId: string;
+  testScriptId: string;
+  isMandatory: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  
+  // Relations
+  control?: Control;
+  testScript?: TestScript;
+}
+
+export interface TestExecution {
+  id: string;
+  testScriptId: string;
+  controlId: string;
+  executedBy: string;
+  executionDate: Date;
+  status: TestStatus;
+  results: TestResult[];
+  evidence: string[];
+  notes?: string;
+  duration?: number;
+  createdAt: Date;
+  updatedAt: Date;
+  
+  // Relations
+  testScript?: TestScript;
+  executor?: User;
+}
+
+export interface TestResult {
+  stepId: string;
+  status: 'passed' | 'failed' | 'skipped' | 'not_applicable';
+  actualResult: string;
+  notes?: string;
+  evidence?: string[];
+}
+
+// Extended Control interface with test scripts
+export interface ControlWithTestScripts extends Control {
+  testScripts?: TestScript[];
+}
+
+// API Request/Response types for Test Scripts
+export interface CreateTestScriptRequest {
+  title: string;
+  description: string;
+  steps: Omit<TestStep, 'id'>[];
+  expectedResults: string;
+  testType: TestScriptType;
+  frequency: TestFrequency;
+  estimatedDuration?: number;
+  automationCapable?: boolean;
+  automationScript?: string;
+  tags?: string[];
+  controlIds?: string[]; // Controls to associate with
+}
+
+export interface UpdateTestScriptRequest {
+  title?: string;
+  description?: string;
+  steps?: TestStep[];
+  expectedResults?: string;
+  testType?: TestScriptType;
+  frequency?: TestFrequency;
+  estimatedDuration?: number;
+  automationCapable?: boolean;
+  automationScript?: string;
+  tags?: string[];
+}
+
+export interface TestScriptQueryParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  testType?: TestScriptType | TestScriptType[];
+  frequency?: TestFrequency | TestFrequency[];
+  automationCapable?: boolean;
+  controlId?: string;
+  tags?: string[];
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
+
+export interface ExecuteTestRequest {
+  testScriptId: string;
+  controlId: string;
+  results: TestResult[];
+  evidence?: string[];
+  notes?: string;
+  duration?: number;
+}
+
+// AI Generation types
+export interface GenerateTestScriptRequest {
+  controlId: string;
+  controlDescription?: string;
+  testObjective?: string;
+  additionalContext?: string;
+}
+
+export interface GenerateTestScriptResponse {
+  testScript: Omit<TestScript, 'id' | 'organizationId' | 'createdAt' | 'updatedAt'>;
+  confidence: number;
+  reasoning: string;
+  suggestions?: string[];
 } 

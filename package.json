@@ -81,6 +81,8 @@
     "test:setup": "playwright test --project=setup",
     "test:cleanup": "playwright test --project=cleanup",
     "test:clean": "rimraf test-results coverage .nyc_output",
+    "test:auth-flow": "tsx scripts/test-auth-flow.ts",
+    "test:auth-integration": "jest src/__tests__/integration/auth-api-test.ts",
     "pretest:e2e": "npm run test:setup",
     "posttest:e2e": "npm run test:cleanup",
     "monitoring:init": "echo 'Initializing monitoring systems...' && npm run monitoring:verify",

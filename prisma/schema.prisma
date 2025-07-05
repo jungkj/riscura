@@ -36,12 +36,7 @@ model Organization {
   users                User[]
   workflows            Workflow[]
   workflows_v2         WorkflowV2[]
-  proboControls        ProboControl[]
-  proboTasks           ProboTask[]
-  proboEvidence        ProboEvidence[]
-  vendorAssessments    VendorAssessment[]
-  complianceFrameworks ComplianceFramework[]
-  auditLogs            AuditLog[]
+  testScripts          TestScript[]
 
   @@map("organizations")
 }
@@ -97,10 +92,8 @@ model User {
   assignedWorkflowSteps    WorkflowStep[]           @relation("WorkflowStepAssignedTo")
   createdWorkflows         Workflow[]               @relation("WorkflowCreatedBy")
   receivedMessages         Message[]                @relation("MessageRecipient")
-  assignedProboTasks       ProboTask[]              @relation("ProboTaskAssignedTo")
-  createdProboTasks        ProboTask[]              @relation("ProboTaskAssignedBy")
-  vendorAssessments        VendorAssessment[]       @relation("VendorAssessmentAssessor")
-  auditLogs                AuditLog[]               @relation("AuditLogUser")
+  createdTestScripts       TestScript[]             @relation("TestScriptCreatedBy")
+  testExecutions           TestExecution[]          @relation("TestExecutionExecutor")
 
   @@index([organizationId])
   @@index([email])
@@ -141,6 +134,8 @@ model Risk {
   createdAt       DateTime             @default(now())
   updatedAt       DateTime             @updatedAt
   createdBy       String?
+  activities      Activity[]
+  comments        Comment[]
   controls        ControlRiskMapping[]
   creator         User?                @relation("RiskCreatedBy", fields: [createdBy], references: [id])
   organization    Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -200,6 +195,8 @@ model Control {
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
   createdBy           String?
+  activities          Activity[]
+  comments            Comment[]
   risks               ControlRiskMapping[]
   creator             User?                @relation("ControlCreatedBy", fields: [createdBy], references: [id])
   organization        Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -207,7 +204,7 @@ model Control {
   spreadsheetRows     SpreadsheetRow[]     @relation("SpreadsheetRowControl")
   tasks               Task[]
   evidence            Document[]           @relation("ControlEvidence")
-  linkedProboControls ProboControl[]       @relation("ProboControlLinked")
+  testScripts         ControlTestScript[]
 
   @@index([organizationId])
   @@index([type])
@@ -230,6 +227,8 @@ model Document {
   uploadedBy      String?
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
+  activities      Activity[]
+  comments        Comment[]
   organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   uploader        User?        @relation("DocumentCreatedBy", fields: [uploadedBy], references: [id])
   controlEvidence Control[]    @relation("ControlEvidence")
@@ -329,6 +328,7 @@ model Questionnaire {
   createdAt      DateTime            @default(now())
   updatedAt      DateTime            @updatedAt
   createdBy      String?
+  activities     Activity[]
   creator        User?               @relation("QuestionnaireCreatedBy", fields: [createdBy], references: [id])
   organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   responses      Response[]
@@ -371,6 +371,7 @@ model Workflow {
   createdAt               DateTime              @default(now())
   updatedAt               DateTime              @updatedAt
   createdBy               String?
+  activities              Activity[]
   spreadsheetIntegrations SpreadsheetWorkflow[] @relation("SpreadsheetWorkflowIntegration")
   creator                 User?                 @relation("WorkflowCreatedBy", fields: [createdBy], references: [id])
   organization            Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -437,6 +438,7 @@ model Report {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   createdBy      String?
+  activities     Activity[]
   creator        User?        @relation("ReportCreatedBy", fields: [createdBy], references: [id])
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
@@ -466,6 +468,8 @@ model Task {
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   createdBy       String?
+  activities      Activity[]
+  comments        Comment[]
   spreadsheetRows SpreadsheetRow[] @relation("SpreadsheetRowTask")
   assignee        User?            @relation("TaskAssignedTo", fields: [assigneeId], references: [id])
   control         Control?         @relation(fields: [controlId], references: [id])
@@ -512,6 +516,10 @@ model Comment {
   attachments Json?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  controls    Control    @relation(fields: [entityId], references: [id], map: "comment_control_fkey")
+  documents   Document   @relation(fields: [entityId], references: [id], map: "comment_document_fkey")
+  risks       Risk       @relation(fields: [entityId], references: [id], map: "comment_risk_fkey")
+  tasks       Task       @relation(fields: [entityId], references: [id], map: "comment_task_fkey")
   author      User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   parent      Comment?   @relation("CommentReplies", fields: [parentId], references: [id])
   replies     Comment[]  @relation("CommentReplies")
@@ -568,6 +576,13 @@ model Activity {
   createdAt      DateTime      @default(now())
   organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   user           User?         @relation("ActivityCreatedBy", fields: [userId], references: [id])
+  controls       Control       @relation(fields: [entityId], references: [id], map: "activity_control_fkey")
+  documents      Document      @relation(fields: [entityId], references: [id], map: "activity_document_fkey")
+  questionnaires Questionnaire @relation(fields: [entityId], references: [id], map: "activity_questionnaire_fkey")
+  reports        Report        @relation(fields: [entityId], references: [id], map: "activity_report_fkey")
+  risks          Risk          @relation(fields: [entityId], references: [id], map: "activity_risk_fkey")
+  tasks          Task          @relation(fields: [entityId], references: [id], map: "activity_task_fkey")
+  workflows      Workflow      @relation(fields: [entityId], references: [id], map: "activity_workflow_fkey")
 
   @@index([organizationId])
   @@index([entityType, entityId])
@@ -888,14 +903,16 @@ model SpreadsheetRow {
   position        Int
   isHidden        Boolean           @default(false)
   height          Int               @default(40)
-  linkedRiskId    String?
-  linkedControlId String?
-  linkedTaskId    String?
-  cells           SpreadsheetCell[]
-  linkedControl   Control?          @relation("SpreadsheetRowControl", fields: [linkedControlId], references: [id])
-  linkedRisk      Risk?             @relation("SpreadsheetRowRisk", fields: [linkedRiskId], references: [id])
-  linkedTask      Task?             @relation("SpreadsheetRowTask", fields: [linkedTaskId], references: [id])
-  sheet           SpreadsheetSheet  @relation(fields: [sheetId], references: [id], onDelete: Cascade)
+  linkedRiskId       String?
+  linkedControlId    String?
+  linkedTaskId       String?
+  linkedTestScriptId String?
+  cells              SpreadsheetCell[]
+  linkedControl      Control?          @relation("SpreadsheetRowControl", fields: [linkedControlId], references: [id])
+  linkedRisk         Risk?             @relation("SpreadsheetRowRisk", fields: [linkedRiskId], references: [id])
+  linkedTask         Task?             @relation("SpreadsheetRowTask", fields: [linkedTaskId], references: [id])
+  linkedTestScript   TestScript?       @relation("SpreadsheetRowTestScript", fields: [linkedTestScriptId], references: [id])
+  sheet              SpreadsheetSheet  @relation(fields: [sheetId], references: [id], onDelete: Cascade)
 
   @@index([sheetId])
   @@index([linkedRiskId])
@@ -1014,183 +1031,6 @@ model SpreadsheetTemplate {
   @@index([templateType])
   @@index([category])
   @@map("spreadsheet_templates")
-}
-
-model ProboControl {
-  id                        String                 @id @default(cuid())
-  controlId                 String?
-  title                     String
-  name                      String
-  category                  String
-  importance               String                 @default("PREFERRED")
-  standards                String[]               @default([])
-  description              String
-  status                   String                 @default("NOT_IMPLEMENTED")
-  assignedTo               String?
-  dueDate                  DateTime?
-  completedDate            DateTime?
-  riskReduction            Int                    @default(0)
-  implementationEffort     String                 @default("MEDIUM")
-  implementationComplexity String                 @default("MEDIUM")
-  businessImpact           String                 @default("MEDIUM")
-  estimatedHours           Int                    @default(0)
-  evidenceRequirements     String[]               @default([])
-  organizationId           String
-  createdAt                DateTime               @default(now())
-  updatedAt                DateTime               @updatedAt
-  
-  organization             Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  linkedControl            Control?               @relation("ProboControlLinked", fields: [controlId], references: [id])
-  tasks                    ProboTask[]
-  evidences                ProboEvidence[]
-  measures                 ProboMeasure[]
-
-  @@index([organizationId])
-  @@index([controlId])
-  @@map("probo_controls")
-}
-
-model ProboTask {
-  id             String       @id @default(cuid())
-  title          String
-  description    String
-  priority       String       @default("MEDIUM")
-  estimatedHours Int          @default(0)
-  dueDate        DateTime?
-  assignedTo     String?
-  assignedBy     String?
-  controlId      String
-  organizationId String
-  status         String       @default("TODO")
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  
-  control        ProboControl @relation(fields: [controlId], references: [id], onDelete: Cascade)
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  assignedUser   User?        @relation("ProboTaskAssignedTo", fields: [assignedTo], references: [id])
-  assignedByUser User?        @relation("ProboTaskAssignedBy", fields: [assignedBy], references: [id])
-
-  @@index([controlId])
-  @@index([organizationId])
-  @@index([assignedTo])
-  @@index([assignedBy])
-  @@map("probo_tasks")
-}
-
-model ProboEvidence {
-  id             String       @id @default(cuid())
-  title          String
-  description    String?
-  validUntil     DateTime?
-  status         String       @default("PENDING")
-  controlId      String?
-  organizationId String
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  
-  control        ProboControl? @relation(fields: [controlId], references: [id], onDelete: Cascade)
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-
-  @@index([organizationId])
-  @@index([controlId])
-  @@map("probo_evidence")
-}
-
-model ProboMeasure {
-  id                 String       @id @default(cuid())
-  controlId          String
-  effectivenessScore Int          @default(50)
-  createdAt          DateTime     @default(now())
-  updatedAt          DateTime     @updatedAt
-  
-  control            ProboControl @relation(fields: [controlId], references: [id], onDelete: Cascade)
-
-  @@index([controlId])
-  @@map("probo_measures")
-}
-
-model VendorAssessment {
-  id                String            @id @default(cuid())
-  vendorName        String
-  vendorUrl         String?
-  overallRiskScore  Int
-  securityScore     Int
-  complianceScore   Int
-  financialScore    Int
-  operationalScore  Int
-  assessmentMethod  AssessmentMethod  @default(MANUAL)
-  assessorId        String
-  aiFindings        Json?
-  recommendations   String[]          @default([])
-  assessmentDate    DateTime          @default(now())
-  organizationId    String
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
-  
-  organization      Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  assessor          User              @relation("VendorAssessmentAssessor", fields: [assessorId], references: [id])
-  findings          VendorFinding[]
-
-  @@unique([organizationId, vendorName])
-  @@index([organizationId])
-  @@index([vendorName])
-  @@index([assessorId])
-  @@map("vendor_assessments")
-}
-
-model VendorFinding {
-  id             String           @id @default(cuid())
-  category       String
-  severity       String
-  title          String
-  description    String
-  remediation    String
-  status         String           @default("OPEN")
-  dueDate        DateTime?
-  assessmentId   String
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  
-  assessment     VendorAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
-
-  @@index([assessmentId])
-  @@map("vendor_findings")
-}
-
-model ComplianceFramework {
-  id             String                      @id @default(cuid())
-  name           String
-  version        String?
-  description    String?
-  organizationId String
-  createdAt      DateTime                    @default(now())
-  updatedAt      DateTime                    @updatedAt
-  
-  organization   Organization                @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  requirements   ComplianceFrameworkRequirement[]
-
-  @@unique([organizationId, name, version])
-  @@index([organizationId])
-  @@index([name])
-  @@map("compliance_frameworks")
-}
-
-model ComplianceFrameworkRequirement {
-  id                    String              @id @default(cuid())
-  requirementId         String
-  title                 String
-  description           String?
-  status                String              @default("NOT_STARTED")
-  frameworkId           String
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @updatedAt
-  
-  framework             ComplianceFramework @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
-
-  @@unique([frameworkId, requirementId])
-  @@index([frameworkId])
-  @@index([requirementId])
-  @@map("compliance_framework_requirements")
 }
 
 enum UserRole {
@@ -1424,6 +1264,7 @@ enum ColumnDataType {
   RISK_REFERENCE
   CONTROL_REFERENCE
   TASK_REFERENCE
+  TEST_SCRIPT_REFERENCE
   CALCULATED
   RATING
   CURRENCY
@@ -1441,71 +1282,99 @@ enum SpreadsheetPermissionType {
   VIEWER
 }
 
-enum AssessmentMethod {
+model TestScript {
+  id                   String              @id @default(cuid())
+  title                String
+  description          String
+  steps                Json                // Array of test steps
+  expectedResults      String
+  testType             TestScriptType
+  frequency            TestFrequency
+  estimatedDuration    Int?                // Duration in minutes
+  automationCapable    Boolean             @default(false)
+  automationScript     String?             // Script for automated testing
+  tags                 String[]            @default([])
+  organizationId       String
+  createdBy            String?
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  controls             ControlTestScript[]
+  testExecutions       TestExecution[]
+  spreadsheetRows      SpreadsheetRow[]    @relation("SpreadsheetRowTestScript")
+  creator              User?               @relation("TestScriptCreatedBy", fields: [createdBy], references: [id])
+  organization         Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([testType])
+  @@index([frequency])
+  @@map("test_scripts")
+}
+
+model ControlTestScript {
+  id            String     @id @default(cuid())
+  controlId     String
+  testScriptId  String
+  isMandatory   Boolean    @default(true)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  control       Control    @relation(fields: [controlId], references: [id], onDelete: Cascade)
+  testScript    TestScript @relation(fields: [testScriptId], references: [id], onDelete: Cascade)
+
+  @@unique([controlId, testScriptId])
+  @@index([controlId])
+  @@index([testScriptId])
+  @@map("control_test_scripts")
+}
+
+model TestExecution {
+  id              String         @id @default(cuid())
+  testScriptId    String
+  controlId       String
+  executedBy      String
+  executionDate   DateTime       @default(now())
+  status          TestStatus
+  results         Json           // Detailed test results
+  evidence        String[]       @default([]) // File paths or document IDs
+  notes           String?
+  duration        Int?           // Actual duration in minutes
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  testScript      TestScript     @relation(fields: [testScriptId], references: [id])
+  executor        User           @relation("TestExecutionExecutor", fields: [executedBy], references: [id])
+
+  @@index([testScriptId])
+  @@index([controlId])
+  @@index([executedBy])
+  @@index([status])
+  @@map("test_executions")
+}
+
+enum TestScriptType {
   MANUAL
   AUTOMATED
   HYBRID
+  INQUIRY
+  OBSERVATION
+  INSPECTION
+  REPERFORMANCE
 }
 
-// ============================================================================
-// AUDIT LOGGING MODELS
-// ============================================================================
-
-model AuditLog {
-  id              String       @id @default(cuid())
-  timestamp       DateTime     @default(now())
-  userId          String?
-  organizationId  String
-  action          String
-  entity          String
-  entityId        String?
-  resource        String
-  method          String
-  path            String
-  userAgent       String?
-  ipAddress       String?
-  sessionId       String?
-  changes         String?      // JSON string of changes
-  metadata        String?      // JSON string of metadata
-  severity        AuditSeverity
-  status          AuditStatus
-  errorMessage    String?
-  duration        Int?         // Duration in milliseconds
-  requestId       String?
-  apiVersion      String?
-  clientType      String?
-  geolocation     String?      // JSON string of geolocation data
-  complianceFlags String?      // JSON array of compliance flags
-  retentionPeriod Int?         // Retention period in days
-  encrypted       Boolean      @default(false)
-  createdAt       DateTime     @default(now())
-
-  // Relations
-  user         User?         @relation("AuditLogUser", fields: [userId], references: [id], onDelete: SetNull)
-  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-
-  @@index([organizationId])
-  @@index([userId])
-  @@index([timestamp])
-  @@index([action])
-  @@index([entity])
-  @@index([severity])
-  @@index([status])
-  @@index([timestamp, organizationId])
-  @@index([action, entity])
-  @@map("audit_logs")
+enum TestFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  SEMI_ANNUAL
+  ANNUAL
+  AD_HOC
+  CONTINUOUS
 }
 
-enum AuditSeverity {
-  LOW
-  MEDIUM
-  HIGH
-  CRITICAL
-}
-
-enum AuditStatus {
-  SUCCESS
-  FAILURE
-  WARNING
-  INFO
+enum TestStatus {
+  PASSED
+  FAILED
+  PARTIAL
+  NOT_APPLICABLE
+  IN_PROGRESS
+  PENDING
 }
