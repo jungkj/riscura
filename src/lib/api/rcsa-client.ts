@@ -22,7 +22,8 @@ import {
   ExecuteTestRequest,
   TestExecution,
   GenerateTestScriptRequest,
-  GenerateTestScriptResponse
+  GenerateTestScriptResponse,
+  TestScriptControl
 } from '@/types/rcsa.types';
 import { getSession } from 'next-auth/react';
 
@@ -505,8 +506,8 @@ export class RCSAApiClient {
   }
 
   // Test Script Control associations
-  async getTestScriptControls(testScriptId: string): Promise<ApiResponse<any[]>> {
-    return this.request(`/test-scripts/${testScriptId}/controls`);
+  async getTestScriptControls(testScriptId: string): Promise<ApiResponse<TestScriptControl[]>> {
+    return this.request<TestScriptControl[]>(`/test-scripts/${testScriptId}/controls`);
   }
 
   async associateTestScriptControls(

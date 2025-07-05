@@ -1,7 +1,21 @@
 import { AIService } from './AIService';
+import { ControlType } from '@/types/rcsa.types';
 
 // Import actual Probo data
 import mitigationsData from '@/data/mitigations.json';
+
+// Testing guidance interfaces
+export interface TestStep {
+  description: string;
+  expectedResult: string;
+  dataRequired: string;
+  notes: string;
+}
+
+export interface ControlTestingGuidance {
+  testSteps: TestStep[];
+  suggestions: string[];
+}
 
 export interface VendorInfo {
   name: string;
@@ -465,10 +479,10 @@ export class ProboService {
   }
 
   // Get control testing guidance
-  async getControlTestingGuidance(controlType: string): Promise<any> {
+  async getControlTestingGuidance(controlType: ControlType): Promise<ControlTestingGuidance | null> {
     try {
       // Map control types to testing approaches
-      const testingGuidance: Record<string, any> = {
+      const testingGuidance: Record<ControlType, ControlTestingGuidance> = {
         'PREVENTIVE': {
           testSteps: [
             {
@@ -551,6 +565,27 @@ export class ProboService {
             'Assess control overlap and redundancy',
             'Evaluate cost-effectiveness of compensation',
             'Plan for primary control restoration'
+          ]
+        },
+        'DIRECTIVE': {
+          testSteps: [
+            {
+              description: 'Verify control provides clear guidance and direction',
+              expectedResult: 'Policies and procedures are comprehensive and current',
+              dataRequired: 'Policy documents, procedure manuals',
+              notes: 'Check for version control and approval status'
+            },
+            {
+              description: 'Test awareness and compliance with directives',
+              expectedResult: 'Staff understand and follow documented procedures',
+              dataRequired: 'Training records, compliance assessments',
+              notes: 'Sample testing of staff knowledge'
+            }
+          ],
+          suggestions: [
+            'Assess clarity and completeness of guidance',
+            'Verify accessibility of documentation',
+            'Measure compliance rates and understanding'
           ]
         }
       };

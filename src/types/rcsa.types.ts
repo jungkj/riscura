@@ -471,6 +471,24 @@ export interface ControlTestScript {
   testScript?: TestScript;
 }
 
+// Interface for test script control associations
+export interface TestScriptControl {
+  id: string;
+  controlId: string;
+  testScriptId: string;
+  isMandatory: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  control?: {
+    id: string;
+    title: string;
+    type: ControlType;
+    status: ControlStatus;
+    category?: ControlCategory;
+    effectiveness?: number;
+  };
+}
+
 export interface TestExecution {
   id: string;
   testScriptId: string;

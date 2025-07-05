@@ -186,6 +186,32 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
   
   const data = validationResult.data as CreateTestScriptRequest;
   
+  // Validate control IDs if provided
+  if (data.controlIds && data.controlIds.length > 0) {
+    const controls = await db.control.findMany({
+      where: {
+        id: { in: data.controlIds },
+        organizationId: user.organizationId
+      },
+      select: { id: true }
+    });
+    
+    const foundControlIds = controls.map(c => c.id);
+    const invalidControlIds = data.controlIds.filter(id => !foundControlIds.includes(id));
+    
+    if (invalidControlIds.length > 0) {
+      return ApiResponseFormatter.error(
+        'Invalid control IDs provided',
+        400,
+        'INVALID_CONTROLS',
+        {
+          invalidIds: invalidControlIds,
+          message: 'Some control IDs do not exist or do not belong to your organization'
+        }
+      );
+    }
+  }
+  
   // Create test script with control associations
   const testScript = await db.testScript.create({
     data: {

@@ -7,8 +7,24 @@ import {
   TestScriptType,
   TestFrequency,
   TestStep,
-  Control
+  Control,
+  ControlType,
+  ControlCategory,
+  AutomationLevel
 } from '@/types/rcsa.types';
+
+// Interface for AI generation context
+interface TestScriptGenerationContext {
+  controlTitle: string;
+  controlDescription: string;
+  controlType: ControlType | string;
+  controlCategory: ControlCategory | string;
+  controlFrequency: string;
+  automationLevel: AutomationLevel | string;
+  testObjective: string;
+  additionalContext: string;
+  relatedRisks: string;
+}
 
 export class TestScriptGenerationAIService {
   private aiService: AIService;
@@ -62,6 +78,16 @@ export class TestScriptGenerationAIService {
         maxTokens: 2000
       });
       
+      // Track token usage
+      if (aiResponse.usage) {
+        await this.trackTokenUsage(
+          userId,
+          organizationId,
+          aiResponse.usage,
+          'test-script-generation'
+        );
+      }
+      
       // Parse AI response into structured test script
       const parsedScript = this.parseAIResponse(aiResponse.content);
       
@@ -89,7 +115,7 @@ export class TestScriptGenerationAIService {
     }
   }
 
-  private prepareContext(control: Control | null, request: GenerateTestScriptRequest) {
+  private prepareContext(control: Control | null, request: GenerateTestScriptRequest): TestScriptGenerationContext {
     return {
       controlTitle: control?.title || 'Control',
       controlDescription: request.controlDescription || control?.description || '',
@@ -103,7 +129,7 @@ export class TestScriptGenerationAIService {
     };
   }
 
-  private buildPrompt(context: any): string {
+  private buildPrompt(context: TestScriptGenerationContext): string {
     return `Generate a comprehensive test script for the following control:
 
 Control Title: ${context.controlTitle}
@@ -342,5 +368,50 @@ Always provide practical, implementable test scripts that auditors and control o
     
     // Cap at 0.95
     return Math.min(confidence, 0.95);
+  }
+
+  private async trackTokenUsage(
+    userId: string,
+    organizationId: string,
+    usage: {
+      prompt_tokens?: number;
+      completion_tokens?: number;
+      total_tokens?: number;
+    },
+    context: string
+  ): Promise<void> {
+    try {
+      // Log token usage to database
+      await db.aIUsageLog.create({
+        data: {
+          userId,
+          organizationId,
+          model: 'gpt-4', // Default model, could be parameterized
+          promptTokens: usage.prompt_tokens || 0,
+          completionTokens: usage.completion_tokens || 0,
+          totalTokens: usage.total_tokens || 0,
+          context,
+          timestamp: new Date(),
+          cost: this.calculateCost(usage)
+        }
+      });
+    } catch (error) {
+      console.error('Failed to track AI token usage:', error);
+      // Don't throw - token tracking failure shouldn't break the main flow
+    }
+  }
+
+  private calculateCost(usage: {
+    prompt_tokens?: number;
+    completion_tokens?: number;
+  }): number {
+    // GPT-4 pricing (example rates - adjust to actual)
+    const promptCostPer1k = 0.03;
+    const completionCostPer1k = 0.06;
+    
+    const promptCost = ((usage.prompt_tokens || 0) / 1000) * promptCostPer1k;
+    const completionCost = ((usage.completion_tokens || 0) / 1000) * completionCostPer1k;
+    
+    return promptCost + completionCost;
   }
 }
