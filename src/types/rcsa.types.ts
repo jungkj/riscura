@@ -458,6 +458,10 @@ export interface TestScript {
   testExecutions?: TestExecution[];
 }
 
+/**
+ * Represents the many-to-many relationship between Controls and Test Scripts
+ * This interface is used for both database relations and API responses
+ */
 export interface ControlTestScript {
   id: string;
   controlId: string;
@@ -466,20 +470,8 @@ export interface ControlTestScript {
   createdAt: Date;
   updatedAt: Date;
   
-  // Relations
-  control?: Control;
-  testScript?: TestScript;
-}
-
-// Interface for test script control associations
-export interface TestScriptControl {
-  id: string;
-  controlId: string;
-  testScriptId: string;
-  isMandatory: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  control?: {
+  // Relations - can be either full objects or partial depending on context
+  control?: Control | {
     id: string;
     title: string;
     type: ControlType;
@@ -487,7 +479,11 @@ export interface TestScriptControl {
     category?: ControlCategory;
     effectiveness?: number;
   };
+  testScript?: TestScript;
 }
+
+// Type alias for backward compatibility - will be deprecated
+export type TestScriptControl = ControlTestScript;
 
 export interface TestExecution {
   id: string;

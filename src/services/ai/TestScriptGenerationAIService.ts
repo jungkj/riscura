@@ -71,11 +71,21 @@ export class TestScriptGenerationAIService {
       const context = this.prepareContext(control, request);
       
       // Generate test script using AI
+      const prompt = this.buildPrompt(context);
+      const systemPrompt = this.getSystemPrompt();
+      
       const aiResponse = await this.aiService.generateContent({
-        prompt: this.buildPrompt(context),
-        systemPrompt: this.getSystemPrompt(),
-        temperature: 0.7,
-        maxTokens: 2000
+        type: 'test_script_generation',
+        context: {
+          prompt,
+          systemPrompt,
+          temperature: 0.7,
+          maxTokens: 2000,
+          controlContext: context
+        },
+        requirements: `Generate a comprehensive test script based on the provided control information. ${prompt}`,
+        userId,
+        organizationId
       });
       
       // Track token usage
