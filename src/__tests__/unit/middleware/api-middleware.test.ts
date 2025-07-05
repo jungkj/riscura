@@ -44,7 +44,7 @@ jest.mock('@/lib/billing/manager', () => ({
   billingManager: mockBillingManager
 }));
 
-import { TestUser, TestOrganization, createTestUser, createTestOrganization, createTestSubscriptionPlan, createTestSubscription } from '@/__tests__/utils/test-helpers';
+import type { TestUser, TestOrganization } from '@/__tests__/utils/test-helpers';
 import type { SubscriptionPlan, OrganizationSubscription } from '@/lib/billing/types';
 
 describe('API Middleware', () => {

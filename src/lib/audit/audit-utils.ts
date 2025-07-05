@@ -67,7 +67,7 @@ export function inferActionFromMethod(method: string): string {
     PATCH: 'UPDATE',
     DELETE: 'DELETE',
   };
-  return methodMap[method.toUpperCase()] || 'read';
+  return methodMap[method.toUpperCase()] || 'READ';
 }
 
 /**

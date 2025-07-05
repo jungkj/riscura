@@ -11,6 +11,59 @@ import { authOptions } from '@/lib/auth/auth-options';
 import { prisma } from '@/lib/prisma';
 
 // ============================================================================
+// TYPE GUARDS
+// ============================================================================
+
+/**
+ * Type guard to validate AuditAction values
+ */
+function isValidAuditAction(value: string): value is AuditAction {
+  const validActions: AuditAction[] = [
+    // Authentication Actions
+    'LOGIN', 'LOGOUT', 'LOGIN_FAILED', 'PASSWORD_CHANGE', 'PASSWORD_RESET',
+    'MFA_ENABLE', 'MFA_DISABLE', 'SESSION_EXPIRE', 'ACCOUNT_LOCK',
+    // Data Actions
+    'CREATE', 'READ', 'UPDATE', 'DELETE', 'EXPORT', 'IMPORT', 'BULK_UPDATE',
+    'BULK_DELETE', 'RESTORE', 'ARCHIVE', 'MERGE', 'CLONE', 'SHARE',
+    // Permission Actions
+    'PERMISSION_GRANT', 'PERMISSION_REVOKE', 'ROLE_ASSIGN', 'ROLE_REMOVE',
+    'ACCESS_DENIED', 'ESCALATION_REQUEST', 'ESCALATION_APPROVE',
+    // System Actions
+    'SYSTEM_START', 'SYSTEM_STOP', 'BACKUP_CREATE', 'BACKUP_RESTORE',
+    'CONFIG_CHANGE', 'MAINTENANCE_START', 'MAINTENANCE_END',
+    // Compliance Actions
+    'AUDIT_START', 'AUDIT_END', 'POLICY_UPDATE', 'VIOLATION_DETECTED',
+    'COMPLIANCE_CHECK', 'RISK_ASSESSMENT', 'CONTROL_TEST',
+    // Document Actions
+    'DOCUMENT_UPLOAD', 'DOCUMENT_DOWNLOAD', 'DOCUMENT_VIEW', 'DOCUMENT_EDIT',
+    'DOCUMENT_DELETE', 'DOCUMENT_SHARE', 'DOCUMENT_APPROVE',
+    // Billing Actions
+    'SUBSCRIPTION_CREATE', 'SUBSCRIPTION_UPDATE', 'SUBSCRIPTION_CANCEL',
+    'PAYMENT_SUCCESS', 'PAYMENT_FAILED', 'INVOICE_GENERATE',
+    // AI Actions
+    'AI_QUERY', 'AI_RESPONSE', 'AI_TRAINING', 'AI_MODEL_UPDATE',
+    'PROBO_ANALYSIS', 'RISK_PREDICTION', 'CONTROL_GENERATION'
+  ];
+  return validActions.includes(value as AuditAction);
+}
+
+/**
+ * Type guard to validate AuditEntity values
+ */
+function isValidAuditEntity(value: string): value is AuditEntity {
+  const validEntities: AuditEntity[] = [
+    'USER', 'ORGANIZATION', 'ROLE', 'PERMISSION', 'SESSION',
+    'RISK', 'CONTROL', 'ASSESSMENT', 'COMPLIANCE_FRAMEWORK',
+    'DOCUMENT', 'REPORT', 'DASHBOARD', 'NOTIFICATION',
+    'SUBSCRIPTION', 'INVOICE', 'PAYMENT', 'WEBHOOK',
+    'API_KEY', 'INTEGRATION', 'BACKUP', 'SYSTEM',
+    'POLICY', 'PROCEDURE', 'INCIDENT', 'QUESTIONNAIRE',
+    'AI_MODEL', 'ANALYTICS', 'EXPORT', 'IMPORT'
+  ];
+  return validEntities.includes(value as AuditEntity);
+}
+
+// ============================================================================
 // MIDDLEWARE FUNCTION
 // ============================================================================
 
@@ -72,8 +125,14 @@ export function withAuditLogging<T extends any[]>(
     const baseEvent = {
       userId,
       organizationId,
-      action: options.action || (inferActionFromMethod(method) as AuditAction),
-      entity: options.entity || ('API' as AuditEntity),
+      action: options.action || (() => {
+        const inferredAction = inferActionFromMethod(method);
+        return isValidAuditAction(inferredAction) ? inferredAction : 'READ';
+      })(),
+      entity: options.entity || (() => {
+        const defaultEntity = 'API_KEY';
+        return isValidAuditEntity(defaultEntity) ? defaultEntity : 'SYSTEM';
+      })(),
       entityId: typeof entityId === 'string' ? entityId : undefined,
       resource: options.resource || path.split('/')[2] || 'unknown',
       method,
