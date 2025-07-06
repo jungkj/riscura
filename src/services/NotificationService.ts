@@ -636,3 +636,6 @@ export class NotificationService {
 }
 
 export const notificationService = NotificationService.getInstance();
+
+// Default export for compatibility
+export default NotificationService;

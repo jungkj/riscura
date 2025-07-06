@@ -4,11 +4,11 @@ import { db } from '@/lib/db';
 import { 
   withApiMiddleware, 
   createAPIResponse, 
-  NotFoundError,
   ValidationError,
   ConflictError,
   ForbiddenError
 } from '@/lib/api/middleware';
+import { createNotFoundError } from '@/lib/api/error-handler';
 
 export const GET = withApiMiddleware(async (request: NextRequest) => {
   const user = (request as any).user;
@@ -125,7 +125,7 @@ export const PUT = withApiMiddleware(async (request: NextRequest) => {
   });
 
   if (!subscription) {
-    throw new NotFoundError('Subscription not found');
+    throw createNotFoundError('Subscription');
   }
 
   let updatedSubscription;
@@ -183,7 +183,7 @@ export const DELETE = withApiMiddleware(async (request: NextRequest) => {
   });
 
   if (!subscription) {
-    throw new NotFoundError('Subscription not found');
+    throw createNotFoundError('Subscription');
   }
 
   // Cancel subscription

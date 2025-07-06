@@ -100,7 +100,7 @@ export default function RCSAPage() {
             {viewMode === 'notion' ? (
               <NotionRCSASpreadsheet />
             ) : (
-              <RCSASpreadsheet />
+              <RCSASpreadsheet spreadsheetId="default" />
             )}
           </motion.div>
         </div>
