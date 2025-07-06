@@ -5,7 +5,7 @@ import CloudStorageService from '@/services/CloudStorageService';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
   try {
     // Check authentication
@@ -14,8 +14,11 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Get params
+    const resolvedParams = await params;
+    
     // Reconstruct file path
-    const filePath = `/api/files/${params.path.join('/')}`;
+    const filePath = `/api/files/${resolvedParams.path.join('/')}`;
 
     // Check if file exists
     const exists = await CloudStorageService.fileExists(filePath);

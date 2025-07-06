@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
-import { getAuthenticatedUser } from '@/lib/auth/middleware';
 import { 
   ApiResponseFormatter,
   formatValidationErrors 
@@ -35,11 +34,12 @@ const updateTestScriptSchema = z.object({
 });
 
 // GET /api/test-scripts/[id] - Get a single test script
-export const GET = withApiMiddleware(async (
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) => {
-  const user = await getAuthenticatedUser(req);
+export const GET = withApiMiddleware(
+  async (
+    req: NextRequest,
+    { params }: { params: { id: string } }
+  ) => {
+    const user = (req as any).user;
   const { id } = params;
   
   const testScript = await db.testScript.findFirst({
@@ -103,14 +103,17 @@ export const GET = withApiMiddleware(async (
     testScript,
     'Test script retrieved successfully'
   );
-});
+},
+  { requireAuth: true }
+);
 
 // PATCH /api/test-scripts/[id] - Update a test script
-export const PATCH = withApiMiddleware(async (
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) => {
-  const user = await getAuthenticatedUser(req);
+export const PATCH = withApiMiddleware(
+  async (
+    req: NextRequest,
+    { params }: { params: { id: string } }
+  ) => {
+    const user = (req as any).user;
   const { id } = params;
   
   // Verify test script exists and belongs to organization
@@ -202,14 +205,17 @@ export const PATCH = withApiMiddleware(async (
     updatedTestScript,
     'Test script updated successfully'
   );
-});
+},
+  { requireAuth: true }
+);
 
 // DELETE /api/test-scripts/[id] - Delete a test script
-export const DELETE = withApiMiddleware(async (
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) => {
-  const user = await getAuthenticatedUser(req);
+export const DELETE = withApiMiddleware(
+  async (
+    req: NextRequest,
+    { params }: { params: { id: string } }
+  ) => {
+    const user = (req as any).user;
   const { id } = params;
   
   // Verify test script exists and belongs to organization
@@ -275,4 +281,6 @@ export const DELETE = withApiMiddleware(async (
     { id },
     'Test script deleted successfully'
   );
-});
+},
+  { requireAuth: true }
+);

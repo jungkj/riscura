@@ -1,6 +1,5 @@
 import { NextRequest } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
-import { getAuthenticatedUser } from '@/lib/auth/middleware';
 import { 
   ApiResponseFormatter,
   formatValidationErrors 
@@ -23,8 +22,9 @@ const generateTestScriptSchema = z.object({
 });
 
 // POST /api/test-scripts/generate - Generate test script using AI
-export const POST = withApiMiddleware(async (req: NextRequest) => {
-  const user = await getAuthenticatedUser(req);
+export const POST = withApiMiddleware(
+  async (req: NextRequest) => {
+    const user = (req as any).user;
   
   // Parse and validate request body
   const body = await req.json();
@@ -69,4 +69,6 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
       }
     );
   }
-});
+},
+  { requireAuth: true }
+);

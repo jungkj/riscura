@@ -1,68 +1,78 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { withAPI, createAPIResponse, ForbiddenError } from '@/lib/api/middleware';
-import { getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/middleware';
+import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
 
 // GET /api/analytics - Get various analytics data
-export const GET = withAPI(async (req: NextRequest) => {
-  const authReq = req as AuthenticatedRequest;
-  const user = getAuthenticatedUser(authReq);
-
-  if (!user) {
-    throw new ForbiddenError('Authentication required');
-  }
-
-  try {
-    const { searchParams } = new URL(req.url);
-    const type = searchParams.get('type') || 'overview';
-    const timeRange = searchParams.get('timeRange') || '30d';
+export const GET = withApiMiddleware(
+  async (req: NextRequest) => {
+    // Get user from request (added by middleware)
+    const user = (req as any).user;
     
-    // Calculate date range
-    const now = new Date();
-    const daysBack = timeRange === '7d' ? 7 : timeRange === '90d' ? 90 : 30;
-    const startDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
-
-    let analyticsData = {};
-
-    switch (type) {
-      case 'overview':
-      case 'dashboard':
-        analyticsData = await getDashboardAnalytics(user.organizationId, startDate);
-        break;
-      
-      case 'risks':
-        analyticsData = await getRiskAnalytics(user.organizationId, startDate);
-        break;
-      
-      case 'controls':
-        analyticsData = await getControlAnalytics(user.organizationId, startDate);
-        break;
-      
-      case 'compliance':
-        analyticsData = await getComplianceAnalytics(user.organizationId, startDate);
-        break;
-      
-      default:
-        analyticsData = await getDashboardAnalytics(user.organizationId, startDate);
+    if (!user || !user.organizationId) {
+      return NextResponse.json(
+        { success: false, error: 'Organization context required' },
+        { status: 403 }
+      );
     }
 
-    return createAPIResponse({
-      data: analyticsData,
-      meta: {
-        type,
-        timeRange,
-        generatedAt: new Date().toISOString()
-      }
-    });
+    try {
+      const { searchParams } = new URL(req.url);
+      const type = searchParams.get('type') || 'overview';
+      const timeRange = searchParams.get('timeRange') || '30d';
+      
+      // Calculate date range
+      const now = new Date();
+      const daysBack = timeRange === '7d' ? 7 : timeRange === '90d' ? 90 : 30;
+      const startDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
 
-  } catch (error) {
-    console.error('Error fetching analytics:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch analytics data' },
-      { status: 500 }
-    );
-  }
-});
+      let analyticsData = {};
+
+      switch (type) {
+        case 'overview':
+        case 'dashboard':
+          analyticsData = await getDashboardAnalytics(user.organizationId, startDate);
+          break;
+        
+        case 'risks':
+          analyticsData = await getRiskAnalytics(user.organizationId, startDate);
+          break;
+        
+        case 'controls':
+          analyticsData = await getControlAnalytics(user.organizationId, startDate);
+          break;
+        
+        case 'compliance':
+          analyticsData = await getComplianceAnalytics(user.organizationId, startDate);
+          break;
+        
+        default:
+          analyticsData = await getDashboardAnalytics(user.organizationId, startDate);
+      }
+
+      return NextResponse.json({
+        success: true,
+        data: analyticsData,
+        meta: {
+          type,
+          timeRange,
+          generatedAt: new Date().toISOString()
+        }
+      });
+
+    } catch (error) {
+      console.error('Error fetching analytics:', error);
+      return NextResponse.json(
+        { 
+          success: false,
+          error: 'Failed to fetch analytics data',
+          details: error instanceof Error ? error.message : 'Unknown error'
+        },
+        { status: 500 }
+      );
+    }
+  },
+  { requireAuth: true }
+);
 
 async function getDashboardAnalytics(organizationId: string, startDate: Date) {
   const [

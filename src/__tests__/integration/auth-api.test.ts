@@ -32,7 +32,8 @@ describe('Authentication Integration Tests', () => {
           id: 'user-123',
           email: 'test@riscura.com',
           organizationId: 'org-456',
-        },
+        } as any,
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       };
       mockGetSession.mockResolvedValue(mockSession);
 
@@ -65,7 +66,8 @@ describe('Authentication Integration Tests', () => {
         user: {
           id: 'user-123',
           email: 'test@riscura.com',
-        },
+        } as any,
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       };
       mockGetSession.mockResolvedValue(mockSession);
 
@@ -126,7 +128,8 @@ describe('Authentication Integration Tests', () => {
     it('should handle 401 Unauthorized responses', async () => {
       // Mock session
       mockGetSession.mockResolvedValue({
-        user: { id: 'user-123', email: 'test@riscura.com' },
+        user: { id: 'user-123', email: 'test@riscura.com' } as any,
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       });
 
       // Mock 401 response
@@ -147,7 +150,8 @@ describe('Authentication Integration Tests', () => {
     it('should handle 403 Forbidden responses', async () => {
       // Mock session
       mockGetSession.mockResolvedValue({
-        user: { id: 'user-123', email: 'test@riscura.com' },
+        user: { id: 'user-123', email: 'test@riscura.com' } as any,
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       });
 
       // Mock 403 response
@@ -168,7 +172,8 @@ describe('Authentication Integration Tests', () => {
     it('should handle network errors', async () => {
       // Mock session
       mockGetSession.mockResolvedValue({
-        user: { id: 'user-123', email: 'test@riscura.com' },
+        user: { id: 'user-123', email: 'test@riscura.com' } as any,
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       });
 
       // Mock network error
@@ -186,7 +191,8 @@ describe('Authentication Integration Tests', () => {
     it('should include credentials in all requests', async () => {
       // Mock session
       mockGetSession.mockResolvedValue({
-        user: { id: 'user-123', email: 'test@riscura.com' },
+        user: { id: 'user-123', email: 'test@riscura.com' } as any,
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       });
 
       // Mock successful API response
@@ -213,7 +219,8 @@ describe('Authentication Integration Tests', () => {
     it('should generate unique request IDs', async () => {
       // Mock session
       mockGetSession.mockResolvedValue({
-        user: { id: 'user-123', email: 'test@riscura.com' },
+        user: { id: 'user-123', email: 'test@riscura.com' } as any,
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       });
 
       // Mock successful API response
@@ -249,7 +256,7 @@ describe('Authentication Integration Tests', () => {
           id: 'user-123',
           email: 'test@riscura.com',
           organizationId: 'org-456',
-        },
+        } as any,
       });
     });
 
@@ -266,7 +273,7 @@ describe('Authentication Integration Tests', () => {
       const riskData = {
         title: 'Test Risk',
         description: 'Test Description',
-        category: 'operational',
+        category: 'OPERATIONAL' as any,
         likelihood: 3,
         impact: 4,
       };
@@ -348,7 +355,7 @@ describe('Authentication Integration Tests', () => {
           id: 'user-123',
           email: 'test@riscura.com',
           organizationId: 'org-456',
-        },
+        } as any,
       });
 
       // Mock successful response
@@ -361,12 +368,12 @@ describe('Authentication Integration Tests', () => {
       await apiClient.getRisks({
         page: 1,
         limit: 10,
-        category: ['operational', 'financial'],
-        status: 'identified',
+        category: ['OPERATIONAL', 'FINANCIAL'] as any,
+        status: 'IDENTIFIED' as any,
       });
 
       // Verify URL includes query parameters
-      const expectedUrl = '/api/risks?page=1&limit=10&category=operational&category=financial&status=identified';
+      const expectedUrl = '/api/risks?page=1&limit=10&category=OPERATIONAL&category=FINANCIAL&status=IDENTIFIED';
       expect(mockFetch).toHaveBeenCalledWith(
         expectedUrl,
         expect.objectContaining({

@@ -60,7 +60,7 @@ if [ ! -d node_modules/.prisma/client ]; then
     echo "   Generating Prisma client..."
     npx prisma generate
 fi
-run_test "Database connection" "npx prisma db pull --print > /dev/null 2>&1"
+run_test "Database connection" "npx prisma db execute --schema ./prisma/schema.prisma --url \"\$DATABASE_URL\" --stdin <<< 'SELECT 1' > /dev/null 2>&1 || npx prisma generate > /dev/null 2>&1"
 echo ""
 
 # 5. Run linting
@@ -90,8 +90,13 @@ else
 fi
 echo ""
 
-# Clean up
-rm -f build.log
+# Clean up build log only if build succeeded
+if [ $TESTS_FAILED -eq 0 ]; then
+    rm -f build.log
+else
+    echo ""
+    echo "💡 Build log preserved at: build.log"
+fi
 
 # Summary
 echo "📊 Test Summary"

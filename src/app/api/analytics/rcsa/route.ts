@@ -1,99 +1,133 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth/auth-options';
+import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
 
-export async function GET(request: NextRequest) {
-  try {
-    const session = await getServerSession(authOptions) as any;
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+export const GET = withApiMiddleware(
+  async (req: NextRequest) => {
+    const user = (req as any).user;
+    
+    if (!user || !user.organizationId) {
+      return NextResponse.json(
+        { success: false, error: 'Organization context required' },
+        { status: 403 }
+      );
     }
 
-    const url = new URL(request.url);
-    const timeframe = url.searchParams.get('timeframe') || '30d';
-    const includeDetails = url.searchParams.get('includeDetails') === 'true';
+    try {
+      // Get RCSA analytics data
+      const [
+        totalRisks,
+        totalControls,
+        controlRiskMappings,
+        risksByCategory,
+        risksBySeverity,
+        controlsByType,
+        controlsByEffectiveness
+      ] = await Promise.all([
+        // Total counts
+        db.client.risk.count({
+          where: { organizationId: user.organizationId }
+        }),
+        db.client.control.count({
+          where: { organizationId: user.organizationId }
+        }),
+        db.client.controlRiskMapping.count({
+          where: {
+            risk: { organizationId: user.organizationId }
+          }
+        }),
+        
+        // Risk distributions
+        db.client.risk.groupBy({
+          by: ['category'],
+          where: { organizationId: user.organizationId },
+          _count: { id: true }
+        }),
+        db.client.risk.groupBy({
+          by: ['riskLevel'],
+          where: { organizationId: user.organizationId },
+          _count: { id: true }
+        }),
+        
+        // Control distributions
+        db.client.control.groupBy({
+          by: ['type'],
+          where: { organizationId: user.organizationId },
+          _count: { id: true }
+        }),
+        db.client.control.groupBy({
+          by: ['status'],
+          where: { organizationId: user.organizationId },
+          _count: { id: true }
+        })
+      ]);
 
-    // Mock analytics data for RCSA
-    const analytics: any = {
-      summary: {
-        totalRisks: 42,
-        totalControls: 28,
-        totalMappings: 64,
-        riskCoverage: 0.85,
-        controlEffectiveness: 0.78,
-        complianceScore: 0.82,
-      },
-      riskDistribution: {
-        byCategory: {
-          operational: 12,
-          financial: 8,
-          strategic: 10,
-          compliance: 7,
-          technology: 5,
-        },
-        byLevel: {
-          low: 15,
-          medium: 18,
-          high: 7,
-          critical: 2,
-        },
-        byStatus: {
-          identified: 8,
-          assessed: 20,
-          mitigated: 12,
-          closed: 2,
-        },
-      },
-      controlMetrics: {
-        byStatus: {
-          implemented: 20,
-          planned: 5,
-          inProgress: 3,
-        },
-        byEffectiveness: {
-          high: 12,
-          medium: 14,
-          low: 2,
-        },
-      },
-      trends: {
-        riskTrend: [
-          { date: '2024-01-01', value: 35 },
-          { date: '2024-02-01', value: 38 },
-          { date: '2024-03-01', value: 42 },
-        ],
-        controlTrend: [
-          { date: '2024-01-01', value: 22 },
-          { date: '2024-02-01', value: 25 },
-          { date: '2024-03-01', value: 28 },
-        ],
-      },
-      timeframe,
-      generatedAt: new Date().toISOString(),
-    };
+      // Calculate coverage metrics
+      const risksWithControls = await db.client.risk.count({
+        where: {
+          organizationId: user.organizationId,
+          controls: {
+            some: {}
+          }
+        }
+      });
 
-    if (includeDetails) {
-      analytics.details = {
-        topRisks: [
-          { id: 'risk-1', title: 'Data Breach Risk', score: 16, level: 'CRITICAL' },
-          { id: 'risk-2', title: 'System Downtime', score: 12, level: 'HIGH' },
-          { id: 'risk-3', title: 'Compliance Violations', score: 10, level: 'HIGH' },
-        ],
-        topControls: [
-          { id: 'control-1', name: 'Access Control Policy', effectiveness: 0.95 },
-          { id: 'control-2', name: 'Data Encryption', effectiveness: 0.90 },
-          { id: 'control-3', name: 'Backup Procedures', effectiveness: 0.85 },
-        ],
+      const controlsWithRisks = await db.client.control.count({
+        where: {
+          organizationId: user.organizationId,
+          risks: {
+            some: {}
+          }
+        }
+      });
+
+      const analytics = {
+        summary: {
+          totalRisks,
+          totalControls,
+          totalMappings: controlRiskMappings,
+          riskCoverage: totalRisks > 0 ? (risksWithControls / totalRisks * 100).toFixed(1) : 0,
+          controlUtilization: totalControls > 0 ? (controlsWithRisks / totalControls * 100).toFixed(1) : 0
+        },
+        riskAnalysis: {
+          byCategory: risksByCategory.map(item => ({
+            category: item.category,
+            count: item._count.id
+          })),
+          bySeverity: risksBySeverity.map(item => ({
+            severity: item.riskLevel,
+            count: item._count.id
+          }))
+        },
+        controlAnalysis: {
+          byType: controlsByType.map(item => ({
+            type: item.type,
+            count: item._count.id
+          })),
+          byEffectiveness: controlsByEffectiveness.map(item => ({
+            status: item.status,
+            count: item._count.id
+          }))
+        },
+        trends: {
+          // Placeholder for trend data - would need date-based queries
+          riskTrend: [],
+          controlTrend: [],
+          mappingTrend: []
+        }
       };
-    }
 
-    return NextResponse.json(analytics);
-  } catch (error) {
-    console.error('RCSA analytics API error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch RCSA analytics' },
-      { status: 500 }
-    );
-  }
-} 
+      return NextResponse.json({
+        success: true,
+        data: analytics
+      });
+    } catch (error) {
+      console.error('Get RCSA analytics error:', error);
+      return NextResponse.json(
+        { success: false, error: 'Failed to fetch RCSA analytics' },
+        { status: 500 }
+      );
+    }
+  },
+  { requireAuth: true }
+);

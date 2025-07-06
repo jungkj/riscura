@@ -11,7 +11,7 @@ import {
   Info
 } from 'lucide-react';
 import { NotionRCSASpreadsheet } from '@/components/spreadsheet/NotionRCSASpreadsheet';
-import { RCSASpreadsheet } from '@/components/spreadsheet/RCSASpreadsheet';
+import RCSASpreadsheet from '@/components/spreadsheet/RCSASpreadsheet';
 import { RCSAProvider } from '@/context/RCSAContext';
 import { cn } from '@/lib/utils';
 

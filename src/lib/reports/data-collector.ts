@@ -325,12 +325,12 @@ export class ReportDataCollector {
           effectiveControls: controlsByEffectiveness['EFFECTIVE']?.length || 0,
           failedControls: failedControls.length,
           untestedControls: untestedControls.length,
-          controlCoverage: ((controls.length - untestedControls.length) / controls.length * 100),
+          controlCoverage: controls.length > 0 ? ((controls.length - untestedControls.length) / controls.length * 100) : 0,
         },
         highlights: [
           `${failedControls.length} controls failed recent testing`,
           `${untestedControls.length} controls have not been tested recently`,
-          `${Math.round(((controls.length - untestedControls.length) / controls.length * 100))}% control test coverage`,
+          `${controls.length > 0 ? Math.round(((controls.length - untestedControls.length) / controls.length * 100)) : 0}% control test coverage`,
         ],
       },
     };
@@ -434,7 +434,7 @@ export class ReportDataCollector {
             totalControls: controls.length,
             effectiveControls: effectiveControls.length,
             tasksCompleted: completedTasks.length,
-            taskCompletionRate: (completedTasks.length / tasks.length * 100),
+            taskCompletionRate: tasks.length > 0 ? (completedTasks.length / tasks.length * 100) : 0,
           },
         },
         {
@@ -467,12 +467,12 @@ export class ReportDataCollector {
         totalItems: risks.length + controls.length + tasks.length,
         keyMetrics: {
           riskScore: this.calculateAverageRiskScore(risks),
-          controlEffectiveness: (effectiveControls.length / controls.length * 100),
-          taskCompletionRate: (completedTasks.length / tasks.length * 100),
+          controlEffectiveness: controls.length > 0 ? (effectiveControls.length / controls.length * 100) : 0,
+          taskCompletionRate: tasks.length > 0 ? (completedTasks.length / tasks.length * 100) : 0,
         },
         highlights: [
           `${highCriticalRisks.length} high/critical risks identified`,
-          `${Math.round(effectiveControls.length / controls.length * 100)}% controls rated as effective`,
+          `${controls.length > 0 ? Math.round(effectiveControls.length / controls.length * 100) : 0}% controls rated as effective`,
           `${completedTasks.length} tasks completed in reporting period`,
         ],
       },

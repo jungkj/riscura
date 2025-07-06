@@ -86,7 +86,10 @@ export class ReportService {
 
     return await prisma.report.create({
       data: {
-        ...validated,
+        title: validated.title,
+        description: validated.description,
+        type: validated.type,
+        templateId: validated.templateId,
         parameters: { ...defaultParameters, ...validated.parameters },
         createdBy: userId,
         organizationId,
@@ -160,8 +163,17 @@ export class ReportService {
   ): Promise<Report> {
     const validated = UpdateReportSchema.parse(data);
 
-    return await prisma.report.update({
+    // Find the report first to ensure it belongs to the organization
+    const report = await prisma.report.findFirst({
       where: { id, organizationId },
+    });
+    
+    if (!report) {
+      throw new Error('Report not found');
+    }
+
+    return await prisma.report.update({
+      where: { id },
       data: validated,
       include: {
         creator: true,
@@ -177,8 +189,17 @@ export class ReportService {
       await this.cloudStorage.deleteFile(report.fileUrl);
     }
 
-    await prisma.report.delete({
+    // Find the report first to ensure it belongs to the organization
+    const reportToDelete = await prisma.report.findFirst({
       where: { id, organizationId },
+    });
+    
+    if (!reportToDelete) {
+      throw new Error('Report not found');
+    }
+
+    await prisma.report.delete({
+      where: { id },
     });
   }
 
@@ -227,7 +248,7 @@ export class ReportService {
     return await prisma.report.update({
       where: { id: reportId },
       data: {
-        data: reportData,
+        data: reportData as any, // Cast to any for JSON field
         generatedAt: new Date(),
         fileUrl,
         format,
@@ -250,7 +271,11 @@ export class ReportService {
 
     return await prisma.reportTemplate.create({
       data: {
-        ...validated,
+        name: validated.name,
+        description: validated.description,
+        type: validated.type,
+        templateConfig: validated.templateConfig,
+        defaultParameters: validated.defaultParameters,
         createdBy: userId,
         organizationId,
       },
@@ -296,8 +321,17 @@ export class ReportService {
     data: Partial<z.infer<typeof CreateReportTemplateSchema>>,
     organizationId: string
   ): Promise<ReportTemplate> {
-    return await prisma.reportTemplate.update({
+    // Find the template first to ensure it belongs to the organization
+    const template = await prisma.reportTemplate.findFirst({
       where: { id, organizationId },
+    });
+    
+    if (!template) {
+      throw new Error('Report template not found');
+    }
+
+    return await prisma.reportTemplate.update({
+      where: { id },
       data,
       include: {
         creator: true,
@@ -306,8 +340,17 @@ export class ReportService {
   }
 
   async deleteReportTemplate(id: string, organizationId: string): Promise<void> {
-    await prisma.reportTemplate.update({
+    // Find the template first to ensure it belongs to the organization
+    const template = await prisma.reportTemplate.findFirst({
       where: { id, organizationId },
+    });
+    
+    if (!template) {
+      throw new Error('Report template not found');
+    }
+
+    await prisma.reportTemplate.update({
+      where: { id },
       data: { isActive: false },
     });
   }
@@ -328,7 +371,13 @@ export class ReportService {
 
     return await prisma.reportSchedule.create({
       data: {
-        ...validated,
+        reportTemplateId: validated.reportTemplateId,
+        name: validated.name,
+        description: validated.description,
+        frequency: validated.frequency,
+        scheduleConfig: validated.scheduleConfig,
+        recipients: validated.recipients,
+        isActive: validated.isActive,
         nextRunAt,
         createdBy: userId,
         organizationId,
@@ -370,8 +419,17 @@ export class ReportService {
       }
     }
 
-    return await prisma.reportSchedule.update({
+    // Find the schedule first to ensure it belongs to the organization
+    const schedule = await prisma.reportSchedule.findFirst({
       where: { id, organizationId },
+    });
+    
+    if (!schedule) {
+      throw new Error('Report schedule not found');
+    }
+
+    return await prisma.reportSchedule.update({
+      where: { id },
       data: {
         ...data,
         ...(nextRunAt && { nextRunAt }),
@@ -384,8 +442,17 @@ export class ReportService {
   }
 
   async deleteReportSchedule(id: string, organizationId: string): Promise<void> {
-    await prisma.reportSchedule.update({
+    // Find the schedule first to ensure it belongs to the organization
+    const schedule = await prisma.reportSchedule.findFirst({
       where: { id, organizationId },
+    });
+    
+    if (!schedule) {
+      throw new Error('Report schedule not found');
+    }
+
+    await prisma.reportSchedule.update({
+      where: { id },
       data: { isActive: false },
     });
   }

@@ -1,6 +1,5 @@
 import { NextRequest } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
-import { getAuthenticatedUser } from '@/lib/auth/middleware';
 import { 
   ApiResponseFormatter,
   formatValidationErrors 
@@ -26,8 +25,9 @@ const AI_RATE_LIMIT = {
 };
 
 // POST /api/ai/generate - Generate AI content with server-side API key
-export const POST = withApiMiddleware(async (req: NextRequest) => {
-  const user = await getAuthenticatedUser(req);
+export const POST = withApiMiddleware(
+  async (req: NextRequest) => {
+    const user = (req as any).user;
   
   // Parse and validate request body
   const body = await req.json();
@@ -139,7 +139,9 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
       }
     );
   }
-});
+},
+  { requireAuth: true }
+);
 
 // Helper function to check user's AI usage quota
 async function checkUserAIQuota(userId: string, organizationId: string): Promise<{

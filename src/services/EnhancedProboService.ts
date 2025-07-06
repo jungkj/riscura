@@ -1,8 +1,47 @@
 import { PrismaClient, ProboIntegration, ProboMetric } from '@prisma/client';
 import { ProboIntegrationService } from './ProboIntegrationService';
 import crypto from 'crypto';
+import { z } from 'zod';
 
 const prisma = new PrismaClient();
+
+// Validation schemas
+const ProboMetricsSchema = z.object({
+  totalControls: z.number(),
+  implementedControls: z.number(),
+  vendorAssessments: z.number(),
+  complianceFrameworks: z.number(),
+  riskReduction: z.number(),
+  lastUpdated: z.date().or(z.string().transform(str => new Date(str))),
+});
+
+const ProboComplianceStatusSchema = z.object({
+  framework: z.string(),
+  score: z.number(),
+  status: z.string(),
+  controlsImplemented: z.number(),
+  totalControls: z.number(),
+  proboControlsAvailable: z.number(),
+  lastAssessed: z.date().or(z.string().transform(str => new Date(str))),
+  nextDue: z.date().or(z.string().transform(str => new Date(str))),
+});
+
+const ProboInsightSchema = z.object({
+  type: z.string(),
+  severity: z.string(),
+  title: z.string(),
+  description: z.string(),
+  recommendation: z.string(),
+  affectedFrameworks: z.array(z.string()),
+  timestamp: z.date().or(z.string().transform(str => new Date(str))),
+});
+
+const ProboInsightsSchema = z.object({
+  summary: z.string(),
+  totalInsights: z.number(),
+  criticalInsights: z.number(),
+  recommendations: z.array(ProboInsightSchema),
+});
 
 export interface ProboMetrics {
   totalControls: number;
@@ -46,11 +85,41 @@ export interface ProboVendorSummary {
 
 export class EnhancedProboService {
   private proboIntegration: ProboIntegrationService;
-  private encryptionKey: string;
+  private encryptionKey: Buffer;
+  private static readonly ALGORITHM = 'aes-256-gcm';
+  private static readonly IV_LENGTH = 16;
+  private static readonly TAG_LENGTH = 16;
+  private static readonly SALT_LENGTH = 32;
 
   constructor() {
     this.proboIntegration = ProboIntegrationService.getInstance();
-    this.encryptionKey = process.env.PROBO_ENCRYPTION_KEY || process.env.NEXTAUTH_SECRET || 'default-key';
+    
+    // Enforce secure key requirement
+    const keySource = process.env.PROBO_ENCRYPTION_KEY || process.env.NEXTAUTH_SECRET;
+    if (!keySource) {
+      throw new Error('Encryption key not configured. Please set PROBO_ENCRYPTION_KEY or NEXTAUTH_SECRET environment variable.');
+    }
+    
+    // Derive a proper 256-bit key from the source
+    this.encryptionKey = this.deriveKey(keySource);
+  }
+
+  private deriveKey(keySource: string): Buffer {
+    // Use a consistent salt for key derivation (in production, this could be stored separately)
+    const salt = crypto.createHash('sha256').update('probo-encryption-salt').digest();
+    return crypto.pbkdf2Sync(keySource, salt, 100000, 32, 'sha256');
+  }
+
+  private validateMetricValue<T>(value: any, schema: z.ZodSchema<T>): T {
+    try {
+      return schema.parse(value);
+    } catch (error) {
+      console.error('Metric value validation failed:', error);
+      if (error instanceof z.ZodError) {
+        throw new Error(`Invalid metric data structure: ${error.errors.map(e => e.message).join(', ')}`);
+      }
+      throw new Error('Invalid metric data structure');
+    }
   }
 
   // Integration Management
@@ -169,7 +238,7 @@ export class EnhancedProboService {
       }
     }
 
-    return latestMetric.metricValue as ProboMetrics;
+    return this.validateMetricValue(latestMetric.metricValue, ProboMetricsSchema);
   }
 
   async getComplianceStatus(organizationId: string): Promise<ProboComplianceStatus[]> {
@@ -195,7 +264,7 @@ export class EnhancedProboService {
       }
     }
 
-    return latestMetric.metricValue as ProboComplianceStatus[];
+    return this.validateMetricValue(latestMetric.metricValue, z.array(ProboComplianceStatusSchema));
   }
 
   async getInsights(organizationId: string): Promise<ProboInsights> {
@@ -221,7 +290,7 @@ export class EnhancedProboService {
       }
     }
 
-    return latestMetric.metricValue as ProboInsights;
+    return this.validateMetricValue(latestMetric.metricValue, ProboInsightsSchema);
   }
 
   async getVendorSummary(organizationId: string): Promise<ProboVendorSummary> {
@@ -266,17 +335,54 @@ export class EnhancedProboService {
   }
 
   private encryptApiKey(apiKey: string): string {
-    const cipher = crypto.createCipher('aes-256-cbc', this.encryptionKey);
-    let encrypted = cipher.update(apiKey, 'utf8', 'hex');
-    encrypted += cipher.final('hex');
-    return encrypted;
+    try {
+      // Generate random IV
+      const iv = crypto.randomBytes(EnhancedProboService.IV_LENGTH);
+      
+      // Create cipher
+      const cipher = crypto.createCipheriv(EnhancedProboService.ALGORITHM, this.encryptionKey, iv);
+      
+      // Encrypt the API key
+      let encrypted = cipher.update(apiKey, 'utf8');
+      encrypted = Buffer.concat([encrypted, cipher.final()]);
+      
+      // Get the authentication tag
+      const tag = cipher.getAuthTag();
+      
+      // Combine IV, tag, and encrypted data
+      const combined = Buffer.concat([iv, tag, encrypted]);
+      
+      // Return as base64 string
+      return combined.toString('base64');
+    } catch (error) {
+      console.error('Encryption failed:', error);
+      throw new Error('Failed to encrypt API key');
+    }
   }
 
   private decryptApiKey(encryptedKey: string): string {
-    const decipher = crypto.createDecipher('aes-256-cbc', this.encryptionKey);
-    let decrypted = decipher.update(encryptedKey, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
-    return decrypted;
+    try {
+      // Decode from base64
+      const combined = Buffer.from(encryptedKey, 'base64');
+      
+      // Extract IV, tag, and encrypted data
+      const iv = combined.slice(0, EnhancedProboService.IV_LENGTH);
+      const tag = combined.slice(EnhancedProboService.IV_LENGTH, EnhancedProboService.IV_LENGTH + EnhancedProboService.TAG_LENGTH);
+      const encrypted = combined.slice(EnhancedProboService.IV_LENGTH + EnhancedProboService.TAG_LENGTH);
+      
+      // Create decipher
+      const decipher = crypto.createDecipheriv(EnhancedProboService.ALGORITHM, this.encryptionKey, iv);
+      decipher.setAuthTag(tag);
+      
+      // Decrypt the data
+      let decrypted = decipher.update(encrypted);
+      decrypted = Buffer.concat([decrypted, decipher.final()]);
+      
+      return decrypted.toString('utf8');
+    } catch (error) {
+      console.error('Decryption failed:', error);
+      throw new Error('Failed to decrypt API key');
+    }
   }
 
   // Default Data Methods
