@@ -67,11 +67,8 @@ export class ForbiddenError extends APIError {
   }
 }
 
-export class NotFoundError extends APIError {
-  constructor(message: string = 'Resource not found') {
-    super(message, 404, 'NOT_FOUND_ERROR');
-  }
-}
+// NotFoundError removed - use createNotFoundError from error-handler.ts instead
+// or check for Prisma.PrismaClientKnownRequestError with code P2025
 
 export class ConflictError extends APIError {
   constructor(message: string = 'Resource conflict') {

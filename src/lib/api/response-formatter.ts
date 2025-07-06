@@ -445,4 +445,15 @@ export function isErrorResponse(
 // TODO: Implement real versioned response formatting
 export function VersionedResponseFormatter(data: any) {
   return data;
+}
+
+/**
+ * Format validation errors for consistent API response
+ */
+export function formatValidationErrors(errors: any[]): Array<{ field: string; message: string; code: string }> {
+  return errors.map(error => ({
+    field: error.path?.join('.') || 'unknown',
+    message: error.message || 'Validation error',
+    code: error.code || 'VALIDATION_ERROR'
+  }));
 } 

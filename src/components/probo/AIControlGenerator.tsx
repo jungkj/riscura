@@ -706,4 +706,7 @@ export default function AIControlGenerator({
       </Tabs>
     </div>
   );
-} 
+}
+
+// Export the component
+export { AIControlGenerator }; 

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { withAPI, createAPIResponse, ForbiddenError, ValidationError, NotFoundError } from '@/lib/api/middleware';
+import { withAPI, createAPIResponse, ForbiddenError, ValidationError } from '@/lib/api/middleware';
+import { createNotFoundError } from '@/lib/api/error-handler';
 import { getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/middleware';
 import { db } from '@/lib/db';
 import { riskUpdateSchema } from '@/lib/api/schemas';
@@ -105,7 +106,7 @@ export const GET = withAPI(async (req: NextRequest) => {
     });
 
     if (!risk) {
-      throw new NotFoundError('Risk not found');
+      throw createNotFoundError('Risk');
     }
 
     // Fetch comments and activities separately
@@ -265,7 +266,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
     });
 
     if (!existingRisk) {
-      throw new NotFoundError('Risk not found');
+      throw createNotFoundError('Risk');
     }
 
     // Validate assigned user if provided
@@ -425,7 +426,7 @@ export const DELETE = withAPI(async (req: NextRequest) => {
     });
 
     if (!existingRisk) {
-      throw new NotFoundError('Risk not found');
+      throw createNotFoundError('Risk');
     }
 
     // Check if user has permission to delete (only creator or admin)

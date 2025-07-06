@@ -669,3 +669,6 @@ export class ComplianceService {
 }
 
 export const complianceService = ComplianceService.getInstance();
+
+// Default export for compatibility
+export default ComplianceService;
