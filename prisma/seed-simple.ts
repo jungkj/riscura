@@ -78,38 +78,20 @@ async function main() {
   console.log(`✅ Created admin user: ${adminUser.email}`);
 
   // Create notification preferences for admin user
-  await prisma.notificationPreferences.create({
+  await prisma.notificationPreference.create({
     data: {
       userId: adminUser.id,
-      email: {
-        enabled: true,
+      email: true,
+      push: true,
+      inApp: true,
+      digest: 'DAILY',
+      categories: {
+        risks: true,
+        compliance: true,
+        reports: true,
         riskAlerts: true,
         controlReminders: true,
         reportGeneration: true,
-        systemUpdates: true,
-        weeklyDigest: true,
-        monthlyReport: true,
-      },
-      push: {
-        enabled: true,
-        riskAlerts: true,
-        controlReminders: true,
-        systemUpdates: true,
-      },
-      sms: {
-        enabled: false,
-        riskAlerts: false,
-        emergencyOnly: false,
-      },
-      slack: {
-        enabled: false,
-        channel: null,
-        mentions: false,
-      },
-      inApp: {
-        enabled: true,
-        riskAlerts: true,
-        controlReminders: true,
         systemUpdates: true,
       },
       quietHours: {

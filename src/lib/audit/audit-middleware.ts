@@ -383,17 +383,3 @@ export async function logBulkOperation(
   });
 }
 
-// ============================================================================
-// EXPORTS
-// ============================================================================
-
-export {
-  withAuditLogging,
-  withAuthAudit,
-  withDataAudit,
-  withPermissionAudit,
-  withSystemAudit,
-  withComplianceAudit,
-  logBatchAuditEvents,
-  logBulkOperation,
-};

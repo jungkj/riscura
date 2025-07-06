@@ -1,300 +1,104 @@
-import { NextRequest } from 'next/server';
-import { withAPI, withValidation, createAPIResponse, parsePagination, parseFilters, parseSorting, parseSearch, createPaginationMeta, NotFoundError, ForbiddenError } from '@/lib/api/middleware';
-import { createDocumentSchema, documentQuerySchema } from '@/lib/api/schemas';
-import { getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/middleware';
+import { NextRequest, NextResponse } from 'next/server';
+import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
-import { PERMISSIONS } from '@/lib/auth';
-import { uploadFile, deleteFile } from '@/lib/storage/files';
+import { z } from 'zod';
 
+const CreateDocumentSchema = z.object({
+  name: z.string().min(1),
+  description: z.string().optional(),
+  type: z.string(),
+  fileUrl: z.string().url(),
+  fileSize: z.number().optional(),
+  mimeType: z.string().optional(),
+  tags: z.array(z.string()).optional()
+});
 
-
-// GET /api/documents - List documents with pagination and filtering
-export const GET = withAPI(
-  withValidation(documentQuerySchema)(async (req: NextRequest, query) => {
-    const authReq = req as AuthenticatedRequest;
-    const user = getAuthenticatedUser(authReq);
-
-    if (!user) {
-      throw new ForbiddenError('Authentication required');
-    }
-
-    const url = new URL(req.url);
-    const searchParams = url.searchParams;
-
-    // Parse pagination
-    const { skip, take, page, limit } = parsePagination(searchParams, { maxLimit: 100 });
-
-    // Parse sorting
-    const orderBy = parseSorting(searchParams, {
-      allowedFields: ['title', 'category', 'status', 'createdAt', 'updatedAt', 'version'],
-      defaultField: 'updatedAt',
-      defaultOrder: 'desc'
-    });
-
-    // Parse search
-    const search = parseSearch(searchParams);
-
-    // Parse filters
-    const filters = parseFilters(searchParams);
-
-    // Build where clause with organization isolation
-    const where: any = {
-      organizationId: user.organizationId,
-    };
-
-    // Add search functionality
-    if (search) {
-      where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { type: { contains: search, mode: 'insensitive' } },
-        { extractedText: { contains: search, mode: 'insensitive' } },
-      ];
-    }
-
-    // Add filters from query parameters
-    if (filters.type) {
-      where.type = Array.isArray(filters.type) 
-        ? { in: filters.type }
-        : filters.type;
-    }
-
-    if (filters.owner) {
-      where.uploadedBy = filters.owner;
-    }
-
-    // Date range filtering
-    if (filters.dateFrom || filters.dateTo) {
-      where.uploadedAt = {};
-      if (filters.dateFrom) where.uploadedAt.gte = new Date(filters.dateFrom);
-      if (filters.dateTo) where.uploadedAt.lte = new Date(filters.dateTo);
+export const GET = withApiMiddleware(
+  async (req: NextRequest) => {
+    const user = (req as any).user;
+    
+    if (!user || !user.organizationId) {
+      return NextResponse.json(
+        { success: false, error: 'Organization context required' },
+        { status: 403 }
+      );
     }
 
     try {
-      // Execute queries in parallel
-      const [documents, total] = await Promise.all([
-        db.client.document.findMany({
-          where,
-          skip,
-          take,
-          orderBy,
-          include: {
-            uploader: {
-              select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                email: true,
-              },
-            },
-            riskEvidence: {
-              select: {
-                id: true,
-                title: true,
-                riskLevel: true,
-              },
-            },
-            controlEvidence: {
-              select: {
-                id: true,
-                title: true,
-                status: true,
-              },
-            },
-          },
-        }),
-        db.client.document.count({ where }),
-      ]);
-
-      // Transform data for API response with counts
-      const transformedDocuments = await Promise.all(
-        documents.map(async (doc) => {
-          // Get counts for comments and activities
-          const [commentsCount, activitiesCount] = await Promise.all([
-            db.client.comment.count({
-              where: {
-                entityType: 'DOCUMENT',
-                entityId: doc.id,
-              },
-            }),
-            db.client.activity.count({
-              where: {
-                entityType: 'DOCUMENT',
-                entityId: doc.id,
-              },
-            }),
-          ]);
-
-          return {
-            id: doc.id,
-            name: doc.name,
-            type: doc.type,
-            size: doc.size,
-            content: doc.content,
-            extractedText: doc.extractedText,
-            aiAnalysis: doc.aiAnalysis,
-            uploadedAt: doc.uploadedAt,
-            createdAt: doc.createdAt,
-            updatedAt: doc.updatedAt,
-            uploader: doc.uploader,
-            riskEvidence: doc.riskEvidence,
-            controlEvidence: doc.controlEvidence,
-            _count: {
-              comments: commentsCount,
-              activities: activitiesCount,
-            },
-          };
-        })
-      );
-
-      const paginationMeta = createPaginationMeta(page, limit, total);
-
-      return createAPIResponse({
-        data: transformedDocuments,
-        meta: {
-          pagination: paginationMeta,
-          filters,
-          search,
+      const documents = await db.client.document.findMany({
+        where: { organizationId: user.organizationId },
+        include: {
+          uploadedBy: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true
+            }
+          }
         },
+        orderBy: { createdAt: 'desc' }
+      });
+
+      return NextResponse.json({
+        success: true,
+        data: documents
       });
     } catch (error) {
-      console.error('Failed to fetch documents:', error);
-      throw new Error('Failed to retrieve documents');
+      console.error('Get documents error:', error);
+      return NextResponse.json(
+        { success: false, error: 'Failed to fetch documents' },
+        { status: 500 }
+      );
     }
-  })
+  },
+  { requireAuth: true }
 );
 
-// POST /api/documents - Create new document
-export const POST = withAPI(async (req: NextRequest) => {
-  const authReq = req as AuthenticatedRequest;
-  const user = getAuthenticatedUser(authReq);
-
-  if (!user) {
-    throw new ForbiddenError('Authentication required');
-  }
-
-  // Check permissions
-  if (!user.permissions.includes(PERMISSIONS.DOCUMENT_CREATE) && !user.permissions.includes('*')) {
-    throw new ForbiddenError('Insufficient permissions to create documents');
-  }
-
-  try {
-    // Handle multipart form data for file uploads
-    const formData = await req.formData();
+export const POST = withApiMiddleware(
+  async (req: NextRequest) => {
+    const user = (req as any).user;
     
-    // Extract document metadata
-    const name = formData.get('name') as string;
-    const type = formData.get('type') as string;
-    const content = formData.get('content') as string;
-    const extractedText = formData.get('extractedText') as string;
-
-    // Validate required fields
-    if (!name || !type) {
-      throw new Error('Name and type are required');
+    if (!user || !user.organizationId) {
+      return NextResponse.json(
+        { success: false, error: 'Organization context required' },
+        { status: 403 }
+      );
     }
 
-    // Create document record
-    const document = await db.client.document.create({
-      data: {
-        name,
-        type,
-        size: content ? content.length : 0,
-        content,
-        extractedText,
-        organizationId: user.organizationId,
-        uploadedBy: user.id,
-      },
-    });
+    try {
+      const body = await req.json();
+      const validatedData = CreateDocumentSchema.parse(body);
 
-    // Handle file uploads (simplified for basic Document model)
-    const files = formData.getAll('files') as File[];
-    let fileContent = '';
-    
-    if (files.length > 0) {
-      const file = files[0]; // Take first file only
-      if (file.size > 0) {
-        try {
-          const buffer = await file.arrayBuffer();
-          fileContent = Buffer.from(buffer).toString('base64');
-          
-          // Update document with file content
-          await db.client.document.update({
-            where: { id: document.id },
-            data: {
-              content: fileContent,
-              size: file.size,
-            },
-          });
-        } catch (uploadError) {
-          console.error('File processing error:', uploadError);
+      const document = await db.client.document.create({
+        data: {
+          ...validatedData,
+          organizationId: user.organizationId,
+          uploadedById: user.id,
+          status: 'ACTIVE'
         }
+      });
+
+      return NextResponse.json({
+        success: true,
+        data: document
+      }, { status: 201 });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return NextResponse.json(
+          { success: false, error: 'Validation failed', details: error.errors },
+          { status: 400 }
+        );
       }
+      console.error('Create document error:', error);
+      return NextResponse.json(
+        { success: false, error: 'Failed to create document' },
+        { status: 500 }
+      );
     }
-
-    // Create activity log
-    await db.client.activity.create({
-      data: {
-        type: 'CREATED',
-        description: `Document "${document.name}" was created`,
-        entityType: 'DOCUMENT',
-        entityId: document.id,
-        userId: user.id,
-        organizationId: user.organizationId,
-      },
-    });
-
-    // Fetch complete document data
-    const completeDocument = await db.client.document.findUnique({
-      where: { id: document.id },
-      include: {
-        uploader: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
-          },
-        },
-      },
-    });
-
-    // Get initial counts (should be 0 for new document except for the creation activity)
-    const [commentsCount, activitiesCount] = await Promise.all([
-      db.client.comment.count({
-        where: {
-          entityType: 'DOCUMENT',
-          entityId: document.id,
-        },
-      }),
-      db.client.activity.count({
-        where: {
-          entityType: 'DOCUMENT',
-          entityId: document.id,
-        },
-      }),
-    ]);
-
-    return createAPIResponse({
-      data: {
-        id: completeDocument!.id,
-        name: completeDocument!.name,
-        type: completeDocument!.type,
-        size: completeDocument!.size,
-        content: completeDocument!.content,
-        extractedText: completeDocument!.extractedText,
-        aiAnalysis: completeDocument!.aiAnalysis,
-        uploadedAt: completeDocument!.uploadedAt,
-        createdAt: completeDocument!.createdAt,
-        updatedAt: completeDocument!.updatedAt,
-        uploader: completeDocument!.uploader,
-        _count: {
-          comments: commentsCount,
-          activities: activitiesCount,
-        },
-      },
-      message: 'Document created successfully',
-    });
-  } catch (error) {
-    console.error('Failed to create document:', error);
-    throw new Error('Failed to create document');
+  },
+  { 
+    requireAuth: true,
+    validateBody: CreateDocumentSchema 
   }
-}); 
+);

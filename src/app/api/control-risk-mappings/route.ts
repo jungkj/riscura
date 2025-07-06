@@ -1,89 +1,222 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth/auth-options';
+import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
+import { z } from 'zod';
 
-export async function GET(request: NextRequest) {
-  try {
-    const session = await getServerSession(authOptions) as any;
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+const CreateMappingSchema = z.object({
+  riskId: z.string(),
+  controlId: z.string(),
+  effectiveness: z.number().min(0).max(100).optional()
+});
 
-    const url = new URL(request.url);
-    const riskId = url.searchParams.get('riskId');
-    const controlId = url.searchParams.get('controlId');
-
-    const whereClause: any = {
-      // Add organization isolation if needed
-    };
-
-    if (riskId) {
-      whereClause.riskId = riskId;
-    }
-
-    if (controlId) {
-      whereClause.controlId = controlId;
-    }
-
-    // For now, return mock data since the actual mapping table might not exist
-    const mockMappings = [
-      {
-        id: '1',
-        riskId: riskId || 'risk-1',
-        controlId: controlId || 'control-1',
-        effectiveness: 0.8,
-        implementationStatus: 'IMPLEMENTED',
-        lastTested: new Date().toISOString(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      }
-    ];
-
-    return NextResponse.json(mockMappings);
-  } catch (error) {
-    console.error('Control-risk mappings API error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch control-risk mappings' },
-      { status: 500 }
-    );
-  }
-}
-
-export async function POST(request: NextRequest) {
-  try {
-    const session = await getServerSession(authOptions) as any;
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const body = await request.json();
-    const { riskId, controlId, effectiveness } = body;
-
-    if (!riskId || !controlId) {
+export const GET = withApiMiddleware(
+  async (req: NextRequest) => {
+    const user = (req as any).user;
+    
+    if (!user || !user.organizationId) {
       return NextResponse.json(
-        { error: 'Risk ID and Control ID are required' },
-        { status: 400 }
+        { success: false, error: 'Organization context required' },
+        { status: 403 }
       );
     }
 
-    // Mock response for now
-    const mapping = {
-      id: `mapping-${Date.now()}`,
-      riskId,
-      controlId,
-      effectiveness: effectiveness || 0.5,
-      implementationStatus: 'PLANNED',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+    try {
+      // Get all control-risk mappings for the organization
+      const mappings = await db.client.controlRiskMapping.findMany({
+        where: {
+          risk: {
+            organizationId: user.organizationId
+          }
+        },
+        include: {
+          risk: {
+            select: {
+              id: true,
+              name: true,
+              category: true,
+              riskLevel: true
+            }
+          },
+          control: {
+            select: {
+              id: true,
+              name: true,
+              type: true,
+              effectiveness: true
+            }
+          }
+        }
+      });
 
-    return NextResponse.json(mapping);
-  } catch (error) {
-    console.error('Control-risk mapping creation error:', error);
-    return NextResponse.json(
-      { error: 'Failed to create control-risk mapping' },
-      { status: 500 }
-    );
+      return NextResponse.json({
+        success: true,
+        data: mappings
+      });
+    } catch (error) {
+      console.error('Get control-risk mappings error:', error);
+      return NextResponse.json(
+        { success: false, error: 'Failed to fetch control-risk mappings' },
+        { status: 500 }
+      );
+    }
+  },
+  { requireAuth: true }
+);
+
+export const POST = withApiMiddleware(
+  async (req: NextRequest) => {
+    const user = (req as any).user;
+    
+    if (!user || !user.organizationId) {
+      return NextResponse.json(
+        { success: false, error: 'Organization context required' },
+        { status: 403 }
+      );
+    }
+
+    try {
+      const body = await req.json();
+      const validatedData = CreateMappingSchema.parse(body);
+
+      // Verify the risk and control belong to the organization
+      const [risk, control] = await Promise.all([
+        db.client.risk.findFirst({
+          where: {
+            id: validatedData.riskId,
+            organizationId: user.organizationId
+          }
+        }),
+        db.client.control.findFirst({
+          where: {
+            id: validatedData.controlId,
+            organizationId: user.organizationId
+          }
+        })
+      ]);
+
+      if (!risk || !control) {
+        return NextResponse.json(
+          { success: false, error: 'Risk or control not found' },
+          { status: 404 }
+        );
+      }
+
+      // Check if mapping already exists
+      const existingMapping = await db.client.controlRiskMapping.findUnique({
+        where: {
+          riskId_controlId: {
+            riskId: validatedData.riskId,
+            controlId: validatedData.controlId
+          }
+        }
+      });
+
+      if (existingMapping) {
+        return NextResponse.json(
+          { success: false, error: 'Mapping already exists' },
+          { status: 409 }
+        );
+      }
+
+      // Create the mapping
+      const mapping = await db.client.controlRiskMapping.create({
+        data: {
+          riskId: validatedData.riskId,
+          controlId: validatedData.controlId,
+          effectiveness: validatedData.effectiveness
+        },
+        include: {
+          risk: true,
+          control: true
+        }
+      });
+
+      return NextResponse.json({
+        success: true,
+        data: mapping
+      }, { status: 201 });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return NextResponse.json(
+          { success: false, error: 'Validation failed', details: error.errors },
+          { status: 400 }
+        );
+      }
+      console.error('Create control-risk mapping error:', error);
+      return NextResponse.json(
+        { success: false, error: 'Failed to create control-risk mapping' },
+        { status: 500 }
+      );
+    }
+  },
+  { 
+    requireAuth: true,
+    validateBody: CreateMappingSchema 
   }
-} 
+);
+
+export const DELETE = withApiMiddleware(
+  async (req: NextRequest) => {
+    const user = (req as any).user;
+    
+    if (!user || !user.organizationId) {
+      return NextResponse.json(
+        { success: false, error: 'Organization context required' },
+        { status: 403 }
+      );
+    }
+
+    try {
+      const { searchParams } = new URL(req.url);
+      const riskId = searchParams.get('riskId');
+      const controlId = searchParams.get('controlId');
+
+      if (!riskId || !controlId) {
+        return NextResponse.json(
+          { success: false, error: 'Both riskId and controlId are required' },
+          { status: 400 }
+        );
+      }
+
+      // Verify the mapping exists and belongs to the organization
+      const mapping = await db.client.controlRiskMapping.findFirst({
+        where: {
+          riskId,
+          controlId,
+          risk: {
+            organizationId: user.organizationId
+          }
+        }
+      });
+
+      if (!mapping) {
+        return NextResponse.json(
+          { success: false, error: 'Mapping not found' },
+          { status: 404 }
+        );
+      }
+
+      // Delete the mapping
+      await db.client.controlRiskMapping.delete({
+        where: {
+          riskId_controlId: {
+            riskId,
+            controlId
+          }
+        }
+      });
+
+      return NextResponse.json({
+        success: true,
+        message: 'Mapping deleted successfully'
+      });
+    } catch (error) {
+      console.error('Delete control-risk mapping error:', error);
+      return NextResponse.json(
+        { success: false, error: 'Failed to delete control-risk mapping' },
+        { status: 500 }
+      );
+    }
+  },
+  { requireAuth: true }
+);

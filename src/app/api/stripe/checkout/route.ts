@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { withAPI, createAPIResponse, ForbiddenError, ValidationError } from '@/lib/api/middleware';
-import { getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/middleware';
+import { withApiMiddleware, createAPIResponse, ForbiddenError, ValidationError } from '@/lib/api/middleware';
 import { stripe, createCheckoutSession, SUBSCRIPTION_PLANS, FREE_TRIAL_CONFIG } from '@/lib/stripe';
 import { db } from '@/lib/db';
 import { z } from 'zod';
@@ -13,13 +12,9 @@ const checkoutSchema = z.object({
 });
 
 // POST /api/stripe/checkout - Create Stripe checkout session
-export const POST = withAPI(async (req: NextRequest) => {
-  const authReq = req as AuthenticatedRequest;
-  const user = getAuthenticatedUser(authReq);
-
-  if (!user) {
-    throw new ForbiddenError('Authentication required');
-  }
+export const POST = withApiMiddleware(
+  async (req: NextRequest) => {
+    const user = (req as any).user;
 
   try {
     const body = await req.json();
@@ -112,4 +107,6 @@ export const POST = withAPI(async (req: NextRequest) => {
     
     throw error;
   }
-}); 
+},
+  { requireAuth: true }
+); 

@@ -646,6 +646,15 @@ export function RCSAProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const loadInitialData = async () => {
+      // Check if user is authenticated before loading data
+      const token = localStorage.getItem('auth-token');
+      const sessionToken = sessionStorage.getItem('auth-token');
+      
+      if (!token && !sessionToken) {
+        console.log('Skipping RCSA data load - user not authenticated');
+        return;
+      }
+
       try {
         // Load data individually with error isolation to prevent infinite loops
         const results = await Promise.allSettled([

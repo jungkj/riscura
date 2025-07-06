@@ -24,7 +24,7 @@ jest.mock('@/lib/db', () => ({
 
 // Mock the Stripe service
 const mockStripeService = {
-  getPaymentMethod: jest.fn(),
+  getPaymentMethod: jest.fn<any, any>(),
 };
 jest.mock('@/lib/billing/stripe', () => ({
   stripeService: mockStripeService

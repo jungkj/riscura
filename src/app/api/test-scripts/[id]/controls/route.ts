@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
-import { getAuthenticatedUser } from '@/lib/auth/middleware';
 import { 
   ApiResponseFormatter,
   formatValidationErrors 
@@ -19,11 +18,12 @@ const disassociateControlsSchema = z.object({
 });
 
 // GET /api/test-scripts/[id]/controls - Get controls associated with a test script
-export const GET = withApiMiddleware(async (
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) => {
-  const user = await getAuthenticatedUser(req);
+export const GET = withApiMiddleware(
+  async (
+    req: NextRequest,
+    { params }: { params: { id: string } }
+  ) => {
+    const user = (req as any).user;
   const { id } = params;
   
   // Verify test script exists
@@ -62,14 +62,17 @@ export const GET = withApiMiddleware(async (
     controlAssociations,
     'Associated controls retrieved successfully'
   );
-});
+},
+  { requireAuth: true }
+);
 
 // POST /api/test-scripts/[id]/controls - Associate controls with a test script
-export const POST = withApiMiddleware(async (
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) => {
-  const user = await getAuthenticatedUser(req);
+export const POST = withApiMiddleware(
+  async (
+    req: NextRequest,
+    { params }: { params: { id: string } }
+  ) => {
+    const user = (req as any).user;
   const { id } = params;
   
   // Verify test script exists
@@ -165,14 +168,17 @@ export const POST = withApiMiddleware(async (
     },
     'Controls associated successfully'
   );
-});
+},
+  { requireAuth: true }
+);
 
 // DELETE /api/test-scripts/[id]/controls - Disassociate controls from a test script
-export const DELETE = withApiMiddleware(async (
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) => {
-  const user = await getAuthenticatedUser(req);
+export const DELETE = withApiMiddleware(
+  async (
+    req: NextRequest,
+    { params }: { params: { id: string } }
+  ) => {
+    const user = (req as any).user;
   const { id } = params;
   
   // Verify test script exists
@@ -237,4 +243,6 @@ export const DELETE = withApiMiddleware(async (
     },
     'Controls disassociated successfully'
   );
-});
+},
+  { requireAuth: true }
+);

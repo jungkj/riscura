@@ -795,12 +795,23 @@ export class ChatService {
 
   async getTypingUsers(channelId: string): Promise<string[]> {
     const pattern = `typing:${channelId}:*`;
-    const keys = await redis.keys(pattern);
+    const typingUserIds: string[] = [];
+    let cursor = '0';
     
-    const typingUserIds = keys.map(key => {
-      const parts = key.split(':');
-      return parts[parts.length - 1];
-    });
+    // Use SCAN instead of KEYS for better performance
+    do {
+      const result = await redis.scan(cursor, 'MATCH', pattern, 'COUNT', 100);
+      cursor = result[0];
+      const keys = result[1];
+      
+      // Extract user IDs from keys
+      for (const key of keys) {
+        const parts = key.split(':');
+        if (parts.length >= 3) {
+          typingUserIds.push(parts[parts.length - 1]);
+        }
+      }
+    } while (cursor !== '0');
 
     return typingUserIds;
   }

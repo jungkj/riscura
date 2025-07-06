@@ -1,371 +1,112 @@
-import { NextRequest } from 'next/server';
-import { withAPI, withValidation, createAPIResponse, parsePagination, parseFilters, parseSorting, parseSearch, createPaginationMeta, NotFoundError, ForbiddenError } from '@/lib/api/middleware';
-import { createRiskSchema, riskQuerySchema } from '@/lib/api/schemas';
-import { getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/middleware';
+import { NextRequest, NextResponse } from 'next/server';
+import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
-import { PERMISSIONS } from '@/lib/auth';
+import { z } from 'zod';
 
-// Enum mapping functions with proper validation
-const mapRiskCategory = (apiCategory: string): string => {
-  const mapping: Record<string, string> = {
-    'operational': 'OPERATIONAL',
-    'financial': 'FINANCIAL', 
-    'strategic': 'STRATEGIC',
-    'compliance': 'COMPLIANCE',
-    'technology': 'TECHNOLOGY',
-  };
-  return mapping[apiCategory.toLowerCase()] || 'OPERATIONAL';
-};
+const CreateRiskSchema = z.object({
+  name: z.string().min(1),
+  description: z.string().optional(),
+  category: z.string(),
+  likelihood: z.number().min(1).max(5),
+  impact: z.number().min(1).max(5),
+  status: z.enum(['IDENTIFIED', 'ASSESSED', 'MITIGATED', 'ACCEPTED', 'CLOSED']).optional()
+});
 
-const mapRiskStatus = (apiStatus: string): string => {
-  const mapping: Record<string, string> = {
-    'identified': 'IDENTIFIED',
-    'assessed': 'ASSESSED', 
-    'mitigated': 'MITIGATED',
-    'closed': 'CLOSED',
-  };
-  return mapping[apiStatus.toLowerCase()] || 'IDENTIFIED';
-};
-
-const calculateRiskScore = (likelihood: number, impact: number): number => {
-  return likelihood * impact;
-};
-
-const calculateRiskLevel = (riskScore: number): string => {
-  if (riskScore <= 4) return 'LOW';
-  if (riskScore <= 8) return 'MEDIUM';
-  if (riskScore <= 12) return 'HIGH';
-  return 'CRITICAL';
-};
-
-// GET /api/risks - List risks with pagination and filtering
-export const GET = withAPI(
-  withValidation(riskQuerySchema)(async (req: NextRequest, query = {}) => {
-    const authReq = req as AuthenticatedRequest;
-    const user = getAuthenticatedUser(authReq);
-
-    if (!user) {
-      throw new ForbiddenError('Authentication required');
-    }
-
-    const url = new URL(req.url);
-    const searchParams = url.searchParams;
-
-    // Parse pagination
-    const { skip, take, page, limit } = parsePagination(searchParams, { maxLimit: 100 });
-
-    // Parse sorting
-    const orderBy = parseSorting(searchParams, {
-      defaultField: 'createdAt',
-      defaultOrder: 'desc',
-      allowedFields: ['title', 'riskScore', 'riskLevel', 'status', 'category', 'createdAt', 'updatedAt'],
-    });
-
-    // Parse search
-    const search = parseSearch(searchParams);
-
-    // Build where clause with organization isolation
-    const where: any = {
-      organizationId: user.organizationId,
-    };
-
-    // Add search functionality
-    if (search) {
-      where.OR = [
-        { title: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
-      ];
-    }
-
-    // Add filters from query parameters
-    if (query.category) {
-      where.category = Array.isArray(query.category) 
-        ? { in: query.category.map(mapRiskCategory) }
-        : mapRiskCategory(query.category);
-    }
-
-    if (query.status) {
-      where.status = Array.isArray(query.status)
-        ? { in: query.status.map(mapRiskStatus) }
-        : mapRiskStatus(query.status);
-    }
-
-    if (query.ownerId) {
-      where.owner = query.ownerId;
-    }
-
-    // Date range filtering
-    if (query.dateFrom || query.dateTo) {
-      where.createdAt = {};
-      if (query.dateFrom) where.createdAt.gte = new Date(query.dateFrom);
-      if (query.dateTo) where.createdAt.lte = new Date(query.dateTo);
+export const GET = withApiMiddleware(
+  async (req: NextRequest) => {
+    const user = (req as any).user;
+    
+    if (!user || !user.organizationId) {
+      return NextResponse.json(
+        { success: false, error: 'Organization context required' },
+        { status: 403 }
+      );
     }
 
     try {
-      // Execute queries in parallel
-      const [risks, total] = await Promise.all([
-        db.client.risk.findMany({
-          where,
-          skip,
-          take,
-          orderBy,
-          include: {
-            creator: {
-              select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                email: true,
-              },
-            },
-            assignedUser: {
-              select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                email: true,
-              },
-            },
-            controls: {
-              include: {
-                control: {
-                  select: {
-                    id: true,
-                    title: true,
-                    status: true,
-                    effectiveness: true,
-                  },
-                },
-              },
-            },
-            evidence: {
-              select: {
-                id: true,
-                name: true,
-                createdAt: true,
-              },
-              take: 5, // Limit evidence to avoid payload bloat
-            },
-            _count: {
-              select: {
-                controls: true,
-                evidence: true,
-                tasks: true,
-              },
-            },
-          },
-        }),
-        db.client.risk.count({ where }),
-      ]);
+      const risks = await db.client.risk.findMany({
+        where: { organizationId: user.organizationId },
+        include: {
+          controls: true,
+          createdBy: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true
+            }
+          }
+        },
+        orderBy: { createdAt: 'desc' }
+      });
 
-      // Transform data for API response
-      const transformedRisks = risks.map(risk => ({
-        id: risk.id,
-        title: risk.title,
-        description: risk.description,
-        category: risk.category,
-        likelihood: risk.likelihood,
-        impact: risk.impact,
-        riskScore: risk.riskScore,
-        riskLevel: risk.riskLevel,
-        status: risk.status,
-        owner: risk.assignedUser,
-        dateIdentified: risk.dateIdentified,
-        lastAssessed: risk.lastAssessed,
-        nextReview: risk.nextReview,
-        aiConfidence: risk.aiConfidence,
-        createdAt: risk.createdAt,
-        updatedAt: risk.updatedAt,
-        creator: risk.creator,
-        controls: risk.controls.map(rc => rc.control),
-        evidence: risk.evidence,
-        _count: risk._count,
-      }));
-
-      const paginationMeta = createPaginationMeta(page, limit, total);
-
-      return createAPIResponse(
-        transformedRisks,
-        {
-          pagination: paginationMeta,
-        }
-      );
+      return NextResponse.json({
+        success: true,
+        data: risks
+      });
     } catch (error) {
-      console.error('Error fetching risks:', error);
-      throw new Error('Failed to fetch risks');
+      console.error('Get risks error:', error);
+      return NextResponse.json(
+        { success: false, error: 'Failed to fetch risks' },
+        { status: 500 }
+      );
     }
-  })
+  },
+  { requireAuth: true }
 );
 
-// POST /api/risks - Create new risk
-export const POST = withAPI(
-  withValidation(createRiskSchema)(async (req: NextRequest, data) => {
-    const authReq = req as AuthenticatedRequest;
-    const user = getAuthenticatedUser(authReq);
-
-    if (!user) {
-      throw new ForbiddenError('Authentication required');
+export const POST = withApiMiddleware(
+  async (req: NextRequest) => {
+    const user = (req as any).user;
+    
+    if (!user || !user.organizationId) {
+      return NextResponse.json(
+        { success: false, error: 'Organization context required' },
+        { status: 403 }
+      );
     }
 
-    if (!data) throw new Error('Request body is required');
-
     try {
-      // Calculate risk score and level
-      const riskScore = calculateRiskScore(data.likelihood, data.impact);
-      const riskLevel = calculateRiskLevel(riskScore);
+      const body = await req.json();
+      const validatedData = CreateRiskSchema.parse(body);
 
       const risk = await db.client.risk.create({
         data: {
-          title: data.title,
-          description: data.description,
-          category: mapRiskCategory(data.category) as any,
-          likelihood: data.likelihood,
-          impact: data.impact,
-          riskScore,
-          riskLevel: riskLevel as any,
-          status: data.status ? mapRiskStatus(data.status) as any : 'IDENTIFIED' as any,
-          dateIdentified: data.dateIdentified ? new Date(data.dateIdentified) : new Date(),
-          owner: data.owner,
+          ...validatedData,
           organizationId: user.organizationId,
-          createdBy: user.id,
-        },
-        include: {
-          creator: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              email: true,
-            },
-          },
-          assignedUser: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              email: true,
-            },
-          },
-        },
+          createdById: user.id,
+          riskScore: validatedData.likelihood * validatedData.impact,
+          riskLevel: calculateRiskLevel(validatedData.likelihood * validatedData.impact)
+        }
       });
 
-              return createAPIResponse({
-          data: risk,
-          message: 'Risk created successfully',
-        });
+      return NextResponse.json({
+        success: true,
+        data: risk
+      }, { status: 201 });
     } catch (error) {
-      console.error('Error creating risk:', error);
-      throw new Error('Failed to create risk');
+      if (error instanceof z.ZodError) {
+        return NextResponse.json(
+          { success: false, error: 'Validation failed', details: error.errors },
+          { status: 400 }
+        );
+      }
+      console.error('Create risk error:', error);
+      return NextResponse.json(
+        { success: false, error: 'Failed to create risk' },
+        { status: 500 }
+      );
     }
-  })
+  },
+  { 
+    requireAuth: true,
+    validateBody: CreateRiskSchema 
+  }
 );
 
-// PUT /api/risks - Bulk update risks
-export const PUT = withAPI(async (req: NextRequest) => {
-  const authReq = req as AuthenticatedRequest;
-  const user = getAuthenticatedUser(authReq);
-
-  if (!user) {
-    throw new ForbiddenError('Authentication required');
-  }
-
-  try {
-    const body = await req.json();
-    const { ids, updates } = body;
-
-    if (!ids || !Array.isArray(ids) || ids.length === 0) {
-      throw new Error('Risk IDs are required');
-    }
-
-    // Verify user has access to all risks
-    const existingRisks = await db.client.risk.findMany({
-      where: {
-        id: { in: ids },
-        organizationId: user.organizationId,
-      },
-    });
-
-    if (existingRisks.length !== ids.length) {
-      throw new ForbiddenError('Access denied to some risks');
-    }
-
-    // Prepare update data
-    const updateData: any = {};
-    if (updates.status) updateData.status = mapRiskStatus(updates.status);
-    if (updates.assignedUserId) updateData.assignedUserId = updates.assignedUserId;
-    if (updates.category) updateData.category = mapRiskCategory(updates.category);
-    if (updates.likelihood && updates.impact) {
-      updateData.likelihood = updates.likelihood;
-      updateData.impact = updates.impact;
-      updateData.riskScore = calculateRiskScore(updates.likelihood, updates.impact);
-      updateData.riskLevel = calculateRiskLevel(updateData.riskScore);
-    }
-
-    // Perform bulk update
-    const result = await db.client.risk.updateMany({
-      where: {
-        id: { in: ids },
-        organizationId: user.organizationId,
-      },
-      data: {
-        ...updateData,
-        updatedAt: new Date(),
-      },
-    });
-
-    return createAPIResponse({
-      data: { updated: result.count },
-      message: `${result.count} risks updated successfully`,
-    });
-  } catch (error) {
-    console.error('Error bulk updating risks:', error);
-    throw new Error('Failed to update risks');
-  }
-});
-
-// DELETE /api/risks - Bulk delete risks
-export const DELETE = withAPI(async (req: NextRequest) => {
-  const authReq = req as AuthenticatedRequest;
-  const user = getAuthenticatedUser(authReq);
-
-  if (!user) {
-    throw new ForbiddenError('Authentication required');
-  }
-
-  try {
-    const url = new URL(req.url);
-    const ids = url.searchParams.get('ids')?.split(',') || [];
-
-    if (ids.length === 0) {
-      throw new Error('Risk IDs are required');
-    }
-
-    // Verify user has access to all risks
-    const existingRisks = await db.client.risk.findMany({
-      where: {
-        id: { in: ids },
-        organizationId: user.organizationId,
-      },
-    });
-
-    if (existingRisks.length !== ids.length) {
-      throw new ForbiddenError('Access denied to some risks');
-    }
-
-    // Perform bulk delete
-    const result = await db.client.risk.deleteMany({
-      where: {
-        id: { in: ids },
-        organizationId: user.organizationId,
-      },
-    });
-
-    return createAPIResponse({
-      data: { deleted: result.count },
-      message: `${result.count} risks deleted successfully`,
-    });
-  } catch (error) {
-    console.error('Error bulk deleting risks:', error);
-    throw new Error('Failed to delete risks');
-  }
-}); 
+function calculateRiskLevel(score: number): string {
+  if (score <= 5) return 'LOW';
+  if (score <= 10) return 'MEDIUM';
+  if (score <= 15) return 'HIGH';
+  return 'CRITICAL';
+}

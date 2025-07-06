@@ -1,18 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
-import { getAuthenticatedUser } from '@/lib/auth/auth-middleware';
 import ReportService from '@/services/ReportService';
 import CloudStorageService from '@/services/CloudStorageService';
+import { z } from 'zod';
 
 // GET /api/reports/[id]/download - Download report file
-export const GET = withApiMiddleware(async (
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) => {
-  const { user, organization } = await getAuthenticatedUser(req);
+export const GET = withApiMiddleware(
+  async (
+    req: NextRequest,
+    { params }: { params: { id: string } }
+  ) => {
+    const user = (req as any).user;
 
-  // Get report details
-  const report = await ReportService.getReportById(params.id, organization.id);
+    // Get report details
+    const report = await ReportService.getReportById(params.id, user.organizationId);
 
   if (!report) {
     return NextResponse.json(
@@ -60,39 +61,74 @@ export const GET = withApiMiddleware(async (
       { status: 500 }
     );
   }
+},
+  { requireAuth: true }
+);
+
+// Validation schema for POST request
+const downloadReportSchema = z.object({
+  format: z.enum(['pdf', 'excel']).default('pdf'),
 });
 
 // POST /api/reports/[id]/download - Generate and download report
-export const POST = withApiMiddleware(async (
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) => {
-  const { user, organization } = await getAuthenticatedUser(req);
+export const POST = withApiMiddleware(
+  async (
+    req: NextRequest,
+    { params }: { params: { id: string } }
+  ) => {
+    const user = (req as any).user;
 
-  const body = await req.json();
-  const { format = 'pdf' } = body;
+  try {
+    // Parse and validate request body
+    const body = await req.json();
+    const validatedData = downloadReportSchema.parse(body);
+    
+    // Sanitize the format parameter
+    const format = validatedData.format;
 
-  // Generate report if not already generated
-  const report = await ReportService.generateReport(
-    params.id,
-    format,
-    organization.id
-  );
+    // Generate report if not already generated
+    const report = await ReportService.generateReport(
+      params.id,
+      format,
+      user.organizationId
+    );
 
-  if (!report.fileUrl) {
+    if (!report.fileUrl) {
+      return NextResponse.json(
+        { error: 'Failed to generate report file' },
+        { status: 500 }
+      );
+    }
+
+    // Return download URL
+    return NextResponse.json({
+      data: {
+        downloadUrl: report.fileUrl,
+        format: report.format,
+        generatedAt: report.generatedAt,
+      },
+      message: 'Report ready for download',
+    });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { 
+          error: 'Invalid request format', 
+          details: error.errors.map(e => ({
+            field: e.path.join('.'),
+            message: e.message
+          }))
+        },
+        { status: 400 }
+      );
+    }
+    
+    console.error('Error generating report:', error);
     return NextResponse.json(
-      { error: 'Failed to generate report file' },
+      { error: 'Failed to generate report' },
       { status: 500 }
     );
   }
-
-  // Return download URL
-  return NextResponse.json({
-    data: {
-      downloadUrl: report.fileUrl,
-      format: report.format,
-      generatedAt: report.generatedAt,
-    },
-    message: 'Report ready for download',
-  });
-}); 
+},
+  { requireAuth: true }
+); 

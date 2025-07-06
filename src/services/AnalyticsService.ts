@@ -152,7 +152,7 @@ export class AnalyticsService {
     const testedControls = controls.filter(control =>
       control.testScripts.some(ts => ts.testScript.testExecutions.length > 0)
     );
-    const testingCoverage = (testedControls.length / controls.length) * 100;
+    const testingCoverage = controls.length > 0 ? (testedControls.length / controls.length) * 100 : 0;
 
     // Get trend data
     const trend = await this.getControlTrend(organizationId, timeRange);
@@ -187,7 +187,7 @@ export class AnalyticsService {
     );
 
     // Calculate completion metrics
-    const completionRate = (completedTasks.length / tasks.length) * 100;
+    const completionRate = tasks.length > 0 ? (completedTasks.length / tasks.length) * 100 : 0;
     const averageCompletionTime = this.calculateAverageCompletionTime(completedTasks);
 
     // Get trend data
@@ -311,29 +311,95 @@ export class AnalyticsService {
   private async getRiskTrend(organizationId: string, timeRange: TimeRange): Promise<TrendData[]> {
     const days = eachDayOfInterval({ start: timeRange.start, end: timeRange.end });
     
-    // For demo purposes, generate trend data
-    return days.map((day, index) => ({
-      date: format(day, 'MMM dd'),
-      value: Math.floor(20 + Math.random() * 10 + index * 0.5),
-    }));
+    // Query actual risk data for each day
+    const trendData = await Promise.all(
+      days.map(async (day) => {
+        const startOfDay = new Date(day);
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date(day);
+        endOfDay.setHours(23, 59, 59, 999);
+
+        const count = await prisma.risk.count({
+          where: {
+            organizationId,
+            createdAt: {
+              gte: startOfDay,
+              lte: endOfDay,
+            },
+          },
+        });
+
+        return {
+          date: format(day, 'MMM dd'),
+          value: count,
+        };
+      })
+    );
+
+    return trendData;
   }
 
   private async getControlTrend(organizationId: string, timeRange: TimeRange): Promise<TrendData[]> {
     const days = eachDayOfInterval({ start: timeRange.start, end: timeRange.end });
     
-    return days.map((day, index) => ({
-      date: format(day, 'MMM dd'),
-      value: Math.floor(15 + Math.random() * 5 + index * 0.3),
-    }));
+    // Query actual control data for each day
+    const trendData = await Promise.all(
+      days.map(async (day) => {
+        const startOfDay = new Date(day);
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date(day);
+        endOfDay.setHours(23, 59, 59, 999);
+
+        const count = await prisma.control.count({
+          where: {
+            organizationId,
+            createdAt: {
+              gte: startOfDay,
+              lte: endOfDay,
+            },
+          },
+        });
+
+        return {
+          date: format(day, 'MMM dd'),
+          value: count,
+        };
+      })
+    );
+
+    return trendData;
   }
 
   private async getTaskTrend(organizationId: string, timeRange: TimeRange): Promise<TrendData[]> {
     const days = eachDayOfInterval({ start: timeRange.start, end: timeRange.end });
     
-    return days.map((day, index) => ({
-      date: format(day, 'MMM dd'),
-      value: Math.floor(5 + Math.random() * 10),
-    }));
+    // Query actual task completion data for each day
+    const trendData = await Promise.all(
+      days.map(async (day) => {
+        const startOfDay = new Date(day);
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date(day);
+        endOfDay.setHours(23, 59, 59, 999);
+
+        const count = await prisma.task.count({
+          where: {
+            organizationId,
+            status: 'COMPLETED',
+            completedAt: {
+              gte: startOfDay,
+              lte: endOfDay,
+            },
+          },
+        });
+
+        return {
+          date: format(day, 'MMM dd'),
+          value: count,
+        };
+      })
+    );
+
+    return trendData;
   }
 
   private calculateAverageCompletionTime(completedTasks: any[]): number {

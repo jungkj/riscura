@@ -41,6 +41,10 @@ model Organization {
   reportSchedules      ReportSchedule[]
   proboIntegration     ProboIntegration?
   chatChannels         ChatChannel[]
+  notifications        Notification[]
+  notificationDigests  NotificationDigest[]
+  complianceFrameworks ComplianceFramework[]
+  complianceAssessments ComplianceAssessment[]
 
   @@map("organizations")
 }
@@ -75,8 +79,8 @@ model User {
   createdExtractedControls ExtractedControl[]       @relation("ExtractedControlCreatedBy")
   createdExtractedRisks    ExtractedRisk[]          @relation("ExtractedRiskCreatedBy")
   messages                 Message[]                @relation("MessageSender")
-  notificationPreferences  NotificationPreferences?
-  notifications            Notification[]
+  notificationPreferences  LegacyNotificationPreferences?
+  legacyNotifications      LegacyNotification[]
   createdQuestionnaires    Questionnaire[]          @relation("QuestionnaireCreatedBy")
   createdRcsaEntries       RcsaEntry[]              @relation("RcsaEntryCreatedBy")
   createdReports           Report[]                 @relation("ReportCreatedBy")
@@ -105,6 +109,16 @@ model User {
   chatMessages             ChatMessage[]            @relation("ChatMessageAuthor")
   chatReactions            ChatReaction[]
   chatReadReceipts         ChatReadReceipt[]
+  notificationPreference   NotificationPreference?
+  notificationsList        Notification[]
+  notificationDigests      NotificationDigest[]
+  pushSubscriptions        PushSubscription[]
+  createdComplianceFrameworks ComplianceFramework[] @relation("ComplianceFrameworkCreatedBy")
+  assessorAssessments      ComplianceAssessment[] @relation("ComplianceAssessmentAssessor")
+  reviewerAssessments      ComplianceAssessment[] @relation("ComplianceAssessmentReviewer")
+  assessedItems            ComplianceAssessmentItem[] @relation("AssessmentItemAssessor")
+  reviewedItems            ComplianceAssessmentItem[] @relation("AssessmentItemReviewer")
+  assignedGaps             ComplianceGap[] @relation("ComplianceGapAssignee")
 
   @@index([organizationId])
   @@index([email])
@@ -146,7 +160,6 @@ model Risk {
   updatedAt       DateTime             @updatedAt
   createdBy       String?
   activities      Activity[]
-  comments        Comment[]
   controls        ControlRiskMapping[]
   creator         User?                @relation("RiskCreatedBy", fields: [createdBy], references: [id])
   organization    Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -154,6 +167,7 @@ model Risk {
   spreadsheetRows SpreadsheetRow[]     @relation("SpreadsheetRowRisk")
   tasks           Task[]
   evidence        Document[]           @relation("RiskEvidence")
+  notifications   Notification[]
 
   @@index([organizationId])
   @@index([category])
@@ -207,7 +221,6 @@ model Control {
   updatedAt           DateTime             @updatedAt
   createdBy           String?
   activities          Activity[]
-  comments            Comment[]
   risks               ControlRiskMapping[]
   creator             User?                @relation("ControlCreatedBy", fields: [createdBy], references: [id])
   organization        Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -216,6 +229,8 @@ model Control {
   tasks               Task[]
   evidence            Document[]           @relation("ControlEvidence")
   testScripts         ControlTestScript[]
+  requirementMappings RequirementControlMapping[]
+  testExecutions      TestExecution[]
 
   @@index([organizationId])
   @@index([type])
@@ -239,7 +254,6 @@ model Document {
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
   activities      Activity[]
-  comments        Comment[]
   organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   uploader        User?        @relation("DocumentCreatedBy", fields: [uploadedBy], references: [id])
   controlEvidence Control[]    @relation("ControlEvidence")
@@ -457,6 +471,7 @@ model Report {
   activities       Activity[]
   creator          User?        @relation("ReportCreatedBy", fields: [createdBy], references: [id])
   organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  notifications    Notification[]
 
   @@index([organizationId])
   @@index([type])
@@ -486,7 +501,6 @@ model Task {
   updatedAt       DateTime         @updatedAt
   createdBy       String?
   activities      Activity[]
-  comments        Comment[]
   spreadsheetRows SpreadsheetRow[] @relation("SpreadsheetRowTask")
   assignee        User?            @relation("TaskAssignedTo", fields: [assigneeId], references: [id])
   control         Control?         @relation(fields: [controlId], references: [id])
@@ -533,10 +547,6 @@ model Comment {
   attachments Json?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-  controls    Control    @relation(fields: [entityId], references: [id], map: "comment_control_fkey")
-  documents   Document   @relation(fields: [entityId], references: [id], map: "comment_document_fkey")
-  risks       Risk       @relation(fields: [entityId], references: [id], map: "comment_risk_fkey")
-  tasks       Task       @relation(fields: [entityId], references: [id], map: "comment_task_fkey")
   author      User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   parent      Comment?   @relation("CommentReplies", fields: [parentId], references: [id])
   replies     Comment[]  @relation("CommentReplies")
@@ -547,7 +557,7 @@ model Comment {
   @@map("comments")
 }
 
-model Notification {
+model LegacyNotification {
   id                String           @id @default(cuid())
   type              NotificationType
   title             String
@@ -577,7 +587,7 @@ model Notification {
   @@index([read])
   @@index([isRead])
   @@index([createdAt])
-  @@map("notifications")
+  @@map("legacy_notifications")
 }
 
 model Activity {
@@ -650,7 +660,7 @@ model AIUsageLog {
   @@map("ai_usage_logs")
 }
 
-model NotificationPreferences {
+model LegacyNotificationPreferences {
   id         String   @id @default(cuid())
   userId     String   @unique
   email      Json
@@ -663,7 +673,7 @@ model NotificationPreferences {
   updatedAt  DateTime @updatedAt
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("notification_preferences")
+  @@map("legacy_notification_preferences")
 }
 
 model EncryptionKey {
@@ -1357,6 +1367,7 @@ model TestExecution {
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
   testScript      TestScript     @relation(fields: [testScriptId], references: [id])
+  control         Control        @relation(fields: [controlId], references: [id])
   executor        User           @relation("TestExecutionExecutor", fields: [executedBy], references: [id])
 
   @@index([testScriptId])
@@ -1616,4 +1627,352 @@ model Cache {
   @@index([key])
   @@index([expiresAt])
   @@map("cache")
+}
+
+// Notification system models
+model NotificationPreference {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  email          Boolean  @default(true)
+  push           Boolean  @default(true)
+  inApp          Boolean  @default(true)
+  digest         DigestFrequency @default(DAILY)
+  categories     Json     @default("{}") // { risks: true, compliance: true, reports: true, etc }
+  quietHours     Json?    // { start: "22:00", end: "08:00", timezone: "UTC" }
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  @@map("notification_preferences")
+}
+
+model Notification {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  title          String
+  message        String   @db.Text
+  category       NotificationCategory
+  priority       NotificationPriority @default(MEDIUM)
+  type           NotificationMessageType
+  
+  data           Json?    // Additional context data
+  actionUrl      String?
+  iconUrl        String?
+  
+  read           Boolean  @default(false)
+  readAt         DateTime?
+  dismissed      Boolean  @default(false)
+  dismissedAt    DateTime?
+  
+  // Delivery status
+  emailSent      Boolean  @default(false)
+  emailSentAt    DateTime?
+  pushSent       Boolean  @default(false)
+  pushSentAt     DateTime?
+  
+  // Related entities
+  riskId         String?
+  risk           Risk?    @relation(fields: [riskId], references: [id], onDelete: SetNull)
+  reportId       String?
+  report         Report?  @relation(fields: [reportId], references: [id], onDelete: SetNull)
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  @@index([userId, read, createdAt])
+  @@index([organizationId, category])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+model NotificationDigest {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  frequency      DigestFrequency
+  lastSentAt     DateTime?
+  nextSendAt     DateTime
+  notifications  Json     // Array of notification IDs included
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  @@unique([userId, frequency])
+  @@index([nextSendAt])
+  @@map("notification_digests")
+}
+
+model PushSubscription {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  endpoint       String   @unique
+  auth           String
+  p256dh         String
+  deviceInfo     Json?    // Browser, OS, etc
+  
+  active         Boolean  @default(true)
+  lastUsedAt     DateTime?
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  @@index([userId, active])
+  @@map("push_subscriptions")
+}
+
+enum DigestFrequency {
+  REALTIME
+  HOURLY
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum NotificationCategory {
+  RISK
+  COMPLIANCE
+  REPORT
+  CHAT
+  BILLING
+  SYSTEM
+  SECURITY
+  TEAM
+}
+
+enum NotificationPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum NotificationMessageType {
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+  ACTION_REQUIRED
+}
+
+// Compliance Gap Analysis Models
+model ComplianceFramework {
+  id             String   @id @default(cuid())
+  name           String
+  description    String?
+  version        String?
+  type           ComplianceFrameworkType
+  isActive       Boolean  @default(true)
+  organizationId String
+  createdBy      String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  requirements   ComplianceRequirement[]
+  assessments    ComplianceAssessment[]
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  creator        User? @relation("ComplianceFrameworkCreatedBy", fields: [createdBy], references: [id])
+  
+  @@index([organizationId])
+  @@index([type])
+  @@map("compliance_frameworks")
+}
+
+model ComplianceRequirement {
+  id                String   @id @default(cuid())
+  frameworkId       String
+  requirementId     String   // External ID from framework (e.g., "PCI-DSS 1.1.1")
+  title             String
+  description       String   @db.Text
+  category          String
+  criticality       RequirementCriticality
+  parentId          String?
+  order             Int      @default(0)
+  
+  framework         ComplianceFramework @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
+  parent            ComplianceRequirement? @relation("RequirementHierarchy", fields: [parentId], references: [id])
+  children          ComplianceRequirement[] @relation("RequirementHierarchy")
+  controlMappings   RequirementControlMapping[]
+  assessmentItems   ComplianceAssessmentItem[]
+  
+  @@index([frameworkId])
+  @@index([parentId])
+  @@map("compliance_requirements")
+}
+
+model RequirementControlMapping {
+  id               String   @id @default(cuid())
+  requirementId    String
+  controlId        String
+  mappingType      MappingType
+  effectiveness    Float    @default(0) // 0-100
+  notes            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  requirement      ComplianceRequirement @relation(fields: [requirementId], references: [id], onDelete: Cascade)
+  control          Control @relation(fields: [controlId], references: [id], onDelete: Cascade)
+  
+  @@unique([requirementId, controlId])
+  @@index([requirementId])
+  @@index([controlId])
+  @@map("requirement_control_mappings")
+}
+
+model ComplianceAssessment {
+  id               String   @id @default(cuid())
+  frameworkId      String
+  name             String
+  description      String?
+  assessmentDate   DateTime @default(now())
+  dueDate          DateTime?
+  status           AssessmentStatus @default(IN_PROGRESS)
+  overallScore     Float?   // 0-100
+  organizationId   String
+  assessorId       String?
+  reviewerId       String?
+  completedAt      DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  framework        ComplianceFramework @relation(fields: [frameworkId], references: [id])
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assessor         User? @relation("ComplianceAssessmentAssessor", fields: [assessorId], references: [id])
+  reviewer         User? @relation("ComplianceAssessmentReviewer", fields: [reviewerId], references: [id])
+  items            ComplianceAssessmentItem[]
+  gaps             ComplianceGap[]
+  
+  @@index([organizationId])
+  @@index([frameworkId])
+  @@index([status])
+  @@map("compliance_assessments")
+}
+
+model ComplianceAssessmentItem {
+  id                 String   @id @default(cuid())
+  assessmentId       String
+  requirementId      String
+  status             ComplianceStatus
+  score              Float?   // 0-100
+  evidence           Json?    // Array of evidence links/documents
+  findings           String?  @db.Text
+  recommendations    String?  @db.Text
+  assessedBy         String?
+  assessedAt         DateTime?
+  reviewedBy         String?
+  reviewedAt         DateTime?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  
+  assessment         ComplianceAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  requirement        ComplianceRequirement @relation(fields: [requirementId], references: [id])
+  assessor           User? @relation("AssessmentItemAssessor", fields: [assessedBy], references: [id])
+  reviewer           User? @relation("AssessmentItemReviewer", fields: [reviewedBy], references: [id])
+  
+  @@unique([assessmentId, requirementId])
+  @@index([assessmentId])
+  @@index([requirementId])
+  @@index([status])
+  @@map("compliance_assessment_items")
+}
+
+model ComplianceGap {
+  id                   String   @id @default(cuid())
+  assessmentId         String
+  requirementId        String
+  gapType              GapType
+  severity             GapSeverity
+  description          String   @db.Text
+  impact               String?  @db.Text
+  remediationPlan      String?  @db.Text
+  estimatedEffort      Int?     // Hours
+  targetDate           DateTime?
+  status               GapStatus @default(IDENTIFIED)
+  assignedTo           String?
+  closedAt             DateTime?
+  closureNotes         String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  
+  assessment           ComplianceAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  assignee             User? @relation("ComplianceGapAssignee", fields: [assignedTo], references: [id])
+  
+  @@index([assessmentId])
+  @@index([status])
+  @@index([severity])
+  @@map("compliance_gaps")
+}
+
+enum ComplianceFrameworkType {
+  ISO_27001
+  SOC2
+  PCI_DSS
+  HIPAA
+  GDPR
+  NIST
+  CIS
+  CUSTOM
+}
+
+enum RequirementCriticality {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum MappingType {
+  PRIMARY
+  SECONDARY
+  SUPPORTING
+  COMPENSATING
+}
+
+enum AssessmentStatus {
+  PLANNED
+  IN_PROGRESS
+  UNDER_REVIEW
+  COMPLETED
+  CANCELLED
+}
+
+enum ComplianceStatus {
+  COMPLIANT
+  PARTIALLY_COMPLIANT
+  NON_COMPLIANT
+  NOT_APPLICABLE
+  NOT_ASSESSED
+}
+
+enum GapType {
+  MISSING_CONTROL
+  INEFFECTIVE_CONTROL
+  MISSING_DOCUMENTATION
+  PROCESS_GAP
+  TECHNICAL_GAP
+  TRAINING_GAP
+  POLICY_GAP
+}
+
+enum GapSeverity {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum GapStatus {
+  IDENTIFIED
+  IN_REMEDIATION
+  RESOLVED
+  ACCEPTED
+  DEFERRED
 }
