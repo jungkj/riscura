@@ -18,11 +18,11 @@ const disassociateControlsSchema = z.object({
 });
 
 // GET /api/test-scripts/[id]/controls - Get controls associated with a test script
-export const GET = withApiMiddleware(
-  async (
-    req: NextRequest,
-    { params }: { params: { id: string } }
-  ) => {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { [key: string]: string } }
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
     const user = (req as any).user;
   const { id } = params;
   
@@ -62,16 +62,17 @@ export const GET = withApiMiddleware(
     controlAssociations,
     'Associated controls retrieved successfully'
   );
+})(req);
 },
   { requireAuth: true }
 );
 
 // POST /api/test-scripts/[id]/controls - Associate controls with a test script
-export const POST = withApiMiddleware(
-  async (
-    req: NextRequest,
-    { params }: { params: { id: string } }
-  ) => {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { [key: string]: string } }
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
     const user = (req as any).user;
   const { id } = params;
   
@@ -168,16 +169,17 @@ export const POST = withApiMiddleware(
     },
     'Controls associated successfully'
   );
+})(req);
 },
   { requireAuth: true }
 );
 
 // DELETE /api/test-scripts/[id]/controls - Disassociate controls from a test script
-export const DELETE = withApiMiddleware(
-  async (
-    req: NextRequest,
-    { params }: { params: { id: string } }
-  ) => {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { [key: string]: string } }
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
     const user = (req as any).user;
   const { id } = params;
   
@@ -243,6 +245,7 @@ export const DELETE = withApiMiddleware(
     },
     'Controls disassociated successfully'
   );
+})(req);
 },
   { requireAuth: true }
 );

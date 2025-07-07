@@ -34,11 +34,11 @@ const updateTestScriptSchema = z.object({
 });
 
 // GET /api/test-scripts/[id] - Get a single test script
-export const GET = withApiMiddleware(
-  async (
-    req: NextRequest,
-    { params }: { params: { id: string } }
-  ) => {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { [key: string]: string } }
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
     const user = (req as any).user;
   const { id } = params;
   
@@ -103,16 +103,17 @@ export const GET = withApiMiddleware(
     testScript,
     'Test script retrieved successfully'
   );
+})(req);
 },
   { requireAuth: true }
 );
 
 // PATCH /api/test-scripts/[id] - Update a test script
-export const PATCH = withApiMiddleware(
-  async (
-    req: NextRequest,
-    { params }: { params: { id: string } }
-  ) => {
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: { [key: string]: string } }
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
     const user = (req as any).user;
   const { id } = params;
   
@@ -205,16 +206,17 @@ export const PATCH = withApiMiddleware(
     updatedTestScript,
     'Test script updated successfully'
   );
+})(req);
 },
   { requireAuth: true }
 );
 
 // DELETE /api/test-scripts/[id] - Delete a test script
-export const DELETE = withApiMiddleware(
-  async (
-    req: NextRequest,
-    { params }: { params: { id: string } }
-  ) => {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { [key: string]: string } }
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
     const user = (req as any).user;
   const { id } = params;
   
@@ -281,6 +283,7 @@ export const DELETE = withApiMiddleware(
     { id },
     'Test script deleted successfully'
   );
+})(req);
 },
   { requireAuth: true }
 );

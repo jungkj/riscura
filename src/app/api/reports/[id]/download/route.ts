@@ -5,11 +5,11 @@ import CloudStorageService from '@/services/CloudStorageService';
 import { z } from 'zod';
 
 // GET /api/reports/[id]/download - Download report file
-export const GET = withApiMiddleware(
-  async (
-    req: NextRequest,
-    { params }: { params: { id: string } }
-  ) => {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { [key: string]: string } }
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
     const user = (req as any).user;
 
     // Get report details
@@ -61,6 +61,7 @@ export const GET = withApiMiddleware(
       { status: 500 }
     );
   }
+})(req);
 },
   { requireAuth: true }
 );
@@ -71,11 +72,11 @@ const downloadReportSchema = z.object({
 });
 
 // POST /api/reports/[id]/download - Generate and download report
-export const POST = withApiMiddleware(
-  async (
-    req: NextRequest,
-    { params }: { params: { id: string } }
-  ) => {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { [key: string]: string } }
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
     const user = (req as any).user;
 
   try {
@@ -129,6 +130,7 @@ export const POST = withApiMiddleware(
       { status: 500 }
     );
   }
+})(req);
 },
   { requireAuth: true }
 ); 
