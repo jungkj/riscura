@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
-import { withAPI, withValidation, createAPIResponse, NotFoundError, ForbiddenError, ConflictError } from './middleware';
+import { withAPI, withValidation, createAPIResponse, ForbiddenError, ConflictError } from './middleware';
+import { createNotFoundError } from './error-handler';
 import { bulkOperationSchema } from './schemas';
 import { getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/middleware';
 import { db } from '@/lib/db';
@@ -49,7 +50,9 @@ export function createBulkHandler(
       if (entities.length !== ids.length) {
         const foundIds = entities.map((e: any) => e.id);
         const missingIds = ids.filter((id: string) => !foundIds.includes(id));
-        throw new NotFoundError(`Entities not found: ${missingIds.join(', ')}`);
+        throw createNotFoundError(
+          `${entityType.charAt(0).toUpperCase() + entityType.slice(1)}s not found: ${missingIds.join(', ')}`
+        );
       }
 
       // Destructive operations require confirmation

@@ -225,4 +225,7 @@ export const backgrounds = {
     dark: 'bg-slate-900/80 backdrop-blur-sm',
     subtle: 'bg-slate-50/80 backdrop-blur-sm'
   }
-}; 
+};
+
+// Export spacing as an alias to typographySpacing for backward compatibility
+export const spacing = typographySpacing; 

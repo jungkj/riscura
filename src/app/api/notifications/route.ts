@@ -1,78 +1,49 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { withApiMiddleware } from '@/lib/api/middleware';
+import NotificationService from '@/services/NotificationService';
 
-// GET /api/notifications - List user's notifications (stub implementation)
-export async function GET(request: NextRequest) {
-  try {
-    return NextResponse.json(
-      { 
-        error: 'Notifications list not implemented',
-        data: [],
+export const GET = withApiMiddleware(
+  async (req: NextRequest) => {
+    const user = (req as any).user;
+    
+    if (!user || !user.organizationId) {
+      return NextResponse.json(
+        { success: false, error: 'Organization context required' },
+        { status: 403 }
+      );
+    }
+
+    try {
+      const { searchParams } = new URL(req.url);
+      const page = parseInt(searchParams.get('page') || '1', 10);
+      const limit = parseInt(searchParams.get('limit') || '10', 10);
+      const unreadOnly = searchParams.get('unreadOnly') === 'true';
+
+      const result = await NotificationService.getUserNotifications(
+        user.id,
+        page,
+        limit,
+        unreadOnly
+      );
+
+      return NextResponse.json({
+        success: true,
+        data: result.notifications,
         meta: {
-          total: 0,
-          unreadCount: 0
+          total: result.total,
+          page,
+          limit,
+          pages: result.pages,
+          unreadCount: result.unreadCount
         }
-      },
-      { status: 501 }
-    );
-  } catch (error) {
-    console.error('Get notifications error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
-}
-
-// POST /api/notifications - Create new notification (stub implementation)
-export async function POST(request: NextRequest) {
-  try {
-    return NextResponse.json(
-      { 
-        error: 'Create notification not implemented'
-      },
-      { status: 501 }
-    );
-  } catch (error) {
-    console.error('Create notification error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
-}
-
-// PUT /api/notifications - Bulk update notifications (stub implementation)
-export async function PUT(request: NextRequest) {
-  try {
-    return NextResponse.json(
-      { 
-        error: 'Bulk update notifications not implemented'
-      },
-      { status: 501 }
-    );
-  } catch (error) {
-    console.error('Bulk update notifications error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
-}
-
-// DELETE /api/notifications - Delete notifications (stub implementation)
-export async function DELETE(request: NextRequest) {
-  try {
-    return NextResponse.json(
-      { 
-        error: 'Delete notifications not implemented'
-      },
-      { status: 501 }
-    );
-  } catch (error) {
-    console.error('Delete notifications error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
-} 
+      });
+    } catch (error) {
+      console.error('Get notifications error:', error);
+      return NextResponse.json(
+        { success: false, error: 'Failed to fetch notifications' },
+        { status: 500 }
+      );
+    }
+  },
+  { requireAuth: true }
+);

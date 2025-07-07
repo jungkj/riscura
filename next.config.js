@@ -65,6 +65,32 @@ const nextConfig = {
         ],
       },
       {
+        source: '/_next/static/css/(.*).css',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/css; charset=utf-8',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/chunks/(.*).js',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/javascript; charset=utf-8',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
         source: '/api/(.*)',
         headers: [
           {
@@ -102,42 +128,63 @@ const nextConfig = {
       }
     }
 
-    // Optimize chunks
+    // Optimize chunks with proper CSS/JS separation
     if (config.optimization) {
       config.optimization.splitChunks = {
         ...config.optimization.splitChunks,
         chunks: 'all',
         cacheGroups: {
           ...config.optimization.splitChunks?.cacheGroups,
+          // Separate vendor JS from CSS
           vendor: {
-            test: /[\\/]node_modules[\\/]/,
+            test: /[\\/]node_modules[\\/].*\.(js|jsx|ts|tsx)$/,
             name: 'vendors',
             priority: 10,
             reuseExistingChunk: true,
+            enforce: true,
+          },
+          // Separate vendor CSS
+          vendorStyles: {
+            test: /[\\/]node_modules[\\/].*\.(css|scss|sass)$/,
+            name: 'vendor-styles',
+            priority: 11,
+            reuseExistingChunk: true,
+            enforce: true,
+            type: 'css/mini-extract',
           },
           common: {
+            test: /\.(js|jsx|ts|tsx)$/,
             name: 'common',
             minChunks: 2,
             priority: 5,
             reuseExistingChunk: true,
           },
           ui: {
-            test: /[\\/]src[\\/]components[\\/]ui[\\/]/,
+            test: /[\\/]src[\\/]components[\\/]ui[\\/].*\.(js|jsx|ts|tsx)$/,
             name: 'ui',
             priority: 15,
             reuseExistingChunk: true,
           },
           charts: {
-            test: /[\\/](recharts|chart\.js|d3)[\\/]/,
+            test: /[\\/](recharts|chart\.js|d3)[\\/].*\.(js|jsx|ts|tsx)$/,
             name: 'charts',
             priority: 20,
             reuseExistingChunk: true,
           },
           icons: {
-            test: /[\\/](lucide-react|@heroicons|react-icons)[\\/]/,
+            test: /[\\/](lucide-react|@heroicons|react-icons)[\\/].*\.(js|jsx|ts|tsx)$/,
             name: 'icons',
             priority: 25,
             reuseExistingChunk: true,
+          },
+          // Global styles
+          styles: {
+            test: /\.(css|scss|sass)$/,
+            name: 'styles',
+            priority: 30,
+            reuseExistingChunk: true,
+            enforce: true,
+            type: 'css/mini-extract',
           },
         },
       };

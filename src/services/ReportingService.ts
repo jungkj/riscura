@@ -451,7 +451,8 @@ export class ReportingService {
             },
           } : undefined,
           include: {
-            controlAssessments: true,
+            items: true,
+            gaps: true,
           },
         },
       },
@@ -464,8 +465,8 @@ export class ReportingService {
         req.controls && req.controls.length > 0 && req.controls.some((controlId: string) => {
           // Check if any control referenced in the requirement is implemented
           return framework.assessments.some((assessment: any) => 
-            assessment.controlAssessments.some((result: any) => 
-              result.controlId === controlId && result.status === 'EFFECTIVE'
+            assessment.items.some((item: any) => 
+              item.controlId === controlId && item.status === 'COMPLIANT'
             )
           );
         })

@@ -5,6 +5,7 @@ interface AssessmentResults {
   controlEffectiveness: any;
   recommendations: any[];
   actionPlan: any[];
+  executiveSummary?: string;
 }
 
 export interface ReportTemplate {
@@ -468,7 +469,7 @@ export class ReportGenerationService {
     
     switch (section.id) {
       case 'exec-summary':
-        return this.formatContent(results.executiveSummary, format);
+        return this.formatContent(results.executiveSummary || this.generateExecutiveSummaryContent(results), format);
       
       case 'compliance-statement':
         return this.formatContent(
@@ -1079,6 +1080,31 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
   private estimateFileSize(content: string): number {
     // Rough estimation in bytes
     return content.length * 2; // Account for formatting and metadata
+  }
+
+  private generateExecutiveSummaryContent(results: AssessmentResults): string {
+    const riskSummary = results.riskAssessment ? 
+      `Total Risks: ${results.riskAssessment.totalRisks || 0}, Critical: ${results.riskAssessment.risksByLevel?.CRITICAL || 0}` : 
+      'Risk assessment data not available';
+    
+    const complianceSummary = results.complianceAssessment ? 
+      `Compliance Score: ${results.complianceAssessment.overallScore || 0}%, Rating: ${results.complianceAssessment.overallRating || 'N/A'}` : 
+      'Compliance assessment data not available';
+    
+    const controlSummary = results.controlEffectiveness ? 
+      `Total Controls: ${results.controlEffectiveness.totalControls || 0}, Average Effectiveness: ${results.controlEffectiveness.averageEffectiveness || 0}%` : 
+      'Control effectiveness data not available';
+
+    return `
+EXECUTIVE SUMMARY
+
+${riskSummary}
+${complianceSummary}
+${controlSummary}
+
+This assessment was conducted to evaluate the organization's risk posture, compliance status, and control effectiveness. 
+The results provide insights into areas requiring immediate attention and recommendations for improvement.
+    `.trim();
   }
 
   // Public methods for template management
