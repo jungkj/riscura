@@ -2,14 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
 import { z } from 'zod';
+import { RiskCategory, RiskLevel, RiskStatus } from '@prisma/client';
 
 const CreateRiskSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),
-  category: z.string(),
+  category: z.nativeEnum(RiskCategory),
   likelihood: z.number().min(1).max(5),
   impact: z.number().min(1).max(5),
-  status: z.enum(['IDENTIFIED', 'ASSESSED', 'MITIGATED', 'ACCEPTED', 'CLOSED']).optional()
+  status: z.nativeEnum(RiskStatus).optional()
 });
 
 export const GET = withApiMiddleware(
@@ -27,26 +28,45 @@ export const GET = withApiMiddleware(
     try {
       console.log('[Risks API] Fetching risks for organization:', user.organizationId);
       
+      // Parse pagination parameters from query string
+      const { searchParams } = new URL(req.url);
+      const page = parseInt(searchParams.get('page') || '1');
+      const limit = parseInt(searchParams.get('limit') || '50');
+      const offset = (page - 1) * limit;
+      
+      // Get total count for pagination
+      const totalCount = await db.risk.count({
+        where: { organizationId: user.organizationId }
+      });
+      
       // Start with a simple query first
-      const risks = await db.client.risk.findMany({
+      const risks = await db.risk.findMany({
         where: { organizationId: user.organizationId },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
+        skip: offset,
+        take: limit
       });
 
-      console.log(`[Risks API] Found ${risks.length} risks`);
+      console.log(`[Risks API] Found ${risks.length} risks (page ${page}, total: ${totalCount})`);
 
-      // If no risks found, return empty array
+      // If no risks found, return empty array with pagination info
       if (!risks || risks.length === 0) {
         return NextResponse.json({
           success: true,
           data: [],
-          message: 'No risks found'
+          message: 'No risks found',
+          pagination: {
+            page,
+            limit,
+            total: totalCount,
+            totalPages: Math.ceil(totalCount / limit)
+          }
         });
       }
 
       // Try to include relationships if we have risks
       try {
-        const risksWithRelations = await db.client.risk.findMany({
+        const risksWithRelations = await db.risk.findMany({
           where: { organizationId: user.organizationId },
           include: {
             controls: {
@@ -63,19 +83,33 @@ export const GET = withApiMiddleware(
               }
             }
           },
-          orderBy: { createdAt: 'desc' }
+          orderBy: { createdAt: 'desc' },
+          skip: offset,
+          take: limit
         });
 
         return NextResponse.json({
           success: true,
-          data: risksWithRelations
+          data: risksWithRelations,
+          pagination: {
+            page,
+            limit,
+            total: totalCount,
+            totalPages: Math.ceil(totalCount / limit)
+          }
         });
       } catch (relationError) {
         console.warn('[Risks API] Error fetching relationships, returning basic data:', relationError);
-        // If relationships fail, return basic risk data
+        // If relationships fail, return basic risk data with pagination
         return NextResponse.json({
           success: true,
-          data: risks
+          data: risks,
+          pagination: {
+            page,
+            limit,
+            total: totalCount,
+            totalPages: Math.ceil(totalCount / limit)
+          }
         });
       }
     } catch (error) {
@@ -125,12 +159,12 @@ export const POST = withApiMiddleware(
       const riskData = {
         title: validatedData.title,
         description: validatedData.description || '',
-        category: validatedData.category as any, // Cast to enum
+        category: validatedData.category,
         likelihood: validatedData.likelihood,
         impact: validatedData.impact,
         riskScore,
-        riskLevel: riskLevel as any, // Cast to enum
-        status: (validatedData.status || 'IDENTIFIED') as any,
+        riskLevel: riskLevel as RiskLevel,
+        status: validatedData.status || RiskStatus.IDENTIFIED,
         organizationId: user.organizationId,
         createdBy: user.id,
         dateIdentified: new Date()
@@ -138,7 +172,7 @@ export const POST = withApiMiddleware(
 
       console.log('[Risks API] Creating risk with processed data:', riskData);
 
-      const risk = await db.client.risk.create({
+      const risk = await db.risk.create({
         data: riskData
       });
 
@@ -193,9 +227,9 @@ export const POST = withApiMiddleware(
   }
 );
 
-function calculateRiskLevel(score: number): string {
-  if (score <= 6) return 'LOW';      // 1-6 (24% of range)
-  if (score <= 12) return 'MEDIUM';  // 7-12 (24% of range)
-  if (score <= 20) return 'HIGH';    // 13-20 (32% of range)
-  return 'CRITICAL';                 // 21-25 (20% of range)
+function calculateRiskLevel(score: number): RiskLevel {
+  if (score <= 6) return RiskLevel.LOW;      // 1-6 (24% of range)
+  if (score <= 12) return RiskLevel.MEDIUM;  // 7-12 (24% of range)
+  if (score <= 20) return RiskLevel.HIGH;    // 13-20 (32% of range)
+  return RiskLevel.CRITICAL;                 // 21-25 (20% of range)
 }

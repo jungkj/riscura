@@ -36,12 +36,12 @@ export const GET = withApiMiddleware(
       const offset = (page - 1) * limit;
       
       // Get total count for pagination
-      const totalCount = await db.client.control.count({
+      const totalCount = await db.control.count({
         where: { organizationId: user.organizationId }
       });
       
       // Start with a simple query first
-      const controls = await db.client.control.findMany({
+      const controls = await db.control.findMany({
         where: { organizationId: user.organizationId },
         orderBy: { createdAt: 'desc' },
         skip: offset,
@@ -67,7 +67,7 @@ export const GET = withApiMiddleware(
 
       // Try to include relationships if we have controls
       try {
-        const controlsWithRelations = await db.client.control.findMany({
+        const controlsWithRelations = await db.control.findMany({
           where: { organizationId: user.organizationId },
           include: {
             risks: {
@@ -177,7 +177,7 @@ export const POST = withApiMiddleware(
 
       console.log('[Controls API] Creating control with processed data:', controlData);
 
-      const control = await db.client.control.create({
+      const control = await db.control.create({
         data: controlData
       });
 

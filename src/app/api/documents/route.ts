@@ -25,7 +25,18 @@ export const GET = withApiMiddleware(
     }
 
     try {
-      const documents = await db.client.document.findMany({
+      // Parse pagination parameters from query string
+      const { searchParams } = new URL(req.url);
+      const page = parseInt(searchParams.get('page') || '1');
+      const limit = parseInt(searchParams.get('limit') || '50');
+      const offset = (page - 1) * limit;
+
+      // Get total count for pagination
+      const totalCount = await db.document.count({
+        where: { organizationId: user.organizationId }
+      });
+
+      const documents = await db.document.findMany({
         where: { organizationId: user.organizationId },
         include: {
           uploadedBy: {
@@ -37,12 +48,20 @@ export const GET = withApiMiddleware(
             }
           }
         },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
+        skip: offset,
+        take: limit
       });
 
       return NextResponse.json({
         success: true,
-        data: documents
+        data: documents,
+        pagination: {
+          page,
+          limit,
+          total: totalCount,
+          totalPages: Math.ceil(totalCount / limit)
+        }
       });
     } catch (error) {
       console.error('Get documents error:', error);
@@ -69,7 +88,7 @@ export const POST = withApiMiddleware(
     try {
       const body = (req as any).body;
 
-      const document = await db.client.document.create({
+      const document = await db.document.create({
         data: {
           ...body,
           organizationId: user.organizationId,
