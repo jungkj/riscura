@@ -86,8 +86,8 @@ export const GET = withApiMiddleware(
           totalRisks,
           totalControls,
           totalMappings: controlRiskMappings,
-          riskCoverage: totalRisks > 0 ? (risksWithControls / totalRisks * 100).toFixed(1) : 0,
-          controlUtilization: totalControls > 0 ? (controlsWithRisks / totalControls * 100).toFixed(1) : 0
+          riskCoverage: totalRisks > 0 ? parseFloat((risksWithControls / totalRisks * 100).toFixed(1)) : 0,
+          controlUtilization: totalControls > 0 ? parseFloat((controlsWithRisks / totalControls * 100).toFixed(1)) : 0
         },
         riskAnalysis: {
           byCategory: risksByCategory.map(item => ({

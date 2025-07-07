@@ -459,8 +459,6 @@ export const {
   control,
   document,
   questionnaire,
-  activity,
-  aIUsageLog,
   controlRiskMapping,
   // Add other models as needed
 } = prismaClient;

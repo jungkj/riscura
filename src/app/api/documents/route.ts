@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
 import { z } from 'zod';
+import { AuthenticatedRequest } from '@/types/api';
 
 const CreateDocumentSchema = z.object({
   name: z.string().min(1),
@@ -15,7 +16,7 @@ const CreateDocumentSchema = z.object({
 
 export const GET = withApiMiddleware(
   async (req: NextRequest) => {
-    const user = (req as any).user;
+    const { user } = req as AuthenticatedRequest;
     
     if (!user || !user.organizationId) {
       return NextResponse.json(
@@ -25,10 +26,15 @@ export const GET = withApiMiddleware(
     }
 
     try {
-      // Parse pagination parameters from query string
+      // Parse and validate pagination parameters from query string
       const { searchParams } = new URL(req.url);
-      const page = parseInt(searchParams.get('page') || '1');
-      const limit = parseInt(searchParams.get('limit') || '50');
+      const pageParam = parseInt(searchParams.get('page') || '1');
+      const limitParam = parseInt(searchParams.get('limit') || '50');
+      
+      // Validate pagination parameters
+      const page = Math.max(1, pageParam || 1);
+      const MAX_LIMIT = 100;
+      const limit = Math.min(MAX_LIMIT, Math.max(1, limitParam || 50));
       const offset = (page - 1) * limit;
 
       // Get total count for pagination
@@ -75,8 +81,8 @@ export const GET = withApiMiddleware(
 );
 
 export const POST = withApiMiddleware(
-  async (req: NextRequest) => {
-    const user = (req as any).user;
+  async (req: NextRequest, validatedBody?: z.infer<typeof CreateDocumentSchema>) => {
+    const { user } = req as AuthenticatedRequest;
     
     if (!user || !user.organizationId) {
       return NextResponse.json(
@@ -85,12 +91,17 @@ export const POST = withApiMiddleware(
       );
     }
 
-    try {
-      const body = (req as any).body;
+    if (!validatedBody) {
+      return NextResponse.json(
+        { success: false, error: 'Request body is required' },
+        { status: 400 }
+      );
+    }
 
+    try {
       const document = await db.document.create({
         data: {
-          ...body,
+          ...validatedBody,
           organizationId: user.organizationId,
           uploadedById: user.id,
           status: 'ACTIVE'

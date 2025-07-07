@@ -1,7 +1,14 @@
+/**
+ * AI Model Pricing Configuration
+ * Last Updated: July 2025
+ * 
+ * TODO: Implement automated dynamic pricing updates via API calls to provider pricing endpoints
+ *       to reduce manual maintenance and ensure accuracy
+ */
 export const AI_MODEL_PRICING = {
   'gpt-3.5-turbo': { 
-    prompt: 0.0015,      // per 1K tokens
-    completion: 0.002    // per 1K tokens
+    prompt: 0.0005,      // per 1K tokens (July 2025 rate)
+    completion: 0.0015   // per 1K tokens (July 2025 rate)
   },
   'gpt-4': { 
     prompt: 0.03,        // per 1K tokens
@@ -11,6 +18,14 @@ export const AI_MODEL_PRICING = {
     prompt: 0.01,        // per 1K tokens
     completion: 0.03     // per 1K tokens
   },
+  'gpt-4o': {
+    prompt: 0.005,       // per 1K tokens (July 2025 rate)
+    completion: 0.015    // per 1K tokens (July 2025 rate)
+  },
+  'gpt-4o-mini': {
+    prompt: 0.00015,     // per 1K tokens (July 2025 rate)
+    completion: 0.0006   // per 1K tokens (July 2025 rate)
+  },
   'claude-3-opus': {
     prompt: 0.015,       // per 1K tokens
     completion: 0.075    // per 1K tokens
@@ -18,6 +33,10 @@ export const AI_MODEL_PRICING = {
   'claude-3-sonnet': {
     prompt: 0.003,       // per 1K tokens
     completion: 0.015    // per 1K tokens
+  },
+  'claude-3.5-sonnet': {
+    prompt: 0.003,       // per 1K tokens (July 2025 rate)
+    completion: 0.015    // per 1K tokens (July 2025 rate)
   }
 } as const;
 
