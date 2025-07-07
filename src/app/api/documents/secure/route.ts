@@ -236,7 +236,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       resourceId: 'multiple',
       result: 'success',
       metadata: {
-        resultsCount: secureDocuments.data.length,
+        resultsCount: secureDocuments.documents.length,
         filters: {
           category: searchParams.get('category'),
           sensitivity: searchParams.get('sensitivity'),
@@ -248,8 +248,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({
       success: true,
-      data: secureDocuments.data,
-      pagination: secureDocuments.pagination,
+      data: secureDocuments.documents,
+      pagination: {
+        page,
+        limit,
+        totalCount: secureDocuments.totalCount,
+        hasNextPage: secureDocuments.hasNextPage
+      },
       security: {
         userRole,
         accessLevel: 'filtered_by_permissions',
@@ -544,15 +549,9 @@ async function getSecureDocuments(
   );
 
   return {
-    data: paginatedDocuments,
-    pagination: {
-      page: filters.page,
-      limit: filters.limit,
-      total,
-      pages: Math.ceil(total / filters.limit),
-      hasNext: filters.page * filters.limit < total,
-      hasPrev: filters.page > 1,
-    }
+    documents: paginatedDocuments,
+    totalCount: total,
+    hasNextPage: filters.page * filters.limit < total
   };
 }
 

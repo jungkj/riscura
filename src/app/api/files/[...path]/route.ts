@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-options';
 import CloudStorageService from '@/services/CloudStorageService';
 
@@ -40,7 +40,7 @@ export async function GET(
       headers: {
         'Content-Type': metadata.mimeType,
         'Content-Length': metadata.size.toString(),
-        'Content-Disposition': `inline; filename="${params.path[params.path.length - 1]}"`,
+        'Content-Disposition': `inline; filename="${resolvedParams.path[resolvedParams.path.length - 1]}"`,
         'Last-Modified': metadata.lastModified.toUTCString(),
         'Cache-Control': 'private, max-age=3600',
       },

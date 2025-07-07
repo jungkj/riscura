@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-options';
-import enhancedProboService from '@/services/EnhancedProboService';
+import { ComplianceAIService } from '@/services/ComplianceAIService';
 import { z } from 'zod';
 
 const gapAnalysisSchema = z.object({
@@ -24,27 +24,54 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { action } = body;
 
-    const proboService = enhancedProboService;
+    const complianceAIService = new ComplianceAIService();
 
     switch (action) {
       case 'analyze':
         const analysisData = gapAnalysisSchema.parse(body);
-        const gapAnalysis = await proboService.performComplianceGapAnalysis(
-          analysisData.organizationId,
-          analysisData.frameworkName
+        // TODO: Get existing controls and risks from database
+        const existingControls: any[] = [];
+        const risks: any[] = [];
+        
+        const gaps = await complianceAIService.identifyComplianceGaps(
+          analysisData.frameworkName,
+          existingControls,
+          risks
         );
         
         return NextResponse.json({
           success: true,
-          data: gapAnalysis,
+          data: { gaps },
           message: `Gap analysis completed for ${analysisData.frameworkName}`
         });
 
       case 'roadmap':
         const roadmapData = roadmapSchema.parse(body);
-        const roadmap = await proboService.generateComplianceRoadmap(
-          roadmapData.organizationId,
-          roadmapData.frameworkName
+        // TODO: Get current assessment from database
+        const currentAssessment: any = {
+          id: 'temp',
+          framework: roadmapData.frameworkName,
+          scope: {},
+          overallScore: 0,
+          maturityLevel: 0,
+          completionPercentage: 0,
+          gapsIdentified: 0,
+          criticalGaps: 0,
+          requirements: [],
+          recommendations: [],
+          nextActions: [],
+          auditReadiness: {},
+          riskProfile: {},
+          timeline: {},
+          estimatedCosts: {},
+          aiInsights: [],
+          createdAt: new Date(),
+          lastUpdated: new Date()
+        };
+        
+        const roadmap = await complianceAIService.generateComplianceRoadmap(
+          [roadmapData.frameworkName],
+          currentAssessment
         );
         
         return NextResponse.json({

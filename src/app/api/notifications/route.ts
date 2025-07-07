@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
-import NotificationService from '@/services/NotificationService';
+import { notificationService } from '@/services/NotificationService';
 
 export const GET = withApiMiddleware(
   async (req: NextRequest) => {
@@ -19,7 +19,7 @@ export const GET = withApiMiddleware(
       const limit = parseInt(searchParams.get('limit') || '10', 10);
       const unreadOnly = searchParams.get('unreadOnly') === 'true';
 
-      const result = await NotificationService.getUserNotifications(
+      const result = await notificationService.getUserNotifications(
         user.id,
         page,
         limit,
