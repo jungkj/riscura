@@ -42,7 +42,6 @@
   "exclude": [
     "node_modules",
     "scripts/**/*",
-    "src/app/api/stripe/webhook/route.ts",
-    "src/components/ai/VoiceInterface.tsx"
+    "src/app/api/stripe/webhook/route.ts"
   ]
 }

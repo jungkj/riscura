@@ -317,22 +317,32 @@ export function handleOpenAIError(error: any): OpenAIError {
 }
 
 export class OpenAIClient {
-  private client: OpenAI;
+  private client: OpenAI | null = null;
   private rateLimitReset: Date | null = null;
   private requestCount = 0;
   private maxRequestsPerMinute = 50;
+  private isEnabled = false;
 
   constructor() {
-    if (!process.env.OPENAI_API_KEY) {
-      throw new Error('OPENAI_API_KEY environment variable is required');
+    const apiKey = process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY;
+    
+    if (!apiKey) {
+      console.warn('OpenAI API key not configured. AI features will be disabled.');
+      this.isEnabled = false;
+      return;
     }
 
     this.client = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: apiKey,
     });
+    this.isEnabled = true;
   }
 
   async createChatCompletion(params: OpenAI.Chat.ChatCompletionCreateParams): Promise<OpenAI.Chat.ChatCompletion> {
+    if (!this.isEnabled || !this.client) {
+      throw new Error('OpenAI client is not configured. Please set OPENAI_API_KEY environment variable.');
+    }
+
     await this.checkRateLimit();
     
     try {
@@ -349,6 +359,10 @@ export class OpenAIClient {
   }
 
   async createEmbedding(params: OpenAI.EmbeddingCreateParams): Promise<OpenAI.CreateEmbeddingResponse> {
+    if (!this.isEnabled || !this.client) {
+      throw new Error('OpenAI client is not configured. Please set OPENAI_API_KEY environment variable.');
+    }
+
     await this.checkRateLimit();
     
     try {
@@ -443,4 +457,15 @@ export class OpenAIClient {
   }
 }
 
-export const openaiClient = new OpenAIClient(); 
+// Create a singleton instance - won't throw if API key is missing
+let openaiClientInstance: OpenAIClient | null = null;
+
+export const getOpenAIClient = (): OpenAIClient => {
+  if (!openaiClientInstance) {
+    openaiClientInstance = new OpenAIClient();
+  }
+  return openaiClientInstance;
+};
+
+// For backward compatibility
+export const openaiClient = getOpenAIClient(); 

@@ -14,7 +14,10 @@ import {
   CreateControlRequest,
   UpdateControlRequest,
   EffectivenessUpdate,
-  RCSAAnalytics
+  RCSAAnalytics,
+  TestScript,
+  CreateTestScriptRequest,
+  UpdateTestScriptRequest
 } from '@/types/rcsa.types';
 
 // ============================================================================
@@ -26,12 +29,14 @@ interface RCSAContextState {
   currentRisk: Risk | null;
   currentControl: Control | null;
   currentWorkflow: AssessmentWorkflow | null;
+  currentTestScript: TestScript | null;
   
   // Data collections
   risks: Risk[];
   controls: Control[];
   controlRiskMappings: ControlRiskMapping[];
   evidence: AssessmentEvidence[];
+  testScripts: TestScript[];
   
   // UI state
   loading: boolean;
@@ -73,11 +78,19 @@ interface RCSAContextActions {
   getRelatedRisks: (controlId: string) => Risk[];
   clearNavigationContext: () => void;
   
+  // Test Script operations
+  createTestScript: (testScript: CreateTestScriptRequest) => Promise<TestScript>;
+  updateTestScript: (id: string, updates: UpdateTestScriptRequest) => Promise<TestScript>;
+  deleteTestScript: (id: string) => Promise<void>;
+  navigateToTestScript: (testScriptId: string, fromContext?: NavigationContext) => Promise<void>;
+  
   // Data refresh
   refreshRisks: () => Promise<void>;
   refreshControls: () => Promise<void>;
   refreshMappings: () => Promise<void>;
   refreshAnalytics: () => Promise<void>;
+  refreshTestScripts: () => Promise<void>;
+  refreshData: () => Promise<void>;
   
   // Error handling
   clearError: () => void;
@@ -96,8 +109,10 @@ type RCSAAction =
   | { type: 'SET_CURRENT_RISK'; payload: Risk | null }
   | { type: 'SET_CURRENT_CONTROL'; payload: Control | null }
   | { type: 'SET_CURRENT_WORKFLOW'; payload: AssessmentWorkflow | null }
+  | { type: 'SET_CURRENT_TEST_SCRIPT'; payload: TestScript | null }
   | { type: 'SET_RISKS'; payload: Risk[] }
   | { type: 'SET_CONTROLS'; payload: Control[] }
+  | { type: 'SET_TEST_SCRIPTS'; payload: TestScript[] }
   | { type: 'SET_CONTROL_RISK_MAPPINGS'; payload: ControlRiskMapping[] }
   | { type: 'SET_EVIDENCE'; payload: AssessmentEvidence[] }
   | { type: 'SET_ANALYTICS'; payload: RCSAAnalytics }
@@ -631,6 +646,15 @@ export function RCSAProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const loadInitialData = async () => {
+      // Check if user is authenticated before loading data
+      const token = localStorage.getItem('auth-token');
+      const sessionToken = sessionStorage.getItem('auth-token');
+      
+      if (!token && !sessionToken) {
+        console.log('Skipping RCSA data load - user not authenticated');
+        return;
+      }
+
       try {
         // Load data individually with error isolation to prevent infinite loops
         const results = await Promise.allSettled([

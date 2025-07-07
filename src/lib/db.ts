@@ -447,8 +447,24 @@ export const db = {
 };
 
 // Export the Prisma client as default and named export
-export default prisma;
-export { prisma };
+const prismaClient = getSafePrismaClient();
+export default prismaClient;
+export { prismaClient as prisma };
+
+// Export direct model access
+export const {
+  user,
+  organization,
+  risk,
+  control,
+  document,
+  questionnaire,
+  controlRiskMapping,
+  // Add other models as needed
+} = prismaClient;
+
+// Re-export db object with direct model access
+Object.assign(db, prismaClient);
 
 // Export types for use in other files
 export type { PrismaClient } from '@prisma/client';

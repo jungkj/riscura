@@ -328,7 +328,7 @@ describe('/api/risks', () => {
       (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(mockRiskWithDetails);
 
       const request = new NextRequest(`http://localhost:3000/api/risks/${riskId}`);
-      const response = await GetSingle(request, { params: { id: riskId } });
+      const response = await GetSingle(request);
       const data = await response.json();
 
       expect(response.status).toBe(200);
@@ -358,7 +358,7 @@ describe('/api/risks', () => {
       (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(null);
 
       const request = new NextRequest(`http://localhost:3000/api/risks/${riskId}`);
-      const response = await GetSingle(request, { params: { id: riskId } });
+      const response = await GetSingle(request);
       const data = await response.json();
 
       expect(response.status).toBe(404);
@@ -371,7 +371,7 @@ describe('/api/risks', () => {
       (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(null); // Risk exists but not in user's org
 
       const request = new NextRequest(`http://localhost:3000/api/risks/${riskId}`);
-      const response = await GetSingle(request, { params: { id: riskId } });
+      const response = await GetSingle(request);
       const data = await response.json();
 
       expect(response.status).toBe(404);
@@ -415,7 +415,7 @@ describe('/api/risks', () => {
         headers: { 'Content-Type': 'application/json' },
       });
 
-      const response = await PutSingle(request, { params: { id: riskId } });
+      const response = await PutSingle(request);
       const data = await response.json();
 
       expect(response.status).toBe(200);
@@ -449,7 +449,7 @@ describe('/api/risks', () => {
         headers: { 'Content-Type': 'application/json' },
       });
 
-      const response = await PutSingle(request, { params: { id: riskId } });
+      const response = await PutSingle(request);
       const data = await response.json();
 
       expect(response.status).toBe(400);
@@ -467,7 +467,7 @@ describe('/api/risks', () => {
         headers: { 'Content-Type': 'application/json' },
       });
 
-      const response = await PutSingle(request, { params: { id: riskId } });
+      const response = await PutSingle(request);
       const data = await response.json();
 
       expect(response.status).toBe(404);
@@ -487,7 +487,7 @@ describe('/api/risks', () => {
         method: 'DELETE',
       });
 
-      const response = await DeleteSingle(request, { params: { id: riskId } });
+      const response = await DeleteSingle(request);
       const data = await response.json();
 
       expect(response.status).toBe(200);
@@ -507,7 +507,7 @@ describe('/api/risks', () => {
         method: 'DELETE',
       });
 
-      const response = await DeleteSingle(request, { params: { id: riskId } });
+      const response = await DeleteSingle(request);
       const data = await response.json();
 
       expect(response.status).toBe(404);
@@ -528,7 +528,7 @@ describe('/api/risks', () => {
         method: 'DELETE',
       });
 
-      const response = await DeleteSingle(request, { params: { id: riskId } });
+      const response = await DeleteSingle(request);
       const data = await response.json();
 
       expect(response.status).toBe(400);
