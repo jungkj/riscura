@@ -31,12 +31,7 @@ export const POST = withApiMiddleware(
   const validationResult = generateTestScriptSchema.safeParse(body);
   
   if (!validationResult.success) {
-    return ApiResponseFormatter.error(
-      'Invalid request data',
-      400,
-      'VALIDATION_ERROR',
-      formatValidationErrors(validationResult.error)
-    );
+    return ApiResponseFormatter.error('VALIDATION_ERROR', 'Invalid request data', { status: 400, details: formatValidationErrors(validationResult.error) });
   }
   
   const data = validationResult.data as GenerateTestScriptRequest;
@@ -52,22 +47,14 @@ export const POST = withApiMiddleware(
       user.id
     );
     
-    return ApiResponseFormatter.success(
-      response,
-      'Test script generated successfully'
-    );
+    return ApiResponseFormatter.success(response);
   } catch (error) {
     console.error('Test script generation error:', error);
     
-    return ApiResponseFormatter.error(
-      'Failed to generate test script',
-      500,
-      'AI_GENERATION_ERROR',
-      {
+    return ApiResponseFormatter.error('AI_GENERATION_ERROR', 'Failed to generate test script', { status: 500, details: {
         message: error instanceof Error ? error.message : 'Unknown error occurred',
         suggestion: 'Please try again or provide more context'
-      }
-    );
+      } });
   }
 },
   { requireAuth: true }

@@ -21,8 +21,5 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
 
   await notificationService.unsubscribeFromPush(endpoint);
 
-  return ApiResponseFormatter.success(
-    null,
-    'Successfully unsubscribed from push notifications'
-  );
+  return ApiResponseFormatter.success(null);
 });

@@ -27,7 +27,7 @@ export async function GET(
 
     const requirements = await complianceService.getRequirements(id);
 
-    return ApiResponseFormatter.success(requirements, "Requirements retrieved successfully");
+    return ApiResponseFormatter.success(requirements);
     },
     { requireAuth: true }
   )(req);
@@ -72,7 +72,7 @@ export async function POST(
       frameworkId: id
     });
 
-    return ApiResponseFormatter.success(requirement, "Requirement created successfully");
+    return ApiResponseFormatter.success(requirement);
     },
     { requireAuth: true }
   )(req);

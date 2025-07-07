@@ -34,7 +34,7 @@ export async function GET(
       return ApiResponseFormatter.forbiddenError('Access denied');
     }
 
-    return ApiResponseFormatter.success(framework, "Framework retrieved successfully");
+    return ApiResponseFormatter.success(framework);
     },
     { requireAuth: true }
   )(req);

@@ -15,7 +15,7 @@ export const GET = withApiMiddleware(async (req: NextRequest) => {
 
   const preferences = await notificationService.getUserPreferences(user.id);
 
-  return ApiResponseFormatter.success(preferences, 'Preferences retrieved successfully');
+  return ApiResponseFormatter.success(preferences);
 });
 
 // PUT /api/notifications/preferences - Update user preferences
@@ -43,5 +43,5 @@ export const PUT = withApiMiddleware(async (req: NextRequest) => {
 
   const preferences = await notificationService.updateUserPreferences(user.id, validatedData);
 
-  return ApiResponseFormatter.success(preferences, 'Preferences updated successfully');
+  return ApiResponseFormatter.success(preferences);
 });

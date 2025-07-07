@@ -43,7 +43,7 @@ export async function POST(
       assessedBy: user.id
     });
 
-    return ApiResponseFormatter.success(item, "Requirement assessed successfully");
+    return ApiResponseFormatter.success(item);
     },
     { requireAuth: true }
   )(req);
