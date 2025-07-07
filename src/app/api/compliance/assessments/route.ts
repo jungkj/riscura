@@ -8,7 +8,7 @@ import { AssessmentStatus } from '@prisma/client';
 
 // GET /api/compliance/assessments - Get assessments
 export const GET = withApiMiddleware(async (req: NextRequest) => {
-  const user = await getAuthenticatedUser();
+  const user = (req as any).user;
   if (!user) {
     return ApiResponseFormatter.authError('User not authenticated');
   }
@@ -37,7 +37,7 @@ const createAssessmentSchema = z.object({
 });
 
 export const POST = withApiMiddleware(async (req: NextRequest) => {
-  const user = await getAuthenticatedUser();
+  const user = (req as any).user;
   if (!user || !['ADMIN', 'MANAGER'].includes(user.role)) {
     return ApiResponseFormatter.forbiddenError('Insufficient permissions');
   }

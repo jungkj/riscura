@@ -290,6 +290,7 @@
     "css-minimizer-webpack-plugin": "^7.0.2",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.0",
+    "glob": "^11.0.3",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^30.0.0-beta.3",
     "msw": "^2.10.2",
