@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
 import { z } from 'zod';
+import { AuthenticatedRequest } from '@/types/api';
 
 const CreateControlSchema = z.object({
   title: z.string().min(1),
@@ -16,7 +17,7 @@ const CreateControlSchema = z.object({
 
 export const GET = withApiMiddleware(
   async (req: NextRequest) => {
-    const user = (req as any).user;
+    const { user } = req as AuthenticatedRequest;
     
     if (!user || !user.organizationId) {
       console.warn('[Controls API] Missing user or organizationId', { user });
@@ -40,34 +41,10 @@ export const GET = withApiMiddleware(
         where: { organizationId: user.organizationId }
       });
       
-      // Start with a simple query first
-      const controls = await db.control.findMany({
-        where: { organizationId: user.organizationId },
-        orderBy: { createdAt: 'desc' },
-        skip: offset,
-        take: limit
-      });
-
-      console.log(`[Controls API] Found ${controls.length} controls (page ${page}, total: ${totalCount})`);
-
-      // If no controls found, return empty array with pagination info
-      if (!controls || controls.length === 0) {
-        return NextResponse.json({
-          success: true,
-          data: [],
-          message: 'No controls found',
-          pagination: {
-            page,
-            limit,
-            total: totalCount,
-            totalPages: Math.ceil(totalCount / limit)
-          }
-        });
-      }
-
-      // Try to include relationships if we have controls
+      // Single optimized query with relationships
+      let controls;
       try {
-        const controlsWithRelations = await db.control.findMany({
+        controls = await db.control.findMany({
           where: { organizationId: user.organizationId },
           include: {
             risks: {
@@ -96,31 +73,30 @@ export const GET = withApiMiddleware(
           skip: offset,
           take: limit
         });
-
-        return NextResponse.json({
-          success: true,
-          data: controlsWithRelations,
-          pagination: {
-            page,
-            limit,
-            total: totalCount,
-            totalPages: Math.ceil(totalCount / limit)
-          }
-        });
       } catch (relationError) {
-        console.warn('[Controls API] Error fetching relationships, returning basic data:', relationError);
-        // If relationships fail, return basic control data with pagination
-        return NextResponse.json({
-          success: true,
-          data: controls,
-          pagination: {
-            page,
-            limit,
-            total: totalCount,
-            totalPages: Math.ceil(totalCount / limit)
-          }
+        console.warn('[Controls API] Error fetching relationships, falling back to basic query:', relationError);
+        // Fallback to basic query without relationships
+        controls = await db.control.findMany({
+          where: { organizationId: user.organizationId },
+          orderBy: { createdAt: 'desc' },
+          skip: offset,
+          take: limit
         });
       }
+
+      console.log(`[Controls API] Found ${controls.length} controls (page ${page}, total: ${totalCount})`);
+
+      return NextResponse.json({
+        success: true,
+        data: controls,
+        message: controls.length === 0 ? 'No controls found' : undefined,
+        pagination: {
+          page,
+          limit,
+          total: totalCount,
+          totalPages: Math.ceil(totalCount / limit)
+        }
+      });
     } catch (error) {
       console.error('[Controls API] Critical error:', {
         error,
@@ -144,7 +120,7 @@ export const GET = withApiMiddleware(
 
 export const POST = withApiMiddleware(
   async (req: NextRequest) => {
-    const user = (req as any).user;
+    const { user } = req as AuthenticatedRequest;
     
     if (!user || !user.organizationId) {
       console.warn('[Controls API] Missing user or organizationId in POST', { user });

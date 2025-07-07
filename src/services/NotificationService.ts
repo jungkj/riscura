@@ -623,9 +623,17 @@ export class NotificationService {
       select: { id: true, organizationId: true },
     });
 
+    // Determine organizationId with proper validation
+    const resolvedOrgId = organizationId || users[0]?.organizationId;
+    
+    if (!resolvedOrgId) {
+      console.error('Failed to create system notification: No organizationId available');
+      throw new Error('Organization ID is required to create notifications');
+    }
+
     await this.createBulkNotifications({
       userIds: users.map(u => u.id),
-      organizationId: organizationId || users[0]?.organizationId || '',
+      organizationId: resolvedOrgId,
       title,
       message,
       category: NotificationCategory.SYSTEM,

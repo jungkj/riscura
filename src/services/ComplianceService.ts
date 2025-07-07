@@ -395,7 +395,7 @@ export class ComplianceService {
         gapType: GapType.MISSING_CONTROL,
         severity: this.determineSeverity(item.requirement.criticality),
         description: input.findings,
-        impact: input.recommendations,
+        remediationPlan: input.recommendations,
       });
     }
 
