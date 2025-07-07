@@ -19,7 +19,7 @@ export async function GET(
 
       try {
         const analysis = await complianceService.performGapAnalysis(id);
-        return ApiResponseFormatter.success(analysis, "Gap analysis completed successfully");
+        return ApiResponseFormatter.success(analysis);
       } catch (error) {
         console.error('Gap analysis error:', error);
         if (error instanceof Error) {

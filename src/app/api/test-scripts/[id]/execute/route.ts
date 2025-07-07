@@ -39,12 +39,7 @@ export async function POST(
   const validationResult = executeTestSchema.safeParse(body);
   
   if (!validationResult.success) {
-    return ApiResponseFormatter.error(
-      'Invalid request data',
-      400,
-      'VALIDATION_ERROR',
-      formatValidationErrors(validationResult.error)
-    );
+    return ApiResponseFormatter.error('VALIDATION_ERROR', 'Invalid request data', { status: 400, details: formatValidationErrors(validationResult.error) });
   }
   
   const data = validationResult.data as ExecuteTestRequest;
@@ -52,7 +47,7 @@ export async function POST(
   // Verify test script exists and is associated with the control
   const testScript = await db.testScript.findFirst({
     where: {
-      id: testScriptId,
+      id,
       organizationId: user.organizationId
     },
     include: {
@@ -63,19 +58,11 @@ export async function POST(
   });
   
   if (!testScript) {
-    return ApiResponseFormatter.error(
-      'Test script not found',
-      404,
-      'NOT_FOUND'
-    );
+    return ApiResponseFormatter.error('NOT_FOUND', 'Test script not found', { status: 404 });
   }
   
   if (testScript.controls.length === 0) {
-    return ApiResponseFormatter.error(
-      'Test script is not associated with the specified control',
-      400,
-      'NOT_ASSOCIATED'
-    );
+    return ApiResponseFormatter.error('NOT_ASSOCIATED', 'Test script is not associated with the specified control', { status: 400 });
   }
   
   // Verify control exists
@@ -87,11 +74,7 @@ export async function POST(
   });
   
   if (!control) {
-    return ApiResponseFormatter.error(
-      'Control not found',
-      404,
-      'CONTROL_NOT_FOUND'
-    );
+    return ApiResponseFormatter.error('CONTROL_NOT_FOUND', 'Control not found', { status: 404 });
   }
   
   // Determine overall test status based on results
@@ -113,7 +96,7 @@ export async function POST(
   // Create test execution record
   const testExecution = await db.testExecution.create({
     data: {
-      testScriptId,
+      testScriptId: id,
       controlId: data.controlId,
       executedBy: user.id,
       status: overallStatus,
@@ -167,7 +150,7 @@ export async function POST(
       entityId: testExecution.id,
       description: `Executed test script: ${testScript.title}`,
       metadata: {
-        testScriptId,
+        testScriptId: id,
         controlId: data.controlId,
         status: overallStatus,
         duration: data.duration,
@@ -180,16 +163,9 @@ export async function POST(
   
   return ApiResponseFormatter.success(
     testExecution,
-    'Test executed successfully',
     {
-      status: overallStatus,
-      summary: {
-        passed: passedSteps,
-        failed: failedSteps,
-        total: totalSteps
-      }
-    },
-    201
+      status: 201
+    }
   );
     },
     { requireAuth: true }

@@ -13,5 +13,5 @@ export const GET = withApiMiddleware(async (req: NextRequest) => {
 
   const count = await notificationService.getUnreadCount(user.id);
 
-  return ApiResponseFormatter.success({ count }, 'Unread count retrieved successfully');
+  return ApiResponseFormatter.success({ count });
 });

@@ -36,7 +36,7 @@ export async function GET(
 
     const gaps = await complianceService.getAssessmentGaps(id, filters);
 
-    return ApiResponseFormatter.success(gaps, "Gaps retrieved successfully");
+    return ApiResponseFormatter.success(gaps);
     },
     { requireAuth: true }
   )(req);
@@ -76,7 +76,7 @@ export async function POST(
       targetDate: validatedData.targetDate ? new Date(validatedData.targetDate) : undefined
     });
 
-    return ApiResponseFormatter.success(gap, "Gap created successfully");
+    return ApiResponseFormatter.success(gap);
     },
     { requireAuth: true }
   )(req);

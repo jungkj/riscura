@@ -34,7 +34,7 @@ export async function GET(
       return ApiResponseFormatter.forbiddenError('Access denied');
     }
 
-    return ApiResponseFormatter.success(assessment, "Assessment retrieved successfully");
+    return ApiResponseFormatter.success(assessment);
     },
     { requireAuth: true }
   )(req);

@@ -34,7 +34,7 @@ export async function GET(
       return ApiResponseFormatter.notFoundError('Notification not found');
     }
 
-    return ApiResponseFormatter.success(notifications[0], "Notification retrieved successfully");
+    return ApiResponseFormatter.success(notifications[0]);
     },
     { requireAuth: true }
   )(req);
@@ -55,7 +55,7 @@ export async function PATCH(
 
     const notification = await notificationService.markAsRead(id, user.id);
 
-    return ApiResponseFormatter.success(notification, "Notification marked as read");
+    return ApiResponseFormatter.success(notification);
     },
     { requireAuth: true }
   )(req);
@@ -76,7 +76,7 @@ export async function DELETE(
 
     const notification = await notificationService.dismissNotification(id, user.id);
 
-    return ApiResponseFormatter.success(notification, "Notification dismissed");
+    return ApiResponseFormatter.success(notification);
     },
     { requireAuth: true }
   )(req);

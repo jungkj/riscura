@@ -24,7 +24,7 @@ export const GET = withApiMiddleware(async (req: NextRequest) => {
 
   const assessments = await complianceService.getAssessments(user.organizationId, filters);
 
-  return ApiResponseFormatter.success(assessments, 'Assessments retrieved successfully');
+  return ApiResponseFormatter.success(assessments);
 });
 
 // POST /api/compliance/assessments - Create assessment

@@ -35,11 +35,7 @@ export async function GET(
     });
     
     if (!testScript) {
-      return ApiResponseFormatter.error(
-        'Test script not found',
-        404,
-        'NOT_FOUND'
-      );
+      return ApiResponseFormatter.error('NOT_FOUND', 'Test script not found', { status: 404 });
     }
     
     // Get associated controls
@@ -58,10 +54,7 @@ export async function GET(
       }
     });
     
-    return ApiResponseFormatter.success(
-      controlAssociations,
-      'Associated controls retrieved successfully'
-    );
+    return ApiResponseFormatter.success(controlAssociations);
     },
     { requireAuth: true }
   )(req);
@@ -85,11 +78,7 @@ export async function POST(
     });
     
     if (!testScript) {
-      return ApiResponseFormatter.error(
-        'Test script not found',
-        404,
-        'NOT_FOUND'
-      );
+      return ApiResponseFormatter.error('NOT_FOUND', 'Test script not found', { status: 404 });
     }
     
     // Parse and validate request body
@@ -97,12 +86,7 @@ export async function POST(
     const validationResult = associateControlsSchema.safeParse(body);
     
     if (!validationResult.success) {
-      return ApiResponseFormatter.error(
-        'Invalid request data',
-        400,
-        'VALIDATION_ERROR',
-        formatValidationErrors(validationResult.error)
-      );
+      return ApiResponseFormatter.error('VALIDATION_ERROR', 'Invalid request data', { status: 400, details: formatValidationErrors(validationResult.error) });
     }
     
     const { controlIds, isMandatory } = validationResult.data;
@@ -116,11 +100,7 @@ export async function POST(
     });
     
     if (controls.length !== controlIds.length) {
-      return ApiResponseFormatter.error(
-        'One or more controls not found',
-        400,
-        'INVALID_CONTROLS'
-      );
+      return ApiResponseFormatter.error('INVALID_CONTROLS', 'One or more controls not found', { status: 400 });
     }
     
     // Get existing associations to avoid duplicates
@@ -192,11 +172,7 @@ export async function DELETE(
     });
     
     if (!testScript) {
-      return ApiResponseFormatter.error(
-        'Test script not found',
-        404,
-        'NOT_FOUND'
-      );
+      return ApiResponseFormatter.error('NOT_FOUND', 'Test script not found', { status: 404 });
     }
     
     // Parse and validate request body
@@ -204,12 +180,7 @@ export async function DELETE(
     const validationResult = disassociateControlsSchema.safeParse(body);
     
     if (!validationResult.success) {
-      return ApiResponseFormatter.error(
-        'Invalid request data',
-        400,
-        'VALIDATION_ERROR',
-        formatValidationErrors(validationResult.error)
-      );
+      return ApiResponseFormatter.error('VALIDATION_ERROR', 'Invalid request data', { status: 400, details: formatValidationErrors(validationResult.error) });
     }
     
     const { controlIds } = validationResult.data;
@@ -239,12 +210,9 @@ export async function DELETE(
       }
     });
     
-    return ApiResponseFormatter.success(
-      {
+    return ApiResponseFormatter.success({
         removed: result.count
-      },
-      'Controls disassociated successfully'
-    );
+      });
     },
     { requireAuth: true }
   )(req);

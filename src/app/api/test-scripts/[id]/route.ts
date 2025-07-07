@@ -92,17 +92,10 @@ export async function GET(
     });
     
     if (!testScript) {
-      return ApiResponseFormatter.error(
-        'Test script not found',
-        404,
-        'NOT_FOUND'
-      );
+      return ApiResponseFormatter.error('NOT_FOUND', 'Test script not found', { status: 404 });
     }
     
-    return ApiResponseFormatter.success(
-      testScript,
-      'Test script retrieved successfully'
-    );
+    return ApiResponseFormatter.success(testScript);
     },
     { requireAuth: true }
   )(req);
@@ -126,11 +119,7 @@ export async function PATCH(
   });
   
   if (!existingTestScript) {
-    return ApiResponseFormatter.error(
-      'Test script not found',
-      404,
-      'NOT_FOUND'
-    );
+    return ApiResponseFormatter.error('NOT_FOUND', 'Test script not found', { status: 404 });
   }
   
   // Parse and validate request body
@@ -138,12 +127,7 @@ export async function PATCH(
   const validationResult = updateTestScriptSchema.safeParse(body);
   
   if (!validationResult.success) {
-    return ApiResponseFormatter.error(
-      'Invalid request data',
-      400,
-      'VALIDATION_ERROR',
-      formatValidationErrors(validationResult.error)
-    );
+    return ApiResponseFormatter.error('VALIDATION_ERROR', 'Invalid request data', { status: 400, details: formatValidationErrors(validationResult.error) });
   }
   
   const data = validationResult.data as UpdateTestScriptRequest;
@@ -202,10 +186,7 @@ export async function PATCH(
     }
   });
   
-  return ApiResponseFormatter.success(
-    updatedTestScript,
-    'Test script updated successfully'
-  );
+  return ApiResponseFormatter.success(updatedTestScript);
     },
     { requireAuth: true }
   )(req);
@@ -237,24 +218,15 @@ export async function DELETE(
   });
   
   if (!testScript) {
-    return ApiResponseFormatter.error(
-      'Test script not found',
-      404,
-      'NOT_FOUND'
-    );
+    return ApiResponseFormatter.error('NOT_FOUND', 'Test script not found', { status: 404 });
   }
   
   // Check if test script is in use
   if (testScript._count.testExecutions > 0) {
-    return ApiResponseFormatter.error(
-      'Cannot delete test script with existing executions',
-      400,
-      'IN_USE',
-      {
+    return ApiResponseFormatter.error('IN_USE', 'Cannot delete test script with existing executions', { status: 400, details: {
         executionCount: testScript._count.testExecutions,
         message: 'Archive the test script instead of deleting it'
-      }
-    );
+      } });
   }
   
   // Delete test script (cascade will handle relationships)
@@ -279,10 +251,7 @@ export async function DELETE(
     }
   });
   
-  return ApiResponseFormatter.success(
-    { id },
-    'Test script deleted successfully'
-  );
+  return ApiResponseFormatter.success({ id });
     },
     { requireAuth: true }
   )(req);

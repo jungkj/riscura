@@ -37,8 +37,5 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
     deviceInfo
   );
 
-  return ApiResponseFormatter.success(
-    pushSubscription,
-    'Successfully subscribed to push notifications'
-  );
+  return ApiResponseFormatter.success(pushSubscription);
 });
