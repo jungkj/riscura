@@ -50,7 +50,9 @@ export function createBulkHandler(
       if (entities.length !== ids.length) {
         const foundIds = entities.map((e: any) => e.id);
         const missingIds = ids.filter((id: string) => !foundIds.includes(id));
-        throw createNotFoundError(`${entityType.charAt(0).toUpperCase() + entityType.slice(1)}s`);
+        throw createNotFoundError(
+          `${entityType.charAt(0).toUpperCase() + entityType.slice(1)}s not found: ${missingIds.join(', ')}`
+        );
       }
 
       // Destructive operations require confirmation

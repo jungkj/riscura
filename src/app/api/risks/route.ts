@@ -4,7 +4,7 @@ import { db } from '@/lib/db';
 import { z } from 'zod';
 
 const CreateRiskSchema = z.object({
-  name: z.string().min(1),
+  title: z.string().min(1),
   description: z.string().optional(),
   category: z.string(),
   likelihood: z.number().min(1).max(5),
@@ -123,7 +123,7 @@ export const POST = withApiMiddleware(
       console.log('[Risks API] Calculated risk score:', riskScore, 'level:', riskLevel);
 
       const riskData = {
-        title: validatedData.name, // Map name to title based on schema
+        title: validatedData.title,
         description: validatedData.description || '',
         category: validatedData.category as any, // Cast to enum
         likelihood: validatedData.likelihood,
@@ -194,8 +194,8 @@ export const POST = withApiMiddleware(
 );
 
 function calculateRiskLevel(score: number): string {
-  if (score <= 5) return 'LOW';
-  if (score <= 10) return 'MEDIUM';
-  if (score <= 15) return 'HIGH';
-  return 'CRITICAL';
+  if (score <= 6) return 'LOW';      // 1-6 (24% of range)
+  if (score <= 12) return 'MEDIUM';  // 7-12 (24% of range)
+  if (score <= 20) return 'HIGH';    // 13-20 (32% of range)
+  return 'CRITICAL';                 // 21-25 (20% of range)
 }

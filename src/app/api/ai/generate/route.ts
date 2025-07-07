@@ -7,6 +7,7 @@ import {
 import { z } from 'zod';
 import { AIService } from '@/services/AIService';
 import { db } from '@/lib/db';
+import { getModelPricing } from '@/lib/config/ai-pricing';
 
 // Validation schema for AI generation requests
 const aiGenerateSchema = z.object({
@@ -226,14 +227,7 @@ async function trackAIUsage(data: {
 function calculateAICost(model: string, usage?: { prompt_tokens?: number; completion_tokens?: number }): number {
   if (!usage) return 0;
   
-  // Pricing per 1K tokens (example rates, adjust to actual pricing)
-  const pricing: Record<string, { prompt: number; completion: number }> = {
-    'gpt-3.5-turbo': { prompt: 0.0015, completion: 0.002 },
-    'gpt-4': { prompt: 0.03, completion: 0.06 },
-    'gpt-4-turbo': { prompt: 0.01, completion: 0.03 }
-  };
-  
-  const modelPricing = pricing[model] || pricing['gpt-4'];
+  const modelPricing = getModelPricing(model);
   const promptCost = (usage.prompt_tokens || 0) / 1000 * modelPricing.prompt;
   const completionCost = (usage.completion_tokens || 0) / 1000 * modelPricing.completion;
   

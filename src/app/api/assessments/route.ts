@@ -14,7 +14,7 @@ export const GET = withApiMiddleware(
     }
 
     try {
-      const assessments = await db.client.questionnaire.findMany({
+      const assessments = await db.questionnaire.findMany({
         where: { organizationId: user.organizationId },
         include: {
           questions: {

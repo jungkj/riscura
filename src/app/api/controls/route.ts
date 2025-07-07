@@ -4,12 +4,14 @@ import { db } from '@/lib/db';
 import { z } from 'zod';
 
 const CreateControlSchema = z.object({
-  name: z.string().min(1),
+  title: z.string().min(1),
   description: z.string().optional(),
   type: z.enum(['PREVENTIVE', 'DETECTIVE', 'CORRECTIVE']),
   frequency: z.enum(['CONTINUOUS', 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'ANNUALLY']),
   effectiveness: z.number().min(0).max(100).optional(),
-  status: z.enum(['ACTIVE', 'INACTIVE', 'UNDER_REVIEW']).optional()
+  status: z.enum(['ACTIVE', 'INACTIVE', 'UNDER_REVIEW']).optional(),
+  category: z.enum(['OPERATIONAL', 'FINANCIAL', 'COMPLIANCE', 'IT']).optional(),
+  automationLevel: z.enum(['MANUAL', 'SEMI_AUTOMATED', 'AUTOMATED']).optional()
 });
 
 export const GET = withApiMiddleware(
@@ -27,20 +29,39 @@ export const GET = withApiMiddleware(
     try {
       console.log('[Controls API] Fetching controls for organization:', user.organizationId);
       
+      // Parse pagination parameters from query string
+      const { searchParams } = new URL(req.url);
+      const page = parseInt(searchParams.get('page') || '1');
+      const limit = parseInt(searchParams.get('limit') || '50');
+      const offset = (page - 1) * limit;
+      
+      // Get total count for pagination
+      const totalCount = await db.client.control.count({
+        where: { organizationId: user.organizationId }
+      });
+      
       // Start with a simple query first
       const controls = await db.client.control.findMany({
         where: { organizationId: user.organizationId },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
+        skip: offset,
+        take: limit
       });
 
-      console.log(`[Controls API] Found ${controls.length} controls`);
+      console.log(`[Controls API] Found ${controls.length} controls (page ${page}, total: ${totalCount})`);
 
-      // If no controls found, return empty array
+      // If no controls found, return empty array with pagination info
       if (!controls || controls.length === 0) {
         return NextResponse.json({
           success: true,
           data: [],
-          message: 'No controls found'
+          message: 'No controls found',
+          pagination: {
+            page,
+            limit,
+            total: totalCount,
+            totalPages: Math.ceil(totalCount / limit)
+          }
         });
       }
 
@@ -71,19 +92,33 @@ export const GET = withApiMiddleware(
               }
             }
           },
-          orderBy: { createdAt: 'desc' }
+          orderBy: { createdAt: 'desc' },
+          skip: offset,
+          take: limit
         });
 
         return NextResponse.json({
           success: true,
-          data: controlsWithRelations
+          data: controlsWithRelations,
+          pagination: {
+            page,
+            limit,
+            total: totalCount,
+            totalPages: Math.ceil(totalCount / limit)
+          }
         });
       } catch (relationError) {
         console.warn('[Controls API] Error fetching relationships, returning basic data:', relationError);
-        // If relationships fail, return basic control data
+        // If relationships fail, return basic control data with pagination
         return NextResponse.json({
           success: true,
-          data: controls
+          data: controls,
+          pagination: {
+            page,
+            limit,
+            total: totalCount,
+            totalPages: Math.ceil(totalCount / limit)
+          }
         });
       }
     } catch (error) {
@@ -127,14 +162,14 @@ export const POST = withApiMiddleware(
       
       // Map the incoming data to match the schema
       const controlData = {
-        title: validatedData.name, // Map name to title based on schema
+        title: validatedData.title,
         description: validatedData.description || '',
-        type: validatedData.type as any, // Cast to enum
+        type: validatedData.type,
         frequency: validatedData.frequency,
         effectiveness: validatedData.effectiveness || 0,
-        status: (validatedData.status || 'ACTIVE') as any,
-        category: 'OPERATIONAL' as any, // Default category
-        automationLevel: 'MANUAL' as any, // Default automation level
+        status: validatedData.status || 'ACTIVE',
+        category: validatedData.category || 'OPERATIONAL',
+        automationLevel: validatedData.automationLevel || 'MANUAL',
         organizationId: user.organizationId,
         owner: user.id,
         createdBy: user.id
