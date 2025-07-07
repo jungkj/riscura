@@ -34,7 +34,7 @@ export async function GET(
       ...(severity && { severity })
     };
 
-    const gaps = await complianceService.getAssessmentGaps(id, filters);
+    const gaps = await complianceService.getGaps(id, filters);
 
     return ApiResponseFormatter.success(gaps);
     },
