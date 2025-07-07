@@ -5,9 +5,9 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { withAPI } from '@/lib/api/middleware';
-import { getAuditLogger, AuditQueryOptions } from '@/lib/audit/audit-logger';
-import { withDataAudit } from '@/lib/audit/audit-middleware';
+import { getAuditLogger, AuditQueryOptions, AuditAction, AuditEntity } from '@/lib/audit/audit-logger';
 import { z } from 'zod';
+import { db } from '@/lib/db';
 
 // ============================================================================
 // VALIDATION SCHEMAS
@@ -34,9 +34,24 @@ const AuditQuerySchema = z.object({
 // GET /api/audit - Query Audit Logs
 // ============================================================================
 
-async function handleGet(req: NextRequest, context: { user: any; organization: any }) {
+async function handleGet(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const organizationId = context.organization.id;
+  const user = (req as any).user;
+  
+  if (!user || !user.organizationId) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: {
+          code: 'UNAUTHORIZED',
+          message: 'Organization context required',
+        },
+      },
+      { status: 403 }
+    );
+  }
+  
+  const organizationId = user.organizationId;
 
   try {
     // Parse query parameters
@@ -59,16 +74,18 @@ async function handleGet(req: NextRequest, context: { user: any; organization: a
 
     const validatedQuery = AuditQuerySchema.parse(queryData);
 
-    // Convert date strings to Date objects
+    // Convert date strings to Date objects and ensure action/entity are typed correctly
     const queryOptions: AuditQueryOptions = {
       ...validatedQuery,
       organizationId,
       startDate: validatedQuery.startDate ? new Date(validatedQuery.startDate) : undefined,
       endDate: validatedQuery.endDate ? new Date(validatedQuery.endDate) : undefined,
+      action: validatedQuery.action as AuditAction | undefined,
+      entity: validatedQuery.entity as AuditEntity | undefined,
     };
 
     // Query audit logs
-    const auditLogger = getAuditLogger(context.prisma);
+    const auditLogger = getAuditLogger(db.client);
     const result = await auditLogger.query(queryOptions);
 
     return NextResponse.json({
@@ -129,195 +146,14 @@ async function handleGet(req: NextRequest, context: { user: any; organization: a
 // ============================================================================
 
 export const GET = withAPI(
-  withDataAudit('AUDIT', 'READ')(handleGet),
+  handleGet,
   {
-    auth: true,
-    permissions: ['audit:read'],
+    requireAuth: true,
+    requiredPermissions: ['audit:read'],
     rateLimit: {
-      requests: 100,
-      window: '1h',
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      maxRequests: 100,
     },
-    tags: ['Audit'],
-    summary: 'Query Audit Logs',
-    description: 'Retrieve audit logs with filtering, pagination, and search capabilities',
-    parameters: [
-      {
-        name: 'userId',
-        in: 'query',
-        description: 'Filter by user ID',
-        schema: { type: 'string' },
-      },
-      {
-        name: 'action',
-        in: 'query',
-        description: 'Filter by action type',
-        schema: { type: 'string' },
-      },
-      {
-        name: 'entity',
-        in: 'query',
-        description: 'Filter by entity type',
-        schema: { type: 'string' },
-      },
-      {
-        name: 'severity',
-        in: 'query',
-        description: 'Filter by severity level',
-        schema: {
-          type: 'string',
-          enum: ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'],
-        },
-      },
-      {
-        name: 'status',
-        in: 'query',
-        description: 'Filter by operation status',
-        schema: {
-          type: 'string',
-          enum: ['SUCCESS', 'FAILURE', 'WARNING', 'INFO'],
-        },
-      },
-      {
-        name: 'startDate',
-        in: 'query',
-        description: 'Filter events after this date (ISO 8601)',
-        schema: {
-          type: 'string',
-          format: 'date-time',
-        },
-      },
-      {
-        name: 'endDate',
-        in: 'query',
-        description: 'Filter events before this date (ISO 8601)',
-        schema: {
-          type: 'string',
-          format: 'date-time',
-        },
-      },
-      {
-        name: 'search',
-        in: 'query',
-        description: 'Search in resource, path, and error message fields',
-        schema: { type: 'string' },
-      },
-      {
-        name: 'page',
-        in: 'query',
-        description: 'Page number for pagination',
-        schema: {
-          type: 'integer',
-          minimum: 1,
-          default: 1,
-        },
-      },
-      {
-        name: 'limit',
-        in: 'query',
-        description: 'Number of events per page',
-        schema: {
-          type: 'integer',
-          minimum: 1,
-          maximum: 1000,
-          default: 50,
-        },
-      },
-      {
-        name: 'sortBy',
-        in: 'query',
-        description: 'Field to sort by',
-        schema: {
-          type: 'string',
-          default: 'timestamp',
-        },
-      },
-      {
-        name: 'sortOrder',
-        in: 'query',
-        description: 'Sort order',
-        schema: {
-          type: 'string',
-          enum: ['asc', 'desc'],
-          default: 'desc',
-        },
-      },
-      {
-        name: 'includeMetadata',
-        in: 'query',
-        description: 'Include metadata and change details',
-        schema: {
-          type: 'boolean',
-          default: false,
-        },
-      },
-      {
-        name: 'complianceFlags',
-        in: 'query',
-        description: 'Filter by compliance flags (comma-separated)',
-        schema: { type: 'string' },
-      },
-    ],
-    responses: {
-      '200': {
-        description: 'Audit logs retrieved successfully',
-        content: {
-          'application/json': {
-            schema: {
-              type: 'object',
-              properties: {
-                success: { type: 'boolean', example: true },
-                data: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      id: { type: 'string' },
-                      timestamp: { type: 'string', format: 'date-time' },
-                      userId: { type: 'string' },
-                      organizationId: { type: 'string' },
-                      action: { type: 'string' },
-                      entity: { type: 'string' },
-                      entityId: { type: 'string' },
-                      resource: { type: 'string' },
-                      method: { type: 'string' },
-                      path: { type: 'string' },
-                      severity: {
-                        type: 'string',
-                        enum: ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'],
-                      },
-                      status: {
-                        type: 'string',
-                        enum: ['SUCCESS', 'FAILURE', 'WARNING', 'INFO'],
-                      },
-                      duration: { type: 'number' },
-                      errorMessage: { type: 'string' },
-                      metadata: { type: 'object' },
-                      complianceFlags: {
-                        type: 'array',
-                        items: { type: 'string' },
-                      },
-                    },
-                  },
-                },
-                pagination: {
-                  type: 'object',
-                  properties: {
-                    page: { type: 'integer' },
-                    limit: { type: 'integer' },
-                    total: { type: 'integer' },
-                    pages: { type: 'integer' },
-                    hasNextPage: { type: 'boolean' },
-                    hasPreviousPage: { type: 'boolean' },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-      '400': { $ref: '#/components/responses/ValidationError' },
-      '401': { $ref: '#/components/responses/Unauthorized' },
-      '403': { $ref: '#/components/responses/Forbidden' },
-    },
+    validateQuery: AuditQuerySchema,
   }
 );
