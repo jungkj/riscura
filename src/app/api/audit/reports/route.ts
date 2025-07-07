@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { withAPI } from '@/lib/api/middleware';
-import { getAuditLogger, AuditReport } from '@/lib/audit/audit-logger';
+import { getAuditLogger, AuditReport, AuditAction } from '@/lib/audit/audit-logger';
 import { withComplianceAudit } from '@/lib/audit/audit-middleware';
 import { z } from 'zod';
 import { db } from '@/lib/db';
@@ -47,12 +47,13 @@ async function handlePost(req: NextRequest, context: { user: any; organization: 
     const body = await req.json();
     const validatedData = AuditReportRequestSchema.parse(body);
 
-    // Convert date strings to Date objects
+    // Convert date strings to Date objects and ensure action is typed correctly
     const filters = {
       ...validatedData.filters,
       organizationId,
       startDate: new Date(validatedData.filters.startDate),
       endDate: new Date(validatedData.filters.endDate),
+      action: validatedData.filters.action as AuditAction | undefined,
     };
 
     // Validate date range
