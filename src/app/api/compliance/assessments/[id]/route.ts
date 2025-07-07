@@ -11,16 +11,19 @@ interface RouteParams {
 }
 
 // GET /api/compliance/assessments/[id] - Get single assessment with details
-export const GET = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
-
-    
-    const user = (req as any).user;
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  return withApiMiddleware(
+    async (request: NextRequest) => {
+      const { id } = await params;
+      const user = (request as any).user;
     if (!user) {
       return ApiResponseFormatter.authError('User not authenticated');
     }
 
-    const assessment = await complianceService.getAssessment((await params).id);
+    const assessment = await complianceService.getAssessment(id);
     
     if (!assessment) {
       return ApiResponseFormatter.notFoundError('Assessment not found');
@@ -32,6 +35,7 @@ export const GET = withApiMiddleware(
     }
 
     return ApiResponseFormatter.success(assessment, "Assessment retrieved successfully");
-  },
-  { requireAuth: true }
-);
+    },
+    { requireAuth: true }
+  )(req);
+}

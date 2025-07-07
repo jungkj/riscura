@@ -11,16 +11,19 @@ interface RouteParams {
 }
 
 // GET /api/compliance/frameworks/[id] - Get single framework with requirements
-export const GET = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
-
-    
-    const user = (req as any).user;
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  return withApiMiddleware(
+    async (request: NextRequest) => {
+      const { id } = await params;
+      const user = (request as any).user;
     if (!user) {
       return ApiResponseFormatter.authError('User not authenticated');
     }
 
-    const framework = await complianceService.getFramework((await params).id);
+    const framework = await complianceService.getFramework(id);
     
     if (!framework) {
       return ApiResponseFormatter.notFoundError('Framework not found');
@@ -32,6 +35,7 @@ export const GET = withApiMiddleware(
     }
 
     return ApiResponseFormatter.success(framework, "Framework retrieved successfully");
-  },
-  { requireAuth: true }
-);
+    },
+    { requireAuth: true }
+  )(req);
+}

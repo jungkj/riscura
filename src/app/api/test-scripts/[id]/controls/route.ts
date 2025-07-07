@@ -18,12 +18,15 @@ const disassociateControlsSchema = z.object({
 });
 
 // GET /api/test-scripts/[id]/controls - Get controls associated with a test script
-export const GET = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: { [key: string]: string } }) => {
-    const user = (req as any).user;
-    const { id } = params;
-    
-    // Verify test script exists
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  return withApiMiddleware(
+    async (request: NextRequest) => {
+      const { id } = await params;
+      const user = (request as any).user;
+        // Verify test script exists
     const testScript = await db.testScript.findFirst({
       where: {
         id,
@@ -59,17 +62,21 @@ export const GET = withApiMiddleware(
       controlAssociations,
       'Associated controls retrieved successfully'
     );
-  },
-  { requireAuth: true }
-);
+    },
+    { requireAuth: true }
+  )(req);
+}
 
 // POST /api/test-scripts/[id]/controls - Associate controls with a test script
-export const POST = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: { [key: string]: string } }) => {
-    const user = (req as any).user;
-    const { id } = params;
-    
-    // Verify test script exists
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  return withApiMiddleware(
+    async (request: NextRequest) => {
+      const { id } = await params;
+      const user = (request as any).user;
+        // Verify test script exists
     const testScript = await db.testScript.findFirst({
       where: {
         id,
@@ -86,7 +93,7 @@ export const POST = withApiMiddleware(
     }
     
     // Parse and validate request body
-    const body = await req.json();
+    const body = await request.json();
     const validationResult = associateControlsSchema.safeParse(body);
     
     if (!validationResult.success) {
@@ -162,17 +169,21 @@ export const POST = withApiMiddleware(
       },
       'Controls associated successfully'
     );
-  },
-  { requireAuth: true }
-);
+    },
+    { requireAuth: true }
+  )(req);
+}
 
 // DELETE /api/test-scripts/[id]/controls - Disassociate controls from a test script
-export const DELETE = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: { [key: string]: string } }) => {
-    const user = (req as any).user;
-    const { id } = params;
-    
-    // Verify test script exists
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  return withApiMiddleware(
+    async (request: NextRequest) => {
+      const { id } = await params;
+      const user = (request as any).user;
+        // Verify test script exists
     const testScript = await db.testScript.findFirst({
       where: {
         id,
@@ -189,7 +200,7 @@ export const DELETE = withApiMiddleware(
     }
     
     // Parse and validate request body
-    const body = await req.json();
+    const body = await request.json();
     const validationResult = disassociateControlsSchema.safeParse(body);
     
     if (!validationResult.success) {
@@ -234,6 +245,7 @@ export const DELETE = withApiMiddleware(
       },
       'Controls disassociated successfully'
     );
-  },
-  { requireAuth: true }
-);
+    },
+    { requireAuth: true }
+  )(req);
+}

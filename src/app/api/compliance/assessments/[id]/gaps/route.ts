@@ -13,17 +13,19 @@ interface RouteParams {
 }
 
 // GET /api/compliance/assessments/[id]/gaps - Get assessment gaps
-export const GET = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
-    const { id } = await params;
-
-    
-    const user = (req as any).user;
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  return withApiMiddleware(
+    async (request: NextRequest) => {
+      const { id } = await params;
+      const user = (request as any).user;
     if (!user) {
       return ApiResponseFormatter.authError('User not authenticated');
     }
 
-    const searchParams = req.nextUrl.searchParams;
+    const searchParams = request.nextUrl.searchParams;
     const status = searchParams.get('status') as GapStatus | null;
     const severity = searchParams.get('severity') as GapSeverity | null;
 
@@ -32,12 +34,13 @@ export const GET = withApiMiddleware(
       ...(severity && { severity })
     };
 
-    const gaps = await complianceService.getAssessmentGaps((await params).id, filters);
+    const gaps = await complianceService.getAssessmentGaps(id, filters);
 
     return ApiResponseFormatter.success(gaps, "Gaps retrieved successfully");
-  },
-  { requireAuth: true }
-);
+    },
+    { requireAuth: true }
+  )(req);
+}
 
 // POST /api/compliance/assessments/[id]/gaps - Create gap
 const createGapSchema = z.object({
@@ -52,25 +55,29 @@ const createGapSchema = z.object({
   assignedTo: z.string().optional(),
 });
 
-export const POST = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
-
-    
-    const user = (req as any).user;
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  return withApiMiddleware(
+    async (request: NextRequest) => {
+      const { id } = await params;
+      const user = (request as any).user;
     if (!user) {
       return ApiResponseFormatter.authError('User not authenticated');
     }
 
-    const body = await req.json();
+    const body = await request.json();
     const validatedData = createGapSchema.parse(body);
 
     const gap = await complianceService.createGap({
       ...validatedData,
-      assessmentId: (await params).id,
+      assessmentId: id,
       targetDate: validatedData.targetDate ? new Date(validatedData.targetDate) : undefined
     });
 
     return ApiResponseFormatter.success(gap, "Gap created successfully");
-  },
-  { requireAuth: true }
-);
+    },
+    { requireAuth: true }
+  )(req);
+}

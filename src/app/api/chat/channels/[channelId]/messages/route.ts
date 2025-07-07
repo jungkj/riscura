@@ -11,16 +11,16 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ channelId: string }> }
 ) {
-  return withApiMiddleware(async (req: NextRequest) => {
-    const user = (req as any).user;
-    if (!user) {
-      return ApiResponseFormatter.authError('User not authenticated');
-    }
-
-    const { channelId } = await params;
+  return withApiMiddleware(
+    async (request: NextRequest) => {
+      const { channelId } = await params;
+      const user = (request as any).user;
+      if (!user) {
+        return ApiResponseFormatter.authError('User not authenticated');
+      }
 
     try {
-      const { searchParams } = new URL(req.url);
+      const { searchParams } = new URL(request.url);
       const limit = parseInt(searchParams.get('limit') || '50');
       const before = searchParams.get('before') || undefined;
 
@@ -40,7 +40,9 @@ export async function GET(
         { status: error instanceof Error && error.message === 'Access denied' ? 403 : 500 }
       );
     }
-  })(req);
+    },
+    { requireAuth: true }
+  )(req);
 }
 
 // POST /api/chat/channels/[channelId]/messages - Send a message
@@ -55,16 +57,16 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ channelId: string }> }
 ) {
-  return withApiMiddleware(async (req: NextRequest) => {
-    const user = (req as any).user;
-    if (!user) {
-      return ApiResponseFormatter.authError('User not authenticated');
-    }
-
-    const { channelId } = await params;
+  return withApiMiddleware(
+    async (request: NextRequest) => {
+      const { channelId } = await params;
+      const user = (request as any).user;
+      if (!user) {
+        return ApiResponseFormatter.authError('User not authenticated');
+      }
 
     try {
-      const body = await req.json();
+      const body = await request.json();
       const validatedData = sendMessageSchema.parse(body);
 
       const message = await ChatService.sendMessage({
@@ -93,5 +95,7 @@ export async function POST(
         { status: error instanceof Error && error.message === 'Access denied' ? 403 : 500 }
       );
     }
-  })(req);
+    },
+    { requireAuth: true }
+  )(req);
 }
