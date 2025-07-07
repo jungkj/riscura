@@ -4,17 +4,20 @@ import { getAuthenticatedUser } from '@/lib/auth/middleware';
 import ChatService from '@/services/ChatService';
 import { z } from 'zod';
 import { ChatMessageType } from '@prisma/client';
+import { ApiResponseFormatter } from '@/lib/api/response-formatter';
 
 // GET /api/chat/channels/[channelId]/messages - Get channel messages
 export async function GET(
   req: NextRequest,
-  { params }: { params: { channelId: string } }
+  { params }: { params: Promise<{ channelId: string }> }
 ) {
   return withApiMiddleware(async (req: NextRequest) => {
-    const user = getAuthenticatedUser(req);
+    const user = (req as any).user;
     if (!user) {
-      return new Response('Unauthorized', { status: 401 });
+      return ApiResponseFormatter.authError('User not authenticated');
     }
+
+    const { channelId } = await params;
 
     try {
       const { searchParams } = new URL(req.url);
@@ -22,20 +25,18 @@ export async function GET(
       const before = searchParams.get('before') || undefined;
 
       const messages = await ChatService.getChannelMessages(
-        params.channelId,
+        channelId,
         user.id,
         limit,
         before
       );
 
-      return Response.json({
-        success: true,
-        data: messages,
-      });
+      return ApiResponseFormatter.success(messages);
     } catch (error) {
       console.error('Failed to fetch messages:', error);
-      return Response.json(
-        { success: false, error: error instanceof Error ? error.message : 'Failed to fetch messages' },
+      return ApiResponseFormatter.error(
+        'CHAT_ERROR',
+        error instanceof Error ? error.message : 'Failed to fetch messages',
         { status: error instanceof Error && error.message === 'Access denied' ? 403 : 500 }
       );
     }
@@ -52,39 +53,43 @@ const sendMessageSchema = z.object({
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { channelId: string } }
+  { params }: { params: Promise<{ channelId: string }> }
 ) {
   return withApiMiddleware(async (req: NextRequest) => {
-    const user = getAuthenticatedUser(req);
+    const user = (req as any).user;
     if (!user) {
-      return new Response('Unauthorized', { status: 401 });
+      return ApiResponseFormatter.authError('User not authenticated');
     }
+
+    const { channelId } = await params;
 
     try {
       const body = await req.json();
       const validatedData = sendMessageSchema.parse(body);
 
       const message = await ChatService.sendMessage({
-        channelId: params.channelId,
+        channelId: channelId,
         userId: user.id,
-        ...validatedData,
+        content: validatedData.content,
+        type: validatedData.type,
+        attachments: validatedData.attachments,
+        parentId: validatedData.parentId,
       });
 
-      return Response.json({
-        success: true,
-        data: message,
-      });
+      return ApiResponseFormatter.success(message);
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return Response.json(
-          { success: false, error: 'Invalid request data', details: error.errors },
-          { status: 400 }
+        return ApiResponseFormatter.error(
+          'VALIDATION_ERROR',
+          'Invalid request data',
+          { status: 400, details: error.errors }
         );
       }
       
       console.error('Failed to send message:', error);
-      return Response.json(
-        { success: false, error: error instanceof Error ? error.message : 'Failed to send message' },
+      return ApiResponseFormatter.error(
+        'CHAT_ERROR',
+        error instanceof Error ? error.message : 'Failed to send message',
         { status: error instanceof Error && error.message === 'Access denied' ? 403 : 500 }
       );
     }

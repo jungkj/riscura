@@ -34,88 +34,81 @@ const updateTestScriptSchema = z.object({
 });
 
 // GET /api/test-scripts/[id] - Get a single test script
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { [key: string]: string } }
-) {
-  return withApiMiddleware(async (req: NextRequest) => {
+export const GET = withApiMiddleware(
+  async (req: NextRequest, { params }: { params: { [key: string]: string } }) => {
     const user = (req as any).user;
-  const { id } = params;
-  
-  const testScript = await db.testScript.findFirst({
-    where: {
-      id,
-      organizationId: user.organizationId
-    },
-    include: {
-      controls: {
-        include: {
-          control: {
-            include: {
-              _count: {
-                select: {
-                  risks: true
+    const { id } = params;
+    
+    const testScript = await db.testScript.findFirst({
+      where: {
+        id,
+        organizationId: user.organizationId
+      },
+      include: {
+        controls: {
+          include: {
+            control: {
+              include: {
+                _count: {
+                  select: {
+                    risks: true
+                  }
                 }
               }
             }
           }
-        }
-      },
-      testExecutions: {
-        orderBy: { executionDate: 'desc' },
-        take: 10,
-        include: {
-          executor: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              email: true
+        },
+        testExecutions: {
+          orderBy: { executionDate: 'desc' },
+          take: 10,
+          include: {
+            executor: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true
+              }
             }
           }
-        }
-      },
-      creator: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          email: true
-        }
-      },
-      _count: {
-        select: {
-          testExecutions: true
+        },
+        creator: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        },
+        _count: {
+          select: {
+            testExecutions: true
+          }
         }
       }
+    });
+    
+    if (!testScript) {
+      return ApiResponseFormatter.error(
+        'Test script not found',
+        404,
+        'NOT_FOUND'
+      );
     }
-  });
-  
-  if (!testScript) {
-    return ApiResponseFormatter.error(
-      'Test script not found',
-      404,
-      'NOT_FOUND'
+    
+    return ApiResponseFormatter.success(
+      testScript,
+      'Test script retrieved successfully'
     );
-  }
-  
-  return ApiResponseFormatter.success(
-    testScript,
-    'Test script retrieved successfully'
-  );
-})(req);
-},
+  },
   { requireAuth: true }
 );
 
 // PATCH /api/test-scripts/[id] - Update a test script
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: { [key: string]: string } }
-) {
-  return withApiMiddleware(async (req: NextRequest) => {
+export const PATCH = withApiMiddleware(
+  async (req: NextRequest, { params }: { params: { [key: string]: string } }) => {
     const user = (req as any).user;
-  const { id } = params;
+    const { id } = params;
   
   // Verify test script exists and belongs to organization
   const existingTestScript = await db.testScript.findFirst({
@@ -206,19 +199,15 @@ export async function PATCH(
     updatedTestScript,
     'Test script updated successfully'
   );
-})(req);
-},
+  },
   { requireAuth: true }
 );
 
 // DELETE /api/test-scripts/[id] - Delete a test script
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { [key: string]: string } }
-) {
-  return withApiMiddleware(async (req: NextRequest) => {
+export const DELETE = withApiMiddleware(
+  async (req: NextRequest, { params }: { params: { [key: string]: string } }) => {
     const user = (req as any).user;
-  const { id } = params;
+    const { id } = params;
   
   // Verify test script exists and belongs to organization
   const testScript = await db.testScript.findFirst({
@@ -283,7 +272,6 @@ export async function DELETE(
     { id },
     'Test script deleted successfully'
   );
-})(req);
-},
+  },
   { requireAuth: true }
 );

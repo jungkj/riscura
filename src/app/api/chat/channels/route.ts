@@ -59,7 +59,9 @@ export const POST = withApiMiddleware(
       const validatedData = CreateChannelSchema.parse(body);
 
       const channel = await ChatService.createChannel({
-        ...validatedData,
+        name: validatedData.name,
+        description: validatedData.description,
+        type: validatedData.type,
         organizationId: user.organizationId,
         createdBy: user.id,
         members: validatedData.members || []

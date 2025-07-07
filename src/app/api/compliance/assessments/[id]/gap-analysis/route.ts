@@ -5,26 +5,32 @@ import { complianceService } from '@/services/ComplianceService';
 import { ApiResponseFormatter } from '@/lib/api/response-formatter';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // GET /api/compliance/assessments/[id]/gap-analysis - Perform gap analysis
-export const GET = withApiMiddleware(async (req: NextRequest, { params }: RouteParams) => {
-  const user = await getAuthenticatedUser();
-  if (!user) {
-    return ApiResponseFormatter.unauthorized('User not authenticated');
-  }
-
-  try {
-    const analysis = await complianceService.performGapAnalysis(params.id);
-    return ApiResponseFormatter.success(analysis, 'Gap analysis completed successfully');
-  } catch (error) {
-    console.error('Gap analysis error:', error);
-    if (error instanceof Error) {
-      return ApiResponseFormatter.error(error.message, 500);
+export async function GET(
+  req: NextRequest,
+  { params }: RouteParams
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
+    const resolvedParams = await params;
+    const user = await getAuthenticatedUser();
+    if (!user) {
+      return ApiResponseFormatter.authError('User not authenticated');
     }
-    return ApiResponseFormatter.error('Failed to perform gap analysis', 500);
-  }
-});
+
+    try {
+      const analysis = await complianceService.performGapAnalysis(resolvedParams.id);
+      return ApiResponseFormatter.success(analysis, 'Gap analysis completed successfully');
+    } catch (error) {
+      console.error('Gap analysis error:', error);
+      if (error instanceof Error) {
+        return ApiResponseFormatter.error(error.message, 500);
+      }
+      return ApiResponseFormatter.error('Failed to perform gap analysis', 500);
+    }
+  })(req);
+}

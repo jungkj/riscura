@@ -25,7 +25,7 @@ const subscribeSchema = z.object({
 export const POST = withApiMiddleware(async (req: NextRequest) => {
   const user = await getAuthenticatedUser();
   if (!user) {
-    return ApiResponseFormatter.unauthorized('User not authenticated');
+    return ApiResponseFormatter.authError('User not authenticated');
   }
 
   const body = await req.json();
