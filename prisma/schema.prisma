@@ -8,117 +8,117 @@ datasource db {
 }
 
 model Organization {
-  id                   String                     @id @default(cuid())
-  name                 String
-  domain               String?                    @unique
-  settings             Json?
-  plan                 String                     @default("free")
-  stripeCustomerId     String?
-  isActive             Boolean                    @default(true)
-  createdAt            DateTime                   @default(now())
-  updatedAt            DateTime                   @updatedAt
-  activities           Activity[]
-  apiKeys              APIKey[]
-  billingEvents        BillingEvent[]
-  controls             Control[]
-  documents            Document[]
-  encryptionKeys       EncryptionKey[]
-  extractedControls    ExtractedControl[]
-  extractedRisks       ExtractedRisk[]
-  subscriptions        OrganizationSubscription[]
-  questionnaires       Questionnaire[]
-  rcsaEntries          RcsaEntry[]
-  reports              Report[]
-  risks                Risk[]
-  spreadsheetTemplates SpreadsheetTemplate[]      @relation("SpreadsheetTemplateOrg")
-  spreadsheets         Spreadsheet[]
-  tasks                Task[]
-  users                User[]
-  workflows            Workflow[]
-  workflows_v2         WorkflowV2[]
-  testScripts          TestScript[]
-  reportTemplates      ReportTemplate[]
-  reportSchedules      ReportSchedule[]
-  proboIntegration     ProboIntegration?
-  chatChannels         ChatChannel[]
-  notifications        Notification[]
-  notificationDigests  NotificationDigest[]
-  complianceFrameworks ComplianceFramework[]
+  id                    String                     @id @default(cuid())
+  name                  String
+  domain                String?                    @unique
+  settings              Json?
+  plan                  String                     @default("free")
+  stripeCustomerId      String?
+  isActive              Boolean                    @default(true)
+  createdAt             DateTime                   @default(now())
+  updatedAt             DateTime                   @updatedAt
+  activities            Activity[]
+  apiKeys               APIKey[]
+  billingEvents         BillingEvent[]
+  chatChannels          ChatChannel[]
   complianceAssessments ComplianceAssessment[]
+  complianceFrameworks  ComplianceFramework[]
+  controls              Control[]
+  documents             Document[]
+  encryptionKeys        EncryptionKey[]
+  extractedControls     ExtractedControl[]
+  extractedRisks        ExtractedRisk[]
+  notificationDigests   NotificationDigest[]
+  notifications         Notification[]
+  subscriptions         OrganizationSubscription[]
+  proboIntegration      ProboIntegration?
+  questionnaires        Questionnaire[]
+  rcsaEntries           RcsaEntry[]
+  reportSchedules       ReportSchedule[]
+  reportTemplates       ReportTemplate[]
+  reports               Report[]
+  risks                 Risk[]
+  spreadsheetTemplates  SpreadsheetTemplate[]      @relation("SpreadsheetTemplateOrg")
+  spreadsheets          Spreadsheet[]
+  tasks                 Task[]
+  testScripts           TestScript[]
+  users                 User[]
+  workflows             Workflow[]
+  workflows_v2          WorkflowV2[]
 
   @@map("organizations")
 }
 
 model User {
-  id                       String                   @id @default(cuid())
-  email                    String                   @unique
-  firstName                String
-  lastName                 String
-  passwordHash             String?
-  avatar                   String?
-  phoneNumber              String?
-  role                     UserRole                 @default(USER)
-  permissions              String[]                 @default([])
-  isActive                 Boolean                  @default(true)
-  emailVerified            DateTime?
-  emailVerificationToken   String?
-  emailVerificationExpires DateTime?
-  passwordResetToken       String?
-  passwordResetExpires     DateTime?
-  lastLogin                DateTime?
-  organizationId           String
-  createdAt                DateTime                 @default(now())
-  updatedAt                DateTime                 @updatedAt
-  createdActivities        Activity[]               @relation("ActivityCreatedBy")
-  aiConversations          AIConversation[]
-  aiUsageLogs              AIUsageLog[]
-  comments                 Comment[]
-  createdControls          Control[]                @relation("ControlCreatedBy")
-  assignedControls         Control[]                @relation("ControlAssignedTo")
-  createdDocuments         Document[]               @relation("DocumentCreatedBy")
-  createdExtractedControls ExtractedControl[]       @relation("ExtractedControlCreatedBy")
-  createdExtractedRisks    ExtractedRisk[]          @relation("ExtractedRiskCreatedBy")
-  messages                 Message[]                @relation("MessageSender")
-  notificationPreferences  LegacyNotificationPreferences?
-  legacyNotifications      LegacyNotification[]
-  createdQuestionnaires    Questionnaire[]          @relation("QuestionnaireCreatedBy")
-  createdRcsaEntries       RcsaEntry[]              @relation("RcsaEntryCreatedBy")
-  createdReports           Report[]                 @relation("ReportCreatedBy")
-  responses                Response[]
-  createdRisks             Risk[]                   @relation("RiskCreatedBy")
-  assignedRisks            Risk[]                   @relation("RiskAssignedTo")
-  sessions                 Session[]
-  cellComments             SpreadsheetCellComment[] @relation("SpreadsheetCellCommentUser")
-  modifiedCells            SpreadsheetCell[]        @relation("SpreadsheetCellModifier")
-  spreadsheetPermissions   SpreadsheetPermission[]  @relation("SpreadsheetPermissionUser")
-  createdTemplates         SpreadsheetTemplate[]    @relation("SpreadsheetTemplateCreator")
-  spreadsheetVersions      SpreadsheetVersion[]     @relation("SpreadsheetVersionUser")
-  createdSpreadsheets      Spreadsheet[]            @relation("SpreadsheetCreatedBy")
-  assignedTasks            Task[]                   @relation("TaskAssignedTo")
-  createdTasks             Task[]                   @relation("TaskCreatedBy")
-  organization             Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  assignedWorkflowSteps    WorkflowStep[]           @relation("WorkflowStepAssignedTo")
-  createdWorkflows         Workflow[]               @relation("WorkflowCreatedBy")
-  receivedMessages         Message[]                @relation("MessageRecipient")
-  createdTestScripts       TestScript[]             @relation("TestScriptCreatedBy")
-  testExecutions           TestExecution[]          @relation("TestExecutionExecutor")
-  createdReportTemplates   ReportTemplate[]         @relation("ReportTemplateCreatedBy")
-  createdReportSchedules   ReportSchedule[]         @relation("ReportScheduleCreatedBy")
-  createdChatChannels      ChatChannel[]            @relation("ChatChannelCreatedBy")
-  chatChannelMemberships   ChatChannelMember[]
-  chatMessages             ChatMessage[]            @relation("ChatMessageAuthor")
-  chatReactions            ChatReaction[]
-  chatReadReceipts         ChatReadReceipt[]
-  notificationPreference   NotificationPreference?
-  notificationsList        Notification[]
-  notificationDigests      NotificationDigest[]
-  pushSubscriptions        PushSubscription[]
-  createdComplianceFrameworks ComplianceFramework[] @relation("ComplianceFrameworkCreatedBy")
-  assessorAssessments      ComplianceAssessment[] @relation("ComplianceAssessmentAssessor")
-  reviewerAssessments      ComplianceAssessment[] @relation("ComplianceAssessmentReviewer")
-  assessedItems            ComplianceAssessmentItem[] @relation("AssessmentItemAssessor")
-  reviewedItems            ComplianceAssessmentItem[] @relation("AssessmentItemReviewer")
-  assignedGaps             ComplianceGap[] @relation("ComplianceGapAssignee")
+  id                          String                         @id @default(cuid())
+  email                       String                         @unique
+  firstName                   String
+  lastName                    String
+  passwordHash                String?
+  avatar                      String?
+  phoneNumber                 String?
+  role                        UserRole                       @default(USER)
+  permissions                 String[]                       @default([])
+  isActive                    Boolean                        @default(true)
+  emailVerified               DateTime?
+  emailVerificationToken      String?
+  emailVerificationExpires    DateTime?
+  passwordResetToken          String?
+  passwordResetExpires        DateTime?
+  lastLogin                   DateTime?
+  organizationId              String
+  createdAt                   DateTime                       @default(now())
+  updatedAt                   DateTime                       @updatedAt
+  createdActivities           Activity[]                     @relation("ActivityCreatedBy")
+  aiConversations             AIConversation[]
+  aiUsageLogs                 AIUsageLog[]
+  chatChannelMemberships      ChatChannelMember[]
+  createdChatChannels         ChatChannel[]                  @relation("ChatChannelCreatedBy")
+  chatMessages                ChatMessage[]                  @relation("ChatMessageAuthor")
+  chatReactions               ChatReaction[]
+  chatReadReceipts            ChatReadReceipt[]
+  comments                    Comment[]
+  assessedItems               ComplianceAssessmentItem[]     @relation("AssessmentItemAssessor")
+  reviewedItems               ComplianceAssessmentItem[]     @relation("AssessmentItemReviewer")
+  assessorAssessments         ComplianceAssessment[]         @relation("ComplianceAssessmentAssessor")
+  reviewerAssessments         ComplianceAssessment[]         @relation("ComplianceAssessmentReviewer")
+  createdComplianceFrameworks ComplianceFramework[]          @relation("ComplianceFrameworkCreatedBy")
+  assignedGaps                ComplianceGap[]                @relation("ComplianceGapAssignee")
+  createdControls             Control[]                      @relation("ControlCreatedBy")
+  assignedControls            Control[]                      @relation("ControlAssignedTo")
+  createdDocuments            Document[]                     @relation("DocumentCreatedBy")
+  createdExtractedControls    ExtractedControl[]             @relation("ExtractedControlCreatedBy")
+  createdExtractedRisks       ExtractedRisk[]                @relation("ExtractedRiskCreatedBy")
+  notificationPreferences     LegacyNotificationPreferences?
+  legacyNotifications         LegacyNotification[]
+  messages                    Message[]                      @relation("MessageSender")
+  notificationDigests         NotificationDigest[]
+  notificationPreference      NotificationPreference?
+  notificationsList           Notification[]
+  pushSubscriptions           PushSubscription[]
+  createdQuestionnaires       Questionnaire[]                @relation("QuestionnaireCreatedBy")
+  createdRcsaEntries          RcsaEntry[]                    @relation("RcsaEntryCreatedBy")
+  createdReportSchedules      ReportSchedule[]               @relation("ReportScheduleCreatedBy")
+  createdReportTemplates      ReportTemplate[]               @relation("ReportTemplateCreatedBy")
+  createdReports              Report[]                       @relation("ReportCreatedBy")
+  responses                   Response[]
+  createdRisks                Risk[]                         @relation("RiskCreatedBy")
+  assignedRisks               Risk[]                         @relation("RiskAssignedTo")
+  sessions                    Session[]
+  cellComments                SpreadsheetCellComment[]       @relation("SpreadsheetCellCommentUser")
+  modifiedCells               SpreadsheetCell[]              @relation("SpreadsheetCellModifier")
+  spreadsheetPermissions      SpreadsheetPermission[]        @relation("SpreadsheetPermissionUser")
+  createdTemplates            SpreadsheetTemplate[]          @relation("SpreadsheetTemplateCreator")
+  spreadsheetVersions         SpreadsheetVersion[]           @relation("SpreadsheetVersionUser")
+  createdSpreadsheets         Spreadsheet[]                  @relation("SpreadsheetCreatedBy")
+  assignedTasks               Task[]                         @relation("TaskAssignedTo")
+  createdTasks                Task[]                         @relation("TaskCreatedBy")
+  testExecutions              TestExecution[]                @relation("TestExecutionExecutor")
+  createdTestScripts          TestScript[]                   @relation("TestScriptCreatedBy")
+  organization                Organization                   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assignedWorkflowSteps       WorkflowStep[]                 @relation("WorkflowStepAssignedTo")
+  createdWorkflows            Workflow[]                     @relation("WorkflowCreatedBy")
+  receivedMessages            Message[]                      @relation("MessageRecipient")
 
   @@index([organizationId])
   @@index([email])
@@ -161,13 +161,13 @@ model Risk {
   createdBy       String?
   activities      Activity[]
   controls        ControlRiskMapping[]
+  notifications   Notification[]
   creator         User?                @relation("RiskCreatedBy", fields: [createdBy], references: [id])
   organization    Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   assignedUser    User?                @relation("RiskAssignedTo", fields: [owner], references: [id])
   spreadsheetRows SpreadsheetRow[]     @relation("SpreadsheetRowRisk")
   tasks           Task[]
   evidence        Document[]           @relation("RiskEvidence")
-  notifications   Notification[]
 
   @@index([organizationId])
   @@index([category])
@@ -192,19 +192,19 @@ model ControlRiskMapping {
 }
 
 model Control {
-  id                  String               @id @default(cuid())
+  id                  String                      @id @default(cuid())
   title               String
   description         String
   type                ControlType
-  category            ControlCategory      @default(OPERATIONAL)
+  category            ControlCategory             @default(OPERATIONAL)
   frequency           String
-  automationLevel     AutomationLevel      @default(MANUAL)
-  effectiveness       Float                @default(0)
+  automationLevel     AutomationLevel             @default(MANUAL)
+  effectiveness       Float                       @default(0)
   effectivenessRating EffectivenessRating?
   owner               String?
   operatorId          String?
   reviewerId          String?
-  status              ControlStatus        @default(PLANNED)
+  status              ControlStatus               @default(PLANNED)
   priority            Priority?
   lastTestDate        DateTime?
   nextTestDate        DateTime?
@@ -214,23 +214,23 @@ model Control {
   location            String?
   cost                Float?
   effort              ControlEffort?
-  tags                String[]             @default([])
+  tags                String[]                    @default([])
   customFields        Json?
   organizationId      String
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
+  createdAt           DateTime                    @default(now())
+  updatedAt           DateTime                    @updatedAt
   createdBy           String?
   activities          Activity[]
   risks               ControlRiskMapping[]
-  creator             User?                @relation("ControlCreatedBy", fields: [createdBy], references: [id])
-  organization        Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  assignedUser        User?                @relation("ControlAssignedTo", fields: [owner], references: [id])
-  spreadsheetRows     SpreadsheetRow[]     @relation("SpreadsheetRowControl")
-  tasks               Task[]
-  evidence            Document[]           @relation("ControlEvidence")
   testScripts         ControlTestScript[]
+  creator             User?                       @relation("ControlCreatedBy", fields: [createdBy], references: [id])
+  organization        Organization                @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assignedUser        User?                       @relation("ControlAssignedTo", fields: [owner], references: [id])
   requirementMappings RequirementControlMapping[]
+  spreadsheetRows     SpreadsheetRow[]            @relation("SpreadsheetRowControl")
+  tasks               Task[]
   testExecutions      TestExecution[]
+  evidence            Document[]                  @relation("ControlEvidence")
 
   @@index([organizationId])
   @@index([type])
@@ -451,27 +451,27 @@ model WorkflowStep {
 }
 
 model Report {
-  id               String       @id @default(cuid())
-  title            String
-  description      String?
-  type             ReportType
-  status           ReportStatus @default(DRAFT)
-  templateId       String?
-  data             Json?        // Report content data
-  parameters       Json?        // Filters and parameters used
-  generatedAt      DateTime?    // When the report was generated
-  fileUrl          String?      // URL to generated file (PDF/Excel)
-  format           String?      // Format of generated file (pdf, excel, etc)
-  sharedWith       String[]     @default([])
-  exportFormats    String[]     @default([])
-  organizationId   String
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
-  createdBy        String?
-  activities       Activity[]
-  creator          User?        @relation("ReportCreatedBy", fields: [createdBy], references: [id])
-  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  notifications    Notification[]
+  id             String         @id @default(cuid())
+  title          String
+  type           ReportType
+  status         ReportStatus   @default(DRAFT)
+  data           Json?
+  parameters     Json?
+  sharedWith     String[]       @default([])
+  exportFormats  String[]       @default([])
+  organizationId String
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  createdBy      String?
+  description    String?
+  fileUrl        String?
+  format         String?
+  generatedAt    DateTime?
+  templateId     String?
+  activities     Activity[]
+  notifications  Notification[]
+  creator        User?          @relation("ReportCreatedBy", fields: [createdBy], references: [id])
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@index([organizationId])
   @@index([type])
@@ -591,25 +591,32 @@ model LegacyNotification {
 }
 
 model Activity {
-  id             String        @id @default(cuid())
-  type           ActivityType
-  userId         String?
-  entityType     EntityType
-  entityId       String
-  description    String
-  metadata       Json?
-  isPublic       Boolean       @default(true)
-  organizationId String
-  createdAt      DateTime      @default(now())
-  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  user           User?         @relation("ActivityCreatedBy", fields: [userId], references: [id])
-  controls       Control       @relation(fields: [entityId], references: [id], map: "activity_control_fkey")
-  documents      Document      @relation(fields: [entityId], references: [id], map: "activity_document_fkey")
-  questionnaires Questionnaire @relation(fields: [entityId], references: [id], map: "activity_questionnaire_fkey")
-  reports        Report        @relation(fields: [entityId], references: [id], map: "activity_report_fkey")
-  risks          Risk          @relation(fields: [entityId], references: [id], map: "activity_risk_fkey")
-  tasks          Task          @relation(fields: [entityId], references: [id], map: "activity_task_fkey")
-  workflows      Workflow      @relation(fields: [entityId], references: [id], map: "activity_workflow_fkey")
+  id              String         @id @default(cuid())
+  type            ActivityType
+  userId          String?
+  entityType      EntityType
+  entityId        String
+  description     String
+  metadata        Json?
+  isPublic        Boolean        @default(true)
+  organizationId  String
+  createdAt       DateTime       @default(now())
+  organization    Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user            User?          @relation("ActivityCreatedBy", fields: [userId], references: [id])
+  Risk            Risk?          @relation(fields: [riskId], references: [id])
+  riskId          String?
+  Control         Control?       @relation(fields: [controlId], references: [id])
+  controlId       String?
+  Document        Document?      @relation(fields: [documentId], references: [id])
+  documentId      String?
+  Questionnaire   Questionnaire? @relation(fields: [questionnaireId], references: [id])
+  questionnaireId String?
+  Workflow        Workflow?      @relation(fields: [workflowId], references: [id])
+  workflowId      String?
+  Report          Report?        @relation(fields: [reportId], references: [id])
+  reportId        String?
+  Task            Task?          @relation(fields: [taskId], references: [id])
+  taskId          String?
 
   @@index([organizationId])
   @@index([entityType, entityId])
@@ -925,11 +932,11 @@ model SpreadsheetColumn {
 }
 
 model SpreadsheetRow {
-  id              String            @id @default(cuid())
-  sheetId         String
-  position        Int
-  isHidden        Boolean           @default(false)
-  height          Int               @default(40)
+  id                 String            @id @default(cuid())
+  sheetId            String
+  position           Int
+  isHidden           Boolean           @default(false)
+  height             Int               @default(40)
   linkedRiskId       String?
   linkedControlId    String?
   linkedTaskId       String?
@@ -1058,6 +1065,492 @@ model SpreadsheetTemplate {
   @@index([templateType])
   @@index([category])
   @@map("spreadsheet_templates")
+}
+
+model TestScript {
+  id                String              @id @default(cuid())
+  title             String
+  description       String
+  steps             Json
+  expectedResults   String
+  testType          TestScriptType
+  frequency         TestFrequency
+  estimatedDuration Int?
+  automationCapable Boolean             @default(false)
+  automationScript  String?
+  tags              String[]            @default([])
+  organizationId    String
+  createdBy         String?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  controls          ControlTestScript[]
+  spreadsheetRows   SpreadsheetRow[]    @relation("SpreadsheetRowTestScript")
+  testExecutions    TestExecution[]
+  creator           User?               @relation("TestScriptCreatedBy", fields: [createdBy], references: [id])
+  organization      Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([testType])
+  @@index([frequency])
+  @@map("test_scripts")
+}
+
+model ControlTestScript {
+  id           String     @id @default(cuid())
+  controlId    String
+  testScriptId String
+  isMandatory  Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  control      Control    @relation(fields: [controlId], references: [id], onDelete: Cascade)
+  testScript   TestScript @relation(fields: [testScriptId], references: [id], onDelete: Cascade)
+
+  @@unique([controlId, testScriptId])
+  @@index([controlId])
+  @@index([testScriptId])
+  @@map("control_test_scripts")
+}
+
+model TestExecution {
+  id            String     @id @default(cuid())
+  testScriptId  String
+  controlId     String
+  executedBy    String
+  executionDate DateTime   @default(now())
+  status        TestStatus
+  results       Json
+  evidence      String[]   @default([])
+  notes         String?
+  duration      Int?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  control       Control    @relation(fields: [controlId], references: [id])
+  executor      User       @relation("TestExecutionExecutor", fields: [executedBy], references: [id])
+  testScript    TestScript @relation(fields: [testScriptId], references: [id])
+
+  @@index([testScriptId])
+  @@index([controlId])
+  @@index([executedBy])
+  @@index([status])
+  @@index([executionDate])
+  @@map("test_executions")
+}
+
+model ReportTemplate {
+  id                String           @id @default(cuid())
+  name              String
+  description       String?
+  type              ReportType
+  templateConfig    Json
+  defaultParameters Json?
+  isActive          Boolean          @default(true)
+  organizationId    String
+  createdBy         String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  reportSchedules   ReportSchedule[]
+  creator           User?            @relation("ReportTemplateCreatedBy", fields: [createdBy], references: [id])
+  organization      Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([type])
+  @@map("report_templates")
+}
+
+model ReportSchedule {
+  id               String            @id @default(cuid())
+  reportTemplateId String
+  name             String
+  description      String?
+  frequency        ScheduleFrequency
+  scheduleConfig   Json
+  recipients       String[]          @default([])
+  isActive         Boolean           @default(true)
+  lastRunAt        DateTime?
+  nextRunAt        DateTime?
+  organizationId   String
+  createdBy        String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  creator          User?             @relation("ReportScheduleCreatedBy", fields: [createdBy], references: [id])
+  organization     Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  reportTemplate   ReportTemplate    @relation(fields: [reportTemplateId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([reportTemplateId])
+  @@index([nextRunAt])
+  @@map("report_schedules")
+}
+
+model ChatChannel {
+  id             String              @id @default(cuid())
+  name           String
+  description    String?
+  type           ChannelType         @default(PUBLIC)
+  isPrivate      Boolean             @default(false)
+  organizationId String
+  createdBy      String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  lastActivityAt DateTime            @default(now())
+  members        ChatChannelMember[]
+  creator        User?               @relation("ChatChannelCreatedBy", fields: [createdBy], references: [id])
+  organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  messages       ChatMessage[]
+
+  @@index([organizationId])
+  @@index([type])
+  @@index([lastActivityAt])
+  @@map("chat_channels")
+}
+
+model ChatChannelMember {
+  id                   String            @id @default(cuid())
+  channelId            String
+  userId               String
+  role                 ChannelMemberRole @default(MEMBER)
+  joinedAt             DateTime          @default(now())
+  lastReadAt           DateTime          @default(now())
+  notificationSettings Json?
+  channel              ChatChannel       @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  user                 User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([channelId, userId])
+  @@index([userId])
+  @@index([channelId])
+  @@map("chat_channel_members")
+}
+
+model ChatMessage {
+  id           String            @id @default(cuid())
+  channelId    String
+  userId       String
+  content      String
+  type         ChatMessageType   @default(TEXT)
+  attachments  Json?
+  metadata     Json?
+  isEdited     Boolean           @default(false)
+  editedAt     DateTime?
+  isDeleted    Boolean           @default(false)
+  deletedAt    DateTime?
+  parentId     String?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  channel      ChatChannel       @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  parent       ChatMessage?      @relation("MessageReplies", fields: [parentId], references: [id])
+  replies      ChatMessage[]     @relation("MessageReplies")
+  user         User              @relation("ChatMessageAuthor", fields: [userId], references: [id])
+  reactions    ChatReaction[]
+  readReceipts ChatReadReceipt[]
+
+  @@index([channelId])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([parentId])
+  @@map("chat_messages")
+}
+
+model ChatReaction {
+  id        String      @id @default(cuid())
+  messageId String
+  userId    String
+  emoji     String
+  createdAt DateTime    @default(now())
+  message   ChatMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId, emoji])
+  @@index([messageId])
+  @@index([userId])
+  @@map("chat_reactions")
+}
+
+model ChatReadReceipt {
+  id        String      @id @default(cuid())
+  messageId String
+  userId    String
+  readAt    DateTime    @default(now())
+  message   ChatMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId])
+  @@index([messageId])
+  @@index([userId])
+  @@map("chat_read_receipts")
+}
+
+model ProboIntegration {
+  id              String        @id @default(cuid())
+  organizationId  String        @unique
+  apiKeyEncrypted String?
+  webhookUrl      String?
+  webhookSecret   String?
+  config          Json?
+  isActive        Boolean       @default(true)
+  lastSyncAt      DateTime?
+  lastSyncStatus  String?
+  lastSyncError   String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  organization    Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  metrics         ProboMetric[]
+
+  @@map("probo_integrations")
+}
+
+model ProboMetric {
+  id            String           @id @default(cuid())
+  integrationId String
+  metricType    String
+  metricValue   Json
+  metadata      Json?
+  timestamp     DateTime         @default(now())
+  integration   ProboIntegration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+
+  @@index([integrationId])
+  @@index([metricType])
+  @@index([timestamp])
+  @@map("probo_metrics")
+}
+
+model Cache {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([key])
+  @@index([expiresAt])
+  @@map("cache")
+}
+
+model NotificationPreference {
+  id         String          @id @default(cuid())
+  userId     String          @unique
+  quietHours Json?
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  categories Json            @default("{}")
+  digest     DigestFrequency @default(DAILY)
+  email      Boolean         @default(true)
+  push       Boolean         @default(true)
+  inApp      Boolean         @default(true)
+  user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notification_preferences")
+}
+
+model Notification {
+  id             String                  @id @default(cuid())
+  title          String
+  message        String
+  read           Boolean                 @default(false)
+  readAt         DateTime?
+  userId         String
+  actionUrl      String?
+  createdAt      DateTime                @default(now())
+  category       NotificationCategory
+  data           Json?
+  dismissed      Boolean                 @default(false)
+  dismissedAt    DateTime?
+  emailSent      Boolean                 @default(false)
+  emailSentAt    DateTime?
+  iconUrl        String?
+  organizationId String
+  pushSent       Boolean                 @default(false)
+  pushSentAt     DateTime?
+  reportId       String?
+  riskId         String?
+  updatedAt      DateTime                @updatedAt
+  type           NotificationMessageType
+  priority       NotificationPriority    @default(MEDIUM)
+  organization   Organization            @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  report         Report?                 @relation(fields: [reportId], references: [id])
+  risk           Risk?                   @relation(fields: [riskId], references: [id])
+  user           User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read, createdAt])
+  @@index([organizationId, category])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+model NotificationDigest {
+  id             String          @id @default(cuid())
+  userId         String
+  organizationId String
+  frequency      DigestFrequency
+  lastSentAt     DateTime?
+  nextSendAt     DateTime
+  notifications  Json
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  organization   Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, frequency])
+  @@index([nextSendAt])
+  @@map("notification_digests")
+}
+
+model PushSubscription {
+  id         String    @id @default(cuid())
+  userId     String
+  endpoint   String    @unique
+  auth       String
+  p256dh     String
+  deviceInfo Json?
+  active     Boolean   @default(true)
+  lastUsedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, active])
+  @@map("push_subscriptions")
+}
+
+model ComplianceFramework {
+  id             String                  @id @default(cuid())
+  name           String
+  description    String?
+  version        String?
+  type           ComplianceFrameworkType
+  isActive       Boolean                 @default(true)
+  organizationId String
+  createdBy      String?
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+  assessments    ComplianceAssessment[]
+  creator        User?                   @relation("ComplianceFrameworkCreatedBy", fields: [createdBy], references: [id])
+  organization   Organization            @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  requirements   ComplianceRequirement[]
+
+  @@index([organizationId])
+  @@index([type])
+  @@map("compliance_frameworks")
+}
+
+model ComplianceRequirement {
+  id              String                      @id @default(cuid())
+  frameworkId     String
+  requirementId   String
+  title           String
+  description     String
+  category        String
+  criticality     RequirementCriticality
+  parentId        String?
+  order           Int                         @default(0)
+  assessmentItems ComplianceAssessmentItem[]
+  framework       ComplianceFramework         @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
+  parent          ComplianceRequirement?      @relation("RequirementHierarchy", fields: [parentId], references: [id])
+  children        ComplianceRequirement[]     @relation("RequirementHierarchy")
+  controlMappings RequirementControlMapping[]
+
+  @@index([frameworkId])
+  @@index([parentId])
+  @@map("compliance_requirements")
+}
+
+model RequirementControlMapping {
+  id            String                @id @default(cuid())
+  requirementId String
+  controlId     String
+  mappingType   MappingType
+  effectiveness Float                 @default(0)
+  notes         String?
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+  control       Control               @relation(fields: [controlId], references: [id], onDelete: Cascade)
+  requirement   ComplianceRequirement @relation(fields: [requirementId], references: [id], onDelete: Cascade)
+
+  @@unique([requirementId, controlId])
+  @@index([requirementId])
+  @@index([controlId])
+  @@map("requirement_control_mappings")
+}
+
+model ComplianceAssessment {
+  id             String                     @id @default(cuid())
+  frameworkId    String
+  name           String
+  description    String?
+  assessmentDate DateTime                   @default(now())
+  dueDate        DateTime?
+  status         AssessmentStatus           @default(IN_PROGRESS)
+  overallScore   Float?
+  organizationId String
+  assessorId     String?
+  reviewerId     String?
+  completedAt    DateTime?
+  createdAt      DateTime                   @default(now())
+  updatedAt      DateTime                   @updatedAt
+  items          ComplianceAssessmentItem[]
+  assessor       User?                      @relation("ComplianceAssessmentAssessor", fields: [assessorId], references: [id])
+  framework      ComplianceFramework        @relation(fields: [frameworkId], references: [id])
+  organization   Organization               @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  reviewer       User?                      @relation("ComplianceAssessmentReviewer", fields: [reviewerId], references: [id])
+  gaps           ComplianceGap[]
+
+  @@index([organizationId])
+  @@index([frameworkId])
+  @@index([status])
+  @@map("compliance_assessments")
+}
+
+model ComplianceAssessmentItem {
+  id              String                @id @default(cuid())
+  assessmentId    String
+  requirementId   String
+  status          ComplianceStatus
+  score           Float?
+  evidence        Json?
+  findings        String?
+  recommendations String?
+  assessedBy      String?
+  assessedAt      DateTime?
+  reviewedBy      String?
+  reviewedAt      DateTime?
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  assessor        User?                 @relation("AssessmentItemAssessor", fields: [assessedBy], references: [id])
+  assessment      ComplianceAssessment  @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  requirement     ComplianceRequirement @relation(fields: [requirementId], references: [id])
+  reviewer        User?                 @relation("AssessmentItemReviewer", fields: [reviewedBy], references: [id])
+
+  @@unique([assessmentId, requirementId])
+  @@index([assessmentId])
+  @@index([requirementId])
+  @@index([status])
+  @@map("compliance_assessment_items")
+}
+
+model ComplianceGap {
+  id              String               @id @default(cuid())
+  assessmentId    String
+  requirementId   String
+  gapType         GapType
+  severity        GapSeverity
+  description     String
+  impact          String?
+  remediationPlan String?
+  estimatedEffort Int?
+  targetDate      DateTime?
+  status          GapStatus            @default(IDENTIFIED)
+  assignedTo      String?
+  closedAt        DateTime?
+  closureNotes    String?
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  assessment      ComplianceAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  assignee        User?                @relation("ComplianceGapAssignee", fields: [assignedTo], references: [id])
+
+  @@index([assessmentId])
+  @@index([status])
+  @@index([severity])
+  @@map("compliance_gaps")
 }
 
 enum UserRole {
@@ -1291,7 +1784,6 @@ enum ColumnDataType {
   RISK_REFERENCE
   CONTROL_REFERENCE
   TASK_REFERENCE
-  TEST_SCRIPT_REFERENCE
   CALCULATED
   RATING
   CURRENCY
@@ -1300,6 +1792,7 @@ enum ColumnDataType {
   URL
   PHONE
   FILE_ATTACHMENT
+  TEST_SCRIPT_REFERENCE
 }
 
 enum SpreadsheetPermissionType {
@@ -1307,75 +1800,6 @@ enum SpreadsheetPermissionType {
   EDITOR
   COMMENTER
   VIEWER
-}
-
-model TestScript {
-  id                   String              @id @default(cuid())
-  title                String
-  description          String
-  steps                Json                // Array of test steps
-  expectedResults      String
-  testType             TestScriptType
-  frequency            TestFrequency
-  estimatedDuration    Int?                // Duration in minutes
-  automationCapable    Boolean             @default(false)
-  automationScript     String?             // Script for automated testing
-  tags                 String[]            @default([])
-  organizationId       String
-  createdBy            String?
-  createdAt            DateTime            @default(now())
-  updatedAt            DateTime            @updatedAt
-  controls             ControlTestScript[]
-  testExecutions       TestExecution[]
-  spreadsheetRows      SpreadsheetRow[]    @relation("SpreadsheetRowTestScript")
-  creator              User?               @relation("TestScriptCreatedBy", fields: [createdBy], references: [id])
-  organization         Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-
-  @@index([organizationId])
-  @@index([testType])
-  @@index([frequency])
-  @@map("test_scripts")
-}
-
-model ControlTestScript {
-  id            String     @id @default(cuid())
-  controlId     String
-  testScriptId  String
-  isMandatory   Boolean    @default(true)
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  control       Control    @relation(fields: [controlId], references: [id], onDelete: Cascade)
-  testScript    TestScript @relation(fields: [testScriptId], references: [id], onDelete: Cascade)
-
-  @@unique([controlId, testScriptId])
-  @@index([controlId])
-  @@index([testScriptId])
-  @@map("control_test_scripts")
-}
-
-model TestExecution {
-  id              String         @id @default(cuid())
-  testScriptId    String
-  controlId       String
-  executedBy      String
-  executionDate   DateTime       @default(now())
-  status          TestStatus
-  results         Json           // Detailed test results
-  evidence        String[]       @default([]) // File paths or document IDs
-  notes           String?
-  duration        Int?           // Actual duration in minutes
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
-  testScript      TestScript     @relation(fields: [testScriptId], references: [id])
-  control         Control        @relation(fields: [controlId], references: [id])
-  executor        User           @relation("TestExecutionExecutor", fields: [executedBy], references: [id])
-
-  @@index([testScriptId])
-  @@index([controlId])
-  @@index([executedBy])
-  @@index([status])
-  @@index([executionDate])
-  @@map("test_executions")
 }
 
 enum TestScriptType {
@@ -1408,52 +1832,6 @@ enum TestStatus {
   PENDING
 }
 
-model ReportTemplate {
-  id                   String              @id @default(cuid())
-  name                 String
-  description          String?
-  type                 ReportType
-  templateConfig       Json                // Contains report structure, sections, fields
-  defaultParameters    Json?               // Default filter parameters
-  isActive             Boolean             @default(true)
-  organizationId       String
-  createdBy            String?
-  createdAt            DateTime            @default(now())
-  updatedAt            DateTime            @updatedAt
-  reportSchedules      ReportSchedule[]
-  creator              User?               @relation("ReportTemplateCreatedBy", fields: [createdBy], references: [id])
-  organization         Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-
-  @@index([organizationId])
-  @@index([type])
-  @@map("report_templates")
-}
-
-model ReportSchedule {
-  id                   String              @id @default(cuid())
-  reportTemplateId     String
-  name                 String
-  description          String?
-  frequency            ScheduleFrequency
-  scheduleConfig       Json                // Cron expression or detailed schedule config
-  recipients           String[]            @default([]) // Email addresses
-  isActive             Boolean             @default(true)
-  lastRunAt            DateTime?
-  nextRunAt            DateTime?
-  organizationId       String
-  createdBy            String?
-  createdAt            DateTime            @default(now())
-  updatedAt            DateTime            @updatedAt
-  reportTemplate       ReportTemplate      @relation(fields: [reportTemplateId], references: [id], onDelete: Cascade)
-  creator              User?               @relation("ReportScheduleCreatedBy", fields: [createdBy], references: [id])
-  organization         Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-
-  @@index([organizationId])
-  @@index([reportTemplateId])
-  @@index([nextRunAt])
-  @@map("report_schedules")
-}
-
 enum ScheduleFrequency {
   DAILY
   WEEKLY
@@ -1461,103 +1839,6 @@ enum ScheduleFrequency {
   QUARTERLY
   ANNUALLY
   CUSTOM
-}
-
-model ChatChannel {
-  id                   String              @id @default(cuid())
-  name                 String
-  description          String?
-  type                 ChannelType         @default(PUBLIC)
-  isPrivate            Boolean             @default(false)
-  organizationId       String
-  createdBy            String?
-  createdAt            DateTime            @default(now())
-  updatedAt            DateTime            @updatedAt
-  lastActivityAt       DateTime            @default(now())
-  members              ChatChannelMember[]
-  messages             ChatMessage[]
-  creator              User?               @relation("ChatChannelCreatedBy", fields: [createdBy], references: [id])
-  organization         Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-
-  @@index([organizationId])
-  @@index([type])
-  @@index([lastActivityAt])
-  @@map("chat_channels")
-}
-
-model ChatChannelMember {
-  id                   String              @id @default(cuid())
-  channelId            String
-  userId               String
-  role                 ChannelMemberRole   @default(MEMBER)
-  joinedAt             DateTime            @default(now())
-  lastReadAt           DateTime            @default(now())
-  notificationSettings Json?
-  channel              ChatChannel         @relation(fields: [channelId], references: [id], onDelete: Cascade)
-  user                 User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([channelId, userId])
-  @@index([userId])
-  @@index([channelId])
-  @@map("chat_channel_members")
-}
-
-model ChatMessage {
-  id                   String              @id @default(cuid())
-  channelId            String
-  userId               String
-  content              String
-  type                 ChatMessageType     @default(TEXT)
-  attachments          Json?               // Array of attachment objects
-  metadata             Json?               // Additional message data
-  isEdited             Boolean             @default(false)
-  editedAt             DateTime?
-  isDeleted            Boolean             @default(false)
-  deletedAt            DateTime?
-  parentId             String?             // For threaded messages
-  createdAt            DateTime            @default(now())
-  updatedAt            DateTime            @updatedAt
-  channel              ChatChannel         @relation(fields: [channelId], references: [id], onDelete: Cascade)
-  user                 User                @relation("ChatMessageAuthor", fields: [userId], references: [id])
-  parent               ChatMessage?        @relation("MessageReplies", fields: [parentId], references: [id])
-  replies              ChatMessage[]       @relation("MessageReplies")
-  reactions            ChatReaction[]
-  readReceipts         ChatReadReceipt[]
-
-  @@index([channelId])
-  @@index([userId])
-  @@index([createdAt])
-  @@index([parentId])
-  @@map("chat_messages")
-}
-
-model ChatReaction {
-  id                   String              @id @default(cuid())
-  messageId            String
-  userId               String
-  emoji                String
-  createdAt            DateTime            @default(now())
-  message              ChatMessage         @relation(fields: [messageId], references: [id], onDelete: Cascade)
-  user                 User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([messageId, userId, emoji])
-  @@index([messageId])
-  @@index([userId])
-  @@map("chat_reactions")
-}
-
-model ChatReadReceipt {
-  id                   String              @id @default(cuid())
-  messageId            String
-  userId               String
-  readAt               DateTime            @default(now())
-  message              ChatMessage         @relation(fields: [messageId], references: [id], onDelete: Cascade)
-  user                 User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([messageId, userId])
-  @@index([messageId])
-  @@index([userId])
-  @@map("chat_read_receipts")
 }
 
 enum ChannelType {
@@ -1580,153 +1861,6 @@ enum ChatMessageType {
   IMAGE
   SYSTEM
   ANNOUNCEMENT
-}
-
-model ProboIntegration {
-  id                   String              @id @default(cuid())
-  organizationId       String              @unique
-  apiKeyEncrypted      String?
-  webhookUrl           String?
-  webhookSecret        String?
-  config               Json?               // Integration configuration
-  isActive             Boolean             @default(true)
-  lastSyncAt           DateTime?
-  lastSyncStatus       String?
-  lastSyncError        String?
-  createdAt            DateTime            @default(now())
-  updatedAt            DateTime            @updatedAt
-  organization         Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  metrics              ProboMetric[]
-
-  @@map("probo_integrations")
-}
-
-model ProboMetric {
-  id                   String              @id @default(cuid())
-  integrationId        String
-  metricType           String              // vulnerability_score, security_posture, etc.
-  metricValue          Json                // Flexible JSON for different metric types
-  metadata             Json?               // Additional context
-  timestamp            DateTime            @default(now())
-  integration          ProboIntegration    @relation(fields: [integrationId], references: [id], onDelete: Cascade)
-
-  @@index([integrationId])
-  @@index([metricType])
-  @@index([timestamp])
-  @@map("probo_metrics")
-}
-
-model Cache {
-  id        String   @id @default(cuid())
-  key       String   @unique
-  value     String   @db.Text
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([key])
-  @@index([expiresAt])
-  @@map("cache")
-}
-
-// Notification system models
-model NotificationPreference {
-  id             String   @id @default(cuid())
-  userId         String   @unique
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  email          Boolean  @default(true)
-  push           Boolean  @default(true)
-  inApp          Boolean  @default(true)
-  digest         DigestFrequency @default(DAILY)
-  categories     Json     @default("{}") // { risks: true, compliance: true, reports: true, etc }
-  quietHours     Json?    // { start: "22:00", end: "08:00", timezone: "UTC" }
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  
-  @@map("notification_preferences")
-}
-
-model Notification {
-  id             String   @id @default(cuid())
-  userId         String
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  
-  title          String
-  message        String   @db.Text
-  category       NotificationCategory
-  priority       NotificationPriority @default(MEDIUM)
-  type           NotificationMessageType
-  
-  data           Json?    // Additional context data
-  actionUrl      String?
-  iconUrl        String?
-  
-  read           Boolean  @default(false)
-  readAt         DateTime?
-  dismissed      Boolean  @default(false)
-  dismissedAt    DateTime?
-  
-  // Delivery status
-  emailSent      Boolean  @default(false)
-  emailSentAt    DateTime?
-  pushSent       Boolean  @default(false)
-  pushSentAt     DateTime?
-  
-  // Related entities
-  riskId         String?
-  risk           Risk?    @relation(fields: [riskId], references: [id], onDelete: SetNull)
-  reportId       String?
-  report         Report?  @relation(fields: [reportId], references: [id], onDelete: SetNull)
-  
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  
-  @@index([userId, read, createdAt])
-  @@index([organizationId, category])
-  @@index([createdAt])
-  @@map("notifications")
-}
-
-model NotificationDigest {
-  id             String   @id @default(cuid())
-  userId         String
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  
-  frequency      DigestFrequency
-  lastSentAt     DateTime?
-  nextSendAt     DateTime
-  notifications  Json     // Array of notification IDs included
-  
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  
-  @@unique([userId, frequency])
-  @@index([nextSendAt])
-  @@map("notification_digests")
-}
-
-model PushSubscription {
-  id             String   @id @default(cuid())
-  userId         String
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  endpoint       String   @unique
-  auth           String
-  p256dh         String
-  deviceInfo     Json?    // Browser, OS, etc
-  
-  active         Boolean  @default(true)
-  lastUsedAt     DateTime?
-  
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  
-  @@index([userId, active])
-  @@map("push_subscriptions")
 }
 
 enum DigestFrequency {
@@ -1761,154 +1895,6 @@ enum NotificationMessageType {
   WARNING
   ERROR
   ACTION_REQUIRED
-}
-
-// Compliance Gap Analysis Models
-model ComplianceFramework {
-  id             String   @id @default(cuid())
-  name           String
-  description    String?
-  version        String?
-  type           ComplianceFrameworkType
-  isActive       Boolean  @default(true)
-  organizationId String
-  createdBy      String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  
-  requirements   ComplianceRequirement[]
-  assessments    ComplianceAssessment[]
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  creator        User? @relation("ComplianceFrameworkCreatedBy", fields: [createdBy], references: [id])
-  
-  @@index([organizationId])
-  @@index([type])
-  @@map("compliance_frameworks")
-}
-
-model ComplianceRequirement {
-  id                String   @id @default(cuid())
-  frameworkId       String
-  requirementId     String   // External ID from framework (e.g., "PCI-DSS 1.1.1")
-  title             String
-  description       String   @db.Text
-  category          String
-  criticality       RequirementCriticality
-  parentId          String?
-  order             Int      @default(0)
-  
-  framework         ComplianceFramework @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
-  parent            ComplianceRequirement? @relation("RequirementHierarchy", fields: [parentId], references: [id])
-  children          ComplianceRequirement[] @relation("RequirementHierarchy")
-  controlMappings   RequirementControlMapping[]
-  assessmentItems   ComplianceAssessmentItem[]
-  
-  @@index([frameworkId])
-  @@index([parentId])
-  @@map("compliance_requirements")
-}
-
-model RequirementControlMapping {
-  id               String   @id @default(cuid())
-  requirementId    String
-  controlId        String
-  mappingType      MappingType
-  effectiveness    Float    @default(0) // 0-100
-  notes            String?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  
-  requirement      ComplianceRequirement @relation(fields: [requirementId], references: [id], onDelete: Cascade)
-  control          Control @relation(fields: [controlId], references: [id], onDelete: Cascade)
-  
-  @@unique([requirementId, controlId])
-  @@index([requirementId])
-  @@index([controlId])
-  @@map("requirement_control_mappings")
-}
-
-model ComplianceAssessment {
-  id               String   @id @default(cuid())
-  frameworkId      String
-  name             String
-  description      String?
-  assessmentDate   DateTime @default(now())
-  dueDate          DateTime?
-  status           AssessmentStatus @default(IN_PROGRESS)
-  overallScore     Float?   // 0-100
-  organizationId   String
-  assessorId       String?
-  reviewerId       String?
-  completedAt      DateTime?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  
-  framework        ComplianceFramework @relation(fields: [frameworkId], references: [id])
-  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  assessor         User? @relation("ComplianceAssessmentAssessor", fields: [assessorId], references: [id])
-  reviewer         User? @relation("ComplianceAssessmentReviewer", fields: [reviewerId], references: [id])
-  items            ComplianceAssessmentItem[]
-  gaps             ComplianceGap[]
-  
-  @@index([organizationId])
-  @@index([frameworkId])
-  @@index([status])
-  @@map("compliance_assessments")
-}
-
-model ComplianceAssessmentItem {
-  id                 String   @id @default(cuid())
-  assessmentId       String
-  requirementId      String
-  status             ComplianceStatus
-  score              Float?   // 0-100
-  evidence           Json?    // Array of evidence links/documents
-  findings           String?  @db.Text
-  recommendations    String?  @db.Text
-  assessedBy         String?
-  assessedAt         DateTime?
-  reviewedBy         String?
-  reviewedAt         DateTime?
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-  
-  assessment         ComplianceAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
-  requirement        ComplianceRequirement @relation(fields: [requirementId], references: [id])
-  assessor           User? @relation("AssessmentItemAssessor", fields: [assessedBy], references: [id])
-  reviewer           User? @relation("AssessmentItemReviewer", fields: [reviewedBy], references: [id])
-  
-  @@unique([assessmentId, requirementId])
-  @@index([assessmentId])
-  @@index([requirementId])
-  @@index([status])
-  @@map("compliance_assessment_items")
-}
-
-model ComplianceGap {
-  id                   String   @id @default(cuid())
-  assessmentId         String
-  requirementId        String
-  gapType              GapType
-  severity             GapSeverity
-  description          String   @db.Text
-  impact               String?  @db.Text
-  remediationPlan      String?  @db.Text
-  estimatedEffort      Int?     // Hours
-  targetDate           DateTime?
-  status               GapStatus @default(IDENTIFIED)
-  assignedTo           String?
-  closedAt             DateTime?
-  closureNotes         String?
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-  
-  assessment           ComplianceAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
-  assignee             User? @relation("ComplianceGapAssignee", fields: [assignedTo], references: [id])
-  
-  @@index([assessmentId])
-  @@index([status])
-  @@index([severity])
-  @@map("compliance_gaps")
 }
 
 enum ComplianceFrameworkType {

@@ -10,7 +10,7 @@ import { AssessmentStatus } from '@prisma/client';
 export const GET = withApiMiddleware(async (req: NextRequest) => {
   const user = await getAuthenticatedUser();
   if (!user) {
-    return ApiResponseFormatter.unauthorized('User not authenticated');
+    return ApiResponseFormatter.authError('User not authenticated');
   }
 
   const searchParams = req.nextUrl.searchParams;
@@ -39,7 +39,7 @@ const createAssessmentSchema = z.object({
 export const POST = withApiMiddleware(async (req: NextRequest) => {
   const user = await getAuthenticatedUser();
   if (!user || !['ADMIN', 'MANAGER'].includes(user.role)) {
-    return ApiResponseFormatter.forbidden('Insufficient permissions');
+    return ApiResponseFormatter.forbiddenError('Insufficient permissions');
   }
 
   const body = await req.json();

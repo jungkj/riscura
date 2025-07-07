@@ -7,9 +7,9 @@ import { riskUpdateSchema } from '@/lib/api/schemas';
 import { z } from 'zod';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // GET /api/risks/[id] - Get single risk with full details

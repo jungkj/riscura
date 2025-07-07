@@ -5,28 +5,34 @@ import { complianceService } from '@/services/ComplianceService';
 import { ApiResponseFormatter } from '@/lib/api/response-formatter';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // GET /api/compliance/assessments/[id] - Get single assessment with details
-export const GET = withApiMiddleware(async (req: NextRequest, { params }: RouteParams) => {
-  const user = await getAuthenticatedUser();
-  if (!user) {
-    return ApiResponseFormatter.unauthorized('User not authenticated');
-  }
+export async function GET(
+  req: NextRequest,
+  { params }: RouteParams
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
+    const resolvedParams = await params;
+    const user = await getAuthenticatedUser();
+    if (!user) {
+      return ApiResponseFormatter.authError('User not authenticated');
+    }
 
-  const assessment = await complianceService.getAssessment(params.id);
-  
-  if (!assessment) {
-    return ApiResponseFormatter.notFound('Assessment not found');
-  }
+    const assessment = await complianceService.getAssessment(resolvedParams.id);
+    
+    if (!assessment) {
+      return ApiResponseFormatter.notFoundError('Assessment not found');
+    }
 
-  // Verify user has access to this assessment
-  if (assessment.organizationId !== user.organizationId) {
-    return ApiResponseFormatter.forbidden('Access denied');
-  }
+    // Verify user has access to this assessment
+    if (assessment.organizationId !== user.organizationId) {
+      return ApiResponseFormatter.forbiddenError('Access denied');
+    }
 
-  return ApiResponseFormatter.success(assessment, 'Assessment retrieved successfully');
-});
+    return ApiResponseFormatter.success(assessment, 'Assessment retrieved successfully');
+  })(req);
+}

@@ -7,9 +7,9 @@ import { z } from 'zod';
 import { ComplianceStatus } from '@prisma/client';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // POST /api/compliance/assessments/[id]/items - Assess requirement
@@ -22,20 +22,26 @@ const assessRequirementSchema = z.object({
   recommendations: z.string().optional(),
 });
 
-export const POST = withApiMiddleware(async (req: NextRequest, { params }: RouteParams) => {
-  const user = await getAuthenticatedUser();
-  if (!user) {
-    return ApiResponseFormatter.unauthorized('User not authenticated');
-  }
+export async function POST(
+  req: NextRequest,
+  { params }: RouteParams
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
+    const resolvedParams = await params;
+    const user = await getAuthenticatedUser();
+    if (!user) {
+      return ApiResponseFormatter.authError('User not authenticated');
+    }
 
-  const body = await req.json();
-  const validatedData = assessRequirementSchema.parse(body);
+    const body = await req.json();
+    const validatedData = assessRequirementSchema.parse(body);
 
-  const item = await complianceService.assessRequirement({
-    ...validatedData,
-    assessmentId: params.id,
-    assessedBy: user.id,
-  });
+    const item = await complianceService.assessRequirement({
+      ...validatedData,
+      assessmentId: resolvedParams.id,
+      assessedBy: user.id,
+    });
 
-  return ApiResponseFormatter.success(item, 'Requirement assessed successfully');
-});
+    return ApiResponseFormatter.success(item, 'Requirement assessed successfully');
+  })(req);
+}

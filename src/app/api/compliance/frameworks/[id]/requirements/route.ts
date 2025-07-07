@@ -7,22 +7,28 @@ import { z } from 'zod';
 import { RequirementCriticality } from '@prisma/client';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // GET /api/compliance/frameworks/[id]/requirements - Get framework requirements
-export const GET = withApiMiddleware(async (req: NextRequest, { params }: RouteParams) => {
-  const user = await getAuthenticatedUser();
-  if (!user) {
-    return ApiResponseFormatter.unauthorized('User not authenticated');
-  }
+export async function GET(
+  req: NextRequest,
+  { params }: RouteParams
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
+    const resolvedParams = await params;
+    const user = await getAuthenticatedUser();
+    if (!user) {
+      return ApiResponseFormatter.authError('User not authenticated');
+    }
 
-  const requirements = await complianceService.getRequirements(params.id);
+    const requirements = await complianceService.getRequirements(resolvedParams.id);
 
-  return ApiResponseFormatter.success(requirements, 'Requirements retrieved successfully');
-});
+    return ApiResponseFormatter.success(requirements, 'Requirements retrieved successfully');
+  })(req);
+}
 
 // POST /api/compliance/frameworks/[id]/requirements - Create requirement
 const createRequirementSchema = z.object({
@@ -35,27 +41,33 @@ const createRequirementSchema = z.object({
   order: z.number().optional(),
 });
 
-export const POST = withApiMiddleware(async (req: NextRequest, { params }: RouteParams) => {
-  const user = await getAuthenticatedUser();
-  if (!user || !['ADMIN', 'MANAGER'].includes(user.role)) {
-    return ApiResponseFormatter.forbidden('Insufficient permissions');
-  }
+export async function POST(
+  req: NextRequest,
+  { params }: RouteParams
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
+    const resolvedParams = await params;
+    const user = await getAuthenticatedUser();
+    if (!user || !['ADMIN', 'MANAGER'].includes(user.role)) {
+      return ApiResponseFormatter.forbiddenError('Insufficient permissions');
+    }
 
-  const body = await req.json();
-  
-  // Handle bulk creation
-  if (Array.isArray(body)) {
-    const requirements = body.map(item => createRequirementSchema.parse(item));
-    const count = await complianceService.bulkCreateRequirements(params.id, requirements);
-    return ApiResponseFormatter.success({ count }, `${count} requirements created successfully`);
-  }
+    const body = await req.json();
+    
+    // Handle bulk creation
+    if (Array.isArray(body)) {
+      const requirements = body.map(item => createRequirementSchema.parse(item));
+      const count = await complianceService.bulkCreateRequirements(resolvedParams.id, requirements);
+      return ApiResponseFormatter.success({ count }, `${count} requirements created successfully`);
+    }
 
-  // Handle single creation
-  const validatedData = createRequirementSchema.parse(body);
-  const requirement = await complianceService.createRequirement({
-    ...validatedData,
-    frameworkId: params.id,
-  });
+    // Handle single creation
+    const validatedData = createRequirementSchema.parse(body);
+    const requirement = await complianceService.createRequirement({
+      ...validatedData,
+      frameworkId: resolvedParams.id,
+    });
 
-  return ApiResponseFormatter.success(requirement, 'Requirement created successfully', 201);
-});
+    return ApiResponseFormatter.success(requirement, 'Requirement created successfully', 201);
+  })(req);
+}

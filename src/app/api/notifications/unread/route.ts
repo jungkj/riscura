@@ -8,7 +8,7 @@ import { ApiResponseFormatter } from '@/lib/api/response-formatter';
 export const GET = withApiMiddleware(async (req: NextRequest) => {
   const user = await getAuthenticatedUser();
   if (!user) {
-    return ApiResponseFormatter.unauthorized('User not authenticated');
+    return ApiResponseFormatter.authError('User not authenticated');
   }
 
   const count = await notificationService.getUnreadCount(user.id);
