@@ -4,8 +4,8 @@ import { complianceService } from '@/services/ComplianceService';
 import { AuthenticatedRequest } from '@/types/api';
 
 export const GET = withApiMiddleware(
-  async (req: AuthenticatedRequest) => {
-    const user = req.user;
+  async (req: NextRequest) => {
+    const user = (req as any).user;
     
     if (!user || !user.organizationId) {
       return NextResponse.json(
