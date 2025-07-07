@@ -9,62 +9,72 @@ const updateMessageSchema = z.object({
   content: z.string().min(1).max(2000),
 });
 
-export const PATCH = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: Promise<{ messageId: string }> }) => {
-    const { messageId } = await params;
-    const user = (req as any).user;
-    if (!user) {
-      return ApiResponseFormatter.authError();
-    }
-
-    try {
-      const body = await req.json();
-      const validatedData = updateMessageSchema.parse(body);
-
-      const message = await ChatService.updateMessage({
-        messageId,
-        userId: user.id,
-        content: validatedData.content,
-      });
-
-      return ApiResponseFormatter.success(message);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return ApiResponseFormatter.validationError(error.errors);
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ messageId: string }> }
+) {
+  return withApiMiddleware(
+    async (request: NextRequest) => {
+      const { messageId } = await params;
+      const user = (request as any).user;
+      if (!user) {
+        return ApiResponseFormatter.authError();
       }
-      
-      console.error('Failed to update message:', error);
-      return ApiResponseFormatter.error(
-        error instanceof Error && error.message === 'Access denied' ? 'ACCESS_DENIED' : 'INTERNAL_ERROR',
-        error instanceof Error ? error.message : 'Failed to update message',
-        { status: error instanceof Error && error.message === 'Access denied' ? 403 : 500 }
-      );
-    }
-  },
-  { requireAuth: true }
-);
+
+      try {
+        const body = await request.json();
+        const validatedData = updateMessageSchema.parse(body);
+
+        const message = await ChatService.updateMessage({
+          messageId,
+          userId: user.id,
+          content: validatedData.content,
+        });
+
+        return ApiResponseFormatter.success(message);
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          return ApiResponseFormatter.validationError(error.errors);
+        }
+        
+        console.error('Failed to update message:', error);
+        return ApiResponseFormatter.error(
+          error instanceof Error && error.message === 'Access denied' ? 'ACCESS_DENIED' : 'INTERNAL_ERROR',
+          error instanceof Error ? error.message : 'Failed to update message',
+          { status: error instanceof Error && error.message === 'Access denied' ? 403 : 500 }
+        );
+      }
+    },
+    { requireAuth: true }
+  )(req);
+}
 
 // DELETE /api/chat/messages/[messageId] - Delete a message
-export const DELETE = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: Promise<{ messageId: string }> }) => {
-    const { messageId } = await params;
-    const user = (req as any).user;
-    if (!user) {
-      return ApiResponseFormatter.authError();
-    }
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ messageId: string }> }
+) {
+  return withApiMiddleware(
+    async (request: NextRequest) => {
+      const { messageId } = await params;
+      const user = (request as any).user;
+      if (!user) {
+        return ApiResponseFormatter.authError();
+      }
 
-    try {
-      await ChatService.deleteMessage(messageId, user.id);
+      try {
+        await ChatService.deleteMessage(messageId, user.id);
 
-      return ApiResponseFormatter.success({ message: 'Message deleted successfully' });
-    } catch (error) {
-      console.error('Failed to delete message:', error);
-      return ApiResponseFormatter.error(
-        error instanceof Error && error.message === 'Access denied' ? 'ACCESS_DENIED' : 'INTERNAL_ERROR',
-        error instanceof Error ? error.message : 'Failed to delete message',
-        { status: error instanceof Error && error.message === 'Access denied' ? 403 : 500 }
-      );
-    }
-  },
-  { requireAuth: true }
-);
+        return ApiResponseFormatter.success({ message: 'Message deleted successfully' });
+      } catch (error) {
+        console.error('Failed to delete message:', error);
+        return ApiResponseFormatter.error(
+          error instanceof Error && error.message === 'Access denied' ? 'ACCESS_DENIED' : 'INTERNAL_ERROR',
+          error instanceof Error ? error.message : 'Failed to delete message',
+          { status: error instanceof Error && error.message === 'Access denied' ? 403 : 500 }
+        );
+      }
+    },
+    { requireAuth: true }
+  )(req);
+}

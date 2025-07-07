@@ -5,23 +5,28 @@ import { z } from 'zod';
 import { ReportStatus } from '@prisma/client';
 
 // GET /api/reports/[id] - Get single report
-export const GET = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: { [key: string]: string } }) => {
-    const user = (req as any).user;
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { [key: string]: string } }
+) {
+  return withApiMiddleware(
+    async (request: NextRequest) => {
+      const user = (request as any).user;
 
-    const report = await ReportService.getReportById(params.id, user.organizationId);
+      const report = await ReportService.getReportById(params.id, user.organizationId);
 
-    if (!report) {
-      return NextResponse.json(
-        { error: 'Report not found' },
-        { status: 404 }
-      );
-    }
+      if (!report) {
+        return NextResponse.json(
+          { error: 'Report not found' },
+          { status: 404 }
+        );
+      }
 
-    return NextResponse.json({ data: report });
-  },
-  { requireAuth: true }
-);
+      return NextResponse.json({ data: report });
+    },
+    { requireAuth: true }
+  )(req);
+}
 
 // PUT /api/reports/[id] - Update report
 export const PUT = withApiMiddleware(
