@@ -151,7 +151,10 @@ async function handlePost(req: NextRequest, context: { user: any; organization: 
           error: {
             code: 'VALIDATION_ERROR',
             message: 'Invalid report request',
-            details: error.errors,
+            details: error.errors.map(err => ({
+              field: err.path.join('.'),
+              message: err.message
+            })),
           },
         },
         { status: 400 }

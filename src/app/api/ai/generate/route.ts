@@ -47,6 +47,9 @@ export const POST = withApiMiddleware(
   
   const data = validationResult.data;
   
+  // Record start time for response time calculation
+  const startTime = Date.now();
+  
   try {
     // Check user's AI usage quota if applicable
     const userQuota = await checkUserAIQuota(user.id, user.organizationId);
@@ -84,6 +87,9 @@ export const POST = withApiMiddleware(
       organizationId: user.organizationId
     });
     
+    // Calculate response time
+    const responseTime = Date.now() - startTime;
+    
     // Track AI usage for billing and analytics
     await trackAIUsage({
       userId: user.id,
@@ -95,16 +101,18 @@ export const POST = withApiMiddleware(
       cost: calculateAICost(data.model, {
         prompt_tokens: response.usage?.promptTokens,
         completion_tokens: response.usage?.completionTokens
-      })
+      }),
+      responseTime,
+      success: true
     });
     
     // Log activity
     await db.client.activity.create({
       data: {
-        type: 'CREATED',
+        type: 'UPDATED',
         userId: user.id,
         organizationId: user.organizationId,
-        entityType: 'REPORT',
+        entityType: 'ASSESSMENT',
         entityId: response.id || 'unknown',
         description: `Generated AI content using ${data.model}`,
         metadata: JSON.parse(JSON.stringify({
@@ -125,6 +133,22 @@ export const POST = withApiMiddleware(
     );
   } catch (error) {
     console.error('AI generation error:', error);
+    
+    // Calculate response time for failed request
+    const responseTime = Date.now() - startTime;
+    
+    // Track failed AI usage
+    await trackAIUsage({
+      userId: user.id,
+      organizationId: user.organizationId,
+      model: data.model,
+      promptTokens: 0,
+      completionTokens: 0,
+      totalTokens: 0,
+      cost: 0,
+      responseTime,
+      success: false
+    });
     
     // Handle specific AI service errors
     if (error instanceof Error) {
@@ -218,6 +242,8 @@ async function trackAIUsage(data: {
   completionTokens: number;
   totalTokens: number;
   cost: number;
+  responseTime: number;
+  success: boolean;
 }) {
   try {
     await db.client.aIUsageLog.create({
@@ -229,8 +255,8 @@ async function trackAIUsage(data: {
         completionTokens: data.completionTokens,
         totalTokens: data.totalTokens,
         estimatedCost: data.cost,
-        responseTime: 0,
-        success: true
+        responseTime: data.responseTime,
+        success: data.success
       }
     });
   } catch (error) {
