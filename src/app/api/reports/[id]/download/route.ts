@@ -7,14 +7,15 @@ import { z } from 'zod';
 // GET /api/reports/[id]/download - Download report file
 export async function GET(
   req: NextRequest,
-  { params }: { params: { [key: string]: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return withApiMiddleware(
     async (request: NextRequest) => {
       const user = (request as any).user;
+      const { id } = await params;
 
       // Get report details
-      const report = await ReportService.getReportById(params.id, user.organizationId);
+      const report = await ReportService.getReportById(id, user.organizationId);
 
       if (!report) {
         return NextResponse.json(
@@ -75,11 +76,12 @@ const downloadReportSchema = z.object({
 // POST /api/reports/[id]/download - Generate and download report
 export async function POST(
   req: NextRequest,
-  { params }: { params: { [key: string]: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return withApiMiddleware(
     async (request: NextRequest) => {
       const user = (request as any).user;
+      const { id } = await params;
 
       try {
         // Parse and validate request body
@@ -91,7 +93,7 @@ export async function POST(
 
         // Generate report if not already generated
         const report = await ReportService.generateReport(
-          params.id,
+          id,
           format,
           user.organizationId
         );
