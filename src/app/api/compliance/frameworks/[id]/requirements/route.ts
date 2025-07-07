@@ -62,14 +62,20 @@ export async function POST(
     if (Array.isArray(body)) {
       const requirements = body.map(item => createRequirementSchema.parse(item));
       const count = await complianceService.bulkCreateRequirements(id, requirements);
-      return ApiResponseFormatter.success({ count }, `${count} requirements created successfully`);
+      return ApiResponseFormatter.success({ count });
     }
 
     // Handle single creation
     const validatedData = createRequirementSchema.parse(body);
     const requirement = await complianceService.createRequirement({
-      ...validatedData,
-      frameworkId: id
+      frameworkId: id,
+      requirementId: validatedData.requirementId,
+      title: validatedData.title,
+      description: validatedData.description,
+      category: validatedData.category,
+      criticality: validatedData.criticality,
+      parentId: validatedData.parentId,
+      order: validatedData.order
     });
 
     return ApiResponseFormatter.success(requirement);
