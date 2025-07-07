@@ -7,13 +7,14 @@ import { ReportStatus } from '@prisma/client';
 // GET /api/reports/[id] - Get single report
 export async function GET(
   req: NextRequest,
-  { params }: { params: { [key: string]: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return withApiMiddleware(
     async (request: NextRequest) => {
       const user = (request as any).user;
+      const { id } = await params;
 
-      const report = await ReportService.getReportById(params.id, user.organizationId);
+      const report = await ReportService.getReportById(id, user.organizationId);
 
       if (!report) {
         return NextResponse.json(
