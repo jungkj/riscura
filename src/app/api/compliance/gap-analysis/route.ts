@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-options';
-import { EnhancedProboService } from '@/services/EnhancedProboService';
+import enhancedProboService from '@/services/EnhancedProboService';
 import { z } from 'zod';
 
 const gapAnalysisSchema = z.object({
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { action } = body;
 
-    const proboService = EnhancedProboService.getInstance();
+    const proboService = enhancedProboService;
 
     switch (action) {
       case 'analyze':
