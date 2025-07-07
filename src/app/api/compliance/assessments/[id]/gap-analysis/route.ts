@@ -23,9 +23,9 @@ export async function GET(
       } catch (error) {
         console.error('Gap analysis error:', error);
         if (error instanceof Error) {
-          return ApiResponseFormatter.error(error.message, { status: 500 });
+          return ApiResponseFormatter.error('SERVER_ERROR', error.message, { status: 500 });
         }
-        return ApiResponseFormatter.error('Failed to perform gap analysis', { status: 500 });
+        return ApiResponseFormatter.error('SERVER_ERROR', 'Failed to perform gap analysis', { status: 500 });
       }
     },
     { requireAuth: true }
