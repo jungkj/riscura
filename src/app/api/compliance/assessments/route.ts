@@ -46,10 +46,13 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
   const validatedData = createAssessmentSchema.parse(body);
 
   const assessment = await complianceService.createAssessment({
-    ...validatedData,
+    frameworkId: validatedData.frameworkId,
+    name: validatedData.name,
+    description: validatedData.description,
     dueDate: validatedData.dueDate ? new Date(validatedData.dueDate) : undefined,
     organizationId: user.organizationId,
+    assessorId: validatedData.assessorId
   });
 
-  return ApiResponseFormatter.success(assessment, 'Assessment created successfully', 201);
+  return ApiResponseFormatter.success(assessment, { status: 201 });
 });
