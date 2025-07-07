@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
+import { AuthenticatedRequest } from '@/types/api';
 
 export const GET = withApiMiddleware(
-  async (req: NextRequest) => {
-    const user = (req as any).user;
+  async (req: AuthenticatedRequest) => {
+    const user = req.user;
     
     if (!user || !user.organizationId) {
       return NextResponse.json(
