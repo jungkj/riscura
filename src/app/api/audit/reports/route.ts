@@ -5,9 +5,10 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { withAPI } from '@/lib/api/middleware';
-import { getAuditLogger, AuditReport } from '@/lib/audit/audit-logger';
+import { getAuditLogger, AuditReport, AuditAction } from '@/lib/audit/audit-logger';
 import { withComplianceAudit } from '@/lib/audit/audit-middleware';
 import { z } from 'zod';
+import { db } from '@/lib/db';
 
 // ============================================================================
 // VALIDATION SCHEMAS
@@ -46,12 +47,13 @@ async function handlePost(req: NextRequest, context: { user: any; organization: 
     const body = await req.json();
     const validatedData = AuditReportRequestSchema.parse(body);
 
-    // Convert date strings to Date objects
+    // Convert date strings to Date objects and ensure action is typed correctly
     const filters = {
       ...validatedData.filters,
       organizationId,
       startDate: new Date(validatedData.filters.startDate),
       endDate: new Date(validatedData.filters.endDate),
+      action: validatedData.filters.action as AuditAction | undefined,
     };
 
     // Validate date range
@@ -84,7 +86,7 @@ async function handlePost(req: NextRequest, context: { user: any; organization: 
     }
 
     // Generate the report
-    const auditLogger = getAuditLogger(context.prisma);
+    const auditLogger = getAuditLogger(db.client);
     const report = await auditLogger.generateReport(
       organizationId,
       validatedData.reportType,
@@ -150,7 +152,10 @@ async function handlePost(req: NextRequest, context: { user: any; organization: 
           error: {
             code: 'VALIDATION_ERROR',
             message: 'Invalid report request',
-            details: error.errors,
+            details: error.errors.map(err => ({
+              field: err.path.join('.'),
+              message: err.message
+            })),
           },
         },
         { status: 400 }

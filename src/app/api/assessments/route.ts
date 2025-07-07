@@ -14,22 +14,18 @@ export const GET = withApiMiddleware(
     }
 
     try {
-      const assessments = await db.questionnaire.findMany({
+      const assessments = await db.client.questionnaire.findMany({
         where: { organizationId: user.organizationId },
         include: {
-          questions: {
-            include: {
-              answers: true
-            }
-          },
-          createdBy: {
+          creator: {
             select: {
               id: true,
               firstName: true,
               lastName: true,
               email: true
             }
-          }
+          },
+          responses: true
         },
         orderBy: { createdAt: 'desc' }
       });

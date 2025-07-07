@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
+import { AuthenticatedRequest } from '@/types/api';
 
 export const GET = withApiMiddleware(
   async (req: NextRequest) => {
@@ -111,9 +112,9 @@ export const GET = withApiMiddleware(
         },
         trends: {
           // Placeholder for trend data - would need date-based queries
-          riskTrend: [],
-          controlTrend: [],
-          mappingTrend: []
+          riskTrend: [] as any[],
+          controlTrend: [] as any[],
+          mappingTrend: [] as any[]
         }
       };
 
