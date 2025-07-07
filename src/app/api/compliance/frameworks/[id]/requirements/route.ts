@@ -13,22 +13,21 @@ interface RouteParams {
 }
 
 // GET /api/compliance/frameworks/[id]/requirements - Get framework requirements
-export async function GET(
-  req: NextRequest,
-  { params }: RouteParams
-) {
-  return withApiMiddleware(async (req: NextRequest) => {
-    const resolvedParams = await params;
-    const user = await getAuthenticatedUser();
+export const GET = withApiMiddleware(
+  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
+
+    
+    const user = (req as any).user;
     if (!user) {
       return ApiResponseFormatter.authError('User not authenticated');
     }
 
-    const requirements = await complianceService.getRequirements(resolvedParams.id);
+    const requirements = await complianceService.getRequirements((await params).id);
 
-    return ApiResponseFormatter.success(requirements, 'Requirements retrieved successfully');
-  })(req);
-}
+    return ApiResponseFormatter.success(requirements, "Requirements retrieved successfully");
+  },
+  { requireAuth: true }
+);
 
 // POST /api/compliance/frameworks/[id]/requirements - Create requirement
 const createRequirementSchema = z.object({
@@ -41,13 +40,11 @@ const createRequirementSchema = z.object({
   order: z.number().optional(),
 });
 
-export async function POST(
-  req: NextRequest,
-  { params }: RouteParams
-) {
-  return withApiMiddleware(async (req: NextRequest) => {
-    const resolvedParams = await params;
-    const user = await getAuthenticatedUser();
+export const POST = withApiMiddleware(
+  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
+
+    
+    const user = (req as any).user;
     if (!user || !['ADMIN', 'MANAGER'].includes(user.role)) {
       return ApiResponseFormatter.forbiddenError('Insufficient permissions');
     }
@@ -57,7 +54,7 @@ export async function POST(
     // Handle bulk creation
     if (Array.isArray(body)) {
       const requirements = body.map(item => createRequirementSchema.parse(item));
-      const count = await complianceService.bulkCreateRequirements(resolvedParams.id, requirements);
+      const count = await complianceService.bulkCreateRequirements((await params).id, requirements);
       return ApiResponseFormatter.success({ count }, `${count} requirements created successfully`);
     }
 
@@ -65,9 +62,10 @@ export async function POST(
     const validatedData = createRequirementSchema.parse(body);
     const requirement = await complianceService.createRequirement({
       ...validatedData,
-      frameworkId: resolvedParams.id,
+      frameworkId: (await params).id
     });
 
-    return ApiResponseFormatter.success(requirement, 'Requirement created successfully', 201);
-  })(req);
-}
+    return ApiResponseFormatter.success(requirement, "Requirement created successfully");
+  },
+  { requireAuth: true }
+);

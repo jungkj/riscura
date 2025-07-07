@@ -8,7 +8,7 @@ import { DigestFrequency } from '@prisma/client';
 
 // GET /api/notifications/preferences - Get user preferences
 export const GET = withApiMiddleware(async (req: NextRequest) => {
-  const user = await getAuthenticatedUser();
+  const user = (req as any).user;
   if (!user) {
     return ApiResponseFormatter.authError('User not authenticated');
   }
@@ -33,7 +33,7 @@ const updatePreferencesSchema = z.object({
 });
 
 export const PUT = withApiMiddleware(async (req: NextRequest) => {
-  const user = await getAuthenticatedUser();
+  const user = (req as any).user;
   if (!user) {
     return ApiResponseFormatter.authError('User not authenticated');
   }

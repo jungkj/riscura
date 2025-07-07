@@ -11,26 +11,25 @@ interface RouteParams {
 }
 
 // GET /api/compliance/assessments/[id]/gap-analysis - Perform gap analysis
-export async function GET(
-  req: NextRequest,
-  { params }: RouteParams
-) {
-  return withApiMiddleware(async (req: NextRequest) => {
-    const resolvedParams = await params;
-    const user = await getAuthenticatedUser();
+export const GET = withApiMiddleware(
+  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
+
+    
+    const user = (req as any).user;
     if (!user) {
       return ApiResponseFormatter.authError('User not authenticated');
     }
 
     try {
-      const analysis = await complianceService.performGapAnalysis(resolvedParams.id);
-      return ApiResponseFormatter.success(analysis, 'Gap analysis completed successfully');
+      const analysis = await complianceService.performGapAnalysis((await params).id);
+      return ApiResponseFormatter.success(analysis, "Gap analysis completed successfully");
     } catch (error) {
       console.error('Gap analysis error:', error);
       if (error instanceof Error) {
-        return ApiResponseFormatter.error(error.message, 500);
+        return ApiResponseFormatter.error(error.message, { status: 500 });
       }
-      return ApiResponseFormatter.error('Failed to perform gap analysis', 500);
+      return ApiResponseFormatter.error('Failed to perform gap analysis', { status: 500 });
     }
-  })(req);
-}
+  },
+  { requireAuth: true }
+);

@@ -31,7 +31,7 @@ export async function GET(
 
 // PUT /api/reports/[id] - Update report
 export const PUT = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: { [key: string]: string } }) => {
+  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
     const user = (req as any).user;
 
     const body = await req.json();
@@ -63,10 +63,10 @@ export const PUT = withApiMiddleware(
 
 // DELETE /api/reports/[id] - Delete report
 export const DELETE = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: { [key: string]: string } }) => {
+  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
     const user = (req as any).user;
 
-    await ReportService.deleteReport(params.id, user.organizationId);
+    await ReportService.deleteReport((await params).id, user.organizationId);
 
     return NextResponse.json({
       message: 'Report deleted successfully',
@@ -77,7 +77,7 @@ export const DELETE = withApiMiddleware(
 
 // POST /api/reports/[id]/generate - Generate report file
 export const POST = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: { [key: string]: string } }) => {
+  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
     const user = (req as any).user;
 
     const body = await req.json();
@@ -85,8 +85,7 @@ export const POST = withApiMiddleware(
       format: z.enum(['pdf', 'excel']).optional(),
     }).parse(body);
 
-    const report = await ReportService.generateReport(
-      params.id,
+    const report = await ReportService.generateReport((await params).id,
       format,
       user.organizationId
     );
