@@ -71,9 +71,16 @@ export async function POST(
     const validatedData = createGapSchema.parse(body);
 
     const gap = await complianceService.createGap({
-      ...validatedData,
       assessmentId: id,
-      targetDate: validatedData.targetDate ? new Date(validatedData.targetDate) : undefined
+      requirementId: validatedData.requirementId,
+      gapType: validatedData.gapType,
+      severity: validatedData.severity,
+      description: validatedData.description,
+      impact: validatedData.impact,
+      remediationPlan: validatedData.remediationPlan,
+      estimatedEffort: validatedData.estimatedEffort,
+      targetDate: validatedData.targetDate ? new Date(validatedData.targetDate) : undefined,
+      assignedTo: validatedData.assignedTo
     });
 
     return ApiResponseFormatter.success(gap);
