@@ -24,11 +24,11 @@ const executeTestSchema = z.object({
 });
 
 // POST /api/test-scripts/[id]/execute - Execute a test script
-export const POST = withApiMiddleware(
-  async (
-    req: NextRequest,
-    { params }: { params: { id: string } }
-  ) => {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { [key: string]: string } }
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
     const user = (req as any).user;
   const { id: testScriptId } = params;
   
@@ -189,6 +189,7 @@ export const POST = withApiMiddleware(
     },
     201
   );
+})(req);
 },
   { requireAuth: true }
 );

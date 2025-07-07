@@ -9,10 +9,11 @@ const addReactionSchema = z.object({
   emoji: z.string().min(1).max(10),
 });
 
-export const POST = withApiMiddleware(async (
+export async function POST(
   req: NextRequest,
-  { params }: { params: { messageId: string } }
-) => {
+  { params }: { params: { [key: string]: string } }
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
   const user = getAuthenticatedUser(req);
   if (!user) {
     return new Response('Unauthorized', { status: 401 });
@@ -46,13 +47,15 @@ export const POST = withApiMiddleware(async (
       { status: error instanceof Error && error.message === 'Access denied' ? 403 : 500 }
     );
   }
+})(req);
 });
 
 // DELETE /api/chat/messages/[messageId]/reactions/[emoji] - Remove a reaction
-export const DELETE = withApiMiddleware(async (
+export async function DELETE(
   req: NextRequest,
-  { params }: { params: { messageId: string; emoji: string } }
-) => {
+  { params }: { params: { [key: string]: string } }
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
   const user = getAuthenticatedUser(req);
   if (!user) {
     return new Response('Unauthorized', { status: 401 });
@@ -72,4 +75,5 @@ export const DELETE = withApiMiddleware(async (
       { status: 500 }
     );
   }
+})(req);
 });

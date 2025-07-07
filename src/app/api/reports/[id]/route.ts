@@ -5,11 +5,11 @@ import { z } from 'zod';
 import { ReportStatus } from '@prisma/client';
 
 // GET /api/reports/[id] - Get single report
-export const GET = withApiMiddleware(
-  async (
-    req: NextRequest,
-    { params }: { params: { id: string } }
-  ) => {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { [key: string]: string } }
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
     const user = (req as any).user;
 
     const report = await ReportService.getReportById(params.id, user.organizationId);
@@ -22,16 +22,17 @@ export const GET = withApiMiddleware(
     }
 
     return NextResponse.json({ data: report });
-  },
+  })(req);
+},
   { requireAuth: true }
 );
 
 // PUT /api/reports/[id] - Update report
-export const PUT = withApiMiddleware(
-  async (
-    req: NextRequest,
-    { params }: { params: { id: string } }
-  ) => {
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { [key: string]: string } }
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
     const user = (req as any).user;
 
     const body = await req.json();
@@ -57,16 +58,17 @@ export const PUT = withApiMiddleware(
       data: report,
       message: 'Report updated successfully',
     });
-  },
+  })(req);
+},
   { requireAuth: true }
 );
 
 // DELETE /api/reports/[id] - Delete report
-export const DELETE = withApiMiddleware(
-  async (
-    req: NextRequest,
-    { params }: { params: { id: string } }
-  ) => {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { [key: string]: string } }
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
     const user = (req as any).user;
 
     await ReportService.deleteReport(params.id, user.organizationId);
@@ -74,16 +76,17 @@ export const DELETE = withApiMiddleware(
     return NextResponse.json({
       message: 'Report deleted successfully',
     });
-  },
+  })(req);
+},
   { requireAuth: true }
 );
 
 // POST /api/reports/[id]/generate - Generate report file
-export const POST = withApiMiddleware(
-  async (
-    req: NextRequest,
-    { params }: { params: { id: string } }
-  ) => {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { [key: string]: string } }
+) {
+  return withApiMiddleware(async (req: NextRequest) => {
     const user = (req as any).user;
 
     const body = await req.json();
@@ -101,6 +104,7 @@ export const POST = withApiMiddleware(
       data: report,
       message: `Report generated successfully as ${format.toUpperCase()}`,
     });
-  },
+  })(req);
+},
   { requireAuth: true }
 );
