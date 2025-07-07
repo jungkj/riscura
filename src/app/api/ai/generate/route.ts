@@ -109,10 +109,10 @@ export const POST = withApiMiddleware(
     // Log activity
     await db.client.activity.create({
       data: {
-        type: 'UPDATED',
+        type: 'CREATED',
         userId: user.id,
         organizationId: user.organizationId,
-        entityType: 'ASSESSMENT',
+        entityType: 'REPORT',
         entityId: response.id || 'unknown',
         description: `Generated AI content using ${data.model}`,
         metadata: JSON.parse(JSON.stringify({
@@ -256,7 +256,8 @@ async function trackAIUsage(data: {
         totalTokens: data.totalTokens,
         estimatedCost: data.cost,
         responseTime: data.responseTime,
-        success: data.success
+        success: data.success,
+        createdAt: new Date()
       }
     });
   } catch (error) {
