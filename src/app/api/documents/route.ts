@@ -38,14 +38,14 @@ export const GET = withApiMiddleware(
       const offset = (page - 1) * limit;
 
       // Get total count for pagination
-      const totalCount = await db.document.count({
+      const totalCount = await db.client.document.count({
         where: { organizationId: user.organizationId }
       });
 
-      const documents = await db.document.findMany({
+      const documents = await db.client.document.findMany({
         where: { organizationId: user.organizationId },
         include: {
-          uploadedBy: {
+          uploader: {
             select: {
               id: true,
               firstName: true,
@@ -99,11 +99,11 @@ export const POST = withApiMiddleware(
     }
 
     try {
-      const document = await db.document.create({
+      const document = await db.client.document.create({
         data: {
           ...validatedBody,
           organizationId: user.organizationId,
-          uploadedById: user.id,
+          uploadedBy: user.id,
           status: 'ACTIVE'
         }
       });
