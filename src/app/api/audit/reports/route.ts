@@ -39,9 +39,24 @@ const AuditReportRequestSchema = z.object({
 // POST /api/audit/reports - Generate Audit Report
 // ============================================================================
 
-async function handlePost(req: NextRequest, context: { user: any; organization: any }) {
-  const organizationId = context.organization.id;
-  const userId = context.user.id;
+async function handlePost(req: NextRequest) {
+  const user = (req as any).user;
+  
+  if (!user || !user.organizationId) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: {
+          code: 'UNAUTHORIZED',
+          message: 'Organization context required',
+        },
+      },
+      { status: 403 }
+    );
+  }
+  
+  const organizationId = user.organizationId;
+  const userId = user.id;
 
   try {
     const body = await req.json();
@@ -88,6 +103,30 @@ async function handlePost(req: NextRequest, context: { user: any; organization: 
 
     // Generate the report
     const auditLogger = getAuditLogger(db.client);
+    
+    // Log audit start event
+    await auditLogger.log({
+      action: 'AUDIT_START',
+      entity: 'COMPLIANCE_FRAMEWORK',
+      entityId: validatedData.reportType,
+      userId,
+      organizationId,
+      resource: 'compliance',
+      method: req.method,
+      path: req.nextUrl.pathname,
+      ipAddress: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown',
+      userAgent: req.headers.get('user-agent') || undefined,
+      status: 'SUCCESS',
+      severity: 'HIGH',
+      complianceFlags: ['SOC2', 'ISO27001', 'SOX'],
+      metadata: {
+        complianceAction: true,
+        auditTrail: true,
+        regulatoryImplications: true,
+        reportType: validatedData.reportType,
+      },
+    });
+    
     const report = await auditLogger.generateReport(
       organizationId,
       validatedData.reportType,
@@ -273,7 +312,7 @@ async function convertReportToXLSX(report: AuditReport): Promise<Buffer> {
 // ============================================================================
 
 export const POST = withAPI(
-  withComplianceAudit('AUDIT_START')(handlePost),
+  handlePost,
   {
     auth: true,
     permissions: ['audit:read', 'reports:generate'],
