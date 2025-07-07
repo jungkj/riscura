@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
-import ComplianceService from '@/services/ComplianceService';
+import { complianceService } from '@/services/ComplianceService';
+import { AuthenticatedRequest } from '@/types/api';
 
 export const GET = withApiMiddleware(
-  async (req: NextRequest) => {
-    const user = (req as any).user;
+  async (req: AuthenticatedRequest) => {
+    const user = req.user;
     
     if (!user || !user.organizationId) {
       return NextResponse.json(
@@ -14,7 +15,7 @@ export const GET = withApiMiddleware(
     }
 
     try {
-      const frameworks = await ComplianceService.getFrameworks(user.organizationId);
+      const frameworks = await complianceService.getFrameworks(user.organizationId);
 
       return NextResponse.json({
         success: true,
