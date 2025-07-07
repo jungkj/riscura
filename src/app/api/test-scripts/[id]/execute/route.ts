@@ -24,13 +24,18 @@ const executeTestSchema = z.object({
 });
 
 // POST /api/test-scripts/[id]/execute - Execute a test script
-export const POST = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: { [key: string]: string } }) => {
-    const user = (req as any).user;
-    const { id: testScriptId } = params;
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  return withApiMiddleware(
+    async (request: NextRequest) => {
+      const { id } = await params;
+      const user = (request as any).user;
+    
   
   // Parse and validate request body
-  const body = await req.json();
+  const body = await request.json();
   const validationResult = executeTestSchema.safeParse(body);
   
   if (!validationResult.success) {
@@ -186,6 +191,7 @@ export const POST = withApiMiddleware(
     },
     201
   );
-  },
-  { requireAuth: true }
-);
+    },
+    { requireAuth: true }
+  )(req);
+}

@@ -22,25 +22,29 @@ const assessRequirementSchema = z.object({
   recommendations: z.string().optional(),
 });
 
-export const POST = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
-
-    
-    const user = (req as any).user;
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  return withApiMiddleware(
+    async (request: NextRequest) => {
+      const { id } = await params;
+      const user = (request as any).user;
     if (!user) {
       return ApiResponseFormatter.authError('User not authenticated');
     }
 
-    const body = await req.json();
+    const body = await request.json();
     const validatedData = assessRequirementSchema.parse(body);
 
     const item = await complianceService.assessRequirement({
       ...validatedData,
-      assessmentId: (await params).id,
+      assessmentId: id,
       assessedBy: user.id
     });
 
     return ApiResponseFormatter.success(item, "Requirement assessed successfully");
-  },
-  { requireAuth: true }
-);
+    },
+    { requireAuth: true }
+  )(req);
+}

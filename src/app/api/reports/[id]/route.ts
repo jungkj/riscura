@@ -30,11 +30,16 @@ export async function GET(
 }
 
 // PUT /api/reports/[id] - Update report
-export const PUT = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
-    const user = (req as any).user;
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  return withApiMiddleware(
+    async (request: NextRequest) => {
+      const { id } = await params;
+      const user = (request as any).user;
 
-    const body = await req.json();
+    const body = await request.json();
 
     // Validate request body
     const UpdateReportSchema = z.object({
@@ -48,7 +53,7 @@ export const PUT = withApiMiddleware(
     const validatedData = UpdateReportSchema.parse(body);
 
     const report = await ReportService.updateReport(
-      params.id,
+      id,
       validatedData,
       user.organizationId
     );
@@ -57,35 +62,47 @@ export const PUT = withApiMiddleware(
       data: report,
       message: 'Report updated successfully',
     });
-  },
-  { requireAuth: true }
-);
+    },
+    { requireAuth: true }
+  )(req);
+}
 
 // DELETE /api/reports/[id] - Delete report
-export const DELETE = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
-    const user = (req as any).user;
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  return withApiMiddleware(
+    async (request: NextRequest) => {
+      const { id } = await params;
+      const user = (request as any).user;
 
-    await ReportService.deleteReport((await params).id, user.organizationId);
+    await ReportService.deleteReport(id, user.organizationId);
 
     return NextResponse.json({
       message: 'Report deleted successfully',
     });
-  },
-  { requireAuth: true }
-);
+    },
+    { requireAuth: true }
+  )(req);
+}
 
 // POST /api/reports/[id]/generate - Generate report file
-export const POST = withApiMiddleware(
-  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
-    const user = (req as any).user;
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  return withApiMiddleware(
+    async (request: NextRequest) => {
+      const { id } = await params;
+      const user = (request as any).user;
 
-    const body = await req.json();
+    const body = await request.json();
     const { format = 'pdf' } = z.object({
       format: z.enum(['pdf', 'excel']).optional(),
     }).parse(body);
 
-    const report = await ReportService.generateReport((await params).id,
+    const report = await ReportService.generateReport(id,
       format,
       user.organizationId
     );
@@ -94,6 +111,7 @@ export const POST = withApiMiddleware(
       data: report,
       message: `Report generated successfully as ${format.toUpperCase()}`,
     });
-  },
-  { requireAuth: true }
-);
+    },
+    { requireAuth: true }
+  )(req);
+}
