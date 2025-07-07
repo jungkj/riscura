@@ -38,8 +38,13 @@ export async function POST(
     const validatedData = assessRequirementSchema.parse(body);
 
     const item = await complianceService.assessRequirement({
-      ...validatedData,
       assessmentId: id,
+      requirementId: validatedData.requirementId,
+      status: validatedData.status,
+      score: validatedData.score,
+      evidence: validatedData.evidence,
+      findings: validatedData.findings,
+      recommendations: validatedData.recommendations,
       assessedBy: user.id
     });
 
