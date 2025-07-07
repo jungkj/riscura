@@ -60,7 +60,16 @@ export async function POST(
     
     // Handle bulk creation
     if (Array.isArray(body)) {
-      const requirements = body.map(item => createRequirementSchema.parse(item));
+      const parsedRequirements = body.map(item => createRequirementSchema.parse(item));
+      const requirements = parsedRequirements.map(req => ({
+        requirementId: req.requirementId,
+        title: req.title,
+        description: req.description,
+        category: req.category,
+        criticality: req.criticality,
+        parentId: req.parentId,
+        order: req.order
+      }));
       const count = await complianceService.bulkCreateRequirements(id, requirements);
       return ApiResponseFormatter.success({ count });
     }
