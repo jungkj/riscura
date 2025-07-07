@@ -17,7 +17,14 @@ export const GET = withApiMiddleware(async (req: NextRequest, { params }: RouteP
     return ApiResponseFormatter.unauthorized('User not authenticated');
   }
 
-  const analysis = await complianceService.performGapAnalysis(params.id);
-
-  return ApiResponseFormatter.success(analysis, 'Gap analysis completed successfully');
+  try {
+    const analysis = await complianceService.performGapAnalysis(params.id);
+    return ApiResponseFormatter.success(analysis, 'Gap analysis completed successfully');
+  } catch (error) {
+    console.error('Gap analysis error:', error);
+    if (error instanceof Error) {
+      return ApiResponseFormatter.error(error.message, 500);
+    }
+    return ApiResponseFormatter.error('Failed to perform gap analysis', 500);
+  }
 });

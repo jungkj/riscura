@@ -41,7 +41,6 @@ const Logo: React.FC<LogoProps> = ({
         height={isIcon ? iconHeight : height}
         priority={priority}
         className="object-contain"
-        style={{ width: 'auto', height: 'auto' }}
       />
     </div>
   );

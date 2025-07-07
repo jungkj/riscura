@@ -67,12 +67,11 @@ export const POST = withApiMiddleware(
     }
 
     try {
-      const body = await req.json();
-      const validatedData = CreateDocumentSchema.parse(body);
+      const body = (req as any).body;
 
       const document = await db.client.document.create({
         data: {
-          ...validatedData,
+          ...body,
           organizationId: user.organizationId,
           uploadedById: user.id,
           status: 'ACTIVE'
@@ -84,12 +83,6 @@ export const POST = withApiMiddleware(
         data: document
       }, { status: 201 });
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        return NextResponse.json(
-          { success: false, error: 'Validation failed', details: error.errors },
-          { status: 400 }
-        );
-      }
       console.error('Create document error:', error);
       return NextResponse.json(
         { success: false, error: 'Failed to create document' },
