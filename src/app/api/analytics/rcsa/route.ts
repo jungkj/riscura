@@ -4,8 +4,8 @@ import { db } from '@/lib/db';
 import { AuthenticatedRequest } from '@/types/api';
 
 export const GET = withApiMiddleware(
-  async (req: AuthenticatedRequest) => {
-    const user = req.user;
+  async (req: NextRequest) => {
+    const user = (req as any).user;
     
     if (!user || !user.organizationId) {
       return NextResponse.json(
@@ -112,9 +112,9 @@ export const GET = withApiMiddleware(
         },
         trends: {
           // Placeholder for trend data - would need date-based queries
-          riskTrend: [],
-          controlTrend: [],
-          mappingTrend: []
+          riskTrend: [] as any[],
+          controlTrend: [] as any[],
+          mappingTrend: [] as any[]
         }
       };
 

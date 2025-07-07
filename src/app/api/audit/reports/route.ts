@@ -8,6 +8,7 @@ import { withAPI } from '@/lib/api/middleware';
 import { getAuditLogger, AuditReport } from '@/lib/audit/audit-logger';
 import { withComplianceAudit } from '@/lib/audit/audit-middleware';
 import { z } from 'zod';
+import { db } from '@/lib/db';
 
 // ============================================================================
 // VALIDATION SCHEMAS
@@ -84,7 +85,7 @@ async function handlePost(req: NextRequest, context: { user: any; organization: 
     }
 
     // Generate the report
-    const auditLogger = getAuditLogger(context.prisma);
+    const auditLogger = getAuditLogger(db.client);
     const report = await auditLogger.generateReport(
       organizationId,
       validatedData.reportType,

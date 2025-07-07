@@ -36,10 +36,12 @@ export const POST = withApiMiddleware(
   
   if (!validationResult.success) {
     return ApiResponseFormatter.error(
-      'Invalid request data',
-      400,
       'VALIDATION_ERROR',
-      formatValidationErrors(validationResult.error)
+      'Invalid request data',
+      {
+        status: 400,
+        details: formatValidationErrors(validationResult.error.errors)
+      }
     );
   }
   
@@ -50,13 +52,15 @@ export const POST = withApiMiddleware(
     const userQuota = await checkUserAIQuota(user.id, user.organizationId);
     if (!userQuota.allowed) {
       return ApiResponseFormatter.error(
-        'AI generation quota exceeded',
-        429,
         'QUOTA_EXCEEDED',
+        'AI generation quota exceeded',
         {
-          quotaLimit: userQuota.limit,
-          quotaUsed: userQuota.used,
-          resetAt: userQuota.resetAt
+          status: 429,
+          details: {
+            quotaLimit: userQuota.limit,
+            quotaUsed: userQuota.used,
+            resetAt: userQuota.resetAt
+          }
         }
       );
     }
@@ -64,13 +68,20 @@ export const POST = withApiMiddleware(
     // Initialize AI service with server-side configuration
     const aiService = new AIService();
     
-    // Generate content
+    // Generate content using the correct interface
     const response = await aiService.generateContent({
-      prompt: data.prompt,
-      systemPrompt: data.systemPrompt,
-      temperature: data.temperature,
-      maxTokens: data.maxTokens,
-      model: data.model
+      type: 'general',
+      context: {
+        prompt: data.prompt,
+        systemPrompt: data.systemPrompt,
+        temperature: data.temperature,
+        maxTokens: data.maxTokens,
+        model: data.model,
+        additionalContext: data.context
+      },
+      requirements: `Generate content based on the provided prompt with temperature ${data.temperature} and max tokens ${data.maxTokens}`,
+      userId: user.id,
+      organizationId: user.organizationId
     });
     
     // Track AI usage for billing and analytics
@@ -78,26 +89,29 @@ export const POST = withApiMiddleware(
       userId: user.id,
       organizationId: user.organizationId,
       model: data.model,
-      promptTokens: response.usage?.prompt_tokens || 0,
-      completionTokens: response.usage?.completion_tokens || 0,
-      totalTokens: response.usage?.total_tokens || 0,
-      cost: calculateAICost(data.model, response.usage)
+      promptTokens: response.usage?.promptTokens || 0,
+      completionTokens: response.usage?.completionTokens || 0,
+      totalTokens: response.usage?.totalTokens || 0,
+      cost: calculateAICost(data.model, {
+        prompt_tokens: response.usage?.promptTokens,
+        completion_tokens: response.usage?.completionTokens
+      })
     });
     
     // Log activity
-    await db.activity.create({
+    await db.client.activity.create({
       data: {
-        type: 'AI_CONTENT_GENERATED',
+        type: 'CREATED',
         userId: user.id,
         organizationId: user.organizationId,
-        entityType: 'AI_GENERATION',
+        entityType: 'REPORT',
         entityId: response.id || 'unknown',
         description: `Generated AI content using ${data.model}`,
-        metadata: {
+        metadata: JSON.parse(JSON.stringify({
           model: data.model,
           tokenUsage: response.usage,
           temperature: data.temperature
-        }
+        }))
       }
     });
     
@@ -107,8 +121,7 @@ export const POST = withApiMiddleware(
         model: data.model,
         usage: response.usage,
         id: response.id
-      },
-      'AI content generated successfully'
+      }
     );
   } catch (error) {
     console.error('AI generation error:', error);
@@ -117,26 +130,28 @@ export const POST = withApiMiddleware(
     if (error instanceof Error) {
       if (error.message.includes('rate limit')) {
         return ApiResponseFormatter.error(
+          'RATE_LIMITED',
           'AI service rate limit exceeded',
-          429,
-          'RATE_LIMITED'
+          { status: 429 }
         );
       }
       if (error.message.includes('invalid api key')) {
         return ApiResponseFormatter.error(
+          'SERVICE_ERROR',
           'AI service configuration error',
-          500,
-          'SERVICE_ERROR'
+          { status: 500 }
         );
       }
     }
     
     return ApiResponseFormatter.error(
-      'Failed to generate AI content',
-      500,
       'AI_GENERATION_ERROR',
+      'Failed to generate AI content',
       {
-        message: error instanceof Error ? error.message : 'Unknown error occurred'
+        status: 500,
+        details: {
+          message: error instanceof Error ? error.message : 'Unknown error occurred'
+        }
       }
     );
   }
@@ -157,7 +172,7 @@ async function checkUserAIQuota(userId: string, organizationId: string): Promise
   startOfMonth.setDate(1);
   startOfMonth.setHours(0, 0, 0, 0);
   
-  const usage = await db.aIUsageLog.count({
+  const usage = await db.client.aIUsageLog.count({
     where: {
       userId,
       organizationId,
@@ -168,7 +183,7 @@ async function checkUserAIQuota(userId: string, organizationId: string): Promise
   });
   
   // Get organization's plan limits
-  const organization = await db.organization.findUnique({
+  const organization = await db.client.organization.findUnique({
     where: { id: organizationId },
     select: { plan: true }
   });
@@ -205,16 +220,17 @@ async function trackAIUsage(data: {
   cost: number;
 }) {
   try {
-    await db.aIUsageLog.create({
+    await db.client.aIUsageLog.create({
       data: {
         userId: data.userId,
         organizationId: data.organizationId,
-        model: data.model,
+        requestType: data.model,
         promptTokens: data.promptTokens,
         completionTokens: data.completionTokens,
         totalTokens: data.totalTokens,
-        cost: data.cost,
-        timestamp: new Date()
+        estimatedCost: data.cost,
+        responseTime: 0,
+        success: true
       }
     });
   } catch (error) {
