@@ -1,9 +1,10 @@
-import { PrismaClient, ProboIntegration, ProboMetric } from '@prisma/client';
+import { ProboIntegration, ProboMetric } from '@prisma/client';
 import { ProboIntegrationService } from './ProboIntegrationService';
 import crypto from 'crypto';
 import { z } from 'zod';
+import { db } from '@/lib/db';
 
-const prisma = new PrismaClient();
+const prisma = db.client;
 
 // Validation schemas
 const ProboMetricsSchema = z.object({
