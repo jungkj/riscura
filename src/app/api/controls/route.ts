@@ -17,6 +17,7 @@ export const GET = withApiMiddleware(
     const user = (req as any).user;
     
     if (!user || !user.organizationId) {
+      console.warn('[Controls API] Missing user or organizationId', { user });
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
         { status: 403 }
@@ -24,30 +25,81 @@ export const GET = withApiMiddleware(
     }
 
     try {
+      console.log('[Controls API] Fetching controls for organization:', user.organizationId);
+      
+      // Start with a simple query first
       const controls = await db.client.control.findMany({
         where: { organizationId: user.organizationId },
-        include: {
-          risks: true,
-          owner: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              email: true
-            }
-          }
-        },
         orderBy: { createdAt: 'desc' }
       });
 
-      return NextResponse.json({
-        success: true,
-        data: controls
-      });
+      console.log(`[Controls API] Found ${controls.length} controls`);
+
+      // If no controls found, return empty array
+      if (!controls || controls.length === 0) {
+        return NextResponse.json({
+          success: true,
+          data: [],
+          message: 'No controls found'
+        });
+      }
+
+      // Try to include relationships if we have controls
+      try {
+        const controlsWithRelations = await db.client.control.findMany({
+          where: { organizationId: user.organizationId },
+          include: {
+            risks: {
+              include: {
+                risk: true
+              }
+            },
+            assignedUser: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true
+              }
+            },
+            creator: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true
+              }
+            }
+          },
+          orderBy: { createdAt: 'desc' }
+        });
+
+        return NextResponse.json({
+          success: true,
+          data: controlsWithRelations
+        });
+      } catch (relationError) {
+        console.warn('[Controls API] Error fetching relationships, returning basic data:', relationError);
+        // If relationships fail, return basic control data
+        return NextResponse.json({
+          success: true,
+          data: controls
+        });
+      }
     } catch (error) {
-      console.error('Get controls error:', error);
+      console.error('[Controls API] Critical error:', {
+        error,
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+        organizationId: user.organizationId
+      });
+      
       return NextResponse.json(
-        { success: false, error: 'Failed to fetch controls' },
+        { 
+          success: false, 
+          error: 'Failed to fetch controls',
+          details: error instanceof Error ? error.message : 'Unknown error'
+        },
         { status: 500 }
       );
     }
@@ -60,6 +112,7 @@ export const POST = withApiMiddleware(
     const user = (req as any).user;
     
     if (!user || !user.organizationId) {
+      console.warn('[Controls API] Missing user or organizationId in POST', { user });
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
         { status: 403 }
@@ -68,16 +121,32 @@ export const POST = withApiMiddleware(
 
     try {
       const body = await req.json();
+      console.log('[Controls API] Creating control with data:', body);
+      
       const validatedData = CreateControlSchema.parse(body);
+      
+      // Map the incoming data to match the schema
+      const controlData = {
+        title: validatedData.name, // Map name to title based on schema
+        description: validatedData.description || '',
+        type: validatedData.type as any, // Cast to enum
+        frequency: validatedData.frequency,
+        effectiveness: validatedData.effectiveness || 0,
+        status: (validatedData.status || 'ACTIVE') as any,
+        category: 'OPERATIONAL' as any, // Default category
+        automationLevel: 'MANUAL' as any, // Default automation level
+        organizationId: user.organizationId,
+        owner: user.id,
+        createdBy: user.id
+      };
+
+      console.log('[Controls API] Creating control with processed data:', controlData);
 
       const control = await db.client.control.create({
-        data: {
-          ...validatedData,
-          organizationId: user.organizationId,
-          ownerId: user.id,
-          status: validatedData.status || 'ACTIVE'
-        }
+        data: controlData
       });
+
+      console.log('[Controls API] Control created successfully:', control.id);
 
       return NextResponse.json({
         success: true,
@@ -85,20 +154,45 @@ export const POST = withApiMiddleware(
       }, { status: 201 });
     } catch (error) {
       if (error instanceof z.ZodError) {
+        console.error('[Controls API] Validation error:', error.errors);
         return NextResponse.json(
           { success: false, error: 'Validation failed', details: error.errors },
           { status: 400 }
         );
       }
-      console.error('Create control error:', error);
+      
+      // Check for foreign key constraint errors
+      if (error instanceof Error && error.message.includes('organizationId_fkey')) {
+        console.error('[Controls API] Organization not found:', user.organizationId);
+        return NextResponse.json(
+          { 
+            success: false, 
+            error: 'Organization not found',
+            details: 'The organization does not exist in the database. Please ensure your organization is properly set up.',
+            hint: process.env.NODE_ENV === 'development' ? 'In development mode, you may need to seed the database with test organizations.' : undefined
+          },
+          { status: 404 }
+        );
+      }
+      
+      console.error('[Controls API] Create control error:', {
+        error,
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+        user: { id: user.id, organizationId: user.organizationId }
+      });
+      
       return NextResponse.json(
-        { success: false, error: 'Failed to create control' },
+        { 
+          success: false, 
+          error: 'Failed to create control',
+          details: error instanceof Error ? error.message : 'Unknown error'
+        },
         { status: 500 }
       );
     }
   },
   { 
-    requireAuth: true,
-    validateBody: CreateControlSchema 
+    requireAuth: true
   }
 );

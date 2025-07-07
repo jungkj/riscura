@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import { NotionRCSASpreadsheet } from '@/components/spreadsheet/NotionRCSASpreadsheet';
 import RCSASpreadsheet from '@/components/spreadsheet/RCSASpreadsheet';
-import { RCSAProvider } from '@/context/RCSAContext';
 import { cn } from '@/lib/utils';
 
 type ViewMode = 'notion' | 'classic';
@@ -21,7 +20,6 @@ export default function RCSAPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('notion');
 
   return (
-    <RCSAProvider>
       <div className="flex flex-col h-full">
         {/* Page Header */}
         <div className="flex items-center justify-between p-6 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
@@ -107,6 +105,5 @@ export default function RCSAPage() {
 
         {/* Removed non-functional floating action button - creation handled within spreadsheet components */}
       </div>
-    </RCSAProvider>
   );
 }

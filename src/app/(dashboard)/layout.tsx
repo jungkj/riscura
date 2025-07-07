@@ -15,4 +15,4 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       </DashboardProviders>
     </MainLayout>
   );
-} 
+}
