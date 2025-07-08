@@ -202,7 +202,7 @@ export async function DELETE(
       const { id } = await params;
       const user = (request as any).user;
       // Verify test script exists and belongs to organization
-  const testScript = await db.testScript.findFirst({
+  const testScript = await db.client.testScript.findFirst({
     where: {
       id,
       organizationId: user.organizationId

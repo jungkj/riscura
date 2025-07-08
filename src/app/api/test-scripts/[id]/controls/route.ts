@@ -92,7 +92,7 @@ export async function POST(
     const { controlIds, isMandatory } = validationResult.data;
     
     // Verify all controls exist and belong to the organization
-    const controls = await db.control.findMany({
+    const controls = await db.client.control.findMany({
       where: {
         id: { in: controlIds },
         organizationId: user.organizationId
