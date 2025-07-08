@@ -173,7 +173,7 @@ export async function PATCH(
   // Log activity
   await db.client.activity.create({
     data: {
-      type: 'TEST_SCRIPT_UPDATED',
+      type: 'UPDATED',
       userId: user.id,
       organizationId: user.organizationId,
       entityType: 'TEST_SCRIPT',
@@ -237,7 +237,7 @@ export async function DELETE(
   // Log activity
   await db.client.activity.create({
     data: {
-      type: 'TEST_SCRIPT_DELETED',
+      type: 'DELETED',
       userId: user.id,
       organizationId: user.organizationId,
       entityType: 'TEST_SCRIPT',

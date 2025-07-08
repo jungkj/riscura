@@ -128,12 +128,12 @@ export async function POST(
     // Log activity
     await db.client.activity.create({
       data: {
-        type: 'TEST_SCRIPT_CONTROLS_ASSOCIATED',
+        type: 'UPDATED',
         userId: user.id,
         organizationId: user.organizationId,
         entityType: 'TEST_SCRIPT',
         entityId: id,
-        description: `Associated ${newControlIds.length} controls with test script`,
+        description: `Associated ${newControlIds.length} controls with test script: ${testScript.title}`,
         metadata: {
           testScriptId: id,
           controlIds: newControlIds,
@@ -196,12 +196,12 @@ export async function DELETE(
     // Log activity
     await db.client.activity.create({
       data: {
-        type: 'TEST_SCRIPT_CONTROLS_DISASSOCIATED',
+        type: 'UPDATED',
         userId: user.id,
         organizationId: user.organizationId,
         entityType: 'TEST_SCRIPT',
         entityId: id,
-        description: `Disassociated ${result.count} controls from test script`,
+        description: `Disassociated ${result.count} controls from test script: ${testScript.title}`,
         metadata: {
           testScriptId: id,
           controlIds,
