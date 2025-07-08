@@ -72,8 +72,13 @@ async function extractTextFromTxt(buffer: Buffer): Promise<string> {
  * Extract risks and controls from text using Claude AI
  */
 async function extractRisksAndControls(text: string, fileName: string): Promise<ExtractedContent> {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    throw new Error('ANTHROPIC_API_KEY is not configured');
+  }
+  
   const anthropic = new Anthropic({
-    apiKey: process.env.ANTHROPIC_API_KEY!,
+    apiKey: apiKey,
   });
 
   const completion = await anthropic.messages.create({
