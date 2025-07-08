@@ -12,12 +12,15 @@ import { generateAccessToken } from './jwt';
 import { createSession, validateSession } from './session';
 import { ROLE_PERMISSIONS } from './index';
 
-export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(db.client),
-  providers: [
+// Build providers array conditionally based on available credentials
+const providers: any[] = [];
+
+// Only add Google provider if credentials are available
+if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
+  providers.push(
     GoogleProvider({
-      clientId: env.GOOGLE_CLIENT_ID!,
-      clientSecret: env.GOOGLE_CLIENT_SECRET!,
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
       authorization: {
         params: {
           prompt: 'consent',
@@ -25,8 +28,13 @@ export const authOptions: NextAuthOptions = {
           response_type: 'code',
         },
       },
-    }),
-    CredentialsProvider({
+    })
+  );
+}
+
+// Always add credentials provider
+providers.push(
+  CredentialsProvider({
       name: 'credentials',
       credentials: {
         email: { label: 'Email', type: 'email' },
@@ -94,8 +102,13 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
       },
-    }),
-  ],
+    })
+  );
+}
+
+export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(db.client),
+  providers,
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
