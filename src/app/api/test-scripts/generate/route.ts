@@ -31,7 +31,7 @@ export const POST = withApiMiddleware(
   const validationResult = generateTestScriptSchema.safeParse(body);
   
   if (!validationResult.success) {
-    return ApiResponseFormatter.error('VALIDATION_ERROR', 'Invalid request data', { status: 400, details: formatValidationErrors(validationResult.error) });
+    return ApiResponseFormatter.error('VALIDATION_ERROR', 'Invalid request data', { status: 400, details: formatValidationErrors(validationResult.error.errors) });
   }
   
   const data = validationResult.data as GenerateTestScriptRequest;
