@@ -336,9 +336,9 @@ export class ProactiveAIIntegrationService {
     const result = this.processingResults.get(taskId);
     
     return {
-      trends: [], // Would be populated by AI analysis
-      insights: result?.insights || [],
-      predictions: result?.predictions || []
+      trends: [] as unknown[], // Would be populated by AI analysis
+      insights: result?.insights || [] as ProactiveInsight[],
+      predictions: result?.predictions || [] as PredictiveResult[]
     };
   }
 
@@ -560,8 +560,8 @@ export class ProactiveAIIntegrationService {
     const riskData = task.targetEntity.data as { risk: Risk };
     
     return {
-      insights: [],
-      recommendations: [],
+      insights: [] as ProactiveInsight[],
+      recommendations: [] as ActionRecommendation[],
       predictions: [
         {
           id: generateId('prediction'),
@@ -575,7 +575,7 @@ export class ProactiveAIIntegrationService {
           impact: 'medium'
         }
       ],
-      notifications: [],
+      notifications: [] as SmartNotification[],
       confidence: 0.8
     };
   }
@@ -624,10 +624,10 @@ export class ProactiveAIIntegrationService {
       description: insight.description,
       priority: insight.priority,
       confidence: insight.confidence,
-      evidence: [],
+      evidence: [] as string[],
       actionable: true,
-      recommendations: [],
-      affectedEntities: [],
+      recommendations: [] as ActionRecommendation[],
+      affectedEntities: [] as string[],
       timeframe: '1-30 days',
       aiGenerated: true,
       generatedAt: insight.createdAt
@@ -662,9 +662,9 @@ export class ProactiveAIIntegrationService {
       expectedOutcome: 'Improved risk management',
       effort: 'medium',
       timeline: '2-4 weeks',
-      resources: [],
-      dependencies: [],
-      successCriteria: []
+      resources: [] as string[],
+      dependencies: [] as string[],
+      successCriteria: [] as string[]
     };
   }
 
@@ -692,10 +692,10 @@ export class ProactiveAIIntegrationService {
     confidence: number;
   } {
     return {
-      insights: [],
-      recommendations: [],
-      predictions: [],
-      notifications: [],
+      insights: [] as ProactiveInsight[],
+      recommendations: [] as ActionRecommendation[],
+      predictions: [] as PredictiveResult[],
+      notifications: [] as SmartNotification[],
       confidence: 0
     };
   }

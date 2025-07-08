@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,7 +24,7 @@ import {
   FileText
 } from 'lucide-react';
 
-export default function ProboPage() {
+function ProboPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(searchParams?.get('tab') || 'overview');
@@ -472,5 +472,13 @@ export default function ProboPage() {
         </div>
       </div>
     </ProtectedRoute>
+  );
+}
+
+export default function ProboPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+      <ProboPageContent />
+    </Suspense>
   );
 } 

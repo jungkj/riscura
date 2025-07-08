@@ -51,6 +51,7 @@ export interface ProboMetrics {
   complianceFrameworks: number;
   riskReduction: number;
   lastUpdated: Date;
+  proboControlsAvailable?: number;
 }
 
 export interface ProboComplianceStatus {
@@ -59,17 +60,30 @@ export interface ProboComplianceStatus {
   status: 'compliant' | 'in-progress' | 'needs-review';
   controlsImplemented: number;
   totalControls: number;
-  proboControlsAvailable: number;
+  proboControlsAvailable?: number;
   lastAssessed: Date;
   nextDue: Date;
 }
 
+export interface ProboInsight {
+  type: string;
+  severity: string;
+  title: string;
+  description: string;
+  recommendation: string;
+  affectedFrameworks: string[];
+  timestamp: Date;
+}
+
 export interface ProboInsights {
-  controlCoverage: number;
-  riskReduction: number;
-  complianceImprovement: number;
-  vendorRiskScore: number;
-  recommendations: string[];
+  summary: string;
+  totalInsights: number;
+  criticalInsights: number;
+  recommendations: ProboInsight[];
+  controlCoverage?: number;
+  riskReduction?: number;
+  complianceImprovement?: number;
+  vendorRiskScore?: number;
 }
 
 export interface ProboVendorSummary {
@@ -179,9 +193,25 @@ export class EnhancedProboService {
 
     try {
       // Get metrics from ProboIntegrationService
-      const metrics = await this.proboIntegration.getMetrics();
+      const metrics = await this.proboIntegration.getIntegrationMetrics();
       const complianceStatus = await this.proboIntegration.getComplianceStatus();
-      const insights = await this.proboIntegration.getInsights();
+      const proboInsights = await this.proboIntegration.getProboInsights();
+      
+      // Transform insights to match expected format
+      const insights: ProboInsights = {
+        summary: `${proboInsights.recommendations.length} insights identified`,
+        totalInsights: proboInsights.recommendations.length,
+        criticalInsights: Math.floor(proboInsights.recommendations.length * 0.3),
+        recommendations: proboInsights.recommendations.map((rec, index) => ({
+          type: 'control_gap',
+          severity: index < 2 ? 'critical' : 'medium',
+          title: rec,
+          description: rec,
+          recommendation: `Implement ${rec}`,
+          affectedFrameworks: ['SOC2', 'ISO27001'],
+          timestamp: new Date()
+        }))
+      };
 
       // Store metrics in database
       await Promise.all([
@@ -239,7 +269,7 @@ export class EnhancedProboService {
       }
     }
 
-    return this.validateMetricValue(latestMetric.metricValue, ProboMetricsSchema);
+    return this.validateMetricValue(latestMetric.metricValue, ProboMetricsSchema) as ProboMetrics;
   }
 
   async getComplianceStatus(organizationId: string): Promise<ProboComplianceStatus[]> {
@@ -265,7 +295,7 @@ export class EnhancedProboService {
       }
     }
 
-    return this.validateMetricValue(latestMetric.metricValue, z.array(ProboComplianceStatusSchema));
+    return this.validateMetricValue(latestMetric.metricValue, z.array(ProboComplianceStatusSchema)) as ProboComplianceStatus[];
   }
 
   async getInsights(organizationId: string): Promise<ProboInsights> {
@@ -291,29 +321,14 @@ export class EnhancedProboService {
       }
     }
 
-    return this.validateMetricValue(latestMetric.metricValue, ProboInsightsSchema);
+    return this.validateMetricValue(latestMetric.metricValue, ProboInsightsSchema) as ProboInsights;
   }
 
   async getVendorSummary(organizationId: string): Promise<ProboVendorSummary> {
     // Get vendor data from ProboIntegrationService
-    const vendorAssessments = await this.proboIntegration.getVendorAssessments();
+    const vendorSummary = await this.proboIntegration.getVendorAssessmentSummary();
     
-    const highRiskVendors = vendorAssessments.filter(v => v.riskScore > 70).length;
-    const averageRiskScore = vendorAssessments.length > 0
-      ? vendorAssessments.reduce((sum, v) => sum + v.riskScore, 0) / vendorAssessments.length
-      : 0;
-
-    return {
-      totalAssessments: vendorAssessments.length,
-      highRiskVendors,
-      averageRiskScore,
-      recentAssessments: vendorAssessments.slice(0, 5).map(v => ({
-        vendorName: v.vendorName,
-        riskScore: v.riskScore,
-        assessmentDate: v.lastAssessed,
-        status: v.status,
-      })),
-    };
+    return vendorSummary;
   }
 
   // Helper Methods
@@ -444,18 +459,59 @@ export class EnhancedProboService {
   }
 
   private getDefaultInsights(): ProboInsights {
+    const recommendations: ProboInsight[] = [
+      {
+        type: 'control_gap',
+        severity: 'critical',
+        title: 'Implement multi-factor authentication',
+        description: 'MFA is not enabled for all user accounts',
+        recommendation: 'Implement multi-factor authentication across all systems',
+        affectedFrameworks: ['SOC2', 'ISO27001'],
+        timestamp: new Date()
+      },
+      {
+        type: 'compliance_gap',
+        severity: 'high',
+        title: 'Update data retention policies',
+        description: 'Current policies do not meet GDPR requirements',
+        recommendation: 'Review and update data retention policies',
+        affectedFrameworks: ['GDPR'],
+        timestamp: new Date()
+      },
+      {
+        type: 'vendor_risk',
+        severity: 'medium',
+        title: 'Vendor assessments overdue',
+        description: 'Quarterly assessments not completed for 5 vendors',
+        recommendation: 'Conduct quarterly vendor risk assessments',
+        affectedFrameworks: ['SOC2'],
+        timestamp: new Date()
+      },
+      {
+        type: 'security_awareness',
+        severity: 'medium',
+        title: 'Security training outdated',
+        description: 'Employee training materials need update',
+        recommendation: 'Enhance employee security awareness training',
+        affectedFrameworks: ['ISO27001'],
+        timestamp: new Date()
+      },
+      {
+        type: 'monitoring_gap',
+        severity: 'high',
+        title: 'Manual compliance monitoring',
+        description: 'Compliance checks are performed manually',
+        recommendation: 'Implement automated compliance monitoring',
+        affectedFrameworks: ['SOC2', 'ISO27001'],
+        timestamp: new Date()
+      }
+    ];
+
     return {
-      controlCoverage: 85,
-      riskReduction: 78,
-      complianceImprovement: 15,
-      vendorRiskScore: 72,
-      recommendations: [
-        'Implement multi-factor authentication across all systems',
-        'Review and update data retention policies',
-        'Conduct quarterly vendor risk assessments',
-        'Enhance employee security awareness training',
-        'Implement automated compliance monitoring',
-      ],
+      summary: '5 critical insights requiring attention',
+      totalInsights: 5,
+      criticalInsights: 2,
+      recommendations
     };
   }
 

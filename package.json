@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "prisma generate && node --max-old-space-size=4096 ./node_modules/.bin/next build",
     "start": "next start",
-    "build:vercel": "prisma generate && next build",
+    "build:vercel": "prisma generate && node --max-old-space-size=8192 ./node_modules/.bin/next build",
     "build:prod": "prisma generate && next build",
     "type-check": "tsc --noEmit",
     "type-check:full": "node --max-old-space-size=8192 scripts/type-check.js",

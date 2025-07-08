@@ -495,7 +495,7 @@ export class ProboIntegrationService {
         category: this.getControlCategory(template.category),
         framework: this.getFrameworkForControl(request.preferredFrameworks[0] || 'SOC2'),
         priority: this.determinePriority(request.riskSeverity, template.priority),
-        implementationComplexity: template.complexity,
+        implementationComplexity: this.mapComplexity(template.complexity),
         estimatedHours: this.calculateEstimatedHours(template, request.organizationContext),
         status: {
           current: 'Not Started',
@@ -1162,10 +1162,10 @@ export class ProboIntegrationService {
     return baseHours;
   }
 
-  private assessComplexity(mitigation: any): 'Low' | 'Medium' | 'High' {
-    if (mitigation.importance === 'MANDATORY') return 'High';
-    if (mitigation.importance === 'PREFERRED') return 'Medium';
-    return 'Low';
+  private assessComplexity(mitigation: any): 'Simple' | 'Moderate' | 'Complex' {
+    if (mitigation.importance === 'MANDATORY') return 'Complex';
+    if (mitigation.importance === 'PREFERRED') return 'Moderate';
+    return 'Simple';
   }
 
   private generateTags(mitigation: any): string[] {
@@ -1204,6 +1204,18 @@ export class ProboIntegrationService {
     // Extract requirement IDs from standards string
     const standardList = standards.split(';').filter(Boolean);
     return standardList.map(s => s.trim()).filter(s => s.length > 0);
+  }
+
+  private mapComplexity(complexity: string): 'Simple' | 'Moderate' | 'Complex' {
+    const complexityMap: Record<string, 'Simple' | 'Moderate' | 'Complex'> = {
+      'simple': 'Simple',
+      'moderate': 'Moderate',
+      'complex': 'Complex',
+      'low': 'Simple',
+      'medium': 'Moderate',
+      'high': 'Complex'
+    };
+    return complexityMap[complexity.toLowerCase()] || 'Moderate';
   }
 }
 
