@@ -35,12 +35,12 @@ if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
 // Always add credentials provider
 providers.push(
   CredentialsProvider({
-      name: 'credentials',
-      credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' },
-      },
-      async authorize(credentials) {
+    name: 'credentials',
+    credentials: {
+      email: { label: 'Email', type: 'email' },
+      password: { label: 'Password', type: 'password' },
+    },
+    async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
@@ -103,8 +103,7 @@ providers.push(
         }
       },
     })
-  );
-}
+);
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db.client),
