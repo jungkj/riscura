@@ -200,7 +200,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
       case 'category': return Tag;
       case 'owner': return Users;
       case 'status': return BarChart3;
-      case 'level': 
+      case 'level': return Shield;
       default: return Shield;
     }
   };

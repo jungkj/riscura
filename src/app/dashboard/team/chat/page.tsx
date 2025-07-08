@@ -225,7 +225,10 @@ export default function TeamChatPage() {
             const reactions = [...(msg.reactions || [])];
             const existingReaction = reactions.find(r => r.emoji === message.payload.emoji);
             if (existingReaction) {
-              if (!existingReaction.user.some(u => u.id === message.payload.userId)) {
+              if (!Array.isArray(existingReaction.user)) {
+                existingReaction.user = [];
+              }
+              if (!existingReaction.user.some((u: any) => u.id === message.payload.userId)) {
                 existingReaction.user.push({ id: message.payload.userId } as any);
               }
             } else {
@@ -256,6 +259,9 @@ export default function TeamChatPage() {
     if (activeChannel) {
       fetchMessages(activeChannel);
       ws.joinChannel(activeChannel);
+      return () => {
+        ws.leaveChannel(activeChannel);
+      };
       
       return () => {
         ws.leaveChannel(activeChannel);
@@ -515,7 +521,7 @@ export default function TeamChatPage() {
 
   const activeChannelData = channels.find(c => c.id === activeChannel);
   const channelMessages = messages;
-  const onlineMembers = activeChannelData?.members.filter(m => m.user.id !== session?.user?.id) || [];
+  const onlineMembers = activeChannelData?.members.filter(m => m.user.id !== (session?.user as any)?.id) || [];
 
   return (
     <ProtectedRoute>
@@ -541,7 +547,7 @@ export default function TeamChatPage() {
           },
           {
             label: 'Settings',
-            onClick: () => toast.success('Opening chat settings...'),
+            onClick: () => toast({ title: 'Opening chat settings...', variant: 'default' }),
             icon: Settings,
             variant: 'outline',
           },
@@ -549,7 +555,7 @@ export default function TeamChatPage() {
         stats={[
           {
             label: 'active channels',
-            value: sampleChannels.filter(c => c.isActive).length,
+            value: channels.filter((c: ChatChannel) => c.isActive).length,
             variant: 'default',
           },
           {
@@ -559,7 +565,7 @@ export default function TeamChatPage() {
           },
           {
             label: 'unread messages',
-            value: sampleChannels.reduce((sum, c) => sum + c.unreadCount, 0),
+            value: channels.reduce((sum: number, c: ChatChannel) => sum + (c.unreadCount || 0), 0),
             variant: 'warning',
           },
         ]}
@@ -641,9 +647,9 @@ export default function TeamChatPage() {
               <CardContent>
                 <ScrollArea className="h-48">
                   <div className="space-y-1">
-                    {sampleChannels
-                      .filter(c => c.type === 'direct')
-                      .map((channel) => (
+                    {channels
+                      .filter((c: ChatChannel) => c.type === ChannelType.DIRECT)
+                      .map((channel: ChatChannel) => (
                         <div
                           key={channel.id}
                           className={cn(
@@ -655,7 +661,7 @@ export default function TeamChatPage() {
                           <div className="flex items-center space-x-2 flex-1">
                             <Avatar className="h-6 w-6">
                               <AvatarFallback className="text-xs">
-                                {channel.name.split(' ').map(n => n[0]).join('')}
+                                {channel.name.split(' ').map((n: string) => n[0]).join('')}
                               </AvatarFallback>
                             </Avatar>
                             <div className="flex-1">
@@ -687,7 +693,7 @@ export default function TeamChatPage() {
               <CardHeader className="border-b">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    {activeChannelData?.type === 'direct' ? (
+                    {activeChannelData?.type === ChannelType.DIRECT ? (
                       <Avatar className="h-8 w-8">
                         <AvatarFallback>
                           {activeChannelData.name.split(' ').map(n => n[0]).join('')}
@@ -696,7 +702,7 @@ export default function TeamChatPage() {
                     ) : (
                       <div className="flex items-center space-x-2">
                         <Hash className="h-5 w-5 text-gray-500" />
-                        {activeChannelData?.type === 'private' && (
+                        {activeChannelData?.type === ChannelType.PRIVATE && (
                           <Shield className="h-4 w-4 text-orange-500" />
                         )}
                       </div>
@@ -704,9 +710,9 @@ export default function TeamChatPage() {
                     <div>
                       <CardTitle className="text-lg">{activeChannelData?.name}</CardTitle>
                       <CardDescription>
-                        {activeChannelData?.type === 'direct' 
+                        {activeChannelData?.type === ChannelType.DIRECT 
                           ? 'Direct message' 
-                          : `${activeChannelData?.memberCount} members`}
+                          : `${activeChannelData?.members?.length || 0} members`}
                       </CardDescription>
                     </div>
                   </div>
@@ -729,34 +735,29 @@ export default function TeamChatPage() {
                 <ScrollArea className="h-full p-4">
                   <div className="space-y-4">
                     {channelMessages.map((message) => {
-                      const StatusIcon = getMessageStatusIcon(message.status);
+                      // const StatusIcon = getMessageStatusIcon(message.status);
                       
                       return (
                         <div key={message.id} className="group">
                           <div className="flex items-start space-x-3">
                             <Avatar className="h-8 w-8">
-                              <AvatarImage src={message.userAvatar} />
+                              <AvatarImage src={message.user.avatar} />
                               <AvatarFallback className="text-xs">
-                                {message.userName.split(' ').map(n => n[0]).join('')}
+                                {`${message.user.firstName} ${message.user.lastName}`.split(' ').map((n: string) => n[0]).join('')}
                               </AvatarFallback>
                             </Avatar>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center space-x-2 mb-1">
-                                <span className="font-medium text-sm">{message.userName}</span>
+                                <span className="font-medium text-sm">{`${message.user.firstName} ${message.user.lastName}`}</span>
                                 <span className="text-xs text-gray-500">
-                                  {message.timestamp.toLocaleTimeString()}
+                                  {new Date(message.createdAt).toLocaleTimeString()}
                                 </span>
                                 {message.isEdited && (
                                   <Badge variant="outline" className="text-xs">
                                     edited
                                   </Badge>
                                 )}
-                                <StatusIcon className={cn(
-                                  "h-3 w-3",
-                                  message.status === 'read' ? 'text-blue-500' :
-                                  message.status === 'delivered' ? 'text-gray-500' :
-                                  message.status === 'failed' ? 'text-red-500' : 'text-gray-400'
-                                )} />
+                                {/* Status icon removed as message doesn't have status property */}
                               </div>
                               
                               <div className="text-sm text-gray-900 whitespace-pre-wrap">
@@ -766,7 +767,7 @@ export default function TeamChatPage() {
                               {/* Attachments */}
                               {message.attachments && message.attachments.length > 0 && (
                                 <div className="mt-2 space-y-2">
-                                  {message.attachments.map((attachment) => (
+                                  {message.attachments.map((attachment: any) => (
                                     <div key={attachment.id} className="flex items-center space-x-2 p-2 bg-gray-50 rounded-lg">
                                       <FileText className="h-4 w-4 text-blue-600" />
                                       <div className="flex-1">
@@ -784,7 +785,7 @@ export default function TeamChatPage() {
                               )}
 
                               {/* Reactions */}
-                              {message.reactions.length > 0 && (
+                              {message.reactions && message.reactions.length > 0 && (
                                 <div className="flex items-center space-x-1 mt-2">
                                   {message.reactions.map((reaction, index) => (
                                     <Button
@@ -794,7 +795,7 @@ export default function TeamChatPage() {
                                       className="h-6 px-2 text-xs"
                                       onClick={() => handleReaction(message.id, reaction.emoji)}
                                     >
-                                      {reaction.emoji} {reaction.count}
+                                      {reaction.emoji} {(reaction as any).count || 1}
                                     </Button>
                                   ))}
                                 </div>
@@ -824,7 +825,7 @@ export default function TeamChatPage() {
 
               {/* Message Input */}
               <div className="border-t p-4">
-                {isTyping && (
+                {typingUsers.length > 0 && (
                   <div className="text-xs text-gray-500 mb-2">
                     Someone is typing...
                   </div>
@@ -881,20 +882,20 @@ export default function TeamChatPage() {
               <CardContent>
                 <ScrollArea className="h-80">
                   <div className="space-y-2">
-                    {sampleTeamMembers.map((member) => {
-                      const statusConfig = getStatusConfig(member.status);
+                    {onlineMembers.map((member: any) => {
+                      // const statusConfig = getStatusConfig(member.status);
                       
                       return (
                         <div
                           key={member.id}
                           className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 cursor-pointer"
-                          onClick={() => toast.success(`Starting chat with ${member.name}...`)}
+                          onClick={() => toast({ title: `Starting chat with ${member.user.firstName}...`, variant: 'default' })}
                         >
                           <div className="relative">
                             <Avatar className="h-8 w-8">
-                              <AvatarImage src={member.avatar} />
+                              <AvatarImage src={member.user.avatar} />
                               <AvatarFallback className="text-xs">
-                                {member.name.split(' ').map(n => n[0]).join('')}
+                                {`${member.user.firstName} ${member.user.lastName}`.split(' ').map((n: string) => n[0]).join('')}
                               </AvatarFallback>
                             </Avatar>
                             <div className={cn(
