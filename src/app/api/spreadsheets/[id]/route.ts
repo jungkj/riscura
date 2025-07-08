@@ -239,8 +239,8 @@ export async function GET(
         id: sheet.id,
         name: sheet.name,
         position: sheet.position,
-        columns: [],
-        rows: []
+        columns: [] as any[],
+        rows: [] as any[]
       }));
     }
 
