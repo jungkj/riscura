@@ -14,5 +14,5 @@ export interface AuthenticatedRequest extends NextRequest {
 }
 
 export interface ValidatedRequest<T = any> extends AuthenticatedRequest {
-  body: T;
+  validatedBody: T;
 }

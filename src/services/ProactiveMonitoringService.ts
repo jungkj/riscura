@@ -184,9 +184,9 @@ class InMemoryAIProcessingQueue implements AIProcessingQueue {
     const batch = this.queue.splice(0, batchSize);
     return batch.map(task => ({
       taskId: task.id,
-      insights: [],
-      recommendations: [],
-      predictions: [],
+      insights: [] as any[],
+      recommendations: [] as any[],
+      predictions: [] as any[],
       confidence: 0.8,
       processingTime: 1000,
       tokenUsage: { prompt: 100, completion: 200, total: 300 }

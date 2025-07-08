@@ -223,20 +223,22 @@ export default function TeamChatPage() {
         setMessages(prev => prev.map(msg => {
           if (msg.id === message.payload.messageId) {
             const reactions = [...(msg.reactions || [])];
-            const existingReaction = reactions.find(r => r.emoji === message.payload.emoji);
-            if (existingReaction) {
-              if (!Array.isArray(existingReaction.user)) {
-                existingReaction.user = [];
-              }
-              if (!existingReaction.user.some((u: any) => u.id === message.payload.userId)) {
-                existingReaction.user.push({ id: message.payload.userId } as any);
-              }
-            } else {
+            // Check if this user already reacted with this emoji
+            const existingReactionIndex = reactions.findIndex(
+              r => r.userId === message.payload.userId && r.emoji === message.payload.emoji
+            );
+            
+            if (existingReactionIndex === -1) {
+              // Add new reaction
               reactions.push({
                 messageId: msg.id,
                 userId: message.payload.userId,
                 emoji: message.payload.emoji,
-                user: { id: message.payload.userId } as any,
+                user: {
+                  id: message.payload.userId,
+                  firstName: message.payload.userFirstName || '',
+                  lastName: message.payload.userLastName || '',
+                },
               });
             }
             return { ...msg, reactions };
@@ -262,11 +264,8 @@ export default function TeamChatPage() {
       return () => {
         ws.leaveChannel(activeChannel);
       };
-      
-      return () => {
-        ws.leaveChannel(activeChannel);
-      };
     }
+    return undefined;
   }, [activeChannel, ws]);
 
   // Auto-scroll to bottom when messages change

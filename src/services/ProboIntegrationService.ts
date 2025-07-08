@@ -13,7 +13,9 @@ import {
   ProboControlLibrary,
   BulkControlOperation,
   BulkOperationResult,
-  ProboEvent
+  ProboEvent,
+  EvidenceRequirement,
+  ComplianceMapping
 } from '@/types/probo-integration.types';
 
 export interface ProboIntegrationMetrics {
@@ -610,48 +612,57 @@ export class ProboIntegrationService {
   private async mapProboMitigationsToControls(mitigations: any[]): Promise<ProboControl[]> {
     return mitigations.map(mitigation => ({
       id: mitigation.id,
-      name: mitigation.name,
+      title: mitigation.name, // Changed from 'name' to 'title'
       description: mitigation.description,
       category: this.findControlCategoryForMitigation(mitigation),
       framework: this.determineFrameworkFromStandards(mitigation.standards),
       priority: this.mapImportanceToPriority(mitigation.importance),
+      implementationComplexity: this.assessComplexity(mitigation),
+      estimatedHours: this.estimateImplementationHours(mitigation),
       status: {
-        implementation: 'Not Started' as const,
-        testing: 'Not Started' as const,
-        effectiveness: 0,
-        lastReviewed: null,
-        nextReview: null,
-        evidence: []
+        current: 'Not Started' as const,
+        progress: 0,
+        lastUpdated: new Date().toISOString()
       },
+      evidenceRequirements: [] as EvidenceRequirement[],
+      automationPotential: 'Manual' as const,
+      riskMitigationScore: this.calculateRiskMitigationScore(mitigation),
+      complianceMapping: [] as ComplianceMapping[],
+      dependencies: [] as string[],
+      tags: this.generateTags(mitigation),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      aiGenerated: true,
+      aiConfidence: 0.8,
       metadata: {
         standards: mitigation.standards.split(';').filter(Boolean),
         category: mitigation.category,
         importance: mitigation.importance,
         estimatedHours: this.estimateImplementationHours(mitigation),
         complexity: this.assessComplexity(mitigation),
-        dependencies: [],
+        dependencies: [] as string[],
         tags: this.generateTags(mitigation)
       },
       implementation: {
-        assignedTo: null,
-        dueDate: null,
+        assignedTo: null as any,
+        dueDate: null as any,
         progress: 0,
-        notes: [],
-        resources: [],
+        notes: [] as any[],
+        resources: [] as any[],
         checklist: this.generateImplementationChecklist(mitigation)
       },
       testing: {
         frequency: this.determineTestingFrequency(mitigation),
-        lastTest: null,
-        nextTest: null,
-        results: [],
+        lastTest: null as any,
+        nextTest: null as any,
+        results: [] as any[],
         automated: false
       },
       compliance: {
         frameworks: this.extractFrameworksFromStandards(mitigation.standards),
         requirements: this.extractRequirementsFromStandards(mitigation.standards),
-        evidence: [],
-        auditNotes: []
+        evidence: [] as any[],
+        auditNotes: [] as any[]
       }
     }));
   }
@@ -1019,7 +1030,19 @@ export class ProboIntegrationService {
     return hasAutomationTech ? 'Partial' : 'Manual';
   }
 
-  private calculateRiskMitigationScore(template: any, riskSeverity: string): number {
+  private calculateRiskMitigationScore(template: any, riskSeverity?: string): number {
+    // Handle single parameter case (mitigation object)
+    if (!riskSeverity && template.importance) {
+      const importanceMap: Record<string, number> = {
+        'Critical': 9,
+        'High': 7,
+        'Medium': 5,
+        'Low': 3
+      };
+      return importanceMap[template.importance] || 5;
+    }
+    
+    // Handle two parameter case (template and riskSeverity)
     const baseScore = 7;
     const severityBonus = riskSeverity === 'Critical' ? 2 : riskSeverity === 'High' ? 1 : 0;
     return Math.min(10, baseScore + severityBonus);
