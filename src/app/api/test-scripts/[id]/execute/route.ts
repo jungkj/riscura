@@ -100,7 +100,7 @@ export async function POST(
       controlId: data.controlId,
       executedBy: user.id,
       status: overallStatus,
-      results: data.results,
+      results: data.results as any,
       evidence: data.evidence || [],
       notes: data.notes,
       duration: data.duration
