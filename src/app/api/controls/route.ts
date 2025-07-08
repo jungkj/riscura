@@ -136,25 +136,28 @@ export const POST = withApiMiddleware(
       
       const validatedData = CreateControlSchema.parse(body);
       
-      // Map the incoming data to match the schema
-      const controlData = {
-        title: validatedData.title,
-        description: validatedData.description || '',
-        type: validatedData.type,
-        frequency: validatedData.frequency,
-        effectiveness: validatedData.effectiveness || 0,
-        status: validatedData.status || 'ACTIVE',
-        category: validatedData.category || 'OPERATIONAL',
-        automationLevel: validatedData.automationLevel || 'MANUAL',
-        organizationId: user.organizationId,
-        owner: user.id,
-        createdBy: user.id
-      };
-
-      console.log('[Controls API] Creating control with processed data:', controlData);
+      console.log('[Controls API] Creating control with processed data');
 
       const control = await db.client.control.create({
-        data: controlData
+        data: {
+          title: validatedData.title,
+          description: validatedData.description || '',
+          type: validatedData.type,
+          frequency: validatedData.frequency,
+          effectiveness: validatedData.effectiveness || 0,
+          status: validatedData.status || 'ACTIVE',
+          category: validatedData.category || 'OPERATIONAL',
+          automationLevel: validatedData.automationLevel || 'MANUAL',
+          organization: {
+            connect: { id: user.organizationId }
+          },
+          assignedUser: {
+            connect: { id: user.id }
+          },
+          creator: {
+            connect: { id: user.id }
+          }
+        }
       });
 
       console.log('[Controls API] Control created successfully:', control.id);
