@@ -51,8 +51,8 @@ function NewRiskForm() {
         impact: parseInt(formData.impact),
         status: 'identified' as const,
         owner: formData.riskOwner,
-        controls: [] as string[],
-        evidence: [] as string[],
+        controls: [],
+        evidence: [],
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
       };
 
