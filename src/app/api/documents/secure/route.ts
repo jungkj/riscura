@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import crypto from 'crypto';
 import { securityMiddleware, RATE_LIMITS, CORS_CONFIGS } from '@/lib/security/middleware';
 import { accessControl, Permission } from '@/lib/security/access-control';
 import { documentEncryption } from '@/lib/security/document-encryption';
@@ -548,8 +549,38 @@ async function getSecureDocuments(
     filters.page * filters.limit
   );
 
+  // Transform mock documents to match SecureDocumentResponse type
+  const transformedDocuments: SecureDocumentResponse[] = paginatedDocuments.map(doc => ({
+    id: doc.id,
+    title: doc.title,
+    description: doc.description,
+    fileName: doc.files[0]?.filename || 'unknown.pdf',
+    fileType: doc.files[0]?.mimeType || 'application/octet-stream',
+    size: doc.size,
+    hash: crypto.randomUUID(), // Mock hash
+    organizationId: 'org_123', // Mock org ID
+    createdById: doc.ownerId,
+    createdAt: doc.createdAt,
+    updatedAt: doc.updatedAt,
+    tags: doc.tags,
+    category: doc.category,
+    status: doc.status.toLowerCase() as 'draft' | 'review' | 'approved' | 'archived',
+    metadata: {
+      encrypted: doc.security?.encrypted || false,
+      watermark: doc.security?.watermarkRequired ? 'CONFIDENTIAL' : undefined,
+      accessLevel: (doc.security?.accessLevel || 'internal') as 'public' | 'internal' | 'confidential' | 'restricted',
+      downloadable: doc.security?.downloadable || true,
+      printable: doc.security?.printable || false,
+      expiresAt: null as Date | null,
+      accessLog: [] as any[]
+    },
+    _count: {
+      versions: 1
+    }
+  }));
+
   return {
-    documents: paginatedDocuments,
+    documents: transformedDocuments,
     totalCount: total,
     hasNextPage: filters.page * filters.limit < total
   };

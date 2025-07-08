@@ -21,11 +21,13 @@ export const GET = withApiMiddleware(
 
       const result = await notificationService.getUserNotifications(
         user.id,
+        { read: unreadOnly ? false : undefined }, // NotificationFilters
         page,
-        limit,
-        unreadOnly
+        limit
       );
 
+      const totalPages = Math.ceil(result.total / limit);
+      
       return NextResponse.json({
         success: true,
         data: result.notifications,
@@ -33,8 +35,8 @@ export const GET = withApiMiddleware(
           total: result.total,
           page,
           limit,
-          pages: result.pages,
-          unreadCount: result.unreadCount
+          pages: totalPages,
+          unreadCount: unreadOnly ? result.total : undefined
         }
       });
     } catch (error) {
