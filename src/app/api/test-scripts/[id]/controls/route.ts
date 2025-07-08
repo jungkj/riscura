@@ -126,7 +126,7 @@ export async function POST(
     }
     
     // Log activity
-    await db.activity.create({
+    await db.client.activity.create({
       data: {
         type: 'TEST_SCRIPT_CONTROLS_ASSOCIATED',
         userId: user.id,
@@ -194,7 +194,7 @@ export async function DELETE(
     });
     
     // Log activity
-    await db.activity.create({
+    await db.client.activity.create({
       data: {
         type: 'TEST_SCRIPT_CONTROLS_DISASSOCIATED',
         userId: user.id,
