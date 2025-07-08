@@ -11,7 +11,7 @@ const CreateControlSchema = z.object({
   frequency: z.enum(['CONTINUOUS', 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'ANNUALLY']),
   effectiveness: z.number().min(0).max(100).optional(),
   status: z.enum(['PLANNED', 'IMPLEMENTED', 'TESTING', 'OPERATIONAL', 'REMEDIATION', 'DISABLED', 'ACTIVE', 'INACTIVE']).optional(),
-  category: z.enum(['OPERATIONAL', 'FINANCIAL', 'COMPLIANCE', 'IT']).optional(),
+  category: z.enum(['TECHNICAL', 'ADMINISTRATIVE', 'PHYSICAL', 'OPERATIONAL', 'MANAGEMENT']).optional(),
   automationLevel: z.enum(['MANUAL', 'SEMI_AUTOMATED', 'AUTOMATED']).optional()
 });
 
