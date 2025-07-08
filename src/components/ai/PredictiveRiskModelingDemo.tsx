@@ -92,7 +92,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
     id: riskId || 'demo-risk-001',
     title: 'Cybersecurity Incident Risk',
     description: 'Risk of data breach or cyber attack affecting customer data and operations',
-    category: 'technology' as const,
+    category: 'TECHNOLOGY' as const,
     likelihood: 3,
     impact: 4,
     riskScore: 12,

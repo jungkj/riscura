@@ -46,13 +46,13 @@ function NewRiskForm() {
       const riskData = {
         title: formData.title,
         description: formData.description,
-        category: formData.category as 'operational' | 'financial' | 'strategic' | 'compliance' | 'technology',
+        category: formData.category as 'OPERATIONAL' | 'FINANCIAL' | 'STRATEGIC' | 'COMPLIANCE' | 'TECHNOLOGY',
         likelihood: parseInt(formData.likelihood),
         impact: parseInt(formData.impact),
         status: 'identified' as const,
         owner: formData.riskOwner,
-        controls: [],
-        evidence: [],
+        controls: [] as string[],
+        evidence: [] as string[],
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
       };
 
@@ -162,12 +162,11 @@ function NewRiskForm() {
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
                     <SelectContent className="bg-white border-gray-200 rounded-lg shadow-lg">
-                      <SelectItem value="operational">Operational</SelectItem>
-                      <SelectItem value="financial">Financial</SelectItem>
-                      <SelectItem value="strategic">Strategic</SelectItem>
-                      <SelectItem value="compliance">Compliance</SelectItem>
-                      <SelectItem value="technology">Technology</SelectItem>
-                      <SelectItem value="reputational">Reputational</SelectItem>
+                      <SelectItem value="OPERATIONAL">Operational</SelectItem>
+                      <SelectItem value="FINANCIAL">Financial</SelectItem>
+                      <SelectItem value="STRATEGIC">Strategic</SelectItem>
+                      <SelectItem value="COMPLIANCE">Compliance</SelectItem>
+                      <SelectItem value="TECHNOLOGY">Technology</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
