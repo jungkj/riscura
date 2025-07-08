@@ -27,6 +27,22 @@ function getDatabaseConfig(): DatabaseConfig {
     throw new Error('Database operations are not available on the client side');
   }
 
+  // During build time, return a minimal configuration
+  if (process.env.BUILDING === 'true' || process.env.NEXT_PHASE === 'phase-production-build') {
+    return {
+      url: 'postgresql://build:build@localhost:5432/build',
+      directUrl: 'postgresql://build:build@localhost:5432/build',
+      maxConnections: 1,
+      minConnections: 1,
+      acquireTimeout: 1000,
+      idleTimeout: 1000,
+      queryTimeout: 1000,
+      enableLogging: false,
+      retryAttempts: 1,
+      retryDelay: 100,
+    };
+  }
+
   const databaseUrl = process.env.DATABASE_URL;
   
   // Validate required environment variables
@@ -165,7 +181,8 @@ function getSafePrismaClient(): PrismaClient {
 }
 
 // Development hot reloading support (server-side only)
-if (typeof window === 'undefined') {
+// Skip initialization during build time
+if (typeof window === 'undefined' && process.env.BUILDING !== 'true' && process.env.NEXT_PHASE !== 'phase-production-build') {
   if (process.env.NODE_ENV !== 'production') {
     if (!globalThis.prisma) {
       globalThis.prisma = getPrismaClient();
@@ -447,24 +464,69 @@ export const db = {
 };
 
 // Export the Prisma client as default and named export
-const prismaClient = getSafePrismaClient();
-export default prismaClient;
-export { prismaClient as prisma };
+// Use lazy getter to avoid initialization during build
+const getPrismaClientLazy = () => getSafePrismaClient();
 
-// Export direct model access
-export const {
-  user,
-  organization,
-  risk,
-  control,
-  document,
-  questionnaire,
-  controlRiskMapping,
-  // Add other models as needed
-} = prismaClient;
+// Create a proxy that lazily initializes Prisma when accessed
+const prismaProxy = new Proxy({} as PrismaClient, {
+  get(target, prop) {
+    const client = getPrismaClientLazy();
+    return client[prop as keyof PrismaClient];
+  }
+});
 
-// Re-export db object with direct model access
-Object.assign(db, prismaClient);
+export default prismaProxy;
+export { prismaProxy as prisma };
+
+// Export direct model access with lazy initialization
+export const user = new Proxy({} as any, {
+  get(target, prop) {
+    const client = getPrismaClientLazy();
+    return client.user[prop as keyof typeof client.user];
+  }
+});
+
+export const organization = new Proxy({} as any, {
+  get(target, prop) {
+    const client = getPrismaClientLazy();
+    return client.organization[prop as keyof typeof client.organization];
+  }
+});
+
+export const risk = new Proxy({} as any, {
+  get(target, prop) {
+    const client = getPrismaClientLazy();
+    return client.risk[prop as keyof typeof client.risk];
+  }
+});
+
+export const control = new Proxy({} as any, {
+  get(target, prop) {
+    const client = getPrismaClientLazy();
+    return client.control[prop as keyof typeof client.control];
+  }
+});
+
+export const document = new Proxy({} as any, {
+  get(target, prop) {
+    const client = getPrismaClientLazy();
+    return client.document[prop as keyof typeof client.document];
+  }
+});
+
+export const questionnaire = new Proxy({} as any, {
+  get(target, prop) {
+    const client = getPrismaClientLazy();
+    return client.questionnaire[prop as keyof typeof client.questionnaire];
+  }
+});
+
+export const controlRiskMapping = new Proxy({} as any, {
+  get(target, prop) {
+    const client = getPrismaClientLazy();
+    return client.controlRiskMapping[prop as keyof typeof client.controlRiskMapping];
+  }
+});
 
 // Export types for use in other files
 export type { PrismaClient } from '@prisma/client';
