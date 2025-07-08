@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-options';
-import enhancedProboService from '@/services/EnhancedProboService';
+import getEnhancedProboService from '@/services/EnhancedProboService';
 import { z } from 'zod';
 
 const querySchema = z.object({
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { action } = body;
 
-    const proboService = enhancedProboService;
+    const proboService = getEnhancedProboService();
 
     switch (action) {
       case 'import':

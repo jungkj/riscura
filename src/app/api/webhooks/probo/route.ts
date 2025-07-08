@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import EnhancedProboService from '@/services/EnhancedProboService';
-import { PrismaClient } from '@prisma/client';
+import getEnhancedProboService from '@/services/EnhancedProboService';
+import { db } from '@/lib/db';
 
-const prisma = new PrismaClient();
+const prisma = db.client;
 
 // POST /api/webhooks/probo - Handle Probo webhook events
 export async function POST(request: NextRequest) {
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     const webhookData = await request.json();
 
     // Handle webhook
-    await EnhancedProboService.handleWebhook(organizationId, webhookData, signature);
+    await getEnhancedProboService().handleWebhook(organizationId, webhookData, signature);
 
     return NextResponse.json({ success: true });
   } catch (error) {
