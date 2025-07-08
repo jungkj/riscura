@@ -4,7 +4,9 @@ import { authOptions } from '@/lib/auth/auth.config';
 import { ProboIntegrationService } from '@/services/ProboIntegrationService';
 import {
   ControlGenerationRequest,
-  ProboIntegrationConfig
+  ProboIntegrationConfig,
+  ComplianceFramework,
+  ProboControlCategory
 } from '@/types/probo-integration.types';
 
 /**
@@ -41,8 +43,8 @@ export async function POST(request: NextRequest) {
       enableAI: process.env.PROBO_ENABLE_AI === 'true',
       autoApplyRecommendations: false,
       confidenceThreshold: 0.8,
-      frameworks: [],
-      customCategories: []
+      frameworks: [] as ComplianceFramework[],
+      customCategories: [] as ProboControlCategory[]
     };
 
     // Get Probo service instance

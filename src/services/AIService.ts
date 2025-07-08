@@ -272,8 +272,8 @@ export interface ChatResponse {
 }
 
 export class AIService {
-  private openai: OpenAI;
-  private anthropic: Anthropic;
+  private _openai: OpenAI | null = null;
+  private _anthropic: Anthropic | null = null;
   private conversationHistory: Map<string, Array<{ role: string; content: string }>> = new Map();
   private config: AIConfig;
   private modelConfigs: Map<string, ModelConfig>;
@@ -281,6 +281,61 @@ export class AIService {
   private usageMetrics: UsageMetrics;
   private circuitBreaker: CircuitBreaker;
   private cache: Map<string, CacheEntry>;
+
+  /**
+   * Lazy initialization getter for OpenAI client
+   * Only creates the client when it's actually needed
+   */
+  private get openai(): OpenAI {
+    if (!this._openai) {
+      const apiKey = process.env.OPENAI_API_KEY;
+      if (!apiKey) {
+        throw new AIServiceError(
+          'OpenAI API key not configured',
+          'MISSING_API_KEY',
+          500,
+          false,
+          'critical',
+          'AI service is not properly configured'
+        );
+      }
+      this._openai = new OpenAI({
+        apiKey,
+        organization: this.config.organization || undefined,
+        baseURL: this.config.baseURL || undefined,
+        timeout: this.config.timeout,
+        maxRetries: this.config.maxRetries
+      });
+    }
+    return this._openai;
+  }
+
+  /**
+   * Lazy initialization getter for Anthropic client
+   * Only creates the client when it's actually needed
+   */
+  private get anthropic(): Anthropic {
+    if (!this._anthropic) {
+      const apiKey = process.env.ANTHROPIC_API_KEY;
+      if (!apiKey) {
+        throw new AIServiceError(
+          'Anthropic API key not configured',
+          'MISSING_API_KEY',
+          500,
+          false,
+          'critical',
+          'AI service is not properly configured'
+        );
+      }
+      this._anthropic = new Anthropic({
+        apiKey,
+        baseURL: this.config.baseURL || undefined,
+        timeout: this.config.timeout,
+        maxRetries: this.config.maxRetries
+      });
+    }
+    return this._anthropic;
+  }
 
   constructor(config: Partial<AIConfig> = {}) {
     this.config = {
@@ -300,13 +355,8 @@ export class AIService {
       ...config
     };
 
-    this.openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
-
-    this.anthropic = new Anthropic({
-      apiKey: process.env.ANTHROPIC_API_KEY || '',
-    });
+    // Initialize configuration and model configs
+    // AI clients will be initialized lazily when first used to prevent build-time errors
 
     this.modelConfigs = new Map([
       ['gpt-4o', {

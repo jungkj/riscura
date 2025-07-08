@@ -882,8 +882,6 @@ export default function TeamChatPage() {
                 <ScrollArea className="h-80">
                   <div className="space-y-2">
                     {onlineMembers.map((member: any) => {
-                      // const statusConfig = getStatusConfig(member.status);
-                      
                       return (
                         <div
                           key={member.id}
@@ -899,15 +897,15 @@ export default function TeamChatPage() {
                             </Avatar>
                             <div className={cn(
                               "absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white",
-                              statusConfig.color
+                              "bg-green-500"
                             )} />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium truncate">{member.name}</div>
+                            <div className="text-sm font-medium truncate">{member.user.firstName} {member.user.lastName}</div>
                             <div className="text-xs text-gray-500 truncate">{member.role}</div>
                           </div>
-                          <Badge variant="outline" className={cn("text-xs", statusConfig.color.replace('bg-', 'text-'))}>
-                            {statusConfig.label}
+                          <Badge variant="outline" className={cn("text-xs", "text-green-500")}>
+                            Online
                           </Badge>
                         </div>
                       );

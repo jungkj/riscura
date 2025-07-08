@@ -184,9 +184,9 @@ class InMemoryAIProcessingQueue implements AIProcessingQueue {
     const batch = this.queue.splice(0, batchSize);
     return batch.map(task => ({
       taskId: task.id,
-      insights: [] as any[],
-      recommendations: [] as any[],
-      predictions: [] as any[],
+      insights: [] as ProactiveInsight[],
+      recommendations: [] as ActionRecommendation[],
+      predictions: [] as PredictiveResult[],
       confidence: 0.8,
       processingTime: 1000,
       tokenUsage: { prompt: 100, completion: 200, total: 300 }
@@ -219,7 +219,7 @@ class InMemoryScheduleManager implements ScheduleManager {
         frequency: task.frequency,
         timezone: 'UTC',
         startDate: new Date(),
-        blackoutPeriods: []
+        blackoutPeriods: [] as any[]
       },
       nextRun: task.scheduledAt,
       enabled: true,
@@ -366,11 +366,11 @@ export class ProactiveMonitoringService {
   private createMockTrendAnalysisService(): TrendAnalysisService {
     return {
       analyzeDataTrends: async () => ({ direction: 'stable', magnitude: 0, confidence: 50 }),
-      detectAnomalies: async () => ([]),
-      predictFutureTrends: async () => ([]),
-      generateTrendReport: async () => ({ summary: 'No trends detected', details: [] }),
+      detectAnomalies: async () => [] as any[],
+      predictFutureTrends: async () => [] as any[],
+      generateTrendReport: async () => ({ summary: 'No trends detected', details: [] as any[] }),
       configureTrendParameters: async () => {},
-      getTrendHistory: async () => ([])
+      getTrendHistory: async () => [] as any[]
     } as any;
   }
 
@@ -380,7 +380,7 @@ export class ProactiveMonitoringService {
       scheduleNotification: async () => {},
       cancelNotification: async () => {},
       updateNotificationPreferences: async () => {},
-      getNotificationHistory: async () => ([]),
+      getNotificationHistory: async () => [] as any[],
       configureNotificationRules: async () => {},
       testNotificationChannel: async () => true
     } as any;
@@ -704,7 +704,7 @@ export class ProactiveMonitoringService {
     
     // Execute tasks in parallel
     const taskPromises = tasksToProcess.map(task => 
-      this.executeMonitoringTask(task).catch(error => {
+      this.executeMonitoringTask(task).catch((error): MonitoringResult | null => {
         console.error(`Task ${task.id} failed:`, error);
         return null;
       })
@@ -982,7 +982,7 @@ export class ProactiveMonitoringService {
               percentChange: 50
             },
             prediction: {
-              forecast: [],
+              forecast: [] as number[],
               confidenceInterval: { lower: 90, upper: 100, confidence: 95 },
               timeframe: 'immediate',
               assumptions: ['Assessment remains current priority'],
@@ -1073,7 +1073,7 @@ export class ProactiveMonitoringService {
             percentChange: ((deadline.urgency - 90) / 90) * 100
           },
           prediction: {
-            forecast: [],
+            forecast: [] as number[],
             confidenceInterval: { lower: 100, upper: 100, confidence: 100 },
             timeframe: 'fixed',
             assumptions: ['Testing schedule is fixed'],
@@ -1263,7 +1263,7 @@ export class ProactiveMonitoringService {
               percentChange: ((Math.round(averageDuration / 3600000 * 10) / 10 - 2) / 2) * 100
             },
             prediction: {
-              forecast: [],
+              forecast: [] as number[],
               confidenceInterval: { lower: 70, upper: 90, confidence: 80 },
               timeframe: 'ongoing',
               assumptions: ['Current workflow patterns continue'],
@@ -1329,7 +1329,7 @@ export class ProactiveMonitoringService {
       frequency,
       timezone: 'UTC',
       startDate: new Date(),
-      blackoutPeriods: []
+      blackoutPeriods: [] as any[]
     };
     
     switch (frequency) {
@@ -1447,7 +1447,7 @@ export class ProactiveMonitoringService {
 
   private async performAnalysis(task: MonitoringTask, targetData: unknown): Promise<unknown> {
     // Mock analysis implementation
-    return { status: 'completed', findings: [], insights: [] };
+    return { status: 'completed', findings: [] as MonitoringFinding[], insights: [] as ProactiveInsight[] };
   }
 
   private async generateFindings(task: MonitoringTask, analysisResult: unknown): Promise<MonitoringFinding[]> {

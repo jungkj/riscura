@@ -30,8 +30,8 @@ export async function POST(request: NextRequest) {
       case 'analyze':
         const analysisData = gapAnalysisSchema.parse(body);
         // TODO: Get existing controls and risks from database
-        const existingControls: any[] = [];
-        const risks: any[] = [];
+        const existingControls: any[] = [] as any[];
+        const risks: any[] = [] as any[];
         
         const gaps = await complianceAIService.identifyComplianceGaps(
           analysisData.frameworkName,
@@ -57,14 +57,14 @@ export async function POST(request: NextRequest) {
           completionPercentage: 0,
           gapsIdentified: 0,
           criticalGaps: 0,
-          requirements: [],
-          recommendations: [],
-          nextActions: [],
+          requirements: [] as any[],
+          recommendations: [] as any[],
+          nextActions: [] as any[],
           auditReadiness: {},
           riskProfile: {},
           timeline: {},
           estimatedCosts: {},
-          aiInsights: [],
+          aiInsights: [] as any[],
           createdAt: new Date(),
           lastUpdated: new Date()
         };

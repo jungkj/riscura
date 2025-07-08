@@ -317,29 +317,46 @@ export function handleOpenAIError(error: any): OpenAIError {
 }
 
 export class OpenAIClient {
-  private client: OpenAI | null = null;
+  private _client: OpenAI | null = null;
   private rateLimitReset: Date | null = null;
   private requestCount = 0;
   private maxRequestsPerMinute = 50;
-  private isEnabled = false;
+  private isEnabled: boolean | null = null;
 
-  constructor() {
-    const apiKey = process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY;
-    
-    if (!apiKey) {
-      console.warn('OpenAI API key not configured. AI features will be disabled.');
-      this.isEnabled = false;
-      return;
+  /**
+   * Lazy initialization getter for OpenAI client
+   * Only creates the client when it's actually needed
+   */
+  private get client(): OpenAI {
+    if (this._client === null) {
+      const apiKey = process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY;
+      
+      if (!apiKey) {
+        this.isEnabled = false;
+        throw new Error('OpenAI API key not configured. Please set OPENAI_API_KEY environment variable.');
+      }
+
+      this._client = new OpenAI({
+        apiKey: apiKey,
+      });
+      this.isEnabled = true;
     }
+    return this._client;
+  }
 
-    this.client = new OpenAI({
-      apiKey: apiKey,
-    });
-    this.isEnabled = true;
+  /**
+   * Check if OpenAI is enabled (has API key)
+   */
+  private checkEnabled(): boolean {
+    if (this.isEnabled === null) {
+      const apiKey = process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY;
+      this.isEnabled = !!apiKey;
+    }
+    return this.isEnabled;
   }
 
   async createChatCompletion(params: OpenAI.Chat.ChatCompletionCreateParams): Promise<OpenAI.Chat.ChatCompletion> {
-    if (!this.isEnabled || !this.client) {
+    if (!this.checkEnabled()) {
       throw new Error('OpenAI client is not configured. Please set OPENAI_API_KEY environment variable.');
     }
 
@@ -359,7 +376,7 @@ export class OpenAIClient {
   }
 
   async createEmbedding(params: OpenAI.EmbeddingCreateParams): Promise<OpenAI.CreateEmbeddingResponse> {
-    if (!this.isEnabled || !this.client) {
+    if (!this.checkEnabled()) {
       throw new Error('OpenAI client is not configured. Please set OPENAI_API_KEY environment variable.');
     }
 
