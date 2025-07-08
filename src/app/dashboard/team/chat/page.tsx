@@ -540,7 +540,7 @@ export default function TeamChatPage() {
         secondaryActions={[
           {
             label: 'Video Call',
-            onClick: () => toast.success('Starting video call...'),
+            onClick: () => toast({ title: 'Starting video call...', variant: 'default' }),
             icon: Video,
             variant: 'outline',
           },
