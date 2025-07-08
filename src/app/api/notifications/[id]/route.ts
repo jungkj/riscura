@@ -3,6 +3,7 @@ import { withApiMiddleware } from '@/lib/api/middleware';
 import { getAuthenticatedUser } from '@/lib/auth/middleware';
 import { notificationService } from '@/services/NotificationService';
 import { ApiResponseFormatter } from '@/lib/api/response-formatter';
+import { db } from '@/lib/db';
 
 interface RouteParams {
   params: Promise<{
@@ -23,18 +24,19 @@ export async function GET(
       return ApiResponseFormatter.authError('User not authenticated');
     }
 
-    const { notifications } = await notificationService.getUserNotifications(
-      user.id,
-      { id: id },
-      1,
-      1
-    );
+    // Get single notification by ID
+    const notification = await db.client.notification.findFirst({
+      where: {
+        id: id,
+        userId: user.id
+      }
+    });
 
-    if (notifications.length === 0) {
+    if (!notification) {
       return ApiResponseFormatter.notFoundError('Notification not found');
     }
 
-    return ApiResponseFormatter.success(notifications[0]);
+    return ApiResponseFormatter.success(notification);
     },
     { requireAuth: true }
   )(req);

@@ -4,13 +4,19 @@ import { db } from '@/lib/db';
 import { z } from 'zod';
 
 const CreateTestScriptSchema = z.object({
-  name: z.string().min(1),
-  description: z.string().optional(),
+  title: z.string().min(1),
+  description: z.string(),
   steps: z.array(z.object({
     stepNumber: z.number(),
     description: z.string(),
     expectedResult: z.string()
   })),
+  expectedResults: z.string(),
+  testType: z.enum(['MANUAL', 'AUTOMATED', 'SEMI_AUTOMATED', 'INQUIRY', 'OBSERVATION', 'EXAMINATION', 'REPERFORMANCE']),
+  frequency: z.enum(['ANNUAL', 'SEMI_ANNUAL', 'QUARTERLY', 'MONTHLY', 'WEEKLY', 'DAILY', 'AD_HOC', 'CONTINUOUS']),
+  estimatedDuration: z.number().optional(),
+  automationCapable: z.boolean().optional(),
+  automationScript: z.string().optional(),
   tags: z.array(z.string()).optional()
 });
 
@@ -29,7 +35,7 @@ export const GET = withApiMiddleware(
       const testScripts = await db.client.testScript.findMany({
         where: { organizationId: user.organizationId },
         include: {
-          createdBy: {
+          creator: {
             select: {
               id: true,
               firstName: true,
@@ -79,13 +85,18 @@ export const POST = withApiMiddleware(
 
       const testScript = await db.client.testScript.create({
         data: {
-          name: validatedData.name,
+          title: validatedData.title,
           description: validatedData.description,
           steps: validatedData.steps,
+          expectedResults: validatedData.expectedResults,
+          testType: validatedData.testType,
+          frequency: validatedData.frequency,
+          estimatedDuration: validatedData.estimatedDuration,
+          automationCapable: validatedData.automationCapable || false,
+          automationScript: validatedData.automationScript,
           tags: validatedData.tags || [],
           organizationId: user.organizationId,
-          createdById: user.id,
-          status: 'DRAFT'
+          createdBy: user.id
         }
       });
 

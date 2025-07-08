@@ -35,12 +35,12 @@ export const GET = withApiMiddleware(
       const offset = (page - 1) * limit;
       
       // Get total count for pagination
-      const totalCount = await db.risk.count({
+      const totalCount = await db.client.risk.count({
         where: { organizationId: user.organizationId }
       });
       
       // Start with a simple query first
-      const risks = await db.risk.findMany({
+      const risks = await db.client.risk.findMany({
         where: { organizationId: user.organizationId },
         orderBy: { createdAt: 'desc' },
         skip: offset,
@@ -66,7 +66,7 @@ export const GET = withApiMiddleware(
 
       // Try to include relationships if we have risks
       try {
-        const risksWithRelations = await db.risk.findMany({
+        const risksWithRelations = await db.client.risk.findMany({
           where: { organizationId: user.organizationId },
           include: {
             controls: {

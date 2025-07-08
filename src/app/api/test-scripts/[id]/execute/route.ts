@@ -45,7 +45,7 @@ export async function POST(
   const data = validationResult.data as ExecuteTestRequest;
   
   // Verify test script exists and is associated with the control
-  const testScript = await db.testScript.findFirst({
+  const testScript = await db.client.testScript.findFirst({
     where: {
       id,
       organizationId: user.organizationId
@@ -66,7 +66,7 @@ export async function POST(
   }
   
   // Verify control exists
-  const control = await db.control.findFirst({
+  const control = await db.client.control.findFirst({
     where: {
       id: data.controlId,
       organizationId: user.organizationId
@@ -94,7 +94,7 @@ export async function POST(
   }
   
   // Create test execution record
-  const testExecution = await db.testExecution.create({
+  const testExecution = await db.client.testExecution.create({
     data: {
       testScriptId: id,
       controlId: data.controlId,
@@ -125,7 +125,7 @@ export async function POST(
   });
   
   // Update control's last test date and results
-  await db.control.update({
+  await db.client.control.update({
     where: { id: data.controlId },
     data: {
       lastTestDate: new Date(),
@@ -141,7 +141,7 @@ export async function POST(
   });
   
   // Log activity
-  await db.activity.create({
+  await db.client.activity.create({
     data: {
       type: 'TEST_EXECUTED',
       userId: user.id,

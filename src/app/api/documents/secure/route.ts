@@ -133,8 +133,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         accessLevel: sensitivity,
         downloadable: true,
         printable: false,
-        expiresAt: null,
-        accessLog: []
+        expiresAt: null as Date | null,
+        accessLog: [] as any[]
       },
       _count: {
         versions: 1,

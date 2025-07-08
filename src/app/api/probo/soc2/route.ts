@@ -65,20 +65,21 @@ export async function POST(request: NextRequest) {
         name: framework.name,
         version: framework.version,
         description: 'SOC 2 Type II compliance framework imported from Probo',
+        type: 'SOC2',
         organizationId,
       }
     });
 
     // Create framework requirements
     for (const requirement of framework.requirements) {
-      await db.client.frameworkRequirement.create({
+      await db.client.complianceRequirement.create({
         data: {
           frameworkId: createdFramework.id,
+          requirementId: requirement.id || requirement.title.replace(/\s+/g, '_').toUpperCase(),
           title: requirement.title,
           description: requirement.description,
           category: 'SOC2',
-          controls: requirement.controls,
-          priority: 'HIGH'
+          criticality: 'HIGH'
         }
       });
     }
@@ -109,26 +110,14 @@ export async function POST(request: NextRequest) {
         });
       }
 
-      // Create framework control mapping
-      await db.client.frameworkControl.create({
-        data: {
-          frameworkId: createdFramework.id,
-          controlId: existingControl.id,
-          requirement: control.requirement,
-          description: control.description,
-          category: control.category
-        }
-      });
+      // TODO: Create framework control mapping
+      // Note: frameworkControl model doesn't exist in current schema
+      // This would need to be implemented based on the actual schema structure
     }
 
     const completeFramework = await db.client.complianceFramework.findUnique({
       where: { id: createdFramework.id },
       include: {
-        controls: {
-          include: {
-            control: true
-          }
-        },
         requirements: true
       }
     });
