@@ -12,7 +12,7 @@ const CreateControlSchema = z.object({
   effectiveness: z.number().min(0).max(100).optional(),
   status: z.enum(['PLANNED', 'IMPLEMENTED', 'TESTING', 'OPERATIONAL', 'REMEDIATION', 'DISABLED', 'ACTIVE', 'INACTIVE']).optional(),
   category: z.enum(['TECHNICAL', 'ADMINISTRATIVE', 'PHYSICAL', 'OPERATIONAL', 'MANAGEMENT']).optional(),
-  automationLevel: z.enum(['MANUAL', 'SEMI_AUTOMATED', 'AUTOMATED']).optional()
+  automationLevel: z.enum(['MANUAL', 'SEMI_AUTOMATED']).optional()
 });
 
 export const GET = withApiMiddleware(
