@@ -143,7 +143,7 @@ export async function POST(
   // Log activity
   await db.client.activity.create({
     data: {
-      type: 'TEST_EXECUTED',
+      type: 'COMPLETED',
       userId: user.id,
       organizationId: user.organizationId,
       entityType: 'TEST_EXECUTION',
