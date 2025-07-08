@@ -182,7 +182,7 @@ async function getUploadProgressFromCache(uploadId: string, organizationId: stri
     totalBytes: 1024000,
     filesProcessed: 1,
     totalFiles: 1,
-    errors: [],
+    errors: [] as any[],
     startedAt: new Date().toISOString(),
     completedAt: new Date().toISOString(),
   };

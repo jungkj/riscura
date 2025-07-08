@@ -6,12 +6,11 @@ import { AuthenticatedRequest } from '@/types/api';
 
 const CreateDocumentSchema = z.object({
   name: z.string().min(1),
-  description: z.string().optional(),
   type: z.string(),
-  fileUrl: z.string().url(),
-  fileSize: z.number().optional(),
-  mimeType: z.string().optional(),
-  tags: z.array(z.string()).optional()
+  size: z.number(),
+  content: z.string().optional(),
+  extractedText: z.string().optional(),
+  aiAnalysis: z.any().optional()
 });
 
 export const GET = withApiMiddleware(
@@ -101,9 +100,18 @@ export const POST = withApiMiddleware(
     try {
       const document = await db.client.document.create({
         data: {
-          ...validatedBody,
-          organizationId: user.organizationId,
-          uploadedBy: user.id
+          name: validatedBody.name,
+          type: validatedBody.type,
+          size: validatedBody.size,
+          content: validatedBody.content,
+          extractedText: validatedBody.extractedText,
+          aiAnalysis: validatedBody.aiAnalysis,
+          organization: {
+            connect: { id: user.organizationId }
+          },
+          uploader: {
+            connect: { id: user.id }
+          }
         }
       });
 

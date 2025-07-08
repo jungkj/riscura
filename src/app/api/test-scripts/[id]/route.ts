@@ -42,7 +42,7 @@ export async function GET(
     async (request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
-        const testScript = await db.testScript.findFirst({
+        const testScript = await db.client.testScript.findFirst({
       where: {
         id,
         organizationId: user.organizationId
@@ -111,7 +111,7 @@ export async function PATCH(
       const { id } = await params;
       const user = (request as any).user;
       // Verify test script exists and belongs to organization
-  const existingTestScript = await db.testScript.findFirst({
+  const existingTestScript = await db.client.testScript.findFirst({
     where: {
       id,
       organizationId: user.organizationId
@@ -133,7 +133,7 @@ export async function PATCH(
   const data = validationResult.data as UpdateTestScriptRequest;
   
   // Update test script
-  const updatedTestScript = await db.testScript.update({
+  const updatedTestScript = await db.client.testScript.update({
     where: { id },
     data: {
       ...(data.title && { title: data.title }),
@@ -171,7 +171,7 @@ export async function PATCH(
   });
   
   // Log activity
-  await db.activity.create({
+  await db.client.activity.create({
     data: {
       type: 'TEST_SCRIPT_UPDATED',
       userId: user.id,
@@ -230,12 +230,12 @@ export async function DELETE(
   }
   
   // Delete test script (cascade will handle relationships)
-  await db.testScript.delete({
+  await db.client.testScript.delete({
     where: { id }
   });
   
   // Log activity
-  await db.activity.create({
+  await db.client.activity.create({
     data: {
       type: 'TEST_SCRIPT_DELETED',
       userId: user.id,

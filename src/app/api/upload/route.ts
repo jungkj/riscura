@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { getAuthenticatedUser } from '@/lib/auth/middleware';
 import { storageService } from '@/lib/storage/supabase-storage';
@@ -7,7 +7,7 @@ import { storageService } from '@/lib/storage/supabase-storage';
 export const POST = withApiMiddleware(async (req: NextRequest) => {
   const user = getAuthenticatedUser(req);
   if (!user) {
-    return new Response('Unauthorized', { status: 401 });
+    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
@@ -17,7 +17,7 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
     const metadata = formData.get('metadata');
     
     if (!file) {
-      return Response.json(
+      return NextResponse.json(
         { success: false, error: 'No file provided' },
         { status: 400 }
       );
@@ -25,7 +25,7 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
     
     // Check file size (10MB limit)
     if (file.size > 10 * 1024 * 1024) {
-      return Response.json(
+      return NextResponse.json(
         { success: false, error: 'File size exceeds 10MB limit' },
         { status: 400 }
       );
@@ -47,7 +47,7 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
       3600 // 1 hour expiry
     );
     
-    return Response.json({
+    return NextResponse.json({
       success: true,
       data: {
         ...uploadedFile,
@@ -56,7 +56,7 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
     });
   } catch (error) {
     console.error('Upload error:', error);
-    return Response.json(
+    return NextResponse.json(
       { success: false, error: 'Failed to upload file' },
       { status: 500 }
     );
@@ -67,7 +67,7 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
 export const GET = withApiMiddleware(async (req: NextRequest) => {
   const user = getAuthenticatedUser(req);
   if (!user) {
-    return new Response('Unauthorized', { status: 401 });
+    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
@@ -76,7 +76,7 @@ export const GET = withApiMiddleware(async (req: NextRequest) => {
     // Add usage percentage (1GB = 1073741824 bytes)
     const usagePercentage = (stats.totalSize / 1073741824) * 100;
     
-    return Response.json({
+    return NextResponse.json({
       success: true,
       data: {
         ...stats,
@@ -87,7 +87,7 @@ export const GET = withApiMiddleware(async (req: NextRequest) => {
     });
   } catch (error) {
     console.error('Failed to get storage stats:', error);
-    return Response.json(
+    return NextResponse.json(
       { success: false, error: 'Failed to get storage statistics' },
       { status: 500 }
     );
