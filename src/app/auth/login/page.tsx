@@ -2,6 +2,7 @@
 
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -62,8 +63,15 @@ function LoginForm() {
 
   const handleGoogleLogin = async () => {
     try {
-      // Implement Google OAuth login
-      window.location.href = `/api/auth/google?redirect=${encodeURIComponent(redirectTo)}`;
+      // Use NextAuth's signIn function for Google OAuth
+      const result = await signIn('google', {
+        callbackUrl: redirectTo,
+        redirect: true,
+      });
+      
+      if (result?.error) {
+        setError('Google login failed. Please try again.');
+      }
     } catch (err) {
       setError('Google login failed. Please try again.');
     }
