@@ -12,7 +12,7 @@ const CreateTestScriptSchema = z.object({
     expectedResult: z.string()
   })),
   expectedResults: z.string(),
-  testType: z.enum(['MANUAL', 'AUTOMATED', 'SEMI_AUTOMATED', 'INQUIRY', 'OBSERVATION', 'EXAMINATION', 'REPERFORMANCE']),
+  testType: z.enum(['MANUAL', 'AUTOMATED', 'HYBRID', 'INQUIRY', 'OBSERVATION', 'INSPECTION', 'REPERFORMANCE']),
   frequency: z.enum(['ANNUAL', 'SEMI_ANNUAL', 'QUARTERLY', 'MONTHLY', 'WEEKLY', 'DAILY', 'AD_HOC', 'CONTINUOUS']),
   estimatedDuration: z.number().optional(),
   automationCapable: z.boolean().optional(),
