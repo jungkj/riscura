@@ -326,25 +326,9 @@ async function handleGet(req: NextRequest) {
 // ============================================================================
 
 export const GET = withAPI(handleGet, {
-  auth: false, // Public endpoint
+  requireAuth: false, // Public endpoint
   rateLimit: {
     maxRequests: 100,
     windowMs: 60 * 60 * 1000, // 1 hour
-  },
-  tags: ['Documentation'],
-  summary: 'API Documentation Interface',
-  description: 'Interactive Swagger UI for exploring and testing the Riscura API',
-  responses: {
-    '200': {
-      description: 'HTML page with Swagger UI',
-      content: {
-        'text/html': {
-          schema: {
-            type: 'string',
-            description: 'HTML page containing interactive API documentation',
-          },
-        },
-      },
-    },
-  },
+  }
 });
