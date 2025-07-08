@@ -142,13 +142,11 @@ export async function POST(
       }
     });
     
-    return ApiResponseFormatter.success(
-      {
-        associated: newControlIds.length,
-        alreadyAssociated: existingControlIds.length
-      },
-      'Controls associated successfully'
-    );
+    return ApiResponseFormatter.success({
+      associated: newControlIds.length,
+      alreadyAssociated: existingControlIds.length,
+      message: 'Controls associated successfully'
+    });
     },
     { requireAuth: true }
   )(req);
