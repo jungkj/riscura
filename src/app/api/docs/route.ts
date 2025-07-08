@@ -58,44 +58,9 @@ async function handleGet(req: NextRequest) {
 // ============================================================================
 
 export const GET = withAPI(handleGet, {
-  auth: false, // Public endpoint
+  requireAuth: false, // Public endpoint
   rateLimit: {
     maxRequests: 100,
     windowMs: 60 * 60 * 1000, // 1 hour
-  },
-  tags: ['Documentation'],
-  summary: 'Get API Documentation',
-  description: 'Returns the OpenAPI 3.0 specification for the Riscura API',
-  responses: {
-    '200': {
-      description: 'OpenAPI specification',
-      content: {
-        'application/json': {
-          schema: {
-            type: 'object',
-            description: 'OpenAPI 3.0 specification',
-          },
-        },
-        'application/yaml': {
-          schema: {
-            type: 'string',
-            description: 'OpenAPI 3.0 specification in YAML format',
-          },
-        },
-      },
-    },
-  },
-  parameters: [
-    {
-      name: 'format',
-      in: 'query',
-      description: 'Response format (json or yaml)',
-      required: false,
-      schema: {
-        type: 'string',
-        enum: ['json', 'yaml'],
-        default: 'json',
-      },
-    },
-  ],
+  }
 });
