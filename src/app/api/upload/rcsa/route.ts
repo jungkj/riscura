@@ -173,7 +173,7 @@ async function handleRCSAUpload(request: AuthenticatedRequest): Promise<NextResp
 
     try {
       // Process the data in a transaction
-      await db.transaction(async (prisma) => {
+      await db.client.$transaction(async (prisma) => {
         // Group processed data by risk ID to create RCSA entries
         const rcsaEntryMap = new Map<string, RCSARow[]>();
         
