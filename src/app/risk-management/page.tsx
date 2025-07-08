@@ -1,1 +1,5 @@
-'use client'; export default function RiskManagementPage() { return null; }
+'use client';
+
+export default function RiskManagementPage(): JSX.Element | null {
+  return null;
+}

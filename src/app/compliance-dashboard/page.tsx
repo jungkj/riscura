@@ -1,1 +1,5 @@
-'use client'; export default function ComplianceDashboardPage() { return null; }
+'use client';
+
+export default function ComplianceDashboardPage(): JSX.Element | null {
+  return null;
+}
