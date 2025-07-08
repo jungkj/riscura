@@ -176,7 +176,7 @@ export async function PATCH(
       type: 'UPDATED',
       userId: user.id,
       organizationId: user.organizationId,
-      entityType: 'TEST_SCRIPT',
+      entityType: 'DOCUMENT',
       entityId: id,
       description: `Updated test script: ${updatedTestScript.title}`,
       metadata: {
@@ -240,7 +240,7 @@ export async function DELETE(
       type: 'DELETED',
       userId: user.id,
       organizationId: user.organizationId,
-      entityType: 'TEST_SCRIPT',
+      entityType: 'DOCUMENT',
       entityId: id,
       description: `Deleted test script: ${testScript.title}`,
       metadata: {
