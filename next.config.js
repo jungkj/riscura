@@ -113,6 +113,24 @@ const nextConfig = {
 
   // Webpack configuration for performance
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    // Memory optimization for build
+    if (!dev) {
+      config.optimization = {
+        ...config.optimization,
+        minimize: true,
+        moduleIds: 'deterministic',
+        chunkIds: 'deterministic',
+        mangleExports: true,
+        removeAvailableModules: true,
+        removeEmptyChunks: true,
+        mergeDuplicateChunks: true,
+        providedExports: true,
+        usedExports: true,
+        concatenateModules: true,
+        sideEffects: true,
+        portableRecords: true,
+      };
+    }
     // Bundle analyzer
     if (process.env.ANALYZE === 'true') {
       try {
