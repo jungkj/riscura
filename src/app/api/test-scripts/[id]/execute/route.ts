@@ -146,7 +146,7 @@ export async function POST(
       type: 'COMPLETED',
       userId: user.id,
       organizationId: user.organizationId,
-      entityType: 'TEST_EXECUTION',
+      entityType: 'DOCUMENT',
       entityId: testExecution.id,
       description: `Executed test script: ${testScript.title}`,
       metadata: {

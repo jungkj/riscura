@@ -131,7 +131,7 @@ export async function POST(
         type: 'UPDATED',
         userId: user.id,
         organizationId: user.organizationId,
-        entityType: 'TEST_SCRIPT',
+        entityType: 'DOCUMENT',
         entityId: id,
         description: `Associated ${newControlIds.length} controls with test script: ${testScript.title}`,
         metadata: {
@@ -199,7 +199,7 @@ export async function DELETE(
         type: 'UPDATED',
         userId: user.id,
         organizationId: user.organizationId,
-        entityType: 'TEST_SCRIPT',
+        entityType: 'DOCUMENT',
         entityId: id,
         description: `Disassociated ${result.count} controls from test script: ${testScript.title}`,
         metadata: {
