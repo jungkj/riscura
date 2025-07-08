@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
-import EnhancedProboService from '@/services/EnhancedProboService';
+import getEnhancedProboService from '@/services/EnhancedProboService';
 import { z } from 'zod';
 
 // GET /api/dashboard/probo-insights - Get Probo integration insights
@@ -18,11 +18,12 @@ export const GET = withApiMiddleware(
       }
 
       // Fetch all Probo data
+      const proboService = getEnhancedProboService();
       const [metrics, complianceStatus, insights, vendorSummary] = await Promise.all([
-        EnhancedProboService.getLatestMetrics(user.organizationId),
-        EnhancedProboService.getComplianceStatus(user.organizationId),
-        EnhancedProboService.getInsights(user.organizationId),
-        EnhancedProboService.getVendorSummary(user.organizationId),
+        proboService.getLatestMetrics(user.organizationId),
+        proboService.getComplianceStatus(user.organizationId),
+        proboService.getInsights(user.organizationId),
+        proboService.getVendorSummary(user.organizationId),
       ]);
 
       return NextResponse.json({

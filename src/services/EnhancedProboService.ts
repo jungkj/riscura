@@ -109,6 +109,12 @@ export class EnhancedProboService {
   constructor() {
     this.proboIntegration = ProboIntegrationService.getInstance();
     
+    // Skip key initialization during build
+    if (process.env.BUILDING === 'true' || process.env.NEXT_PHASE === 'phase-production-build') {
+      this.encryptionKey = Buffer.alloc(32); // Dummy key for build time
+      return;
+    }
+    
     // Enforce secure key requirement
     const keySource = process.env.PROBO_ENCRYPTION_KEY || process.env.NEXTAUTH_SECRET;
     if (!keySource) {
@@ -546,4 +552,15 @@ export class EnhancedProboService {
   }
 }
 
-export default new EnhancedProboService();
+// Lazy initialization to avoid instantiation during build
+let serviceInstance: EnhancedProboService | null = null;
+
+export function getEnhancedProboService(): EnhancedProboService {
+  if (!serviceInstance) {
+    serviceInstance = new EnhancedProboService();
+  }
+  return serviceInstance;
+}
+
+// Export the getter function, not the result
+export default getEnhancedProboService;
