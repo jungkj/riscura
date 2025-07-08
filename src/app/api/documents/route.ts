@@ -103,8 +103,7 @@ export const POST = withApiMiddleware(
         data: {
           ...validatedBody,
           organizationId: user.organizationId,
-          uploadedBy: user.id,
-          status: 'ACTIVE'
+          uploadedBy: user.id
         }
       });
 
