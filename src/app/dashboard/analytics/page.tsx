@@ -295,7 +295,7 @@ export default function AnalyticsPage() {
                           fill="#8884d8"
                           dataKey="value"
                         >
-                          {getRiskDistributionData().map((entry, index) => (
+                          {getRiskDistributionData().map((entry: { name: string; value: number }, index: number) => (
                             <Cell key={`cell-${index}`} fill={Object.values(COLORS)[index % Object.values(COLORS).length]} />
                           ))}
                         </Pie>
