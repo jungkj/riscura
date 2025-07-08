@@ -138,7 +138,7 @@ export async function PATCH(
     data: {
       ...(data.title && { title: data.title }),
       ...(data.description && { description: data.description }),
-      ...(data.steps && { steps: data.steps }),
+      ...(data.steps && { steps: data.steps as any }),
       ...(data.expectedResults && { expectedResults: data.expectedResults }),
       ...(data.testType && { testType: data.testType }),
       ...(data.frequency && { frequency: data.frequency }),
