@@ -1,11 +1,48 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
 
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+// Lazy initialization variables
+let supabaseStorageInstance: SupabaseClient | null = null;
 
-export const supabaseStorage = createClient(supabaseUrl, supabaseServiceKey);
+// Check if we're in a build environment
+const isBuildTime = process.env.BUILDING === 'true' || process.env.NEXT_PHASE === 'phase-production-build';
+
+// Lazy initialization for Supabase storage client
+export const supabaseStorage: SupabaseClient = new Proxy({} as SupabaseClient, {
+  get(target, prop) {
+    if (!supabaseStorageInstance && !isBuildTime) {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+      
+      if (!supabaseUrl || !supabaseServiceKey) {
+        throw new Error('Missing Supabase environment variables for storage');
+      }
+      
+      supabaseStorageInstance = createClient(supabaseUrl, supabaseServiceKey);
+    }
+    
+    if (isBuildTime) {
+      // Return dummy implementations for build time
+      if (prop === 'storage') {
+        return {
+          from: () => ({
+            upload: () => Promise.resolve({ data: { id: 'dummy', path: 'dummy' }, error: null }),
+            download: () => Promise.resolve({ data: new Blob(), error: null }),
+            remove: () => Promise.resolve({ error: null }),
+            list: () => Promise.resolve({ data: [], error: null }),
+            getPublicUrl: () => ({ data: { publicUrl: 'https://dummy.url' } }),
+            createSignedUrl: () => Promise.resolve({ data: { signedUrl: 'https://dummy.url' }, error: null }),
+          }),
+          getBucket: () => Promise.resolve({ data: null, error: null }),
+          createBucket: () => Promise.resolve({ error: null }),
+        };
+      }
+      return () => {};
+    }
+    
+    return supabaseStorageInstance ? (supabaseStorageInstance as any)[prop] : undefined;
+  }
+});
 
 export interface UploadFileOptions {
   bucket: 'documents' | 'attachments' | 'reports' | 'avatars';
