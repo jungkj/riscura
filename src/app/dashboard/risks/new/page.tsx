@@ -14,6 +14,7 @@ import { ArrowLeft, Save, X, Shield, Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useRisks } from '@/context/RiskContext';
 import { ToastProvider, useToastHelpers } from '@/components/ui/toast-system';
+import type { Document } from '@/types';
 
 // Internal component that uses toast hooks
 function NewRiskForm() {
@@ -51,8 +52,8 @@ function NewRiskForm() {
         impact: parseInt(formData.impact),
         status: 'identified' as const,
         owner: formData.riskOwner,
-        controls: [],
-        evidence: [],
+        controls: [] as string[],
+        evidence: [] as Document[],
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
       };
 
