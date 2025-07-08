@@ -60,8 +60,8 @@ async function handleGet(req: NextRequest) {
 export const GET = withAPI(handleGet, {
   auth: false, // Public endpoint
   rateLimit: {
-    requests: 100,
-    window: '1h',
+    max: 100,
+    windowMs: 60 * 60 * 1000, // 1 hour
   },
   tags: ['Documentation'],
   summary: 'Get API Documentation',
