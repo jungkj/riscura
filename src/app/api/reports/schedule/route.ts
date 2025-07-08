@@ -117,10 +117,21 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const scheduledReports = await db.client.report.findMany({
+    const scheduledReports = await db.client.reportSchedule.findMany({
       where: {
         organizationId: user.organizationId,
-        isScheduled: true,
+        isActive: true,
+      },
+      include: {
+        reportTemplate: true,
+        creator: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
       },
       orderBy: {
         createdAt: 'desc',

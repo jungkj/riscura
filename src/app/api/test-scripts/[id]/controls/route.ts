@@ -27,7 +27,7 @@ export async function GET(
       const { id } = await params;
       const user = (request as any).user;
         // Verify test script exists
-    const testScript = await db.testScript.findFirst({
+    const testScript = await db.client.testScript.findFirst({
       where: {
         id,
         organizationId: user.organizationId
@@ -39,7 +39,7 @@ export async function GET(
     }
     
     // Get associated controls
-    const controlAssociations = await db.controlTestScript.findMany({
+    const controlAssociations = await db.client.controlTestScript.findMany({
       where: { testScriptId: id },
       include: {
         control: {
@@ -70,7 +70,7 @@ export async function POST(
       const { id } = await params;
       const user = (request as any).user;
         // Verify test script exists
-    const testScript = await db.testScript.findFirst({
+    const testScript = await db.client.testScript.findFirst({
       where: {
         id,
         organizationId: user.organizationId
@@ -104,7 +104,7 @@ export async function POST(
     }
     
     // Get existing associations to avoid duplicates
-    const existingAssociations = await db.controlTestScript.findMany({
+    const existingAssociations = await db.client.controlTestScript.findMany({
       where: {
         testScriptId: id,
         controlId: { in: controlIds }
@@ -116,7 +116,7 @@ export async function POST(
     
     // Create new associations
     if (newControlIds.length > 0) {
-      await db.controlTestScript.createMany({
+      await db.client.controlTestScript.createMany({
         data: newControlIds.map(controlId => ({
           testScriptId: id,
           controlId,
@@ -164,7 +164,7 @@ export async function DELETE(
       const { id } = await params;
       const user = (request as any).user;
         // Verify test script exists
-    const testScript = await db.testScript.findFirst({
+    const testScript = await db.client.testScript.findFirst({
       where: {
         id,
         organizationId: user.organizationId
@@ -186,7 +186,7 @@ export async function DELETE(
     const { controlIds } = validationResult.data;
     
     // Delete associations
-    const result = await db.controlTestScript.deleteMany({
+    const result = await db.client.controlTestScript.deleteMany({
       where: {
         testScriptId: id,
         controlId: { in: controlIds }

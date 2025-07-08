@@ -172,7 +172,7 @@ export const POST = withApiMiddleware(
 
       console.log('[Risks API] Creating risk with processed data:', riskData);
 
-      const risk = await db.risk.create({
+      const risk = await db.client.risk.create({
         data: riskData
       });
 
