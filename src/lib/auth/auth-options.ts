@@ -122,6 +122,7 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db.client),
   providers,
   debug: true, // Enable debug mode
+  secret: env.NEXTAUTH_SECRET || env.JWT_ACCESS_SECRET, // Add explicit secret
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
