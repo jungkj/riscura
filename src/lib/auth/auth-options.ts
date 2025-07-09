@@ -120,12 +120,23 @@ providers.push(
 // Safely get database client
 let dbAdapter;
 try {
-  const { db } = require('@/lib/db');
-  dbAdapter = PrismaAdapter(db.client);
-  console.log('[NextAuth] Database adapter initialized successfully');
+  // Use dynamic import to prevent module-level failures
+  const getDbAdapter = async () => {
+    try {
+      const { db } = await import('@/lib/db');
+      return PrismaAdapter(db.client);
+    } catch (error) {
+      console.error('[NextAuth] Failed to import db module:', error);
+      return null;
+    }
+  };
+  
+  // Note: This is a promise, we'll handle it in the authOptions
+  dbAdapter = getDbAdapter();
 } catch (error) {
   console.error('[NextAuth] Failed to initialize database adapter:', error);
   console.warn('[NextAuth] Running without database adapter - OAuth may not persist sessions');
+  dbAdapter = null;
 }
 
 export const authOptions: NextAuthOptions = {
