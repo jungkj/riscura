@@ -71,8 +71,6 @@ function LoginForm() {
       
       // Note: This won't return since we're redirecting
       return;
-        setError('Google login failed. Please try again.');
-      }
     } catch (err) {
       setError('Google login failed. Please try again.');
     }
