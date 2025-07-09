@@ -121,6 +121,7 @@ providers.push(
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db.client),
   providers,
+  debug: true, // Enable debug mode
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -144,8 +145,25 @@ export const authOptions: NextAuthOptions = {
       }
     },
   },
+  logger: {
+    error(code, metadata) {
+      console.error('[NextAuth Error]', { code, metadata });
+    },
+    warn(code) {
+      console.warn('[NextAuth Warning]', code);
+    },
+    debug(code, metadata) {
+      console.log('[NextAuth Debug]', { code, metadata });
+    },
+  },
   callbacks: {
     async signIn({ user, account, profile }) {
+      console.log('[NextAuth] signIn callback:', {
+        provider: account?.provider,
+        email: user?.email,
+        accountId: account?.providerAccountId,
+      });
+      
       // Handle Google OAuth sign-in
       if (account?.provider === 'google') {
         try {
@@ -155,6 +173,7 @@ export const authOptions: NextAuthOptions = {
           });
 
           if (!existingUser) {
+            console.log('[NextAuth] No existing user found for email:', user.email);
             // For OAuth, we need an organization invite or allow self-registration
             // For now, prevent OAuth registration without existing account
             return `/auth/error?error=NoInvite`;
