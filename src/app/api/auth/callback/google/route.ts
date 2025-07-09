@@ -20,11 +20,16 @@ export async function GET(request: NextRequest) {
 
   console.log('[Google OAuth Callback Debug]', JSON.stringify(debugInfo, null, 2));
 
-  // If this route is hit, it means NextAuth isn't intercepting the callback
-  // This helps identify configuration issues
-  return NextResponse.json({
-    error: 'OAuth callback not handled by NextAuth',
-    debug: debugInfo,
-    help: 'This suggests NextAuth is not properly configured or the provider is not set up correctly',
-  }, { status: 500 });
+  // Since NextAuth is not working, redirect to our simple OAuth handler
+  const simpleOAuthUrl = new URL('/api/google-oauth/callback', request.nextUrl.origin);
+  
+  // Copy all search params to the new URL
+  searchParams.forEach((value, key) => {
+    simpleOAuthUrl.searchParams.set(key, value);
+  });
+  
+  console.log('[Google OAuth] Redirecting to simple OAuth handler:', simpleOAuthUrl.toString());
+  
+  // Redirect to simple OAuth callback
+  return NextResponse.redirect(simpleOAuthUrl.toString());
 }

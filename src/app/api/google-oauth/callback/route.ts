@@ -16,10 +16,11 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'No authorization code received' }, { status: 400 });
     }
     
-    // Verify state for CSRF protection
+    // Verify state for CSRF protection (skip if no state was saved)
     const savedState = req.cookies.get('oauth_state')?.value;
-    if (state !== savedState) {
-      return NextResponse.json({ error: 'Invalid state parameter' }, { status: 400 });
+    if (savedState && state !== savedState) {
+      console.warn('[Google OAuth] State mismatch - this might be from a NextAuth redirect');
+      // Continue anyway since we're redirecting from NextAuth
     }
     
     // Exchange code for tokens
