@@ -16,11 +16,23 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'No authorization code received' }, { status: 400 });
     }
     
-    // Verify state for CSRF protection (skip if no state was saved)
-    const savedState = req.cookies.get('oauth_state')?.value;
-    if (savedState && state !== savedState) {
-      console.warn('[Google OAuth] State mismatch - this might be from a NextAuth redirect');
-      // Continue anyway since we're redirecting from NextAuth
+    // Parse state to get CSRF token and redirect URL
+    let redirectTo = '/dashboard';
+    try {
+      if (state) {
+        const stateData = JSON.parse(Buffer.from(state, 'base64').toString());
+        const savedCsrf = req.cookies.get('oauth_state')?.value;
+        
+        // Verify CSRF token
+        if (savedCsrf && stateData.csrf !== savedCsrf) {
+          console.warn('[Google OAuth] CSRF token mismatch');
+        }
+        
+        redirectTo = stateData.redirect || '/dashboard';
+      }
+    } catch (e) {
+      // State might be from old format, continue with default redirect
+      console.log('[Google OAuth] Could not parse state, using default redirect');
     }
     
     // Exchange code for tokens
@@ -69,8 +81,8 @@ export async function GET(req: NextRequest) {
       expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days
     })).toString('base64');
     
-    // Redirect to dashboard with session
-    const response = NextResponse.redirect(`${process.env.NEXTAUTH_URL || 'https://riscura.app'}/dashboard`);
+    // Redirect to the intended destination with session
+    const response = NextResponse.redirect(`${process.env.NEXTAUTH_URL || 'https://riscura.app'}${redirectTo}`);
     
     // Set session cookie
     response.cookies.set('session-token', sessionToken, {

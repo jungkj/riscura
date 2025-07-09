@@ -256,14 +256,20 @@ const authService = {
     const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
     
     try {
-      await fetch('/api/auth/logout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token && { 'Authorization': `Bearer ${token}` }),
-        },
-        body: JSON.stringify({ logoutType }),
-      });
+      if (token && token !== 'oauth-session') {
+        // Regular token logout
+        await fetch('/api/auth/logout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({ logoutType }),
+        });
+      } else {
+        // OAuth session logout
+        await fetch('/api/google-oauth/logout');
+      }
     } finally {
       // Always clear both storage locations, even if API call fails
       localStorage.removeItem('accessToken');
@@ -393,7 +399,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Check both localStorage and sessionStorage for token
       const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
       
+      // Also check for simple OAuth session
       if (!token) {
+        try {
+          const oauthResponse = await fetch('/api/google-oauth/session');
+          const oauthData = await oauthResponse.json();
+          
+          if (oauthData.user) {
+            // Convert simple OAuth user to AuthUser format
+            const authUser: AuthUser = {
+              id: oauthData.user.id,
+              email: oauthData.user.email,
+              name: oauthData.user.name,
+              firstName: oauthData.user.name?.split(' ')[0] || '',
+              lastName: oauthData.user.name?.split(' ')[1] || '',
+              role: 'USER' as any,
+              isActive: true,
+              emailVerified: true,
+              organizationId: 'oauth-org',
+              permissions: [],
+              avatar: oauthData.user.picture,
+              createdAt: new Date().toISOString(),
+            };
+            
+            dispatch({ type: 'AUTH_INITIALIZE', payload: { user: authUser, token: 'oauth-session' } });
+            return;
+          }
+        } catch (error) {
+          console.log('No OAuth session found');
+        }
+        
         dispatch({ type: 'AUTH_INITIALIZE', payload: null });
         return;
       }
