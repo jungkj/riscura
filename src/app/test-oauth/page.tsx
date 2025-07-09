@@ -87,5 +87,3 @@ export default function TestOAuthPage() {
   );
 }
 
-// Force dynamic rendering to prevent build errors
-export const dynamic = 'force-dynamic';

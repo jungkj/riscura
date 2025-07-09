@@ -7,8 +7,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Development
 ```bash
 npm run dev                # Start development server
-npm run dev:setup         # Run development setup
+npm run dev:setup         # Run development setup (installs deps, generates Prisma, seeds DB)
 npm run dev:check         # Check development environment
+./test-website.sh         # Full stack website testing script
 ```
 
 ### Type Checking & Linting
@@ -98,8 +99,22 @@ npm run security:audit      # Full security audit
 
 1. **API Development**: Always use `withApiMiddleware()` wrapper for new API endpoints
    ```typescript
+   // Current pattern (most endpoints use this):
    export const POST = withApiMiddleware(async (req) => {
+     const user = (req as any).user;
      // Your handler code
+     return NextResponse.json({ data });
+   });
+   
+   // Recommended pattern (newer, supports validation & rate limiting):
+   export const POST = withApiMiddleware({
+     requireAuth: true,
+     bodySchema: MyBodySchema,
+     rateLimiters: ['standard'] // or 'auth', 'fileUpload', 'expensive'
+   })(async (context, validatedData) => {
+     const { user, organizationId } = context;
+     // Return data directly - middleware handles response formatting
+     return { data: result };
    });
    ```
 
@@ -118,13 +133,14 @@ npm run security:audit      # Full security audit
 7. **Database Queries**: Always include organizationId in Prisma queries for multi-tenancy
 
 ### Environment Variables
-Key environment variables needed (see env.example):
+Key environment variables needed (see `env.example` for comprehensive list with descriptions):
 - `DATABASE_URL` - PostgreSQL connection string
 - `REDIS_URL` - Redis connection for caching
 - `NEXTAUTH_URL` - Authentication base URL
 - `NEXTAUTH_SECRET` - Auth secret key
 - `OPENAI_API_KEY` - OpenAI API key for AI features
 - `STRIPE_SECRET_KEY` - Stripe API key for billing
+- Additional configs for AWS, email, monitoring, and performance optimization
 
 ### Test Credentials
 - Email: testuser@riscura.com
@@ -177,6 +193,24 @@ Key environment variables needed (see env.example):
 ### Common Patterns
 - **Authentication Check**: Use `getAuthenticatedUser()` from auth middleware
 - **Rate Limiting**: Applied automatically via `withApiMiddleware()`
+  - Available rate limiters: `standard`, `auth`, `fileUpload`, `expensive`, `bulk`, `report`
 - **Validation**: Use Zod schemas for request validation
 - **Response Format**: Use `ApiResponseFormatter` for consistent API responses
 - **Error Responses**: Use `globalErrorHandler` for error formatting
+- **Error Classes**: Use standardized errors from `/src/lib/api/errors.ts`:
+  - `APIError`, `ValidationError`, `AuthenticationError`, `ForbiddenError`
+  - `RateLimitError`, `SubscriptionError`, `PlanLimitError`
+
+## Additional Resources
+
+### Scripts Directory
+- `/scripts/dev-setup.js` - Full development environment setup and validation
+- `/scripts/type-check.js` - Comprehensive TypeScript checking including Next.js build
+
+### CI/CD
+- GitHub Actions workflows in `.github/workflows/` for automated testing and deployment
+- Includes security scanning, performance testing, and comprehensive test suites
+
+### Documentation
+- `/docs/` directory contains technical documentation, API specs, and implementation guides
+- `/src/lib/api/README.md` - Detailed API standardization documentation
