@@ -15,8 +15,19 @@ import { ROLE_PERMISSIONS } from './index';
 // Build providers array conditionally based on available credentials
 const providers: any[] = [];
 
+// Debug logging for Google OAuth configuration
+console.log('[NextAuth] Google OAuth configuration check:', {
+  hasClientId: !!env.GOOGLE_CLIENT_ID,
+  hasClientSecret: !!env.GOOGLE_CLIENT_SECRET,
+  clientIdLength: env.GOOGLE_CLIENT_ID?.length || 0,
+  clientSecretLength: env.GOOGLE_CLIENT_SECRET?.length || 0,
+  // Log first few chars to verify it's being loaded
+  clientIdPreview: env.GOOGLE_CLIENT_ID ? `${env.GOOGLE_CLIENT_ID.substring(0, 10)}...` : 'not set',
+});
+
 // Only add Google provider if credentials are available
 if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
+  console.log('[NextAuth] Adding Google provider');
   providers.push(
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
@@ -30,6 +41,8 @@ if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
       },
     })
   );
+} else {
+  console.log('[NextAuth] Google provider not added - missing credentials');
 }
 
 // Always add credentials provider
