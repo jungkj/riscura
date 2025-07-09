@@ -310,6 +310,10 @@ function createMinimalEnv() {
     INTERNAL_API_KEY: process.env.INTERNAL_API_KEY || 'dev-internal-api-key-12345678901234567890123456789012345678901234567890',
     WEBHOOK_SECRET: process.env.WEBHOOK_SECRET || 'dev-webhook-secret-12345678901234567890123456789012345678901234567890',
     
+    // OAuth providers (pass through if available)
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || undefined,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || undefined,
+    
     // Encryption keys
     DATABASE_ENCRYPTION_KEY: process.env.DATABASE_ENCRYPTION_KEY || 'dev-db-encryption-key-12345678901234567890123456789012345678901234567890',
     FILE_ENCRYPTION_KEY: process.env.FILE_ENCRYPTION_KEY || 'dev-file-encryption-key-12345678901234567890123456789012345678901234567890',
