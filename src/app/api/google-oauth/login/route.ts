@@ -18,13 +18,28 @@ export async function GET(req: NextRequest) {
     googleAuthUrl.searchParams.set('access_type', 'offline');
     googleAuthUrl.searchParams.set('prompt', 'consent');
     
-    // Add state for CSRF protection
-    const state = Math.random().toString(36).substring(7);
+    // Get redirect URL from referrer or default to dashboard
+    const referer = req.headers.get('referer');
+    let intendedRedirect = '/dashboard';
+    
+    // Extract redirect path from login page URL if present
+    if (referer && referer.includes('/auth/login')) {
+      const url = new URL(referer);
+      intendedRedirect = url.searchParams.get('from') || '/dashboard';
+    }
+    
+    // Create state with both CSRF token and redirect
+    const csrfToken = Math.random().toString(36).substring(7);
+    const stateData = {
+      csrf: csrfToken,
+      redirect: intendedRedirect
+    };
+    const state = Buffer.from(JSON.stringify(stateData)).toString('base64');
     googleAuthUrl.searchParams.set('state', state);
     
-    // Set state in cookie for verification
+    // Set CSRF token in cookie for verification
     const response = NextResponse.redirect(googleAuthUrl.toString());
-    response.cookies.set('oauth_state', state, {
+    response.cookies.set('oauth_state', csrfToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',

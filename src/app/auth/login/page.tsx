@@ -63,13 +63,14 @@ function LoginForm() {
 
   const handleGoogleLogin = async () => {
     try {
-      // Use NextAuth's signIn function for Google OAuth
-      const result = await signIn('google', {
-        callbackUrl: redirectTo,
-        redirect: true,
-      });
+      // Store the redirect URL in session storage
+      sessionStorage.setItem('oauth_redirect', redirectTo);
       
-      if (result?.error) {
+      // Use our working simple OAuth implementation
+      window.location.href = '/api/google-oauth/login';
+      
+      // Note: This won't return since we're redirecting
+      return;
         setError('Google login failed. Please try again.');
       }
     } catch (err) {
