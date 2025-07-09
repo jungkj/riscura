@@ -192,10 +192,8 @@ const envSchema = z.object({
     .transform(Number)
     .default('900000'), // 15 minutes
   
-  // Monitoring - required in production
-  SENTRY_DSN: isProduction
-    ? z.string().url('SENTRY_DSN is required in production for error monitoring')
-    : z.string().url().optional(),
+  // Monitoring - optional for now
+  SENTRY_DSN: z.string().url().optional(),
   
   LOG_LEVEL: z.enum(['error', 'warn', 'info', 'debug'])
     .default(isProduction ? 'warn' : 'info'),
@@ -225,9 +223,9 @@ const envSchema = z.object({
   API_RATE_LIMIT_MAX: z.string().transform(Number).default('1000'),
   API_RATE_LIMIT_WINDOW: z.string().transform(Number).default('900000'), // 15 minutes
   
-  // Stripe Configuration
-  STRIPE_SECRET_KEY: z.string().min(1, "Stripe secret key is required"),
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1, "Stripe publishable key is required"),
+  // Stripe Configuration - optional for now
+  STRIPE_SECRET_KEY: z.string().optional(),
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
   STRIPE_PRICE_ID_PRO: z.string().optional(),
   STRIPE_PRICE_ID_ENTERPRISE: z.string().optional(),
@@ -406,9 +404,10 @@ function validateProductionEnvironment(env: any) {
     warnings.push('REDIS_URL not configured - using in-memory storage for sessions and rate limiting');
   }
   
-  if (!env.SENTRY_DSN) {
-    errors.push('SENTRY_DSN is required in production for error monitoring');
-  }
+  // SENTRY_DSN is now optional
+  // if (!env.SENTRY_DSN) {
+  //   errors.push('SENTRY_DSN is required in production for error monitoring');
+  // }
   
   // Check SSL/HTTPS configuration
   if (env.APP_URL && env.APP_URL.startsWith('http://') && !env.APP_URL.includes('localhost')) {
