@@ -3,7 +3,6 @@ import type { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { db } from '@/lib/db';
 import { verifyPassword } from '@/lib/auth/password';
 import { env } from '@/config/env';
 import { UserRole } from '@prisma/client';
@@ -118,8 +117,19 @@ providers.push(
     })
 );
 
+// Safely get database client
+let dbAdapter;
+try {
+  const { db } = require('@/lib/db');
+  dbAdapter = PrismaAdapter(db.client);
+  console.log('[NextAuth] Database adapter initialized successfully');
+} catch (error) {
+  console.error('[NextAuth] Failed to initialize database adapter:', error);
+  console.warn('[NextAuth] Running without database adapter - OAuth may not persist sessions');
+}
+
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(db.client),
+  ...(dbAdapter ? { adapter: dbAdapter } : {}),
   providers,
   debug: true, // Enable debug mode
   secret: env.NEXTAUTH_SECRET || env.JWT_ACCESS_SECRET, // Add explicit secret

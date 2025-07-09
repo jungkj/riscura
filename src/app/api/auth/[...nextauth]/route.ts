@@ -2,9 +2,6 @@ import NextAuth from 'next-auth';
 import { authOptions } from '@/lib/auth/auth-options';
 import { NextRequest, NextResponse } from 'next/server';
 
-// Create handlers with proper error handling
-const handlers = NextAuth(authOptions);
-
 // Wrap the handler to add error logging and ensure JSON responses
 async function authHandler(req: NextRequest, context: any) {
   try {
@@ -17,6 +14,24 @@ async function authHandler(req: NextRequest, context: any) {
     const isApiCall = acceptHeader.includes('application/json') || 
                       req.headers.get('content-type')?.includes('application/json') ||
                       pathname.includes('/api/auth/');
+    
+    // Initialize NextAuth inside try block to catch initialization errors
+    let handlers;
+    try {
+      handlers = NextAuth(authOptions);
+    } catch (initError) {
+      console.error('[NextAuth] Failed to initialize:', initError);
+      return NextResponse.json(
+        {
+          error: 'Authentication system initialization failed',
+          message: initError instanceof Error ? initError.message : 'Unknown initialization error',
+          details: process.env.NODE_ENV === 'development' ? {
+            stack: initError instanceof Error ? initError.stack : undefined,
+          } : undefined,
+        },
+        { status: 500 }
+      );
+    }
     
     // Get the appropriate handler
     let handler;
