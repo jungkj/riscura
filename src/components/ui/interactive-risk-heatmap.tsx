@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Target } from 'lucide-react';
@@ -39,8 +39,31 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
     likelihood: string;
     risks: Risk[];
   } | null>(null);
+  const [risks, setRisks] = useState<Risk[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Sample risk data mapped to heatmap categories
+  // Fetch real risks from API
+  useEffect(() => {
+    const fetchRisks = async () => {
+      try {
+        const response = await fetch('/api/risks');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            setRisks(data.data);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch risks:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRisks();
+  }, []);
+
+  // Keep sample risks for development/demo mode
   const sampleRisks: Risk[] = [
     // Very High Impact, Very likely (2 risks)
     {
@@ -230,8 +253,42 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
     },
   ];
 
-  // Sample data - in a real app, this would come from props or API
-  const heatMapData: HeatMapData[] = [
+  // Use real risks if available, otherwise use empty data
+  const activeRisks = risks.length > 0 ? risks : [];
+
+  // Generate heat map data from actual risks
+  const generateHeatMapData = (): HeatMapData[] => {
+    const data: HeatMapData[] = [];
+    const impactLevels = ['Very High', 'High', 'Medium', 'Low', 'Very Low'];
+    const likelihoodLevels = ['Very unlikely', 'Unlikely', 'Somewhat unlikely', 'Likely', 'Very likely'];
+    
+    impactLevels.forEach((impact, impactIndex) => {
+      likelihoodLevels.forEach((likelihood, likelihoodIndex) => {
+        const impactValue = 5 - impactIndex;
+        const likelihoodValue = likelihoodIndex + 1;
+        
+        const count = activeRisks.filter(risk => 
+          risk.impact === impactValue && risk.likelihood === likelihoodValue
+        ).length;
+        
+        // Determine risk level based on impact and likelihood
+        let level: 'low' | 'medium' | 'high' | 'critical' = 'low';
+        const score = impactValue * likelihoodValue;
+        if (score >= 20) level = 'critical';
+        else if (score >= 12) level = 'high';
+        else if (score >= 6) level = 'medium';
+        
+        data.push({ impact, likelihood, count, level });
+      });
+    });
+    
+    return data;
+  };
+
+  const heatMapData = generateHeatMapData();
+
+  // Keep sample data for demo/development
+  const sampleHeatMapData: HeatMapData[] = [
     // Very High Impact
     { impact: 'Very High', likelihood: 'Very unlikely', count: 1, level: 'low' },
     { impact: 'Very High', likelihood: 'Unlikely', count: 1, level: 'medium' },
@@ -316,7 +373,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
     const impactValue = getImpactValue(impact);
     const likelihoodValue = getLikelihoodValue(likelihood);
     
-    return sampleRisks.filter(risk => 
+    return activeRisks.filter(risk => 
       risk.impact === impactValue && risk.likelihood === likelihoodValue
     );
   };
@@ -342,7 +399,9 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
               <Target className="w-5 h-5 mr-2 text-blue-600" />
               <div>
                 <h2 className="text-lg font-semibold text-gray-900">Risk Heat Map</h2>
-                <p className="text-sm text-gray-500 font-normal">Interactive risk assessment matrix</p>
+                <p className="text-sm text-gray-500 font-normal">
+                  {loading ? 'Loading risks...' : totalRisks === 0 ? 'No risks yet - add your first risk to see it here' : 'Interactive risk assessment matrix'}
+                </p>
               </div>
             </div>
             <Badge variant="secondary" className="bg-blue-50 text-blue-700 text-xs">
