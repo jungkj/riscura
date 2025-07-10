@@ -9,7 +9,8 @@ export async function GET(req: NextRequest) {
     
     // Check for OAuth errors
     if (error) {
-      return NextResponse.redirect(`${process.env.NEXTAUTH_URL || 'https://riscura.app'}/auth/error?error=${error}`);
+      const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
+      return NextResponse.redirect(`${baseUrl}/auth/error?error=${error}`);
     }
     
     if (!code) {
@@ -100,13 +101,25 @@ export async function GET(req: NextRequest) {
     const response = NextResponse.redirect(redirectUrl);
     
     // Set session cookie with appropriate expiration
-    response.cookies.set('session-token', sessionToken, {
+    const cookieOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: 'lax' as const,
       maxAge: rememberMe ? 30 * 24 * 60 * 60 : undefined, // 30 days if remember me, session cookie otherwise
       path: '/', // Ensure cookie is available site-wide
+    };
+    
+    // In production, we might need to set the domain explicitly
+    if (process.env.NODE_ENV === 'production' && process.env.COOKIE_DOMAIN) {
+      (cookieOptions as any).domain = process.env.COOKIE_DOMAIN;
+    }
+    
+    console.log('[Google OAuth] Setting cookie with options:', {
+      ...cookieOptions,
+      sessionTokenLength: sessionToken.length,
     });
+    
+    response.cookies.set('session-token', sessionToken, cookieOptions);
     
     // Clear OAuth state cookie
     response.cookies.delete('oauth_state');
