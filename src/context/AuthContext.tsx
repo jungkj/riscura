@@ -399,35 +399,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Check both localStorage and sessionStorage for token
       const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
       
-      // Also check for OAuth sessions (NextAuth or simple OAuth)
+      // Also check for simple OAuth session
       if (!token) {
         try {
-          // First try NextAuth session endpoint
-          const sessionResponse = await fetch('/api/auth/session');
-          const sessionData = await sessionResponse.json();
-          
-          if (sessionData && sessionData.user) {
-            // Convert OAuth user to AuthUser format
-            const authUser: AuthUser = {
-              id: sessionData.user.id || sessionData.user.email,
-              email: sessionData.user.email,
-              name: sessionData.user.name || sessionData.user.email,
-              firstName: sessionData.user.name?.split(' ')[0] || '',
-              lastName: sessionData.user.name?.split(' ')[1] || '',
-              role: 'USER' as any,
-              isActive: true,
-              emailVerified: true,
-              organizationId: 'oauth-org',
-              permissions: [],
-              avatar: sessionData.user.image || sessionData.user.picture,
-              createdAt: new Date().toISOString(),
-            };
-            
-            dispatch({ type: 'AUTH_INITIALIZE', payload: { user: authUser, token: 'oauth-session' } });
-            return;
-          }
-          
-          // If no NextAuth session, try simple OAuth session
+          // Only check simple OAuth session (bypassing problematic NextAuth)
           const oauthResponse = await fetch('/api/google-oauth/session');
           const oauthData = await oauthResponse.json();
           
