@@ -89,8 +89,9 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/favicon.ico') ||
     pathname === '/api/health' ||
     pathname.startsWith('/api/test') ||
+    pathname.startsWith('/api/google-oauth/') ||
     pathname.startsWith('/sw.js') ||
-    pathname.startsWith('/manifest.json')
+    pathname === '/manifest.json'
   ) {
     return NextResponse.next();
   }
@@ -153,6 +154,12 @@ export async function middleware(request: NextRequest) {
       const sessionToken = request.cookies.get('next-auth.session-token')?.value || 
                           request.cookies.get('__Secure-next-auth.session-token')?.value ||
                           request.cookies.get('session-token')?.value; // Also check simple OAuth token
+      
+      // Log for debugging
+      console.log(`[Middleware] Auth check for ${pathname}:`, {
+        hasSessionToken: !!sessionToken,
+        cookies: request.cookies.getAll().map(c => c.name),
+      });
       
       if (!sessionToken) {
         const url = request.nextUrl.clone();
