@@ -167,6 +167,32 @@ export async function middleware(request: NextRequest) {
         url.searchParams.set('redirect', pathname);
         return NextResponse.redirect(url);
       }
+      
+      // Validate simple OAuth session token
+      if (sessionToken && !sessionToken.includes('.')) {
+        try {
+          const sessionData = JSON.parse(Buffer.from(sessionToken, 'base64').toString());
+          const isExpired = new Date(sessionData.expires) < new Date();
+          
+          console.log(`[Middleware] Session validation:`, {
+            userEmail: sessionData.user?.email,
+            expires: sessionData.expires,
+            isExpired,
+          });
+          
+          if (isExpired) {
+            const url = request.nextUrl.clone();
+            url.pathname = '/auth/login';
+            url.searchParams.set('redirect', pathname);
+            url.searchParams.set('reason', 'session_expired');
+            response = NextResponse.redirect(url);
+            response.cookies.delete('session-token');
+            return response;
+          }
+        } catch (error) {
+          console.error('[Middleware] Failed to validate session:', error);
+        }
+      }
     }
     
     // Apply security headers
