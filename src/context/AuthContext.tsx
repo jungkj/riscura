@@ -403,8 +403,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (!token) {
         try {
           // Only check simple OAuth session (bypassing problematic NextAuth)
+          console.log('[AuthContext] Checking OAuth session...');
           const oauthResponse = await fetch('/api/google-oauth/session');
           const oauthData = await oauthResponse.json();
+          console.log('[AuthContext] OAuth session response:', oauthData);
           
           if (oauthData && oauthData.user) {
             // Convert simple OAuth user to AuthUser format
@@ -414,13 +416,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               name: oauthData.user.name,
               firstName: oauthData.user.name?.split(' ')[0] || '',
               lastName: oauthData.user.name?.split(' ')[1] || '',
-              role: 'USER' as any,
+              role: 'user' as any, // Changed from 'USER' to 'user' to match the role type
               isActive: true,
               emailVerified: true,
               organizationId: 'oauth-org',
               permissions: [],
               avatar: oauthData.user.picture,
               createdAt: new Date().toISOString(),
+              lastLogin: new Date().toISOString(), // Add required lastLogin field
             };
             
             dispatch({ type: 'AUTH_INITIALIZE', payload: { user: authUser, token: 'oauth-session' } });
