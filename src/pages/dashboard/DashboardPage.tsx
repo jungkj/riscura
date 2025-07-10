@@ -85,20 +85,58 @@ interface Insight {
 export default function DashboardPage() {
   const router = useRouter();
   const [stats, setStats] = useState<DashboardStats>({
-    totalRisks: 23,
-    highRisks: 4,
-    complianceScore: 94,
-    activeControls: 18,
-    pendingActions: 7
+    totalRisks: 0,
+    highRisks: 0,
+    complianceScore: 0,
+    activeControls: 0,
+    pendingActions: 0
   });
   const [loading, setLoading] = useState(true);
   const [showTour, setShowTour] = useState(false);
   const [selectedStatsModal, setSelectedStatsModal] = useState<any>(null);
 
-  // Simulate loading for demonstration
+  // Fetch real dashboard data
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1500);
-    return () => clearTimeout(timer);
+    const fetchDashboardData = async () => {
+      try {
+        const [dashboardRes, risksRes] = await Promise.all([
+          fetch('/api/dashboard'),
+          fetch('/api/risks')
+        ]);
+        
+        if (dashboardRes.ok) {
+          const dashboardData = await dashboardRes.json();
+          if (dashboardData.success && dashboardData.data) {
+            const metrics = dashboardData.data.metrics;
+            
+            // Get high risk count from risks API
+            let highRiskCount = 0;
+            if (risksRes.ok) {
+              const risksData = await risksRes.json();
+              if (risksData.success && risksData.data) {
+                highRiskCount = risksData.data.filter((risk: any) => 
+                  risk.likelihood >= 4 && risk.impact >= 4
+                ).length;
+              }
+            }
+            
+            setStats({
+              totalRisks: metrics.totalRisks || 0,
+              highRisks: highRiskCount,
+              complianceScore: metrics.complianceScore || 0,
+              activeControls: metrics.totalControls || 0,
+              pendingActions: metrics.openTasks || 0
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
   }, []);
 
   // Check if user is new and should see the tour
@@ -242,7 +280,29 @@ export default function DashboardPage() {
     }
   ];
 
-  const insights: Insight[] = [
+  const [insights, setInsights] = useState<Insight[]>([]);
+
+  // Fetch insights
+  useEffect(() => {
+    const fetchInsights = async () => {
+      try {
+        const response = await fetch('/api/dashboard/insights');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            setInsights(data.data);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch insights:', error);
+      }
+    };
+
+    fetchInsights();
+  }, []);
+
+  // Sample insights for development (remove in production)
+  const sampleInsights: Insight[] = [
     {
       id: '1',
       title: 'Vendor Risk Assessment Due',
@@ -690,43 +750,19 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 border border-gray-100 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm text-[#191919]">Sarah Chen</p>
-                    <p className="text-xs text-gray-500">Risk Manager • Online</p>
-                  </div>
-                </div>
-                <Badge className="bg-green-50 text-green-700 text-xs">3 Active</Badge>
-              </div>
-              <div className="flex items-center justify-between p-3 border border-gray-100 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
-                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm text-[#191919]">John Smith</p>
-                    <p className="text-xs text-gray-500">Compliance Officer • Away</p>
-                  </div>
-                </div>
-                <Badge className="bg-orange-50 text-orange-700 text-xs">2 Pending</Badge>
-              </div>
-              <div className="flex items-center justify-between p-3 border border-gray-100 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                    <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm text-[#191919]">Lisa Wang</p>
-                    <p className="text-xs text-gray-500">IT Security • Online</p>
-                  </div>
-                </div>
-                <Badge className="bg-blue-50 text-blue-700 text-xs">1 Review</Badge>
-              </div>
+            <div className="text-center py-8">
+              <Users className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500 text-sm">No team members yet</p>
+              <p className="text-gray-400 text-xs mt-1">Invite your team to collaborate</p>
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-4"
+                onClick={() => router.push('/dashboard/team/invite')}
+              >
+                <UserPlus className="h-4 w-4 mr-2" />
+                Invite Team
+              </Button>
             </div>
           </CardContent>
         </Card>
