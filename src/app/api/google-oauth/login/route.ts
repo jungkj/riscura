@@ -18,9 +18,10 @@ export async function GET(req: NextRequest) {
     googleAuthUrl.searchParams.set('access_type', 'offline');
     googleAuthUrl.searchParams.set('prompt', 'consent');
     
-    // Get redirect URL from referrer or default to dashboard
+    // Get redirect URL and remember me preference from referrer or query params
     const referer = req.headers.get('referer');
     let intendedRedirect = '/dashboard';
+    let rememberMe = false;
     
     // Extract redirect path from login page URL if present
     if (referer && referer.includes('/auth/login')) {
@@ -28,11 +29,18 @@ export async function GET(req: NextRequest) {
       intendedRedirect = url.searchParams.get('from') || '/dashboard';
     }
     
-    // Create state with both CSRF token and redirect
+    // Check for remember me preference in query params
+    const { searchParams } = req.nextUrl;
+    if (searchParams.has('remember')) {
+      rememberMe = searchParams.get('remember') === 'true';
+    }
+    
+    // Create state with CSRF token, redirect, and remember preference
     const csrfToken = Math.random().toString(36).substring(7);
     const stateData = {
       csrf: csrfToken,
-      redirect: intendedRedirect
+      redirect: intendedRedirect,
+      remember: rememberMe
     };
     const state = Buffer.from(JSON.stringify(stateData)).toString('base64');
     googleAuthUrl.searchParams.set('state', state);

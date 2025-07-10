@@ -66,8 +66,8 @@ function LoginForm() {
       // Store the redirect URL in session storage
       sessionStorage.setItem('oauth_redirect', redirectTo);
       
-      // Use our working simple OAuth implementation
-      window.location.href = '/api/google-oauth/login';
+      // Use our working simple OAuth implementation with remember me preference
+      window.location.href = `/api/google-oauth/login?remember=${formData.rememberMe}`;
       
       // Note: This won't return since we're redirecting
       return;

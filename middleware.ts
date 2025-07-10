@@ -149,9 +149,10 @@ export async function middleware(request: NextRequest) {
     
     // Authentication check for protected routes
     if (pathname.startsWith('/dashboard') || pathname.startsWith('/admin')) {
-      // Check for NextAuth session token
+      // Check for NextAuth session token or simple OAuth session token
       const sessionToken = request.cookies.get('next-auth.session-token')?.value || 
-                          request.cookies.get('__Secure-next-auth.session-token')?.value;
+                          request.cookies.get('__Secure-next-auth.session-token')?.value ||
+                          request.cookies.get('session-token')?.value; // Also check simple OAuth token
       
       if (!sessionToken) {
         const url = request.nextUrl.clone();
