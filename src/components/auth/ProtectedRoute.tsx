@@ -20,15 +20,24 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requireAll = false,
   fallbackPath = '/auth/login'
 }) => {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading, isInitialized } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
   // Handle authentication and authorization logic in useEffect
   useEffect(() => {
-    if (isLoading) return; // Don't do anything while loading
+    // Wait for auth to initialize before making any decisions
+    if (!isInitialized || isLoading) {
+      console.log('[ProtectedRoute] Waiting for auth:', { isInitialized, isLoading });
+      return;
+    }
 
     if (!isAuthenticated || !user) {
+      console.log('[ProtectedRoute] Not authenticated, redirecting:', { 
+        isAuthenticated, 
+        hasUser: !!user,
+        pathname 
+      });
       const redirectUrl = `${fallbackPath}?from=${encodeURIComponent(pathname || '')}`;
       router.push(redirectUrl);
       return;
@@ -51,10 +60,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         return;
       }
     }
-  }, [isAuthenticated, user, isLoading, router, pathname, fallbackPath, requiredRoles, requiredPermissions, requireAll]);
+  }, [isAuthenticated, user, isLoading, isInitialized, router, pathname, fallbackPath, requiredRoles, requiredPermissions, requireAll]);
 
   // Show loading spinner while checking authentication
-  if (isLoading) {
+  if (!isInitialized || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
