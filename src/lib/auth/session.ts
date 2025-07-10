@@ -375,6 +375,20 @@ export async function isSessionValid(sessionId: string): Promise<boolean> {
 }
 
 /**
+ * Delete session by ID
+ */
+export async function deleteSession(sessionId: string): Promise<void> {
+  try {
+    await db.client.session.delete({
+      where: { id: sessionId },
+    });
+  } catch (error) {
+    console.error('Session deletion error:', error);
+    throw new Error('Failed to delete session');
+  }
+}
+
+/**
  * Revoke session by ID (for admin use)
  */
 export async function revokeSession(sessionId: string): Promise<boolean> {

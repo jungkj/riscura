@@ -10,6 +10,7 @@ import jwt from 'jsonwebtoken';
 import { generateAccessToken } from './jwt';
 import { createSession, validateSession } from './session';
 import { ROLE_PERMISSIONS } from './index';
+import { db } from '@/lib/db';
 
 // Build providers array conditionally based on available credentials
 const providers: any[] = [];
@@ -117,22 +118,17 @@ providers.push(
     })
 );
 
-// Safely get database client
+// Initialize database adapter
 let dbAdapter;
 try {
-  // Use dynamic import to prevent module-level failures
-  const getDbAdapter = async () => {
-    try {
-      const { db } = await import('@/lib/db');
-      return PrismaAdapter(db.client);
-    } catch (error) {
-      console.error('[NextAuth] Failed to import db module:', error);
-      return null;
-    }
-  };
-  
-  // Note: This is a promise, we'll handle it in the authOptions
-  dbAdapter = getDbAdapter();
+  // During build time, skip database initialization
+  if (process.env.BUILDING === 'true' || process.env.NEXT_PHASE === 'phase-production-build') {
+    console.log('[NextAuth] Skipping database adapter during build');
+    dbAdapter = null;
+  } else if (typeof window === 'undefined') {
+    // Only initialize on server side
+    dbAdapter = PrismaAdapter(db.client);
+  }
 } catch (error) {
   console.error('[NextAuth] Failed to initialize database adapter:', error);
   console.warn('[NextAuth] Running without database adapter - OAuth may not persist sessions');

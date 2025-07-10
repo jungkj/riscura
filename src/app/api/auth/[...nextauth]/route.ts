@@ -15,12 +15,40 @@ async function authHandler(req: NextRequest, context: any) {
                       req.headers.get('content-type')?.includes('application/json') ||
                       pathname.includes('/api/auth/');
     
+    // Special handling for session endpoint when NextAuth is not properly configured
+    if (pathname.endsWith('/api/auth/session') && req.method === 'GET') {
+      // Check if we have a simple OAuth session first
+      const sessionToken = req.cookies.get('session-token')?.value;
+      if (sessionToken) {
+        try {
+          const sessionData = JSON.parse(Buffer.from(sessionToken, 'base64').toString());
+          if (new Date(sessionData.expires) > new Date()) {
+            return NextResponse.json({
+              user: sessionData.user,
+              expires: sessionData.expires
+            });
+          }
+        } catch (e) {
+          console.log('[NextAuth] Invalid simple OAuth session token');
+        }
+      }
+      
+      // Return null session if no valid session found
+      return NextResponse.json(null);
+    }
+    
     // Initialize NextAuth inside try block to catch initialization errors
     let handlers;
     try {
       handlers = NextAuth(authOptions);
     } catch (initError) {
       console.error('[NextAuth] Failed to initialize:', initError);
+      
+      // For session endpoint, return null instead of error
+      if (pathname.endsWith('/api/auth/session')) {
+        return NextResponse.json(null);
+      }
+      
       return NextResponse.json(
         {
           error: 'Authentication system initialization failed',

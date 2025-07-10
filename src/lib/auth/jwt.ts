@@ -87,7 +87,7 @@ export function generateAccessTokenJWT(payload: Omit<JWTPayload, 'tokenType'>): 
     env.JWT_SECRET,
     {
       expiresIn: ACCESS_TOKEN_EXPIRES_IN,
-      issuer: env.APP_NAME,
+      issuer: 'Riscura',
       audience: env.APP_URL,
     }
   );
@@ -105,7 +105,7 @@ export function generateRefreshToken(payload: Omit<JWTPayload, 'tokenType'>): st
     env.JWT_SECRET,
     {
       expiresIn: REFRESH_TOKEN_EXPIRES_IN,
-      issuer: env.APP_NAME,
+      issuer: 'Riscura',
       audience: env.APP_URL,
     }
   );
@@ -132,7 +132,7 @@ export function generateTokenPair(payload: Omit<JWTPayload, 'tokenType'>): Token
 export function verifyToken(token: string): JWTPayload {
   try {
     const decoded = jwt.verify(token, env.JWT_SECRET, {
-      issuer: env.APP_NAME,
+      issuer: 'Riscura',
       audience: env.APP_URL,
     });
 
