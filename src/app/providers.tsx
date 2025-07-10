@@ -7,6 +7,7 @@ import { AIProvider } from '@/context/AIContext';
 import { Toaster } from '@/components/ui/sonner';
 import ClientProvider from '@/components/providers/ClientProvider';
 import { PerformanceProvider } from '@/components/providers/PerformanceProvider';
+import { AuthDebugger } from '@/components/debug/AuthDebugger';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -23,6 +24,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
               <AIProvider>
                 {children}
                 <Toaster />
+                <AuthDebugger />
               </AIProvider>
             </AuthProvider>
           </TooltipProvider>
