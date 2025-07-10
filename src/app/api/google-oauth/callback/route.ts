@@ -16,8 +16,9 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'No authorization code received' }, { status: 400 });
     }
     
-    // Parse state to get CSRF token and redirect URL
+    // Parse state to get CSRF token, redirect URL, and remember preference
     let redirectTo = '/dashboard';
+    let rememberMe = false;
     try {
       if (state) {
         const stateData = JSON.parse(Buffer.from(state, 'base64').toString());
@@ -29,6 +30,7 @@ export async function GET(req: NextRequest) {
         }
         
         redirectTo = stateData.redirect || '/dashboard';
+        rememberMe = stateData.remember || false;
       }
     } catch (e) {
       // State might be from old format, continue with default redirect
@@ -70,7 +72,8 @@ export async function GET(req: NextRequest) {
     
     const user = await userResponse.json();
     
-    // Create a simple session token
+    // Create a simple session token with appropriate expiration
+    const sessionDuration = rememberMe ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000; // 30 days if remember me, 1 day otherwise
     const sessionToken = Buffer.from(JSON.stringify({
       user: {
         id: user.id,
@@ -78,18 +81,19 @@ export async function GET(req: NextRequest) {
         name: user.name,
         picture: user.picture,
       },
-      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days
+      expires: new Date(Date.now() + sessionDuration).toISOString(),
+      rememberMe: rememberMe,
     })).toString('base64');
     
     // Redirect to the intended destination with session
     const response = NextResponse.redirect(`${process.env.NEXTAUTH_URL || 'https://riscura.app'}${redirectTo}`);
     
-    // Set session cookie
+    // Set session cookie with appropriate expiration
     response.cookies.set('session-token', sessionToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 30 * 24 * 60 * 60, // 30 days
+      maxAge: rememberMe ? 30 * 24 * 60 * 60 : undefined, // 30 days if remember me, session cookie otherwise
     });
     
     // Clear OAuth state cookie
