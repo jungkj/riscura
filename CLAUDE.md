@@ -9,6 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev                # Start development server
 npm run dev:setup         # Run development setup (installs deps, generates Prisma, seeds DB)
 npm run dev:check         # Check development environment
+npm run dev:test          # Push DB schema and start dev server
 ./test-website.sh         # Full stack website testing script
 ```
 
@@ -19,13 +20,17 @@ npm run type-check:full   # Full type check (use before commits)
 npm run type-check:watch  # Continuous type checking
 npm run lint              # Run ESLint
 npm run lint:fix          # Auto-fix ESLint issues
+npm run precommit         # Run both type-check:full and lint (use before commits)
 ```
 
 ### Building & Production
 ```bash
 npm run build             # Build for production
+npm run build:prod        # Standard production build
+npm run build:vercel      # Build with increased memory for Vercel
 npm run start             # Start production server
 npm run production:ready  # Full production validation
+npm run production:deploy # Full production deployment with monitoring
 ```
 
 ### Database
@@ -33,8 +38,10 @@ npm run production:ready  # Full production validation
 npm run db:generate       # Generate Prisma client
 npm run db:push          # Push schema changes
 npm run db:migrate       # Run migrations
+npm run db:migrate:deploy # Deploy database migrations
 npm run db:studio        # Open Prisma Studio GUI
 npm run db:seed          # Seed database
+npm run db:reset         # Reset database (CAUTION: destroys data!)
 ```
 
 ### Testing
@@ -50,29 +57,60 @@ npm run test:components  # Component tests only
 npm run test:ai-services # AI service tests only
 npm run test:all         # All test suites
 npm run test:full-suite  # Complete test suite including performance
+npm run test:auth-flow   # Test authentication flow manually
+npm run test:full-stack  # Full stack testing (tsx src/scripts/test-full-stack.ts)
 
 # Run a single test file
 npm test -- path/to/test.spec.ts
 jest path/to/test.spec.ts --watch
+
+# Test shell scripts
+./test-website.sh            # Full stack website testing
+./test-oauth-deployment.sh   # OAuth deployment verification
+./test-auth-endpoints.sh     # Authentication endpoint testing
 ```
 
 ### Performance & Security
 ```bash
 npm run performance:analyze  # Bundle analysis
 npm run bundle:analyze      # Webpack bundle analyzer
+npm run bundle:optimize     # Optimize and analyze bundle
 npm run security:check      # Security configuration check
 npm run security:audit      # Full security audit
+npm run optimize:images     # Optimize image assets
+```
+
+### Development Utilities
+```bash
+npm run verify           # Full verification: generate, type-check, lint, build
+npm run verify:quick     # Quick verification: generate and lint only
+npm run clean            # Clean Next.js build cache
+npm run clean:all        # Full clean including node_modules
+npm run cache:clear      # Clear application cache
+npm run config:verify    # Verify environment configuration
+npm run generate-secrets # Generate secure secrets
+npm run debug:login      # Debug login issues
+```
+
+### Monitoring & Documentation
+```bash
+npm run monitoring:init     # Initialize monitoring systems
+npm run monitoring:verify   # Verify monitoring configuration
+npm run docs:generate       # Generate API documentation
+npm run docs:serve         # Serve docs on port 8080
+npm run support:init       # Initialize support system
+npm run alerts:test        # Test alert system
 ```
 
 ## Architecture Overview
 
 ### Project Structure
-- **Framework**: Next.js 14 App Router with React 18
+- **Framework**: Next.js 15 App Router with React 18
 - **Language**: TypeScript (strict mode currently disabled)
 - **Database**: PostgreSQL via Prisma ORM (Supabase hosted)
 - **Authentication**: NextAuth.js with SAML/OAuth support
 - **Styling**: Tailwind CSS with custom enterprise design system
-- **State Management**: React Context API pattern
+- **State Management**: React Context API and Zustand
 - **Caching**: Redis with multi-layer caching strategy
 - **AI Integration**: OpenAI GPT-4 and Anthropic Claude
 
@@ -94,6 +132,8 @@ npm run security:audit      # Full security audit
   - `/ai/` - AI service integrations
 - `/src/hooks/` - Custom React hooks
 - `/src/types/` - TypeScript type definitions
+- `/scripts/` - Development and deployment scripts
+- `/src/scripts/` - Test and utility scripts
 
 ### Critical Development Guidelines
 
@@ -122,7 +162,7 @@ npm run security:audit      # Full security audit
    - `src/app/api/stripe/webhook/route.ts`
    - `src/components/ai/VoiceInterface.tsx`
 
-3. **Before Committing**: Always run `npm run type-check:full` to catch errors
+3. **Before Committing**: Always run `npm run precommit` or `npm run type-check:full` to catch errors
 
 4. **Multi-Tenant Architecture**: All data operations must respect organization boundaries
 
@@ -159,6 +199,7 @@ Key environment variables needed (see `env.example` for comprehensive list with 
 - Leverage Redis caching for expensive operations
 - Follow mobile-first responsive design
 - Bundle optimization with multiple cache groups in webpack
+- Build commands use increased memory allocation for large codebases
 
 ### AI Integration Pattern
 - AI services are modular and located in `/src/services/ai/`
@@ -206,6 +247,8 @@ Key environment variables needed (see `env.example` for comprehensive list with 
 ### Scripts Directory
 - `/scripts/dev-setup.js` - Full development environment setup and validation
 - `/scripts/type-check.js` - Comprehensive TypeScript checking including Next.js build
+- `/src/scripts/test-auth-flow.ts` - Comprehensive authentication testing
+- `/src/scripts/test-full-stack.ts` - Full stack test runner
 
 ### CI/CD
 - GitHub Actions workflows in `.github/workflows/` for automated testing and deployment
@@ -214,3 +257,9 @@ Key environment variables needed (see `env.example` for comprehensive list with 
 ### Documentation
 - `/docs/` directory contains technical documentation, API specs, and implementation guides
 - `/src/lib/api/README.md` - Detailed API standardization documentation
+
+### Quick Start for New Developers
+1. Run `npm run dev:setup` to set up the development environment
+2. Run `npm run test:auth-flow` to verify authentication is working
+3. Run `./test-website.sh` for quick full-stack validation
+4. Use `npm run precommit` before committing changes
