@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
       code,
       client_id: process.env.GOOGLE_CLIENT_ID!,
       client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-      redirect_uri: `${process.env.NEXTAUTH_URL || 'https://riscura.app'}/api/google-oauth/callback`,
+      redirect_uri: `${process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app'}/api/google-oauth/callback`,
       grant_type: 'authorization_code',
     });
     
@@ -86,7 +86,18 @@ export async function GET(req: NextRequest) {
     })).toString('base64');
     
     // Redirect to the intended destination with session
-    const response = NextResponse.redirect(`${process.env.NEXTAUTH_URL || 'https://riscura.app'}${redirectTo}`);
+    const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
+    const redirectUrl = `${baseUrl}${redirectTo}`;
+    
+    console.log('[Google OAuth] Setting session cookie and redirecting:', {
+      baseUrl,
+      redirectTo,
+      redirectUrl,
+      rememberMe,
+      userEmail: user.email,
+    });
+    
+    const response = NextResponse.redirect(redirectUrl);
     
     // Set session cookie with appropriate expiration
     response.cookies.set('session-token', sessionToken, {
@@ -94,6 +105,7 @@ export async function GET(req: NextRequest) {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: rememberMe ? 30 * 24 * 60 * 60 : undefined, // 30 days if remember me, session cookie otherwise
+      path: '/', // Ensure cookie is available site-wide
     });
     
     // Clear OAuth state cookie

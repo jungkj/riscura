@@ -3,7 +3,14 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(req: NextRequest) {
   try {
     const clientId = process.env.GOOGLE_CLIENT_ID;
-    const redirectUri = `${process.env.NEXTAUTH_URL || 'https://riscura.app'}/api/google-oauth/callback`;
+    const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
+    const redirectUri = `${baseUrl}/api/google-oauth/callback`;
+    
+    console.log('[Google OAuth] Login initialization:', {
+      baseUrl,
+      redirectUri,
+      hasClientId: !!clientId,
+    });
     
     if (!clientId) {
       return NextResponse.json({ error: 'Google Client ID not configured' }, { status: 500 });
