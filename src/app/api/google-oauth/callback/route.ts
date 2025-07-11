@@ -77,13 +77,29 @@ export async function GET(req: NextRequest) {
     const googleUser = await userResponse.json();
     
     // Import database client
-    const { db } = await import('@/lib/db');
+    let db;
+    try {
+      const dbModule = await import('@/lib/db');
+      db = dbModule.db;
+    } catch (dbError) {
+      console.error('[Google OAuth] Database import error:', dbError);
+      const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
+      return NextResponse.redirect(`${baseUrl}/login?error=Database%20configuration%20error`);
+    }
     
     // Find or create user in database
-    let dbUser = await db.client.user.findUnique({
-      where: { email: googleUser.email },
-      include: { organization: true }
-    });
+    let dbUser;
+    try {
+      dbUser = await db.client.user.findUnique({
+        where: { email: googleUser.email },
+        include: { organization: true }
+      });
+    } catch (dbError) {
+      console.error('[Google OAuth] Database query error:', dbError);
+      const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
+      // Provide a more user-friendly error message
+      return NextResponse.redirect(`${baseUrl}/login?error=Unable%20to%20connect%20to%20database.%20Please%20try%20again%20later.`);
+    }
     
     if (!dbUser) {
       console.log('[Google OAuth] Creating new user:', googleUser.email);
