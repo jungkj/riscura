@@ -417,15 +417,15 @@ export default function HomePage() {
               {/* Social Proof Stats */}
               <div className="grid grid-cols-3 gap-6 md:gap-8 max-w-md mx-auto lg:mx-0">
                 <div className="text-center lg:text-left">
-                  <p className="text-3xl font-bold text-[#191919] font-inter">99.9%</p>
-                  <p className="text-sm text-[#A8A8A8] font-inter">Uptime SLA</p>
+                  <p className="text-3xl font-bold text-[#191919] font-inter">Enterprise</p>
+                  <p className="text-sm text-[#A8A8A8] font-inter">Grade Security</p>
                 </div>
                 <div className="text-center lg:text-left">
-                  <p className="text-3xl font-bold text-[#191919] font-inter">5min</p>
-                  <p className="text-sm text-[#A8A8A8] font-inter">Setup time</p>
+                  <p className="text-3xl font-bold text-[#191919] font-inter">Quick</p>
+                  <p className="text-sm text-[#A8A8A8] font-inter">Setup</p>
                 </div>
                 <div className="text-center lg:text-left">
-                  <p className="text-3xl font-bold text-[#191919] font-inter">24/7</p>
+                  <p className="text-3xl font-bold text-[#191919] font-inter">Expert</p>
                   <p className="text-sm text-[#A8A8A8] font-inter">Support</p>
                 </div>
               </div>
@@ -605,7 +605,7 @@ export default function HomePage() {
                   <TrendingUp className="w-6 h-6 text-[#199BEC]" />
                 </div>
                 <p className="text-[#191919] font-semibold font-inter">Proven ROI</p>
-                <p className="text-[#A8A8A8] text-sm font-inter">90% time savings</p>
+                <p className="text-[#A8A8A8] text-sm font-inter">Significant efficiency gains</p>
               </div>
             </div>
           </motion.div>

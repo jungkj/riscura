@@ -94,14 +94,25 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [showTour, setShowTour] = useState(false);
   const [selectedStatsModal, setSelectedStatsModal] = useState<any>(null);
+  
+  // Additional state for dynamic data
+  const [criticalRisks, setCriticalRisks] = useState(0);
+  const [mediumRisks, setMediumRisks] = useState(0);
+  const [lowRisks, setLowRisks] = useState(0);
+  const [recentActivity, setRecentActivity] = useState<any[]>([]);
+  const [complianceData, setComplianceData] = useState<any[]>([]);
+  const [controlsData, setControlsData] = useState<any[]>([]);
+  const [pendingActionsData, setPendingActionsData] = useState<any[]>([]);
 
   // Fetch real dashboard data
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const [dashboardRes, risksRes] = await Promise.all([
+        const [dashboardRes, risksRes, complianceRes, controlsRes] = await Promise.all([
           fetch('/api/dashboard'),
-          fetch('/api/risks')
+          fetch('/api/risks'),
+          fetch('/api/compliance/assessments'),
+          fetch('/api/controls')
         ]);
         
         if (dashboardRes.ok) {
@@ -109,16 +120,34 @@ export default function DashboardPage() {
           if (dashboardData.success && dashboardData.data) {
             const metrics = dashboardData.data.metrics;
             
-            // Get high risk count from risks API
+            // Get risk details from risks API
             let highRiskCount = 0;
+            let criticalCount = 0;
+            let mediumCount = 0;
+            let lowCount = 0;
+            
             if (risksRes.ok) {
               const risksData = await risksRes.json();
               if (risksData.success && risksData.data) {
-                highRiskCount = risksData.data.filter((risk: any) => 
-                  risk.likelihood >= 4 && risk.impact >= 4
-                ).length;
+                risksData.data.forEach((risk: any) => {
+                  const riskScore = (risk.likelihood || 0) * (risk.impact || 0);
+                  if (riskScore >= 20) {
+                    criticalCount++;
+                    highRiskCount++;
+                  } else if (riskScore >= 12) {
+                    highRiskCount++;
+                  } else if (riskScore >= 6) {
+                    mediumCount++;
+                  } else {
+                    lowCount++;
+                  }
+                });
               }
             }
+            
+            setCriticalRisks(criticalCount);
+            setMediumRisks(mediumCount);
+            setLowRisks(lowCount);
             
             setStats({
               totalRisks: metrics.totalRisks || 0,
@@ -127,6 +156,42 @@ export default function DashboardPage() {
               activeControls: metrics.totalControls || 0,
               pendingActions: metrics.openTasks || 0
             });
+            
+            // Set recent activity
+            if (dashboardData.data.recentActivity) {
+              setRecentActivity(dashboardData.data.recentActivity.map((item: any) => ({
+                ...item,
+                type: item.type || 'risk',
+                priority: item.priority || 'medium',
+                status: item.status || 'Active'
+              })));
+            }
+            
+            // Set compliance data
+            if (complianceRes.ok) {
+              const compData = await complianceRes.json();
+              if (compData.success && compData.data) {
+                setComplianceData(compData.data.map((item: any) => ({
+                  framework: item.framework || item.name,
+                  score: item.complianceScore || 0
+                })));
+              }
+            }
+            
+            // Set controls data
+            if (controlsRes.ok) {
+              const ctrlData = await controlsRes.json();
+              if (ctrlData.success && ctrlData.data) {
+                setControlsData(ctrlData.data.map((item: any) => ({
+                  ...item,
+                  type: item.type?.toLowerCase() || 'preventive',
+                  effectiveness: item.effectiveness?.toLowerCase() || 'medium'
+                })));
+              }
+            }
+            
+            // Mock pending actions for now
+            setPendingActionsData([]);
           }
         }
       } catch (error) {
@@ -182,11 +247,11 @@ export default function DashboardPage() {
     {
       id: 'probo-controls',
       title: 'Browse Controls',
-      description: 'Access 650+ security controls',
+      description: 'Access security controls library',
       icon: Target,
       href: '/dashboard/probo?tab=controls-library',
       color: 'text-emerald-600',
-      badge: '650+'
+      badge: 'Library'
     },
     {
       id: 'import-rcsa',
@@ -232,53 +297,8 @@ export default function DashboardPage() {
     }
   ];
 
-  const recentActivity: RecentActivity[] = [
-    { 
-      id: 1, 
-      action: 'Risk assessment completed for "Data Breach Scenario"', 
-      user: 'Sarah Chen', 
-      time: '2 hours ago', 
-      type: 'success',
-      module: 'Risk Management',
-      avatar: 'SC'
-    },
-    { 
-      id: 2, 
-      action: 'New control "Multi-Factor Authentication" added', 
-      user: 'John Smith', 
-      time: '4 hours ago', 
-      type: 'info',
-      module: 'Controls',
-      avatar: 'JS'
-    },
-    { 
-      id: 3, 
-      action: 'Compliance report generated for SOC 2', 
-      user: 'Lisa Wang', 
-      time: '6 hours ago', 
-      type: 'success',
-      module: 'Compliance',
-      avatar: 'LW'
-    },
-    { 
-      id: 4, 
-      action: 'High-risk vulnerability detected in payment system', 
-      user: 'System Alert', 
-      time: '8 hours ago', 
-      type: 'warning',
-      module: 'Monitoring',
-      avatar: 'SA'
-    },
-    { 
-      id: 5, 
-      action: 'Quarterly risk review meeting scheduled', 
-      user: 'Mike Johnson', 
-      time: '1 day ago', 
-      type: 'info',
-      module: 'Planning',
-      avatar: 'MJ'
-    }
-  ];
+  // Recent activity is now fetched dynamically
+  const formattedRecentActivity: RecentActivity[] = recentActivity.length > 0 ? recentActivity : [];
 
   const [insights, setInsights] = useState<Insight[]>([]);
 
@@ -301,33 +321,8 @@ export default function DashboardPage() {
     fetchInsights();
   }, []);
 
-  // Sample insights for development (remove in production)
-  const sampleInsights: Insight[] = [
-    {
-      id: '1',
-      title: 'Vendor Risk Assessment Due',
-      description: 'CloudSecure Inc. assessment expires in 15 days. Schedule renewal to maintain compliance.',
-      type: 'alert',
-      priority: 'high',
-      action: 'Schedule Assessment'
-    },
-    {
-      id: '2',
-      title: 'Control Optimization Opportunity',
-      description: 'AI analysis suggests consolidating 3 access controls to improve efficiency by 25%.',
-      type: 'opportunity',
-      priority: 'medium',
-      action: 'Review Suggestion'
-    },
-    {
-      id: '3',
-      title: 'Compliance Score Improvement',
-      description: 'Your SOC 2 compliance score increased by 8% this quarter through automated controls.',
-      type: 'compliance',
-      priority: 'low',
-      action: 'View Report'
-    }
-  ];
+  // Use fetched insights or empty array
+  const displayInsights = insights.length > 0 ? insights : [];
 
 
 
@@ -371,22 +366,27 @@ export default function DashboardPage() {
           value: stats.totalRisks,
           description: 'Complete overview of all identified risks across your organization',
           details: {
-            overview: 'Your organization currently has 23 identified risks spanning across various categories and business units. This represents a comprehensive risk landscape that requires ongoing monitoring and management.',
-            breakdown: [
-              { label: 'Critical Risks', value: 2, color: '#ef4444', percentage: 9 },
-              { label: 'High Risks', value: 4, color: '#f97316', percentage: 17 },
-              { label: 'Medium Risks', value: 12, color: '#eab308', percentage: 52 },
-              { label: 'Low Risks', value: 5, color: '#22c55e', percentage: 22 }
-            ],
-            recentItems: [
-              { id: 'RSK-001', title: 'Critical System Failure', status: 'Under Review', date: '2 hours ago', priority: 'high' as const },
-              { id: 'RSK-002', title: 'Data Privacy Compliance', status: 'Mitigated', date: '1 day ago', priority: 'medium' as const },
-              { id: 'RSK-003', title: 'Vendor Risk Assessment', status: 'In Progress', date: '3 days ago', priority: 'medium' as const }
-            ],
-            insights: [
-              { text: 'Risk count has decreased by 8% over the last quarter', type: 'positive' as const },
-              { text: 'Technology risks represent 35% of total risk exposure', type: 'neutral' as const },
-              { text: 'Three new risks identified in the last week', type: 'negative' as const }
+            overview: `Your organization currently has ${stats.totalRisks} identified risk${stats.totalRisks !== 1 ? 's' : ''} across various categories and business units. ${stats.totalRisks === 0 ? 'Start by identifying and documenting your organization\'s risks.' : 'This represents your current risk landscape that requires ongoing monitoring and management.'}`,
+            breakdown: stats.totalRisks > 0 ? [
+              { label: 'Critical Risks', value: criticalRisks || 0, color: '#ef4444', percentage: stats.totalRisks > 0 ? Math.round((criticalRisks / stats.totalRisks) * 100) : 0 },
+              { label: 'High Risks', value: stats.highRisks || 0, color: '#f97316', percentage: stats.totalRisks > 0 ? Math.round((stats.highRisks / stats.totalRisks) * 100) : 0 },
+              { label: 'Medium Risks', value: mediumRisks || 0, color: '#eab308', percentage: stats.totalRisks > 0 ? Math.round((mediumRisks / stats.totalRisks) * 100) : 0 },
+              { label: 'Low Risks', value: lowRisks || 0, color: '#22c55e', percentage: stats.totalRisks > 0 ? Math.round((lowRisks / stats.totalRisks) * 100) : 0 }
+            ] : [],
+            recentItems: recentActivity.filter(item => item.type === 'risk').slice(0, 3).map(item => ({
+              id: item.id,
+              title: item.description,
+              status: item.status || 'Active',
+              date: item.time,
+              priority: (item.priority || 'medium') as 'high' | 'medium' | 'low'
+            })),
+            insights: stats.totalRisks > 0 ? [
+              { text: `You have ${stats.totalRisks} total risk${stats.totalRisks !== 1 ? 's' : ''} identified`, type: 'neutral' as const },
+              stats.highRisks > 0 ? { text: `${stats.highRisks} risk${stats.highRisks !== 1 ? 's require' : ' requires'} immediate attention`, type: 'negative' as const } : null,
+              stats.totalRisks > 10 ? { text: 'Consider grouping related risks for better management', type: 'neutral' as const } : null
+            ].filter(Boolean) : [
+              { text: 'No risks have been identified yet', type: 'neutral' as const },
+              { text: 'Start by conducting a risk assessment', type: 'positive' as const }
             ]
           },
           actions: [
@@ -402,18 +402,23 @@ export default function DashboardPage() {
           value: stats.highRisks,
           description: 'Critical and high-priority risks requiring immediate attention',
           details: {
-            overview: 'You have 4 high-priority risks that require immediate attention and management. These risks pose significant threats to your organization and should be addressed promptly.',
-            breakdown: [
-              { label: 'Critical Risks', value: 2, color: '#dc2626', percentage: 50 },
-              { label: 'High Risks', value: 2, color: '#ea580c', percentage: 50 }
-            ],
-            recentItems: [
-              { id: 'RSK-001', title: 'Critical System Failure', status: 'Active', date: 'Today', priority: 'high' as const },
-              { id: 'RSK-004', title: 'Supply Chain Disruption', status: 'Escalated', date: 'Yesterday', priority: 'high' as const }
-            ],
-            insights: [
-              { text: 'Average resolution time for high-priority risks: 5.2 days', type: 'neutral' as const },
-              { text: 'Two critical risks require executive attention', type: 'negative' as const }
+            overview: stats.highRisks > 0 ? `You have ${stats.highRisks} high-priority risk${stats.highRisks !== 1 ? 's' : ''} that require${stats.highRisks === 1 ? 's' : ''} immediate attention and management. These risks pose significant threats to your organization and should be addressed promptly.` : 'No high-priority risks have been identified. Continue monitoring your risk landscape for any changes.',
+            breakdown: stats.highRisks > 0 ? [
+              { label: 'Critical Risks', value: criticalRisks || 0, color: '#dc2626', percentage: (criticalRisks && stats.highRisks > 0) ? Math.round((criticalRisks / (criticalRisks + stats.highRisks)) * 100) : 0 },
+              { label: 'High Risks', value: stats.highRisks || 0, color: '#ea580c', percentage: stats.highRisks > 0 ? Math.round((stats.highRisks / (criticalRisks + stats.highRisks)) * 100) : 100 }
+            ] : [],
+            recentItems: recentActivity.filter(item => item.type === 'risk' && (item.priority === 'high' || item.priority === 'critical')).slice(0, 2).map(item => ({
+              id: item.id,
+              title: item.description,
+              status: item.status || 'Active',
+              date: item.time,
+              priority: 'high' as const
+            })),
+            insights: stats.highRisks > 0 ? [
+              { text: `${stats.highRisks} high-priority risk${stats.highRisks !== 1 ? 's' : ''} identified`, type: 'negative' as const },
+              criticalRisks > 0 ? { text: `${criticalRisks} critical risk${criticalRisks !== 1 ? 's require' : ' requires'} executive attention`, type: 'negative' as const } : null
+            ].filter(Boolean) : [
+              { text: 'No high-priority risks identified', type: 'positive' as const }
             ]
           },
           actions: [
@@ -428,17 +433,20 @@ export default function DashboardPage() {
           value: `${stats.complianceScore}%`,
           description: 'Overall compliance status across all regulatory frameworks',
           details: {
-            overview: 'Your organization maintains a strong 94% compliance score across all applicable regulatory frameworks. This reflects excellent adherence to industry standards and regulations.',
-            breakdown: [
-              { label: 'SOC 2 Type II', value: 98, color: '#16a34a', percentage: 98 },
-              { label: 'ISO 27001', value: 95, color: '#16a34a', percentage: 95 },
-              { label: 'GDPR', value: 92, color: '#16a34a', percentage: 92 },
-              { label: 'HIPAA', value: 89, color: '#eab308', percentage: 89 }
-            ],
-            insights: [
-              { text: 'Compliance score improved by 3% this quarter', type: 'positive' as const },
-              { text: 'All major frameworks maintain >90% compliance', type: 'positive' as const },
-              { text: 'HIPAA compliance needs attention', type: 'negative' as const }
+            overview: stats.complianceScore > 0 ? `Your organization maintains a ${stats.complianceScore}% compliance score across all applicable regulatory frameworks. ${stats.complianceScore >= 90 ? 'This reflects excellent adherence to industry standards and regulations.' : stats.complianceScore >= 70 ? 'There is room for improvement in your compliance posture.' : 'Immediate attention is required to improve compliance.'}` : 'No compliance assessments have been completed yet. Start by selecting applicable frameworks and conducting assessments.',
+            breakdown: complianceData.length > 0 ? complianceData.map(item => ({
+              label: item.framework,
+              value: item.score,
+              color: item.score >= 90 ? '#16a34a' : item.score >= 70 ? '#eab308' : '#ef4444',
+              percentage: item.score
+            })) : [],
+            insights: stats.complianceScore > 0 ? [
+              { text: `Overall compliance score: ${stats.complianceScore}%`, type: stats.complianceScore >= 90 ? 'positive' as const : stats.complianceScore >= 70 ? 'neutral' as const : 'negative' as const },
+              complianceData.filter(item => item.score < 90).length > 0 ? { text: `${complianceData.filter(item => item.score < 90).length} framework${complianceData.filter(item => item.score < 90).length !== 1 ? 's need' : ' needs'} attention`, type: 'negative' as const } : null,
+              complianceData.filter(item => item.score >= 90).length > 0 ? { text: `${complianceData.filter(item => item.score >= 90).length} framework${complianceData.filter(item => item.score >= 90).length !== 1 ? 's' : ''} at excellent compliance`, type: 'positive' as const } : null
+            ].filter(Boolean) : [
+              { text: 'No compliance assessments completed', type: 'neutral' as const },
+              { text: 'Start by selecting applicable frameworks', type: 'positive' as const }
             ]
           },
           actions: [
@@ -453,20 +461,25 @@ export default function DashboardPage() {
           value: stats.activeControls,
           description: 'Security controls currently active and protecting your organization',
           details: {
-            overview: 'Your organization has 18 active security controls deployed across various domains, providing comprehensive protection against identified risks.',
-            breakdown: [
-              { label: 'Preventive Controls', value: 8, color: '#3b82f6', percentage: 44 },
-              { label: 'Detective Controls', value: 6, color: '#8b5cf6', percentage: 33 },
-              { label: 'Corrective Controls', value: 4, color: '#06b6d4', percentage: 23 }
-            ],
-            recentItems: [
-              { id: 'CTL-001', title: 'Multi-Factor Authentication', status: 'Active', date: 'Running', priority: 'high' as const },
-              { id: 'CTL-002', title: 'Endpoint Detection', status: 'Active', date: 'Running', priority: 'high' as const },
-              { id: 'CTL-003', title: 'Access Reviews', status: 'Scheduled', date: 'Next week', priority: 'medium' as const }
-            ],
-            insights: [
-              { text: 'All critical controls are functioning properly', type: 'positive' as const },
-              { text: 'Control effectiveness rated at 92%', type: 'positive' as const }
+            overview: stats.activeControls > 0 ? `Your organization has ${stats.activeControls} active security control${stats.activeControls !== 1 ? 's' : ''} deployed across various domains, providing protection against identified risks.` : 'No security controls have been implemented yet. Start by identifying key controls for your highest risks.',
+            breakdown: controlsData.length > 0 ? [
+              { label: 'Preventive Controls', value: controlsData.filter(c => c.type === 'preventive').length, color: '#3b82f6', percentage: stats.activeControls > 0 ? Math.round((controlsData.filter(c => c.type === 'preventive').length / stats.activeControls) * 100) : 0 },
+              { label: 'Detective Controls', value: controlsData.filter(c => c.type === 'detective').length, color: '#8b5cf6', percentage: stats.activeControls > 0 ? Math.round((controlsData.filter(c => c.type === 'detective').length / stats.activeControls) * 100) : 0 },
+              { label: 'Corrective Controls', value: controlsData.filter(c => c.type === 'corrective').length, color: '#06b6d4', percentage: stats.activeControls > 0 ? Math.round((controlsData.filter(c => c.type === 'corrective').length / stats.activeControls) * 100) : 0 }
+            ] : [],
+            recentItems: recentActivity.filter(item => item.type === 'control').slice(0, 3).map(item => ({
+              id: item.id,
+              title: item.description,
+              status: item.status || 'Active',
+              date: item.time,
+              priority: (item.priority || 'medium') as 'high' | 'medium' | 'low'
+            })),
+            insights: stats.activeControls > 0 ? [
+              { text: `${stats.activeControls} control${stats.activeControls !== 1 ? 's are' : ' is'} currently active`, type: 'neutral' as const },
+              controlsData.filter(c => c.effectiveness === 'high').length > 0 ? { text: `${controlsData.filter(c => c.effectiveness === 'high').length} high-effectiveness control${controlsData.filter(c => c.effectiveness === 'high').length !== 1 ? 's' : ''}`, type: 'positive' as const } : null
+            ].filter(Boolean) : [
+              { text: 'No controls implemented yet', type: 'neutral' as const },
+              { text: 'Start by implementing controls for high risks', type: 'positive' as const }
             ]
           },
           actions: [
@@ -481,20 +494,25 @@ export default function DashboardPage() {
           value: stats.pendingActions,
           description: 'Outstanding actions and tasks requiring completion',
           details: {
-            overview: 'You have 7 pending actions that require attention. These include risk assessments, control implementations, and compliance reviews.',
-            breakdown: [
-              { label: 'Risk Assessments', value: 3, color: '#ef4444', percentage: 43 },
-              { label: 'Control Updates', value: 2, color: '#f97316', percentage: 29 },
-              { label: 'Compliance Reviews', value: 2, color: '#eab308', percentage: 28 }
-            ],
-            recentItems: [
-              { id: 'ACT-001', title: 'Quarterly Risk Review', status: 'Due Today', date: 'Today', priority: 'high' as const },
-              { id: 'ACT-002', title: 'Update Access Controls', status: 'Overdue', date: '2 days ago', priority: 'high' as const },
-              { id: 'ACT-003', title: 'Vendor Assessment', status: 'In Progress', date: 'Due Tomorrow', priority: 'medium' as const }
-            ],
-            insights: [
-              { text: 'Two actions are overdue and require immediate attention', type: 'negative' as const },
-              { text: 'Average completion time has improved by 15%', type: 'positive' as const }
+            overview: stats.pendingActions > 0 ? `You have ${stats.pendingActions} pending action${stats.pendingActions !== 1 ? 's' : ''} that require${stats.pendingActions === 1 ? 's' : ''} attention. These may include risk assessments, control implementations, and compliance reviews.` : 'No pending actions at this time. All tasks are up to date.',
+            breakdown: pendingActionsData.length > 0 ? [
+              { label: 'Risk Assessments', value: pendingActionsData.filter(a => a.type === 'risk').length, color: '#ef4444', percentage: stats.pendingActions > 0 ? Math.round((pendingActionsData.filter(a => a.type === 'risk').length / stats.pendingActions) * 100) : 0 },
+              { label: 'Control Updates', value: pendingActionsData.filter(a => a.type === 'control').length, color: '#f97316', percentage: stats.pendingActions > 0 ? Math.round((pendingActionsData.filter(a => a.type === 'control').length / stats.pendingActions) * 100) : 0 },
+              { label: 'Compliance Reviews', value: pendingActionsData.filter(a => a.type === 'compliance').length, color: '#eab308', percentage: stats.pendingActions > 0 ? Math.round((pendingActionsData.filter(a => a.type === 'compliance').length / stats.pendingActions) * 100) : 0 }
+            ] : [],
+            recentItems: pendingActionsData.slice(0, 3).map(item => ({
+              id: item.id,
+              title: item.title,
+              status: item.status,
+              date: item.dueDate,
+              priority: (item.priority || 'medium') as 'high' | 'medium' | 'low'
+            })),
+            insights: stats.pendingActions > 0 ? [
+              { text: `${stats.pendingActions} action${stats.pendingActions !== 1 ? 's' : ''} pending completion`, type: 'neutral' as const },
+              pendingActionsData.filter(a => a.status === 'overdue').length > 0 ? { text: `${pendingActionsData.filter(a => a.status === 'overdue').length} action${pendingActionsData.filter(a => a.status === 'overdue').length !== 1 ? 's are' : ' is'} overdue`, type: 'negative' as const } : null
+            ].filter(Boolean) : [
+              { text: 'All actions completed', type: 'positive' as const },
+              { text: 'No pending tasks', type: 'positive' as const }
             ]
           },
           actions: [
