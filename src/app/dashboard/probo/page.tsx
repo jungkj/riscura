@@ -64,6 +64,9 @@ function ProboPageContent() {
             setVendorAssessmentData(vendorData.data);
             setStats(prev => ({ ...prev, vendorAssessments: vendorData.data.length }));
           }
+        } else {
+          console.error('Failed to fetch assessments:', vendorRes.status);
+          setVendorAssessmentData([]);
         }
 
         // Fetch controls
@@ -74,6 +77,9 @@ function ProboPageContent() {
             setControlsData(controlsData.data);
             setStats(prev => ({ ...prev, securityControls: controlsData.data.length }));
           }
+        } else {
+          console.error('Failed to fetch controls:', controlsRes.status);
+          setControlsData([]);
         }
 
         // Fetch compliance score
@@ -95,6 +101,9 @@ function ProboPageContent() {
               });
             }
           }
+        } else {
+          console.error('Failed to fetch compliance assessments:', complianceRes.status);
+          setStats(prev => ({ ...prev, complianceScore: 0 }));
         }
       } catch (error) {
         console.error('Failed to fetch Probo data:', error);
