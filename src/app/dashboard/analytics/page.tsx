@@ -189,8 +189,8 @@ export default function AnalyticsPage() {
           <MetricCard
             title="Total Risks"
             value={analyticsData?.totals?.risks || 0}
-            change={12}
-            trend="up"
+            change={analyticsData?.changes?.risks}
+            trend={analyticsData?.changes?.risks > 0 ? "up" : "down"}
             icon={AlertTriangle}
             color="red"
             loading={loading}
@@ -198,8 +198,8 @@ export default function AnalyticsPage() {
           <MetricCard
             title="Active Controls"
             value={analyticsData?.totals?.controls || 0}
-            change={8}
-            trend="up"
+            change={analyticsData?.changes?.controls}
+            trend={analyticsData?.changes?.controls > 0 ? "up" : "down"}
             icon={Shield}
             color="green"
             loading={loading}
@@ -207,8 +207,8 @@ export default function AnalyticsPage() {
           <MetricCard
             title="Documents"
             value={analyticsData?.totals?.documents || 0}
-            change={5}
-            trend="up"
+            change={analyticsData?.changes?.documents}
+            trend={analyticsData?.changes?.documents > 0 ? "up" : "down"}
             icon={FileText}
             color="blue"
             loading={loading}
@@ -216,8 +216,8 @@ export default function AnalyticsPage() {
           <MetricCard
             title="Questionnaires"
             value={analyticsData?.totals?.questionnaires || 0}
-            change={-3}
-            trend="down"
+            change={analyticsData?.changes?.questionnaires}
+            trend={analyticsData?.changes?.questionnaires > 0 ? "up" : "down"}
             icon={CheckCircle}
             color="purple"
             loading={loading}

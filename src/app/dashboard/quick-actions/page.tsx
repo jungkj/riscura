@@ -112,6 +112,13 @@ export default function QuickActionsPage() {
   const [recentActions, setRecentActions] = useState<string[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showTour, setShowTour] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    pendingActions: 0,
+    activeWorkflows: 0,
+    completionRate: 0,
+    timeSaved: 0
+  });
 
   // Load user preferences
   useEffect(() => {
@@ -126,37 +133,57 @@ export default function QuickActionsPage() {
     }
   }, []);
 
-  // Quick stats for context
+  // Fetch stats on mount
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch('/api/dashboard/workflow-stats');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            setStats(data.data);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch workflow stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  // Dynamic stats based on actual data
   const quickStats: QuickStat[] = [
     {
       label: 'Pending Actions',
-      value: 7,
-      change: '+2 from yesterday',
-      trend: 'up',
+      value: stats.pendingActions,
+      change: stats.pendingActions > 0 ? 'Needs attention' : 'All clear',
+      trend: stats.pendingActions > 0 ? 'up' : 'neutral',
       icon: Clock,
       color: '#F57C00'
     },
     {
       label: 'Active Workflows',
-      value: 3,
-      change: 'On track',
+      value: stats.activeWorkflows,
+      change: stats.activeWorkflows > 0 ? 'In progress' : 'None active',
       trend: 'neutral',
       icon: Workflow,
       color: '#1976D2'
     },
     {
       label: 'Completion Rate',
-      value: '94%',
-      change: '+5% this week',
-      trend: 'up',
+      value: stats.completionRate > 0 ? `${stats.completionRate}%` : 'N/A',
+      change: stats.completionRate > 0 ? 'This month' : 'No data yet',
+      trend: stats.completionRate > 80 ? 'up' : stats.completionRate > 0 ? 'down' : 'neutral',
       icon: Target,
       color: '#2E7D32'
     },
     {
       label: 'Time Saved',
-      value: '2.5h',
+      value: stats.timeSaved > 0 ? `${stats.timeSaved}h` : '0h',
       change: 'This week',
-      trend: 'up',
+      trend: stats.timeSaved > 0 ? 'up' : 'neutral',
       icon: Zap,
       color: '#512DA8'
     }
@@ -182,8 +209,7 @@ export default function QuickActionsPage() {
           estimatedTime: '15-20 min',
           difficulty: 'beginner',
           tags: ['risk', 'assessment', 'new'],
-          isNew: true,
-          completionRate: 85
+          isNew: true
         },
         {
           id: 'update-assessment',
@@ -193,8 +219,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/workflows/risk-assessment/update',
           estimatedTime: '10-15 min',
           difficulty: 'beginner',
-          tags: ['risk', 'update', 'review'],
-          completionRate: 92
+          tags: ['risk', 'update', 'review']
         },
         {
           id: 'review-controls',
@@ -205,8 +230,7 @@ export default function QuickActionsPage() {
           estimatedTime: '20-30 min',
           difficulty: 'intermediate',
           prerequisites: ['Risk assessment completed'],
-          tags: ['controls', 'review', 'effectiveness'],
-          completionRate: 78
+          tags: ['controls', 'review', 'effectiveness']
         },
         {
           id: 'risk-report',
@@ -216,8 +240,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/workflows/risk-assessment/report',
           estimatedTime: '10-15 min',
           difficulty: 'beginner',
-          tags: ['report', 'documentation', 'export'],
-          completionRate: 96
+          tags: ['report', 'documentation', 'export']
         }
       ]
     },
@@ -238,8 +261,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/workflows/compliance-review/framework',
           estimatedTime: '25-35 min',
           difficulty: 'intermediate',
-          tags: ['compliance', 'framework', 'assessment'],
-          completionRate: 88
+          tags: ['compliance', 'framework', 'assessment']
         },
         {
           id: 'gap-analysis',
@@ -250,8 +272,7 @@ export default function QuickActionsPage() {
           estimatedTime: '30-45 min',
           difficulty: 'advanced',
           prerequisites: ['Framework assessment completed'],
-          tags: ['gap-analysis', 'compliance', 'review'],
-          completionRate: 73
+          tags: ['gap-analysis', 'compliance', 'review']
         },
         {
           id: 'audit-prep',
@@ -261,8 +282,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/workflows/compliance-review/audit-prep',
           estimatedTime: '45-60 min',
           difficulty: 'advanced',
-          tags: ['audit', 'preparation', 'documentation'],
-          completionRate: 82
+          tags: ['audit', 'preparation', 'documentation']
         },
         {
           id: 'evidence-collection',
@@ -272,8 +292,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/workflows/compliance-review/evidence',
           estimatedTime: '20-30 min',
           difficulty: 'intermediate',
-          tags: ['evidence', 'collection', 'organization'],
-          completionRate: 91
+          tags: ['evidence', 'collection', 'organization']
         }
       ]
     },
@@ -294,8 +313,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/analytics',
           estimatedTime: '10-15 min',
           difficulty: 'beginner',
-          tags: ['dashboard', 'metrics', 'analysis'],
-          completionRate: 95
+          tags: ['dashboard', 'metrics', 'analysis']
         },
         {
           id: 'trend-analysis',
@@ -305,8 +323,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/analytics/trends',
           estimatedTime: '15-25 min',
           difficulty: 'intermediate',
-          tags: ['trends', 'analysis', 'patterns'],
-          completionRate: 87
+          tags: ['trends', 'analysis', 'patterns']
         },
         {
           id: 'custom-report',
@@ -316,8 +333,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/reporting/custom',
           estimatedTime: '20-30 min',
           difficulty: 'intermediate',
-          tags: ['reporting', 'custom', 'stakeholders'],
-          completionRate: 79
+          tags: ['reporting', 'custom', 'stakeholders']
         },
         {
           id: 'schedule-reports',
@@ -327,8 +343,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/reporting/schedule',
           estimatedTime: '10-15 min',
           difficulty: 'beginner',
-          tags: ['automation', 'scheduling', 'notifications'],
-          completionRate: 93
+          tags: ['automation', 'scheduling', 'notifications']
         }
       ]
     },
@@ -350,8 +365,7 @@ export default function QuickActionsPage() {
           estimatedTime: '5-10 min',
           difficulty: 'beginner',
           tags: ['ai', 'insights', 'recommendations'],
-          isNew: true,
-          completionRate: 89
+          isNew: true
         },
         {
           id: 'risk-prediction',
@@ -361,8 +375,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/aria/predictions',
           estimatedTime: '15-20 min',
           difficulty: 'advanced',
-          tags: ['prediction', 'ai', 'modeling'],
-          completionRate: 76
+          tags: ['prediction', 'ai', 'modeling']
         },
         {
           id: 'smart-recommendations',
@@ -372,8 +385,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/aria/recommendations',
           estimatedTime: '10-15 min',
           difficulty: 'intermediate',
-          tags: ['recommendations', 'ai', 'controls'],
-          completionRate: 84
+          tags: ['recommendations', 'ai', 'controls']
         }
       ]
     },
@@ -394,8 +406,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/data/import',
           estimatedTime: '15-25 min',
           difficulty: 'intermediate',
-          tags: ['import', 'data', 'upload'],
-          completionRate: 91
+          tags: ['import', 'data', 'upload']
         },
         {
           id: 'export-data',
@@ -405,8 +416,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/data/export',
           estimatedTime: '5-10 min',
           difficulty: 'beginner',
-          tags: ['export', 'data', 'reports'],
-          completionRate: 97
+          tags: ['export', 'data', 'reports']
         },
         {
           id: 'data-validation',
@@ -416,8 +426,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/data/validation',
           estimatedTime: '10-20 min',
           difficulty: 'intermediate',
-          tags: ['validation', 'quality', 'cleaning'],
-          completionRate: 83
+          tags: ['validation', 'quality', 'cleaning']
         },
         {
           id: 'backup-restore',
@@ -427,8 +436,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/data/backup',
           estimatedTime: '5-15 min',
           difficulty: 'advanced',
-          tags: ['backup', 'restore', 'management'],
-          completionRate: 88
+          tags: ['backup', 'restore', 'management']
         }
       ]
     }
@@ -589,8 +597,12 @@ export default function QuickActionsPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-contrast-low">{stat.label}</p>
-                      <p className="text-2xl font-bold text-contrast-medium mt-1">{stat.value}</p>
-                      <p className="text-xs text-contrast-low mt-1">{stat.change}</p>
+                      <p className="text-2xl font-bold text-contrast-medium mt-1">
+                        {loading ? '...' : stat.value}
+                      </p>
+                      <p className="text-xs text-contrast-low mt-1">
+                        {loading ? 'Loading...' : stat.change}
+                      </p>
                     </div>
                     <div 
                       className="w-12 h-12 rounded-lg flex items-center justify-center"
@@ -769,20 +781,7 @@ export default function QuickActionsPage() {
                                     </Badge>
                                   </div>
 
-                                  {action.completionRate && (
-                                    <div className="space-y-1">
-                                      <div className="flex items-center justify-between text-xs">
-                                        <span className="text-contrast-low">Success Rate</span>
-                                        <span className="text-contrast-medium font-medium">{action.completionRate}%</span>
-                                      </div>
-                                      <div className="w-full bg-gray-200 rounded-full h-1.5">
-                                        <div 
-                                          className="bg-green-500 h-1.5 rounded-full transition-all duration-300"
-                                          style={{ width: `${action.completionRate}%` }}
-                                        />
-                                      </div>
-                                    </div>
-                                  )}
+                                  {/* Success rate removed - will be added when we have real usage data */}
 
                                   {action.prerequisites && (
                                     <div className="text-xs text-orange-600 bg-orange-50 p-2 rounded">
