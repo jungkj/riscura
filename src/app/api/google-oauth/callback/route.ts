@@ -176,7 +176,7 @@ export async function GET(req: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax' as const,
-      maxAge: rememberMe ? 30 * 24 * 60 * 60 : undefined, // 30 days if remember me, session cookie otherwise
+      maxAge: rememberMe ? 30 * 24 * 60 * 60 : 24 * 60 * 60, // Default to 24 hours if not remember me
       path: '/', // Ensure cookie is available site-wide
     };
     
@@ -185,9 +185,17 @@ export async function GET(req: NextRequest) {
       (cookieOptions as any).domain = process.env.COOKIE_DOMAIN;
     }
     
+    // For localhost development, ensure cookie works properly
+    if (process.env.NODE_ENV === 'development') {
+      // Don't set domain for localhost to avoid cookie issues
+      delete (cookieOptions as any).domain;
+    }
+    
     console.log('[Google OAuth] Setting cookie with options:', {
       ...cookieOptions,
       sessionTokenLength: sessionToken.length,
+      environment: process.env.NODE_ENV,
+      redirectUrl,
     });
     
     response.cookies.set('session-token', sessionToken, cookieOptions);

@@ -25,22 +25,33 @@ export async function GET(req: NextRequest) {
     googleAuthUrl.searchParams.set('access_type', 'offline');
     googleAuthUrl.searchParams.set('prompt', 'consent');
     
-    // Get redirect URL and remember me preference from referrer or query params
+    // Get redirect URL and remember me preference from query params or referrer
+    const { searchParams } = req.nextUrl;
     const referer = req.headers.get('referer');
     let intendedRedirect = '/dashboard';
     let rememberMe = false;
     
-    // Extract redirect path from login page URL if present
-    if (referer && referer.includes('/auth/login')) {
+    // First check query params for redirect
+    if (searchParams.has('redirect')) {
+      intendedRedirect = decodeURIComponent(searchParams.get('redirect') || '/dashboard');
+    }
+    // Fallback to extracting from referrer if not in query params
+    else if (referer && referer.includes('/auth/login')) {
       const url = new URL(referer);
       intendedRedirect = url.searchParams.get('from') || '/dashboard';
     }
     
     // Check for remember me preference in query params
-    const { searchParams } = req.nextUrl;
     if (searchParams.has('remember')) {
       rememberMe = searchParams.get('remember') === 'true';
     }
+    
+    console.log('[Google OAuth] Login params:', {
+      intendedRedirect,
+      rememberMe,
+      hasRedirectParam: searchParams.has('redirect'),
+      hasRememberParam: searchParams.has('remember'),
+    });
     
     // Create state with CSRF token, redirect, and remember preference
     const csrfToken = Math.random().toString(36).substring(7);
