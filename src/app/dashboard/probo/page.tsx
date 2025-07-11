@@ -37,91 +37,78 @@ function ProboPageContent() {
     }
   }, [searchParams]);
 
-  const vendorAssessmentData = [
-    {
-      id: 1,
-      name: 'CloudSecure Inc.',
-      status: 'Completed',
-      riskScore: 'Low',
-      lastAssessed: '2024-01-15',
-      compliance: 95,
-      controls: 42
-    },
-    {
-      id: 2,
-      name: 'DataFlow Systems',
-      status: 'In Progress',
-      riskScore: 'Medium',
-      lastAssessed: '2024-01-10',
-      compliance: 78,
-      controls: 35
-    },
-    {
-      id: 3,
-      name: 'SecureNet Solutions',
-      status: 'Pending',
-      riskScore: 'High',
-      lastAssessed: '2023-12-20',
-      compliance: 65,
-      controls: 28
-    }
-  ];
+  const [vendorAssessmentData, setVendorAssessmentData] = useState([]);
+  const [controlsData, setControlsData] = useState([]);
+  const [stats, setStats] = useState({
+    vendorAssessments: 0,
+    securityControls: 0,
+    complianceScore: 0,
+    lastMonthChange: 0,
+    lastQuarterChange: 0
+  });
+  const [soc2Score, setSoc2Score] = useState({
+    overallScore: 0,
+    categories: []
+  });
+  const [loading, setLoading] = useState(true);
 
-  const controlsLibraryData = [
-    {
-      id: 'AC-1',
-      title: 'Access Control Policy and Procedures',
-      framework: 'NIST 800-53',
-      category: 'Access Control',
-      implementation: 'Implemented',
-      description: 'Develop, document, and disseminate access control policy and procedures.'
-    },
-    {
-      id: 'AU-1',
-      title: 'Audit and Accountability Policy',
-      framework: 'NIST 800-53',
-      category: 'Audit and Accountability',
-      implementation: 'Implemented',
-      description: 'Develop, document, and disseminate audit and accountability policy.'
-    },
-    {
-      id: 'CA-1',
-      title: 'Security Assessment and Authorization Policy',
-      framework: 'NIST 800-53',
-      category: 'Security Assessment',
-      implementation: 'Planned',
-      description: 'Develop, document, and disseminate security assessment policy.'
-    },
-    {
-      id: 'CM-1',
-      title: 'Configuration Management Policy',
-      framework: 'NIST 800-53',
-      category: 'Configuration Management',
-      implementation: 'In Progress',
-      description: 'Develop, document, and disseminate configuration management policy.'
-    },
-    {
-      id: 'CP-1',
-      title: 'Contingency Planning Policy',
-      framework: 'NIST 800-53',
-      category: 'Contingency Planning',
-      implementation: 'Implemented',
-      description: 'Develop, document, and disseminate contingency planning policy.'
-    }
-  ];
+  // Fetch real data
+  useEffect(() => {
+    const fetchProboData = async () => {
+      try {
+        // Fetch vendor assessments
+        const vendorRes = await fetch('/api/assessments');
+        if (vendorRes.ok) {
+          const vendorData = await vendorRes.json();
+          if (vendorData.success && vendorData.data) {
+            setVendorAssessmentData(vendorData.data);
+            setStats(prev => ({ ...prev, vendorAssessments: vendorData.data.length }));
+          }
+        }
 
-  const soc2Data = {
-    overallScore: 94,
-    categories: [
-      { name: 'Security', score: 96, controls: 45, status: 'Compliant' },
-      { name: 'Availability', score: 92, controls: 23, status: 'Compliant' },
-      { name: 'Processing Integrity', score: 89, controls: 18, status: 'Minor Issues' },
-      { name: 'Confidentiality', score: 97, controls: 31, status: 'Compliant' },
-      { name: 'Privacy', score: 91, controls: 22, status: 'Compliant' }
-    ]
-  };
+        // Fetch controls
+        const controlsRes = await fetch('/api/controls');
+        if (controlsRes.ok) {
+          const controlsData = await controlsRes.json();
+          if (controlsData.success && controlsData.data) {
+            setControlsData(controlsData.data);
+            setStats(prev => ({ ...prev, securityControls: controlsData.data.length }));
+          }
+        }
 
-  const filteredControls = controlsLibraryData.filter(control =>
+        // Fetch compliance score
+        const complianceRes = await fetch('/api/compliance/assessments');
+        if (complianceRes.ok) {
+          const complianceData = await complianceRes.json();
+          if (complianceData.success && complianceData.data) {
+            // Calculate average compliance score
+            const scores = complianceData.data.map(a => a.complianceScore || 0);
+            const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+            setStats(prev => ({ ...prev, complianceScore: avgScore }));
+            
+            // Set SOC2 data if available
+            const soc2Assessment = complianceData.data.find(a => a.framework === 'SOC2');
+            if (soc2Assessment) {
+              setSoc2Score({
+                overallScore: soc2Assessment.complianceScore || 0,
+                categories: soc2Assessment.categories || []
+              });
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch Probo data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProboData();
+  }, []);
+
+  // Removed hard-coded data - now fetched above
+
+  const filteredControls = controlsData.filter(control =>
     control.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     control.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
     control.framework.toLowerCase().includes(searchQuery.toLowerCase())
@@ -182,8 +169,10 @@ function ProboPageContent() {
                     <Building2 className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">24</div>
-                    <p className="text-xs text-muted-foreground">+3 from last month</p>
+                    <div className="text-2xl font-bold">{loading ? '...' : stats.vendorAssessments}</div>
+                    <p className="text-xs text-muted-foreground">
+                      {loading ? 'Loading...' : stats.vendorAssessments === 0 ? 'No assessments yet' : 'Total assessments'}
+                    </p>
                   </CardContent>
                 </Card>
                 <Card className="hover:shadow-md transition-shadow">
@@ -192,8 +181,10 @@ function ProboPageContent() {
                     <Shield className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">650+</div>
-                    <p className="text-xs text-muted-foreground">Across all frameworks</p>
+                    <div className="text-2xl font-bold">{loading ? '...' : stats.securityControls}</div>
+                    <p className="text-xs text-muted-foreground">
+                      {loading ? 'Loading...' : stats.securityControls === 0 ? 'No controls added' : 'Active controls'}
+                    </p>
                   </CardContent>
                 </Card>
                 <Card className="hover:shadow-md transition-shadow">
@@ -202,8 +193,10 @@ function ProboPageContent() {
                     <TrendingUp className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">94%</div>
-                    <p className="text-xs text-muted-foreground">+2% from last quarter</p>
+                    <div className="text-2xl font-bold">{loading ? '...' : `${stats.complianceScore}%`}</div>
+                    <p className="text-xs text-muted-foreground">
+                      {loading ? 'Loading...' : stats.complianceScore === 0 ? 'Not assessed' : 'Average compliance'}
+                    </p>
                   </CardContent>
                 </Card>
               </div>
@@ -260,7 +253,7 @@ function ProboPageContent() {
                         <Globe className="h-4 w-4 text-blue-600" />
                       </div>
                       <div>
-                        <p className="font-medium">650+ Security Controls</p>
+                        <p className="font-medium">Security Controls Library</p>
                         <p className="text-sm text-gray-600">Comprehensive control library</p>
                       </div>
                     </div>
@@ -291,56 +284,76 @@ function ProboPageContent() {
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1 gap-4">
-                {vendorAssessmentData.map((vendor) => (
-                  <Card key={vendor.id} className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="p-3 bg-blue-100 rounded-lg">
-                            <Building2 className="h-6 w-6 text-blue-600" />
+              {loading ? (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <p className="text-gray-500">Loading vendor assessments...</p>
+                  </CardContent>
+                </Card>
+              ) : vendorAssessmentData.length === 0 ? (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <Building2 className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No vendor assessments yet</h3>
+                    <p className="text-gray-600 mb-4">Start your first vendor security assessment to track third-party risks</p>
+                    <Button className="bg-blue-600 hover:bg-blue-700">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Start First Assessment
+                    </Button>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="grid grid-cols-1 gap-4">
+                  {vendorAssessmentData.map((vendor) => (
+                    <Card key={vendor.id} className="hover:shadow-md transition-shadow">
+                      <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <div className="p-3 bg-blue-100 rounded-lg">
+                              <Building2 className="h-6 w-6 text-blue-600" />
+                            </div>
+                            <div>
+                              <h3 className="font-semibold text-lg">{vendor.name}</h3>
+                              <p className="text-gray-600">Last assessed: {vendor.lastAssessed}</p>
+                            </div>
                           </div>
-                          <div>
-                            <h3 className="font-semibold text-lg">{vendor.name}</h3>
-                            <p className="text-gray-600">Last assessed: {vendor.lastAssessed}</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <div className="text-center">
-                            <p className="text-sm text-gray-600">Risk Score</p>
+                          <div className="flex items-center gap-4">
+                            <div className="text-center">
+                              <p className="text-sm text-gray-600">Risk Score</p>
+                              <Badge 
+                                className={
+                                  vendor.riskScore === 'Low' ? 'bg-green-100 text-green-800' :
+                                  vendor.riskScore === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-red-100 text-red-800'
+                                }
+                              >
+                                {vendor.riskScore}
+                              </Badge>
+                            </div>
+                            <div className="text-center">
+                              <p className="text-sm text-gray-600">Compliance</p>
+                              <p className="font-bold text-lg">{vendor.compliance}%</p>
+                            </div>
+                            <div className="text-center">
+                              <p className="text-sm text-gray-600">Controls</p>
+                              <p className="font-bold text-lg">{vendor.controls}</p>
+                            </div>
                             <Badge 
                               className={
-                                vendor.riskScore === 'Low' ? 'bg-green-100 text-green-800' :
-                                vendor.riskScore === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-red-100 text-red-800'
+                                vendor.status === 'Completed' ? 'bg-green-100 text-green-800' :
+                                vendor.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
+                                'bg-gray-100 text-gray-800'
                               }
                             >
-                              {vendor.riskScore}
+                              {vendor.status}
                             </Badge>
                           </div>
-                          <div className="text-center">
-                            <p className="text-sm text-gray-600">Compliance</p>
-                            <p className="font-bold text-lg">{vendor.compliance}%</p>
-                          </div>
-                          <div className="text-center">
-                            <p className="text-sm text-gray-600">Controls</p>
-                            <p className="font-bold text-lg">{vendor.controls}</p>
-                          </div>
-                          <Badge 
-                            className={
-                              vendor.status === 'Completed' ? 'bg-green-100 text-green-800' :
-                              vendor.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
-                              'bg-gray-100 text-gray-800'
-                            }
-                          >
-                            {vendor.status}
-                          </Badge>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </TabsContent>
 
             {/* Controls Library Tab */}
@@ -348,7 +361,7 @@ function ProboPageContent() {
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900">Security Controls Library</h2>
-                  <p className="text-gray-600">Access 650+ security controls across frameworks</p>
+                  <p className="text-gray-600">Build your security control library</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="relative">
@@ -367,38 +380,65 @@ function ProboPageContent() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-4">
-                {filteredControls.map((control) => (
-                  <Card key={control.id} className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <Badge variant="outline" className="font-mono text-xs">
-                              {control.id}
-                            </Badge>
-                            <Badge 
-                              className={
-                                control.implementation === 'Implemented' ? 'bg-green-100 text-green-800' :
-                                control.implementation === 'In Progress' ? 'bg-blue-100 text-blue-800' :
-                                'bg-gray-100 text-gray-800'
-                              }
-                            >
-                              {control.implementation}
-                            </Badge>
-                            <Badge variant="outline" className="text-xs">
-                              {control.framework}
-                            </Badge>
+              {loading ? (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <p className="text-gray-500">Loading controls library...</p>
+                  </CardContent>
+                </Card>
+              ) : filteredControls.length === 0 && searchQuery === '' ? (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <Target className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No security controls yet</h3>
+                    <p className="text-gray-600 mb-4">Add your first control to start building your security framework</p>
+                    <Button className="bg-green-600 hover:bg-green-700">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add First Control
+                    </Button>
+                  </CardContent>
+                </Card>
+              ) : filteredControls.length === 0 ? (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <Search className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No controls found</h3>
+                    <p className="text-gray-600">Try adjusting your search query</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="grid grid-cols-1 gap-4">
+                  {filteredControls.map((control) => (
+                    <Card key={control.id} className="hover:shadow-md transition-shadow">
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <Badge variant="outline" className="font-mono text-xs">
+                                {control.id}
+                              </Badge>
+                              <Badge 
+                                className={
+                                  control.implementation === 'Implemented' ? 'bg-green-100 text-green-800' :
+                                  control.implementation === 'In Progress' ? 'bg-blue-100 text-blue-800' :
+                                  'bg-gray-100 text-gray-800'
+                                }
+                              >
+                                {control.implementation}
+                              </Badge>
+                              <Badge variant="outline" className="text-xs">
+                                {control.framework}
+                              </Badge>
+                            </div>
+                            <h3 className="font-semibold text-lg mb-2">{control.title}</h3>
+                            <p className="text-gray-600 mb-3">{control.description}</p>
+                            <div className="flex items-center gap-2">
+                              <Badge variant="outline" className="text-xs">
+                                {control.category}
+                              </Badge>
+                            </div>
                           </div>
-                          <h3 className="font-semibold text-lg mb-2">{control.title}</h3>
-                          <p className="text-gray-600 mb-3">{control.description}</p>
-                          <div className="flex items-center gap-2">
-                            <Badge variant="outline" className="text-xs">
-                              {control.category}
-                            </Badge>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2 ml-4">
+                          <div className="flex items-center gap-2 ml-4">
                           <Button variant="outline" size="sm">
                             <Eye className="h-4 w-4 mr-1" />
                             View Details
@@ -427,46 +467,72 @@ function ProboPageContent() {
                 </Button>
               </div>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <span>Overall SOC 2 Compliance</span>
-                    <Badge className="bg-green-100 text-green-800 text-lg px-3 py-1">
-                      {soc2Data.overallScore}%
-                    </Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {soc2Data.categories.map((category) => (
-                      <Card key={category.name} className="border-2 hover:shadow-md transition-shadow">
-                        <CardContent className="p-4">
-                          <div className="flex items-center justify-between mb-3">
-                            <h3 className="font-semibold">{category.name}</h3>
-                            <Badge 
-                              className={
-                                category.status === 'Compliant' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                              }
-                            >
-                              {category.status}
-                            </Badge>
-                          </div>
-                          <div className="space-y-2">
-                            <div className="flex justify-between">
-                              <span className="text-sm text-gray-600">Score</span>
-                              <span className="font-bold">{category.score}%</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-sm text-gray-600">Controls</span>
-                              <span className="font-bold">{category.controls}</span>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+              {loading ? (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <p className="text-gray-500">Loading SOC 2 assessment data...</p>
+                  </CardContent>
+                </Card>
+              ) : soc2Score.overallScore === 0 && soc2Score.categories.length === 0 ? (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <CheckCircle2 className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No SOC 2 assessment yet</h3>
+                    <p className="text-gray-600 mb-4">Start your SOC 2 compliance journey by setting up your framework</p>
+                    <Button className="bg-purple-600 hover:bg-purple-700">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Set Up SOC 2 Framework
+                    </Button>
+                  </CardContent>
+                </Card>
+              ) : (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center justify-between">
+                      <span>Overall SOC 2 Compliance</span>
+                      <Badge className="bg-green-100 text-green-800 text-lg px-3 py-1">
+                        {soc2Score.overallScore}%
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {soc2Score.categories.length === 0 ? (
+                      <div className="text-center py-8">
+                        <p className="text-gray-600">No category data available yet</p>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {soc2Score.categories.map((category) => (
+                          <Card key={category.name} className="border-2 hover:shadow-md transition-shadow">
+                            <CardContent className="p-4">
+                              <div className="flex items-center justify-between mb-3">
+                                <h3 className="font-semibold">{category.name}</h3>
+                                <Badge 
+                                  className={
+                                    category.status === 'Compliant' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                                  }
+                                >
+                                  {category.status}
+                                </Badge>
+                              </div>
+                              <div className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-gray-600">Score</span>
+                                  <span className="font-bold">{category.score}%</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-gray-600">Controls</span>
+                                  <span className="font-bold">{category.controls}</span>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
             </TabsContent>
           </Tabs>
         </div>
