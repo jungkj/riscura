@@ -71,16 +71,68 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to get user info' }, { status: 500 });
     }
     
-    const user = await userResponse.json();
+    const googleUser = await userResponse.json();
+    
+    // Import database client
+    const { db } = await import('@/lib/db');
+    
+    // Find or create user in database
+    let dbUser = await db.client.user.findUnique({
+      where: { email: googleUser.email },
+      include: { organization: true }
+    });
+    
+    if (!dbUser) {
+      console.log('[Google OAuth] Creating new user:', googleUser.email);
+      
+      // Create a default organization for the user
+      const orgName = googleUser.email.split('@')[1] || 'My Organization';
+      const org = await db.client.organization.create({
+        data: {
+          name: orgName,
+          tier: 'STARTER',
+          settings: {}
+        }
+      });
+      
+      // Create the user
+      dbUser = await db.client.user.create({
+        data: {
+          email: googleUser.email,
+          firstName: googleUser.given_name || googleUser.name?.split(' ')[0] || '',
+          lastName: googleUser.family_name || googleUser.name?.split(' ').slice(1).join(' ') || '',
+          role: 'USER',
+          avatar: googleUser.picture,
+          organizationId: org.id,
+          lastLogin: new Date(),
+          profile: {
+            bio: '',
+            department: '',
+            jobTitle: '',
+            location: '',
+            phone: ''
+          }
+        },
+        include: { organization: true }
+      });
+    } else {
+      // Update last login
+      await db.client.user.update({
+        where: { id: dbUser.id },
+        data: { lastLogin: new Date() }
+      });
+    }
     
     // Create a simple session token with appropriate expiration
     const sessionDuration = rememberMe ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000; // 30 days if remember me, 1 day otherwise
     const sessionToken = Buffer.from(JSON.stringify({
       user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        picture: user.picture,
+        id: dbUser.id,
+        email: dbUser.email,
+        name: `${dbUser.firstName} ${dbUser.lastName}`.trim() || dbUser.email,
+        picture: dbUser.avatar || googleUser.picture,
+        organizationId: dbUser.organizationId,
+        role: dbUser.role
       },
       expires: new Date(Date.now() + sessionDuration).toISOString(),
       rememberMe: rememberMe,

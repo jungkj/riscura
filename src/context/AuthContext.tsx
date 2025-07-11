@@ -416,14 +416,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               name: oauthData.user.name,
               firstName: oauthData.user.name?.split(' ')[0] || '',
               lastName: oauthData.user.name?.split(' ')[1] || '',
-              role: 'user' as any, // Changed from 'USER' to 'user' to match the role type
+              role: (oauthData.user.role || 'user').toLowerCase() as any,
               isActive: true,
               emailVerified: true,
-              organizationId: 'oauth-org',
+              organizationId: oauthData.user.organizationId || 'oauth-org',
               permissions: [],
               avatar: oauthData.user.picture,
               createdAt: new Date().toISOString(),
-              lastLogin: new Date().toISOString(), // Add required lastLogin field
+              lastLogin: new Date().toISOString(),
             };
             
             dispatch({ type: 'AUTH_INITIALIZE', payload: { user: authUser, token: 'oauth-session' } });

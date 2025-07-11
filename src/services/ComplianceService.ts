@@ -1,4 +1,5 @@
-import { prisma } from '@/lib/prisma';
+import { db } from '@/lib/db';
+const prisma = db.client;
 import {
   ComplianceFramework,
   ComplianceRequirement,
@@ -300,22 +301,29 @@ export class ComplianceService {
     organizationId: string,
     filters?: { frameworkId?: string; status?: AssessmentStatus }
   ): Promise<ComplianceAssessment[]> {
-    const cacheKey = `${this.cacheKeyPrefix}assessments:${organizationId}:${JSON.stringify(filters)}`;
-    const cached = await redis.get(cacheKey);
-    
-    if (cached) {
-      return JSON.parse(cached);
-    }
+    try {
+      const cacheKey = `${this.cacheKeyPrefix}assessments:${organizationId}:${JSON.stringify(filters)}`;
+      
+      // Try to get from cache
+      try {
+        const cached = await redis.get(cacheKey);
+        if (cached) {
+          return JSON.parse(cached);
+        }
+      } catch (cacheError) {
+        console.warn('[ComplianceService] Cache read error:', cacheError);
+        // Continue without cache
+      }
 
-    const assessments = await prisma.complianceAssessment.findMany({
-      where: {
-        organizationId,
-        ...filters,
-      },
-      include: {
-        framework: true,
-        assessor: true,
-        reviewer: true,
+      const assessments = await prisma.complianceAssessment.findMany({
+        where: {
+          organizationId,
+          ...filters,
+        },
+        include: {
+          framework: true,
+          assessor: true,
+          reviewer: true,
         _count: {
           select: { items: true, gaps: true },
         },
@@ -323,8 +331,20 @@ export class ComplianceService {
       orderBy: { assessmentDate: 'desc' },
     });
 
-    await redis.setex(cacheKey, this.cacheTTL, JSON.stringify(assessments));
-    return assessments;
+      // Try to cache the result
+      try {
+        await redis.setex(cacheKey, this.cacheTTL, JSON.stringify(assessments));
+      } catch (cacheError) {
+        console.warn('[ComplianceService] Cache write error:', cacheError);
+        // Continue without caching
+      }
+      
+      return assessments;
+    } catch (error) {
+      console.error('[ComplianceService] Error fetching assessments:', error);
+      // Return empty array instead of throwing to maintain UI functionality
+      return [];
+    }
   }
 
   async getAssessment(id: string): Promise<ComplianceAssessment | null> {

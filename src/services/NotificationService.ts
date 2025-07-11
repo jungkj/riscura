@@ -1,4 +1,5 @@
-import { prisma } from '@/lib/prisma';
+import { db } from '@/lib/db';
+const prisma = db.client;
 import {
   Notification,
   NotificationCategory,
