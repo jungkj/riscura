@@ -14,7 +14,8 @@ export async function GET(req: NextRequest) {
     }
     
     if (!code) {
-      return NextResponse.json({ error: 'No authorization code received' }, { status: 400 });
+      const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
+      return NextResponse.redirect(`${baseUrl}/login?error=No%20authorization%20code%20received`);
     }
     
     // Parse state to get CSRF token, redirect URL, and remember preference
@@ -57,7 +58,8 @@ export async function GET(req: NextRequest) {
     if (!tokenResponse.ok) {
       const error = await tokenResponse.text();
       console.error('[Google OAuth] Token exchange failed:', error);
-      return NextResponse.json({ error: 'Token exchange failed', details: error }, { status: 500 });
+      const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
+      return NextResponse.redirect(`${baseUrl}/login?error=Authentication%20failed`);
     }
     
     const tokens = await tokenResponse.json();
@@ -68,7 +70,8 @@ export async function GET(req: NextRequest) {
     });
     
     if (!userResponse.ok) {
-      return NextResponse.json({ error: 'Failed to get user info' }, { status: 500 });
+      const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
+      return NextResponse.redirect(`${baseUrl}/login?error=Failed%20to%20get%20user%20info`);
     }
     
     const googleUser = await userResponse.json();
@@ -147,7 +150,7 @@ export async function GET(req: NextRequest) {
       redirectTo,
       redirectUrl,
       rememberMe,
-      userEmail: user.email,
+      userEmail: dbUser.email,
     });
     
     const response = NextResponse.redirect(redirectUrl);
@@ -179,12 +182,12 @@ export async function GET(req: NextRequest) {
     return response;
   } catch (error) {
     console.error('[Google OAuth] Callback error:', error);
-    return NextResponse.json(
-      { 
-        error: 'OAuth callback failed',
-        details: error instanceof Error ? error.message : 'Unknown error'
-      },
-      { status: 500 }
-    );
+    
+    // Always redirect to login with error instead of returning JSON
+    const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
+    const errorMessage = error instanceof Error ? error.message : 'OAuth callback failed';
+    const errorUrl = `${baseUrl}/login?error=${encodeURIComponent(errorMessage)}`;
+    
+    return NextResponse.redirect(errorUrl);
   }
 }
