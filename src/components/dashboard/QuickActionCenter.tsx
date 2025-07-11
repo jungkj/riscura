@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -33,6 +33,28 @@ interface QuickAction {
 
 export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
   const router = useRouter();
+  const [recentActions, setRecentActions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch recent actions from API
+    const fetchRecentActions = async () => {
+      try {
+        const response = await fetch('/api/dashboard/recent-actions');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            setRecentActions(data.data.slice(0, 3));
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch recent actions:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRecentActions();
+  }, []);
 
   const allActions: QuickAction[] = [
     {
@@ -63,7 +85,6 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
       icon: <Target className="w-5 h-5" />,
       color: 'bg-emerald-50 hover:bg-emerald-100 border-emerald-200 text-emerald-700',
       href: '/dashboard/probo?tab=controls-library',
-      badge: 'Library',
       roles: ['executive', 'analyst', 'operator']
     },
     {
@@ -286,28 +307,30 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
         <div className="mt-6 pt-4 border-t border-[#D8C3A5]">
           <h4 className="text-sm font-medium text-[#A8A8A8] mb-3 font-inter">Recent Actions</h4>
           <div className="space-y-2">
-            {[
-              { action: 'Created new cybersecurity risk', time: '2 mins ago', type: 'risk' },
-              { action: 'Completed SOC2 control test', time: '15 mins ago', type: 'control' },
-              { action: 'Generated compliance report', time: '1 hour ago', type: 'report' }
-            ].slice(0, 3).map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="flex items-center justify-between py-2"
-              >
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full" />
-                  <span className="text-sm text-[#191919] font-inter">{item.action}</span>
-                </div>
-                <div className="flex items-center space-x-2 text-xs text-[#A8A8A8] font-inter">
-                  <Clock className="w-3 h-3" />
-                  <span>{item.time}</span>
-                </div>
-              </motion.div>
-            ))}
+            {loading ? (
+              <div className="text-sm text-[#A8A8A8] font-inter">Loading recent actions...</div>
+            ) : recentActions.length > 0 ? (
+              recentActions.map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="flex items-center justify-between py-2"
+                >
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full" />
+                    <span className="text-sm text-[#191919] font-inter">{item.action}</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-xs text-[#A8A8A8] font-inter">
+                    <Clock className="w-3 h-3" />
+                    <span>{item.time}</span>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <div className="text-sm text-[#A8A8A8] font-inter">No recent actions to display</div>
+            )}
           </div>
         </div>
 
