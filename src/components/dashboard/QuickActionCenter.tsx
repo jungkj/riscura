@@ -46,24 +46,24 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
       roles: ['executive', 'analyst', 'operator']
     },
     {
-      id: 'probo-vendor-assessment',
+      id: 'vendor-assessment',
       title: 'Assess Vendor',
       description: 'AI-powered vendor security assessment',
       icon: <Shield className="w-5 h-5" />,
       color: 'bg-[#199BEC]/10 hover:bg-[#199BEC]/20 border-[#199BEC]/30 text-[#199BEC]',
-      href: '/probo?tab=vendor-assessment',
-      badge: 'Probo',
+      href: '/dashboard/probo?tab=vendor-assessment',
+      badge: 'AI',
       shortcut: 'Ctrl+V',
       roles: ['executive', 'analyst', 'operator']
     },
     {
-      id: 'probo-controls-library',
+      id: 'controls-library',
       title: 'Browse Controls',
-      description: 'Access 650+ security controls',
+      description: 'Enterprise security controls',
       icon: <Target className="w-5 h-5" />,
       color: 'bg-emerald-50 hover:bg-emerald-100 border-emerald-200 text-emerald-700',
-      href: '/probo?tab=controls-library',
-      badge: '650+',
+      href: '/dashboard/probo?tab=controls-library',
+      badge: 'Library',
       roles: ['executive', 'analyst', 'operator']
     },
     {
@@ -77,12 +77,12 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
       roles: ['executive', 'analyst', 'operator']
     },
     {
-      id: 'probo-soc2-assessment',
+      id: 'soc2-assessment',
       title: 'SOC 2 Assessment',
       description: 'Framework compliance tracking',
       icon: <CheckCircle className="w-5 h-5" />,
       color: 'bg-purple-50 hover:bg-purple-100 border-purple-200 text-purple-700',
-      href: '/probo?tab=soc2-assessment',
+      href: '/dashboard/probo?tab=soc2-assessment',
       badge: 'SOC 2',
       roles: ['executive', 'analyst', 'auditor']
     },
@@ -106,12 +106,12 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
       roles: ['executive', 'analyst', 'auditor']
     },
     {
-      id: 'probo-integration-dashboard',
-      title: 'Probo Dashboard',
-      description: 'Risk & compliance hub',
+      id: 'risk-control-center',
+      title: 'Risk Control Center',
+      description: 'AI-powered compliance hub',
       icon: <Activity className="w-5 h-5" />,
       color: 'bg-indigo-50 hover:bg-indigo-100 border-indigo-200 text-indigo-700',
-      href: '/probo',
+      href: '/dashboard/probo',
       badge: 'Hub',
       roles: ['executive', 'analyst', 'operator', 'auditor']
     },
@@ -201,10 +201,10 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
   // Prioritize actions based on role with Probo integration
   const getPrioritizedActions = () => {
     const roleBasedOrder = {
-      executive: ['probo-integration-dashboard', 'probo-vendor-assessment', 'generate-report', 'ai-analysis', 'review-alerts', 'schedule-audit', 'team-management'],
-      analyst: ['probo-controls-library', 'probo-soc2-assessment', 'create-risk', 'control-testing', 'ai-analysis', 'generate-report', 'review-alerts'],
-      operator: ['probo-controls-library', 'create-control', 'control-testing', 'upload-document', 'create-risk', 'review-alerts'],
-      auditor: ['probo-soc2-assessment', 'generate-report', 'upload-document', 'schedule-audit', 'export-data', 'dashboard-config']
+      executive: ['risk-control-center', 'vendor-assessment', 'generate-report', 'ai-analysis', 'review-alerts', 'schedule-audit', 'team-management'],
+      analyst: ['controls-library', 'soc2-assessment', 'create-risk', 'control-testing', 'ai-analysis', 'generate-report', 'review-alerts'],
+      operator: ['controls-library', 'create-control', 'control-testing', 'upload-document', 'create-risk', 'review-alerts'],
+      auditor: ['soc2-assessment', 'generate-report', 'upload-document', 'schedule-audit', 'export-data', 'dashboard-config']
     };
 
     const priority = roleBasedOrder[viewMode] || [];

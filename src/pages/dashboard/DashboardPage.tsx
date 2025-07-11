@@ -42,7 +42,7 @@ import Image from 'next/image';
 
 // Import the interactive risk heat map component
 import { RiskHeatMap as InteractiveRiskHeatMap } from '@/components/ui/interactive-risk-heatmap';
-import ProboIntegrationWidget from '@/components/dashboard/ProboIntegrationWidget';
+import RiskControlWidget from '@/components/dashboard/RiskControlWidget';
 
 // Types
 interface DashboardStats {
@@ -695,11 +695,11 @@ export default function DashboardPage() {
       {/* Probo Integration Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         <div className="lg:col-span-2">
-          <ProboIntegrationWidget variant="detailed" showActions={true} />
+          <RiskControlWidget variant="detailed" showActions={true} />
         </div>
         <div className="space-y-4 md:space-y-6">
-          <ProboIntegrationWidget variant="metrics-only" showActions={false} />
-          <ProboIntegrationWidget variant="compact" showActions={false} />
+          <RiskControlWidget variant="metrics-only" showActions={false} />
+          <RiskControlWidget variant="compact" showActions={false} />
         </div>
       </div>
 

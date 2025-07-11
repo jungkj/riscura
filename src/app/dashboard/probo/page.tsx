@@ -21,7 +21,11 @@ import {
   TrendingUp,
   Plus,
   Eye,
-  FileText
+  FileText,
+  Zap,
+  Brain,
+  BarChart3,
+  ShieldCheck
 } from 'lucide-react';
 
 function ProboPageContent() {
@@ -139,12 +143,13 @@ function ProboPageContent() {
                 Back to Dashboard
               </Button>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Probo Integration</h1>
-                <p className="text-gray-600">AI-Powered Risk Management Platform</p>
+                <h1 className="text-3xl font-bold text-gray-900">Risk Control Center</h1>
+                <p className="text-gray-600">AI-Powered Vendor & Compliance Management</p>
               </div>
             </div>
             <Badge variant="secondary" className="bg-blue-100 text-blue-800 font-semibold">
-              Fully Integrated
+              <Zap className="h-3 w-3 mr-1" />
+              AI Enhanced
             </Badge>
           </div>
 
@@ -253,8 +258,8 @@ function ProboPageContent() {
                         <CheckCircle2 className="h-4 w-4 text-green-600" />
                       </div>
                       <div>
-                        <p className="font-medium">AI-Powered Automation</p>
-                        <p className="text-sm text-gray-600">Streamline vendor assessments</p>
+                        <p className="font-medium">AI-Powered Risk Analysis</p>
+                        <p className="text-sm text-gray-600">Intelligent threat detection & assessment</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -262,8 +267,8 @@ function ProboPageContent() {
                         <Globe className="h-4 w-4 text-blue-600" />
                       </div>
                       <div>
-                        <p className="font-medium">Security Controls Library</p>
-                        <p className="text-sm text-gray-600">Comprehensive control library</p>
+                        <p className="font-medium">Enterprise Control Framework</p>
+                        <p className="text-sm text-gray-600">Industry-standard security controls</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -271,8 +276,8 @@ function ProboPageContent() {
                         <Lock className="h-4 w-4 text-purple-600" />
                       </div>
                       <div>
-                        <p className="font-medium">Compliance Workflows</p>
-                        <p className="text-sm text-gray-600">Automate compliance tracking</p>
+                        <p className="font-medium">Automated Compliance</p>
+                        <p className="text-sm text-gray-600">Real-time regulatory tracking</p>
                       </div>
                     </div>
                   </CardContent>
