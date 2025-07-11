@@ -439,19 +439,20 @@ function ProboPageContent() {
                             </div>
                           </div>
                           <div className="flex items-center gap-2 ml-4">
-                          <Button variant="outline" size="sm">
-                            <Eye className="h-4 w-4 mr-1" />
-                            View Details
-                          </Button>
-                          <Button size="sm">
-                            Implement
-                          </Button>
+                            <Button variant="outline" size="sm">
+                              <Eye className="h-4 w-4 mr-1" />
+                              View Details
+                            </Button>
+                            <Button size="sm">
+                              Implement
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </TabsContent>
 
             {/* SOC 2 Assessment Tab */}
