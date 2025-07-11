@@ -39,17 +39,17 @@ interface ProboInsights {
   recommendations: string[];
 }
 
-interface ProboIntegrationWidgetProps {
+interface RiskControlWidgetProps {
   variant?: 'compact' | 'detailed' | 'metrics-only';
   showActions?: boolean;
   className?: string;
 }
 
-export function ProboIntegrationWidget({ 
+export function RiskControlWidget({ 
   variant = 'detailed', 
   showActions = true,
   className = '' 
-}: ProboIntegrationWidgetProps) {
+}: RiskControlWidgetProps) {
   const router = useRouter();
   const [metrics, setMetrics] = useState<ProboMetrics | null>(null);
   const [insights, setInsights] = useState<ProboInsights | null>(null);
@@ -63,18 +63,18 @@ export function ProboIntegrationWidget({
   const fetchProboData = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/dashboard/probo-insights');
+      const response = await fetch('/api/dashboard/risk-insights');
       const data = await response.json();
 
       if (data.success) {
         setMetrics(data.data.metrics);
         setInsights(data.data.insights);
       } else {
-        setError(data.error || 'Failed to fetch Probo data');
+        setError(data.error || 'Failed to fetch risk control data');
       }
     } catch (err) {
-      setError('Network error while fetching Probo data');
-      console.error('Error fetching Probo data:', err);
+      setError('Network error while fetching risk control data');
+      console.error('Error fetching risk control data:', err);
     } finally {
       setLoading(false);
     }
@@ -83,19 +83,19 @@ export function ProboIntegrationWidget({
   const handleProboAction = (action: string) => {
     switch (action) {
       case 'hub':
-        router.push('/probo');
+        router.push('/dashboard/probo');
         break;
       case 'controls':
-        router.push('/probo?tab=controls-library');
+        router.push('/dashboard/probo?tab=controls-library');
         break;
       case 'vendor-assessment':
-        router.push('/probo?tab=vendor-assessment');
+        router.push('/dashboard/probo?tab=vendor-assessment');
         break;
       case 'soc2':
-        router.push('/probo?tab=soc2-assessment');
+        router.push('/dashboard/probo?tab=soc2-assessment');
         break;
       default:
-        router.push('/probo');
+        router.push('/dashboard/probo');
     }
   };
 
@@ -125,7 +125,7 @@ export function ProboIntegrationWidget({
         <CardHeader>
           <CardTitle className="text-[#191919] font-inter flex items-center gap-2">
             <AlertTriangle className="h-5 w-5 text-red-500" />
-            Probo Integration
+            Risk Control Center
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -153,7 +153,7 @@ export function ProboIntegrationWidget({
                 <Zap className="h-5 w-5 text-[#199BEC]" />
               </div>
               <div>
-                <h3 className="font-semibold text-[#191919]">Probo Active</h3>
+                <h3 className="font-semibold text-[#191919]">AI Risk Analysis</h3>
                 <p className="text-sm text-[#A8A8A8]">
                   {metrics?.totalControls || 0} controls available
                 </p>
@@ -178,7 +178,7 @@ export function ProboIntegrationWidget({
         <CardHeader>
           <CardTitle className="text-[#191919] font-inter flex items-center gap-2">
             <BarChart3 className="h-5 w-5 text-[#199BEC]" />
-            Probo Metrics
+            Risk Control Metrics
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -222,7 +222,7 @@ export function ProboIntegrationWidget({
             <div className="p-2 bg-[#199BEC]/10 rounded-lg">
               <Shield className="h-5 w-5 text-[#199BEC]" />
             </div>
-            Probo Integration
+            Risk Control Center
           </CardTitle>
           <Badge variant="outline" className="bg-[#199BEC]/10 text-[#199BEC] border-[#199BEC]/30">
             Active
@@ -374,4 +374,4 @@ export function ProboIntegrationWidget({
   );
 }
 
-export default ProboIntegrationWidget; 
+export default RiskControlWidget; 
