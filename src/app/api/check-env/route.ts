@@ -16,7 +16,9 @@ export async function GET() {
     },
     database: {
       DATABASE_URL: process.env.DATABASE_URL ? 'Set' : 'Not set',
+      database_url: process.env.database_url ? 'Set' : 'Not set',
       DIRECT_URL: process.env.DIRECT_URL ? 'Set' : 'Not set',
+      actualUrl: (process.env.DATABASE_URL || process.env.database_url) ? 'Available' : 'Missing',
     },
     auth: {
       NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'Not set',

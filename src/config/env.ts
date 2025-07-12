@@ -291,7 +291,7 @@ function createMinimalEnv() {
     NODE_ENV: process.env.NODE_ENV || 'development',
     APP_URL: process.env.APP_URL || 'http://localhost:3000',
     NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'http://localhost:3000',
-    DATABASE_URL: process.env.DATABASE_URL || 'file:./dev.db',
+    DATABASE_URL: process.env.DATABASE_URL || process.env.database_url || 'file:./dev.db',
     
     // JWT & Authentication Secrets (Development defaults)
     JWT_SECRET: process.env.JWT_SECRET || 'dev-jwt-secret-12345678901234567890123456789012345678901234567890',
@@ -622,7 +622,7 @@ export function validateSecurityConfiguration(): {
 // TODO: Replace with your actual app config
 export const appConfig = {
   APP_URL: process.env.APP_URL || 'http://localhost:3000',
-  DATABASE_URL: process.env.DATABASE_URL || '',
+  DATABASE_URL: process.env.DATABASE_URL || process.env.database_url || '',
   AI_ENCRYPTION_KEY: process.env.AI_ENCRYPTION_KEY || '',
   WEBHOOK_SECRET: process.env.WEBHOOK_SECRET || '',
 };

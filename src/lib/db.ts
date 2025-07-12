@@ -43,11 +43,13 @@ function getDatabaseConfig(): DatabaseConfig {
     };
   }
 
-  const databaseUrl = process.env.DATABASE_URL;
+  // Check for both uppercase and lowercase versions (Vercel might use lowercase)
+  const databaseUrl = process.env.DATABASE_URL || process.env.database_url;
   
   // Validate required environment variables
   if (!databaseUrl) {
     console.error('❌ DATABASE_URL environment variable is missing');
+    console.error('Checked: DATABASE_URL =', process.env.DATABASE_URL, 'database_url =', process.env.database_url);
     throw new Error(
       'DATABASE_URL environment variable is required. Please set it in your .env file.\n' +
       'Example: DATABASE_URL="postgresql://username:password@localhost:5432/riscura"\n' +
