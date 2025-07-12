@@ -83,8 +83,18 @@ export async function GET(req: NextRequest) {
       db = dbModule.db;
     } catch (dbError) {
       console.error('[Google OAuth] Database import error:', dbError);
+      console.error('[Google OAuth] Environment check:', {
+        hasDbUrl: !!process.env.DATABASE_URL,
+        nodeEnv: process.env.NODE_ENV,
+        nextAuthUrl: process.env.NEXTAUTH_URL,
+        appUrl: process.env.APP_URL,
+      });
       const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
-      return NextResponse.redirect(`${baseUrl}/login?error=Database%20configuration%20error`);
+      // More specific error message for missing DATABASE_URL
+      const errorMsg = !process.env.DATABASE_URL 
+        ? 'Database%20not%20configured.%20Please%20contact%20support.'
+        : 'Database%20configuration%20error';
+      return NextResponse.redirect(`${baseUrl}/login?error=${errorMsg}`);
     }
     
     // Find or create user in database
@@ -96,6 +106,11 @@ export async function GET(req: NextRequest) {
       });
     } catch (dbError) {
       console.error('[Google OAuth] Database query error:', dbError);
+      console.error('[Google OAuth] Query error details:', {
+        errorName: dbError instanceof Error ? dbError.name : 'Unknown',
+        errorMessage: dbError instanceof Error ? dbError.message : String(dbError),
+        hasDbClient: !!db?.client,
+      });
       const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
       // Provide a more user-friendly error message
       return NextResponse.redirect(`${baseUrl}/login?error=Unable%20to%20connect%20to%20database.%20Please%20try%20again%20later.`);
