@@ -44,7 +44,21 @@ function getDatabaseConfig(): DatabaseConfig {
   }
 
   // Check for both uppercase and lowercase versions (Vercel might use lowercase)
-  const databaseUrl = process.env.DATABASE_URL || process.env.database_url;
+  let databaseUrl = process.env.DATABASE_URL || process.env.database_url;
+  
+  // Auto-convert Supabase direct URL to pooled URL for Vercel production
+  if (databaseUrl && process.env.VERCEL && process.env.NODE_ENV === 'production') {
+    const supabaseDirectPattern = /postgresql:\/\/postgres:([^@]+)@db\.([^.]+)\.supabase\.co:5432\/postgres/;
+    const match = databaseUrl.match(supabaseDirectPattern);
+    
+    if (match) {
+      const [, password, projectRef] = match;
+      // Convert to pooled connection URL
+      const pooledUrl = `postgresql://postgres.${projectRef}:${password}@aws-0-us-west-1.pooler.supabase.com:6543/postgres`;
+      console.log('🔄 Converting Supabase direct URL to pooled URL for Vercel');
+      databaseUrl = pooledUrl;
+    }
+  }
   
   // Validate required environment variables
   if (!databaseUrl) {
@@ -105,12 +119,21 @@ function createPrismaClient(): PrismaClient {
   console.log(`📊 Connection pool: ${config.minConnections}-${config.maxConnections}`);
   console.log(`⏱️  Query timeout: ${config.queryTimeout}ms`);
   
+  const datasourceUrl = new URL(config.url);
+  const isSupabasePooled = datasourceUrl.hostname.includes('pooler.supabase.com');
+  
+  // Add connection pool parameters for Supabase
+  if (isSupabasePooled) {
+    datasourceUrl.searchParams.set('pgbouncer', 'true');
+    datasourceUrl.searchParams.set('connection_limit', '1');
+  }
+  
   return new PrismaClient({
     log: getLogConfig(),
     errorFormat: 'pretty',
     datasources: {
       db: {
-        url: config.url,
+        url: datasourceUrl.toString(),
       },
     },
   });
