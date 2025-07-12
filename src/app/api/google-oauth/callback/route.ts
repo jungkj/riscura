@@ -85,15 +85,20 @@ export async function GET(req: NextRequest) {
       console.error('[Google OAuth] Database import error:', dbError);
       console.error('[Google OAuth] Environment check:', {
         hasDbUrl: !!process.env.DATABASE_URL,
+        hasDbUrlLower: !!process.env.database_url,
+        hasAnyDb: !!(process.env.DATABASE_URL || process.env.database_url),
         nodeEnv: process.env.NODE_ENV,
         nextAuthUrl: process.env.NEXTAUTH_URL,
         appUrl: process.env.APP_URL,
+        errorType: dbError instanceof Error ? dbError.name : 'Unknown',
+        errorMsg: dbError instanceof Error ? dbError.message : String(dbError),
       });
       const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
       // More specific error message for missing DATABASE_URL
-      const errorMsg = !process.env.DATABASE_URL 
+      const hasDb = process.env.DATABASE_URL || process.env.database_url;
+      const errorMsg = !hasDb 
         ? 'Database%20not%20configured.%20Please%20contact%20support.'
-        : 'Database%20configuration%20error';
+        : `Database%20import%20failed%3A%20${encodeURIComponent((dbError instanceof Error ? dbError.message : 'Unknown error').substring(0, 50))}`;
       return NextResponse.redirect(`${baseUrl}/login?error=${errorMsg}`);
     }
     
