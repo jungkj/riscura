@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
     
     if (!code) {
       const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
-      return NextResponse.redirect(`${baseUrl}/login?error=No%20authorization%20code%20received`);
+      return NextResponse.redirect(`${baseUrl}/auth/login?error=No%20authorization%20code%20received`);
     }
     
     // Parse state to get CSRF token, redirect URL, and remember preference
@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
       const error = await tokenResponse.text();
       console.error('[Google OAuth] Token exchange failed:', error);
       const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
-      return NextResponse.redirect(`${baseUrl}/login?error=Authentication%20failed`);
+      return NextResponse.redirect(`${baseUrl}/auth/login?error=Authentication%20failed`);
     }
     
     const tokens = await tokenResponse.json();
@@ -71,7 +71,7 @@ export async function GET(req: NextRequest) {
     
     if (!userResponse.ok) {
       const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
-      return NextResponse.redirect(`${baseUrl}/login?error=Failed%20to%20get%20user%20info`);
+      return NextResponse.redirect(`${baseUrl}/auth/login?error=Failed%20to%20get%20user%20info`);
     }
     
     const googleUser = await userResponse.json();
@@ -99,7 +99,7 @@ export async function GET(req: NextRequest) {
       const errorMsg = !hasDb 
         ? 'Database%20not%20configured.%20Please%20contact%20support.'
         : `Database%20import%20failed%3A%20${encodeURIComponent((dbError instanceof Error ? dbError.message : 'Unknown error').substring(0, 50))}`;
-      return NextResponse.redirect(`${baseUrl}/login?error=${errorMsg}`);
+      return NextResponse.redirect(`${baseUrl}/auth/login?error=${errorMsg}`);
     }
     
     // Find or create user in database
@@ -118,7 +118,7 @@ export async function GET(req: NextRequest) {
       });
       const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
       // Provide a more user-friendly error message
-      return NextResponse.redirect(`${baseUrl}/login?error=Unable%20to%20connect%20to%20database.%20Please%20try%20again%20later.`);
+      return NextResponse.redirect(`${baseUrl}/auth/login?error=Unable%20to%20connect%20to%20database.%20Please%20try%20again%20later.`);
     }
     
     if (!dbUser) {
@@ -230,7 +230,7 @@ export async function GET(req: NextRequest) {
     // Always redirect to login with error instead of returning JSON
     const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
     const errorMessage = error instanceof Error ? error.message : 'OAuth callback failed';
-    const errorUrl = `${baseUrl}/login?error=${encodeURIComponent(errorMessage)}`;
+    const errorUrl = `${baseUrl}/auth/login?error=${encodeURIComponent(errorMessage)}`;
     
     return NextResponse.redirect(errorUrl);
   }
