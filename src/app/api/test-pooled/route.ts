@@ -3,6 +3,11 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   const results: any = {
     timestamp: new Date().toISOString(),
+    environment: {
+      VERCEL: process.env.VERCEL || 'not set',
+      VERCEL_ENV: process.env.VERCEL_ENV || 'not set',
+      NODE_ENV: process.env.NODE_ENV || 'not set',
+    },
     currentUrl: {
       DATABASE_URL: process.env.DATABASE_URL ? 'Set' : 'Not set',
       database_url: process.env.database_url ? 'Set' : 'Not set',
