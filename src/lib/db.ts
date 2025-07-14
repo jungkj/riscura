@@ -46,8 +46,9 @@ function getDatabaseConfig(): DatabaseConfig {
   // Check for both uppercase and lowercase versions (Vercel might use lowercase)
   let databaseUrl = process.env.DATABASE_URL || process.env.database_url;
   
-  // Auto-convert Supabase direct URL to pooled URL for Vercel production
-  if (databaseUrl && process.env.VERCEL && process.env.NODE_ENV === 'production') {
+  // Auto-convert Supabase direct URL to pooled URL
+  // Always convert in production environment, not just on Vercel
+  if (databaseUrl && process.env.NODE_ENV === 'production') {
     const supabaseDirectPattern = /postgresql:\/\/postgres:([^@]+)@db\.([^.]+)\.supabase\.co:5432\/postgres/;
     const match = databaseUrl.match(supabaseDirectPattern);
     
@@ -55,8 +56,17 @@ function getDatabaseConfig(): DatabaseConfig {
       const [, password, projectRef] = match;
       // Convert to pooled connection URL
       const pooledUrl = `postgresql://postgres.${projectRef}:${password}@aws-0-us-west-1.pooler.supabase.com:6543/postgres`;
-      console.log('🔄 Converting Supabase direct URL to pooled URL for Vercel');
+      console.log('🔄 Converting Supabase direct URL to pooled URL');
+      console.log('Environment:', { 
+        NODE_ENV: process.env.NODE_ENV,
+        VERCEL: process.env.VERCEL, 
+        VERCEL_ENV: process.env.VERCEL_ENV,
+        originalHost: `db.${projectRef}.supabase.co`,
+        newHost: `aws-0-us-west-1.pooler.supabase.com`
+      });
       databaseUrl = pooledUrl;
+    } else {
+      console.log('🔍 Supabase URL pattern not matched:', databaseUrl?.substring(0, 50) + '...');
     }
   }
   
