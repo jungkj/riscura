@@ -1,7 +1,15 @@
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { RiskCategory, RiskStatus, TreatmentStrategy } from '@/types';
+import { RiskCategory, RiskStatus } from '@/types/rcsa.types';
+
+// Define TreatmentStrategy enum since it's not exported from rcsa.types
+export enum TreatmentStrategy {
+  ACCEPT = 'ACCEPT',
+  MITIGATE = 'MITIGATE',
+  TRANSFER = 'TRANSFER',
+  AVOID = 'AVOID'
+}
 
 // Define valid step names as a union type
 export type RiskFlowStep = 'basic' | 'matrix' | 'details' | 'review';
@@ -104,18 +112,17 @@ export function RiskFlowProvider({ children }: { children: ReactNode }) {
       
       // Validate enum fields
       if ('category' in data && (data.category === null || 
-          ['STRATEGIC', 'OPERATIONAL', 'FINANCIAL', 'COMPLIANCE', 'REPUTATIONAL', 
-           'TECHNOLOGICAL', 'ENVIRONMENTAL', 'SOCIAL'].includes(data.category))) {
+          Object.values(RiskCategory).includes(data.category as RiskCategory))) {
         validated.category = data.category;
       }
       
       if ('status' in data && 
-          ['IDENTIFIED', 'ASSESSING', 'TREATING', 'MONITORING', 'CLOSED'].includes(data.status)) {
+          Object.values(RiskStatus).includes(data.status as RiskStatus)) {
         validated.status = data.status;
       }
       
       if ('treatmentStrategy' in data && (data.treatmentStrategy === null || 
-          ['ACCEPT', 'MITIGATE', 'TRANSFER', 'AVOID'].includes(data.treatmentStrategy))) {
+          Object.values(TreatmentStrategy).includes(data.treatmentStrategy as TreatmentStrategy))) {
         validated.treatmentStrategy = data.treatmentStrategy;
       }
       
