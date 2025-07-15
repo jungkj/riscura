@@ -12,6 +12,8 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import { EnhancedProboService } from '@/services/EnhancedProboService';
 import { CreateRiskModal } from './CreateRiskModal';
 import { NewRiskFlow } from './NewRiskFlow';
@@ -626,18 +628,32 @@ export const RiskManagementDashboard: React.FC = () => {
       maxWidth="2xl"
     >
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6">
-        <TabsList>
-          <TabsTrigger value="register">Risk Register</TabsTrigger>
-          <TabsTrigger value="assessment">Assessment</TabsTrigger>
-          <TabsTrigger value="heatmap">Heat Map</TabsTrigger>
-          <TabsTrigger value="controls">
-            <Shield className="h-4 w-4 mr-2" />
-            Probo Controls
-          </TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-        </TabsList>
-      </Tabs>
+      <div className="flex items-center justify-between mb-enterprise-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList>
+            <TabsTrigger value="register">Risk Register</TabsTrigger>
+            <TabsTrigger value="assessment">Assessment</TabsTrigger>
+            <TabsTrigger value="heatmap">Heat Map</TabsTrigger>
+            <TabsTrigger value="controls">
+              <Shield className="h-4 w-4 mr-2" />
+              Probo Controls
+            </TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          </TabsList>
+        </Tabs>
+        
+        {/* Risk Creation Flow Toggle */}
+        <div className="flex items-center space-x-2">
+          <Label htmlFor="flow-toggle" className="text-sm font-medium">
+            New Interactive Flow
+          </Label>
+          <Switch
+            id="flow-toggle"
+            checked={useNewFlow}
+            onCheckedChange={setUseNewFlow}
+          />
+        </div>
+      </div>
 
       <TabsContent value="register">
         <RiskRegister />

@@ -36,8 +36,19 @@ export function RiskMatrixStep({ onNext, onBack }: RiskMatrixStepProps) {
     if (!matrixRef.current) return;
     
     const rect = matrixRef.current.getBoundingClientRect();
-    const x = 'clientX' in event ? event.clientX : 0;
-    const y = 'clientY' in event ? event.clientY : 0;
+    let x = 0;
+    let y = 0;
+    
+    if ('touches' in event && event.touches.length > 0) {
+      x = event.touches[0].clientX;
+      y = event.touches[0].clientY;
+    } else if ('changedTouches' in event && event.changedTouches.length > 0) {
+      x = event.changedTouches[0].clientX;
+      y = event.changedTouches[0].clientY;
+    } else if ('clientX' in event) {
+      x = event.clientX;
+      y = event.clientY;
+    }
     
     const relativeX = x - rect.left;
     const relativeY = y - rect.top;

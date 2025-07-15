@@ -192,7 +192,7 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
           <Input
             id="dateIdentified"
             type="date"
-            value={format(riskData.dateIdentified, 'yyyy-MM-dd')}
+            value={riskData.dateIdentified ? format(riskData.dateIdentified, 'yyyy-MM-dd') : ''}
             onChange={(e) => updateRiskData({ dateIdentified: new Date(e.target.value) })}
             className="mt-1"
           />

@@ -25,7 +25,10 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
     return { level: 'Critical', color: 'text-red-600 bg-red-50', icon: '🔴' };
   };
 
-  const riskScore = riskData.likelihood * riskData.impact;
+  // Validate and clamp likelihood and impact values
+  const validLikelihood = Math.max(1, Math.min(5, riskData.likelihood || 1));
+  const validImpact = Math.max(1, Math.min(5, riskData.impact || 1));
+  const riskScore = validLikelihood * validImpact;
   const riskLevel = getRiskLevel(riskScore);
 
   const handleCreate = async () => {
@@ -40,26 +43,42 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
           title: riskData.title,
           description: riskData.description,
           category: riskData.category,
-          likelihood: riskData.likelihood,
-          impact: riskData.impact,
+          likelihood: validLikelihood,
+          impact: validImpact,
           owner: riskData.owner,
           status: riskData.status,
           treatmentStrategy: riskData.treatmentStrategy,
           controlMeasures: riskData.controlMeasures,
-          dateIdentified: riskData.dateIdentified.toISOString(),
-          nextReview: riskData.nextReview?.toISOString(),
+          dateIdentified: riskData.dateIdentified instanceof Date && !isNaN(riskData.dateIdentified.getTime()) 
+            ? riskData.dateIdentified.toISOString() 
+            : new Date().toISOString(),
+          nextReview: riskData.nextReview instanceof Date && !isNaN(riskData.nextReview.getTime()) 
+            ? riskData.nextReview.toISOString() 
+            : undefined,
           frameworkIds: riskData.frameworkIds,
           tags: riskData.tags,
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to create risk');
+      if (!response.ok) {
+        // Try to parse error message from response
+        let errorMessage = 'Failed to create risk';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorData.error || errorMessage;
+        } catch {
+          // If JSON parsing fails, use status text
+          errorMessage = response.statusText || errorMessage;
+        }
+        throw new Error(errorMessage);
+      }
 
       toast.success('Risk created successfully!');
       onSuccess();
     } catch (error) {
       console.error('Error creating risk:', error);
-      toast.error('Failed to create risk. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create risk. Please try again.';
+      toast.error(errorMessage);
     } finally {
       setIsCreating(false);
       setIsSubmitting(false);
@@ -123,11 +142,11 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
               <div className="space-y-1">
                 <div className="flex items-center gap-2 text-sm">
                   <TrendingUp className="w-4 h-4 text-muted-foreground" />
-                  <span>Likelihood: {riskData.likelihood}/5</span>
+                  <span>Likelihood: {validLikelihood}/5</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <AlertTriangle className="w-4 h-4 text-muted-foreground" />
-                  <span>Impact: {riskData.impact}/5</span>
+                  <span>Impact: {validImpact}/5</span>
                 </div>
               </div>
             </div>
@@ -157,9 +176,11 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
           <div className="flex items-center gap-4 pt-2 border-t text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
-              <span>Identified: {format(riskData.dateIdentified, 'MMM dd, yyyy')}</span>
+              <span>Identified: {riskData.dateIdentified instanceof Date && !isNaN(riskData.dateIdentified.getTime()) 
+                ? format(riskData.dateIdentified, 'MMM dd, yyyy') 
+                : 'Today'}</span>
             </div>
-            {riskData.nextReview && (
+            {riskData.nextReview instanceof Date && !isNaN(riskData.nextReview.getTime()) && (
               <div className="flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
                 <span>Next Review: {format(riskData.nextReview, 'MMM dd, yyyy')}</span>
