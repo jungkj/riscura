@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { getProductionDatabaseUrl } from './db-config';
 
 // Extend PrismaClient for global typing
 declare global {
@@ -45,23 +46,15 @@ function getDatabaseConfig(): DatabaseConfig {
 
   // Check for both uppercase and lowercase versions (Vercel might use lowercase)
   // Also check for other common Vercel database env var names
-  let databaseUrl = process.env.DATABASE_URL || 
+  // Use the production override if applicable
+  let databaseUrl = getProductionDatabaseUrl() || 
+                   process.env.DATABASE_URL || 
                    process.env.database_url || 
                    process.env.POSTGRES_URL ||
                    process.env.POSTGRES_PRISMA_URL ||
                    process.env.POSTGRES_URL_NON_POOLING;
   
-  // TEMPORARY WORKAROUND: Force use of known pooled URL in production for zggstcxinvxsfksssdyr project
-  if (process.env.NODE_ENV === 'production' && databaseUrl?.includes('db.zggstcxinvxsfksssdyr.supabase.co')) {
-    console.log('🚨 TEMPORARY WORKAROUND: Detected direct URL for zggstcxinvxsfksssdyr project, forcing pooled URL');
-    // Extract password from the direct URL
-    const passwordMatch = databaseUrl.match(/postgres:([^@]+)@/);
-    if (passwordMatch) {
-      const password = passwordMatch[1];
-      databaseUrl = `postgresql://postgres.zggstcxinvxsfksssdyr:${password}@aws-0-us-east-1.pooler.supabase.com:6543/postgres`;
-      console.log('✅ Forced pooled URL for production');
-    }
-  }
+  // The production override is now handled by getProductionDatabaseUrl()
   
   // Check if URL is already a pooled URL (contains pooler.supabase.com)
   const isAlreadyPooled = databaseUrl?.includes('pooler.supabase.com');
