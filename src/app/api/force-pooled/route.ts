@@ -20,7 +20,9 @@ export async function GET() {
   }
 
   const [, password, projectRef] = match;
-  const pooledUrl = `postgresql://postgres.${projectRef}:${password}@aws-0-us-west-1.pooler.supabase.com:6543/postgres`;
+  // Get the region from environment or default to us-east-1
+  const region = process.env.SUPABASE_REGION || 'us-east-1';
+  const pooledUrl = `postgresql://postgres.${projectRef}:${password}@aws-0-${region}.pooler.supabase.com:6543/postgres`;
   
   // Test the pooled connection
   try {
@@ -47,13 +49,15 @@ export async function GET() {
       result,
       conversion: {
         from: `db.${projectRef}.supabase.co:5432`,
-        to: 'aws-0-us-west-1.pooler.supabase.com:6543',
+        to: `aws-0-${region}.pooler.supabase.com:6543`,
+        region: region,
       },
       nextSteps: [
         '1. Go to Vercel dashboard',
         '2. Update your database_url environment variable',
-        `3. Use this pooled URL: postgresql://postgres.${projectRef}:[YOUR-PASSWORD]@aws-0-us-west-1.pooler.supabase.com:6543/postgres`,
+        `3. Use this pooled URL: postgresql://postgres.${projectRef}:[YOUR-PASSWORD]@aws-0-${region}.pooler.supabase.com:6543/postgres`,
         '4. Or get the exact URL from Supabase Dashboard → Settings → Database → Connection Pooling',
+        '5. Optionally set SUPABASE_REGION environment variable to your region (e.g., us-east-1)',
       ],
     });
   } catch (error) {

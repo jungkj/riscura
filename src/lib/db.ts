@@ -46,27 +46,45 @@ function getDatabaseConfig(): DatabaseConfig {
   // Check for both uppercase and lowercase versions (Vercel might use lowercase)
   let databaseUrl = process.env.DATABASE_URL || process.env.database_url;
   
+  // Check if URL is already a pooled URL (contains pooler.supabase.com)
+  const isAlreadyPooled = databaseUrl?.includes('pooler.supabase.com');
+  
+  if (databaseUrl && !isAlreadyPooled) {
+    console.log('🔍 Checking database URL format:', {
+      urlPreview: databaseUrl.substring(0, 60) + '...',
+      isProduction: process.env.NODE_ENV === 'production',
+      isPooled: isAlreadyPooled
+    });
+  }
+  
   // Auto-convert Supabase direct URL to pooled URL
   // Always convert in production environment, not just on Vercel
-  if (databaseUrl && process.env.NODE_ENV === 'production') {
+  if (databaseUrl && process.env.NODE_ENV === 'production' && !isAlreadyPooled) {
     const supabaseDirectPattern = /postgresql:\/\/postgres:([^@]+)@db\.([^.]+)\.supabase\.co:5432\/postgres/;
     const match = databaseUrl.match(supabaseDirectPattern);
     
     if (match) {
       const [, password, projectRef] = match;
-      // Convert to pooled connection URL
-      const pooledUrl = `postgresql://postgres.${projectRef}:${password}@aws-0-us-west-1.pooler.supabase.com:6543/postgres`;
+      // Get the region from environment or default to us-east-1
+      const region = process.env.SUPABASE_REGION || 'us-east-1';
+      // Convert to pooled connection URL with the correct region
+      const pooledUrl = `postgresql://postgres.${projectRef}:${password}@aws-0-${region}.pooler.supabase.com:6543/postgres`;
       console.log('🔄 Converting Supabase direct URL to pooled URL');
       console.log('Environment:', { 
         NODE_ENV: process.env.NODE_ENV,
         VERCEL: process.env.VERCEL, 
         VERCEL_ENV: process.env.VERCEL_ENV,
         originalHost: `db.${projectRef}.supabase.co`,
-        newHost: `aws-0-us-west-1.pooler.supabase.com`
+        newHost: `aws-0-${region}.pooler.supabase.com`,
+        region: region
       });
       databaseUrl = pooledUrl;
     } else {
-      console.log('🔍 Supabase URL pattern not matched:', databaseUrl?.substring(0, 50) + '...');
+      console.log('🔍 Database URL format:', {
+        isDirectUrl: databaseUrl?.includes('db.') && databaseUrl?.includes('.supabase.co'),
+        isPooledUrl: isAlreadyPooled,
+        urlPattern: databaseUrl?.substring(0, 50) + '...'
+      });
     }
   }
   
