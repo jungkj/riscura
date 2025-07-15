@@ -7,7 +7,7 @@ interface RiskData {
   // Basic Info
   title: string;
   description: string;
-  category: RiskCategory | '';
+  category: RiskCategory | null;
   
   // Risk Assessment
   likelihood: number;
@@ -17,7 +17,7 @@ interface RiskData {
   // Details
   owner: string;
   status: RiskStatus;
-  treatmentStrategy: TreatmentStrategy | '';
+  treatmentStrategy: TreatmentStrategy | null;
   controlMeasures: string;
   dateIdentified: Date;
   nextReview?: Date;
@@ -45,12 +45,12 @@ export function RiskFlowProvider({ children }: { children: ReactNode }) {
   const [riskData, setRiskData] = useState<RiskData>({
     title: '',
     description: '',
-    category: '',
+    category: null,
     likelihood: 3,
     impact: 3,
     owner: '',
     status: 'IDENTIFIED',
-    treatmentStrategy: '',
+    treatmentStrategy: null,
     controlMeasures: '',
     dateIdentified: new Date(),
     frameworkIds: [],

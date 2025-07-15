@@ -19,13 +19,18 @@ export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
   const currentIndex = steps.findIndex(s => s.id === currentStep);
   
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between" role="list" aria-label="Progress steps">
       {steps.map((step, index) => {
         const isActive = step.id === currentStep;
         const isCompleted = index < currentIndex;
         
         return (
-          <div key={step.id} className="flex items-center flex-1">
+          <div 
+            key={step.id} 
+            className="flex items-center flex-1" 
+            role="listitem"
+            aria-current={isActive ? "step" : undefined}
+          >
             <div className="flex items-center">
               <motion.div
                 initial={false}
@@ -38,6 +43,7 @@ export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
                   "w-10 h-10 rounded-full flex items-center justify-center text-white relative",
                   !isActive && !isCompleted && "text-gray-600"
                 )}
+                aria-label={`Step ${index + 1}: ${step.label} - ${isCompleted ? 'Completed' : isActive ? 'Current' : 'Upcoming'}`}
               >
                 {isCompleted ? (
                   <Check className="w-5 h-5" />

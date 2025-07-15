@@ -146,7 +146,7 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
       >
         <Label htmlFor="category">Category</Label>
         <Select
-          value={riskData.category}
+          value={riskData.category || ''}
           onValueChange={(value) => {
             updateRiskData({ category: value as RiskCategory });
             if (errors.category) setErrors({ ...errors, category: '' });
