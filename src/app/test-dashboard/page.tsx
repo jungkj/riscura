@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import DashboardPage from '@/components/dashboard/DashboardPage';
+import DashboardPage from '@/pages/dashboard/DashboardPage';
 
 export default function TestDashboard() {
   const [sessionInfo, setSessionInfo] = useState<any>(null);
