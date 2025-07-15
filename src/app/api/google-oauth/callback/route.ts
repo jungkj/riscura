@@ -143,14 +143,8 @@ export async function GET(req: NextRequest) {
           role: 'USER',
           avatar: googleUser.picture,
           organizationId: org.id,
-          lastLogin: new Date(),
-          profile: {
-            bio: '',
-            department: '',
-            jobTitle: '',
-            location: '',
-            phone: ''
-          }
+          lastLogin: new Date()
+          // Removed profile field as it doesn't exist in the schema
         },
         include: { organization: true }
       });
