@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useRiskFlow } from '../RiskFlowContext';
-import { RiskCategory } from '@/types';
+import { RiskCategory } from '@/types/rcsa.types';
 import { cn } from '@/lib/utils';
 
 const categories: { value: RiskCategory; label: string; color: string; emoji: string }[] = [
