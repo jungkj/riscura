@@ -175,6 +175,9 @@ function createPrismaClient(): PrismaClient {
   console.log(`📊 Connection pool: ${config.minConnections}-${config.maxConnections}`);
   console.log(`⏱️  Query timeout: ${config.queryTimeout}ms`);
   
+  // Log the URL we're about to use (first 60 chars only for security)
+  console.log('🔍 Using database URL:', config.url.substring(0, 60) + '...');
+  
   const datasourceUrl = new URL(config.url);
   const isSupabasePooled = datasourceUrl.hostname.includes('pooler.supabase.com');
   
@@ -182,6 +185,9 @@ function createPrismaClient(): PrismaClient {
   if (isSupabasePooled) {
     datasourceUrl.searchParams.set('pgbouncer', 'true');
     datasourceUrl.searchParams.set('connection_limit', '1');
+    console.log('✅ Configured for Supabase pooled connection');
+  } else if (datasourceUrl.hostname.includes('supabase.co')) {
+    console.warn('⚠️  Using direct Supabase connection - this may cause issues in production!');
   }
   
   return new PrismaClient({
