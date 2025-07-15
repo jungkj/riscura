@@ -44,10 +44,38 @@ function getDatabaseConfig(): DatabaseConfig {
   }
 
   // Check for both uppercase and lowercase versions (Vercel might use lowercase)
-  let databaseUrl = process.env.DATABASE_URL || process.env.database_url;
+  // Also check for other common Vercel database env var names
+  let databaseUrl = process.env.DATABASE_URL || 
+                   process.env.database_url || 
+                   process.env.POSTGRES_URL ||
+                   process.env.POSTGRES_PRISMA_URL ||
+                   process.env.POSTGRES_URL_NON_POOLING;
+  
+  // TEMPORARY WORKAROUND: Force use of known pooled URL in production for zggstcxinvxsfksssdyr project
+  if (process.env.NODE_ENV === 'production' && databaseUrl?.includes('db.zggstcxinvxsfksssdyr.supabase.co')) {
+    console.log('🚨 TEMPORARY WORKAROUND: Detected direct URL for zggstcxinvxsfksssdyr project, forcing pooled URL');
+    // Extract password from the direct URL
+    const passwordMatch = databaseUrl.match(/postgres:([^@]+)@/);
+    if (passwordMatch) {
+      const password = passwordMatch[1];
+      databaseUrl = `postgresql://postgres.zggstcxinvxsfksssdyr:${password}@aws-0-us-east-1.pooler.supabase.com:6543/postgres`;
+      console.log('✅ Forced pooled URL for production');
+    }
+  }
   
   // Check if URL is already a pooled URL (contains pooler.supabase.com)
   const isAlreadyPooled = databaseUrl?.includes('pooler.supabase.com');
+  
+  // For production, if we have a DIRECT_URL set, prefer the main DATABASE_URL
+  // This handles cases where Vercel sets both
+  if (process.env.NODE_ENV === 'production' && process.env.DIRECT_URL && databaseUrl === process.env.DIRECT_URL) {
+    console.log('⚠️  Using DIRECT_URL in production, checking for pooled alternative...');
+    const pooledAlternative = process.env.DATABASE_URL || process.env.database_url || process.env.POSTGRES_URL;
+    if (pooledAlternative && pooledAlternative !== process.env.DIRECT_URL) {
+      console.log('✅ Found pooled URL alternative, switching to it');
+      databaseUrl = pooledAlternative;
+    }
+  }
   
   if (databaseUrl && !isAlreadyPooled) {
     console.log('🔍 Checking database URL format:', {
