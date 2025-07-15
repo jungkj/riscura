@@ -129,7 +129,7 @@ export async function GET(req: NextRequest) {
       const org = await db.client.organization.create({
         data: {
           name: orgName,
-          tier: 'STARTER',
+          plan: 'free', // Using 'plan' field, not 'tier'
           settings: {}
         }
       });
