@@ -165,7 +165,7 @@ export async function GET(req: NextRequest) {
         name: `${dbUser.firstName} ${dbUser.lastName}`.trim() || dbUser.email,
         picture: dbUser.avatar || googleUser.picture,
         organizationId: dbUser.organizationId,
-        role: dbUser.role
+        role: dbUser.role.toLowerCase() // Ensure role is lowercase for consistency
       },
       expires: new Date(Date.now() + sessionDuration).toISOString(),
       rememberMe: rememberMe,
