@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { RiskFlowProvider } from './RiskFlowContext';
+import { RiskFlowProvider, RiskFlowStep } from './RiskFlowContext';
 import { StepIndicator } from './StepIndicator';
 import { BasicInfoStep } from './steps/BasicInfoStep';
 import { RiskMatrixStep } from './steps/RiskMatrixStep';
@@ -19,7 +19,7 @@ interface NewRiskFlowProps {
   onSuccess?: () => void;
 }
 
-const steps = [
+const steps: Array<{ id: RiskFlowStep; label: string; icon: string }> = [
   { id: 'basic', label: 'Basic Info', icon: '📝' },
   { id: 'matrix', label: 'Risk Assessment', icon: '🎯' },
   { id: 'details', label: 'Details', icon: '📋' },

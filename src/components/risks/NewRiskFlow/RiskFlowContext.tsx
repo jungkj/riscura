@@ -3,6 +3,9 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { RiskCategory, RiskStatus, TreatmentStrategy } from '@/types';
 
+// Define valid step names as a union type
+export type RiskFlowStep = 'basic' | 'matrix' | 'details' | 'review';
+
 interface RiskData {
   // Basic Info
   title: string;
@@ -30,8 +33,8 @@ interface RiskData {
 interface RiskFlowContextType {
   riskData: RiskData;
   updateRiskData: (data: Partial<RiskData>) => void;
-  currentStep: string;
-  setCurrentStep: (step: string) => void;
+  currentStep: RiskFlowStep;
+  setCurrentStep: (step: RiskFlowStep) => void;
   isSubmitting: boolean;
   setIsSubmitting: (submitting: boolean) => void;
 }
@@ -39,7 +42,7 @@ interface RiskFlowContextType {
 const RiskFlowContext = createContext<RiskFlowContextType | undefined>(undefined);
 
 export function RiskFlowProvider({ children }: { children: ReactNode }) {
-  const [currentStep, setCurrentStep] = useState('basic');
+  const [currentStep, setCurrentStep] = useState<RiskFlowStep>('basic');
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [riskData, setRiskData] = useState<RiskData>({
@@ -59,11 +62,105 @@ export function RiskFlowProvider({ children }: { children: ReactNode }) {
 
   const updateRiskData = (data: Partial<RiskData>) => {
     setRiskData(prev => {
-      const updated = { ...prev, ...data };
-      // Auto-calculate risk score
-      if ('likelihood' in data || 'impact' in data) {
+      // Create a copy for validation
+      const validated: Partial<RiskData> = {};
+      
+      // Validate likelihood (1-5)
+      if ('likelihood' in data && data.likelihood !== undefined) {
+        const likelihood = Number(data.likelihood);
+        if (!isNaN(likelihood) && likelihood >= 1 && likelihood <= 5) {
+          validated.likelihood = Math.round(likelihood);
+        } else {
+          console.warn(`Invalid likelihood value: ${data.likelihood}. Must be between 1-5.`);
+        }
+      }
+      
+      // Validate impact (1-5)
+      if ('impact' in data && data.impact !== undefined) {
+        const impact = Number(data.impact);
+        if (!isNaN(impact) && impact >= 1 && impact <= 5) {
+          validated.impact = Math.round(impact);
+        } else {
+          console.warn(`Invalid impact value: ${data.impact}. Must be between 1-5.`);
+        }
+      }
+      
+      // Validate string fields (non-empty for required fields)
+      if ('title' in data && typeof data.title === 'string') {
+        validated.title = data.title.trim();
+      }
+      
+      if ('description' in data && typeof data.description === 'string') {
+        validated.description = data.description.trim();
+      }
+      
+      if ('owner' in data && typeof data.owner === 'string') {
+        validated.owner = data.owner.trim();
+      }
+      
+      if ('controlMeasures' in data && typeof data.controlMeasures === 'string') {
+        validated.controlMeasures = data.controlMeasures.trim();
+      }
+      
+      // Validate enum fields
+      if ('category' in data && (data.category === null || 
+          ['STRATEGIC', 'OPERATIONAL', 'FINANCIAL', 'COMPLIANCE', 'REPUTATIONAL', 
+           'TECHNOLOGICAL', 'ENVIRONMENTAL', 'SOCIAL'].includes(data.category))) {
+        validated.category = data.category;
+      }
+      
+      if ('status' in data && 
+          ['IDENTIFIED', 'ASSESSING', 'TREATING', 'MONITORING', 'CLOSED'].includes(data.status)) {
+        validated.status = data.status;
+      }
+      
+      if ('treatmentStrategy' in data && (data.treatmentStrategy === null || 
+          ['ACCEPT', 'MITIGATE', 'TRANSFER', 'AVOID'].includes(data.treatmentStrategy))) {
+        validated.treatmentStrategy = data.treatmentStrategy;
+      }
+      
+      // Validate dates
+      if ('dateIdentified' in data) {
+        if (data.dateIdentified instanceof Date && !isNaN(data.dateIdentified.getTime())) {
+          validated.dateIdentified = data.dateIdentified;
+        } else if (typeof data.dateIdentified === 'string') {
+          const date = new Date(data.dateIdentified);
+          if (!isNaN(date.getTime())) {
+            validated.dateIdentified = date;
+          }
+        }
+      }
+      
+      if ('nextReview' in data) {
+        if (data.nextReview === undefined || data.nextReview === null) {
+          validated.nextReview = undefined;
+        } else if (data.nextReview instanceof Date && !isNaN(data.nextReview.getTime())) {
+          validated.nextReview = data.nextReview;
+        } else if (typeof data.nextReview === 'string') {
+          const date = new Date(data.nextReview);
+          if (!isNaN(date.getTime())) {
+            validated.nextReview = date;
+          }
+        }
+      }
+      
+      // Validate arrays
+      if ('frameworkIds' in data && Array.isArray(data.frameworkIds)) {
+        validated.frameworkIds = data.frameworkIds.filter(id => typeof id === 'string');
+      }
+      
+      if ('tags' in data && Array.isArray(data.tags)) {
+        validated.tags = data.tags.filter(tag => typeof tag === 'string');
+      }
+      
+      // Merge validated data
+      const updated = { ...prev, ...validated };
+      
+      // Auto-calculate risk score if likelihood or impact changed
+      if ('likelihood' in validated || 'impact' in validated) {
         updated.riskScore = updated.likelihood * updated.impact;
       }
+      
       return updated;
     });
   };
