@@ -14,6 +14,7 @@ import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { EnhancedProboService } from '@/services/EnhancedProboService';
 import { CreateRiskModal } from './CreateRiskModal';
+import { NewRiskFlow } from './NewRiskFlow';
 import ExportService from '@/services/ExportService';
 import {
   Plus,
@@ -495,6 +496,7 @@ export const RiskManagementDashboard: React.FC = () => {
   const [proboMappings, setProboMappings] = useState<any[]>([]);
   const [isLoadingMappings, setIsLoadingMappings] = useState(false);
   const [isCreateRiskModalOpen, setIsCreateRiskModalOpen] = useState(false);
+  const [useNewFlow, setUseNewFlow] = useState(true); // Default to new flow
   const [refreshKey, setRefreshKey] = useState(0);
 
   const totalRisks = sampleRisks.length;
@@ -800,12 +802,23 @@ export const RiskManagementDashboard: React.FC = () => {
         </div>
       </TabsContent>
 
-      {/* Create Risk Modal */}
-      <CreateRiskModal
-        open={isCreateRiskModalOpen}
-        onOpenChange={setIsCreateRiskModalOpen}
-        onRiskCreated={handleRiskCreated}
-      />
+      {/* Create Risk Modal - Toggle between old and new flow */}
+      {useNewFlow ? (
+        <NewRiskFlow
+          open={isCreateRiskModalOpen}
+          onOpenChange={setIsCreateRiskModalOpen}
+          onSuccess={() => {
+            handleRiskCreated({});
+            setIsCreateRiskModalOpen(false);
+          }}
+        />
+      ) : (
+        <CreateRiskModal
+          open={isCreateRiskModalOpen}
+          onOpenChange={setIsCreateRiskModalOpen}
+          onRiskCreated={handleRiskCreated}
+        />
+      )}
     </MainContentArea>
   );
 };
