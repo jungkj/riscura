@@ -10,7 +10,8 @@ const CreateRiskSchema = z.object({
   category: z.nativeEnum(RiskCategory),
   likelihood: z.number().min(1).max(5),
   impact: z.number().min(1).max(5),
-  status: z.nativeEnum(RiskStatus).optional()
+  status: z.nativeEnum(RiskStatus).optional(),
+  addToRCSA: z.boolean().optional() // Option to automatically add to RCSA
 });
 
 export const GET = withApiMiddleware(
@@ -167,7 +168,11 @@ export const POST = withApiMiddleware(
         status: validatedData.status || RiskStatus.IDENTIFIED,
         organizationId: user.organizationId,
         createdBy: user.id,
-        dateIdentified: new Date()
+        dateIdentified: new Date(),
+        metadata: validatedData.addToRCSA ? {
+          includedInRCSA: true,
+          lastRCSASync: new Date().toISOString()
+        } : undefined
       };
 
       console.log('[Risks API] Creating risk with processed data:', riskData);
@@ -177,6 +182,20 @@ export const POST = withApiMiddleware(
       });
 
       console.log('[Risks API] Risk created successfully:', risk.id);
+      
+      // Create activity log if added to RCSA
+      if (validatedData.addToRCSA) {
+        await db.client.activity.create({
+          data: {
+            type: 'CREATED',
+            entityType: 'RISK',
+            entityId: risk.id,
+            description: 'Risk created and added to RCSA',
+            userId: user.id,
+            organizationId: user.organizationId
+          }
+        });
+      }
 
       return NextResponse.json({
         success: true,

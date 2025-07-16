@@ -9,16 +9,18 @@ import {
   FileSpreadsheet,
   ArrowLeft,
   Info,
-  Upload
+  Upload,
+  TableProperties
 } from 'lucide-react';
 import { NotionRCSASpreadsheet } from '@/components/spreadsheet/NotionRCSASpreadsheet';
 import RCSASpreadsheet from '@/components/spreadsheet/RCSASpreadsheet';
+import EnhancedRCSASpreadsheet from '@/components/spreadsheet/EnhancedRCSASpreadsheet';
 import RCSAImportFlow from '@/components/rcsa/RCSAImportFlow';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 
-type ViewMode = 'notion' | 'classic';
+type ViewMode = 'notion' | 'classic' | 'spreadsheet';
 
 export default function RCSAPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('notion');
@@ -99,11 +101,36 @@ export default function RCSAPage() {
                 if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
                   setViewMode('notion');
                   e.preventDefault();
+                } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                  setViewMode('spreadsheet');
+                  e.preventDefault();
                 }
               }}
             >
               <Grid3x3 className="h-4 w-4" aria-hidden="true" />
               <span>Classic View</span>
+            </button>
+            <button
+              onClick={() => setViewMode('spreadsheet')}
+              className={cn(
+                'flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+                viewMode === 'spreadsheet'
+                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              )}
+              role="radio"
+              aria-checked={viewMode === 'spreadsheet'}
+              aria-label="Spreadsheet view mode"
+              tabIndex={viewMode === 'spreadsheet' ? 0 : -1}
+              onKeyDown={(e) => {
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                  setViewMode('classic');
+                  e.preventDefault();
+                }
+              }}
+            >
+              <TableProperties className="h-4 w-4" aria-hidden="true" />
+              <span>Spreadsheet</span>
             </button>
           </div>
           </div>
@@ -120,8 +147,10 @@ export default function RCSAPage() {
           >
             {viewMode === 'notion' ? (
               <NotionRCSASpreadsheet key={refreshKey} />
-            ) : (
+            ) : viewMode === 'classic' ? (
               <RCSASpreadsheet key={refreshKey} spreadsheetId="default" />
+            ) : (
+              <EnhancedRCSASpreadsheet key={refreshKey} />
             )}
           </motion.div>
         </div>
