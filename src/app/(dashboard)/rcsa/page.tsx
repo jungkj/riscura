@@ -8,19 +8,30 @@ import {
   Plus, 
   FileSpreadsheet,
   ArrowLeft,
-  Info
+  Info,
+  Upload
 } from 'lucide-react';
 import { NotionRCSASpreadsheet } from '@/components/spreadsheet/NotionRCSASpreadsheet';
 import RCSASpreadsheet from '@/components/spreadsheet/RCSASpreadsheet';
+import RCSAImportFlow from '@/components/rcsa/RCSAImportFlow';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 
 type ViewMode = 'notion' | 'classic';
 
 export default function RCSAPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('notion');
+  const [showImportDialog, setShowImportDialog] = useState(false);
+
+  const handleImportComplete = () => {
+    setShowImportDialog(false);
+    // Refresh the page or data
+    window.location.reload();
+  };
 
   return (
-      <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full">
         {/* Page Header */}
         <div className="flex items-center justify-between p-6 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
           <div className="flex items-center gap-4">
@@ -33,12 +44,22 @@ export default function RCSAPage() {
             </div>
           </div>
 
-          {/* View Mode Toggle with Accessibility */}
-          <div 
-            className="flex items-center gap-2 p-1 rounded-lg bg-gray-100 dark:bg-gray-800"
-            role="radiogroup"
-            aria-label="View mode selection"
-          >
+          <div className="flex items-center gap-4">
+            {/* Import Button */}
+            <Button
+              onClick={() => setShowImportDialog(true)}
+              className="flex items-center gap-2"
+            >
+              <Upload className="h-4 w-4" />
+              Import RCSA
+            </Button>
+
+            {/* View Mode Toggle with Accessibility */}
+            <div 
+              className="flex items-center gap-2 p-1 rounded-lg bg-gray-100 dark:bg-gray-800"
+              role="radiogroup"
+              aria-label="View mode selection"
+            >
             <button
               onClick={() => setViewMode('notion')}
               className={cn(
@@ -84,6 +105,7 @@ export default function RCSAPage() {
               <span>Classic View</span>
             </button>
           </div>
+          </div>
         </div>
 
         {/* Content */}
@@ -104,6 +126,19 @@ export default function RCSAPage() {
         </div>
 
         {/* Removed non-functional floating action button - creation handled within spreadsheet components */}
+        
+        {/* Import Dialog */}
+        <Dialog open={showImportDialog} onOpenChange={setShowImportDialog}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Import RCSA Data</DialogTitle>
+              <DialogDescription>
+                Upload your RCSA Excel file or paste data to automatically analyze and import risks and controls
+              </DialogDescription>
+            </DialogHeader>
+            <RCSAImportFlow onComplete={handleImportComplete} />
+          </DialogContent>
+        </Dialog>
       </div>
   );
 }
