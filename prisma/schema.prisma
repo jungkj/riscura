@@ -45,6 +45,8 @@ model Organization {
   users                 User[]
   workflows             Workflow[]
   workflows_v2          WorkflowV2[]
+  sharePointIntegrations SharePointIntegration[]
+  importJobs            ImportJob[]
 
   @@map("organizations")
 }
@@ -119,6 +121,7 @@ model User {
   assignedWorkflowSteps       WorkflowStep[]                 @relation("WorkflowStepAssignedTo")
   createdWorkflows            Workflow[]                     @relation("WorkflowCreatedBy")
   receivedMessages            Message[]                      @relation("MessageRecipient")
+  importJobs                  ImportJob[]
 
   @@index([organizationId])
   @@index([email])
@@ -1546,6 +1549,44 @@ model ComplianceGap {
   @@map("compliance_gaps")
 }
 
+model SharePointIntegration {
+  id                String         @id @default(cuid())
+  organizationId    String
+  organization      Organization   @relation(fields: [organizationId], references: [id])
+  displayName       String
+  siteId            String
+  driveId           String?
+  isActive          Boolean        @default(true)
+  lastSyncedAt      DateTime?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  
+  @@unique([organizationId, siteId])
+  @@index([organizationId])
+  @@map("sharepoint_integrations")
+}
+
+model ImportJob {
+  id              String           @id @default(cuid())
+  organizationId  String
+  organization    Organization     @relation(fields: [organizationId], references: [id])
+  userId          String
+  user            User             @relation(fields: [userId], references: [id])
+  type            String           // 'sharepoint-excel-import'
+  status          ImportJobStatus
+  progress        Int              @default(0)
+  progressMessage String?
+  sourceUrl       String
+  metadata        Json?            // Store file info, validation results, etc.
+  errorMessage    String?
+  startedAt       DateTime         @default(now())
+  completedAt     DateTime?
+  
+  @@index([organizationId, status])
+  @@index([userId])
+  @@map("import_jobs")
+}
+
 enum UserRole {
   ADMIN
   RISK_MANAGER
@@ -1954,4 +1995,12 @@ enum GapStatus {
   RESOLVED
   ACCEPTED
   DEFERRED
+}
+
+enum ImportJobStatus {
+  QUEUED
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
 }

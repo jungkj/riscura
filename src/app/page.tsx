@@ -8,6 +8,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { TimeSavingChart } from '@/components/charts/TimeSavingChart';
+import { IntegrationPartners } from '@/components/landing/IntegrationPartners';
+import { TextFlipContainer } from '@/components/ui/TextFlipContainer';
 
 // Icons
 import {
@@ -34,64 +36,16 @@ const cyclingWords = ["effortless", "intelligent", "automated", "proactive", "st
 
 // Single Word Typewriter Component
 function SingleWordTypewriter() {
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [displayText, setDisplayText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [typingSpeed, setTypingSpeed] = useState(150);
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isClient) return;
-    
-    const currentWord = cyclingWords[currentWordIndex];
-    
-    const timer = setTimeout(() => {
-      if (!isDeleting) {
-        // Typing
-        setDisplayText(currentWord.substring(0, displayText.length + 1));
-        setTypingSpeed(120);
-        
-        if (displayText === currentWord) {
-          // Start deleting after a pause
-          setTimeout(() => setIsDeleting(true), 2500);
-        }
-      } else {
-        // Deleting
-        setDisplayText(currentWord.substring(0, displayText.length - 1));
-        setTypingSpeed(80);
-        
-        if (displayText === '') {
-          setIsDeleting(false);
-          setCurrentWordIndex((prev) => (prev + 1) % cyclingWords.length);
-        }
-      }
-    }, typingSpeed);
-
-    return () => clearTimeout(timer);
-  }, [displayText, isDeleting, currentWordIndex, typingSpeed, isClient]);
-
   return (
     <div className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-center lg:text-left font-inter">
       <span className="text-gray-900">
         Risk management made{' '}
       </span>
-      <span className="relative inline-block min-w-[280px] sm:min-w-[320px] lg:min-w-[400px] text-left">
-        <span className="text-[#191919] font-bold">
-          {isClient ? displayText : 'effortless'}
-        </span>
-        {isClient && (
-          <motion.span
-            className="absolute top-0 w-0.5 h-full bg-[#199BEC] rounded-sm ml-1"
-            style={{ left: `${displayText.length * 0.6}em` }}
-            animate={{ opacity: [0, 1, 0] }}
-            transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
-          />
-        )}
-      </span>
+      <TextFlipContainer 
+        words={cyclingWords}
+        className="text-[#191919] font-bold min-w-[280px] sm:min-w-[320px] lg:min-w-[400px]"
+        cursorClassName="bg-[#199BEC]"
+      />
     </div>
   );
 }
@@ -443,6 +397,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Integration Partners Section */}
+      <IntegrationPartners />
 
       {/* Time Savings Chart Section */}
       <TimeSavingChart />
