@@ -1,5 +1,5 @@
 import { OpenAI } from 'openai';
-import { RCSARowData } from '@/lib/rcsa/parser';
+import { RCSARowData, COLUMN_MAPPINGS } from '@/lib/rcsa/parser';
 import { RiskCategory, RiskStatus, ControlType, ControlCategory, AutomationLevel } from '@/types/rcsa.types';
 
 const openai = new OpenAI({
@@ -175,6 +175,17 @@ export async function analyzeRCSAData(rows: RCSARowData[]): Promise<RCSAGapAnaly
       response_format: { type: "json_object" },
       temperature: 0.3,
     });
+    
+    // Track token usage
+    if (completion.usage) {
+      console.log('[RCSA Analysis] Token usage:', {
+        prompt_tokens: completion.usage.prompt_tokens,
+        completion_tokens: completion.usage.completion_tokens,
+        total_tokens: completion.usage.total_tokens,
+        estimated_cost: (completion.usage.total_tokens / 1000) * 0.01 // Rough estimate for GPT-4
+      });
+      // TODO: Store token usage in database or monitoring system
+    }
     
     const aiResponse = JSON.parse(completion.choices[0].message.content || '{}');
     
