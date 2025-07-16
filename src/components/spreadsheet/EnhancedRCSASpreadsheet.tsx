@@ -166,6 +166,10 @@ export default function EnhancedRCSASpreadsheet() {
   const [isAutoSaving, setIsAutoSaving] = useState(false);
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [columnWidths, setColumnWidths] = useState<Record<string, number>>({});
+  const [gridDimensions, setGridDimensions] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 1200,
+    height: typeof window !== 'undefined' ? window.innerHeight - 200 : 600
+  });
   
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -300,9 +304,9 @@ export default function EnhancedRCSASpreadsheet() {
         e.preventDefault();
         handleSaveCell();
         // Move to next cell
-        const nextCol = e.shiftKey ? col - 1 : col + 1;
-        if (nextCol >= 0 && nextCol < numCols) {
-          setActiveCell({ row, col: nextCol });
+        const nextColEdit = e.shiftKey ? col - 1 : col + 1;
+        if (nextColEdit >= 0 && nextColEdit < numCols) {
+          setActiveCell({ row, col: nextColEdit });
         }
       }
       return;
@@ -356,7 +360,7 @@ export default function EnhancedRCSASpreadsheet() {
           startEditing('');
         }
         break;
-      case 'Tab':
+      case 'Tab': {
         e.preventDefault();
         const nextCol = e.shiftKey ? col - 1 : col + 1;
         if (nextCol >= 0 && nextCol < numCols) {
@@ -364,6 +368,7 @@ export default function EnhancedRCSASpreadsheet() {
           scrollToCellIfNeeded(row, nextCol);
         }
         break;
+      }
       default:
         // Start typing in editable cells
         if (columns[col].editable && e.key.length === 1 && !e.metaKey && !e.ctrlKey) {
@@ -508,6 +513,19 @@ export default function EnhancedRCSASpreadsheet() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
+
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setGridDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight - 200 // Adjust for header height
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Cell renderer
   const Cell = ({ columnIndex, rowIndex, style }: any) => {
@@ -797,10 +815,10 @@ export default function EnhancedRCSASpreadsheet() {
           ref={gridRef}
           columnCount={columns.length}
           columnWidth={(index) => columns[index].width}
-          height={window.innerHeight - 200} // Adjust based on header height
+          height={gridDimensions.height}
           rowCount={filteredRows.length}
           rowHeight={() => 36}
-          width={window.innerWidth}
+          width={gridDimensions.width}
           className="border-l border-t border-gray-300"
           overscanRowCount={10}
           overscanColumnCount={3}
