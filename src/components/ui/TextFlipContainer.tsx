@@ -14,6 +14,20 @@ export const TextFlipContainer = ({
 }) => {
   const [currentWord, setCurrentWord] = React.useState(words[0]);
   const [isAnimating, setIsAnimating] = React.useState<boolean>(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = React.useState(false);
+
+  // Check for prefers-reduced-motion on mount and when it changes
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setPrefersReducedMotion(e.matches);
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
 
   const startAnimation = useCallback(() => {
     const currentIndex = words.indexOf(currentWord);
@@ -24,13 +38,13 @@ export const TextFlipContainer = ({
   }, [currentWord, words]);
 
   useEffect(() => {
-    if (!isAnimating) {
+    if (!isAnimating && !prefersReducedMotion) {
       const timer = setTimeout(() => {
         startAnimation();
       }, 3000); // Wait 3 seconds between word changes
       return () => clearTimeout(timer);
     }
-  }, [isAnimating, startAnimation]);
+  }, [isAnimating, startAnimation, prefersReducedMotion]);
 
   return (
     <AnimatePresence
@@ -40,7 +54,7 @@ export const TextFlipContainer = ({
       }}
     >
       <motion.div
-        initial={{
+        initial={prefersReducedMotion ? { opacity: 1 } : {
           opacity: 0,
           y: 10,
         }}
@@ -48,12 +62,12 @@ export const TextFlipContainer = ({
           opacity: 1,
           y: 0,
         }}
-        transition={{
+        transition={prefersReducedMotion ? { duration: 0 } : {
           type: "spring",
           stiffness: 100,
           damping: 10,
         }}
-        exit={{
+        exit={prefersReducedMotion ? { opacity: 1 } : {
           opacity: 0,
           y: -40,
           x: 40,
@@ -64,28 +78,34 @@ export const TextFlipContainer = ({
         className={`z-10 inline-block relative text-left ${className}`}
         key={currentWord}
       >
-        {currentWord.split("").map((letter, index) => (
-          <motion.span
-            key={currentWord + index}
-            initial={{ opacity: 0, y: 10, filter: "blur(8px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{
-              delay: index * 0.08,
-              duration: 0.4,
-            }}
-            className="inline-block"
-          >
-            {letter}
-          </motion.span>
-        ))}
+        {prefersReducedMotion ? (
+          // Simple text display without animation when reduced motion is preferred
+          <span>{currentWord}</span>
+        ) : (
+          // Animated letter-by-letter display
+          currentWord.split("").map((letter, index) => (
+            <motion.span
+              key={currentWord + index}
+              initial={{ opacity: 0, y: 10, filter: "blur(8px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{
+                delay: index * 0.08,
+                duration: 0.4,
+              }}
+              className="inline-block"
+            >
+              {letter}
+            </motion.span>
+          ))
+        )}
         <motion.span
           initial={{
-            opacity: 0,
+            opacity: prefersReducedMotion ? 1 : 0,
           }}
           animate={{
-            opacity: 1,
+            opacity: prefersReducedMotion ? 1 : [0, 1],
           }}
-          transition={{
+          transition={prefersReducedMotion ? {} : {
             duration: 0.8,
             repeat: Infinity,
             repeatType: "reverse",

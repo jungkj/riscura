@@ -1,5 +1,5 @@
 import Bull from 'bull';
-import { PrismaClient, ImportJob, ImportJobStatus } from '@prisma/client';
+import { ImportJob, ImportJobStatus } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { redis } from '@/lib/redis';
 import { getSharePointFileService } from '../sharepoint/file.service';

@@ -1,6 +1,7 @@
 import { Client } from '@microsoft/microsoft-graph-client';
 import { DriveItem, Site, Drive } from '@microsoft/microsoft-graph-types';
 import { getSharePointAuthService } from './auth.service';
+import { SharePointSiteInfo } from '@/types/sharepoint';
 
 export interface FileInfo {
   id: string;
@@ -11,13 +12,6 @@ export interface FileInfo {
   webUrl?: string;
   mimeType?: string;
   path?: string;
-}
-
-export interface SharePointSiteInfo {
-  id: string;
-  displayName: string;
-  webUrl: string;
-  description?: string;
 }
 
 export class SharePointFileService {
@@ -183,14 +177,70 @@ export class SharePointFileService {
         throw new Error('Download URL not available');
       }
 
-      // Download the file content
-      const response = await fetch(fileItem['@microsoft.graph.downloadUrl']);
-      if (!response.ok) {
-        throw new Error(`Failed to download file: ${response.statusText}`);
+      // Download the file content with timeout and size limits
+      const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB limit
+      const DOWNLOAD_TIMEOUT = 30000; // 30 seconds
+      
+      // Create abort controller for timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), DOWNLOAD_TIMEOUT);
+      
+      try {
+        const response = await fetch(fileItem['@microsoft.graph.downloadUrl'], {
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) {
+          throw new Error(`Failed to download file: ${response.statusText}`);
+        }
+        
+        // Check content length if available
+        const contentLength = response.headers.get('content-length');
+        if (contentLength && parseInt(contentLength) > MAX_FILE_SIZE) {
+          throw new Error(`File size exceeds maximum allowed size of ${MAX_FILE_SIZE / 1024 / 1024}MB`);
+        }
+        
+        // Download with size monitoring
+        const reader = response.body?.getReader();
+        if (!reader) {
+          throw new Error('Unable to read response body');
+        }
+        
+        const chunks: Uint8Array[] = [];
+        let totalSize = 0;
+        
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          
+          totalSize += value.length;
+          if (totalSize > MAX_FILE_SIZE) {
+            reader.cancel();
+            throw new Error(`File size exceeds maximum allowed size of ${MAX_FILE_SIZE / 1024 / 1024}MB`);
+          }
+          
+          chunks.push(value);
+        }
+        
+        // Combine chunks into single buffer
+        const buffer = new Uint8Array(totalSize);
+        let position = 0;
+        for (const chunk of chunks) {
+          buffer.set(chunk, position);
+          position += chunk.length;
+        }
+        
+        return Buffer.from(buffer);
+      } catch (error: any) {
+        if (error.name === 'AbortError') {
+          throw new Error('File download timed out after 30 seconds');
+        }
+        throw error;
+      } finally {
+        clearTimeout(timeoutId);
       }
-
-      const arrayBuffer = await response.arrayBuffer();
-      return Buffer.from(arrayBuffer);
     } catch (error) {
       console.error('Error downloading file:', error);
       throw new Error('Failed to download file from SharePoint');

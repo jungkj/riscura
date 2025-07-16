@@ -1,4 +1,5 @@
 import * as XLSX from 'xlsx';
+import { parseRiskScore } from '@/lib/utils/risk-score';
 
 export interface ValidationError {
   type: 'error' | 'warning';
@@ -271,7 +272,7 @@ export class ExcelValidatorService {
       
       // Validate risk scores
       if (row.likelihood !== undefined) {
-        const likelihood = this.parseRiskScore(row.likelihood);
+        const likelihood = parseRiskScore(row.likelihood);
         if (likelihood < 1 || likelihood > 5) {
           warnings.push({
             type: 'warning',
@@ -284,7 +285,7 @@ export class ExcelValidatorService {
       }
       
       if (row.impact !== undefined) {
-        const impact = this.parseRiskScore(row.impact);
+        const impact = parseRiskScore(row.impact);
         if (impact < 1 || impact > 5) {
           warnings.push({
             type: 'warning',
@@ -367,7 +368,7 @@ export class ExcelValidatorService {
       
       // Validate effectiveness
       if (row.effectiveness !== undefined) {
-        const effectiveness = this.parseRiskScore(row.effectiveness);
+        const effectiveness = parseRiskScore(row.effectiveness);
         if (effectiveness < 1 || effectiveness > 5) {
           warnings.push({
             type: 'warning',
@@ -505,34 +506,6 @@ export class ExcelValidatorService {
     }
   }
 
-  /**
-   * Parse risk score from various formats
-   */
-  private parseRiskScore(value: string | number | undefined): number {
-    if (value === undefined || value === null) return 0;
-    
-    if (typeof value === 'number') return value;
-    
-    // Handle string values
-    const strValue = value.toString().toLowerCase().trim();
-    
-    // Handle text values
-    const textToScore: { [key: string]: number } = {
-      'very low': 1, 'verylow': 1, 'very_low': 1,
-      'low': 2,
-      'medium': 3, 'moderate': 3,
-      'high': 4,
-      'very high': 5, 'veryhigh': 5, 'very_high': 5, 'critical': 5
-    };
-    
-    if (textToScore[strValue]) {
-      return textToScore[strValue];
-    }
-    
-    // Try to parse as number
-    const numValue = parseInt(strValue);
-    return isNaN(numValue) ? 0 : numValue;
-  }
 }
 
 // Singleton instance

@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
 import { startOfDay, subDays, format, eachDayOfInterval, startOfWeek, startOfMonth, endOfMonth } from 'date-fns';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 export interface AnalyticsMetrics {
   risks: {

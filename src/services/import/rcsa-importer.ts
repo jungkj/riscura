@@ -1,6 +1,7 @@
 import * as XLSX from 'xlsx';
 import { prisma } from '@/lib/prisma';
 import { RiskStatus, RiskLikelihood, RiskImpact, ControlType, ControlStatus, ControlFrequency } from '@prisma/client';
+import { parseRiskScore } from '@/lib/utils/risk-score';
 
 interface ImportOptions {
   organizationId: string;
@@ -425,21 +426,3 @@ function mapAssessmentStatus(status?: string): string {
   return 'SATISFACTORY';
 }
 
-function parseRiskScore(value: string): number {
-  const strValue = value.toLowerCase().trim();
-  
-  const textToScore: { [key: string]: number } = {
-    'very low': 1, 'verylow': 1, 'very_low': 1,
-    'low': 2,
-    'medium': 3, 'moderate': 3,
-    'high': 4,
-    'very high': 5, 'veryhigh': 5, 'very_high': 5, 'critical': 5
-  };
-  
-  if (textToScore[strValue]) {
-    return textToScore[strValue];
-  }
-  
-  const numValue = parseInt(strValue);
-  return isNaN(numValue) ? 3 : Math.max(1, Math.min(5, numValue));
-}

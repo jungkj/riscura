@@ -8,6 +8,7 @@ import { useSharePointIntegration } from '@/hooks/useSharePointIntegration';
 import { SharePointFileBrowser } from '@/components/integrations/SharePointFileBrowser';
 import { useGoogleDriveIntegration } from '@/hooks/useGoogleDriveIntegration';
 import { GoogleDriveFileBrowser } from '@/components/integrations/GoogleDriveFileBrowser';
+import { FixedSizeList as List } from 'react-window';
 
 // UI Components
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -761,19 +762,48 @@ export default function DragDropImport({
                     <p className="text-sm font-medium text-blue-900">
                       Selected {selectedSharePointFiles.length} file{selectedSharePointFiles.length > 1 ? 's' : ''}
                     </p>
-                    <div className="mt-2 space-y-1">
-                      {selectedSharePointFiles.map((file) => (
-                        <div key={file.id} className="flex items-center justify-between text-sm">
-                          <span className="text-blue-700 truncate">{file.name}</span>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setSelectedSharePointFiles(prev => prev.filter(f => f.id !== file.id))}
-                          >
-                            <X className="h-3 w-3" />
-                          </Button>
+                    <div className="mt-2">
+                      {selectedSharePointFiles.length <= 5 ? (
+                        // For small lists, use regular rendering
+                        <div className="space-y-1">
+                          {selectedSharePointFiles.map((file) => (
+                            <div key={file.id} className="flex items-center justify-between text-sm">
+                              <span className="text-blue-700 truncate">{file.name}</span>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setSelectedSharePointFiles(prev => prev.filter(f => f.id !== file.id))}
+                              >
+                                <X className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      ) : (
+                        // For large lists, use virtualization
+                        <List
+                          height={150} // Fixed height for 5 items
+                          itemCount={selectedSharePointFiles.length}
+                          itemSize={30} // Height of each item
+                          width="100%"
+                        >
+                          {({ index, style }) => {
+                            const file = selectedSharePointFiles[index];
+                            return (
+                              <div key={file.id} style={style} className="flex items-center justify-between text-sm px-1">
+                                <span className="text-blue-700 truncate">{file.name}</span>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => setSelectedSharePointFiles(prev => prev.filter(f => f.id !== file.id))}
+                                >
+                                  <X className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            );
+                          }}
+                        </List>
+                      )}
                     </div>
                   </div>
                 )}

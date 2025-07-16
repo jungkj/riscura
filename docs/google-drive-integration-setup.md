@@ -48,7 +48,7 @@ This guide provides step-by-step instructions for setting up Google Drive integr
    - Application type: "Web application"
    - Name: "Riscura Web Client"
    - Authorized redirect URIs:
-     - For development: `http://localhost:3000/api/google-drive/callback`
+     - For development: `http://localhost:3001/api/google-drive/callback`
      - For production: `https://yourdomain.com/api/google-drive/callback`
    - Click "Create"
 
@@ -64,7 +64,7 @@ Add the following to your `.env` file:
 # Google Drive Integration
 GOOGLE_CLIENT_ID="your-client-id.apps.googleusercontent.com"
 GOOGLE_CLIENT_SECRET="your-client-secret"
-GOOGLE_REDIRECT_URI="http://localhost:3000/api/google-drive/callback"
+GOOGLE_REDIRECT_URI="http://localhost:3001/api/google-drive/callback"
 ```
 
 ## Step 5: Test the Integration
