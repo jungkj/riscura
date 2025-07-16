@@ -1,0 +1,358 @@
+import { Client } from '@microsoft/microsoft-graph-client';
+import { DriveItem, Site, Drive } from '@microsoft/microsoft-graph-types';
+import { getSharePointAuthService } from './auth.service';
+
+export interface FileInfo {
+  id: string;
+  name: string;
+  size: number;
+  modifiedDate: Date;
+  downloadUrl?: string;
+  webUrl?: string;
+  mimeType?: string;
+  path?: string;
+}
+
+export interface SharePointSiteInfo {
+  id: string;
+  displayName: string;
+  webUrl: string;
+  description?: string;
+}
+
+export class SharePointFileService {
+  private graphClient: Client | null = null;
+
+  /**
+   * Initialize with Graph client
+   */
+  private async ensureClient(): Promise<Client> {
+    if (!this.graphClient) {
+      const authService = getSharePointAuthService();
+      this.graphClient = await authService.getGraphClient();
+    }
+    return this.graphClient;
+  }
+
+  /**
+   * Get site information
+   */
+  async getSiteInfo(siteId: string): Promise<SharePointSiteInfo> {
+    try {
+      const client = await this.ensureClient();
+      const site: Site = await client
+        .api(`/sites/${siteId}`)
+        .select('id,displayName,webUrl,description')
+        .get();
+
+      return {
+        id: site.id!,
+        displayName: site.displayName!,
+        webUrl: site.webUrl!,
+        description: site.description || undefined
+      };
+    } catch (error) {
+      console.error('Error fetching site info:', error);
+      throw new Error('Failed to fetch SharePoint site information');
+    }
+  }
+
+  /**
+   * Get site by URL
+   */
+  async getSiteByUrl(siteUrl: string): Promise<SharePointSiteInfo> {
+    try {
+      const client = await this.ensureClient();
+      
+      // Parse the site URL to get hostname and site path
+      const url = new URL(siteUrl);
+      const hostname = url.hostname;
+      const sitePath = url.pathname;
+
+      // Use Graph API search to find the site
+      const searchPath = sitePath.startsWith('/sites/') 
+        ? `${hostname}:${sitePath}` 
+        : `${hostname}:/sites/${sitePath.replace(/^\//, '')}`;
+
+      const site: Site = await client
+        .api(`/sites/${searchPath}`)
+        .select('id,displayName,webUrl,description')
+        .get();
+
+      return {
+        id: site.id!,
+        displayName: site.displayName!,
+        webUrl: site.webUrl!,
+        description: site.description || undefined
+      };
+    } catch (error) {
+      console.error('Error fetching site by URL:', error);
+      throw new Error('Failed to fetch SharePoint site by URL');
+    }
+  }
+
+  /**
+   * Get default document library (drive) for a site
+   */
+  async getDefaultDrive(siteId: string): Promise<string> {
+    try {
+      const client = await this.ensureClient();
+      const drive: Drive = await client
+        .api(`/sites/${siteId}/drive`)
+        .select('id')
+        .get();
+
+      return drive.id!;
+    } catch (error) {
+      console.error('Error fetching default drive:', error);
+      throw new Error('Failed to fetch default document library');
+    }
+  }
+
+  /**
+   * List Excel files in a SharePoint site
+   */
+  async listExcelFiles(
+    siteId: string, 
+    driveId?: string,
+    path?: string
+  ): Promise<FileInfo[]> {
+    try {
+      const client = await this.ensureClient();
+      
+      // If no driveId provided, get the default drive
+      const targetDriveId = driveId || await this.getDefaultDrive(siteId);
+      
+      // Build the API path
+      let apiPath = `/sites/${siteId}/drives/${targetDriveId}`;
+      if (path) {
+        apiPath += `/root:/${path}:/children`;
+      } else {
+        apiPath += '/root/children';
+      }
+
+      // Fetch items with pagination support
+      const response = await client
+        .api(apiPath)
+        .filter("file ne null and (name endsWith '.xlsx' or name endsWith '.xls')")
+        .select('id,name,size,lastModifiedDateTime,webUrl,file,@microsoft.graph.downloadUrl')
+        .top(100)
+        .get();
+
+      const files: FileInfo[] = [];
+      
+      // Process the response
+      if (response.value) {
+        for (const item of response.value) {
+          if (item.file) {
+            files.push({
+              id: item.id,
+              name: item.name,
+              size: item.size || 0,
+              modifiedDate: new Date(item.lastModifiedDateTime),
+              downloadUrl: item['@microsoft.graph.downloadUrl'],
+              webUrl: item.webUrl,
+              mimeType: item.file.mimeType,
+              path: path || '/'
+            });
+          }
+        }
+      }
+
+      return files;
+    } catch (error) {
+      console.error('Error listing Excel files:', error);
+      throw new Error('Failed to list Excel files from SharePoint');
+    }
+  }
+
+  /**
+   * Download file content
+   */
+  async downloadFile(siteId: string, driveId: string, itemId: string): Promise<Buffer> {
+    try {
+      const client = await this.ensureClient();
+      
+      // Get file metadata first to get download URL
+      const fileItem: DriveItem = await client
+        .api(`/sites/${siteId}/drives/${driveId}/items/${itemId}`)
+        .select('@microsoft.graph.downloadUrl')
+        .get();
+
+      if (!fileItem['@microsoft.graph.downloadUrl']) {
+        throw new Error('Download URL not available');
+      }
+
+      // Download the file content
+      const response = await fetch(fileItem['@microsoft.graph.downloadUrl']);
+      if (!response.ok) {
+        throw new Error(`Failed to download file: ${response.statusText}`);
+      }
+
+      const arrayBuffer = await response.arrayBuffer();
+      return Buffer.from(arrayBuffer);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      throw new Error('Failed to download file from SharePoint');
+    }
+  }
+
+  /**
+   * Get file by site-relative URL
+   */
+  async getFileBySiteRelativeUrl(
+    siteId: string, 
+    relativePath: string
+  ): Promise<FileInfo> {
+    try {
+      const client = await this.ensureClient();
+      
+      // Encode the path properly
+      const encodedPath = encodeURIComponent(relativePath);
+      
+      const fileItem: DriveItem = await client
+        .api(`/sites/${siteId}/drive/root:/${encodedPath}`)
+        .select('id,name,size,lastModifiedDateTime,webUrl,file,@microsoft.graph.downloadUrl')
+        .get();
+
+      if (!fileItem.file) {
+        throw new Error('Path does not point to a file');
+      }
+
+      return {
+        id: fileItem.id!,
+        name: fileItem.name!,
+        size: fileItem.size || 0,
+        modifiedDate: new Date(fileItem.lastModifiedDateTime!),
+        downloadUrl: fileItem['@microsoft.graph.downloadUrl'],
+        webUrl: fileItem.webUrl!,
+        mimeType: fileItem.file.mimeType,
+        path: relativePath
+      };
+    } catch (error) {
+      console.error('Error fetching file by URL:', error);
+      throw new Error('Failed to fetch file by relative URL');
+    }
+  }
+
+  /**
+   * Get file metadata
+   */
+  async getFileMetadata(
+    siteId: string,
+    driveId: string,
+    itemId: string
+  ): Promise<FileInfo> {
+    try {
+      const client = await this.ensureClient();
+      
+      const fileItem: DriveItem = await client
+        .api(`/sites/${siteId}/drives/${driveId}/items/${itemId}`)
+        .select('id,name,size,lastModifiedDateTime,webUrl,file,@microsoft.graph.downloadUrl')
+        .get();
+
+      if (!fileItem.file) {
+        throw new Error('Item is not a file');
+      }
+
+      return {
+        id: fileItem.id!,
+        name: fileItem.name!,
+        size: fileItem.size || 0,
+        modifiedDate: new Date(fileItem.lastModifiedDateTime!),
+        downloadUrl: fileItem['@microsoft.graph.downloadUrl'],
+        webUrl: fileItem.webUrl!,
+        mimeType: fileItem.file.mimeType
+      };
+    } catch (error) {
+      console.error('Error fetching file metadata:', error);
+      throw new Error('Failed to fetch file metadata');
+    }
+  }
+
+  /**
+   * Check if user has access to a specific file
+   */
+  async checkFileAccess(
+    siteId: string,
+    driveId: string,
+    itemId: string
+  ): Promise<boolean> {
+    try {
+      const client = await this.ensureClient();
+      
+      // Try to get file permissions
+      await client
+        .api(`/sites/${siteId}/drives/${driveId}/items/${itemId}/permissions`)
+        .top(1)
+        .get();
+
+      return true;
+    } catch (error) {
+      console.error('Error checking file access:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Search for files in SharePoint
+   */
+  async searchFiles(
+    siteId: string,
+    searchQuery: string,
+    fileTypes: string[] = ['xlsx', 'xls']
+  ): Promise<FileInfo[]> {
+    try {
+      const client = await this.ensureClient();
+      
+      // Build search query
+      const typeFilter = fileTypes.map(ext => `filetype:${ext}`).join(' OR ');
+      const fullQuery = `${searchQuery} AND (${typeFilter}) AND path:https://*/sites/*`;
+
+      const response = await client
+        .api('/search/query')
+        .post({
+          requests: [{
+            entityTypes: ['driveItem'],
+            query: {
+              queryString: fullQuery
+            },
+            from: 0,
+            size: 50
+          }]
+        });
+
+      const files: FileInfo[] = [];
+      
+      if (response.value?.[0]?.hitsContainers?.[0]?.hits) {
+        for (const hit of response.value[0].hitsContainers[0].hits) {
+          const resource = hit.resource;
+          if (resource) {
+            files.push({
+              id: resource.id,
+              name: resource.name,
+              size: resource.size || 0,
+              modifiedDate: new Date(resource.lastModifiedDateTime),
+              webUrl: resource.webUrl
+            });
+          }
+        }
+      }
+
+      return files;
+    } catch (error) {
+      console.error('Error searching files:', error);
+      throw new Error('Failed to search files in SharePoint');
+    }
+  }
+}
+
+// Singleton instance
+let fileServiceInstance: SharePointFileService | null = null;
+
+export function getSharePointFileService(): SharePointFileService {
+  if (!fileServiceInstance) {
+    fileServiceInstance = new SharePointFileService();
+  }
+  return fileServiceInstance;
+}
