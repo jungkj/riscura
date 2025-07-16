@@ -68,6 +68,8 @@ jest path/to/test.spec.ts --watch
 ./test-website.sh            # Full stack website testing
 ./test-oauth-deployment.sh   # OAuth deployment verification
 ./test-auth-endpoints.sh     # Authentication endpoint testing
+./scripts/test-redis.sh      # Redis connection testing
+./scripts/test-email.sh      # Email service testing
 ```
 
 ### Performance & Security
@@ -150,19 +152,29 @@ npm run alerts:test        # Test alert system
    export const POST = withApiMiddleware({
      requireAuth: true,
      bodySchema: MyBodySchema,
-     rateLimiters: ['standard'] // or 'auth', 'fileUpload', 'expensive'
+     rateLimiters: ['standard'] // or 'auth', 'fileUpload', 'expensive', 'bulk', 'report'
    })(async (context, validatedData) => {
      const { user, organizationId } = context;
      // Return data directly - middleware handles response formatting
      return { data: result };
    });
    ```
+   
+   Available rate limiters:
+   - `standard`: 1000 requests per 15 minutes
+   - `auth`: 5 attempts per 15 minutes
+   - `fileUpload`: 50 uploads per hour
+   - `expensive`: 10 operations per hour
+   - `bulk`: 5 operations per 10 minutes
+   - `report`: 20 reports per 30 minutes
 
 2. **TypeScript**: While strict mode is disabled, aim for type safety. Two files are excluded from checking:
    - `src/app/api/stripe/webhook/route.ts`
    - `src/components/ai/VoiceInterface.tsx`
 
 3. **Before Committing**: Always run `npm run precommit` or `npm run type-check:full` to catch errors
+   - Note: TypeScript strict mode is currently disabled - focus on functionality while maintaining reasonable type safety
+   - Use `// @ts-ignore` sparingly and only with proper documentation (see TypeScript Strict Mode Guidelines)
 
 4. **Multi-Tenant Architecture**: All data operations must respect organization boundaries
 
@@ -178,13 +190,34 @@ Key environment variables needed (see `env.example` for comprehensive list with 
 - `REDIS_URL` - Redis connection for caching
 - `NEXTAUTH_URL` - Authentication base URL
 - `NEXTAUTH_SECRET` - Auth secret key
-- `OPENAI_API_KEY` - OpenAI API key for AI features
+- `OPENAI_API_KEY` - OpenAI API key for AI features (server-side only, never expose to client)
 - `STRIPE_SECRET_KEY` - Stripe API key for billing
+- `STRIPE_WEBHOOK_SECRET` - Stripe webhook endpoint secret
+- `AWS_S3_BUCKET` - S3 bucket for document storage
+- `SENDGRID_API_KEY` - Email service API key
 - Additional configs for AWS, email, monitoring, and performance optimization
+
+See `env.example` for:
+- Advanced performance settings (connection pools, caching, memory management)
+- Monitoring and alerting configuration
+- Feature flags
+- Security settings
+- Rate limiting configuration
 
 ### Test Credentials
 - Email: testuser@riscura.com
 - Password: test123
+
+### TypeScript Strict Mode Guidelines
+- **Current Status**: Strict mode disabled with ~785 errors across 165 files
+- **Use `// @ts-ignore` ONLY with proper documentation**:
+  ```typescript
+  // @ts-ignore - [REASON]: [DESCRIPTION] - [TRACKING_ID]
+  // TODO: [CLEANUP_PLAN] - Target: [DATE/MILESTONE]
+  // Related: [ISSUE_LINK] or [TECH_DEBT_ITEM]
+  ```
+- **Never use for**: New code, legitimate errors, shortcuts, undefined/null references
+- **Weekly cleanup targets**: Systematic reduction of TypeScript errors
 
 ### Key Configuration Files
 - **TypeScript**: `tsconfig.json` - Strict mode disabled, excludes 2 files from type checking
@@ -214,6 +247,37 @@ Key environment variables needed (see `env.example` for comprehensive list with 
 - Push notification support
 - App-like navigation with gesture support
 
+## Current Development Phase
+
+The codebase is in Phase 2 of a multi-phase development plan:
+- **Phase 1** (Completed): Initial POC development with focus on rapid iteration
+- **Phase 2** (Current): Technical debt resolution and production readiness
+  - TypeScript strict mode migration (~785 errors across 165 files)
+  - API standardization improvements
+  - Performance optimization
+  - Security hardening
+- **Phase 3** (Planned): Scale optimization and enterprise features
+
+### TypeScript Strict Mode Guidelines
+
+The codebase currently has TypeScript strict mode disabled with ongoing migration efforts. When working with TypeScript:
+
+1. **Using @ts-ignore**: Only use when absolutely necessary with proper documentation:
+   ```typescript
+   // @ts-ignore - Temporary: [Specific reason, e.g., "Third-party library type mismatch, tracked in issue #123"]
+   ```
+
+2. **Do NOT use @ts-ignore for**:
+   - Simple type definition fixes
+   - Missing imports that can be added
+   - Basic null/undefined checks
+   - Property access issues fixable with optional chaining (`?.`)
+
+3. **Priority areas for type improvements**:
+   - New code should be fully typed
+   - API endpoints should use proper request/response types
+   - Critical business logic should have comprehensive types
+
 ## Development Guidelines
 
 ### File Structure Conventions
@@ -242,6 +306,15 @@ Key environment variables needed (see `env.example` for comprehensive list with 
   - `APIError`, `ValidationError`, `AuthenticationError`, `ForbiddenError`
   - `RateLimitError`, `SubscriptionError`, `PlanLimitError`
 
+### Current Development Phase
+- **Phase**: Technical debt resolution while supporting feature development
+- **TypeScript Errors**: ~785 errors across 165 files (being systematically reduced)
+- **Focus Areas**:
+  1. Database model updates and Prisma schema alignment
+  2. Enum standardization (case sensitivity issues)
+  3. Missing interface properties
+  4. Gradual TypeScript strict mode re-enablement
+
 ## Additional Resources
 
 ### Scripts Directory
@@ -263,3 +336,9 @@ Key environment variables needed (see `env.example` for comprehensive list with 
 2. Run `npm run test:auth-flow` to verify authentication is working
 3. Run `./test-website.sh` for quick full-stack validation
 4. Use `npm run precommit` before committing changes
+5. Review current development phase and TypeScript guidelines before coding
+
+### Shell Test Scripts
+- `./test-website.sh` - Full stack website testing
+- `./test-oauth-deployment.sh` - OAuth deployment verification
+- `./test-auth-endpoints.sh` - Authentication endpoint testing
