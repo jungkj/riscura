@@ -47,7 +47,14 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
       // Convert file to base64
       const reader = new FileReader();
       reader.onload = async (e) => {
-        const base64 = e.target?.result?.toString().split(',')[1];
+        const result = e.target?.result;
+        if (!result || typeof result !== 'string') {
+          toast.error('Failed to read file');
+          setStep('upload');
+          return;
+        }
+        
+        const base64 = result.split(',')[1];
         if (!base64) {
           toast.error('Failed to read file');
           setStep('upload');

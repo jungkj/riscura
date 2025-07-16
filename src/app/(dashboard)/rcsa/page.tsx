@@ -146,11 +146,11 @@ export default function RCSAPage() {
             className="h-full"
           >
             {viewMode === 'notion' ? (
-              <NotionRCSASpreadsheet key={refreshKey} />
+              <NotionRCSASpreadsheet />
             ) : viewMode === 'classic' ? (
-              <RCSASpreadsheet key={refreshKey} spreadsheetId="default" />
+              <RCSASpreadsheet spreadsheetId="default" />
             ) : (
-              <EnhancedRCSASpreadsheet key={refreshKey} />
+              <EnhancedRCSASpreadsheet />
             )}
           </motion.div>
         </div>

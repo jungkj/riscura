@@ -28,25 +28,25 @@ export const POST = withApiMiddleware({
       // Parse pasted text data
       parsedData = parseRCSAText(content);
     } else {
-      return NextResponse.json({
+      return {
         success: false,
         error: 'Invalid input data'
-      }, { status: 400 });
+      };
     }
     
     if (parsedData.errors.length > 0) {
-      return NextResponse.json({
+      return {
         success: false,
         errors: parsedData.errors,
         warnings: parsedData.warnings
-      }, { status: 400 });
+      };
     }
     
     if (parsedData.rows.length === 0) {
-      return NextResponse.json({
+      return {
         success: false,
         error: 'No valid data found to analyze'
-      }, { status: 400 });
+      };
     }
     
     // Perform AI gap analysis
@@ -55,20 +55,20 @@ export const POST = withApiMiddleware({
     // Store analysis in session or temporary storage for review
     // This would be implemented based on your session management approach
     
-    return NextResponse.json({
+    return {
       success: true,
       data: {
         analysis,
         rowCount: parsedData.rows.length,
         warnings: parsedData.warnings
       }
-    });
+    };
     
   } catch (error) {
     console.error('RCSA analysis error:', error);
-    return NextResponse.json({
+    return {
       success: false,
       error: 'Failed to analyze RCSA data'
-    }, { status: 500 });
+    };
   }
 });
