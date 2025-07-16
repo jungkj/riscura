@@ -53,15 +53,25 @@ This guide provides step-by-step instructions for setting up SharePoint integrat
    openssl req -new -key riscura-sharepoint.key -out riscura-sharepoint.csr \
      -subj "/C=US/ST=State/L=City/O=Riscura/CN=riscura-sharepoint-integration"
    
-   # Generate self-signed certificate (valid for 365 days)
-   openssl x509 -req -days 365 -in riscura-sharepoint.csr \
+   # Generate self-signed certificate (valid for 90 days - recommended for security)
+   openssl x509 -req -days 90 -in riscura-sharepoint.csr \
      -signkey riscura-sharepoint.key -out riscura-sharepoint.crt
    
    # Create PFX file for Azure upload
+   # Store the password in an environment variable for security
+   export CERT_PASSWORD="$(openssl rand -base64 32)"
+   echo "Certificate password: $CERT_PASSWORD"
+   
    openssl pkcs12 -export -out riscura-sharepoint.pfx \
      -inkey riscura-sharepoint.key -in riscura-sharepoint.crt \
-     -password pass:your-secure-password
+     -password pass:$CERT_PASSWORD
    ```
+   
+   > **Security Note**: 
+   > - Store the certificate password in a secure secret management tool (e.g., Azure Key Vault, AWS Secrets Manager)
+   > - Never commit passwords to version control
+   > - Use shorter certificate validity periods (90 days recommended) for enhanced security
+   > - Set up automated certificate rotation if possible
 
 2. **Upload Certificate to Azure AD App**
    - In your app registration, go to "Certificates & secrets"

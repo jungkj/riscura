@@ -10,17 +10,22 @@ export const GET = withApiMiddleware({
   
   try {
     const authService = getGoogleDriveAuthService();
-    const authUrl = authService.getAuthUrl(user.id);
+    const authUrl = await authService.getAuthUrl(user.id);
     
     return {
-      authUrl,
-      message: 'Redirect user to this URL for Google Drive authorization'
+      data: {
+        authUrl,
+        message: 'Redirect user to this URL for Google Drive authorization'
+      }
     };
   } catch (error) {
-    console.error('Error generating auth URL:', error);
-    return {
-      error: 'Failed to generate authorization URL'
-    };
+    console.error('Error generating Google Drive auth URL:', {
+      userId: user.id,
+      operation: 'generateAuthUrl',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+    
+    throw new Error('Failed to generate authorization URL');
   }
 });
 
@@ -36,12 +41,17 @@ export const DELETE = withApiMiddleware({
     await authService.revokeAccess(user.id);
     
     return {
-      message: 'Google Drive access revoked successfully'
+      data: {
+        success: true,
+        message: 'Google Drive access revoked successfully'
+      }
     };
   } catch (error) {
-    console.error('Error revoking access:', error);
-    return {
-      error: 'Failed to revoke Google Drive access'
-    };
+    console.error('Error revoking Google Drive access:', {
+      userId: user.id,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+    
+    throw new Error('Failed to revoke Google Drive access');
   }
 });

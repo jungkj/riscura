@@ -47,11 +47,10 @@ export const GET = withApiMiddleware({
   try {
     const authService = getGoogleDriveAuthService();
     
-    // Validate state parameter (should be a valid user ID)
-    // In production, you might want to use encrypted state or CSRF tokens
-    const isValidUserId = /^[a-zA-Z0-9-_]+$/.test(state);
-    if (!isValidUserId) {
-      console.warn('Invalid state parameter in Google Drive callback:', { state: state.substring(0, 10) + '...' });
+    // Validate CSRF token and get user ID
+    const userId = await authService.validateCSRFToken(state);
+    if (!userId) {
+      console.warn('Invalid or expired CSRF token in Google Drive callback');
       return NextResponse.redirect(
         new URL('/import?error=google_drive_invalid_state', req.url)
       );
@@ -61,7 +60,7 @@ export const GET = withApiMiddleware({
     const tokens = await authService.getTokensFromCode(code);
     
     // Store tokens for the user
-    await authService.storeTokens(state, tokens);
+    await authService.storeTokens(userId, tokens);
     
     // Redirect back to import page with success
     return NextResponse.redirect(

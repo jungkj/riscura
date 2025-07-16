@@ -212,17 +212,26 @@ export class ExcelValidatorService {
   }
 
   /**
-   * Parse sheet data
+   * Parse sheet data with runtime validation
    */
   private parseSheet<T>(workbook: XLSX.WorkBook, sheetName: string): T[] {
     const worksheet = workbook.Sheets[sheetName];
-    const jsonData = XLSX.utils.sheet_to_json<T>(worksheet, {
+    if (!worksheet) {
+      throw new Error(`Sheet "${sheetName}" not found in the workbook`);
+    }
+    
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, {
       raw: false,
       defval: undefined,
       blankrows: false
     });
     
-    return jsonData;
+    // Runtime validation to ensure the parsed data is an array
+    if (!Array.isArray(jsonData)) {
+      throw new Error(`Invalid data format for sheet "${sheetName}": expected an array but got ${typeof jsonData}`);
+    }
+    
+    return jsonData as T[];
   }
 
   /**

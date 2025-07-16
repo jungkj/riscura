@@ -1,6 +1,7 @@
 import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import { redis } from '@/lib/redis';
+import crypto from 'crypto';
 
 export interface GoogleDriveTokens {
   access_token: string;
@@ -8,6 +9,12 @@ export interface GoogleDriveTokens {
   scope: string;
   token_type: string;
   expiry_date: number;
+}
+
+interface CSRFState {
+  userId: string;
+  token: string;
+  createdAt: number;
 }
 
 export class GoogleDriveAuthService {
@@ -18,25 +25,72 @@ export class GoogleDriveAuthService {
     this.oauth2Client = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
-      process.env.GOOGLE_REDIRECT_URI || `${process.env.NEXTAUTH_URL}/api/auth/google-drive/callback`
+      process.env.GOOGLE_REDIRECT_URI || `${process.env.NEXTAUTH_URL}/api/google-drive/callback`
     );
   }
 
   /**
-   * Generate the authorization URL for OAuth consent
+   * Generate the authorization URL for OAuth consent with CSRF protection
    */
-  getAuthUrl(userId: string): string {
+  async getAuthUrl(userId: string): Promise<string> {
     const scopes = [
       'https://www.googleapis.com/auth/drive.readonly',
       'https://www.googleapis.com/auth/drive.file'
     ];
 
+    // Generate CSRF token
+    const csrfToken = crypto.randomBytes(32).toString('hex');
+    
+    // Store CSRF state in Redis with 10 minute expiration
+    const stateData: CSRFState = {
+      userId,
+      token: csrfToken,
+      createdAt: Date.now()
+    };
+    
+    const stateKey = `googledrive:csrf:${csrfToken}`;
+    await redis.setex(stateKey, 600, JSON.stringify(stateData)); // 10 minute TTL
+    
     return this.oauth2Client.generateAuthUrl({
       access_type: 'offline',
       scope: scopes,
-      state: userId, // Pass userId in state for callback
+      state: csrfToken, // Use CSRF token as state
       prompt: 'consent' // Force consent to get refresh token
     });
+  }
+
+  /**
+   * Validate CSRF token and return associated user ID
+   */
+  async validateCSRFToken(token: string): Promise<string | null> {
+    if (!token || typeof token !== 'string') {
+      return null;
+    }
+    
+    const stateKey = `googledrive:csrf:${token}`;
+    const stateData = await redis.get(stateKey);
+    
+    if (!stateData) {
+      return null;
+    }
+    
+    try {
+      const state: CSRFState = JSON.parse(stateData);
+      
+      // Validate token age (10 minutes max)
+      if (Date.now() - state.createdAt > 600000) {
+        await redis.del(stateKey);
+        return null;
+      }
+      
+      // Delete token after validation (one-time use)
+      await redis.del(stateKey);
+      
+      return state.userId;
+    } catch (error) {
+      console.error('Error parsing CSRF state:', error);
+      return null;
+    }
   }
 
   /**

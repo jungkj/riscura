@@ -6,6 +6,7 @@ import { ProgressBar } from '@/components/ui/ProgressBar';
 import { Alert } from '@/components/ui/Alert';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { useRouter } from 'next/navigation';
 import { 
   CheckCircle, 
   XCircle, 
@@ -25,6 +26,7 @@ interface Props {
 export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel }) => {
   const { job, isLoading, error, cancelJob } = useImportJob(jobId);
   const [cancelling, setCancelling] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (job && (job.status === 'COMPLETED' || job.status === 'FAILED')) {
@@ -204,7 +206,7 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
         {job.status === 'COMPLETED' && (
           <div className="flex gap-2 pt-2">
             <Button
-              onClick={() => window.location.href = '/risks'}
+              onClick={() => router.push('/risks')}
               size="sm"
             >
               <Eye className="h-4 w-4 mr-2" />

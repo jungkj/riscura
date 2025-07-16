@@ -39,10 +39,21 @@ export class SharePointFileService {
         .select('id,displayName,webUrl,description')
         .get();
 
+      // Validate required fields
+      if (!site.id || !site.displayName || !site.webUrl) {
+        throw new Error(
+          `Incomplete site data received from Graph API. Missing required fields: ${[
+            !site.id && 'id',
+            !site.displayName && 'displayName',
+            !site.webUrl && 'webUrl'
+          ].filter(Boolean).join(', ')}`
+        );
+      }
+
       return {
-        id: site.id!,
-        displayName: site.displayName!,
-        webUrl: site.webUrl!,
+        id: site.id,
+        displayName: site.displayName,
+        webUrl: site.webUrl,
         description: site.description || undefined
       };
     } catch (error) {
@@ -73,10 +84,21 @@ export class SharePointFileService {
         .select('id,displayName,webUrl,description')
         .get();
 
+      // Validate required fields
+      if (!site.id || !site.displayName || !site.webUrl) {
+        throw new Error(
+          `Incomplete site data received from Graph API. Missing required fields: ${[
+            !site.id && 'id',
+            !site.displayName && 'displayName',
+            !site.webUrl && 'webUrl'
+          ].filter(Boolean).join(', ')}`
+        );
+      }
+
       return {
-        id: site.id!,
-        displayName: site.displayName!,
-        webUrl: site.webUrl!,
+        id: site.id,
+        displayName: site.displayName,
+        webUrl: site.webUrl,
         description: site.description || undefined
       };
     } catch (error) {
@@ -104,13 +126,15 @@ export class SharePointFileService {
   }
 
   /**
-   * List Excel files in a SharePoint site
+   * List Excel files in a SharePoint site with pagination support
    */
   async listExcelFiles(
     siteId: string, 
     driveId?: string,
-    path?: string
-  ): Promise<FileInfo[]> {
+    path?: string,
+    pageSize: number = 100,
+    nextPageToken?: string
+  ): Promise<{ files: FileInfo[]; nextPageToken?: string }> {
     try {
       const client = await this.ensureClient();
       
@@ -125,13 +149,19 @@ export class SharePointFileService {
         apiPath += '/root/children';
       }
 
-      // Fetch items with pagination support
-      const response = await client
+      // Build the request with pagination
+      let request = client
         .api(apiPath)
         .filter("file ne null and (name endsWith '.xlsx' or name endsWith '.xls')")
         .select('id,name,size,lastModifiedDateTime,webUrl,file,@microsoft.graph.downloadUrl')
-        .top(100)
-        .get();
+        .top(pageSize);
+      
+      // If we have a next page token, use it
+      if (nextPageToken) {
+        request = client.api(nextPageToken);
+      }
+
+      const response = await request.get();
 
       const files: FileInfo[] = [];
       
@@ -153,11 +183,42 @@ export class SharePointFileService {
         }
       }
 
-      return files;
+      // Return files with next page token if available
+      return {
+        files,
+        nextPageToken: response['@odata.nextLink'] || undefined
+      };
     } catch (error) {
       console.error('Error listing Excel files:', error);
       throw new Error('Failed to list Excel files from SharePoint');
     }
+  }
+
+  /**
+   * List all Excel files in a SharePoint site (fetches all pages)
+   */
+  async listAllExcelFiles(
+    siteId: string, 
+    driveId?: string,
+    path?: string,
+    maxFiles: number = 1000
+  ): Promise<FileInfo[]> {
+    const allFiles: FileInfo[] = [];
+    let nextPageToken: string | undefined;
+    
+    do {
+      const result = await this.listExcelFiles(siteId, driveId, path, 100, nextPageToken);
+      allFiles.push(...result.files);
+      nextPageToken = result.nextPageToken;
+      
+      // Safety limit to prevent infinite loops
+      if (allFiles.length >= maxFiles) {
+        console.warn(`Reached maximum file limit of ${maxFiles}. Some files may not be included.`);
+        break;
+      }
+    } while (nextPageToken);
+    
+    return allFiles;
   }
 
   /**

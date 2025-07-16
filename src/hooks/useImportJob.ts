@@ -115,11 +115,50 @@ export const useImportJob = (jobId: string, pollInterval: number = 2000): UseImp
 
   // Set up polling
   useEffect(() => {
+    if (!jobId) return;
+    
+    // Define the polling function inside useEffect to avoid dependencies
+    const pollJobStatus = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const response = await api.get(`/api/import/jobs/${jobId}`);
+        const data = await response.json();
+        
+        if (data.job) {
+          setJob(data.job);
+          
+          // Stop polling if job is complete
+          if (data.job.status === 'COMPLETED' || data.job.status === 'FAILED' || data.job.status === 'CANCELLED') {
+            if (intervalRef.current) {
+              clearInterval(intervalRef.current);
+              intervalRef.current = undefined;
+            }
+          }
+        } else if (data.error) {
+          setError(data.error);
+          setJob(null);
+          
+          // Stop polling on error
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = undefined;
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching job status:', err);
+        setError('Failed to fetch import job status');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
     // Initial fetch
-    fetchJobStatus();
+    pollJobStatus();
     
     // Set up polling interval
-    intervalRef.current = setInterval(fetchJobStatus, pollInterval);
+    intervalRef.current = setInterval(pollJobStatus, pollInterval);
     
     // Cleanup
     return () => {
@@ -127,7 +166,7 @@ export const useImportJob = (jobId: string, pollInterval: number = 2000): UseImp
         clearInterval(intervalRef.current);
       }
     };
-  }, [jobId, fetchJobStatus, pollInterval]);
+  }, [jobId, pollInterval]);
 
   return {
     job,
@@ -158,16 +197,24 @@ export const useImportJobs = (): UseImportJobsReturn => {
   const [error, setError] = useState<string | null>(null);
   const [total, setTotal] = useState(0);
 
-  // Create import job
+  // Create import job with configurable endpoint
   const createImportJob = useCallback(async (params: {
     integrationId: string;
     fileId: string;
     fileName: string;
+    endpoint?: string; // Allow custom endpoint
   }): Promise<{ success: boolean; jobId?: string; error?: string }> => {
     try {
       setError(null);
       
-      const response = await api.post('/api/sharepoint/import', params);
+      // Use custom endpoint or default to SharePoint
+      const importEndpoint = params.endpoint || '/api/sharepoint/import';
+      
+      const response = await api.post(importEndpoint, {
+        integrationId: params.integrationId,
+        fileId: params.fileId,
+        fileName: params.fileName
+      });
       const data = await response.json();
       
       if (data.jobId) {

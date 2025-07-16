@@ -1,4 +1,5 @@
 // SharePoint Integration Types
+import { ValidationError } from '@/services/excel/validator.service';
 
 export interface SharePointIntegration {
   id: string;
@@ -90,14 +91,6 @@ export interface ExcelValidationResult {
   };
 }
 
-export interface ValidationError {
-  type: 'error' | 'warning';
-  sheet?: string;
-  row?: number;
-  column?: string;
-  field?: string;
-  message: string;
-}
 
 // API Request/Response Types
 

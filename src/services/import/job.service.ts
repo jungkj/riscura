@@ -22,6 +22,15 @@ interface JobProgress {
   message: string;
 }
 
+interface ImportJobUpdateData {
+  status: ImportJobStatus;
+  progress: number;
+  progressMessage: string;
+  metadata?: any;
+  errorMessage?: string;
+  completedAt?: Date;
+}
+
 export class ImportJobService {
   private queue: Bull.Queue<JobData>;
   private static instance: ImportJobService;
@@ -74,6 +83,7 @@ export class ImportJobService {
     fileName: string;
     sourceUrl: string;
     metadata?: any;
+    importType?: string; // Allow custom import type
   }): Promise<string> {
     try {
       // Create job record in database
@@ -81,7 +91,7 @@ export class ImportJobService {
         data: {
           organizationId: params.organizationId,
           userId: params.userId,
-          type: 'sharepoint-excel-import',
+          type: params.importType || 'sharepoint-excel-import', // Use provided type or default
           status: ImportJobStatus.QUEUED,
           sourceUrl: params.sourceUrl,
           metadata: params.metadata || {},
@@ -318,7 +328,7 @@ export class ImportJobService {
     errorMessage?: string
   ): Promise<void> {
     try {
-      const updateData: any = {
+      const updateData: ImportJobUpdateData = {
         status,
         progress,
         progressMessage: message

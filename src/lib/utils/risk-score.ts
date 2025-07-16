@@ -5,7 +5,10 @@
 export function parseRiskScore(value: string | number | undefined | null): number {
   if (value === undefined || value === null) return 0;
   
-  if (typeof value === 'number') return value;
+  // Handle number values - clamp between 1 and 5
+  if (typeof value === 'number') {
+    return Math.max(1, Math.min(5, Math.round(value)));
+  }
   
   // Handle string values
   const strValue = value.toString().toLowerCase().trim();
@@ -19,7 +22,8 @@ export function parseRiskScore(value: string | number | undefined | null): numbe
     'very high': 5, 'veryhigh': 5, 'very_high': 5, 'critical': 5
   };
   
-  if (textToScore[strValue]) {
+  // Check for text value match - use hasOwnProperty to handle falsy values
+  if (textToScore.hasOwnProperty(strValue)) {
     return textToScore[strValue];
   }
   

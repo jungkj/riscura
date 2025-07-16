@@ -74,7 +74,7 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
         const newIntegration: SharePointIntegration = {
           ...data.integration,
           lastSyncedAt: data.integration.lastSyncedAt ? new Date(data.integration.lastSyncedAt) : undefined,
-          createdAt: new Date()
+          createdAt: data.integration.createdAt ? new Date(data.integration.createdAt) : new Date()
         };
         
         // Update integrations list

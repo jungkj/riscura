@@ -53,6 +53,13 @@ export const POST = withApiMiddleware({
       };
     }
 
+    // Validate driveId
+    if (!integration.driveId || integration.driveId.trim() === '') {
+      return {
+        error: 'SharePoint integration is missing driveId. Please reconnect to SharePoint and select a document library.'
+      };
+    }
+
     // Create import job
     const jobService = getImportJobService();
     const jobId = await jobService.createImportJob({
@@ -60,7 +67,7 @@ export const POST = withApiMiddleware({
       userId: user.id,
       integrationId,
       siteId: integration.siteId,
-      driveId: integration.driveId || '',
+      driveId: integration.driveId,
       fileId,
       fileName,
       sourceUrl: `sharepoint://${integration.siteId}/${fileId}`,

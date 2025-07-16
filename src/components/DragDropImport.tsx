@@ -815,91 +815,89 @@ export default function DragDropImport({
 
       {/* Google Drive Integration */}
       {selectedMode.id === 'googledrive' && (
-        <>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Google Drive Connection</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {!isGoogleDriveConnected ? (
-                <div className="space-y-4">
-                  <Alert>
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>
-                      Connect your Google Drive account to import Excel files directly from your Drive.
-                    </AlertDescription>
-                  </Alert>
-                  <Button 
-                    onClick={connectGoogleDrive}
-                    className="w-full"
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Google Drive Connection</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {!isGoogleDriveConnected ? (
+              <div className="space-y-4">
+                <Alert>
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>
+                    Connect your Google Drive account to import Excel files directly from your Drive.
+                  </AlertDescription>
+                </Alert>
+                <Button 
+                  onClick={connectGoogleDrive}
+                  className="w-full"
+                >
+                  <Cloud className="h-4 w-4 mr-2" />
+                  Connect Google Drive
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                  <div className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                    <span className="text-green-900 font-medium">Google Drive Connected</span>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={checkGoogleDriveConnection}
                   >
-                    <Cloud className="h-4 w-4 mr-2" />
-                    Connect Google Drive
+                    <RefreshCw className="h-4 w-4" />
                   </Button>
                 </div>
-              ) : (
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                    <div className="flex items-center">
-                      <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                      <span className="text-green-900 font-medium">Google Drive Connected</span>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={checkGoogleDriveConnection}
-                    >
-                      <RefreshCw className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  
-                  {/* Google Drive File Browser */}
-                  <GoogleDriveFileBrowser
-                    onFileSelect={(file) => {
-                      const isSelected = selectedGoogleDriveFiles.some(f => f.id === file.id);
-                      if (isSelected) {
-                        setSelectedGoogleDriveFiles(prev => prev.filter(f => f.id !== file.id));
+                
+                {/* Google Drive File Browser */}
+                <GoogleDriveFileBrowser
+                  onFileSelect={(file) => {
+                    const isSelected = selectedGoogleDriveFiles.some(f => f.id === file.id);
+                    if (isSelected) {
+                      setSelectedGoogleDriveFiles(prev => prev.filter(f => f.id !== file.id));
+                    } else {
+                      if (selectedGoogleDriveFiles.length < selectedMode.maxFiles) {
+                        setSelectedGoogleDriveFiles(prev => [...prev, file]);
                       } else {
-                        if (selectedGoogleDriveFiles.length < selectedMode.maxFiles) {
-                          setSelectedGoogleDriveFiles(prev => [...prev, file]);
-                        } else {
-                          toast({
-                            title: "Maximum files reached",
-                            description: `You can only select up to ${selectedMode.maxFiles} files`,
-                            variant: "destructive"
-                          });
-                        }
+                        toast({
+                          title: "Maximum files reached",
+                          description: `You can only select up to ${selectedMode.maxFiles} files`,
+                          variant: "destructive"
+                        });
                       }
-                    }}
-                    selectedFileId={selectedGoogleDriveFiles[0]?.id}
-                  />
-                  
-                  {selectedGoogleDriveFiles.length > 0 && (
-                    <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                      <p className="text-sm font-medium text-blue-900">
-                        Selected {selectedGoogleDriveFiles.length} file{selectedGoogleDriveFiles.length > 1 ? 's' : ''}
-                      </p>
-                      <div className="mt-2 space-y-1">
-                        {selectedGoogleDriveFiles.map((file) => (
-                          <div key={file.id} className="flex items-center justify-between text-sm">
-                            <span className="text-blue-700 truncate">{file.name}</span>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => setSelectedGoogleDriveFiles(prev => prev.filter(f => f.id !== file.id))}
-                            >
-                              <X className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        ))}
-                      </div>
+                    }
+                  }}
+                  selectedFileId={selectedGoogleDriveFiles[0]?.id}
+                />
+                
+                {selectedGoogleDriveFiles.length > 0 && (
+                  <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                    <p className="text-sm font-medium text-blue-900">
+                      Selected {selectedGoogleDriveFiles.length} file{selectedGoogleDriveFiles.length > 1 ? 's' : ''}
+                    </p>
+                    <div className="mt-2 space-y-1">
+                      {selectedGoogleDriveFiles.map((file) => (
+                        <div key={file.id} className="flex items-center justify-between text-sm">
+                          <span className="text-blue-700 truncate">{file.name}</span>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setSelectedGoogleDriveFiles(prev => prev.filter(f => f.id !== file.id))}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      ))}
                     </div>
-                  )}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </>
+                  </div>
+                )}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       )}
 
       {/* Selected Files */}

@@ -34,11 +34,12 @@ export const POST = withApiMiddleware({
     // Get file service
     const fileService = getSharePointFileService();
 
-    // List Excel files
-    const files = await fileService.listExcelFiles(
+    // List Excel files - use listAllExcelFiles for backward compatibility
+    const files = await fileService.listAllExcelFiles(
       integration.siteId,
       integration.driveId || undefined,
-      path
+      path,
+      500 // Reasonable limit for UI display
     );
 
     // Update last synced timestamp
