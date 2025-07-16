@@ -3,7 +3,7 @@ import { withApiMiddleware } from '@/lib/api/middleware';
 import { z } from 'zod';
 import { db } from '@/lib/db';
 import { RiskCategory, RiskStatus, ControlType, ControlCategory, AutomationLevel, EffectivenessRating, ControlStatus, Priority } from '@/types/rcsa.types';
-import { EntityType } from '@prisma/client';
+import { EntityType, RiskLevel } from '@prisma/client';
 import { riskSchema as baseRiskSchema, controlSchema as baseControlSchema } from '@/lib/validations';
 
 // Extend base schemas for import-specific fields
@@ -79,12 +79,12 @@ export const POST = withApiMiddleware({
       // Create or update risks
       for (const risk of risks) {
         const riskScore = risk.likelihood * risk.impact;
-        let riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+        let riskLevel: RiskLevel;
         
-        if (riskScore <= 5) riskLevel = 'LOW';
-        else if (riskScore <= 10) riskLevel = 'MEDIUM';
-        else if (riskScore <= 15) riskLevel = 'HIGH';
-        else riskLevel = 'CRITICAL';
+        if (riskScore <= 6) riskLevel = RiskLevel.LOW;
+        else if (riskScore <= 12) riskLevel = RiskLevel.MEDIUM;
+        else if (riskScore <= 20) riskLevel = RiskLevel.HIGH;
+        else riskLevel = RiskLevel.CRITICAL;
         
         // Check if risk already exists
         const existingRisk = await prisma.risk.findFirst({
