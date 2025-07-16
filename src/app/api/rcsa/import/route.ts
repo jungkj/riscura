@@ -4,32 +4,28 @@ import { z } from 'zod';
 import { db } from '@/lib/db';
 import { RiskCategory, RiskStatus, ControlType, ControlCategory, AutomationLevel, EffectivenessRating, ControlStatus, Priority } from '@/types/rcsa.types';
 import { EntityType } from '@prisma/client';
+import { riskSchema as baseRiskSchema, controlSchema as baseControlSchema } from '@/lib/validations';
 
-const riskSchema = z.object({
+// Extend base schemas for import-specific fields
+const riskSchema = baseRiskSchema.extend({
   externalId: z.string(),
-  title: z.string(),
-  description: z.string(),
-  category: z.nativeEnum(RiskCategory),
-  likelihood: z.number().min(1).max(5),
-  impact: z.number().min(1).max(5),
+  category: z.nativeEnum(RiskCategory), // Override with enum
   status: z.nativeEnum(RiskStatus),
-  owner: z.string().optional(),
   rationale: z.string().optional(),
+  owner: z.string().optional(), // Make optional for import
 });
 
-const controlSchema = z.object({
+const controlSchema = baseControlSchema.extend({
   externalId: z.string(),
-  title: z.string(),
-  description: z.string(),
-  type: z.nativeEnum(ControlType),
+  type: z.nativeEnum(ControlType), // Override with enum
   category: z.nativeEnum(ControlCategory),
-  frequency: z.string(),
   automationLevel: z.nativeEnum(AutomationLevel),
-  owner: z.string().optional(),
+  owner: z.string().optional(), // Make optional for import
   evidence: z.string().optional(),
   designEffectiveness: z.string().optional(),
   operatingEffectiveness: z.string().optional(),
   riskIds: z.array(z.string()),
+  effectiveness: z.string().optional(), // Override to make optional
 });
 
 const importBodySchema = z.object({
@@ -49,6 +45,20 @@ function mapEffectivenessRating(rating?: string): EffectivenessRating | undefine
   if (lower.includes('non') || lower.includes('ineffective')) return EffectivenessRating.NOT_EFFECTIVE;
   
   return undefined;
+}
+
+function calculateEffectivenessScore(operatingEffectiveness?: string): number {
+  const rating = mapEffectivenessRating(operatingEffectiveness);
+  switch (rating) {
+    case EffectivenessRating.EFFECTIVE:
+      return 0.8;
+    case EffectivenessRating.PARTIALLY_EFFECTIVE:
+      return 0.5;
+    case EffectivenessRating.NOT_EFFECTIVE:
+      return 0.2;
+    default:
+      return 0.5; // Default to medium effectiveness
+  }
 }
 
 export const POST = withApiMiddleware({
@@ -224,10 +234,7 @@ export const POST = withApiMiddleware({
                 data: {
                   riskId,
                   controlId: dbControl.id,
-                  effectiveness: control.operatingEffectiveness ? 
-                    (mapEffectivenessRating(control.operatingEffectiveness) === EffectivenessRating.EFFECTIVE ? 0.8 :
-                     mapEffectivenessRating(control.operatingEffectiveness) === EffectivenessRating.PARTIALLY_EFFECTIVE ? 0.5 : 0.2)
-                    : 0.5,
+                  effectiveness: calculateEffectivenessScore(control.operatingEffectiveness),
                 }
               });
               createdMappings.push(mapping);

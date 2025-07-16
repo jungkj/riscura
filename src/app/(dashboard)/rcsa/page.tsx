@@ -23,11 +23,12 @@ type ViewMode = 'notion' | 'classic';
 export default function RCSAPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('notion');
   const [showImportDialog, setShowImportDialog] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const handleImportComplete = () => {
     setShowImportDialog(false);
-    // Refresh the page or data
-    window.location.reload();
+    // Trigger a re-render of child components
+    setRefreshKey(prev => prev + 1);
   };
 
   return (
@@ -111,16 +112,16 @@ export default function RCSAPage() {
         {/* Content */}
         <div className="flex-1 overflow-hidden">
           <motion.div
-            key={viewMode}
+            key={`${viewMode}-${refreshKey}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
             className="h-full"
           >
             {viewMode === 'notion' ? (
-              <NotionRCSASpreadsheet />
+              <NotionRCSASpreadsheet key={refreshKey} />
             ) : (
-              <RCSASpreadsheet spreadsheetId="default" />
+              <RCSASpreadsheet key={refreshKey} spreadsheetId="default" />
             )}
           </motion.div>
         </div>

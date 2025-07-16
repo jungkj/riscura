@@ -40,7 +40,7 @@ export interface ParsedRCSAData {
   warnings: string[];
 }
 
-const COLUMN_MAPPINGS = {
+export const COLUMN_MAPPINGS = {
   // Risk Information
   sourcesOfRisk: ['sources of risk', 'risk source', 'source'],
   riskDriver: ['risk driver', 'driver'],

@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { RCSAGapAnalysis, MappedRisk, MappedControl, RiskGap, ControlGap } from '@/services/ai/rcsa-analysis';
 import { RiskCategory, ControlType, AutomationLevel } from '@/types/rcsa.types';
 import { toast } from 'sonner';
+import { FixedSizeList } from 'react-window';
 
 interface RCSAImportFlowProps {
   onComplete?: () => void;
@@ -170,6 +171,203 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
     setEditedControls(prev => prev.map(c => 
       c.externalId === controlId ? { ...c, ...updates } : c
     ));
+  };
+
+  // Virtual scrolling row renderer for risks
+  const RiskRow = ({ index, style }: { index: number; style: React.CSSProperties }) => {
+    const risk = editedRisks[index];
+    return (
+      <div style={style}>
+        <div className="border rounded-lg p-4 mx-4 mb-4">
+          {editingRiskId === risk.externalId ? (
+            <div className="space-y-3">
+              <Input
+                value={risk.title}
+                onChange={(e) => updateRisk(risk.externalId, { title: e.target.value })}
+                placeholder="Risk Title"
+              />
+              <Textarea
+                value={risk.description}
+                onChange={(e) => updateRisk(risk.externalId, { description: e.target.value })}
+                placeholder="Risk Description"
+                rows={3}
+              />
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <Label>Category</Label>
+                  <Select
+                    value={risk.category}
+                    onValueChange={(v) => updateRisk(risk.externalId, { category: v as RiskCategory })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.values(RiskCategory).map(cat => (
+                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Likelihood (1-5)</Label>
+                  <Input
+                    type="number"
+                    min="1"
+                    max="5"
+                    value={risk.likelihood}
+                    onChange={(e) => updateRisk(risk.externalId, { likelihood: parseInt(e.target.value) })}
+                  />
+                </div>
+                <div>
+                  <Label>Impact (1-5)</Label>
+                  <Input
+                    type="number"
+                    min="1"
+                    max="5"
+                    value={risk.impact}
+                    onChange={(e) => updateRisk(risk.externalId, { impact: parseInt(e.target.value) })}
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end space-x-2">
+                <Button size="sm" variant="outline" onClick={() => setEditingRiskId(null)}>
+                  Cancel
+                </Button>
+                <Button size="sm" onClick={() => setEditingRiskId(null)}>
+                  Save
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className="flex justify-between items-start">
+                <div className="flex-1">
+                  <h4 className="font-medium">{risk.title}</h4>
+                  <p className="text-sm text-gray-500 mt-1">{risk.description}</p>
+                  <div className="flex gap-4 mt-2">
+                    <Badge variant="outline">{risk.category}</Badge>
+                    <span className="text-xs text-gray-500">
+                      Likelihood: {risk.likelihood} | Impact: {risk.impact} | Score: {risk.likelihood * risk.impact}
+                    </span>
+                  </div>
+                </div>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setEditingRiskId(risk.externalId)}
+                >
+                  <Edit className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  // Virtual scrolling row renderer for controls
+  const ControlRow = ({ index, style }: { index: number; style: React.CSSProperties }) => {
+    const control = editedControls[index];
+    return (
+      <div style={style}>
+        <div className="border rounded-lg p-4 mx-4 mb-4">
+          {editingControlId === control.externalId ? (
+            <div className="space-y-3">
+              <Input
+                value={control.title}
+                onChange={(e) => updateControl(control.externalId, { title: e.target.value })}
+                placeholder="Control Title"
+              />
+              <Textarea
+                value={control.description}
+                onChange={(e) => updateControl(control.externalId, { description: e.target.value })}
+                placeholder="Control Description"
+                rows={3}
+              />
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <Label>Type</Label>
+                  <Select
+                    value={control.type}
+                    onValueChange={(v) => updateControl(control.externalId, { type: v as ControlType })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.values(ControlType).map(type => (
+                        <SelectItem key={type} value={type}>{type}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Frequency</Label>
+                  <Input
+                    value={control.frequency}
+                    onChange={(e) => updateControl(control.externalId, { frequency: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <Label>Automation</Label>
+                  <Select
+                    value={control.automationLevel}
+                    onValueChange={(v) => updateControl(control.externalId, { automationLevel: v as AutomationLevel })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.values(AutomationLevel).map(level => (
+                        <SelectItem key={level} value={level}>{level}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="flex justify-end space-x-2">
+                <Button size="sm" variant="outline" onClick={() => setEditingControlId(null)}>
+                  Cancel
+                </Button>
+                <Button size="sm" onClick={() => setEditingControlId(null)}>
+                  Save
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className="flex justify-between items-start">
+                <div className="flex-1">
+                  <h4 className="font-medium">{control.title}</h4>
+                  <p className="text-sm text-gray-500 mt-1">{control.description}</p>
+                  <div className="flex gap-4 mt-2">
+                    <Badge variant="outline">{control.type}</Badge>
+                    <Badge variant="outline">{control.automationLevel}</Badge>
+                    <span className="text-xs text-gray-500">
+                      Frequency: {control.frequency}
+                    </span>
+                  </div>
+                  {control.riskIds.length > 0 && (
+                    <p className="text-xs text-gray-400 mt-1">
+                      Linked to {control.riskIds.length} risk(s)
+                    </p>
+                  )}
+                </div>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setEditingControlId(control.externalId)}
+                >
+                  <Edit className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
   };
 
   if (step === 'upload') {
@@ -347,95 +545,22 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
             <CardDescription>Edit risk details before importing</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {editedRisks.map((risk) => (
-                <div key={risk.externalId} className="border rounded-lg p-4">
-                  {editingRiskId === risk.externalId ? (
-                    <div className="space-y-3">
-                      <Input
-                        value={risk.title}
-                        onChange={(e) => updateRisk(risk.externalId, { title: e.target.value })}
-                        placeholder="Risk Title"
-                      />
-                      <Textarea
-                        value={risk.description}
-                        onChange={(e) => updateRisk(risk.externalId, { description: e.target.value })}
-                        placeholder="Risk Description"
-                        rows={3}
-                      />
-                      <div className="grid grid-cols-3 gap-3">
-                        <div>
-                          <Label>Category</Label>
-                          <Select
-                            value={risk.category}
-                            onValueChange={(v) => updateRisk(risk.externalId, { category: v as RiskCategory })}
-                          >
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {Object.values(RiskCategory).map(cat => (
-                                <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <Label>Likelihood (1-5)</Label>
-                          <Input
-                            type="number"
-                            min="1"
-                            max="5"
-                            value={risk.likelihood}
-                            onChange={(e) => updateRisk(risk.externalId, { likelihood: parseInt(e.target.value) })}
-                          />
-                        </div>
-                        <div>
-                          <Label>Impact (1-5)</Label>
-                          <Input
-                            type="number"
-                            min="1"
-                            max="5"
-                            value={risk.impact}
-                            onChange={(e) => updateRisk(risk.externalId, { impact: parseInt(e.target.value) })}
-                          />
-                        </div>
-                      </div>
-                      <div className="flex justify-end space-x-2">
-                        <Button size="sm" variant="outline" onClick={() => setEditingRiskId(null)}>
-                          Cancel
-                        </Button>
-                        <Button size="sm" onClick={() => setEditingRiskId(null)}>
-                          Save
-                        </Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <h4 className="font-medium">{risk.title}</h4>
-                          <p className="text-sm text-gray-500 mt-1">{risk.description}</p>
-                          <div className="flex gap-4 mt-2">
-                            <Badge variant="outline">{risk.category}</Badge>
-                            <span className="text-xs text-gray-500">
-                              Likelihood: {risk.likelihood} | Impact: {risk.impact} | Score: {risk.likelihood * risk.impact}
-                            </span>
-                          </div>
-                        </div>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => setEditingRiskId(risk.externalId)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+            {editedRisks.length > 10 ? (
+              <FixedSizeList
+                height={400}
+                itemCount={editedRisks.length}
+                itemSize={editingRiskId ? 350 : 120}
+                width="100%"
+              >
+                {RiskRow}
+              </FixedSizeList>
+            ) : (
+              <div className="space-y-4">
+                {editedRisks.map((_, index) => (
+                  <RiskRow key={editedRisks[index].externalId} index={index} style={{}} />
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -446,104 +571,22 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
             <CardDescription>Edit control details before importing</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {editedControls.map((control) => (
-                <div key={control.externalId} className="border rounded-lg p-4">
-                  {editingControlId === control.externalId ? (
-                    <div className="space-y-3">
-                      <Input
-                        value={control.title}
-                        onChange={(e) => updateControl(control.externalId, { title: e.target.value })}
-                        placeholder="Control Title"
-                      />
-                      <Textarea
-                        value={control.description}
-                        onChange={(e) => updateControl(control.externalId, { description: e.target.value })}
-                        placeholder="Control Description"
-                        rows={3}
-                      />
-                      <div className="grid grid-cols-3 gap-3">
-                        <div>
-                          <Label>Type</Label>
-                          <Select
-                            value={control.type}
-                            onValueChange={(v) => updateControl(control.externalId, { type: v as ControlType })}
-                          >
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {Object.values(ControlType).map(type => (
-                                <SelectItem key={type} value={type}>{type}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <Label>Frequency</Label>
-                          <Input
-                            value={control.frequency}
-                            onChange={(e) => updateControl(control.externalId, { frequency: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label>Automation</Label>
-                          <Select
-                            value={control.automationLevel}
-                            onValueChange={(v) => updateControl(control.externalId, { automationLevel: v as AutomationLevel })}
-                          >
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {Object.values(AutomationLevel).map(level => (
-                                <SelectItem key={level} value={level}>{level}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <div className="flex justify-end space-x-2">
-                        <Button size="sm" variant="outline" onClick={() => setEditingControlId(null)}>
-                          Cancel
-                        </Button>
-                        <Button size="sm" onClick={() => setEditingControlId(null)}>
-                          Save
-                        </Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <h4 className="font-medium">{control.title}</h4>
-                          <p className="text-sm text-gray-500 mt-1">{control.description}</p>
-                          <div className="flex gap-4 mt-2">
-                            <Badge variant="outline">{control.type}</Badge>
-                            <Badge variant="outline">{control.automationLevel}</Badge>
-                            <span className="text-xs text-gray-500">
-                              Frequency: {control.frequency}
-                            </span>
-                          </div>
-                          {control.riskIds.length > 0 && (
-                            <p className="text-xs text-gray-400 mt-1">
-                              Linked to {control.riskIds.length} risk(s)
-                            </p>
-                          )}
-                        </div>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => setEditingControlId(control.externalId)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+            {editedControls.length > 10 ? (
+              <FixedSizeList
+                height={400}
+                itemCount={editedControls.length}
+                itemSize={editingControlId ? 350 : 140}
+                width="100%"
+              >
+                {ControlRow}
+              </FixedSizeList>
+            ) : (
+              <div className="space-y-4">
+                {editedControls.map((_, index) => (
+                  <ControlRow key={editedControls[index].externalId} index={index} style={{}} />
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
 
