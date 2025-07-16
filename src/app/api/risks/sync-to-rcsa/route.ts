@@ -3,20 +3,35 @@ import { withApiMiddleware } from '@/lib/api/middleware';
 import { z } from 'zod';
 import { db } from '@/lib/db';
 
+// Define metadata type for RCSA tracking
+interface RCSAMetadata {
+  includedInRCSA?: boolean;
+  lastRCSASync?: string;
+  [key: string]: any; // Allow other metadata fields
+}
+
 const syncBodySchema = z.object({
   riskId: z.string(),
   action: z.enum(['add', 'update', 'remove'])
 });
 
-export const POST = withApiMiddleware({
-  requireAuth: true,
-  bodySchema: syncBodySchema,
-  rateLimiters: ['standard']
-})(async (context, validatedData) => {
-  const { riskId, action } = validatedData;
-  const { organizationId } = context;
-  
-  try {
+export const POST = withApiMiddleware(
+  async (req: NextRequest) => {
+    const user = (req as any).user;
+    const organizationId = user?.organizationId;
+    
+    if (!organizationId) {
+      return NextResponse.json({
+        success: false,
+        error: 'Organization context required'
+      }, { status: 403 });
+    }
+    
+    const body = await req.json();
+    const validatedData = syncBodySchema.parse(body);
+    const { riskId, action } = validatedData;
+    
+    try {
     // Verify risk exists and belongs to organization
     const risk = await db.client.risk.findFirst({
       where: {
@@ -44,11 +59,12 @@ export const POST = withApiMiddleware({
     
     if (action === 'add' || action === 'update') {
       // Mark risk as included in RCSA if not already
+      const existingMetadata = (risk.metadata as RCSAMetadata) || {};
       await db.client.risk.update({
         where: { id: riskId },
         data: {
           metadata: {
-            ...(risk.metadata as any || {}),
+            ...existingMetadata,
             includedInRCSA: true,
             lastRCSASync: new Date().toISOString()
           }
@@ -62,17 +78,18 @@ export const POST = withApiMiddleware({
           entityType: 'RISK',
           entityId: riskId,
           description: `Risk ${action === 'add' ? 'added to' : 'updated in'} RCSA`,
-          userId: context.user.id,
+          userId: user.id,
           organizationId
         }
       });
     } else if (action === 'remove') {
       // Mark risk as excluded from RCSA
+      const existingMetadata = (risk.metadata as RCSAMetadata) || {};
       await db.client.risk.update({
         where: { id: riskId },
         data: {
           metadata: {
-            ...(risk.metadata as any || {}),
+            ...existingMetadata,
             includedInRCSA: false,
             lastRCSASync: new Date().toISOString()
           }
@@ -86,7 +103,7 @@ export const POST = withApiMiddleware({
           entityType: 'RISK',
           entityId: riskId,
           description: 'Risk removed from RCSA',
-          userId: context.user.id,
+          userId: user.id,
           organizationId
         }
       });
@@ -108,4 +125,6 @@ export const POST = withApiMiddleware({
       error: 'Failed to sync risk to RCSA'
     }, { status: 500 });
   }
-});
+  },
+  { requireAuth: true }
+);
