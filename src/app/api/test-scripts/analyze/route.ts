@@ -60,22 +60,21 @@ export const POST = withApiMiddleware({
     };
   }
   
-  // Get control details first (outside try block for access in catch)
-  const control = await db.client.control.findFirst({
-    where: {
-      id: controlId,
-      organizationId,
-    },
-  });
-  
-  if (!control) {
-    return {
-      success: false,
-      error: 'Control not found'
-    };
-  }
-  
   try {
+    // Get control details
+    const control = await db.client.control.findFirst({
+      where: {
+        id: controlId,
+        organizationId,
+      },
+    });
+    
+    if (!control) {
+      return {
+        success: false,
+        error: 'Control not found'
+      };
+    }
     
     // Perform AI analysis
     const completion = await openai.chat.completions.create({
@@ -174,6 +173,14 @@ Determine if this test script provides adequate evidence for control effectivene
   } catch (error) {
     console.error('Test script analysis error:', error);
     
+    // Check if it's a database error
+    if (error instanceof Error && error.message.includes('database')) {
+      return {
+        success: false,
+        error: 'Database connection error. Please try again.'
+      };
+    }
+    
     // Fallback analysis without AI
     const basicAnalysis: EvidenceAnalysis = {
       matchesRequirements: false,
@@ -197,7 +204,7 @@ Determine if this test script provides adequate evidence for control effectivene
       success: true,
       data: {
         analysis: basicAnalysis,
-        controlTitle: control.title
+        controlTitle: 'Control' // Fallback title since control may not be available
       }
     };
   }

@@ -101,9 +101,9 @@ const RISK_COLUMNS: Column[] = [
   { id: 'riskLevel', label: 'Risk Level', width: 120, editable: false,
     format: (row: SpreadsheetRow) => {
       const score = (row.cells.likelihood || 0) * (row.cells.impact || 0);
-      if (score <= 5) return 'LOW';
-      if (score <= 10) return 'MEDIUM';
-      if (score <= 15) return 'HIGH';
+      if (score <= 6) return 'LOW';
+      if (score <= 12) return 'MEDIUM';
+      if (score <= 20) return 'HIGH';
       return 'CRITICAL';
     }
   },
@@ -276,9 +276,9 @@ export default function EnhancedRCSASpreadsheet() {
       // Risk level filter (only for risks)
       if (filterRiskLevel !== 'all' && row.type === 'risk') {
         const riskLevel = row.cells.riskLevel || 
-          (row.cells.likelihood * row.cells.impact <= 5 ? 'LOW' :
-           row.cells.likelihood * row.cells.impact <= 10 ? 'MEDIUM' :
-           row.cells.likelihood * row.cells.impact <= 15 ? 'HIGH' : 'CRITICAL');
+          (row.cells.likelihood * row.cells.impact <= 6 ? 'LOW' :
+           row.cells.likelihood * row.cells.impact <= 12 ? 'MEDIUM' :
+           row.cells.likelihood * row.cells.impact <= 20 ? 'HIGH' : 'CRITICAL');
         if (riskLevel !== filterRiskLevel) return false;
       }
 
@@ -493,13 +493,41 @@ export default function EnhancedRCSASpreadsheet() {
       isDirty: true
     };
     
-    setRows([...rows, newRow]);
-    
-    // Focus on the new row
-    setTimeout(() => {
-      setActiveCell({ row: filteredRows.length, col: 1 });
-      startEditing();
-    }, 100);
+    setRows(prevRows => {
+      const updatedRows = [...prevRows, newRow];
+      
+      // Focus on the new row after state update
+      setTimeout(() => {
+        // Calculate the index of the new row in filtered rows
+        const newRowIndex = updatedRows.filter(row => {
+          // Apply the same filtering logic as filteredRows
+          if (debouncedSearchQuery) {
+            const searchLower = debouncedSearchQuery.toLowerCase();
+            const matchesSearch = 
+              row.cells.title?.toLowerCase().includes(searchLower) ||
+              row.cells.description?.toLowerCase().includes(searchLower) ||
+              row.cells.owner?.toLowerCase().includes(searchLower);
+            if (!matchesSearch) return false;
+          }
+          if (filterStatus !== 'all' && row.cells.status !== filterStatus) return false;
+          if (filterRiskLevel !== 'all' && row.type === 'risk') {
+            const riskLevel = row.cells.riskLevel || 
+              (row.cells.likelihood * row.cells.impact <= 6 ? 'LOW' :
+               row.cells.likelihood * row.cells.impact <= 12 ? 'MEDIUM' :
+               row.cells.likelihood * row.cells.impact <= 20 ? 'HIGH' : 'CRITICAL');
+            if (riskLevel !== filterRiskLevel) return false;
+          }
+          return true;
+        }).findIndex(r => r.id === newId);
+        
+        if (newRowIndex !== -1) {
+          setActiveCell({ row: newRowIndex, col: 1 });
+          startEditing();
+        }
+      }, 100);
+      
+      return updatedRows;
+    });
   };
 
   // Export to Excel

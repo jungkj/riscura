@@ -72,15 +72,15 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
           })
         });
         
-        const result = await response.json();
+        const apiResult = await response.json();
         
-        if (result.success) {
-          setAnalysis(result.data.analysis);
-          setEditedRisks(result.data.analysis.mappedRisks);
-          setEditedControls(result.data.analysis.mappedControls);
+        if (apiResult.success) {
+          setAnalysis(apiResult.data.analysis);
+          setEditedRisks(apiResult.data.analysis.mappedRisks);
+          setEditedControls(apiResult.data.analysis.mappedControls);
           setStep('review');
         } else {
-          toast.error(result.error || 'Analysis failed');
+          toast.error(apiResult.error || 'Analysis failed');
           setStep('upload');
         }
       };
@@ -223,7 +223,14 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
                     min="1"
                     max="5"
                     value={risk.likelihood}
-                    onChange={(e) => updateRisk(risk.externalId, { likelihood: parseInt(e.target.value) })}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value);
+                      if (!isNaN(value) && value >= 1 && value <= 5) {
+                        updateRisk(risk.externalId, { likelihood: value });
+                      } else if (e.target.value === '') {
+                        updateRisk(risk.externalId, { likelihood: 1 });
+                      }
+                    }}
                   />
                 </div>
                 <div>
@@ -233,7 +240,14 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
                     min="1"
                     max="5"
                     value={risk.impact}
-                    onChange={(e) => updateRisk(risk.externalId, { impact: parseInt(e.target.value) })}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value);
+                      if (!isNaN(value) && value >= 1 && value <= 5) {
+                        updateRisk(risk.externalId, { impact: value });
+                      } else if (e.target.value === '') {
+                        updateRisk(risk.externalId, { impact: 1 });
+                      }
+                    }}
                   />
                 </div>
               </div>
