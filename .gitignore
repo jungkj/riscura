@@ -145,3 +145,6 @@ PROMPT_*_IMPLEMENTATION_COMPLETE.md
 .env.*.backup.*
 start-node-env.bat
 test-*.xlsx
+
+# Specstory history (may contain sensitive data)
+.specstory/
