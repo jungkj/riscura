@@ -2,9 +2,15 @@ import { OpenAI } from 'openai';
 import { RCSARowData, COLUMN_MAPPINGS } from '@/lib/rcsa/parser';
 import { RiskCategory, RiskStatus, ControlType, ControlCategory, AutomationLevel } from '@/types/rcsa.types';
 
-const openai = new OpenAI({
+// Validate OpenAI API key at module initialization
+if (!process.env.OPENAI_API_KEY) {
+  console.error('[RCSA Analysis] OpenAI API key is not configured. AI analysis features will be unavailable.');
+}
+
+// Create OpenAI instance only if API key is available
+const openai = process.env.OPENAI_API_KEY ? new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-});
+}) : null;
 
 export interface RCSAGapAnalysis {
   overallAssessment: string;
@@ -153,6 +159,12 @@ function mapAutomationLevel(automation?: string): AutomationLevel {
 
 export async function analyzeRCSAData(rows: RCSARowData[]): Promise<RCSAGapAnalysis> {
   try {
+    // Check if OpenAI is available
+    if (!openai) {
+      console.warn('[RCSA Analysis] OpenAI not configured, falling back to basic analysis');
+      return performBasicAnalysis(rows);
+    }
+    
     // Prepare data for AI analysis
     const analysisData = {
       rowCount: rows.length,
