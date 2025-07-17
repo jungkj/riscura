@@ -57,7 +57,7 @@ export const GoogleDriveFileBrowser: React.FC<Props> = ({
         listFiles();
       }
     });
-  }, []);
+  }, [checkConnection, authRequired, listFiles]);
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) {

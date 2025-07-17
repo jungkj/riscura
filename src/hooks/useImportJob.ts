@@ -150,8 +150,9 @@ interface UseImportJobsReturn {
     integrationId: string;
     fileId: string;
     fileName: string;
+    endpoint?: string;
   }) => Promise<{ success: boolean; jobId?: string; error?: string }>;
-  fetchJobs: (integrationId?: string, limit?: number, offset?: number) => Promise<void>;
+  fetchJobs: (integrationId?: string, limit?: number, offset?: number, endpoint?: string) => Promise<void>;
 }
 
 export const useImportJobs = (): UseImportJobsReturn => {
@@ -196,11 +197,12 @@ export const useImportJobs = (): UseImportJobsReturn => {
     }
   }, []);
 
-  // Fetch jobs
+  // Fetch jobs with configurable endpoint
   const fetchJobs = useCallback(async (
     integrationId?: string, 
     limit: number = 10, 
-    offset: number = 0
+    offset: number = 0,
+    endpoint: string = '/api/sharepoint/import' // Make endpoint configurable
   ) => {
     try {
       setIsLoading(true);
@@ -215,7 +217,7 @@ export const useImportJobs = (): UseImportJobsReturn => {
         params.append('integrationId', integrationId);
       }
       
-      const response = await api.get(`/api/sharepoint/import?${params}`);
+      const response = await api.get(`${endpoint}?${params}`);
       const data = await response.json();
       
       if (data.jobs) {

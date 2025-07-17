@@ -51,7 +51,7 @@ export const SharePointFileBrowser: React.FC<Props> = ({
   useEffect(() => {
     // Load files when component mounts
     listFiles();
-  }, [integrationId]);
+  }, [integrationId, listFiles]);
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) {
