@@ -23,8 +23,8 @@ This guide provides step-by-step instructions for setting up SharePoint integrat
    - Click "Register"
 
 3. **Note Important Values**
-   - Application (client) ID: 242c229d-a083-40a0-800c-30d5f3b4f83c
-   - Directory (tenant) ID: `fa38a026-aefe-42f4-b5e2-5ae7af567750
+   - Application (client) ID: `YOUR_CLIENT_ID_HERE`
+   - Directory (tenant) ID: `YOUR_TENANT_ID_HERE`
 
 ## Step 2: Configure API Permissions
 

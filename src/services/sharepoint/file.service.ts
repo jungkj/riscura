@@ -330,13 +330,25 @@ export class SharePointFileService {
         throw new Error('Path does not point to a file');
       }
 
+      // Validate required fields
+      if (!fileItem.id || !fileItem.name || !fileItem.lastModifiedDateTime || !fileItem.webUrl) {
+        throw new Error(
+          `Incomplete file data received from Graph API. Missing required fields: ${[
+            !fileItem.id && 'id',
+            !fileItem.name && 'name',
+            !fileItem.lastModifiedDateTime && 'lastModifiedDateTime',
+            !fileItem.webUrl && 'webUrl'
+          ].filter(Boolean).join(', ')}`
+        );
+      }
+
       return {
-        id: fileItem.id!,
-        name: fileItem.name!,
+        id: fileItem.id,
+        name: fileItem.name,
         size: fileItem.size || 0,
-        modifiedDate: new Date(fileItem.lastModifiedDateTime!),
+        modifiedDate: new Date(fileItem.lastModifiedDateTime),
         downloadUrl: fileItem['@microsoft.graph.downloadUrl'],
-        webUrl: fileItem.webUrl!,
+        webUrl: fileItem.webUrl,
         mimeType: fileItem.file.mimeType,
         path: relativePath
       };
@@ -366,13 +378,25 @@ export class SharePointFileService {
         throw new Error('Item is not a file');
       }
 
+      // Validate required fields
+      if (!fileItem.id || !fileItem.name || !fileItem.lastModifiedDateTime || !fileItem.webUrl) {
+        throw new Error(
+          `Incomplete file metadata received from Graph API. Missing required fields: ${[
+            !fileItem.id && 'id',
+            !fileItem.name && 'name',
+            !fileItem.lastModifiedDateTime && 'lastModifiedDateTime',
+            !fileItem.webUrl && 'webUrl'
+          ].filter(Boolean).join(', ')}`
+        );
+      }
+
       return {
-        id: fileItem.id!,
-        name: fileItem.name!,
+        id: fileItem.id,
+        name: fileItem.name,
         size: fileItem.size || 0,
-        modifiedDate: new Date(fileItem.lastModifiedDateTime!),
+        modifiedDate: new Date(fileItem.lastModifiedDateTime),
         downloadUrl: fileItem['@microsoft.graph.downloadUrl'],
-        webUrl: fileItem.webUrl!,
+        webUrl: fileItem.webUrl,
         mimeType: fileItem.file.mimeType
       };
     } catch (error) {

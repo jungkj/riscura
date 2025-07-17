@@ -22,8 +22,8 @@ export function parseRiskScore(value: string | number | undefined | null): numbe
     'very high': 5, 'veryhigh': 5, 'very_high': 5, 'critical': 5
   };
   
-  // Check for text value match - use hasOwnProperty to handle falsy values
-  if (textToScore.hasOwnProperty(strValue)) {
+  // Check for text value match - use Object.hasOwn to handle falsy values
+  if (Object.hasOwn(textToScore, strValue)) {
     return textToScore[strValue];
   }
   

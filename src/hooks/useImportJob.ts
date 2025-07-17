@@ -117,48 +117,11 @@ export const useImportJob = (jobId: string, pollInterval: number = 2000): UseImp
   useEffect(() => {
     if (!jobId) return;
     
-    // Define the polling function inside useEffect to avoid dependencies
-    const pollJobStatus = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        
-        const response = await api.get(`/api/import/jobs/${jobId}`);
-        const data = await response.json();
-        
-        if (data.job) {
-          setJob(data.job);
-          
-          // Stop polling if job is complete
-          if (data.job.status === 'COMPLETED' || data.job.status === 'FAILED' || data.job.status === 'CANCELLED') {
-            if (intervalRef.current) {
-              clearInterval(intervalRef.current);
-              intervalRef.current = undefined;
-            }
-          }
-        } else if (data.error) {
-          setError(data.error);
-          setJob(null);
-          
-          // Stop polling on error
-          if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = undefined;
-          }
-        }
-      } catch (err) {
-        console.error('Error fetching job status:', err);
-        setError('Failed to fetch import job status');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
     // Initial fetch
-    pollJobStatus();
+    fetchJobStatus();
     
     // Set up polling interval
-    intervalRef.current = setInterval(pollJobStatus, pollInterval);
+    intervalRef.current = setInterval(fetchJobStatus, pollInterval);
     
     // Cleanup
     return () => {
@@ -166,7 +129,7 @@ export const useImportJob = (jobId: string, pollInterval: number = 2000): UseImp
         clearInterval(intervalRef.current);
       }
     };
-  }, [jobId, pollInterval]);
+  }, [jobId, pollInterval, fetchJobStatus]);
 
   return {
     job,
