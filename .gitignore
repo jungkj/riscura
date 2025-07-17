@@ -89,6 +89,7 @@ temp/
 *.pfx
 *.cert
 *.crt
+*.csr
 /certificates
 
 # backups

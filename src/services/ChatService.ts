@@ -1,7 +1,6 @@
-import { PrismaClient, ChannelType, ChannelMemberRole, ChatMessageType } from '@prisma/client';
+import { ChannelType, ChannelMemberRole, ChatMessageType } from '@prisma/client';
 import { redis } from '@/lib/cache/memory-cache';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 export interface CreateChannelInput {
   name: string;
