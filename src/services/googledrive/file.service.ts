@@ -124,8 +124,14 @@ export class GoogleDriveFileService {
       const authService = getGoogleDriveAuthService();
       const drive = await authService.getDriveClient(userId);
       
+      // Sanitize query to prevent injection and syntax errors
+      const sanitizedQuery = query
+        .replace(/\\/g, '\\\\')  // Escape backslashes
+        .replace(/'/g, "\\'")    // Escape single quotes
+        .replace(/"/g, '\\"');   // Escape double quotes
+      
       // Search for Excel files containing the query
-      const searchQuery = `(mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType='application/vnd.ms-excel') and name contains '${query}'`;
+      const searchQuery = `(mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType='application/vnd.ms-excel') and name contains '${sanitizedQuery}'`;
       
       const response = await drive.files.list({
         q: searchQuery,

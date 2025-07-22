@@ -1,4 +1,5 @@
-import { ReportType, ReportStatus, Report, ReportTemplate, ReportSchedule, Prisma } from '@prisma/client';
+import { ReportType, ReportStatus, Report, ReportTemplate, ReportSchedule } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { subDays, startOfMonth, endOfMonth, startOfQuarter, endOfQuarter, startOfYear, endOfYear } from 'date-fns';
 import { PDFGenerator } from '@/lib/reports/pdf-generator';

@@ -12,14 +12,23 @@ export class SharePointAuthService {
   private tokenExpiryKey = 'sharepoint:token_expiry';
 
   constructor() {
+    // Validate required environment variables
+    if (!process.env.AZURE_KEY_VAULT_NAME) {
+      throw new Error('AZURE_KEY_VAULT_NAME environment variable is required');
+    }
+    
     this.keyVaultUrl = `https://${process.env.AZURE_KEY_VAULT_NAME}.vault.azure.net`;
     
     // Initialize credential based on environment
     if (process.env.AZURE_AD_CLIENT_SECRET) {
       // Development: Use client secret
+      if (!process.env.AZURE_AD_TENANT_ID || !process.env.AZURE_AD_CLIENT_ID) {
+        throw new Error('AZURE_AD_TENANT_ID and AZURE_AD_CLIENT_ID are required when using client secret authentication');
+      }
+      
       this.credential = new ClientSecretCredential(
-        process.env.AZURE_AD_TENANT_ID!,
-        process.env.AZURE_AD_CLIENT_ID!,
+        process.env.AZURE_AD_TENANT_ID,
+        process.env.AZURE_AD_CLIENT_ID,
         process.env.AZURE_AD_CLIENT_SECRET
       );
     } else {
@@ -84,13 +93,23 @@ export class SharePointAuthService {
    */
   private async getCertificateFromKeyVault(): Promise<string> {
     try {
+      // Validate required environment variable
+      if (!process.env.AZURE_KEY_VAULT_CERTIFICATE_NAME) {
+        throw new Error('AZURE_KEY_VAULT_CERTIFICATE_NAME environment variable is required for certificate authentication');
+      }
+      
+      // Ensure credential is properly typed
+      if (!(this.credential instanceof DefaultAzureCredential)) {
+        throw new Error('DefaultAzureCredential is required for Key Vault access');
+      }
+      
       const certificateClient = new CertificateClient(
         this.keyVaultUrl,
-        this.credential as DefaultAzureCredential
+        this.credential
       );
       
       const certificate = await certificateClient.getCertificate(
-        process.env.AZURE_KEY_VAULT_CERTIFICATE_NAME!
+        process.env.AZURE_KEY_VAULT_CERTIFICATE_NAME
       );
 
       if (!certificate.cer) {

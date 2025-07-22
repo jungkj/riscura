@@ -140,11 +140,32 @@ export class ImportJobService {
         // Update progress from Bull job if available
         const progress = bullJob.progress();
         if (typeof progress === 'number' && progress !== job.progress) {
-          await prisma.importJob.update({
-            where: { id: jobId },
-            data: { progress }
+          // Use transaction to ensure atomic update with optimistic locking
+          const updatedJob = await prisma.$transaction(async (tx) => {
+            // Re-fetch the job within transaction to check current state
+            const currentJob = await tx.importJob.findUnique({
+              where: { id: jobId }
+            });
+            
+            if (!currentJob) {
+              throw new Error('Job not found');
+            }
+            
+            // Only update if progress has actually changed
+            if (currentJob.progress !== progress) {
+              return await tx.importJob.update({
+                where: { id: jobId },
+                data: { 
+                  progress,
+                  updatedAt: new Date() // Explicit timestamp for version tracking
+                }
+              });
+            }
+            
+            return currentJob;
           });
-          job.progress = progress;
+          
+          job.progress = updatedJob.progress;
         }
       }
 

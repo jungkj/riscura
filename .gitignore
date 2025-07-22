@@ -29,6 +29,13 @@
 !.vscode/extensions.json
 !.vscode/settings.json
 
+# certificates and passwords
+cert_password.txt
+*.pfx
+*.key
+*.crt
+*.csr
+
 # debug
 npm-debug.log*
 yarn-debug.log*

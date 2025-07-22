@@ -58,16 +58,18 @@ This guide provides step-by-step instructions for setting up SharePoint integrat
      -signkey riscura-sharepoint.key -out riscura-sharepoint.crt
    
    # Create PFX file for Azure upload
-   # Store the password in an environment variable for security
-   export CERT_PASSWORD="$(openssl rand -base64 32)"
-   echo "Certificate password: $CERT_PASSWORD"
+   # Generate and securely store the password
+   openssl rand -base64 32 > cert_password.txt
+   chmod 600 cert_password.txt  # Restrict file permissions
    
+   # Use the password from file (avoid shell history)
    openssl pkcs12 -export -out riscura-sharepoint.pfx \
      -inkey riscura-sharepoint.key -in riscura-sharepoint.crt \
-     -password pass:$CERT_PASSWORD
+     -password file:cert_password.txt
    ```
    
    > **Security Note**: 
+   > - Add `cert_password.txt` to your `.gitignore` file to prevent accidental commits
    > - Store the certificate password in a secure secret management tool (e.g., Azure Key Vault, AWS Secrets Manager)
    > - Never commit passwords to version control
    > - Use shorter certificate validity periods (90 days recommended) for enhanced security
@@ -152,16 +154,36 @@ GRAPH_API_SCOPE=https://graph.microsoft.com/.default
 
 1. **Test Authentication**
    ```typescript
-   // Quick test script to verify authentication
-   import { ClientSecretCredential } from '@azure/identity';
+   // Production example using certificate-based authentication
+   import { ClientCertificateCredential } from '@azure/identity';
+   import { SecretClient } from '@azure/keyvault-secrets';
+   import { DefaultAzureCredential } from '@azure/identity';
    import { Client } from '@microsoft/microsoft-graph-client';
    import { TokenCredentialAuthenticationProvider } from '@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials';
    
-   const credential = new ClientSecretCredential(
+   // Retrieve certificate from Azure Key Vault
+   const keyVaultUrl = `https://${process.env.AZURE_KEY_VAULT_NAME}.vault.azure.net`;
+   const secretClient = new SecretClient(keyVaultUrl, new DefaultAzureCredential());
+   
+   const certificateSecret = await secretClient.getSecret(process.env.AZURE_KEY_VAULT_CERTIFICATE_NAME!);
+   const certificateBuffer = Buffer.from(certificateSecret.value!, 'base64');
+   
+   // Create certificate credential
+   const credential = new ClientCertificateCredential(
      process.env.AZURE_AD_TENANT_ID!,
      process.env.AZURE_AD_CLIENT_ID!,
-     process.env.AZURE_AD_CLIENT_SECRET! // Use certificate in production
+     {
+       certificate: certificateBuffer,
+       certificatePassword: process.env.CERTIFICATE_PASSWORD // Optional, if certificate is password-protected
+     }
    );
+   
+   // For development/testing with client secret (not recommended for production)
+   // const credential = new ClientSecretCredential(
+   //   process.env.AZURE_AD_TENANT_ID!,
+   //   process.env.AZURE_AD_CLIENT_ID!,
+   //   process.env.AZURE_AD_CLIENT_SECRET!
+   // );
    
    const authProvider = new TokenCredentialAuthenticationProvider(credential, {
      scopes: [process.env.GRAPH_API_SCOPE!]

@@ -1552,7 +1552,7 @@ model ComplianceGap {
 model SharePointIntegration {
   id                String         @id @default(cuid())
   organizationId    String
-  organization      Organization   @relation(fields: [organizationId], references: [id])
+  organization      Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   displayName       String
   siteId            String
   driveId           String?
@@ -1569,10 +1569,10 @@ model SharePointIntegration {
 model ImportJob {
   id              String           @id @default(cuid())
   organizationId  String
-  organization    Organization     @relation(fields: [organizationId], references: [id])
+  organization    Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   userId          String
-  user            User             @relation(fields: [userId], references: [id])
-  type            String           // 'sharepoint-excel-import'
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type            ImportJobType
   status          ImportJobStatus
   progress        Int              @default(0)
   progressMessage String?
@@ -2003,4 +2003,10 @@ enum ImportJobStatus {
   COMPLETED
   FAILED
   CANCELLED
+}
+
+enum ImportJobType {
+  SHAREPOINT_EXCEL_IMPORT
+  GOOGLE_DRIVE_EXCEL_IMPORT
+  LOCAL_FILE_IMPORT
 }
