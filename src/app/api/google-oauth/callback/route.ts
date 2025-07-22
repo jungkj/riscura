@@ -194,15 +194,14 @@ export async function GET(req: NextRequest) {
       path: '/', // Ensure cookie is available site-wide
     };
     
-    // In production, we might need to set the domain explicitly
-    if (process.env.NODE_ENV === 'production' && process.env.COOKIE_DOMAIN) {
-      (cookieOptions as any).domain = process.env.COOKIE_DOMAIN;
-    }
-    
-    // For localhost development, ensure cookie works properly
-    if (process.env.NODE_ENV === 'development') {
-      // Don't set domain for localhost to avoid cookie issues
-      delete (cookieOptions as any).domain;
+    // In production, handle cookie domain properly
+    if (process.env.NODE_ENV === 'production') {
+      // For Vercel deployments, don't set domain to allow cookies to work properly
+      // The browser will automatically use the current domain
+      // Only set domain if explicitly configured (e.g., for custom domains)
+      if (process.env.COOKIE_DOMAIN && process.env.COOKIE_DOMAIN !== 'auto') {
+        (cookieOptions as any).domain = process.env.COOKIE_DOMAIN;
+      }
     }
     
     console.log('[Google OAuth] Setting cookie with options:', {

@@ -118,6 +118,7 @@
     "npm": ">=9.0.0"
   },
   "dependencies": {
+    "@anthropic-ai/claude-code": "^1.0.57",
     "@anthropic-ai/sdk": "^0.53.0",
     "@aws-sdk/client-s3": "^3.830.0",
     "@aws-sdk/client-ses": "^3.830.0",
@@ -195,6 +196,7 @@
     "bull": "^4.16.5",
     "busboy": "^1.6.0",
     "class-variance-authority": "^0.7.0",
+    "claude": "^0.1.2",
     "claude-code": "^0.0.2",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",

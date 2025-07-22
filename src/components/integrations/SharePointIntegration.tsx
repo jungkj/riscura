@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSharePointIntegration } from '@/hooks/useSharePointIntegration';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
-import { Alert } from '@/components/ui/Alert';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Alert } from '@/components/ui/alert';
 import { Loader2, Link, Unlink, RefreshCw, CheckCircle, XCircle } from 'lucide-react';
 
 export const SharePointIntegration: React.FC = () => {

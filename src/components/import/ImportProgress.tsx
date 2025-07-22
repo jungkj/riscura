@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { useImportJob } from '@/hooks/useImportJob';
-import { ProgressBar } from '@/components/ui/ProgressBar';
-import { Alert } from '@/components/ui/Alert';
-import { Card } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
+import { Progress } from '@/components/ui/progress';
+import { Alert } from '@/components/ui/alert';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { 
   CheckCircle, 
@@ -154,7 +154,7 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
         {/* Progress Bar */}
         {(job.status === 'QUEUED' || job.status === 'PROCESSING') && (
           <div className="space-y-2">
-            <ProgressBar progress={job.progress} />
+            <Progress value={job.progress} className="h-2" />
             <p className="text-sm text-gray-600">
               {job.progressMessage || 'Processing...'}
             </p>

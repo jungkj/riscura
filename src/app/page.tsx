@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { TimeSavingChart } from '@/components/charts/TimeSavingChart';
 import { IntegrationPartners } from '@/components/landing/IntegrationPartners';
 import { TextFlipContainer } from '@/components/ui/TextFlipContainer';
+import { FloatingNav } from '@/components/ui/FloatingNav';
 
 // Icons
 import {
@@ -28,7 +29,11 @@ import {
   FileText,
   BarChart3,
   Sparkles,
-  AlertTriangle
+  AlertTriangle,
+  Home,
+  Briefcase,
+  DollarSign,
+  PlayCircle
 } from 'lucide-react';
 
 // New single-word typewriter effect
@@ -286,53 +291,42 @@ export default function HomePage() {
     router.push('/auth/register');
   };
 
+  // Navigation items for FloatingNav
+  const navItems = [
+    {
+      name: "Platform",
+      link: "#platform",
+      icon: <Shield className="h-4 w-4" />,
+    },
+    {
+      name: "Enterprise",
+      link: "#enterprise",
+      icon: <Briefcase className="h-4 w-4" />,
+    },
+    {
+      name: "Pricing",
+      link: "#pricing",
+      icon: <DollarSign className="h-4 w-4" />,
+    },
+    {
+      name: "Demo",
+      link: "#demo",
+      icon: <PlayCircle className="h-4 w-4" />,
+    },
+  ];
+
   return (
     <div className="min-h-screen font-inter" style={{ backgroundColor: '#FFFFFF' }}>
-      {/* Enhanced Navigation with Dolphin Logo */}
-      <nav className="fixed inset-x-0 top-0 z-50 w-full bg-white/90 backdrop-blur-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-3">
-              <Image
-                src="/images/logo/riscura.png"
-                alt="Riscura Logo"
-                width={32}
-                height={32}
-                className="object-contain"
-                priority
-              />
-              <span className="text-2xl font-bold text-[#199BEC] font-inter">Riscura</span>
-            </div>
-            
-            {/* Center Navigation Links */}
-            <div className="hidden md:flex items-center space-x-8">
-              <button className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors">Platform</button>
-              <button className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors">Enterprise</button>
-              <button className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors">Pricing</button>
-              <button className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors">Demo</button>
-            </div>
-            
-            <div className="flex items-center space-x-4">
-              <Button 
-                variant="outline"
-                onClick={() => router.push('/auth/login')}
-                className="px-4 py-2 text-sm border-[#199BEC] text-[#199BEC] hover:bg-[#199BEC] hover:text-white"
-              >
-                Login
-              </Button>
-              <Button 
-                onClick={handleGetStarted}
-                className="px-4 py-2 text-sm bg-[#199BEC] hover:bg-[#199BEC]/80"
-              >
-                Get Started
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* Floating Navigation */}
+      <FloatingNav 
+        navItems={navItems} 
+        onLogin={() => router.push('/auth/login')}
+        onGetStarted={handleGetStarted}
+      />
+      
 
       {/* Enhanced Hero Section */}
-      <section className="pt-36 pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-card to-background">
+      <section className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-card to-background">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left Column - Content */}

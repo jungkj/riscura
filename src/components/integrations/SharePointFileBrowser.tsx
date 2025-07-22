@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSharePointFiles } from '@/hooks/useSharePointFiles';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
-import { Alert } from '@/components/ui/Alert';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Alert } from '@/components/ui/alert';
 import { 
   FileSpreadsheet, 
   Folder, 

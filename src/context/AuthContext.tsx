@@ -396,43 +396,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Initialize authentication state on app load
   useEffect(() => {
     const initializeAuth = async () => {
-      // Check both localStorage and sessionStorage for token
+      // First, always check for OAuth session (priority check)
+      try {
+        console.log('[AuthContext] Checking OAuth session first...');
+        const oauthResponse = await fetch('/api/google-oauth/session');
+        const oauthData = await oauthResponse.json();
+        console.log('[AuthContext] OAuth session response:', oauthData);
+        
+        if (oauthData && oauthData.user) {
+          // Convert simple OAuth user to AuthUser format
+          const authUser: AuthUser = {
+            id: oauthData.user.id,
+            email: oauthData.user.email,
+            name: oauthData.user.name,
+            firstName: oauthData.user.name?.split(' ')[0] || '',
+            lastName: oauthData.user.name?.split(' ')[1] || '',
+            role: (oauthData.user.role || 'user').toLowerCase() as any,
+            isActive: true,
+            emailVerified: true,
+            organizationId: oauthData.user.organizationId || 'oauth-org',
+            permissions: [],
+            avatar: oauthData.user.picture,
+            createdAt: new Date().toISOString(),
+            lastLogin: new Date().toISOString(),
+          };
+          
+          dispatch({ type: 'AUTH_INITIALIZE', payload: { user: authUser, token: 'oauth-session' } });
+          return;
+        }
+      } catch (error) {
+        console.log('[AuthContext] No OAuth session found:', error);
+      }
+
+      // If no OAuth session, check for JWT token
       const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
       
-      // Also check for simple OAuth session
       if (!token) {
-        try {
-          // Only check simple OAuth session (bypassing problematic NextAuth)
-          console.log('[AuthContext] Checking OAuth session...');
-          const oauthResponse = await fetch('/api/google-oauth/session');
-          const oauthData = await oauthResponse.json();
-          console.log('[AuthContext] OAuth session response:', oauthData);
-          
-          if (oauthData && oauthData.user) {
-            // Convert simple OAuth user to AuthUser format
-            const authUser: AuthUser = {
-              id: oauthData.user.id,
-              email: oauthData.user.email,
-              name: oauthData.user.name,
-              firstName: oauthData.user.name?.split(' ')[0] || '',
-              lastName: oauthData.user.name?.split(' ')[1] || '',
-              role: (oauthData.user.role || 'user').toLowerCase() as any,
-              isActive: true,
-              emailVerified: true,
-              organizationId: oauthData.user.organizationId || 'oauth-org',
-              permissions: [],
-              avatar: oauthData.user.picture,
-              createdAt: new Date().toISOString(),
-              lastLogin: new Date().toISOString(),
-            };
-            
-            dispatch({ type: 'AUTH_INITIALIZE', payload: { user: authUser, token: 'oauth-session' } });
-            return;
-          }
-        } catch (error) {
-          console.log('No OAuth session found:', error);
-        }
-        
         dispatch({ type: 'AUTH_INITIALIZE', payload: null });
         return;
       }
