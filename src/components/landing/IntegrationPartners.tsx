@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { 
   Cloud, 
   Database, 
@@ -19,12 +20,23 @@ import {
   Zap
 } from 'lucide-react';
 
+// Define integration partners type
+interface IntegrationPartner {
+  id: string;
+  name: string;
+  logo?: string;
+  icon?: any;
+  color: string;
+  description: string;
+  available: boolean;
+}
+
 // Define integration partners with their logos and details
-const integrationPartners = [
+const integrationPartners: IntegrationPartner[] = [
   {
     id: 'microsoft',
     name: 'Microsoft SharePoint',
-    icon: FileText,
+    logo: '/logos/sharepoint.png',
     color: '#0078D4',
     description: 'SharePoint document management integration',
     available: true
@@ -32,7 +44,7 @@ const integrationPartners = [
   {
     id: 'google',
     name: 'Google Drive',
-    icon: Cloud,
+    logo: '/logos/googledrive.png',
     color: '#4285F4',
     description: 'Google Drive file import and sync',
     available: true
@@ -40,10 +52,10 @@ const integrationPartners = [
   {
     id: 'dropbox',
     name: 'Dropbox',
-    icon: Package,
+    logo: '/logos/dropbox.png',
     color: '#0061FF',
     description: 'Dropbox Business integration',
-    available: false
+    available: true
   },
   {
     id: 'box',
@@ -64,18 +76,18 @@ const integrationPartners = [
   {
     id: 'slack',
     name: 'Slack',
-    icon: Share2,
+    logo: '/logos/Slack.png',
     color: '#4A154B',
     description: 'Slack notifications and alerts',
-    available: false
+    available: true
   },
   {
     id: 'teams',
     name: 'Microsoft Teams',
-    icon: Layers,
+    logo: '/logos/Teams.png',
     color: '#6264A7',
     description: 'Teams collaboration integration',
-    available: false
+    available: true
   },
   {
     id: 'salesforce',
@@ -124,6 +136,14 @@ const integrationPartners = [
     color: '#29B5E8',
     description: 'Snowflake data warehouse',
     available: false
+  },
+  {
+    id: 'openai',
+    name: 'OpenAI',
+    logo: '/logos/OPenAi.png',
+    color: '#000000',
+    description: 'AI-powered risk analysis',
+    available: true
   },
   {
     id: 'tableau',
@@ -254,23 +274,38 @@ export const IntegrationPartners: React.FC = () => {
                       transition-all duration-300
                     `}
                   >
-                    {/* Icon */}
-                    <partner.icon 
-                      className={`
-                        w-8 h-8 mb-2 transition-all duration-300
-                        ${hoveredPartner === partner.id ? '' : 'text-gray-400'}
-                      `}
-                      style={{
-                        color: hoveredPartner === partner.id ? partner.color : undefined
-                      }}
-                    />
-                    {/* Name */}
+                    {/* Logo or Icon */}
+                    {partner.available && partner.logo ? (
+                      <div className="relative w-12 h-12 mb-2">
+                        <Image
+                          src={partner.logo}
+                          alt={partner.name}
+                          fill
+                          className="object-contain"
+                          style={{
+                            filter: hoveredPartner === partner.id ? 'none' : 'grayscale(100%) opacity(0.6)'
+                          }}
+                        />
+                      </div>
+                    ) : partner.icon ? (
+                      <partner.icon 
+                        className={`
+                          w-8 h-8 mb-2 transition-all duration-300
+                          ${hoveredPartner === partner.id ? '' : 'text-gray-400'}
+                        `}
+                        style={{
+                          color: hoveredPartner === partner.id ? partner.color : undefined
+                        }}
+                      />
+                    ) : null}
+                    
+                    {/* Name or Coming Soon */}
                     <div className={`
                       text-center font-medium text-xs leading-tight
-                      ${hoveredPartner === partner.id ? 'text-gray-900' : 'text-gray-500'}
+                      ${!partner.available ? 'text-gray-400' : hoveredPartner === partner.id ? 'text-gray-900' : 'text-gray-500'}
                       transition-colors duration-300
                     `}>
-                      {partner.name}
+                      {partner.available ? partner.name : 'Coming Soon'}
                     </div>
                   </div>
                   
