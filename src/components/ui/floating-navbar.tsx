@@ -9,13 +9,10 @@ import {
 } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import Image from "next/image";
 
-export const FloatingNav = ({
+export const FloatingNavbar = ({
   navItems,
   className,
-  onLogin,
-  onGetStarted,
 }: {
   navItems: {
     name: string;
@@ -23,8 +20,6 @@ export const FloatingNav = ({
     icon?: React.ReactNode;
   }[];
   className?: string;
-  onLogin?: () => void;
-  onGetStarted?: () => void;
 }) => {
   const { scrollYProgress } = useScroll();
   const [visible, setVisible] = useState(false);
@@ -35,14 +30,11 @@ export const FloatingNav = ({
       let direction = current! - scrollYProgress.getPrevious()!;
 
       if (scrollYProgress.get() < 0.05) {
-        // Always hide when at the very top
         setVisible(false);
       } else {
         if (direction < 0) {
-          // Scrolling up - show navbar
           setVisible(true);
         } else {
-          // Scrolling down - hide navbar
           setVisible(false);
         }
       }
@@ -68,21 +60,6 @@ export const FloatingNav = ({
           className
         )}
       >
-        {/* Logo */}
-        <Link href="/" className="flex items-center space-x-2 mr-2">
-          <Image
-            src="/images/logo/riscura.png"
-            alt="Riscura Logo"
-            width={24}
-            height={24}
-            className="object-contain"
-          />
-          <span className="hidden sm:block text-lg font-bold text-[#199BEC]">Riscura</span>
-        </Link>
-        
-        {/* Separator */}
-        <div className="hidden sm:block h-5 w-px bg-gray-300" />
-        
         {navItems.map((navItem: any, idx: number) => (
           <Link
             key={`link-${idx}`}
@@ -95,22 +72,10 @@ export const FloatingNav = ({
             <span className="hidden sm:block text-sm">{navItem.name}</span>
           </Link>
         ))}
-        <div className="flex items-center space-x-2">
-          <button 
-            onClick={onLogin}
-            className="border text-sm font-medium relative border-neutral-200 dark:border-white/[0.2] text-black dark:text-white px-4 py-2 rounded-full"
-          >
-            <span>Login</span>
-            <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-          </button>
-          <button 
-            onClick={onGetStarted}
-            className="border text-sm font-medium relative border-neutral-200 dark:border-white/[0.2] bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-full"
-          >
-            <span>Get Started</span>
-            <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-white to-transparent h-px opacity-40" />
-          </button>
-        </div>
+        <button className="border text-sm font-medium relative border-neutral-200 dark:border-white/[0.2] text-black dark:text-white px-4 py-2 rounded-full">
+          <span>Login</span>
+          <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
+        </button>
       </motion.div>
     </AnimatePresence>
   );
