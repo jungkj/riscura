@@ -2,30 +2,12 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import { 
-  Cloud, 
-  Database, 
-  Server, 
-  HardDrive, 
-  Share2, 
-  FileText,
-  Layers,
-  Globe,
-  Cpu,
-  Package,
-  Briefcase,
-  BarChart3,
-  PieChart,
-  Activity,
-  Zap
-} from 'lucide-react';
 
 // Define integration partners type
 interface IntegrationPartner {
   id: string;
   name: string;
-  logo?: string;
-  icon?: any;
+  logo: string;
   color: string;
   description: string;
   available: boolean;
@@ -58,22 +40,6 @@ const integrationPartners: IntegrationPartner[] = [
     available: true
   },
   {
-    id: 'box',
-    name: 'Box',
-    icon: HardDrive,
-    color: '#0061D5',
-    description: 'Box cloud content management',
-    available: false
-  },
-  {
-    id: 'onedrive',
-    name: 'OneDrive',
-    icon: Cloud,
-    color: '#0078D4',
-    description: 'OneDrive for Business integration',
-    available: false
-  },
-  {
     id: 'slack',
     name: 'Slack',
     logo: '/logos/Slack.png',
@@ -90,76 +56,12 @@ const integrationPartners: IntegrationPartner[] = [
     available: true
   },
   {
-    id: 'salesforce',
-    name: 'Salesforce',
-    icon: Cloud,
-    color: '#00A1E0',
-    description: 'Salesforce CRM integration',
-    available: false
-  },
-  {
-    id: 'sap',
-    name: 'SAP',
-    icon: Briefcase,
-    color: '#0070BA',
-    description: 'SAP ERP integration',
-    available: false
-  },
-  {
-    id: 'oracle',
-    name: 'Oracle',
-    icon: Database,
-    color: '#F80000',
-    description: 'Oracle database connectivity',
-    available: false
-  },
-  {
-    id: 'aws',
-    name: 'AWS',
-    icon: Server,
-    color: '#FF9900',
-    description: 'AWS S3 storage integration',
-    available: false
-  },
-  {
-    id: 'azure',
-    name: 'Microsoft Azure',
-    icon: Cloud,
-    color: '#0078D4',
-    description: 'Azure cloud services integration',
-    available: false
-  },
-  {
-    id: 'snowflake',
-    name: 'Snowflake',
-    icon: Database,
-    color: '#29B5E8',
-    description: 'Snowflake data warehouse',
-    available: false
-  },
-  {
     id: 'openai',
     name: 'OpenAI',
     logo: '/logos/OPenAi.png',
     color: '#000000',
     description: 'AI-powered risk analysis',
     available: true
-  },
-  {
-    id: 'tableau',
-    name: 'Tableau',
-    icon: BarChart3,
-    color: '#E97627',
-    description: 'Tableau analytics integration',
-    available: false
-  },
-  {
-    id: 'powerbi',
-    name: 'Power BI',
-    icon: PieChart,
-    color: '#F2C811',
-    description: 'Power BI reporting integration',
-    available: false
   }
 ];
 
@@ -274,38 +176,26 @@ export const IntegrationPartners: React.FC = () => {
                       transition-all duration-300
                     `}
                   >
-                    {/* Logo or Icon */}
-                    {partner.available && partner.logo ? (
-                      <div className="relative w-12 h-12 mb-2">
-                        <Image
-                          src={partner.logo}
-                          alt={partner.name}
-                          fill
-                          className="object-contain"
-                          style={{
-                            filter: hoveredPartner === partner.id ? 'none' : 'grayscale(100%) opacity(0.6)'
-                          }}
-                        />
-                      </div>
-                    ) : partner.icon ? (
-                      <partner.icon 
-                        className={`
-                          w-8 h-8 mb-2 transition-all duration-300
-                          ${hoveredPartner === partner.id ? '' : 'text-gray-400'}
-                        `}
+                    {/* Logo */}
+                    <div className="relative w-12 h-12 mb-2">
+                      <Image
+                        src={partner.logo}
+                        alt={partner.name}
+                        fill
+                        className="object-contain"
                         style={{
-                          color: hoveredPartner === partner.id ? partner.color : undefined
+                          filter: hoveredPartner === partner.id ? 'none' : 'grayscale(100%) opacity(0.6)'
                         }}
                       />
-                    ) : null}
+                    </div>
                     
-                    {/* Name or Coming Soon */}
+                    {/* Name */}
                     <div className={`
                       text-center font-medium text-xs leading-tight
-                      ${!partner.available ? 'text-gray-400' : hoveredPartner === partner.id ? 'text-gray-900' : 'text-gray-500'}
+                      ${hoveredPartner === partner.id ? 'text-gray-900' : 'text-gray-500'}
                       transition-colors duration-300
                     `}>
-                      {partner.available ? partner.name : 'Coming Soon'}
+                      {partner.name}
                     </div>
                   </div>
                   
