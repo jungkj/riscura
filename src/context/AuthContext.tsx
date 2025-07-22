@@ -410,7 +410,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             email: oauthData.user.email,
             name: oauthData.user.name,
             firstName: oauthData.user.name?.split(' ')[0] || '',
-            lastName: oauthData.user.name?.split(' ')[1] || '',
+            lastName: oauthData.user.name?.split(' ').slice(1).join(' ') || '',
             role: (oauthData.user.role || 'user').toLowerCase() as any,
             isActive: true,
             emailVerified: true,
