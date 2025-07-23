@@ -4,6 +4,8 @@ const require = createRequire(import.meta.url);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Page extensions for MDX
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
   // Enable experimental features
   experimental: {
     optimizeCss: true,

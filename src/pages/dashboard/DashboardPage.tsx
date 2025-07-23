@@ -36,13 +36,19 @@ import {
   UserPlus,
   Share2,
   Bell,
-  Briefcase
+  Briefcase,
+  FileSpreadsheet,
+  Download,
+  Sparkles,
+  FileDown,
+  Link2
 } from 'lucide-react';
 import Image from 'next/image';
 
 // Import the interactive risk heat map component
 import { RiskHeatMap as InteractiveRiskHeatMap } from '@/components/ui/interactive-risk-heatmap';
 import RiskControlWidget from '@/components/dashboard/RiskControlWidget';
+import EmptyStateWizard from '@/components/dashboard/EmptyStateWizard';
 
 // Types
 interface DashboardStats {
@@ -103,6 +109,7 @@ export default function DashboardPage() {
   const [complianceData, setComplianceData] = useState<any[]>([]);
   const [controlsData, setControlsData] = useState<any[]>([]);
   const [pendingActionsData, setPendingActionsData] = useState<any[]>([]);
+  const [recentImports, setRecentImports] = useState<any[]>([]);
 
   // Fetch real dashboard data
   useEffect(() => {
@@ -216,76 +223,68 @@ export default function DashboardPage() {
     }
   }, [loading]);
 
+  // Load recent imports from localStorage
+  useEffect(() => {
+    try {
+      const imports = localStorage.getItem('recentExcelImports');
+      if (imports) {
+        const parsedImports = JSON.parse(imports);
+        // Sort by date and take the most recent 3
+        const sortedImports = parsedImports
+          .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
+          .slice(0, 3);
+        setRecentImports(sortedImports);
+      }
+    } catch (error) {
+      console.error('Failed to load recent imports:', error);
+    }
+  }, []);
+
   const quickActions: QuickAction[] = [
     {
-      id: 'probo-hub',
-      title: 'Probo Hub',
-      description: 'Access integrated risk & compliance platform',
-      icon: Briefcase,
-      href: '/dashboard/probo',
-      color: 'text-[#199BEC]',
-      badge: 'Hub'
+      id: 'import-excel',
+      title: 'Import Excel RCSA',
+      description: 'Convert your spreadsheets instantly',
+      icon: FileSpreadsheet,
+      href: '/dashboard/import',
+      color: 'text-green-600',
+      badge: 'Excel'
     },
     {
-      id: 'probo-vendor-assessment',
-      title: 'Assess Vendor',
-      description: 'AI-powered vendor security assessment',
-      icon: Shield,
-      href: '/dashboard/probo?tab=vendor-assessment',
-      color: 'text-[#199BEC]',
-      badge: 'Probo'
+      id: 'download-templates',
+      title: 'Download Templates',
+      description: 'Excel templates for easy migration',
+      icon: Download,
+      href: '/dashboard/templates',
+      color: 'text-blue-600',
+      badge: 'Templates'
+    },
+    {
+      id: 'ai-assistant',
+      title: 'AI Risk Assistant',
+      description: 'Generate risks 10x faster',
+      icon: Sparkles,
+      href: '/dashboard/aria',
+      color: 'text-purple-600',
+      badge: 'Beta'
+    },
+    {
+      id: 'export-reports',
+      title: 'Export Reports',
+      description: 'Back to Excel anytime',
+      icon: FileDown,
+      href: '/dashboard/reporting/export',
+      color: 'text-orange-600',
+      badge: 'Export'
     },
     {
       id: 'new-risk',
       title: 'Add New Risk',
-      description: 'Document and assess a new risk',
+      description: 'Create risk with AI assistance',
       icon: Shield,
       href: '/dashboard/risks/new',
       color: 'text-red-600',
       badge: 'Quick'
-    },
-    {
-      id: 'probo-controls',
-      title: 'Browse Controls',
-      description: 'Access security controls library',
-      icon: Target,
-      href: '/dashboard/probo?tab=controls-library',
-      color: 'text-emerald-600',
-      badge: 'Library'
-    },
-    {
-      id: 'import-rcsa',
-      title: 'Import RCSA',
-      description: 'Upload risk assessment data',
-      icon: Upload,
-      href: '/dashboard/import/rcsa',
-      color: 'text-blue-600'
-    },
-    {
-      id: 'ask-aria',
-      title: 'Ask ARIA',
-      description: 'Get AI-powered insights',
-      icon: () => <Image src="/images/logo/riscura.png" alt="Riscura" width={20} height={20} />,
-      href: '/dashboard/aria',
-      color: 'text-[#199BEC]',
-      badge: 'AI'
-    },
-    {
-      id: 'probo-soc2',
-      title: 'SOC 2 Assessment',
-      description: 'Framework compliance tracking',
-      icon: CheckCircle2,
-      href: '/dashboard/probo?tab=soc2-assessment',
-      color: 'text-purple-600',
-      badge: 'SOC 2'
-    },
-    {
-      id: 'generate-report',
-      title: 'Generate Report',
-      description: 'Create compliance reports',
-      icon: FileText,
-      href: '/dashboard/reporting',
-      color: 'text-green-600'
     },
     {
       id: 'risk-assessment',
@@ -293,7 +292,33 @@ export default function DashboardPage() {
       description: 'Conduct risk evaluation',
       icon: Target,
       href: '/dashboard/risks/assessment',
-      color: 'text-orange-600'
+      color: 'text-emerald-600'
+    },
+    {
+      id: 'control-mapping',
+      title: 'Map Controls',
+      description: 'Smart control suggestions',
+      icon: Link2,
+      href: '/dashboard/controls/mapping',
+      color: 'text-indigo-600',
+      badge: 'Smart'
+    },
+    {
+      id: 'compliance-check',
+      title: 'Compliance Check',
+      description: 'Instant compliance status',
+      icon: CheckCircle2,
+      href: '/dashboard/compliance',
+      color: 'text-teal-600'
+    },
+    {
+      id: 'team-collaborate',
+      title: 'Invite Team',
+      description: 'Collaborate on risk management',
+      icon: Users,
+      href: '/dashboard/team/invite',
+      color: 'text-pink-600',
+      badge: 'Team'
     }
   ];
 
@@ -582,7 +607,24 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* Show Empty State Wizard if no risks */}
+      {stats.totalRisks === 0 && !loading && (
+        <EmptyStateWizard 
+          onImportComplete={() => {
+            // Refresh dashboard data
+            window.location.reload();
+          }}
+          onRiskCreated={() => {
+            // Navigation handled in component
+          }}
+          onDemoStarted={() => {
+            // Demo mode will be handled later
+          }}
+        />
+      )}
+
       {/* Main Dashboard Grid - Enhanced Layout with Better Balance */}
+      {stats.totalRisks > 0 && (
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Left Column - Compact Stats & Quick Actions */}
         <div className="lg:col-span-4 space-y-4">
@@ -681,6 +723,59 @@ export default function DashboardPage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Recently Imported Section */}
+          {recentImports.length > 0 && (
+            <Card className="bg-white border-gray-200">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2">
+                  <FileSpreadsheet className="h-5 w-5 text-green-600" />
+                  <span className="text-[#191919] font-bold text-base">Recently Imported</span>
+                  <Badge variant="secondary" className="bg-green-100 text-green-800 font-semibold text-xs">
+                    {recentImports.length} files
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="space-y-2">
+                  {recentImports.map((importItem, index) => (
+                    <div 
+                      key={index}
+                      className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-green-50 rounded-lg">
+                          <FileSpreadsheet className="h-4 w-4 text-green-600" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm text-[#191919]">{importItem.filename}</p>
+                          <p className="text-xs text-gray-500">
+                            {importItem.risksImported} risks • {new Date(importItem.date).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => router.push('/dashboard/risks')}
+                        >
+                          View
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => router.push('/dashboard/import')}
+                        >
+                          Re-import
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {/* Right Column - Expanded Risk Heat Map Showcase */}
@@ -691,8 +786,11 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+      )}
 
       {/* Probo Integration Section */}
+      {stats.totalRisks > 0 && (
+      <>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         <div className="lg:col-span-2">
           <RiskControlWidget variant="detailed" showActions={true} />
@@ -886,6 +984,8 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+      </>
+      )}
 
       {/* Stats Modal */}
       <DashboardStatsModal

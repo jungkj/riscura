@@ -8,45 +8,45 @@ datasource db {
 }
 
 model Organization {
-  id                    String                     @id @default(cuid())
-  name                  String
-  domain                String?                    @unique
-  settings              Json?
-  plan                  String                     @default("free")
-  stripeCustomerId      String?
-  isActive              Boolean                    @default(true)
-  createdAt             DateTime                   @default(now())
-  updatedAt             DateTime                   @updatedAt
-  activities            Activity[]
-  apiKeys               APIKey[]
-  billingEvents         BillingEvent[]
-  chatChannels          ChatChannel[]
-  complianceAssessments ComplianceAssessment[]
-  complianceFrameworks  ComplianceFramework[]
-  controls              Control[]
-  documents             Document[]
-  encryptionKeys        EncryptionKey[]
-  extractedControls     ExtractedControl[]
-  extractedRisks        ExtractedRisk[]
-  notificationDigests   NotificationDigest[]
-  notifications         Notification[]
-  subscriptions         OrganizationSubscription[]
-  proboIntegration      ProboIntegration?
-  questionnaires        Questionnaire[]
-  rcsaEntries           RcsaEntry[]
-  reportSchedules       ReportSchedule[]
-  reportTemplates       ReportTemplate[]
-  reports               Report[]
-  risks                 Risk[]
-  spreadsheetTemplates  SpreadsheetTemplate[]      @relation("SpreadsheetTemplateOrg")
-  spreadsheets          Spreadsheet[]
-  tasks                 Task[]
-  testScripts           TestScript[]
-  users                 User[]
-  workflows             Workflow[]
-  workflows_v2          WorkflowV2[]
+  id                     String                     @id @default(cuid())
+  name                   String
+  domain                 String?                    @unique
+  settings               Json?
+  plan                   String                     @default("free")
+  stripeCustomerId       String?
+  isActive               Boolean                    @default(true)
+  createdAt              DateTime                   @default(now())
+  updatedAt              DateTime                   @updatedAt
+  activities             Activity[]
+  apiKeys                APIKey[]
+  billingEvents          BillingEvent[]
+  chatChannels           ChatChannel[]
+  complianceAssessments  ComplianceAssessment[]
+  complianceFrameworks   ComplianceFramework[]
+  controls               Control[]
+  documents              Document[]
+  encryptionKeys         EncryptionKey[]
+  extractedControls      ExtractedControl[]
+  extractedRisks         ExtractedRisk[]
+  importJobs             ImportJob[]
+  notificationDigests    NotificationDigest[]
+  notifications          Notification[]
+  subscriptions          OrganizationSubscription[]
+  proboIntegration       ProboIntegration?
+  questionnaires         Questionnaire[]
+  rcsaEntries            RcsaEntry[]
+  reportSchedules        ReportSchedule[]
+  reportTemplates        ReportTemplate[]
+  reports                Report[]
+  risks                  Risk[]
   sharePointIntegrations SharePointIntegration[]
-  importJobs            ImportJob[]
+  spreadsheetTemplates   SpreadsheetTemplate[]      @relation("SpreadsheetTemplateOrg")
+  spreadsheets           Spreadsheet[]
+  tasks                  Task[]
+  testScripts            TestScript[]
+  users                  User[]
+  workflows              Workflow[]
+  workflows_v2           WorkflowV2[]
 
   @@map("organizations")
 }
@@ -91,6 +91,7 @@ model User {
   createdDocuments            Document[]                     @relation("DocumentCreatedBy")
   createdExtractedControls    ExtractedControl[]             @relation("ExtractedControlCreatedBy")
   createdExtractedRisks       ExtractedRisk[]                @relation("ExtractedRiskCreatedBy")
+  importJobs                  ImportJob[]
   notificationPreferences     LegacyNotificationPreferences?
   legacyNotifications         LegacyNotification[]
   messages                    Message[]                      @relation("MessageSender")
@@ -121,7 +122,6 @@ model User {
   assignedWorkflowSteps       WorkflowStep[]                 @relation("WorkflowStepAssignedTo")
   createdWorkflows            Workflow[]                     @relation("WorkflowCreatedBy")
   receivedMessages            Message[]                      @relation("MessageRecipient")
-  importJobs                  ImportJob[]
 
   @@index([organizationId])
   @@index([email])
@@ -606,13 +606,13 @@ model Activity {
   createdAt      DateTime      @default(now())
   organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   user           User?         @relation("ActivityCreatedBy", fields: [userId], references: [id])
-  controls       Control       @relation(fields: [entityId], references: [id], map: "activity_control_fkey")
-  documents      Document      @relation(fields: [entityId], references: [id], map: "activity_document_fkey")
-  questionnaires Questionnaire @relation(fields: [entityId], references: [id], map: "activity_questionnaire_fkey")
-  reports        Report        @relation(fields: [entityId], references: [id], map: "activity_report_fkey")
+  risks          Control       @relation(fields: [entityId], references: [id], map: "activity_risk_fkey")
+  risks          Document      @relation(fields: [entityId], references: [id], map: "activity_risk_fkey")
+  risks          Questionnaire @relation(fields: [entityId], references: [id], map: "activity_risk_fkey")
+  risks          Report        @relation(fields: [entityId], references: [id], map: "activity_risk_fkey")
   risks          Risk          @relation(fields: [entityId], references: [id], map: "activity_risk_fkey")
-  tasks          Task          @relation(fields: [entityId], references: [id], map: "activity_task_fkey")
-  workflows      Workflow      @relation(fields: [entityId], references: [id], map: "activity_workflow_fkey")
+  risks          Task          @relation(fields: [entityId], references: [id], map: "activity_risk_fkey")
+  risks          Workflow      @relation(fields: [entityId], references: [id], map: "activity_risk_fkey")
 
   @@index([organizationId])
   @@index([entityType, entityId])
@@ -1550,38 +1550,38 @@ model ComplianceGap {
 }
 
 model SharePointIntegration {
-  id                String         @id @default(cuid())
-  organizationId    String
-  organization      Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  displayName       String
-  siteId            String
-  driveId           String?
-  isActive          Boolean        @default(true)
-  lastSyncedAt      DateTime?
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
-  
+  id             String       @id @default(cuid())
+  organizationId String
+  displayName    String
+  siteId         String
+  driveId        String?
+  isActive       Boolean      @default(true)
+  lastSyncedAt   DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
   @@unique([organizationId, siteId])
   @@index([organizationId])
   @@map("sharepoint_integrations")
 }
 
 model ImportJob {
-  id              String           @id @default(cuid())
+  id              String          @id @default(cuid())
   organizationId  String
-  organization    Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   userId          String
-  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type            ImportJobType
+  type            String
   status          ImportJobStatus
-  progress        Int              @default(0)
+  progress        Int             @default(0)
   progressMessage String?
   sourceUrl       String
-  metadata        Json?            // Store file info, validation results, etc.
+  metadata        Json?
   errorMessage    String?
-  startedAt       DateTime         @default(now())
+  startedAt       DateTime        @default(now())
   completedAt     DateTime?
-  
+  organization    Organization    @relation(fields: [organizationId], references: [id])
+  user            User            @relation(fields: [userId], references: [id])
+
   @@index([organizationId, status])
   @@index([userId])
   @@map("import_jobs")
@@ -2003,10 +2003,4 @@ enum ImportJobStatus {
   COMPLETED
   FAILED
   CANCELLED
-}
-
-enum ImportJobType {
-  SHAREPOINT_EXCEL_IMPORT
-  GOOGLE_DRIVE_EXCEL_IMPORT
-  LOCAL_FILE_IMPORT
 }
