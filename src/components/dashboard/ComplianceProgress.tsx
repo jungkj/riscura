@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardHeader, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -177,7 +177,7 @@ export default function ComplianceProgress() {
 
       {/* Overall Progress */}
       <DaisyCard className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-        <DaisyCardContent className="p-6">
+        <DaisyCardBody className="p-6">
           <div className="flex items-center justify-between">
             <div>
               <h4 className="text-lg font-semibold text-gray-900 mb-2">Overall Compliance</h4>
@@ -220,7 +220,7 @@ export default function ComplianceProgress() {
                 </DaisyBadge>
               </div>
             
-            <DaisyCardContent className="pt-0">
+            <DaisyCardBody className="pt-0">
               <div className="flex items-center justify-center mb-4">
                 <DaisyProgressRing 
                   progress={framework.progress} 
@@ -268,7 +268,7 @@ export default function ComplianceProgress() {
               </DaisyButton>
             </div>
           
-          <DaisyCardContent>
+          <DaisyCardBody>
             {(() => {
               const framework = frameworks.find(f => f.id === selectedFramework);
               if (!framework) return null;

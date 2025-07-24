@@ -226,7 +226,7 @@ export default function AIControlGenerator({
             </div>
           </DaisyCardTitle>
         
-        <DaisyCardContent>
+        <DaisyCardBody>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="flex items-center space-x-2">
               <Target className="h-4 w-4 text-blue-600" />
@@ -279,42 +279,32 @@ export default function AIControlGenerator({
                   Organization Context
                 </DaisyCardTitle>
               
-              <DaisyCardContent className="space-y-4">
+              <DaisyCardBody className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <DaisyLabel>Industry</DaisyLabel>
                     <DaisySelect
                       value={organizationContext.industry}
-                      onValueChange={(value) => setOrganizationContext(prev => ({ ...prev, industry: value }))}
+                      onChange={(e) => setOrganizationContext(prev => ({ ...prev, industry: e.target.value }))}
                     >
-                      <DaisySelectTrigger>
-                        <DaisySelectValue />
-                      </SelectTrigger>
-                      <DaisySelectContent>
-                        <DaisySelectItem value="Technology">Technology</SelectItem>
-                        <DaisySelectItem value="Healthcare">Healthcare</SelectItem>
-                        <DaisySelectItem value="Finance">Finance</SelectItem>
-                        <DaisySelectItem value="Retail">Retail</SelectItem>
-                        <DaisySelectItem value="Manufacturing">Manufacturing</SelectItem>
-                      </SelectContent>
+                      <option value="Technology">Technology</option>
+                      <option value="Healthcare">Healthcare</option>
+                      <option value="Finance">Finance</option>
+                      <option value="Retail">Retail</option>
+                      <option value="Manufacturing">Manufacturing</option>
                     </DaisySelect>
                   </div>
                   <div className="space-y-2">
                     <DaisyLabel>Organization Size</DaisyLabel>
                     <DaisySelect
                       value={organizationContext.size}
-                      onValueChange={(value: any) => setOrganizationContext(prev => ({ ...prev, size: value }))}
+                      onChange={(e) => setOrganizationContext(prev => ({ ...prev, size: e.target.value as any }))}
                     >
-                      <DaisySelectTrigger>
-                        <DaisySelectValue />
-                      </SelectTrigger>
-                      <DaisySelectContent>
-                        <DaisySelectItem value="Startup">Startup (1-50)</SelectItem>
-                        <DaisySelectItem value="Small">Small (51-200)</SelectItem>
-                        <DaisySelectItem value="Medium">Medium (201-1000)</SelectItem>
-                        <DaisySelectItem value="Large">Large (1001-5000)</SelectItem>
-                        <DaisySelectItem value="Enterprise">Enterprise (5000+)</SelectItem>
-                      </SelectContent>
+                      <option value="Startup">Startup (1-50)</option>
+                      <option value="Small">Small (51-200)</option>
+                      <option value="Medium">Medium (201-1000)</option>
+                      <option value="Large">Large (1001-5000)</option>
+                      <option value="Enterprise">Enterprise (5000+)</option>
                     </DaisySelect>
                   </div>
                 </div>
@@ -337,32 +327,22 @@ export default function AIControlGenerator({
                     <DaisyLabel>Risk Tolerance</DaisyLabel>
                     <DaisySelect
                       value={organizationContext.riskTolerance}
-                      onValueChange={(value: any) => setOrganizationContext(prev => ({ ...prev, riskTolerance: value }))}
+                      onChange={(e) => setOrganizationContext(prev => ({ ...prev, riskTolerance: e.target.value as any }))}
                     >
-                      <DaisySelectTrigger>
-                        <DaisySelectValue />
-                      </SelectTrigger>
-                      <DaisySelectContent>
-                        <DaisySelectItem value="Low">Low</SelectItem>
-                        <DaisySelectItem value="Medium">Medium</SelectItem>
-                        <DaisySelectItem value="High">High</SelectItem>
-                      </SelectContent>
+                      <option value="Low">Low</option>
+                      <option value="Medium">Medium</option>
+                      <option value="High">High</option>
                     </DaisySelect>
                   </div>
                   <div className="space-y-2">
                     <DaisyLabel>Timeline</DaisyLabel>
                     <DaisySelect
                       value={organizationContext.timeline}
-                      onValueChange={(value: any) => setOrganizationContext(prev => ({ ...prev, timeline: value }))}
+                      onChange={(e) => setOrganizationContext(prev => ({ ...prev, timeline: e.target.value as any }))}
                     >
-                      <DaisySelectTrigger>
-                        <DaisySelectValue />
-                      </SelectTrigger>
-                      <DaisySelectContent>
-                        <DaisySelectItem value="Urgent">Urgent (1-2 weeks)</SelectItem>
-                        <DaisySelectItem value="Standard">Standard (1-2 months)</SelectItem>
-                        <DaisySelectItem value="Flexible">Flexible (3+ months)</SelectItem>
-                      </SelectContent>
+                      <option value="Urgent">Urgent (1-2 weeks)</option>
+                      <option value="Standard">Standard (1-2 months)</option>
+                      <option value="Flexible">Flexible (3+ months)</option>
                     </DaisySelect>
                   </div>
                 </div>
@@ -377,7 +357,7 @@ export default function AIControlGenerator({
                   Generation Constraints
                 </DaisyCardTitle>
               
-              <DaisyCardContent className="space-y-4">
+              <DaisyCardBody className="space-y-4">
                 <div className="space-y-2">
                   <DaisyLabel>Max Implementation Hours</DaisyLabel>
                   <DaisyInput
@@ -473,7 +453,7 @@ export default function AIControlGenerator({
                 AI Control Generation in Progress
               </DaisyCardTitle>
             
-            <DaisyCardContent className="space-y-6">
+            <DaisyCardBody className="space-y-6">
               {isGenerating ? (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -530,7 +510,7 @@ export default function AIControlGenerator({
               {/* Summary Cards */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <DaisyCard className="bg-blue-50 border-blue-200">
-                  <DaisyCardContent className="p-4">
+                  <DaisyCardBody className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium text-blue-600">Controls Generated</p>
@@ -542,7 +522,7 @@ export default function AIControlGenerator({
                 </DaisyCard>
 
                 <DaisyCard className="bg-green-50 border-green-200">
-                  <DaisyCardContent className="p-4">
+                  <DaisyCardBody className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium text-green-600">Implementation Time</p>
@@ -554,7 +534,7 @@ export default function AIControlGenerator({
                 </DaisyCard>
 
                 <DaisyCard className="bg-purple-50 border-purple-200">
-                  <DaisyCardContent className="p-4">
+                  <DaisyCardBody className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium text-purple-600">AI Confidence</p>
@@ -566,7 +546,7 @@ export default function AIControlGenerator({
                 </DaisyCard>
 
                 <DaisyCard className="bg-orange-50 border-orange-200">
-                  <DaisyCardContent className="p-4">
+                  <DaisyCardBody className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium text-orange-600">Est. Cost</p>
@@ -604,7 +584,7 @@ export default function AIControlGenerator({
                     </div>
                   </div>
                 
-                <DaisyCardContent>
+                <DaisyCardBody>
                   <div className="space-y-4">
                     {generatedResponse.controls.map((control) => {
                       const IconComponent = getControlIcon(control.category.name);

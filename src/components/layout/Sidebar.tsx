@@ -463,7 +463,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                   </div>
                 </DaisyTooltipContent>
               </DaisyTooltip>
-            
+            </DaisyTooltipProvider>
           ))}
         </div>
 
@@ -483,7 +483,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                 {user?.firstName} {user?.lastName}
               </DaisyTooltipContent>
             </DaisyTooltip>
-          
+          </DaisyTooltipProvider>
         </div>
       </div>
     );

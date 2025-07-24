@@ -204,16 +204,11 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
                   <DaisyLabel>Category</DaisyLabel>
                   <DaisySelect
                     value={risk.category}
-                    onValueChange={(v) => updateRisk(risk.externalId, { category: v as RiskCategory })}
+                    onChange={(e) => updateRisk(risk.externalId, { category: e.target.value as RiskCategory })}
                   >
-                    <DaisySelectTrigger>
-                      <DaisySelectValue />
-                    </SelectTrigger>
-                    <DaisySelectContent>
-                      {Object.values(RiskCategory).map(cat => (
-                        <DaisySelectItem key={cat} value={cat}>{cat}</SelectItem>
-                      ))}
-                    </SelectContent>
+                    {Object.values(RiskCategory).map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
                   </DaisySelect>
                 </div>
                 <div>
@@ -312,16 +307,11 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
                   <DaisyLabel>Type</DaisyLabel>
                   <DaisySelect
                     value={control.type}
-                    onValueChange={(v) => updateControl(control.externalId, { type: v as ControlType })}
+                    onChange={(e) => updateControl(control.externalId, { type: e.target.value as ControlType })}
                   >
-                    <DaisySelectTrigger>
-                      <DaisySelectValue />
-                    </SelectTrigger>
-                    <DaisySelectContent>
-                      {Object.values(ControlType).map(type => (
-                        <DaisySelectItem key={type} value={type}>{type}</SelectItem>
-                      ))}
-                    </SelectContent>
+                    {Object.values(ControlType).map(type => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
                   </DaisySelect>
                 </div>
                 <div>
@@ -335,16 +325,11 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
                   <DaisyLabel>Automation</DaisyLabel>
                   <DaisySelect
                     value={control.automationLevel}
-                    onValueChange={(v) => updateControl(control.externalId, { automationLevel: v as AutomationLevel })}
+                    onChange={(e) => updateControl(control.externalId, { automationLevel: e.target.value as AutomationLevel })}
                   >
-                    <DaisySelectTrigger>
-                      <DaisySelectValue />
-                    </SelectTrigger>
-                    <DaisySelectContent>
-                      {Object.values(AutomationLevel).map(level => (
-                        <DaisySelectItem key={level} value={level}>{level}</SelectItem>
-                      ))}
-                    </SelectContent>
+                    {Object.values(AutomationLevel).map(level => (
+                      <option key={level} value={level}>{level}</option>
+                    ))}
                   </DaisySelect>
                 </div>
               </div>
@@ -396,11 +381,11 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
       <DaisyCard>
         <DaisyCardHeader>
           <DaisyCardTitle>Import RCSA Data</DaisyCardTitle>
-          <DaisyCardDescription>
+          <p>
             Upload an Excel file or paste your RCSA data to begin the analysis
           </p>
         
-        <DaisyCardContent>
+        <DaisyCardBody>
           <DaisyTabs value={uploadMethod} onValueChange={(v) => setUploadMethod(v as 'file' | 'paste')}>
             <DaisyTabsList className="grid w-full grid-cols-2">
               <DaisyTabsTrigger value="file">Upload File</DaisyTabsTrigger>
@@ -449,7 +434,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
   if (step === 'analyzing') {
     return (
       <DaisyCard>
-        <DaisyCardContent className="py-12">
+        <DaisyCardBody className="py-12">
           <div className="flex flex-col items-center space-y-4">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
             <p className="text-lg font-medium">Analyzing RCSA Data...</p>
@@ -469,9 +454,9 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle>RCSA Analysis Complete</DaisyCardTitle>
-            <DaisyCardDescription>{analysis.overallAssessment}</p>
+            <p>{analysis.overallAssessment}</p>
           
-          <DaisyCardContent>
+          <DaisyCardBody>
             <div className="grid grid-cols-3 gap-4">
               <div className="text-center">
                 <p className="text-2xl font-bold">{analysis.completenessScore}%</p>
@@ -494,9 +479,9 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle>Gap Analysis</DaisyCardTitle>
-              <DaisyCardDescription>Issues identified in your RCSA data</p>
+              <p>Issues identified in your RCSA data</p>
             
-            <DaisyCardContent>
+            <DaisyCardBody>
               <DaisyTabs defaultValue="risks">
                 <DaisyTabsList>
                   <DaisyTabsTrigger value="risks">
@@ -511,7 +496,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
                   {analysis.riskGaps.map((gap, index) => (
                     <DaisyAlert key={index}>
                       <DaisyAlertCircle className="h-4 w-4" />
-                      <DaisyAlertDescription>
+                      <p>
                         <div className="flex justify-between items-start">
                           <div>
                             <p className="font-medium">{gap.issue}</p>
@@ -535,7 +520,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
                   {analysis.controlGaps.map((gap, index) => (
                     <DaisyAlert key={index}>
                       <DaisyAlertCircle className="h-4 w-4" />
-                      <DaisyAlertDescription>
+                      <p>
                         <div className="flex justify-between items-start">
                           <div>
                             <p className="font-medium">{gap.controlId}: {gap.issue}</p>
@@ -563,9 +548,9 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle>Review Risks</DaisyCardTitle>
-            <DaisyCardDescription>Edit risk details before importing</p>
+            <p>Edit risk details before importing</p>
           
-          <DaisyCardContent>
+          <DaisyCardBody>
             {editedRisks.length > 10 ? (
               <FixedSizeList
                 height={400}
@@ -589,9 +574,9 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle>Review Controls</DaisyCardTitle>
-            <DaisyCardDescription>Edit control details before importing</p>
+            <p>Edit control details before importing</p>
           
-          <DaisyCardContent>
+          <DaisyCardBody>
             {editedControls.length > 10 ? (
               <FixedSizeList
                 height={400}
@@ -627,7 +612,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
   if (step === 'importing') {
     return (
       <DaisyCard>
-        <DaisyCardContent className="py-12">
+        <DaisyCardBody className="py-12">
           <div className="flex flex-col items-center space-y-4">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
             <p className="text-lg font-medium">Importing RCSA Data...</p>
@@ -643,7 +628,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
   if (step === 'complete') {
     return (
       <DaisyCard>
-        <DaisyCardContent className="py-12">
+        <DaisyCardBody className="py-12">
           <div className="flex flex-col items-center space-y-4">
             <CheckCircle className="h-12 w-12 text-green-500" />
             <p className="text-lg font-medium">Import Complete!</p>

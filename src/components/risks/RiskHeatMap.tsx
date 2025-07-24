@@ -272,44 +272,29 @@ export const RiskHeatMap: React.FC = () => {
         </ContentCard>
 
         <ContentCard title="Group By" className="p-4">
-          <DaisySelect value={groupBy} onValueChange={(value: any) => setGroupBy(value)}>
-            <DaisySelectTrigger>
-              <DaisySelectValue />
-            </SelectTrigger>
-            <DaisySelectContent>
-              <DaisySelectItem value="none">No Grouping</SelectItem>
-              <DaisySelectItem value="category">Category</SelectItem>
-              <DaisySelectItem value="framework">Framework</SelectItem>
-              <DaisySelectItem value="status">Status</SelectItem>
-            </SelectContent>
+          <DaisySelect value={groupBy} onChange={(e) => setGroupBy(e.target.value as any)}>
+            <option value="none">No Grouping</option>
+            <option value="category">Category</option>
+            <option value="framework">Framework</option>
+            <option value="status">Status</option>
           </DaisySelect>
         </ContentCard>
 
         <ContentCard title="Category Filter" className="p-4">
-          <DaisySelect value={filterCategory} onValueChange={setFilterCategory}>
-            <DaisySelectTrigger>
-              <DaisySelectValue />
-            </SelectTrigger>
-            <DaisySelectContent>
-              <DaisySelectItem value="all">All Categories</SelectItem>
-              {categories.map(category => (
-                <DaisySelectItem key={category} value={category}>{category}</SelectItem>
-              ))}
-            </SelectContent>
+          <DaisySelect value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+            <option value="all">All Categories</option>
+            {categories.map(category => (
+              <option key={category} value={category}>{category}</option>
+            ))}
           </DaisySelect>
         </ContentCard>
 
         <ContentCard title="Framework Filter" className="p-4">
-          <DaisySelect value={filterFramework} onValueChange={setFilterFramework}>
-            <DaisySelectTrigger>
-              <DaisySelectValue />
-            </SelectTrigger>
-            <DaisySelectContent>
-              <DaisySelectItem value="all">All Frameworks</SelectItem>
-              {frameworks.map(framework => (
-                <DaisySelectItem key={framework} value={framework}>{framework}</SelectItem>
-              ))}
-            </SelectContent>
+          <DaisySelect value={filterFramework} onChange={(e) => setFilterFramework(e.target.value)}>
+            <option value="all">All Frameworks</option>
+            {frameworks.map(framework => (
+              <option key={framework} value={framework}>{framework}</option>
+            ))}
           </DaisySelect>
         </ContentCard>
       </div>
