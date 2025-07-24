@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, AlertCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DaisySelect } from '@/components/ui/DaisySelect';
 import { useRiskFlow } from '../RiskFlowContext';
 import { RiskCategory } from '@/types/rcsa.types';
 import { cn } from '@/lib/utils';
@@ -82,8 +82,8 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <Label htmlFor="title">Risk Title</Label>
-        <Input
+        <DaisyLabel htmlFor="title">Risk Title</DaisyLabel>
+        <DaisyInput
           id="title"
           placeholder="e.g., Data breach risk, Supply chain disruption"
           value={riskData.title}
@@ -95,7 +95,7 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
         />
         {errors.title && (
           <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
-            <AlertCircle className="w-3 h-3" />
+            <DaisyAlertCircle className="w-3 h-3" />
             {errors.title}
           </p>
         )}
@@ -107,8 +107,8 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
         transition={{ delay: 0.2 }}
       >
         <div className="flex items-center justify-between mb-1">
-          <Label htmlFor="description">Risk Description</Label>
-          <Button
+          <DaisyLabel htmlFor="description">Risk Description</DaisyLabel>
+          <DaisyButton
             type="button"
             variant="ghost"
             size="sm"
@@ -118,7 +118,7 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
           >
             <Sparkles className="w-3 h-3 mr-1" />
             {aiSuggesting ? 'Generating...' : 'AI Suggest'}
-          </Button>
+          </DaisyButton>
         </div>
         <Textarea
           id="description"
@@ -133,7 +133,7 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
         />
         {errors.description && (
           <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
-            <AlertCircle className="w-3 h-3" />
+            <DaisyAlertCircle className="w-3 h-3" />
             {errors.description}
           </p>
         )}
@@ -144,20 +144,20 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        <Label htmlFor="category">Category</Label>
-        <Select
+        <DaisyLabel htmlFor="category">Category</DaisyLabel>
+        <DaisySelect
           value={riskData.category || ''}
           onValueChange={(value) => {
             updateRiskData({ category: value as RiskCategory });
             if (errors.category) setErrors({ ...errors, category: '' });
           }}
         >
-          <SelectTrigger className={cn("mt-1", errors.category && "border-red-500")}>
-            <SelectValue placeholder="Select a category" />
+          <DaisySelectTrigger className={cn("mt-1", errors.category && "border-red-500")}>
+            <DaisySelectValue placeholder="Select a category" />
           </SelectTrigger>
-          <SelectContent>
+          <DaisySelectContent>
             {categories.map((cat) => (
-              <SelectItem key={cat.value} value={cat.value}>
+              <DaisySelectItem key={cat.value} value={cat.value}>
                 <div className="flex items-center gap-2">
                   <span className={cn("px-2 py-0.5 rounded-md text-xs font-medium", cat.color)}>
                     {cat.emoji} {cat.label}
@@ -166,10 +166,10 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
               </SelectItem>
             ))}
           </SelectContent>
-        </Select>
+        </DaisySelect>
         {errors.category && (
           <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
-            <AlertCircle className="w-3 h-3" />
+            <DaisyAlertCircle className="w-3 h-3" />
             {errors.category}
           </p>
         )}
@@ -181,9 +181,9 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
         transition={{ delay: 0.4 }}
         className="flex justify-end pt-4"
       >
-        <Button onClick={handleNext} size="lg" className="min-w-[120px]">
+        <DaisyButton onClick={handleNext} size="lg" className="min-w-[120px]">
           Next
-        </Button>
+        </DaisyButton>
       </motion.div>
     </div>
   );

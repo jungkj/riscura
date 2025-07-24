@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
@@ -101,52 +101,52 @@ export function RiskControlWidget({
 
   if (loading) {
     return (
-      <Card className={`bg-[#FAFAFA] border-[#D8C3A5] ${className}`}>
-        <CardHeader>
+      <DaisyCard className={`bg-[#FAFAFA] border-[#D8C3A5] ${className}`}>
+        <DaisyCardHeader>
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 bg-[#199BEC]/20 rounded animate-pulse" />
             <div className="w-32 h-5 bg-gray-200 rounded animate-pulse" />
           </div>
-        </CardHeader>
-        <CardContent>
+        
+        <DaisyCardContent>
           <div className="space-y-3">
             <div className="w-full h-4 bg-gray-200 rounded animate-pulse" />
             <div className="w-3/4 h-4 bg-gray-200 rounded animate-pulse" />
             <div className="w-1/2 h-4 bg-gray-200 rounded animate-pulse" />
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     );
   }
 
   if (error) {
     return (
-      <Card className={`bg-[#FAFAFA] border-[#D8C3A5] ${className}`}>
-        <CardHeader>
-          <CardTitle className="text-[#191919] font-inter flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-red-500" />
+      <DaisyCard className={`bg-[#FAFAFA] border-[#D8C3A5] ${className}`}>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="text-[#191919] font-inter flex items-center gap-2">
+            <DaisyAlertTriangle className="h-5 w-5 text-red-500" />
             Risk Control Center
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <p className="text-sm text-red-600">{error}</p>
-          <Button 
+          <DaisyButton 
             variant="outline" 
             size="sm" 
             onClick={fetchProboData}
             className="mt-2"
           >
             Retry
-          </Button>
-        </CardContent>
-      </Card>
+          </DaisyButton>
+        </DaisyCardBody>
+      </DaisyCard>
     );
   }
 
   if (variant === 'compact') {
     return (
-      <Card className={`bg-gradient-to-r from-[#199BEC]/5 to-[#199BEC]/10 border-[#199BEC]/20 ${className}`}>
-        <CardContent className="p-4">
+      <DaisyCard className={`bg-gradient-to-r from-[#199BEC]/5 to-[#199BEC]/10 border-[#199BEC]/20 ${className}`}>
+        <DaisyCardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-[#199BEC]/10 rounded-lg">
@@ -159,29 +159,29 @@ export function RiskControlWidget({
                 </p>
               </div>
             </div>
-            <Button 
+            <DaisyButton 
               size="sm"
               onClick={() => handleProboAction('hub')}
               className="bg-[#199BEC] hover:bg-[#199BEC]/90 text-white"
             >
               Open
-            </Button>
+            </DaisyButton>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     );
   }
 
   if (variant === 'metrics-only') {
     return (
-      <Card className={`bg-[#FAFAFA] border-[#D8C3A5] ${className}`}>
-        <CardHeader>
-          <CardTitle className="text-[#191919] font-inter flex items-center gap-2">
+      <DaisyCard className={`bg-[#FAFAFA] border-[#D8C3A5] ${className}`}>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="text-[#191919] font-inter flex items-center gap-2">
             <BarChart3 className="h-5 w-5 text-[#199BEC]" />
             Risk Control Metrics
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-[#199BEC]">
@@ -208,29 +208,29 @@ export function RiskControlWidget({
               <p className="text-sm text-[#A8A8A8]">Compliance Boost</p>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     );
   }
 
   // Detailed variant (default)
   return (
-    <Card className={`bg-[#FAFAFA] border-[#D8C3A5] ${className}`}>
-      <CardHeader>
+    <DaisyCard className={`bg-[#FAFAFA] border-[#D8C3A5] ${className}`}>
+      <DaisyCardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-[#191919] font-inter flex items-center gap-2">
+          <DaisyCardTitle className="text-[#191919] font-inter flex items-center gap-2">
             <div className="p-2 bg-[#199BEC]/10 rounded-lg">
               <Shield className="h-5 w-5 text-[#199BEC]" />
             </div>
             Risk Control Center
-          </CardTitle>
-          <Badge variant="outline" className="bg-[#199BEC]/10 text-[#199BEC] border-[#199BEC]/30">
+          </DaisyCardTitle>
+          <DaisyBadge variant="outline" className="bg-[#199BEC]/10 text-[#199BEC] border-[#199BEC]/30">
             Active
-          </Badge>
+          </DaisyBadge>
         </div>
-      </CardHeader>
+      
 
-      <CardContent className="space-y-6">
+      <DaisyCardContent className="space-y-6">
         {/* Key Metrics */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <motion.div 
@@ -290,7 +290,7 @@ export function RiskControlWidget({
               {insights?.controlCoverage || 0}%
             </span>
           </div>
-          <Progress 
+          <DaisyProgress 
             value={insights?.controlCoverage || 0} 
             className="h-2"
           />
@@ -323,7 +323,7 @@ export function RiskControlWidget({
           <div className="space-y-3">
             <h4 className="text-sm font-semibold text-[#191919]">Quick Actions</h4>
             <div className="grid grid-cols-2 gap-2">
-              <Button
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={() => handleProboAction('controls')}
@@ -331,8 +331,8 @@ export function RiskControlWidget({
               >
                 <Target className="h-3 w-3 mr-2" />
                 Browse Controls
-              </Button>
-              <Button
+              </DaisyButton>
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={() => handleProboAction('vendor-assessment')}
@@ -340,8 +340,8 @@ export function RiskControlWidget({
               >
                 <Users className="h-3 w-3 mr-2" />
                 Assess Vendor
-              </Button>
-              <Button
+              </DaisyButton>
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={() => handleProboAction('soc2')}
@@ -349,8 +349,8 @@ export function RiskControlWidget({
               >
                 <CheckCircle className="h-3 w-3 mr-2" />
                 SOC 2 Status
-              </Button>
-              <Button
+              </DaisyButton>
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={() => handleProboAction('hub')}
@@ -358,7 +358,7 @@ export function RiskControlWidget({
               >
                 <ArrowRight className="h-3 w-3 mr-2" />
                 Open Hub
-              </Button>
+              </DaisyButton>
             </div>
           </div>
         )}
@@ -369,8 +369,8 @@ export function RiskControlWidget({
             Last updated: {metrics?.lastUpdated ? new Date(metrics.lastUpdated).toLocaleTimeString() : 'Never'}
           </p>
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 }
 

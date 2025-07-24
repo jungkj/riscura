@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { toast } from '@/hooks/use-toast';
 import { CollaborationPanel } from '@/components/collaboration/CollaborationPanel';
 import { RealTimeEditor } from '@/components/collaboration/RealTimeEditor';
@@ -173,12 +173,12 @@ export default function CollaborativeQuestionnairePage({
           <div className="flex items-center justify-between h-16">
             {/* Left section */}
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm">
+              <DaisyButton variant="ghost" size="sm">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Questionnaires
-              </Button>
+              </DaisyButton>
               
-              <Separator orientation="vertical" className="h-6" />
+              <DaisySeparator orientation="vertical" className="h-6" />
               
               <div className="flex items-center space-x-3">
                 <div>
@@ -186,9 +186,9 @@ export default function CollaborativeQuestionnairePage({
                   <div className="flex items-center space-x-2 text-sm text-gray-500">
                     <span>v{questionnaire.version}</span>
                     <span>•</span>
-                    <Badge className={getStatusColor(questionnaire.status)}>
+                    <DaisyBadge className={getStatusColor(questionnaire.status)}>
                       {questionnaire.status}
-                    </Badge>
+                    </DaisyBadge>
                     <span>•</span>
                     <span>{viewerCount} viewing</span>
                   </div>
@@ -223,36 +223,36 @@ export default function CollaborativeQuestionnairePage({
                 )}
               </div>
 
-              <Separator orientation="vertical" className="h-6" />
+              <DaisySeparator orientation="vertical" className="h-6" />
 
               {/* Action buttons */}
               <div className="flex items-center space-x-2">
-                <Button variant="ghost" size="sm" onClick={handleStar}>
+                <DaisyButton variant="ghost" size="sm" onClick={handleStar}>
                   <Star className={`w-4 h-4 ${isStarred ? 'fill-yellow-400 text-yellow-400' : ''}`} />
-                </Button>
+                </DaisyButton>
 
-                <Button variant="ghost" size="sm">
+                <DaisyButton variant="ghost" size="sm">
                   <Bell className="w-4 h-4" />
-                </Button>
+                </DaisyButton>
 
-                <Button variant="ghost" size="sm" onClick={handleShare}>
+                <DaisyButton variant="ghost" size="sm" onClick={handleShare}>
                   <Share2 className="w-4 h-4" />
-                </Button>
+                </DaisyButton>
 
-                <Button variant="ghost" size="sm">
+                <DaisyButton variant="ghost" size="sm">
                   <Download className="w-4 h-4" />
-                </Button>
+                </DaisyButton>
 
-                <Button variant="ghost" size="sm">
+                <DaisyButton variant="ghost" size="sm">
                   <MoreVertical className="w-4 h-4" />
-                </Button>
+                </DaisyButton>
               </div>
 
-              <Separator orientation="vertical" className="h-6" />
+              <DaisySeparator orientation="vertical" className="h-6" />
 
               {/* Mode switcher */}
               <div className="flex items-center bg-gray-100 rounded-lg p-1">
-                <Button
+                <DaisyButton
                   variant={currentMode === 'view' ? 'primary' : 'ghost'}
                   size="sm"
                   onClick={() => setCurrentMode('view')}
@@ -260,8 +260,8 @@ export default function CollaborativeQuestionnairePage({
                 >
                   <Eye className="w-4 h-4 mr-1" />
                   View
-                </Button>
-                <Button
+                </DaisyButton>
+                <DaisyButton
                   variant={currentMode === 'edit' ? 'primary' : 'ghost'}
                   size="sm"
                   onClick={() => setCurrentMode('edit')}
@@ -269,8 +269,8 @@ export default function CollaborativeQuestionnairePage({
                 >
                   <Edit3 className="w-4 h-4 mr-1" />
                   Edit
-                </Button>
-                <Button
+                </DaisyButton>
+                <DaisyButton
                   variant={currentMode === 'collaborate' ? 'primary' : 'ghost'}
                   size="sm"
                   onClick={() => setCurrentMode('collaborate')}
@@ -278,18 +278,18 @@ export default function CollaborativeQuestionnairePage({
                 >
                   <Users className="w-4 h-4 mr-1" />
                   Collaborate
-                </Button>
+                </DaisyButton>
               </div>
 
               {/* Collaboration toggle */}
-              <Button
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={() => setCollaborationPanelOpen(!collaborationPanelOpen)}
                 className={collaborationPanelOpen ? 'bg-blue-50 border-blue-200' : ''}
               >
                 <MessageCircle className="w-4 h-4" />
-              </Button>
+              </DaisyButton>
             </div>
           </div>
         </div>
@@ -308,13 +308,13 @@ export default function CollaborativeQuestionnairePage({
                  className="h-full"
                />
              ) : (
-              <Card className="h-full">
-                <CardHeader>
-                  <CardTitle>
+              <DaisyCard className="h-full">
+                <DaisyCardHeader>
+                  <DaisyCardTitle>
                     {currentMode === 'view' ? 'Preview Mode' : 'Edit Mode'}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+                  </DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <div className="space-y-6">
                     <div>
                       <h2 className="text-2xl font-bold mb-2">{questionnaire.title}</h2>
@@ -365,8 +365,8 @@ export default function CollaborativeQuestionnairePage({
                       </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             )}
           </div>
 

@@ -2,9 +2,9 @@
 
 import React, { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { 
   ChevronRight, 
   Home, 
@@ -136,12 +136,12 @@ const PageStats: React.FC<{ stats: PageStats[] }> = ({ stats }) => {
     <div className="flex items-center space-x-6">
       {stats.map((stat, index) => (
         <div key={index} className="flex items-center space-x-2">
-          <Badge 
+          <DaisyBadge 
             variant={stat.variant || 'outline'} 
             className="text-sm font-medium px-3 py-1"
           >
             {stat.value} {stat.label}
-          </Badge>
+          </DaisyBadge>
           
           {stat.trend && stat.trendValue && (
             <div className={cn("flex items-center space-x-1 text-xs", getTrendColor(stat.trend))}>
@@ -166,7 +166,7 @@ const ActionButtons: React.FC<{
       {secondary.length > 0 && (
         <div className="flex items-center space-x-2">
           {secondary.slice(0, 2).map((action, index) => (
-            <Button
+            <DaisyButton
               key={index}
               variant={action.variant || 'outline'}
               size="sm"
@@ -177,25 +177,25 @@ const ActionButtons: React.FC<{
             >
               {action.icon && <action.icon className="h-4 w-4 mr-2" />}
               {action.label}
-            </Button>
+            </DaisyButton>
           ))}
           
           {/* More Actions Dropdown */}
           {secondary.length > 2 && (
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               className="border-gray-300 hover:border-[#199BEC]"
             >
               <MoreHorizontal className="h-4 w-4" />
-            </Button>
+            </DaisyButton>
           )}
         </div>
       )}
       
       {/* Primary Action */}
       {primary && (
-        <Button
+        <DaisyButton
           variant={primary.variant || 'primary'}
           size="sm"
           onClick={primary.onClick}
@@ -205,7 +205,7 @@ const ActionButtons: React.FC<{
         >
           {primary.icon && <primary.icon className="h-4 w-4 mr-2" />}
           {primary.label}
-        </Button>
+        </DaisyButton>
       )}
     </div>
   );
@@ -285,7 +285,7 @@ export const MainContentArea: React.FC<MainContentAreaProps> = ({
           </div>
           
           {headerSeparator && (
-            <Separator className="mt-6" />
+            <DaisySeparator className="mt-6" />
           )}
         </header>
         
@@ -348,7 +348,7 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
           </div>
           
           {action && (
-            <Button
+            <DaisyButton
               variant={action.variant || 'outline'}
               size="sm"
               onClick={action.onClick}
@@ -356,7 +356,7 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
             >
               {action.icon && <action.icon className="h-4 w-4 mr-2" />}
               {action.label}
-            </Button>
+            </DaisyButton>
           )}
         </div>
       )}
@@ -426,7 +426,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           </div>
           
           {action && (
-            <Button
+            <DaisyButton
               variant={action.variant || 'outline'}
               size="sm"
               onClick={action.onClick}
@@ -434,7 +434,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
             >
               {action.icon && <action.icon className="h-4 w-4 mr-2" />}
               {action.label}
-            </Button>
+            </DaisyButton>
           )}
         </div>
       )}

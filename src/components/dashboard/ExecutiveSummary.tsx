@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import type { Risk } from '@/types';
 
 interface ExecutiveSummaryProps {
@@ -12,17 +12,17 @@ interface ExecutiveSummaryProps {
 
 export function ExecutiveSummary({ data, risks, viewMode }: ExecutiveSummaryProps) {
   return (
-    <Card className="bg-[#FAFAFA] border-[#D8C3A5]">
-      <CardHeader>
-        <CardTitle className="text-lg font-semibold text-[#191919] font-inter">
+    <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+      <DaisyCardHeader>
+        <DaisyCardTitle className="text-lg font-semibold text-[#191919] font-inter">
           Executive Summary
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+        </DaisyCardTitle>
+      
+      <DaisyCardContent>
         <p className="text-sm text-[#A8A8A8] font-inter">
           Your personalized risk management summary will appear here.
         </p>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 } 

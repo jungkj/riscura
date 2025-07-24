@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Checkbox } from '@/components/ui/checkbox';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { 
   Search,
   Shield,
@@ -144,7 +144,7 @@ export function ProboMitigationLibrary() {
 
   const getImportanceIcon = (importance: string) => {
     switch (importance) {
-      case 'MANDATORY': return <AlertCircle className="h-3 w-3" />;
+      case 'MANDATORY': return <DaisyAlertCircle className="h-3 w-3" />;
       case 'PREFERRED': return <Star className="h-3 w-3" />;
       case 'ADVANCED': return <Zap className="h-3 w-3" />;
       default: return <CheckCircle className="h-3 w-3" />;
@@ -183,9 +183,9 @@ export function ProboMitigationLibrary() {
           <h1 className="text-2xl font-bold text-[#191919]">Security Controls Library</h1>
           <p className="text-[#A8A8A8]">650+ security controls from Probo's mitigation library</p>
         </div>
-        <Badge className="bg-[#199BEC] text-white">
+        <DaisyBadge className="bg-[#199BEC] text-white">
           {mitigations.length} Controls Available
-        </Badge>
+        </DaisyBadge>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -197,12 +197,12 @@ export function ProboMitigationLibrary() {
 
         <TabsContent value="browse" className="space-y-4">
           {/* Search and Filters */}
-          <Card className="bg-[#FAFAFA] border-[#D8C3A5]">
-            <CardContent className="p-4">
+          <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+            <DaisyCardContent className="p-4">
               <div className="flex flex-col lg:flex-row gap-4">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 transform -translate-y-1/2 text-[#A8A8A8]" />
-                  <Input
+                  <DaisyInput
                     placeholder="Search controls by name, description, or standards..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -230,25 +230,25 @@ export function ProboMitigationLibrary() {
                   <option value="ADVANCED">Advanced</option>
                 </select>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
           {/* Selection Actions */}
           {selectedMitigations.length > 0 && (
-            <Alert>
+            <DaisyAlert>
               <CheckCircle className="h-4 w-4" />
-              <AlertDescription className="flex items-center justify-between w-full">
+              <DaisyAlertDescription className="flex items-center justify-between w-full">
                 <span>{selectedMitigations.length} controls selected</span>
                 <div className="flex items-center space-x-2">
-                  <Button size="sm" variant="outline" onClick={() => setSelectedMitigations([])}>
+                  <DaisyButton size="sm" variant="outline" onClick={() => setSelectedMitigations([])}>
                     Clear Selection
-                  </Button>
-                  <Button size="sm" onClick={importSelectedMitigations} disabled={importing}>
+                  </DaisyButton>
+                  <DaisyButton size="sm" onClick={importSelectedMitigations} disabled={importing}>
                     {importing ? 'Importing...' : 'Import Selected'}
-                  </Button>
+                  </DaisyButton>
                 </div>
-              </AlertDescription>
-            </Alert>
+              
+            </DaisyAlert>
           )}
 
           {/* Controls Grid */}
@@ -259,10 +259,10 @@ export function ProboMitigationLibrary() {
 
             <div className="grid gap-4">
               {filteredMitigations.map(mitigation => (
-                <Card key={mitigation.id} className="bg-[#FAFAFA] border-[#D8C3A5] hover:shadow-md transition-shadow">
-                  <CardContent className="p-4">
+                <DaisyCard key={mitigation.id} className="bg-[#FAFAFA] border-[#D8C3A5] hover:shadow-md transition-shadow">
+                  <DaisyCardContent className="p-4">
                     <div className="flex items-start space-x-3">
-                      <Checkbox
+                      <DaisyCheckbox
                         checked={selectedMitigations.includes(mitigation.id)}
                         onCheckedChange={() => toggleMitigationSelection(mitigation.id)}
                         className="mt-1"
@@ -277,15 +277,15 @@ export function ProboMitigationLibrary() {
                             <p className="text-sm text-[#A8A8A8] mb-2">{mitigation.description}</p>
                           </div>
                           <div className="flex flex-col items-end space-y-1">
-                            <Badge className={cn('text-xs border', getImportanceColor(mitigation.importance))}>
+                            <DaisyBadge className={cn('text-xs border', getImportanceColor(mitigation.importance))}>
                               <span className="flex items-center space-x-1">
                                 {getImportanceIcon(mitigation.importance)}
                                 <span>{mitigation.importance}</span>
                               </span>
-                            </Badge>
-                            <Badge variant="outline" className="text-xs">
+                            </DaisyBadge>
+                            <DaisyBadge variant="outline" className="text-xs">
                               {mitigation.category}
-                            </Badge>
+                            </DaisyBadge>
                           </div>
                         </div>
                         
@@ -296,41 +296,41 @@ export function ProboMitigationLibrary() {
                               <span>Frequency: {mitigation.frequency}</span>
                             )}
                           </div>
-                          <Button size="sm" variant="outline" className="text-xs">
+                          <DaisyButton size="sm" variant="outline" className="text-xs">
                             View Details
-                          </Button>
+                          </DaisyButton>
                         </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               ))}
             </div>
           </div>
         </TabsContent>
 
         <TabsContent value="import" className="space-y-4">
-          <Card className="bg-[#FAFAFA] border-[#D8C3A5]">
-            <CardHeader>
-              <CardTitle className="text-[#191919] font-inter flex items-center">
+          <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+            <DaisyCardHeader>
+              <DaisyCardTitle className="text-[#191919] font-inter flex items-center">
                 <Upload className="h-5 w-5 mr-2" />
                 Import Security Controls
-              </CardTitle>
-              <CardDescription>
+              </DaisyCardTitle>
+              <DaisyCardDescription>
                 Import Probo's security controls into your organization's control library
               </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Alert>
+            
+            <DaisyCardContent className="space-y-4">
+              <DaisyAlert>
                 <BookOpen className="h-4 w-4" />
-                <AlertDescription>
+                <DaisyAlertDescription>
                   These controls are sourced from industry-standard frameworks including ISO 27001, SOC 2, NIST, and more. 
                   You can customize them after import to match your organization's specific requirements.
-                </AlertDescription>
-              </Alert>
+                
+              </DaisyAlert>
 
               <div className="space-y-4">
-                <Button 
+                <DaisyButton 
                   onClick={importSelectedMitigations}
                   disabled={importing || selectedMitigations.length === 0}
                   className="bg-[#199BEC] hover:bg-[#199BEC]/90 w-full"
@@ -346,9 +346,9 @@ export function ProboMitigationLibrary() {
                       Import Selected Controls ({selectedMitigations.length})
                     </>
                   )}
-                </Button>
+                </DaisyButton>
 
-                <Button 
+                <DaisyButton 
                   variant="outline" 
                   onClick={() => {
                     setSelectedMitigations([]);
@@ -358,34 +358,34 @@ export function ProboMitigationLibrary() {
                   className="w-full"
                 >
                   Import All Controls ({mitigations.length})
-                </Button>
+                </DaisyButton>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </TabsContent>
 
         <TabsContent value="imported" className="space-y-4">
-          <Card className="bg-[#FAFAFA] border-[#D8C3A5]">
-            <CardHeader>
-              <CardTitle className="text-[#191919] font-inter">Imported Controls</CardTitle>
-              <CardDescription>
+          <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+            <DaisyCardHeader>
+              <DaisyCardTitle className="text-[#191919] font-inter">Imported Controls</DaisyCardTitle>
+              <DaisyCardDescription>
                 Security controls that have been imported into your organization
               </CardDescription>
-            </CardHeader>
-            <CardContent>
+            
+            <DaisyCardContent>
               <div className="text-center py-8">
                 <FileText className="h-12 w-12 text-[#A8A8A8] mx-auto mb-4" />
                 <p className="text-[#191919] font-medium">No controls imported yet</p>
                 <p className="text-[#A8A8A8] text-sm">Start by importing controls from the library</p>
-                <Button 
+                <DaisyButton 
                   className="mt-4 bg-[#199BEC] hover:bg-[#199BEC]/90"
                   onClick={() => setActiveTab('browse')}
                 >
                   Browse Library
-                </Button>
+                </DaisyButton>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </TabsContent>
       </Tabs>
     </div>

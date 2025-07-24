@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -201,71 +201,71 @@ const ComplianceDashboard: React.FC = () => {
           <p className="text-gray-600">Monitor and manage your compliance posture across frameworks</p>
         </div>
         <div className="flex space-x-2">
-          <Button variant="outline">
+          <DaisyButton variant="outline">
             <FileText className="w-4 h-4 mr-2" />
             Generate Report
-          </Button>
-          <Button>
+          </DaisyButton>
+          <DaisyButton>
             <Settings className="w-4 h-4 mr-2" />
             Settings
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Overall Compliance Score</CardTitle>
+        <DaisyCard>
+          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <DaisyCardTitle className="text-sm font-medium">Overall Compliance Score</DaisyCardTitle>
             <Shield className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className="text-2xl font-bold">{overallComplianceScore}%</div>
-            <Progress value={overallComplianceScore} className="mt-2" />
+            <DaisyProgress value={overallComplianceScore} className="mt-2" />
             <p className="text-xs text-muted-foreground mt-2">
               Across {frameworks.length} frameworks
             </p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Critical Gaps</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-red-500" />
-          </CardHeader>
-          <CardContent>
+        <DaisyCard>
+          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <DaisyCardTitle className="text-sm font-medium">Critical Gaps</DaisyCardTitle>
+            <DaisyAlertTriangle className="h-4 w-4 text-red-500" />
+          
+          <DaisyCardContent>
             <div className="text-2xl font-bold text-red-600">{criticalGaps}</div>
             <p className="text-xs text-muted-foreground">
               {highGaps} high priority gaps
             </p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Frameworks</CardTitle>
+        <DaisyCard>
+          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <DaisyCardTitle className="text-sm font-medium">Active Frameworks</DaisyCardTitle>
             <CheckCircle className="h-4 w-4 text-green-500" />
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className="text-2xl font-bold">{frameworks.length}</div>
             <p className="text-xs text-muted-foreground">
               {frameworks.filter(f => f.mandatory).length} mandatory
             </p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">AI Insights</CardTitle>
+        <DaisyCard>
+          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <DaisyCardTitle className="text-sm font-medium">AI Insights</DaisyCardTitle>
             <Brain className="h-4 w-4 text-purple-500" />
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className="text-2xl font-bold">{insights.length}</div>
             <p className="text-xs text-muted-foreground">
               {insights.filter(i => i.severity === 'critical').length} critical insights
             </p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
 
       {/* Main Content Tabs */}
@@ -280,12 +280,12 @@ const ComplianceDashboard: React.FC = () => {
         <TabsContent value="overview" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Compliance Coverage Chart */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Framework Coverage</CardTitle>
-                <CardDescription>Coverage and maturity across frameworks</CardDescription>
-              </CardHeader>
-              <CardContent>
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle>Framework Coverage</DaisyCardTitle>
+                <DaisyCardDescription>Coverage and maturity across frameworks</CardDescription>
+              
+              <DaisyCardContent>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={frameworkChartData}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -296,16 +296,16 @@ const ComplianceDashboard: React.FC = () => {
                     <Bar dataKey="maturity" fill="#10B981" name="Maturity %" />
                   </BarChart>
                 </ResponsiveContainer>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
             {/* Gap Distribution */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Gap Distribution</CardTitle>
-                <CardDescription>Gaps by category</CardDescription>
-              </CardHeader>
-              <CardContent>
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle>Gap Distribution</DaisyCardTitle>
+                <DaisyCardDescription>Gaps by category</CardDescription>
+              
+              <DaisyCardContent>
                 <ResponsiveContainer width="100%" height={300}>
                   <PieChart>
                     <Pie
@@ -325,66 +325,66 @@ const ComplianceDashboard: React.FC = () => {
                     <Tooltip />
                   </PieChart>
                 </ResponsiveContainer>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           </div>
         </TabsContent>
 
         <TabsContent value="frameworks" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {frameworks.map((framework) => (
-              <Card key={framework.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
+              <DaisyCard key={framework.id} className="hover:shadow-lg transition-shadow">
+                <DaisyCardHeader>
                   <div className="flex justify-between items-start">
                     <div>
-                      <CardTitle className="text-lg">{framework.name}</CardTitle>
-                      <CardDescription>{framework.description}</CardDescription>
+                      <DaisyCardTitle className="text-lg">{framework.name}</DaisyCardTitle>
+                      <DaisyCardDescription>{framework.description}</CardDescription>
                     </div>
                     <div className="flex flex-col items-end space-y-1">
-                      <Badge variant={framework.mandatory ? 'destructive' : 'secondary'}>
+                      <DaisyBadge variant={framework.mandatory ? 'destructive' : 'secondary'}>
                         {framework.mandatory ? 'Mandatory' : 'Optional'}
-                      </Badge>
+                      </DaisyBadge>
                       <div className={`w-3 h-3 rounded-full ${getStatusColor(framework.status)}`} />
                     </div>
                   </div>
-                </CardHeader>
-                <CardContent>
+                
+                <DaisyCardContent>
                   <div className="space-y-3">
                     <div>
                       <div className="flex justify-between text-sm">
                         <span>Coverage</span>
                         <span>{framework.coverage}%</span>
                       </div>
-                      <Progress value={framework.coverage} className="mt-1" />
+                      <DaisyProgress value={framework.coverage} className="mt-1" />
                     </div>
                     <div>
                       <div className="flex justify-between text-sm">
                         <span>Maturity</span>
                         <span>{framework.maturityScore}%</span>
                       </div>
-                      <Progress value={framework.maturityScore} className="mt-1" />
+                      <DaisyProgress value={framework.maturityScore} className="mt-1" />
                     </div>
                     <div className="flex justify-between text-sm">
                       <span>Open Gaps</span>
                       <span className="font-medium text-red-600">{framework.gaps}</span>
                     </div>
-                    <Button variant="outline" size="sm" className="w-full">
+                    <DaisyButton variant="outline" size="sm" className="w-full">
                       View Details
-                    </Button>
+                    </DaisyButton>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             ))}
           </div>
         </TabsContent>
 
         <TabsContent value="gaps" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Compliance Gaps</CardTitle>
-              <CardDescription>Issues requiring attention</CardDescription>
-            </CardHeader>
-            <CardContent>
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle>Compliance Gaps</DaisyCardTitle>
+              <DaisyCardDescription>Issues requiring attention</CardDescription>
+            
+            <DaisyCardContent>
               <div className="space-y-4">
                 {gaps.map((gap) => (
                   <div key={gap.id} className="flex items-center justify-between p-4 border rounded-lg">
@@ -399,38 +399,38 @@ const ComplianceDashboard: React.FC = () => {
                     </div>
                     <div className="flex items-center space-x-4">
                       <div className="text-right">
-                        <Badge variant={gap.priority === 'critical' ? 'destructive' : 'secondary'}>
+                        <DaisyBadge variant={gap.priority === 'critical' ? 'destructive' : 'secondary'}>
                           {gap.priority}
-                        </Badge>
+                        </DaisyBadge>
                         <p className="text-xs text-gray-500 mt-1">Due: {gap.dueDate}</p>
                       </div>
-                      <Button variant="outline" size="sm">
+                      <DaisyButton variant="outline" size="sm">
                         <Clock className="w-4 h-4 mr-1" />
                         Resolve
-                      </Button>
+                      </DaisyButton>
                     </div>
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </TabsContent>
 
         <TabsContent value="insights" className="space-y-4">
           <div className="space-y-4">
             {insights.map((insight) => (
-              <Alert key={insight.id} className={insight.severity === 'critical' ? 'border-red-200' : 'border-blue-200'}>
+              <DaisyAlert key={insight.id} className={insight.severity === 'critical' ? 'border-red-200' : 'border-blue-200'}>
                 <Brain className="h-4 w-4" />
-                <AlertTitle className="flex items-center justify-between">
+                <DaisyAlertTitle className="flex items-center justify-between">
                   {insight.title}
-                  <Badge variant="outline">
+                  <DaisyBadge variant="outline">
                     {Math.round(insight.confidence * 100)}% confidence
-                  </Badge>
+                  </DaisyBadge>
                 </AlertTitle>
-                <AlertDescription>
+                <DaisyAlertDescription>
                   {insight.description}
-                </AlertDescription>
-              </Alert>
+                
+              </DaisyAlert>
             ))}
           </div>
         </TabsContent>

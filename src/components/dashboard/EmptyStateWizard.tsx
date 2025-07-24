@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import { useDropzone } from 'react-dropzone';
@@ -149,7 +149,7 @@ export default function EmptyStateWizard({
           </span>
         </div>
         <div className="space-y-3">
-          <Progress 
+          <DaisyProgress 
             value={(onboardingSteps.filter(s => s.completed).length / 3) * 100} 
             className="h-2"
           />
@@ -179,7 +179,7 @@ export default function EmptyStateWizard({
       {/* Action Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Import Excel Card */}
-        <Card 
+        <DaisyCard 
           className={`
             relative overflow-hidden transition-all duration-300 cursor-pointer
             ${hoveredCard === 'import' ? 'shadow-lg scale-105' : 'shadow-md'}
@@ -190,12 +190,12 @@ export default function EmptyStateWizard({
         >
           <div {...getRootProps()} className="h-full">
             <input {...getInputProps()} />
-            <CardContent className="p-6 h-full flex flex-col">
+            <DaisyCardContent className="p-6 h-full flex flex-col">
               <div className="flex items-center justify-between mb-4">
                 <div className="p-3 bg-green-100 rounded-lg">
                   <FileSpreadsheet className="w-6 h-6 text-green-700" />
                 </div>
-                <Badge className="bg-green-100 text-green-700">Excel</Badge>
+                <DaisyBadge className="bg-green-100 text-green-700">Excel</DaisyBadge>
               </div>
               
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
@@ -226,12 +226,12 @@ export default function EmptyStateWizard({
               {hoveredCard === 'import' && !uploadingFile && (
                 <div className="absolute inset-0 bg-gradient-to-t from-blue-50 to-transparent opacity-0 animate-fade-in" />
               )}
-            </CardContent>
+            </DaisyCardBody>
           </div>
-        </Card>
+        </DaisyCard>
 
         {/* Start Fresh Card */}
-        <Card 
+        <DaisyCard 
           className={`
             relative overflow-hidden transition-all duration-300 cursor-pointer
             ${hoveredCard === 'fresh' ? 'shadow-lg scale-105' : 'shadow-md'}
@@ -240,12 +240,12 @@ export default function EmptyStateWizard({
           onMouseLeave={() => setHoveredCard(null)}
           onClick={handleStartFresh}
         >
-          <CardContent className="p-6 h-full flex flex-col">
+          <DaisyCardContent className="p-6 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <div className="p-3 bg-blue-100 rounded-lg">
                 <Zap className="w-6 h-6 text-blue-700" />
               </div>
-              <Badge className="bg-blue-100 text-blue-700">AI-Powered</Badge>
+              <DaisyBadge className="bg-blue-100 text-blue-700">AI-Powered</DaisyBadge>
             </div>
             
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
@@ -258,16 +258,16 @@ export default function EmptyStateWizard({
 
             <div className="space-y-2">
               <p className="text-sm text-gray-500">Estimated time: 5 minutes</p>
-              <Button variant="outline" className="w-full group">
+              <DaisyButton variant="outline" className="w-full group">
                 Get Started
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              </DaisyButton>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
         {/* Explore Demo Card */}
-        <Card 
+        <DaisyCard 
           className={`
             relative overflow-hidden transition-all duration-300 cursor-pointer
             ${hoveredCard === 'demo' ? 'shadow-lg scale-105' : 'shadow-md'}
@@ -276,12 +276,12 @@ export default function EmptyStateWizard({
           onMouseLeave={() => setHoveredCard(null)}
           onClick={handleExploreDemo}
         >
-          <CardContent className="p-6 h-full flex flex-col">
+          <DaisyCardContent className="p-6 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <div className="p-3 bg-purple-100 rounded-lg">
                 <Play className="w-6 h-6 text-purple-700" />
               </div>
-              <Badge className="bg-purple-100 text-purple-700">2 min tour</Badge>
+              <DaisyBadge className="bg-purple-100 text-purple-700">2 min tour</DaisyBadge>
             </div>
             
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
@@ -297,18 +297,18 @@ export default function EmptyStateWizard({
                 <Users className="w-4 h-4" />
                 <span>Live demo environment</span>
               </div>
-              <Button variant="outline" className="w-full group">
+              <DaisyButton variant="outline" className="w-full group">
                 Start Tour
                 <Play className="w-4 h-4 ml-2 group-hover:scale-110 transition-transform" />
-              </Button>
+              </DaisyButton>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
 
       {/* Interactive Heat Map Preview */}
-      <Card className="overflow-hidden">
-        <CardContent className="p-8">
+      <DaisyCard className="overflow-hidden">
+        <DaisyCardContent className="p-8">
           <div className="text-center space-y-4">
             <div className="relative mx-auto w-full max-w-2xl">
               <div className="aspect-[16/9] bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg flex items-center justify-center relative overflow-hidden">
@@ -338,8 +338,8 @@ export default function EmptyStateWizard({
               </p>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Value Propositions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

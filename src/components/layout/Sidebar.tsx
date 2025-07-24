@@ -60,12 +60,12 @@ import {
   Grid3X3
 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Input } from '@/components/ui/input';
+import { DaisyInput } from '@/components/ui/DaisyInput';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Separator } from '@/components/ui/separator';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -425,14 +425,14 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
               priority
             />
           </div>
-          <Button
+          <DaisyButton
             variant="ghost"
-            size="icon"
+            shape="square" size="md"
             onClick={onToggle}
             className="w-6 h-6 text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] transition-colors"
           >
             <ChevronRight className="w-3 h-3" />
-          </Button>
+          </DaisyButton>
         </div>
 
         {/* Collapsed Navigation */}
@@ -441,9 +441,9 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
             <TooltipProvider key={section.id}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button
+                  <DaisyButton
                     variant="ghost"
-                    size="icon"
+                    shape="square" size="md"
                     className={cn(
                       "w-10 h-10 mx-auto text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] transition-all duration-200",
                       section.items.some(item => isItemActive(item.href)) && "bg-[#199BEC] text-white shadow-md"
@@ -454,7 +454,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                       const IconComponent = section.items[0].icon;
                       return <IconComponent className="w-5 h-5" />;
                     })()}
-                  </Button>
+                  </DaisyButton>
                 </TooltipTrigger>
                 <TooltipContent side="right" className="font-medium">
                   <div>
@@ -504,21 +504,21 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
             priority
           />
         </div>
-        <Button
+        <DaisyButton
           variant="ghost"
-          size="icon"
+          shape="square" size="md"
           onClick={onToggle}
           className="w-8 h-8 text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
-        </Button>
+        </DaisyButton>
       </div>
 
       {/* Search */}
       <div className="p-4 border-b border-gray-200" data-tour="global-search">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
-          <Input
+          <DaisyInput
             ref={searchInputRef}
             placeholder="Search features..."
             value={searchQuery}
@@ -526,14 +526,14 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
             className="pl-10 pr-4 py-2 text-sm bg-white/50 border-gray-200/60 focus:ring-2 focus:ring-[#199BEC]/20 focus:border-[#199BEC]/50 rounded-xl"
           />
           {searchQuery && (
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={() => setSearchQuery('')}
               className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-gray-400 hover:text-[#191919]"
             >
               ×
-            </Button>
+            </DaisyButton>
           )}
         </div>
         <div className="mt-2 text-xs text-gray-500 flex items-center gap-1">
@@ -594,7 +594,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                   </div>
                 </div>
                 {section.collapsible && (
-                  <Button
+                  <DaisyButton
                     variant="ghost"
                     size="sm"
                     onClick={() => toggleSection(section.id)}
@@ -605,7 +605,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                     ) : (
                       <ChevronRight className="w-3 h-3" />
                     )}
-                  </Button>
+                  </DaisyButton>
                 )}
               </div>
 
@@ -635,16 +635,16 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                           {/* Badges and Actions */}
                           <div className="flex items-center gap-1">
                             {item.isNew && (
-                              <Badge variant="secondary" className="px-1.5 py-0.5 text-xs bg-[#199BEC] text-white border-0">
+                              <DaisyBadge variant="secondary" className="px-1.5 py-0.5 text-xs bg-[#199BEC] text-white border-0">
                                 New
-                              </Badge>
+                              </DaisyBadge>
                             )}
                           </div>
                         </div>
                       </Link>
                       
                       {/* Favorite Toggle */}
-                      <Button
+                      <DaisyButton
                         variant="ghost"
                         size="sm"
                         onClick={(e) => {
@@ -662,7 +662,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                             isFavorite(item.id) ? "text-[#199BEC] fill-[#199BEC]" : "text-gray-400 hover:text-[#199BEC]"
                           )} 
                         />
-                      </Button>
+                      </DaisyButton>
                     </div>
                   ))}
                 </div>
@@ -687,9 +687,9 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
             </p>
             <p className="text-xs text-gray-600 truncate">{user?.email}</p>
           </div>
-          <Button variant="ghost" size="icon" className="w-6 h-6 text-gray-500 hover:text-[#199BEC] opacity-0 group-hover:opacity-100 transition-all" data-tour="help-menu">
+          <DaisyButton variant="ghost" shape="square" size="md" className="w-6 h-6 text-gray-500 hover:text-[#199BEC] opacity-0 group-hover:opacity-100 transition-all" data-tour="help-menu">
             <Settings className="w-4 h-4" />
-          </Button>
+          </DaisyButton>
         </div>
       </div>
     </div>

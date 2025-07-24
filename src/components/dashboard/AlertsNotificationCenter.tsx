@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Bell, AlertTriangle, CheckCircle, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -15,7 +15,7 @@ export function AlertsNotificationCenter() {
 
   const getIcon = (type: string) => {
     switch (type) {
-      case 'critical': return <AlertTriangle className="w-4 h-4 text-red-600" />;
+      case 'critical': return <DaisyAlertTriangle className="w-4 h-4 text-red-600" />;
       case 'warning': return <Bell className="w-4 h-4 text-orange-600" />;
       case 'info': return <Info className="w-4 h-4 text-blue-600" />;
       default: return <CheckCircle className="w-4 h-4 text-green-600" />;
@@ -23,13 +23,13 @@ export function AlertsNotificationCenter() {
   };
 
   return (
-    <Card className="bg-[#FAFAFA] border-[#D8C3A5]">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-semibold text-[#191919] font-inter">
+    <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+      <DaisyCardHeader className="pb-3">
+        <DaisyCardTitle className="text-lg font-semibold text-[#191919] font-inter">
           Alerts & Notifications
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-3">
+        </DaisyCardTitle>
+      
+      <DaisyCardContent className="space-y-3">
         {alerts.map((alert, index) => (
           <motion.div
             key={alert.id}
@@ -49,7 +49,7 @@ export function AlertsNotificationCenter() {
             </div>
           </motion.div>
         ))}
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 } 

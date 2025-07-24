@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, Save, Calendar, User2, Shield, TrendingUp, AlertTriangle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { useRiskFlow } from '../RiskFlowContext';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -145,7 +145,7 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
                   <span>Likelihood: {validLikelihood}/5</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <AlertTriangle className="w-4 h-4 text-muted-foreground" />
+                  <DaisyAlertTriangle className="w-4 h-4 text-muted-foreground" />
                   <span>Impact: {validImpact}/5</span>
                 </div>
               </div>
@@ -196,11 +196,11 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
         transition={{ delay: 0.2 }}
         className="flex justify-between pt-4"
       >
-        <Button onClick={onBack} variant="outline" size="lg" disabled={isCreating}>
+        <DaisyButton onClick={onBack} variant="outline" size="lg" disabled={isCreating}>
           <ChevronLeft className="w-4 h-4 mr-2" />
           Back
-        </Button>
-        <Button 
+        </DaisyButton>
+        <DaisyButton 
           onClick={handleCreate} 
           size="lg" 
           className="min-w-[140px]"
@@ -214,7 +214,7 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
               Create Risk
             </>
           )}
-        </Button>
+        </DaisyButton>
       </motion.div>
     </div>
   );

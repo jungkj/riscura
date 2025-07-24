@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Badge } from '@/components/ui/badge';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { cn } from '@/lib/utils';
 
 interface ProboRiskBadgeProps {
@@ -93,7 +93,7 @@ export function ProboRiskBadge({ level, className }: ProboRiskBadgeProps) {
   const colorClasses = getBadgeColor(level);
   
   return (
-    <Badge 
+    <DaisyBadge 
       className={cn(
         "text-xs font-medium px-2 py-1",
         colorClasses,
@@ -101,6 +101,6 @@ export function ProboRiskBadge({ level, className }: ProboRiskBadgeProps) {
       )}
     >
       {label}
-    </Badge>
+    </DaisyBadge>
   );
 } 

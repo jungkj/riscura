@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, Calendar, User2, Shield, AlertCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DaisySelect } from '@/components/ui/DaisySelect';
 import { useRiskFlow, TreatmentStrategy } from '../RiskFlowContext';
 import { RiskStatus } from '@/types/rcsa.types';
 import { cn } from '@/lib/utils';
@@ -66,11 +66,11 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
         className="grid grid-cols-2 gap-4"
       >
         <div>
-          <Label htmlFor="owner">
+          <DaisyLabel htmlFor="owner">
             <User2 className="w-4 h-4 inline mr-1" />
             Risk Owner
-          </Label>
-          <Input
+          </DaisyLabel>
+          <DaisyInput
             id="owner"
             placeholder="e.g., John Smith, IT Department"
             value={riskData.owner}
@@ -82,24 +82,24 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
           />
           {errors.owner && (
             <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
-              <AlertCircle className="w-3 h-3" />
+              <DaisyAlertCircle className="w-3 h-3" />
               {errors.owner}
             </p>
           )}
         </div>
 
         <div>
-          <Label htmlFor="status">Status</Label>
-          <Select
+          <DaisyLabel htmlFor="status">Status</DaisyLabel>
+          <DaisySelect
             value={riskData.status}
             onValueChange={(value) => updateRiskData({ status: value as RiskStatus })}
           >
-            <SelectTrigger className="mt-1">
-              <SelectValue />
+            <DaisySelectTrigger className="mt-1">
+              <DaisySelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <DaisySelectContent>
               {statuses.map((status) => (
-                <SelectItem key={status.value} value={status.value}>
+                <DaisySelectItem key={status.value} value={status.value}>
                   <span className="flex items-center gap-2">
                     <span>{status.icon}</span>
                     {status.label}
@@ -107,7 +107,7 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </DaisySelect>
         </div>
       </motion.div>
 
@@ -116,10 +116,10 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <Label htmlFor="treatment">
+        <DaisyLabel htmlFor="treatment">
           <Shield className="w-4 h-4 inline mr-1" />
           Treatment Strategy
-        </Label>
+        </DaisyLabel>
         <div className="mt-2 space-y-2">
           {strategies.map((strategy) => (
             <motion.div
@@ -156,7 +156,7 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
         </div>
         {errors.treatmentStrategy && (
           <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
-            <AlertCircle className="w-3 h-3" />
+            <DaisyAlertCircle className="w-3 h-3" />
             {errors.treatmentStrategy}
           </p>
         )}
@@ -167,7 +167,7 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        <Label htmlFor="controls">Control Measures</Label>
+        <DaisyLabel htmlFor="controls">Control Measures</DaisyLabel>
         <Textarea
           id="controls"
           placeholder="Describe any control measures or mitigation actions..."
@@ -185,11 +185,11 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
         className="grid grid-cols-2 gap-4"
       >
         <div>
-          <Label htmlFor="dateIdentified">
+          <DaisyLabel htmlFor="dateIdentified">
             <Calendar className="w-4 h-4 inline mr-1" />
             Date Identified
-          </Label>
-          <Input
+          </DaisyLabel>
+          <DaisyInput
             id="dateIdentified"
             type="date"
             value={riskData.dateIdentified ? format(riskData.dateIdentified, 'yyyy-MM-dd') : ''}
@@ -199,11 +199,11 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
         </div>
 
         <div>
-          <Label htmlFor="nextReview">
+          <DaisyLabel htmlFor="nextReview">
             <Calendar className="w-4 h-4 inline mr-1" />
             Next Review Date
-          </Label>
-          <Input
+          </DaisyLabel>
+          <DaisyInput
             id="nextReview"
             type="date"
             value={riskData.nextReview ? format(riskData.nextReview, 'yyyy-MM-dd') : ''}
@@ -219,13 +219,13 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
         transition={{ delay: 0.5 }}
         className="flex justify-between pt-4"
       >
-        <Button onClick={onBack} variant="outline" size="lg">
+        <DaisyButton onClick={onBack} variant="outline" size="lg">
           <ChevronLeft className="w-4 h-4 mr-2" />
           Back
-        </Button>
-        <Button onClick={handleNext} size="lg" className="min-w-[120px]">
+        </DaisyButton>
+        <DaisyButton onClick={handleNext} size="lg" className="min-w-[120px]">
           Next
-        </Button>
+        </DaisyButton>
       </motion.div>
     </div>
   );

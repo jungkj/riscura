@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { RiskFlowProvider, RiskFlowStep } from './RiskFlowContext';
 import { StepIndicator } from './StepIndicator';
@@ -59,14 +59,14 @@ function RiskFlowContent({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
             Follow the steps to identify and assess a new risk
           </p>
         </div>
-        <Button
+        <DaisyButton
           variant="ghost"
-          size="icon"
+          shape="square" size="md"
           onClick={handleClose}
           disabled={isSubmitting}
         >
           <X className="h-4 w-4" />
-        </Button>
+        </DaisyButton>
       </div>
 
       {/* Step Indicator */}
@@ -138,12 +138,12 @@ function RiskFlowContent({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
 
 export function NewRiskFlow({ open, onOpenChange, onSuccess }: NewRiskFlowProps) {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl h-[90vh] p-0">
+    <DaisyDialog open={open} onOpenChange={onOpenChange}>
+      <DaisyDialogContent className="max-w-4xl h-[90vh] p-0">
         <RiskFlowProvider>
           <RiskFlowContent onOpenChange={onOpenChange} onSuccess={onSuccess} />
         </RiskFlowProvider>
-      </DialogContent>
-    </Dialog>
+      </DaisyDialogContent>
+    </DaisyDialog>
   );
 }
