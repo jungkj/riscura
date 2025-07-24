@@ -8,7 +8,7 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/DaisySheet';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import {
   DropdownMenu,

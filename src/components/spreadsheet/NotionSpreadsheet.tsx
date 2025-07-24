@@ -5,7 +5,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogFooter, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { 
@@ -651,7 +651,7 @@ export default function NotionSpreadsheet() {
             <DaisyButton onClick={addColumn} disabled={!newColumn.name.trim()}>
               Add Column
             </DaisyButton>
-          </DialogFooter>
+          </DaisyDialogFooter>
         </DaisyDialogContent>
       </DaisyDialog>
 
@@ -725,7 +725,7 @@ export default function NotionSpreadsheet() {
               <Sparkles className="w-4 h-4 mr-2" />
               Refresh Insights
             </DaisyButton>
-          </DialogFooter>
+          </DaisyDialogFooter>
         </DaisyDialogContent>
       </DaisyDialog>
     </div>

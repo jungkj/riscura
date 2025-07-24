@@ -1033,7 +1033,7 @@ export function CollaborationPanel({
               }}>
                 Share
               </DaisyButton>
-            </DialogFooter>
+            </DaisyDialogFooter>
           </DaisyDialogContent>
         </DaisyDialog>
         
@@ -1068,7 +1068,7 @@ export function CollaborationPanel({
               }}>
                 Create Version
               </DaisyButton>
-            </DialogFooter>
+            </DaisyDialogFooter>
           </DaisyDialogContent>
         </DaisyDialog>
       </DaisyCard>

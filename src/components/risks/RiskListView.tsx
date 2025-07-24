@@ -459,7 +459,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                         </DaisyButton>
                       </DaisyDropdownMenuTrigger>
                       <DaisyDropdownMenuContent align="end">
-                        <DaisyDropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DaisyDropdownMenuLabel>Actions</DaisyDropdownMenuLabel>
                         <DaisyDropdownMenuItem
                           onClick={() => onViewRisk ? onViewRisk(risk) : router.push(`/risks/${risk.id}`)}
                         >

@@ -121,6 +121,31 @@ const componentMapping = {
   
   // Select with all parts imports
   "import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'": "import { DaisySelect, DaisySelectContent, DaisySelectItem, DaisySelectTrigger, DaisySelectValue } from '@/components/ui/DaisySelect'",
+  
+  // Form imports
+  "import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'": "import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/DaisyForm'",
+  
+  // Toast imports
+  "import { useToast } from '@/components/ui/use-toast'": "import { useToast } from '@/components/ui/DaisyToast'",
+  "import { toast } from '@/components/ui/use-toast'": "import { useToast } from '@/components/ui/DaisyToast'",
+  "import { Toast, ToastAction, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast'": "import { Toast, ToastAction, ToastClose, ToastDescription, ToastProvider, ToastTitle } from '@/components/ui/DaisyToast'",
+  
+  // More Dialog imports
+  "import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'": "import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogFooter, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog'",
+  "import { Dialog, DialogContent } from '@/components/ui/dialog'": "import { DaisyDialog, DaisyDialogContent } from '@/components/ui/DaisyDialog'",
+  
+  // Sheet with more components
+  "import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'": "import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/DaisySheet'",
+  
+  // Button variants
+  "import { buttonVariants } from '@/components/ui/button'": "import { DaisyButton } from '@/components/ui/DaisyButton'",
+  
+  // More Card imports
+  "import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'": "import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardActions } from '@/components/ui/DaisyCard'",
+  "import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'": "import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'",
+  
+  // Command imports (to be created)
+  "import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut } from '@/components/ui/command'": "import { DaisyCommand, DaisyCommandDialog, DaisyCommandEmpty, DaisyCommandGroup, DaisyCommandInput, DaisyCommandItem, DaisyCommandList, DaisyCommandSeparator, DaisyCommandShortcut } from '@/components/ui/DaisyCommand'",
 };
 
 // Component usage mapping
@@ -177,6 +202,8 @@ const usageMapping = {
   '</DialogDescription>': '</DaisyDialogDescription>',
   '<DialogTrigger': '<DaisyDialogTrigger',
   '</DialogTrigger>': '</DaisyDialogTrigger>',
+  '<DialogFooter': '<DaisyDialogFooter',
+  '</DialogFooter>': '</DaisyDialogFooter>',
   
   // Label
   '<Label': '<DaisyLabel',

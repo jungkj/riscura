@@ -522,7 +522,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
                 </>
               )}
             </DaisyButton>
-          </DialogFooter>
+          </DaisyDialogFooter>
         </form>
       </DaisyDialogContent>
     </DaisyDialog>

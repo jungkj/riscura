@@ -564,7 +564,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                         </DaisyButton>
                       </DaisyDropdownMenuTrigger>
                       <DaisyDropdownMenuContent align="end">
-                        <DaisyDropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DaisyDropdownMenuLabel>Actions</DaisyDropdownMenuLabel>
                         <DaisyDropdownMenuItem
                           onClick={() => setSelectedControl(control)}
                         >

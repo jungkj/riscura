@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { DaisyDialog, DaisyDialogContent } from '@/components/ui/DaisyDialog';
 import { RiskFlowProvider, RiskFlowStep } from './RiskFlowContext';
 import { StepIndicator } from './StepIndicator';
 import { BasicInfoStep } from './steps/BasicInfoStep';

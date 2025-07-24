@@ -361,7 +361,7 @@ export default function SpreadsheetsPage() {
               <DaisyButton onClick={handleCreateSpreadsheet} disabled={!newSpreadsheet.name}>
                 Create Spreadsheet
               </DaisyButton>
-            </DialogFooter>
+            </DaisyDialogFooter>
           </DaisyDialogContent>
         </DaisyDialog>
       </div>

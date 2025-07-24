@@ -440,7 +440,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
                 </DaisyButton>
               </DaisyDropdownMenuTrigger>
               <DaisyDropdownMenuContent align="end">
-                <DaisyDropdownMenuLabel>Export Options</DropdownMenuLabel>
+                <DaisyDropdownMenuLabel>Export Options</DaisyDropdownMenuLabel>
                 <DaisyDropdownMenuSeparator />
                 <DaisyDropdownMenuItem onClick={exportToPNG}>
                   Export as PNG

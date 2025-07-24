@@ -38,7 +38,7 @@ import {
   Download,
   RefreshCw,
 } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/ui/DaisyToast';
 import { format } from 'date-fns';
 import { ComplianceFrameworkSelector } from './ComplianceFrameworkSelector';
 import { ComplianceGapList } from './ComplianceGapList';

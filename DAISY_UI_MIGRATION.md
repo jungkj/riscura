@@ -6,13 +6,35 @@ This guide documents the migration from custom Tailwind CSS components to DaisyU
 
 ## Migration Status
 
+### Phase 1: Setup and Configuration ✅
 - ✅ DaisyUI installed and configured
-- ✅ Tailwind config updated with custom themes
+- ✅ Tailwind config updated with custom themes ('riscura' and 'riscuraDark')
 - ✅ Global CSS updated for DaisyUI support
-- ✅ Component wrappers created
-- ✅ ThemeContext updated for DaisyUI themes
-- ✅ Login page refactored
-- ✅ Dashboard example created
+- ✅ ThemeContext updated for DaisyUI theme switching
+
+### Phase 2: Component Creation ✅
+- ✅ Created 28 DaisyUI wrapper components
+- ✅ All major UI patterns covered
+- ✅ Backward compatibility maintained
+
+### Phase 3: Codebase Migration (88% Complete) ✅
+- **Initial State**: 1,102 files using old UI components
+- **Current State**: 129 files remaining (973 files migrated)
+- **Progress**: 88% complete
+- ✅ Automated migration script created
+- ✅ Major pages and components migrated
+- ✅ Authentication pages updated
+- ✅ Dashboard pages updated
+
+### Phase 4: Testing and Refinement (In Progress)
+- [ ] Test all migrated components
+- [ ] Fix any styling inconsistencies
+- [ ] Ensure theme switching works properly
+
+### Phase 5: Cleanup (Pending)
+- [ ] Remove old component files
+- [ ] Update documentation
+- [ ] Final code review
 
 ## Component Mapping
 
@@ -25,8 +47,32 @@ This guide documents the migration from custom Tailwind CSS components to DaisyU
 | `Input` | `DaisyInput` | `/src/components/ui/DaisyInput.tsx` |
 | `Alert` | `DaisyAlert` | `/src/components/ui/DaisyAlert.tsx` |
 | `Badge` | `DaisyBadge` | `/src/components/ui/DaisyBadge.tsx` |
-| `Modal/Dialog` | `DaisyModal` | `/src/components/ui/DaisyModal.tsx` |
+| `Modal` | `DaisyModal` | `/src/components/ui/DaisyModal.tsx` |
+| `Dialog` | `DaisyDialog` | `/src/components/ui/DaisyDialog.tsx` |
 | `Table` | `DaisyTable` | `/src/components/ui/DaisyTable.tsx` |
+| `Select` | `DaisySelect` | `/src/components/ui/DaisySelect.tsx` |
+| `Checkbox` | `DaisyCheckbox` | `/src/components/ui/DaisyCheckbox.tsx` |
+| `Progress` | `DaisyProgress` | `/src/components/ui/DaisyProgress.tsx` |
+| `Label` | `DaisyLabel` | `/src/components/ui/DaisyLabel.tsx` |
+| `Separator` | `DaisySeparator` | `/src/components/ui/DaisySeparator.tsx` |
+| `Tabs` | `DaisyTabs` | `/src/components/ui/DaisyTabs.tsx` |
+| `Textarea` | `DaisyTextarea` | `/src/components/ui/DaisyTextarea.tsx` |
+| `Switch` | `DaisySwitch` | `/src/components/ui/DaisySwitch.tsx` |
+| `Avatar` | `DaisyAvatar` | `/src/components/ui/DaisyAvatar.tsx` |
+| `Tooltip` | `DaisyTooltip` | `/src/components/ui/DaisyTooltip.tsx` |
+| `Dropdown` | `DaisyDropdown` | `/src/components/ui/DaisyDropdown.tsx` |
+| `Accordion` | `DaisyAccordion` | `/src/components/ui/DaisyAccordion.tsx` |
+| `RadioGroup` | `DaisyRadioGroup` | `/src/components/ui/DaisyRadioGroup.tsx` |
+| `Popover` | `DaisyPopover` | `/src/components/ui/DaisyPopover.tsx` |
+| `Calendar` | `DaisyCalendar` | `/src/components/ui/DaisyCalendar.tsx` |
+| `Skeleton` | `DaisySkeleton` | `/src/components/ui/DaisySkeleton.tsx` |
+| `Slider` | `DaisySlider` | `/src/components/ui/DaisySlider.tsx` |
+| `ScrollArea` | `DaisyScrollArea` | `/src/components/ui/DaisyScrollArea.tsx` |
+| `LoadingSpinner` | `DaisyLoadingSpinner` | `/src/components/ui/DaisyLoadingSpinner.tsx` |
+| `AlertDialog` | `DaisyAlertDialog` | `/src/components/ui/DaisyAlertDialog.tsx` |
+| `Sheet` | `DaisySheet` | `/src/components/ui/DaisySheet.tsx` |
+| `Form` | `DaisyForm` | `/src/components/ui/DaisyForm.tsx` |
+| `Toast` | `DaisyToast` | `/src/components/ui/DaisyToast.tsx` |
 
 ### Class Mapping
 

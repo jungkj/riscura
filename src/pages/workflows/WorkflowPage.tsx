@@ -435,7 +435,7 @@ export default function WorkflowPage() {
                                 </DaisyButton>
                               </DaisyDropdownMenuTrigger>
                               <DaisyDropdownMenuContent align="end">
-                                <DaisyDropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <DaisyDropdownMenuLabel>Actions</DaisyDropdownMenuLabel>
                                 <DaisyDropdownMenuItem onClick={() => handleViewSteps(workflow)}>
                                   <GitBranch className="mr-2 h-4 w-4" />
                                   View Steps

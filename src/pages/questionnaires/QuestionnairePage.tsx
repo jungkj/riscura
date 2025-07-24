@@ -569,7 +569,7 @@ export default function QuestionnairePage() {
                         </DaisyButton>
                       </DaisyDropdownMenuTrigger>
                       <DaisyDropdownMenuContent align="end" className="bg-white border border-gray-100 shadow-lg">
-                        <DaisyDropdownMenuLabel className="text-gray-900">Actions</DropdownMenuLabel>
+                        <DaisyDropdownMenuLabel className="text-gray-900">Actions</DaisyDropdownMenuLabel>
                         <DaisyDropdownMenuItem
                           onClick={() => handleEdit(questionnaire)}
                           className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium"

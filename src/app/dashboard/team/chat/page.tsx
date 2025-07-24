@@ -12,7 +12,7 @@ import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogFooter, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { cn } from '@/lib/utils';
@@ -1005,7 +1005,7 @@ export default function TeamChatPage() {
               <DaisyButton onClick={handleCreateChannel} disabled={!newChannelData.name.trim()}>
                 Create Channel
               </DaisyButton>
-            </DialogFooter>
+            </DaisyDialogFooter>
           </DaisyDialogContent>
         </DaisyDialog>
       </MainContentArea>

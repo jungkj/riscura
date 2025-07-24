@@ -520,7 +520,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
               </DaisyButton>
             </DaisyDropdownMenuTrigger>
             <DaisyDropdownMenuContent align="end" className="w-48">
-              <DaisyDropdownMenuLabel>Saved Views</DropdownMenuLabel>
+              <DaisyDropdownMenuLabel>Saved Views</DaisyDropdownMenuLabel>
               {savedViews.map(view => (
                 <DaisyDropdownMenuItem key={view.id} onClick={() => setActiveView(view)}>
                   {view.name}
@@ -544,7 +544,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
               </DaisyButton>
             </DaisyDropdownMenuTrigger>
             <DaisyDropdownMenuContent align="end" className="w-56">
-              <DaisyDropdownMenuLabel>Column Visibility</DropdownMenuLabel>
+              <DaisyDropdownMenuLabel>Column Visibility</DaisyDropdownMenuLabel>
               {columns.map(column => (
                 <DaisyDropdownMenuCheckboxItem
                   key={column.key}

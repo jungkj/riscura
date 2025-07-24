@@ -1053,7 +1053,7 @@ export default function DragDropImport({
             <DaisyButton onClick={() => setShowResults(false)}>
               Close
             </DaisyButton>
-          </DialogFooter>
+          </DaisyDialogFooter>
         </DaisyDialogContent>
       </DaisyDialog>
     </div>

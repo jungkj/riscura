@@ -830,7 +830,7 @@ export function AdvancedSearchFilter({
               <Save className="w-4 h-4 mr-2" />
               Save Search
             </DaisyButton>
-          </DialogFooter>
+          </DaisyDialogFooter>
         </DaisyDialogContent>
       </DaisyDialog>
 
@@ -905,7 +905,7 @@ export function AdvancedSearchFilter({
             <DaisyButton onClick={() => setShowTagManagement(false)}>
               Done
             </DaisyButton>
-          </DialogFooter>
+          </DaisyDialogFooter>
         </DaisyDialogContent>
       </DaisyDialog>
     </div>
