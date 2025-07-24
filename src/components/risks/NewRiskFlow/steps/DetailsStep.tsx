@@ -186,7 +186,7 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
       >
         <div>
           <DaisyLabel htmlFor="dateIdentified">
-            <Calendar className="w-4 h-4 inline mr-1" />
+            <DaisyCalendar className="w-4 h-4 inline mr-1" />
             Date Identified
           </DaisyLabel>
           <DaisyInput
@@ -200,7 +200,7 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
 
         <div>
           <DaisyLabel htmlFor="nextReview">
-            <Calendar className="w-4 h-4 inline mr-1" />
+            <DaisyCalendar className="w-4 h-4 inline mr-1" />
             Next Review Date
           </DaisyLabel>
           <DaisyInput

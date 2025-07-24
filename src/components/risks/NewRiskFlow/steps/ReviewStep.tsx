@@ -175,14 +175,14 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
 
           <div className="flex items-center gap-4 pt-2 border-t text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
-              <Calendar className="w-4 h-4" />
+              <DaisyCalendar className="w-4 h-4" />
               <span>Identified: {riskData.dateIdentified instanceof Date && !isNaN(riskData.dateIdentified.getTime()) 
                 ? format(riskData.dateIdentified, 'MMM dd, yyyy') 
                 : 'Today'}</span>
             </div>
             {riskData.nextReview instanceof Date && !isNaN(riskData.nextReview.getTime()) && (
               <div className="flex items-center gap-1">
-                <Calendar className="w-4 h-4" />
+                <DaisyCalendar className="w-4 h-4" />
                 <span>Next Review: {format(riskData.nextReview, 'MMM dd, yyyy')}</span>
               </div>
             )}

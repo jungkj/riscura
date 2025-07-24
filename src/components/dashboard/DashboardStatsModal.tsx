@@ -11,7 +11,7 @@ import {
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
   Shield, 
@@ -116,7 +116,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
           </DaisyDialogDescription>
         </DaisyDialogHeader>
 
-        <ScrollArea className="max-h-[60vh] pr-4">
+        <DaisyScrollArea className="max-h-[60vh] pr-4">
           <div className="space-y-6">
             {/* Overview Section */}
             <DaisyCard className="border-2 border-[#D8C3A5] bg-[#FAFAFA]">
@@ -241,7 +241,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
               </DaisyCard>
             )}
           </div>
-        </ScrollArea>
+        </DaisyScrollArea>
 
         {/* Action Buttons */}
         <div className="flex flex-wrap gap-3 pt-4 border-t border-[#D8C3A5]">

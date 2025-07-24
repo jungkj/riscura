@@ -364,7 +364,7 @@ const ControlCard: React.FC<{
         {/* Testing Schedule */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-enterprise-2">
-            <Calendar className={cn(
+            <DaisyCalendar className={cn(
               "h-3 w-3",
               isOverdue ? "text-semantic-error" : "text-text-tertiary"
             )} />

@@ -208,7 +208,7 @@ const DateCell: React.FC<{ value: any }> = ({ value }) => {
     <DaisyTooltip>
       <DaisyTooltipTrigger asChild>
         <div className="flex items-center space-x-enterprise-1 text-body-sm">
-          <Calendar className="h-3 w-3 text-text-tertiary" />
+          <DaisyCalendar className="h-3 w-3 text-text-tertiary" />
           <span className="text-text-primary">{getRelativeTime(diffDays)}</span>
         </div>
       </DaisyTooltipTrigger>

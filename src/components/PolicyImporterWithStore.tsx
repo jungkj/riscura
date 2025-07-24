@@ -12,7 +12,7 @@ import {
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { DaisyAccordion, DaisyAccordionContent, DaisyAccordionItem, DaisyAccordionTrigger } from '@/components/ui/DaisyAccordion';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -319,13 +319,13 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
             {/* Results Accordion */}
             <DaisyCard>
               <DaisyCardContent className="pt-6">
-                <Accordion type="multiple" defaultValue={['risks', 'controls']}>
+                <DaisyAccordion type="multiple" defaultValue={['risks', 'controls']}>
                   {/* Risks Section */}
-                  <AccordionItem value="risks">
-                    <AccordionTrigger className="text-lg font-semibold">
+                  <DaisyAccordionItem value="risks">
+                    <DaisyAccordionTrigger className="text-lg font-semibold">
                       Identified Risks ({policyExtraction?.risks.length})
-                    </AccordionTrigger>
-                    <AccordionContent>
+                    </DaisyAccordionTrigger>
+                    <DaisyAccordionContent>
                       <div className="space-y-4">
                         {policyExtraction?.risks.map((risk) => {
                           const itemId = `risk-${risk.id}`;
@@ -403,15 +403,15 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                           );
                         })}
                       </div>
-                    </AccordionContent>
-                  </AccordionItem>
+                    </DaisyAccordionContent>
+                  </DaisyAccordionItem>
 
                   {/* Controls Section */}
-                  <AccordionItem value="controls">
-                    <AccordionTrigger className="text-lg font-semibold">
+                  <DaisyAccordionItem value="controls">
+                    <DaisyAccordionTrigger className="text-lg font-semibold">
                       Identified Controls ({policyExtraction?.controls.length})
-                    </AccordionTrigger>
-                    <AccordionContent>
+                    </DaisyAccordionTrigger>
+                    <DaisyAccordionContent>
                       <div className="space-y-4">
                         {policyExtraction?.controls.map((control) => {
                           const itemId = `control-${control.id}`;
@@ -489,9 +489,9 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                           );
                         })}
                       </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
+                    </DaisyAccordionContent>
+                  </DaisyAccordionItem>
+                </DaisyAccordion>
               </DaisyCardBody>
             </DaisyCard>
           </motion.div>

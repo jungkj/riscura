@@ -3,7 +3,7 @@
 import { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { EnhancedHeading } from '@/components/ui/enhanced-typography';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
 import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -207,7 +207,7 @@ export default function SelfAssessmentPage() {
                             <span>{assessment.timeRequired}</span>
                           </div>
                           <div className="flex items-center space-x-2 text-sm text-[#6B5B47]">
-                            <Calendar className="w-4 h-4" />
+                            <DaisyCalendar className="w-4 h-4" />
                             <span>Due: {assessment.nextDue}</span>
                           </div>
                         </div>

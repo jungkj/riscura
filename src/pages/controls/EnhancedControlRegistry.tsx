@@ -19,7 +19,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisySelect } from '@/components/ui/DaisySelect';
@@ -532,7 +532,7 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
                                   {control.owner}
                                 </span>
                                 <span className="flex items-center gap-1">
-                                  <Calendar className="w-4 h-4" />
+                                  <DaisyCalendar className="w-4 h-4" />
                                   {control.frequency}
                                 </span>
                                 <span className="flex items-center gap-1">

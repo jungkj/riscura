@@ -12,7 +12,7 @@ import React, {
 } from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { Skeleton } from '@/components/ui/skeleton';
+import { DaisySkeleton } from '@/components/ui/DaisySkeleton';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { AlertCircle, Download, Maximize2 } from 'lucide-react';
 
@@ -428,7 +428,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
             aria-hidden="true"
           />
         ) : (
-          <Skeleton className="w-full h-full" />
+          <DaisySkeleton className="w-full h-full" />
         )}
         
         {isLoading && loadProgress > 0 && (

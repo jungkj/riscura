@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
@@ -104,7 +104,7 @@ export default function TeamChatPanel({ isOpen, onClose }: TeamChatPanelProps) {
       </div>
       
       {/* Messages */}
-      <ScrollArea className="flex-1 p-4">
+      <DaisyScrollArea className="flex-1 p-4">
         <div className="space-y-4">
           {messages.map((message) => (
             <div 
@@ -138,7 +138,7 @@ export default function TeamChatPanel({ isOpen, onClose }: TeamChatPanelProps) {
             </div>
           ))}
         </div>
-      </ScrollArea>
+      </DaisyScrollArea>
       
       {/* Input Area */}
       <div className="border-t p-4">

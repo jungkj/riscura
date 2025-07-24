@@ -272,7 +272,7 @@ const RiskCard: React.FC<{ risk: Risk; onAction: (action: string, risk: Risk) =>
         {/* Due Date */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-enterprise-2">
-            <Calendar className={cn(
+            <DaisyCalendar className={cn(
               "h-3 w-3",
               isOverdue ? "text-semantic-error" : "text-text-tertiary"
             )} />

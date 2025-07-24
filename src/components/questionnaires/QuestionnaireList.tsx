@@ -236,7 +236,7 @@ export function QuestionnaireList({
           {/* Footer */}
           <div className="flex items-center justify-between pt-2 border-t border-notion-border">
             <div className="flex items-center space-x-2 text-xs text-notion-text-secondary">
-              <Calendar className="w-3 h-3" />
+              <DaisyCalendar className="w-3 h-3" />
               <span>Updated {formatDate(questionnaire.updatedAt)}</span>
             </div>
             
@@ -352,7 +352,7 @@ export function QuestionnaireList({
             {/* Right Section - Date & Actions */}
             <div className="flex items-center space-x-4 flex-shrink-0">
               <div className="hidden lg:flex items-center space-x-2 text-xs text-notion-text-secondary">
-                <Calendar className="w-3 h-3" />
+                <DaisyCalendar className="w-3 h-3" />
                 <span>Updated {formatDate(questionnaire.updatedAt)}</span>
               </div>
               

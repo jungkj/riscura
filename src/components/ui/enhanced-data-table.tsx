@@ -4,9 +4,9 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DaisyTable, DaisyTableBody, DaisyTableCell, DaisyTableHead, DaisyTableHeader, DaisyTableRow } from '@/components/ui/DaisyTable';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -173,7 +173,7 @@ const DateCell: React.FC<{ value: Date | string }> = ({ value }) => {
 
   return (
     <div className="flex items-center gap-2">
-      <Calendar className={cn("h-3 w-3 flex-shrink-0", 
+      <DaisyCalendar className={cn("h-3 w-3 flex-shrink-0", 
         isOverdue ? 'text-red-500' : 
         isUpcoming ? 'text-yellow-500' : 
         'text-gray-400'
@@ -358,8 +358,8 @@ const AdvancedFilters: React.FC<{
   const hasActiveFilters = Object.keys(filters).length > 0;
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
+    <DaisyPopover>
+      <DaisyPopoverTrigger asChild>
         <DaisyButton variant="tertiary" size={device.type === 'mobile' ? 'default' : 'sm'} className="gap-2">
           <Filter className="h-4 w-4" />
           {device.type !== 'mobile' && 'Filters'}
@@ -369,8 +369,8 @@ const AdvancedFilters: React.FC<{
             </DaisyBadge>
           )}
         </DaisyButton>
-      </PopoverTrigger>
-      <PopoverContent className="w-80 p-4">
+      </DaisyPopoverTrigger>
+      <DaisyPopoverContent className="w-80 p-4">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h4 className="font-semibold text-sm text-[#191919] font-inter">Advanced Filters</h4>
@@ -437,8 +437,8 @@ const AdvancedFilters: React.FC<{
             ))}
           </div>
         </div>
-      </PopoverContent>
-    </Popover>
+      </DaisyPopoverContent>
+    </DaisyPopover>
   );
 };
 
@@ -735,19 +735,19 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
         // Desktop Table View
         <div className="border border-gray-200 rounded-lg overflow-hidden">
           <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
+            <DaisyTable>
+              <DaisyTableHeader>
+                <DaisyTableRow>
                   {selectable && (
-                    <TableHead className="w-12">
+                    <DaisyTableHead className="w-12">
                       <DaisyCheckbox
                         checked={selectedRows.length === paginatedData.length && paginatedData.length > 0}
                         onCheckedChange={handleSelectAll}
                       />
-                    </TableHead>
+                    </DaisyTableHead>
                   )}
                   {visibleColumns.map((column) => (
-                    <TableHead
+                    <DaisyTableHead
                       key={column.key}
                       className={cn(
                         column.sortable && "cursor-pointer hover:bg-gray-50 transition-colors",
@@ -763,48 +763,48 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
                         </span>
                         {column.sortable && getSortIcon(column.key)}
                       </div>
-                    </TableHead>
+                    </DaisyTableHead>
                   ))}
-                </TableRow>
-              </TableHeader>
+                </DaisyTableRow>
+              </DaisyTableHeader>
 
-              <TableBody>
+              <DaisyTableBody>
                 {loading ? (
-                  <TableRow>
-                    <TableCell colSpan={visibleColumns.length + (selectable ? 1 : 0)} className="py-12">
+                  <DaisyTableRow>
+                    <DaisyTableCell colSpan={visibleColumns.length + (selectable ? 1 : 0)} className="py-12">
                       <div className="text-center">
                         <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-[#199BEC]" />
                         <p className="text-sm text-gray-500 mt-2 font-inter">Loading...</p>
                       </div>
-                    </TableCell>
-                  </TableRow>
+                    </DaisyTableCell>
+                  </DaisyTableRow>
                 ) : paginatedData.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={visibleColumns.length + (selectable ? 1 : 0)} className="py-12">
+                  <DaisyTableRow>
+                    <DaisyTableCell colSpan={visibleColumns.length + (selectable ? 1 : 0)} className="py-12">
                       <div className="text-center">
                         <div className="p-4 rounded-full bg-gray-100 inline-block mb-3">
                           <Sparkles className="h-6 w-6 text-gray-400" />
                         </div>
                         <p className="text-sm text-gray-500 font-inter">{emptyMessage}</p>
                       </div>
-                    </TableCell>
-                  </TableRow>
+                    </DaisyTableCell>
+                  </DaisyTableRow>
                 ) : (
                   paginatedData.map((row: any, index) => (
-                    <TableRow
+                    <DaisyTableRow
                       key={row.id || index}
                       className="hover:bg-gray-50 transition-colors"
                     >
                       {selectable && (
-                        <TableCell>
+                        <DaisyTableCell>
                           <DaisyCheckbox
                             checked={selectedRows.includes(row.id)}
                             onCheckedChange={(checked) => handleSelectRow(row.id, !!checked)}
                           />
-                        </TableCell>
+                        </DaisyTableCell>
                       )}
                       {visibleColumns.map((column) => (
-                        <TableCell
+                        <DaisyTableCell
                           key={column.key}
                           className={cn(
                             column.align === 'center' && "text-center",
@@ -812,13 +812,13 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
                           )}
                         >
                           {renderCell(column, row[column.key], row)}
-                        </TableCell>
+                        </DaisyTableCell>
                       ))}
-                    </TableRow>
+                    </DaisyTableRow>
                   ))
                 )}
-              </TableBody>
-            </Table>
+              </DaisyTableBody>
+            </DaisyTable>
           </div>
         </div>
       )}

@@ -37,7 +37,7 @@ import {
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
 
 // Icons
 import {
@@ -526,42 +526,42 @@ export default function QuestionnairePage() {
           </p>
         
         <DaisyCardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="text-gray-700 font-medium">Title</TableHead>
-                <TableHead className="text-gray-700 font-medium">Status</TableHead>
-                <TableHead className="text-gray-700 font-medium">Category</TableHead>
-                <TableHead className="text-gray-700 font-medium">Created</TableHead>
-                <TableHead className="text-gray-700 font-medium">Completion</TableHead>
-                <TableHead className="text-gray-700 font-medium">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+          <DaisyTable>
+            <DaisyTableHeader>
+              <DaisyTableRow>
+                <DaisyTableHead className="text-gray-700 font-medium">Title</DaisyTableHead>
+                <DaisyTableHead className="text-gray-700 font-medium">Status</DaisyTableHead>
+                <DaisyTableHead className="text-gray-700 font-medium">Category</DaisyTableHead>
+                <DaisyTableHead className="text-gray-700 font-medium">Created</DaisyTableHead>
+                <DaisyTableHead className="text-gray-700 font-medium">Completion</DaisyTableHead>
+                <DaisyTableHead className="text-gray-700 font-medium">Actions</DaisyTableHead>
+              </DaisyTableRow>
+            </DaisyTableHeader>
+            <DaisyTableBody>
               {questionnaires.map((questionnaire) => (
-                <TableRow key={questionnaire.id} className="hover:bg-[#D8C3A5]/20">
-                  <TableCell>
+                <DaisyTableRow key={questionnaire.id} className="hover:bg-[#D8C3A5]/20">
+                  <DaisyTableCell>
                     <div>
                       <div className="font-medium text-gray-900">{questionnaire.title}</div>
                       <div className="text-sm text-gray-600">{questionnaire.description}</div>
                     </div>
-                  </TableCell>
-                  <TableCell>{getStatusBadge(questionnaire.status)}</TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>{getStatusBadge(questionnaire.status)}</DaisyTableCell>
+                  <DaisyTableCell>
                     <DaisyBadge variant="outline" className="bg-secondary/20 text-muted-foreground border-0">
                       {questionnaire.category.replace('_', ' ')}
                     </DaisyBadge>
-                  </TableCell>
-                  <TableCell className="text-gray-600">
+                  </DaisyTableCell>
+                  <DaisyTableCell className="text-gray-600">
                     {formatDate(questionnaire.createdAt.toISOString())}
-                  </TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>
                     <div className="flex items-center space-x-2">
                       <DaisyProgress value={questionnaire.analytics.overview.completionRate * 100} className="w-16 bg-secondary/20 border border-border h-2" />
                       <span className="text-sm text-gray-600">{(questionnaire.analytics.overview.completionRate * 100).toFixed(0)}%</span>
                     </div>
-                  </TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>
                     <DaisyDropdownMenu>
                       <DaisyDropdownMenuTrigger asChild>
                         <DaisyButton variant="ghost" className="h-8 w-8 p-0 text-gray-600 hover:text-gray-900 hover:bg-[#D8C3A5]/20">
@@ -608,11 +608,11 @@ export default function QuestionnairePage() {
                         </DaisyDropdownMenuItem>
                       </DaisyDropdownMenuContent>
                     </DaisyDropdownMenu>
-                  </TableCell>
-                </TableRow>
+                  </DaisyTableCell>
+                </DaisyTableRow>
               ))}
-            </TableBody>
-          </Table>
+            </DaisyTableBody>
+          </DaisyTable>
         </DaisyCardBody>
       </DaisyCard>
 

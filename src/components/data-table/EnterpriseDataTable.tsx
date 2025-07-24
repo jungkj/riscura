@@ -6,7 +6,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DaisyTable, DaisyTableBody, DaisyTableCell, DaisyTableHead, DaisyTableHeader, DaisyTableRow } from '@/components/ui/DaisyTable';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
 import { Search, Download, MoreHorizontal, ChevronDown, Edit, Trash2, Eye, Copy, RefreshCw, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -254,11 +254,11 @@ export default function EnterpriseDataTable<T extends TableData>({
 
       <DaisyCardContent className="p-0">
         <div className="border rounded-lg">
-          <Table>
-            <TableHeader>
-              <TableRow>
+          <DaisyTable>
+            <DaisyTableHeader>
+              <DaisyTableRow>
                 {enableSelection && (
-                  <TableHead className="w-12">
+                  <DaisyTableHead className="w-12">
                     <DaisyCheckbox
                       checked={isAllSelected}
                       ref={(el) => {
@@ -269,10 +269,10 @@ export default function EnterpriseDataTable<T extends TableData>({
                       onCheckedChange={handleSelectAll}
                       aria-label="Select all"
                     />
-                  </TableHead>
+                  </DaisyTableHead>
                 )}
                 {columns.map((column) => (
-                  <TableHead key={column.key as string}>
+                  <DaisyTableHead key={column.key as string}>
                     {column.sortable !== false ? (
                       <DaisyButton
                         variant="ghost"
@@ -292,29 +292,29 @@ export default function EnterpriseDataTable<T extends TableData>({
                     ) : (
                       column.header
                     )}
-                  </TableHead>
+                  </DaisyTableHead>
                 ))}
-                <TableHead className="w-20">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+                <DaisyTableHead className="w-20">Actions</DaisyTableHead>
+              </DaisyTableRow>
+            </DaisyTableHeader>
+            <DaisyTableBody>
               {paginatedData.length > 0 ? (
                 paginatedData.map((row) => (
-                  <TableRow
+                  <DaisyTableRow
                     key={row.id}
                     className={`hover:bg-gray-50 ${selectedRows.has(row.id) ? 'bg-blue-50' : ''}`}
                   >
                     {enableSelection && (
-                      <TableCell>
+                      <DaisyTableCell>
                         <DaisyCheckbox
                           checked={selectedRows.has(row.id)}
                           onCheckedChange={(checked) => handleRowSelection(row.id, checked as boolean)}
                           aria-label="Select row"
                         />
-                      </TableCell>
+                      </DaisyTableCell>
                     )}
                     {columns.map((column) => (
-                      <TableCell
+                      <DaisyTableCell
                         key={column.key as string}
                         onClick={() => onRowClick?.(row)}
                         className="cursor-pointer"
@@ -323,9 +323,9 @@ export default function EnterpriseDataTable<T extends TableData>({
                           ? column.render(row[column.key], row)
                           : String(row[column.key] || '')
                         }
-                      </TableCell>
+                      </DaisyTableCell>
                     ))}
-                    <TableCell>
+                    <DaisyTableCell>
                       <DaisyDropdownMenu>
                         <DaisyDropdownMenuTrigger asChild>
                           <DaisyButton variant="ghost" className="h-8 w-8 p-0">
@@ -358,18 +358,18 @@ export default function EnterpriseDataTable<T extends TableData>({
                           )}
                         </DaisyDropdownMenuContent>
                       </DaisyDropdownMenu>
-                    </TableCell>
-                  </TableRow>
+                    </DaisyTableCell>
+                  </DaisyTableRow>
                 ))
               ) : (
-                <TableRow>
-                  <TableCell colSpan={columns.length + (enableSelection ? 2 : 1)} className="h-24 text-center">
+                <DaisyTableRow>
+                  <DaisyTableCell colSpan={columns.length + (enableSelection ? 2 : 1)} className="h-24 text-center">
                     No results found.
-                  </TableCell>
-                </TableRow>
+                  </DaisyTableCell>
+                </DaisyTableRow>
               )}
-            </TableBody>
-          </Table>
+            </DaisyTableBody>
+          </DaisyTable>
         </div>
         
         {enablePagination && totalPages > 1 && (

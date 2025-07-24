@@ -12,8 +12,8 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Calendar } from '@/components/ui/calendar';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
+import { DaisyCalendar } from '@/components/ui/DaisyCalendar';
 import { toast } from '@/hooks/use-toast';
 import {
   Dialog,
@@ -518,7 +518,7 @@ export function ShareDialog({
                 </div>
               
               <DaisyCardContent className="p-0">
-                <ScrollArea className="h-64">
+                <DaisyScrollArea className="h-64">
                   <div className="space-y-2 p-4">
                     {filteredUsers.map(user => (
                       <div key={user.id} className="flex items-center justify-between p-3 border rounded-lg">
@@ -609,7 +609,7 @@ export function ShareDialog({
                       </div>
                     ))}
                   </div>
-                </ScrollArea>
+                </DaisyScrollArea>
               </DaisyCardBody>
             </DaisyCard>
           </DaisyTabsContent>

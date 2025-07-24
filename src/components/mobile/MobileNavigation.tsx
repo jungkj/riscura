@@ -6,7 +6,7 @@ import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { useGesture } from '@use-gesture/react';
 import {
@@ -430,11 +430,11 @@ export default function MobileNavigation({
             )}
             
             {/* Navigation Items */}
-            <ScrollArea className="flex-1">
+            <DaisyScrollArea className="flex-1">
               <nav className="p-4 space-y-2" role="navigation" aria-label="Main navigation">
                 {filteredItems.map(item => renderNavigationItem(item))}
               </nav>
-            </ScrollArea>
+            </DaisyScrollArea>
             
             {/* Footer */}
             <div className="p-4 border-t space-y-2">

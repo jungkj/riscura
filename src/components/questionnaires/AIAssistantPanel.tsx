@@ -8,7 +8,7 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 
@@ -371,7 +371,7 @@ export function AIAssistantPanel({
               <DaisySeparator />
 
               {/* Question Suggestions */}
-              <ScrollArea className="h-[400px]">
+              <DaisyScrollArea className="h-[400px]">
                 <div className="space-y-3">
                   {isGenerating && (
                     <motion.div
@@ -466,7 +466,7 @@ export function AIAssistantPanel({
                     </motion.div>
                   ))}
                 </div>
-              </ScrollArea>
+              </DaisyScrollArea>
             </div>
           </DaisyTabsContent>
 
@@ -493,7 +493,7 @@ export function AIAssistantPanel({
               {/* Risk Recommendations */}
               <div>
                 <h4 className="text-sm font-semibold text-notion-text-primary mb-2">Risk Recommendations</h4>
-                <ScrollArea className="h-[200px]">
+                <DaisyScrollArea className="h-[200px]">
                   <div className="space-y-2">
                     {mockRiskRecommendations.map((rec, index) => (
                       <motion.div
@@ -533,7 +533,7 @@ export function AIAssistantPanel({
                       </motion.div>
                     ))}
                   </div>
-                </ScrollArea>
+                </DaisyScrollArea>
               </div>
 
               <DaisySeparator />
@@ -541,7 +541,7 @@ export function AIAssistantPanel({
               {/* Response Insights */}
               <div>
                 <h4 className="text-sm font-semibold text-notion-text-primary mb-2">Response Insights</h4>
-                <ScrollArea className="h-[150px]">
+                <DaisyScrollArea className="h-[150px]">
                   <div className="space-y-2">
                     {mockResponseInsights.map((insight, index) => {
                       const IconComponent = getInsightTypeIcon(insight.type);
@@ -581,7 +581,7 @@ export function AIAssistantPanel({
                       );
                     })}
                   </div>
-                </ScrollArea>
+                </DaisyScrollArea>
               </div>
             </div>
           </DaisyTabsContent>
@@ -590,7 +590,7 @@ export function AIAssistantPanel({
           <DaisyTabsContent value="optimize" className="h-full m-0">
             <div className="p-3 space-y-3">
               <h4 className="text-sm font-semibold text-notion-text-primary">Optimization Suggestions</h4>
-              <ScrollArea className="h-[500px]">
+              <DaisyScrollArea className="h-[500px]">
                 <div className="space-y-3">
                   {mockOptimizationSuggestions.map((suggestion, index) => (
                     <motion.div
@@ -648,7 +648,7 @@ export function AIAssistantPanel({
                     </motion.div>
                   ))}
                 </div>
-              </ScrollArea>
+              </DaisyScrollArea>
             </div>
           </DaisyTabsContent>
 
@@ -656,7 +656,7 @@ export function AIAssistantPanel({
           <DaisyTabsContent value="help" className="h-full m-0">
             <div className="p-3 space-y-3">
               <h4 className="text-sm font-semibold text-notion-text-primary">Contextual Help</h4>
-              <ScrollArea className="h-[500px]">
+              <DaisyScrollArea className="h-[500px]">
                 <div className="space-y-3">
                   {getContextualHelp(activeTab).map((help, index) => (
                     <motion.div
@@ -712,7 +712,7 @@ export function AIAssistantPanel({
                     </div>
                   </div>
                 </div>
-              </ScrollArea>
+              </DaisyScrollArea>
             </div>
           </DaisyTabsContent>
         </div>

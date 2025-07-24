@@ -10,7 +10,7 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-import { Slider } from '@/components/ui/slider';
+import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { toast } from '@/hooks/use-toast';
 import {

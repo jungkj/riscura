@@ -3,7 +3,7 @@
 import { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { EnhancedHeading } from '@/components/ui/enhanced-typography';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
 import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';

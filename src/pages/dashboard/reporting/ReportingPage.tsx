@@ -680,7 +680,7 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
                 <p className="text-sm font-medium text-purple-600">Scheduled Reports</p>
                 <p className="text-3xl font-bold text-purple-900">{analytics.scheduledReports}</p>
               </div>
-              <Calendar className="h-8 w-8 text-purple-600" />
+              <DaisyCalendar className="h-8 w-8 text-purple-600" />
             </div>
           </DaisyCardBody>
         </DaisyCard>
@@ -770,7 +770,7 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
 
         <DaisyTabsContent value="scheduled" className="space-y-6">
           <div className="text-center py-12">
-            <Calendar className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
+            <DaisyCalendar className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
               Scheduled Reports Coming Soon
             </h3>

@@ -196,7 +196,7 @@ export default function UpdateRiskAssessmentPage() {
                             <span>{risk.owner}</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
+                            <DaisyCalendar className="h-4 w-4" />
                             <span>Last updated: {risk.lastUpdated}</span>
                           </div>
                           <div className="flex items-center gap-1">

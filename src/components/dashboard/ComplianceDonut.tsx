@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { Skeleton } from '@/components/ui/skeleton';
+import { DaisySkeleton } from '@/components/ui/DaisySkeleton';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 
 interface ComplianceDonutProps {
@@ -58,7 +58,7 @@ export const ComplianceDonut: React.FC<ComplianceDonutProps> = ({ isLoading = fa
   };
 
   if (isLoading) {
-    return <Skeleton className="h-[280px] w-full" />;
+    return <DaisySkeleton className="h-[280px] w-full" />;
   }
 
   return (

@@ -7,8 +7,8 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -505,7 +505,7 @@ export default function CustomDashboardBuilder({
                 
                 {categories.map(category => (
                   <DaisyTabsContent key={category} value={category} className="mt-4">
-                    <ScrollArea className="h-96">
+                    <DaisyScrollArea className="h-96">
                       <div className="space-y-3">
                         {widgetLibrary
                           .filter(widget => widget.category === category)
@@ -513,7 +513,7 @@ export default function CustomDashboardBuilder({
                             <DraggableWidget key={widget.id} widget={widget} />
                           ))}
                       </div>
-                    </ScrollArea>
+                    </DaisyScrollArea>
                   </DaisyTabsContent>
                 ))}
               </DaisyTabs>

@@ -136,7 +136,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           {/* Table of Contents - Desktop */}
           <aside className="hidden lg:block lg:col-span-3">
             <div className="sticky top-20">
-              <TableOfContents content={post.content} />
+              <DaisyTableOfContents content={post.content} />
             </div>
           </aside>
 

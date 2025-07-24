@@ -312,7 +312,7 @@ export const DataTablesDemo = () => {
       {/* Enhanced Data Table */}
       <section className="space-y-4">
         <div className="flex items-center gap-2">
-          <Table className="h-5 w-5 text-[#199BEC]" />
+          <DaisyTable className="h-5 w-5 text-[#199BEC]" />
           <h2 className="text-xl font-bold text-[#191919] font-inter">Enhanced Data Table</h2>
         </div>
         <EnhancedDataTable

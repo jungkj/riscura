@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { useToast } from '@/hooks/use-toast';
 
@@ -375,7 +375,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
                     </DaisyTabsTrigger>
                   </DaisyTabsList>
 
-                  <ScrollArea className="flex-1 px-4">
+                  <DaisyScrollArea className="flex-1 px-4">
                     <DaisyTabsContent value="all" className="mt-4">
                       {results.map(result => (
                         <ResultCard key={result.id} result={result} />
@@ -393,7 +393,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
                         <ResultCard key={result.id} result={result} />
                       ))}
                     </DaisyTabsContent>
-                  </ScrollArea>
+                  </DaisyScrollArea>
                 </DaisyTabs>
               )}
             </div>

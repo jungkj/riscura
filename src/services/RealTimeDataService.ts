@@ -135,7 +135,7 @@ export class RealTimeDataService {
   subscribeToTable<T extends keyof Tables>(
     table: T,
     organizationId: string,
-    callback: (payload: RealtimePostgresChangesPayload<Tables[T]['Row']>) => void
+    callback: (payload: RealtimePostgresChangesPayload<DaisyTables[T]['Row']>) => void
   ): RealTimeSubscription {
     const channelName = `${table}-${organizationId}`
     

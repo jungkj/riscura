@@ -90,7 +90,7 @@ export function QuestionnaireBuilder({
       case 'multiple_choice': return <List className="w-4 h-4" />;
       case 'scale': return <Gauge className="w-4 h-4" />;
       case 'boolean': return <ToggleLeft className="w-4 h-4" />;
-      case 'date': return <Calendar className="w-4 h-4" />;
+      case 'date': return <DaisyCalendar className="w-4 h-4" />;
       case 'file_upload': return <Upload className="w-4 h-4" />;
       default: return <Type className="w-4 h-4" />;
     }

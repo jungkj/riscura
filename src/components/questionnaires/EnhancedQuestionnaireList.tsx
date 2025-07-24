@@ -569,7 +569,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
               <span>{questionnaire.createdBy}</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Calendar className="w-3 h-3" />
+              <DaisyCalendar className="w-3 h-3" />
               <span>{questionnaire.lastModified.toLocaleDateString()}</span>
             </div>
           </div>

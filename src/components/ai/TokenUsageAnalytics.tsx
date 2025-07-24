@@ -17,7 +17,7 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { useAI } from '@/context/AIContext';
 import { PRICING_TIERS } from '@/services/TokenManagementService';
@@ -203,7 +203,7 @@ export const TokenUsageAnalytics: React.FC = () => {
               variant={alert.severity === 'critical' ? 'destructive' : 'default'}
             >
               <DaisyAlertTriangle className="h-4 w-4" />
-              <DaisyAlertTitle>{alert.type.replace('_', ' ').toUpperCase()}</AlertTitle>
+              <DaisyAlertTitle>{alert.type.replace('_', ' ').toUpperCase()}</DaisyCardTitle>
               <DaisyAlertDescription className="flex justify-between items-center">
                 <span>{alert.message}</span>
                 <DaisyButton 
@@ -385,7 +385,7 @@ export const TokenUsageAnalytics: React.FC = () => {
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle className="flex items-center space-x-2">
-                <Calendar className="h-5 w-5" />
+                <DaisyCalendar className="h-5 w-5" />
                 <span>Cost Projections</span>
               </DaisyCardTitle>
               <DaisyCardDescription>

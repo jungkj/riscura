@@ -22,7 +22,7 @@ interface SkeletonProps {
   height?: string | number;
 }
 
-export const Skeleton: React.FC<SkeletonProps> = ({ 
+export const Skeleton: React.FC<DaisySkeletonProps> = ({ 
   className, 
   width,
   height = '1rem'
@@ -52,7 +52,7 @@ export const SkeletonText: React.FC<{ lines?: number; className?: string }> = ({
   return (
     <div className={cn("space-y-2", className)}>
       {Array.from({ length: lines }).map((_, index) => (
-        <Skeleton 
+        <DaisySkeleton 
           key={index}
           height={16}
           width={index === lines - 1 ? '75%' : '100%'}
@@ -66,13 +66,13 @@ export const SkeletonCard: React.FC<{ className?: string }> = ({ className }) =>
   return (
     <div className={cn("p-4 border border-gray-200 rounded-lg space-y-3", className)}>
       <div className="flex items-center space-x-3">
-        <Skeleton width={40} height={40} className="rounded-full" />
+        <DaisySkeleton width={40} height={40} className="rounded-full" />
         <div className="space-y-2 flex-1">
-          <Skeleton height={16} width="60%" />
-          <Skeleton height={14} width="40%" />
+          <DaisySkeleton height={16} width="60%" />
+          <DaisySkeleton height={14} width="40%" />
         </div>
       </div>
-      <SkeletonText lines={2} />
+      <DaisySkeletonText lines={2} />
     </div>
   );
 };
@@ -91,7 +91,7 @@ export const SkeletonTable: React.FC<{
       {/* Header */}
       <div className="flex space-x-3">
         {Array.from({ length: columns }).map((_, index) => (
-          <Skeleton key={`header-${index}`} height={20} className="flex-1" />
+          <DaisySkeleton key={`header-${index}`} height={20} className="flex-1" />
         ))}
       </div>
       
@@ -99,7 +99,7 @@ export const SkeletonTable: React.FC<{
       {Array.from({ length: rows }).map((_, rowIndex) => (
         <div key={`row-${rowIndex}`} className="flex space-x-3">
           {Array.from({ length: columns }).map((_, colIndex) => (
-            <Skeleton key={`cell-${rowIndex}-${colIndex}`} height={16} className="flex-1" />
+            <DaisySkeleton key={`cell-${rowIndex}-${colIndex}`} height={16} className="flex-1" />
           ))}
         </div>
       ))}

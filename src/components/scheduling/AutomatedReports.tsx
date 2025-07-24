@@ -646,7 +646,7 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
                 size="sm"
                 onClick={() => setCurrentView('calendar')}
               >
-                <Calendar className="w-4 h-4" />
+                <DaisyCalendar className="w-4 h-4" />
               </DaisyButton>
               <DaisyButton
                 variant={currentView === 'analytics' ? 'default' : 'outline'}
@@ -672,13 +672,13 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle className="flex items-center">
-              <Calendar className="w-5 h-5 mr-2" />
+              <DaisyCalendar className="w-5 h-5 mr-2" />
               Report Schedule Calendar
             </DaisyCardTitle>
           
           <DaisyCardContent>
             <div className="text-center py-12 text-gray-500">
-              <Calendar className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+              <DaisyCalendar className="w-16 h-16 mx-auto mb-4 text-gray-300" />
               <p>Calendar view coming soon</p>
               <p className="text-sm">Visualize report schedules in calendar format</p>
             </div>

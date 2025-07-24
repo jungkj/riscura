@@ -7,7 +7,7 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -173,7 +173,7 @@ const DateCell: React.FC<{ value: Date }> = ({ value }) => {
 
   return (
     <div className="flex items-center space-x-enterprise-1">
-      <Calendar className={cn("h-3 w-3", 
+      <DaisyCalendar className={cn("h-3 w-3", 
         isOverdue ? 'text-semantic-error' : 
         isUpcoming ? 'text-semantic-warning' : 
         'text-text-tertiary'
@@ -238,8 +238,8 @@ const AdvancedFilters: React.FC<{
   const hasActiveFilters = Object.keys(filters).length > 0;
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
+    <DaisyPopover>
+      <DaisyPopoverTrigger asChild>
         <DaisyButton variant="outline" size="sm" className="relative">
           <Filter className="h-3 w-3 mr-enterprise-1" />
           Filters
@@ -247,8 +247,8 @@ const AdvancedFilters: React.FC<{
             <div className="absolute -top-1 -right-1 h-2 w-2 bg-interactive-primary rounded-full" />
           )}
         </DaisyButton>
-      </PopoverTrigger>
-      <PopoverContent className="w-80 p-enterprise-4" align="start">
+      </DaisyPopoverTrigger>
+      <DaisyPopoverContent className="w-80 p-enterprise-4" align="start">
         <div className="space-y-enterprise-4">
           <div className="flex items-center justify-between">
             <h4 className="text-body-sm font-semibold text-text-primary">Advanced Filters</h4>
@@ -308,8 +308,8 @@ const AdvancedFilters: React.FC<{
             </div>
           ))}
         </div>
-      </PopoverContent>
-    </Popover>
+      </DaisyPopoverContent>
+    </DaisyPopover>
   );
 };
 

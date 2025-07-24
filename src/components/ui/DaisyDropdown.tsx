@@ -88,3 +88,26 @@ export const DaisyDropdownMenuItem = ({
 export const DaisyDropdownMenuSeparator = ({ className, ...props }: DropdownMenuSeparatorProps) => {
   return <li className={cn('divider m-0', className)} {...props}></li>;
 };
+
+// Label component
+export const DaisyDropdownMenuLabel: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ 
+  className, 
+  children,
+  ...props 
+}) => {
+  return (
+    <li className="menu-title">
+      <span className={cn('text-xs', className)} {...props}>
+        {children}
+      </span>
+    </li>
+  );
+};
+
+// Group component
+export const DaisyDropdownMenuGroup: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ 
+  children,
+  ...props 
+}) => {
+  return <>{children}</>;
+};

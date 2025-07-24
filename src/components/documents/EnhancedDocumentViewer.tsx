@@ -26,7 +26,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
@@ -294,11 +294,11 @@ export default function EnhancedDocumentViewer({
 
     if (document.type.startsWith('text/') && document.extractedText) {
       return (
-        <ScrollArea className="h-96 w-full border rounded-lg p-4">
+        <DaisyScrollArea className="h-96 w-full border rounded-lg p-4">
           <pre className="text-sm whitespace-pre-wrap font-mono">
             {document.extractedText}
           </pre>
-        </ScrollArea>
+        </DaisyScrollArea>
       );
     }
 

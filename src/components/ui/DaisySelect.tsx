@@ -49,3 +49,22 @@ export const DaisySelect = forwardRef<HTMLSelectElement, SelectProps>(
 );
 
 DaisySelect.displayName = 'DaisySelect';
+
+// Sub-components for compatibility
+export const DaisySelectTrigger = forwardRef<HTMLSelectElement, SelectProps>(
+  ({ children, ...props }, ref) => {
+    return <>{children}</>;
+  }
+);
+
+DaisySelectTrigger.displayName = 'DaisySelectTrigger';
+
+export const DaisySelectValue = () => null;
+
+export const DaisySelectContent = ({ children }: { children: React.ReactNode }) => {
+  return <>{children}</>;
+};
+
+export const DaisySelectItem = ({ value, children }: { value: string; children: React.ReactNode }) => {
+  return <option value={value}>{children}</option>;
+};

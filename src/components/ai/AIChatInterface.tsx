@@ -5,8 +5,8 @@ import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import {
   Bot,
   User,
@@ -466,7 +466,7 @@ export const AIChatInterface: React.FC<{
         </DaisyDialogHeader>
 
         {/* Chat Messages */}
-        <ScrollArea ref={scrollAreaRef} className="flex-1 px-enterprise-4 py-enterprise-3">
+        <DaisyScrollArea ref={scrollAreaRef} className="flex-1 px-enterprise-4 py-enterprise-3">
           <div className="space-y-enterprise-4">
             {messages.map((message) => (
               <ChatMessageComponent
@@ -476,7 +476,7 @@ export const AIChatInterface: React.FC<{
               />
             ))}
           </div>
-        </ScrollArea>
+        </DaisyScrollArea>
 
         {/* Quick Suggestions */}
         {messages.length <= 2 && (

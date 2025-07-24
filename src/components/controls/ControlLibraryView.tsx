@@ -34,7 +34,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
 import {
   Dialog,
   DialogContent,
@@ -474,16 +474,16 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
       {/* Control Table */}
       <DaisyCard>
         <DaisyCardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-12">
+          <DaisyTable>
+            <DaisyTableHeader>
+              <DaisyTableRow>
+                <DaisyTableHead className="w-12">
                   <DaisyCheckbox
                     checked={selectedControls.length === filteredControls.length && filteredControls.length > 0}
                     onCheckedChange={handleSelectAll}
                   />
-                </TableHead>
-                <TableHead>
+                </DaisyTableHead>
+                <DaisyTableHead>
                   <DaisyButton
                     variant="ghost"
                     onClick={() => handleSort('title')}
@@ -495,9 +495,9 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                     )}
                     {sortBy !== 'title' && <ArrowUpDown className="ml-2 h-4 w-4" />}
                   </DaisyButton>
-                </TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>
+                </DaisyTableHead>
+                <DaisyTableHead>Type</DaisyTableHead>
+                <DaisyTableHead>
                   <DaisyButton
                     variant="ghost"
                     onClick={() => handleSort('effectiveness')}
@@ -509,45 +509,45 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                     )}
                     {sortBy !== 'effectiveness' && <ArrowUpDown className="ml-2 h-4 w-4" />}
                   </DaisyButton>
-                </TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Owner</TableHead>
-                <TableHead>Last Tested</TableHead>
-                <TableHead>Next Test</TableHead>
-                <TableHead className="w-12"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+                </DaisyTableHead>
+                <DaisyTableHead>Status</DaisyTableHead>
+                <DaisyTableHead>Owner</DaisyTableHead>
+                <DaisyTableHead>Last Tested</DaisyTableHead>
+                <DaisyTableHead>Next Test</DaisyTableHead>
+                <DaisyTableHead className="w-12"></DaisyTableHead>
+              </DaisyTableRow>
+            </DaisyTableHeader>
+            <DaisyTableBody>
               {paginatedControls.map((control) => (
-                <TableRow key={control.id} className="hover:bg-muted/50">
-                  <TableCell>
+                <DaisyTableRow key={control.id} className="hover:bg-muted/50">
+                  <DaisyTableCell>
                     <DaisyCheckbox
                       checked={selectedControls.includes(control.id)}
                       onCheckedChange={() => handleSelectControl(control.id)}
                     />
-                  </TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>
                     <div>
                       <div className="font-medium">{control.title}</div>
                       <div className="text-sm text-muted-foreground truncate max-w-xs">
                         {control.description}
                       </div>
                     </div>
-                  </TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>
                     <ControlTypeBadge type={control.type} />
-                  </TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>
                     <EffectivenessIndicator effectiveness={control.effectiveness} />
-                  </TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>
                     <ControlStatusIndicator control={control} />
-                  </TableCell>
-                  <TableCell>{control.owner}</TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>{control.owner}</DaisyTableCell>
+                  <DaisyTableCell>
                     {control.lastTestDate ? formatDate(control.lastTestDate) : 'Never'}
-                  </TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>
                     {control.nextTestDate ? (
                       <div className={`text-sm ${new Date(control.nextTestDate) < new Date() ? 'text-red-600' : ''}`}>
                         {formatDate(control.nextTestDate)}
@@ -555,8 +555,8 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                     ) : (
                       'Not scheduled'
                     )}
-                  </TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>
                     <DaisyDropdownMenu>
                       <DaisyDropdownMenuTrigger asChild>
                         <DaisyButton variant="ghost" className="h-8 w-8 p-0">
@@ -580,7 +580,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                         <DaisyDropdownMenuItem
                           onClick={() => onTestControl ? onTestControl(control) : router.push(`/controls/${control.id}/test`)}
                         >
-                          <Calendar className="mr-2 h-4 w-4" />
+                          <DaisyCalendar className="mr-2 h-4 w-4" />
                           Schedule Test
                         </DaisyDropdownMenuItem>
                         <DaisyDropdownMenuSeparator />
@@ -593,11 +593,11 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                         </DaisyDropdownMenuItem>
                       </DaisyDropdownMenuContent>
                     </DaisyDropdownMenu>
-                  </TableCell>
-                </TableRow>
+                  </DaisyTableCell>
+                </DaisyTableRow>
               ))}
-            </TableBody>
-          </Table>
+            </DaisyTableBody>
+          </DaisyTable>
 
           {/* Pagination */}
           {totalPages > 1 && (

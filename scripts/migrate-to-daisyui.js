@@ -71,6 +71,56 @@ const componentMapping = {
   "import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'": "import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuSeparator, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown'",
   "import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'": "import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown'",
   "import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu'": "import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger, DaisyDropdownMenuSeparator } from '@/components/ui/DaisyDropdown'",
+  "import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'": "import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuLabel, DaisyDropdownMenuSeparator, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown'",
+  "import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'": "import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuGroup, DaisyDropdownMenuItem, DaisyDropdownMenuLabel, DaisyDropdownMenuSeparator, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown'",
+  
+  // Accordion imports
+  "import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'": "import { DaisyAccordion, DaisyAccordionContent, DaisyAccordionItem, DaisyAccordionTrigger } from '@/components/ui/DaisyAccordion'",
+  
+  // Radio group imports
+  "import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'": "import { DaisyRadioGroup, DaisyRadioGroupItem } from '@/components/ui/DaisyRadioGroup'",
+  
+  // Popover imports
+  "import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'": "import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover'",
+  
+  // Calendar imports
+  "import { Calendar } from '@/components/ui/calendar'": "import { DaisyCalendar } from '@/components/ui/DaisyCalendar'",
+  
+  // Skeleton imports
+  "import { Skeleton } from '@/components/ui/skeleton'": "import { DaisySkeleton } from '@/components/ui/DaisySkeleton'",
+  
+  // Slider imports
+  "import { Slider } from '@/components/ui/slider'": "import { DaisySlider } from '@/components/ui/DaisySlider'",
+  
+  // ScrollArea imports
+  "import { ScrollArea } from '@/components/ui/scroll-area'": "import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea'",
+  
+  // LoadingSpinner imports
+  "import { LoadingSpinner } from '@/components/ui/loading-spinner'": "import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner'",
+  "import { LoadingSpinner, PageLoadingSpinner } from '@/components/ui/loading-spinner'": "import { LoadingSpinner, PageLoadingSpinner } from '@/components/ui/DaisyLoadingSpinner'",
+  "import { LoadingSpinner, InlineLoadingSpinner } from '@/components/ui/loading-spinner'": "import { LoadingSpinner, InlineLoadingSpinner } from '@/components/ui/DaisyLoadingSpinner'",
+  
+  // AlertDialog imports
+  "import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'": "import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/DaisyAlertDialog'",
+  
+  // Sheet imports
+  "import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'": "import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/DaisySheet'",
+  "import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'": "import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/DaisySheet'",
+  
+  // Alert with Title imports
+  "import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'": "import { DaisyAlert } from '@/components/ui/DaisyAlert'",
+  
+  // Table imports
+  "import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'": "import { DaisyTable, DaisyTableBody, DaisyTableCell, DaisyTableHead, DaisyTableHeader, DaisyTableRow } from '@/components/ui/DaisyTable'",
+  
+  // Dialog with Trigger imports
+  "import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'": "import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog'",
+  "import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'": "import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog'",
+  "import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'": "import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog'",
+  "import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'": "import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog'",
+  
+  // Select with all parts imports
+  "import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'": "import { DaisySelect, DaisySelectContent, DaisySelectItem, DaisySelectTrigger, DaisySelectValue } from '@/components/ui/DaisySelect'",
 };
 
 // Component usage mapping
@@ -125,6 +175,8 @@ const usageMapping = {
   '</DialogTitle>': '</DaisyDialogTitle>',
   '<DialogDescription': '<DaisyDialogDescription',
   '</DialogDescription>': '</DaisyDialogDescription>',
+  '<DialogTrigger': '<DaisyDialogTrigger',
+  '</DialogTrigger>': '</DaisyDialogTrigger>',
   
   // Label
   '<Label': '<DaisyLabel',
@@ -167,6 +219,60 @@ const usageMapping = {
   '<TooltipProvider>': '',
   '</TooltipProvider>': '',
   
+  // AlertDialog
+  '<AlertDialog': '<AlertDialog',
+  '</AlertDialog>': '</AlertDialog>',
+  '<AlertDialogTrigger': '<AlertDialogTrigger',
+  '</AlertDialogTrigger>': '</AlertDialogTrigger>',
+  '<AlertDialogContent': '<AlertDialogContent',
+  '</AlertDialogContent>': '</AlertDialogContent>',
+  '<AlertDialogHeader': '<AlertDialogHeader',
+  '</AlertDialogHeader>': '</AlertDialogHeader>',
+  '<AlertDialogTitle': '<AlertDialogTitle',
+  '</AlertDialogTitle>': '</AlertDialogTitle>',
+  '<AlertDialogDescription': '<AlertDialogDescription',
+  '</AlertDialogDescription>': '</AlertDialogDescription>',
+  '<AlertDialogFooter': '<AlertDialogFooter',
+  '</AlertDialogFooter>': '</AlertDialogFooter>',
+  '<AlertDialogAction': '<AlertDialogAction',
+  '</AlertDialogAction>': '</AlertDialogAction>',
+  '<AlertDialogCancel': '<AlertDialogCancel',
+  '</AlertDialogCancel>': '</AlertDialogCancel>',
+  
+  // Sheet
+  '<Sheet': '<Sheet',
+  '</Sheet>': '</Sheet>',
+  '<SheetTrigger': '<SheetTrigger',
+  '</SheetTrigger>': '</SheetTrigger>',
+  '<SheetContent': '<SheetContent',
+  '</SheetContent>': '</SheetContent>',
+  '<SheetHeader': '<SheetHeader',
+  '</SheetHeader>': '</SheetHeader>',
+  '<SheetTitle': '<SheetTitle',
+  '</SheetTitle>': '</SheetTitle>',
+  '<SheetDescription': '<SheetDescription',
+  '</SheetDescription>': '</SheetDescription>',
+  '<SheetClose': '<SheetClose',
+  '</SheetClose>': '</SheetClose>',
+  
+  // Table
+  '<Table': '<DaisyTable',
+  '</Table>': '</DaisyTable>',
+  '<TableHeader': '<DaisyTableHeader',
+  '</TableHeader>': '</DaisyTableHeader>',
+  '<TableBody': '<DaisyTableBody',
+  '</TableBody>': '</DaisyTableBody>',
+  '<TableRow': '<DaisyTableRow',
+  '</TableRow>': '</DaisyTableRow>',
+  '<TableHead': '<DaisyTableHead',
+  '</TableHead>': '</DaisyTableHead>',
+  '<TableCell': '<DaisyTableCell',
+  '</TableCell>': '</DaisyTableCell>',
+  
+  // Alert with Title
+  '<AlertTitle': '<DaisyCardTitle',
+  '</AlertTitle>': '</DaisyCardTitle>',
+  
   // Dropdown
   '<DropdownMenu': '<DaisyDropdownMenu',
   '</DropdownMenu>': '</DaisyDropdownMenu>',
@@ -178,6 +284,46 @@ const usageMapping = {
   '</DropdownMenuItem>': '</DaisyDropdownMenuItem>',
   '<DropdownMenuSeparator': '<DaisyDropdownMenuSeparator',
   '</DropdownMenuSeparator>': '</DaisyDropdownMenuSeparator>',
+  '<DropdownMenuLabel': '<DaisyDropdownMenuLabel',
+  '</DropdownMenuLabel>': '</DaisyDropdownMenuLabel>',
+  '<DropdownMenuGroup': '<DaisyDropdownMenuGroup',
+  '</DropdownMenuGroup>': '</DaisyDropdownMenuGroup>',
+  
+  // Accordion
+  '<Accordion': '<DaisyAccordion',
+  '</Accordion>': '</DaisyAccordion>',
+  '<AccordionItem': '<DaisyAccordionItem',
+  '</AccordionItem>': '</DaisyAccordionItem>',
+  '<AccordionTrigger': '<DaisyAccordionTrigger',
+  '</AccordionTrigger>': '</DaisyAccordionTrigger>',
+  '<AccordionContent': '<DaisyAccordionContent',
+  '</AccordionContent>': '</DaisyAccordionContent>',
+  
+  // Radio Group
+  '<RadioGroup': '<DaisyRadioGroup',
+  '</RadioGroup>': '</DaisyRadioGroup>',
+  '<RadioGroupItem': '<DaisyRadioGroupItem',
+  
+  // Popover
+  '<Popover': '<DaisyPopover',
+  '</Popover>': '</DaisyPopover>',
+  '<PopoverTrigger': '<DaisyPopoverTrigger',
+  '</PopoverTrigger>': '</DaisyPopoverTrigger>',
+  '<PopoverContent': '<DaisyPopoverContent',
+  '</PopoverContent>': '</DaisyPopoverContent>',
+  
+  // Calendar
+  '<Calendar': '<DaisyCalendar',
+  
+  // Skeleton
+  '<Skeleton': '<DaisySkeleton',
+  
+  // Slider
+  '<Slider': '<DaisySlider',
+  
+  // ScrollArea
+  '<ScrollArea': '<DaisyScrollArea',
+  '</ScrollArea>': '</DaisyScrollArea>',
 };
 
 // Files to process

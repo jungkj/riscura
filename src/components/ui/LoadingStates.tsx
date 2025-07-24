@@ -133,11 +133,11 @@ export const LoadingCard: React.FC<LoadingCardProps> = ({
     )}
     {content && (
       <DaisyCardContent className="space-y-3">
-        <SkeletonText lines={3} />
+        <DaisySkeletonText lines={3} />
         {actions && (
           <div className="flex gap-2 pt-2">
-            <SkeletonButton />
-            <SkeletonButton />
+            <DaisySkeletonButton />
+            <DaisySkeletonButton />
           </div>
         )}
       </DaisyCardBody>
@@ -262,8 +262,8 @@ export const LoadingDashboard: React.FC = () => (
         <EnhancedSkeleton className="h-4 w-64" />
       </div>
       <div className="flex gap-2">
-        <SkeletonButton />
-        <SkeletonButton />
+        <DaisySkeletonButton />
+        <DaisySkeletonButton />
       </div>
     </div>
     
@@ -317,7 +317,7 @@ export const LoadingList: React.FC<LoadingListProps> = ({
     {Array.from({ length: items }).map((_, i) => (
       <div key={i} className="flex items-center justify-between p-4">
         <div className="flex items-center gap-3">
-          {showAvatar && <SkeletonAvatar />}
+          {showAvatar && <DaisySkeletonAvatar />}
           <div>
             <EnhancedSkeleton className="h-4 w-32 mb-2" />
             <EnhancedSkeleton className="h-3 w-48" />
@@ -325,7 +325,7 @@ export const LoadingList: React.FC<LoadingListProps> = ({
         </div>
         {showActions && (
           <div className="flex gap-2">
-            <SkeletonButton variant="default" />
+            <DaisySkeletonButton variant="default" />
           </div>
         )}
       </div>
@@ -343,8 +343,8 @@ export const LoadingForm: React.FC<{ fields?: number }> = ({ fields = 4 }) => (
       </div>
     ))}
     <div className="flex justify-end gap-2 pt-4">
-      <SkeletonButton />
-      <SkeletonButton />
+      <DaisySkeletonButton />
+      <DaisySkeletonButton />
     </div>
   </div>
 );

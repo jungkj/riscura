@@ -13,7 +13,7 @@ import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { toast } from '@/hooks/use-toast';
 import {
   Dialog,
@@ -782,7 +782,7 @@ export function CollaborationPanel({
                 </div>
               </div>
               
-              <ScrollArea className="h-[400px] px-6">
+              <DaisyScrollArea className="h-[400px] px-6">
                 <div className="space-y-6 py-4">
                   {filteredComments.map(comment => renderComment(comment))}
                   
@@ -794,7 +794,7 @@ export function CollaborationPanel({
                     </div>
                   )}
                 </div>
-              </ScrollArea>
+              </DaisyScrollArea>
             </DaisyTabsContent>
             
             {/* Versions Tab */}
@@ -806,7 +806,7 @@ export function CollaborationPanel({
                 </DaisyButton>
               </div>
               
-              <ScrollArea className="h-[400px] px-6">
+              <DaisyScrollArea className="h-[400px] px-6">
                 <div className="space-y-4 py-4">
                   {versions.map(version => (
                     <div key={version.id} className="border rounded-lg p-4 space-y-3">
@@ -869,12 +869,12 @@ export function CollaborationPanel({
                     </div>
                   ))}
                 </div>
-              </ScrollArea>
+              </DaisyScrollArea>
             </DaisyTabsContent>
             
             {/* Activity Tab */}
             <DaisyTabsContent value="activity" className="mt-0">
-              <ScrollArea className="h-[500px] px-6">
+              <DaisyScrollArea className="h-[500px] px-6">
                 <div className="space-y-4 py-4">
                   {activities.map(activity => (
                     <div key={activity.id} className="flex items-start space-x-3">
@@ -901,7 +901,7 @@ export function CollaborationPanel({
                     </div>
                   ))}
                 </div>
-              </ScrollArea>
+              </DaisyScrollArea>
             </DaisyTabsContent>
             
             {/* Team Tab */}
@@ -913,7 +913,7 @@ export function CollaborationPanel({
                 </DaisyButton>
               </div>
               
-              <ScrollArea className="h-[400px] px-6">
+              <DaisyScrollArea className="h-[400px] px-6">
                 <div className="space-y-4 py-4">
                   {activeUsers.map(user => (
                     <div key={user.id} className="flex items-center justify-between">
@@ -965,7 +965,7 @@ export function CollaborationPanel({
                     </div>
                   ))}
                 </div>
-              </ScrollArea>
+              </DaisyScrollArea>
             </DaisyTabsContent>
           </DaisyTabs>
         </DaisyCardBody>

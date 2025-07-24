@@ -30,8 +30,8 @@ export function DatePicker({
   const [open, setOpen] = React.useState(false)
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+    <DaisyPopover open={open} onOpenChange={setOpen}>
+      <DaisyPopoverTrigger asChild>
         <DaisyButton
           variant={"outline"}
           className={cn(
@@ -41,12 +41,12 @@ export function DatePicker({
           )}
           disabled={disabled}
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
+          <DaisyCalendarIcon className="mr-2 h-4 w-4" />
           {value ? format(value, "PPP") : <span>{placeholder}</span>}
         </DaisyButton>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
-        <Calendar
+      </DaisyPopoverTrigger>
+      <DaisyPopoverContent className="w-auto p-0">
+        <DaisyCalendar
           mode="single"
           selected={value || undefined}
           onSelect={(date) => {
@@ -55,7 +55,7 @@ export function DatePicker({
           }}
           initialFocus
         />
-      </PopoverContent>
-    </Popover>
+      </DaisyPopoverContent>
+    </DaisyPopover>
   )
 } 

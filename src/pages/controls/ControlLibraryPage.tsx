@@ -120,7 +120,7 @@ export default function ControlLibraryPage() {
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
           <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Overdue Tests</DaisyCardTitle>
-            <Calendar className="h-4 w-4 text-red-600" />
+            <DaisyCalendar className="h-4 w-4 text-red-600" />
           
           <DaisyCardContent>
             <div className="text-2xl font-bold text-red-600">
@@ -145,7 +145,7 @@ export default function ControlLibraryPage() {
             Risk Mapping
           </DaisyTabsTrigger>
           <DaisyTabsTrigger value="testing" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg flex items-center gap-2">
-            <Calendar className="h-4 w-4" />
+            <DaisyCalendar className="h-4 w-4" />
             Testing Schedule
           </DaisyTabsTrigger>
           <DaisyTabsTrigger value="analytics" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg flex items-center gap-2">
@@ -193,7 +193,7 @@ export default function ControlLibraryPage() {
           <DaisyCard className="bg-white border border-gray-100 shadow-sm">
             <DaisyCardHeader>
               <DaisyCardTitle className="flex items-center gap-2 text-gray-900">
-                <Calendar className="h-5 w-5" />
+                <DaisyCalendar className="h-5 w-5" />
                 Control Testing Schedule
               </DaisyCardTitle>
               <p className="text-sm text-gray-600">
@@ -235,7 +235,7 @@ export default function ControlLibraryPage() {
                 </div>
                 
                 <div className="text-center py-8 text-gray-600">
-                  <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <DaisyCalendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
                   <p>Detailed testing schedule interface coming soon</p>
                   <p className="text-sm">
                     This will include calendar view and testing workflows

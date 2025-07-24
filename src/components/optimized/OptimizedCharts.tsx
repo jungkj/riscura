@@ -29,7 +29,7 @@ import { cn } from '@/lib/utils';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
-import { Slider } from '@/components/ui/slider';
+import { DaisySlider } from '@/components/ui/DaisySlider';
 import { 
   Select, 
   SelectContent, 

@@ -210,7 +210,7 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
                 <Maximize2 className="h-4 w-4 mr-2" />
                 Full View
               </DaisyButton>
-            </DialogTrigger>
+            </DaisyDialogTrigger>
             <DaisyDialogContent className="max-w-6xl">
               <DaisyDialogHeader>
                 <DaisyDialogTitle>Risk Matrix - Full View</DaisyDialogTitle>

@@ -10,9 +10,9 @@ import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { Slider } from '@/components/ui/slider';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { DaisySlider } from '@/components/ui/DaisySlider';
+import { DaisyCalendar } from '@/components/ui/DaisyCalendar';
+import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import { format, subDays, subMonths, subYears } from 'date-fns';
 import toast from 'react-hot-toast';
 
@@ -379,8 +379,8 @@ export default function DocumentSearch({
                   ))}
                 </div>
                 <div className="flex gap-2">
-                  <Popover>
-                    <PopoverTrigger asChild>
+                  <DaisyPopover>
+                    <DaisyPopoverTrigger asChild>
                       <DaisyButton variant="outline" className="justify-start text-left font-normal">
                         {filters.dateRange.from ? (
                           format(filters.dateRange.from, 'PPP')
@@ -388,18 +388,18 @@ export default function DocumentSearch({
                           'From date'
                         )}
                       </DaisyButton>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
+                    </DaisyPopoverTrigger>
+                    <DaisyPopoverContent className="w-auto p-0">
+                      <DaisyCalendar
                         mode="single"
                         selected={filters.dateRange.from}
                         onSelect={(date) => setDateRange({ ...filters.dateRange, from: date })}
                         initialFocus
                       />
-                    </PopoverContent>
-                  </Popover>
-                  <Popover>
-                    <PopoverTrigger asChild>
+                    </DaisyPopoverContent>
+                  </DaisyPopover>
+                  <DaisyPopover>
+                    <DaisyPopoverTrigger asChild>
                       <DaisyButton variant="outline" className="justify-start text-left font-normal">
                         {filters.dateRange.to ? (
                           format(filters.dateRange.to, 'PPP')
@@ -407,16 +407,16 @@ export default function DocumentSearch({
                           'To date'
                         )}
                       </DaisyButton>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
+                    </DaisyPopoverTrigger>
+                    <DaisyPopoverContent className="w-auto p-0">
+                      <DaisyCalendar
                         mode="single"
                         selected={filters.dateRange.to}
                         onSelect={(date) => setDateRange({ ...filters.dateRange, to: date })}
                         initialFocus
                       />
-                    </PopoverContent>
-                  </Popover>
+                    </DaisyPopoverContent>
+                  </DaisyPopover>
                 </div>
               </div>
 
@@ -424,7 +424,7 @@ export default function DocumentSearch({
               <div className="space-y-2">
                 <DaisyLabel>File Size Range (MB)</DaisyLabel>
                 <div className="px-2">
-                  <Slider
+                  <DaisySlider
                     value={[filters.sizeRange.min, filters.sizeRange.max]}
                     onValueChange={([min, max]) => setFilters(prev => ({
                       ...prev,

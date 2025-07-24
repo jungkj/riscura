@@ -305,7 +305,7 @@ export default function SpreadsheetsPage() {
               <Plus className="h-4 w-4" />
               New Spreadsheet
             </DaisyButton>
-          </DialogTrigger>
+          </DaisyDialogTrigger>
           <DaisyDialogContent className="sm:max-w-[600px]">
             <DaisyDialogHeader>
               <DaisyDialogTitle>Create New Spreadsheet</DaisyDialogTitle>

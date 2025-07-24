@@ -5,8 +5,8 @@ import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import {
   Bell,
@@ -645,7 +645,7 @@ export const SmartNotifications: React.FC<{
           </div>
         
         <DaisyCardContent className="p-0">
-          <ScrollArea style={{ maxHeight }} className="px-enterprise-4">
+          <DaisyScrollArea style={{ maxHeight }} className="px-enterprise-4">
             <div className="space-y-enterprise-3 pb-enterprise-4">
               {filteredNotifications.slice(0, 5).map((notification) => (
                 <NotificationCard
@@ -663,7 +663,7 @@ export const SmartNotifications: React.FC<{
                 </div>
               )}
             </div>
-          </ScrollArea>
+          </DaisyScrollArea>
         </DaisyCardBody>
       </DaisyCard>
     );

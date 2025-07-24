@@ -14,7 +14,7 @@ import {
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { ConnectionStatus } from '@/services/AIService';
 
@@ -71,7 +71,7 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
           <div className="flex items-center space-x-2">
             {getSeverityIcon()}
             <div>
-              <DaisyAlertTitle className="text-sm">{error.type.replace('_', ' ').toUpperCase()}</AlertTitle>
+              <DaisyAlertTitle className="text-sm">{error.type.replace('_', ' ').toUpperCase()}</DaisyCardTitle>
               <DaisyAlertDescription className="text-xs">
                 {error.userMessage || error.message}
               
@@ -102,7 +102,7 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
     >
       <DaisyAlert variant={getSeverityVariant()}>
         {getSeverityIcon()}
-        <DaisyAlertTitle>{error.type.replace('_', ' ').toUpperCase()}</AlertTitle>
+        <DaisyAlertTitle>{error.type.replace('_', ' ').toUpperCase()}</DaisyCardTitle>
         <DaisyAlertDescription>
           <div className="space-y-3">
             <p>{error.userMessage || error.message}</p>
@@ -253,7 +253,7 @@ export const FallbackModeDisplay: React.FC<FallbackModeDisplayProps> = ({
     >
       <DaisyAlert>
         <Shield className="h-4 w-4" />
-        <DaisyAlertTitle>Fallback Mode Active</AlertTitle>
+        <DaisyAlertTitle>Fallback Mode Active</DaisyCardTitle>
         <DaisyAlertDescription>
           <div className="space-y-2">
             <p>

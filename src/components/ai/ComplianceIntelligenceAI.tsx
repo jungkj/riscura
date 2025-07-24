@@ -23,7 +23,7 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 
 import { Risk, Control } from '@/types';
 import { 
@@ -443,7 +443,7 @@ const RegulatoryChangesView: React.FC<{
             {change.ai_analysis.action_required && (
               <DaisyAlert className="mt-4">
                 <DaisyAlertTriangle className="h-4 w-4" />
-                <DaisyAlertTitle>Action Required</AlertTitle>
+                <DaisyAlertTitle>Action Required</DaisyCardTitle>
                 <DaisyAlertDescription>
                   This change requires organizational response by {change.ai_analysis.deadline.toLocaleDateString()}
                 
@@ -767,7 +767,7 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
               
               <div className="flex gap-2">
                 <DaisyButton onClick={handleGenerateRoadmap} className="gap-2">
-                  <Calendar className="h-4 w-4" />
+                  <DaisyCalendar className="h-4 w-4" />
                   Generate Roadmap
                 </DaisyButton>
                 <DaisyButton variant="outline" onClick={handlePrepareAudit} className="gap-2">

@@ -8,10 +8,10 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { DaisyCalendar } from '@/components/ui/DaisyCalendar';
+import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import {
   Upload,
@@ -534,7 +534,7 @@ const WorkflowCard: React.FC<{
         {/* Dates */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-enterprise-2">
-            <CalendarIcon className={cn(
+            <DaisyCalendarIcon className={cn(
               "h-3 w-3",
               isOverdue ? "text-semantic-error" : "text-text-tertiary"
             )} />

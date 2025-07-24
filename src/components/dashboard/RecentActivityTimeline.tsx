@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Skeleton } from '@/components/ui/skeleton';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
+import { DaisySkeleton } from '@/components/ui/DaisySkeleton';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import { cn } from '@/lib/utils';
 
@@ -102,10 +102,10 @@ export default function RecentActivityTimeline({ isLoading = false }: RecentActi
       <div className="space-y-4">
         {[1, 2, 3, 4].map((i) => (
           <div key={i} className="flex items-start space-x-3">
-            <Skeleton className="h-10 w-10 rounded-full" />
+            <DaisySkeleton className="h-10 w-10 rounded-full" />
             <div className="space-y-2 flex-1">
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-3 w-full" />
+              <DaisySkeleton className="h-4 w-3/4" />
+              <DaisySkeleton className="h-3 w-full" />
             </div>
           </div>
         ))}
@@ -114,7 +114,7 @@ export default function RecentActivityTimeline({ isLoading = false }: RecentActi
   }
 
   return (
-    <ScrollArea className="h-[350px] pr-3">
+    <DaisyScrollArea className="h-[350px] pr-3">
       <div className="relative">
         {/* Vertical timeline line */}
         <div className="absolute left-4 top-0 bottom-0 w-[1px] bg-border ml-[0.625rem]" />
@@ -152,6 +152,6 @@ export default function RecentActivityTimeline({ isLoading = false }: RecentActi
           </div>
         ))}
       </div>
-    </ScrollArea>
+    </DaisyScrollArea>
   );
 }

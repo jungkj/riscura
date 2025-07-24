@@ -17,7 +17,7 @@ import RCSASpreadsheet from '@/components/spreadsheet/RCSASpreadsheet';
 import EnhancedRCSASpreadsheet from '@/components/spreadsheet/EnhancedRCSASpreadsheet';
 import RCSAImportFlow from '@/components/rcsa/RCSAImportFlow';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { cn } from '@/lib/utils';
 
 type ViewMode = 'notion' | 'classic' | 'spreadsheet';
@@ -82,7 +82,7 @@ export default function RCSAPage() {
                 }
               }}
             >
-              <Table2 className="h-4 w-4" aria-hidden="true" />
+              <DaisyTable2 className="h-4 w-4" aria-hidden="true" />
               <span>Notion View</span>
             </button>
             <button
@@ -129,7 +129,7 @@ export default function RCSAPage() {
                 }
               }}
             >
-              <TableProperties className="h-4 w-4" aria-hidden="true" />
+              <DaisyTableProperties className="h-4 w-4" aria-hidden="true" />
               <span>Spreadsheet</span>
             </button>
           </div>

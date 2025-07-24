@@ -6,12 +6,12 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { Slider } from '@/components/ui/slider';
+import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import {
   AlertTriangle,
@@ -482,7 +482,7 @@ const SimulationInterface: React.FC<{
                       <DaisyLabel className="text-body-sm font-medium mb-enterprise-2">
                         Simulation Timeframe: {timeframe[0]} days
                       </DaisyLabel>
-                      <Slider
+                      <DaisySlider
                         value={timeframe}
                         onValueChange={setTimeframe}
                         max={365}
@@ -495,7 +495,7 @@ const SimulationInterface: React.FC<{
                       <DaisyLabel className="text-body-sm font-medium mb-enterprise-2">
                         Monte Carlo Iterations: {iterations[0].toLocaleString()}
                       </DaisyLabel>
-                      <Slider
+                      <DaisySlider
                         value={iterations}
                         onValueChange={setIterations}
                         max={10000}

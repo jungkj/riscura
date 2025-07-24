@@ -330,7 +330,7 @@ export default function ComplianceProgress() {
                     <h4 className="font-medium text-gray-900">Upcoming Tasks</h4>
                     <div className="space-y-3">
                       <div className="flex items-start space-x-3">
-                        <Calendar className="w-4 h-4 text-[#199BEC] mt-0.5" />
+                        <DaisyCalendar className="w-4 h-4 text-[#199BEC] mt-0.5" />
                         <div>
                           <p className="text-sm font-medium">Quarterly review</p>
                           <p className="text-xs text-gray-600">Due in 2 weeks</p>

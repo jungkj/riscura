@@ -265,7 +265,7 @@ export default function VantaInspiredDashboard() {
               value="risks"
               className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm"
             >
-              <Calendar className="w-4 h-4 mr-2" />
+              <DaisyCalendar className="w-4 h-4 mr-2" />
               Risk Analysis
             </DaisyTabsTrigger>
             <DaisyTabsTrigger 

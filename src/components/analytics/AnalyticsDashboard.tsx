@@ -35,9 +35,9 @@ import {
   Settings,
 } from 'lucide-react';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyCalendar } from '@/components/ui/DaisyCalendar';
+import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { toast } from 'sonner';
 import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';

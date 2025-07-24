@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { toast } from 'sonner';
@@ -505,14 +505,14 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
 
           {/* Usage Stats */}
           {usageStats && (
-            <Popover>
-              <PopoverTrigger asChild>
+            <DaisyPopover>
+              <DaisyPopoverTrigger asChild>
                 <DaisyButton variant="outline" size="sm">
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Usage
                 </DaisyButton>
-              </PopoverTrigger>
-              <PopoverContent className="w-80">
+              </DaisyPopoverTrigger>
+              <DaisyPopoverContent className="w-80">
                 <div className="space-y-3">
                   <h4 className="font-medium">AI Usage (30 days)</h4>
                   <div className="grid grid-cols-2 gap-3 text-sm">
@@ -536,8 +536,8 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
                     </div>
                   </div>
                 </div>
-              </PopoverContent>
-            </Popover>
+              </DaisyPopoverContent>
+            </DaisyPopover>
           )}
         </div>
       </div>

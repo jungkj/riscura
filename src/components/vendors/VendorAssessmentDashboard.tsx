@@ -330,7 +330,7 @@ export function VendorAssessmentDashboard() {
                     </div>
                     <div className="space-y-3">
                       <div className="flex items-center text-sm">
-                        <Calendar className="h-4 w-4 mr-2 text-[#A8A8A8]" />
+                        <DaisyCalendar className="h-4 w-4 mr-2 text-[#A8A8A8]" />
                         <span className="text-[#A8A8A8]">Assessed:</span>
                         <span className="ml-2 text-[#191919]">
                           {new Date(assessment.assessmentDate).toLocaleDateString()}

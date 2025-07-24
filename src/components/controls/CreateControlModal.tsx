@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -13,7 +13,7 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DatePicker } from '@/components/ui/date-picker';
-import { Slider } from '@/components/ui/slider';
+import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { Shield, Calendar, Target, Users, FileText, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
@@ -421,7 +421,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle className="flex items-center space-x-2">
-                  <Calendar className="h-5 w-5" />
+                  <DaisyCalendar className="h-5 w-5" />
                   <span>Testing Configuration</span>
                 </DaisyCardTitle>
                 <DaisyCardDescription>

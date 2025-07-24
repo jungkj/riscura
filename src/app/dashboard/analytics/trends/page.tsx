@@ -760,7 +760,7 @@ export default function AnalyticsTrendsPage() {
                           Create Action Plan
                         </DaisyButton>
                         <DaisyButton variant="outline" size="sm">
-                          <Calendar className="h-4 w-4 mr-1" />
+                          <DaisyCalendar className="h-4 w-4 mr-1" />
                           Set Reminder
                         </DaisyButton>
                         <DaisyButton variant="outline" size="sm">

@@ -523,10 +523,10 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
             </DaisyCard>
 
             {/* Extracted Content */}
-            <Accordion type="multiple" className="space-y-4" defaultValue={['risks', 'controls']}>
+            <DaisyAccordion type="multiple" className="space-y-4" defaultValue={['risks', 'controls']}>
               {/* Risks Section */}
-              <AccordionItem value="risks" className="border rounded-lg">
-                <AccordionTrigger className="px-6 py-4 hover:no-underline">
+              <DaisyAccordionItem value="risks" className="border rounded-lg">
+                <DaisyAccordionTrigger className="px-6 py-4 hover:no-underline">
                   <div className="flex items-center gap-3">
                     <DaisyAlertTriangle className="h-5 w-5 text-red-600" />
                     <span className="text-lg font-semibold">
@@ -536,8 +536,8 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                       {analysisResult.data.risks.filter(r => r.approved).length} approved
                     </DaisyBadge>
                   </div>
-                </AccordionTrigger>
-                <AccordionContent className="px-6 pb-6">
+                </DaisyAccordionTrigger>
+                <DaisyAccordionContent className="px-6 pb-6">
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <p className="text-sm text-gray-600 dark:text-gray-300">
@@ -623,12 +623,12 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                       ))}
                     </div>
                   </div>
-                </AccordionContent>
-              </AccordionItem>
+                </DaisyAccordionContent>
+              </DaisyAccordionItem>
 
               {/* Controls Section */}
-              <AccordionItem value="controls" className="border rounded-lg">
-                <AccordionTrigger className="px-6 py-4 hover:no-underline">
+              <DaisyAccordionItem value="controls" className="border rounded-lg">
+                <DaisyAccordionTrigger className="px-6 py-4 hover:no-underline">
                   <div className="flex items-center gap-3">
                     <Shield className="h-5 w-5 text-blue-600" />
                     <span className="text-lg font-semibold">
@@ -638,8 +638,8 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                       {analysisResult.data.controls.filter(c => c.approved).length} approved
                     </DaisyBadge>
                   </div>
-                </AccordionTrigger>
-                <AccordionContent className="px-6 pb-6">
+                </DaisyAccordionTrigger>
+                <DaisyAccordionContent className="px-6 pb-6">
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <p className="text-sm text-gray-600 dark:text-gray-300">
@@ -725,9 +725,9 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                       ))}
                     </div>
                   </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+                </DaisyAccordionContent>
+              </DaisyAccordionItem>
+            </DaisyAccordion>
           </motion.div>
         )}
       </AnimatePresence>

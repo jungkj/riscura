@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 
 // Animation variants for skeletons
 type SkeletonVariant = 'pulse' | 'wave' | 'shimmer';
@@ -153,7 +153,7 @@ interface TableSkeletonProps extends BaseSkeletonProps {
   showCheckboxes?: boolean;
 }
 
-export const TableSkeleton: React.FC<TableSkeletonProps> = ({
+export const TableSkeleton: React.FC<DaisyTableSkeletonProps> = ({
   rows = 5,
   columns = 4,
   hasHeader = true,
@@ -308,7 +308,7 @@ export const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
             </div>
           
           <DaisyCardContent>
-            <TableSkeleton 
+            <DaisyTableSkeleton 
               variant={variant}
               rows={8}
               columns={5}
@@ -584,7 +584,7 @@ export const PageSkeletons = {
         {/* Content */}
         <DaisyCard>
           <DaisyCardContent>
-            <TableSkeleton rows={10} columns={6} hasActions showCheckboxes />
+            <DaisyTableSkeleton rows={10} columns={6} hasActions showCheckboxes />
           </DaisyCardBody>
         </DaisyCard>
       </div>

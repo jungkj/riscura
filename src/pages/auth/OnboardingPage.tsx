@@ -205,14 +205,14 @@ export default function OnboardingPage() {
                         Select the role that best describes your position
                       </FormDescription>
                       <FormControl>
-                        <RadioGroup
+                        <DaisyRadioGroup
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                           className="space-y-1"
                         >
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
-                              <RadioGroupItem value="risk_manager" />
+                              <DaisyRadioGroupItem value="risk_manager" />
                             </FormControl>
                             <FormLabel className="font-normal">
                               Risk Manager
@@ -220,7 +220,7 @@ export default function OnboardingPage() {
                           </FormItem>
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
-                              <RadioGroupItem value="admin" />
+                              <DaisyRadioGroupItem value="admin" />
                             </FormControl>
                             <FormLabel className="font-normal">
                               Administrator
@@ -228,7 +228,7 @@ export default function OnboardingPage() {
                           </FormItem>
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
-                              <RadioGroupItem value="auditor" />
+                              <DaisyRadioGroupItem value="auditor" />
                             </FormControl>
                             <FormLabel className="font-normal">
                               Auditor
@@ -236,13 +236,13 @@ export default function OnboardingPage() {
                           </FormItem>
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
-                              <RadioGroupItem value="user" />
+                              <DaisyRadioGroupItem value="user" />
                             </FormControl>
                             <FormLabel className="font-normal">
                               Regular User
                             </FormLabel>
                           </FormItem>
-                        </RadioGroup>
+                        </DaisyRadioGroup>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

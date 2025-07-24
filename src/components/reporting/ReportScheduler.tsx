@@ -8,8 +8,8 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { DaisyTable, DaisyTableBody, DaisyTableCell, DaisyTableHead, DaisyTableHeader, DaisyTableRow } from '@/components/ui/DaisyTable';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { 
@@ -635,56 +635,56 @@ export default function ReportScheduler({
       {/* Schedules Table */}
       <DaisyCard>
         <DaisyCardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Frequency</TableHead>
-                <TableHead>Next Run</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Recipients</TableHead>
-                <TableHead>Stats</TableHead>
-                <TableHead className="w-32">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+          <DaisyTable>
+            <DaisyTableHeader>
+              <DaisyTableRow>
+                <DaisyTableHead>Name</DaisyTableHead>
+                <DaisyTableHead>Type</DaisyTableHead>
+                <DaisyTableHead>Frequency</DaisyTableHead>
+                <DaisyTableHead>Next Run</DaisyTableHead>
+                <DaisyTableHead>Status</DaisyTableHead>
+                <DaisyTableHead>Recipients</DaisyTableHead>
+                <DaisyTableHead>Stats</DaisyTableHead>
+                <DaisyTableHead className="w-32">Actions</DaisyTableHead>
+              </DaisyTableRow>
+            </DaisyTableHeader>
+            <DaisyTableBody>
               {isLoading ? (
-                <TableRow>
-                  <TableCell colSpan={8} className="text-center py-8">
+                <DaisyTableRow>
+                  <DaisyTableCell colSpan={8} className="text-center py-8">
                     <div className="flex items-center justify-center gap-2">
                       <RefreshCw className="h-4 w-4 animate-spin" />
                       Loading schedules...
                     </div>
-                  </TableCell>
-                </TableRow>
+                  </DaisyTableCell>
+                </DaisyTableRow>
               ) : schedules.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={8} className="text-center py-8">
+                <DaisyTableRow>
+                  <DaisyTableCell colSpan={8} className="text-center py-8">
                     <div className="flex flex-col items-center gap-2">
-                      <Calendar className="h-8 w-8 text-muted-foreground" />
+                      <DaisyCalendar className="h-8 w-8 text-muted-foreground" />
                       <p className="text-muted-foreground">No scheduled reports found</p>
                     </div>
-                  </TableCell>
-                </TableRow>
+                  </DaisyTableCell>
+                </DaisyTableRow>
               ) : (
                 schedules.map((schedule) => (
-                  <TableRow key={schedule.id}>
-                    <TableCell>
+                  <DaisyTableRow key={schedule.id}>
+                    <DaisyTableCell>
                       <div className="flex flex-col">
                         <span className="font-medium">{schedule.name}</span>
                         {schedule.description && (
                           <span className="text-xs text-muted-foreground">{schedule.description}</span>
                         )}
                       </div>
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <DaisyBadge variant="outline">{schedule.reportType.replace('_', ' ')}</DaisyBadge>
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       {getFrequencyBadge(schedule.frequency)}
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       {schedule.nextRun ? (
                         <div className="flex flex-col">
                           <span className="text-sm">{format(new Date(schedule.nextRun), 'MMM dd, yyyy')}</span>
@@ -693,30 +693,30 @@ export default function ReportScheduler({
                       ) : (
                         <span className="text-muted-foreground">-</span>
                       )}
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <div className="flex items-center gap-2">
                         {getStatusIcon(schedule)}
                         <span className="text-sm">
                           {schedule.enabled ? 'Active' : 'Paused'}
                         </span>
                       </div>
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <div className="flex items-center gap-1">
                         <Mail className="h-4 w-4 text-muted-foreground" />
                         <span className="text-sm">{schedule.recipients.length}</span>
                       </div>
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <div className="flex flex-col text-xs">
                         <span>Runs: {schedule.runCount}</span>
                         {schedule.failureCount > 0 && (
                           <span className="text-red-600">Failures: {schedule.failureCount}</span>
                         )}
                       </div>
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <div className="flex items-center gap-1">
                         <DaisyButton
                           variant="ghost"
@@ -748,12 +748,12 @@ export default function ReportScheduler({
                           <Trash2 className="h-4 w-4" />
                         </DaisyButton>
                       </div>
-                    </TableCell>
-                  </TableRow>
+                    </DaisyTableCell>
+                  </DaisyTableRow>
                 ))
               )}
-            </TableBody>
-          </Table>
+            </DaisyTableBody>
+          </DaisyTable>
         </DaisyCardBody>
       </DaisyCard>
 

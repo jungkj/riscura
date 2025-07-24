@@ -9,12 +9,12 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { DaisyRadioGroup, DaisyRadioGroupItem } from '@/components/ui/DaisyRadioGroup';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import {
   ChevronLeft,
   ChevronRight,
@@ -392,14 +392,14 @@ export default function MobileFormLayout({
           
         case 'radio':
           return (
-            <RadioGroup value={value} onValueChange={(val) => handleFieldChange(field.id, val)}>
+            <DaisyRadioGroup value={value} onValueChange={(val) => handleFieldChange(field.id, val)}>
               {field.options?.map(option => (
                 <div key={option.value} className="flex items-center space-x-2">
-                  <RadioGroupItem value={option.value} id={`${field.id}-${option.value}`} />
+                  <DaisyRadioGroupItem value={option.value} id={`${field.id}-${option.value}`} />
                   <DaisyLabel htmlFor={`${field.id}-${option.value}`}>{option.label}</DaisyLabel>
                 </div>
               ))}
-            </RadioGroup>
+            </DaisyRadioGroup>
           );
           
         case 'switch':

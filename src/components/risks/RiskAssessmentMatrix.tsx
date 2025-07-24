@@ -9,7 +9,7 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import {
   Plus,
@@ -33,8 +33,8 @@ import {
   Info,
 } from 'lucide-react';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { toast } from 'sonner';
 
 // Import our API services
@@ -695,7 +695,7 @@ const RiskAssessmentMatrix: React.FC = () => {
                 </p>
               
               <DaisyCardContent>
-                <ScrollArea className="h-96">
+                <DaisyScrollArea className="h-96">
                   <div className="space-y-4">
                     {likelihoodFactors.map((factor) => (
                       <div key={factor.id} className="p-4 border rounded-lg space-y-3">
@@ -736,7 +736,7 @@ const RiskAssessmentMatrix: React.FC = () => {
                       </div>
                     ))}
                   </div>
-                </ScrollArea>
+                </DaisyScrollArea>
               </DaisyCardBody>
             </DaisyCard>
 
@@ -752,7 +752,7 @@ const RiskAssessmentMatrix: React.FC = () => {
                 </p>
               
               <DaisyCardContent>
-                <ScrollArea className="h-96">
+                <DaisyScrollArea className="h-96">
                   <div className="space-y-4">
                     {impactFactors.map((factor) => (
                       <div key={factor.id} className="p-4 border rounded-lg space-y-3">
@@ -793,7 +793,7 @@ const RiskAssessmentMatrix: React.FC = () => {
                       </div>
                     ))}
                   </div>
-                </ScrollArea>
+                </DaisyScrollArea>
               </DaisyCardBody>
             </DaisyCard>
           </div>

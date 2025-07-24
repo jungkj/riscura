@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { format } from 'date-fns';
 import { useToast } from '@/components/ui/use-toast';
@@ -204,7 +204,7 @@ export function NotificationCenter() {
             </DaisyTabsList>
             
             <DaisyTabsContent value={filter} className="mt-0">
-              <ScrollArea className="h-[400px]">
+              <DaisyScrollArea className="h-[400px]">
                 {loading ? (
                   <div className="p-8 text-center text-muted-foreground">
                     Loading notifications...
@@ -226,7 +226,7 @@ export function NotificationCenter() {
                     ))}
                   </div>
                 )}
-              </ScrollArea>
+              </DaisyScrollArea>
             </DaisyTabsContent>
           </DaisyTabs>
 

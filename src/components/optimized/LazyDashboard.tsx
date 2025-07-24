@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { ErrorBoundary } from 'react-error-boundary';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { Skeleton } from '@/components/ui/skeleton';
+import { DaisySkeleton } from '@/components/ui/DaisySkeleton';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { RefreshCw, AlertTriangle, Eye, EyeOff } from 'lucide-react';
 import { ReactNode } from 'react';
@@ -78,7 +78,7 @@ interface SkeletonProps {
   className?: string;
 }
 
-const WidgetSkeleton: React.FC<SkeletonProps> = ({ size, className }) => {
+const WidgetSkeleton: React.FC<DaisySkeletonProps> = ({ size, className }) => {
   const sizeClasses = {
     small: 'h-32',
     medium: 'h-48',

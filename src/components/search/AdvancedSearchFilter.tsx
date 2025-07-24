@@ -535,7 +535,7 @@ export function AdvancedSearchFilter({
           onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
           className={showAdvancedSearch ? 'bg-blue-50 border-blue-200' : ''}
         >
-          <SlidersHorizontal className="w-4 h-4 mr-2" />
+          <DaisySlidersHorizontal className="w-4 h-4 mr-2" />
           Filters
         </DaisyButton>
 

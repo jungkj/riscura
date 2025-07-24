@@ -175,7 +175,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter">
-              <Tablet className="h-5 w-5 text-[#199BEC]" />
+              <DaisyTablet className="h-5 w-5 text-[#199BEC]" />
               Tablet (768px - 1024px)
             </DaisyCardTitle>
           

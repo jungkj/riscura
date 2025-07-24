@@ -176,7 +176,7 @@ export default function AssessmentDetailPage() {
                 <p className="text-sm font-medium text-gray-600">Due Date</p>
                 <p className="text-sm font-bold text-gray-900">{assessment.dueDate}</p>
               </div>
-              <Calendar className="h-8 w-8 text-purple-600" />
+              <DaisyCalendar className="h-8 w-8 text-purple-600" />
             </div>
           </DaisyCardBody>
         </DaisyCard>

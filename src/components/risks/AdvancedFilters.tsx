@@ -29,7 +29,7 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-import { Calendar } from '@/components/ui/calendar';
+import { DaisyCalendar } from '@/components/ui/DaisyCalendar';
 import {
   Filter,
   X,
@@ -272,8 +272,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
     const [open, setOpen] = useState(false);
 
     return (
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
+      <DaisyPopover open={open} onOpenChange={setOpen}>
+        <DaisyPopoverTrigger asChild>
           <DaisyButton
             className="w-full justify-between text-left font-normal"
             size="sm"
@@ -285,8 +285,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
             )}
             <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </DaisyButton>
-        </PopoverTrigger>
-        <PopoverContent className="w-full p-0" align="start">
+        </DaisyPopoverTrigger>
+        <DaisyPopoverContent className="w-full p-0" align="start">
           <Command>
             <CommandInput placeholder={`Search ${placeholder.toLowerCase()}...`} />
             <CommandList>
@@ -312,8 +312,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               </CommandGroup>
             </CommandList>
           </Command>
-        </PopoverContent>
-      </Popover>
+        </DaisyPopoverContent>
+      </DaisyPopover>
     );
   };
 

@@ -265,7 +265,7 @@ export default function ComplianceDashboard() {
       <DaisyCard className="bg-[#FAFAFA] border-gray-200">
         <DaisyCardHeader>
           <DaisyCardTitle className="flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-[#199BEC]" />
+            <DaisyCalendar className="h-5 w-5 text-[#199BEC]" />
             Framework Progress Details
           </DaisyCardTitle>
         

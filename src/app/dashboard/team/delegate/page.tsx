@@ -14,7 +14,7 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
 import {

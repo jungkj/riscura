@@ -9,7 +9,7 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { DaisyRadioGroup, DaisyRadioGroupItem } from '@/components/ui/DaisyRadioGroup';
 import { useToast } from '@/hooks/use-toast';
 import { 
   ArrowLeft, 
@@ -296,7 +296,7 @@ export default function GenerateRiskReportPage() {
 
                   <div>
                     <DaisyLabel>Report Format</DaisyLabel>
-                    <RadioGroup
+                    <DaisyRadioGroup
                       value={reportConfig.format}
                       onValueChange={(value: 'pdf' | 'excel' | 'word') => 
                         setReportConfig(prev => ({ ...prev, format: value }))
@@ -304,18 +304,18 @@ export default function GenerateRiskReportPage() {
                       className="mt-2"
                     >
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="pdf" id="pdf" />
+                        <DaisyRadioGroupItem value="pdf" id="pdf" />
                         <DaisyLabel htmlFor="pdf" className="cursor-pointer">PDF Document</DaisyLabel>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="excel" id="excel" />
+                        <DaisyRadioGroupItem value="excel" id="excel" />
                         <DaisyLabel htmlFor="excel" className="cursor-pointer">Excel Spreadsheet</DaisyLabel>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="word" id="word" />
+                        <DaisyRadioGroupItem value="word" id="word" />
                         <DaisyLabel htmlFor="word" className="cursor-pointer">Word Document</DaisyLabel>
                       </div>
-                    </RadioGroup>
+                    </DaisyRadioGroup>
                   </div>
                 </DaisyCardBody>
               </DaisyCard>
@@ -451,7 +451,7 @@ export default function GenerateRiskReportPage() {
                     className="w-full justify-start"
                     onClick={() => router.push('/dashboard/reporting/schedule')}
                   >
-                    <Calendar className="h-4 w-4 mr-2" />
+                    <DaisyCalendar className="h-4 w-4 mr-2" />
                     Schedule Recurring Report
                   </DaisyButton>
                   <DaisyButton

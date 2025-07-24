@@ -23,7 +23,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { useToast } from '@/hooks/use-toast';
 
@@ -405,7 +405,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
                   </p>
                 </div>
               ) : (
-                <ScrollArea className="h-full p-4">
+                <DaisyScrollArea className="h-full p-4">
                   <div className="space-y-3">
                     {selections.map((item: BatchSelectionItem) => (
                       <DaisyCard 
@@ -478,7 +478,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
                       </DaisyCard>
                     ))}
                   </div>
-                </ScrollArea>
+                </DaisyScrollArea>
               )}
             </div>
           </motion.div>

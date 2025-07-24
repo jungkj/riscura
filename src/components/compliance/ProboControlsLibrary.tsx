@@ -9,7 +9,7 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { 
   Search, 
@@ -296,7 +296,7 @@ export function ProboControlsLibrary() {
               </div>
             
             <DaisyCardContent>
-              <ScrollArea className="h-[600px]">
+              <DaisyScrollArea className="h-[600px]">
                 <div className="space-y-4">
                   {filteredMitigations.map((mitigation) => (
                     <div
@@ -347,7 +347,7 @@ export function ProboControlsLibrary() {
                     </div>
                   ))}
                 </div>
-              </ScrollArea>
+              </DaisyScrollArea>
             </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>

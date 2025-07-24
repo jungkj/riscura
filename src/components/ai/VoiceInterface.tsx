@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { Slider } from '@/components/ui/slider';
+import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { CommunicationIcons, StatusIcons, ActionIcons, NavigationIcons } from '@/components/icons/IconLibrary';
 
@@ -418,7 +418,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                   <span className="text-sm">Confidence threshold</span>
                   <span className="text-sm text-gray-500">{Math.round(settings.threshold * 100)}%</span>
                 </div>
-                <Slider
+                <DaisySlider
                   value={[settings.threshold]}
                   onValueChange={([value]) => updateSetting('threshold', value)}
                   min={0.1}
@@ -455,7 +455,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                   <span className="text-sm">Speech rate</span>
                   <span className="text-sm text-gray-500">{settings.speechRate.toFixed(1)}x</span>
                 </div>
-                <Slider
+                <DaisySlider
                   value={[settings.speechRate]}
                   onValueChange={([value]) => updateSetting('speechRate', value)}
                   min={0.1}
@@ -470,7 +470,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                   <span className="text-sm">Pitch</span>
                   <span className="text-sm text-gray-500">{settings.speechPitch.toFixed(1)}</span>
                 </div>
-                <Slider
+                <DaisySlider
                   value={[settings.speechPitch]}
                   onValueChange={([value]) => updateSetting('speechPitch', value)}
                   min={0.1}
@@ -485,7 +485,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                   <span className="text-sm">Volume</span>
                   <span className="text-sm text-gray-500">{Math.round(settings.speechVolume * 100)}%</span>
                 </div>
-                <Slider
+                <DaisySlider
                   value={[settings.speechVolume]}
                   onValueChange={([value]) => updateSetting('speechVolume', value)}
                   min={0.0}

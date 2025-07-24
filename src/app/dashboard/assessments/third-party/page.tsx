@@ -3,7 +3,7 @@
 import { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { EnhancedHeading } from '@/components/ui/enhanced-typography';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
 import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -85,7 +85,7 @@ export default function ThirdPartyAssessmentPage() {
     switch (status) {
       case 'Completed': return <CheckCircle className="w-4 h-4 text-green-600" />;
       case 'In Progress': return <Clock className="w-4 h-4 text-blue-600" />;
-      case 'Scheduled': return <Calendar className="w-4 h-4 text-yellow-600" />;
+      case 'Scheduled': return <DaisyCalendar className="w-4 h-4 text-yellow-600" />;
       default: return <Clock className="w-4 h-4 text-gray-600" />;
     }
   };
@@ -222,7 +222,7 @@ export default function ThirdPartyAssessmentPage() {
                             <span>{assessment.assessor}</span>
                           </div>
                           <div className="flex items-center space-x-2 text-sm text-[#6B5B47]">
-                            <Calendar className="w-4 h-4" />
+                            <DaisyCalendar className="w-4 h-4" />
                             <span>Next Review: {assessment.nextReview}</span>
                           </div>
                           <div className="flex items-center space-x-2 text-sm text-[#6B5B47]">

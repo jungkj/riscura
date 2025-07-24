@@ -433,7 +433,7 @@ export default function NewAssessmentPage() {
                 <p>Assign the right team or individual</p>
               </div>
               <div className="flex items-start space-x-2">
-                <Calendar className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                <DaisyCalendar className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
                 <p>Set realistic timelines for completion</p>
               </div>
               <div className="flex items-start space-x-2">

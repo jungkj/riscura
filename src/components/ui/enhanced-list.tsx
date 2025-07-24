@@ -293,7 +293,7 @@ const DateDisplay: React.FC<{ date: Date | string; label?: string }> = ({ date, 
 
   return (
     <div className="flex items-center gap-2">
-      <Calendar className={cn("h-3 w-3 flex-shrink-0",
+      <DaisyCalendar className={cn("h-3 w-3 flex-shrink-0",
         isOverdue ? 'text-red-500' : 
         isUpcoming ? 'text-yellow-500' : 
         'text-gray-400'

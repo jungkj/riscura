@@ -140,7 +140,7 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
       id: 'schedule-audit',
       title: 'Schedule Audit',
       description: 'Plan compliance audit',
-      icon: <Calendar className="w-5 h-5" />,
+      icon: <DaisyCalendar className="w-5 h-5" />,
       color: 'bg-orange-50 hover:bg-orange-100 border-orange-200 text-orange-700',
       href: '/dashboard/workflows/audit',
       roles: ['executive', 'auditor']

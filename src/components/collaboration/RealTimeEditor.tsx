@@ -8,7 +8,7 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { toast } from '@/hooks/use-toast';
 import {
@@ -602,7 +602,7 @@ export function RealTimeEditor({
               </DaisyCardTitle>
             
             <DaisyCardContent className="p-0">
-              <ScrollArea className="h-60">
+              <DaisyScrollArea className="h-60">
                 <div className="space-y-2 p-4">
                   {operationHistory.slice(-10).reverse().map(operation => {
                     const user = activeUsers.find(u => u.id === operation.userId);
@@ -626,7 +626,7 @@ export function RealTimeEditor({
                     );
                   })}
                 </div>
-              </ScrollArea>
+              </DaisyScrollArea>
             </DaisyCardBody>
           </DaisyCard>
         </div>

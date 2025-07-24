@@ -20,7 +20,7 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
-import { Slider } from '@/components/ui/slider';
+import { DaisySlider } from '@/components/ui/DaisySlider';
 
 import { Risk, Control } from '@/types';
 import { 
@@ -596,7 +596,7 @@ const ImplementationPlanView: React.FC<{
           <div className="space-y-3">
             {plan.milestones.map((milestone, index) => (
               <div key={index} className="flex items-start gap-3 p-3 border rounded-lg">
-                <Calendar className="h-5 w-5 text-muted-foreground mt-0.5" />
+                <DaisyCalendar className="h-5 w-5 text-muted-foreground mt-0.5" />
                 <div className="flex-1">
                   <h4 className="font-medium">{milestone.name}</h4>
                   <p className="text-sm text-muted-foreground mb-2">{milestone.description}</p>
@@ -805,7 +805,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
                           ${budget[0].toLocaleString()}
                         </span>
                       </div>
-                      <Slider
+                      <DaisySlider
                         id="budget"
                         min={10000}
                         max={1000000}
@@ -822,7 +822,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
                           {timeline[0]} months
                         </span>
                       </div>
-                      <Slider
+                      <DaisySlider
                         id="timeline"
                         min={3}
                         max={24}
@@ -896,7 +896,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
                       disabled={recommendations.length === 0}
                       className="gap-2"
                     >
-                      <Calendar className="h-4 w-4" />
+                      <DaisyCalendar className="h-4 w-4" />
                       Generate Plan
                     </DaisyButton>
                     <DaisyButton variant="outline" className="gap-2">

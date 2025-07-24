@@ -169,7 +169,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
       case 'date':
         return (
           <div className="flex items-center space-x-enterprise-1 text-body-sm">
-            <Calendar className="h-3 w-3 text-text-tertiary" />
+            <DaisyCalendar className="h-3 w-3 text-text-tertiary" />
             <span className="text-text-primary">
               {value ? new Date(value).toLocaleDateString() : '—'}
             </span>

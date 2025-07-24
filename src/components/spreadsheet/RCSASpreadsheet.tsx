@@ -595,7 +595,7 @@ Provide recommendations for strengthening risk governance and operational resili
                     {risk.riskInfo.owner}
                   </span>
                   <span className="flex items-center gap-1">
-                    <Calendar className="w-3 h-3" />
+                    <DaisyCalendar className="w-3 h-3" />
                     Updated {risk.lastUpdated}
                   </span>
                 </div>

@@ -11,7 +11,7 @@ import {
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { 
   AlertTriangle, 
   Calendar, 
@@ -111,7 +111,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
           </DaisyDialogDescription>
         </DaisyDialogHeader>
 
-        <ScrollArea className="max-h-[60vh] pr-4">
+        <DaisyScrollArea className="max-h-[60vh] pr-4">
           <div className="space-y-4">
             {risks.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
@@ -179,7 +179,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                       </div>
                       
                       <div className="flex items-center space-x-2">
-                        <Calendar className="w-4 h-4 text-gray-500" />
+                        <DaisyCalendar className="w-4 h-4 text-gray-500" />
                         <div>
                           <p className="font-medium">Last Updated</p>
                           <p className="text-gray-600">
@@ -228,7 +228,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
               ))
             )}
           </div>
-        </ScrollArea>
+        </DaisyScrollArea>
 
         <div className="flex justify-end space-x-2 pt-4 border-t">
           <DaisyButton variant="outline" onClick={onClose}>

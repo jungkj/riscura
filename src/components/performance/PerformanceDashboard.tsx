@@ -5,7 +5,7 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { toast } from 'sonner';
 import {
@@ -458,7 +458,7 @@ const PerformanceDashboard: React.FC = () => {
               {alerts.slice(0, 3).map((alert) => (
                 <DaisyAlert key={alert.id} variant={alert.type === 'CRITICAL' ? 'destructive' : 'default'}>
                   <DaisyAlertTriangle className="h-4 w-4" />
-                  <DaisyAlertTitle>{alert.metric.toUpperCase()}</AlertTitle>
+                  <DaisyAlertTitle>{alert.metric.toUpperCase()}</DaisyCardTitle>
                   <DaisyAlertDescription>
                     {alert.message} - Current: {formatMetric(alert.value, 'ms')}, 
                     Threshold: {formatMetric(alert.threshold, 'ms')}

@@ -283,7 +283,7 @@ const FilterBar: React.FC<{
       <div className="flex flex-wrap items-center gap-enterprise-4">
         {/* Date Range Preset */}
         <div className="flex items-center space-x-enterprise-2">
-          <Calendar className="h-4 w-4 text-text-tertiary" />
+          <DaisyCalendar className="h-4 w-4 text-text-tertiary" />
           <DaisySelect defaultValue="last-30-days">
             <DaisySelectTrigger className="w-40">
               <DaisySelectValue />

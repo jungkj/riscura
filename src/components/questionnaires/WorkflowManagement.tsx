@@ -7,7 +7,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
@@ -797,7 +797,7 @@ function WorkflowInstanceDetail({
                         ))}
                         {step.deadline && (
                           <span className="flex items-center">
-                            <Calendar className="w-3 h-3 mr-1" />
+                            <DaisyCalendar className="w-3 h-3 mr-1" />
                             Due {new Date(step.deadline).toLocaleDateString()}
                           </span>
                         )}

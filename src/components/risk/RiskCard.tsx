@@ -225,7 +225,7 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
                   <span className="text-xs">{risk.assignee}</span>
                 </div>
                 <div className="flex items-center space-x-1">
-                  <Calendar className="w-4 h-4" />
+                  <DaisyCalendar className="w-4 h-4" />
                   <span className={`text-xs ${getDueDateColor(risk.dueDate)}`}>
                     {formatDate(risk.dueDate)}
                   </span>

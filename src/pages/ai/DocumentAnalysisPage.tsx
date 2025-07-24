@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import { Upload, AlertCircle, FileText, CheckCircle2, XCircle, Sparkles } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -10,7 +10,7 @@ import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 
 interface RiskInsight {
   id: string;
@@ -312,13 +312,13 @@ export default function DocumentAnalysisPage() {
                 <DaisyTabsContent value="risks" className="space-y-4 pt-4">
                   <DaisyAlert>
                     <DaisyAlertCircle className="h-4 w-4" />
-                    <DaisyAlertTitle>AI Analysis Complete</AlertTitle>
+                    <DaisyAlertTitle>AI Analysis Complete</DaisyCardTitle>
                     <DaisyAlertDescription>
                       Found {riskInsights.length} potential risks in the document
                     
                   </DaisyAlert>
                   
-                  <ScrollArea className="h-[400px] pr-4">
+                  <DaisyScrollArea className="h-[400px] pr-4">
                     <div className="space-y-3">
                       {riskInsights.map((risk) => (
                         <DaisyCard key={risk.id} className="hover:shadow-sm transition-shadow">
@@ -347,7 +347,7 @@ export default function DocumentAnalysisPage() {
                         </DaisyCard>
                       ))}
                     </div>
-                  </ScrollArea>
+                  </DaisyScrollArea>
                 </DaisyTabsContent>
                 
                 <DaisyTabsContent value="insights" className="pt-4">

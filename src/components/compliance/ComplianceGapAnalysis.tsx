@@ -7,7 +7,7 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import {
   BarChart,
   Bar,
@@ -445,7 +445,7 @@ export function ComplianceGapAnalysis() {
                 {analysis.recommendations.map((recommendation, index) => (
                   <DaisyAlert key={index}>
                     <DaisyAlertTriangle className="h-4 w-4" />
-                    <DaisyAlertTitle>Recommendation {index + 1}</AlertTitle>
+                    <DaisyAlertTitle>Recommendation {index + 1}</DaisyCardTitle>
                     <DaisyAlertDescription>{recommendation}
                   </DaisyAlert>
                 ))}

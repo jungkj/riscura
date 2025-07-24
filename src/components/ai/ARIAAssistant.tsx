@@ -6,7 +6,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { 
   Send, 
@@ -460,7 +460,7 @@ How can I assist you today?`,
 
       <DaisyCardContent className="flex-1 flex flex-col p-0">
         {/* Messages Area */}
-        <ScrollArea className="flex-1 px-4">
+        <DaisyScrollArea className="flex-1 px-4">
           <div className="space-y-4 pb-4">
             {messages.map((message) => (
               <div
@@ -600,7 +600,7 @@ How can I assist you today?`,
             
             <div ref={messagesEndRef} />
           </div>
-        </ScrollArea>
+        </DaisyScrollArea>
 
         <DaisySeparator />
 

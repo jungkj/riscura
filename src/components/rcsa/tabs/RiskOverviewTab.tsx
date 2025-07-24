@@ -131,7 +131,7 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Created</p>
                 <div className="flex items-center gap-1">
-                  <Calendar className="h-3 w-3" />
+                  <DaisyCalendar className="h-3 w-3" />
                   <span className="text-sm">{formatDate(risk.createdAt)}</span>
                 </div>
               </div>
@@ -336,7 +336,7 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
             </div>
             
             <DaisyButton className="w-full mt-4" variant="outline">
-              <Calendar className="h-4 w-4 mr-2" />
+              <DaisyCalendar className="h-4 w-4 mr-2" />
               Schedule Assessment
             </DaisyButton>
           </DaisyCardBody>

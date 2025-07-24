@@ -19,7 +19,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 
@@ -751,7 +751,7 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
                   {isMonitoringActive && (
                     <DaisyAlert>
                       <Activity className="h-4 w-4" />
-                      <DaisyAlertTitle>Monitoring Active</AlertTitle>
+                      <DaisyAlertTitle>Monitoring Active</DaisyCardTitle>
                       <DaisyAlertDescription>
                         AI is continuously analyzing your risk environment and will generate
                         insights, predictions, and notifications automatically.

@@ -6,7 +6,7 @@ import { ContentCard } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-import { Slider } from '@/components/ui/slider';
+import { DaisySlider } from '@/components/ui/DaisySlider';
 import {
   ZoomIn,
   ZoomOut,
@@ -260,7 +260,7 @@ export const RiskHeatMap: React.FC = () => {
                 <ZoomIn className="h-3 w-3" />
               </DaisyButton>
             </div>
-            <Slider
+            <DaisySlider
               value={zoomLevel}
               onValueChange={setZoomLevel}
               min={50}

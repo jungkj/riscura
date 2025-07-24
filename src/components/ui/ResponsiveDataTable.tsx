@@ -7,7 +7,7 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
@@ -894,7 +894,7 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
       )}
 
       {device.type === 'tablet' && (
-        <TabletListLayout
+        <DaisyTabletListLayout
           data={paginatedData}
           columns={columns}
           selectedItems={selectedItems}

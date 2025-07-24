@@ -507,7 +507,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                     onCheckedChange={(checked) => setConfig(prev => ({ ...prev, isScheduled: checked as boolean }))}
                   />
                   <DaisyLabel htmlFor="scheduled" className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4" />
+                    <DaisyCalendar className="h-4 w-4" />
                     Schedule this report
                   </DaisyLabel>
                 </div>
@@ -664,7 +664,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
             disabled={isGenerating}
             className="flex-1"
           >
-            <Calendar className="h-4 w-4 mr-2" />
+            <DaisyCalendar className="h-4 w-4 mr-2" />
             Schedule Report
           </DaisyButton>
         )}

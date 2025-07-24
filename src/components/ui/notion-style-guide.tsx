@@ -333,52 +333,52 @@ export function NotionStyleGuide() {
             <DaisyCardDescription>Clean table design for data display</p>
           
           <DaisyCardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Risk ID</TableHead>
-                  <TableHead>Description</TableHead>
-                  <TableHead>Severity</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Owner</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell className="font-medium">RSK-001</TableCell>
-                  <TableCell>Data breach vulnerability</TableCell>
-                  <TableCell>
+            <DaisyTable>
+              <DaisyTableHeader>
+                <DaisyTableRow>
+                  <DaisyTableHead>Risk ID</DaisyTableHead>
+                  <DaisyTableHead>Description</DaisyTableHead>
+                  <DaisyTableHead>Severity</DaisyTableHead>
+                  <DaisyTableHead>Status</DaisyTableHead>
+                  <DaisyTableHead>Owner</DaisyTableHead>
+                </DaisyTableRow>
+              </DaisyTableHeader>
+              <DaisyTableBody>
+                <DaisyTableRow>
+                  <DaisyTableCell className="font-medium">RSK-001</DaisyTableCell>
+                  <DaisyTableCell>Data breach vulnerability</DaisyTableCell>
+                  <DaisyTableCell>
                     <DaisyBadge variant="error">High</DaisyBadge>
-                  </TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>
                     <DaisyBadge variant="warning">In Progress</DaisyBadge>
-                  </TableCell>
-                  <TableCell>Sarah Chen</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">RSK-002</TableCell>
-                  <TableCell>Access control weakness</TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>Sarah Chen</DaisyTableCell>
+                </DaisyTableRow>
+                <DaisyTableRow>
+                  <DaisyTableCell className="font-medium">RSK-002</DaisyTableCell>
+                  <DaisyTableCell>Access control weakness</DaisyTableCell>
+                  <DaisyTableCell>
                     <DaisyBadge variant="warning">Medium</DaisyBadge>
-                  </TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>
                     <DaisyBadge variant="success">Resolved</DaisyBadge>
-                  </TableCell>
-                  <TableCell>John Smith</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">RSK-003</TableCell>
-                  <TableCell>Compliance gap identified</TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>John Smith</DaisyTableCell>
+                </DaisyTableRow>
+                <DaisyTableRow>
+                  <DaisyTableCell className="font-medium">RSK-003</DaisyTableCell>
+                  <DaisyTableCell>Compliance gap identified</DaisyTableCell>
+                  <DaisyTableCell>
                     <DaisyBadge variant="secondary">Low</DaisyBadge>
-                  </TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>
                     <DaisyBadge variant="blue">Under Review</DaisyBadge>
-                  </TableCell>
-                  <TableCell>Alex Johnson</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+                  </DaisyTableCell>
+                  <DaisyTableCell>Alex Johnson</DaisyTableCell>
+                </DaisyTableRow>
+              </DaisyTableBody>
+            </DaisyTable>
           </DaisyCardBody>
         </DaisyCard>
 

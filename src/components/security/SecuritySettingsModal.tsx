@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -12,7 +12,7 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
-import { Slider } from '@/components/ui/slider';
+import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
@@ -257,16 +257,15 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
 
           <DaisyTabsContent value="alerts" className="space-y-6">
             <DaisyCard>
-              <DaisyCardHeader>
+              <DaisyCardBody>
                 <DaisyCardTitle className="flex items-center space-x-2">
                   <Bell className="h-5 w-5" />
                   <span>Alert Configuration</span>
                 </DaisyCardTitle>
-                <DaisyCardDescription>
+                <p className="text-sm text-gray-500 mb-4">
                   Configure how and when you receive security alerts
                 </p>
-              
-              <DaisyCardContent className="space-y-6">
+                <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
@@ -329,7 +328,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                             <div className="font-medium">{threshold.label}</div>
                             <div className="text-sm text-gray-500">{threshold.description}</div>
                           </div>
-                        </SelectItem>
+                        </DaisySelectItem>
                       ))}
                     </SelectContent>
                   </DaisySelect>
@@ -371,16 +370,15 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
 
           <DaisyTabsContent value="monitoring" className="space-y-6">
             <DaisyCard>
-              <DaisyCardHeader>
+              <DaisyCardBody>
                 <DaisyCardTitle className="flex items-center space-x-2">
                   <Monitor className="h-5 w-5" />
                   <span>Monitoring Configuration</span>
                 </DaisyCardTitle>
-                <DaisyCardDescription>
+                <p className="text-sm text-gray-500 mb-4">
                   Configure security monitoring and detection settings
                 </p>
-              
-              <DaisyCardContent className="space-y-6">
+                <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
@@ -420,7 +418,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
 
                 <div className="space-y-4">
                   <DaisyLabel>Monitoring Interval: {settings.monitoring.monitoringInterval} minutes</DaisyLabel>
-                  <Slider
+                  <DaisySlider
                     value={[settings.monitoring.monitoringInterval]}
                     onValueChange={([value]) => updateSettings('monitoring.monitoringInterval', value)}
                     max={60}
@@ -436,7 +434,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
 
                 <div className="space-y-4">
                   <DaisyLabel>Data Retention: {settings.monitoring.retentionPeriod} days</DaisyLabel>
-                  <Slider
+                  <DaisySlider
                     value={[settings.monitoring.retentionPeriod]}
                     onValueChange={([value]) => updateSettings('monitoring.retentionPeriod', value)}
                     max={365}
@@ -476,16 +474,15 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
 
           <DaisyTabsContent value="access" className="space-y-6">
             <DaisyCard>
-              <DaisyCardHeader>
+              <DaisyCardBody>
                 <DaisyCardTitle className="flex items-center space-x-2">
                   <Lock className="h-5 w-5" />
                   <span>Access Control Settings</span>
                 </DaisyCardTitle>
-                <DaisyCardDescription>
+                <p className="text-sm text-gray-500 mb-4">
                   Configure authentication and authorization policies
                 </p>
-              
-              <DaisyCardContent className="space-y-6">
+                <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
@@ -563,16 +560,15 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
 
           <DaisyTabsContent value="compliance" className="space-y-6">
             <DaisyCard>
-              <DaisyCardHeader>
+              <DaisyCardBody>
                 <DaisyCardTitle className="flex items-center space-x-2">
                   <CheckCircle className="h-5 w-5" />
                   <span>Compliance Settings</span>
                 </DaisyCardTitle>
-                <DaisyCardDescription>
+                <p className="text-sm text-gray-500 mb-4">
                   Configure compliance monitoring and reporting
                 </p>
-              
-              <DaisyCardContent className="space-y-6">
+                <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <DaisyLabel>Enable Compliance Monitoring</DaisyLabel>
@@ -637,9 +633,9 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                         <DaisySelectValue />
                       </SelectTrigger>
                       <DaisySelectContent>
-                        <DaisySelectItem value="daily">Daily</SelectItem>
-                        <DaisySelectItem value="weekly">Weekly</SelectItem>
-                        <DaisySelectItem value="monthly">Monthly</SelectItem>
+                        <DaisySelectItem value="daily">Daily</DaisySelectItem>
+                        <DaisySelectItem value="weekly">Weekly</DaisySelectItem>
+                        <DaisySelectItem value="monthly">Monthly</DaisySelectItem>
                       </SelectContent>
                     </DaisySelect>
                   </div>
@@ -650,16 +646,15 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
 
           <DaisyTabsContent value="integrations" className="space-y-6">
             <DaisyCard>
-              <DaisyCardHeader>
+              <DaisyCardBody>
                 <DaisyCardTitle className="flex items-center space-x-2">
                   <Key className="h-5 w-5" />
                   <span>Integration Settings</span>
                 </DaisyCardTitle>
-                <DaisyCardDescription>
+                <p className="text-sm text-gray-500 mb-4">
                   Configure external security tool integrations
                 </p>
-              
-              <DaisyCardContent className="space-y-6">
+                <div className="space-y-6">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">

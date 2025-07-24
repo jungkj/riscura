@@ -408,7 +408,7 @@ const RiskItem: React.FC<{ risk: Risk; index: number }> = ({ risk, index }) => {
             width={60}
             height={40}
             className="rounded flex-shrink-0"
-            placeholder={<SkeletonLoader variant="rectangular" width={60} height={40} />}
+            placeholder={<DaisySkeletonLoader variant="rectangular" width={60} height={40} />}
           />
         )}
         
@@ -633,7 +633,7 @@ const EnhancedRiskDashboard: React.FC = () => {
             {isLoading ? (
               <div className="p-6 space-y-4">
                 {Array.from({ length: 5 }).map((_, index) => (
-                  <SkeletonLoader key={index} variant="card" height={120} />
+                  <DaisySkeletonLoader key={index} variant="card" height={120} />
                 ))}
               </div>
             ) : filteredRisks.length === 0 ? (

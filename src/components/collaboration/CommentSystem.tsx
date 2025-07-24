@@ -8,9 +8,9 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
+import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
 import {
   MessageSquare,
@@ -516,8 +516,8 @@ const CommentComponent: React.FC<{
             Reply
           </DaisyButton>
 
-          <Popover open={showReactions} onOpenChange={setShowReactions}>
-            <PopoverTrigger asChild>
+          <DaisyPopover open={showReactions} onOpenChange={setShowReactions}>
+            <DaisyPopoverTrigger asChild>
               <DaisyButton
                 variant="ghost"
                 size="sm"
@@ -526,8 +526,8 @@ const CommentComponent: React.FC<{
                 <Heart className="h-3 w-3 mr-enterprise-1" />
                 React
               </DaisyButton>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-2">
+            </DaisyPopoverTrigger>
+            <DaisyPopoverContent className="w-auto p-2">
               <div className="flex space-x-1">
                 {commonReactions.map((emoji) => (
                   <DaisyButton
@@ -544,8 +544,8 @@ const CommentComponent: React.FC<{
                   </DaisyButton>
                 ))}
               </div>
-            </PopoverContent>
-          </Popover>
+            </DaisyPopoverContent>
+          </DaisyPopover>
 
           {replies.length > 0 && (
             <DaisyButton
@@ -727,7 +727,7 @@ export const CommentSystem: React.FC<{
     return (
       <div className="w-80 max-h-96 flex flex-col">
         <div className="flex-1 overflow-hidden">
-          <ScrollArea className="h-full">
+          <DaisyScrollArea className="h-full">
             <div className="p-enterprise-4 space-y-enterprise-4">
               {filteredComments.map((comment) => (
                 <CommentComponent
@@ -749,7 +749,7 @@ export const CommentSystem: React.FC<{
                 </div>
               )}
             </div>
-          </ScrollArea>
+          </DaisyScrollArea>
         </div>
         
         <div className="border-t border-border p-enterprise-3">

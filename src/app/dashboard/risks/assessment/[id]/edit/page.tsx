@@ -292,7 +292,7 @@ export default function EditAssessmentPage() {
                 <span>{formData.assignee}</span>
               </div>
               <div className="flex items-center space-x-2 text-sm">
-                <Calendar className="h-4 w-4 text-gray-500" />
+                <DaisyCalendar className="h-4 w-4 text-gray-500" />
                 <span>Due: {formData.dueDate}</span>
               </div>
             </DaisyCardBody>
@@ -312,7 +312,7 @@ export default function EditAssessmentPage() {
                 Assign Team Members
               </DaisyButton>
               <DaisyButton variant="outline" className="w-full justify-start">
-                <Calendar className="h-4 w-4 mr-2" />
+                <DaisyCalendar className="h-4 w-4 mr-2" />
                 Schedule Review
               </DaisyButton>
             </DaisyCardBody>

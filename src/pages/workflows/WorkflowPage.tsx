@@ -36,7 +36,7 @@ import {
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 
 // Icons
@@ -368,66 +368,66 @@ export default function WorkflowPage() {
                   </DaisyButton>
                 </div>
               ) : (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Priority</TableHead>
-                      <TableHead>Progress</TableHead>
-                      <TableHead>Assignees</TableHead>
-                      <TableHead>Created</TableHead>
-                      <TableHead className="w-12"></TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
+                <DaisyTable>
+                  <DaisyTableHeader>
+                    <DaisyTableRow>
+                      <DaisyTableHead>Name</DaisyTableHead>
+                      <DaisyTableHead>Type</DaisyTableHead>
+                      <DaisyTableHead>Status</DaisyTableHead>
+                      <DaisyTableHead>Priority</DaisyTableHead>
+                      <DaisyTableHead>Progress</DaisyTableHead>
+                      <DaisyTableHead>Assignees</DaisyTableHead>
+                      <DaisyTableHead>Created</DaisyTableHead>
+                      <DaisyTableHead className="w-12"></DaisyTableHead>
+                    </DaisyTableRow>
+                  </DaisyTableHeader>
+                  <DaisyTableBody>
                     {workflows.map((workflow) => {
                       const completedSteps = workflow.steps.filter(s => s.status === 'completed').length;
                       const totalSteps = workflow.steps.length;
                       const progress = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
 
                       return (
-                        <TableRow key={workflow.id}>
-                          <TableCell>
+                        <DaisyTableRow key={workflow.id}>
+                          <DaisyTableCell>
                             <div>
                               <div className="font-medium">{workflow.name}</div>
                               <div className="text-sm text-muted-foreground truncate max-w-xs">
                                 {workflow.description}
                               </div>
                             </div>
-                          </TableCell>
-                          <TableCell>
+                          </DaisyTableCell>
+                          <DaisyTableCell>
                             <DaisyBadge variant="outline">
                               {workflow.type.replace('_', ' ')}
                             </DaisyBadge>
-                          </TableCell>
-                          <TableCell>
+                          </DaisyTableCell>
+                          <DaisyTableCell>
                             {getStatusBadge(workflow.status)}
-                          </TableCell>
-                          <TableCell>
+                          </DaisyTableCell>
+                          <DaisyTableCell>
                             {getPriorityBadge(workflow.priority)}
-                          </TableCell>
-                          <TableCell>
+                          </DaisyTableCell>
+                          <DaisyTableCell>
                             <div className="flex items-center space-x-2">
                               <DaisyProgress value={progress} className="w-16" />
                               <span className="text-sm text-muted-foreground">
                                 {completedSteps}/{totalSteps}
                               </span>
                             </div>
-                          </TableCell>
-                          <TableCell>
+                          </DaisyTableCell>
+                          <DaisyTableCell>
                             <div className="flex items-center space-x-1">
                               <Users className="h-4 w-4 text-muted-foreground" />
                               <span className="text-sm">{workflow.assignedTo.length}</span>
                             </div>
-                          </TableCell>
-                          <TableCell>
+                          </DaisyTableCell>
+                          <DaisyTableCell>
                             <div className="text-sm">
                               {formatDate(workflow.createdAt)}
                             </div>
-                          </TableCell>
-                          <TableCell>
+                          </DaisyTableCell>
+                          <DaisyTableCell>
                             <DaisyDropdownMenu>
                               <DaisyDropdownMenuTrigger asChild>
                                 <DaisyButton variant="ghost" className="h-8 w-8 p-0">
@@ -464,12 +464,12 @@ export default function WorkflowPage() {
                                 </DaisyDropdownMenuItem>
                               </DaisyDropdownMenuContent>
                             </DaisyDropdownMenu>
-                          </TableCell>
-                        </TableRow>
+                          </DaisyTableCell>
+                        </DaisyTableRow>
                       );
                     })}
-                  </TableBody>
-                </Table>
+                  </DaisyTableBody>
+                </DaisyTable>
               )}
             </DaisyCardBody>
           </DaisyCard>
@@ -523,7 +523,7 @@ export default function WorkflowPage() {
                                     <span>{step.assignee}</span>
                                   </div>
                                   <div className="flex items-center space-x-1">
-                                    <Calendar className="h-3 w-3" />
+                                    <DaisyCalendar className="h-3 w-3" />
                                     <span>Due: {formatDate(step.dueDate)}</span>
                                   </div>
                                 </div>

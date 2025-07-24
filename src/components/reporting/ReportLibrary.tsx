@@ -8,8 +8,8 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { DaisyTable, DaisyTableBody, DaisyTableCell, DaisyTableHead, DaisyTableHeader, DaisyTableRow } from '@/components/ui/DaisyTable';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { 
   FileText, 
@@ -270,7 +270,7 @@ export default function ReportLibrary({
       case 'FAILED':
         return <DaisyAlertCircle className="h-4 w-4 text-red-600" />;
       case 'SCHEDULED':
-        return <Calendar className="h-4 w-4 text-orange-600" />;
+        return <DaisyCalendar className="h-4 w-4 text-orange-600" />;
       default:
         return <Info className="h-4 w-4 text-gray-600" />;
     }
@@ -419,59 +419,59 @@ export default function ReportLibrary({
       {/* Reports Table */}
       <DaisyCard>
         <DaisyCardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-12">
+          <DaisyTable>
+            <DaisyTableHeader>
+              <DaisyTableRow>
+                <DaisyTableHead className="w-12">
                   <DaisyCheckbox
                     checked={selectedReports.length === filteredReports.length && filteredReports.length > 0}
                     onCheckedChange={handleSelectAll}
                   />
-                </TableHead>
-                <TableHead>Report Name</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Format</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Size</TableHead>
-                <TableHead>Created By</TableHead>
-                <TableHead>Generated</TableHead>
-                <TableHead className="w-32">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+                </DaisyTableHead>
+                <DaisyTableHead>Report Name</DaisyTableHead>
+                <DaisyTableHead>Type</DaisyTableHead>
+                <DaisyTableHead>Format</DaisyTableHead>
+                <DaisyTableHead>Status</DaisyTableHead>
+                <DaisyTableHead>Size</DaisyTableHead>
+                <DaisyTableHead>Created By</DaisyTableHead>
+                <DaisyTableHead>Generated</DaisyTableHead>
+                <DaisyTableHead className="w-32">Actions</DaisyTableHead>
+              </DaisyTableRow>
+            </DaisyTableHeader>
+            <DaisyTableBody>
               {isLoading ? (
-                <TableRow>
-                  <TableCell colSpan={9} className="text-center py-8">
+                <DaisyTableRow>
+                  <DaisyTableCell colSpan={9} className="text-center py-8">
                     <div className="flex items-center justify-center gap-2">
                       <RefreshCw className="h-4 w-4 animate-spin" />
                       Loading reports...
                     </div>
-                  </TableCell>
-                </TableRow>
+                  </DaisyTableCell>
+                </DaisyTableRow>
               ) : filteredReports.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={9} className="text-center py-8">
+                <DaisyTableRow>
+                  <DaisyTableCell colSpan={9} className="text-center py-8">
                     <div className="flex flex-col items-center gap-2">
                       <FileText className="h-8 w-8 text-muted-foreground" />
                       <p className="text-muted-foreground">No reports found</p>
                     </div>
-                  </TableCell>
-                </TableRow>
+                  </DaisyTableCell>
+                </DaisyTableRow>
               ) : (
                 filteredReports.map((report) => (
-                  <TableRow key={report.id}>
-                    <TableCell>
+                  <DaisyTableRow key={report.id}>
+                    <DaisyTableCell>
                       <DaisyCheckbox
                         checked={selectedReports.includes(report.id)}
                         onCheckedChange={(checked) => handleSelectReport(report.id, checked as boolean)}
                       />
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <div className="flex flex-col">
                         <span className="font-medium">{report.name}</span>
                         {report.isScheduled && (
                           <span className="text-xs text-muted-foreground flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
+                            <DaisyCalendar className="h-3 w-3" />
                             Scheduled: {report.schedule?.frequency}
                             {report.schedule?.nextRun && (
                               <span>
@@ -481,33 +481,33 @@ export default function ReportLibrary({
                           </span>
                         )}
                       </div>
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <DaisyBadge variant="outline">{report.type.replace('_', ' ')}</DaisyBadge>
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <DaisyBadge variant="secondary" className="uppercase">
                         {report.format}
                       </DaisyBadge>
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       {getStatusBadge(report.status)}
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       {report.fileSize > 0 ? formatFileSize(report.fileSize) : '-'}
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <div className="flex items-center gap-2">
                         <User className="h-4 w-4 text-muted-foreground" />
                         <span className="text-sm">{report.createdBy.name}</span>
                       </div>
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <span className="text-sm">
                         {format(new Date(report.generatedAt), 'MMM dd, yyyy HH:mm')}
                       </span>
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <div className="flex items-center gap-1">
                         <DaisyButton
                           variant="ghost"
@@ -530,7 +530,7 @@ export default function ReportLibrary({
                             <DaisyButton variant="ghost" size="sm">
                               <MoreHorizontal className="h-4 w-4" />
                             </DaisyButton>
-                          </DialogTrigger>
+                          </DaisyDialogTrigger>
                           <DaisyDialogContent>
                             <DaisyDialogHeader>
                               <DaisyDialogTitle>Report Details</DaisyDialogTitle>
@@ -600,12 +600,12 @@ export default function ReportLibrary({
                           </DaisyDialogContent>
                         </DaisyDialog>
                       </div>
-                    </TableCell>
-                  </TableRow>
+                    </DaisyTableCell>
+                  </DaisyTableRow>
                 ))
               )}
-            </TableBody>
-          </Table>
+            </DaisyTableBody>
+          </DaisyTable>
         </DaisyCardBody>
       </DaisyCard>
 

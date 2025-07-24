@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -13,7 +13,7 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DatePicker } from '@/components/ui/date-picker';
-import { Slider } from '@/components/ui/slider';
+import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { AlertTriangle, Calendar, Shield, Target, Users, FileText, Loader2 } from 'lucide-react';
 
@@ -312,7 +312,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <DaisyLabel>Likelihood: {formData.likelihood}</DaisyLabel>
-                    <Slider
+                    <DaisySlider
                       value={[formData.likelihood]}
                       onValueChange={([value]) => setFormData(prev => ({ ...prev, likelihood: value }))}
                       max={5}
@@ -328,7 +328,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
 
                   <div className="space-y-4">
                     <DaisyLabel>Impact: {formData.impact}</DaisyLabel>
-                    <Slider
+                    <DaisySlider
                       value={[formData.impact]}
                       onValueChange={([value]) => setFormData(prev => ({ ...prev, impact: value }))}
                       max={5}

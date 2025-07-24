@@ -486,7 +486,7 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
           <HelpCircle className="w-4 h-4" />
           Help
         </DaisyButton>
-      </DialogTrigger>
+      </DaisyDialogTrigger>
       
       <DaisyDialogContent className="max-w-4xl max-h-[80vh]">
         <DaisyDialogHeader>
@@ -532,7 +532,7 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
                 ))}
               </div>
               
-              <ScrollArea className="h-96">
+              <DaisyScrollArea className="h-96">
                 <div className="space-y-3">
                   {filteredArticles.map(article => (
                     <DaisyCard
@@ -562,11 +562,11 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
                     </DaisyCard>
                   ))}
                 </div>
-              </ScrollArea>
+              </DaisyScrollArea>
             </DaisyTabsContent>
             
             <DaisyTabsContent value="tours" className="space-y-4">
-              <ScrollArea className="h-96">
+              <DaisyScrollArea className="h-96">
                 <div className="space-y-3">
                   {filteredTours.map(tour => (
                     <DaisyCard key={tour.id}>
@@ -601,7 +601,7 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
                     </DaisyCard>
                   ))}
                 </div>
-              </ScrollArea>
+              </DaisyScrollArea>
             </DaisyTabsContent>
             
             <DaisyTabsContent value="support" className="space-y-4">
@@ -660,11 +660,11 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
                 </div>
               </DaisyDialogHeader>
               
-              <ScrollArea className="max-h-96">
+              <DaisyScrollArea className="max-h-96">
                 <div className="prose prose-sm max-w-none">
                   {selectedArticle.content}
                 </div>
-              </ScrollArea>
+              </DaisyScrollArea>
             </DaisyDialogContent>
           </DaisyDialog>
         )}
@@ -687,13 +687,13 @@ export const QuickHelp: React.FC<QuickHelpProps> = ({
 }) => {
   if (helpText) {
     return (
-      <Popover>
-        <PopoverTrigger asChild>
+      <DaisyPopover>
+        <DaisyPopoverTrigger asChild>
           <DaisyButton variant="ghost" size="sm" className={cn("h-6 w-6 p-0", className)}>
             <HelpCircle className="w-4 h-4" />
           </DaisyButton>
-        </PopoverTrigger>
-        <PopoverContent className="w-80">
+        </DaisyPopoverTrigger>
+        <DaisyPopoverContent className="w-80">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <Info className="w-4 h-4 text-blue-500" />
@@ -701,8 +701,8 @@ export const QuickHelp: React.FC<QuickHelpProps> = ({
             </div>
             <p className="text-sm text-muted-foreground">{helpText}</p>
           </div>
-        </PopoverContent>
-      </Popover>
+        </DaisyPopoverContent>
+      </DaisyPopover>
     );
   }
 

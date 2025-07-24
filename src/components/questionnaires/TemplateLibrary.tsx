@@ -6,7 +6,7 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 
 import { Search, Eye, Copy, Star, Shield, FileCheck, AlertTriangle, Building, CheckCircle, Tag, TrendingUp, Grid3X3, List, BookOpen, Download } from 'lucide-react';

@@ -30,7 +30,7 @@ export default function MetricCard({
         </div>
         <div className="space-y-1">
           {isLoading ? (
-            <Skeleton className="h-10 w-[100px]" />
+            <DaisySkeleton className="h-10 w-[100px]" />
           ) : (
             <div className="flex items-baseline">
               <span className="text-3xl font-bold tracking-tight">{value}</span>
@@ -40,7 +40,7 @@ export default function MetricCard({
           
           {trend && (
             isLoading ? (
-              <Skeleton className="h-5 w-[60px]" />
+              <DaisySkeleton className="h-5 w-[60px]" />
             ) : (
               <p className={cn(
                 "text-xs font-medium",

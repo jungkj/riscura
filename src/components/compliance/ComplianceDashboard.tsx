@@ -6,7 +6,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, LineChart, Line
@@ -426,7 +426,7 @@ const ComplianceDashboard: React.FC = () => {
                   <DaisyBadge variant="outline">
                     {Math.round(insight.confidence * 100)}% confidence
                   </DaisyBadge>
-                </AlertTitle>
+                </DaisyCardTitle>
                 <DaisyAlertDescription>
                   {insight.description}
                 

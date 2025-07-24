@@ -12,7 +12,7 @@ interface SkeletonProps {
   animate?: boolean;
 }
 
-const BaseSkeleton: React.FC<SkeletonProps> = ({
+const BaseSkeleton: React.FC<DaisySkeletonProps> = ({
   className = '',
   width = '100%',
   height = '1rem',
@@ -115,7 +115,7 @@ interface TableSkeletonProps {
   showHeader?: boolean;
 }
 
-const TableSkeleton: React.FC<TableSkeletonProps> = ({
+const TableSkeleton: React.FC<DaisyTableSkeletonProps> = ({
   rows = 5,
   columns = 4,
   className = '',
@@ -385,7 +385,7 @@ const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
       </div>
       
       {/* Data Table */}
-      <TableSkeleton rows={8} columns={5} />
+      <DaisyTableSkeleton rows={8} columns={5} />
     </div>
   );
 };

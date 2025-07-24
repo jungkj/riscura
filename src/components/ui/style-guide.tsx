@@ -532,7 +532,7 @@ const ResponsivePreview: React.FC = () => {
             <p className="text-sm text-gray-600 font-inter">&lt; 768px</p>
           </div>
           <div className="p-4 border rounded-lg">
-            <Tablet className="h-6 w-6 text-[#199BEC] mb-2" />
+            <DaisyTablet className="h-6 w-6 text-[#199BEC] mb-2" />
             <h4 className="font-medium text-[#191919] font-inter">Tablet</h4>
             <p className="text-sm text-gray-600 font-inter">768px - 1024px</p>
           </div>

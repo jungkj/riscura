@@ -6,8 +6,8 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { toast } from 'sonner';
 import { 
   CreditCard, 
@@ -493,7 +493,7 @@ const BillingDashboard: React.FC = () => {
       {billingData.subscription.status !== 'ACTIVE' && (
         <DaisyAlert variant="error">
           <DaisyAlertTriangle className="h-4 w-4" />
-          <DaisyAlertTitle>Subscription Issue</AlertTitle>
+          <DaisyAlertTitle>Subscription Issue</DaisyCardTitle>
           <DaisyAlertDescription>
             Your subscription is {billingData.subscription.status.toLowerCase()}. 
             Please update your payment method to continue using premium features.
@@ -619,7 +619,7 @@ const BillingDashboard: React.FC = () => {
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle className="flex items-center gap-2">
-                    <Calendar className="h-5 w-5" />
+                    <DaisyCalendar className="h-5 w-5" />
                     Upcoming Invoice
                   </DaisyCardTitle>
                 

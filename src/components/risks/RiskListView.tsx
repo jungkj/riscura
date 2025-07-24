@@ -33,8 +33,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
 
 // Icons
 import {
@@ -348,16 +348,16 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
       {/* Risk Table */}
       <DaisyCard>
         <DaisyCardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-12">
+          <DaisyTable>
+            <DaisyTableHeader>
+              <DaisyTableRow>
+                <DaisyTableHead className="w-12">
                   <DaisyCheckbox
                     checked={selectedRisks.length === filteredRisks.length && filteredRisks.length > 0}
                     onCheckedChange={handleSelectAll}
                   />
-                </TableHead>
-                <TableHead>
+                </DaisyTableHead>
+                <DaisyTableHead>
                   <DaisyButton
                     variant="ghost"
                     onClick={() => handleSort('title')}
@@ -369,9 +369,9 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                     )}
                     {sortBy !== 'title' && <ArrowUpDown className="ml-2 h-4 w-4" />}
                   </DaisyButton>
-                </TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>
+                </DaisyTableHead>
+                <DaisyTableHead>Category</DaisyTableHead>
+                <DaisyTableHead>
                   <DaisyButton
                     variant="ghost"
                     onClick={() => handleSort('status')}
@@ -383,8 +383,8 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                     )}
                     {sortBy !== 'status' && <ArrowUpDown className="ml-2 h-4 w-4" />}
                   </DaisyButton>
-                </TableHead>
-                <TableHead>
+                </DaisyTableHead>
+                <DaisyTableHead>
                   <DaisyButton
                     variant="ghost"
                     onClick={() => handleSort('riskScore')}
@@ -396,9 +396,9 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                     )}
                     {sortBy !== 'riskScore' && <ArrowUpDown className="ml-2 h-4 w-4" />}
                   </DaisyButton>
-                </TableHead>
-                <TableHead>Owner</TableHead>
-                <TableHead>
+                </DaisyTableHead>
+                <DaisyTableHead>Owner</DaisyTableHead>
+                <DaisyTableHead>
                   <DaisyButton
                     variant="ghost"
                     onClick={() => handleSort('createdAt')}
@@ -410,48 +410,48 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                     )}
                     {sortBy !== 'createdAt' && <ArrowUpDown className="ml-2 h-4 w-4" />}
                   </DaisyButton>
-                </TableHead>
-                <TableHead className="w-12"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+                </DaisyTableHead>
+                <DaisyTableHead className="w-12"></DaisyTableHead>
+              </DaisyTableRow>
+            </DaisyTableHeader>
+            <DaisyTableBody>
               {paginatedRisks.map((risk) => (
-                <TableRow key={risk.id} className="hover:bg-muted/50">
-                  <TableCell>
+                <DaisyTableRow key={risk.id} className="hover:bg-muted/50">
+                  <DaisyTableCell>
                     <DaisyCheckbox
                       checked={selectedRisks.includes(risk.id)}
                       onCheckedChange={() => handleSelectRisk(risk.id)}
                     />
-                  </TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>
                     <div>
                       <div className="font-medium">{risk.title}</div>
                       <div className="text-sm text-muted-foreground truncate max-w-xs">
                         {risk.description}
                       </div>
                     </div>
-                  </TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>
                     <DaisyBadge variant="outline">
                       {risk.category}
                     </DaisyBadge>
-                  </TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>
                     <DaisyBadge
                       variant={risk.status === 'closed' ? 'default' : 'secondary'}
                     >
                       {risk.status}
                     </DaisyBadge>
-                  </TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>
                     <div className="flex items-center space-x-2">
                       <RiskScoreProgress score={risk.riskScore} />
                       <RiskLevelBadge score={risk.riskScore} />
                     </div>
-                  </TableCell>
-                  <TableCell>{risk.owner}</TableCell>
-                  <TableCell>{formatDate(risk.createdAt)}</TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>{risk.owner}</DaisyTableCell>
+                  <DaisyTableCell>{formatDate(risk.createdAt)}</DaisyTableCell>
+                  <DaisyTableCell>
                     <DaisyDropdownMenu>
                       <DaisyDropdownMenuTrigger asChild>
                         <DaisyButton variant="ghost" className="h-8 w-8 p-0">
@@ -482,11 +482,11 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                         </DaisyDropdownMenuItem>
                       </DaisyDropdownMenuContent>
                     </DaisyDropdownMenu>
-                  </TableCell>
-                </TableRow>
+                  </DaisyTableCell>
+                </DaisyTableRow>
               ))}
-            </TableBody>
-          </Table>
+            </DaisyTableBody>
+          </DaisyTable>
 
           {/* Pagination */}
           {totalPages > 1 && (

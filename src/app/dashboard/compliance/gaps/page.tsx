@@ -590,7 +590,7 @@ export default function ComplianceGapsPage() {
                           Assign
                         </DaisyButton>
                         <DaisyButton variant="outline" size="sm">
-                          <Calendar className="h-4 w-4 mr-1" />
+                          <DaisyCalendar className="h-4 w-4 mr-1" />
                           Schedule
                         </DaisyButton>
                       </div>
