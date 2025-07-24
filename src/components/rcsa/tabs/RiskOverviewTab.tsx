@@ -1,11 +1,11 @@
 "use client";
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { 
   Shield, 
   TrendingUp, 
@@ -95,14 +95,14 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
       {/* Main Risk Information */}
       <div className="lg:col-span-2 space-y-6">
         {/* Risk Description */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5" />
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle className="flex items-center gap-2">
+              <DaisyAlertTriangle className="h-5 w-5" />
               Risk Description
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+            </DaisyCardTitle>
+          
+          <DaisyCardContent>
             <p className="text-foreground leading-relaxed">
               {risk.description}
             </p>
@@ -111,15 +111,15 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Category</p>
-                <Badge variant="outline" className="capitalize">
+                <DaisyBadge variant="outline" className="capitalize">
                   {risk.category.toLowerCase().replace('_', ' ')}
-                </Badge>
+                </DaisyBadge>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Status</p>
-                <Badge className={getStatusColor(risk.status)}>
+                <DaisyBadge className={getStatusColor(risk.status)}>
                   {risk.status.toLowerCase().replace('_', ' ')}
-                </Badge>
+                </DaisyBadge>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Owner</p>
@@ -148,38 +148,38 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
                     {Math.round(risk.aiConfidence * 100)}%
                   </span>
                 </div>
-                <Progress 
+                <DaisyProgress 
                   value={risk.aiConfidence * 100} 
                   className="mt-2 h-2"
                 />
               </div>
             )}
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
         {/* Related Controls */}
-        <Card>
-          <CardHeader>
+        <DaisyCard>
+          <DaisyCardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
+              <DaisyCardTitle className="flex items-center gap-2">
                 <Shield className="h-5 w-5" />
                 Related Controls
-                <Badge variant="secondary">{relatedControls.length}</Badge>
-              </CardTitle>
-              <Button variant="outline" size="sm">
+                <DaisyBadge variant="secondary">{relatedControls.length}</DaisyBadge>
+              </DaisyCardTitle>
+              <DaisyButton variant="outline" size="sm">
                 <Edit className="h-4 w-4 mr-2" />
                 Manage Controls
-              </Button>
+              </DaisyButton>
             </div>
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             {relatedControls.length === 0 ? (
               <div className="text-center py-8">
                 <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <p className="text-muted-foreground">No controls mapped to this risk yet.</p>
-                <Button variant="outline" className="mt-4">
+                <DaisyButton variant="outline" className="mt-4">
                   Map Controls
-                </Button>
+                </DaisyButton>
               </div>
             ) : (
               <div className="space-y-4">
@@ -192,9 +192,9 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <h4 className="font-medium">{control.title}</h4>
-                        <Badge variant="outline" className="text-xs">
+                        <DaisyBadge variant="outline" className="text-xs">
                           {control.type}
-                        </Badge>
+                        </DaisyBadge>
                       </div>
                       <p className="text-sm text-muted-foreground line-clamp-2">
                         {control.description}
@@ -213,7 +213,7 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
                         <div className={`text-sm font-medium ${rcsaHelpers.getEffectivenessColor(control.effectiveness)}`}>
                           {rcsaHelpers.formatEffectiveness(control.effectiveness)}
                         </div>
-                        <Progress 
+                        <DaisyProgress 
                           value={control.effectiveness * 100} 
                           className="w-16 h-2 mt-1"
                         />
@@ -224,65 +224,65 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
                 ))}
               </div>
             )}
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
 
       {/* Sidebar - Risk Metrics & Quick Actions */}
       <div className="space-y-6">
         {/* Risk Score Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle className="flex items-center gap-2">
               <Target className="h-5 w-5" />
               Risk Score
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+            </DaisyCardTitle>
+          
+          <DaisyCardContent>
             <div className="text-center">
               <div className={`text-4xl font-bold rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-4 ${getRiskLevelColor(riskLevel)}`}>
                 {riskScore}
               </div>
-              <Badge className={getRiskLevelColor(riskLevel)} variant="secondary">
+              <DaisyBadge className={getRiskLevelColor(riskLevel)} variant="secondary">
                 {riskLevel} Risk
-              </Badge>
+              </DaisyBadge>
             </div>
             
-            <Separator className="my-4" />
+            <DaisySeparator className="my-4" />
             
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-foreground">{risk.likelihood}</div>
                 <div className="text-xs text-muted-foreground">Likelihood</div>
-                <Progress value={(risk.likelihood / 5) * 100} className="mt-1 h-1" />
+                <DaisyProgress value={(risk.likelihood / 5) * 100} className="mt-1 h-1" />
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-foreground">{risk.impact}</div>
                 <div className="text-xs text-muted-foreground">Impact</div>
-                <Progress value={(risk.impact / 5) * 100} className="mt-1 h-1" />
+                <DaisyProgress value={(risk.impact / 5) * 100} className="mt-1 h-1" />
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
         {/* Control Effectiveness Summary */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5" />
               Control Effectiveness
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+            </DaisyCardTitle>
+          
+          <DaisyCardContent>
             <div className="text-center mb-4">
               <div className="text-3xl font-bold text-foreground">
                 {Math.round(averageEffectiveness * 100)}%
               </div>
               <div className="text-sm text-muted-foreground">Average Effectiveness</div>
-              <Progress value={averageEffectiveness * 100} className="mt-2" />
+              <DaisyProgress value={averageEffectiveness * 100} className="mt-2" />
             </div>
 
-            <Separator className="my-4" />
+            <DaisySeparator className="my-4" />
 
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
@@ -302,18 +302,18 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
                 <span className="font-medium">{controlCounts['PLANNED'] || 0}</span>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
         {/* Timeline Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle className="flex items-center gap-2">
               <Clock className="h-5 w-5" />
               Timeline
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+            </DaisyCardTitle>
+          
+          <DaisyCardContent>
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span className="text-sm text-muted-foreground">Identified</span>
@@ -335,37 +335,37 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
               </div>
             </div>
             
-            <Button className="w-full mt-4" variant="outline">
+            <DaisyButton className="w-full mt-4" variant="outline">
               <Calendar className="h-4 w-4 mr-2" />
               Schedule Assessment
-            </Button>
-          </CardContent>
-        </Card>
+            </DaisyButton>
+          </DaisyCardBody>
+        </DaisyCard>
 
         {/* Quick Actions */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <Button className="w-full" variant="outline">
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle>Quick Actions</DaisyCardTitle>
+          
+          <DaisyCardContent className="space-y-2">
+            <DaisyButton className="w-full" variant="outline">
               <Edit className="h-4 w-4 mr-2" />
               Edit Risk
-            </Button>
-            <Button className="w-full" variant="outline">
+            </DaisyButton>
+            <DaisyButton className="w-full" variant="outline">
               <Shield className="h-4 w-4 mr-2" />
               Map Controls
-            </Button>
-            <Button className="w-full" variant="outline">
+            </DaisyButton>
+            <DaisyButton className="w-full" variant="outline">
               <CheckCircle className="h-4 w-4 mr-2" />
               Start Assessment
-            </Button>
-            <Button className="w-full" variant="outline">
+            </DaisyButton>
+            <DaisyButton className="w-full" variant="outline">
               <TrendingUp className="h-4 w-4 mr-2" />
               View Analytics
-            </Button>
-          </CardContent>
-        </Card>
+            </DaisyButton>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
     </div>
   );

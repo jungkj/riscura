@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Check, Zap, Star, Crown, ArrowRight } from 'lucide-react';
 import { SUBSCRIPTION_PLANS, formatPrice } from '@/lib/stripe';
 import { useRouter } from 'next/navigation';
@@ -80,9 +80,9 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <Badge className="bg-[#199BEC]/10 text-[#199BEC] px-4 py-2 mb-6 text-sm">
+          <DaisyBadge className="bg-[#199BEC]/10 text-[#199BEC] px-4 py-2 mb-6 text-sm">
             Simple Pricing
-          </Badge>
+          </DaisyBadge>
           <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
             Choose your plan
           </h2>
@@ -120,20 +120,20 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
               >
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                    <Badge className="bg-[#199BEC] text-white px-4 py-1 font-semibold">
+                    <DaisyBadge className="bg-[#199BEC] text-white px-4 py-1 font-semibold">
                       Most Popular
-                    </Badge>
+                    </DaisyBadge>
                   </div>
                 )}
                 
-                <Card className={`
+                <DaisyCard className={`
                   h-full relative overflow-hidden transition-all duration-300 hover:shadow-xl
                   ${plan.popular 
                     ? 'border-[#199BEC] shadow-lg bg-gradient-to-br from-[#199BEC]/5 to-white' 
                     : 'border-gray-200 hover:border-gray-300'
                   }
                 `}>
-                  <CardHeader className="text-center pb-8">
+                  <DaisyCardHeader className="text-center pb-8">
                     <div className={`
                       w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4
                       ${plan.popular ? 'bg-[#199BEC]/10' : 'bg-gray-100'}
@@ -144,9 +144,9 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
                       `} />
                     </div>
                     
-                    <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
+                    <DaisyCardTitle className="text-2xl font-bold text-gray-900 mb-2">
                       {plan.name}
-                    </CardTitle>
+                    </DaisyCardTitle>
                     
                     <p className="text-gray-600 text-sm mb-4">
                       {plan.description}
@@ -173,9 +173,9 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
                         </div>
                       )}
                     </div>
-                  </CardHeader>
                   
-                  <CardContent>
+                  
+                  <DaisyCardContent>
                     <ul className="space-y-3 mb-8">
                       {plan.features.map((feature, featureIndex) => (
                         <li key={featureIndex} className="flex items-start space-x-3">
@@ -185,7 +185,7 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
                       ))}
                     </ul>
                     
-                    <Button
+                    <DaisyButton
                       className={`
                         w-full font-semibold py-3
                         ${plan.popular 
@@ -210,15 +210,15 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
                       {plan.key !== 'ENTERPRISE' && !loading && (
                         <ArrowRight className="w-4 h-4 ml-2" />
                       )}
-                    </Button>
+                    </DaisyButton>
                     
                     {plan.key === 'PRO' && (
                       <p className="text-center text-xs text-gray-500 mt-3">
                         No credit card required for trial
                       </p>
                     )}
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               </motion.div>
             );
           })}
@@ -235,13 +235,13 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
           <p className="text-gray-600 mb-6">
             Need something different? We're happy to discuss custom plans.
           </p>
-          <Button 
+          <DaisyButton 
             variant="secondary"
             onClick={() => router.push('/contact')}
             className="px-8 py-3"
           >
             Contact Sales
-          </Button>
+          </DaisyButton>
         </motion.div>
 
         {/* Trust Elements */}

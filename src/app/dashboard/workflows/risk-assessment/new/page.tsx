@@ -3,13 +3,13 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { useToast } from '@/hooks/use-toast';
 import { 
   ArrowLeft, 
@@ -144,24 +144,24 @@ export default function NewRiskAssessmentPage() {
         <div className="p-6">
           {/* Header */}
           <div className="mb-6">
-            <Button
+            <DaisyButton
               variant="ghost"
               onClick={() => router.push('/dashboard/quick-actions')}
               className="mb-4"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Quick Actions
-            </Button>
+            </DaisyButton>
             
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">New Risk Assessment</h1>
                 <p className="text-gray-600 mt-1">Document and assess a new organizational risk</p>
               </div>
-              <Badge variant="outline" className="text-sm">
+              <DaisyBadge variant="outline" className="text-sm">
                 <Shield className="h-4 w-4 mr-1" />
                 15-20 min
-              </Badge>
+              </DaisyBadge>
             </div>
           </div>
 
@@ -204,14 +204,14 @@ export default function NewRiskAssessmentPage() {
           </div>
 
           {/* Form Content */}
-          <Card>
-            <CardContent className="p-6">
+          <DaisyCard>
+            <DaisyCardContent className="p-6">
               {/* Step 1: Basic Information */}
               {currentStep === 1 && (
                 <div className="space-y-6">
                   <div>
-                    <Label htmlFor="title">Risk Title *</Label>
-                    <Input
+                    <DaisyLabel htmlFor="title">Risk Title *</DaisyLabel>
+                    <DaisyInput
                       id="title"
                       value={formData.title}
                       onChange={(e) => handleInputChange('title', e.target.value)}
@@ -221,8 +221,8 @@ export default function NewRiskAssessmentPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="description">Risk Description *</Label>
-                    <Textarea
+                    <DaisyLabel htmlFor="description">Risk Description *</DaisyLabel>
+                    <DaisyTextarea
                       id="description"
                       value={formData.description}
                       onChange={(e) => handleInputChange('description', e.target.value)}
@@ -233,28 +233,28 @@ export default function NewRiskAssessmentPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="category">Risk Category *</Label>
-                    <Select
+                    <DaisyLabel htmlFor="category">Risk Category *</DaisyLabel>
+                    <DaisySelect
                       value={formData.category}
                       onValueChange={(value) => handleInputChange('category', value)}
                     >
-                      <SelectTrigger className="mt-1">
-                        <SelectValue placeholder="Select risk category" />
+                      <DaisySelectTrigger className="mt-1">
+                        <DaisySelectValue placeholder="Select risk category" />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="operational">Operational</SelectItem>
-                        <SelectItem value="financial">Financial</SelectItem>
-                        <SelectItem value="compliance">Compliance</SelectItem>
-                        <SelectItem value="strategic">Strategic</SelectItem>
-                        <SelectItem value="cybersecurity">Cybersecurity</SelectItem>
-                        <SelectItem value="reputational">Reputational</SelectItem>
+                      <DaisySelectContent>
+                        <DaisySelectItem value="operational">Operational</SelectItem>
+                        <DaisySelectItem value="financial">Financial</SelectItem>
+                        <DaisySelectItem value="compliance">Compliance</SelectItem>
+                        <DaisySelectItem value="strategic">Strategic</SelectItem>
+                        <DaisySelectItem value="cybersecurity">Cybersecurity</SelectItem>
+                        <DaisySelectItem value="reputational">Reputational</SelectItem>
                       </SelectContent>
-                    </Select>
+                    </DaisySelect>
                   </div>
 
                   <div>
-                    <Label htmlFor="department">Department</Label>
-                    <Input
+                    <DaisyLabel htmlFor="department">Department</DaisyLabel>
+                    <DaisyInput
                       id="department"
                       value={formData.department}
                       onChange={(e) => handleInputChange('department', e.target.value)}
@@ -269,46 +269,46 @@ export default function NewRiskAssessmentPage() {
               {currentStep === 2 && (
                 <div className="space-y-6">
                   <div>
-                    <Label htmlFor="likelihood">Likelihood *</Label>
-                    <Select
+                    <DaisyLabel htmlFor="likelihood">Likelihood *</DaisyLabel>
+                    <DaisySelect
                       value={formData.likelihood}
                       onValueChange={(value) => handleInputChange('likelihood', value)}
                     >
-                      <SelectTrigger className="mt-1">
-                        <SelectValue placeholder="Select likelihood level" />
+                      <DaisySelectTrigger className="mt-1">
+                        <DaisySelectValue placeholder="Select likelihood level" />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="low">Low - Unlikely to occur</SelectItem>
-                        <SelectItem value="medium">Medium - Possible occurrence</SelectItem>
-                        <SelectItem value="high">High - Likely to occur</SelectItem>
-                        <SelectItem value="critical">Critical - Almost certain</SelectItem>
+                      <DaisySelectContent>
+                        <DaisySelectItem value="low">Low - Unlikely to occur</SelectItem>
+                        <DaisySelectItem value="medium">Medium - Possible occurrence</SelectItem>
+                        <DaisySelectItem value="high">High - Likely to occur</SelectItem>
+                        <DaisySelectItem value="critical">Critical - Almost certain</SelectItem>
                       </SelectContent>
-                    </Select>
+                    </DaisySelect>
                   </div>
 
                   <div>
-                    <Label htmlFor="impact">Impact *</Label>
-                    <Select
+                    <DaisyLabel htmlFor="impact">Impact *</DaisyLabel>
+                    <DaisySelect
                       value={formData.impact}
                       onValueChange={(value) => handleInputChange('impact', value)}
                     >
-                      <SelectTrigger className="mt-1">
-                        <SelectValue placeholder="Select impact level" />
+                      <DaisySelectTrigger className="mt-1">
+                        <DaisySelectValue placeholder="Select impact level" />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="low">Low - Minimal impact</SelectItem>
-                        <SelectItem value="medium">Medium - Moderate impact</SelectItem>
-                        <SelectItem value="high">High - Significant impact</SelectItem>
-                        <SelectItem value="critical">Critical - Severe impact</SelectItem>
+                      <DaisySelectContent>
+                        <DaisySelectItem value="low">Low - Minimal impact</SelectItem>
+                        <DaisySelectItem value="medium">Medium - Moderate impact</SelectItem>
+                        <DaisySelectItem value="high">High - Significant impact</SelectItem>
+                        <DaisySelectItem value="critical">Critical - Severe impact</SelectItem>
                       </SelectContent>
-                    </Select>
+                    </DaisySelect>
                   </div>
 
                   {formData.likelihood && formData.impact && (
                     <div className="p-4 bg-gray-50 rounded-lg">
                       <p className="text-sm font-medium text-gray-700">Calculated Risk Score</p>
                       <div className="mt-2 flex items-center gap-2">
-                        <Badge 
+                        <DaisyBadge 
                           className={`
                             ${calculateRiskScore(formData.likelihood, formData.impact) === 'critical' ? 'bg-red-100 text-red-800' : ''}
                             ${calculateRiskScore(formData.likelihood, formData.impact) === 'high' ? 'bg-orange-100 text-orange-800' : ''}
@@ -317,7 +317,7 @@ export default function NewRiskAssessmentPage() {
                           `}
                         >
                           {calculateRiskScore(formData.likelihood, formData.impact).toUpperCase()}
-                        </Badge>
+                        </DaisyBadge>
                         <span className="text-sm text-gray-600">
                           ({formData.likelihood} likelihood × {formData.impact} impact)
                         </span>
@@ -326,8 +326,8 @@ export default function NewRiskAssessmentPage() {
                   )}
 
                   <div>
-                    <Label htmlFor="owner">Risk Owner *</Label>
-                    <Input
+                    <DaisyLabel htmlFor="owner">Risk Owner *</DaisyLabel>
+                    <DaisyInput
                       id="owner"
                       value={formData.owner}
                       onChange={(e) => handleInputChange('owner', e.target.value)}
@@ -337,8 +337,8 @@ export default function NewRiskAssessmentPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="detectionMethod">Detection Method</Label>
-                    <Textarea
+                    <DaisyLabel htmlFor="detectionMethod">Detection Method</DaisyLabel>
+                    <DaisyTextarea
                       id="detectionMethod"
                       value={formData.detectionMethod}
                       onChange={(e) => handleInputChange('detectionMethod', e.target.value)}
@@ -354,8 +354,8 @@ export default function NewRiskAssessmentPage() {
               {currentStep === 3 && (
                 <div className="space-y-6">
                   <div>
-                    <Label htmlFor="existingControls">Existing Controls *</Label>
-                    <Textarea
+                    <DaisyLabel htmlFor="existingControls">Existing Controls *</DaisyLabel>
+                    <DaisyTextarea
                       id="existingControls"
                       value={formData.existingControls}
                       onChange={(e) => handleInputChange('existingControls', e.target.value)}
@@ -366,8 +366,8 @@ export default function NewRiskAssessmentPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="proposedMitigation">Proposed Mitigation Strategy *</Label>
-                    <Textarea
+                    <DaisyLabel htmlFor="proposedMitigation">Proposed Mitigation Strategy *</DaisyLabel>
+                    <DaisyTextarea
                       id="proposedMitigation"
                       value={formData.proposedMitigation}
                       onChange={(e) => handleInputChange('proposedMitigation', e.target.value)}
@@ -401,7 +401,7 @@ export default function NewRiskAssessmentPage() {
                         <div><span className="font-medium">Impact:</span> {formData.impact}</div>
                         <div className="flex items-center gap-2">
                           <span className="font-medium">Risk Score:</span>
-                          <Badge 
+                          <DaisyBadge 
                             className={`
                               ${calculateRiskScore(formData.likelihood, formData.impact) === 'critical' ? 'bg-red-100 text-red-800' : ''}
                               ${calculateRiskScore(formData.likelihood, formData.impact) === 'high' ? 'bg-orange-100 text-orange-800' : ''}
@@ -410,7 +410,7 @@ export default function NewRiskAssessmentPage() {
                             `}
                           >
                             {calculateRiskScore(formData.likelihood, formData.impact).toUpperCase()}
-                          </Badge>
+                          </DaisyBadge>
                         </div>
                         <div><span className="font-medium">Owner:</span> {formData.owner}</div>
                       </div>
@@ -435,25 +435,25 @@ export default function NewRiskAssessmentPage() {
 
               {/* Navigation Buttons */}
               <div className="mt-8 flex items-center justify-between">
-                <Button
+                <DaisyButton
                   variant="outline"
                   onClick={handlePrevious}
                   disabled={currentStep === 1}
                 >
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Previous
-                </Button>
+                </DaisyButton>
 
                 {currentStep < steps.length ? (
-                  <Button
+                  <DaisyButton
                     onClick={handleNext}
                     disabled={!isStepValid(currentStep)}
                   >
                     Next
                     <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
+                  </DaisyButton>
                 ) : (
-                  <Button
+                  <DaisyButton
                     onClick={handleSubmit}
                     disabled={loading || !isStepValid(3)}
                     className="bg-green-600 hover:bg-green-700"
@@ -466,11 +466,11 @@ export default function NewRiskAssessmentPage() {
                         Submit Risk Assessment
                       </>
                     )}
-                  </Button>
+                  </DaisyButton>
                 )}
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </div>
       </div>
     </ProtectedRoute>

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Badge } from '@/components/ui/badge';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { 
   CheckCircle, 
   AlertTriangle, 
@@ -214,7 +214,7 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
 
   if (showBadge) {
     return (
-      <Badge
+      <DaisyBadge
         className={`
           inline-flex items-center font-medium rounded-md transition-colors
           ${sizeStyles.padding} ${sizeStyles.fontSize} ${sizeStyles.gap}
@@ -239,7 +239,7 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
         {description && (
           <span className="sr-only">. {description}</span>
         )}
-      </Badge>
+      </DaisyBadge>
     );
   }
 

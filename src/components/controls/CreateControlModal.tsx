@@ -6,16 +6,16 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
-import { Textarea } from '@/components/ui/textarea';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Slider } from '@/components/ui/slider';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
-import { Switch } from '@/components/ui/switch';
+import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { Shield, Calendar, Target, Users, FileText, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
 
 interface CreateControlModalProps {
@@ -277,15 +277,15 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
           </DaisyDialogDescription>
         </DaisyDialogHeader>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="basic">Basic Info</TabsTrigger>
-            <TabsTrigger value="testing">Testing</TabsTrigger>
-            <TabsTrigger value="compliance">Compliance</TabsTrigger>
-            <TabsTrigger value="additional">Additional</TabsTrigger>
-          </TabsList>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <DaisyTabsList className="grid w-full grid-cols-4">
+            <DaisyTabsTrigger value="basic">Basic Info</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="testing">Testing</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="additional">Additional</DaisyTabsTrigger>
+          </DaisyTabsList>
 
-          <TabsContent value="basic" className="space-y-4">
+          <DaisyTabsContent value="basic" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <DaisyLabel htmlFor="title">Control Title *</DaisyLabel>
@@ -322,7 +322,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
 
             <div className="space-y-2">
               <DaisyLabel htmlFor="description">Description *</DaisyLabel>
-              <Textarea
+              <DaisyTextarea
                 id="description"
                 placeholder="Describe the control in detail"
                 value={formData.description}
@@ -415,9 +415,9 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                 </DaisySelect>
               </div>
             </div>
-          </TabsContent>
+          </DaisyTabsContent>
 
-          <TabsContent value="testing" className="space-y-6">
+          <DaisyTabsContent value="testing" className="space-y-6">
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle className="flex items-center space-x-2">
@@ -426,7 +426,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                 </DaisyCardTitle>
                 <DaisyCardDescription>
                   Configure how and when this control will be tested
-                </CardDescription>
+                </p>
               
               <DaisyCardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -472,7 +472,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                         Require evidence documentation for testing
                       </p>
                     </div>
-                    <Switch
+                    <DaisySwitch
                       checked={formData.evidenceRequired}
                       onCheckedChange={(checked) => setFormData(prev => ({ ...prev, evidenceRequired: checked }))}
                     />
@@ -485,7 +485,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                         Enable continuous monitoring for this control
                       </p>
                     </div>
-                    <Switch
+                    <DaisySwitch
                       checked={formData.continuousMonitoring}
                       onCheckedChange={(checked) => setFormData(prev => ({ ...prev, continuousMonitoring: checked }))}
                     />
@@ -515,9 +515,9 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                 </div>
               </DaisyCardBody>
             </DaisyCard>
-          </TabsContent>
+          </DaisyTabsContent>
 
-          <TabsContent value="compliance" className="space-y-4">
+          <DaisyTabsContent value="compliance" className="space-y-4">
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle className="flex items-center space-x-2">
@@ -526,7 +526,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                 </DaisyCardTitle>
                 <DaisyCardDescription>
                   Select applicable compliance frameworks for this control
-                </CardDescription>
+                </p>
               
               <DaisyCardContent>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -545,9 +545,9 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                 </div>
               </DaisyCardBody>
             </DaisyCard>
-          </TabsContent>
+          </DaisyTabsContent>
 
-          <TabsContent value="additional" className="space-y-4">
+          <DaisyTabsContent value="additional" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <DaisyLabel htmlFor="businessUnit">Business Unit</DaisyLabel>
@@ -584,7 +584,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                 <DaisyCardTitle>Control Summary</DaisyCardTitle>
                 <DaisyCardDescription>
                   Review your control configuration
-                </CardDescription>
+                </p>
               
               <DaisyCardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4 text-sm">
@@ -622,8 +622,8 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                 )}
               </DaisyCardBody>
             </DaisyCard>
-          </TabsContent>
-        </Tabs>
+          </DaisyTabsContent>
+        </DaisyTabs>
 
         <div className="flex justify-end space-x-2 pt-4 border-t">
           <DaisyButton

@@ -654,7 +654,7 @@ export default function DashboardPage() {
               <DaisyCardContent className="p-4">
                 <div className="flex items-center">
                   <div className="p-2 bg-red-50 rounded-lg">
-                    <AlertTriangle className="h-5 w-5 text-red-600" />
+                    <DaisyAlertTriangle className="h-5 w-5 text-red-600" />
                   </div>
                   <div className="ml-3">
                     <p className="text-2xl font-bold text-red-600">{stats.highRisks}</p>

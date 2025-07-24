@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { 
   Shield, 
   Target, 
@@ -35,14 +35,14 @@ export default function FeatureShowcase() {
       stats: "62% faster risk evidence collection time",
       color: "text-[#199BEC]",
       mockUI: (
-        <Card className="bg-white rounded-lg shadow-lg p-6">
+        <DaisyCard className="bg-white rounded-lg shadow-lg p-6">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h4 className="font-semibold text-gray-900">Risk Assessment</h4>
-              <Badge className="bg-green-100 text-green-800">
+              <DaisyBadge className="bg-green-100 text-green-800">
                 <CheckCircle className="w-3 h-3 mr-1" />
                 Completed
-              </Badge>
+              </DaisyBadge>
             </div>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
@@ -58,7 +58,7 @@ export default function FeatureShowcase() {
               </div>
             </div>
           </div>
-        </Card>
+        </DaisyCard>
       )
     },
     {
@@ -68,7 +68,7 @@ export default function FeatureShowcase() {
       stats: "54% increased productivity gains",
       color: "text-[#199BEC]",
       mockUI: (
-        <Card className="bg-white rounded-lg shadow-lg p-6">
+        <DaisyCard className="bg-white rounded-lg shadow-lg p-6">
           <div className="space-y-4">
             <h4 className="font-semibold text-gray-900">Risk Scoring Matrix</h4>
             <div className="grid grid-cols-5 gap-1">
@@ -88,7 +88,7 @@ export default function FeatureShowcase() {
               })}
             </div>
           </div>
-        </Card>
+        </DaisyCard>
       )
     },
     {
@@ -98,14 +98,14 @@ export default function FeatureShowcase() {
       stats: "90% improvement in risk visibility",
       color: "text-[#199BEC]",
       mockUI: (
-        <Card className="bg-white rounded-lg shadow-lg p-6">
+        <DaisyCard className="bg-white rounded-lg shadow-lg p-6">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h4 className="font-semibold text-gray-900">Discovered Risks</h4>
-              <Badge className="bg-orange-100 text-orange-800">
-                <AlertTriangle className="w-3 h-3 mr-1" />
+              <DaisyBadge className="bg-orange-100 text-orange-800">
+                <DaisyAlertTriangle className="w-3 h-3 mr-1" />
                 5 New
-              </Badge>
+              </DaisyBadge>
             </div>
             <div className="space-y-3">
               {[
@@ -126,7 +126,7 @@ export default function FeatureShowcase() {
               ))}
             </div>
           </div>
-        </Card>
+        </DaisyCard>
       )
     },
     {
@@ -136,7 +136,7 @@ export default function FeatureShowcase() {
       stats: "Complete risk program integration",
       color: "text-[#199BEC]",
       mockUI: (
-        <Card className="bg-white rounded-lg shadow-lg p-6">
+        <DaisyCard className="bg-white rounded-lg shadow-lg p-6">
           <div className="space-y-4">
             <h4 className="font-semibold text-gray-900">Risk Dashboard</h4>
             <div className="grid grid-cols-2 gap-4">
@@ -158,7 +158,7 @@ export default function FeatureShowcase() {
               </div>
             </div>
           </div>
-        </Card>
+        </DaisyCard>
       )
     }
   ];
@@ -219,10 +219,10 @@ export default function FeatureShowcase() {
                   <div className="flex items-center space-x-4 mb-6">
                     <div className="text-2xl font-bold text-[#199BEC]">{feature.stats}</div>
                   </div>
-                  <Button className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white">
+                  <DaisyButton className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white">
                     Request a demo
                     <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
+                  </DaisyButton>
                 </div>
               </div>
               

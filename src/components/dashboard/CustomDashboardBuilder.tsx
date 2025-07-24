@@ -1,15 +1,15 @@
 'use client';
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisySelect } from '@/components/ui/DaisySelect';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Responsive, WidthProvider, Layout } from 'react-grid-layout';
@@ -88,7 +88,7 @@ const SampleChartWidget = ({ title, config }: { title: string; config: any }) =>
   <div className="h-full flex flex-col">
     <div className="flex items-center justify-between p-2 border-b">
       <h4 className="font-medium text-sm">{title}</h4>
-      <Badge variant="outline" className="text-xs">Chart</Badge>
+      <DaisyBadge variant="outline" className="text-xs">Chart</DaisyBadge>
     </div>
     <div className="flex-1 flex items-center justify-center bg-gray-50">
       <div className="text-center text-gray-500">
@@ -104,7 +104,7 @@ const SampleMetricWidget = ({ title, config }: { title: string; config: any }) =
   <div className="h-full flex flex-col">
     <div className="flex items-center justify-between p-2 border-b">
       <h4 className="font-medium text-sm">{title}</h4>
-      <Badge variant="outline" className="text-xs">Metric</Badge>
+      <DaisyBadge variant="outline" className="text-xs">Metric</DaisyBadge>
     </div>
     <div className="flex-1 flex items-center justify-center">
       <div className="text-center">
@@ -119,7 +119,7 @@ const SampleTableWidget = ({ title, config }: { title: string; config: any }) =>
   <div className="h-full flex flex-col">
     <div className="flex items-center justify-between p-2 border-b">
       <h4 className="font-medium text-sm">{title}</h4>
-      <Badge variant="outline" className="text-xs">Table</Badge>
+      <DaisyBadge variant="outline" className="text-xs">Table</DaisyBadge>
     </div>
     <div className="flex-1 p-2">
       <div className="space-y-2">
@@ -206,7 +206,7 @@ const widgetLibrary: WidgetConfig[] = [
     type: 'alerts',
     name: 'Alert List',
     description: 'Recent alerts and notifications',
-    icon: <AlertTriangle className="w-4 h-4" />,
+    icon: <DaisyAlertTriangle className="w-4 h-4" />,
     category: 'Monitoring',
     defaultSize: { w: 4, h: 6 },
     minSize: { w: 3, h: 4 },
@@ -257,7 +257,7 @@ const DraggableWidget = ({ widget }: { widget: WidgetConfig }) => {
       </div>
       <p className="text-xs text-gray-600">{widget.description}</p>
       <div className="flex items-center justify-between mt-2">
-        <Badge variant="outline" className="text-xs">{widget.category}</Badge>
+        <DaisyBadge variant="outline" className="text-xs">{widget.category}</DaisyBadge>
         <span className="text-xs text-gray-500">{widget.defaultSize.w}x{widget.defaultSize.h}</span>
       </div>
     </div>
@@ -447,7 +447,7 @@ export default function CustomDashboardBuilder({
       >
         {isEditMode && (
           <div className="absolute top-1 right-1 z-10 flex space-x-1">
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={(e) => {
@@ -457,8 +457,8 @@ export default function CustomDashboardBuilder({
               className="h-6 w-6 p-0"
             >
               {widget.visible ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
-            </Button>
-            <Button
+            </DaisyButton>
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={(e) => {
@@ -468,7 +468,7 @@ export default function CustomDashboardBuilder({
               className="h-6 w-6 p-0 text-red-600 hover:text-red-700"
             >
               <Trash2 className="h-3 w-3" />
-            </Button>
+            </DaisyButton>
           </div>
         )}
         <WidgetComponent title={widget.title} config={widget.config} />
@@ -485,26 +485,26 @@ export default function CustomDashboardBuilder({
             <div className="p-4 border-b">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-semibold">Widget Library</h3>
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowWidgetLibrary(false)}
                 >
                   <EyeOff className="h-4 w-4" />
-                </Button>
+                </DaisyButton>
               </div>
               
-              <Tabs defaultValue={categories[0]} className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
+              <DaisyTabs defaultValue={categories[0]} className="w-full">
+                <DaisyTabsList className="grid w-full grid-cols-2">
                   {categories.slice(0, 2).map(category => (
-                    <TabsTrigger key={category} value={category} className="text-xs">
+                    <DaisyTabsTrigger key={category} value={category} className="text-xs">
                       {category}
-                    </TabsTrigger>
+                    </DaisyTabsTrigger>
                   ))}
-                </TabsList>
+                </DaisyTabsList>
                 
                 {categories.map(category => (
-                  <TabsContent key={category} value={category} className="mt-4">
+                  <DaisyTabsContent key={category} value={category} className="mt-4">
                     <ScrollArea className="h-96">
                       <div className="space-y-3">
                         {widgetLibrary
@@ -514,9 +514,9 @@ export default function CustomDashboardBuilder({
                           ))}
                       </div>
                     </ScrollArea>
-                  </TabsContent>
+                  </DaisyTabsContent>
                 ))}
-              </Tabs>
+              </DaisyTabs>
             </div>
           </div>
         )}
@@ -529,63 +529,63 @@ export default function CustomDashboardBuilder({
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                   <LayoutIcon className="w-5 h-5 text-blue-600" />
-                  <Input
+                  <DaisyInput
                     value={currentLayout.name}
                     onChange={(e) => setCurrentLayout(prev => ({ ...prev, name: e.target.value }))}
                     className="font-semibold border-none p-0 h-auto focus-visible:ring-0"
                   />
                 </div>
                 
-                <Badge variant={isEditMode ? 'default' : 'secondary'}>
+                <DaisyBadge variant={isEditMode ? 'default' : 'secondary'}>
                   {isEditMode ? 'Edit Mode' : 'View Mode'}
-                </Badge>
+                </DaisyBadge>
               </div>
               
               <div className="flex items-center space-x-2">
                 {!showWidgetLibrary && (
-                  <Button
+                  <DaisyButton
                     variant="outline"
                     size="sm"
                     onClick={() => setShowWidgetLibrary(true)}
                   >
                     <Plus className="h-4 w-4 mr-2" />
                     Widgets
-                  </Button>
+                  </DaisyButton>
                 )}
                 
-                <Button
+                <DaisyButton
                   variant="outline"
                   size="sm"
                   onClick={() => setIsEditMode(!isEditMode)}
                 >
                   {isEditMode ? <Eye className="h-4 w-4 mr-2" /> : <Edit className="h-4 w-4 mr-2" />}
                   {isEditMode ? 'Preview' : 'Edit'}
-                </Button>
+                </DaisyButton>
                 
-                <Button
+                <DaisyButton
                   variant="outline"
                   size="sm"
                   onClick={exportDashboard}
                 >
                   <Download className="h-4 w-4 mr-2" />
                   Export
-                </Button>
+                </DaisyButton>
                 
-                <Button
+                <DaisyButton
                   size="sm"
                   onClick={saveDashboard}
                 >
                   <Save className="h-4 w-4 mr-2" />
                   Save
-                </Button>
+                </DaisyButton>
                 
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowSettings(true)}
                 >
                   <Settings className="h-4 w-4" />
-                </Button>
+                </DaisyButton>
               </div>
             </div>
           </div>
@@ -599,10 +599,10 @@ export default function CustomDashboardBuilder({
                   <h3 className="text-lg font-medium mb-2">Empty Dashboard</h3>
                   <p className="text-sm mb-4">Drag widgets from the library to get started</p>
                   {!showWidgetLibrary && (
-                    <Button onClick={() => setShowWidgetLibrary(true)}>
+                    <DaisyButton onClick={() => setShowWidgetLibrary(true)}>
                       <Plus className="h-4 w-4 mr-2" />
                       Open Widget Library
-                    </Button>
+                    </DaisyButton>
                   )}
                 </div>
               </div>
@@ -628,16 +628,16 @@ export default function CustomDashboardBuilder({
         </div>
         
         {/* Settings Dialog */}
-        <Dialog open={showSettings} onOpenChange={setShowSettings}>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>Dashboard Settings</DialogTitle>
-            </DialogHeader>
+        <DaisyDialog open={showSettings} onOpenChange={setShowSettings}>
+          <DaisyDialogContent className="max-w-md">
+            <DaisyDialogHeader>
+              <DaisyDialogTitle>Dashboard Settings</DaisyDialogTitle>
+            </DaisyDialogHeader>
             
             <div className="space-y-4">
               <div>
                 <label className="text-sm font-medium">Dashboard Name</label>
-                <Input
+                <DaisyInput
                   value={currentLayout.name}
                   onChange={(e) => setCurrentLayout(prev => ({ ...prev, name: e.target.value }))}
                   className="mt-1"
@@ -646,7 +646,7 @@ export default function CustomDashboardBuilder({
               
               <div>
                 <label className="text-sm font-medium">Description</label>
-                <Input
+                <DaisyInput
                   value={currentLayout.description || ''}
                   onChange={(e) => setCurrentLayout(prev => ({ ...prev, description: e.target.value }))}
                   className="mt-1"
@@ -654,7 +654,7 @@ export default function CustomDashboardBuilder({
                 />
               </div>
               
-              <Separator />
+              <DaisySeparator />
               
               <div className="space-y-2">
                 <h4 className="text-sm font-medium">Dashboard Info</h4>
@@ -667,16 +667,16 @@ export default function CustomDashboardBuilder({
               </div>
               
               <div className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={() => setShowSettings(false)}>
+                <DaisyButton variant="outline" onClick={() => setShowSettings(false)}>
                   Cancel
-                </Button>
-                <Button onClick={() => setShowSettings(false)}>
+                </DaisyButton>
+                <DaisyButton onClick={() => setShowSettings(false)}>
                   Save Changes
-                </Button>
+                </DaisyButton>
               </div>
             </div>
-          </DialogContent>
-        </Dialog>
+          </DaisyDialogContent>
+        </DaisyDialog>
       </div>
     </DndProvider>
   );

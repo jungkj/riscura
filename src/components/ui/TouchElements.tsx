@@ -2,11 +2,11 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import {
   MoreHorizontal,
   ChevronDown,
@@ -237,7 +237,7 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
   };
 
   return (
-    <Button
+    <DaisyButton
       variant={variant}
       disabled={disabled}
       aria-label={ariaLabel}
@@ -257,7 +257,7 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
       {...longPressProps}
     >
       {children}
-    </Button>
+    </DaisyButton>
   );
 };
 
@@ -351,7 +351,7 @@ export const SwipeableCard: React.FC<SwipeableCardProps> = ({
       )}
 
       {/* Card Content */}
-      <Card
+      <DaisyCard
         ref={cardRef}
         className={cn(
           "relative bg-white transition-transform duration-150 ease-out touch-manipulation",
@@ -363,7 +363,7 @@ export const SwipeableCard: React.FC<SwipeableCardProps> = ({
         onTouchEnd={handleTouchEnd}
       >
         {children}
-      </Card>
+      </DaisyCard>
     </div>
   );
 };
@@ -602,7 +602,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
             {isRefreshing ? 'Refreshing...' : canRefresh ? 'Release to refresh' : 'Pull to refresh'}
           </span>
           {pullDistance > 0 && !isRefreshing && (
-            <Progress value={refreshProgress} className="w-16 h-1" />
+            <DaisyProgress value={refreshProgress} className="w-16 h-1" />
           )}
         </div>
       </div>
@@ -660,8 +660,8 @@ export const TouchActionMenu: React.FC<{
           />
           
           {/* Menu */}
-          <Card className="absolute right-0 top-full mt-2 z-50 min-w-48 shadow-lg">
-            <CardContent className="p-2">
+          <DaisyCard className="absolute right-0 top-full mt-2 z-50 min-w-48 shadow-lg">
+            <DaisyCardContent className="p-2">
               {items.map((item) => (
                 <TouchButton
                   key={item.id}
@@ -681,8 +681,8 @@ export const TouchActionMenu: React.FC<{
                   <span>{item.label}</span>
                 </TouchButton>
               ))}
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </>
       )}
     </div>

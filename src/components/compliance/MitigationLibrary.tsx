@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { 
@@ -218,15 +218,15 @@ export function MitigationLibrary() {
         </DaisyBadge>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="browse">Browse Library</TabsTrigger>
-          <TabsTrigger value="categories">Categories</TabsTrigger>
-          <TabsTrigger value="import">Import Controls</TabsTrigger>
-          <TabsTrigger value="imported">My Controls</TabsTrigger>
-        </TabsList>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
+        <DaisyTabsList className="grid w-full grid-cols-4">
+          <DaisyTabsTrigger value="browse">Browse Library</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="categories">Categories</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="import">Import Controls</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="imported">My Controls</DaisyTabsTrigger>
+        </DaisyTabsList>
 
-        <TabsContent value="browse" className="space-y-4">
+        <DaisyTabsContent value="browse" className="space-y-4">
           {/* Search and Filters */}
           <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
             <DaisyCardContent className="p-4">
@@ -348,9 +348,9 @@ export function MitigationLibrary() {
               ))}
             </div>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="categories" className="space-y-4">
+        <DaisyTabsContent value="categories" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {categories.map(category => (
               <DaisyCard 
@@ -405,9 +405,9 @@ export function MitigationLibrary() {
               </div>
             </DaisyCardBody>
           </DaisyCard>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="import" className="space-y-4">
+        <DaisyTabsContent value="import" className="space-y-4">
           <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
             <DaisyCardHeader>
               <DaisyCardTitle className="text-[#191919] font-inter flex items-center">
@@ -416,7 +416,7 @@ export function MitigationLibrary() {
               </DaisyCardTitle>
               <DaisyCardDescription>
                 Import Probo's security controls into your organization's control library
-              </CardDescription>
+              </p>
             
             <DaisyCardContent className="space-y-4">
               <DaisyAlert>
@@ -471,15 +471,15 @@ export function MitigationLibrary() {
               </div>
             </DaisyCardBody>
           </DaisyCard>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="imported" className="space-y-4">
+        <DaisyTabsContent value="imported" className="space-y-4">
           <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
             <DaisyCardHeader>
               <DaisyCardTitle className="text-[#191919] font-inter">Imported Controls</DaisyCardTitle>
               <DaisyCardDescription>
                 Security controls that have been imported into your organization
-              </CardDescription>
+              </p>
             
             <DaisyCardContent>
               <div className="text-center py-8">
@@ -495,8 +495,8 @@ export function MitigationLibrary() {
               </div>
             </DaisyCardBody>
           </DaisyCard>
-        </TabsContent>
-      </Tabs>
+        </DaisyTabsContent>
+      </DaisyTabs>
     </div>
   );
 } 

@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { 
   Search,
   Globe,
@@ -198,36 +198,36 @@ export function VendorAssessmentDashboard() {
           <h1 className="text-2xl font-bold text-[#191919]">Vendor Risk Assessment</h1>
           <p className="text-[#A8A8A8]">AI-powered vendor security assessments</p>
         </div>
-        <Badge className="bg-[#199BEC] text-white">
+        <DaisyBadge className="bg-[#199BEC] text-white">
           Powered by Probo AI
-        </Badge>
+        </DaisyBadge>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="assess">New Assessment</TabsTrigger>
-          <TabsTrigger value="results">Results</TabsTrigger>
-          <TabsTrigger value="history">History</TabsTrigger>
-          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-        </TabsList>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
+        <DaisyTabsList className="grid w-full grid-cols-4">
+          <DaisyTabsTrigger value="assess">New Assessment</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="results">Results</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="history">History</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="dashboard">Dashboard</DaisyTabsTrigger>
+        </DaisyTabsList>
 
-        <TabsContent value="assess" className="space-y-4">
-          <Card className="bg-[#FAFAFA] border-[#D8C3A5]">
-            <CardHeader>
-              <CardTitle className="text-[#191919] font-inter flex items-center">
+        <DaisyTabsContent value="assess" className="space-y-4">
+          <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+            <DaisyCardHeader>
+              <DaisyCardTitle className="text-[#191919] font-inter flex items-center">
                 <Globe className="h-5 w-5 mr-2" />
                 Assess New Vendor
-              </CardTitle>
-              <CardDescription>
+              </DaisyCardTitle>
+              <DaisyCardDescription>
                 Enter a vendor's website URL to perform an AI-powered security assessment
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </p>
+            
+            <DaisyCardContent>
               <div className="space-y-4">
                 <div className="flex gap-4">
                   <div className="relative flex-1">
                     <Globe className="absolute left-3 top-1/2 h-4 w-4 transform -translate-y-1/2 text-[#A8A8A8]" />
-                    <Input
+                    <DaisyInput
                       placeholder="https://example.com"
                       value={vendorUrl}
                       onChange={(e) => setVendorUrl(e.target.value)}
@@ -235,7 +235,7 @@ export function VendorAssessmentDashboard() {
                       onKeyPress={(e) => e.key === 'Enter' && handleAssessVendor()}
                     />
                   </div>
-                  <Button 
+                  <DaisyButton 
                     onClick={handleAssessVendor}
                     disabled={isAssessing || !vendorUrl.trim()}
                     className="bg-[#199BEC] hover:bg-[#199BEC]/90 min-w-[120px]"
@@ -251,16 +251,16 @@ export function VendorAssessmentDashboard() {
                         Assess
                       </>
                     )}
-                  </Button>
+                  </DaisyButton>
                 </div>
 
-                <Alert>
+                <DaisyAlert>
                   <Shield className="h-4 w-4" />
-                  <AlertDescription>
+                  <DaisyAlertDescription>
                     Our AI agent will analyze the vendor's website, security posture, compliance documentation, 
                     and publicly available information to generate a comprehensive risk assessment.
-                  </AlertDescription>
-                </Alert>
+                  
+                </DaisyAlert>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
                   <div className="text-center">
@@ -280,32 +280,32 @@ export function VendorAssessmentDashboard() {
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
 
-        <TabsContent value="results" className="space-y-4">
+        <DaisyTabsContent value="results" className="space-y-4">
           {assessment ? (
             <div className="space-y-6">
               {/* Vendor Overview */}
-              <Card className="bg-[#FAFAFA] border-[#D8C3A5]">
-                <CardHeader>
+              <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+                <DaisyCardHeader>
                   <div className="flex items-start justify-between">
                     <div>
-                      <CardTitle className="text-[#191919] font-inter flex items-center">
+                      <DaisyCardTitle className="text-[#191919] font-inter flex items-center">
                         <Building className="h-5 w-5 mr-2" />
                         {assessment.vendorInfo.name}
-                      </CardTitle>
-                      <CardDescription className="mt-1">
+                      </DaisyCardTitle>
+                      <DaisyCardDescription className="mt-1">
                         {assessment.vendorInfo.description}
-                      </CardDescription>
+                      </p>
                     </div>
-                    <Badge className={cn('text-sm', getRiskBadgeColor(assessment.riskScore))}>
+                    <DaisyBadge className={cn('text-sm', getRiskBadgeColor(assessment.riskScore))}>
                       Risk Score: {assessment.riskScore}
-                    </Badge>
+                    </DaisyBadge>
                   </div>
-                </CardHeader>
-                <CardContent>
+                
+                <DaisyCardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-3">
                       <div className="flex items-center text-sm">
@@ -339,9 +339,9 @@ export function VendorAssessmentDashboard() {
                       <div className="flex items-center text-sm">
                         <Shield className="h-4 w-4 mr-2 text-[#A8A8A8]" />
                         <span className="text-[#A8A8A8]">Compliance:</span>
-                        <Badge className={cn('ml-2 text-xs', getComplianceStatusColor(assessment.complianceStatus))}>
+                        <DaisyBadge className={cn('ml-2 text-xs', getComplianceStatusColor(assessment.complianceStatus))}>
                           {assessment.complianceStatus.replace('_', ' ')}
-                        </Badge>
+                        </DaisyBadge>
                       </div>
                       <div className="flex items-center text-sm">
                         <UserCheck className="h-4 w-4 mr-2 text-[#A8A8A8]" />
@@ -358,21 +358,21 @@ export function VendorAssessmentDashboard() {
                       <p className="text-sm text-[#A8A8A8] mb-2">Security Certifications:</p>
                       <div className="flex flex-wrap gap-2">
                         {assessment.vendorInfo.certifications.map((cert, idx) => (
-                          <Badge key={idx} variant="outline" className="text-xs">
+                          <DaisyBadge key={idx} variant="outline" className="text-xs">
                             {cert}
-                          </Badge>
+                          </DaisyBadge>
                         ))}
                       </div>
                     </div>
                   )}
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
 
               {/* Risk Categories */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {riskCategories.map((category) => (
-                  <Card key={category.name} className="bg-[#FAFAFA] border-[#D8C3A5]">
-                    <CardContent className="p-4">
+                  <DaisyCard key={category.name} className="bg-[#FAFAFA] border-[#D8C3A5]">
+                    <DaisyCardContent className="p-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-medium text-[#191919]">{category.name}</span>
                         {category.trend === 'up' && <TrendingUp className="h-4 w-4 text-green-500" />}
@@ -385,24 +385,24 @@ export function VendorAssessmentDashboard() {
                         </span>
                         <span className="text-xs text-[#A8A8A8]">/ 100</span>
                       </div>
-                      <Progress value={category.score} className="h-2 mt-2" />
-                    </CardContent>
-                  </Card>
+                      <DaisyProgress value={category.score} className="h-2 mt-2" />
+                    </DaisyCardBody>
+                  </DaisyCard>
                 ))}
               </div>
 
               {/* Findings */}
-              <Card className="bg-[#FAFAFA] border-[#D8C3A5]">
-                <CardHeader>
-                  <CardTitle className="text-[#191919] font-inter flex items-center">
-                    <AlertTriangle className="h-5 w-5 mr-2" />
+              <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="text-[#191919] font-inter flex items-center">
+                    <DaisyAlertTriangle className="h-5 w-5 mr-2" />
                     Security Findings
-                    <Badge variant="outline" className="ml-2">
+                    <DaisyBadge variant="outline" className="ml-2">
                       {assessment.findings.length} findings
-                    </Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+                    </DaisyBadge>
+                  </DaisyCardTitle>
+                
+                <DaisyCardContent>
                   {assessment.findings.length > 0 ? (
                     <div className="space-y-4">
                       {assessment.findings.map((finding) => (
@@ -413,12 +413,12 @@ export function VendorAssessmentDashboard() {
                               <p className="text-sm text-[#A8A8A8] mt-1">{finding.description}</p>
                             </div>
                             <div className="flex flex-col items-end space-y-1">
-                              <Badge className={cn('text-xs', getSeverityColor(finding.severity))}>
+                              <DaisyBadge className={cn('text-xs', getSeverityColor(finding.severity))}>
                                 {finding.severity}
-                              </Badge>
-                              <Badge variant="outline" className="text-xs">
+                              </DaisyBadge>
+                              <DaisyBadge variant="outline" className="text-xs">
                                 {finding.category}
-                              </Badge>
+                              </DaisyBadge>
                             </div>
                           </div>
                           {finding.remediation && (
@@ -438,40 +438,40 @@ export function VendorAssessmentDashboard() {
                       <p className="text-[#A8A8A8] text-sm">This vendor appears to have good security practices</p>
                     </div>
                   )}
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
 
               {/* Actions */}
               <div className="flex items-center justify-end space-x-2">
-                <Button variant="outline" className="border-[#D8C3A5]">
+                <DaisyButton variant="outline" className="border-[#D8C3A5]">
                   <Download className="h-4 w-4 mr-2" />
                   Export Report
-                </Button>
-                <Button className="bg-[#199BEC] hover:bg-[#199BEC]/90">
+                </DaisyButton>
+                <DaisyButton className="bg-[#199BEC] hover:bg-[#199BEC]/90">
                   Schedule Review
-                </Button>
+                </DaisyButton>
               </div>
             </div>
           ) : (
-            <Card className="bg-[#FAFAFA] border-[#D8C3A5]">
-              <CardContent className="p-8 text-center">
+            <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+              <DaisyCardContent className="p-8 text-center">
                 <Search className="h-12 w-12 text-[#A8A8A8] mx-auto mb-4" />
                 <p className="text-[#191919] font-medium">No assessment results</p>
                 <p className="text-[#A8A8A8] text-sm">Run a vendor assessment to see results here</p>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           )}
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="history" className="space-y-4">
-          <Card className="bg-[#FAFAFA] border-[#D8C3A5]">
-            <CardHeader>
-              <CardTitle className="text-[#191919] font-inter">Assessment History</CardTitle>
-              <CardDescription>
+        <DaisyTabsContent value="history" className="space-y-4">
+          <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+            <DaisyCardHeader>
+              <DaisyCardTitle className="text-[#191919] font-inter">Assessment History</DaisyCardTitle>
+              <DaisyCardDescription>
                 View all previous vendor risk assessments
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </p>
+            
+            <DaisyCardContent>
               {loading ? (
                 <div className="flex items-center justify-center py-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#199BEC]"></div>
@@ -486,15 +486,15 @@ export function VendorAssessmentDashboard() {
                           <p className="text-sm text-[#A8A8A8]">{assessment.vendorInfo.category}</p>
                         </div>
                         <div className="flex items-center space-x-4">
-                          <Badge className={cn('text-sm', getRiskBadgeColor(assessment.riskScore))}>
+                          <DaisyBadge className={cn('text-sm', getRiskBadgeColor(assessment.riskScore))}>
                             Risk: {assessment.riskScore}
-                          </Badge>
+                          </DaisyBadge>
                           <span className="text-sm text-[#A8A8A8]">
                             {new Date(assessment.assessmentDate).toLocaleDateString()}
                           </span>
-                          <Button size="sm" variant="outline">
+                          <DaisyButton size="sm" variant="outline">
                             View
-                          </Button>
+                          </DaisyButton>
                         </div>
                       </div>
                     </div>
@@ -507,14 +507,14 @@ export function VendorAssessmentDashboard() {
                   <p className="text-[#A8A8A8] text-sm">Start by assessing your first vendor</p>
                 </div>
               )}
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
 
-        <TabsContent value="dashboard" className="space-y-4">
+        <DaisyTabsContent value="dashboard" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="bg-[#FAFAFA] border-[#D8C3A5]">
-              <CardContent className="p-4">
+            <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+              <DaisyCardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-[#A8A8A8]">Total Vendors</p>
@@ -522,11 +522,11 @@ export function VendorAssessmentDashboard() {
                   </div>
                   <Building className="h-8 w-8 text-[#199BEC]" />
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
-            <Card className="bg-[#FAFAFA] border-[#D8C3A5]">
-              <CardContent className="p-4">
+            <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+              <DaisyCardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-[#A8A8A8]">High Risk</p>
@@ -534,13 +534,13 @@ export function VendorAssessmentDashboard() {
                       {assessments.filter(a => a.riskScore > 70).length}
                     </p>
                   </div>
-                  <AlertTriangle className="h-8 w-8 text-red-500" />
+                  <DaisyAlertTriangle className="h-8 w-8 text-red-500" />
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
-            <Card className="bg-[#FAFAFA] border-[#D8C3A5]">
-              <CardContent className="p-4">
+            <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+              <DaisyCardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-[#A8A8A8]">Compliant</p>
@@ -550,11 +550,11 @@ export function VendorAssessmentDashboard() {
                   </div>
                   <CheckCircle className="h-8 w-8 text-green-500" />
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           </div>
-        </TabsContent>
-      </Tabs>
+        </DaisyTabsContent>
+      </DaisyTabs>
     </div>
   );
 } 

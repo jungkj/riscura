@@ -13,7 +13,7 @@ import React, {
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Button } from '@/components/ui/button';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { AlertCircle, Download, Maximize2 } from 'lucide-react';
 
 export interface ImageOptimizerProps {
@@ -182,11 +182,11 @@ const ImageErrorFallback = memo(({
       className
     )}>
       <div className="text-center p-4">
-        <AlertCircle className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+        <DaisyAlertCircle className="w-8 h-8 text-gray-400 mx-auto mb-2" />
         <p className="text-sm text-gray-500 mb-2">Failed to load image</p>
-        <Button onClick={retry} variant="outline" size="sm">
+        <DaisyButton onClick={retry} variant="outline" size="sm">
           Retry
-        </Button>
+        </DaisyButton>
       </div>
     </div>
   );
@@ -527,24 +527,24 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <div className="flex gap-1">
             {enableDownload && (
-              <Button
+              <DaisyButton
                 variant="secondary"
                 size="sm"
                 onClick={downloadImage}
                 className="bg-black bg-opacity-50 hover:bg-opacity-70 text-white border-none"
               >
                 <Download className="w-4 h-4" />
-              </Button>
+              </DaisyButton>
             )}
             {enableFullscreen && (
-              <Button
+              <DaisyButton
                 variant="secondary"
                 size="sm"
                 onClick={() => setIsFullscreen(true)}
                 className="bg-black bg-opacity-50 hover:bg-opacity-70 text-white border-none"
               >
                 <Maximize2 className="w-4 h-4" />
-              </Button>
+              </DaisyButton>
             )}
           </div>
         </div>

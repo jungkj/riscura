@@ -1,12 +1,12 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Progress } from '@/components/ui/progress'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+import { DaisyButton } from '@/components/ui/DaisyButton'
+import { DaisyBadge } from '@/components/ui/DaisyBadge'
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs'
+import { DaisyProgress } from '@/components/ui/DaisyProgress'
+import { DaisyAlert } from '@/components/ui/DaisyAlert'
 import { 
   Activity, 
   AlertTriangle, 
@@ -133,9 +133,9 @@ export default function RealTimeDashboard({
     }
     
     return (
-      <Badge className={cn(colors[level as keyof typeof colors] || 'bg-gray-500 text-white')}>
+      <DaisyBadge className={cn(colors[level as keyof typeof colors] || 'bg-gray-500 text-white')}>
         {level || 'Unassessed'}
-      </Badge>
+      </DaisyBadge>
     )
   }
   
@@ -149,9 +149,9 @@ export default function RealTimeDashboard({
     }
     
     return (
-      <Badge className={cn(colors[effectiveness as keyof typeof colors] || 'bg-gray-500 text-white')}>
+      <DaisyBadge className={cn(colors[effectiveness as keyof typeof colors] || 'bg-gray-500 text-white')}>
         {effectiveness?.replace(/_/g, ' ') || 'Not Assessed'}
-      </Badge>
+      </DaisyBadge>
     )
   }
   
@@ -167,12 +167,12 @@ export default function RealTimeDashboard({
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[...Array(4)].map((_, i) => (
-            <Card key={i} className="animate-pulse">
-              <CardHeader className="space-y-2">
+            <DaisyCard key={i} className="animate-pulse">
+              <DaisyCardHeader className="space-y-2">
                 <div className="h-4 bg-gray-200 rounded w-3/4"></div>
                 <div className="h-8 bg-gray-200 rounded w-1/2"></div>
-              </CardHeader>
-            </Card>
+              
+            </DaisyCard>
           ))}
         </div>
       </div>
@@ -182,20 +182,20 @@ export default function RealTimeDashboard({
   if (error) {
     return (
       <div className={cn("space-y-6", className)}>
-        <Alert variant="destructive">
+        <DaisyAlert variant="error">
           <XCircle className="h-4 w-4" />
-          <AlertDescription>
+          <DaisyAlertDescription>
             Error loading dashboard data: {error}
-            <Button 
+            <DaisyButton 
               variant="outline" 
               size="sm" 
               onClick={actions.refreshData}
               className="ml-2"
             >
               Retry
-            </Button>
-          </AlertDescription>
-        </Alert>
+            </DaisyButton>
+          
+        </DaisyAlert>
       </div>
     )
   }
@@ -210,7 +210,7 @@ export default function RealTimeDashboard({
         </div>
         <div className="flex items-center gap-4">
           <ConnectionStatus />
-          <Button 
+          <DaisyButton 
             variant="outline" 
             size="sm" 
             onClick={actions.refreshData}
@@ -218,95 +218,95 @@ export default function RealTimeDashboard({
           >
             <RefreshCw className={cn("h-4 w-4 mr-2", isLoading && "animate-spin")} />
             Refresh
-          </Button>
+          </DaisyButton>
         </div>
       </div>
       
       {/* Metrics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Risks</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
+        <DaisyCard>
+          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <DaisyCardTitle className="text-sm font-medium">Total Risks</DaisyCardTitle>
+            <DaisyAlertTriangle className="h-4 w-4 text-muted-foreground" />
+          
+          <DaisyCardContent>
             <div className="text-2xl font-bold">{risks.length}</div>
             {metrics.risks && (
               <div className="flex gap-1 mt-2">
-                <Badge variant="destructive" className="text-xs">
+                <DaisyBadge variant="error" className="text-xs">
                   {metrics.risks.byLevel.critical} Critical
-                </Badge>
-                <Badge variant="secondary" className="text-xs">
+                </DaisyBadge>
+                <DaisyBadge variant="secondary" className="text-xs">
                   {metrics.risks.byLevel.high} High
-                </Badge>
+                </DaisyBadge>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
         
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Controls</CardTitle>
+        <DaisyCard>
+          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <DaisyCardTitle className="text-sm font-medium">Active Controls</DaisyCardTitle>
             <Shield className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className="text-2xl font-bold">{controls.length}</div>
             {metrics.controls && (
               <div className="text-xs text-muted-foreground mt-2">
                 {metrics.controls.effectivenessRate.toFixed(1)}% Effective
-                <Progress 
+                <DaisyProgress 
                   value={metrics.controls.effectivenessRate} 
                   className="mt-1 h-2" 
                 />
               </div>
             )}
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
         
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Documents</CardTitle>
+        <DaisyCard>
+          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <DaisyCardTitle className="text-sm font-medium">Documents</DaisyCardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className="text-2xl font-bold">{documents.length}</div>
             <p className="text-xs text-muted-foreground mt-2">
               Files and policies
             </p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
         
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Team Members</CardTitle>
+        <DaisyCard>
+          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <DaisyCardTitle className="text-sm font-medium">Team Members</DaisyCardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className="text-2xl font-bold">{users.length}</div>
             <p className="text-xs text-muted-foreground mt-2">
               Active users
             </p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
       
       {/* Detailed Tabs */}
-      <Tabs defaultValue="risks" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="risks">Recent Risks</TabsTrigger>
-          <TabsTrigger value="controls">Recent Controls</TabsTrigger>
-          <TabsTrigger value="activities">Live Activity</TabsTrigger>
-        </TabsList>
+      <DaisyTabs defaultValue="risks" className="space-y-4">
+        <DaisyTabsList>
+          <DaisyTabsTrigger value="risks">Recent Risks</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="controls">Recent Controls</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="activities">Live Activity</DaisyTabsTrigger>
+        </DaisyTabsList>
         
-        <TabsContent value="risks" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Risks</CardTitle>
-              <CardDescription>
+        <DaisyTabsContent value="risks" className="space-y-4">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle>Recent Risks</DaisyCardTitle>
+              <DaisyCardDescription>
                 Latest risks added to your organization (updates in real-time)
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </p>
+            
+            <DaisyCardContent>
               {risks.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
                   No risks found. Create your first risk to see real-time updates.
@@ -336,19 +336,19 @@ export default function RealTimeDashboard({
                   ))}
                 </div>
               )}
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
         
-        <TabsContent value="controls" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Controls</CardTitle>
-              <CardDescription>
+        <DaisyTabsContent value="controls" className="space-y-4">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle>Recent Controls</DaisyCardTitle>
+              <DaisyCardDescription>
                 Latest controls added to your organization (updates in real-time)
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </p>
+            
+            <DaisyCardContent>
               {controls.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
                   No controls found. Create your first control to see real-time updates.
@@ -378,19 +378,19 @@ export default function RealTimeDashboard({
                   ))}
                 </div>
               )}
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
         
-        <TabsContent value="activities" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Live Activity Feed</CardTitle>
-              <CardDescription>
+        <DaisyTabsContent value="activities" className="space-y-4">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle>Live Activity Feed</DaisyCardTitle>
+              <DaisyCardDescription>
                 Real-time updates from your organization (auto-refreshes)
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </p>
+            
+            <DaisyCardContent>
               {activities.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
                   No recent activity. Start using the platform to see live updates here.
@@ -418,10 +418,10 @@ export default function RealTimeDashboard({
                   ))}
                 </div>
               )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
+      </DaisyTabs>
     </div>
   )
 } 

@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { useGoogleDriveFiles } from '@/hooks/useGoogleDriveFiles';
 import { useGoogleDriveIntegration } from '@/hooks/useGoogleDriveIntegration';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Alert } from '@/components/ui/alert';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard } from '@/components/ui/DaisyCard';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { 
   FileSpreadsheet, 
   Search, 
@@ -84,32 +84,32 @@ export const GoogleDriveFileBrowser: React.FC<Props> = ({
   // Show auth required state
   if (authRequired || !isConnected) {
     return (
-      <Card className="p-6">
+      <DaisyCard className="p-6">
         <div className="text-center space-y-4">
-          <AlertCircle className="h-12 w-12 text-yellow-500 mx-auto" />
+          <DaisyAlertCircle className="h-12 w-12 text-yellow-500 mx-auto" />
           <h3 className="text-lg font-semibold">Connect Google Drive</h3>
           <p className="text-gray-600">
             Connect your Google Drive account to import Excel files
           </p>
-          <Button
+          <DaisyButton
             onClick={connect}
             className="mx-auto"
           >
             Connect Google Drive
-          </Button>
+          </DaisyButton>
         </div>
-      </Card>
+      </DaisyCard>
     );
   }
 
   if (isLoading && files.length === 0) {
     return (
-      <Card className="p-6">
+      <DaisyCard className="p-6">
         <div className="flex items-center justify-center">
           <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
           <span className="ml-2">Loading files...</span>
         </div>
-      </Card>
+      </DaisyCard>
     );
   }
 
@@ -128,31 +128,31 @@ export const GoogleDriveFileBrowser: React.FC<Props> = ({
             className="w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <Button
+        <DaisyButton
           onClick={handleSearch}
           disabled={isLoading}
           variant="outline"
         >
           Search
-        </Button>
-        <Button
+        </DaisyButton>
+        <DaisyButton
           onClick={refresh}
           variant="outline"
           disabled={isLoading}
         >
           <RefreshCw className="h-4 w-4" />
-        </Button>
+        </DaisyButton>
       </div>
 
       {/* Error Alert */}
       {error && (
-        <Alert variant="error">
+        <DaisyAlert variant="error">
           {error}
-        </Alert>
+        </DaisyAlert>
       )}
 
       {/* File List */}
-      <Card className="divide-y">
+      <DaisyCard className="divide-y">
         {files.length === 0 ? (
           <div className="p-8 text-center text-gray-500">
             {searchQuery ? (
@@ -200,7 +200,7 @@ export const GoogleDriveFileBrowser: React.FC<Props> = ({
             </div>
           ))
         )}
-      </Card>
+      </DaisyCard>
 
       {/* Loading indicator for pagination */}
       {isLoading && files.length > 0 && (

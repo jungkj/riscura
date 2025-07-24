@@ -3,9 +3,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { ContentCard } from '@/components/layout/MainContentArea';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { 
   Select,
   SelectContent,
@@ -34,7 +34,7 @@ import {
   Share,
   Settings,
 } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -191,13 +191,13 @@ const KPICard: React.FC<{
           </span>
           
           {metric.trendPercentage && (
-            <Badge 
+            <DaisyBadge 
               variant={metric.trend === 'up' ? 'default' : metric.trend === 'down' ? 'destructive' : 'secondary'}
               className="text-caption"
             >
               {metric.trend === 'up' ? '+' : metric.trend === 'down' ? '-' : ''}
               {Math.abs(metric.trendPercentage)}%
-            </Badge>
+            </DaisyBadge>
           )}
         </div>
         
@@ -263,28 +263,28 @@ const ChartContainer: React.FC<{
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-enterprise-2">
             {realTime && (
-              <Badge variant="outline" className="text-caption">
+              <DaisyBadge variant="outline" className="text-caption">
                 <div className="w-2 h-2 bg-semantic-success rounded-full mr-enterprise-1 animate-pulse" />
                 Real-time
-              </Badge>
+              </DaisyBadge>
             )}
           </div>
           
           <div className="flex items-center space-x-enterprise-2">
             {onDrillDown && (
-              <Button variant="ghost" size="sm" onClick={onDrillDown}>
+              <DaisyButton variant="ghost" size="sm" onClick={onDrillDown}>
                 <Target className="h-4 w-4" />
-              </Button>
+              </DaisyButton>
             )}
             {onExpand && (
-              <Button variant="ghost" size="sm" onClick={onExpand}>
+              <DaisyButton variant="ghost" size="sm" onClick={onExpand}>
                 <Maximize2 className="h-4 w-4" />
-              </Button>
+              </DaisyButton>
             )}
             {onExport && (
-              <Button variant="ghost" size="sm" onClick={onExport}>
+              <DaisyButton variant="ghost" size="sm" onClick={onExport}>
                 <Download className="h-4 w-4" />
-              </Button>
+              </DaisyButton>
             )}
           </div>
         </div>
@@ -447,7 +447,7 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
       case 'progress-rings':
         return (
           <ChartContainer title={widget.title} {...commonProps}>
-            <ProgressRingsPlaceholder data={widget.data} />
+            <DaisyProgressRingsPlaceholder data={widget.data} />
           </ChartContainer>
         );
 
@@ -475,27 +475,27 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
 
         <div className="flex items-center space-x-enterprise-3">
           {/* Time Range Selector */}
-          <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger className="w-32">
-              <SelectValue />
+          <DaisySelect value={timeRange} onValueChange={setTimeRange}>
+            <DaisySelectTrigger className="w-32">
+              <DaisySelectValue />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="1d">Last 24h</SelectItem>
-              <SelectItem value="7d">Last 7 days</SelectItem>
-              <SelectItem value="30d">Last 30 days</SelectItem>
-              <SelectItem value="90d">Last 90 days</SelectItem>
-              <SelectItem value="1y">Last year</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="1d">Last 24h</SelectItem>
+              <DaisySelectItem value="7d">Last 7 days</SelectItem>
+              <DaisySelectItem value="30d">Last 30 days</SelectItem>
+              <DaisySelectItem value="90d">Last 90 days</SelectItem>
+              <DaisySelectItem value="1y">Last year</SelectItem>
             </SelectContent>
-          </Select>
+          </DaisySelect>
 
           {/* Actions */}
           <div className="flex items-center space-x-enterprise-2">
-            <Button variant="outline" size="sm">
+            <DaisyButton variant="outline" size="sm">
               <Filter className="h-4 w-4 mr-enterprise-1" />
               Filter
-            </Button>
+            </DaisyButton>
 
-            <Button 
+            <DaisyButton 
               variant="outline" 
               size="sm" 
               onClick={handleRefresh}
@@ -503,12 +503,12 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
             >
               <RefreshCw className={cn("h-4 w-4 mr-enterprise-1", refreshing && "animate-spin")} />
               Refresh
-            </Button>
+            </DaisyButton>
 
-            <Button variant="outline" size="sm">
+            <DaisyButton variant="outline" size="sm">
               <Share className="h-4 w-4 mr-enterprise-1" />
               Share
-            </Button>
+            </DaisyButton>
           </div>
         </div>
       </div>
@@ -524,9 +524,9 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
             </span>
           </div>
           
-          <Badge variant="outline" className="text-caption">
+          <DaisyBadge variant="outline" className="text-caption">
             Real-time enabled
-          </Badge>
+          </DaisyBadge>
         </div>
       )}
 

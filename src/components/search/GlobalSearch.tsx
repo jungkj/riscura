@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -474,13 +474,13 @@ export default function GlobalSearch({
         exit={{ opacity: 0, scale: 0.95, y: -20 }}
         className="w-full max-w-2xl mx-4"
       >
-        <Card className="bg-white border border-gray-200 shadow-2xl">
+        <DaisyCard className="bg-white border border-gray-200 shadow-2xl">
           {/* Search Header */}
-          <CardHeader className="pb-4">
+          <DaisyCardHeader className="pb-4">
             <div className="flex items-center gap-3">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <Input
+                <DaisyInput
                   ref={searchInputRef}
                   value={query}
                   onChange={(e) => handleQueryChange(e.target.value)}
@@ -488,20 +488,20 @@ export default function GlobalSearch({
                   className="pl-10 pr-4 py-3 text-lg border-0 focus:ring-0 bg-transparent"
                 />
                 {query && (
-                  <Button
+                  <DaisyButton
                     variant="ghost"
                     size="sm"
                     onClick={() => handleQueryChange('')}
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 w-6 h-6 p-0"
                   >
                     <X className="w-4 h-4" />
-                  </Button>
+                  </DaisyButton>
                 )}
               </div>
               
               <div className="flex items-center gap-2">
                 {showFilters && (
-                  <Button
+                  <DaisyButton
                     variant="ghost"
                     size="sm"
                     onClick={() => setShowAdvanced(!showAdvanced)}
@@ -509,17 +509,17 @@ export default function GlobalSearch({
                   >
                     <Filter className="w-4 h-4" />
                     Filters
-                  </Button>
+                  </DaisyButton>
                 )}
                 
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   onClick={onClose}
                   className="w-8 h-8 p-0"
                 >
                   <X className="w-4 h-4" />
-                </Button>
+                </DaisyButton>
               </div>
             </div>
 
@@ -530,9 +530,9 @@ export default function GlobalSearch({
                 {isLoading && <span>Searching...</span>}
               </div>
             )}
-          </CardHeader>
+          
 
-          <CardContent className="p-0 max-h-96 overflow-y-auto" ref={resultsRef}>
+          <DaisyCardContent className="p-0 max-h-96 overflow-y-auto" ref={resultsRef}>
             {/* No query state - show suggestions and recent */}
             {!query.trim() && (
               <div className="p-6 space-y-6">
@@ -653,9 +653,9 @@ export default function GlobalSearch({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <h4 className="font-medium text-gray-900 truncate">{result.title}</h4>
-                            <Badge variant="secondary" className="text-xs">
+                            <DaisyBadge variant="secondary" className="text-xs">
                               {result.type}
-                            </Badge>
+                            </DaisyBadge>
                           </div>
                           
                           <p className="text-sm text-gray-600 line-clamp-2 mb-2">
@@ -680,9 +680,9 @@ export default function GlobalSearch({
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                               {result.tags && result.tags.slice(0, 2).map(tag => (
-                                <Badge key={tag} variant="outline" className="text-xs">
+                                <DaisyBadge key={tag} variant="outline" className="text-xs">
                                   {tag}
-                                </Badge>
+                                </DaisyBadge>
                               ))}
                               {result.tags && result.tags.length > 2 && (
                                 <span className="text-xs text-gray-500">
@@ -716,20 +716,20 @@ export default function GlobalSearch({
                   Try adjusting your search terms or using different keywords.
                 </p>
                 <div className="flex items-center justify-center gap-2">
-                  <Button
+                  <DaisyButton
                     variant="secondary"
                     size="sm"
                     onClick={() => handleQueryChange('')}
                   >
                     Clear Search
-                  </Button>
-                  <Button
+                  </DaisyButton>
+                  <DaisyButton
                     variant="secondary"
                     size="sm"
                     onClick={() => setShowAdvanced(true)}
                   >
                     Advanced Search
-                  </Button>
+                  </DaisyButton>
                 </div>
               </div>
             )}
@@ -741,7 +741,7 @@ export default function GlobalSearch({
                 <p className="text-gray-500">Searching...</p>
               </div>
             )}
-          </CardContent>
+          </DaisyCardBody>
 
           {/* Footer with shortcuts */}
           <div className="border-t border-gray-200 p-3 bg-gray-50">
@@ -768,7 +768,7 @@ export default function GlobalSearch({
               </div>
             </div>
           </div>
-        </Card>
+        </DaisyCard>
       </motion.div>
     </div>
   );
@@ -800,14 +800,14 @@ export function SearchTrigger({
   if (variant === 'icon') {
     return (
       <>
-        <Button
+        <DaisyButton
           variant="ghost"
           size="sm"
           onClick={() => setIsOpen(true)}
           className={`w-8 h-8 p-0 ${className}`}
         >
           <Search className="w-4 h-4" />
-        </Button>
+        </DaisyButton>
         <GlobalSearch isOpen={isOpen} onClose={() => setIsOpen(false)} />
       </>
     );
@@ -816,7 +816,7 @@ export function SearchTrigger({
   if (variant === 'compact') {
     return (
       <>
-        <Button
+        <DaisyButton
           variant="secondary"
           onClick={() => setIsOpen(true)}
           className={`flex items-center gap-2 ${className}`}
@@ -826,7 +826,7 @@ export function SearchTrigger({
           <kbd className="ml-auto px-1.5 py-0.5 bg-gray-200 border border-gray-300 rounded text-xs">
             ⌘K
           </kbd>
-        </Button>
+        </DaisyButton>
         <GlobalSearch isOpen={isOpen} onClose={() => setIsOpen(false)} />
       </>
     );

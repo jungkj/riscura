@@ -6,10 +6,10 @@ import { ContentCard } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-import { Textarea } from '@/components/ui/textarea';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -353,7 +353,7 @@ const TestingForm: React.FC<{
         <label className="text-body-sm font-medium text-text-primary">
           Actual Result *
         </label>
-        <Textarea
+        <DaisyTextarea
           value={formData.actualResult}
           onChange={(e) => handleInputChange('actualResult', e.target.value)}
           placeholder="Describe the actual testing results..."
@@ -433,7 +433,7 @@ const TestingForm: React.FC<{
         <label className="text-body-sm font-medium text-text-primary">
           Findings & Observations
         </label>
-        <Textarea
+        <DaisyTextarea
           value={formData.findings}
           onChange={(e) => handleInputChange('findings', e.target.value)}
           placeholder="Document any findings, issues, or observations..."
@@ -447,7 +447,7 @@ const TestingForm: React.FC<{
         <label className="text-body-sm font-medium text-text-primary">
           Recommendations
         </label>
-        <Textarea
+        <DaisyTextarea
           value={formData.recommendations}
           onChange={(e) => handleInputChange('recommendations', e.target.value)}
           placeholder="Provide recommendations for improvement..."
@@ -683,37 +683,37 @@ export const ControlTestingWorkflow: React.FC = () => {
               </DaisyDialogTitle>
             </DaisyDialogHeader>
             
-            <Tabs defaultValue="testing" className="mt-enterprise-4">
-              <TabsList>
-                <TabsTrigger value="testing">Testing Form</TabsTrigger>
-                <TabsTrigger value="evidence">Evidence</TabsTrigger>
-                <TabsTrigger value="history">History</TabsTrigger>
-              </TabsList>
+            <DaisyTabs defaultValue="testing" className="mt-enterprise-4">
+              <DaisyTabsList>
+                <DaisyTabsTrigger value="testing">Testing Form</DaisyTabsTrigger>
+                <DaisyTabsTrigger value="evidence">Evidence</DaisyTabsTrigger>
+                <DaisyTabsTrigger value="history">History</DaisyTabsTrigger>
+              </DaisyTabsList>
               
-              <TabsContent value="testing" className="mt-enterprise-4">
+              <DaisyTabsContent value="testing" className="mt-enterprise-4">
                 <TestingForm
                   workflow={selectedWorkflow}
                   onSave={handleTestingSave}
                   onSubmit={handleTestingSubmit}
                 />
-              </TabsContent>
+              </DaisyTabsContent>
               
-              <TabsContent value="evidence" className="mt-enterprise-4">
+              <DaisyTabsContent value="evidence" className="mt-enterprise-4">
                 <EvidenceUpload
                   workflow={selectedWorkflow}
                   onEvidenceUpload={handleEvidenceUpload}
                 />
-              </TabsContent>
+              </DaisyTabsContent>
               
-              <TabsContent value="history" className="mt-enterprise-4">
+              <DaisyTabsContent value="history" className="mt-enterprise-4">
                 <div className="text-center py-enterprise-8">
                   <BarChart3 className="h-8 w-8 text-text-tertiary mx-auto mb-enterprise-2" />
                   <p className="text-body-sm text-text-secondary">
                     Testing history and audit trail
                   </p>
                 </div>
-              </TabsContent>
-            </Tabs>
+              </DaisyTabsContent>
+            </DaisyTabs>
           </DaisyDialogContent>
         </DaisyDialog>
       )}

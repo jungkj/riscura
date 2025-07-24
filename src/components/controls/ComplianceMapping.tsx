@@ -7,7 +7,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   Target,
@@ -591,14 +591,14 @@ export const ComplianceMapping: React.FC = () => {
           </div>
 
           {/* Tabs */}
-          <Tabs value={activeView} onValueChange={(value: any) => setActiveView(value)}>
-            <TabsList>
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="mapping">Control Mapping</TabsTrigger>
-              <TabsTrigger value="gaps">Gap Analysis</TabsTrigger>
-            </TabsList>
+          <DaisyTabs value={activeView} onValueChange={(value: any) => setActiveView(value)}>
+            <DaisyTabsList>
+              <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="mapping">Control Mapping</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="gaps">Gap Analysis</DaisyTabsTrigger>
+            </DaisyTabsList>
 
-            <TabsContent value="overview" className="mt-enterprise-4">
+            <DaisyTabsContent value="overview" className="mt-enterprise-4">
               <div className="space-y-enterprise-4">
                 {/* Framework Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-enterprise-4">
@@ -645,9 +645,9 @@ export const ComplianceMapping: React.FC = () => {
                   ))}
                 </div>
               </div>
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="mapping" className="mt-enterprise-4">
+            <DaisyTabsContent value="mapping" className="mt-enterprise-4">
               <div className="space-y-enterprise-4">
                 {selectedFramework.categories.map((category) => (
                   <CategoryDetail
@@ -657,12 +657,12 @@ export const ComplianceMapping: React.FC = () => {
                   />
                 ))}
               </div>
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="gaps" className="mt-enterprise-4">
+            <DaisyTabsContent value="gaps" className="mt-enterprise-4">
               <GapAnalysisView framework={selectedFramework} />
-            </TabsContent>
-          </Tabs>
+            </DaisyTabsContent>
+          </DaisyTabs>
         </div>
       )}
     </div>

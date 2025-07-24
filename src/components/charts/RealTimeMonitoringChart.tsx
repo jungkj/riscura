@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisySwitch } from '@/components/ui/DaisySwitch';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import {
   ResponsiveContainer,
   LineChart,
@@ -142,7 +142,7 @@ export default function RealTimeMonitoringChart({
   const [selectedMetrics, setSelectedMetrics] = useState<(keyof MonitoringDataPoint)[]>([
     'riskScore', 'activeIncidents', 'systemLoad', 'complianceScore'
   ]);
-  const [thresholds, setThresholds] = useState<AlertThreshold[]>(defaultThresholds);
+  const [thresholds, setThresholds] = useState<DaisyAlertThreshold[]>(defaultThresholds);
   const [alerts, setAlerts] = useState<Array<{ id: string; metric: string; value: number; threshold: number; severity: string; timestamp: number }>>([]);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [selectedTab, setSelectedTab] = useState('monitoring');
@@ -250,7 +250,7 @@ export default function RealTimeMonitoringChart({
   };
   
   // Update threshold
-  const updateThreshold = (index: number, updates: Partial<AlertThreshold>) => {
+  const updateThreshold = (index: number, updates: Partial<DaisyAlertThreshold>) => {
     setThresholds(prev => prev.map((threshold, i) => 
       i === index ? { ...threshold, ...updates } : threshold
     ));
@@ -348,12 +348,12 @@ export default function RealTimeMonitoringChart({
   };
   
   return (
-    <Card className={`${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
-      <CardHeader className="pb-3">
+    <DaisyCard className={`${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
+      <DaisyCardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Activity className="w-5 h-5 text-blue-600" />
-            <CardTitle className="text-lg">Real-Time Monitoring</CardTitle>
+            <DaisyCardTitle className="text-lg">Real-Time Monitoring</DaisyCardTitle>
             
             {/* Connection Status */}
             <div className="flex items-center space-x-1">
@@ -362,17 +362,17 @@ export default function RealTimeMonitoringChart({
               ) : (
                 <WifiOff className="w-4 h-4 text-red-600" />
               )}
-              <Badge 
+              <DaisyBadge 
                 variant={isConnected ? 'default' : 'secondary'}
                 className="text-xs"
               >
                 {isConnected ? (isPaused ? 'Paused' : 'Live') : 'Disconnected'}
-              </Badge>
+              </DaisyBadge>
             </div>
             
             {/* Current Status */}
             {currentStatus && (
-              <Badge 
+              <DaisyBadge 
                 variant={
                   currentStatus.status === 'healthy' ? 'default' :
                   currentStatus.status === 'warning' ? 'secondary' : 'destructive'
@@ -380,72 +380,72 @@ export default function RealTimeMonitoringChart({
                 className="text-xs"
               >
                 {currentStatus.status === 'healthy' && <CheckCircle className="w-3 h-3 mr-1" />}
-                {currentStatus.status === 'warning' && <AlertTriangle className="w-3 h-3 mr-1" />}
+                {currentStatus.status === 'warning' && <DaisyAlertTriangle className="w-3 h-3 mr-1" />}
                 {currentStatus.status === 'critical' && <Zap className="w-3 h-3 mr-1" />}
                 {currentStatus.status}
-              </Badge>
+              </DaisyBadge>
             )}
           </div>
           
           <div className="flex items-center space-x-1">
             {/* Control Buttons */}
             {!isConnected ? (
-              <Button
+              <DaisyButton
                 variant="primary"
                 size="sm"
                 onClick={startMonitoring}
                 className="p-2"
               >
                 <Play className="w-4 h-4" />
-              </Button>
+              </DaisyButton>
             ) : (
               <>
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   onClick={togglePause}
                   className="p-2"
                 >
                   {isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
-                </Button>
+                </DaisyButton>
                 
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   onClick={stopMonitoring}
                   className="p-2"
                 >
                   <WifiOff className="w-4 h-4" />
-                </Button>
+                </DaisyButton>
               </>
             )}
             
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={resetData}
               className="p-2"
             >
               <RotateCcw className="w-4 h-4" />
-            </Button>
+            </DaisyButton>
             
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={handleExport}
               className="p-2"
             >
               <Download className="w-4 h-4" />
-            </Button>
+            </DaisyButton>
             
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={() => setIsFullscreen(!isFullscreen)}
               className="p-2"
             >
               <Maximize2 className="w-4 h-4" />
-            </Button>
+            </DaisyButton>
           </div>
         </div>
         
@@ -453,7 +453,7 @@ export default function RealTimeMonitoringChart({
         <div className="flex flex-wrap items-center gap-2 mt-3">
           <span className="text-sm text-gray-600">Metrics:</span>
           {Object.keys(metricConfigs).filter(key => !['timestamp', 'time'].includes(key)).map(metric => (
-            <Button
+            <DaisyButton
               key={metric}
               variant={selectedMetrics.includes(metric as keyof MonitoringDataPoint) ? 'primary' : 'outline'}
               size="sm"
@@ -468,20 +468,20 @@ export default function RealTimeMonitoringChart({
               className="text-xs h-7"
             >
               {metricConfigs[metric as keyof typeof metricConfigs].label}
-            </Button>
+            </DaisyButton>
           ))}
         </div>
-      </CardHeader>
+      
 
-      <CardContent>
-        <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="monitoring">Live Data</TabsTrigger>
-            <TabsTrigger value="alerts">Alerts</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
-          </TabsList>
+      <DaisyCardContent>
+        <DaisyTabs value={selectedTab} onValueChange={setSelectedTab}>
+          <DaisyTabsList className="grid w-full grid-cols-3">
+            <DaisyTabsTrigger value="monitoring">Live Data</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="alerts">Alerts</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="settings">Settings</DaisyTabsTrigger>
+          </DaisyTabsList>
           
-          <TabsContent value="monitoring" className="space-y-4">
+          <DaisyTabsContent value="monitoring" className="space-y-4">
             {/* Current Values */}
             {currentStatus && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
@@ -518,7 +518,7 @@ export default function RealTimeMonitoringChart({
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="time" />
                 <YAxis />
-                <Tooltip content={<CustomTooltip />} />
+                <DaisyTooltip content={<CustomTooltip />} />
                 <Legend />
                 
                 {selectedMetrics.map(metric => {
@@ -555,14 +555,14 @@ export default function RealTimeMonitoringChart({
                 })}
               </LineChart>
             </ResponsiveContainer>
-          </TabsContent>
+          </DaisyTabsContent>
           
-          <TabsContent value="alerts" className="space-y-4">
+          <DaisyTabsContent value="alerts" className="space-y-4">
             <div className="flex items-center justify-between mb-4">
               <h4 className="font-medium">Recent Alerts</h4>
-              <Badge variant="secondary" className="text-xs">
+              <DaisyBadge variant="secondary" className="text-xs">
                 {alerts.length} total
-              </Badge>
+              </DaisyBadge>
             </div>
             
             <div className="space-y-2 max-h-96 overflow-y-auto">
@@ -576,12 +576,12 @@ export default function RealTimeMonitoringChart({
                   <div key={alert.id} className="p-3 border rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-2">
-                        <Badge 
+                        <DaisyBadge 
                           variant={alert.severity === 'critical' ? 'destructive' : 'secondary'}
                           className="text-xs"
                         >
                           {alert.severity}
-                        </Badge>
+                        </DaisyBadge>
                         <span className="font-medium text-sm">
                           {metricConfigs[alert.metric as keyof typeof metricConfigs].label}
                         </span>
@@ -598,9 +598,9 @@ export default function RealTimeMonitoringChart({
                 ))
               )}
             </div>
-          </TabsContent>
+          </DaisyTabsContent>
           
-          <TabsContent value="settings" className="space-y-4">
+          <DaisyTabsContent value="settings" className="space-y-4">
             <h4 className="font-medium mb-4">Alert Thresholds</h4>
             
             <div className="space-y-4">
@@ -610,7 +610,7 @@ export default function RealTimeMonitoringChart({
                     <span className="font-medium">
                       {metricConfigs[threshold.metric].label}
                     </span>
-                    <Switch
+                    <DaisySwitch
                       checked={threshold.enabled}
                       onCheckedChange={(enabled) => updateThreshold(index, { enabled })}
                     />
@@ -618,23 +618,23 @@ export default function RealTimeMonitoringChart({
                   
                   <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <Label className="text-xs">Condition</Label>
-                      <Select 
+                      <DaisyLabel className="text-xs">Condition</DaisyLabel>
+                      <DaisySelect 
                         value={threshold.condition} 
                         onValueChange={(condition: 'above' | 'below') => updateThreshold(index, { condition })}
                       >
-                        <SelectTrigger className="h-8">
-                          <SelectValue />
+                        <DaisySelectTrigger className="h-8">
+                          <DaisySelectValue />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="above">Above</SelectItem>
-                          <SelectItem value="below">Below</SelectItem>
+                        <DaisySelectContent>
+                          <DaisySelectItem value="above">Above</SelectItem>
+                          <DaisySelectItem value="below">Below</SelectItem>
                         </SelectContent>
-                      </Select>
+                      </DaisySelect>
                     </div>
                     
                     <div>
-                      <Label className="text-xs">Threshold</Label>
+                      <DaisyLabel className="text-xs">Threshold</DaisyLabel>
                       <input
                         type="number"
                         value={threshold.threshold}
@@ -644,29 +644,29 @@ export default function RealTimeMonitoringChart({
                     </div>
                     
                     <div>
-                      <Label className="text-xs">Severity</Label>
-                      <Select 
+                      <DaisyLabel className="text-xs">Severity</DaisyLabel>
+                      <DaisySelect 
                         value={threshold.severity} 
                         onValueChange={(severity: 'low' | 'medium' | 'high' | 'critical') => updateThreshold(index, { severity })}
                       >
-                        <SelectTrigger className="h-8">
-                          <SelectValue />
+                        <DaisySelectTrigger className="h-8">
+                          <DaisySelectValue />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="low">Low</SelectItem>
-                          <SelectItem value="medium">Medium</SelectItem>
-                          <SelectItem value="high">High</SelectItem>
-                          <SelectItem value="critical">Critical</SelectItem>
+                        <DaisySelectContent>
+                          <DaisySelectItem value="low">Low</SelectItem>
+                          <DaisySelectItem value="medium">Medium</SelectItem>
+                          <DaisySelectItem value="high">High</SelectItem>
+                          <DaisySelectItem value="critical">Critical</SelectItem>
                         </SelectContent>
-                      </Select>
+                      </DaisySelect>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
+          </DaisyTabsContent>
+        </DaisyTabs>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 } 

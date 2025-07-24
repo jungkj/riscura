@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
   Shield, 
   CheckCircle, 
@@ -217,25 +217,25 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
   const totalGaps = data.reduce((sum, f) => sum + f.criticalGaps, 0);
 
   return (
-    <Card className={`bg-[#FAFAFA] border-gray-200 ${className}`}>
-      <CardHeader>
+    <DaisyCard className={`bg-[#FAFAFA] border-gray-200 ${className}`}>
+      <DaisyCardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
+          <DaisyCardTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5 text-[#199BEC]" />
             Compliance Overview
-          </CardTitle>
+          </DaisyCardTitle>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm">
+            <DaisyButton variant="outline" size="sm">
               <Eye className="h-4 w-4 mr-2" />
               View All
-            </Button>
-            <Button variant="outline" size="sm">
+            </DaisyButton>
+            <DaisyButton variant="outline" size="sm">
               <Settings className="h-4 w-4" />
-            </Button>
+            </DaisyButton>
           </div>
         </div>
-      </CardHeader>
-      <CardContent>
+      
+      <DaisyCardContent>
         <div className="space-y-6">
           {/* Overall Score Ring */}
           <div className="flex items-center justify-center">
@@ -357,7 +357,7 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
                           className="w-3 h-3" 
                           style={{ color: statusConfig[framework.status].color }}
                         />
-                        <Badge 
+                        <DaisyBadge 
                           variant="secondary"
                           className="text-xs"
                           style={{ 
@@ -366,7 +366,7 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
                           }}
                         >
                           {statusConfig[framework.status].label}
-                        </Badge>
+                        </DaisyBadge>
                       </div>
 
                       {/* Trend Indicator */}
@@ -406,13 +406,13 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <h3 className="font-semibold text-[#191919]">{framework.name}</h3>
-                      <Button
+                      <DaisyButton
                         variant="ghost"
                         size="sm"
                         onClick={() => setSelectedFramework(null)}
                       >
                         ×
-                      </Button>
+                      </DaisyButton>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -450,7 +450,7 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
                         <span>Implementation Progress</span>
                         <span>{Math.round((framework.implementedControls / framework.totalControls) * 100)}%</span>
                       </div>
-                      <Progress 
+                      <DaisyProgress 
                         value={(framework.implementedControls / framework.totalControls) * 100}
                         className="h-2"
                       />
@@ -485,7 +485,7 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
             </div>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 }; 

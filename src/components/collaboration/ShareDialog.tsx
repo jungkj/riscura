@@ -2,16 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisySwitch } from '@/components/ui/DaisySwitch';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
+import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Calendar } from '@/components/ui/calendar';
 import { toast } from '@/hooks/use-toast';
@@ -403,87 +403,87 @@ export function ShareDialog({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
-        <DialogHeader>
-          <DialogTitle className="flex items-center">
+    <DaisyDialog open={isOpen} onOpenChange={onOpenChange}>
+      <DaisyDialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
+        <DaisyDialogHeader>
+          <DaisyDialogTitle className="flex items-center">
             <Share2 className="w-5 h-5 mr-2" />
             Share "{questionnaireName}"
-          </DialogTitle>
-          <DialogDescription>
+          </DaisyDialogTitle>
+          <DaisyDialogDescription>
             Manage access and permissions for this questionnaire.
-          </DialogDescription>
-        </DialogHeader>
+          </DaisyDialogDescription>
+        </DaisyDialogHeader>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="people">
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="flex-1">
+          <DaisyTabsList className="grid w-full grid-cols-4">
+            <DaisyTabsTrigger value="people">
               People
               {shareUsers.length > 0 && (
-                <Badge variant="secondary" className="ml-1 px-1 py-0 text-xs">
+                <DaisyBadge variant="secondary" className="ml-1 px-1 py-0 text-xs">
                   {shareUsers.length}
-                </Badge>
+                </DaisyBadge>
               )}
-            </TabsTrigger>
-            <TabsTrigger value="links">Links</TabsTrigger>
-            <TabsTrigger value="assignments">Assignments</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
-          </TabsList>
+            </DaisyTabsTrigger>
+            <DaisyTabsTrigger value="links">Links</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="assignments">Assignments</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="settings">Settings</DaisyTabsTrigger>
+          </DaisyTabsList>
 
           {/* People Tab */}
-          <TabsContent value="people" className="space-y-4">
+          <DaisyTabsContent value="people" className="space-y-4">
             {/* Invite section */}
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base">Invite People</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+            <DaisyCard>
+              <DaisyCardHeader className="pb-3">
+                <DaisyCardTitle className="text-base">Invite People</DaisyCardTitle>
+              
+              <DaisyCardContent className="space-y-4">
                 <div className="flex space-x-2">
                   <div className="flex-1">
-                    <Input
+                    <DaisyInput
                       type="email"
                       placeholder="Enter email address"
                       value={inviteEmail}
                       onChange={(e) => setInviteEmail(e.target.value)}
                     />
                   </div>
-                  <Select value={inviteRole} onValueChange={(value: ShareUser['role']) => setInviteRole(value)}>
-                    <SelectTrigger className="w-32">
-                      <SelectValue />
+                  <DaisySelect value={inviteRole} onValueChange={(value: ShareUser['role']) => setInviteRole(value)}>
+                    <DaisySelectTrigger className="w-32">
+                      <DaisySelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="viewer">Viewer</SelectItem>
-                      <SelectItem value="commenter">Commenter</SelectItem>
-                      <SelectItem value="editor">Editor</SelectItem>
-                      <SelectItem value="admin">Admin</SelectItem>
+                    <DaisySelectContent>
+                      <DaisySelectItem value="viewer">Viewer</SelectItem>
+                      <DaisySelectItem value="commenter">Commenter</SelectItem>
+                      <DaisySelectItem value="editor">Editor</SelectItem>
+                      <DaisySelectItem value="admin">Admin</SelectItem>
                     </SelectContent>
-                  </Select>
-                  <Button onClick={handleInviteUser}>
+                  </DaisySelect>
+                  <DaisyButton onClick={handleInviteUser}>
                     <UserPlus className="w-4 h-4 mr-2" />
                     Invite
-                  </Button>
+                  </DaisyButton>
                 </div>
 
                 {inviteMessage && (
-                  <Textarea
+                  <DaisyTextarea
                     placeholder="Add a personal message (optional)"
                     value={inviteMessage}
                     onChange={(e) => setInviteMessage(e.target.value)}
                     rows={2}
                   />
                 )}
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
             {/* People list */}
-            <Card>
-              <CardHeader className="pb-3">
+            <DaisyCard>
+              <DaisyCardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-base">People with Access</CardTitle>
+                  <DaisyCardTitle className="text-base">People with Access</DaisyCardTitle>
                   <div className="flex items-center space-x-2">
                     <div className="relative">
                       <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                      <Input
+                      <DaisyInput
                         placeholder="Search people..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
@@ -491,33 +491,33 @@ export function ShareDialog({
                       />
                     </div>
                     {selectedUsers.length > 0 && (
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="sm">
+                      <DaisyDropdownMenu>
+                        <DaisyDropdownMenuTrigger asChild>
+                          <DaisyButton variant="outline" size="sm">
                             Actions ({selectedUsers.length})
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                          <DropdownMenuItem onClick={() => setBulkAction('role')}>
+                          </DaisyButton>
+                        </DaisyDropdownMenuTrigger>
+                        <DaisyDropdownMenuContent>
+                          <DaisyDropdownMenuItem onClick={() => setBulkAction('role')}>
                             Change Role
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => setBulkAction('permissions')}>
+                          </DaisyDropdownMenuItem>
+                          <DaisyDropdownMenuItem onClick={() => setBulkAction('permissions')}>
                             Edit Permissions
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem 
+                          </DaisyDropdownMenuItem>
+                          <DaisyDropdownMenuSeparator />
+                          <DaisyDropdownMenuItem 
                             onClick={() => setBulkAction('remove')}
                             className="text-red-600"
                           >
                             Remove Access
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                          </DaisyDropdownMenuItem>
+                        </DaisyDropdownMenuContent>
+                      </DaisyDropdownMenu>
                     )}
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent className="p-0">
+              
+              <DaisyCardContent className="p-0">
                 <ScrollArea className="h-64">
                   <div className="space-y-2 p-4">
                     {filteredUsers.map(user => (
@@ -536,19 +536,19 @@ export function ShareDialog({
                             className="rounded"
                           />
                           
-                          <Avatar className="w-8 h-8">
-                            <AvatarImage src={user.avatar} />
-                            <AvatarFallback>
+                          <DaisyAvatar className="w-8 h-8">
+                            <DaisyAvatarImage src={user.avatar} />
+                            <DaisyAvatarFallback>
                               {user.name.split(' ').map(n => n[0]).join('')}
-                            </AvatarFallback>
-                          </Avatar>
+                            </DaisyAvatarFallback>
+                          </DaisyAvatar>
                           
                           <div>
                             <div className="flex items-center space-x-2">
                               <span className="font-medium">{user.name}</span>
-                              <Badge className={getRoleBadgeColor(user.role)}>
+                              <DaisyBadge className={getRoleBadgeColor(user.role)}>
                                 {user.role}
-                              </Badge>
+                              </DaisyBadge>
                               <span className={`text-xs ${getStatusColor(user.status)}`}>
                                 {user.status}
                               </span>
@@ -563,98 +563,98 @@ export function ShareDialog({
                         </div>
 
                         <div className="flex items-center space-x-2">
-                          <Select
+                          <DaisySelect
                             value={user.role}
                             onValueChange={(value: ShareUser['role']) => 
                               handleChangeUserRole(user.id, value)
                             }
                           >
-                            <SelectTrigger className="w-24">
-                              <SelectValue />
+                            <DaisySelectTrigger className="w-24">
+                              <DaisySelectValue />
                             </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="viewer">Viewer</SelectItem>
-                              <SelectItem value="commenter">Commenter</SelectItem>
-                              <SelectItem value="editor">Editor</SelectItem>
-                              <SelectItem value="admin">Admin</SelectItem>
+                            <DaisySelectContent>
+                              <DaisySelectItem value="viewer">Viewer</SelectItem>
+                              <DaisySelectItem value="commenter">Commenter</SelectItem>
+                              <DaisySelectItem value="editor">Editor</SelectItem>
+                              <DaisySelectItem value="admin">Admin</SelectItem>
                             </SelectContent>
-                          </Select>
+                          </DaisySelect>
 
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm">
+                          <DaisyDropdownMenu>
+                            <DaisyDropdownMenuTrigger asChild>
+                              <DaisyButton variant="ghost" size="sm">
                                 <MoreVertical className="w-4 h-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                              <DropdownMenuItem>
+                              </DaisyButton>
+                            </DaisyDropdownMenuTrigger>
+                            <DaisyDropdownMenuContent>
+                              <DaisyDropdownMenuItem>
                                 <Mail className="w-4 h-4 mr-2" />
                                 Send Message
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>
+                              </DaisyDropdownMenuItem>
+                              <DaisyDropdownMenuItem>
                                 <Key className="w-4 h-4 mr-2" />
                                 Edit Permissions
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem 
+                              </DaisyDropdownMenuItem>
+                              <DaisyDropdownMenuSeparator />
+                              <DaisyDropdownMenuItem 
                                 onClick={() => handleRemoveUser(user.id)}
                                 className="text-red-600"
                               >
                                 <Trash2 className="w-4 h-4 mr-2" />
                                 Remove Access
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
+                              </DaisyDropdownMenuItem>
+                            </DaisyDropdownMenuContent>
+                          </DaisyDropdownMenu>
                         </div>
                       </div>
                     ))}
                   </div>
                 </ScrollArea>
-              </CardContent>
-            </Card>
-          </TabsContent>
+              </DaisyCardBody>
+            </DaisyCard>
+          </DaisyTabsContent>
 
           {/* Links Tab */}
-          <TabsContent value="links" className="space-y-4">
+          <DaisyTabsContent value="links" className="space-y-4">
             {/* Create link section */}
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base">Create Share Link</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+            <DaisyCard>
+              <DaisyCardHeader className="pb-3">
+                <DaisyCardTitle className="text-base">Create Share Link</DaisyCardTitle>
+              
+              <DaisyCardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label>Link Name</Label>
-                    <Input
+                    <DaisyLabel>Link Name</DaisyLabel>
+                    <DaisyInput
                       value={linkSettings.name}
                       onChange={(e) => setLinkSettings(prev => ({ ...prev, name: e.target.value }))}
                       placeholder="Enter link name"
                     />
                   </div>
                   <div>
-                    <Label>Access Level</Label>
-                    <Select 
+                    <DaisyLabel>Access Level</DaisyLabel>
+                    <DaisySelect 
                       value={linkSettings.type} 
                       onValueChange={(value: ShareLink['type']) => 
                         setLinkSettings(prev => ({ ...prev, type: value }))
                       }
                     >
-                      <SelectTrigger>
-                        <SelectValue />
+                      <DaisySelectTrigger>
+                        <DaisySelectValue />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="view">View Only</SelectItem>
-                        <SelectItem value="comment">View & Comment</SelectItem>
-                        <SelectItem value="edit">View & Edit</SelectItem>
+                      <DaisySelectContent>
+                        <DaisySelectItem value="view">View Only</SelectItem>
+                        <DaisySelectItem value="comment">View & Comment</SelectItem>
+                        <DaisySelectItem value="edit">View & Edit</SelectItem>
                       </SelectContent>
-                    </Select>
+                    </DaisySelect>
                   </div>
                 </div>
 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <Label>Require sign-in</Label>
-                    <Switch
+                    <DaisyLabel>Require sign-in</DaisyLabel>
+                    <DaisySwitch
                       checked={linkSettings.requiresSignIn}
                       onCheckedChange={(checked) => 
                         setLinkSettings(prev => ({ ...prev, requiresSignIn: checked }))
@@ -662,8 +662,8 @@ export function ShareDialog({
                     />
                   </div>
                   <div className="flex items-center justify-between">
-                    <Label>Allow downloads</Label>
-                    <Switch
+                    <DaisyLabel>Allow downloads</DaisyLabel>
+                    <DaisySwitch
                       checked={linkSettings.downloadAllowed}
                       onCheckedChange={(checked) => 
                         setLinkSettings(prev => ({ ...prev, downloadAllowed: checked }))
@@ -671,8 +671,8 @@ export function ShareDialog({
                     />
                   </div>
                   <div className="flex items-center justify-between">
-                    <Label>Password protect</Label>
-                    <Switch
+                    <DaisyLabel>Password protect</DaisyLabel>
+                    <DaisySwitch
                       checked={linkSettings.passwordProtected}
                       onCheckedChange={(checked) => 
                         setLinkSettings(prev => ({ ...prev, passwordProtected: checked }))
@@ -683,8 +683,8 @@ export function ShareDialog({
 
                 {linkSettings.passwordProtected && (
                   <div>
-                    <Label>Password</Label>
-                    <Input
+                    <DaisyLabel>Password</DaisyLabel>
+                    <DaisyInput
                       type="password"
                       value={linkSettings.password}
                       onChange={(e) => setLinkSettings(prev => ({ ...prev, password: e.target.value }))}
@@ -693,19 +693,19 @@ export function ShareDialog({
                   </div>
                 )}
 
-                <Button onClick={handleCreateShareLink} className="w-full">
+                <DaisyButton onClick={handleCreateShareLink} className="w-full">
                   <Link2 className="w-4 h-4 mr-2" />
                   Create Link
-                </Button>
-              </CardContent>
-            </Card>
+                </DaisyButton>
+              </DaisyCardBody>
+            </DaisyCard>
 
             {/* Existing links */}
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base">Active Links</CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
+            <DaisyCard>
+              <DaisyCardHeader className="pb-3">
+                <DaisyCardTitle className="text-base">Active Links</DaisyCardTitle>
+              
+              <DaisyCardContent className="p-0">
                 <div className="space-y-3 p-4">
                   {shareLinks.map(link => (
                     <div key={link.id} className="p-4 border rounded-lg">
@@ -713,12 +713,12 @@ export function ShareDialog({
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-2">
                             <h4 className="font-medium">{link.name}</h4>
-                            <Badge variant="outline">{link.type}</Badge>
+                            <DaisyBadge variant="outline">{link.type}</DaisyBadge>
                             {link.passwordProtected && (
-                              <Badge variant="secondary">
+                              <DaisyBadge variant="secondary">
                                 <Lock className="w-3 h-3 mr-1" />
                                 Password
-                              </Badge>
+                              </DaisyBadge>
                             )}
                           </div>
                           
@@ -736,75 +736,75 @@ export function ShareDialog({
                             <code className="px-2 py-1 bg-gray-100 rounded text-xs font-mono flex-1">
                               {link.url}
                             </code>
-                            <Button
+                            <DaisyButton
                               variant="outline"
                               size="sm"
                               onClick={() => handleCopyLink(link.url)}
                             >
                               <Copy className="w-4 h-4" />
-                            </Button>
+                            </DaisyButton>
                           </div>
                         </div>
 
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
+                        <DaisyDropdownMenu>
+                          <DaisyDropdownMenuTrigger asChild>
+                            <DaisyButton variant="ghost" size="sm">
                               <MoreVertical className="w-4 h-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent>
-                            <DropdownMenuItem>
+                            </DaisyButton>
+                          </DaisyDropdownMenuTrigger>
+                          <DaisyDropdownMenuContent>
+                            <DaisyDropdownMenuItem>
                               <Edit3 className="w-4 h-4 mr-2" />
                               Edit Settings
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            </DaisyDropdownMenuItem>
+                            <DaisyDropdownMenuItem>
                               <Eye className="w-4 h-4 mr-2" />
                               View Analytics
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600">
+                            </DaisyDropdownMenuItem>
+                            <DaisyDropdownMenuSeparator />
+                            <DaisyDropdownMenuItem className="text-red-600">
                               <Trash2 className="w-4 h-4 mr-2" />
                               Delete Link
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                            </DaisyDropdownMenuItem>
+                          </DaisyDropdownMenuContent>
+                        </DaisyDropdownMenu>
                       </div>
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+              </DaisyCardBody>
+            </DaisyCard>
+          </DaisyTabsContent>
 
           {/* Assignments Tab */}
-          <TabsContent value="assignments" className="space-y-4">
+          <DaisyTabsContent value="assignments" className="space-y-4">
             <div className="text-center py-8 text-gray-500">
               <Users className="w-12 h-12 mx-auto mb-3 text-gray-300" />
               <p>Team assignments coming soon</p>
               <p className="text-sm">Assign questionnaires to team members with deadlines and reminders</p>
             </div>
-          </TabsContent>
+          </DaisyTabsContent>
 
           {/* Settings Tab */}
-          <TabsContent value="settings" className="space-y-4">
+          <DaisyTabsContent value="settings" className="space-y-4">
             <div className="text-center py-8 text-gray-500">
               <Settings className="w-12 h-12 mx-auto mb-3 text-gray-300" />
               <p>Advanced sharing settings coming soon</p>
               <p className="text-sm">Configure organization-wide sharing policies and defaults</p>
             </div>
-          </TabsContent>
-        </Tabs>
+          </DaisyTabsContent>
+        </DaisyTabs>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+        <DaisyDialogFooter>
+          <DaisyButton variant="outline" onClick={() => onOpenChange(false)}>
             Close
-          </Button>
-          <Button onClick={() => onShare?.({})}>
+          </DaisyButton>
+          <DaisyButton onClick={() => onShare?.({})}>
             <Share2 className="w-4 h-4 mr-2" />
             Share
-          </Button>
+          </DaisyButton>
         </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      </DaisyDialogContent>
+    </DaisyDialog>
   );
 } 

@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { 
   MessageSquare,
   Search,
@@ -346,14 +346,14 @@ export default function ConversationHistory({
 
   if (isLoading) {
     return (
-      <Card className={className}>
-        <CardHeader>
+      <DaisyCard className={className}>
+        <DaisyCardHeader>
           <div className="flex items-center space-x-2">
             <History className="w-5 h-5 text-blue-600" />
-            <CardTitle className="text-lg">Conversation History</CardTitle>
+            <DaisyCardTitle className="text-lg">Conversation History</DaisyCardTitle>
           </div>
-        </CardHeader>
-        <CardContent>
+        
+        <DaisyCardContent>
           <div className="space-y-4">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="animate-pulse">
@@ -363,27 +363,27 @@ export default function ConversationHistory({
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     );
   }
 
   return (
-    <Card className={className}>
-      <CardHeader className="pb-3">
+    <DaisyCard className={className}>
+      <DaisyCardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <History className="w-5 h-5 text-blue-600" />
-            <CardTitle className="text-lg">Conversation History</CardTitle>
-            <Badge variant="secondary" className="text-xs">
+            <DaisyCardTitle className="text-lg">Conversation History</DaisyCardTitle>
+            <DaisyBadge variant="secondary" className="text-xs">
               {conversations.length} conversations
-            </Badge>
+            </DaisyBadge>
           </div>
           
           <div className="flex items-center space-x-1">
             {selectedConversations.size > 0 && (
               <>
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   onClick={() => exportConversations(
@@ -392,38 +392,38 @@ export default function ConversationHistory({
                   className="p-2"
                 >
                   <Download className="w-4 h-4" />
-                </Button>
+                </DaisyButton>
                 
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   onClick={deleteSelectedConversations}
                   className="p-2 text-red-600"
                 >
                   <Trash2 className="w-4 h-4" />
-                </Button>
+                </DaisyButton>
               </>
             )}
             
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={() => exportConversations(filteredConversations)}
               className="p-2"
             >
               <Download className="w-4 h-4" />
-            </Button>
+            </DaisyButton>
           </div>
         </div>
-      </CardHeader>
+      
 
-      <CardContent className="p-0">
+      <DaisyCardContent className="p-0">
         {/* Search and Filters */}
         <div className="p-4 border-b space-y-3">
           <div className="flex space-x-2">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <Input
+              <DaisyInput
                 placeholder="Search conversations..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -431,42 +431,42 @@ export default function ConversationHistory({
               />
             </div>
             
-            <Select value={selectedFilter} onValueChange={setSelectedFilter}>
-              <SelectTrigger className="w-32">
+            <DaisySelect value={selectedFilter} onValueChange={setSelectedFilter}>
+              <DaisySelectTrigger className="w-32">
                 <Filter className="w-4 h-4 mr-2" />
-                <SelectValue />
+                <DaisySelectValue />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Time</SelectItem>
-                <SelectItem value="today">Today</SelectItem>
-                <SelectItem value="week">This Week</SelectItem>
-                <SelectItem value="month">This Month</SelectItem>
+              <DaisySelectContent>
+                <DaisySelectItem value="all">All Time</SelectItem>
+                <DaisySelectItem value="today">Today</SelectItem>
+                <DaisySelectItem value="week">This Week</SelectItem>
+                <DaisySelectItem value="month">This Month</SelectItem>
               </SelectContent>
-            </Select>
+            </DaisySelect>
             
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-32">
-                <SelectValue />
+            <DaisySelect value={sortBy} onValueChange={setSortBy}>
+              <DaisySelectTrigger className="w-32">
+                <DaisySelectValue />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="updated">Last Updated</SelectItem>
-                <SelectItem value="created">Date Created</SelectItem>
-                <SelectItem value="title">Title</SelectItem>
-                <SelectItem value="messages">Message Count</SelectItem>
+              <DaisySelectContent>
+                <DaisySelectItem value="updated">Last Updated</SelectItem>
+                <DaisySelectItem value="created">Date Created</SelectItem>
+                <DaisySelectItem value="title">Title</SelectItem>
+                <DaisySelectItem value="messages">Message Count</SelectItem>
               </SelectContent>
-            </Select>
+            </DaisySelect>
           </div>
         </div>
 
         {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mx-4 mb-4">
-            <TabsTrigger value="recent">Recent</TabsTrigger>
-            <TabsTrigger value="starred">Starred</TabsTrigger>
-            <TabsTrigger value="archived">Archived</TabsTrigger>
-          </TabsList>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <DaisyTabsList className="grid w-full grid-cols-3 mx-4 mb-4">
+            <DaisyTabsTrigger value="recent">Recent</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="starred">Starred</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="archived">Archived</DaisyTabsTrigger>
+          </DaisyTabsList>
 
-          <TabsContent value={activeTab} className="mt-0">
+          <DaisyTabsContent value={activeTab} className="mt-0">
             <div className="max-h-96 overflow-y-auto">
               {filteredConversations.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
@@ -545,14 +545,14 @@ export default function ConversationHistory({
                               {conversation.tags.length > 0 && (
                                 <div className="flex flex-wrap gap-1 mt-2">
                                   {conversation.tags.slice(0, 3).map((tag) => (
-                                    <Badge key={tag} variant="outline" className="text-xs">
+                                    <DaisyBadge key={tag} variant="outline" className="text-xs">
                                       {tag}
-                                    </Badge>
+                                    </DaisyBadge>
                                   ))}
                                   {conversation.tags.length > 3 && (
-                                    <Badge variant="outline" className="text-xs">
+                                    <DaisyBadge variant="outline" className="text-xs">
                                       +{conversation.tags.length - 3}
-                                    </Badge>
+                                    </DaisyBadge>
                                   )}
                                 </div>
                               )}
@@ -560,7 +560,7 @@ export default function ConversationHistory({
                           </div>
                           
                           <div className="flex items-center space-x-1 ml-2">
-                            <Button
+                            <DaisyButton
                               variant="ghost"
                               size="sm"
                               onClick={() => toggleStar(conversation.id)}
@@ -571,18 +571,18 @@ export default function ConversationHistory({
                                   conversation.isStarred ? 'text-yellow-500 fill-current' : ''
                                 }`} 
                               />
-                            </Button>
+                            </DaisyButton>
                             
-                            <Button
+                            <DaisyButton
                               variant="ghost"
                               size="sm"
                               onClick={() => shareConversation(conversation)}
                               className="p-1 h-6 w-6"
                             >
                               <Share2 className="w-3 h-3" />
-                            </Button>
+                            </DaisyButton>
                             
-                            <Button
+                            <DaisyButton
                               variant="ghost"
                               size="sm"
                               onClick={() => toggleConversationExpansion(conversation.id)}
@@ -593,7 +593,7 @@ export default function ConversationHistory({
                               ) : (
                                 <ChevronRight className="w-3 h-3" />
                               )}
-                            </Button>
+                            </DaisyButton>
                             
                             <select
                               className="text-xs border rounded px-1 py-0.5"
@@ -644,9 +644,9 @@ export default function ConversationHistory({
                                       </span>
                                       
                                       {message.metadata?.confidence && (
-                                        <Badge variant="outline" className="text-xs">
+                                        <DaisyBadge variant="outline" className="text-xs">
                                           {Math.round(message.metadata.confidence * 100)}% confidence
-                                        </Badge>
+                                        </DaisyBadge>
                                       )}
                                     </div>
                                   </div>
@@ -667,9 +667,9 @@ export default function ConversationHistory({
                 </div>
               )}
             </div>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
+          </DaisyTabsContent>
+        </DaisyTabs>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 } 

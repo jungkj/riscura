@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, Save, Clock, X, Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Slider } from '@/components/ui/slider';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -263,22 +263,22 @@ export default function DocumentSearch({
 
   return (
     <div className={`space-y-6 ${className}`}>
-      <Tabs defaultValue="search" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="search">Search Filters</TabsTrigger>
-          <TabsTrigger value="saved">Saved Searches</TabsTrigger>
-        </TabsList>
+      <DaisyTabs defaultValue="search" className="w-full">
+        <DaisyTabsList className="grid w-full grid-cols-2">
+          <DaisyTabsTrigger value="search">Search Filters</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="saved">Saved Searches</DaisyTabsTrigger>
+        </DaisyTabsList>
 
-        <TabsContent value="search" className="space-y-6 mt-6">
+        <DaisyTabsContent value="search" className="space-y-6 mt-6">
           {/* Basic Search */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Basic Search</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="text-lg">Basic Search</DaisyCardTitle>
+            
+            <DaisyCardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="search-query">Search Query</Label>
-                <Input
+                <DaisyLabel htmlFor="search-query">Search Query</DaisyLabel>
+                <DaisyInput
                   id="search-query"
                   placeholder="Enter keywords, file names, or phrases..."
                   value={filters.query}
@@ -288,76 +288,76 @@ export default function DocumentSearch({
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Category</Label>
-                  <Select 
+                  <DaisyLabel>Category</DaisyLabel>
+                  <DaisySelect 
                     value={filters.category} 
                     onValueChange={(value) => setFilters(prev => ({ ...prev, category: value }))}
                   >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
+                    <DaisySelectTrigger>
+                      <DaisySelectValue placeholder="Select category" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <DaisySelectContent>
                       {CATEGORY_OPTIONS.map(option => (
-                        <SelectItem key={option.value} value={option.value}>
+                        <DaisySelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>
                       ))}
                     </SelectContent>
-                  </Select>
+                  </DaisySelect>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>File Type</Label>
-                  <Select 
+                  <DaisyLabel>File Type</DaisyLabel>
+                  <DaisySelect 
                     value={filters.fileType} 
                     onValueChange={(value) => setFilters(prev => ({ ...prev, fileType: value }))}
                   >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select file type" />
+                    <DaisySelectTrigger>
+                      <DaisySelectValue placeholder="Select file type" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <DaisySelectContent>
                       {FILE_TYPE_OPTIONS.map(option => (
-                        <SelectItem key={option.value} value={option.value}>
+                        <DaisySelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>
                       ))}
                     </SelectContent>
-                  </Select>
+                  </DaisySelect>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
           {/* Advanced Filters */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Advanced Filters</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="text-lg">Advanced Filters</DaisyCardTitle>
+            
+            <DaisyCardContent className="space-y-4">
               {/* Tags */}
               <div className="space-y-2">
-                <Label>Tags</Label>
+                <DaisyLabel>Tags</DaisyLabel>
                 <div className="flex gap-2">
-                  <Input
+                  <DaisyInput
                     placeholder="Add tag..."
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && addTag()}
                   />
-                  <Button onClick={addTag} size="sm">
+                  <DaisyButton onClick={addTag} size="sm">
                     <Plus className="w-4 h-4" />
-                  </Button>
+                  </DaisyButton>
                 </div>
                 {filters.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {filters.tags.map((tag, index) => (
-                      <Badge key={index} variant="secondary" className="cursor-pointer">
+                      <DaisyBadge key={index} variant="secondary" className="cursor-pointer">
                         {tag}
                         <X 
                           className="w-3 h-3 ml-1" 
                           onClick={() => removeTag(tag)}
                         />
-                      </Badge>
+                      </DaisyBadge>
                     ))}
                   </div>
                 )}
@@ -365,29 +365,29 @@ export default function DocumentSearch({
 
               {/* Date Range */}
               <div className="space-y-2">
-                <Label>Upload Date Range</Label>
+                <DaisyLabel>Upload Date Range</DaisyLabel>
                 <div className="flex flex-wrap gap-2 mb-2">
                   {QUICK_DATE_RANGES.map((range, index) => (
-                    <Button
+                    <DaisyButton
                       key={index}
                       variant="outline"
                       size="sm"
                       onClick={() => setDateRange(range.value())}
                     >
                       {range.label}
-                    </Button>
+                    </DaisyButton>
                   ))}
                 </div>
                 <div className="flex gap-2">
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" className="justify-start text-left font-normal">
+                      <DaisyButton variant="outline" className="justify-start text-left font-normal">
                         {filters.dateRange.from ? (
                           format(filters.dateRange.from, 'PPP')
                         ) : (
                           'From date'
                         )}
-                      </Button>
+                      </DaisyButton>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0">
                       <Calendar
@@ -400,13 +400,13 @@ export default function DocumentSearch({
                   </Popover>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" className="justify-start text-left font-normal">
+                      <DaisyButton variant="outline" className="justify-start text-left font-normal">
                         {filters.dateRange.to ? (
                           format(filters.dateRange.to, 'PPP')
                         ) : (
                           'To date'
                         )}
-                      </Button>
+                      </DaisyButton>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0">
                       <Calendar
@@ -422,7 +422,7 @@ export default function DocumentSearch({
 
               {/* File Size Range */}
               <div className="space-y-2">
-                <Label>File Size Range (MB)</Label>
+                <DaisyLabel>File Size Range (MB)</DaisyLabel>
                 <div className="px-2">
                   <Slider
                     value={[filters.sizeRange.min, filters.sizeRange.max]}
@@ -445,53 +445,53 @@ export default function DocumentSearch({
               {/* Linked Entity */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Linked Entity Type</Label>
-                  <Select 
+                  <DaisyLabel>Linked Entity Type</DaisyLabel>
+                  <DaisySelect 
                     value={filters.linkedEntityType} 
                     onValueChange={(value) => setFilters(prev => ({ ...prev, linkedEntityType: value }))}
                   >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select entity type" />
+                    <DaisySelectTrigger>
+                      <DaisySelectValue placeholder="Select entity type" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="">All Types</SelectItem>
-                      <SelectItem value="RISK">Risk</SelectItem>
-                      <SelectItem value="CONTROL">Control</SelectItem>
-                      <SelectItem value="ASSESSMENT">Assessment</SelectItem>
-                      <SelectItem value="AUDIT">Audit</SelectItem>
+                    <DaisySelectContent>
+                      <DaisySelectItem value="">All Types</SelectItem>
+                      <DaisySelectItem value="RISK">Risk</SelectItem>
+                      <DaisySelectItem value="CONTROL">Control</SelectItem>
+                      <DaisySelectItem value="ASSESSMENT">Assessment</SelectItem>
+                      <DaisySelectItem value="AUDIT">Audit</SelectItem>
                     </SelectContent>
-                  </Select>
+                  </DaisySelect>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Entity ID</Label>
-                  <Input
+                  <DaisyLabel>Entity ID</DaisyLabel>
+                  <DaisyInput
                     placeholder="Enter entity ID..."
                     value={filters.linkedEntityId}
                     onChange={(e) => setFilters(prev => ({ ...prev, linkedEntityId: e.target.value }))}
                   />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
           {/* Search Actions */}
           <div className="flex items-center justify-between">
-            <Button variant="outline" onClick={clearFilters}>
+            <DaisyButton variant="outline" onClick={clearFilters}>
               Clear Filters
-            </Button>
+            </DaisyButton>
             
             <div className="flex items-center gap-2">
-              <Button
+              <DaisyButton
                 variant="outline"
                 onClick={() => setShowSaveSearch(true)}
                 disabled={!filters.query && !filters.category && !filters.fileType}
               >
                 <Save className="w-4 h-4 mr-2" />
                 Save Search
-              </Button>
+              </DaisyButton>
               
-              <Button onClick={handleSearch} disabled={searching}>
+              <DaisyButton onClick={handleSearch} disabled={searching}>
                 {searching ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
@@ -503,20 +503,20 @@ export default function DocumentSearch({
                     Search
                   </>
                 )}
-              </Button>
+              </DaisyButton>
             </div>
           </div>
 
           {/* Save Search Dialog */}
           {showSaveSearch && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Save Search</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle className="text-lg">Save Search</DaisyCardTitle>
+              
+              <DaisyCardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="search-name">Search Name</Label>
-                  <Input
+                  <DaisyLabel htmlFor="search-name">Search Name</DaisyLabel>
+                  <DaisyInput
                     id="search-name"
                     placeholder="Enter a name for this search..."
                     value={saveSearchName}
@@ -524,22 +524,22 @@ export default function DocumentSearch({
                   />
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button onClick={handleSaveSearch}>Save</Button>
-                  <Button variant="outline" onClick={() => setShowSaveSearch(false)}>
+                  <DaisyButton onClick={handleSaveSearch}>Save</DaisyButton>
+                  <DaisyButton variant="outline" onClick={() => setShowSaveSearch(false)}>
                     Cancel
-                  </Button>
+                  </DaisyButton>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           )}
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="saved" className="space-y-4 mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Saved Searches</CardTitle>
-            </CardHeader>
-            <CardContent>
+        <DaisyTabsContent value="saved" className="space-y-4 mt-6">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="text-lg">Saved Searches</DaisyCardTitle>
+            
+            <DaisyCardContent>
               {savedSearches.length === 0 ? (
                 <div className="text-center py-8">
                   <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
@@ -561,25 +561,25 @@ export default function DocumentSearch({
                           Used {search.useCount} time{search.useCount !== 1 ? 's' : ''}
                         </p>
                       </div>
-                      <Button size="sm" variant="ghost">
+                      <DaisyButton size="sm" variant="ghost">
                         Load
-                      </Button>
+                      </DaisyButton>
                     </div>
                   ))}
                 </div>
               )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
+      </DaisyTabs>
 
       {/* Search Facets */}
       {Object.keys(searchFacets).length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Refine Results</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle className="text-lg">Refine Results</DaisyCardTitle>
+          
+          <DaisyCardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {searchFacets.categories && searchFacets.categories.length > 0 && (
                 <div>
@@ -588,7 +588,7 @@ export default function DocumentSearch({
                     {searchFacets.categories.slice(0, 5).map((facet: any) => (
                       <div key={facet.value} className="flex items-center justify-between text-sm">
                         <span>{facet.value}</span>
-                        <Badge variant="secondary">{facet.count}</Badge>
+                        <DaisyBadge variant="secondary">{facet.count}</DaisyBadge>
                       </div>
                     ))}
                   </div>
@@ -602,7 +602,7 @@ export default function DocumentSearch({
                     {searchFacets.fileTypes.slice(0, 5).map((facet: any) => (
                       <div key={facet.value} className="flex items-center justify-between text-sm">
                         <span>{facet.value}</span>
-                        <Badge variant="secondary">{facet.count}</Badge>
+                        <DaisyBadge variant="secondary">{facet.count}</DaisyBadge>
                       </div>
                     ))}
                   </div>
@@ -616,15 +616,15 @@ export default function DocumentSearch({
                     {searchFacets.uploaders.slice(0, 5).map((facet: any) => (
                       <div key={facet.value} className="flex items-center justify-between text-sm">
                         <span className="truncate">{facet.label}</span>
-                        <Badge variant="secondary">{facet.count}</Badge>
+                        <DaisyBadge variant="secondary">{facet.count}</DaisyBadge>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       )}
     </div>
   );

@@ -3,9 +3,9 @@
 import React, { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { ContentCard } from '@/components/layout/MainContentArea';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisySelect } from '@/components/ui/DaisySelect';
 import { Slider } from '@/components/ui/slider';
 import {
   ZoomIn,
@@ -224,14 +224,14 @@ export const RiskHeatMap: React.FC = () => {
         </div>
         
         <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm" onClick={handleExport}>
+          <DaisyButton variant="outline" size="sm" onClick={handleExport}>
             <Download className="h-3 w-3 mr-1" />
             Export
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleReset}>
+          </DaisyButton>
+          <DaisyButton variant="outline" size="sm" onClick={handleReset}>
             <RotateCcw className="h-3 w-3 mr-1" />
             Reset
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
@@ -240,25 +240,25 @@ export const RiskHeatMap: React.FC = () => {
         <ContentCard title="Zoom" className="p-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Button
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={() => setZoomLevel([Math.max(50, zoomLevel[0] - 25)])}
                 disabled={zoomLevel[0] <= 50}
               >
                 <ZoomOut className="h-3 w-3" />
-              </Button>
+              </DaisyButton>
               <span className="text-xs text-gray-600">
                 {zoomLevel[0]}%
               </span>
-              <Button
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={() => setZoomLevel([Math.min(200, zoomLevel[0] + 25)])}
                 disabled={zoomLevel[0] >= 200}
               >
                 <ZoomIn className="h-3 w-3" />
-              </Button>
+              </DaisyButton>
             </div>
             <Slider
               value={zoomLevel}
@@ -272,45 +272,45 @@ export const RiskHeatMap: React.FC = () => {
         </ContentCard>
 
         <ContentCard title="Group By" className="p-4">
-          <Select value={groupBy} onValueChange={(value: any) => setGroupBy(value)}>
-            <SelectTrigger>
-              <SelectValue />
+          <DaisySelect value={groupBy} onValueChange={(value: any) => setGroupBy(value)}>
+            <DaisySelectTrigger>
+              <DaisySelectValue />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">No Grouping</SelectItem>
-              <SelectItem value="category">Category</SelectItem>
-              <SelectItem value="framework">Framework</SelectItem>
-              <SelectItem value="status">Status</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="none">No Grouping</SelectItem>
+              <DaisySelectItem value="category">Category</SelectItem>
+              <DaisySelectItem value="framework">Framework</SelectItem>
+              <DaisySelectItem value="status">Status</SelectItem>
             </SelectContent>
-          </Select>
+          </DaisySelect>
         </ContentCard>
 
         <ContentCard title="Category Filter" className="p-4">
-          <Select value={filterCategory} onValueChange={setFilterCategory}>
-            <SelectTrigger>
-              <SelectValue />
+          <DaisySelect value={filterCategory} onValueChange={setFilterCategory}>
+            <DaisySelectTrigger>
+              <DaisySelectValue />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="all">All Categories</SelectItem>
               {categories.map(category => (
-                <SelectItem key={category} value={category}>{category}</SelectItem>
+                <DaisySelectItem key={category} value={category}>{category}</SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </DaisySelect>
         </ContentCard>
 
         <ContentCard title="Framework Filter" className="p-4">
-          <Select value={filterFramework} onValueChange={setFilterFramework}>
-            <SelectTrigger>
-              <SelectValue />
+          <DaisySelect value={filterFramework} onValueChange={setFilterFramework}>
+            <DaisySelectTrigger>
+              <DaisySelectValue />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Frameworks</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="all">All Frameworks</SelectItem>
               {frameworks.map(framework => (
-                <SelectItem key={framework} value={framework}>{framework}</SelectItem>
+                <DaisySelectItem key={framework} value={framework}>{framework}</SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </DaisySelect>
         </ContentCard>
       </div>
 
@@ -327,14 +327,14 @@ export const RiskHeatMap: React.FC = () => {
         </div>
         
         <div className="flex items-center space-x-2">
-          <Button
+          <DaisyButton
             variant={showGrid ? 'primary' : 'outline'}
             size="sm"
             onClick={() => setShowGrid(!showGrid)}
           >
             <Grid3X3 className="h-3 w-3 mr-1" />
             Grid
-          </Button>
+          </DaisyButton>
           <span className="text-xs text-gray-600">
             {filteredRisks.length} risks shown
           </span>
@@ -386,10 +386,10 @@ export const RiskHeatMap: React.FC = () => {
             {groupBy !== 'none' && Object.keys(groupedRisks).length > 1 && (
               <div className="absolute top-2 right-2 space-y-1">
                 {Object.entries(groupedRisks).map(([groupName, risks]) => (
-                  <Badge key={groupName} variant="outline" className="text-xs">
+                  <DaisyBadge key={groupName} variant="outline" className="text-xs">
                     <Layers className="h-3 w-3 mr-1" />
                     {groupName} ({risks.length})
-                  </Badge>
+                  </DaisyBadge>
                 ))}
               </div>
             )}
@@ -434,9 +434,9 @@ export const RiskHeatMap: React.FC = () => {
                 {selectedRisk.riskLevel.charAt(0).toUpperCase() + selectedRisk.riskLevel.slice(1)} Risk
               </span>
             </div>
-            <Button variant="outline" size="sm" onClick={() => setSelectedRisk(null)}>
+            <DaisyButton variant="outline" size="sm" onClick={() => setSelectedRisk(null)}>
               Close
-            </Button>
+            </DaisyButton>
           </div>
         </ContentCard>
       )}

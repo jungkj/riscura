@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisySelect } from '@/components/ui/DaisySelect';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -132,42 +132,42 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
         </div>
         
         <div className="flex items-center space-x-3">
-          <Select value={timeRange} onValueChange={(value: any) => setTimeRange(value)}>
-            <SelectTrigger className="w-32">
-              <SelectValue />
+          <DaisySelect value={timeRange} onValueChange={(value: any) => setTimeRange(value)}>
+            <DaisySelectTrigger className="w-32">
+              <DaisySelectValue />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="7d">Last 7 days</SelectItem>
-              <SelectItem value="30d">Last 30 days</SelectItem>
-              <SelectItem value="90d">Last 90 days</SelectItem>
-              <SelectItem value="1y">Last year</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="7d">Last 7 days</SelectItem>
+              <DaisySelectItem value="30d">Last 30 days</SelectItem>
+              <DaisySelectItem value="90d">Last 90 days</SelectItem>
+              <DaisySelectItem value="1y">Last year</SelectItem>
             </SelectContent>
-          </Select>
+          </DaisySelect>
 
-          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading}>
+          <DaisyButton variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading}>
             <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
             Refresh
-          </Button>
+          </DaisyButton>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
+          <DaisyDropdownMenu>
+            <DaisyDropdownMenuTrigger asChild>
+              <DaisyButton variant="outline" size="sm">
                 <Download className="w-4 h-4 mr-2" />
                 Export
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => handleExport('csv')}>
+              </DaisyButton>
+            </DaisyDropdownMenuTrigger>
+            <DaisyDropdownMenuContent>
+              <DaisyDropdownMenuItem onClick={() => handleExport('csv')}>
                 Export as CSV
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleExport('excel')}>
+              </DaisyDropdownMenuItem>
+              <DaisyDropdownMenuItem onClick={() => handleExport('excel')}>
                 Export as Excel
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleExport('pdf')}>
+              </DaisyDropdownMenuItem>
+              <DaisyDropdownMenuItem onClick={() => handleExport('pdf')}>
                 Export as PDF
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DaisyDropdownMenuItem>
+            </DaisyDropdownMenuContent>
+          </DaisyDropdownMenu>
         </div>
       </div>
 
@@ -178,8 +178,8 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <Card>
-            <CardContent className="p-6">
+          <DaisyCard>
+            <DaisyCardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-notion-text-secondary">Total Responses</p>
@@ -193,8 +193,8 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                   <BarChart3 className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </motion.div>
 
         <motion.div
@@ -202,8 +202,8 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <Card>
-            <CardContent className="p-6">
+          <DaisyCard>
+            <DaisyCardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-notion-text-secondary">Avg Completion Rate</p>
@@ -217,8 +217,8 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                   <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </motion.div>
 
         <motion.div
@@ -226,8 +226,8 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card>
-            <CardContent className="p-6">
+          <DaisyCard>
+            <DaisyCardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-notion-text-secondary">Average Score</p>
@@ -241,8 +241,8 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                   <Target className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </motion.div>
 
         <motion.div
@@ -250,8 +250,8 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
         >
-          <Card>
-            <CardContent className="p-6">
+          <DaisyCard>
+            <DaisyCardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-notion-text-secondary">Active Users</p>
@@ -265,22 +265,22 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                   <Users className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </motion.div>
       </div>
 
       {/* Charts Placeholder - will add charts in next step */}
-      <Tabs defaultValue="trends" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="trends">Response Trends</TabsTrigger>
-          <TabsTrigger value="completion">Completion Analysis</TabsTrigger>
-          <TabsTrigger value="scores">Score Distribution</TabsTrigger>
-          <TabsTrigger value="performance">Performance Metrics</TabsTrigger>
-          <TabsTrigger value="ai-analytics">AI Analytics</TabsTrigger>
-        </TabsList>
+      <DaisyTabs defaultValue="trends" className="space-y-6">
+        <DaisyTabsList className="grid w-full grid-cols-5">
+          <DaisyTabsTrigger value="trends">Response Trends</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="completion">Completion Analysis</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="scores">Score Distribution</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="performance">Performance Metrics</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="ai-analytics">AI Analytics</DaisyTabsTrigger>
+        </DaisyTabsList>
 
-        <TabsContent value="trends" className="space-y-6">
+        <DaisyTabsContent value="trends" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Response Trends Chart */}
             <motion.div
@@ -288,20 +288,20 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3 }}
             >
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="flex items-center justify-between">
                     <span>Response Trends</span>
-                    <Badge variant="outline">Last 30 days</Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+                    <DaisyBadge variant="outline">Last 30 days</DaisyBadge>
+                  </DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <LineChart data={data.responsesTrend}>
                       <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                       <XAxis dataKey="date" className="text-xs" />
                       <YAxis className="text-xs" />
-                      <Tooltip content={<CustomTooltip />} />
+                      <DaisyTooltip content={<CustomTooltip />} />
                       <Legend />
                       <Line 
                         type="monotone" 
@@ -326,8 +326,8 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                       />
                     </LineChart>
                   </ResponsiveContainer>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </motion.div>
 
             {/* Response by Hour */}
@@ -336,17 +336,17 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.35 }}
             >
-              <Card>
-                <CardHeader>
-                  <CardTitle>Daily Activity Pattern</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle>Daily Activity Pattern</DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <AreaChart data={data.responsesTrend.slice(-7)}>
                       <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                       <XAxis dataKey="date" className="text-xs" />
                       <YAxis className="text-xs" />
-                      <Tooltip content={<CustomTooltip />} />
+                      <DaisyTooltip content={<CustomTooltip />} />
                       <Area 
                         type="monotone" 
                         dataKey="responses" 
@@ -367,13 +367,13 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                       />
                     </AreaChart>
                   </ResponsiveContainer>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </motion.div>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="completion" className="space-y-6">
+        <DaisyTabsContent value="completion" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Completion Rates by Questionnaire */}
             <motion.div
@@ -381,22 +381,22 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3 }}
             >
-              <Card>
-                <CardHeader>
-                  <CardTitle>Completion Rates by Questionnaire</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle>Completion Rates by Questionnaire</DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={data.completionRates}>
                       <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                       <XAxis dataKey="questionnaire" className="text-xs" />
                       <YAxis className="text-xs" />
-                      <Tooltip content={<CustomTooltip />} />
+                      <DaisyTooltip content={<CustomTooltip />} />
                       <Bar dataKey="completionRate" fill="#10b981" name="Completion Rate %" />
                     </BarChart>
                   </ResponsiveContainer>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </motion.div>
 
             {/* Completion Rate Breakdown */}
@@ -405,32 +405,32 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.35 }}
             >
-              <Card>
-                <CardHeader>
-                  <CardTitle>Completion Breakdown</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle>Completion Breakdown</DaisyCardTitle>
+                
+                <DaisyCardContent className="space-y-4">
                   <div className="space-y-3">
                     <div>
                       <div className="flex justify-between text-sm mb-1">
                         <span>Completed</span>
                         <span className="font-medium">{totalCompletions}</span>
                       </div>
-                      <Progress value={65} className="h-2" />
+                      <DaisyProgress value={65} className="h-2" />
                     </div>
                     <div>
                       <div className="flex justify-between text-sm mb-1">
                         <span>In Progress</span>
                         <span className="font-medium">289</span>
                       </div>
-                      <Progress value={25} className="h-2" />
+                      <DaisyProgress value={25} className="h-2" />
                     </div>
                     <div>
                       <div className="flex justify-between text-sm mb-1">
                         <span>Abandoned</span>
                         <span className="font-medium">127</span>
                       </div>
-                      <Progress value={10} className="h-2" />
+                      <DaisyProgress value={10} className="h-2" />
                     </div>
                   </div>
 
@@ -452,18 +452,18 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                           dataKey="value"
                         >
                         </Pie>
-                        <Tooltip content={<CustomTooltip />} />
+                        <DaisyTooltip content={<CustomTooltip />} />
                         <Legend />
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </motion.div>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="scores" className="space-y-6">
+        <DaisyTabsContent value="scores" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Score Distribution */}
             <motion.div
@@ -471,22 +471,22 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3 }}
             >
-              <Card>
-                <CardHeader>
-                  <CardTitle>Score Distribution</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle>Score Distribution</DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={data.scoreDistribution}>
                       <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                       <XAxis dataKey="scoreRange" className="text-xs" />
                       <YAxis className="text-xs" />
-                      <Tooltip content={<CustomTooltip />} />
+                      <DaisyTooltip content={<CustomTooltip />} />
                       <Bar dataKey="count" fill="#6366f1" name="Count" />
                     </BarChart>
                   </ResponsiveContainer>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </motion.div>
 
             {/* Score Trends */}
@@ -495,11 +495,11 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.35 }}
             >
-              <Card>
-                <CardHeader>
-                  <CardTitle>Score Trends</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle>Score Trends</DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <LineChart data={data.responsesTrend.map((item, index) => ({
                       ...item,
@@ -508,7 +508,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                       <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                       <XAxis dataKey="date" className="text-xs" />
                       <YAxis domain={[60, 90]} className="text-xs" />
-                      <Tooltip content={<CustomTooltip />} />
+                      <DaisyTooltip content={<CustomTooltip />} />
                       <Line 
                         type="monotone" 
                         dataKey="avgScore" 
@@ -518,13 +518,13 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                       />
                     </LineChart>
                   </ResponsiveContainer>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </motion.div>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="performance" className="space-y-6">
+        <DaisyTabsContent value="performance" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Performance by Category */}
             <motion.div
@@ -532,25 +532,25 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3 }}
             >
-              <Card>
-                <CardHeader>
-                  <CardTitle>Performance by Category</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle>Performance by Category</DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <ComposedChart data={data.performanceMetrics}>
                       <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                       <XAxis dataKey="category" className="text-xs" />
                       <YAxis yAxisId="left" className="text-xs" />
                       <YAxis yAxisId="right" orientation="right" className="text-xs" />
-                      <Tooltip content={<CustomTooltip />} />
+                      <DaisyTooltip content={<CustomTooltip />} />
                       <Legend />
                       <Bar yAxisId="left" dataKey="avgScore" fill="#3b82f6" name="Avg Score" />
                       <Line yAxisId="right" type="monotone" dataKey="completion" stroke="#10b981" strokeWidth={2} name="Completion %" />
                     </ComposedChart>
                   </ResponsiveContainer>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </motion.div>
 
             {/* Performance Summary */}
@@ -559,11 +559,11 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.35 }}
             >
-              <Card>
-                <CardHeader>
-                  <CardTitle>Performance Summary</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle>Performance Summary</DaisyCardTitle>
+                
+                <DaisyCardContent className="space-y-4">
                   {data.performanceMetrics.map((metric, index) => (
                     <div key={index} className="flex items-center justify-between p-3 bg-notion-bg-tertiary rounded-lg">
                       <div>
@@ -576,13 +576,13 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                       </div>
                     </div>
                   ))}
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </motion.div>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="ai-analytics" className="space-y-6">
+        <DaisyTabsContent value="ai-analytics" className="space-y-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -590,8 +590,8 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
           >
             <AIEnhancedAnalytics />
           </motion.div>
-        </TabsContent>
-      </Tabs>
+        </DaisyTabsContent>
+      </DaisyTabs>
     </div>
   );
 } 

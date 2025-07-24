@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Card, CardContent } from '@/components/ui/card';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { cn } from '@/lib/utils';
 import {
   FileText,
@@ -113,8 +113,8 @@ export function AnalyticsCards({ analytics, className }: AnalyticsCardsProps) {
           whileHover={{ scale: 1.02 }}
           className="h-full"
         >
-          <Card className="border-notion-border bg-white dark:bg-notion-bg-secondary hover:shadow-md transition-all duration-200 h-full">
-            <CardContent className="p-5">
+          <DaisyCard className="border-notion-border bg-white dark:bg-notion-bg-secondary hover:shadow-md transition-all duration-200 h-full">
+            <DaisyCardContent className="p-5">
               <div className="flex items-center justify-between h-full">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-notion-text-secondary mb-1 truncate">
@@ -133,8 +133,8 @@ export function AnalyticsCards({ analytics, className }: AnalyticsCardsProps) {
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </motion.div>
       ))}
     </motion.div>
@@ -149,8 +149,8 @@ export function AnalyticsCardsSkeleton({ className }: { className?: string }) {
       className
     )}>
       {Array.from({ length: 6 }).map((_, index) => (
-        <Card key={index} className="border-notion-border bg-white dark:bg-notion-bg-secondary">
-          <CardContent className="p-5">
+        <DaisyCard key={index} className="border-notion-border bg-white dark:bg-notion-bg-secondary">
+          <DaisyCardContent className="p-5">
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2 w-24 animate-pulse" />
@@ -158,8 +158,8 @@ export function AnalyticsCardsSkeleton({ className }: { className?: string }) {
               </div>
               <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       ))}
     </div>
   );

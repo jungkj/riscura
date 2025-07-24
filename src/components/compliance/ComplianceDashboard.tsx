@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { 
@@ -269,21 +269,21 @@ const ComplianceDashboard: React.FC = () => {
       </div>
 
       {/* Main Content Tabs */}
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="frameworks">Frameworks</TabsTrigger>
-          <TabsTrigger value="gaps">Gaps & Issues</TabsTrigger>
-          <TabsTrigger value="insights">AI Insights</TabsTrigger>
-        </TabsList>
+      <DaisyTabs defaultValue="overview" className="space-y-4">
+        <DaisyTabsList>
+          <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="frameworks">Frameworks</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="gaps">Gaps & Issues</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="insights">AI Insights</DaisyTabsTrigger>
+        </DaisyTabsList>
 
-        <TabsContent value="overview" className="space-y-4">
+        <DaisyTabsContent value="overview" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Compliance Coverage Chart */}
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle>Framework Coverage</DaisyCardTitle>
-                <DaisyCardDescription>Coverage and maturity across frameworks</CardDescription>
+                <DaisyCardDescription>Coverage and maturity across frameworks</p>
               
               <DaisyCardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -291,7 +291,7 @@ const ComplianceDashboard: React.FC = () => {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
                     <YAxis />
-                    <Tooltip />
+                    <DaisyTooltip />
                     <Bar dataKey="coverage" fill="#3B82F6" name="Coverage %" />
                     <Bar dataKey="maturity" fill="#10B981" name="Maturity %" />
                   </BarChart>
@@ -303,7 +303,7 @@ const ComplianceDashboard: React.FC = () => {
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle>Gap Distribution</DaisyCardTitle>
-                <DaisyCardDescription>Gaps by category</CardDescription>
+                <DaisyCardDescription>Gaps by category</p>
               
               <DaisyCardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -322,15 +322,15 @@ const ComplianceDashboard: React.FC = () => {
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <DaisyTooltip />
                   </PieChart>
                 </ResponsiveContainer>
               </DaisyCardBody>
             </DaisyCard>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="frameworks" className="space-y-4">
+        <DaisyTabsContent value="frameworks" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {frameworks.map((framework) => (
               <DaisyCard key={framework.id} className="hover:shadow-lg transition-shadow">
@@ -338,7 +338,7 @@ const ComplianceDashboard: React.FC = () => {
                   <div className="flex justify-between items-start">
                     <div>
                       <DaisyCardTitle className="text-lg">{framework.name}</DaisyCardTitle>
-                      <DaisyCardDescription>{framework.description}</CardDescription>
+                      <DaisyCardDescription>{framework.description}</p>
                     </div>
                     <div className="flex flex-col items-end space-y-1">
                       <DaisyBadge variant={framework.mandatory ? 'destructive' : 'secondary'}>
@@ -376,13 +376,13 @@ const ComplianceDashboard: React.FC = () => {
               </DaisyCard>
             ))}
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="gaps" className="space-y-4">
+        <DaisyTabsContent value="gaps" className="space-y-4">
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle>Compliance Gaps</DaisyCardTitle>
-              <DaisyCardDescription>Issues requiring attention</CardDescription>
+              <DaisyCardDescription>Issues requiring attention</p>
             
             <DaisyCardContent>
               <div className="space-y-4">
@@ -414,9 +414,9 @@ const ComplianceDashboard: React.FC = () => {
               </div>
             </DaisyCardBody>
           </DaisyCard>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="insights" className="space-y-4">
+        <DaisyTabsContent value="insights" className="space-y-4">
           <div className="space-y-4">
             {insights.map((insight) => (
               <DaisyAlert key={insight.id} className={insight.severity === 'critical' ? 'border-red-200' : 'border-blue-200'}>
@@ -433,8 +433,8 @@ const ComplianceDashboard: React.FC = () => {
               </DaisyAlert>
             ))}
           </div>
-        </TabsContent>
-      </Tabs>
+        </DaisyTabsContent>
+      </DaisyTabs>
     </div>
   );
 };

@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisySelect } from '@/components/ui/DaisySelect';
 import { useToast } from '@/hooks/use-toast';
 import {
   LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
@@ -45,8 +45,8 @@ const MetricCard = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className="hover:shadow-md transition-shadow">
-        <CardContent className="p-6">
+      <DaisyCard className="hover:shadow-md transition-shadow">
+        <DaisyCardContent className="p-6">
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <p className="text-sm font-medium text-gray-600">{title}</p>
@@ -75,8 +75,8 @@ const MetricCard = ({
               <Icon className="h-6 w-6" />
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </motion.div>
   );
 };
@@ -157,17 +157,17 @@ export default function AnalyticsPage() {
               <p className="text-gray-600">Comprehensive insights and metrics</p>
             </div>
             <div className="flex items-center space-x-3">
-              <Select value={timeRange} onValueChange={setTimeRange}>
-                <SelectTrigger className="w-40">
-                  <SelectValue />
+              <DaisySelect value={timeRange} onValueChange={setTimeRange}>
+                <DaisySelectTrigger className="w-40">
+                  <DaisySelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="7d">Last 7 days</SelectItem>
-                  <SelectItem value="30d">Last 30 days</SelectItem>
-                  <SelectItem value="90d">Last 90 days</SelectItem>
+                <DaisySelectContent>
+                  <DaisySelectItem value="7d">Last 7 days</SelectItem>
+                  <DaisySelectItem value="30d">Last 30 days</SelectItem>
+                  <DaisySelectItem value="90d">Last 90 days</SelectItem>
                 </SelectContent>
-              </Select>
-              <Button
+              </DaisySelect>
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={fetchAnalytics}
@@ -175,11 +175,11 @@ export default function AnalyticsPage() {
               >
                 <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
                 Refresh
-              </Button>
-              <Button size="sm">
+              </DaisyButton>
+              <DaisyButton size="sm">
                 <Download className="h-4 w-4 mr-2" />
                 Export
-              </Button>
+              </DaisyButton>
             </div>
           </div>
         </div>
@@ -225,27 +225,27 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Main Analytics Content */}
-        <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList className="grid grid-cols-4 w-fit">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="risks">Risk Analysis</TabsTrigger>
-            <TabsTrigger value="controls">Control Effectiveness</TabsTrigger>
-            <TabsTrigger value="compliance">Compliance</TabsTrigger>
-          </TabsList>
+        <DaisyTabs defaultValue="overview" className="space-y-4">
+          <DaisyTabsList className="grid grid-cols-4 w-fit">
+            <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="risks">Risk Analysis</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="controls">Control Effectiveness</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
+          </DaisyTabsList>
 
           {/* Overview Tab */}
-          <TabsContent value="overview" className="space-y-4">
+          <DaisyTabsContent value="overview" className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Risk Trends Chart */}
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <CardTitle className="text-lg">Risk Trends</CardTitle>
-                  <Badge variant="outline">
+              <DaisyCard>
+                <DaisyCardHeader className="flex flex-row items-center justify-between">
+                  <DaisyCardTitle className="text-lg">Risk Trends</DaisyCardTitle>
+                  <DaisyBadge variant="outline">
                     <TrendingUp className="h-3 w-3 mr-1" />
                     Trending
-                  </Badge>
-                </CardHeader>
-                <CardContent>
+                  </DaisyBadge>
+                
+                <DaisyCardContent>
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={getRiskTrendData()}>
@@ -258,7 +258,7 @@ export default function AnalyticsPage() {
                         <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                         <XAxis dataKey="date" stroke="#888" fontSize={12} />
                         <YAxis stroke="#888" fontSize={12} />
-                        <Tooltip />
+                        <DaisyTooltip />
                         <Area
                           type="monotone"
                           dataKey="value"
@@ -269,19 +269,19 @@ export default function AnalyticsPage() {
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
 
               {/* Risk Distribution */}
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <CardTitle className="text-lg">Risk Distribution</CardTitle>
-                  <Badge variant="outline">
+              <DaisyCard>
+                <DaisyCardHeader className="flex flex-row items-center justify-between">
+                  <DaisyCardTitle className="text-lg">Risk Distribution</DaisyCardTitle>
+                  <DaisyBadge variant="outline">
                     <PieChartIcon className="h-3 w-3 mr-1" />
                     Categories
-                  </Badge>
-                </CardHeader>
-                <CardContent>
+                  </DaisyBadge>
+                
+                <DaisyCardContent>
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
@@ -299,20 +299,20 @@ export default function AnalyticsPage() {
                             <Cell key={`cell-${index}`} fill={Object.values(COLORS)[index % Object.values(COLORS).length]} />
                           ))}
                         </Pie>
-                        <Tooltip />
+                        <DaisyTooltip />
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </div>
 
             {/* Control Effectiveness */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Control Effectiveness Overview</CardTitle>
-              </CardHeader>
-              <CardContent>
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle className="text-lg">Control Effectiveness Overview</DaisyCardTitle>
+              
+              <DaisyCardContent>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Average Effectiveness</span>
@@ -350,19 +350,19 @@ export default function AnalyticsPage() {
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
             {/* Recent Activity */}
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-lg">Recent Activity</CardTitle>
-                <Badge variant="outline">
+            <DaisyCard>
+              <DaisyCardHeader className="flex flex-row items-center justify-between">
+                <DaisyCardTitle className="text-lg">Recent Activity</DaisyCardTitle>
+                <DaisyBadge variant="outline">
                   <Activity className="h-3 w-3 mr-1" />
                   Live
-                </Badge>
-              </CardHeader>
-              <CardContent>
+                </DaisyBadge>
+              
+              <DaisyCardContent>
                 <div className="space-y-3">
                   {getActivityData().map((activity: any, index: number) => (
                     <motion.div
@@ -385,18 +385,18 @@ export default function AnalyticsPage() {
                     </motion.div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+              </DaisyCardBody>
+            </DaisyCard>
+          </DaisyTabsContent>
 
           {/* Risk Analysis Tab */}
-          <TabsContent value="risks" className="space-y-4">
+          <DaisyTabsContent value="risks" className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <Card className="lg:col-span-2">
-                <CardHeader>
-                  <CardTitle className="text-lg">Risk Level Distribution</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <DaisyCard className="lg:col-span-2">
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="text-lg">Risk Level Distribution</DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={[
@@ -408,7 +408,7 @@ export default function AnalyticsPage() {
                         <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                         <XAxis dataKey="level" />
                         <YAxis />
-                        <Tooltip />
+                        <DaisyTooltip />
                         <Bar dataKey="count">
                           {[
                             { level: 'Critical', count: 4, color: COLORS.red },
@@ -422,14 +422,14 @@ export default function AnalyticsPage() {
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Risk Metrics</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="text-lg">Risk Metrics</DaisyCardTitle>
+                
+                <DaisyCardContent className="space-y-4">
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">Critical Risks</span>
@@ -457,18 +457,18 @@ export default function AnalyticsPage() {
                       </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </div>
-          </TabsContent>
+          </DaisyTabsContent>
 
           {/* Control Effectiveness Tab */}
-          <TabsContent value="controls" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Control Performance Matrix</CardTitle>
-              </CardHeader>
-              <CardContent>
+          <DaisyTabsContent value="controls" className="space-y-4">
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle className="text-lg">Control Performance Matrix</DaisyCardTitle>
+              
+              <DaisyCardContent>
                 <div className="h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart data={[
@@ -481,25 +481,25 @@ export default function AnalyticsPage() {
                       <XAxis dataKey="type" />
                       <YAxis yAxisId="left" />
                       <YAxis yAxisId="right" orientation="right" />
-                      <Tooltip />
+                      <DaisyTooltip />
                       <Legend />
                       <Bar yAxisId="left" dataKey="count" fill={COLORS.blue} name="Count" />
                       <Line yAxisId="right" type="monotone" dataKey="effectiveness" stroke={COLORS.green} name="Effectiveness %" />
                     </ComposedChart>
                   </ResponsiveContainer>
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+              </DaisyCardBody>
+            </DaisyCard>
+          </DaisyTabsContent>
 
           {/* Compliance Tab */}
-          <TabsContent value="compliance" className="space-y-4">
+          <DaisyTabsContent value="compliance" className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Framework Compliance</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="text-lg">Framework Compliance</DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
                       <RadialBarChart cx="50%" cy="50%" innerRadius="10%" outerRadius="90%" data={[
@@ -510,18 +510,18 @@ export default function AnalyticsPage() {
                       ]}>
                         <RadialBar dataKey="value" />
                         <Legend />
-                        <Tooltip />
+                        <DaisyTooltip />
                       </RadialBarChart>
                     </ResponsiveContainer>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Compliance Score Trend</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="text-lg">Compliance Score Trend</DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={[
@@ -535,16 +535,16 @@ export default function AnalyticsPage() {
                         <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                         <XAxis dataKey="month" />
                         <YAxis domain={[75, 100]} />
-                        <Tooltip />
+                        <DaisyTooltip />
                         <Line type="monotone" dataKey="score" stroke={COLORS.purple} strokeWidth={2} />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </div>
-          </TabsContent>
-        </Tabs>
+          </DaisyTabsContent>
+        </DaisyTabs>
       </div>
     </ProtectedRoute>
   );

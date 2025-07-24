@@ -21,12 +21,12 @@ import {
 import { ChatMessage as ChatMessageType, AISuggestion } from '@/hooks/useARIAChat';
 import { AgentType } from '@/types/ai.types';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
-import { Separator } from '@/components/ui/separator';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
+import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger, DaisyDropdownMenuSeparator } from '@/components/ui/DaisyDropdown';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { useToast } from '@/hooks/use-toast';
 
 interface MessageAttachment {
@@ -75,14 +75,14 @@ const MessageAttachment: React.FC<MessageAttachmentProps> = ({
       <span className="text-sm font-medium truncate flex-1">{attachment.title}</span>
       <div className="flex gap-1">
         {onView && (
-          <Button variant="ghost" size="sm" onClick={onView}>
+          <DaisyButton variant="ghost" size="sm" onClick={onView}>
             <ExternalLink className="h-3 w-3" />
-          </Button>
+          </DaisyButton>
         )}
         {onDownload && (
-          <Button variant="ghost" size="sm" onClick={onDownload}>
+          <DaisyButton variant="ghost" size="sm" onClick={onDownload}>
             <Download className="h-3 w-3" />
-          </Button>
+          </DaisyButton>
         )}
       </div>
     </div>
@@ -104,23 +104,23 @@ const SuggestionCard: React.FC<{
   };
 
   return (
-    <Card className="p-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 border-blue-200 dark:border-blue-800">
+    <DaisyCard className="p-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 border-blue-200 dark:border-blue-800">
       <div className="flex items-start gap-3">
         <span className="text-lg">{getSuggestionIcon(suggestion.type)}</span>
         <div className="flex-1">
           <h4 className="font-medium text-sm">{suggestion.title}</h4>
           <p className="text-xs text-muted-foreground mt-1">{suggestion.description}</p>
         </div>
-        <Button 
+        <DaisyButton 
           size="sm" 
           variant="outline" 
           onClick={() => onApply(suggestion)}
           className="ml-2"
         >
           Apply
-        </Button>
+        </DaisyButton>
       </div>
-    </Card>
+    </DaisyCard>
   );
 };
 
@@ -223,7 +223,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   const messageMaxWidth = isAI ? '85%' : '75%';
 
   return (
-    <TooltipProvider>
+    <DaisyTooltipProvider>
       <motion.div
         ref={messageRef}
         initial={{ opacity: 0, y: 20 }}
@@ -258,9 +258,9 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                 <Bot className="h-3 w-3" />
                 <span>ARIA</span>
                 {agentType !== 'general_assistant' && (
-                  <Badge variant="secondary" className="text-xs">
+                  <DaisyBadge variant="secondary" className="text-xs">
                     {agentType.replace('_', ' ')}
-                  </Badge>
+                  </DaisyBadge>
                 )}
               </>
             ) : (
@@ -269,20 +269,20 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                 <span>You</span>
               </>
             )}
-            <Separator orientation="vertical" className="h-3" />
-            <Tooltip>
-              <TooltipTrigger>
+            <DaisySeparator orientation="vertical" className="h-3" />
+            <DaisyTooltip>
+              <DaisyTooltipTrigger>
                 <span>{formatDistanceToNow(message.timestamp, { addSuffix: true })}</span>
-              </TooltipTrigger>
-              <TooltipContent>
+              </DaisyTooltipTrigger>
+              <DaisyTooltipContent>
                 {message.timestamp.toLocaleString()}
-              </TooltipContent>
-            </Tooltip>
+              </DaisyTooltipContent>
+            </DaisyTooltip>
             {getStatusIcon()}
           </div>
 
           {/* Message Bubble */}
-          <Card 
+          <DaisyCard 
             className={cn(
               "relative p-4 max-w-none",
               isAI 
@@ -311,30 +311,30 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
 
             {/* Message Actions */}
             <div className="absolute -bottom-2 right-2 flex gap-1">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button 
+              <DaisyDropdownMenu>
+                <DaisyDropdownMenuTrigger asChild>
+                  <DaisyButton 
                     variant="secondary" 
                     size="sm" 
                     className="h-6 w-6 p-0 bg-background border shadow-sm"
                   >
                     <MoreHorizontal className="h-3 w-3" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={handleCopy}>
+                  </DaisyButton>
+                </DaisyDropdownMenuTrigger>
+                <DaisyDropdownMenuContent align="end">
+                  <DaisyDropdownMenuItem onClick={handleCopy}>
                     <Copy className="h-4 w-4 mr-2" />
                     Copy
-                  </DropdownMenuItem>
+                  </DaisyDropdownMenuItem>
                   
                   {isAI && onRegenerate && (
-                    <DropdownMenuItem onClick={onRegenerate}>
+                    <DaisyDropdownMenuItem onClick={onRegenerate}>
                       <RotateCcw className="h-4 w-4 mr-2" />
                       Regenerate
-                    </DropdownMenuItem>
+                    </DaisyDropdownMenuItem>
                   )}
                   
-                  <DropdownMenuItem onClick={handleSpeak}>
+                  <DaisyDropdownMenuItem onClick={handleSpeak}>
                     {isSpeaking ? (
                       <>
                         <VolumeX className="h-4 w-4 mr-2" />
@@ -346,25 +346,25 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                         Speak
                       </>
                     )}
-                  </DropdownMenuItem>
+                  </DaisyDropdownMenuItem>
 
                   {isAI && onFeedback && (
                     <>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => handleFeedback('positive')}>
+                      <DaisyDropdownMenuSeparator />
+                      <DaisyDropdownMenuItem onClick={() => handleFeedback('positive')}>
                         <ThumbsUp className="h-4 w-4 mr-2" />
                         Good response
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleFeedback('negative')}>
+                      </DaisyDropdownMenuItem>
+                      <DaisyDropdownMenuItem onClick={() => handleFeedback('negative')}>
                         <ThumbsDown className="h-4 w-4 mr-2" />
                         Poor response
-                      </DropdownMenuItem>
+                      </DaisyDropdownMenuItem>
                     </>
                   )}
-                </DropdownMenuContent>
-              </DropdownMenu>
+                </DaisyDropdownMenuContent>
+              </DaisyDropdownMenu>
             </div>
-          </Card>
+          </DaisyCard>
 
           {/* Attachments */}
           {message.attachments && message.attachments.length > 0 && (
@@ -409,6 +409,6 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
           </div>
         )}
       </motion.div>
-    </TooltipProvider>
+    
   );
 }; 

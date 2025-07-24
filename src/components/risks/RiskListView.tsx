@@ -452,36 +452,36 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                   <TableCell>{risk.owner}</TableCell>
                   <TableCell>{formatDate(risk.createdAt)}</TableCell>
                   <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                    <DaisyDropdownMenu>
+                      <DaisyDropdownMenuTrigger asChild>
                         <DaisyButton variant="ghost" className="h-8 w-8 p-0">
                           <MoreHorizontal className="h-4 w-4" />
                         </DaisyButton>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
+                      </DaisyDropdownMenuTrigger>
+                      <DaisyDropdownMenuContent align="end">
+                        <DaisyDropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DaisyDropdownMenuItem
                           onClick={() => onViewRisk ? onViewRisk(risk) : router.push(`/risks/${risk.id}`)}
                         >
                           <Eye className="mr-2 h-4 w-4" />
                           View
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
+                        </DaisyDropdownMenuItem>
+                        <DaisyDropdownMenuItem
                           onClick={() => onEditRisk ? onEditRisk(risk) : router.push(`/risks/${risk.id}/edit`)}
                         >
                           <Edit className="mr-2 h-4 w-4" />
                           Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
+                        </DaisyDropdownMenuItem>
+                        <DaisyDropdownMenuSeparator />
+                        <DaisyDropdownMenuItem
                           onClick={() => deleteRisk(risk.id)}
                           className="text-red-600"
                         >
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                        </DaisyDropdownMenuItem>
+                      </DaisyDropdownMenuContent>
+                    </DaisyDropdownMenu>
                   </TableCell>
                 </TableRow>
               ))}

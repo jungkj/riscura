@@ -3,7 +3,7 @@
 import React from 'react';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { VantaDataTable, DataTableColumn } from './VantaDataTable';
-import { Button } from '@/components/ui/button';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Plus, Download, Settings } from 'lucide-react';
 
 // Sample Risk Data

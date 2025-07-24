@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import {
   DropdownMenu,
@@ -13,7 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger } from '@/components/ui/DaisyTooltip';
 
 // Chart Components
 import { AreaChart, Area, BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, 
@@ -124,8 +124,8 @@ export function DashboardGrid({
               {widget.title}
             </DaisyCardTitle>
             <div className="flex items-center space-x-1">
-              <Tooltip>
-                <TooltipTrigger asChild>
+              <DaisyTooltip>
+                <DaisyTooltipTrigger asChild>
                   <DaisyButton
                     variant="ghost"
                     size="sm"
@@ -135,12 +135,12 @@ export function DashboardGrid({
                   >
                     <RefreshCw className={`w-3 h-3 ${isRefreshing ? 'animate-spin' : ''}`} />
                   </DaisyButton>
-                </TooltipTrigger>
-                <TooltipContent>Refresh Widget</TooltipContent>
-              </Tooltip>
+                </DaisyTooltipTrigger>
+                <DaisyTooltipContent>Refresh Widget</DaisyTooltipContent>
+              </DaisyTooltip>
 
-              <Tooltip>
-                <TooltipTrigger asChild>
+              <DaisyTooltip>
+                <DaisyTooltipTrigger asChild>
                   <DaisyButton
                     variant="ghost"
                     size="sm"
@@ -149,12 +149,12 @@ export function DashboardGrid({
                   >
                     {isExpanded ? <Minimize className="w-3 h-3" /> : <Maximize className="w-3 h-3" />}
                   </DaisyButton>
-                </TooltipTrigger>
-                <TooltipContent>{isExpanded ? 'Minimize' : 'Expand'}</TooltipContent>
-              </Tooltip>
+                </DaisyTooltipTrigger>
+                <DaisyTooltipContent>{isExpanded ? 'Minimize' : 'Expand'}</DaisyTooltipContent>
+              </DaisyTooltip>
 
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+              <DaisyDropdownMenu>
+                <DaisyDropdownMenuTrigger asChild>
                   <DaisyButton 
                     variant="ghost" 
                     size="sm"
@@ -162,25 +162,25 @@ export function DashboardGrid({
                   >
                     <MoreHorizontal className="w-3 h-3" />
                   </DaisyButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-[#FAFAFA] border-[#D8C3A5]">
-                  <DropdownMenuItem className="text-[#191919] hover:bg-[#D8C3A5]/20 font-inter">
+                </DaisyDropdownMenuTrigger>
+                <DaisyDropdownMenuContent align="end" className="bg-[#FAFAFA] border-[#D8C3A5]">
+                  <DaisyDropdownMenuItem className="text-[#191919] hover:bg-[#D8C3A5]/20 font-inter">
                     <Download className="w-3 h-3 mr-2" />
                     Export Data
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="text-[#191919] hover:bg-[#D8C3A5]/20 font-inter">
+                  </DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuItem className="text-[#191919] hover:bg-[#D8C3A5]/20 font-inter">
                     <Settings className="w-3 h-3 mr-2" />
                     Configure
-                  </DropdownMenuItem>
-                  <DropdownMenuItem 
+                  </DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuItem 
                     onClick={() => onWidgetToggle(widget.id)}
                     className="text-[#191919] hover:bg-[#D8C3A5]/20 font-inter"
                   >
                     <Eye className="w-3 h-3 mr-2" />
                     Hide Widget
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                  </DaisyDropdownMenuItem>
+                </DaisyDropdownMenuContent>
+              </DaisyDropdownMenu>
             </div>
           
           

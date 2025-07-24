@@ -3,10 +3,10 @@
 import { Suspense, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
   FileCheck, 
   AlertTriangle, 
@@ -112,25 +112,25 @@ export default function RiskAssessmentPage() {
           <p className="text-gray-600">Manage and track your organization's risk assessment processes and outcomes.</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" className="text-sm" onClick={handleFilterAssessments}>
+          <DaisyButton variant="outline" className="text-sm" onClick={handleFilterAssessments}>
             <Filter className="h-4 w-4 mr-2" />
             Filters
-          </Button>
-          <Button variant="outline" className="text-sm" onClick={handleExportAssessments}>
+          </DaisyButton>
+          <DaisyButton variant="outline" className="text-sm" onClick={handleExportAssessments}>
             <Download className="h-4 w-4 mr-2" />
             Export
-          </Button>
-          <Button onClick={handleNewAssessment}>
+          </DaisyButton>
+          <DaisyButton onClick={handleNewAssessment}>
             <FileCheck className="w-4 h-4 mr-2" />
             New Assessment
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
-          <CardContent className="p-6">
+        <DaisyCard className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+          <DaisyCardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-blue-600">Total Assessments</p>
@@ -138,11 +138,11 @@ export default function RiskAssessmentPage() {
               </div>
               <Target className="h-8 w-8 text-blue-600" />
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
-          <CardContent className="p-6">
+        <DaisyCard className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+          <DaisyCardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-green-600">In Progress</p>
@@ -150,23 +150,23 @@ export default function RiskAssessmentPage() {
               </div>
               <TrendingUp className="h-8 w-8 text-green-600" />
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200">
-          <CardContent className="p-6">
+        <DaisyCard className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200">
+          <DaisyCardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-yellow-600">Pending</p>
                 <p className="text-3xl font-bold text-yellow-900">1</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-yellow-600" />
+              <DaisyAlertTriangle className="h-8 w-8 text-yellow-600" />
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200">
-          <CardContent className="p-6">
+        <DaisyCard className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200">
+          <DaisyCardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-emerald-600">Completed</p>
@@ -174,35 +174,35 @@ export default function RiskAssessmentPage() {
               </div>
               <FileCheck className="h-8 w-8 text-emerald-600" />
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
 
       {/* Assessments List */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center gap-2">
             <FileCheck className="h-5 w-5 text-blue-600" />
             Assessment Overview
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+          </DaisyCardTitle>
+        
+        <DaisyCardContent className="space-y-4">
           <Suspense fallback={<LoadingSpinner />}>
             {assessments.map((assessment) => (
-              <Card key={assessment.id} className="border-gray-200 hover:shadow-md transition-shadow">
-                <CardContent className="p-6">
+              <DaisyCard key={assessment.id} className="border-gray-200 hover:shadow-md transition-shadow">
+                <DaisyCardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-3">
                         <h3 className="text-lg font-semibold text-gray-900">
                           {assessment.title}
                         </h3>
-                        <Badge className={getStatusColor(assessment.status)}>
+                        <DaisyBadge className={getStatusColor(assessment.status)}>
                           {assessment.status}
-                        </Badge>
-                        <Badge className={getPriorityColor(assessment.priority)}>
+                        </DaisyBadge>
+                        <DaisyBadge className={getPriorityColor(assessment.priority)}>
                           {assessment.priority}
-                        </Badge>
+                        </DaisyBadge>
                       </div>
                       
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
@@ -215,7 +215,7 @@ export default function RiskAssessmentPage() {
                           <span>{assessment.assignee}</span>
                         </div>
                         <div className="flex items-center space-x-2 text-sm text-gray-600">
-                          <AlertTriangle className="w-4 h-4" />
+                          <DaisyAlertTriangle className="w-4 h-4" />
                           <span>{assessment.riskCount} risks identified</span>
                         </div>
                       </div>
@@ -226,36 +226,36 @@ export default function RiskAssessmentPage() {
                             <span>Progress</span>
                             <span>{assessment.progress}%</span>
                           </div>
-                          <Progress value={assessment.progress} className="h-2" />
+                          <DaisyProgress value={assessment.progress} className="h-2" />
                         </div>
                       )}
                     </div>
                     
                     <div className="flex items-center space-x-2 ml-4">
-                      <Button 
+                      <DaisyButton 
                         variant="outline" 
                         size="sm"
                         onClick={() => handleViewDetails(assessment.id)}
                       >
                         <Eye className="h-4 w-4 mr-2" />
                         View Details
-                      </Button>
-                      <Button 
+                      </DaisyButton>
+                      <DaisyButton 
                         variant="outline" 
                         size="sm"
                         onClick={() => handleEditAssessment(assessment.id)}
                       >
                         <Edit className="h-4 w-4 mr-2" />
                         Edit
-                      </Button>
+                      </DaisyButton>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             ))}
           </Suspense>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </div>
   );
 }

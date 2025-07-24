@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 
 export default function RiskDetailPageRoute() {
   const params = useParams();
@@ -20,14 +20,14 @@ export default function RiskDetailPageRoute() {
           { label: riskId, current: true },
         ]}
       >
-        <Card>
-          <CardHeader>
-            <CardTitle>Risk Information</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle>Risk Information</DaisyCardTitle>
+          
+          <DaisyCardContent>
             <p className="text-gray-500">Risk details for ID: {riskId} coming soon...</p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </MainContentArea>
     </ProtectedRoute>
   );

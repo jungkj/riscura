@@ -8,11 +8,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Progress } from '@/components/ui/progress';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
   Shield, 
   AlertTriangle, 
@@ -80,7 +80,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
       case 'totalRisks':
         return <Shield className="w-6 h-6 text-blue-600" />;
       case 'highRisks':
-        return <AlertTriangle className="w-6 h-6 text-red-600" />;
+        return <DaisyAlertTriangle className="w-6 h-6 text-red-600" />;
       case 'compliance':
         return <CheckCircle className="w-6 h-6 text-green-600" />;
       case 'activeControls':
@@ -98,51 +98,51 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[85vh]" style={{ backgroundColor: '#FFFFFF' }}>
-        <DialogHeader>
-          <DialogTitle className="flex items-center space-x-3 text-[#191919]">
+    <DaisyDialog open={isOpen} onOpenChange={onClose}>
+      <DaisyDialogContent className="max-w-4xl max-h-[85vh]" style={{ backgroundColor: '#FFFFFF' }}>
+        <DaisyDialogHeader>
+          <DaisyDialogTitle className="flex items-center space-x-3 text-[#191919]">
             {getIcon()}
             <span className="font-bold">{data.title}</span>
-            <Badge 
+            <DaisyBadge 
               variant="outline" 
               className="ml-2 text-lg px-3 py-1 border-[#D8C3A5] text-[#191919] bg-[#FAFAFA]"
             >
               {data.value}
-            </Badge>
-          </DialogTitle>
-          <DialogDescription className="text-[#A8A8A8] font-semibold">
+            </DaisyBadge>
+          </DaisyDialogTitle>
+          <DaisyDialogDescription className="text-[#A8A8A8] font-semibold">
             {data.description}
-          </DialogDescription>
-        </DialogHeader>
+          </DaisyDialogDescription>
+        </DaisyDialogHeader>
 
         <ScrollArea className="max-h-[60vh] pr-4">
           <div className="space-y-6">
             {/* Overview Section */}
-            <Card className="border-2 border-[#D8C3A5] bg-[#FAFAFA]">
-              <CardHeader>
-                <CardTitle className="text-[#191919] font-bold flex items-center">
+            <DaisyCard className="border-2 border-[#D8C3A5] bg-[#FAFAFA]">
+              <DaisyCardHeader>
+                <DaisyCardTitle className="text-[#191919] font-bold flex items-center">
                   <Eye className="w-5 h-5 mr-2" />
                   Overview
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </DaisyCardTitle>
+              
+              <DaisyCardContent>
                 <p className="text-[#191919] font-semibold leading-relaxed">
                   {data.details.overview}
                 </p>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
             {/* Breakdown Section */}
             {data.details.breakdown && (
-              <Card className="border-2 border-[#D8C3A5] bg-[#FAFAFA]">
-                <CardHeader>
-                  <CardTitle className="text-[#191919] font-bold flex items-center">
+              <DaisyCard className="border-2 border-[#D8C3A5] bg-[#FAFAFA]">
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="text-[#191919] font-bold flex items-center">
                     <TrendingUp className="w-5 h-5 mr-2" />
                     Breakdown
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+                  </DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <div className="space-y-4">
                     {data.details.breakdown.map((item, index) => (
                       <div key={index} className="space-y-2">
@@ -151,14 +151,14 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                           <div className="flex items-center space-x-2">
                             <span className="text-[#191919] font-bold">{item.value}</span>
                             {item.percentage && (
-                              <Badge variant="outline" className="border-[#D8C3A5] text-[#191919]">
+                              <DaisyBadge variant="outline" className="border-[#D8C3A5] text-[#191919]">
                                 {item.percentage}%
-                              </Badge>
+                              </DaisyBadge>
                             )}
                           </div>
                         </div>
                         {item.percentage && (
-                          <Progress 
+                          <DaisyProgress 
                             value={item.percentage} 
                             className="h-2"
                             style={{ backgroundColor: item.color }}
@@ -167,20 +167,20 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             )}
 
             {/* Recent Items */}
             {data.details.recentItems && (
-              <Card className="border-2 border-[#D8C3A5] bg-[#FAFAFA]">
-                <CardHeader>
-                  <CardTitle className="text-[#191919] font-bold flex items-center">
+              <DaisyCard className="border-2 border-[#D8C3A5] bg-[#FAFAFA]">
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="text-[#191919] font-bold flex items-center">
                     <Activity className="w-5 h-5 mr-2" />
                     Recent Activity
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+                  </DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <div className="space-y-3">
                     {data.details.recentItems.map((item, index) => (
                       <div key={index} className="flex items-center justify-between p-3 border border-[#D8C3A5] rounded-lg bg-white">
@@ -190,34 +190,34 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                         </div>
                         <div className="flex items-center space-x-2">
                           {item.priority && (
-                            <Badge 
+                            <DaisyBadge 
                               variant={item.priority === 'high' ? 'destructive' : item.priority === 'medium' ? 'default' : 'secondary'}
                               className="text-xs"
                             >
                               {item.priority}
-                            </Badge>
+                            </DaisyBadge>
                           )}
-                          <Badge variant="outline" className="border-[#D8C3A5] text-[#191919]">
+                          <DaisyBadge variant="outline" className="border-[#D8C3A5] text-[#191919]">
                             {item.status}
-                          </Badge>
+                          </DaisyBadge>
                         </div>
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             )}
 
             {/* Insights */}
             {data.details.insights && (
-              <Card className="border-2 border-[#D8C3A5] bg-[#FAFAFA]">
-                <CardHeader>
-                  <CardTitle className="text-[#191919] font-bold flex items-center">
+              <DaisyCard className="border-2 border-[#D8C3A5] bg-[#FAFAFA]">
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="text-[#191919] font-bold flex items-center">
                     <FileText className="w-5 h-5 mr-2" />
                     Key Insights
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+                  </DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <div className="space-y-3">
                     {data.details.insights.map((insight, index) => (
                       <div 
@@ -237,8 +237,8 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             )}
           </div>
         </ScrollArea>
@@ -246,7 +246,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
         {/* Action Buttons */}
         <div className="flex flex-wrap gap-3 pt-4 border-t border-[#D8C3A5]">
           {data.actions.map((action, index) => (
-            <Button
+            <DaisyButton
               key={index}
               variant={action.variant}
               onClick={() => handleNavigation(action.href)}
@@ -258,10 +258,10 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
             >
               {action.label}
               <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
+            </DaisyButton>
           ))}
         </div>
-      </DialogContent>
-    </Dialog>
+      </DaisyDialogContent>
+    </DaisyDialog>
   );
 }; 

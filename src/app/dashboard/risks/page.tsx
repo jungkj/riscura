@@ -2,7 +2,7 @@
 
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 
 export default function RisksPage() {
   return (
@@ -15,14 +15,14 @@ export default function RisksPage() {
           { label: 'Risks', current: true },
         ]}
       >
-        <Card>
-          <CardHeader>
-            <CardTitle>Risk Registry</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle>Risk Registry</DaisyCardTitle>
+          
+          <DaisyCardContent>
             <p className="text-gray-500">Risk management interface coming soon...</p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </MainContentArea>
     </ProtectedRoute>
   );

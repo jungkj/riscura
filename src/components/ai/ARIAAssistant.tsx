@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { 
   Send, 
   Mic, 
@@ -402,24 +402,24 @@ How can I assist you today?`,
   };
 
   return (
-    <Card className="h-[600px] flex flex-col">
-      <CardHeader className="pb-3">
+    <DaisyCard className="h-[600px] flex flex-col">
+      <DaisyCardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <div className="flex items-center space-x-2">
               <Brain className="w-5 h-5 text-purple-600" />
-              <CardTitle className="text-lg">ARIA Assistant</CardTitle>
+              <DaisyCardTitle className="text-lg">ARIA Assistant</DaisyCardTitle>
             </div>
-            <Badge variant="secondary" className="text-xs">
+            <DaisyBadge variant="secondary" className="text-xs">
               <Zap className="w-3 h-3 mr-1" />
               AI Powered
-            </Badge>
+            </DaisyBadge>
           </div>
           
           <div className="flex items-center space-x-1">
             {voiceEnabled && (
               <>
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   onClick={isSpeaking ? stopSpeaking : undefined}
@@ -431,11 +431,11 @@ How can I assist you today?`,
                   ) : (
                     <Volume2 className="w-4 h-4" />
                   )}
-                </Button>
+                </DaisyButton>
               </>
             )}
             
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={exportConversation}
@@ -443,9 +443,9 @@ How can I assist you today?`,
               className="p-2"
             >
               <Download className="w-4 h-4" />
-            </Button>
+            </DaisyButton>
             
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={clearConversation}
@@ -453,12 +453,12 @@ How can I assist you today?`,
               className="p-2"
             >
               <RotateCcw className="w-4 h-4" />
-            </Button>
+            </DaisyButton>
           </div>
         </div>
-      </CardHeader>
+      
 
-      <CardContent className="flex-1 flex flex-col p-0">
+      <DaisyCardContent className="flex-1 flex flex-col p-0">
         {/* Messages Area */}
         <ScrollArea className="flex-1 px-4">
           <div className="space-y-4 pb-4">
@@ -491,9 +491,9 @@ How can I assist you today?`,
                           {message.timestamp.toLocaleTimeString()}
                         </span>
                         {message.confidence && (
-                          <Badge variant="outline" className="text-xs">
+                          <DaisyBadge variant="outline" className="text-xs">
                             {Math.round(message.confidence * 100)}% confident
-                          </Badge>
+                          </DaisyBadge>
                         )}
                       </div>
                       
@@ -505,7 +505,7 @@ How can I assist you today?`,
                       {message.actions && message.actions.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-3">
                           {message.actions.map((action, index) => (
-                            <Button
+                            <DaisyButton
                               key={index}
                               variant="outline"
                               size="sm"
@@ -513,7 +513,7 @@ How can I assist you today?`,
                               className="text-xs"
                             >
                               {action.label}
-                            </Button>
+                            </DaisyButton>
                           ))}
                         </div>
                       )}
@@ -523,7 +523,7 @@ How can I assist you today?`,
                         <div className="mt-3 space-y-1">
                           <div className="text-xs opacity-70 mb-2">Suggested questions:</div>
                           {message.followUpQuestions.map((question, index) => (
-                            <Button
+                            <DaisyButton
                               key={index}
                               variant="ghost"
                               size="sm"
@@ -531,7 +531,7 @@ How can I assist you today?`,
                               className="text-xs h-auto p-2 justify-start text-left whitespace-normal"
                             >
                               {question}
-                            </Button>
+                            </DaisyButton>
                           ))}
                         </div>
                       )}
@@ -539,17 +539,17 @@ How can I assist you today?`,
                       {/* Message Actions */}
                       {message.role === 'assistant' && (
                         <div className="flex items-center space-x-1 mt-2">
-                          <Button
+                          <DaisyButton
                             variant="ghost"
                             size="sm"
                             onClick={() => copyMessage(message.content)}
                             className="p-1 h-6 w-6"
                           >
                             <Copy className="w-3 h-3" />
-                          </Button>
+                          </DaisyButton>
                           
                           {voiceEnabled && speechSynthesis && (
-                            <Button
+                            <DaisyButton
                               variant="ghost"
                               size="sm"
                               onClick={() => speakMessage(message.content)}
@@ -557,24 +557,24 @@ How can I assist you today?`,
                               className="p-1 h-6 w-6"
                             >
                               <Volume2 className="w-3 h-3" />
-                            </Button>
+                            </DaisyButton>
                           )}
                           
-                          <Button
+                          <DaisyButton
                             variant="ghost"
                             size="sm"
                             className="p-1 h-6 w-6"
                           >
                             <ThumbsUp className="w-3 h-3" />
-                          </Button>
+                          </DaisyButton>
                           
-                          <Button
+                          <DaisyButton
                             variant="ghost"
                             size="sm"
                             className="p-1 h-6 w-6"
                           >
                             <ThumbsDown className="w-3 h-3" />
-                          </Button>
+                          </DaisyButton>
                         </div>
                       )}
                     </div>
@@ -602,13 +602,13 @@ How can I assist you today?`,
           </div>
         </ScrollArea>
 
-        <Separator />
+        <DaisySeparator />
 
         {/* Input Area */}
         <div className="p-4">
           <form onSubmit={handleSubmit} className="flex space-x-2">
             <div className="flex-1 relative">
-              <Input
+              <DaisyInput
                 ref={inputRef}
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
@@ -618,7 +618,7 @@ How can I assist you today?`,
               />
               
               {voiceEnabled && (
-                <Button
+                <DaisyButton
                   type="button"
                   variant="ghost"
                   size="sm"
@@ -633,22 +633,22 @@ How can I assist you today?`,
                   ) : (
                     <Mic className="w-4 h-4" />
                   )}
-                </Button>
+                </DaisyButton>
               )}
             </div>
             
-            <Button
+            <DaisyButton
               type="submit"
               disabled={!inputMessage.trim() || isLoading}
               size="sm"
             >
               <Send className="w-4 h-4" />
-            </Button>
+            </DaisyButton>
           </form>
           
           {/* Quick Actions */}
           <div className="flex flex-wrap gap-2 mt-3">
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={() => sendMessage('Show me our risk dashboard')}
@@ -657,9 +657,9 @@ How can I assist you today?`,
             >
               <Shield className="w-3 h-3 mr-1" />
               Risk Dashboard
-            </Button>
+            </DaisyButton>
             
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={() => sendMessage('Analyze compliance status')}
@@ -668,9 +668,9 @@ How can I assist you today?`,
             >
               <CheckCircle2 className="w-3 h-3 mr-1" />
               Compliance Status
-            </Button>
+            </DaisyButton>
             
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={() => sendMessage('What are our trending risks?')}
@@ -679,9 +679,9 @@ How can I assist you today?`,
             >
               <BarChart3 className="w-3 h-3 mr-1" />
               Risk Trends
-            </Button>
+            </DaisyButton>
             
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={() => sendMessage('Recommend controls for high-priority risks')}
@@ -690,10 +690,10 @@ How can I assist you today?`,
             >
               <Lightbulb className="w-3 h-3 mr-1" />
               Control Recommendations
-            </Button>
+            </DaisyButton>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 }

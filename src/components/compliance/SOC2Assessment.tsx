@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { 
   CheckCircle, 
@@ -222,7 +222,7 @@ export function SOC2Assessment() {
           </DaisyCardTitle>
           <DaisyCardDescription>
             Import SOC 2 framework to begin compliance assessment
-          </CardDescription>
+          </p>
         
         <DaisyCardContent>
           <DaisyAlert>
@@ -320,15 +320,15 @@ export function SOC2Assessment() {
       </DaisyCard>
 
       {/* Main Content Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="controls">Controls</TabsTrigger>
-          <TabsTrigger value="evidence">Evidence</TabsTrigger>
-          <TabsTrigger value="reports">Reports</TabsTrigger>
-        </TabsList>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
+        <DaisyTabsList className="grid w-full grid-cols-4">
+          <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="controls">Controls</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="evidence">Evidence</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="reports">Reports</DaisyTabsTrigger>
+        </DaisyTabsList>
 
-        <TabsContent value="overview" className="space-y-4">
+        <DaisyTabsContent value="overview" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
               <DaisyCardHeader>
@@ -384,9 +384,9 @@ export function SOC2Assessment() {
               </DaisyCardBody>
             </DaisyCard>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="controls" className="space-y-4">
+        <DaisyTabsContent value="controls" className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <h3 className="text-lg font-semibold text-[#191919]">SOC 2 Controls</h3>
@@ -438,15 +438,15 @@ export function SOC2Assessment() {
               </DaisyCard>
             ))}
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="evidence" className="space-y-4">
+        <DaisyTabsContent value="evidence" className="space-y-4">
           <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
             <DaisyCardHeader>
               <DaisyCardTitle className="text-[#191919] font-inter">Evidence Collection</DaisyCardTitle>
               <DaisyCardDescription>
                 Upload and manage evidence for SOC 2 controls
-              </CardDescription>
+              </p>
             
             <DaisyCardContent>
               <div className="text-center py-8">
@@ -459,15 +459,15 @@ export function SOC2Assessment() {
               </div>
             </DaisyCardBody>
           </DaisyCard>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="reports" className="space-y-4">
+        <DaisyTabsContent value="reports" className="space-y-4">
           <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
             <DaisyCardHeader>
               <DaisyCardTitle className="text-[#191919] font-inter">Assessment Reports</DaisyCardTitle>
               <DaisyCardDescription>
                 Generate and download SOC 2 assessment reports
-              </CardDescription>
+              </p>
             
             <DaisyCardContent>
               <div className="space-y-4">
@@ -486,8 +486,8 @@ export function SOC2Assessment() {
               </div>
             </DaisyCardBody>
           </DaisyCard>
-        </TabsContent>
-      </Tabs>
+        </DaisyTabsContent>
+      </DaisyTabs>
     </div>
   );
 } 

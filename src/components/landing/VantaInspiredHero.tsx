@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { 
   Shield, 
   ArrowRight, 
@@ -33,10 +33,10 @@ export default function VantaInspiredHero() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20">
         <div className={`text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           {/* Announcement Badge */}
-          <Badge className="bg-[#199BEC] text-white px-6 py-2 mb-6 text-sm rounded-full hover:bg-[#0f7dc7] transition-colors">
+          <DaisyBadge className="bg-[#199BEC] text-white px-6 py-2 mb-6 text-sm rounded-full hover:bg-[#0f7dc7] transition-colors">
             <Sparkles className="w-4 h-4 mr-2" />
             Introducing Riscura AI: Powering the future of risk management
-          </Badge>
+          </DaisyBadge>
           
           {/* Large headline with colored accent */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-5 leading-tight">
@@ -56,22 +56,22 @@ export default function VantaInspiredHero() {
           
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-10">
-            <Button 
+            <DaisyButton 
               size="lg" 
               className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
               onClick={() => router.push('/register')}
             >
               Request a demo
               <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-            <Button 
+            </DaisyButton>
+            <DaisyButton 
               variant="outline" 
               size="lg" 
               className="border-gray-300 text-gray-700 hover:border-[#199BEC] hover:text-[#199BEC] px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-200"
             >
               <Play className="w-5 h-5 mr-2" />
               Watch demo
-            </Button>
+            </DaisyButton>
           </div>
           
           {/* Trust Indicators */}

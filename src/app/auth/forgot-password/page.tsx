@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import Link from 'next/link';
 import { ArrowLeft, Mail } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
@@ -40,14 +40,14 @@ export default function ForgotPasswordPage() {
   if (isSubmitted) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
+        <DaisyCard className="w-full max-w-md">
+          <DaisyCardHeader className="text-center">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
               <Mail className="h-6 w-6 text-green-600" />
             </div>
-            <CardTitle>Check your email</CardTitle>
-          </CardHeader>
-          <CardContent className="text-center space-y-4">
+            <DaisyCardTitle>Check your email</DaisyCardTitle>
+          
+          <DaisyCardContent className="text-center space-y-4">
             <p className="text-muted-foreground">
               We've sent a password reset link to <strong>{email}</strong>
             </p>
@@ -55,7 +55,7 @@ export default function ForgotPasswordPage() {
               Didn't receive the email? Check your spam folder or try again.
             </p>
             <div className="space-y-2">
-              <Button 
+              <DaisyButton 
                 variant="outline" 
                 className="w-full"
                 onClick={() => {
@@ -64,34 +64,34 @@ export default function ForgotPasswordPage() {
                 }}
               >
                 Try different email
-              </Button>
+              </DaisyButton>
               <Link href="/auth/login">
-                <Button variant="ghost" className="w-full">
+                <DaisyButton variant="ghost" className="w-full">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to login
-                </Button>
+                </DaisyButton>
               </Link>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Reset your password</CardTitle>
+      <DaisyCard className="w-full max-w-md">
+        <DaisyCardHeader>
+          <DaisyCardTitle>Reset your password</DaisyCardTitle>
           <p className="text-muted-foreground">
             Enter your email address and we'll send you a link to reset your password.
           </p>
-        </CardHeader>
-        <CardContent>
+        
+        <DaisyCardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email address</Label>
-              <Input
+              <DaisyLabel htmlFor="email">Email address</DaisyLabel>
+              <DaisyInput
                 id="email"
                 type="email"
                 placeholder="Enter your email"
@@ -102,23 +102,23 @@ export default function ForgotPasswordPage() {
               />
             </div>
             
-            <Button 
+            <DaisyButton 
               type="submit" 
               className="w-full" 
               disabled={isLoading || !email}
             >
               {isLoading ? 'Sending...' : 'Send reset link'}
-            </Button>
+            </DaisyButton>
             
             <Link href="/auth/login">
-              <Button variant="ghost" className="w-full">
+              <DaisyButton variant="ghost" className="w-full">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to login
-              </Button>
+              </DaisyButton>
             </Link>
           </form>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </div>
   );
 } 

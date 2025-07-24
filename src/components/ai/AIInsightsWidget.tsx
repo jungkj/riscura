@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
   AlertTriangle, 
   TrendingUp, 
@@ -271,8 +271,8 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
 
   const getImpactIcon = (impact: string) => {
     switch (impact) {
-      case 'critical': return <AlertTriangle className="h-4 w-4" />;
-      case 'high': return <AlertCircle className="h-4 w-4" />;
+      case 'critical': return <DaisyAlertTriangle className="h-4 w-4" />;
+      case 'high': return <DaisyAlertCircle className="h-4 w-4" />;
       case 'medium': return <Eye className="h-4 w-4" />;
       case 'low': return <CheckCircle className="h-4 w-4" />;
       default: return <Activity className="h-4 w-4" />;
@@ -299,14 +299,14 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
 
   if (loading && insights.length === 0) {
     return (
-      <Card className={cn("w-full", className)}>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <DaisyCard className={cn("w-full", className)}>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-indigo-600 animate-pulse" />
             AI Intelligence Loading...
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="space-y-3">
             {[...Array(3)].map((_, index) => (
               <div key={index} className="animate-pulse">
@@ -315,25 +315,25 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     );
   }
 
   return (
-    <Card className={cn("w-full", className)}>
-      <CardHeader className="pb-3">
+    <DaisyCard className={cn("w-full", className)}>
+      <DaisyCardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
+          <DaisyCardTitle className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-indigo-600" />
             AI Intelligence Hub
-            <Badge variant="outline" className="ml-2">
+            <DaisyBadge variant="outline" className="ml-2">
               <Sparkles className="h-3 w-3 mr-1" />
               Live
-            </Badge>
-          </CardTitle>
+            </DaisyBadge>
+          </DaisyCardTitle>
           <div className="flex items-center gap-2">
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={realtimeEnabled ? stopRealTimeUpdates : startRealTimeUpdates}
@@ -349,10 +349,10 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
                   Start Live
                 </>
               )}
-            </Button>
-            <Button variant="ghost" size="sm" onClick={fetchInsights} disabled={loading}>
+            </DaisyButton>
+            <DaisyButton variant="ghost" size="sm" onClick={fetchInsights} disabled={loading}>
               <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
-            </Button>
+            </DaisyButton>
           </div>
         </div>
         {lastUpdate && (
@@ -360,27 +360,27 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
             Last updated: {lastUpdate.toLocaleTimeString()}
           </p>
         )}
-      </CardHeader>
+      
 
-      <CardContent className="space-y-4">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="insights" className="text-xs">
+      <DaisyCardContent className="space-y-4">
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
+          <DaisyTabsList className="grid w-full grid-cols-4">
+            <DaisyTabsTrigger value="insights" className="text-xs">
               Insights ({insights.length})
-            </TabsTrigger>
-            <TabsTrigger value="predictions" className="text-xs">
+            </DaisyTabsTrigger>
+            <DaisyTabsTrigger value="predictions" className="text-xs">
               Predictions
-            </TabsTrigger>
-            <TabsTrigger value="recommendations" className="text-xs">
+            </DaisyTabsTrigger>
+            <DaisyTabsTrigger value="recommendations" className="text-xs">
               Recommendations
-            </TabsTrigger>
-            <TabsTrigger value="metrics" className="text-xs">
+            </DaisyTabsTrigger>
+            <DaisyTabsTrigger value="metrics" className="text-xs">
               Live Metrics
-            </TabsTrigger>
-          </TabsList>
+            </DaisyTabsTrigger>
+          </DaisyTabsList>
 
           {/* Insights Tab */}
-          <TabsContent value="insights" className="space-y-3 mt-4">
+          <DaisyTabsContent value="insights" className="space-y-3 mt-4">
             {error && (
               <div className="text-red-600 text-sm p-2 bg-red-50 rounded">
                 {error}
@@ -403,9 +403,9 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
                         <div className="flex items-center gap-2 mb-1">
                           {getImpactIcon(insight.impact)}
                           <h4 className="font-medium text-sm">{insight.title}</h4>
-                          <Badge variant="outline" className="text-xs">
+                          <DaisyBadge variant="outline" className="text-xs">
                             {(insight.confidence * 100).toFixed(0)}%
-                          </Badge>
+                          </DaisyBadge>
                         </div>
                         <p className="text-xs text-gray-600 mb-2">{insight.description}</p>
                         
@@ -426,11 +426,11 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
                             )}
                             
                             <div className="flex items-center gap-2 pt-2">
-                              <Button size="sm" variant="outline" className="text-xs">
+                              <DaisyButton size="sm" variant="outline" className="text-xs">
                                 <Eye className="h-3 w-3 mr-1" />
                                 Investigate
-                              </Button>
-                              <Button 
+                              </DaisyButton>
+                              <DaisyButton 
                                 size="sm" 
                                 variant="outline" 
                                 className="text-xs"
@@ -441,16 +441,16 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
                               >
                                 <MessageSquare className="h-3 w-3 mr-1" />
                                 Ask AI
-                              </Button>
+                              </DaisyButton>
                             </div>
                           </div>
                         )}
                       </div>
                       
                       <div className="flex items-center gap-1">
-                        <Badge variant="secondary" className="text-xs">
+                        <DaisyBadge variant="secondary" className="text-xs">
                           {insight.source.replace('_', ' ')}
-                        </Badge>
+                        </DaisyBadge>
                         {expandedInsights.has(insight.id) ? (
                           <ChevronDown className="h-4 w-4" />
                         ) : (
@@ -468,19 +468,19 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
                 <p className="text-xs">AI is analyzing your data...</p>
               </div>
             )}
-          </TabsContent>
+          </DaisyTabsContent>
 
           {/* Predictions Tab */}
-          <TabsContent value="predictions" className="space-y-3 mt-4">
+          <DaisyTabsContent value="predictions" className="space-y-3 mt-4">
             {predictions.length > 0 ? (
               <div className="space-y-4 max-h-96 overflow-y-auto">
                 {predictions.map((prediction) => (
                   <div key={prediction.id} className="border rounded-lg p-3">
                     <div className="flex items-center justify-between mb-3">
                       <h4 className="font-medium text-sm">{prediction.metric}</h4>
-                      <Badge variant="outline" className="text-xs">
+                      <DaisyBadge variant="outline" className="text-xs">
                         {(prediction.confidence * 100).toFixed(0)}% confidence
-                      </Badge>
+                      </DaisyBadge>
                     </div>
                     
                     <div className="grid grid-cols-2 gap-4 mb-3">
@@ -500,7 +500,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
                           <CartesianGrid strokeDasharray="3 3" />
                           <XAxis dataKey="date" tick={{ fontSize: 10 }} />
                           <YAxis tick={{ fontSize: 10 }} />
-                          <Tooltip />
+                          <DaisyTooltip />
                           <Area 
                             type="monotone" 
                             dataKey="actual" 
@@ -522,14 +522,14 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
                       </ResponsiveContainer>
                     </div>
                     
-                    <Badge className={cn(
+                    <DaisyBadge className={cn(
                       "text-xs",
                       prediction.riskLevel === 'high' ? 'bg-red-100 text-red-800' :
                       prediction.riskLevel === 'medium' ? 'bg-yellow-100 text-yellow-800' :
                       'bg-green-100 text-green-800'
                     )}>
                       {prediction.riskLevel} risk
-                    </Badge>
+                    </DaisyBadge>
                   </div>
                 ))}
               </div>
@@ -544,10 +544,10 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
                 <p className="text-sm">Predictions disabled</p>
               </div>
             )}
-          </TabsContent>
+          </DaisyTabsContent>
 
           {/* Recommendations Tab */}
-          <TabsContent value="recommendations" className="space-y-3 mt-4">
+          <DaisyTabsContent value="recommendations" className="space-y-3 mt-4">
             {recommendations.length > 0 ? (
               <div className="space-y-3 max-h-96 overflow-y-auto">
                 {recommendations.map((rec) => (
@@ -555,8 +555,8 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-medium text-sm">{rec.title}</h4>
                       <div className="flex items-center gap-1">
-                        <Badge variant="outline" className="text-xs">{rec.effort} effort</Badge>
-                        <Badge variant="secondary" className="text-xs">P{rec.priority}</Badge>
+                        <DaisyBadge variant="outline" className="text-xs">{rec.effort} effort</DaisyBadge>
+                        <DaisyBadge variant="secondary" className="text-xs">P{rec.priority}</DaisyBadge>
                       </div>
                     </div>
                     
@@ -574,14 +574,14 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
                     </div>
                     
                     <div className="flex items-center gap-2 mt-3">
-                      <Button size="sm" variant="outline" className="text-xs">
+                      <DaisyButton size="sm" variant="outline" className="text-xs">
                         <CheckCircle className="h-3 w-3 mr-1" />
                         Accept
-                      </Button>
-                      <Button size="sm" variant="outline" className="text-xs">
+                      </DaisyButton>
+                      <DaisyButton size="sm" variant="outline" className="text-xs">
                         <Lightbulb className="h-3 w-3 mr-1" />
                         Learn More
-                      </Button>
+                      </DaisyButton>
                     </div>
                   </div>
                 ))}
@@ -597,10 +597,10 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
                 <p className="text-sm">Recommendations disabled</p>
               </div>
             )}
-          </TabsContent>
+          </DaisyTabsContent>
 
           {/* Live Metrics Tab */}
-          <TabsContent value="metrics" className="space-y-3 mt-4">
+          <DaisyTabsContent value="metrics" className="space-y-3 mt-4">
             <div className="grid grid-cols-2 gap-3">
               {metrics.map((metric) => (
                 <div key={metric.name} className="border rounded-lg p-3">
@@ -627,14 +627,14 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
                     )}
                     
                     {metric.confidence && (
-                      <Progress value={metric.confidence * 100} className="h-1" />
+                      <DaisyProgress value={metric.confidence * 100} className="h-1" />
                     )}
                   </div>
                 </div>
               ))}
             </div>
-          </TabsContent>
-        </Tabs>
+          </DaisyTabsContent>
+        </DaisyTabs>
 
         {/* Interactive Assistance Modal/Panel */}
         {assistance && (
@@ -644,13 +644,13 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
                 <Bot className="h-4 w-4 text-blue-600" />
                 AI Assistant
               </h4>
-              <Button 
+              <DaisyButton 
                 variant="ghost" 
                 size="sm" 
                 onClick={() => setAssistance(null)}
               >
                 ×
-              </Button>
+              </DaisyButton>
             </div>
             
             {assistance.suggestions.length > 0 && (
@@ -666,7 +666,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
             {assistance.quickActions.length > 0 && (
               <div className="flex gap-2 mt-3">
                 {assistance.quickActions.slice(0, 3).map((action) => (
-                  <Button
+                  <DaisyButton
                     key={action.id}
                     size="sm"
                     variant="outline"
@@ -674,13 +674,13 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
                     disabled={!action.enabled}
                   >
                     {action.label}
-                  </Button>
+                  </DaisyButton>
                 ))}
               </div>
             )}
           </div>
         )}
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 }; 

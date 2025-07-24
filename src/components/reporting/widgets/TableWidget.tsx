@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Copy, Trash2, ChevronUp, ChevronDown } from 'lucide-react';
 import { ReportWidget } from '@/lib/reporting/engine';
 
@@ -112,14 +112,14 @@ export function TableWidget({
   };
 
   return (
-    <Card 
+    <DaisyCard 
       className={`h-full ${isSelected ? 'ring-2 ring-blue-500' : ''} cursor-pointer`}
       onClick={onSelect}
     >
-      <CardHeader className="pb-2 flex flex-row items-center justify-between">
-        <CardTitle className="text-sm font-medium">{widget.title}</CardTitle>
+      <DaisyCardHeader className="pb-2 flex flex-row items-center justify-between">
+        <DaisyCardTitle className="text-sm font-medium">{widget.title}</DaisyCardTitle>
         <div className="flex items-center space-x-1">
-          <Button
+          <DaisyButton
             variant="ghost"
             size="sm"
             onClick={(e) => {
@@ -128,8 +128,8 @@ export function TableWidget({
             }}
           >
             <Copy className="w-3 h-3" />
-          </Button>
-          <Button
+          </DaisyButton>
+          <DaisyButton
             variant="ghost"
             size="sm"
             onClick={(e) => {
@@ -138,10 +138,10 @@ export function TableWidget({
             }}
           >
             <Trash2 className="w-3 h-3" />
-          </Button>
+          </DaisyButton>
         </div>
-      </CardHeader>
-      <CardContent className="pt-0">
+      
+      <DaisyCardContent className="pt-0">
         {loading ? (
           <div className="flex items-center justify-center h-32">
             <div className="text-sm text-gray-500">Loading...</div>
@@ -200,28 +200,28 @@ export function TableWidget({
                   Page {currentPage} of {totalPages}
                 </div>
                 <div className="flex space-x-1">
-                  <Button
+                  <DaisyButton
                     variant="ghost"
                     size="sm"
                     disabled={currentPage === 1}
                     onClick={() => setCurrentPage(currentPage - 1)}
                   >
                     Previous
-                  </Button>
-                  <Button
+                  </DaisyButton>
+                  <DaisyButton
                     variant="ghost"
                     size="sm"
                     disabled={currentPage === totalPages}
                     onClick={() => setCurrentPage(currentPage + 1)}
                   >
                     Next
-                  </Button>
+                  </DaisyButton>
                 </div>
               </div>
             )}
           </div>
         )}
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 } 

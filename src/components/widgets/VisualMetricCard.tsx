@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -258,13 +258,13 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
       transition={{ duration: 0.3 }}
       className={className}
     >
-      <Card 
+      <DaisyCard 
         className={`bg-white border-gray-200 transition-all duration-200 ${
           interactive ? 'hover:shadow-lg hover:border-gray-300 cursor-pointer' : ''
         }`}
         onClick={onClick}
       >
-        <CardContent className="p-6">
+        <DaisyCardContent className="p-6">
           <div className="space-y-4">
             {/* Header */}
             <div className="flex items-start justify-between">
@@ -289,7 +289,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
               </div>
               
               <div className="flex items-center gap-2">
-                <Badge 
+                <DaisyBadge 
                   variant="secondary"
                   className="text-xs"
                   style={{ 
@@ -299,12 +299,12 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
                 >
                   <StatusIcon className="w-3 h-3 mr-1" />
                   {statusInfo.label}
-                </Badge>
+                </DaisyBadge>
                 
                 {interactive && (
-                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                  <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
                     <MoreHorizontal className="w-3 h-3" />
-                  </Button>
+                  </DaisyButton>
                 )}
               </div>
             </div>
@@ -365,7 +365,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
               <div className="flex items-center gap-4">
                 {/* Progress Ring */}
                 {target && !showProgress && (
-                  <ProgressRing
+                  <DaisyProgressRing
                     value={Number(value)}
                     target={target}
                     color={cardColor}
@@ -389,10 +389,10 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
             {/* Footer Actions */}
             {interactive && (
               <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                <Button variant="ghost" size="sm" className="text-xs">
+                <DaisyButton variant="ghost" size="sm" className="text-xs">
                   <Eye className="w-3 h-3 mr-1" />
                   View Details
-                </Button>
+                </DaisyButton>
                 
                 <span className="text-xs text-gray-500">
                   Updated 2 min ago
@@ -400,8 +400,8 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
               </div>
             )}
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </motion.div>
   );
 }; 

@@ -124,15 +124,15 @@ export const LoadingCard: React.FC<LoadingCardProps> = ({
   actions = true,
   className
 }) => (
-  <Card className={className}>
+  <DaisyCard className={className}>
     {(title || description) && (
-      <CardHeader>
+      <DaisyCardHeader>
         {title && <EnhancedSkeleton className="h-6 w-1/2 mb-2" />}
         {description && <EnhancedSkeleton className="h-4 w-3/4" />}
-      </CardHeader>
+      
     )}
     {content && (
-      <CardContent className="space-y-3">
+      <DaisyCardContent className="space-y-3">
         <SkeletonText lines={3} />
         {actions && (
           <div className="flex gap-2 pt-2">
@@ -140,9 +140,9 @@ export const LoadingCard: React.FC<LoadingCardProps> = ({
             <SkeletonButton />
           </div>
         )}
-      </CardContent>
+      </DaisyCardBody>
     )}
-  </Card>
+  </DaisyCard>
 );
 
 // Table Loading Skeleton
@@ -270,8 +270,8 @@ export const LoadingDashboard: React.FC = () => (
     {/* Stats Cards */}
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {Array.from({ length: 4 }).map((_, i) => (
-        <Card key={i}>
-          <CardContent className="p-6">
+        <DaisyCard key={i}>
+          <DaisyCardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <EnhancedSkeleton className="h-4 w-24 mb-2" />
@@ -279,8 +279,8 @@ export const LoadingDashboard: React.FC = () => (
               </div>
               <EnhancedSkeleton className="h-8 w-8 rounded" />
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       ))}
     </div>
     
@@ -372,7 +372,7 @@ export const LoadingProgress: React.FC<LoadingProgressProps> = ({
         )}
       </div>
     )}
-    <Progress 
+    <DaisyProgress 
       value={indeterminate ? undefined : progress} 
       className={indeterminate ? 'animate-pulse' : ''}
     />
@@ -424,10 +424,10 @@ export const NetworkLoading: React.FC<NetworkLoadingProps> = ({
 
   return (
     <div className="flex items-center justify-center p-4">
-      <Badge variant={getVariant() as any} className="flex items-center gap-2">
+      <DaisyBadge variant={getVariant() as any} className="flex items-center gap-2">
         {getIcon()}
         <span>{message || getStatusText()}</span>
-      </Badge>
+      </DaisyBadge>
     </div>
   );
 };

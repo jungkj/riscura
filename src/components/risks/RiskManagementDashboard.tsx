@@ -6,13 +6,13 @@ import { cn } from '@/lib/utils';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
-import { Switch } from '@/components/ui/switch';
+import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { EnhancedProboService } from '@/services/EnhancedProboService';
 import { CreateRiskModal } from './CreateRiskModal';
@@ -629,25 +629,25 @@ export const RiskManagementDashboard: React.FC = () => {
     >
       {/* Tabs */}
       <div className="flex items-center justify-between mb-enterprise-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList>
-            <TabsTrigger value="register">Risk Register</TabsTrigger>
-            <TabsTrigger value="assessment">Assessment</TabsTrigger>
-            <TabsTrigger value="heatmap">Heat Map</TabsTrigger>
-            <TabsTrigger value="controls">
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
+          <DaisyTabsList>
+            <DaisyTabsTrigger value="register">Risk Register</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="assessment">Assessment</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="heatmap">Heat Map</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="controls">
               <Shield className="h-4 w-4 mr-2" />
               Probo Controls
-            </TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          </TabsList>
-        </Tabs>
+            </DaisyTabsTrigger>
+            <DaisyTabsTrigger value="analytics">Analytics</DaisyTabsTrigger>
+          </DaisyTabsList>
+        </DaisyTabs>
         
         {/* Risk Creation Flow Toggle */}
         <div className="flex items-center space-x-2">
           <DaisyLabel htmlFor="flow-toggle" className="text-sm font-medium">
             New Interactive Flow
           </DaisyLabel>
-          <Switch
+          <DaisySwitch
             id="flow-toggle"
             checked={useNewFlow}
             onCheckedChange={setUseNewFlow}
@@ -655,11 +655,11 @@ export const RiskManagementDashboard: React.FC = () => {
         </div>
       </div>
 
-      <TabsContent value="register">
+      <DaisyTabsContent value="register">
         <RiskRegister />
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="assessment">
+      <DaisyTabsContent value="assessment">
         <div className="text-center py-enterprise-12">
           <Target className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -669,9 +669,9 @@ export const RiskManagementDashboard: React.FC = () => {
             Interactive risk matrix and evaluation forms.
           </p>
         </div>
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="heatmap">
+      <DaisyTabsContent value="heatmap">
         <div className="text-center py-enterprise-12">
           <Map className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -681,9 +681,9 @@ export const RiskManagementDashboard: React.FC = () => {
             Interactive risk positioning and grouping.
           </p>
         </div>
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="controls" className="space-y-6">
+      <DaisyTabsContent value="controls" className="space-y-6">
         {/* Probo Integration Header */}
         <DaisyCard>
           <DaisyCardHeader>
@@ -696,7 +696,7 @@ export const RiskManagementDashboard: React.FC = () => {
                   <DaisyCardTitle className="text-lg">Probo Security Controls</DaisyCardTitle>
                   <DaisyCardDescription>
                     AI-powered risk-control mapping with 651+ industry-standard controls
-                  </CardDescription>
+                  </p>
                 </div>
               </div>
               <DaisyButton onClick={handleImportProboControls} className="flex items-center space-x-2">
@@ -752,7 +752,7 @@ export const RiskManagementDashboard: React.FC = () => {
                         <DaisyCardTitle className="text-base">{risk.title}</DaisyCardTitle>
                         <DaisyCardDescription className="line-clamp-2">
                           {risk.description}
-                        </CardDescription>
+                        </p>
                       </div>
                       <div className="text-right">
                         <div className="text-2xl font-bold text-[#199BEC]">{controlCount}</div>
@@ -804,9 +804,9 @@ export const RiskManagementDashboard: React.FC = () => {
             })}
           </div>
         )}
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="analytics">
+      <DaisyTabsContent value="analytics">
         <div className="text-center py-enterprise-12">
           <BarChart3 className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -816,7 +816,7 @@ export const RiskManagementDashboard: React.FC = () => {
             Comprehensive risk metrics and trends.
           </p>
         </div>
-      </TabsContent>
+      </DaisyTabsContent>
 
       {/* Create Risk Modal - Toggle between old and new flow */}
       {useNewFlow ? (

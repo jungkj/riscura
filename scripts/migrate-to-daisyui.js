@@ -10,10 +10,13 @@ const componentMapping = {
   "import { Button } from '@/components/ui/button'": "import { DaisyButton } from '@/components/ui/DaisyButton'",
   "import { Button } from \"@/components/ui/button\"": "import { DaisyButton } from '@/components/ui/DaisyButton'",
   
-  // Card imports
+  // Card imports - with quotes
   "import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'": "import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'",
+  "import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'": "import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'",
+  "import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'": "import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'",
   "import { Card, CardContent } from '@/components/ui/card'": "import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'",
   "import { Card } from '@/components/ui/card'": "import { DaisyCard } from '@/components/ui/DaisyCard'",
+  "import { Card, CardContent, CardHeader } from '@/components/ui/card'": "import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'",
   
   // Input imports
   "import { Input } from '@/components/ui/input'": "import { DaisyInput } from '@/components/ui/DaisyInput'",
@@ -45,6 +48,29 @@ const componentMapping = {
   
   // Separator imports
   "import { Separator } from '@/components/ui/separator'": "import { DaisySeparator } from '@/components/ui/DaisySeparator'",
+  
+  // Tabs imports
+  "import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'": "import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs'",
+  "import { Tabs } from '@/components/ui/tabs'": "import { DaisyTabs } from '@/components/ui/DaisyTabs'",
+  
+  // Textarea imports
+  "import { Textarea } from '@/components/ui/textarea'": "import { DaisyTextarea } from '@/components/ui/DaisyTextarea'",
+  
+  // Switch imports
+  "import { Switch } from '@/components/ui/switch'": "import { DaisySwitch } from '@/components/ui/DaisySwitch'",
+  
+  // Avatar imports
+  "import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'": "import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar'",
+  "import { Avatar, AvatarFallback } from '@/components/ui/avatar'": "import { DaisyAvatar, DaisyAvatarFallback } from '@/components/ui/DaisyAvatar'",
+  
+  // Tooltip imports
+  "import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'": "import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip'",
+  "import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'": "import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger } from '@/components/ui/DaisyTooltip'",
+  
+  // Dropdown menu imports
+  "import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'": "import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuSeparator, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown'",
+  "import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'": "import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown'",
+  "import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu'": "import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger, DaisyDropdownMenuSeparator } from '@/components/ui/DaisyDropdown'",
 };
 
 // Component usage mapping
@@ -62,6 +88,8 @@ const usageMapping = {
   '</CardHeader>': '',
   '<CardTitle': '<DaisyCardTitle',
   '</CardTitle>': '</DaisyCardTitle>',
+  '<CardDescription>': '<p className="text-sm text-base-content/70">',
+  '</CardDescription>': '</p>',
   
   // Input
   '<Input': '<DaisyInput',
@@ -105,6 +133,51 @@ const usageMapping = {
   // Separator
   '<Separator': '<DaisySeparator',
   '</Separator>': '</DaisySeparator>',
+  
+  // Tabs
+  '<Tabs': '<DaisyTabs',
+  '</Tabs>': '</DaisyTabs>',
+  '<TabsList': '<DaisyTabsList',
+  '</TabsList>': '</DaisyTabsList>',
+  '<TabsTrigger': '<DaisyTabsTrigger',
+  '</TabsTrigger>': '</DaisyTabsTrigger>',
+  '<TabsContent': '<DaisyTabsContent',
+  '</TabsContent>': '</DaisyTabsContent>',
+  
+  // Textarea
+  '<Textarea': '<DaisyTextarea',
+  
+  // Switch
+  '<Switch': '<DaisySwitch',
+  
+  // Avatar
+  '<Avatar': '<DaisyAvatar',
+  '</Avatar>': '</DaisyAvatar>',
+  '<AvatarImage': '<DaisyAvatarImage',
+  '<AvatarFallback': '<DaisyAvatarFallback',
+  '</AvatarFallback>': '</DaisyAvatarFallback>',
+  
+  // Tooltip
+  '<Tooltip': '<DaisyTooltip',
+  '</Tooltip>': '</DaisyTooltip>',
+  '<TooltipTrigger': '<DaisyTooltipTrigger',
+  '</TooltipTrigger>': '</DaisyTooltipTrigger>',
+  '<TooltipContent': '<DaisyTooltipContent',
+  '</TooltipContent>': '</DaisyTooltipContent>',
+  '<TooltipProvider>': '',
+  '</TooltipProvider>': '',
+  
+  // Dropdown
+  '<DropdownMenu': '<DaisyDropdownMenu',
+  '</DropdownMenu>': '</DaisyDropdownMenu>',
+  '<DropdownMenuTrigger': '<DaisyDropdownMenuTrigger',
+  '</DropdownMenuTrigger>': '</DaisyDropdownMenuTrigger>',
+  '<DropdownMenuContent': '<DaisyDropdownMenuContent',
+  '</DropdownMenuContent>': '</DaisyDropdownMenuContent>',
+  '<DropdownMenuItem': '<DaisyDropdownMenuItem',
+  '</DropdownMenuItem>': '</DaisyDropdownMenuItem>',
+  '<DropdownMenuSeparator': '<DaisyDropdownMenuSeparator',
+  '</DropdownMenuSeparator>': '</DaisyDropdownMenuSeparator>',
 };
 
 // Files to process

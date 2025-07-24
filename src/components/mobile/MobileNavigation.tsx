@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { useGesture } from '@use-gesture/react';
 import {
   Menu,
@@ -254,7 +254,7 @@ export default function MobileNavigation({
     
     return (
       <div key={item.id} className="w-full">
-        <Button
+        <DaisyButton
           variant={isActive ? 'default' : 'ghost'}
           className={`w-full justify-start text-left h-auto p-3 ${
             level > 0 ? 'ml-4 pl-6' : ''
@@ -283,13 +283,13 @@ export default function MobileNavigation({
             
             <div className="flex items-center space-x-2">
               {item.badge && (
-                <Badge 
+                <DaisyBadge 
                   variant={typeof item.badge === 'number' && item.badge > 0 ? 'destructive' : 'secondary'}
                   className="text-xs"
                   aria-label={`${item.badge} notifications`}
                 >
                   {item.badge}
-                </Badge>
+                </DaisyBadge>
               )}
               {hasChildren && (
                 isExpanded 
@@ -298,7 +298,7 @@ export default function MobileNavigation({
               )}
             </div>
           </div>
-        </Button>
+        </DaisyButton>
         
         {/* Render children */}
         {hasChildren && isExpanded && (
@@ -314,7 +314,7 @@ export default function MobileNavigation({
     <>
       {/* Mobile Navigation Trigger */}
       <div className={`fixed top-4 left-4 z-50 lg:hidden ${className}`} {...bind()}>
-        <Button
+        <DaisyButton
           variant="outline"
           size="sm"
           onClick={() => setIsOpen(true)}
@@ -323,12 +323,12 @@ export default function MobileNavigation({
           accessKey="m"
         >
           <Menu className="w-5 h-5" />
-        </Button>
+        </DaisyButton>
       </div>
       
       {/* Search Button */}
       <div className="fixed top-4 right-16 z-50 lg:hidden">
-        <Button
+        <DaisyButton
           variant="outline"
           size="sm"
           onClick={() => setIsSearchOpen(true)}
@@ -337,12 +337,12 @@ export default function MobileNavigation({
           accessKey="s"
         >
           <Search className="w-5 h-5" />
-        </Button>
+        </DaisyButton>
       </div>
       
       {/* Notifications Button */}
       <div className="fixed top-4 right-4 z-50 lg:hidden">
-        <Button
+        <DaisyButton
           variant="outline"
           size="sm"
           className="bg-white shadow-lg border-gray-200 relative"
@@ -350,15 +350,15 @@ export default function MobileNavigation({
         >
           <Bell className="w-5 h-5" />
           {notifications > 0 && (
-            <Badge 
-              variant="destructive" 
+            <DaisyBadge 
+              variant="error" 
               className="absolute -top-2 -right-2 text-xs h-5 w-5 rounded-full p-0 flex items-center justify-center"
               aria-hidden="true"
             >
               {notifications > 99 ? '99+' : notifications}
-            </Badge>
+            </DaisyBadge>
           )}
-        </Button>
+        </DaisyButton>
       </div>
       
       {/* Mobile Navigation Sheet */}
@@ -375,14 +375,14 @@ export default function MobileNavigation({
                 <SheetTitle className="text-lg font-semibold">
                   Riscura
                 </SheetTitle>
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsOpen(false)}
                   aria-label="Close navigation"
                 >
                   <X className="w-5 h-5" />
-                </Button>
+                </DaisyButton>
               </div>
             </SheetHeader>
             
@@ -413,7 +413,7 @@ export default function MobileNavigation({
                     autoFocus
                     aria-label="Search navigation items"
                   />
-                  <Button
+                  <DaisyButton
                     variant="ghost"
                     size="sm"
                     onClick={() => {
@@ -424,7 +424,7 @@ export default function MobileNavigation({
                     aria-label="Close search"
                   >
                     <X className="w-3 h-3" />
-                  </Button>
+                  </DaisyButton>
                 </div>
               </div>
             )}
@@ -438,27 +438,27 @@ export default function MobileNavigation({
             
             {/* Footer */}
             <div className="p-4 border-t space-y-2">
-              <Button
+              <DaisyButton
                 variant="ghost"
                 className="w-full justify-start"
                 onClick={() => router.push('/settings')}
               >
                 <Settings className="w-5 h-5 mr-3" />
                 Settings
-              </Button>
+              </DaisyButton>
               
-              <Button
+              <DaisyButton
                 variant="ghost"
                 className="w-full justify-start"
                 onClick={() => router.push('/help')}
               >
                 <HelpCircle className="w-5 h-5 mr-3" />
                 Help & Support
-              </Button>
+              </DaisyButton>
               
-              <Separator />
+              <DaisySeparator />
               
-              <Button
+              <DaisyButton
                 variant="ghost"
                 className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
                 onClick={() => {
@@ -468,7 +468,7 @@ export default function MobileNavigation({
               >
                 <LogOut className="w-5 h-5 mr-3" />
                 Sign Out
-              </Button>
+              </DaisyButton>
             </div>
           </div>
         </SheetContent>

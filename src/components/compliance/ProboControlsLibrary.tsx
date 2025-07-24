@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
@@ -213,14 +213,14 @@ export function ProboControlsLibrary() {
         </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="browse">Browse Library</TabsTrigger>
-          <TabsTrigger value="categories">Categories</TabsTrigger>
-          <TabsTrigger value="import">Import Controls</TabsTrigger>
-        </TabsList>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
+        <DaisyTabsList className="grid w-full grid-cols-3">
+          <DaisyTabsTrigger value="browse">Browse Library</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="categories">Categories</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="import">Import Controls</DaisyTabsTrigger>
+        </DaisyTabsList>
 
-        <TabsContent value="browse" className="space-y-6">
+        <DaisyTabsContent value="browse" className="space-y-6">
           {/* Search and Filters */}
           <DaisyCard className="bg-white border-[#D8C3A5]">
             <DaisyCardContent className="p-6">
@@ -350,9 +350,9 @@ export function ProboControlsLibrary() {
               </ScrollArea>
             </DaisyCardBody>
           </DaisyCard>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="categories" className="space-y-6">
+        <DaisyTabsContent value="categories" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {Object.entries(getCategoryStats()).map(([category, stats]) => (
               <DaisyCard key={category} className="bg-white border-[#D8C3A5] hover:shadow-lg transition-shadow">
@@ -387,9 +387,9 @@ export function ProboControlsLibrary() {
               </DaisyCard>
             ))}
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="import" className="space-y-6">
+        <DaisyTabsContent value="import" className="space-y-6">
           <DaisyAlert>
             <CheckCircle className="h-4 w-4" />
             <DaisyAlertDescription>
@@ -406,7 +406,7 @@ export function ProboControlsLibrary() {
                 </DaisyCardTitle>
                 <DaisyCardDescription>
                   Review the controls you've selected for import
-                </CardDescription>
+                </p>
               
               <DaisyCardContent>
                 <div className="space-y-3">
@@ -460,8 +460,8 @@ export function ProboControlsLibrary() {
               </DaisyCardBody>
             </DaisyCard>
           )}
-        </TabsContent>
-      </Tabs>
+        </DaisyTabsContent>
+      </DaisyTabs>
     </div>
   );
 } 

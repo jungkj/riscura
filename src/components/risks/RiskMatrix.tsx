@@ -137,9 +137,9 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
 
   // Risk item component
   const RiskItem: React.FC<{ risk: Risk; isSelected: boolean }> = ({ risk, isSelected }) => (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
+    <DaisyTooltipProvider>
+      <DaisyTooltip>
+        <DaisyTooltipTrigger asChild>
           <div
             draggable
             onDragStart={(e) => handleDragStart(e, risk)}
@@ -154,8 +154,8 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
             <div className="font-medium truncate">{risk.title}</div>
             <div className="text-xs opacity-75">{risk.owner}</div>
           </div>
-        </TooltipTrigger>
-        <TooltipContent>
+        </DaisyTooltipTrigger>
+        <DaisyTooltipContent>
           <div className="max-w-xs">
             <div className="font-medium">{risk.title}</div>
             <div className="text-sm text-muted-foreground mt-1">{risk.description}</div>
@@ -167,9 +167,9 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
               Risk Score: {risk.riskScore} ({getRiskLevel(risk.riskScore).toUpperCase()})
             </div>
           </div>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+        </DaisyTooltipContent>
+      </DaisyTooltip>
+    
   );
 
   // Matrix legend

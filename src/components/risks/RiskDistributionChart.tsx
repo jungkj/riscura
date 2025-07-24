@@ -3,9 +3,9 @@
 import { useMemo, useState } from 'react';
 import { useRisks } from '@/context/RiskContext';
 import { Risk } from '@/types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import {
   Select,
   SelectContent,
@@ -208,41 +208,41 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
   const DistributionIcon = getDistributionIcon(selectedDistribution);
 
   return (
-    <Card className={className}>
-      <CardHeader>
+    <DaisyCard className={className}>
+      <DaisyCardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
+          <DaisyCardTitle className="flex items-center gap-2">
             <DistributionIcon className="h-5 w-5" />
             Risk Distribution
-          </CardTitle>
+          </DaisyCardTitle>
           
           <div className="flex items-center gap-2">
-            <Select value={selectedDistribution} onValueChange={(value) => setSelectedDistribution(value as typeof selectedDistribution)}>
-              <SelectTrigger className="w-32">
-                <SelectValue />
+            <DaisySelect value={selectedDistribution} onValueChange={(value) => setSelectedDistribution(value as typeof selectedDistribution)}>
+              <DaisySelectTrigger className="w-32">
+                <DaisySelectValue />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="level">By Level</SelectItem>
-                <SelectItem value="category">By Category</SelectItem>
-                <SelectItem value="owner">By Owner</SelectItem>
-                <SelectItem value="status">By Status</SelectItem>
+              <DaisySelectContent>
+                <DaisySelectItem value="level">By Level</SelectItem>
+                <DaisySelectItem value="category">By Category</SelectItem>
+                <DaisySelectItem value="owner">By Owner</SelectItem>
+                <DaisySelectItem value="status">By Status</SelectItem>
               </SelectContent>
-            </Select>
+            </DaisySelect>
             
-            <Select value={selectedChartType} onValueChange={(value) => setSelectedChartType(value as typeof selectedChartType)}>
-              <SelectTrigger className="w-24">
-                <SelectValue />
+            <DaisySelect value={selectedChartType} onValueChange={(value) => setSelectedChartType(value as typeof selectedChartType)}>
+              <DaisySelectTrigger className="w-24">
+                <DaisySelectValue />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="donut">Donut</SelectItem>
-                <SelectItem value="bar">Bar</SelectItem>
+              <DaisySelectContent>
+                <DaisySelectItem value="donut">Donut</SelectItem>
+                <DaisySelectItem value="bar">Bar</SelectItem>
               </SelectContent>
-            </Select>
+            </DaisySelect>
           </div>
         </div>
-      </CardHeader>
       
-      <CardContent>
+      
+      <DaisyCardContent>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Chart */}
           <div className="flex items-center justify-center">
@@ -271,9 +271,9 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge className="text-xs">
+                    <DaisyBadge className="text-xs">
                       {item.value}
-                    </Badge>
+                    </DaisyBadge>
                     <span className="text-xs text-slate-500">
                       {item.percentage.toFixed(1)}%
                     </span>
@@ -299,7 +299,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
             </div>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 }; 

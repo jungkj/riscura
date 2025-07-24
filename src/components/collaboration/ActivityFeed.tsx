@@ -2,15 +2,15 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Separator } from '@/components/ui/separator';
+import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import {
   Activity,
   Filter,
@@ -385,7 +385,7 @@ const ActivityItem: React.FC<{
       case 'uploaded': return <Upload className="h-4 w-4" />;
       case 'downloaded': return <Download className="h-4 w-4" />;
       case 'shared': return <Share2 className="h-4 w-4" />;
-      case 'deadline_approaching': return <AlertTriangle className="h-4 w-4" />;
+      case 'deadline_approaching': return <DaisyAlertTriangle className="h-4 w-4" />;
       case 'deadline_missed': return <Clock className="h-4 w-4" />;
       case 'workflow_started': return <Workflow className="h-4 w-4" />;
       case 'workflow_completed': return <GitCommit className="h-4 w-4" />;
@@ -410,9 +410,9 @@ const ActivityItem: React.FC<{
     };
 
     return (
-      <Badge className={cn('text-caption px-enterprise-1 py-0', colors[severity])}>
+      <DaisyBadge className={cn('text-caption px-enterprise-1 py-0', colors[severity])}>
         {severity}
-      </Badge>
+      </DaisyBadge>
     );
   };
 
@@ -438,9 +438,9 @@ const ActivityItem: React.FC<{
         <div className="text-caption text-text-secondary font-medium">Changes:</div>
         {changes.map((change, index) => (
           <div key={index} className="flex items-center space-x-enterprise-2 text-caption">
-            <Badge variant="outline" className="text-caption px-enterprise-1 py-0">
+            <DaisyBadge variant="outline" className="text-caption px-enterprise-1 py-0">
               {change.field}
-            </Badge>
+            </DaisyBadge>
             <span className="text-text-secondary">from</span>
             <span className="font-mono bg-surface-secondary px-enterprise-1 rounded">
               {change.oldValue || 'null'}
@@ -498,35 +498,35 @@ const ActivityItem: React.FC<{
         </div>
 
         {!activity.isRead && (
-          <Button
+          <DaisyButton
             variant="ghost"
             size="sm"
             className="h-6 w-6 p-0"
             onClick={() => onMarkAsRead?.(activity.id)}
           >
             <Dot className="h-4 w-4 text-blue-600" />
-          </Button>
+          </DaisyButton>
         )}
       </div>
     );
   }
 
   return (
-    <Card className={cn(
+    <DaisyCard className={cn(
       "transition-all duration-200 hover:shadow-notion-sm",
       !activity.isRead && "border-l-4 border-l-blue-500 bg-blue-50/30"
     )}>
-      <CardContent className="p-enterprise-4">
+      <DaisyCardContent className="p-enterprise-4">
         <div className="flex items-start space-x-enterprise-3">
           {/* Avatar & Icon */}
           <div className="relative">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={activity.actor.avatar} />
-              <AvatarFallback className="text-caption">
+            <DaisyAvatar className="h-8 w-8">
+              <DaisyAvatarImage src={activity.actor.avatar} />
+              <DaisyAvatarFallback className="text-caption">
                 {activity.actor.name === 'System' ? 'SYS' : 
                  activity.actor.name.split(' ').map(n => n[0]).join('')}
-              </AvatarFallback>
-            </Avatar>
+              </DaisyAvatarFallback>
+            </DaisyAvatar>
             <div className={cn(
               "absolute -bottom-1 -right-1 p-0.5 rounded-full bg-white border",
               getActivityColor(activity.type, activity.severity)
@@ -544,14 +544,14 @@ const ActivityItem: React.FC<{
                   <span className="font-medium">{activity.actor.name}</span>
                   {' '}{activity.action}{' '}
                   {activity.target && (
-                    <Button
+                    <DaisyButton
                       variant="link"
                       className="h-auto p-0 font-medium text-body-sm"
                       onClick={() => activity.target?.url && window.open(activity.target.url, '_blank')}
                     >
                       {activity.target.name}
                       <ExternalLink className="h-3 w-3 ml-enterprise-1" />
-                    </Button>
+                    </DaisyButton>
                   )}
                 </p>
                 
@@ -562,9 +562,9 @@ const ActivityItem: React.FC<{
                   </div>
                   
                   {activity.context?.department && (
-                    <Badge variant="outline" className="text-caption px-enterprise-1 py-0">
+                    <DaisyBadge variant="outline" className="text-caption px-enterprise-1 py-0">
                       {activity.context.department}
-                    </Badge>
+                    </DaisyBadge>
                   )}
                   
                   {getSeverityBadge(activity.severity)}
@@ -573,37 +573,37 @@ const ActivityItem: React.FC<{
 
               <div className="flex items-center space-x-enterprise-1">
                 {!activity.isRead && (
-                  <Button
+                  <DaisyButton
                     variant="ghost"
                     size="sm"
                     className="h-6 w-6 p-0"
                     onClick={() => onMarkAsRead?.(activity.id)}
                   >
                     <Dot className="h-4 w-4 text-blue-600" />
-                  </Button>
+                  </DaisyButton>
                 )}
                 
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                <DaisyDropdownMenu>
+                  <DaisyDropdownMenuTrigger asChild>
+                    <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
                       <MoreHorizontal className="h-3 w-3" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => onViewDetails?.(activity)}>
+                    </DaisyButton>
+                  </DaisyDropdownMenuTrigger>
+                  <DaisyDropdownMenuContent align="end">
+                    <DaisyDropdownMenuItem onClick={() => onViewDetails?.(activity)}>
                       <Eye className="h-3 w-3 mr-enterprise-2" />
                       View Details
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => {}}>
+                    </DaisyDropdownMenuItem>
+                    <DaisyDropdownMenuItem onClick={() => {}}>
                       <Copy className="h-3 w-3 mr-enterprise-2" />
                       Copy Link
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => {}}>
+                    </DaisyDropdownMenuItem>
+                    <DaisyDropdownMenuItem onClick={() => {}}>
                       <Flag className="h-3 w-3 mr-enterprise-2" />
                       Report Issue
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                    </DaisyDropdownMenuItem>
+                  </DaisyDropdownMenuContent>
+                </DaisyDropdownMenu>
               </div>
             </div>
 
@@ -650,7 +650,7 @@ const ActivityItem: React.FC<{
 
             {/* Expand/Collapse Button */}
             {(activity.changes || activity.metadata) && !showDetails && (
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 className="mt-enterprise-2 h-auto p-0 text-caption text-text-secondary"
@@ -667,12 +667,12 @@ const ActivityItem: React.FC<{
                     Show Details
                   </>
                 )}
-              </Button>
+              </DaisyButton>
             )}
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 };
 
@@ -810,9 +810,9 @@ export const ActivityFeed: React.FC<{
                 <Activity className="h-5 w-5 mr-enterprise-2" />
                 Activity Feed
                 {unreadCount > 0 && (
-                  <Badge className="ml-enterprise-2 text-caption px-enterprise-1 py-0 bg-blue-600">
+                  <DaisyBadge className="ml-enterprise-2 text-caption px-enterprise-1 py-0 bg-blue-600">
                     {unreadCount}
-                  </Badge>
+                  </DaisyBadge>
                 )}
               </h3>
               <p className="text-body-sm text-text-secondary mt-enterprise-1">
@@ -823,7 +823,7 @@ export const ActivityFeed: React.FC<{
 
           <div className="flex items-center space-x-enterprise-2">
             {/* Search */}
-            <Input
+            <DaisyInput
               placeholder="Search activities..."
               value={filters.search || ''}
               onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
@@ -831,35 +831,35 @@ export const ActivityFeed: React.FC<{
             />
 
             {/* Filters */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm">
+            <DaisyDropdownMenu>
+              <DaisyDropdownMenuTrigger asChild>
+                <DaisyButton variant="outline" size="sm">
                   <Filter className="h-3 w-3 mr-enterprise-2" />
                   Filter
                   <ChevronDown className="h-3 w-3 ml-enterprise-1" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setFilters(prev => ({ ...prev, unreadOnly: !prev.unreadOnly }))}>
+                </DaisyButton>
+              </DaisyDropdownMenuTrigger>
+              <DaisyDropdownMenuContent>
+                <DaisyDropdownMenuItem onClick={() => setFilters(prev => ({ ...prev, unreadOnly: !prev.unreadOnly }))}>
                   <Bell className="h-3 w-3 mr-enterprise-2" />
                   {filters.unreadOnly ? 'Show All' : 'Unread Only'}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFilters(prev => ({ ...prev, severity: 'critical' }))}>
-                  <AlertTriangle className="h-3 w-3 mr-enterprise-2" />
+                </DaisyDropdownMenuItem>
+                <DaisyDropdownMenuItem onClick={() => setFilters(prev => ({ ...prev, severity: 'critical' }))}>
+                  <DaisyAlertTriangle className="h-3 w-3 mr-enterprise-2" />
                   Critical Only
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFilters(prev => ({ ...prev, category: 'risk_management' }))}>
+                </DaisyDropdownMenuItem>
+                <DaisyDropdownMenuItem onClick={() => setFilters(prev => ({ ...prev, category: 'risk_management' }))}>
                   <Target className="h-3 w-3 mr-enterprise-2" />
                   Risk Management
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFilters({})}>
+                </DaisyDropdownMenuItem>
+                <DaisyDropdownMenuItem onClick={() => setFilters({})}>
                   Clear Filters
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                </DaisyDropdownMenuItem>
+              </DaisyDropdownMenuContent>
+            </DaisyDropdownMenu>
 
             {/* Auto-refresh toggle */}
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={() => setIsAutoRefresh(!isAutoRefresh)}
@@ -867,41 +867,41 @@ export const ActivityFeed: React.FC<{
             >
               <RefreshCw className={cn("h-3 w-3 mr-enterprise-2", isAutoRefresh && "animate-spin")} />
               Auto-refresh
-            </Button>
+            </DaisyButton>
 
             {/* Export */}
             {showExport && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm">
+              <DaisyDropdownMenu>
+                <DaisyDropdownMenuTrigger asChild>
+                  <DaisyButton variant="outline" size="sm">
                     <Download className="h-3 w-3 mr-enterprise-2" />
                     Export
                     <ChevronDown className="h-3 w-3 ml-enterprise-1" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => handleExport('csv')}>
+                  </DaisyButton>
+                </DaisyDropdownMenuTrigger>
+                <DaisyDropdownMenuContent>
+                  <DaisyDropdownMenuItem onClick={() => handleExport('csv')}>
                     Export as CSV
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleExport('json')}>
+                  </DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuItem onClick={() => handleExport('json')}>
                     Export as JSON
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleExport('pdf')}>
+                  </DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuItem onClick={() => handleExport('pdf')}>
                     Export as PDF
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                  </DaisyDropdownMenuItem>
+                </DaisyDropdownMenuContent>
+              </DaisyDropdownMenu>
             )}
 
             {/* Mark all as read */}
             {unreadCount > 0 && (
-              <Button
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={handleMarkAllAsRead}
               >
                 Mark All Read
-              </Button>
+              </DaisyButton>
             )}
           </div>
         </div>
@@ -934,18 +934,18 @@ export const ActivityFeed: React.FC<{
       {/* Load More */}
       {!isCompact && filteredActivities.length > (maxItems || 20) && (
         <div className="text-center">
-          <Button variant="outline">
+          <DaisyButton variant="outline">
             Load More Activities
-          </Button>
+          </DaisyButton>
         </div>
       )}
 
       {/* Activity Details Dialog */}
-      <Dialog open={showActivityDialog} onOpenChange={setShowActivityDialog}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Activity Details</DialogTitle>
-          </DialogHeader>
+      <DaisyDialog open={showActivityDialog} onOpenChange={setShowActivityDialog}>
+        <DaisyDialogContent className="max-w-2xl">
+          <DaisyDialogHeader>
+            <DaisyDialogTitle>Activity Details</DaisyDialogTitle>
+          </DaisyDialogHeader>
           
           {selectedActivity && (
             <div className="space-y-enterprise-4">
@@ -957,7 +957,7 @@ export const ActivityFeed: React.FC<{
 
               {/* Additional Details */}
               <div className="space-y-enterprise-3">
-                <Separator />
+                <DaisySeparator />
                 
                 <div className="grid grid-cols-2 gap-enterprise-4 text-body-sm">
                   <div>
@@ -983,8 +983,8 @@ export const ActivityFeed: React.FC<{
               </div>
             </div>
           )}
-        </DialogContent>
-      </Dialog>
+        </DaisyDialogContent>
+      </DaisyDialog>
     </div>
   );
 };

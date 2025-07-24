@@ -62,9 +62,9 @@ import {
 import { useState, useEffect, useRef } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 
 interface SidebarProps {
@@ -438,9 +438,9 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
         {/* Collapsed Navigation */}
         <div className="flex-1 py-4 space-y-2">
           {navigationSections.map((section) => (
-            <TooltipProvider key={section.id}>
-              <Tooltip>
-                <TooltipTrigger asChild>
+            <DaisyTooltipProvider key={section.id}>
+              <DaisyTooltip>
+                <DaisyTooltipTrigger asChild>
                   <DaisyButton
                     variant="ghost"
                     shape="square" size="md"
@@ -455,35 +455,35 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                       return <IconComponent className="w-5 h-5" />;
                     })()}
                   </DaisyButton>
-                </TooltipTrigger>
-                <TooltipContent side="right" className="font-medium">
+                </DaisyTooltipTrigger>
+                <DaisyTooltipContent side="right" className="font-medium">
                   <div>
                     <p className="font-semibold">{section.title}</p>
                     <p className="text-xs text-gray-500">{section.description}</p>
                   </div>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+                </DaisyTooltipContent>
+              </DaisyTooltip>
+            
           ))}
         </div>
 
         {/* Collapsed User */}
         <div className="p-4 border-t border-gray-200">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Avatar className="w-8 h-8 mx-auto cursor-pointer">
-                  <AvatarImage src={user?.avatar} />
-                  <AvatarFallback className="text-xs bg-[#199BEC] text-white">
+          <DaisyTooltipProvider>
+            <DaisyTooltip>
+              <DaisyTooltipTrigger asChild>
+                <DaisyAvatar className="w-8 h-8 mx-auto cursor-pointer">
+                  <DaisyAvatarImage src={user?.avatar} />
+                  <DaisyAvatarFallback className="text-xs bg-[#199BEC] text-white">
                     {user?.firstName?.[0]}{user?.lastName?.[0]}
-                  </AvatarFallback>
-                </Avatar>
-              </TooltipTrigger>
-              <TooltipContent side="right" className="font-medium">
+                  </DaisyAvatarFallback>
+                </DaisyAvatar>
+              </DaisyTooltipTrigger>
+              <DaisyTooltipContent side="right" className="font-medium">
                 {user?.firstName} {user?.lastName}
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+              </DaisyTooltipContent>
+            </DaisyTooltip>
+          
         </div>
       </div>
     );
@@ -675,12 +675,12 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
       {/* User Profile */}
       <div className="p-4 border-t border-gray-200" data-tour="user-profile">
         <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#199BEC]/10 transition-colors cursor-pointer group">
-          <Avatar className="w-8 h-8">
-            <AvatarImage src={user?.avatar} />
-            <AvatarFallback className="bg-[#199BEC] text-white text-sm">
+          <DaisyAvatar className="w-8 h-8">
+            <DaisyAvatarImage src={user?.avatar} />
+            <DaisyAvatarFallback className="bg-[#199BEC] text-white text-sm">
               {user?.firstName?.[0]}{user?.lastName?.[0]}
-            </AvatarFallback>
-          </Avatar>
+            </DaisyAvatarFallback>
+          </DaisyAvatar>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-[#191919] font-inter truncate">
               {user?.firstName} {user?.lastName}

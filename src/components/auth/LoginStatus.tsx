@@ -3,7 +3,7 @@
 import React from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { AuthStorage } from '@/lib/auth/storage';
-import { Badge } from '@/components/ui/badge';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Clock, Shield } from 'lucide-react';
 
 interface LoginStatusProps {
@@ -22,7 +22,7 @@ export const LoginStatus: React.FC<LoginStatusProps> = ({ className = '' }) => {
 
   return (
     <div className={`flex items-center space-x-2 ${className}`}>
-      <Badge 
+      <DaisyBadge 
         variant={hasRememberMe ? "default" : "secondary"}
         className="flex items-center space-x-1"
       >
@@ -37,12 +37,12 @@ export const LoginStatus: React.FC<LoginStatusProps> = ({ className = '' }) => {
             <span>Session Login</span>
           </>
         )}
-      </Badge>
+      </DaisyBadge>
       
       {process.env.NODE_ENV === 'development' && (
-        <Badge variant="outline" className="text-xs">
+        <DaisyBadge variant="outline" className="text-xs">
           {storageType === 'localStorage' ? 'Local' : 'Session'}
-        </Badge>
+        </DaisyBadge>
       )}
     </div>
   );

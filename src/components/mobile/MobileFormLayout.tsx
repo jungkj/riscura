@@ -2,18 +2,18 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useGesture } from '@use-gesture/react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Switch } from '@/components/ui/switch';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import { DaisySwitch } from '@/components/ui/DaisySwitch';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   ChevronLeft,
@@ -350,7 +350,7 @@ export default function MobileFormLayout({
       switch (field.type) {
         case 'textarea':
           return (
-            <Textarea
+            <DaisyTextarea
               {...fieldProps}
               placeholder={field.placeholder}
               rows={field.rows || 3}
@@ -359,34 +359,34 @@ export default function MobileFormLayout({
           
         case 'select':
           return (
-            <Select value={value} onValueChange={(val) => handleFieldChange(field.id, val)}>
-              <SelectTrigger className={error ? 'border-red-500' : ''}>
-                <SelectValue placeholder={field.placeholder} />
+            <DaisySelect value={value} onValueChange={(val) => handleFieldChange(field.id, val)}>
+              <DaisySelectTrigger className={error ? 'border-red-500' : ''}>
+                <DaisySelectValue placeholder={field.placeholder} />
               </SelectTrigger>
-              <SelectContent>
+              <DaisySelectContent>
                 {field.options?.map(option => (
-                  <SelectItem key={option.value} value={option.value}>
+                  <DaisySelectItem key={option.value} value={option.value}>
                     {option.label}
                   </SelectItem>
                 ))}
               </SelectContent>
-            </Select>
+            </DaisySelect>
           );
           
         case 'checkbox':
           return (
             <div className="flex items-center space-x-2">
-              <Checkbox
+              <DaisyCheckbox
                 id={field.id}
                 checked={value}
                 onCheckedChange={(checked) => handleFieldChange(field.id, checked)}
                 disabled={field.disabled}
                 aria-describedby={error ? `${field.id}-error` : field.description ? `${field.id}-description` : undefined}
               />
-              <Label htmlFor={field.id} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              <DaisyLabel htmlFor={field.id} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 {field.label}
                 {isRequired && <span className="text-red-500 ml-1">*</span>}
-              </Label>
+              </DaisyLabel>
             </div>
           );
           
@@ -396,7 +396,7 @@ export default function MobileFormLayout({
               {field.options?.map(option => (
                 <div key={option.value} className="flex items-center space-x-2">
                   <RadioGroupItem value={option.value} id={`${field.id}-${option.value}`} />
-                  <Label htmlFor={`${field.id}-${option.value}`}>{option.label}</Label>
+                  <DaisyLabel htmlFor={`${field.id}-${option.value}`}>{option.label}</DaisyLabel>
                 </div>
               ))}
             </RadioGroup>
@@ -405,20 +405,20 @@ export default function MobileFormLayout({
         case 'switch':
           return (
             <div className="flex items-center space-x-2">
-              <Switch
+              <DaisySwitch
                 id={field.id}
                 checked={value}
                 onCheckedChange={(checked) => handleFieldChange(field.id, checked)}
                 disabled={field.disabled}
               />
-              <Label htmlFor={field.id}>{field.label}</Label>
+              <DaisyLabel htmlFor={field.id}>{field.label}</DaisyLabel>
             </div>
           );
           
         case 'file':
           return (
             <div className="space-y-2">
-              <Input
+              <DaisyInput
                 type="file"
                 {...fieldProps}
                 accept={field.accept}
@@ -429,7 +429,7 @@ export default function MobileFormLayout({
                 }}
                 className="hidden"
               />
-              <Label
+              <DaisyLabel
                 htmlFor={field.id}
                 className="flex items-center justify-center px-4 py-8 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 transition-colors"
               >
@@ -444,7 +444,7 @@ export default function MobileFormLayout({
                     </p>
                   )}
                 </div>
-              </Label>
+              </DaisyLabel>
               {value && (
                 <div className="text-sm text-gray-600">
                   {field.multiple && Array.isArray(value) 
@@ -459,12 +459,12 @@ export default function MobileFormLayout({
         case 'password':
           return (
             <div className="relative">
-              <Input
+              <DaisyInput
                 {...fieldProps}
                 type={showPassword[field.id] ? 'text' : 'password'}
                 placeholder={field.placeholder}
               />
-              <Button
+              <DaisyButton
                 type="button"
                 variant="ghost"
                 size="sm"
@@ -477,7 +477,7 @@ export default function MobileFormLayout({
                 ) : (
                   <Eye className="w-4 h-4 text-gray-400" />
                 )}
-              </Button>
+              </DaisyButton>
             </div>
           );
           
@@ -489,7 +489,7 @@ export default function MobileFormLayout({
                   {field.icon}
                 </div>
               )}
-              <Input
+              <DaisyInput
                 {...fieldProps}
                 type={field.type}
                 placeholder={field.placeholder}
@@ -503,10 +503,10 @@ export default function MobileFormLayout({
     return (
       <div key={field.id} className="space-y-2">
         {field.type !== 'checkbox' && field.type !== 'switch' && (
-          <Label htmlFor={field.id} className="text-sm font-medium">
+          <DaisyLabel htmlFor={field.id} className="text-sm font-medium">
             {field.label}
             {isRequired && <span className="text-red-500 ml-1">*</span>}
-          </Label>
+          </DaisyLabel>
         )}
         
         {renderInput()}
@@ -519,7 +519,7 @@ export default function MobileFormLayout({
         
         {error && (
           <p id={`${field.id}-error`} className="text-xs text-red-600 flex items-center">
-            <AlertTriangle className="w-3 h-3 mr-1" />
+            <DaisyAlertTriangle className="w-3 h-3 mr-1" />
             {error}
           </p>
         )}
@@ -544,7 +544,7 @@ export default function MobileFormLayout({
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               {onCancel && (
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   onClick={onCancel}
@@ -552,7 +552,7 @@ export default function MobileFormLayout({
                   aria-label="Cancel"
                 >
                   <X className="w-5 h-5" />
-                </Button>
+                </DaisyButton>
               )}
               <div>
                 <h1 className="text-lg font-semibold text-gray-900">{title}</h1>
@@ -572,7 +572,7 @@ export default function MobileFormLayout({
           </div>
           
           {showProgress && (
-            <Progress value={progress} className="mt-2 h-1" />
+            <DaisyProgress value={progress} className="mt-2 h-1" />
           )}
         </div>
       )}
@@ -589,8 +589,8 @@ export default function MobileFormLayout({
             const isCurrentStep = index === currentStep;
             
             return (
-              <Card key={section.id} className={`${isCurrentStep ? 'ring-2 ring-blue-500' : ''}`}>
-                <CardHeader 
+              <DaisyCard key={section.id} className={`${isCurrentStep ? 'ring-2 ring-blue-500' : ''}`}>
+                <DaisyCardHeader 
                   className={`${section.collapsible ? 'cursor-pointer' : ''} pb-3`}
                   onClick={() => section.collapsible && toggleSection(section.id)}
                 >
@@ -598,7 +598,7 @@ export default function MobileFormLayout({
                     <div className="flex items-center space-x-3">
                       {section.icon}
                       <div>
-                        <CardTitle className="text-base">{section.title}</CardTitle>
+                        <DaisyCardTitle className="text-base">{section.title}</DaisyCardTitle>
                         {section.description && (
                           <p className="text-sm text-gray-500 mt-1">{section.description}</p>
                         )}
@@ -606,28 +606,28 @@ export default function MobileFormLayout({
                     </div>
                     
                     <div className="flex items-center space-x-2">
-                      <Badge variant="secondary" className="text-xs">
+                      <DaisyBadge variant="secondary" className="text-xs">
                         {index + 1} of {sections.length}
-                      </Badge>
+                      </DaisyBadge>
                       {section.collapsible && (
-                        <Button variant="ghost" size="sm" className="p-1">
+                        <DaisyButton variant="ghost" size="sm" className="p-1">
                           {isExpanded ? (
                             <ChevronUp className="w-4 h-4" />
                           ) : (
                             <ChevronDown className="w-4 h-4" />
                           )}
-                        </Button>
+                        </DaisyButton>
                       )}
                     </div>
                   </div>
-                </CardHeader>
+                
                 
                 {(!section.collapsible || isExpanded) && (
-                  <CardContent className="space-y-4">
+                  <DaisyCardContent className="space-y-4">
                     {section.fields.map(field => renderField(field))}
-                  </CardContent>
+                  </DaisyCardBody>
                 )}
-              </Card>
+              </DaisyCard>
             );
           })}
         </div>
@@ -638,7 +638,7 @@ export default function MobileFormLayout({
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 z-40">
           <div className="flex space-x-3">
             {onCancel && (
-              <Button
+              <DaisyButton
                 type="button"
                 variant="outline"
                 onClick={onCancel}
@@ -646,10 +646,10 @@ export default function MobileFormLayout({
                 className="flex-1"
               >
                 {cancelLabel}
-              </Button>
+              </DaisyButton>
             )}
             
-            <Button
+            <DaisyButton
               type="submit"
               onClick={handleSubmit}
               disabled={isSubmitting || loading}
@@ -666,7 +666,7 @@ export default function MobileFormLayout({
                   {submitLabel}
                 </>
               )}
-            </Button>
+            </DaisyButton>
           </div>
           
           {isDirty && (
@@ -680,7 +680,7 @@ export default function MobileFormLayout({
       {/* Section Navigation */}
       {sections.length > 1 && (
         <div className="fixed bottom-20 left-4 right-4 flex justify-between z-30">
-          <Button
+          <DaisyButton
             variant="outline"
             size="sm"
             onClick={() => setCurrentStep(prev => Math.max(0, prev - 1))}
@@ -689,9 +689,9 @@ export default function MobileFormLayout({
           >
             <ChevronLeft className="w-4 h-4 mr-1" />
             Previous
-          </Button>
+          </DaisyButton>
           
-          <Button
+          <DaisyButton
             variant="outline"
             size="sm"
             onClick={() => setCurrentStep(prev => Math.min(sections.length - 1, prev + 1))}
@@ -700,7 +700,7 @@ export default function MobileFormLayout({
           >
             Next
             <ChevronRight className="w-4 h-4 ml-1" />
-          </Button>
+          </DaisyButton>
         </div>
       )}
     </div>

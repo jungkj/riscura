@@ -139,18 +139,18 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
             </div>
 
             {showActions && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+              <DaisyDropdownMenu>
+                <DaisyDropdownMenuTrigger asChild>
                   <DaisyButton variant="ghost" size="sm" className="h-8 w-8 p-0">
                     <MoreHorizontal className="h-4 w-4" />
                   </DaisyButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem>View Details</DropdownMenuItem>
-                  <DropdownMenuItem>Export Data</DropdownMenuItem>
-                  <DropdownMenuItem>Configure</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                </DaisyDropdownMenuTrigger>
+                <DaisyDropdownMenuContent align="end">
+                  <DaisyDropdownMenuItem>View Details</DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuItem>Export Data</DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuItem>Configure</DaisyDropdownMenuItem>
+                </DaisyDropdownMenuContent>
+              </DaisyDropdownMenu>
             )}
           </div>
         

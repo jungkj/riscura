@@ -73,7 +73,7 @@ interface CardSkeletonProps {
   contentLines?: number;
 }
 
-const CardSkeleton: React.FC<CardSkeletonProps> = ({
+const CardSkeleton: React.FC<DaisyCardSkeletonProps> = ({
   className = '',
   showHeader = true,
   showFooter = false,
@@ -397,7 +397,7 @@ interface ProgressiveSkeletonProps {
   className?: string;
 }
 
-const ProgressiveSkeleton: React.FC<ProgressiveSkeletonProps> = ({
+const ProgressiveSkeleton: React.FC<DaisyProgressiveSkeletonProps> = ({
   itemCount = 3,
   itemHeight = '80px',
   className = ''

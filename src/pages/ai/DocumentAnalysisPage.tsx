@@ -3,13 +3,13 @@ import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import { Upload, AlertCircle, FileText, CheckCircle2, XCircle, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface RiskInsight {
@@ -166,14 +166,14 @@ export default function DocumentAnalysisPage() {
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Document Upload Panel */}
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle>Upload Document</CardTitle>
-            <CardDescription>
+        <DaisyCard className="lg:col-span-1">
+          <DaisyCardHeader>
+            <DaisyCardTitle>Upload Document</DaisyCardTitle>
+            <DaisyCardDescription>
               Supported formats: PDF, DOC, DOCX, TXT
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+            </p>
+          
+          <DaisyCardContent>
             {!analyzedDocument ? (
               <div className="space-y-4">
                 <div className="border-2 border-dashed border-muted-foreground/25 hover:border-muted-foreground/50 transition-colors rounded-lg p-6 text-center">
@@ -182,16 +182,16 @@ export default function DocumentAnalysisPage() {
                   <p className="text-muted-foreground text-sm mb-4">
                     Drag files here or click to browse
                   </p>
-                  <Input
+                  <DaisyInput
                     type="file"
                     id="document-upload"
                     className="hidden"
                     onChange={handleFileChange}
                     accept=".pdf,.doc,.docx,.txt"
                   />
-                  <Button variant="outline" onClick={() => document.getElementById('document-upload')?.click()}>
+                  <DaisyButton variant="outline" onClick={() => document.getElementById('document-upload')?.click()}>
                     Select File
-                  </Button>
+                  </DaisyButton>
                 </div>
                 
                 {file && (
@@ -202,28 +202,28 @@ export default function DocumentAnalysisPage() {
                         <p className="text-sm font-medium truncate">{file.name}</p>
                         <p className="text-xs text-muted-foreground">{formatFileSize(file.size)}</p>
                       </div>
-                      <Button 
+                      <DaisyButton 
                         variant="secondary" 
                         size="sm" 
                         onClick={handleUpload}
                         disabled={uploading || processing}
                       >
                         {uploading ? 'Uploading...' : 'Analyze'}
-                      </Button>
+                      </DaisyButton>
                     </div>
                   </div>
                 )}
                 
                 {(uploading || processing) && (
-                  <Card className="border border-muted/50">
-                    <CardContent className="p-4">
+                  <DaisyCard className="border border-muted/50">
+                    <DaisyCardContent className="p-4">
                       <div className="flex items-center space-x-4">
                         <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent"></div>
                         <div className="space-y-2 flex-1">
                           <p className="font-medium">
                             {uploading ? 'Uploading Document...' : 'Analyzing Document...'}
                           </p>
-                          <Progress 
+                          <DaisyProgress 
                             value={uploading ? undefined : processingProgress} 
                             className="h-2"
                           />
@@ -234,8 +234,8 @@ export default function DocumentAnalysisPage() {
                           )}
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </DaisyCardBody>
+                  </DaisyCard>
                 )}
               </div>
             ) : (
@@ -249,26 +249,26 @@ export default function DocumentAnalysisPage() {
                         {formatFileSize(analyzedDocument.size)} • Analyzed {new Date(analyzedDocument.uploadedAt).toLocaleTimeString()}
                       </p>
                     </div>
-                    <Badge variant="default" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                    <DaisyBadge variant="default" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
                       Analyzed
-                    </Badge>
+                    </DaisyBadge>
                   </div>
                 </div>
                 
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <Label>Identified Risks</Label>
-                    <Badge variant="outline">{riskInsights.length}</Badge>
+                    <DaisyLabel>Identified Risks</DaisyLabel>
+                    <DaisyBadge variant="outline">{riskInsights.length}</DaisyBadge>
                   </div>
                   <div className="flex justify-between items-center">
-                    <Label>High Confidence</Label>
-                    <Badge variant="outline">
+                    <DaisyLabel>High Confidence</DaisyLabel>
+                    <DaisyBadge variant="outline">
                       {riskInsights.filter(r => r.confidence >= 0.8).length}
-                    </Badge>
+                    </DaisyBadge>
                   </div>
                 </div>
                 
-                <Button 
+                <DaisyButton 
                   className="w-full"
                   variant="outline"
                   onClick={() => {
@@ -279,21 +279,21 @@ export default function DocumentAnalysisPage() {
                   }}
                 >
                   Start New Analysis
-                </Button>
+                </DaisyButton>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
         
         {/* Analysis Results Panel */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Analysis Results</CardTitle>
-            <CardDescription>
+        <DaisyCard className="lg:col-span-2">
+          <DaisyCardHeader>
+            <DaisyCardTitle>Analysis Results</DaisyCardTitle>
+            <DaisyCardDescription>
               AI-identified risks and suggested controls
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+            </p>
+          
+          <DaisyCardContent>
             {!analyzedDocument ? (
               <div className="flex flex-col items-center justify-center h-72 text-center">
                 <Sparkles className="h-12 w-12 text-muted-foreground mb-4 opacity-30" />
@@ -303,56 +303,56 @@ export default function DocumentAnalysisPage() {
                 </p>
               </div>
             ) : (
-              <Tabs defaultValue="risks" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="risks">Identified Risks</TabsTrigger>
-                  <TabsTrigger value="insights">AI Insights</TabsTrigger>
-                </TabsList>
+              <DaisyTabs defaultValue="risks" className="w-full">
+                <DaisyTabsList className="grid w-full grid-cols-2">
+                  <DaisyTabsTrigger value="risks">Identified Risks</DaisyTabsTrigger>
+                  <DaisyTabsTrigger value="insights">AI Insights</DaisyTabsTrigger>
+                </DaisyTabsList>
                 
-                <TabsContent value="risks" className="space-y-4 pt-4">
-                  <Alert>
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>AI Analysis Complete</AlertTitle>
-                    <AlertDescription>
+                <DaisyTabsContent value="risks" className="space-y-4 pt-4">
+                  <DaisyAlert>
+                    <DaisyAlertCircle className="h-4 w-4" />
+                    <DaisyAlertTitle>AI Analysis Complete</AlertTitle>
+                    <DaisyAlertDescription>
                       Found {riskInsights.length} potential risks in the document
-                    </AlertDescription>
-                  </Alert>
+                    
+                  </DaisyAlert>
                   
                   <ScrollArea className="h-[400px] pr-4">
                     <div className="space-y-3">
                       {riskInsights.map((risk) => (
-                        <Card key={risk.id} className="hover:shadow-sm transition-shadow">
-                          <CardContent className="p-4">
+                        <DaisyCard key={risk.id} className="hover:shadow-sm transition-shadow">
+                          <DaisyCardContent className="p-4">
                             <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-2">
                               <div className="space-y-1">
                                 <div className="flex items-center">
                                   <h4 className="font-semibold">{risk.title}</h4>
-                                  <Badge className="ml-2" variant="outline">{risk.category}</Badge>
+                                  <DaisyBadge className="ml-2" variant="outline">{risk.category}</DaisyBadge>
                                 </div>
                                 <p className="text-sm text-muted-foreground">{risk.description}</p>
                               </div>
                               <div className="flex flex-col gap-2 items-end shrink-0">
-                                <Badge variant={getConfidenceBadgeVariant(risk.confidence)}>
+                                <DaisyBadge variant={getConfidenceBadgeVariant(risk.confidence)}>
                                   {Math.round(risk.confidence * 100)}% confidence
-                                </Badge>
-                                <Button 
+                                </DaisyBadge>
+                                <DaisyButton 
                                   size="sm" 
                                   onClick={() => addRiskToRegister(risk)}
                                 >
                                   Add to Register
-                                </Button>
+                                </DaisyButton>
                               </div>
                             </div>
-                          </CardContent>
-                        </Card>
+                          </DaisyCardBody>
+                        </DaisyCard>
                       ))}
                     </div>
                   </ScrollArea>
-                </TabsContent>
+                </DaisyTabsContent>
                 
-                <TabsContent value="insights" className="pt-4">
-                  <Card>
-                    <CardContent className="p-6">
+                <DaisyTabsContent value="insights" className="pt-4">
+                  <DaisyCard>
+                    <DaisyCardContent className="p-6">
                       <h3 className="text-xl font-semibold mb-4">Document Summary</h3>
                       <p className="text-sm mb-6">
                         This document appears to be a policy document outlining operational procedures 
@@ -390,16 +390,16 @@ export default function DocumentAnalysisPage() {
                         </div>
                       </div>
                       
-                      <Button className="w-full" variant="outline">
+                      <DaisyButton className="w-full" variant="outline">
                         Generate Full Report
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-              </Tabs>
+                      </DaisyButton>
+                    </DaisyCardBody>
+                  </DaisyCard>
+                </DaisyTabsContent>
+              </DaisyTabs>
             )}
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
     </div>
   );

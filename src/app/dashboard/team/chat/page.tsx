@@ -3,18 +3,18 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisySelect } from '@/components/ui/DaisySelect';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useWebSocket } from '@/hooks/useWebSocket';
@@ -577,7 +577,7 @@ export default function TeamChatPage() {
             {/* Search */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
+              <DaisyInput
                 placeholder="Search channels..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -586,14 +586,14 @@ export default function TeamChatPage() {
             </div>
 
             {/* Channels */}
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium flex items-center">
+            <DaisyCard>
+              <DaisyCardHeader className="pb-3">
+                <DaisyCardTitle className="text-sm font-medium flex items-center">
                   <Hash className="h-4 w-4 mr-2" />
                   Channels
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </DaisyCardTitle>
+              
+              <DaisyCardContent>
                 <ScrollArea className="h-64">
                   <div className="space-y-1">
                     {channels
@@ -623,27 +623,27 @@ export default function TeamChatPage() {
                               <Shield className="h-3 w-3 text-orange-500" />
                             )}
                             {channel.unreadCount && channel.unreadCount > 0 && (
-                              <Badge variant="destructive" className="text-xs">
+                              <DaisyBadge variant="error" className="text-xs">
                                 {channel.unreadCount}
-                              </Badge>
+                              </DaisyBadge>
                             )}
                           </div>
                         </div>
                       ))}
                   </div>
                 </ScrollArea>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
             {/* Direct Messages */}
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium flex items-center">
+            <DaisyCard>
+              <DaisyCardHeader className="pb-3">
+                <DaisyCardTitle className="text-sm font-medium flex items-center">
                   <MessageSquare className="h-4 w-4 mr-2" />
                   Direct Messages
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </DaisyCardTitle>
+              
+              <DaisyCardContent>
                 <ScrollArea className="h-48">
                   <div className="space-y-1">
                     {channels
@@ -658,11 +658,11 @@ export default function TeamChatPage() {
                           onClick={() => setActiveChannel(channel.id)}
                         >
                           <div className="flex items-center space-x-2 flex-1">
-                            <Avatar className="h-6 w-6">
-                              <AvatarFallback className="text-xs">
+                            <DaisyAvatar className="h-6 w-6">
+                              <DaisyAvatarFallback className="text-xs">
                                 {channel.name.split(' ').map((n: string) => n[0]).join('')}
-                              </AvatarFallback>
-                            </Avatar>
+                              </DaisyAvatarFallback>
+                            </DaisyAvatar>
                             <div className="flex-1">
                               <div className="text-sm font-medium">{channel.name}</div>
                               {channel.lastMessage && (
@@ -673,31 +673,31 @@ export default function TeamChatPage() {
                             </div>
                           </div>
                           {channel.unreadCount > 0 && (
-                            <Badge variant="destructive" className="text-xs">
+                            <DaisyBadge variant="error" className="text-xs">
                               {channel.unreadCount}
-                            </Badge>
+                            </DaisyBadge>
                           )}
                         </div>
                       ))}
                   </div>
                 </ScrollArea>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           </div>
 
           {/* Chat Area */}
           <div className="col-span-6 flex flex-col">
-            <Card className="flex-1 flex flex-col">
+            <DaisyCard className="flex-1 flex flex-col">
               {/* Chat Header */}
-              <CardHeader className="border-b">
+              <DaisyCardHeader className="border-b">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     {activeChannelData?.type === ChannelType.DIRECT ? (
-                      <Avatar className="h-8 w-8">
-                        <AvatarFallback>
+                      <DaisyAvatar className="h-8 w-8">
+                        <DaisyAvatarFallback>
                           {activeChannelData.name.split(' ').map(n => n[0]).join('')}
-                        </AvatarFallback>
-                      </Avatar>
+                        </DaisyAvatarFallback>
+                      </DaisyAvatar>
                     ) : (
                       <div className="flex items-center space-x-2">
                         <Hash className="h-5 w-5 text-gray-500" />
@@ -707,30 +707,30 @@ export default function TeamChatPage() {
                       </div>
                     )}
                     <div>
-                      <CardTitle className="text-lg">{activeChannelData?.name}</CardTitle>
-                      <CardDescription>
+                      <DaisyCardTitle className="text-lg">{activeChannelData?.name}</DaisyCardTitle>
+                      <DaisyCardDescription>
                         {activeChannelData?.type === ChannelType.DIRECT 
                           ? 'Direct message' 
                           : `${activeChannelData?.members?.length || 0} members`}
-                      </CardDescription>
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Button variant="outline" size="sm">
+                    <DaisyButton variant="outline" size="sm">
                       <Phone className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="sm">
+                    </DaisyButton>
+                    <DaisyButton variant="outline" size="sm">
                       <Video className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="sm">
+                    </DaisyButton>
+                    <DaisyButton variant="outline" size="sm">
                       <MoreHorizontal className="h-4 w-4" />
-                    </Button>
+                    </DaisyButton>
                   </div>
                 </div>
-              </CardHeader>
+              
 
               {/* Messages */}
-              <CardContent className="flex-1 overflow-hidden p-0">
+              <DaisyCardContent className="flex-1 overflow-hidden p-0">
                 <ScrollArea className="h-full p-4">
                   <div className="space-y-4">
                     {channelMessages.map((message) => {
@@ -739,12 +739,12 @@ export default function TeamChatPage() {
                       return (
                         <div key={message.id} className="group">
                           <div className="flex items-start space-x-3">
-                            <Avatar className="h-8 w-8">
-                              <AvatarImage src={message.user.avatar} />
-                              <AvatarFallback className="text-xs">
+                            <DaisyAvatar className="h-8 w-8">
+                              <DaisyAvatarImage src={message.user.avatar} />
+                              <DaisyAvatarFallback className="text-xs">
                                 {`${message.user.firstName} ${message.user.lastName}`.split(' ').map((n: string) => n[0]).join('')}
-                              </AvatarFallback>
-                            </Avatar>
+                              </DaisyAvatarFallback>
+                            </DaisyAvatar>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center space-x-2 mb-1">
                                 <span className="font-medium text-sm">{`${message.user.firstName} ${message.user.lastName}`}</span>
@@ -752,9 +752,9 @@ export default function TeamChatPage() {
                                   {new Date(message.createdAt).toLocaleTimeString()}
                                 </span>
                                 {message.isEdited && (
-                                  <Badge variant="outline" className="text-xs">
+                                  <DaisyBadge variant="outline" className="text-xs">
                                     edited
-                                  </Badge>
+                                  </DaisyBadge>
                                 )}
                                 {/* Status icon removed as message doesn't have status property */}
                               </div>
@@ -775,9 +775,9 @@ export default function TeamChatPage() {
                                           {formatFileSize(attachment.size)}
                                         </div>
                                       </div>
-                                      <Button variant="outline" size="sm">
+                                      <DaisyButton variant="outline" size="sm">
                                         <Download className="h-4 w-4" />
-                                      </Button>
+                                      </DaisyButton>
                                     </div>
                                   ))}
                                 </div>
@@ -787,7 +787,7 @@ export default function TeamChatPage() {
                               {message.reactions && message.reactions.length > 0 && (
                                 <div className="flex items-center space-x-1 mt-2">
                                   {message.reactions.map((reaction, index) => (
-                                    <Button
+                                    <DaisyButton
                                       key={index}
                                       variant="outline"
                                       size="sm"
@@ -795,7 +795,7 @@ export default function TeamChatPage() {
                                       onClick={() => handleReaction(message.id, reaction.emoji)}
                                     >
                                       {reaction.emoji} {(reaction as any).count || 1}
-                                    </Button>
+                                    </DaisyButton>
                                   ))}
                                 </div>
                               )}
@@ -803,15 +803,15 @@ export default function TeamChatPage() {
 
                             {/* Message Actions */}
                             <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center space-x-1">
-                              <Button variant="ghost" size="sm" onClick={() => handleReaction(message.id, '👍')}>
+                              <DaisyButton variant="ghost" size="sm" onClick={() => handleReaction(message.id, '👍')}>
                                 <Smile className="h-4 w-4" />
-                              </Button>
-                              <Button variant="ghost" size="sm">
+                              </DaisyButton>
+                              <DaisyButton variant="ghost" size="sm">
                                 <Reply className="h-4 w-4" />
-                              </Button>
-                              <Button variant="ghost" size="sm">
+                              </DaisyButton>
+                              <DaisyButton variant="ghost" size="sm">
                                 <MoreHorizontal className="h-4 w-4" />
-                              </Button>
+                              </DaisyButton>
                             </div>
                           </div>
                         </div>
@@ -820,7 +820,7 @@ export default function TeamChatPage() {
                     <div ref={messagesEndRef} />
                   </div>
                 </ScrollArea>
-              </CardContent>
+              </DaisyCardBody>
 
               {/* Message Input */}
               <div className="border-t p-4">
@@ -830,16 +830,16 @@ export default function TeamChatPage() {
                   </div>
                 )}
                 <div className="flex items-end space-x-2">
-                  <Button
+                  <DaisyButton
                     variant="outline"
                     size="sm"
                     onClick={handleFileUpload}
                     className="flex-shrink-0"
                   >
                     <Paperclip className="h-4 w-4" />
-                  </Button>
+                  </DaisyButton>
                   <div className="flex-1">
-                    <Textarea
+                    <DaisyTextarea
                       placeholder={`Message ${activeChannelData?.name}...`}
                       value={messageInput}
                       onChange={(e) => setMessageInput(e.target.value)}
@@ -847,13 +847,13 @@ export default function TeamChatPage() {
                       className="min-h-[60px] resize-none"
                     />
                   </div>
-                  <Button
+                  <DaisyButton
                     onClick={handleSendMessage}
                     disabled={!messageInput.trim()}
                     className="flex-shrink-0"
                   >
                     <Send className="h-4 w-4" />
-                  </Button>
+                  </DaisyButton>
                 </div>
                 <input
                   ref={fileInputRef}
@@ -863,22 +863,22 @@ export default function TeamChatPage() {
                   multiple
                 />
               </div>
-            </Card>
+            </DaisyCard>
           </div>
 
           {/* Team Members Sidebar */}
           <div className="col-span-3 space-y-4">
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium flex items-center">
+            <DaisyCard>
+              <DaisyCardHeader className="pb-3">
+                <DaisyCardTitle className="text-sm font-medium flex items-center">
                   <Users className="h-4 w-4 mr-2" />
                   Team Members
-                  <Badge variant="outline" className="ml-2 text-xs">
+                  <DaisyBadge variant="outline" className="ml-2 text-xs">
                     {onlineMembers.length} online
-                  </Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                  </DaisyBadge>
+                </DaisyCardTitle>
+              
+              <DaisyCardContent>
                 <ScrollArea className="h-80">
                   <div className="space-y-2">
                     {onlineMembers.map((member: any) => {
@@ -889,12 +889,12 @@ export default function TeamChatPage() {
                           onClick={() => toast({ title: `Starting chat with ${member.user.firstName}...`, variant: 'default' })}
                         >
                           <div className="relative">
-                            <Avatar className="h-8 w-8">
-                              <AvatarImage src={member.user.avatar} />
-                              <AvatarFallback className="text-xs">
+                            <DaisyAvatar className="h-8 w-8">
+                              <DaisyAvatarImage src={member.user.avatar} />
+                              <DaisyAvatarFallback className="text-xs">
                                 {`${member.user.firstName} ${member.user.lastName}`.split(' ').map((n: string) => n[0]).join('')}
-                              </AvatarFallback>
-                            </Avatar>
+                              </DaisyAvatarFallback>
+                            </DaisyAvatar>
                             <div className={cn(
                               "absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white",
                               "bg-green-500"
@@ -904,59 +904,59 @@ export default function TeamChatPage() {
                             <div className="text-sm font-medium truncate">{member.user.firstName} {member.user.lastName}</div>
                             <div className="text-xs text-gray-500 truncate">{member.role}</div>
                           </div>
-                          <Badge variant="outline" className={cn("text-xs", "text-green-500")}>
+                          <DaisyBadge variant="outline" className={cn("text-xs", "text-green-500")}>
                             Online
-                          </Badge>
+                          </DaisyBadge>
                         </div>
                       );
                     })}
                   </div>
                 </ScrollArea>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
             {/* Quick Actions */}
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium">Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent>
+            <DaisyCard>
+              <DaisyCardHeader className="pb-3">
+                <DaisyCardTitle className="text-sm font-medium">Quick Actions</DaisyCardTitle>
+              
+              <DaisyCardContent>
                 <div className="space-y-2">
-                  <Button variant="outline" size="sm" className="w-full justify-start">
+                  <DaisyButton variant="outline" size="sm" className="w-full justify-start">
                     <Video className="h-4 w-4 mr-2" />
                     Start Video Call
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-full justify-start">
+                  </DaisyButton>
+                  <DaisyButton variant="outline" size="sm" className="w-full justify-start">
                     <Users className="h-4 w-4 mr-2" />
                     Create Group
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-full justify-start">
+                  </DaisyButton>
+                  <DaisyButton variant="outline" size="sm" className="w-full justify-start">
                     <FileText className="h-4 w-4 mr-2" />
                     Share Document
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-full justify-start">
+                  </DaisyButton>
+                  <DaisyButton variant="outline" size="sm" className="w-full justify-start">
                     <Settings className="h-4 w-4 mr-2" />
                     Chat Settings
-                  </Button>
+                  </DaisyButton>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           </div>
         </div>
 
         {/* Create Channel Dialog */}
-        <Dialog open={isCreateChannelOpen} onOpenChange={setIsCreateChannelOpen}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create New Channel</DialogTitle>
-              <DialogDescription>
+        <DaisyDialog open={isCreateChannelOpen} onOpenChange={setIsCreateChannelOpen}>
+          <DaisyDialogContent>
+            <DaisyDialogHeader>
+              <DaisyDialogTitle>Create New Channel</DaisyDialogTitle>
+              <DaisyDialogDescription>
                 Create a new channel for your team to collaborate
-              </DialogDescription>
-            </DialogHeader>
+              </DaisyDialogDescription>
+            </DaisyDialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="channel-name">Channel Name</Label>
-                <Input
+                <DaisyLabel htmlFor="channel-name">Channel Name</DaisyLabel>
+                <DaisyInput
                   id="channel-name"
                   placeholder="e.g., project-alpha"
                   value={newChannelData.name}
@@ -964,8 +964,8 @@ export default function TeamChatPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="channel-description">Description (optional)</Label>
-                <Input
+                <DaisyLabel htmlFor="channel-description">Description (optional)</DaisyLabel>
+                <DaisyInput
                   id="channel-description"
                   placeholder="What's this channel about?"
                   value={newChannelData.description}
@@ -973,41 +973,41 @@ export default function TeamChatPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="channel-type">Channel Type</Label>
-                <Select
+                <DaisyLabel htmlFor="channel-type">Channel Type</DaisyLabel>
+                <DaisySelect
                   value={newChannelData.type}
                   onValueChange={(value) => setNewChannelData(prev => ({ ...prev, type: value as ChannelType }))}
                 >
-                  <SelectTrigger>
-                    <SelectValue />
+                  <DaisySelectTrigger>
+                    <DaisySelectValue />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value={ChannelType.PUBLIC}>
+                  <DaisySelectContent>
+                    <DaisySelectItem value={ChannelType.PUBLIC}>
                       <div className="flex items-center">
                         <Hash className="h-4 w-4 mr-2" />
                         Public - Anyone in the organization can join
                       </div>
                     </SelectItem>
-                    <SelectItem value={ChannelType.PRIVATE}>
+                    <DaisySelectItem value={ChannelType.PRIVATE}>
                       <div className="flex items-center">
                         <Shield className="h-4 w-4 mr-2" />
                         Private - Invite only
                       </div>
                     </SelectItem>
                   </SelectContent>
-                </Select>
+                </DaisySelect>
               </div>
             </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsCreateChannelOpen(false)}>
+            <DaisyDialogFooter>
+              <DaisyButton variant="outline" onClick={() => setIsCreateChannelOpen(false)}>
                 Cancel
-              </Button>
-              <Button onClick={handleCreateChannel} disabled={!newChannelData.name.trim()}>
+              </DaisyButton>
+              <DaisyButton onClick={handleCreateChannel} disabled={!newChannelData.name.trim()}>
                 Create Channel
-              </Button>
+              </DaisyButton>
             </DialogFooter>
-          </DialogContent>
-        </Dialog>
+          </DaisyDialogContent>
+        </DaisyDialog>
       </MainContentArea>
     </ProtectedRoute>
   );

@@ -2,12 +2,12 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyInput } from '@/components/ui/DaisyInput';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DaisySelect } from '@/components/ui/DaisySelect';
 
 import { Search, Eye, Copy, Star, Shield, FileCheck, AlertTriangle, Building, CheckCircle, Tag, TrendingUp, Grid3X3, List, BookOpen, Download } from 'lucide-react';
 
@@ -192,7 +192,7 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
         <div className="flex items-center space-x-3">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-notion-text-tertiary w-4 h-4" />
-            <Input
+            <DaisyInput
               placeholder="Search templates..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -200,28 +200,28 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
             />
           </div>
 
-          <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-            <SelectTrigger className="w-32">
-              <SelectValue />
+          <DaisySelect value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+            <DaisySelectTrigger className="w-32">
+              <DaisySelectValue />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="popular">Popular</SelectItem>
-              <SelectItem value="recent">Recent</SelectItem>
-              <SelectItem value="rating">Rating</SelectItem>
-              <SelectItem value="title">Title</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="popular">Popular</SelectItem>
+              <DaisySelectItem value="recent">Recent</SelectItem>
+              <DaisySelectItem value="rating">Rating</SelectItem>
+              <DaisySelectItem value="title">Title</SelectItem>
             </SelectContent>
-          </Select>
+          </DaisySelect>
         </div>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Sidebar - Categories */}
         <div className="lg:w-64 space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Categories</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="text-lg">Categories</DaisyCardTitle>
+            
+            <DaisyCardContent className="space-y-2">
               {templateCategories.map((category) => {
                 const Icon = category.icon;
                 const isSelected = selectedCategory === category.id;
@@ -239,24 +239,24 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
                       <Icon className="w-4 h-4" />
                       <span className="font-medium">{category.name}</span>
                     </div>
-                    <Badge variant={isSelected ? 'secondary' : 'outline'} className="text-xs">
+                    <DaisyBadge variant={isSelected ? 'secondary' : 'outline'} className="text-xs">
                       {category.count}
-                    </Badge>
+                    </DaisyBadge>
                   </button>
                 );
               })}
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
           {/* Featured Templates */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="text-lg flex items-center">
                 <Star className="w-4 h-4 mr-2 text-yellow-500" />
                 Featured
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
+              </DaisyCardTitle>
+            
+            <DaisyCardContent className="space-y-3">
               {mockTemplates.filter(t => t.isFeatured).slice(0, 3).map((template) => (
                 <div
                   key={template.id}
@@ -280,8 +280,8 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
                   </div>
                 </div>
               ))}
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </div>
 
         {/* Main Content */}
@@ -307,30 +307,30 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
                 >
-                  <Card className="h-full hover:shadow-md transition-all duration-200 hover:scale-[1.02] cursor-pointer">
-                    <CardHeader className="pb-3">
+                  <DaisyCard className="h-full hover:shadow-md transition-all duration-200 hover:scale-[1.02] cursor-pointer">
+                    <DaisyCardHeader className="pb-3">
                       <div className="flex items-start justify-between mb-2">
                         <div className="w-10 h-10 bg-notion-bg-tertiary rounded-lg flex items-center justify-center">
                           <Icon className="w-5 h-5 text-notion-text-secondary" />
                         </div>
                         <div className="flex items-center space-x-1">
                           {template.isPopular && (
-                            <Badge variant="secondary" className="text-xs">
+                            <DaisyBadge variant="secondary" className="text-xs">
                               <TrendingUp className="w-3 h-3 mr-1" />
                               Popular
-                            </Badge>
+                            </DaisyBadge>
                           )}
                           {template.isFeatured && (
                             <Star className="w-4 h-4 text-yellow-500 fill-current" />
                           )}
                         </div>
                       </div>
-                      <CardTitle className="text-lg line-clamp-2">{template.title}</CardTitle>
+                      <DaisyCardTitle className="text-lg line-clamp-2">{template.title}</DaisyCardTitle>
                       <p className="text-sm text-notion-text-secondary line-clamp-3">
                         {template.description}
                       </p>
-                    </CardHeader>
-                    <CardContent className="pt-0">
+                    
+                    <DaisyCardContent className="pt-0">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between text-sm">
                           <span className="text-notion-text-tertiary">{template.questions} questions</span>
@@ -346,16 +346,16 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
                         </div>
 
                         <div className="flex items-center justify-between">
-                          <Badge className={getDifficultyColor(template.difficulty)}>
+                          <DaisyBadge className={getDifficultyColor(template.difficulty)}>
                             {template.difficulty}
-                          </Badge>
+                          </DaisyBadge>
                           <span className="text-xs text-notion-text-tertiary">
                             Updated {new Date(template.lastUpdated).toLocaleDateString()}
                           </span>
                         </div>
 
                         <div className="flex items-center space-x-2 pt-2">
-                          <Button 
+                          <DaisyButton 
                             variant="outline" 
                             size="sm" 
                             onClick={() => handlePreviewTemplate(template)} 
@@ -363,8 +363,8 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
                           >
                             <Eye className="w-4 h-4 mr-1" />
                             Preview
-                          </Button>
-                          <Button 
+                          </DaisyButton>
+                          <DaisyButton 
                             variant="primary" 
                             size="sm" 
                             onClick={() => handleCloneTemplate(template)} 
@@ -372,11 +372,11 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
                           >
                             <Copy className="w-4 h-4 mr-1" />
                             Clone
-                          </Button>
+                          </DaisyButton>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </DaisyCardBody>
+                  </DaisyCard>
                 </motion.div>
               );
             })}
@@ -397,8 +397,8 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
       </div>
 
       {/* Template Preview Dialog */}
-      <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+      <DaisyDialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+        <DaisyDialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
           {selectedTemplate && (
             <TemplatePreview
               template={selectedTemplate}
@@ -407,8 +407,8 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
               getCategoryIcon={getCategoryIcon}
             />
           )}
-        </DialogContent>
-      </Dialog>
+        </DaisyDialogContent>
+      </DaisyDialog>
     </div>
   );
 }
@@ -431,19 +431,19 @@ function TemplatePreview({
 
   return (
     <>
-      <DialogHeader>
+      <DaisyDialogHeader>
         <div className="flex items-center space-x-3 mb-2">
           <div className="w-12 h-12 bg-notion-bg-tertiary rounded-lg flex items-center justify-center">
             <Icon className="w-6 h-6 text-notion-text-secondary" />
           </div>
           <div>
-            <DialogTitle className="text-xl">{template.title}</DialogTitle>
-            <DialogDescription className="text-notion-text-secondary">
+            <DaisyDialogTitle className="text-xl">{template.title}</DaisyDialogTitle>
+            <DaisyDialogDescription className="text-notion-text-secondary">
               {template.subcategory} • {template.questions} questions • {template.estimatedTime}
-            </DialogDescription>
+            </DaisyDialogDescription>
           </div>
         </div>
-      </DialogHeader>
+      </DaisyDialogHeader>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
         {/* Left Column - Details */}
@@ -480,10 +480,10 @@ function TemplatePreview({
             <h3 className="font-semibold text-notion-text-primary mb-3">Tags</h3>
             <div className="flex flex-wrap gap-2">
               {template.tags.map((tag, index) => (
-                <Badge key={index} variant="outline" className="text-xs">
+                <DaisyBadge key={index} variant="outline" className="text-xs">
                   <Tag className="w-3 h-3 mr-1" />
                   {tag}
-                </Badge>
+                </DaisyBadge>
               ))}
             </div>
           </div>
@@ -507,9 +507,9 @@ function TemplatePreview({
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-notion-text-secondary">Difficulty</span>
-                <Badge className={getDifficultyColor(template.difficulty)}>
+                <DaisyBadge className={getDifficultyColor(template.difficulty)}>
                   {template.difficulty}
-                </Badge>
+                </DaisyBadge>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-notion-text-secondary">Last Updated</span>
@@ -521,14 +521,14 @@ function TemplatePreview({
           </div>
 
           <div className="space-y-3">
-            <Button onClick={onClone} className="w-full">
+            <DaisyButton onClick={onClone} className="w-full">
               <Copy className="w-4 h-4 mr-2" />
               Clone Template
-            </Button>
-            <Button variant="outline" className="w-full">
+            </DaisyButton>
+            <DaisyButton variant="outline" className="w-full">
               <Download className="w-4 h-4 mr-2" />
               Import to Library
-            </Button>
+            </DaisyButton>
           </div>
 
           <div className="p-4 border border-notion-border rounded-lg">

@@ -557,42 +557,42 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                     )}
                   </TableCell>
                   <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                    <DaisyDropdownMenu>
+                      <DaisyDropdownMenuTrigger asChild>
                         <DaisyButton variant="ghost" className="h-8 w-8 p-0">
                           <MoreHorizontal className="h-4 w-4" />
                         </DaisyButton>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
+                      </DaisyDropdownMenuTrigger>
+                      <DaisyDropdownMenuContent align="end">
+                        <DaisyDropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DaisyDropdownMenuItem
                           onClick={() => setSelectedControl(control)}
                         >
                           <Eye className="mr-2 h-4 w-4" />
                           View Details
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
+                        </DaisyDropdownMenuItem>
+                        <DaisyDropdownMenuItem
                           onClick={() => onEditControl ? onEditControl(control) : router.push(`/controls/${control.id}/edit`)}
                         >
                           <Edit className="mr-2 h-4 w-4" />
                           Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
+                        </DaisyDropdownMenuItem>
+                        <DaisyDropdownMenuItem
                           onClick={() => onTestControl ? onTestControl(control) : router.push(`/controls/${control.id}/test`)}
                         >
                           <Calendar className="mr-2 h-4 w-4" />
                           Schedule Test
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
+                        </DaisyDropdownMenuItem>
+                        <DaisyDropdownMenuSeparator />
+                        <DaisyDropdownMenuItem
                           onClick={() => deleteControl(control.id)}
                           className="text-red-600"
                         >
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                        </DaisyDropdownMenuItem>
+                      </DaisyDropdownMenuContent>
+                    </DaisyDropdownMenu>
                   </TableCell>
                 </TableRow>
               ))}

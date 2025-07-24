@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyInput } from '@/components/ui/DaisyInput';
 import { 
   Shield, 
   CheckCircle, 
@@ -163,12 +163,12 @@ export default function VantaInspiredLanding() {
             
             <div className="flex items-center space-x-4">
               <button className="text-gray-700 hover:text-[#199BEC] font-medium">Login</button>
-              <Button 
+              <DaisyButton 
                 className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white px-6"
                 onClick={() => router.push('/register')}
               >
                 Request a demo
-              </Button>
+              </DaisyButton>
             </div>
           </div>
         </div>
@@ -179,10 +179,10 @@ export default function VantaInspiredLanding() {
         <div className="absolute inset-0 bg-gradient-to-br from-[#199BEC]/5 via-white to-purple-50"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24">
           <div className="text-center">
-            <Badge className="bg-[#199BEC] text-white px-6 py-2 mb-8 text-sm rounded-full">
+            <DaisyBadge className="bg-[#199BEC] text-white px-6 py-2 mb-8 text-sm rounded-full">
               <Sparkles className="w-4 h-4 mr-2" />
               Introducing Riscura AI: Powering the future of risk management
-            </Badge>
+            </DaisyBadge>
             
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Risk Management that turns
@@ -197,22 +197,22 @@ export default function VantaInspiredLanding() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button 
+              <DaisyButton 
                 size="lg" 
                 className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white px-8 py-4 text-lg"
                 onClick={() => router.push('/register')}
               >
                 Request a demo
                 <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-              <Button 
+              </DaisyButton>
+              <DaisyButton 
                 variant="outline" 
                 size="lg" 
                 className="border-gray-300 text-gray-700 hover:border-[#199BEC] hover:text-[#199BEC] px-8 py-4 text-lg"
               >
                 <Play className="w-5 h-5 mr-2" />
                 Watch demo
-              </Button>
+              </DaisyButton>
             </div>
             
             <div className="mt-12 flex justify-center items-center space-x-8 text-sm text-gray-500">
@@ -270,10 +270,10 @@ export default function VantaInspiredLanding() {
                 <div className="flex items-center space-x-4 mb-6">
                   <div className="text-2xl font-bold text-[#199BEC]">{feature.stats}</div>
                 </div>
-                <Button className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white">
+                <DaisyButton className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white">
                   Request a demo
                   <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
+                </DaisyButton>
               </div>
               <div className="flex-1">
                 <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 shadow-lg">
@@ -307,18 +307,18 @@ export default function VantaInspiredLanding() {
           
           <div className="grid lg:grid-cols-3 gap-8">
             {aiFeatures.map((feature, index) => (
-              <Card key={index} className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
-                <CardHeader>
-                  <CardTitle className="text-xl">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <DaisyCard key={index} className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="text-xl">{feature.title}</DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <p className="text-purple-100 mb-4">{feature.description}</p>
-                  <Button variant="outline" className="border-white/30 text-white hover:bg-white/10">
+                  <DaisyButton variant="outline" className="border-white/30 text-white hover:bg-white/10">
                     {feature.action}
                     <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </CardContent>
-              </Card>
+                  </DaisyButton>
+                </DaisyCardBody>
+              </DaisyCard>
             ))}
           </div>
         </div>
@@ -360,14 +360,14 @@ export default function VantaInspiredLanding() {
           <p className="text-xl text-blue-100 mb-8">
             Join thousands of companies that trust Riscura to manage their risk and compliance programs.
           </p>
-          <Button 
+          <DaisyButton 
             size="lg" 
             className="bg-white text-[#199BEC] hover:bg-gray-100 px-8 py-4 text-lg font-semibold"
             onClick={() => router.push('/register')}
           >
             Request a demo
             <ArrowRight className="w-5 h-5 ml-2" />
-          </Button>
+          </DaisyButton>
         </div>
       </section>
 

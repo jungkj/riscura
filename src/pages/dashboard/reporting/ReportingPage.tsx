@@ -6,7 +6,7 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { useRouter } from 'next/navigation';
@@ -723,16 +723,16 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
       </div>
 
       {/* Main Content Tabs */}
-      <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-          <TabsTrigger value="library">Report Library</TabsTrigger>
-          <TabsTrigger value="builder">Report Builder</TabsTrigger>
-          <TabsTrigger value="scheduled">Scheduled Reports</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-        </TabsList>
+      <DaisyTabs value={activeView} onValueChange={setActiveView} className="space-y-6">
+        <DaisyTabsList className="grid w-full grid-cols-5">
+          <DaisyTabsTrigger value="dashboard">Dashboard</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="library">Report Library</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="builder">Report Builder</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="scheduled">Scheduled Reports</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="analytics">Analytics</DaisyTabsTrigger>
+        </DaisyTabsList>
 
-        <TabsContent value="dashboard" className="space-y-6">
+        <DaisyTabsContent value="dashboard" className="space-y-6">
           <div className="text-center py-12">
             <BarChart3 className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
@@ -742,9 +742,9 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               Real-time reporting dashboard will be available here
             </p>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="library" className="space-y-6">
+        <DaisyTabsContent value="library" className="space-y-6">
           <div className="text-center py-12">
             <FileText className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
@@ -754,9 +754,9 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               Comprehensive report templates library will be available here
             </p>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="builder" className="space-y-6">
+        <DaisyTabsContent value="builder" className="space-y-6">
           <div className="text-center py-12">
             <Plus className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
@@ -766,9 +766,9 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               Drag-and-drop report builder with AI assistance will be available here
             </p>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="scheduled" className="space-y-6">
+        <DaisyTabsContent value="scheduled" className="space-y-6">
           <div className="text-center py-12">
             <Calendar className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
@@ -778,9 +778,9 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               Automated report scheduling and distribution will be available here
             </p>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="analytics" className="space-y-6">
+        <DaisyTabsContent value="analytics" className="space-y-6">
           <div className="text-center py-12">
             <TrendingUp className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
@@ -790,8 +790,8 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               Deep reporting analytics and usage insights will be available here
             </p>
           </div>
-        </TabsContent>
-      </Tabs>
+        </DaisyTabsContent>
+      </DaisyTabs>
     </div>
   );
 } 

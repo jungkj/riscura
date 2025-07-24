@@ -6,11 +6,11 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
-import { Textarea } from '@/components/ui/textarea';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Slider } from '@/components/ui/slider';
@@ -215,15 +215,15 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
           </DaisyDialogDescription>
         </DaisyDialogHeader>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="basic">Basic Info</TabsTrigger>
-            <TabsTrigger value="assessment">Assessment</TabsTrigger>
-            <TabsTrigger value="compliance">Compliance</TabsTrigger>
-            <TabsTrigger value="additional">Additional</TabsTrigger>
-          </TabsList>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <DaisyTabsList className="grid w-full grid-cols-4">
+            <DaisyTabsTrigger value="basic">Basic Info</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="assessment">Assessment</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="additional">Additional</DaisyTabsTrigger>
+          </DaisyTabsList>
 
-          <TabsContent value="basic" className="space-y-4">
+          <DaisyTabsContent value="basic" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <DaisyLabel htmlFor="title">Risk Title *</DaisyLabel>
@@ -260,7 +260,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
 
             <div className="space-y-2">
               <DaisyLabel htmlFor="description">Description *</DaisyLabel>
-              <Textarea
+              <DaisyTextarea
                 id="description"
                 placeholder="Describe the risk in detail"
                 value={formData.description}
@@ -295,9 +295,9 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 {errors.dueDate && <p className="text-sm text-red-600">{errors.dueDate}</p>}
               </div>
             </div>
-          </TabsContent>
+          </DaisyTabsContent>
 
-          <TabsContent value="assessment" className="space-y-6">
+          <DaisyTabsContent value="assessment" className="space-y-6">
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle className="flex items-center space-x-2">
@@ -306,7 +306,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 </DaisyCardTitle>
                 <DaisyCardDescription>
                   Evaluate the likelihood and impact of this risk
-                </CardDescription>
+                </p>
               
               <DaisyCardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -378,9 +378,9 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 </div>
               </DaisyCardBody>
             </DaisyCard>
-          </TabsContent>
+          </DaisyTabsContent>
 
-          <TabsContent value="compliance" className="space-y-4">
+          <DaisyTabsContent value="compliance" className="space-y-4">
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle className="flex items-center space-x-2">
@@ -389,7 +389,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 </DaisyCardTitle>
                 <DaisyCardDescription>
                   Select applicable compliance frameworks for this risk
-                </CardDescription>
+                </p>
               
               <DaisyCardContent>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -408,9 +408,9 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 </div>
               </DaisyCardBody>
             </DaisyCard>
-          </TabsContent>
+          </DaisyTabsContent>
 
-          <TabsContent value="additional" className="space-y-4">
+          <DaisyTabsContent value="additional" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <DaisyLabel htmlFor="businessUnit">Business Unit</DaisyLabel>
@@ -441,8 +441,8 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 />
               </div>
             </div>
-          </TabsContent>
-        </Tabs>
+          </DaisyTabsContent>
+        </DaisyTabs>
 
         <div className="flex justify-end space-x-2 pt-4 border-t">
           <DaisyButton

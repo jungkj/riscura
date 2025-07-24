@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger } from '@/components/ui/DaisyTooltip';
 
 import {
   TrendingUp, TrendingDown, Minus, BarChart3, AlertTriangle, 
@@ -235,19 +235,19 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
                     {metric.icon}
                     <span className="text-sm text-[#6B5B47]">{metric.label}</span>
                   </div>
-                  <Tooltip>
-                    <TooltipTrigger>
+                  <DaisyTooltip>
+                    <DaisyTooltipTrigger>
                       <div className="flex items-center space-x-1">
                         {getTrendIcon(metric.value, metric.previousValue)}
                         <span className={`text-xs ${getStatusColor(metric.value, metric.threshold)}`}>
                           {getTrendPercentage(metric.value, metric.previousValue)}
                         </span>
                       </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
+                    </DaisyTooltipTrigger>
+                    <DaisyTooltipContent>
                       <p>{metric.description}</p>
-                    </TooltipContent>
-                  </Tooltip>
+                    </DaisyTooltipContent>
+                  </DaisyTooltip>
                 </div>
                 
                 <div className="flex items-baseline justify-between">

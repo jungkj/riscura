@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
 import { Search, Download, MoreHorizontal, ChevronDown, Edit, Trash2, Eye, Copy, RefreshCw, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -182,11 +182,11 @@ export default function EnterpriseDataTable<T extends TableData>({
   const isIndeterminate = selectedRows.size > 0 && !isAllSelected;
   
   return (
-    <Card className={className}>
-      <CardHeader className="pb-3">
+    <DaisyCard className={className}>
+      <DaisyCardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-lg">{title}</CardTitle>
+            <DaisyCardTitle className="text-lg">{title}</DaisyCardTitle>
             {description && (
               <p className="text-sm text-gray-600 mt-1">{description}</p>
             )}
@@ -194,29 +194,29 @@ export default function EnterpriseDataTable<T extends TableData>({
           
           <div className="flex items-center space-x-2">
             {enableExport && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm">
+              <DaisyDropdownMenu>
+                <DaisyDropdownMenuTrigger asChild>
+                  <DaisyButton variant="outline" size="sm">
                     <Download className="h-4 w-4 mr-2" />
                     Export
                     <ChevronDown className="h-4 w-4 ml-2" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => handleExport('csv')}>
+                  </DaisyButton>
+                </DaisyDropdownMenuTrigger>
+                <DaisyDropdownMenuContent>
+                  <DaisyDropdownMenuItem onClick={() => handleExport('csv')}>
                     Export as CSV
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleExport('json')}>
+                  </DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuItem onClick={() => handleExport('json')}>
                     Export as JSON
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                  </DaisyDropdownMenuItem>
+                </DaisyDropdownMenuContent>
+              </DaisyDropdownMenu>
             )}
             
-            <Button variant="outline" size="sm" onClick={handleReset}>
+            <DaisyButton variant="outline" size="sm" onClick={handleReset}>
               <RefreshCw className="h-4 w-4 mr-2" />
               Reset
-            </Button>
+            </DaisyButton>
           </div>
         </div>
         
@@ -224,7 +224,7 @@ export default function EnterpriseDataTable<T extends TableData>({
           {enableSearch && (
             <div className="flex items-center space-x-2">
               <Search className="h-4 w-4 text-gray-500" />
-              <Input
+              <DaisyInput
                 placeholder="Search all columns..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -235,9 +235,9 @@ export default function EnterpriseDataTable<T extends TableData>({
           
           {enableSelection && selectedRows.size > 0 && bulkActions.length > 0 && (
             <div className="flex items-center space-x-2 p-3 bg-blue-50 rounded-lg">
-              <Badge variant="secondary">{selectedRows.size} selected</Badge>
+              <DaisyBadge variant="secondary">{selectedRows.size} selected</DaisyBadge>
               {bulkActions.map((action) => (
-                <Button
+                <DaisyButton
                   key={action.id}
                   variant={action.variant || 'outline'}
                   size="sm"
@@ -245,21 +245,21 @@ export default function EnterpriseDataTable<T extends TableData>({
                 >
                   {action.icon}
                   {action.label}
-                </Button>
+                </DaisyButton>
               ))}
             </div>
           )}
         </div>
-      </CardHeader>
+      
 
-      <CardContent className="p-0">
+      <DaisyCardContent className="p-0">
         <div className="border rounded-lg">
           <Table>
             <TableHeader>
               <TableRow>
                 {enableSelection && (
                   <TableHead className="w-12">
-                    <Checkbox
+                    <DaisyCheckbox
                       checked={isAllSelected}
                       ref={(el) => {
                         if (el && el instanceof HTMLInputElement) {
@@ -274,7 +274,7 @@ export default function EnterpriseDataTable<T extends TableData>({
                 {columns.map((column) => (
                   <TableHead key={column.key as string}>
                     {column.sortable !== false ? (
-                      <Button
+                      <DaisyButton
                         variant="ghost"
                         onClick={() => handleSort(column.key)}
                         className="h-8 p-0 hover:bg-transparent"
@@ -288,7 +288,7 @@ export default function EnterpriseDataTable<T extends TableData>({
                         {sortConfig?.key !== column.key && (
                           <ArrowUpDown className="ml-2 h-4 w-4 opacity-50" />
                         )}
-                      </Button>
+                      </DaisyButton>
                     ) : (
                       column.header
                     )}
@@ -306,7 +306,7 @@ export default function EnterpriseDataTable<T extends TableData>({
                   >
                     {enableSelection && (
                       <TableCell>
-                        <Checkbox
+                        <DaisyCheckbox
                           checked={selectedRows.has(row.id)}
                           onCheckedChange={(checked) => handleRowSelection(row.id, checked as boolean)}
                           aria-label="Select row"
@@ -326,38 +326,38 @@ export default function EnterpriseDataTable<T extends TableData>({
                       </TableCell>
                     ))}
                     <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" className="h-8 w-8 p-0">
+                      <DaisyDropdownMenu>
+                        <DaisyDropdownMenuTrigger asChild>
+                          <DaisyButton variant="ghost" className="h-8 w-8 p-0">
                             <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => onRowClick?.(row)}>
+                          </DaisyButton>
+                        </DaisyDropdownMenuTrigger>
+                        <DaisyDropdownMenuContent align="end">
+                          <DaisyDropdownMenuItem onClick={() => onRowClick?.(row)}>
                             <Eye className="mr-2 h-4 w-4" />
                             View
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => navigator.clipboard.writeText(row.id)}>
+                          </DaisyDropdownMenuItem>
+                          <DaisyDropdownMenuItem onClick={() => navigator.clipboard.writeText(row.id)}>
                             <Copy className="mr-2 h-4 w-4" />
                             Copy ID
-                          </DropdownMenuItem>
+                          </DaisyDropdownMenuItem>
                           {onRowEdit && (
-                            <DropdownMenuItem onClick={() => onRowEdit(row)}>
+                            <DaisyDropdownMenuItem onClick={() => onRowEdit(row)}>
                               <Edit className="mr-2 h-4 w-4" />
                               Edit
-                            </DropdownMenuItem>
+                            </DaisyDropdownMenuItem>
                           )}
                           {onRowDelete && (
-                            <DropdownMenuItem 
+                            <DaisyDropdownMenuItem 
                               onClick={() => onRowDelete(row)}
                               className="text-red-600"
                             >
                               <Trash2 className="mr-2 h-4 w-4" />
                               Delete
-                            </DropdownMenuItem>
+                            </DaisyDropdownMenuItem>
                           )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                        </DaisyDropdownMenuContent>
+                      </DaisyDropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))
@@ -381,14 +381,14 @@ export default function EnterpriseDataTable<T extends TableData>({
             </div>
             
             <div className="flex items-center space-x-2">
-              <Button
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
               >
                 Previous
-              </Button>
+              </DaisyButton>
               
               <div className="flex items-center space-x-1">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -404,7 +404,7 @@ export default function EnterpriseDataTable<T extends TableData>({
                   }
                   
                   return (
-                    <Button
+                    <DaisyButton
                       key={page}
                       variant={currentPage === page ? 'primary' : 'outline'}
                       size="sm"
@@ -412,24 +412,24 @@ export default function EnterpriseDataTable<T extends TableData>({
                       className="w-8 h-8 p-0"
                     >
                       {page}
-                    </Button>
+                    </DaisyButton>
                   );
                 })}
               </div>
               
-              <Button
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                 disabled={currentPage === totalPages}
               >
                 Next
-              </Button>
+              </DaisyButton>
             </div>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 }
 
@@ -456,7 +456,7 @@ export function RiskDataTableExample() {
       key: 'category',
       header: 'Category',
       sortable: true,
-      render: (value) => <Badge variant="outline">{value}</Badge>
+      render: (value) => <DaisyBadge variant="outline">{value}</DaisyBadge>
     },
     {
       key: 'status',
@@ -469,7 +469,7 @@ export function RiskDataTableExample() {
           'Mitigated': 'default',
           'Closed': 'outline'
         } as const;
-        return <Badge variant={variants[value as keyof typeof variants]}>{value}</Badge>;
+        return <DaisyBadge variant={variants[value as keyof typeof variants]}>{value}</DaisyBadge>;
       }
     },
     {

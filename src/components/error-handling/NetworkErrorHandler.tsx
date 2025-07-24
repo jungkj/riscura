@@ -14,13 +14,13 @@ import {
   Zap,
   Signal
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { useToast } from '@/components/ui/UserFeedback';
 import { cn } from '@/lib/utils';
-import { Progress } from '@/components/ui/progress';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 
 // Network status types
 export type NetworkStatus = 'online' | 'offline' | 'slow' | 'checking';
@@ -324,7 +324,7 @@ const NetworkStatusIndicator: React.FC<{
       case 'checking':
         return <RefreshCw className="w-4 h-4 text-blue-500 animate-spin" />;
       default:
-        return <AlertTriangle className="w-4 h-4 text-gray-500" />;
+        return <DaisyAlertTriangle className="w-4 h-4 text-gray-500" />;
     }
   };
 
@@ -366,19 +366,19 @@ const NetworkStatusIndicator: React.FC<{
   }
 
   return (
-    <Card className="w-full max-w-sm">
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-sm">
+    <DaisyCard className="w-full max-w-sm">
+      <DaisyCardHeader className="pb-3">
+        <DaisyCardTitle className="flex items-center gap-2 text-sm">
           {getStatusIcon()}
           Network Status
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-3">
+        </DaisyCardTitle>
+      
+      <DaisyCardContent className="space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium">Status:</span>
-          <Badge variant={status === 'online' ? 'default' : 'destructive'}>
+          <DaisyBadge variant={status === 'online' ? 'default' : 'destructive'}>
             {getStatusText()}
-          </Badge>
+          </DaisyBadge>
         </div>
         
         {status === 'online' && (
@@ -395,8 +395,8 @@ const NetworkStatusIndicator: React.FC<{
           <span>Last checked:</span>
           <span>{lastChecked.toLocaleTimeString()}</span>
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 };
 
@@ -424,7 +424,7 @@ const OfflineBanner: React.FC<{
           </div>
         </div>
         
-        <Button
+        <DaisyButton
           variant="secondary"
           size="sm"
           onClick={onRetry}
@@ -442,7 +442,7 @@ const OfflineBanner: React.FC<{
               Retry Now
             </>
           )}
-        </Button>
+        </DaisyButton>
       </div>
     </div>
   );
@@ -505,23 +505,23 @@ export const NetworkErrorHandler: React.FC<NetworkErrorHandlerProps> = ({
       {/* Retry Progress Indicator */}
       {isRetrying && failedRequests.length > 0 && (
         <div className="fixed bottom-4 right-4 z-40">
-          <Card className="w-80">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-sm">
+          <DaisyCard className="w-80">
+            <DaisyCardHeader className="pb-3">
+              <DaisyCardTitle className="flex items-center gap-2 text-sm">
                 <RefreshCw className="w-4 h-4 animate-spin" />
                 Retrying failed requests...
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Progress 
+              </DaisyCardTitle>
+            
+            <DaisyCardContent>
+              <DaisyProgress 
                 value={(failedRequests.filter(r => r.retryCount > 0).length / failedRequests.length) * 100} 
                 className="h-2"
               />
               <p className="text-xs text-muted-foreground mt-2">
                 {failedRequests.length} request{failedRequests.length > 1 ? 's' : ''} in queue
               </p>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </div>
       )}
     </div>

@@ -20,8 +20,8 @@ import {
   ResponsiveContainer,
   Cell,
 } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { MoreVertical, Copy, Trash2 } from 'lucide-react';
 import { ReportWidget } from '@/lib/reporting/engine';
 
@@ -114,7 +114,7 @@ export function ChartWidget({
             {showGrid && <CartesianGrid strokeDasharray="3 3" />}
             <XAxis dataKey="name" />
             <YAxis />
-            <Tooltip />
+            <DaisyTooltip />
             {showLegend && <Legend />}
             <Bar dataKey="value" fill="#8884d8" />
             <Bar dataKey="risk" fill="#82ca9d" />
@@ -127,7 +127,7 @@ export function ChartWidget({
             {showGrid && <CartesianGrid strokeDasharray="3 3" />}
             <XAxis dataKey="name" />
             <YAxis />
-            <Tooltip />
+            <DaisyTooltip />
             {showLegend && <Legend />}
             <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
             <Line type="monotone" dataKey="risk" stroke="#82ca9d" strokeWidth={2} />
@@ -140,7 +140,7 @@ export function ChartWidget({
             {showGrid && <CartesianGrid strokeDasharray="3 3" />}
             <XAxis dataKey="name" />
             <YAxis />
-            <Tooltip />
+            <DaisyTooltip />
             {showLegend && <Legend />}
             <Area type="monotone" dataKey="value" stackId="1" stroke="#8884d8" fill="#8884d8" />
             <Area type="monotone" dataKey="risk" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
@@ -163,7 +163,7 @@ export function ChartWidget({
                 <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
               ))}
             </Pie>
-            <Tooltip />
+            <DaisyTooltip />
             {showLegend && <Legend />}
           </PieChart>
         );
@@ -174,7 +174,7 @@ export function ChartWidget({
             {showGrid && <CartesianGrid strokeDasharray="3 3" />}
             <XAxis dataKey="value" type="number" />
             <YAxis dataKey="risk" type="number" />
-            <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+            <DaisyTooltip cursor={{ strokeDasharray: '3 3' }} />
             {showLegend && <Legend />}
             <Scatter name="Data Points" data={data} fill="#8884d8" />
           </ScatterChart>
@@ -186,14 +186,14 @@ export function ChartWidget({
   };
 
   return (
-    <Card 
+    <DaisyCard 
       className={`h-full ${isSelected ? 'ring-2 ring-blue-500' : ''} cursor-pointer`}
       onClick={onSelect}
     >
-      <CardHeader className="pb-2 flex flex-row items-center justify-between">
-        <CardTitle className="text-sm font-medium">{widget.title}</CardTitle>
+      <DaisyCardHeader className="pb-2 flex flex-row items-center justify-between">
+        <DaisyCardTitle className="text-sm font-medium">{widget.title}</DaisyCardTitle>
         <div className="flex items-center space-x-1">
-          <Button
+          <DaisyButton
             variant="ghost"
             size="sm"
             onClick={(e) => {
@@ -202,8 +202,8 @@ export function ChartWidget({
             }}
           >
             <Copy className="w-3 h-3" />
-          </Button>
-          <Button
+          </DaisyButton>
+          <DaisyButton
             variant="ghost"
             size="sm"
             onClick={(e) => {
@@ -212,10 +212,10 @@ export function ChartWidget({
             }}
           >
             <Trash2 className="w-3 h-3" />
-          </Button>
+          </DaisyButton>
         </div>
-      </CardHeader>
-      <CardContent className="pt-0">
+      
+      <DaisyCardContent className="pt-0">
         {loading ? (
           <div className="flex items-center justify-center h-32">
             <div className="text-sm text-gray-500">Loading...</div>
@@ -231,7 +231,7 @@ export function ChartWidget({
             </ResponsiveContainer>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 } 

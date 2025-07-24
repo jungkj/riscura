@@ -6,7 +6,7 @@ import { ChevronLeft, Calendar, User2, Shield, AlertCircle } from 'lucide-react'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
-import { Textarea } from '@/components/ui/textarea';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { useRiskFlow, TreatmentStrategy } from '../RiskFlowContext';
 import { RiskStatus } from '@/types/rcsa.types';
@@ -168,7 +168,7 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
         transition={{ delay: 0.3 }}
       >
         <DaisyLabel htmlFor="controls">Control Measures</DaisyLabel>
-        <Textarea
+        <DaisyTextarea
           id="controls"
           placeholder="Describe any control measures or mitigation actions..."
           value={riskData.controlMeasures}

@@ -3,11 +3,11 @@
 import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisySelect } from '@/components/ui/DaisySelect';
 import { useToast } from '@/hooks/use-toast';
 import { useDropzone } from 'react-dropzone';
 import { 
@@ -157,7 +157,7 @@ export default function ImportDataPage() {
       case 'success': return <CheckCircle className="h-5 w-5 text-green-600" />;
       case 'error': return <XCircle className="h-5 w-5 text-red-600" />;
       case 'processing': return <Clock className="h-5 w-5 text-blue-600 animate-spin" />;
-      default: return <AlertTriangle className="h-5 w-5 text-gray-400" />;
+      default: return <DaisyAlertTriangle className="h-5 w-5 text-gray-400" />;
     }
   };
 
@@ -167,24 +167,24 @@ export default function ImportDataPage() {
         <div className="p-6">
           {/* Header */}
           <div className="mb-6">
-            <Button
+            <DaisyButton
               variant="ghost"
               onClick={() => router.push('/dashboard/quick-actions')}
               className="mb-4"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Quick Actions
-            </Button>
+            </DaisyButton>
             
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Import Risk Data</h1>
                 <p className="text-gray-600 mt-1">Upload and import risk data from external sources</p>
               </div>
-              <Badge variant="outline" className="text-sm">
+              <DaisyBadge variant="outline" className="text-sm">
                 <Clock className="h-4 w-4 mr-1" />
                 15-25 min
-              </Badge>
+              </DaisyBadge>
             </div>
           </div>
 
@@ -192,32 +192,32 @@ export default function ImportDataPage() {
             {/* Import Configuration */}
             <div className="lg:col-span-2 space-y-6">
               {/* Data Type Selection */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Import Configuration</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="text-lg">Import Configuration</DaisyCardTitle>
+                
+                <DaisyCardContent className="space-y-4">
                   <div>
                     <label className="text-sm font-medium text-gray-700">Data Type</label>
-                    <Select value={dataType} onValueChange={setDataType}>
-                      <SelectTrigger className="mt-1">
-                        <SelectValue />
+                    <DaisySelect value={dataType} onValueChange={setDataType}>
+                      <DaisySelectTrigger className="mt-1">
+                        <DaisySelectValue />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="risks">Risks</SelectItem>
-                        <SelectItem value="controls">Controls</SelectItem>
-                        <SelectItem value="vendors">Vendors</SelectItem>
-                        <SelectItem value="assets">Assets</SelectItem>
-                        <SelectItem value="compliance">Compliance Data</SelectItem>
+                      <DaisySelectContent>
+                        <DaisySelectItem value="risks">Risks</SelectItem>
+                        <DaisySelectItem value="controls">Controls</SelectItem>
+                        <DaisySelectItem value="vendors">Vendors</SelectItem>
+                        <DaisySelectItem value="assets">Assets</SelectItem>
+                        <DaisySelectItem value="compliance">Compliance Data</SelectItem>
                       </SelectContent>
-                    </Select>
+                    </DaisySelect>
                   </div>
 
                   <div className="p-4 bg-blue-50 rounded-lg">
                     <p className="text-sm text-blue-800">
                       <strong>Supported formats:</strong> CSV, Excel (.xls, .xlsx), JSON
                     </p>
-                    <Button
+                    <DaisyButton
                       variant="link"
                       size="sm"
                       onClick={downloadTemplate}
@@ -225,17 +225,17 @@ export default function ImportDataPage() {
                     >
                       <Download className="h-4 w-4 mr-1" />
                       Download {dataType} template
-                    </Button>
+                    </DaisyButton>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
 
               {/* File Upload */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Upload Files</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="text-lg">Upload Files</DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <div
                     {...getRootProps()}
                     className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
@@ -297,13 +297,13 @@ export default function ImportDataPage() {
                             {getStatusIcon(importFile.status)}
                             
                             {importFile.status === 'pending' && (
-                              <Button
+                              <DaisyButton
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => removeFile(index)}
                               >
                                 <XCircle className="h-4 w-4" />
-                              </Button>
+                              </DaisyButton>
                             )}
                           </div>
                         </div>
@@ -318,22 +318,22 @@ export default function ImportDataPage() {
                         <p className="text-sm font-medium">Import Progress</p>
                         <p className="text-sm text-gray-500">{Math.round(importProgress)}%</p>
                       </div>
-                      <Progress value={importProgress} className="h-2" />
+                      <DaisyProgress value={importProgress} className="h-2" />
                     </div>
                   )}
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </div>
 
             {/* Import Actions & Help */}
             <div className="space-y-6">
               {/* Actions */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Import Actions</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <Button
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="text-lg">Import Actions</DaisyCardTitle>
+                
+                <DaisyCardContent className="space-y-3">
+                  <DaisyButton
                     className="w-full"
                     size="lg"
                     onClick={handleImport}
@@ -347,34 +347,34 @@ export default function ImportDataPage() {
                         Start Import
                       </>
                     )}
-                  </Button>
+                  </DaisyButton>
 
-                  <Button
+                  <DaisyButton
                     variant="outline"
                     className="w-full"
                     onClick={() => toast({ title: 'Opening validation rules...' })}
                   >
                     <Eye className="h-4 w-4 mr-2" />
                     View Validation Rules
-                  </Button>
+                  </DaisyButton>
 
-                  <Button
+                  <DaisyButton
                     variant="outline"
                     className="w-full"
                     onClick={() => setFiles([])}
                     disabled={importing}
                   >
                     Clear All Files
-                  </Button>
-                </CardContent>
-              </Card>
+                  </DaisyButton>
+                </DaisyCardBody>
+              </DaisyCard>
 
               {/* Import Guidelines */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Import Guidelines</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3 text-sm">
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="text-lg">Import Guidelines</DaisyCardTitle>
+                
+                <DaisyCardContent className="space-y-3 text-sm">
                   <div>
                     <h4 className="font-medium mb-1">File Requirements</h4>
                     <ul className="space-y-1 text-gray-600">
@@ -402,18 +402,18 @@ export default function ImportDataPage() {
                       <li>• Partial imports allowed</li>
                     </ul>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
 
               {/* Recent Imports */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Recent Imports</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="text-lg">Recent Imports</DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <p className="text-sm text-gray-600">No recent imports</p>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </div>
           </div>
         </div>

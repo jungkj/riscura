@@ -917,14 +917,14 @@ export function EnhancedMobileForm({
 
     switch (field.type) {
       case 'textarea':
-        fieldComponent = <TextareaField {...commonProps} />;
+        fieldComponent = <DaisyTextareaField {...commonProps} />;
         break;
       case 'select':
       case 'multiselect':
-        fieldComponent = <SelectField {...commonProps} />;
+        fieldComponent = <DaisySelectField {...commonProps} />;
         break;
       case 'checkbox':
-        return <CheckboxField {...commonProps} />;
+        return <DaisyCheckboxField {...commonProps} />;
       case 'toggle':
         return <ToggleField {...commonProps} />;
       case 'file':
@@ -1007,7 +1007,7 @@ export function EnhancedMobileForm({
           >
             {autoSaveStatus === 'saving' && <Save className="w-4 h-4 animate-spin" />}
             {autoSaveStatus === 'saved' && <Check className="w-4 h-4" />}
-            {autoSaveStatus === 'error' && <AlertCircle className="w-4 h-4" />}
+            {autoSaveStatus === 'error' && <DaisyAlertCircle className="w-4 h-4" />}
             <span>
               {autoSaveStatus === 'saving' && 'Saving...'}
               {autoSaveStatus === 'saved' && 'Saved automatically'}
@@ -1025,7 +1025,7 @@ export function EnhancedMobileForm({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
             >
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <DaisyAlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
               <p className="text-red-800">{error}</p>
             </motion.div>
           )}

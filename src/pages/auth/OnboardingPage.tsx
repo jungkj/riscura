@@ -24,8 +24,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import {
   Select,
   SelectContent,
@@ -100,18 +100,18 @@ export default function OnboardingPage() {
   };
 
   return (
-    <Card className="w-full">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">
+    <DaisyCard className="w-full">
+      <DaisyCardHeader className="space-y-1">
+        <DaisyCardTitle className="text-2xl font-bold">
           {step === 1 ? 'Welcome to Riscura' : 'Complete Your Profile'}
-        </CardTitle>
-        <CardDescription>
+        </DaisyCardTitle>
+        <DaisyCardDescription>
           {step === 1 
             ? 'Let\'s set up your organization'
             : 'Tell us about your role and requirements'}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+        </p>
+      
+      <DaisyCardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {step === 1 ? (
@@ -123,7 +123,7 @@ export default function OnboardingPage() {
                     <FormItem>
                       <FormLabel>Organization Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Acme Corp" {...field} />
+                        <DaisyInput placeholder="Acme Corp" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -135,25 +135,25 @@ export default function OnboardingPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Industry</FormLabel>
-                      <Select 
+                      <DaisySelect 
                         onValueChange={field.onChange} 
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select industry" />
+                          <DaisySelectTrigger>
+                            <DaisySelectValue placeholder="Select industry" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
-                          <SelectItem value="financial">Financial Services</SelectItem>
-                          <SelectItem value="healthcare">Healthcare</SelectItem>
-                          <SelectItem value="technology">Technology</SelectItem>
-                          <SelectItem value="manufacturing">Manufacturing</SelectItem>
-                          <SelectItem value="retail">Retail</SelectItem>
-                          <SelectItem value="energy">Energy</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
+                        <DaisySelectContent>
+                          <DaisySelectItem value="financial">Financial Services</SelectItem>
+                          <DaisySelectItem value="healthcare">Healthcare</SelectItem>
+                          <DaisySelectItem value="technology">Technology</SelectItem>
+                          <DaisySelectItem value="manufacturing">Manufacturing</SelectItem>
+                          <DaisySelectItem value="retail">Retail</SelectItem>
+                          <DaisySelectItem value="energy">Energy</SelectItem>
+                          <DaisySelectItem value="other">Other</SelectItem>
                         </SelectContent>
-                      </Select>
+                      </DaisySelect>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -164,34 +164,34 @@ export default function OnboardingPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Company Size</FormLabel>
-                      <Select 
+                      <DaisySelect 
                         onValueChange={field.onChange} 
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select company size" />
+                          <DaisySelectTrigger>
+                            <DaisySelectValue placeholder="Select company size" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
-                          <SelectItem value="1-50">1-50 employees</SelectItem>
-                          <SelectItem value="51-200">51-200 employees</SelectItem>
-                          <SelectItem value="201-500">201-500 employees</SelectItem>
-                          <SelectItem value="501-1000">501-1000 employees</SelectItem>
-                          <SelectItem value="1001+">1001+ employees</SelectItem>
+                        <DaisySelectContent>
+                          <DaisySelectItem value="1-50">1-50 employees</SelectItem>
+                          <DaisySelectItem value="51-200">51-200 employees</SelectItem>
+                          <DaisySelectItem value="201-500">201-500 employees</SelectItem>
+                          <DaisySelectItem value="501-1000">501-1000 employees</SelectItem>
+                          <DaisySelectItem value="1001+">1001+ employees</SelectItem>
                         </SelectContent>
-                      </Select>
+                      </DaisySelect>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button 
+                <DaisyButton 
                   type="button" 
                   onClick={nextStep} 
                   className="w-full"
                 >
                   Continue
-                </Button>
+                </DaisyButton>
               </>
             ) : (
               <>
@@ -250,15 +250,15 @@ export default function OnboardingPage() {
                 />
                 
                 <div className="flex gap-3 pt-4">
-                  <Button 
+                  <DaisyButton 
                     type="button" 
                     variant="outline" 
                     onClick={prevStep}
                     className="flex-1"
                   >
                     Back
-                  </Button>
-                  <Button 
+                  </DaisyButton>
+                  <DaisyButton 
                     type="submit" 
                     className="flex-1"
                     disabled={isLoading}
@@ -271,18 +271,18 @@ export default function OnboardingPage() {
                     ) : (
                       'Complete Setup'
                     )}
-                  </Button>
+                  </DaisyButton>
                 </div>
               </>
             )}
           </form>
         </Form>
-      </CardContent>
-      <CardFooter className="flex justify-center">
+      </DaisyCardBody>
+      <DaisyCardFooter className="flex justify-center">
         <p className="text-xs text-muted-foreground">
           Step {step} of 2
         </p>
       </CardFooter>
-    </Card>
+    </DaisyCard>
   );
 }

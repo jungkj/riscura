@@ -6,7 +6,7 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { useRouter } from 'next/navigation';
@@ -792,18 +792,18 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
           </motion.div>
 
           {/* Main Content Tabs */}
-          <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
-            <TabsList className="grid w-full grid-cols-7">
-              <TabsTrigger value="list">Questionnaires</TabsTrigger>
-              <TabsTrigger value="enhanced-search">Advanced Search</TabsTrigger>
-              <TabsTrigger value="builder">Builder</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-              <TabsTrigger value="templates">Templates</TabsTrigger>
-              <TabsTrigger value="workflow">Workflow</TabsTrigger>
-              <TabsTrigger value="collaboration">Collaboration</TabsTrigger>
-            </TabsList>
+          <DaisyTabs value={activeView} onValueChange={setActiveView} className="space-y-6">
+            <DaisyTabsList className="grid w-full grid-cols-7">
+              <DaisyTabsTrigger value="list">Questionnaires</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="enhanced-search">Advanced Search</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="builder">Builder</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="analytics">Analytics</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="templates">Templates</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="workflow">Workflow</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="collaboration">Collaboration</DaisyTabsTrigger>
+            </DaisyTabsList>
 
-            <TabsContent value="list" className="space-y-6">
+            <DaisyTabsContent value="list" className="space-y-6">
               <QuestionnaireList
                 questionnaires={filteredQuestionnaires}
                 onEdit={handleEditQuestionnaire}
@@ -813,13 +813,13 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
                 viewMode={questionnaireViewMode}
                 onViewModeChange={setQuestionnaireViewMode}
               />
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="enhanced-search" className="space-y-6">
+            <DaisyTabsContent value="enhanced-search" className="space-y-6">
               <EnhancedQuestionnaireList />
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="builder" className="space-y-6">
+            <DaisyTabsContent value="builder" className="space-y-6">
               <EnhancedQuestionnaireBuilder
                 questionnaire={selectedQuestionnaire}
                 onSave={(questionnaire) => {
@@ -837,24 +837,24 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
                   setSelectedQuestionnaire(null);
                 }}
               />
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="analytics" className="space-y-6">
+            <DaisyTabsContent value="analytics" className="space-y-6">
               <AnalyticsDashboard />
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="templates" className="space-y-6">
+            <DaisyTabsContent value="templates" className="space-y-6">
               <TemplateLibrary />
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="workflow" className="space-y-6">
+            <DaisyTabsContent value="workflow" className="space-y-6">
               <WorkflowManagement />
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="collaboration" className="space-y-6">
+            <DaisyTabsContent value="collaboration" className="space-y-6">
               <CollaborativeQuestionnairePage mode="collaborate" />
-            </TabsContent>
-          </Tabs>
+            </DaisyTabsContent>
+          </DaisyTabs>
         </main>
 
         {/* AI Panel */}

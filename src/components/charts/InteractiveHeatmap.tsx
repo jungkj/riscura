@@ -2,10 +2,10 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
 import { 
   Activity, 
   Filter, 
@@ -242,15 +242,15 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
   const statuses = [...new Set(data.map(risk => risk.status))];
 
   return (
-    <Card className={`bg-[#FAFAFA] border-gray-200 ${className}`}>
-      <CardHeader>
+    <DaisyCard className={`bg-[#FAFAFA] border-gray-200 ${className}`}>
+      <DaisyCardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
+          <DaisyCardTitle className="flex items-center gap-2">
             <Activity className="h-5 w-5 text-[#199BEC]" />
             Risk Heatmap
-          </CardTitle>
+          </DaisyCardTitle>
           <div className="flex items-center gap-2">
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={() => {
@@ -261,28 +261,28 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
             >
               <RotateCcw className="h-4 w-4 mr-2" />
               Reset
-            </Button>
-            <Button variant="outline" size="sm">
+            </DaisyButton>
+            <DaisyButton variant="outline" size="sm">
               <Maximize2 className="h-4 w-4" />
-            </Button>
+            </DaisyButton>
           </div>
         </div>
-      </CardHeader>
-      <CardContent>
+      
+      <DaisyCardContent>
         <div className="space-y-6">
           {/* Filters */}
           <div className="flex flex-wrap gap-2">
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium text-gray-700">Category:</span>
-              <Button
+              <DaisyButton
                 variant={filterCategory === null ? "primary" : "outline"}
                 size="sm"
                 onClick={() => setFilterCategory(null)}
               >
                 All
-              </Button>
+              </DaisyButton>
               {categories.map(category => (
-                <Button
+                <DaisyButton
                   key={category}
                   variant={filterCategory === category ? "primary" : "outline"}
                   size="sm"
@@ -294,7 +294,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
                     style={{ backgroundColor: categoryColors[category as keyof typeof categoryColors] }}
                   />
                   {category}
-                </Button>
+                </DaisyButton>
               ))}
             </div>
           </div>
@@ -302,15 +302,15 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
           <div className="flex flex-wrap gap-2">
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium text-gray-700">Status:</span>
-              <Button
+              <DaisyButton
                 variant={filterStatus === null ? "primary" : "outline"}
                 size="sm"
                 onClick={() => setFilterStatus(null)}
               >
                 All
-              </Button>
+              </DaisyButton>
               {statuses.map(status => (
-                <Button
+                <DaisyButton
                   key={status}
                   variant={filterStatus === status ? "primary" : "outline"}
                   size="sm"
@@ -322,7 +322,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
                     style={{ backgroundColor: statusColors[status as keyof typeof statusColors] }}
                   />
                   {status}
-                </Button>
+                </DaisyButton>
               ))}
             </div>
           </div>
@@ -363,9 +363,9 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
                       if (!cell) return null;
 
                       return (
-                        <TooltipProvider key={cell.id}>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
+                        <DaisyTooltipProvider key={cell.id}>
+                          <DaisyTooltip>
+                            <DaisyTooltipTrigger asChild>
                               <motion.div
                                 className={`w-16 h-16 border-2 rounded-lg cursor-pointer transition-all duration-200 flex flex-col items-center justify-center ${
                                   interactive ? 'hover:scale-105 hover:shadow-lg' : ''
@@ -395,8 +395,8 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
                                   </>
                                 )}
                               </motion.div>
-                            </TooltipTrigger>
-                            <TooltipContent className="max-w-xs">
+                            </DaisyTooltipTrigger>
+                            <DaisyTooltipContent className="max-w-xs">
                               <div className="space-y-2">
                                 <div className="font-semibold">
                                   Impact: {impact} | Likelihood: {likelihood}
@@ -418,9 +418,9 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
                                   </div>
                                 )}
                               </div>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
+                            </DaisyTooltipContent>
+                          </DaisyTooltip>
+                        
                       );
                     })}
                   </React.Fragment>
@@ -455,13 +455,13 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
                   <h3 className="font-semibold text-[#191919]">
                     Cell Details: Impact {selectedCell.y} × Likelihood {selectedCell.x}
                   </h3>
-                  <Button
+                  <DaisyButton
                     variant="ghost"
                     size="sm"
                     onClick={() => setSelectedCell(null)}
                   >
                     ×
-                  </Button>
+                  </DaisyButton>
                 </div>
 
                 <div className="grid grid-cols-3 gap-4">
@@ -505,7 +505,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
                           <span className="font-medium text-sm">{risk.title}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Badge 
+                          <DaisyBadge 
                             variant="secondary"
                             style={{ 
                               backgroundColor: statusColors[risk.status] + '20',
@@ -513,7 +513,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
                             }}
                           >
                             {risk.status}
-                          </Badge>
+                          </DaisyBadge>
                           <span className="text-sm font-medium">{risk.riskScore}</span>
                         </div>
                       </div>
@@ -567,7 +567,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
             </div>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 }; 

@@ -6,10 +6,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import {
   Select,
   SelectContent,
@@ -408,8 +408,8 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-      case 'critical': return <AlertTriangle className="h-4 w-4 text-red-600" />;
-      case 'high': return <AlertCircle className="h-4 w-4 text-orange-600" />;
+      case 'critical': return <DaisyAlertTriangle className="h-4 w-4 text-red-600" />;
+      case 'high': return <DaisyAlertCircle className="h-4 w-4 text-orange-600" />;
       case 'medium': return <Bell className="h-4 w-4 text-yellow-600" />;
       case 'low': return <Eye className="h-4 w-4 text-blue-600" />;
       default: return <Activity className="h-4 w-4 text-gray-600" />;
@@ -439,7 +439,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
         </div>
         
         <div className="flex items-center gap-2">
-          <Button
+          <DaisyButton
             onClick={isMonitoring ? stopMonitoring : startAnomalyDetection}
             className={isMonitoring ? 'bg-red-600 hover:bg-red-700' : 'bg-indigo-600 hover:bg-indigo-700'}
           >
@@ -454,14 +454,14 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                 Start Detection
               </>
             )}
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
       {/* Status Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
+        <DaisyCard>
+          <DaisyCardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Active Alerts</p>
@@ -469,13 +469,13 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                   {activeAlerts.filter(a => a.status === 'new').length}
                 </p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <DaisyAlertTriangle className="h-8 w-8 text-red-500" />
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
         
-        <Card>
-          <CardContent className="p-4">
+        <DaisyCard>
+          <DaisyCardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Monitoring Status</p>
@@ -485,11 +485,11 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
               </div>
               <Activity className={`h-8 w-8 ${isMonitoring ? 'text-green-500' : 'text-gray-400'}`} />
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
         
-        <Card>
-          <CardContent className="p-4">
+        <DaisyCard>
+          <DaisyCardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Anomalies Detected</p>
@@ -499,11 +499,11 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
               </div>
               <Cpu className="h-8 w-8 text-purple-500" />
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
         
-        <Card>
-          <CardContent className="p-4">
+        <DaisyCard>
+          <DaisyCardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Detection Accuracy</p>
@@ -511,53 +511,53 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
               </div>
               <Target className="h-8 w-8 text-blue-500" />
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
 
       {/* Main Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="dashboard" className="flex items-center gap-2">
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+        <DaisyTabsList className="grid w-full grid-cols-4">
+          <DaisyTabsTrigger value="dashboard" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
             Dashboard
-          </TabsTrigger>
-          <TabsTrigger value="alerts" className="flex items-center gap-2">
+          </DaisyTabsTrigger>
+          <DaisyTabsTrigger value="alerts" className="flex items-center gap-2">
             <Bell className="h-4 w-4" />
             Alerts ({activeAlerts.length})
-          </TabsTrigger>
-          <TabsTrigger value="monitoring" className="flex items-center gap-2">
+          </DaisyTabsTrigger>
+          <DaisyTabsTrigger value="monitoring" className="flex items-center gap-2">
             <Activity className="h-4 w-4" />
             Real-time
-          </TabsTrigger>
-          <TabsTrigger value="analysis" className="flex items-center gap-2">
+          </DaisyTabsTrigger>
+          <DaisyTabsTrigger value="analysis" className="flex items-center gap-2">
             <Brain className="h-4 w-4" />
             Analysis
-          </TabsTrigger>
-        </TabsList>
+          </DaisyTabsTrigger>
+        </DaisyTabsList>
 
         {/* Dashboard Tab */}
-        <TabsContent value="dashboard" className="space-y-4">
+        <DaisyTabsContent value="dashboard" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Anomaly Detection Overview */}
-            <Card className="lg:col-span-2">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <DaisyCard className="lg:col-span-2">
+              <DaisyCardHeader>
+                <DaisyCardTitle className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-green-600" />
                   Anomaly Detection Timeline
-                </CardTitle>
-                <CardDescription>
+                </DaisyCardTitle>
+                <DaisyCardDescription>
                   Historical anomaly detection results over time
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
+                </p>
+              
+              <DaisyCardContent>
                 <div className="h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={prepareTimeSeriesData()}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="date" />
                       <YAxis />
-                      <Tooltip />
+                      <DaisyTooltip />
                       <Legend />
                       <Area
                         type="monotone"
@@ -578,30 +578,30 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
             {/* Current Metrics */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Real-time Metrics</CardTitle>
-                <CardDescription>Current anomaly scores for key metrics</CardDescription>
-              </CardHeader>
-              <CardContent>
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle>Real-time Metrics</DaisyCardTitle>
+                <DaisyCardDescription>Current anomaly scores for key metrics</p>
+              
+              <DaisyCardContent>
                 <div className="space-y-4">
                   {realtimeMetrics.map((metric) => (
                     <div key={metric.id} className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium">{metric.name}</span>
                         <div className="flex items-center gap-2">
-                          <Badge variant={metric.isAnomaly ? 'destructive' : 'default'}>
+                          <DaisyBadge variant={metric.isAnomaly ? 'destructive' : 'default'}>
                             {metric.value}
-                          </Badge>
+                          </DaisyBadge>
                           {getTrendIcon(metric.trend)}
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Progress 
+                        <DaisyProgress 
                           value={metric.anomalyScore * 100} 
                           className="flex-1 h-2"
                         />
@@ -617,101 +617,101 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
             {/* Detection Methods */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Detection Methods</CardTitle>
-                <CardDescription>Active anomaly detection algorithms</CardDescription>
-              </CardHeader>
-              <CardContent>
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle>Detection Methods</DaisyCardTitle>
+                <DaisyCardDescription>Active anomaly detection algorithms</p>
+              
+              <DaisyCardContent>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded">
                     <span className="text-sm font-medium">Z-Score Analysis</span>
-                    <Badge className="bg-green-100 text-green-800">Active</Badge>
+                    <DaisyBadge className="bg-green-100 text-green-800">Active</DaisyBadge>
                   </div>
                   <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded">
                     <span className="text-sm font-medium">IQR Outlier Detection</span>
-                    <Badge className="bg-green-100 text-green-800">Active</Badge>
+                    <DaisyBadge className="bg-green-100 text-green-800">Active</DaisyBadge>
                   </div>
                   <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded">
                     <span className="text-sm font-medium">Isolation Forest</span>
-                    <Badge className="bg-green-100 text-green-800">Active</Badge>
+                    <DaisyBadge className="bg-green-100 text-green-800">Active</DaisyBadge>
                   </div>
                   <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded">
                     <span className="text-sm font-medium">Pattern Recognition</span>
-                    <Badge className="bg-green-100 text-green-800">Active</Badge>
+                    <DaisyBadge className="bg-green-100 text-green-800">Active</DaisyBadge>
                   </div>
                   <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded">
                     <span className="text-sm font-medium">Time Series Analysis</span>
-                    <Badge className="bg-green-100 text-green-800">Active</Badge>
+                    <DaisyBadge className="bg-green-100 text-green-800">Active</DaisyBadge>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
         {/* Alerts Tab */}
-        <TabsContent value="alerts" className="space-y-4">
+        <DaisyTabsContent value="alerts" className="space-y-4">
           <div className="flex items-center gap-4 mb-4">
-            <Select value={selectedAlertType} onValueChange={setSelectedAlertType}>
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="Filter by Type" />
+            <DaisySelect value={selectedAlertType} onValueChange={setSelectedAlertType}>
+              <DaisySelectTrigger className="w-48">
+                <DaisySelectValue placeholder="Filter by Type" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="statistical">Statistical</SelectItem>
-                <SelectItem value="pattern">Pattern</SelectItem>
-                <SelectItem value="behavior">Behavior</SelectItem>
-                <SelectItem value="trend">Trend</SelectItem>
+              <DaisySelectContent>
+                <DaisySelectItem value="all">All Types</SelectItem>
+                <DaisySelectItem value="statistical">Statistical</SelectItem>
+                <DaisySelectItem value="pattern">Pattern</SelectItem>
+                <DaisySelectItem value="behavior">Behavior</SelectItem>
+                <DaisySelectItem value="trend">Trend</SelectItem>
               </SelectContent>
-            </Select>
+            </DaisySelect>
             
-            <Select value={selectedSeverity} onValueChange={setSelectedSeverity}>
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="Filter by Severity" />
+            <DaisySelect value={selectedSeverity} onValueChange={setSelectedSeverity}>
+              <DaisySelectTrigger className="w-48">
+                <DaisySelectValue placeholder="Filter by Severity" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Severities</SelectItem>
-                <SelectItem value="critical">Critical</SelectItem>
-                <SelectItem value="high">High</SelectItem>
-                <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="low">Low</SelectItem>
+              <DaisySelectContent>
+                <DaisySelectItem value="all">All Severities</SelectItem>
+                <DaisySelectItem value="critical">Critical</SelectItem>
+                <DaisySelectItem value="high">High</SelectItem>
+                <DaisySelectItem value="medium">Medium</SelectItem>
+                <DaisySelectItem value="low">Low</SelectItem>
               </SelectContent>
-            </Select>
+            </DaisySelect>
           </div>
 
           <div className="space-y-4">
             {filteredAlerts.length > 0 ? (
               filteredAlerts.map((alert) => (
-                <Card key={alert.id}>
-                  <CardHeader>
+                <DaisyCard key={alert.id}>
+                  <DaisyCardHeader>
                     <div className="flex items-center justify-between">
-                      <CardTitle className="flex items-center gap-2">
+                      <DaisyCardTitle className="flex items-center gap-2">
                         {getSeverityIcon(alert.severity)}
                         {alert.title}
-                      </CardTitle>
+                      </DaisyCardTitle>
                       <div className="flex items-center gap-2">
-                        <Badge className={getSeverityColor(alert.severity)}>
+                        <DaisyBadge className={getSeverityColor(alert.severity)}>
                           {alert.severity}
-                        </Badge>
-                        <Badge variant="outline">
+                        </DaisyBadge>
+                        <DaisyBadge variant="outline">
                           {alert.confidence.toFixed(1)}% confidence
-                        </Badge>
+                        </DaisyBadge>
                       </div>
                     </div>
-                    <CardDescription className="flex items-center gap-4">
+                    <DaisyCardDescription className="flex items-center gap-4">
                       <span>Detected {alert.detectedAt.toLocaleTimeString()}</span>
                       <span>•</span>
                       <span>{alert.entityType}: {alert.entityId}</span>
                       <span>•</span>
                       <span>{alert.metric}</span>
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
+                    </p>
+                  
+                  <DaisyCardContent>
                     <div className="space-y-4">
                       <p className="text-gray-700 dark:text-gray-300">{alert.description}</p>
                       
@@ -738,7 +738,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                               <div key={index} className="text-sm p-2 bg-gray-50 dark:bg-gray-800 rounded">
                                 <div className="flex items-center justify-between">
                                   <span>{cause.description}</span>
-                                  <Badge variant="outline">{(cause.probability * 100).toFixed(0)}%</Badge>
+                                  <DaisyBadge variant="outline">{(cause.probability * 100).toFixed(0)}%</DaisyBadge>
                                 </div>
                               </div>
                             ))}
@@ -761,57 +761,57 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                       )}
                       
                       <div className="flex items-center gap-2 pt-2">
-                        <Button size="sm" variant="outline">
+                        <DaisyButton size="sm" variant="outline">
                           <Eye className="h-4 w-4 mr-1" />
                           Investigate
-                        </Button>
-                        <Button size="sm" variant="outline">
+                        </DaisyButton>
+                        <DaisyButton size="sm" variant="outline">
                           <CheckCircle className="h-4 w-4 mr-1" />
                           Acknowledge
-                        </Button>
-                        <Button size="sm" variant="outline">
+                        </DaisyButton>
+                        <DaisyButton size="sm" variant="outline">
                           <Clock className="h-4 w-4 mr-1" />
                           Snooze
-                        </Button>
+                        </DaisyButton>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               ))
             ) : (
-              <Card>
-                <CardContent className="text-center py-12">
+              <DaisyCard>
+                <DaisyCardContent className="text-center py-12">
                   <Shield className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   <p className="text-gray-500">
                     No anomaly alerts found. Start monitoring to detect anomalies.
                   </p>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             )}
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
         {/* Real-time Monitoring Tab */}
-        <TabsContent value="monitoring" className="space-y-4">
+        <DaisyTabsContent value="monitoring" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="lg:col-span-2">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <DaisyCard className="lg:col-span-2">
+              <DaisyCardHeader>
+                <DaisyCardTitle className="flex items-center gap-2">
                   <Activity className="h-5 w-5 text-blue-600" />
                   Real-time Anomaly Scores
-                </CardTitle>
-                <CardDescription>
+                </DaisyCardTitle>
+                <DaisyCardDescription>
                   Live monitoring of anomaly detection scores
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
+                </p>
+              
+              <DaisyCardContent>
                 <div className="h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={prepareMetricsChartData()}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="name" />
                       <YAxis />
-                      <Tooltip />
+                      <DaisyTooltip />
                       <Legend />
                       <Bar dataKey="value" fill="#8884d8" name="Current Value" />
                       <Bar dataKey="anomalyScore" fill="#ff7c7c" name="Anomaly Score %" />
@@ -819,14 +819,14 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Monitoring Configuration</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle>Monitoring Configuration</DaisyCardTitle>
+              
+              <DaisyCardContent className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Z-Score Threshold</label>
                   <input
@@ -870,27 +870,27 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                     <option value="300">5 minutes</option>
                   </select>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>System Status</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle>System Status</DaisyCardTitle>
+              
+              <DaisyCardContent className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Detection Engine</span>
-                  <Badge className={isMonitoring ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}>
+                  <DaisyBadge className={isMonitoring ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}>
                     {isMonitoring ? 'Running' : 'Stopped'}
-                  </Badge>
+                  </DaisyBadge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Data Pipeline</span>
-                  <Badge className="bg-green-100 text-green-800">Healthy</Badge>
+                  <DaisyBadge className="bg-green-100 text-green-800">Healthy</DaisyBadge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Alert System</span>
-                  <Badge className="bg-green-100 text-green-800">Active</Badge>
+                  <DaisyBadge className="bg-green-100 text-green-800">Active</DaisyBadge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Last Update</span>
@@ -898,27 +898,27 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                     {new Date().toLocaleTimeString()}
                   </span>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
         {/* Analysis Tab */}
-        <TabsContent value="analysis" className="space-y-4">
+        <DaisyTabsContent value="analysis" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Detection Accuracy</CardTitle>
-                <CardDescription>Performance metrics for anomaly detection</CardDescription>
-              </CardHeader>
-              <CardContent>
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle>Detection Accuracy</DaisyCardTitle>
+                <DaisyCardDescription>Performance metrics for anomaly detection</p>
+              
+              <DaisyCardContent>
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-sm font-medium">True Positive Rate</span>
                       <span className="text-sm">87.3%</span>
                     </div>
-                    <Progress value={87.3} className="h-2" />
+                    <DaisyProgress value={87.3} className="h-2" />
                   </div>
                   
                   <div className="space-y-2">
@@ -926,7 +926,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                       <span className="text-sm font-medium">False Positive Rate</span>
                       <span className="text-sm">8.1%</span>
                     </div>
-                    <Progress value={8.1} className="h-2" />
+                    <DaisyProgress value={8.1} className="h-2" />
                   </div>
                   
                   <div className="space-y-2">
@@ -934,7 +934,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                       <span className="text-sm font-medium">Precision</span>
                       <span className="text-sm">91.5%</span>
                     </div>
-                    <Progress value={91.5} className="h-2" />
+                    <DaisyProgress value={91.5} className="h-2" />
                   </div>
                   
                   <div className="space-y-2">
@@ -942,23 +942,23 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                       <span className="text-sm font-medium">Recall</span>
                       <span className="text-sm">85.2%</span>
                     </div>
-                    <Progress value={85.2} className="h-2" />
+                    <DaisyProgress value={85.2} className="h-2" />
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Pattern Analysis</CardTitle>
-                <CardDescription>Identified anomaly patterns and trends</CardDescription>
-              </CardHeader>
-              <CardContent>
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle>Pattern Analysis</DaisyCardTitle>
+                <DaisyCardDescription>Identified anomaly patterns and trends</p>
+              
+              <DaisyCardContent>
                 <div className="space-y-3">
                   <div className="p-3 border rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-medium">Weekly Spike Pattern</h4>
-                      <Badge variant="outline">85% confidence</Badge>
+                      <DaisyBadge variant="outline">85% confidence</DaisyBadge>
                     </div>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       Recurring anomalies every Monday morning, likely due to system batch processing
@@ -968,7 +968,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                   <div className="p-3 border rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-medium">Seasonal Variance</h4>
-                      <Badge variant="outline">72% confidence</Badge>
+                      <DaisyBadge variant="outline">72% confidence</DaisyBadge>
                     </div>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       Higher anomaly rates during quarter-end periods
@@ -978,18 +978,18 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                   <div className="p-3 border rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-medium">Correlation Cluster</h4>
-                      <Badge variant="outline">91% confidence</Badge>
+                      <DaisyBadge variant="outline">91% confidence</DaisyBadge>
                     </div>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       Market risk and compliance risk anomalies often occur together
                     </p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           </div>
-        </TabsContent>
-      </Tabs>
+        </DaisyTabsContent>
+      </DaisyTabs>
     </div>
   );
 }; 

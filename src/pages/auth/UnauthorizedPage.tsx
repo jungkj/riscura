@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { AlertTriangle } from 'lucide-react';
 
 export default function UnauthorizedPage() {
@@ -10,7 +10,7 @@ export default function UnauthorizedPage() {
       <div className="max-w-md w-full text-center space-y-8">
         <div className="space-y-4">
           <div className="mx-auto w-24 h-24 bg-red-50 rounded-full flex items-center justify-center">
-            <AlertTriangle className="w-12 h-12 text-red-600" />
+            <DaisyAlertTriangle className="w-12 h-12 text-red-600" />
           </div>
           <div className="space-y-2">
             <h1 className="text-2xl font-bold text-foreground mb-4">
@@ -23,19 +23,19 @@ export default function UnauthorizedPage() {
         </div>
         
         <div className="space-y-4">
-          <Button
+          <DaisyButton
             onClick={() => router.push('/dashboard')}
             className="w-full notion-button-primary"
           >
             Go to Dashboard
-          </Button>
-          <Button
+          </DaisyButton>
+          <DaisyButton
             onClick={() => router.push('/auth/login')}
             variant="outline"
             className="w-full notion-button-outline"
           >
             Sign In Again
-          </Button>
+          </DaisyButton>
         </div>
       </div>
     </div>

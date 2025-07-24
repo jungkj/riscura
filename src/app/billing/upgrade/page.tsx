@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { useSubscription } from '@/hooks/use-subscription';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Check, Crown, Zap, Shield } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 
@@ -113,9 +113,9 @@ export default function UpgradePage() {
         </p>
         {subscription && (
           <div className="mt-4">
-            <Badge variant="outline">
+            <DaisyBadge variant="outline">
               Current Plan: {subscription.plan}
-            </Badge>
+            </DaisyBadge>
           </div>
         )}
       </div>
@@ -127,26 +127,26 @@ export default function UpgradePage() {
           const isUpgrade = subscription && subscription.plan === 'free' && plan.name !== 'Free';
 
           return (
-            <Card key={plan.name} className={`relative ${plan.popular ? 'ring-2 ring-primary' : ''}`}>
+            <DaisyCard key={plan.name} className={`relative ${plan.popular ? 'ring-2 ring-primary' : ''}`}>
               {plan.popular && (
-                <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                <DaisyBadge className="absolute -top-2 left-1/2 transform -translate-x-1/2">
                   Most Popular
-                </Badge>
+                </DaisyBadge>
               )}
-              <CardHeader className="text-center">
+              <DaisyCardHeader className="text-center">
                 <div className="flex justify-center mb-2">
                   <Icon className="h-8 w-8 text-primary" />
                 </div>
-                <CardTitle className="text-2xl">{plan.name}</CardTitle>
+                <DaisyCardTitle className="text-2xl">{plan.name}</DaisyCardTitle>
                 <div className="text-3xl font-bold">
                   {plan.price}
                   <span className="text-base font-normal text-muted-foreground">
                     /{plan.period}
                   </span>
                 </div>
-                <CardDescription>{plan.description}</CardDescription>
-              </CardHeader>
-              <CardContent>
+                <DaisyCardDescription>{plan.description}</p>
+              
+              <DaisyCardContent>
                 <ul className="space-y-3 mb-6">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-center">
@@ -157,28 +157,28 @@ export default function UpgradePage() {
                 </ul>
                 
                 {isCurrentPlan ? (
-                  <Button className="w-full" disabled>
+                  <DaisyButton className="w-full" disabled>
                     Current Plan
-                  </Button>
+                  </DaisyButton>
                                  ) : plan.name === 'Free' ? (
-                   <Button 
+                   <DaisyButton 
                      variant="secondary" 
                      className="w-full"
                      disabled
                    >
                      Free Forever
-                   </Button>
+                   </DaisyButton>
                  ) : (
-                   <Button 
+                   <DaisyButton 
                      className="w-full" 
                      onClick={() => handleUpgrade(plan.name.toLowerCase())}
                      variant={plan.popular ? 'primary' : 'secondary'}
                    >
                      {isUpgrade ? 'Upgrade' : 'Choose'} {plan.name}
-                   </Button>
+                   </DaisyButton>
                  )}
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           );
         })}
       </div>

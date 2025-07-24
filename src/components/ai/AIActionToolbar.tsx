@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { toast } from 'sonner';
 import {
   Bot,
@@ -459,8 +459,8 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
 
   if (!isAIEnabled) {
     return (
-      <Card className="border-dashed">
-        <CardContent className="flex items-center justify-center py-6">
+      <DaisyCard className="border-dashed">
+        <DaisyCardContent className="flex items-center justify-center py-6">
           <div className="text-center">
             <Bot className="h-8 w-8 text-gray-400 mx-auto mb-2" />
             <p className="text-sm text-gray-600">AI features are not enabled</p>
@@ -468,8 +468,8 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
               Contact your administrator to enable AI capabilities
             </p>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     );
   }
 
@@ -480,20 +480,20 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
         <div className="flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-blue-500" />
           <h3 className="font-medium">AI Assistant</h3>
-          <Badge variant="secondary" className="text-xs">
+          <DaisyBadge variant="secondary" className="text-xs">
             {availableAgents.length} agents
-          </Badge>
+          </DaisyBadge>
         </div>
         
         <div className="flex items-center gap-2">
           {/* Agent Selector */}
-          <Select value={selectedAgent} onValueChange={setSelectedAgent}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Select agent" />
+          <DaisySelect value={selectedAgent} onValueChange={setSelectedAgent}>
+            <DaisySelectTrigger className="w-40">
+              <DaisySelectValue placeholder="Select agent" />
             </SelectTrigger>
-            <SelectContent>
+            <DaisySelectContent>
               {availableAgents.map((agent) => (
-                <SelectItem key={agent.id} value={agent.id}>
+                <DaisySelectItem key={agent.id} value={agent.id}>
                   <div className="flex items-center gap-2">
                     <Brain className="h-4 w-4" />
                     <span>{agent.name}</span>
@@ -501,16 +501,16 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </DaisySelect>
 
           {/* Usage Stats */}
           {usageStats && (
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline" size="sm">
+                <DaisyButton variant="outline" size="sm">
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Usage
-                </Button>
+                </DaisyButton>
               </PopoverTrigger>
               <PopoverContent className="w-80">
                 <div className="space-y-3">
@@ -544,8 +544,8 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
 
       {/* Running Actions Status */}
       {runningActions.size > 0 && (
-        <Card>
-          <CardContent className="py-3">
+        <DaisyCard>
+          <DaisyCardContent className="py-3">
             <div className="space-y-2">
               {Array.from(runningActions.values()).map((result) => {
                 const action = aiActions.find(a => a.id === result.actionId);
@@ -560,7 +560,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
                       <CheckCircle className="h-4 w-4 text-green-500" />
                     )}
                     {result.status === 'FAILED' && (
-                      <AlertTriangle className="h-4 w-4 text-red-500" />
+                      <DaisyAlertTriangle className="h-4 w-4 text-red-500" />
                     )}
                     
                     <div className="flex-1">
@@ -575,20 +575,20 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
                       )}
                     </div>
                     
-                    <Badge 
+                    <DaisyBadge 
                       variant={
                         result.status === 'RUNNING' ? 'secondary' :
                         result.status === 'COMPLETED' ? 'default' : 'destructive'
                       }
                     >
                       {result.status.toLowerCase()}
-                    </Badge>
+                    </DaisyBadge>
                   </div>
                 );
               })}
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       )}
 
       {/* AI Actions Grid */}
@@ -605,7 +605,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
                 const requiresDataAndMissing = action.requiresData && !context && !selectedData?.length;
                 
                 return (
-                  <Button
+                  <DaisyButton
                     key={action.id}
                     variant="outline"
                     className="h-auto p-3 flex flex-col items-start gap-2"
@@ -624,16 +624,16 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
                       {action.description}
                     </p>
                     <div className="flex items-center gap-2 w-full mt-1">
-                      <Badge variant="outline" className="text-xs">
+                      <DaisyBadge variant="outline" className="text-xs">
                         {action.estimatedTime}
-                      </Badge>
+                      </DaisyBadge>
                       {requiresDataAndMissing && (
-                        <Badge variant="secondary" className="text-xs">
+                        <DaisyBadge variant="secondary" className="text-xs">
                           No data
-                        </Badge>
+                        </DaisyBadge>
                       )}
                     </div>
-                  </Button>
+                  </DaisyButton>
                 );
               })}
             </div>
@@ -642,8 +642,8 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
       </div>
 
       {/* AI Tips */}
-      <Card className="bg-blue-50 border-blue-200">
-        <CardContent className="py-3">
+      <DaisyCard className="bg-blue-50 border-blue-200">
+        <DaisyCardContent className="py-3">
           <div className="flex items-start gap-3">
             <Lightbulb className="h-5 w-5 text-blue-500 mt-0.5" />
             <div>
@@ -654,8 +654,8 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
               </p>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </div>
   );
 };

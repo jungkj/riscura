@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import { cn } from '@/lib/utils';
 
 interface Activity {
@@ -134,10 +134,10 @@ export default function RecentActivityTimeline({ isLoading = false }: RecentActi
               <p className="text-xs text-muted-foreground mb-2">{activity.description}</p>
               
               <div className="flex items-center">
-                <Avatar className="h-6 w-6 mr-2">
-                  <AvatarImage src={activity.user.avatar} />
-                  <AvatarFallback className="text-[10px]">{activity.user.initials}</AvatarFallback>
-                </Avatar>
+                <DaisyAvatar className="h-6 w-6 mr-2">
+                  <DaisyAvatarImage src={activity.user.avatar} />
+                  <DaisyAvatarFallback className="text-[10px]">{activity.user.initials}</DaisyAvatarFallback>
+                </DaisyAvatar>
                 
                 <span className="text-xs">{activity.user.name}</span>
                 

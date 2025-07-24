@@ -21,14 +21,14 @@ import {
   Area,
   AreaChart
 } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisySwitch } from '@/components/ui/DaisySwitch';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { 
   RiskManagementIcons, 
   DataIcons, 
@@ -508,7 +508,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
-              <Tooltip content={<CustomTooltip />} />
+              <DaisyTooltip content={<CustomTooltip />} />
               <Legend />
               <Bar dataKey="implemented" stackId="a" fill="#10b981" name="Implemented" />
               <Bar dataKey="inProgress" stackId="a" fill="#f59e0b" name="In Progress" />
@@ -524,7 +524,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" tickFormatter={(value) => format(new Date(value), 'MMM dd')} />
               <YAxis />
-              <Tooltip content={<CustomTooltip />} />
+              <DaisyTooltip content={<CustomTooltip />} />
               <Legend />
               <Line 
                 type="monotone" 
@@ -554,7 +554,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis type="number" domain={[0, 100]} />
               <YAxis dataKey="framework" type="category" />
-              <Tooltip content={<CustomTooltip />} />
+              <DaisyTooltip content={<CustomTooltip />} />
               <Legend />
               <Bar dataKey="current" fill="#3b82f6" name="Current Score" />
               <Bar dataKey="target" fill="#10b981" name="Target Score" />
@@ -567,7 +567,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
           <ResponsiveContainer width="100%" height={height}>
             <RadialBarChart cx="50%" cy="50%" innerRadius="10%" outerRadius="80%" data={chartData}>
               <RadialBar dataKey="value" cornerRadius={10} fill="#8884d8" />
-              <Tooltip content={<CustomTooltip />} />
+              <DaisyTooltip content={<CustomTooltip />} />
               <Legend />
             </RadialBarChart>
           </ResponsiveContainer>
@@ -579,14 +579,14 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
   };
 
   return (
-    <Card className={`${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
-      <CardHeader className="pb-4">
+    <DaisyCard className={`${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
+      <DaisyCardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="flex items-center space-x-2">
+            <DaisyCardTitle className="flex items-center space-x-2">
               <RiskManagementIcons.Audit className="h-5 w-5" />
               <span>{title}</span>
-            </CardTitle>
+            </DaisyCardTitle>
             {description && (
               <p className="text-sm text-gray-600 mt-1">{description}</p>
             )}
@@ -594,74 +594,74 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
           
           <div className="flex items-center space-x-2">
             {enableExport && (
-              <Button variant="outline" size="sm" onClick={handleExport}>
+              <DaisyButton variant="outline" size="sm" onClick={handleExport}>
                 <Download className="h-4 w-4 mr-2" />
                 Export
-              </Button>
+              </DaisyButton>
             )}
             
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={() => setIsFullscreen(!isFullscreen)}
               className="p-2"
             >
               <Maximize2 className="w-4 h-4" />
-            </Button>
+            </DaisyButton>
           </div>
         </div>
 
         {/* Controls */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-          <Select value={chartType} onValueChange={(value: any) => setChartType(value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Chart Type" />
+          <DaisySelect value={chartType} onValueChange={(value: any) => setChartType(value)}>
+            <DaisySelectTrigger>
+              <DaisySelectValue placeholder="Chart Type" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="progress">Progress Overview</SelectItem>
-              <SelectItem value="trend">Trend Analysis</SelectItem>
-              <SelectItem value="comparison">Target Comparison</SelectItem>
-              <SelectItem value="radial">Radial Progress</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="progress">Progress Overview</SelectItem>
+              <DaisySelectItem value="trend">Trend Analysis</SelectItem>
+              <DaisySelectItem value="comparison">Target Comparison</SelectItem>
+              <DaisySelectItem value="radial">Radial Progress</SelectItem>
             </SelectContent>
-          </Select>
+          </DaisySelect>
           
-          <Select value={timeRange} onValueChange={(value: any) => setTimeRange(value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Time Range" />
+          <DaisySelect value={timeRange} onValueChange={(value: any) => setTimeRange(value)}>
+            <DaisySelectTrigger>
+              <DaisySelectValue placeholder="Time Range" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="30d">Last 30 Days</SelectItem>
-              <SelectItem value="90d">Last 90 Days</SelectItem>
-              <SelectItem value="6m">Last 6 Months</SelectItem>
-              <SelectItem value="1y">Last Year</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="30d">Last 30 Days</SelectItem>
+              <DaisySelectItem value="90d">Last 90 Days</SelectItem>
+              <DaisySelectItem value="6m">Last 6 Months</SelectItem>
+              <DaisySelectItem value="1y">Last Year</SelectItem>
             </SelectContent>
-          </Select>
+          </DaisySelect>
           
           <div className="flex items-center space-x-2">
-            <Switch 
+            <DaisySwitch 
               id="prediction" 
               checked={showPrediction} 
               onCheckedChange={setShowPrediction}
             />
-            <Label htmlFor="prediction" className="text-sm">Show Prediction</Label>
+            <DaisyLabel htmlFor="prediction" className="text-sm">Show Prediction</DaisyLabel>
           </div>
         </div>
-      </CardHeader>
+      
 
-      <CardContent>
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="frameworks">Frameworks</TabsTrigger>
-            <TabsTrigger value="gaps">Gaps Analysis</TabsTrigger>
-            <TabsTrigger value="roadmap">Roadmap</TabsTrigger>
-          </TabsList>
+      <DaisyCardContent>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <DaisyTabsList className="grid w-full grid-cols-4">
+            <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="frameworks">Frameworks</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="gaps">Gaps Analysis</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="roadmap">Roadmap</DaisyTabsTrigger>
+          </DaisyTabsList>
           
-          <TabsContent value="overview" className="space-y-6">
+          <DaisyTabsContent value="overview" className="space-y-6">
             {/* Summary Statistics */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <Card>
-                <CardContent className="p-4">
+              <DaisyCard>
+                <DaisyCardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-gray-600">Overall Progress</p>
@@ -690,11 +690,11 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                       </ResponsiveContainer>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
               
-              <Card>
-                <CardContent className="p-4">
+              <DaisyCard>
+                <DaisyCardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-gray-600">Compliant Frameworks</p>
@@ -704,11 +704,11 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                     </div>
                     <StatusIcons.CheckCircle className="h-8 w-8 text-green-600" />
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
               
-              <Card>
-                <CardContent className="p-4">
+              <DaisyCard>
+                <DaisyCardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-gray-600">Critical Gaps</p>
@@ -716,11 +716,11 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                     </div>
                     <StatusIcons.AlertTriangle className="h-8 w-8 text-red-600" />
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
               
-              <Card>
-                <CardContent className="p-4">
+              <DaisyCard>
+                <DaisyCardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-gray-600">Avg Score</p>
@@ -728,43 +728,43 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                     </div>
                     <DataIcons.BarChart3 className="h-8 w-8 text-blue-600" />
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </div>
             
             {/* Main Chart */}
             <div className="w-full">
               {renderChart()}
             </div>
-          </TabsContent>
+          </DaisyTabsContent>
           
-          <TabsContent value="frameworks" className="space-y-4">
+          <DaisyTabsContent value="frameworks" className="space-y-4">
             <div className="grid gap-4">
               {frameworks.map(framework => (
-                <Card 
+                <DaisyCard 
                   key={framework.id} 
                   className="cursor-pointer hover:shadow-md transition-shadow"
                   onClick={() => handleFrameworkClick(framework)}
                 >
-                  <CardContent className="p-4">
+                  <DaisyCardContent className="p-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
                           <h4 className="font-medium">{framework.name}</h4>
-                          <Badge variant={
+                          <DaisyBadge variant={
                             framework.status === 'compliant' ? 'success' :
                             framework.status === 'partial' ? 'warning' :
                             framework.status === 'non-compliant' ? 'destructive' : 'secondary'
                           }>
                             {framework.status}
-                          </Badge>
-                          <Badge variant={
+                          </DaisyBadge>
+                          <DaisyBadge variant={
                             framework.riskLevel === 'low' ? 'success' :
                             framework.riskLevel === 'medium' ? 'warning' :
                             framework.riskLevel === 'high' ? 'destructive' : 'destructive'
                           }>
                             {framework.riskLevel} risk
-                          </Badge>
+                          </DaisyBadge>
                         </div>
                         <p className="text-sm text-gray-600 mb-3">{framework.description}</p>
                         
@@ -773,7 +773,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                             <span>Progress</span>
                             <span>{framework.overallScore}%</span>
                           </div>
-                          <Progress value={framework.overallScore} className="h-2" />
+                          <DaisyProgress value={framework.overallScore} className="h-2" />
                           
                           <div className="grid grid-cols-3 gap-4 text-xs text-gray-500">
                             <div>
@@ -805,16 +805,16 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                         </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               ))}
             </div>
-          </TabsContent>
+          </DaisyTabsContent>
           
-          <TabsContent value="gaps" className="space-y-4">
+          <DaisyTabsContent value="gaps" className="space-y-4">
             <div className="grid gap-4">
-              <Card>
-                <CardContent className="p-4">
+              <DaisyCard>
+                <DaisyCardContent className="p-4">
                   <h4 className="font-medium mb-4">Compliance Gaps by Framework</h4>
                   <div className="space-y-3">
                     {frameworks
@@ -829,13 +829,13 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                             <div className="flex-1">
                               <div className="flex items-center space-x-2">
                                 <span className="font-medium">{framework.shortName}</span>
-                                <Badge variant={
+                                <DaisyBadge variant={
                                   framework.riskLevel === 'critical' ? 'destructive' :
                                   framework.riskLevel === 'high' ? 'destructive' :
                                   framework.riskLevel === 'medium' ? 'warning' : 'secondary'
                                 }>
                                   {framework.riskLevel}
-                                </Badge>
+                                </DaisyBadge>
                               </div>
                               <div className="text-sm text-gray-600 mt-1">
                                 {gapCount} controls need attention ({gapPercentage.toFixed(1)}% gap)
@@ -849,15 +849,15 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                         );
                       })}
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </div>
-          </TabsContent>
+          </DaisyTabsContent>
           
-          <TabsContent value="roadmap" className="space-y-4">
+          <DaisyTabsContent value="roadmap" className="space-y-4">
             <div className="grid gap-4">
-              <Card>
-                <CardContent className="p-4">
+              <DaisyCard>
+                <DaisyCardContent className="p-4">
                   <h4 className="font-medium mb-4">Compliance Roadmap</h4>
                   <div className="space-y-4">
                     <div className="flex items-center space-x-4 p-3 bg-blue-50 rounded-lg">
@@ -870,7 +870,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                           Focus on {summaryStats.criticalGaps} critical compliance gaps
                         </div>
                       </div>
-                      <Badge variant="outline">Q1 2024</Badge>
+                      <DaisyBadge variant="outline">Q1 2024</DaisyBadge>
                     </div>
                     
                     <div className="flex items-center space-x-4 p-3 bg-yellow-50 rounded-lg">
@@ -883,7 +883,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                           Finish {summaryStats.inProgressControls} controls currently in progress
                         </div>
                       </div>
-                      <Badge variant="outline">Q2 2024</Badge>
+                      <DaisyBadge variant="outline">Q2 2024</DaisyBadge>
                     </div>
                     
                     <div className="flex items-center space-x-4 p-3 bg-green-50 rounded-lg">
@@ -896,16 +896,16 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                           Implement remaining {summaryStats.notStartedControls} controls
                         </div>
                       </div>
-                      <Badge variant="outline">Q3 2024</Badge>
+                      <DaisyBadge variant="outline">Q3 2024</DaisyBadge>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </div>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
+          </DaisyTabsContent>
+        </DaisyTabs>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 };
 

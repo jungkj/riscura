@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { ArrowLeft, Save, X, Shield, Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useRisks } from '@/context/RiskContext';
@@ -78,7 +78,7 @@ function NewRiskForm() {
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={handleCancel}
@@ -86,7 +86,7 @@ function NewRiskForm() {
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Risks
-              </Button>
+              </DaisyButton>
               <div className="h-6 w-px bg-gray-200" />
               <div className="flex items-center space-x-2">
                 <Shield className="w-5 h-5 text-blue-600" />
@@ -95,7 +95,7 @@ function NewRiskForm() {
             </div>
             
             <div className="flex items-center space-x-3">
-              <Button
+              <DaisyButton
                 variant="outline"
                 onClick={handleCancel}
                 className="border-gray-200 text-gray-600 hover:bg-gray-50"
@@ -103,8 +103,8 @@ function NewRiskForm() {
               >
                 <X className="w-4 h-4 mr-2" />
                 Cancel
-              </Button>
-              <Button
+              </DaisyButton>
+              <DaisyButton
                 type="submit"
                 form="risk-form"
                 disabled={isLoading || !formData.title || !formData.description || !formData.category}
@@ -112,7 +112,7 @@ function NewRiskForm() {
               >
                 <Save className="w-4 h-4 mr-2" />
                 {isLoading ? 'Creating...' : 'Create Risk'}
-              </Button>
+              </DaisyButton>
             </div>
           </div>
           
@@ -133,19 +133,19 @@ function NewRiskForm() {
           className="space-y-8"
         >
           {/* Basic Information */}
-          <Card className="border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-gray-900 text-lg font-semibold">
+          <DaisyCard className="border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm">
+            <DaisyCardHeader className="pb-4">
+              <DaisyCardTitle className="text-gray-900 text-lg font-semibold">
                 Basic Information
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
+              </DaisyCardTitle>
+            
+            <DaisyCardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">
                     Risk Title *
                   </label>
-                  <Input
+                  <DaisyInput
                     value={formData.title}
                     onChange={(e) => handleInputChange('title', e.target.value)}
                     placeholder="Enter a clear, descriptive title"
@@ -158,18 +158,18 @@ function NewRiskForm() {
                   <label className="text-sm font-medium text-gray-700">
                     Category *
                   </label>
-                  <Select value={formData.category} onValueChange={(value) => handleInputChange('category', value)}>
-                    <SelectTrigger className="border-gray-200 focus:border-blue-500 bg-white rounded-lg">
-                      <SelectValue placeholder="Select category" />
+                  <DaisySelect value={formData.category} onValueChange={(value) => handleInputChange('category', value)}>
+                    <DaisySelectTrigger className="border-gray-200 focus:border-blue-500 bg-white rounded-lg">
+                      <DaisySelectValue placeholder="Select category" />
                     </SelectTrigger>
-                    <SelectContent className="bg-white border-gray-200 rounded-lg shadow-lg">
-                      <SelectItem value="OPERATIONAL">Operational</SelectItem>
-                      <SelectItem value="FINANCIAL">Financial</SelectItem>
-                      <SelectItem value="STRATEGIC">Strategic</SelectItem>
-                      <SelectItem value="COMPLIANCE">Compliance</SelectItem>
-                      <SelectItem value="TECHNOLOGY">Technology</SelectItem>
+                    <DaisySelectContent className="bg-white border-gray-200 rounded-lg shadow-lg">
+                      <DaisySelectItem value="OPERATIONAL">Operational</SelectItem>
+                      <DaisySelectItem value="FINANCIAL">Financial</SelectItem>
+                      <DaisySelectItem value="STRATEGIC">Strategic</SelectItem>
+                      <DaisySelectItem value="COMPLIANCE">Compliance</SelectItem>
+                      <DaisySelectItem value="TECHNOLOGY">Technology</SelectItem>
                     </SelectContent>
-                  </Select>
+                  </DaisySelect>
                 </div>
               </div>
 
@@ -177,7 +177,7 @@ function NewRiskForm() {
                 <label className="text-sm font-medium text-gray-700">
                   Description *
                 </label>
-                <Textarea
+                <DaisyTextarea
                   value={formData.description}
                   onChange={(e) => handleInputChange('description', e.target.value)}
                   placeholder="Provide a detailed description of the risk, including potential causes and consequences"
@@ -191,7 +191,7 @@ function NewRiskForm() {
                   <label className="text-sm font-medium text-gray-700">
                     Risk Owner *
                   </label>
-                  <Input
+                  <DaisyInput
                     value={formData.riskOwner}
                     onChange={(e) => handleInputChange('riskOwner', e.target.value)}
                     placeholder="Assign responsible person"
@@ -204,7 +204,7 @@ function NewRiskForm() {
                   <label className="text-sm font-medium text-gray-700">
                     Department
                   </label>
-                  <Input
+                  <DaisyInput
                     value={formData.department}
                     onChange={(e) => handleInputChange('department', e.target.value)}
                     placeholder="Department or business unit"
@@ -212,52 +212,52 @@ function NewRiskForm() {
                   />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
           {/* Risk Assessment */}
-          <Card className="border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-gray-900 text-lg font-semibold">
+          <DaisyCard className="border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm">
+            <DaisyCardHeader className="pb-4">
+              <DaisyCardTitle className="text-gray-900 text-lg font-semibold">
                 Risk Assessment
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
+              </DaisyCardTitle>
+            
+            <DaisyCardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">
                     Likelihood (1-5)
                   </label>
-                  <Select value={formData.likelihood} onValueChange={(value) => handleInputChange('likelihood', value)}>
-                    <SelectTrigger className="border-gray-200 focus:border-blue-500 bg-white rounded-lg">
-                      <SelectValue />
+                  <DaisySelect value={formData.likelihood} onValueChange={(value) => handleInputChange('likelihood', value)}>
+                    <DaisySelectTrigger className="border-gray-200 focus:border-blue-500 bg-white rounded-lg">
+                      <DaisySelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-white border-gray-200 rounded-lg shadow-lg">
-                      <SelectItem value="1">1 - Very Low</SelectItem>
-                      <SelectItem value="2">2 - Low</SelectItem>
-                      <SelectItem value="3">3 - Medium</SelectItem>
-                      <SelectItem value="4">4 - High</SelectItem>
-                      <SelectItem value="5">5 - Very High</SelectItem>
+                    <DaisySelectContent className="bg-white border-gray-200 rounded-lg shadow-lg">
+                      <DaisySelectItem value="1">1 - Very Low</SelectItem>
+                      <DaisySelectItem value="2">2 - Low</SelectItem>
+                      <DaisySelectItem value="3">3 - Medium</SelectItem>
+                      <DaisySelectItem value="4">4 - High</SelectItem>
+                      <DaisySelectItem value="5">5 - Very High</SelectItem>
                     </SelectContent>
-                  </Select>
+                  </DaisySelect>
                 </div>
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">
                     Impact (1-5)
                   </label>
-                  <Select value={formData.impact} onValueChange={(value) => handleInputChange('impact', value)}>
-                    <SelectTrigger className="border-gray-200 focus:border-blue-500 bg-white rounded-lg">
-                      <SelectValue />
+                  <DaisySelect value={formData.impact} onValueChange={(value) => handleInputChange('impact', value)}>
+                    <DaisySelectTrigger className="border-gray-200 focus:border-blue-500 bg-white rounded-lg">
+                      <DaisySelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-white border-gray-200 rounded-lg shadow-lg">
-                      <SelectItem value="1">1 - Very Low</SelectItem>
-                      <SelectItem value="2">2 - Low</SelectItem>
-                      <SelectItem value="3">3 - Medium</SelectItem>
-                      <SelectItem value="4">4 - High</SelectItem>
-                      <SelectItem value="5">5 - Very High</SelectItem>
+                    <DaisySelectContent className="bg-white border-gray-200 rounded-lg shadow-lg">
+                      <DaisySelectItem value="1">1 - Very Low</SelectItem>
+                      <DaisySelectItem value="2">2 - Low</SelectItem>
+                      <DaisySelectItem value="3">3 - Medium</SelectItem>
+                      <DaisySelectItem value="4">4 - High</SelectItem>
+                      <DaisySelectItem value="5">5 - Very High</SelectItem>
                     </SelectContent>
-                  </Select>
+                  </DaisySelect>
                 </div>
 
                 <div className="space-y-2">
@@ -265,7 +265,7 @@ function NewRiskForm() {
                     Risk Score
                   </label>
                   <div className="h-10 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 flex items-center">
-                    <Badge 
+                    <DaisyBadge 
                       variant={
                         parseInt(formData.likelihood) * parseInt(formData.impact) >= 15 ? 'destructive' :
                         parseInt(formData.likelihood) * parseInt(formData.impact) >= 9 ? 'secondary' :
@@ -274,7 +274,7 @@ function NewRiskForm() {
                       className="font-medium"
                     >
                       {parseInt(formData.likelihood) * parseInt(formData.impact)}
-                    </Badge>
+                    </DaisyBadge>
                   </div>
                 </div>
               </div>
@@ -283,34 +283,34 @@ function NewRiskForm() {
                 <label className="text-sm font-medium text-gray-700">
                   Priority
                 </label>
-                <Select value={formData.priority} onValueChange={(value) => handleInputChange('priority', value)}>
-                  <SelectTrigger className="border-gray-200 focus:border-blue-500 bg-white rounded-lg">
-                    <SelectValue />
+                <DaisySelect value={formData.priority} onValueChange={(value) => handleInputChange('priority', value)}>
+                  <DaisySelectTrigger className="border-gray-200 focus:border-blue-500 bg-white rounded-lg">
+                    <DaisySelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-white border-gray-200 rounded-lg shadow-lg">
-                    <SelectItem value="low">Low</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
-                    <SelectItem value="critical">Critical</SelectItem>
+                  <DaisySelectContent className="bg-white border-gray-200 rounded-lg shadow-lg">
+                    <DaisySelectItem value="low">Low</SelectItem>
+                    <DaisySelectItem value="medium">Medium</SelectItem>
+                    <DaisySelectItem value="high">High</SelectItem>
+                    <DaisySelectItem value="critical">Critical</SelectItem>
                   </SelectContent>
-                </Select>
+                </DaisySelect>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
           {/* Additional Information */}
-          <Card className="border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-gray-900 text-lg font-semibold">
+          <DaisyCard className="border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm">
+            <DaisyCardHeader className="pb-4">
+              <DaisyCardTitle className="text-gray-900 text-lg font-semibold">
                 Additional Information
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
+              </DaisyCardTitle>
+            
+            <DaisyCardContent className="space-y-6">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
                   Tags
                 </label>
-                <Input
+                <DaisyInput
                   value={formData.tags}
                   onChange={(e) => handleInputChange('tags', e.target.value)}
                   placeholder="Enter tags separated by commas (e.g., cybersecurity, data breach, financial)"
@@ -320,8 +320,8 @@ function NewRiskForm() {
                   Tags help categorize and search for risks. Use relevant keywords separated by commas.
                 </p>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </motion.form>
       </div>
     </div>

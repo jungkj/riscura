@@ -384,7 +384,7 @@ interface ProgressiveLoaderProps {
   threshold?: number;
 }
 
-export const ProgressiveLoader: React.FC<ProgressiveLoaderProps> = ({
+export const ProgressiveLoader: React.FC<DaisyProgressiveLoaderProps> = ({
   isLoading,
   hasMore,
   onLoadMore,

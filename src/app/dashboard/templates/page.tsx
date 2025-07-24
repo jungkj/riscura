@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { toast } from '@/hooks/use-toast';
 import {
   FileSpreadsheet,
@@ -126,7 +126,7 @@ export default function TemplatesPage() {
     <div className="p-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <Button
+        <DaisyButton
           variant="ghost"
           size="sm"
           onClick={() => router.back()}
@@ -134,7 +134,7 @@ export default function TemplatesPage() {
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
-        </Button>
+        </DaisyButton>
         
         <div className="flex items-center gap-3 mb-2">
           <FileSpreadsheet className="h-8 w-8 text-green-600" />
@@ -150,23 +150,23 @@ export default function TemplatesPage() {
         {templates.map((template) => {
           const Icon = template.icon;
           return (
-            <Card 
+            <DaisyCard 
               key={template.id}
               className="border-gray-200 hover:shadow-lg transition-all duration-300"
             >
-              <CardHeader>
+              <DaisyCardHeader>
                 <div className="flex items-start justify-between mb-3">
                   <div className={`p-3 bg-gray-50 rounded-lg ${template.color}`}>
                     <Icon className="h-6 w-6" />
                   </div>
-                  <Badge variant="secondary" className="text-xs">
+                  <DaisyBadge variant="secondary" className="text-xs">
                     {template.badge}
-                  </Badge>
+                  </DaisyBadge>
                 </div>
-                <CardTitle className="text-xl">{template.name}</CardTitle>
-                <CardDescription>{template.description}</CardDescription>
-              </CardHeader>
-              <CardContent>
+                <DaisyCardTitle className="text-xl">{template.name}</DaisyCardTitle>
+                <DaisyCardDescription>{template.description}</p>
+              
+              <DaisyCardContent>
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <p className="text-sm font-medium text-gray-700">Includes:</p>
@@ -180,7 +180,7 @@ export default function TemplatesPage() {
                     </ul>
                   </div>
                   
-                  <Button
+                  <DaisyButton
                     className="w-full"
                     onClick={() => handleDownload(template.type)}
                     disabled={downloading === template.type}
@@ -196,23 +196,23 @@ export default function TemplatesPage() {
                         Download Template
                       </>
                     )}
-                  </Button>
+                  </DaisyButton>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           );
         })}
       </div>
 
       {/* Instructions Section */}
-      <Card className="mt-8 border-gray-200">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <DaisyCard className="mt-8 border-gray-200">
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center gap-2">
             <FileText className="h-5 w-5 text-blue-600" />
             How to Use These Templates
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <div className="flex items-center gap-2 mb-2">
@@ -256,8 +256,8 @@ export default function TemplatesPage() {
               <strong>Pro Tip:</strong> Start with the sample data to understand the format, then gradually replace it with your own information. The templates include validation rules to help ensure data quality.
             </p>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </div>
   );
 }

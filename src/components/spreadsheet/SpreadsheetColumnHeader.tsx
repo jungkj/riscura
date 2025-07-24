@@ -19,8 +19,8 @@ import {
   Trash2,
   Settings
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuSeparator, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
 import { cn } from '@/lib/utils';
 import { Column } from './SpreadsheetGrid';
 
@@ -123,70 +123,70 @@ export const SpreadsheetColumnHeader: React.FC<SpreadsheetColumnHeaderProps> = (
         </div>
 
         {/* Column menu */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button 
+        <DaisyDropdownMenu>
+          <DaisyDropdownMenuTrigger asChild>
+            <DaisyButton 
               variant="ghost" 
               size="sm" 
               className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity ml-1"
             >
               <ChevronDown className="h-3 w-3" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-48">
+            </DaisyButton>
+          </DaisyDropdownMenuTrigger>
+          <DaisyDropdownMenuContent align="start" className="w-48">
             {/* Sorting */}
             {onSort && (
               <>
-                <DropdownMenuItem onClick={() => onSort('asc')}>
+                <DaisyDropdownMenuItem onClick={() => onSort('asc')}>
                   <ArrowUp className="h-4 w-4 mr-2" />
                   Sort A-Z
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => onSort('desc')}>
+                </DaisyDropdownMenuItem>
+                <DaisyDropdownMenuItem onClick={() => onSort('desc')}>
                   <ArrowDown className="h-4 w-4 mr-2" />
                   Sort Z-A
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
+                </DaisyDropdownMenuItem>
+                <DaisyDropdownMenuSeparator />
               </>
             )}
             
             {/* Insert columns */}
-            <DropdownMenuItem onClick={onInsertLeft}>
+            <DaisyDropdownMenuItem onClick={onInsertLeft}>
               <Plus className="h-4 w-4 mr-2" />
               Insert column left
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={onInsertRight}>
+            </DaisyDropdownMenuItem>
+            <DaisyDropdownMenuItem onClick={onInsertRight}>
               <Plus className="h-4 w-4 mr-2" />
               Insert column right
-            </DropdownMenuItem>
+            </DaisyDropdownMenuItem>
             
-            <DropdownMenuSeparator />
+            <DaisyDropdownMenuSeparator />
             
             {/* Column properties */}
-            <DropdownMenuItem>
+            <DaisyDropdownMenuItem>
               <Settings className="h-4 w-4 mr-2" />
               Column properties
-            </DropdownMenuItem>
+            </DaisyDropdownMenuItem>
             
             {/* Hide/Show */}
             {onHide && (
-              <DropdownMenuItem onClick={onHide}>
+              <DaisyDropdownMenuItem onClick={onHide}>
                 <EyeOff className="h-4 w-4 mr-2" />
                 Hide column
-              </DropdownMenuItem>
+              </DaisyDropdownMenuItem>
             )}
             
             {/* Delete */}
             {onDelete && (
               <>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={onDelete} className="text-red-600">
+                <DaisyDropdownMenuSeparator />
+                <DaisyDropdownMenuItem onClick={onDelete} className="text-red-600">
                   <Trash2 className="h-4 w-4 mr-2" />
                   Delete column
-                </DropdownMenuItem>
+                </DaisyDropdownMenuItem>
               </>
             )}
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </DaisyDropdownMenuContent>
+        </DaisyDropdownMenu>
       </div>
 
       {/* Resize handle */}

@@ -826,7 +826,7 @@ Alert ID: ${alert.id}`;
     this.rules.delete(ruleId);
   }
 
-  updateRule(ruleId: string, updates: Partial<AlertRule>): void {
+  updateRule(ruleId: string, updates: Partial<DaisyAlertRule>): void {
     const rule = this.rules.get(ruleId);
     if (rule) {
       this.rules.set(ruleId, { ...rule, ...updates });

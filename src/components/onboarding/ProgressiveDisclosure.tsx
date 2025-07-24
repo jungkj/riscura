@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
   Eye,
   EyeOff,
@@ -207,7 +207,7 @@ interface ProgressiveDisclosureProps {
   className?: string;
 }
 
-export const ProgressiveDisclosure: React.FC<ProgressiveDisclosureProps> = ({
+export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = ({
   userExperience,
   onFeatureUnlock,
   onFeatureHide,
@@ -325,17 +325,17 @@ export const ProgressiveDisclosure: React.FC<ProgressiveDisclosureProps> = ({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Progress overview */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center space-x-2">
             <Sparkles className="w-5 h-5" />
             <span>Feature Discovery Progress</span>
-          </CardTitle>
+          </DaisyCardTitle>
           <p className="text-gray-600">
             Unlock new features as you become more experienced with Riscura
           </p>
-        </CardHeader>
-        <CardContent>
+        
+        <DaisyCardContent>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Overall Progress</span>
@@ -343,7 +343,7 @@ export const ProgressiveDisclosure: React.FC<ProgressiveDisclosureProps> = ({
                 {unlockedFeatures} of {totalFeatures} features unlocked
               </span>
             </div>
-            <Progress value={progressPercentage} className="h-3" />
+            <DaisyProgress value={progressPercentage} className="h-3" />
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
               {categories.slice(1).map(category => {
@@ -363,22 +363,22 @@ export const ProgressiveDisclosure: React.FC<ProgressiveDisclosureProps> = ({
               })}
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Feature filters */}
-      <Card>
-        <CardContent className="p-4">
+      <DaisyCard>
+        <DaisyCardContent className="p-4">
           <div className="flex flex-wrap gap-2 mb-4">
             {categories.map(category => (
-              <Button
+              <DaisyButton
                 key={category.id}
                 variant={selectedCategory === category.id ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setSelectedCategory(category.id)}
               >
                 {category.name}
-              </Button>
+              </DaisyButton>
             ))}
           </div>
           
@@ -392,8 +392,8 @@ export const ProgressiveDisclosure: React.FC<ProgressiveDisclosureProps> = ({
               <span>Show locked features</span>
             </label>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Features grid */}
       <div className="space-y-6">
@@ -402,9 +402,9 @@ export const ProgressiveDisclosure: React.FC<ProgressiveDisclosureProps> = ({
             {selectedCategory === 'all' && (
               <h3 className="text-lg font-semibold mb-4 capitalize flex items-center space-x-2">
                 <span>{category} Features</span>
-                <Badge variant="secondary" className="text-xs">
+                <DaisyBadge variant="secondary" className="text-xs">
                   {categoryFeatures.filter(f => f.isUnlocked).length} / {categoryFeatures.length}
-                </Badge>
+                </DaisyBadge>
               </h3>
             )}
             
@@ -416,7 +416,7 @@ export const ProgressiveDisclosure: React.FC<ProgressiveDisclosureProps> = ({
                   const unlockProgress = getUnlockProgress(feature);
                   
                   return (
-                    <Card
+                    <DaisyCard
                       key={feature.id}
                       className={`transition-all duration-200 ${
                         feature.isUnlocked 
@@ -424,7 +424,7 @@ export const ProgressiveDisclosure: React.FC<ProgressiveDisclosureProps> = ({
                           : 'opacity-75 hover:shadow-md'
                       }`}
                     >
-                      <CardContent className="p-4">
+                      <DaisyCardContent className="p-4">
                         <div className="flex items-start space-x-3">
                           <div className={`p-2 rounded-lg ${
                             feature.isUnlocked 
@@ -466,7 +466,7 @@ export const ProgressiveDisclosure: React.FC<ProgressiveDisclosureProps> = ({
                                   <span className="text-gray-500">Unlock Progress</span>
                                   <span className="text-gray-500">{Math.round(unlockProgress)}%</span>
                                 </div>
-                                <Progress value={unlockProgress} className="h-1" />
+                                <DaisyProgress value={unlockProgress} className="h-1" />
                                 <p className="text-xs text-gray-500">
                                   {feature.unlockCriteria.description}
                                 </p>
@@ -488,24 +488,24 @@ export const ProgressiveDisclosure: React.FC<ProgressiveDisclosureProps> = ({
                             )}
                             
                             <div className="flex items-center justify-between mt-3">
-                              <Badge variant="outline" className="text-xs capitalize">
+                              <DaisyBadge variant="outline" className="text-xs capitalize">
                                 {feature.category}
-                              </Badge>
+                              </DaisyBadge>
                               
                               {feature.isUnlocked && (
-                                <Button
+                                <DaisyButton
                                   variant="ghost"
                                   size="sm"
                                   className="text-blue-600 hover:text-blue-700 h-auto p-0"
                                 >
                                   Explore <ChevronRight className="w-3 h-3 ml-1" />
-                                </Button>
+                                </DaisyButton>
                               )}
                             </div>
                           </div>
                         </div>
-                      </CardContent>
-                    </Card>
+                      </DaisyCardBody>
+                    </DaisyCard>
                   );
                 })}
             </div>
@@ -525,8 +525,8 @@ export const ProgressiveDisclosure: React.FC<ProgressiveDisclosureProps> = ({
         const progress = getUnlockProgress(nextFeature);
         
         return (
-          <Card className="border-2 border-dashed border-blue-200 bg-blue-50">
-            <CardContent className="p-4">
+          <DaisyCard className="border-2 border-dashed border-blue-200 bg-blue-50">
+            <DaisyCardContent className="p-4">
               <div className="flex items-center space-x-3">
                 <div className="p-2 bg-blue-100 rounded-lg">
                   <Lightbulb className="w-5 h-5 text-blue-600" />
@@ -539,15 +539,15 @@ export const ProgressiveDisclosure: React.FC<ProgressiveDisclosureProps> = ({
                     {nextFeature.unlockCriteria.description}
                   </p>
                   <div className="flex items-center space-x-2">
-                    <Progress value={progress} className="h-2 flex-1" />
+                    <DaisyProgress value={progress} className="h-2 flex-1" />
                     <span className="text-xs text-blue-600 font-medium">
                       {Math.round(progress)}%
                     </span>
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         );
       })()}
     </div>

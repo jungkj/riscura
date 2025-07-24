@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -685,24 +685,24 @@ export const ControlsManagementDashboard: React.FC = () => {
       maxWidth="2xl"
     >
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6">
-        <TabsList>
-          <TabsTrigger value="library">Control Library</TabsTrigger>
-          <TabsTrigger value="probo">
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6">
+        <DaisyTabsList>
+          <DaisyTabsTrigger value="library">Control Library</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="probo">
             <Shield className="h-4 w-4 mr-2" />
             Probo Controls
-          </TabsTrigger>
-          <TabsTrigger value="testing">Testing</TabsTrigger>
-          <TabsTrigger value="compliance">Compliance</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-        </TabsList>
-      </Tabs>
+          </DaisyTabsTrigger>
+          <DaisyTabsTrigger value="testing">Testing</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="analytics">Analytics</DaisyTabsTrigger>
+        </DaisyTabsList>
+      </DaisyTabs>
 
-      <TabsContent value="library">
+      <DaisyTabsContent value="library">
         <ControlLibrary />
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="probo" className="space-y-6">
+      <DaisyTabsContent value="probo" className="space-y-6">
         <div className="bg-gradient-to-r from-[#199BEC]/5 to-[#199BEC]/10 rounded-lg p-6 border border-[#199BEC]/20">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
@@ -803,17 +803,17 @@ export const ControlsManagementDashboard: React.FC = () => {
             ))}
           </div>
         )}
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="testing">
+      <DaisyTabsContent value="testing">
         <ControlTestingWorkflow />
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="compliance">
+      <DaisyTabsContent value="compliance">
         <ComplianceMapping />
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="analytics">
+      <DaisyTabsContent value="analytics">
         <div className="text-center py-enterprise-12">
           <BarChart3 className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -823,7 +823,7 @@ export const ControlsManagementDashboard: React.FC = () => {
             Comprehensive controls metrics and trends.
           </p>
         </div>
-      </TabsContent>
+      </DaisyTabsContent>
 
       {/* Create Control Modal */}
       <CreateControlModal

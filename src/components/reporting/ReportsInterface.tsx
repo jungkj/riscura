@@ -3,9 +3,9 @@
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { 
   Select,
   SelectContent,

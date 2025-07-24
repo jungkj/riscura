@@ -6,12 +6,12 @@ import { ProboIntegrationDashboard } from '@/components/dashboard/ProboIntegrati
 import { SOC2Assessment } from '@/components/compliance/SOC2Assessment';
 import { VendorAssessmentDashboard } from '@/components/vendors/VendorAssessmentDashboard';
 import { ProboControlsLibrary } from '@/components/compliance/ProboControlsLibrary';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Progress } from '@/components/ui/progress';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
   Shield,
   Building,
@@ -223,60 +223,60 @@ export default function ProboIntegrationPage() {
                  animate={isLoaded ? { scale: 1 } : false}
                  transition={isLoaded ? { delay: 0.2 } : undefined}
                >
-                <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1">
+                <DaisyBadge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1">
                   <CheckCircle className="h-3 w-3 mr-1" />
                   Fully Integrated
-                </Badge>
+                </DaisyBadge>
               </motion.div>
             </div>
             <div className="flex items-center space-x-3">
-              <Button variant="outline" className="border-[#D8C3A5] hover:bg-[#199BEC]/5">
+              <DaisyButton variant="outline" className="border-[#D8C3A5] hover:bg-[#199BEC]/5">
                 <ExternalLink className="h-4 w-4 mr-2" />
                 Documentation
-              </Button>
-              <Button className="bg-gradient-to-r from-[#199BEC] to-cyan-500 hover:from-[#199BEC]/90 hover:to-cyan-500/90 shadow-lg">
+              </DaisyButton>
+              <DaisyButton className="bg-gradient-to-r from-[#199BEC] to-cyan-500 hover:from-[#199BEC]/90 hover:to-cyan-500/90 shadow-lg">
                 <Rocket className="h-4 w-4 mr-2" />
                 Get Started
-              </Button>
+              </DaisyButton>
             </div>
           </div>
         </div>
       </motion.div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Tabs value={activeTab} onValueChange={handleTabChange}>
+        <DaisyTabs value={activeTab} onValueChange={handleTabChange}>
                      {/* Enhanced Tab Navigation */}
            <motion.div
              initial={isLoaded ? { opacity: 0, y: 20 } : false}
              animate={isLoaded ? { opacity: 1, y: 0 } : false}
              transition={isLoaded ? { delay: 0.3 } : undefined}
            >
-            <TabsList className="grid w-full grid-cols-5 mb-8 bg-white/50 backdrop-blur-sm border border-[#D8C3A5]/30 p-1 rounded-xl">
-              <TabsTrigger value="overview" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
+            <DaisyTabsList className="grid w-full grid-cols-5 mb-8 bg-white/50 backdrop-blur-sm border border-[#D8C3A5]/30 p-1 rounded-xl">
+              <DaisyTabsTrigger value="overview" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
                 <Globe className="h-4 w-4 mr-2" />
                 Overview
-              </TabsTrigger>
-              <TabsTrigger value="dashboard" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
+              </DaisyTabsTrigger>
+              <DaisyTabsTrigger value="dashboard" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
                 <BarChart3 className="h-4 w-4 mr-2" />
                 Dashboard
-              </TabsTrigger>
-              <TabsTrigger value="vendor-assessment" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
+              </DaisyTabsTrigger>
+              <DaisyTabsTrigger value="vendor-assessment" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
                 <Building className="h-4 w-4 mr-2" />
                 Vendors
-              </TabsTrigger>
-              <TabsTrigger value="soc2" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
+              </DaisyTabsTrigger>
+              <DaisyTabsTrigger value="soc2" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
                 <Shield className="h-4 w-4 mr-2" />
                 SOC 2
-              </TabsTrigger>
-              <TabsTrigger value="controls" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
+              </DaisyTabsTrigger>
+              <DaisyTabsTrigger value="controls" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
                 <Database className="h-4 w-4 mr-2" />
                 Controls
-              </TabsTrigger>
-            </TabsList>
+              </DaisyTabsTrigger>
+            </DaisyTabsList>
           </motion.div>
 
           <AnimatePresence>
-            <TabsContent value="overview" className="space-y-8">
+            <DaisyTabsContent value="overview" className="space-y-8">
               <motion.div
                 key="overview"
                 variants={containerVariants}
@@ -300,15 +300,15 @@ export default function ProboIntegrationPage() {
                     with our comprehensive AI-powered risk management platform.
                   </p>
                   <div className="flex items-center justify-center space-x-4 pt-4">
-                    <Button 
+                    <DaisyButton 
                       size="lg" 
                       className="bg-gradient-to-r from-[#199BEC] to-cyan-500 hover:from-[#199BEC]/90 hover:to-cyan-500/90 shadow-lg px-8"
                       onClick={() => handleTabChange('dashboard')}
                     >
                       <Play className="h-5 w-5 mr-2" />
                       Start Tour
-                    </Button>
-                    <Button 
+                    </DaisyButton>
+                    <DaisyButton 
                       size="lg" 
                       variant="outline" 
                       className="border-[#D8C3A5] hover:bg-[#199BEC]/5 px-8"
@@ -316,7 +316,7 @@ export default function ProboIntegrationPage() {
                     >
                       Try Demo
                       <ChevronRight className="h-4 w-4 ml-2" />
-                    </Button>
+                    </DaisyButton>
                   </div>
                 </motion.div>
 
@@ -332,21 +332,21 @@ export default function ProboIntegrationPage() {
                         className="cursor-pointer"
                         onClick={() => handleTabChange(action.tab)}
                       >
-                        <Card className="bg-white/80 backdrop-blur-sm border-[#D8C3A5]/30 hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                          <CardContent className="p-6">
+                        <DaisyCard className="bg-white/80 backdrop-blur-sm border-[#D8C3A5]/30 hover:shadow-xl transition-all duration-300 overflow-hidden group">
+                          <DaisyCardContent className="p-6">
                             <div className={`h-12 w-12 bg-gradient-to-r ${action.gradient} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                               {action.icon}
                             </div>
                             <h4 className="font-semibold text-[#191919] mb-2">{action.title}</h4>
                             <p className="text-sm text-[#A8A8A8] mb-3">{action.description}</p>
                             <div className="flex items-center justify-between">
-                              <Badge variant="outline" className="text-xs">
+                              <DaisyBadge variant="outline" className="text-xs">
                                 {action.time}
-                              </Badge>
+                              </DaisyBadge>
                               <ChevronRight className="h-4 w-4 text-[#A8A8A8] group-hover:text-[#199BEC] transition-colors" />
                             </div>
-                          </CardContent>
-                        </Card>
+                          </DaisyCardBody>
+                        </DaisyCard>
                       </motion.div>
                     ))}
                   </div>
@@ -362,27 +362,27 @@ export default function ProboIntegrationPage() {
                         whileHover={{ scale: 1.02 }}
                         className="group"
                       >
-                        <Card className="bg-white/80 backdrop-blur-sm border-[#D8C3A5]/30 hover:shadow-xl transition-all duration-300 overflow-hidden">
-                          <CardHeader className="pb-4">
+                        <DaisyCard className="bg-white/80 backdrop-blur-sm border-[#D8C3A5]/30 hover:shadow-xl transition-all duration-300 overflow-hidden">
+                          <DaisyCardHeader className="pb-4">
                             <div className="flex items-start justify-between">
                               <div className="flex items-center space-x-4">
                                 <div className={`p-3 rounded-xl bg-gradient-to-r ${feature.gradient} shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                                   {feature.icon}
                                 </div>
                                 <div className="flex-1">
-                                  <CardTitle className="text-[#191919] text-xl mb-1">{feature.title}</CardTitle>
+                                  <DaisyCardTitle className="text-[#191919] text-xl mb-1">{feature.title}</DaisyCardTitle>
                                   <div className="flex items-center space-x-2">
-                                    <Badge variant="outline" className="text-xs">
+                                    <DaisyBadge variant="outline" className="text-xs">
                                       {feature.stats}
-                                    </Badge>
+                                    </DaisyBadge>
                                     <span className="text-xs text-[#A8A8A8]">{feature.progress}% complete</span>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                            <Progress value={feature.progress} className="mt-3" />
-                          </CardHeader>
-                          <CardContent>
+                            <DaisyProgress value={feature.progress} className="mt-3" />
+                          
+                          <DaisyCardContent>
                             <p className="text-[#A8A8A8] mb-4 leading-relaxed">{feature.description}</p>
                             <div className="space-y-3">
                               <p className="text-sm font-medium text-[#191919]">Key Capabilities:</p>
@@ -395,8 +395,8 @@ export default function ProboIntegrationPage() {
                                 ))}
                               </div>
                             </div>
-                          </CardContent>
-                        </Card>
+                          </DaisyCardBody>
+                        </DaisyCard>
                       </motion.div>
                     ))}
                   </div>
@@ -404,17 +404,17 @@ export default function ProboIntegrationPage() {
 
                 {/* Enhanced Success Metrics */}
                 <motion.div variants={itemVariants}>
-                  <Card className="bg-gradient-to-br from-white via-white to-[#199BEC]/5 border-[#D8C3A5]/30 shadow-xl">
-                    <CardHeader className="text-center pb-8">
-                      <CardTitle className="text-2xl text-[#191919] flex items-center justify-center gap-2">
+                  <DaisyCard className="bg-gradient-to-br from-white via-white to-[#199BEC]/5 border-[#D8C3A5]/30 shadow-xl">
+                    <DaisyCardHeader className="text-center pb-8">
+                      <DaisyCardTitle className="text-2xl text-[#191919] flex items-center justify-center gap-2">
                         <TrendingUp className="h-6 w-6 text-[#199BEC]" />
                         Implementation Impact
-                      </CardTitle>
-                      <CardDescription className="text-lg">
+                      </DaisyCardTitle>
+                      <DaisyCardDescription className="text-lg">
                         Measurable improvements achieved through Probo integration
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
+                      </p>
+                    
+                    <DaisyCardContent>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         {successMetrics.map((metric, index) => (
                           <motion.div
@@ -436,35 +436,35 @@ export default function ProboIntegrationPage() {
                                   After: <span className="text-green-600 font-medium">{metric.after}</span>
                                 </div>
                               </div>
-                              <Badge className="bg-gradient-to-r from-[#199BEC] to-cyan-500 text-white font-medium">
+                              <DaisyBadge className="bg-gradient-to-r from-[#199BEC] to-cyan-500 text-white font-medium">
                                 {metric.improvement}
-                              </Badge>
+                              </DaisyBadge>
                             </div>
                           </motion.div>
                         ))}
                       </div>
-                    </CardContent>
-                  </Card>
+                    </DaisyCardBody>
+                  </DaisyCard>
                 </motion.div>
 
                 {/* Enhanced Status Alert */}
                 <motion.div variants={itemVariants}>
-                  <Alert className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+                  <DaisyAlert className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
                     <div className="flex items-center">
                       <div className="h-3 w-3 bg-green-500 rounded-full animate-pulse mr-3"></div>
                       <Zap className="h-5 w-5 text-green-600" />
                     </div>
-                                         <AlertDescription className="ml-6">
+                                         <DaisyAlertDescription className="ml-6">
                        <strong className="text-green-800">System Status:</strong> All Probo AI services are operational and optimized. 
                        Real-time vendor assessment, SOC 2 workflows, and security controls library are fully integrated. 
                        {currentTime && <span className="text-green-700 font-medium"> Last sync: {currentTime}</span>}
-                     </AlertDescription>
-                  </Alert>
+                     
+                  </DaisyAlert>
                 </motion.div>
               </motion.div>
-            </TabsContent>
+            </DaisyTabsContent>
 
-                         <TabsContent value="dashboard">
+                         <DaisyTabsContent value="dashboard">
                <motion.div
                  initial={isLoaded ? { opacity: 0, y: 20 } : false}
                  animate={isLoaded ? { opacity: 1, y: 0 } : false}
@@ -472,9 +472,9 @@ export default function ProboIntegrationPage() {
                >
                 <ProboIntegrationDashboard />
               </motion.div>
-            </TabsContent>
+            </DaisyTabsContent>
 
-                         <TabsContent value="vendor-assessment">
+                         <DaisyTabsContent value="vendor-assessment">
                <motion.div
                  initial={isLoaded ? { opacity: 0, y: 20 } : false}
                  animate={isLoaded ? { opacity: 1, y: 0 } : false}
@@ -482,9 +482,9 @@ export default function ProboIntegrationPage() {
                >
                 <VendorAssessmentDashboard />
               </motion.div>
-            </TabsContent>
+            </DaisyTabsContent>
 
-                         <TabsContent value="soc2">
+                         <DaisyTabsContent value="soc2">
                <motion.div
                  initial={isLoaded ? { opacity: 0, y: 20 } : false}
                  animate={isLoaded ? { opacity: 1, y: 0 } : false}
@@ -492,9 +492,9 @@ export default function ProboIntegrationPage() {
                >
                 <SOC2Assessment />
               </motion.div>
-            </TabsContent>
+            </DaisyTabsContent>
 
-                         <TabsContent value="controls">
+                         <DaisyTabsContent value="controls">
                <motion.div
                  initial={isLoaded ? { opacity: 0, y: 20 } : false}
                  animate={isLoaded ? { opacity: 1, y: 0 } : false}
@@ -502,9 +502,9 @@ export default function ProboIntegrationPage() {
                >
                 <ProboControlsLibrary />
               </motion.div>
-            </TabsContent>
+            </DaisyTabsContent>
           </AnimatePresence>
-        </Tabs>
+        </DaisyTabs>
       </div>
     </div>
   );

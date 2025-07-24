@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { MainContentArea } from '@/components/layout/MainContentArea';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import {
   Brain,
   TrendingUp,
@@ -282,9 +282,9 @@ const PredictionCard: React.FC<{
               <h3 className="text-body-sm font-semibold text-text-primary">
                 {prediction.title}
               </h3>
-              <Badge variant={impactConfig.badge as any} className="text-caption">
+              <DaisyBadge variant={impactConfig.badge as any} className="text-caption">
                 {prediction.impact.toUpperCase()}
-              </Badge>
+              </DaisyBadge>
             </div>
             <p className="text-caption text-text-secondary">
               {prediction.description}
@@ -301,14 +301,14 @@ const PredictionCard: React.FC<{
             <span className="text-caption text-text-secondary">Confidence</span>
             <span className="text-caption font-medium text-purple-600">{prediction.confidence}%</span>
           </div>
-          <Progress value={prediction.confidence} className="h-2" />
+          <DaisyProgress value={prediction.confidence} className="h-2" />
         </div>
         <div>
           <div className="flex items-center justify-between mb-enterprise-1">
             <span className="text-caption text-text-secondary">Likelihood</span>
             <span className="text-caption font-medium text-text-primary">{prediction.likelihood}%</span>
           </div>
-          <Progress value={prediction.likelihood} className="h-2" />
+          <DaisyProgress value={prediction.likelihood} className="h-2" />
         </div>
       </div>
 
@@ -333,7 +333,7 @@ const PredictionCard: React.FC<{
       {/* Actions */}
       <div className="flex items-center justify-between pt-enterprise-3 border-t border-border">
         <div className="flex items-center space-x-enterprise-1">
-          <Button 
+          <DaisyButton 
             variant="ghost" 
             size="sm" 
             className="h-6 px-enterprise-2 text-purple-600 hover:text-purple-700"
@@ -341,15 +341,15 @@ const PredictionCard: React.FC<{
           >
             <Eye className="h-3 w-3 mr-enterprise-1" />
             Analyze
-          </Button>
-          <Button 
+          </DaisyButton>
+          <DaisyButton 
             variant="ghost" 
             size="sm" 
             className="h-6 px-enterprise-2"
             onClick={() => onAction('dismiss', prediction)}
           >
             Dismiss
-          </Button>
+          </DaisyButton>
         </div>
         <span className="text-caption text-text-tertiary">
           Updated {prediction.lastUpdated.toLocaleDateString()}
@@ -391,12 +391,12 @@ const RecommendationPanel: React.FC<{
             <h3 className="text-body-sm font-semibold text-text-primary">
               {recommendation.title}
             </h3>
-            <Badge 
+            <DaisyBadge 
               className={cn("text-caption", priorityConfig.color, priorityConfig.bg)}
               variant="outline"
             >
               {recommendation.priority.toUpperCase()}
-            </Badge>
+            </DaisyBadge>
           </div>
           <p className="text-caption text-text-secondary mb-enterprise-2">
             {recommendation.description}
@@ -421,7 +421,7 @@ const RecommendationPanel: React.FC<{
             {completedActions}/{recommendation.actions.length} actions
           </span>
         </div>
-        <Progress value={progressPercentage} className="h-2" />
+        <DaisyProgress value={progressPercentage} className="h-2" />
       </div>
 
       {/* Actions List */}
@@ -451,31 +451,31 @@ const RecommendationPanel: React.FC<{
       {/* Action Buttons */}
       <div className="flex items-center justify-between pt-enterprise-3 border-t border-border">
         <div className="flex items-center space-x-enterprise-1">
-          <Button 
+          <DaisyButton 
             size="sm" 
             className="h-6 px-enterprise-3 bg-purple-600 hover:bg-purple-700"
             onClick={() => onAction('implement', recommendation)}
           >
             <ArrowRight className="h-3 w-3 mr-enterprise-1" />
             Implement
-          </Button>
-          <Button 
+          </DaisyButton>
+          <DaisyButton 
             variant="outline" 
             size="sm" 
             className="h-6 px-enterprise-2"
             onClick={() => onAction('view', recommendation)}
           >
             Details
-          </Button>
+          </DaisyButton>
         </div>
-        <Button 
+        <DaisyButton 
           variant="ghost" 
           size="sm" 
           className="h-6 px-enterprise-2"
           onClick={() => onAction('dismiss', recommendation)}
         >
           Dismiss
-        </Button>
+        </DaisyButton>
       </div>
     </div>
   );
@@ -627,16 +627,16 @@ export const AIPoweredDashboard: React.FC = () => {
       )}
 
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="predictions">Predictions</TabsTrigger>
-          <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
-          <TabsTrigger value="trends">Trends</TabsTrigger>
-        </TabsList>
-      </Tabs>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6">
+        <DaisyTabsList>
+          <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="predictions">Predictions</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="recommendations">Recommendations</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="trends">Trends</DaisyTabsTrigger>
+        </DaisyTabsList>
+      </DaisyTabs>
 
-      <TabsContent value="overview">
+      <DaisyTabsContent value="overview">
         <div className="space-y-enterprise-6">
           {/* Critical Alerts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-enterprise-4">
@@ -677,9 +677,9 @@ export const AIPoweredDashboard: React.FC = () => {
             </div>
           </div>
         </div>
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="predictions">
+      <DaisyTabsContent value="predictions">
         <div className="space-y-enterprise-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-enterprise-4">
             {samplePredictions.map((prediction) => (
@@ -691,9 +691,9 @@ export const AIPoweredDashboard: React.FC = () => {
             ))}
           </div>
         </div>
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="recommendations">
+      <DaisyTabsContent value="recommendations">
         <div className="space-y-enterprise-4">
           <div className="grid grid-cols-1 gap-enterprise-4">
             {sampleRecommendations.map((recommendation) => (
@@ -705,9 +705,9 @@ export const AIPoweredDashboard: React.FC = () => {
             ))}
           </div>
         </div>
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="trends">
+      <DaisyTabsContent value="trends">
         <div className="space-y-enterprise-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-enterprise-4">
             {sampleTrendData.map((trend) => (
@@ -715,7 +715,7 @@ export const AIPoweredDashboard: React.FC = () => {
             ))}
           </div>
         </div>
-      </TabsContent>
+      </DaisyTabsContent>
     </MainContentArea>
   );
 };

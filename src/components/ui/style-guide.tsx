@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { 
   Palette,
   Type,
@@ -317,25 +317,25 @@ const ComponentVariations: React.FC = () => {
           <div className="space-y-3">
             <h4 className="font-medium text-sm text-gray-700">Primary Buttons</h4>
             <div className="space-y-2">
-              <Button size="sm">Small Primary</Button>
-              <Button>Default Primary</Button>
-              <Button size="lg">Large Primary</Button>
+              <DaisyButton size="sm">Small Primary</DaisyButton>
+              <DaisyButton>Default Primary</DaisyButton>
+              <DaisyButton size="lg">Large Primary</DaisyButton>
             </div>
           </div>
           <div className="space-y-3">
             <h4 className="font-medium text-sm text-gray-700">Secondary Buttons</h4>
             <div className="space-y-2">
-              <Button variant="secondary" size="sm">Small Secondary</Button>
-              <Button variant="secondary">Default Secondary</Button>
-              <Button variant="secondary" size="lg">Large Secondary</Button>
+              <DaisyButton variant="secondary" size="sm">Small Secondary</DaisyButton>
+              <DaisyButton variant="secondary">Default Secondary</DaisyButton>
+              <DaisyButton variant="secondary" size="lg">Large Secondary</DaisyButton>
             </div>
           </div>
           <div className="space-y-3">
             <h4 className="font-medium text-sm text-gray-700">Other Variants</h4>
             <div className="space-y-2">
-              <Button variant="ghost">Ghost Button</Button>
-              <Button variant="link">Link Button</Button>
-                              <Button variant="danger">Danger</Button>
+              <DaisyButton variant="ghost">Ghost Button</DaisyButton>
+              <DaisyButton variant="link">Link Button</DaisyButton>
+                              <DaisyButton variant="danger">Danger</DaisyButton>
             </div>
           </div>
         </div>
@@ -349,9 +349,9 @@ const ComponentVariations: React.FC = () => {
           <div className="space-y-4">
             <h4 className="font-medium text-[#191919] font-inter">Interactive States</h4>
             <div className="space-y-3 p-4 border rounded-lg">
-              <Button className="w-full">Hover me for state change</Button>
-              <Button className="w-full" disabled>Disabled State</Button>
-              <Button 
+              <DaisyButton className="w-full">Hover me for state change</DaisyButton>
+              <DaisyButton className="w-full" disabled>Disabled State</DaisyButton>
+              <DaisyButton 
                 className="w-full" 
                 onClick={() => {
                   setIsLoading(true);
@@ -367,23 +367,23 @@ const ComponentVariations: React.FC = () => {
                 ) : (
                   'Click for Loading State'
                 )}
-              </Button>
+              </DaisyButton>
             </div>
           </div>
           <div className="space-y-4">
             <h4 className="font-medium text-[#191919] font-inter">Form Elements</h4>
             <div className="space-y-3 p-4 border rounded-lg">
               <div>
-                <Label htmlFor="example-input">Input Field</Label>
-                <Input 
+                <DaisyLabel htmlFor="example-input">Input Field</DaisyLabel>
+                <DaisyInput 
                   id="example-input" 
                   placeholder="Placeholder text" 
                   className="mt-1"
                 />
               </div>
               <div>
-                <Label htmlFor="disabled-input">Disabled Input</Label>
-                <Input 
+                <DaisyLabel htmlFor="disabled-input">Disabled Input</DaisyLabel>
+                <DaisyInput 
                   id="disabled-input" 
                   disabled 
                   value="Disabled value" 
@@ -400,10 +400,10 @@ const ComponentVariations: React.FC = () => {
           Badge Variations
         </h3>
         <div className="flex flex-wrap gap-2">
-          <Badge>Default</Badge>
-          <Badge variant="secondary">Secondary</Badge>
-          <Badge variant="destructive">Destructive</Badge>
-          <Badge variant="outline">Outline</Badge>
+          <DaisyBadge>Default</DaisyBadge>
+          <DaisyBadge variant="secondary">Secondary</DaisyBadge>
+          <DaisyBadge variant="error">Destructive</DaisyBadge>
+          <DaisyBadge variant="outline">Outline</DaisyBadge>
         </div>
       </div>
 
@@ -417,11 +417,11 @@ const ComponentVariations: React.FC = () => {
             <span className="text-green-800 font-inter">Success State</span>
           </div>
           <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-            <AlertTriangle className="h-5 w-5 text-red-600" />
+            <DaisyAlertTriangle className="h-5 w-5 text-red-600" />
             <span className="text-red-800 font-inter">Error State</span>
           </div>
           <div className="flex items-center gap-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-            <AlertTriangle className="h-5 w-5 text-yellow-600" />
+            <DaisyAlertTriangle className="h-5 w-5 text-yellow-600" />
             <span className="text-yellow-800 font-inter">Warning State</span>
           </div>
           <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
@@ -550,7 +550,7 @@ const ResponsivePreview: React.FC = () => {
         </h3>
         <div className="flex gap-2 mb-4">
           {(['mobile', 'tablet', 'desktop'] as const).map((device) => (
-            <Button
+            <DaisyButton
               key={device}
               variant={selectedDevice === device ? 'default' : 'secondary'}
               size="sm"
@@ -558,7 +558,7 @@ const ResponsivePreview: React.FC = () => {
               className="capitalize"
             >
               {device}
-            </Button>
+            </DaisyButton>
           ))}
         </div>
         
@@ -574,7 +574,7 @@ const ResponsivePreview: React.FC = () => {
             <div className="p-4 h-full flex flex-col">
               <div className="flex items-center justify-between mb-4">
                 <h4 className="font-semibold text-[#191919] font-inter">Sample Layout</h4>
-                <Badge>{selectedDevice}</Badge>
+                <DaisyBadge>{selectedDevice}</DaisyBadge>
               </div>
               <div className="flex-1 space-y-4">
                 <div className="h-8 bg-gray-200 rounded"></div>
@@ -586,8 +586,8 @@ const ResponsivePreview: React.FC = () => {
                   )}
                 </div>
                 <div className="flex gap-2">
-                  <Button size="sm">Action</Button>
-                  <Button variant="secondary" size="sm">Cancel</Button>
+                  <DaisyButton size="sm">Action</DaisyButton>
+                  <DaisyButton variant="secondary" size="sm">Cancel</DaisyButton>
                 </div>
               </div>
             </div>
@@ -611,141 +611,141 @@ export const StyleGuide: React.FC = () => {
           Built with a Notion-like aesthetic featuring cream backgrounds, clean typography, and subtle interactions.
         </p>
         <div className="flex items-center justify-center gap-4 mt-4">
-          <Badge className="flex items-center gap-1">
+          <DaisyBadge className="flex items-center gap-1">
             <Palette className="h-3 w-3" />
             Design System
-          </Badge>
-          <Badge variant="secondary" className="flex items-center gap-1">
+          </DaisyBadge>
+          <DaisyBadge variant="secondary" className="flex items-center gap-1">
             <CheckCircle className="h-3 w-3" />
             Validated
-          </Badge>
+          </DaisyBadge>
         </div>
       </div>
 
-      <Tabs defaultValue="colors" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="colors" className="flex items-center gap-2">
+      <DaisyTabs defaultValue="colors" className="w-full">
+        <DaisyTabsList className="grid w-full grid-cols-5">
+          <DaisyTabsTrigger value="colors" className="flex items-center gap-2">
             <Palette className="h-4 w-4" />
             Colors
-          </TabsTrigger>
-          <TabsTrigger value="typography" className="flex items-center gap-2">
+          </DaisyTabsTrigger>
+          <DaisyTabsTrigger value="typography" className="flex items-center gap-2">
             <Type className="h-4 w-4" />
             Typography
-          </TabsTrigger>
-          <TabsTrigger value="spacing" className="flex items-center gap-2">
+          </DaisyTabsTrigger>
+          <DaisyTabsTrigger value="spacing" className="flex items-center gap-2">
             <Grid3X3 className="h-4 w-4" />
             Spacing
-          </TabsTrigger>
-          <TabsTrigger value="components" className="flex items-center gap-2">
+          </DaisyTabsTrigger>
+          <DaisyTabsTrigger value="components" className="flex items-center gap-2">
             <MousePointer className="h-4 w-4" />
             Components
-          </TabsTrigger>
-          <TabsTrigger value="icons" className="flex items-center gap-2">
+          </DaisyTabsTrigger>
+          <DaisyTabsTrigger value="icons" className="flex items-center gap-2">
             <Star className="h-4 w-4" />
             Icons
-          </TabsTrigger>
-        </TabsList>
+          </DaisyTabsTrigger>
+        </DaisyTabsList>
 
-        <TabsContent value="colors" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+        <DaisyTabsContent value="colors" className="mt-6">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="flex items-center gap-2">
                 <Palette className="h-5 w-5" />
                 Color Palette
-              </CardTitle>
-              <CardDescription>
+              </DaisyCardTitle>
+              <DaisyCardDescription>
                 Consistent color scheme based on Notion's aesthetic with cream backgrounds and blue accents
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </p>
+            
+            <DaisyCardContent>
               <ColorPalette />
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
 
-        <TabsContent value="typography" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+        <DaisyTabsContent value="typography" className="mt-6">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="flex items-center gap-2">
                 <Type className="h-5 w-5" />
                 Typography System
-              </CardTitle>
-              <CardDescription>
+              </DaisyCardTitle>
+              <DaisyCardDescription>
                 Inter font family with consistent sizing and weight hierarchy
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </p>
+            
+            <DaisyCardContent>
               <Typography />
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
 
-        <TabsContent value="spacing" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+        <DaisyTabsContent value="spacing" className="mt-6">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="flex items-center gap-2">
                 <Grid3X3 className="h-5 w-5" />
                 Spacing System
-              </CardTitle>
-              <CardDescription>
+              </DaisyCardTitle>
+              <DaisyCardDescription>
                 8px grid system for consistent spacing and layout rhythm
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </p>
+            
+            <DaisyCardContent>
               <SpacingGrid />
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
 
-        <TabsContent value="components" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+        <DaisyTabsContent value="components" className="mt-6">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="flex items-center gap-2">
                 <MousePointer className="h-5 w-5" />
                 Component Library
-              </CardTitle>
-              <CardDescription>
+              </DaisyCardTitle>
+              <DaisyCardDescription>
                 Consistent component variations with proper states and interactions
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </p>
+            
+            <DaisyCardContent>
               <ComponentVariations />
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
 
-        <TabsContent value="icons" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+        <DaisyTabsContent value="icons" className="mt-6">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="flex items-center gap-2">
                 <Star className="h-5 w-5" />
                 Icon System
-              </CardTitle>
-              <CardDescription>
+              </DaisyCardTitle>
+              <DaisyCardDescription>
                 Lucide icons with consistent sizing and usage patterns
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </p>
+            
+            <DaisyCardContent>
               <IconPatterns />
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
+      </DaisyTabs>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center gap-2">
             <Eye className="h-5 w-5" />
             Responsive Design
-          </CardTitle>
-          <CardDescription>
+          </DaisyCardTitle>
+          <DaisyCardDescription>
             Mobile-first responsive design with consistent breakpoints
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </p>
+        
+        <DaisyCardContent>
           <ResponsivePreview />
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </div>
   );
 };

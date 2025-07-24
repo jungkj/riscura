@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useGesture } from '@use-gesture/react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Separator } from '@/components/ui/separator';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -257,9 +257,9 @@ export default function TouchOptimizedTable({
                   { variant: 'secondary' as const, label: status };
     
     return (
-      <Badge variant={config.variant} className="text-xs">
+      <DaisyBadge variant={config.variant} className="text-xs">
         {config.label}
-      </Badge>
+      </DaisyBadge>
     );
   };
   
@@ -290,7 +290,7 @@ export default function TouchOptimizedTable({
     const isExpanded = expandedRow === row.id;
     
     return (
-      <Card 
+      <DaisyCard 
         key={row.id} 
         className={`mb-3 transition-all duration-200 ${
           isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : ''
@@ -303,13 +303,13 @@ export default function TouchOptimizedTable({
           }
         }}
       >
-        <CardContent className="p-4">
+        <DaisyCardContent className="p-4">
           <div className="flex items-start justify-between">
             <div className="flex-1 min-w-0">
               {/* Primary column (first column) */}
               <div className="flex items-center space-x-3 mb-2">
                 {selectable && (
-                  <Checkbox
+                  <DaisyCheckbox
                     checked={isSelected}
                     onCheckedChange={(checked) => handleRowSelect(row.id, checked as boolean)}
                     onClick={(e) => e.stopPropagation()}
@@ -358,9 +358,9 @@ export default function TouchOptimizedTable({
             </div>
             
             {/* Action menu */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
+            <DaisyDropdownMenu>
+              <DaisyDropdownMenuTrigger asChild>
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   className="ml-2 h-8 w-8 p-0"
@@ -368,33 +368,33 @@ export default function TouchOptimizedTable({
                   aria-label="Row actions"
                 >
                   <MoreVertical className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
+                </DaisyButton>
+              </DaisyDropdownMenuTrigger>
+              <DaisyDropdownMenuContent align="end" className="w-48">
+                <DaisyDropdownMenuItem onClick={(e) => e.stopPropagation()}>
                   <Eye className="w-4 h-4 mr-2" />
                   View Details
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
+                </DaisyDropdownMenuItem>
+                <DaisyDropdownMenuItem onClick={(e) => e.stopPropagation()}>
                   <Edit className="w-4 h-4 mr-2" />
                   Edit
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem 
+                </DaisyDropdownMenuItem>
+                <DaisyDropdownMenuSeparator />
+                <DaisyDropdownMenuItem 
                   className="text-red-600"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Trash2 className="w-4 h-4 mr-2" />
                   Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                </DaisyDropdownMenuItem>
+              </DaisyDropdownMenuContent>
+            </DaisyDropdownMenu>
           </div>
           
           {/* Expand/collapse indicator */}
           {columns.length > 4 && (
             <div className="flex justify-center mt-3 pt-2 border-t border-gray-100">
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 className="text-xs text-gray-500"
@@ -404,11 +404,11 @@ export default function TouchOptimizedTable({
                 }}
               >
                 {isExpanded ? 'Show Less' : 'Show More'}
-              </Button>
+              </DaisyButton>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     );
   };
   
@@ -421,7 +421,7 @@ export default function TouchOptimizedTable({
           {searchable && (
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <Input
+              <DaisyInput
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
@@ -435,15 +435,15 @@ export default function TouchOptimizedTable({
           {filterable && (
             <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
               <SheetTrigger asChild>
-                <Button variant="outline" size="sm" className="whitespace-nowrap">
+                <DaisyButton variant="outline" size="sm" className="whitespace-nowrap">
                   <Filter className="w-4 h-4 mr-2" />
                   Filter
                   {Object.values(filters).filter(Boolean).length > 0 && (
-                    <Badge variant="secondary" className="ml-2 text-xs">
+                    <DaisyBadge variant="secondary" className="ml-2 text-xs">
                       {Object.values(filters).filter(Boolean).length}
-                    </Badge>
+                    </DaisyBadge>
                   )}
-                </Button>
+                </DaisyButton>
               </SheetTrigger>
               <SheetContent side="right" className="w-80">
                 <SheetHeader>
@@ -455,7 +455,7 @@ export default function TouchOptimizedTable({
                       <label className="text-sm font-medium text-gray-700 mb-2 block">
                         {column.label}
                       </label>
-                      <Input
+                      <DaisyInput
                         type="text"
                         placeholder={`Filter by ${column.label.toLowerCase()}...`}
                         value={filters[column.key] || ''}
@@ -465,12 +465,12 @@ export default function TouchOptimizedTable({
                   ))}
                   
                   <div className="flex space-x-2 pt-4">
-                    <Button onClick={clearFilters} variant="outline" className="flex-1">
+                    <DaisyButton onClick={clearFilters} variant="outline" className="flex-1">
                       Clear All
-                    </Button>
-                    <Button onClick={() => setIsFilterOpen(false)} className="flex-1">
+                    </DaisyButton>
+                    <DaisyButton onClick={() => setIsFilterOpen(false)} className="flex-1">
                       Apply
-                    </Button>
+                    </DaisyButton>
                   </div>
                 </div>
               </SheetContent>
@@ -478,7 +478,7 @@ export default function TouchOptimizedTable({
           )}
           
           {onRefresh && (
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={onRefresh}
@@ -486,13 +486,13 @@ export default function TouchOptimizedTable({
               aria-label="Refresh data"
             >
               <RefreshCw className={`w-4 h-4 ${loading || isRefreshing ? 'animate-spin' : ''}`} />
-            </Button>
+            </DaisyButton>
           )}
           
           {onExport && (
-            <Button variant="outline" size="sm" onClick={onExport}>
+            <DaisyButton variant="outline" size="sm" onClick={onExport}>
               <Download className="w-4 h-4" />
-            </Button>
+            </DaisyButton>
           )}
         </div>
         
@@ -502,14 +502,14 @@ export default function TouchOptimizedTable({
             <span className="text-sm text-blue-700">
               {selectedRows.size} item{selectedRows.size !== 1 ? 's' : ''} selected
             </span>
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={() => setSelectedRows(new Set())}
               className="text-blue-700 hover:text-blue-800"
             >
               Clear Selection
-            </Button>
+            </DaisyButton>
           </div>
         )}
         
@@ -517,23 +517,23 @@ export default function TouchOptimizedTable({
         {(searchQuery || Object.values(filters).some(Boolean)) && (
           <div className="flex flex-wrap gap-2">
             {searchQuery && (
-              <Badge variant="secondary" className="flex items-center gap-1">
+              <DaisyBadge variant="secondary" className="flex items-center gap-1">
                 Search: {searchQuery}
                 <X 
                   className="w-3 h-3 cursor-pointer" 
                   onClick={() => setSearchQuery('')}
                 />
-              </Badge>
+              </DaisyBadge>
             )}
             {Object.entries(filters).map(([key, value]) => 
               value && (
-                <Badge key={key} variant="secondary" className="flex items-center gap-1">
+                <DaisyBadge key={key} variant="secondary" className="flex items-center gap-1">
                   {columns.find(col => col.key === key)?.label}: {value}
                   <X 
                     className="w-3 h-3 cursor-pointer" 
                     onClick={() => handleFilterChange(key, '')}
                   />
-                </Badge>
+                </DaisyBadge>
               )
             )}
           </div>
@@ -568,14 +568,14 @@ export default function TouchOptimizedTable({
             <Info className="w-8 h-8 mx-auto mb-2 text-gray-400" />
             <p className="text-gray-500">{emptyMessage}</p>
             {(searchQuery || Object.values(filters).some(Boolean)) && (
-              <Button
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={clearFilters}
                 className="mt-2"
               >
                 Clear Filters
-              </Button>
+              </DaisyButton>
             )}
           </div>
         ) : (
@@ -583,7 +583,7 @@ export default function TouchOptimizedTable({
             {/* Select all (mobile) */}
             {selectable && (
               <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg mb-3">
-                <Checkbox
+                <DaisyCheckbox
                   checked={selectedRows.size === paginatedData.length && paginatedData.length > 0}
                   onCheckedChange={handleSelectAll}
                   aria-label="Select all visible rows"
@@ -612,7 +612,7 @@ export default function TouchOptimizedTable({
           </div>
           
           <div className="flex items-center space-x-2">
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
@@ -620,13 +620,13 @@ export default function TouchOptimizedTable({
               aria-label="Previous page"
             >
               <ChevronLeft className="w-4 h-4" />
-            </Button>
+            </DaisyButton>
             
             <span className="text-sm font-medium px-3">
               {currentPage} of {totalPages}
             </span>
             
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
@@ -634,7 +634,7 @@ export default function TouchOptimizedTable({
               aria-label="Next page"
             >
               <ChevronRight className="w-4 h-4" />
-            </Button>
+            </DaisyButton>
           </div>
         </div>
       )}

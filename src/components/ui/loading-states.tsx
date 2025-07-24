@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { 
   Loader2, 
   AlertTriangle, 
@@ -157,7 +157,7 @@ interface ProgressBarProps {
   className?: string;
 }
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({
+export const ProgressBar: React.FC<DaisyProgressBarProps> = ({
   value,
   max = 100,
   label,
@@ -274,7 +274,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
     <div className={cn("text-center py-12 px-4", className)}>
       <div className="max-w-md mx-auto space-y-4">
         <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center">
-          <AlertTriangle className="w-8 h-8 text-red-600" />
+          <DaisyAlertTriangle className="w-8 h-8 text-red-600" />
         </div>
         <div className="space-y-2">
           <h3 className="text-lg font-semibold text-gray-900 font-inter">
@@ -285,10 +285,10 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
           </p>
         </div>
         {onRetry && (
-          <Button onClick={onRetry} className="gap-2">
+          <DaisyButton onClick={onRetry} className="gap-2">
             <RefreshCw className="w-4 h-4" />
             {retryText}
-          </Button>
+          </DaisyButton>
         )}
       </div>
     </div>
@@ -333,10 +333,10 @@ export const NetworkErrorState: React.FC<{ onRetry?: () => void }> = ({ onRetry 
           </p>
         </div>
         {onRetry && (
-          <Button onClick={onRetry} variant="secondary" className="gap-2">
+          <DaisyButton onClick={onRetry} variant="secondary" className="gap-2">
             <RefreshCw className="w-4 h-4" />
             Try again
-          </Button>
+          </DaisyButton>
         )}
       </div>
     </div>
@@ -377,9 +377,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           </p>
         </div>
         {action && (
-          <Button onClick={action.onClick}>
+          <DaisyButton onClick={action.onClick}>
             {action.label}
-          </Button>
+          </DaisyButton>
         )}
       </div>
     </div>
@@ -456,9 +456,9 @@ export const SuccessState: React.FC<{
           </p>
         </div>
         {action && (
-          <Button onClick={action.onClick}>
+          <DaisyButton onClick={action.onClick}>
             {action.label}
-          </Button>
+          </DaisyButton>
         )}
       </div>
     </div>

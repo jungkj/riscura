@@ -8,10 +8,10 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import { debounce } from 'lodash-es';
 import { cn } from '@/lib/utils';
 import { ChevronUp, ChevronDown, Search, Filter } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard } from '@/components/ui/DaisyCard';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import {
   DropdownMenu,
   DropdownMenuContent,

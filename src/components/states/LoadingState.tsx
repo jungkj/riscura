@@ -219,7 +219,7 @@ interface ProgressBarProps {
   className?: string;
 }
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({
+export const ProgressBar: React.FC<DaisyProgressBarProps> = ({
   progress,
   size = 'md',
   color = 'primary',

@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { useToast } from '@/hooks/use-toast';
 import { 
   ArrowLeft, 
@@ -102,53 +102,53 @@ export default function UpdateRiskAssessmentPage() {
         <div className="p-6">
           {/* Header */}
           <div className="mb-6">
-            <Button
+            <DaisyButton
               variant="ghost"
               onClick={() => router.push('/dashboard/quick-actions')}
               className="mb-4"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Quick Actions
-            </Button>
+            </DaisyButton>
             
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Update Risk Assessment</h1>
                 <p className="text-gray-600 mt-1">Review and update existing risk assessments</p>
               </div>
-              <Badge variant="outline" className="text-sm">
+              <DaisyBadge variant="outline" className="text-sm">
                 <Clock className="h-4 w-4 mr-1" />
                 10-15 min
-              </Badge>
+              </DaisyBadge>
             </div>
           </div>
 
           {/* Search Bar */}
-          <Card className="mb-6">
-            <CardContent className="p-4">
+          <DaisyCard className="mb-6">
+            <DaisyCardContent className="p-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
+                <DaisyInput
                   placeholder="Search risks by title, category, or owner..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10"
                 />
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
           {/* Risk List */}
           {loading ? (
-            <Card>
-              <CardContent className="p-12 text-center">
+            <DaisyCard>
+              <DaisyCardContent className="p-12 text-center">
                 <p className="text-gray-500">Loading risks...</p>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           ) : filteredRisks.length === 0 ? (
-            <Card>
-              <CardContent className="p-12 text-center">
-                <AlertTriangle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+            <DaisyCard>
+              <DaisyCardContent className="p-12 text-center">
+                <DaisyAlertTriangle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   {searchQuery ? 'No risks found' : 'No risks to update'}
                 </h3>
@@ -158,35 +158,35 @@ export default function UpdateRiskAssessmentPage() {
                     : 'Create your first risk assessment to get started'}
                 </p>
                 {!searchQuery && (
-                  <Button
+                  <DaisyButton
                     onClick={() => router.push('/dashboard/workflows/risk-assessment/new')}
                   >
                     Create New Risk
-                  </Button>
+                  </DaisyButton>
                 )}
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           ) : (
             <div className="grid gap-4">
               {filteredRisks.map((risk) => (
-                <Card
+                <DaisyCard
                   key={risk.id}
                   className="hover:shadow-md transition-shadow cursor-pointer"
                   onClick={() => handleRiskSelect(risk.id)}
                 >
-                  <CardContent className="p-6">
+                  <DaisyCardContent className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
                           <h3 className="text-lg font-semibold text-gray-900">
                             {risk.title}
                           </h3>
-                          <Badge className={getRiskScoreColor(risk.riskScore)}>
+                          <DaisyBadge className={getRiskScoreColor(risk.riskScore)}>
                             {risk.riskScore.toUpperCase()}
-                          </Badge>
-                          <Badge variant="outline">
+                          </DaisyBadge>
+                          <DaisyBadge variant="outline">
                             {risk.category}
-                          </Badge>
+                          </DaisyBadge>
                           {getTrendIcon(risk.trend)}
                         </div>
                         
@@ -200,31 +200,31 @@ export default function UpdateRiskAssessmentPage() {
                             <span>Last updated: {risk.lastUpdated}</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Badge variant={risk.status === 'active' ? 'default' : 'secondary'}>
+                            <DaisyBadge variant={risk.status === 'active' ? 'default' : 'secondary'}>
                               {risk.status}
-                            </Badge>
+                            </DaisyBadge>
                           </div>
                         </div>
                       </div>
                       
-                      <Button variant="outline" size="sm">
+                      <DaisyButton variant="outline" size="sm">
                         <Edit2 className="h-4 w-4 mr-2" />
                         Update
-                      </Button>
+                      </DaisyButton>
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               ))}
             </div>
           )}
 
           {/* Quick Stats */}
           {!loading && risks.length > 0 && (
-            <Card className="mt-6">
-              <CardHeader>
-                <CardTitle className="text-lg">Quick Overview</CardTitle>
-              </CardHeader>
-              <CardContent>
+            <DaisyCard className="mt-6">
+              <DaisyCardHeader>
+                <DaisyCardTitle className="text-lg">Quick Overview</DaisyCardTitle>
+              
+              <DaisyCardContent>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div className="text-center">
                     <p className="text-2xl font-bold text-gray-900">{risks.length}</p>
@@ -254,8 +254,8 @@ export default function UpdateRiskAssessmentPage() {
                     <p className="text-sm text-gray-600">Need Review (&gt;30 days)</p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           )}
         </div>
       </div>

@@ -11,11 +11,11 @@ import {
   Zap
 } from 'lucide-react';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
 
 interface ContextQualityIndicatorProps {
   contextQuality: {
@@ -58,9 +58,9 @@ const QualityMetric: React.FC<{
   };
 
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
+    <DaisyTooltipProvider>
+      <DaisyTooltip>
+        <DaisyTooltipTrigger asChild>
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <div className={`p-1.5 rounded-md ${getQualityColor()}`}>
@@ -71,7 +71,7 @@ const QualityMetric: React.FC<{
                   <span className="text-sm font-medium">{label}</span>
                   <span className="text-sm font-semibold">{percentage}%</span>
                 </div>
-                <Progress 
+                <DaisyProgress 
                   value={percentage} 
                   className="h-1.5 mt-1"
                   style={{
@@ -81,12 +81,12 @@ const QualityMetric: React.FC<{
               </div>
             </div>
           </div>
-        </TooltipTrigger>
-        <TooltipContent>
+        </DaisyTooltipTrigger>
+        <DaisyTooltipContent>
           <p className="max-w-xs">{description}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+        </DaisyTooltipContent>
+      </DaisyTooltip>
+    
   );
 };
 
@@ -118,10 +118,10 @@ const ContextModeSelector: React.FC<{
   return (
     <div className="flex gap-1 p-1 bg-muted rounded-lg">
       {modes.map((mode) => (
-        <TooltipProvider key={mode.value}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
+        <DaisyTooltipProvider key={mode.value}>
+          <DaisyTooltip>
+            <DaisyTooltipTrigger asChild>
+              <DaisyButton
                 variant={currentMode === mode.value ? 'primary' : 'ghost'}
                 size="sm"
                 onClick={() => onModeChange(mode.value)}
@@ -129,13 +129,13 @@ const ContextModeSelector: React.FC<{
               >
                 {mode.icon}
                 <span className="ml-1">{mode.label}</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
+              </DaisyButton>
+            </DaisyTooltipTrigger>
+            <DaisyTooltipContent>
               <p>{mode.description}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+            </DaisyTooltipContent>
+          </DaisyTooltip>
+        
       ))}
     </div>
   );
@@ -186,15 +186,15 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
         </div>
         
         <div className="flex-1">
-          <Progress value={overallQuality * 100} className="h-1" />
+          <DaisyProgress value={overallQuality * 100} className="h-1" />
         </div>
 
-        <Badge variant="outline" className="text-xs">
+        <DaisyBadge variant="outline" className="text-xs">
           {contextMode}
-        </Badge>
+        </DaisyBadge>
 
         {onRefreshContext && (
-          <Button
+          <DaisyButton
             size="sm"
             variant="ghost"
             onClick={handleRefresh}
@@ -202,7 +202,7 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
             className="h-6 w-6 p-0"
           >
             <RefreshCw className={`h-3 w-3 ${isRefreshing ? 'animate-spin' : ''}`} />
-          </Button>
+          </DaisyButton>
         )}
       </div>
     );
@@ -214,21 +214,21 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
       animate={{ opacity: 1, y: 0 }}
       className={className}
     >
-      <Card>
-        <CardHeader className="pb-3">
+      <DaisyCard>
+        <DaisyCardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <StatusIcon className={`h-5 w-5 ${status.color}`} />
               <div>
-                <CardTitle className="text-base">Context Quality</CardTitle>
-                <CardDescription>
+                <DaisyCardTitle className="text-base">Context Quality</DaisyCardTitle>
+                <DaisyCardDescription>
                   {status.label} - {Math.round(overallQuality * 100)}% overall
-                </CardDescription>
+                </p>
               </div>
             </div>
 
             {onRefreshContext && (
-              <Button
+              <DaisyButton
                 size="sm"
                 variant="outline"
                 onClick={handleRefresh}
@@ -237,12 +237,12 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
               >
                 <RefreshCw className={`h-3 w-3 ${isRefreshing ? 'animate-spin' : ''}`} />
                 Refresh
-              </Button>
+              </DaisyButton>
             )}
           </div>
-        </CardHeader>
+        
 
-        <CardContent className="space-y-4">
+        <DaisyCardContent className="space-y-4">
           {/* Quality Metrics */}
           <div className="space-y-3">
             <QualityMetric
@@ -292,7 +292,7 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
             <div className="space-y-2">
               {contextQuality.relevance < 0.5 && (
                 <div className="flex items-start gap-2 p-2 bg-amber-50 dark:bg-amber-950/20 rounded-md">
-                  <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5" />
+                  <DaisyAlertTriangle className="h-4 w-4 text-amber-600 mt-0.5" />
                   <div className="text-xs text-amber-800 dark:text-amber-200">
                     <strong>Low relevance:</strong> Consider selecting specific risks or controls 
                     to improve context quality.
@@ -331,8 +331,8 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
               )}
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </motion.div>
   );
 }; 

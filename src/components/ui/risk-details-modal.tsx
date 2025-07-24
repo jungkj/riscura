@@ -8,9 +8,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   AlertTriangle, 
@@ -70,7 +70,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
   const getRiskLevelIcon = (level: string) => {
     switch (level) {
       case 'critical':
-        return <AlertTriangle className="w-4 h-4" />;
+        return <DaisyAlertTriangle className="w-4 h-4" />;
       case 'high':
         return <TrendingUp className="w-4 h-4" />;
       case 'medium':
@@ -97,58 +97,58 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[80vh]">
-        <DialogHeader>
-          <DialogTitle className="flex items-center space-x-2">
-            <AlertTriangle className="w-5 h-5 text-orange-600" />
+    <DaisyDialog open={isOpen} onOpenChange={onClose}>
+      <DaisyDialogContent className="max-w-4xl max-h-[80vh]">
+        <DaisyDialogHeader>
+          <DaisyDialogTitle className="flex items-center space-x-2">
+            <DaisyAlertTriangle className="w-5 h-5 text-orange-600" />
             <span>
               Risks: {impact} Impact × {likelihood} Likelihood
             </span>
-          </DialogTitle>
-          <DialogDescription>
+          </DaisyDialogTitle>
+          <DaisyDialogDescription>
             {risks.length} risk{risks.length !== 1 ? 's' : ''} found in this category
-          </DialogDescription>
-        </DialogHeader>
+          </DaisyDialogDescription>
+        </DaisyDialogHeader>
 
         <ScrollArea className="max-h-[60vh] pr-4">
           <div className="space-y-4">
             {risks.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
-                <AlertTriangle className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <DaisyAlertTriangle className="w-12 h-12 mx-auto mb-4 opacity-50" />
                 <p>No risks found in this category</p>
               </div>
             ) : (
               risks.map((risk) => (
-                <Card key={risk.id} className="border-l-4 border-l-blue-500">
-                  <CardHeader className="pb-3">
+                <DaisyCard key={risk.id} className="border-l-4 border-l-blue-500">
+                  <DaisyCardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div className="space-y-1">
-                        <CardTitle className="text-lg font-semibold">
+                        <DaisyCardTitle className="text-lg font-semibold">
                           {risk.title}
-                        </CardTitle>
-                        <CardDescription className="text-sm text-gray-600">
+                        </DaisyCardTitle>
+                        <DaisyCardDescription className="text-sm text-gray-600">
                           ID: {risk.id}
-                        </CardDescription>
+                        </p>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Badge 
+                        <DaisyBadge 
                           className={`${getRiskLevelColor(risk.riskLevel)} flex items-center space-x-1`}
                         >
                           {getRiskLevelIcon(risk.riskLevel)}
                           <span className="capitalize">{risk.riskLevel}</span>
-                        </Badge>
-                        <Badge 
+                        </DaisyBadge>
+                        <DaisyBadge 
                           variant="outline" 
                           className={getStatusColor(risk.status)}
                         >
                           {risk.status.charAt(0).toUpperCase() + risk.status.slice(1)}
-                        </Badge>
+                        </DaisyBadge>
                       </div>
                     </div>
-                  </CardHeader>
                   
-                  <CardContent className="space-y-4">
+                  
+                  <DaisyCardContent className="space-y-4">
                     <p className="text-sm text-gray-700 dark:text-gray-300">
                       {risk.description}
                     </p>
@@ -218,29 +218,29 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                     </div>
 
                     <div className="flex justify-end">
-                      <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                      <DaisyButton variant="outline" size="sm" className="flex items-center space-x-2">
                         <ExternalLink className="w-4 h-4" />
                         <span>View Details</span>
-                      </Button>
+                      </DaisyButton>
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               ))
             )}
           </div>
         </ScrollArea>
 
         <div className="flex justify-end space-x-2 pt-4 border-t">
-          <Button variant="outline" onClick={onClose}>
+          <DaisyButton variant="outline" onClick={onClose}>
             Close
-          </Button>
+          </DaisyButton>
           {risks.length > 0 && (
-            <Button>
+            <DaisyButton>
               View All Risks
-            </Button>
+            </DaisyButton>
           )}
         </div>
-      </DialogContent>
-    </Dialog>
+      </DaisyDialogContent>
+    </DaisyDialog>
   );
 }; 

@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
@@ -242,7 +242,7 @@ export function ComplianceGapAnalysis() {
           <DaisyCardTitle>Compliance Gap Analysis</DaisyCardTitle>
           <DaisyCardDescription>
             Analyze compliance gaps and generate remediation recommendations
-          </CardDescription>
+          </p>
         
         <DaisyCardContent>
           <div className="grid gap-4 md:grid-cols-3">
@@ -297,15 +297,15 @@ export function ComplianceGapAnalysis() {
       </DaisyCard>
 
       {analysis && (
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="gaps">Gaps</TabsTrigger>
-            <TabsTrigger value="requirements">Requirements</TabsTrigger>
-            <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
-          </TabsList>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
+          <DaisyTabsList className="grid w-full grid-cols-4">
+            <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="gaps">Gaps</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="requirements">Requirements</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="recommendations">Recommendations</DaisyTabsTrigger>
+          </DaisyTabsList>
 
-          <TabsContent value="overview" className="space-y-6">
+          <DaisyTabsContent value="overview" className="space-y-6">
             <div className="grid gap-4 md:grid-cols-4">
               <DaisyCard>
                 <DaisyCardHeader className="pb-3">
@@ -380,7 +380,7 @@ export function ComplianceGapAnalysis() {
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      <Tooltip />
+                      <DaisyTooltip />
                     </PieChart>
                   </ResponsiveContainer>
                 </DaisyCardBody>
@@ -396,7 +396,7 @@ export function ComplianceGapAnalysis() {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="severity" />
                       <YAxis />
-                      <Tooltip />
+                      <DaisyTooltip />
                       <Bar dataKey="count" fill="#8884d8" />
                     </BarChart>
                   </ResponsiveContainer>
@@ -414,32 +414,32 @@ export function ComplianceGapAnalysis() {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis type="number" />
                     <YAxis type="category" dataKey="type" width={150} />
-                    <Tooltip />
+                    <DaisyTooltip />
                     <Bar dataKey="count" fill="#10b981" />
                   </BarChart>
                 </ResponsiveContainer>
               </DaisyCardBody>
             </DaisyCard>
-          </TabsContent>
+          </DaisyTabsContent>
 
-          <TabsContent value="gaps">
+          <DaisyTabsContent value="gaps">
             <ComplianceGapList assessmentId={selectedAssessment} gaps={analysis.gaps} />
-          </TabsContent>
+          </DaisyTabsContent>
 
-          <TabsContent value="requirements">
+          <DaisyTabsContent value="requirements">
             <ComplianceRequirementAssessment 
               assessmentId={selectedAssessment}
               frameworkId={analysis.framework.id}
             />
-          </TabsContent>
+          </DaisyTabsContent>
 
-          <TabsContent value="recommendations" className="space-y-4">
+          <DaisyTabsContent value="recommendations" className="space-y-4">
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle>Recommended Actions</DaisyCardTitle>
                 <DaisyCardDescription>
                   Prioritized recommendations based on gap analysis
-                </CardDescription>
+                </p>
               
               <DaisyCardContent className="space-y-4">
                 {analysis.recommendations.map((recommendation, index) => (
@@ -458,8 +458,8 @@ export function ComplianceGapAnalysis() {
                 Export Report
               </DaisyButton>
             </div>
-          </TabsContent>
-        </Tabs>
+          </DaisyTabsContent>
+        </DaisyTabs>
       )}
     </div>
   );

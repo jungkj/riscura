@@ -6,12 +6,12 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
-import { Textarea } from '@/components/ui/textarea';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-import { Switch } from '@/components/ui/switch';
+import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { Slider } from '@/components/ui/slider';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -246,16 +246,16 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
           </DaisyDialogDescription>
         </DaisyDialogHeader>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="alerts">Alerts</TabsTrigger>
-            <TabsTrigger value="monitoring">Monitoring</TabsTrigger>
-            <TabsTrigger value="access">Access Control</TabsTrigger>
-            <TabsTrigger value="compliance">Compliance</TabsTrigger>
-            <TabsTrigger value="integrations">Integrations</TabsTrigger>
-          </TabsList>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <DaisyTabsList className="grid w-full grid-cols-5">
+            <DaisyTabsTrigger value="alerts">Alerts</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="monitoring">Monitoring</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="access">Access Control</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="integrations">Integrations</DaisyTabsTrigger>
+          </DaisyTabsList>
 
-          <TabsContent value="alerts" className="space-y-6">
+          <DaisyTabsContent value="alerts" className="space-y-6">
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle className="flex items-center space-x-2">
@@ -264,7 +264,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                 </DaisyCardTitle>
                 <DaisyCardDescription>
                   Configure how and when you receive security alerts
-                </CardDescription>
+                </p>
               
               <DaisyCardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -276,7 +276,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                       </DaisyLabel>
                       <p className="text-sm text-gray-500">Receive alerts via email</p>
                     </div>
-                    <Switch
+                    <DaisySwitch
                       checked={settings.alertSettings.enableEmailAlerts}
                       onCheckedChange={(checked) => updateSettings('alertSettings.enableEmailAlerts', checked)}
                     />
@@ -290,7 +290,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                       </DaisyLabel>
                       <p className="text-sm text-gray-500">Receive alerts via SMS</p>
                     </div>
-                    <Switch
+                    <DaisySwitch
                       checked={settings.alertSettings.enableSMSAlerts}
                       onCheckedChange={(checked) => updateSettings('alertSettings.enableSMSAlerts', checked)}
                     />
@@ -304,7 +304,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                       </DaisyLabel>
                       <p className="text-sm text-gray-500">Browser notifications</p>
                     </div>
-                    <Switch
+                    <DaisySwitch
                       checked={settings.alertSettings.enablePushNotifications}
                       onCheckedChange={(checked) => updateSettings('alertSettings.enablePushNotifications', checked)}
                     />
@@ -338,7 +338,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <DaisyLabel>Quiet Hours</DaisyLabel>
-                    <Switch
+                    <DaisySwitch
                       checked={settings.alertSettings.quietHours.enabled}
                       onCheckedChange={(checked) => updateSettings('alertSettings.quietHours.enabled', checked)}
                     />
@@ -367,9 +367,9 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                 </div>
               </DaisyCardBody>
             </DaisyCard>
-          </TabsContent>
+          </DaisyTabsContent>
 
-          <TabsContent value="monitoring" className="space-y-6">
+          <DaisyTabsContent value="monitoring" className="space-y-6">
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle className="flex items-center space-x-2">
@@ -378,7 +378,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                 </DaisyCardTitle>
                 <DaisyCardDescription>
                   Configure security monitoring and detection settings
-                </CardDescription>
+                </p>
               
               <DaisyCardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -387,7 +387,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                       <DaisyLabel>Real-time Monitoring</DaisyLabel>
                       <p className="text-sm text-gray-500">Monitor security events in real-time</p>
                     </div>
-                    <Switch
+                    <DaisySwitch
                       checked={settings.monitoring.enableRealTimeMonitoring}
                       onCheckedChange={(checked) => updateSettings('monitoring.enableRealTimeMonitoring', checked)}
                     />
@@ -398,7 +398,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                       <DaisyLabel>Anomaly Detection</DaisyLabel>
                       <p className="text-sm text-gray-500">Detect unusual patterns</p>
                     </div>
-                    <Switch
+                    <DaisySwitch
                       checked={settings.monitoring.enableAnomalyDetection}
                       onCheckedChange={(checked) => updateSettings('monitoring.enableAnomalyDetection', checked)}
                     />
@@ -409,7 +409,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                       <DaisyLabel>Behavior Analysis</DaisyLabel>
                       <p className="text-sm text-gray-500">Analyze user behavior patterns</p>
                     </div>
-                    <Switch
+                    <DaisySwitch
                       checked={settings.monitoring.enableBehaviorAnalysis}
                       onCheckedChange={(checked) => updateSettings('monitoring.enableBehaviorAnalysis', checked)}
                     />
@@ -472,9 +472,9 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                 </div>
               </DaisyCardBody>
             </DaisyCard>
-          </TabsContent>
+          </DaisyTabsContent>
 
-          <TabsContent value="access" className="space-y-6">
+          <DaisyTabsContent value="access" className="space-y-6">
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle className="flex items-center space-x-2">
@@ -483,7 +483,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                 </DaisyCardTitle>
                 <DaisyCardDescription>
                   Configure authentication and authorization policies
-                </CardDescription>
+                </p>
               
               <DaisyCardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -492,7 +492,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                       <DaisyLabel>Strong Password Policy</DaisyLabel>
                       <p className="text-sm text-gray-500">Enforce complex passwords</p>
                     </div>
-                    <Switch
+                    <DaisySwitch
                       checked={settings.accessControl.enforceStrongPasswords}
                       onCheckedChange={(checked) => updateSettings('accessControl.enforceStrongPasswords', checked)}
                     />
@@ -503,7 +503,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                       <DaisyLabel>Multi-Factor Authentication</DaisyLabel>
                       <p className="text-sm text-gray-500">Require MFA for all users</p>
                     </div>
-                    <Switch
+                    <DaisySwitch
                       checked={settings.accessControl.requireMFA}
                       onCheckedChange={(checked) => updateSettings('accessControl.requireMFA', checked)}
                     />
@@ -549,7 +549,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
 
                 <div className="space-y-2">
                   <DaisyLabel>Allowed IP Ranges</DaisyLabel>
-                  <Textarea
+                  <DaisyTextarea
                     placeholder="Enter IP ranges (one per line)&#10;192.168.1.0/24&#10;10.0.0.0/8"
                     value={settings.accessControl.allowedIPRanges.join('\n')}
                     onChange={(e) => updateSettings('accessControl.allowedIPRanges', e.target.value.split('\n').filter(ip => ip.trim()))}
@@ -559,9 +559,9 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                 </div>
               </DaisyCardBody>
             </DaisyCard>
-          </TabsContent>
+          </DaisyTabsContent>
 
-          <TabsContent value="compliance" className="space-y-6">
+          <DaisyTabsContent value="compliance" className="space-y-6">
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle className="flex items-center space-x-2">
@@ -570,7 +570,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                 </DaisyCardTitle>
                 <DaisyCardDescription>
                   Configure compliance monitoring and reporting
-                </CardDescription>
+                </p>
               
               <DaisyCardContent className="space-y-6">
                 <div className="flex items-center justify-between">
@@ -578,7 +578,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     <DaisyLabel>Enable Compliance Monitoring</DaisyLabel>
                     <p className="text-sm text-gray-500">Automatically monitor compliance status</p>
                   </div>
-                  <Switch
+                  <DaisySwitch
                     checked={settings.compliance.enableComplianceMonitoring}
                     onCheckedChange={(checked) => updateSettings('compliance.enableComplianceMonitoring', checked)}
                   />
@@ -608,7 +608,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                       <DaisyLabel>Auto Reporting</DaisyLabel>
                       <p className="text-sm text-gray-500">Generate reports automatically</p>
                     </div>
-                    <Switch
+                    <DaisySwitch
                       checked={settings.compliance.autoReporting}
                       onCheckedChange={(checked) => updateSettings('compliance.autoReporting', checked)}
                     />
@@ -619,7 +619,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                       <DaisyLabel>Audit Logging</DaisyLabel>
                       <p className="text-sm text-gray-500">Enable detailed audit logs</p>
                     </div>
-                    <Switch
+                    <DaisySwitch
                       checked={settings.compliance.enableAuditLogging}
                       onCheckedChange={(checked) => updateSettings('compliance.enableAuditLogging', checked)}
                     />
@@ -646,9 +646,9 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                 )}
               </DaisyCardBody>
             </DaisyCard>
-          </TabsContent>
+          </DaisyTabsContent>
 
-          <TabsContent value="integrations" className="space-y-6">
+          <DaisyTabsContent value="integrations" className="space-y-6">
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle className="flex items-center space-x-2">
@@ -657,7 +657,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                 </DaisyCardTitle>
                 <DaisyCardDescription>
                   Configure external security tool integrations
-                </CardDescription>
+                </p>
               
               <DaisyCardContent className="space-y-6">
                 <div className="space-y-4">
@@ -666,7 +666,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                       <DaisyLabel>SIEM Integration</DaisyLabel>
                       <p className="text-sm text-gray-500">Send events to SIEM system</p>
                     </div>
-                    <Switch
+                    <DaisySwitch
                       checked={settings.integrations.enableSIEMIntegration}
                       onCheckedChange={(checked) => updateSettings('integrations.enableSIEMIntegration', checked)}
                     />
@@ -691,7 +691,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     <DaisyLabel>API Logging</DaisyLabel>
                     <p className="text-sm text-gray-500">Log all API requests and responses</p>
                   </div>
-                  <Switch
+                  <DaisySwitch
                     checked={settings.integrations.enableAPILogging}
                     onCheckedChange={(checked) => updateSettings('integrations.enableAPILogging', checked)}
                   />
@@ -712,15 +712,15 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     <DaisyLabel>Third-party Scanning</DaisyLabel>
                     <p className="text-sm text-gray-500">Enable external vulnerability scanning</p>
                   </div>
-                  <Switch
+                  <DaisySwitch
                     checked={settings.integrations.enableThirdPartyScanning}
                     onCheckedChange={(checked) => updateSettings('integrations.enableThirdPartyScanning', checked)}
                   />
                 </div>
               </DaisyCardBody>
             </DaisyCard>
-          </TabsContent>
-        </Tabs>
+          </DaisyTabsContent>
+        </DaisyTabs>
 
         {hasChanges && (
           <DaisyAlert>

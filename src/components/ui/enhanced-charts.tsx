@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { TrendingUp, TrendingDown, BarChart3, PieChart, Activity } from 'lucide-react';
 
 // Chart Types
@@ -51,22 +51,22 @@ export const SimpleBarChart: React.FC<ChartProps> = ({
   const maxValue = Math.max(...data.map(d => d.value));
   
   return (
-    <Card className={cn("border border-gray-200", className)}>
+    <DaisyCard className={cn("border border-gray-200", className)}>
       {(title || subtitle) && (
-        <CardHeader>
+        <DaisyCardHeader>
           {title && (
-            <CardTitle className="flex items-center gap-2 text-[#191919] font-inter">
+            <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter">
               <BarChart3 className="h-5 w-5 text-[#199BEC]" />
               {title}
-            </CardTitle>
+            </DaisyCardTitle>
           )}
           {subtitle && (
             <p className="text-sm text-gray-600 font-inter">{subtitle}</p>
           )}
-        </CardHeader>
+        
       )}
       
-      <CardContent>
+      <DaisyCardContent>
         <div className="space-y-4">
           {/* Chart */}
           <div className="space-y-3" style={{ height: `${height}px` }}>
@@ -112,8 +112,8 @@ export const SimpleBarChart: React.FC<ChartProps> = ({
             </div>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 };
 
@@ -177,22 +177,22 @@ export const SimpleDonutChart: React.FC<ChartProps> = ({
   });
 
   return (
-    <Card className={cn("border border-gray-200", className)}>
+    <DaisyCard className={cn("border border-gray-200", className)}>
       {(title || subtitle) && (
-        <CardHeader>
+        <DaisyCardHeader>
           {title && (
-            <CardTitle className="flex items-center gap-2 text-[#191919] font-inter">
+            <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter">
               <PieChart className="h-5 w-5 text-[#199BEC]" />
               {title}
-            </CardTitle>
+            </DaisyCardTitle>
           )}
           {subtitle && (
             <p className="text-sm text-gray-600 font-inter">{subtitle}</p>
           )}
-        </CardHeader>
+        
       )}
       
-      <CardContent>
+      <DaisyCardContent>
         <div className="flex flex-col lg:flex-row gap-6 items-center">
           {/* Chart */}
           <div className="relative">
@@ -262,8 +262,8 @@ export const SimpleDonutChart: React.FC<ChartProps> = ({
             </div>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 };
 
@@ -313,8 +313,8 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   };
 
   return (
-    <Card className={cn("border border-gray-200 hover:shadow-sm transition-all duration-200", className)}>
-      <CardContent className="p-4">
+    <DaisyCard className={cn("border border-gray-200 hover:shadow-sm transition-all duration-200", className)}>
+      <DaisyCardContent className="p-4">
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <p className="text-sm text-gray-600 font-inter font-medium mb-1">
@@ -341,8 +341,8 @@ export const MetricCard: React.FC<MetricCardProps> = ({
             </div>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 };
 
@@ -359,7 +359,7 @@ export interface ProgressRingProps {
   className?: string;
 }
 
-export const ProgressRing: React.FC<ProgressRingProps> = ({
+export const ProgressRing: React.FC<DaisyProgressRingProps> = ({
   value,
   max = 100,
   size = 120,
@@ -377,7 +377,7 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   return (
-    <Card className={cn("border border-gray-200 p-4", className)}>
+    <DaisyCard className={cn("border border-gray-200 p-4", className)}>
       <div className="flex flex-col items-center text-center">
         <div className="relative">
           <svg width={size} height={size} className="transform -rotate-90">
@@ -430,7 +430,7 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
           </div>
         )}
       </div>
-    </Card>
+    </DaisyCard>
   );
 };
 

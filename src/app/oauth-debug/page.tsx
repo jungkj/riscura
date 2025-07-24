@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 
 export default function OAuthDebugPage() {
   const [debugInfo, setDebugInfo] = useState<any>(null);
@@ -64,11 +64,11 @@ export default function OAuthDebugPage() {
 
   return (
     <div className="container mx-auto p-8 max-w-4xl">
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>OAuth Debug Information</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <DaisyCard className="mb-6">
+        <DaisyCardHeader>
+          <DaisyCardTitle>OAuth Debug Information</DaisyCardTitle>
+        
+        <DaisyCardContent>
           {error && (
             <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded text-red-800">
               {error}
@@ -79,19 +79,19 @@ export default function OAuthDebugPage() {
             <div>
               <h3 className="font-semibold mb-2">Actions:</h3>
               <div className="space-x-2">
-                <Button 
+                <DaisyButton 
                   onClick={testGoogleSignIn} 
                   disabled={loading}
                   variant="default"
                 >
                   {loading ? 'Testing...' : 'Test Google Sign-In'}
-                </Button>
-                <Button 
+                </DaisyButton>
+                <DaisyButton 
                   onClick={fetchDebugInfo} 
                   variant="outline"
                 >
                   Refresh Debug Info
-                </Button>
+                </DaisyButton>
               </div>
             </div>
 
@@ -123,8 +123,8 @@ export default function OAuthDebugPage() {
               </p>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </div>
   );
 }

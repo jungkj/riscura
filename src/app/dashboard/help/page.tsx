@@ -3,11 +3,11 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { 
   ArrowLeft, 
   Search,
@@ -158,14 +158,14 @@ export default function HelpPage() {
         <div className="p-6">
           {/* Header */}
           <div className="mb-6">
-            <Button
+            <DaisyButton
               variant="ghost"
               onClick={() => router.push('/dashboard')}
               className="mb-4"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard
-            </Button>
+            </DaisyButton>
             
             <div className="flex items-center justify-between">
               <div>
@@ -176,68 +176,68 @@ export default function HelpPage() {
           </div>
 
           {/* Search Bar */}
-          <Card className="mb-6">
-            <CardContent className="p-4">
+          <DaisyCard className="mb-6">
+            <DaisyCardContent className="p-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
+                <DaisyInput
                   placeholder="Search help articles and FAQs..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10"
                 />
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
           {/* Main Content */}
-          <Tabs defaultValue="articles" className="space-y-6">
-            <TabsList>
-              <TabsTrigger value="articles">Help Articles</TabsTrigger>
-              <TabsTrigger value="faqs">FAQs</TabsTrigger>
-              <TabsTrigger value="videos">Video Tutorials</TabsTrigger>
-              <TabsTrigger value="contact">Contact Support</TabsTrigger>
-            </TabsList>
+          <DaisyTabs defaultValue="articles" className="space-y-6">
+            <DaisyTabsList>
+              <DaisyTabsTrigger value="articles">Help Articles</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="faqs">FAQs</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="videos">Video Tutorials</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="contact">Contact Support</DaisyTabsTrigger>
+            </DaisyTabsList>
 
             {/* Help Articles */}
-            <TabsContent value="articles">
+            <DaisyTabsContent value="articles">
               {/* Category Filter */}
               <div className="flex gap-2 mb-6">
-                <Button
+                <DaisyButton
                   variant={selectedCategory === 'all' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setSelectedCategory('all')}
                 >
                   All Categories
-                </Button>
+                </DaisyButton>
                 {categories.map(category => (
-                  <Button
+                  <DaisyButton
                     key={category}
                     variant={selectedCategory === category ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setSelectedCategory(category)}
                   >
                     {category}
-                  </Button>
+                  </DaisyButton>
                 ))}
               </div>
 
               {/* Articles Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredArticles.map(article => (
-                  <Card
+                  <DaisyCard
                     key={article.id}
                     className="hover:shadow-md transition-shadow cursor-pointer"
                     onClick={() => router.push(`/dashboard/help/article/${article.id}`)}
                   >
-                    <CardContent className="p-6">
+                    <DaisyCardContent className="p-6">
                       <div className="flex items-start justify-between mb-4">
                         <div className="p-2 bg-blue-100 rounded-lg">
                           <article.icon className="h-6 w-6 text-blue-600" />
                         </div>
-                        <Badge variant="outline" className="text-xs">
+                        <DaisyBadge variant="outline" className="text-xs">
                           {article.category}
-                        </Badge>
+                        </DaisyBadge>
                       </div>
                       
                       <h3 className="font-semibold text-gray-900 mb-2">
@@ -257,28 +257,28 @@ export default function HelpPage() {
                           {article.helpful} found helpful
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </DaisyCardBody>
+                  </DaisyCard>
                 ))}
               </div>
 
               {filteredArticles.length === 0 && (
-                <Card>
-                  <CardContent className="p-12 text-center">
+                <DaisyCard>
+                  <DaisyCardContent className="p-12 text-center">
                     <HelpCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No articles found</h3>
                     <p className="text-gray-600">Try adjusting your search or category filter</p>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               )}
-            </TabsContent>
+            </DaisyTabsContent>
 
             {/* FAQs */}
-            <TabsContent value="faqs">
+            <DaisyTabsContent value="faqs">
               <div className="space-y-4">
                 {filteredFAQs.map((faq, index) => (
-                  <Card key={index}>
-                    <CardContent className="p-6">
+                  <DaisyCard key={index}>
+                    <DaisyCardContent className="p-6">
                       <div className="flex items-start gap-3">
                         <HelpCircle className="h-5 w-5 text-blue-600 mt-0.5" />
                         <div className="flex-1">
@@ -288,32 +288,32 @@ export default function HelpPage() {
                           <p className="text-gray-600">
                             {faq.answer}
                           </p>
-                          <Badge variant="outline" className="mt-3 text-xs">
+                          <DaisyBadge variant="outline" className="mt-3 text-xs">
                             {faq.category}
-                          </Badge>
+                          </DaisyBadge>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </DaisyCardBody>
+                  </DaisyCard>
                 ))}
               </div>
 
               {filteredFAQs.length === 0 && (
-                <Card>
-                  <CardContent className="p-12 text-center">
+                <DaisyCard>
+                  <DaisyCardContent className="p-12 text-center">
                     <HelpCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No FAQs found</h3>
                     <p className="text-gray-600">Try a different search term</p>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               )}
-            </TabsContent>
+            </DaisyTabsContent>
 
             {/* Video Tutorials */}
-            <TabsContent value="videos">
+            <DaisyTabsContent value="videos">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                  <CardContent className="p-6">
+                <DaisyCard className="hover:shadow-md transition-shadow cursor-pointer">
+                  <DaisyCardContent className="p-6">
                     <div className="aspect-video bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
                       <Video className="h-12 w-12 text-gray-400" />
                     </div>
@@ -325,16 +325,16 @@ export default function HelpPage() {
                     </p>
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-500">5:23</span>
-                      <Button size="sm" variant="outline">
+                      <DaisyButton size="sm" variant="outline">
                         Watch
                         <ExternalLink className="h-3 w-3 ml-1" />
-                      </Button>
+                      </DaisyButton>
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
 
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                  <CardContent className="p-6">
+                <DaisyCard className="hover:shadow-md transition-shadow cursor-pointer">
+                  <DaisyCardContent className="p-6">
                     <div className="aspect-video bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
                       <Video className="h-12 w-12 text-gray-400" />
                     </div>
@@ -346,16 +346,16 @@ export default function HelpPage() {
                     </p>
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-500">12:45</span>
-                      <Button size="sm" variant="outline">
+                      <DaisyButton size="sm" variant="outline">
                         Watch
                         <ExternalLink className="h-3 w-3 ml-1" />
-                      </Button>
+                      </DaisyButton>
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
 
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                  <CardContent className="p-6">
+                <DaisyCard className="hover:shadow-md transition-shadow cursor-pointer">
+                  <DaisyCardContent className="p-6">
                     <div className="aspect-video bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
                       <Video className="h-12 w-12 text-gray-400" />
                     </div>
@@ -367,24 +367,24 @@ export default function HelpPage() {
                     </p>
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-500">8:17</span>
-                      <Button size="sm" variant="outline">
+                      <DaisyButton size="sm" variant="outline">
                         Watch
                         <ExternalLink className="h-3 w-3 ml-1" />
-                      </Button>
+                      </DaisyButton>
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               </div>
-            </TabsContent>
+            </DaisyTabsContent>
 
             {/* Contact Support */}
-            <TabsContent value="contact">
+            <DaisyTabsContent value="contact">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Get in Touch</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
+                <DaisyCard>
+                  <DaisyCardHeader>
+                    <DaisyCardTitle className="text-lg">Get in Touch</DaisyCardTitle>
+                  
+                  <DaisyCardContent className="space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-blue-100 rounded-lg">
                         <Mail className="h-5 w-5 text-blue-600" />
@@ -416,14 +416,14 @@ export default function HelpPage() {
                         <p className="text-sm text-gray-600">Available during business hours</p>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
 
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Support Hours</CardTitle>
-                  </CardHeader>
-                  <CardContent>
+                <DaisyCard>
+                  <DaisyCardHeader>
+                    <DaisyCardTitle className="text-lg">Support Hours</DaisyCardTitle>
+                  
+                  <DaisyCardContent>
                     <div className="space-y-3">
                       <div className="flex justify-between py-2 border-b">
                         <span className="text-gray-600">Monday - Friday</span>
@@ -447,11 +447,11 @@ export default function HelpPage() {
                         Enterprise customers have 24/7 priority support
                       </p>
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               </div>
-            </TabsContent>
-          </Tabs>
+            </DaisyTabsContent>
+          </DaisyTabs>
         </div>
       </div>
     </ProtectedRoute>

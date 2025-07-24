@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { useImportJob } from '@/hooks/useImportJob';
-import { Progress } from '@/components/ui/progress';
-import { Alert } from '@/components/ui/alert';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisyCard } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { useRouter } from 'next/navigation';
 import { 
   CheckCircle, 
@@ -45,28 +45,28 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
 
   if (isLoading && !job) {
     return (
-      <Card className="p-6">
+      <DaisyCard className="p-6">
         <div className="flex items-center justify-center">
           <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
           <span className="ml-2">Loading import status...</span>
         </div>
-      </Card>
+      </DaisyCard>
     );
   }
 
   if (error) {
     return (
-      <Alert variant="error">
+      <DaisyAlert variant="error">
         {error}
-      </Alert>
+      </DaisyAlert>
     );
   }
 
   if (!job) {
     return (
-      <Alert variant="error">
+      <DaisyAlert variant="error">
         Import job not found
-      </Alert>
+      </DaisyAlert>
     );
   }
 
@@ -119,7 +119,7 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
   };
 
   return (
-    <Card className="p-6">
+    <DaisyCard className="p-6">
       <div className="space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -135,7 +135,7 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
             </div>
           </div>
           {job.status === 'PROCESSING' && (
-            <Button
+            <DaisyButton
               onClick={handleCancel}
               variant="outline"
               size="sm"
@@ -147,14 +147,14 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
                 <X className="h-4 w-4" />
               )}
               Cancel
-            </Button>
+            </DaisyButton>
           )}
         </div>
 
         {/* Progress Bar */}
         {(job.status === 'QUEUED' || job.status === 'PROCESSING') && (
           <div className="space-y-2">
-            <Progress value={job.progress} className="h-2" />
+            <DaisyProgress value={job.progress} className="h-2" />
             <p className="text-sm text-gray-600">
               {job.progressMessage || 'Processing...'}
             </p>
@@ -163,21 +163,21 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
 
         {/* Error Message */}
         {job.status === 'FAILED' && job.errorMessage && (
-          <Alert variant="error">
-            <AlertCircle className="h-4 w-4" />
+          <DaisyAlert variant="error">
+            <DaisyAlertCircle className="h-4 w-4" />
             <span className="ml-2">{job.errorMessage}</span>
-          </Alert>
+          </DaisyAlert>
         )}
 
         {/* Success Results */}
         {job.status === 'COMPLETED' && (
           <>
-            <Alert variant="success">
+            <DaisyAlert variant="success">
               <CheckCircle className="h-4 w-4" />
               <span className="ml-2">
                 {job.progressMessage || 'Import completed successfully!'}
               </span>
-            </Alert>
+            </DaisyAlert>
             {formatImportResults()}
           </>
         )}
@@ -205,16 +205,16 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
         {/* Actions */}
         {job.status === 'COMPLETED' && (
           <div className="flex gap-2 pt-2">
-            <Button
+            <DaisyButton
               onClick={() => router.push('/risks')}
               size="sm"
             >
               <Eye className="h-4 w-4 mr-2" />
               View Imported Data
-            </Button>
+            </DaisyButton>
           </div>
         )}
       </div>
-    </Card>
+    </DaisyCard>
   );
 };

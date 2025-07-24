@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSharePointFiles } from '@/hooks/useSharePointFiles';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Alert } from '@/components/ui/alert';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard } from '@/components/ui/DaisyCard';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { 
   FileSpreadsheet, 
   Folder, 
@@ -80,12 +80,12 @@ export const SharePointFileBrowser: React.FC<Props> = ({
 
   if (isLoading && files.length === 0) {
     return (
-      <Card className="p-6">
+      <DaisyCard className="p-6">
         <div className="flex items-center justify-center">
           <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
           <span className="ml-2">Loading files...</span>
         </div>
-      </Card>
+      </DaisyCard>
     );
   }
 
@@ -104,27 +104,27 @@ export const SharePointFileBrowser: React.FC<Props> = ({
             className="w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <Button
+        <DaisyButton
           onClick={handleSearch}
           disabled={isLoading}
           variant="outline"
         >
           Search
-        </Button>
-        <Button
+        </DaisyButton>
+        <DaisyButton
           onClick={refresh}
           variant="outline"
           disabled={isLoading}
         >
           <RefreshCw className="h-4 w-4" />
-        </Button>
+        </DaisyButton>
       </div>
 
       {/* Current Path / Search Results */}
       {isSearching && searchQuery && (
         <div className="flex items-center text-sm text-gray-600">
           <span>Search results for: "{searchQuery}"</span>
-          <Button
+          <DaisyButton
             onClick={() => {
               setSearchQuery('');
               setIsSearching(false);
@@ -135,19 +135,19 @@ export const SharePointFileBrowser: React.FC<Props> = ({
             className="ml-2"
           >
             Clear search
-          </Button>
+          </DaisyButton>
         </div>
       )}
 
       {/* Error Alert */}
       {error && (
-        <Alert variant="error">
+        <DaisyAlert variant="error">
           {error}
-        </Alert>
+        </DaisyAlert>
       )}
 
       {/* File List */}
-      <Card className="divide-y">
+      <DaisyCard className="divide-y">
         {files.length === 0 ? (
           <div className="p-8 text-center text-gray-500">
             {isSearching ? (
@@ -184,7 +184,7 @@ export const SharePointFileBrowser: React.FC<Props> = ({
             </div>
           ))
         )}
-      </Card>
+      </DaisyCard>
 
       {/* Loading indicator for pagination */}
       {isLoading && files.length > 0 && (

@@ -2,17 +2,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { Slider } from '@/components/ui/slider';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisySelect } from '@/components/ui/DaisySelect';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import {
   AlertTriangle,
   Brain,
@@ -290,11 +290,11 @@ const ScenarioCard: React.FC<{
   const CategoryIcon = categoryConfig.icon;
 
   return (
-    <Card className="hover:shadow-notion-sm transition-all duration-200 relative overflow-hidden">
+    <DaisyCard className="hover:shadow-notion-sm transition-all duration-200 relative overflow-hidden">
       {/* AI Accent */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-indigo-600"></div>
       
-      <CardHeader className="pb-enterprise-3">
+      <DaisyCardHeader className="pb-enterprise-3">
         <div className="flex items-start justify-between">
           <div className="flex items-start space-x-enterprise-3">
             <div className={cn("p-enterprise-2 rounded-lg", categoryConfig.bg)}>
@@ -302,14 +302,14 @@ const ScenarioCard: React.FC<{
             </div>
             <div className="flex-1">
               <div className="flex items-center space-x-enterprise-2 mb-enterprise-1">
-                <CardTitle className="text-body-sm">{scenario.name}</CardTitle>
-                <Badge variant="outline" className={cn("text-caption", riskConfig.color)}>
+                <DaisyCardTitle className="text-body-sm">{scenario.name}</DaisyCardTitle>
+                <DaisyBadge variant="outline" className={cn("text-caption", riskConfig.color)}>
                   {riskConfig.label}
-                </Badge>
+                </DaisyBadge>
               </div>
-              <CardDescription className="text-caption line-clamp-2">
+              <DaisyCardDescription className="text-caption line-clamp-2">
                 {scenario.description}
-              </CardDescription>
+              </p>
             </div>
           </div>
           <div className="flex items-center space-x-enterprise-1">
@@ -317,9 +317,9 @@ const ScenarioCard: React.FC<{
             <span className="text-caption font-medium text-purple-600">{scenario.aiConfidence}%</span>
           </div>
         </div>
-      </CardHeader>
+      
 
-      <CardContent className="space-y-enterprise-4">
+      <DaisyCardContent className="space-y-enterprise-4">
         {/* Risk Metrics */}
         <div className="grid grid-cols-2 gap-enterprise-4">
           <div>
@@ -327,14 +327,14 @@ const ScenarioCard: React.FC<{
               <span className="text-caption text-text-secondary">Probability</span>
               <span className="text-caption font-medium text-text-primary">{scenario.probability}%</span>
             </div>
-            <Progress value={scenario.probability} className="h-2" />
+            <DaisyProgress value={scenario.probability} className="h-2" />
           </div>
           <div>
             <div className="flex items-center justify-between mb-enterprise-1">
               <span className="text-caption text-text-secondary">Impact</span>
               <span className="text-caption font-medium text-text-primary">{scenario.impact}%</span>
             </div>
-            <Progress value={scenario.impact} className="h-2" />
+            <DaisyProgress value={scenario.impact} className="h-2" />
           </div>
         </div>
 
@@ -366,15 +366,15 @@ const ScenarioCard: React.FC<{
         {/* Actions */}
         <div className="flex items-center justify-between pt-enterprise-3 border-t border-border">
           <div className="flex items-center space-x-enterprise-1">
-            <Button 
+            <DaisyButton 
               size="sm" 
               className="h-6 px-enterprise-3 bg-purple-600 hover:bg-purple-700"
               onClick={() => onSimulate(scenario)}
             >
               <Play className="h-3 w-3 mr-enterprise-1" />
               Simulate
-            </Button>
-            <Button 
+            </DaisyButton>
+            <DaisyButton 
               variant="outline" 
               size="sm" 
               className="h-6 px-enterprise-2"
@@ -382,14 +382,14 @@ const ScenarioCard: React.FC<{
             >
               <Eye className="h-3 w-3 mr-enterprise-1" />
               Details
-            </Button>
+            </DaisyButton>
           </div>
           <span className="text-caption text-text-tertiary">
             {scenario.lastUpdated.toLocaleDateString()}
           </span>
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 };
 
@@ -448,12 +448,12 @@ const SimulationInterface: React.FC<{
   };
 
   return (
-    <Dialog open onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl h-[90vh] flex flex-col p-0">
-        <DialogHeader className="px-enterprise-6 py-enterprise-4 border-b border-border">
+    <DaisyDialog open onOpenChange={onClose}>
+      <DaisyDialogContent className="max-w-4xl h-[90vh] flex flex-col p-0">
+        <DaisyDialogHeader className="px-enterprise-6 py-enterprise-4 border-b border-border">
           <div className="flex items-center justify-between">
             <div>
-              <DialogTitle className="text-heading-sm">{scenario.name}</DialogTitle>
+              <DaisyDialogTitle className="text-heading-sm">{scenario.name}</DaisyDialogTitle>
               <p className="text-caption text-text-secondary mt-enterprise-1">
                 AI-Powered Risk Scenario Simulation
               </p>
@@ -463,25 +463,25 @@ const SimulationInterface: React.FC<{
               <span className="text-caption text-purple-600">AI Confidence: {scenario.aiConfidence}%</span>
             </div>
           </div>
-        </DialogHeader>
+        </DaisyDialogHeader>
 
         <div className="flex-1 overflow-hidden">
-          <Tabs defaultValue="parameters" className="h-full flex flex-col">
-            <TabsList className="mx-enterprise-6 mt-enterprise-4">
-              <TabsTrigger value="parameters">Parameters</TabsTrigger>
-              <TabsTrigger value="results" disabled={!results}>Results</TabsTrigger>
-              <TabsTrigger value="timeline" disabled={!results}>Timeline</TabsTrigger>
-            </TabsList>
+          <DaisyTabs defaultValue="parameters" className="h-full flex flex-col">
+            <DaisyTabsList className="mx-enterprise-6 mt-enterprise-4">
+              <DaisyTabsTrigger value="parameters">Parameters</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="results" disabled={!results}>Results</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="timeline" disabled={!results}>Timeline</DaisyTabsTrigger>
+            </DaisyTabsList>
 
             <div className="flex-1 overflow-y-auto px-enterprise-6 py-enterprise-4">
-              <TabsContent value="parameters" className="space-y-enterprise-6">
+              <DaisyTabsContent value="parameters" className="space-y-enterprise-6">
                 {/* Simulation Parameters */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-enterprise-6">
                   <div className="space-y-enterprise-4">
                     <div>
-                      <Label className="text-body-sm font-medium mb-enterprise-2">
+                      <DaisyLabel className="text-body-sm font-medium mb-enterprise-2">
                         Simulation Timeframe: {timeframe[0]} days
-                      </Label>
+                      </DaisyLabel>
                       <Slider
                         value={timeframe}
                         onValueChange={setTimeframe}
@@ -492,9 +492,9 @@ const SimulationInterface: React.FC<{
                       />
                     </div>
                     <div>
-                      <Label className="text-body-sm font-medium mb-enterprise-2">
+                      <DaisyLabel className="text-body-sm font-medium mb-enterprise-2">
                         Monte Carlo Iterations: {iterations[0].toLocaleString()}
-                      </Label>
+                      </DaisyLabel>
                       <Slider
                         value={iterations}
                         onValueChange={setIterations}
@@ -535,61 +535,61 @@ const SimulationInterface: React.FC<{
                         <Brain className="h-5 w-5 text-purple-600 animate-pulse" />
                         <span className="text-body-sm">AI analyzing scenario...</span>
                       </div>
-                      <Progress value={progress} className="w-full max-w-md mx-auto" />
+                      <DaisyProgress value={progress} className="w-full max-w-md mx-auto" />
                       <p className="text-caption text-text-secondary">
                         Running {iterations[0].toLocaleString()} iterations over {timeframe[0]} days
                       </p>
                     </div>
                   ) : (
                     <div className="text-center">
-                      <Button 
+                      <DaisyButton 
                         onClick={runSimulation}
                         className="bg-purple-600 hover:bg-purple-700"
                         disabled={isRunning}
                       >
                         <Play className="h-4 w-4 mr-enterprise-2" />
                         Run AI Simulation
-                      </Button>
+                      </DaisyButton>
                     </div>
                   )}
                 </div>
-              </TabsContent>
+              </DaisyTabsContent>
 
-              <TabsContent value="results" className="space-y-enterprise-6">
+              <DaisyTabsContent value="results" className="space-y-enterprise-6">
                 {results && (
                   <>
                     {/* Results Summary */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-enterprise-4">
-                      <Card>
-                        <CardHeader className="pb-enterprise-2">
-                          <CardTitle className="text-body-sm">Average Impact</CardTitle>
-                        </CardHeader>
-                        <CardContent>
+                      <DaisyCard>
+                        <DaisyCardHeader className="pb-enterprise-2">
+                          <DaisyCardTitle className="text-body-sm">Average Impact</DaisyCardTitle>
+                        
+                        <DaisyCardContent>
                           <div className="text-heading-base font-bold text-semantic-warning">
                             {results.averageImpact.toFixed(1)}%
                           </div>
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardHeader className="pb-enterprise-2">
-                          <CardTitle className="text-body-sm">Worst Case</CardTitle>
-                        </CardHeader>
-                        <CardContent>
+                        </DaisyCardBody>
+                      </DaisyCard>
+                      <DaisyCard>
+                        <DaisyCardHeader className="pb-enterprise-2">
+                          <DaisyCardTitle className="text-body-sm">Worst Case</DaisyCardTitle>
+                        
+                        <DaisyCardContent>
                           <div className="text-heading-base font-bold text-semantic-error">
                             {results.worstCase.toFixed(1)}%
                           </div>
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardHeader className="pb-enterprise-2">
-                          <CardTitle className="text-body-sm">Best Case</CardTitle>
-                        </CardHeader>
-                        <CardContent>
+                        </DaisyCardBody>
+                      </DaisyCard>
+                      <DaisyCard>
+                        <DaisyCardHeader className="pb-enterprise-2">
+                          <DaisyCardTitle className="text-body-sm">Best Case</DaisyCardTitle>
+                        
+                        <DaisyCardContent>
                           <div className="text-heading-base font-bold text-semantic-success">
                             {results.bestCase.toFixed(1)}%
                           </div>
-                        </CardContent>
-                      </Card>
+                        </DaisyCardBody>
+                      </DaisyCard>
                     </div>
 
                     {/* AI Recommendations */}
@@ -608,9 +608,9 @@ const SimulationInterface: React.FC<{
                     </div>
                   </>
                 )}
-              </TabsContent>
+              </DaisyTabsContent>
 
-              <TabsContent value="timeline" className="space-y-enterprise-4">
+              <DaisyTabsContent value="timeline" className="space-y-enterprise-4">
                 {results && (
                   <div>
                     <h4 className="text-heading-sm font-semibold mb-enterprise-4">
@@ -643,34 +643,34 @@ const SimulationInterface: React.FC<{
                     </div>
                   </div>
                 )}
-              </TabsContent>
+              </DaisyTabsContent>
             </div>
-          </Tabs>
+          </DaisyTabs>
         </div>
 
         <div className="px-enterprise-6 py-enterprise-4 border-t border-border">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-enterprise-2">
-              <Button variant="outline" onClick={onClose}>
+              <DaisyButton variant="outline" onClick={onClose}>
                 Close Simulation
-              </Button>
+              </DaisyButton>
             </div>
             {results && (
               <div className="flex items-center space-x-enterprise-2">
-                <Button variant="outline" size="sm">
+                <DaisyButton variant="outline" size="sm">
                   <Download className="h-3 w-3 mr-enterprise-1" />
                   Export Results
-                </Button>
-                <Button variant="outline" size="sm">
+                </DaisyButton>
+                <DaisyButton variant="outline" size="sm">
                   <Share className="h-3 w-3 mr-enterprise-1" />
                   Share
-                </Button>
+                </DaisyButton>
               </div>
             )}
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </DaisyDialogContent>
+    </DaisyDialog>
   );
 };
 
@@ -698,60 +698,60 @@ export const RiskScenarioModeling: React.FC = () => {
     <div className="space-y-enterprise-6">
       {/* Header Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-enterprise-4">
-        <Card>
-          <CardHeader className="pb-enterprise-2">
+        <DaisyCard>
+          <DaisyCardHeader className="pb-enterprise-2">
             <div className="flex items-center space-x-enterprise-2">
               <Activity className="h-4 w-4 text-purple-600" />
-              <CardTitle className="text-body-sm">Active Scenarios</CardTitle>
+              <DaisyCardTitle className="text-body-sm">Active Scenarios</DaisyCardTitle>
             </div>
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className="text-heading-base font-bold">{activeScenarios}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-enterprise-2">
+          </DaisyCardBody>
+        </DaisyCard>
+        <DaisyCard>
+          <DaisyCardHeader className="pb-enterprise-2">
             <div className="flex items-center space-x-enterprise-2">
-              <AlertTriangle className="h-4 w-4 text-semantic-error" />
-              <CardTitle className="text-body-sm">High Risk</CardTitle>
+              <DaisyAlertTriangle className="h-4 w-4 text-semantic-error" />
+              <DaisyCardTitle className="text-body-sm">High Risk</DaisyCardTitle>
             </div>
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className="text-heading-base font-bold text-semantic-error">{highRiskScenarios}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-enterprise-2">
+          </DaisyCardBody>
+        </DaisyCard>
+        <DaisyCard>
+          <DaisyCardHeader className="pb-enterprise-2">
             <div className="flex items-center space-x-enterprise-2">
               <Brain className="h-4 w-4 text-purple-600" />
-              <CardTitle className="text-body-sm">AI Confidence</CardTitle>
+              <DaisyCardTitle className="text-body-sm">AI Confidence</DaisyCardTitle>
             </div>
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className="text-heading-base font-bold text-purple-600">{avgConfidence}%</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-enterprise-2">
+          </DaisyCardBody>
+        </DaisyCard>
+        <DaisyCard>
+          <DaisyCardHeader className="pb-enterprise-2">
             <div className="flex items-center space-x-enterprise-2">
               <Target className="h-4 w-4 text-text-primary" />
-              <CardTitle className="text-body-sm">Total Scenarios</CardTitle>
+              <DaisyCardTitle className="text-body-sm">Total Scenarios</DaisyCardTitle>
             </div>
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className="text-heading-base font-bold">{scenarios.length}</div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
 
       {/* Scenarios Grid */}
       <div>
         <div className="flex items-center justify-between mb-enterprise-4">
           <h3 className="text-heading-sm font-semibold">Risk Scenarios</h3>
-          <Button className="bg-purple-600 hover:bg-purple-700">
+          <DaisyButton className="bg-purple-600 hover:bg-purple-700">
             <Plus className="h-4 w-4 mr-enterprise-2" />
             Create Scenario
-          </Button>
+          </DaisyButton>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-enterprise-4">
           {scenarios.map((scenario) => (

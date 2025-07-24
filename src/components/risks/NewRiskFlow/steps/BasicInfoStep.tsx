@@ -6,7 +6,7 @@ import { Sparkles, AlertCircle } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
-import { Textarea } from '@/components/ui/textarea';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { useRiskFlow } from '../RiskFlowContext';
 import { RiskCategory } from '@/types/rcsa.types';
@@ -120,7 +120,7 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
             {aiSuggesting ? 'Generating...' : 'AI Suggest'}
           </DaisyButton>
         </div>
-        <Textarea
+        <DaisyTextarea
           id="description"
           placeholder="Describe the risk, its potential causes, and possible consequences..."
           value={riskData.description}

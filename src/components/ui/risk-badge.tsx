@@ -1,7 +1,7 @@
 'use client';
 
 import React, { FC } from 'react';
-import { Badge } from '@/components/ui/badge';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { CheckCircle, AlertCircle, AlertTriangle, XCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -97,7 +97,7 @@ export const RiskBadge: FC<RiskBadgeProps> = ({
   };
 
   return (
-    <Badge 
+    <DaisyBadge 
       className={cn(
         'inline-flex items-center gap-1.5 font-semibold tracking-wide border transition-all duration-200',
         sizeStyles.badge,
@@ -125,7 +125,7 @@ export const RiskBadge: FC<RiskBadgeProps> = ({
           ({score})
         </span>
       )}
-    </Badge>
+    </DaisyBadge>
   );
 };
 

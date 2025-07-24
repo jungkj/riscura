@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 
 export default function OAuthTestPage() {
   const [envData, setEnvData] = useState<any>(null);
@@ -57,44 +57,44 @@ export default function OAuthTestPage() {
         <h1 className="text-3xl font-bold">OAuth Debug Page</h1>
         
         {error && (
-          <Alert variant="destructive">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
+          <DaisyAlert variant="error">
+            <DaisyAlertDescription>{error}
+          </DaisyAlert>
         )}
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Environment Variables</CardTitle>
-            <CardDescription>Current environment configuration</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle>Environment Variables</DaisyCardTitle>
+            <DaisyCardDescription>Current environment configuration</p>
+          
+          <DaisyCardContent>
             <pre className="bg-gray-100 p-4 rounded overflow-auto text-sm">
               {JSON.stringify(envData, null, 2)}
             </pre>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Database Connection Test</CardTitle>
-            <CardDescription>Results of database connection attempts</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle>Database Connection Test</DaisyCardTitle>
+            <DaisyCardDescription>Results of database connection attempts</p>
+          
+          <DaisyCardContent>
             <pre className="bg-gray-100 p-4 rounded overflow-auto text-sm">
               {JSON.stringify(dbTestData, null, 2)}
             </pre>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>OAuth Test</CardTitle>
-            <CardDescription>Test the Google OAuth flow</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Button onClick={testGoogleLogin} className="w-full">
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle>OAuth Test</DaisyCardTitle>
+            <DaisyCardDescription>Test the Google OAuth flow</p>
+          
+          <DaisyCardContent className="space-y-4">
+            <DaisyButton onClick={testGoogleLogin} className="w-full">
               Test Google Login
-            </Button>
+            </DaisyButton>
             
             <div className="text-sm text-gray-600">
               <p>When you click the button above:</p>
@@ -104,14 +104,14 @@ export default function OAuthTestPage() {
                 <li>Check the browser console and Vercel logs for error details</li>
               </ol>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Quick Links</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle>Quick Links</DaisyCardTitle>
+          
+          <DaisyCardContent className="space-y-2">
             <a href="/api/check-env" className="text-blue-600 hover:underline block">
               /api/check-env - Environment check endpoint
             </a>
@@ -121,8 +121,8 @@ export default function OAuthTestPage() {
             <a href="/api/google-oauth/debug" className="text-blue-600 hover:underline block">
               /api/google-oauth/debug - OAuth configuration debug
             </a>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
     </div>
   );

@@ -20,12 +20,12 @@ import {
   Maximize,
   X,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { formatFileSize } from '@/lib/storage/file-validator';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
@@ -231,8 +231,8 @@ export default function DocumentViewer({
 
   return (
     <>
-      <Card className={`w-full ${className}`}>
-        <CardHeader className="pb-3">
+      <DaisyCard className={`w-full ${className}`}>
+        <DaisyCardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="flex items-start gap-3">
               <div className="flex-shrink-0">
@@ -241,13 +241,13 @@ export default function DocumentViewer({
                 </div>
               </div>
               <div className="flex-1 min-w-0">
-                <CardTitle className="text-lg truncate" title={documentData.originalName}>
+                <DaisyCardTitle className="text-lg truncate" title={documentData.originalName}>
                   {documentData.originalName}
-                </CardTitle>
+                </DaisyCardTitle>
                 <div className="flex items-center gap-2 mt-1">
-                  <Badge className={getCategoryColor(documentData.category)}>
+                  <DaisyBadge className={getCategoryColor(documentData.category)}>
                     {documentData.category}
-                  </Badge>
+                  </DaisyBadge>
                   <span className="text-sm text-gray-500">
                     v{documentData.version}
                   </span>
@@ -257,56 +257,56 @@ export default function DocumentViewer({
             
             <div className="flex items-center gap-1">
               {canPreview && (
-                <Button 
+                <DaisyButton 
                   size="sm" 
                   variant="ghost" 
                   onClick={handlePreview}
                   disabled={loading}
                 >
                   <Eye className="w-4 h-4" />
-                </Button>
+                </DaisyButton>
               )}
-              <Button 
+              <DaisyButton 
                 size="sm" 
                 variant="ghost" 
                 onClick={handleDownload}
                 disabled={loading}
               >
                 <Download className="w-4 h-4" />
-              </Button>
+              </DaisyButton>
               {onShare && (
-                <Button 
+                <DaisyButton 
                   size="sm" 
                   variant="ghost" 
                   onClick={handleShare}
                 >
                   <Share2 className="w-4 h-4" />
-                </Button>
+                </DaisyButton>
               )}
               {onEdit && (
-                <Button 
+                <DaisyButton 
                   size="sm" 
                   variant="ghost" 
                   onClick={handleEdit}
                 >
                   <Edit3 className="w-4 h-4" />
-                </Button>
+                </DaisyButton>
               )}
               {onDelete && (
-                <Button 
+                <DaisyButton 
                   size="sm" 
                   variant="ghost" 
                   onClick={handleDelete}
                   className="text-red-600 hover:text-red-700"
                 >
                   <Trash2 className="w-4 h-4" />
-                </Button>
+                </DaisyButton>
               )}
             </div>
           </div>
-        </CardHeader>
+        
 
-        <CardContent className="space-y-4">
+        <DaisyCardContent className="space-y-4">
           {/* Description */}
           {documentData.description && (
             <div>
@@ -319,24 +319,24 @@ export default function DocumentViewer({
             <div className="flex items-center gap-2 flex-wrap">
               <Tag className="w-4 h-4 text-gray-400" />
               {documentData.tags.map((tag, index) => (
-                <Badge key={index} variant="outline" className="text-xs">
+                <DaisyBadge key={index} variant="outline" className="text-xs">
                   {tag}
-                </Badge>
+                </DaisyBadge>
               ))}
             </div>
           )}
 
-          <Separator />
+          <DaisySeparator />
 
           {/* Document Details */}
-          <Tabs defaultValue="details" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="details">Details</TabsTrigger>
-              <TabsTrigger value="versions">Versions</TabsTrigger>
-              <TabsTrigger value="activity">Activity</TabsTrigger>
-            </TabsList>
+          <DaisyTabs defaultValue="details" className="w-full">
+            <DaisyTabsList className="grid w-full grid-cols-3">
+              <DaisyTabsTrigger value="details">Details</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="versions">Versions</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="activity">Activity</DaisyTabsTrigger>
+            </DaisyTabsList>
 
-            <TabsContent value="details" className="space-y-3 mt-4">
+            <DaisyTabsContent value="details" className="space-y-3 mt-4">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="flex items-center gap-2">
                   <User className="w-4 h-4 text-gray-400" />
@@ -393,9 +393,9 @@ export default function DocumentViewer({
                   </div>
                 </div>
               )}
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="versions" className="space-y-3 mt-4">
+            <DaisyTabsContent value="versions" className="space-y-3 mt-4">
               {document.versions && document.versions.length > 0 ? (
                 <div className="space-y-2">
                   {document.versions.map((version) => (
@@ -407,7 +407,7 @@ export default function DocumentViewer({
                         <div className="flex items-center gap-2">
                           <span className="font-medium">Version {version.version}</span>
                           {version.version === document.version && (
-                            <Badge variant="outline" className="text-xs">Current</Badge>
+                            <DaisyBadge variant="outline" className="text-xs">Current</DaisyBadge>
                           )}
                         </div>
                         <p className="text-sm text-gray-600">
@@ -417,18 +417,18 @@ export default function DocumentViewer({
                           <p className="text-sm text-gray-700 mt-1">{version.changeLog}</p>
                         )}
                       </div>
-                      <Button size="sm" variant="ghost">
+                      <DaisyButton size="sm" variant="ghost">
                         <Download className="w-4 h-4" />
-                      </Button>
+                      </DaisyButton>
                     </div>
                   ))}
                 </div>
               ) : (
                 <p className="text-gray-500 text-center py-4">No version history available</p>
               )}
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="activity" className="space-y-3 mt-4">
+            <DaisyTabsContent value="activity" className="space-y-3 mt-4">
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -456,59 +456,59 @@ export default function DocumentViewer({
                   </div>
                 )}
               </div>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
+            </DaisyTabsContent>
+          </DaisyTabs>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Preview Dialog */}
-      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] p-0">
-          <DialogHeader className="p-4 pb-2">
+      <DaisyDialog open={previewOpen} onOpenChange={setPreviewOpen}>
+        <DaisyDialogContent className="max-w-4xl max-h-[90vh] p-0">
+          <DaisyDialogHeader className="p-4 pb-2">
             <div className="flex items-center justify-between">
-              <DialogTitle className="truncate">{document.originalName}</DialogTitle>
+              <DaisyDialogTitle className="truncate">{document.originalName}</DaisyDialogTitle>
               <div className="flex items-center gap-2">
                 {document.isImage && (
                   <>
-                    <Button
+                    <DaisyButton
                       size="sm"
                       variant="ghost"
                       onClick={() => setZoom(Math.max(25, zoom - 25))}
                     >
                       <ZoomOut className="w-4 h-4" />
-                    </Button>
+                    </DaisyButton>
                     <span className="text-sm min-w-[50px] text-center">{zoom}%</span>
-                    <Button
+                    <DaisyButton
                       size="sm"
                       variant="ghost"
                       onClick={() => setZoom(Math.min(200, zoom + 25))}
                     >
                       <ZoomIn className="w-4 h-4" />
-                    </Button>
-                    <Button
+                    </DaisyButton>
+                    <DaisyButton
                       size="sm"
                       variant="ghost"
                       onClick={() => setRotation((rotation + 90) % 360)}
                     >
                       <RotateCw className="w-4 h-4" />
-                    </Button>
+                    </DaisyButton>
                   </>
                 )}
-                <Button
+                <DaisyButton
                   size="sm"
                   variant="ghost"
                   onClick={() => setPreviewOpen(false)}
                 >
                   <X className="w-4 h-4" />
-                </Button>
+                </DaisyButton>
               </div>
             </div>
-          </DialogHeader>
+          </DaisyDialogHeader>
           <div className="flex-1 p-4 pt-0" style={{ height: '70vh' }}>
             {renderPreviewContent()}
           </div>
-        </DialogContent>
-      </Dialog>
+        </DaisyDialogContent>
+      </DaisyDialog>
     </>
   );
 } 

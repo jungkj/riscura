@@ -1,15 +1,15 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Separator } from '@/components/ui/separator';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import {
   Network,
   Brain,
@@ -334,9 +334,9 @@ export default function SmartRiskControlMapper({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Header */}
-      <Card className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-3">
+      <DaisyCard className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center gap-3">
             <div className="p-2 bg-purple-100 rounded-lg">
               <Network className="h-6 w-6 text-purple-600" />
             </div>
@@ -347,14 +347,14 @@ export default function SmartRiskControlMapper({
               </p>
             </div>
             <div className="ml-auto">
-              <Badge className="bg-purple-100 text-purple-800 border-purple-200">
+              <DaisyBadge className="bg-purple-100 text-purple-800 border-purple-200">
                 <Brain className="h-3 w-3 mr-1" />
                 AI-Enhanced
-              </Badge>
+              </DaisyBadge>
             </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="flex items-center space-x-2">
               <Target className="h-4 w-4 text-purple-600" />
@@ -389,40 +389,40 @@ export default function SmartRiskControlMapper({
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Filters and Search */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Search className="h-5 w-5" />
               Filters & Search
             </div>
             <div className="flex items-center gap-2">
-              <Button
+              <DaisyButton
                 variant={viewMode === 'grid' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setViewMode('grid')}
               >
                 Grid
-              </Button>
-              <Button
+              </DaisyButton>
+              <DaisyButton
                 variant={viewMode === 'matrix' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setViewMode('matrix')}
               >
                 Matrix
-              </Button>
+              </DaisyButton>
             </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
               <label className="text-sm font-medium">Search Risks</label>
-              <Input
+              <DaisyInput
                 placeholder="Search by title or description..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -430,63 +430,63 @@ export default function SmartRiskControlMapper({
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Severity</label>
-              <Select value={filterSeverity} onValueChange={setFilterSeverity}>
-                <SelectTrigger>
-                  <SelectValue />
+              <DaisySelect value={filterSeverity} onValueChange={setFilterSeverity}>
+                <DaisySelectTrigger>
+                  <DaisySelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Severities</SelectItem>
-                  <SelectItem value="Critical">Critical</SelectItem>
-                  <SelectItem value="High">High</SelectItem>
-                  <SelectItem value="Medium">Medium</SelectItem>
-                  <SelectItem value="Low">Low</SelectItem>
+                <DaisySelectContent>
+                  <DaisySelectItem value="all">All Severities</SelectItem>
+                  <DaisySelectItem value="Critical">Critical</SelectItem>
+                  <DaisySelectItem value="High">High</SelectItem>
+                  <DaisySelectItem value="Medium">Medium</SelectItem>
+                  <DaisySelectItem value="Low">Low</SelectItem>
                 </SelectContent>
-              </Select>
+              </DaisySelect>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Category</label>
-              <Select value={filterCategory} onValueChange={setFilterCategory}>
-                <SelectTrigger>
-                  <SelectValue />
+              <DaisySelect value={filterCategory} onValueChange={setFilterCategory}>
+                <DaisySelectTrigger>
+                  <DaisySelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
+                <DaisySelectContent>
+                  <DaisySelectItem value="all">All Categories</SelectItem>
                   {riskCategories.map((category) => (
-                    <SelectItem key={category} value={category}>
+                    <DaisySelectItem key={category} value={category}>
                       {category}
                     </SelectItem>
                   ))}
                 </SelectContent>
-              </Select>
+              </DaisySelect>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Actions</label>
               <div className="flex space-x-2">
-                <Button variant="outline" size="sm">
+                <DaisyButton variant="outline" size="sm">
                   <Download className="h-4 w-4 mr-1" />
                   Export
-                </Button>
-                <Button variant="outline" size="sm">
+                </DaisyButton>
+                <DaisyButton variant="outline" size="sm">
                   <RefreshCw className="h-4 w-4 mr-1" />
                   Refresh
-                </Button>
+                </DaisyButton>
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Risks List */}
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        <DaisyCard className="lg:col-span-1">
+          <DaisyCardHeader>
+            <DaisyCardTitle className="flex items-center gap-2">
               <Target className="h-5 w-5" />
               Risks ({filteredRisks.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 max-h-96 overflow-y-auto">
+            </DaisyCardTitle>
+          
+          <DaisyCardContent className="space-y-3 max-h-96 overflow-y-auto">
             {filteredRisks.map((risk) => {
               const coverage = calculateRiskCoverage(risk.id);
               const mappedControlsCount = getMappedControls(risk.id).length;
@@ -507,9 +507,9 @@ export default function SmartRiskControlMapper({
                   <div className="space-y-2">
                     <div className="flex items-start justify-between">
                       <h4 className="font-medium text-sm">{risk.title}</h4>
-                      <Badge className={getPriorityColor(risk.severity)}>
+                      <DaisyBadge className={getPriorityColor(risk.severity)}>
                         {risk.severity}
-                      </Badge>
+                      </DaisyBadge>
                     </div>
                     
                     <p className="text-xs text-gray-600 line-clamp-2">
@@ -527,23 +527,23 @@ export default function SmartRiskControlMapper({
                       </div>
                     </div>
                     
-                    <Progress value={coverage} className="h-1" />
+                    <DaisyProgress value={coverage} className="h-1" />
                   </div>
                 </motion.div>
               );
             })}
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
         {/* AI Suggestions & Mapping */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        <DaisyCard className="lg:col-span-2">
+          <DaisyCardHeader>
+            <DaisyCardTitle className="flex items-center gap-2">
               <Brain className="h-5 w-5" />
               {selectedRisk ? `AI Suggestions for: ${selectedRisk.title}` : 'Select a Risk to View AI Suggestions'}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+            </DaisyCardTitle>
+          
+          <DaisyCardContent>
             {!selectedRisk ? (
               <div className="text-center py-8">
                 <Target className="h-16 w-16 mx-auto text-gray-400 mb-4" />
@@ -580,30 +580,30 @@ export default function SmartRiskControlMapper({
                               <div>
                                 <p className="font-medium text-sm">{control.title}</p>
                                 <div className="flex items-center space-x-2 mt-1">
-                                  <Badge variant="outline" className="text-xs">
+                                  <DaisyBadge variant="outline" className="text-xs">
                                     {mapping?.mappingType}
-                                  </Badge>
-                                  <Badge className={`text-xs ${getEffectivenessColor(mapping?.effectiveness || 'Medium')}`}>
+                                  </DaisyBadge>
+                                  <DaisyBadge className={`text-xs ${getEffectivenessColor(mapping?.effectiveness || 'Medium')}`}>
                                     {mapping?.effectiveness}
-                                  </Badge>
+                                  </DaisyBadge>
                                   <span className="text-xs text-gray-500">
                                     Coverage: {mapping?.coverage}%
                                   </span>
                                 </div>
                               </div>
                             </div>
-                            <Button
+                            <DaisyButton
                               variant="ghost"
                               size="sm"
                               onClick={() => mapping && removeMapping(mapping.id)}
                             >
                               <Unlink className="h-4 w-4" />
-                            </Button>
+                            </DaisyButton>
                           </div>
                         );
                       })}
                     </div>
-                    <Separator className="my-4" />
+                    <DaisySeparator className="my-4" />
                   </div>
                 )}
 
@@ -615,12 +615,12 @@ export default function SmartRiskControlMapper({
                   </h4>
                   
                   {aiSuggestions.length === 0 ? (
-                    <Alert>
+                    <DaisyAlert>
                       <Lightbulb className="h-4 w-4" />
-                      <AlertDescription>
+                      <DaisyAlertDescription>
                         No additional control suggestions found. All relevant controls may already be mapped.
-                      </AlertDescription>
-                    </Alert>
+                      
+                    </DaisyAlert>
                   ) : (
                     <div className="space-y-3">
                       {aiSuggestions.map((suggestion, index) => (
@@ -635,9 +635,9 @@ export default function SmartRiskControlMapper({
                             <div className="flex-1">
                               <div className="flex items-center space-x-2 mb-2">
                                 <h5 className="font-medium">{suggestion.control.title}</h5>
-                                <Badge className="bg-purple-100 text-purple-800">
+                                <DaisyBadge className="bg-purple-100 text-purple-800">
                                   {suggestion.relevanceScore}% match
-                                </Badge>
+                                </DaisyBadge>
                               </div>
                               
                               <p className="text-sm text-gray-600 mb-3">
@@ -647,15 +647,15 @@ export default function SmartRiskControlMapper({
                               <div className="grid grid-cols-2 gap-4 mb-3">
                                 <div>
                                   <p className="text-xs text-gray-500">Suggested Type</p>
-                                  <Badge variant="outline" className="text-xs">
+                                  <DaisyBadge variant="outline" className="text-xs">
                                     {suggestion.suggestedMappingType}
-                                  </Badge>
+                                  </DaisyBadge>
                                 </div>
                                 <div>
                                   <p className="text-xs text-gray-500">Effectiveness</p>
-                                  <Badge className={`text-xs ${getEffectivenessColor(suggestion.estimatedEffectiveness)}`}>
+                                  <DaisyBadge className={`text-xs ${getEffectivenessColor(suggestion.estimatedEffectiveness)}`}>
                                     {suggestion.estimatedEffectiveness}
-                                  </Badge>
+                                  </DaisyBadge>
                                 </div>
                               </div>
                               
@@ -679,14 +679,14 @@ export default function SmartRiskControlMapper({
                               </p>
                             </div>
                             
-                            <Button
+                            <DaisyButton
                               size="sm"
                               onClick={() => applyAISuggestion(suggestion)}
                               className="ml-4"
                             >
                               <Plus className="h-4 w-4 mr-1" />
                               Apply
-                            </Button>
+                            </DaisyButton>
                           </div>
                         </motion.div>
                       ))}
@@ -695,8 +695,8 @@ export default function SmartRiskControlMapper({
                 </div>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
     </div>
   );

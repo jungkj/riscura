@@ -4,7 +4,7 @@ import * as React from "react"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { DaisyButton } from '@/components/ui/DaisyButton'
 import { Calendar } from "@/components/ui/calendar"
 import {
   Popover,
@@ -32,7 +32,7 @@ export function DatePicker({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
+        <DaisyButton
           variant={"outline"}
           className={cn(
             "w-full justify-start text-left font-normal",
@@ -43,7 +43,7 @@ export function DatePicker({
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
           {value ? format(value, "PPP") : <span>{placeholder}</span>}
-        </Button>
+        </DaisyButton>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar

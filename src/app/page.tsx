@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import Image from 'next/image';
 import { TimeSavingChart } from '@/components/charts/TimeSavingChart';
 import { IntegrationPartners } from '@/components/landing/IntegrationPartners';
@@ -106,8 +106,8 @@ function HeroProcessCard() {
   return (
     <div className="relative w-full max-w-4xl mx-auto">
       {/* Main Process Card */}
-      <Card className="bg-white/80 backdrop-blur-xl border border-gray-200/60 shadow-2xl overflow-hidden w-full">
-        <CardContent className="p-0">
+      <DaisyCard className="bg-white/80 backdrop-blur-xl border border-gray-200/60 shadow-2xl overflow-hidden w-full">
+        <DaisyCardContent className="p-0">
           {/* Header with Browser Chrome */}
           <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
             <div className="flex items-center justify-between">
@@ -224,7 +224,7 @@ function HeroProcessCard() {
                     <div className="bg-white/50 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-4">
                         <h4 className="font-medium text-gray-900 text-sm">Risk Assessment Results</h4>
-                        <Badge className="bg-green-100 text-green-800 text-xs">Complete</Badge>
+                        <DaisyBadge className="bg-green-100 text-green-800 text-xs">Complete</DaisyBadge>
                       </div>
                       <div className="grid grid-cols-3 gap-3">
                         {currentStepData.results?.map((result, index) => (
@@ -242,12 +242,12 @@ function HeroProcessCard() {
                               }`}></div>
                             </div>
                             <div className="text-xs text-gray-900 font-medium mb-2">{result.name}</div>
-                            <Badge 
+                            <DaisyBadge 
                               variant={result.level === 'high' ? 'destructive' : result.level === 'medium' ? 'secondary' : 'default'}
                               className="text-xs mb-1"
                             >
                               {result.level}
-                            </Badge>
+                            </DaisyBadge>
                             <div className="text-xs font-mono text-gray-600 mt-1">{result.score}</div>
                           </motion.div>
                         ))}
@@ -274,8 +274,8 @@ function HeroProcessCard() {
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </div>
   );
 }
@@ -344,22 +344,22 @@ export default function HomePage() {
 
               {/* Primary CTA */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
-                <Button 
+                <DaisyButton 
                   onClick={handleGetStarted}
                   size="lg" 
                   className="px-10 py-5 text-xl rounded-xl font-semibold font-inter min-w-[200px] bg-[#199BEC] hover:bg-[#199BEC]/80"
                 >
                   Start free trial
                   <ArrowRight className="ml-3 h-6 w-6" />
-                </Button>
-                <Button 
+                </DaisyButton>
+                <DaisyButton 
                   onClick={handleRequestDemo}
                   variant="outline"
                   size="lg"
                   className="px-10 py-5 text-xl rounded-xl font-semibold font-inter min-w-[200px]"
                                   >
                     Book a demo
-                  </Button>
+                  </DaisyButton>
                 </div>
 
               {/* Social Proof Stats */}
@@ -409,9 +409,9 @@ export default function HomePage() {
               viewport={{ once: true }}
               className="space-y-6 md:space-y-8"
             >
-              <Badge className="bg-[#191919] text-[#FAFAFA] px-4 py-2 text-sm font-inter">
+              <DaisyBadge className="bg-[#191919] text-[#FAFAFA] px-4 py-2 text-sm font-inter">
                 Enterprise Platform
-              </Badge>
+              </DaisyBadge>
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#191919] font-inter leading-tight">
                 Built for modern<br />enterprise security
               </h2>
@@ -468,8 +468,8 @@ export default function HomePage() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-white border border-[#D8C3A5]/30 h-full hover:shadow-xl hover:border-[#D8C3A5]/60 transition-all duration-300 group rounded-2xl">
-                  <CardContent className="p-8">
+                <DaisyCard className="bg-white border border-[#D8C3A5]/30 h-full hover:shadow-xl hover:border-[#D8C3A5]/60 transition-all duration-300 group rounded-2xl">
+                  <DaisyCardContent className="p-8">
                     <div className="w-14 h-14 rounded-2xl bg-[#199BEC]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                       <feature.icon className="h-7 w-7 text-[#199BEC]" />
                     </div>
@@ -487,8 +487,8 @@ export default function HomePage() {
                         </li>
                       ))}
                     </ul>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               </motion.div>
             ))}
           </div>
@@ -505,9 +505,9 @@ export default function HomePage() {
             viewport={{ once: true }}
             className="space-y-6 md:space-y-8"
           >
-            <Badge className="bg-[#199BEC] text-white px-6 py-2 text-sm font-inter rounded-full">
+            <DaisyBadge className="bg-[#199BEC] text-white px-6 py-2 text-sm font-inter rounded-full">
               Get Started Today
-            </Badge>
+            </DaisyBadge>
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#191919] font-inter leading-tight">
               Ready to secure<br />your enterprise?
             </h2>
@@ -517,22 +517,22 @@ export default function HomePage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button 
+              <DaisyButton 
                 onClick={handleGetStarted}
                 size="lg" 
                 className="px-12 py-4 text-lg font-semibold font-inter min-w-[220px] rounded-xl bg-[#199BEC] hover:bg-[#199BEC]/80"
               >
                 Start free trial
                 <ChevronRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button 
+              </DaisyButton>
+              <DaisyButton 
                 onClick={handleRequestDemo}
                 variant="outline"
                 size="lg"
                 className="px-12 py-4 text-lg font-semibold font-inter min-w-[220px] rounded-xl"
               >
                 Schedule demo
-              </Button>
+              </DaisyButton>
             </div>
 
             {/* Trust Elements */}
@@ -581,15 +581,15 @@ export default function HomePage() {
               Enterprise risk management platform powered by AI. Secure your business with intelligent automation.
             </p>
             <div className="flex items-center justify-center space-x-6 mb-8">
-              <Badge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
+              <DaisyBadge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
                 SOC 2 Type II
-              </Badge>
-              <Badge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
+              </DaisyBadge>
+              <DaisyBadge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
                 ISO 27001
-              </Badge>
-              <Badge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
+              </DaisyBadge>
+              <DaisyBadge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
                 GDPR Ready
-              </Badge>
+              </DaisyBadge>
             </div>
             <p className="text-[#A8A8A8] font-inter">
               © 2024 Riscura Inc. All rights reserved.

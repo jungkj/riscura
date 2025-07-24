@@ -363,7 +363,7 @@ const MetricCard: React.FC<{ metric: MetricData; index: number }> = ({ metric, i
             <span className="text-xs text-text-secondary">vs last month</span>
           </div>
 
-          <ProgressBar
+          <DaisyProgressBar
             progress={(metric.value / metric.target) * 100}
             color={metric.color}
             className="h-2"
@@ -442,7 +442,7 @@ const RiskItem: React.FC<{ risk: Risk; index: number }> = ({ risk, index }) => {
             </div>
             
             <div className="flex items-center gap-2">
-              <ProgressBar
+              <DaisyProgressBar
                 progress={risk.progress}
                 className="w-16 h-1"
                 color={risk.progress > 75 ? 'success' : risk.progress > 50 ? 'warning' : 'error'}

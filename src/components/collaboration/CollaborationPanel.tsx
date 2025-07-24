@@ -2,17 +2,17 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Separator } from '@/components/ui/separator';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisySwitch } from '@/components/ui/DaisySwitch';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
+import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from '@/hooks/use-toast';
 import {
@@ -561,22 +561,22 @@ export function CollaborationPanel({
   const renderComment = (comment: Comment, isReply = false) => (
     <div key={comment.id} className={`space-y-3 ${isReply ? 'ml-8 pl-4 border-l-2 border-gray-200' : ''}`}>
       <div className="flex items-start space-x-3">
-        <Avatar className="w-8 h-8">
-          <AvatarImage src={comment.author.avatar} />
-          <AvatarFallback>{comment.author.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-        </Avatar>
+        <DaisyAvatar className="w-8 h-8">
+          <DaisyAvatarImage src={comment.author.avatar} />
+          <DaisyAvatarFallback>{comment.author.name.split(' ').map(n => n[0]).join('')}</DaisyAvatarFallback>
+        </DaisyAvatar>
         
         <div className="flex-1 space-y-2">
           <div className="flex items-center space-x-2">
             <span className="font-medium text-sm">{comment.author.name}</span>
-            <Badge className={`text-xs ${getRoleBadgeColor(comment.author.role)}`}>
+            <DaisyBadge className={`text-xs ${getRoleBadgeColor(comment.author.role)}`}>
               {comment.author.role}
-            </Badge>
+            </DaisyBadge>
             <span className="text-xs text-gray-500">
               {comment.createdAt.toLocaleString()}
             </span>
             {comment.isEdited && (
-              <Badge variant="outline" className="text-xs">edited</Badge>
+              <DaisyBadge variant="outline" className="text-xs">edited</DaisyBadge>
             )}
           </div>
           
@@ -592,7 +592,7 @@ export function CollaborationPanel({
                 if (reactions.length === 0) return null;
                 
                 return (
-                  <Button
+                  <DaisyButton
                     key={type}
                     variant="ghost"
                     size="sm"
@@ -603,7 +603,7 @@ export function CollaborationPanel({
                     {type === 'love' && '❤️'}
                     {type === 'laugh' && '😄'}
                     <span className="ml-1">{reactions.length}</span>
-                  </Button>
+                  </DaisyButton>
                 );
               })}
             </div>
@@ -611,7 +611,7 @@ export function CollaborationPanel({
           
           {/* Actions */}
           <div className="flex items-center space-x-2 text-xs">
-            <Button 
+            <DaisyButton 
               variant="ghost" 
               size="sm" 
               className="h-6 px-2"
@@ -619,8 +619,8 @@ export function CollaborationPanel({
             >
               <ThumbsUp className="w-3 h-3 mr-1" />
               Like
-            </Button>
-            <Button 
+            </DaisyButton>
+            <DaisyButton 
               variant="ghost" 
               size="sm" 
               className="h-6 px-2"
@@ -628,8 +628,8 @@ export function CollaborationPanel({
             >
               <Reply className="w-3 h-3 mr-1" />
               Reply
-            </Button>
-            <Button 
+            </DaisyButton>
+            <DaisyButton 
               variant="ghost" 
               size="sm" 
               className="h-6 px-2"
@@ -637,7 +637,7 @@ export function CollaborationPanel({
             >
               <CheckCircle className={`w-3 h-3 mr-1 ${comment.isResolved ? 'text-green-600' : ''}`} />
               {comment.isResolved ? 'Resolved' : 'Resolve'}
-            </Button>
+            </DaisyButton>
           </div>
         </div>
       </div>
@@ -652,34 +652,34 @@ export function CollaborationPanel({
   );
 
   return (
-    <TooltipProvider>
-      <Card className={`h-full ${className}`}>
-        <CardHeader className="pb-3">
+    <DaisyTooltipProvider>
+      <DaisyCard className={`h-full ${className}`}>
+        <DaisyCardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg flex items-center">
+            <DaisyCardTitle className="text-lg flex items-center">
               <Users className="w-5 h-5 mr-2" />
               Collaboration
-            </CardTitle>
+            </DaisyCardTitle>
             
             <div className="flex items-center space-x-2">
               <div className="flex items-center space-x-1">
                 {activeUsers.slice(0, 4).map(user => (
-                  <Tooltip key={user.id}>
-                    <TooltipTrigger>
+                  <DaisyTooltip key={user.id}>
+                    <DaisyTooltipTrigger>
                       <div className="relative">
-                        <Avatar className="w-6 h-6">
-                          <AvatarImage src={user.avatar} />
-                          <AvatarFallback className="text-xs">
+                        <DaisyAvatar className="w-6 h-6">
+                          <DaisyAvatarImage src={user.avatar} />
+                          <DaisyAvatarFallback className="text-xs">
                             {user.name.split(' ').map(n => n[0]).join('')}
-                          </AvatarFallback>
-                        </Avatar>
+                          </DaisyAvatarFallback>
+                        </DaisyAvatar>
                         <div className={`absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full border border-white ${getUserStatusColor(user.status)}`} />
                       </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
+                    </DaisyTooltipTrigger>
+                    <DaisyTooltipContent>
                       <p>{user.name} - {user.status}</p>
-                    </TooltipContent>
-                  </Tooltip>
+                    </DaisyTooltipContent>
+                  </DaisyTooltip>
                 ))}
                 {activeUsers.length > 4 && (
                   <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-xs font-medium">
@@ -688,69 +688,69 @@ export function CollaborationPanel({
                 )}
               </div>
               
-              <Separator orientation="vertical" className="h-4" />
+              <DaisySeparator orientation="vertical" className="h-4" />
               
-              <Button variant="ghost" size="sm" onClick={() => setShowShareDialog(true)}>
+              <DaisyButton variant="ghost" size="sm" onClick={() => setShowShareDialog(true)}>
                 <Share2 className="w-4 h-4" />
-              </Button>
+              </DaisyButton>
               
-              <Button variant="ghost" size="sm" onClick={() => setShowAssignDialog(true)}>
+              <DaisyButton variant="ghost" size="sm" onClick={() => setShowAssignDialog(true)}>
                 <UserPlus className="w-4 h-4" />
-              </Button>
+              </DaisyButton>
             </div>
           </div>
-        </CardHeader>
         
-        <CardContent className="p-0">
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
+        
+        <DaisyCardContent className="p-0">
+          <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
             <div className="px-6">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="comments" className="text-xs">
+              <DaisyTabsList className="grid w-full grid-cols-4">
+                <DaisyTabsTrigger value="comments" className="text-xs">
                   Comments
                   {comments.length > 0 && (
-                    <Badge variant="secondary" className="ml-1 px-1 py-0 text-xs">
+                    <DaisyBadge variant="secondary" className="ml-1 px-1 py-0 text-xs">
                       {comments.length}
-                    </Badge>
+                    </DaisyBadge>
                   )}
-                </TabsTrigger>
-                <TabsTrigger value="versions" className="text-xs">
+                </DaisyTabsTrigger>
+                <DaisyTabsTrigger value="versions" className="text-xs">
                   Versions
-                </TabsTrigger>
-                <TabsTrigger value="activity" className="text-xs">
+                </DaisyTabsTrigger>
+                <DaisyTabsTrigger value="activity" className="text-xs">
                   Activity
-                </TabsTrigger>
-                <TabsTrigger value="team" className="text-xs">
+                </DaisyTabsTrigger>
+                <DaisyTabsTrigger value="team" className="text-xs">
                   Team
-                </TabsTrigger>
-              </TabsList>
+                </DaisyTabsTrigger>
+              </DaisyTabsList>
             </div>
             
             {/* Comments Tab */}
-            <TabsContent value="comments" className="mt-0">
+            <DaisyTabsContent value="comments" className="mt-0">
               <div className="px-6 py-4 border-b">
                 <div className="flex items-center justify-between mb-4">
-                  <Select value={commentFilter} onValueChange={(value: any) => setCommentFilter(value)}>
-                    <SelectTrigger className="w-32">
-                      <SelectValue />
+                  <DaisySelect value={commentFilter} onValueChange={(value: any) => setCommentFilter(value)}>
+                    <DaisySelectTrigger className="w-32">
+                      <DaisySelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All</SelectItem>
-                      <SelectItem value="unresolved">Unresolved</SelectItem>
-                      <SelectItem value="mentions">Mentions</SelectItem>
+                    <DaisySelectContent>
+                      <DaisySelectItem value="all">All</SelectItem>
+                      <DaisySelectItem value="unresolved">Unresolved</SelectItem>
+                      <DaisySelectItem value="mentions">Mentions</SelectItem>
                     </SelectContent>
-                  </Select>
+                  </DaisySelect>
                   
                   <div className="flex items-center space-x-2">
-                    <Switch
+                    <DaisySwitch
                       checked={isRealTimeEnabled}
                       onCheckedChange={setIsRealTimeEnabled}
                     />
-                    <Label className="text-sm">Real-time</Label>
+                    <DaisyLabel className="text-sm">Real-time</DaisyLabel>
                   </div>
                 </div>
                 
                 <div className="space-y-3">
-                  <Textarea
+                  <DaisyTextarea
                     placeholder={selectedComment ? `Reply to ${selectedComment.author.name}...` : "Add a comment..."}
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
@@ -763,21 +763,21 @@ export function CollaborationPanel({
                         <div className="flex items-center space-x-2 text-sm text-gray-600">
                           <Reply className="w-4 h-4" />
                           Replying to {selectedComment.author.name}
-                          <Button
+                          <DaisyButton
                             variant="ghost"
                             size="sm"
                             onClick={() => setSelectedComment(null)}
                           >
                             <X className="w-3 h-3" />
-                          </Button>
+                          </DaisyButton>
                         </div>
                       )}
                     </div>
                     
-                    <Button size="sm" onClick={handleAddComment} disabled={!newComment.trim()}>
+                    <DaisyButton size="sm" onClick={handleAddComment} disabled={!newComment.trim()}>
                       <Send className="w-4 h-4 mr-2" />
                       {selectedComment ? 'Reply' : 'Comment'}
-                    </Button>
+                    </DaisyButton>
                   </div>
                 </div>
               </div>
@@ -795,15 +795,15 @@ export function CollaborationPanel({
                   )}
                 </div>
               </ScrollArea>
-            </TabsContent>
+            </DaisyTabsContent>
             
             {/* Versions Tab */}
-            <TabsContent value="versions" className="mt-0">
+            <DaisyTabsContent value="versions" className="mt-0">
               <div className="px-6 py-4 border-b">
-                <Button size="sm" onClick={() => setShowVersionDialog(true)}>
+                <DaisyButton size="sm" onClick={() => setShowVersionDialog(true)}>
                   <GitBranch className="w-4 h-4 mr-2" />
                   Create Version
-                </Button>
+                </DaisyButton>
               </div>
               
               <ScrollArea className="h-[400px] px-6">
@@ -812,39 +812,39 @@ export function CollaborationPanel({
                     <div key={version.id} className="border rounded-lg p-4 space-y-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                          <Badge variant={version.isCurrent ? "default" : "outline"}>
+                          <DaisyBadge variant={version.isCurrent ? "default" : "outline"}>
                             v{version.version}
-                          </Badge>
+                          </DaisyBadge>
                           {version.isCurrent && (
-                            <Badge variant="secondary">Current</Badge>
+                            <DaisyBadge variant="secondary">Current</DaisyBadge>
                           )}
                           {version.isPublished && (
-                            <Badge className="bg-green-100 text-green-800">Published</Badge>
+                            <DaisyBadge className="bg-green-100 text-green-800">Published</DaisyBadge>
                           )}
                         </div>
                         
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
+                        <DaisyDropdownMenu>
+                          <DaisyDropdownMenuTrigger asChild>
+                            <DaisyButton variant="ghost" size="sm">
                               <MoreVertical className="w-4 h-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent>
-                            <DropdownMenuItem>
+                            </DaisyButton>
+                          </DaisyDropdownMenuTrigger>
+                          <DaisyDropdownMenuContent>
+                            <DaisyDropdownMenuItem>
                               <Eye className="w-4 h-4 mr-2" />
                               View Changes
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            </DaisyDropdownMenuItem>
+                            <DaisyDropdownMenuItem>
                               <Download className="w-4 h-4 mr-2" />
                               Download
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem>
+                            </DaisyDropdownMenuItem>
+                            <DaisyDropdownMenuSeparator />
+                            <DaisyDropdownMenuItem>
                               <GitBranch className="w-4 h-4 mr-2" />
                               Create Branch
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                            </DaisyDropdownMenuItem>
+                          </DaisyDropdownMenuContent>
+                        </DaisyDropdownMenu>
                       </div>
                       
                       <div>
@@ -860,9 +860,9 @@ export function CollaborationPanel({
                       {version.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1">
                           {version.tags.map(tag => (
-                            <Badge key={tag} variant="outline" className="text-xs">
+                            <DaisyBadge key={tag} variant="outline" className="text-xs">
                               {tag}
-                            </Badge>
+                            </DaisyBadge>
                           ))}
                         </div>
                       )}
@@ -870,20 +870,20 @@ export function CollaborationPanel({
                   ))}
                 </div>
               </ScrollArea>
-            </TabsContent>
+            </DaisyTabsContent>
             
             {/* Activity Tab */}
-            <TabsContent value="activity" className="mt-0">
+            <DaisyTabsContent value="activity" className="mt-0">
               <ScrollArea className="h-[500px] px-6">
                 <div className="space-y-4 py-4">
                   {activities.map(activity => (
                     <div key={activity.id} className="flex items-start space-x-3">
-                      <Avatar className="w-8 h-8">
-                        <AvatarImage src={activity.user.avatar} />
-                        <AvatarFallback className="text-xs">
+                      <DaisyAvatar className="w-8 h-8">
+                        <DaisyAvatarImage src={activity.user.avatar} />
+                        <DaisyAvatarFallback className="text-xs">
                           {activity.user.name.split(' ').map(n => n[0]).join('')}
-                        </AvatarFallback>
-                      </Avatar>
+                        </DaisyAvatarFallback>
+                      </DaisyAvatar>
                       
                       <div className="flex-1 space-y-1">
                         <p className="text-sm">{activity.description}</p>
@@ -902,15 +902,15 @@ export function CollaborationPanel({
                   ))}
                 </div>
               </ScrollArea>
-            </TabsContent>
+            </DaisyTabsContent>
             
             {/* Team Tab */}
-            <TabsContent value="team" className="mt-0">
+            <DaisyTabsContent value="team" className="mt-0">
               <div className="px-6 py-4 border-b">
-                <Button size="sm" onClick={() => setShowAssignDialog(true)}>
+                <DaisyButton size="sm" onClick={() => setShowAssignDialog(true)}>
                   <UserPlus className="w-4 h-4 mr-2" />
                   Invite Member
-                </Button>
+                </DaisyButton>
               </div>
               
               <ScrollArea className="h-[400px] px-6">
@@ -919,12 +919,12 @@ export function CollaborationPanel({
                     <div key={user.id} className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
                         <div className="relative">
-                          <Avatar className="w-10 h-10">
-                            <AvatarImage src={user.avatar} />
-                            <AvatarFallback>
+                          <DaisyAvatar className="w-10 h-10">
+                            <DaisyAvatarImage src={user.avatar} />
+                            <DaisyAvatarFallback>
                               {user.name.split(' ').map(n => n[0]).join('')}
-                            </AvatarFallback>
-                          </Avatar>
+                            </DaisyAvatarFallback>
+                          </DaisyAvatar>
                           <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${getUserStatusColor(user.status)}`} />
                         </div>
                         
@@ -935,143 +935,143 @@ export function CollaborationPanel({
                       </div>
                       
                       <div className="flex items-center space-x-2">
-                        <Badge className={getRoleBadgeColor(user.role)}>
+                        <DaisyBadge className={getRoleBadgeColor(user.role)}>
                           {user.role}
-                        </Badge>
+                        </DaisyBadge>
                         
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
+                        <DaisyDropdownMenu>
+                          <DaisyDropdownMenuTrigger asChild>
+                            <DaisyButton variant="ghost" size="sm">
                               <MoreVertical className="w-4 h-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent>
-                            <DropdownMenuItem>
+                            </DaisyButton>
+                          </DaisyDropdownMenuTrigger>
+                          <DaisyDropdownMenuContent>
+                            <DaisyDropdownMenuItem>
                               <Edit3 className="w-4 h-4 mr-2" />
                               Change Role
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            </DaisyDropdownMenuItem>
+                            <DaisyDropdownMenuItem>
                               <Mail className="w-4 h-4 mr-2" />
                               Send Message
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600">
+                            </DaisyDropdownMenuItem>
+                            <DaisyDropdownMenuSeparator />
+                            <DaisyDropdownMenuItem className="text-red-600">
                               <Trash2 className="w-4 h-4 mr-2" />
                               Remove
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                            </DaisyDropdownMenuItem>
+                          </DaisyDropdownMenuContent>
+                        </DaisyDropdownMenu>
                       </div>
                     </div>
                   ))}
                 </div>
               </ScrollArea>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
+            </DaisyTabsContent>
+          </DaisyTabs>
+        </DaisyCardBody>
         
         {/* Share Dialog */}
-        <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>Share Questionnaire</DialogTitle>
-              <DialogDescription>
+        <DaisyDialog open={showShareDialog} onOpenChange={setShowShareDialog}>
+          <DaisyDialogContent className="max-w-2xl">
+            <DaisyDialogHeader>
+              <DaisyDialogTitle>Share Questionnaire</DaisyDialogTitle>
+              <DaisyDialogDescription>
                 Configure sharing settings and permissions for this questionnaire.
-              </DialogDescription>
-            </DialogHeader>
+              </DaisyDialogDescription>
+            </DaisyDialogHeader>
             
             <div className="space-y-6">
               <div className="space-y-4">
-                <Label>Sharing Type</Label>
-                <Select defaultValue="private">
-                  <SelectTrigger>
-                    <SelectValue />
+                <DaisyLabel>Sharing Type</DaisyLabel>
+                <DaisySelect defaultValue="private">
+                  <DaisySelectTrigger>
+                    <DaisySelectValue />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="private">Private - Specific people</SelectItem>
-                    <SelectItem value="organization">Organization - Anyone in org</SelectItem>
-                    <SelectItem value="public">Public - Anyone with link</SelectItem>
+                  <DaisySelectContent>
+                    <DaisySelectItem value="private">Private - Specific people</SelectItem>
+                    <DaisySelectItem value="organization">Organization - Anyone in org</SelectItem>
+                    <DaisySelectItem value="public">Public - Anyone with link</SelectItem>
                   </SelectContent>
-                </Select>
+                </DaisySelect>
               </div>
               
               <div className="space-y-4">
-                <Label>Permissions</Label>
+                <DaisyLabel>Permissions</DaisyLabel>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="font-medium">View</p>
                       <p className="text-sm text-gray-600">Can view the questionnaire</p>
                     </div>
-                    <Switch defaultChecked />
+                    <DaisySwitch defaultChecked />
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="font-medium">Comment</p>
                       <p className="text-sm text-gray-600">Can add comments</p>
                     </div>
-                    <Switch />
+                    <DaisySwitch />
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="font-medium">Edit</p>
                       <p className="text-sm text-gray-600">Can edit content</p>
                     </div>
-                    <Switch />
+                    <DaisySwitch />
                   </div>
                 </div>
               </div>
             </div>
             
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setShowShareDialog(false)}>
+            <DaisyDialogFooter>
+              <DaisyButton variant="outline" onClick={() => setShowShareDialog(false)}>
                 Cancel
-              </Button>
-              <Button onClick={() => {
+              </DaisyButton>
+              <DaisyButton onClick={() => {
                 handleShare({});
                 setShowShareDialog(false);
               }}>
                 Share
-              </Button>
+              </DaisyButton>
             </DialogFooter>
-          </DialogContent>
-        </Dialog>
+          </DaisyDialogContent>
+        </DaisyDialog>
         
         {/* Version Dialog */}
-        <Dialog open={showVersionDialog} onOpenChange={setShowVersionDialog}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create New Version</DialogTitle>
-              <DialogDescription>
+        <DaisyDialog open={showVersionDialog} onOpenChange={setShowVersionDialog}>
+          <DaisyDialogContent>
+            <DaisyDialogHeader>
+              <DaisyDialogTitle>Create New Version</DaisyDialogTitle>
+              <DaisyDialogDescription>
                 Create a new version of this questionnaire.
-              </DialogDescription>
-            </DialogHeader>
+              </DaisyDialogDescription>
+            </DaisyDialogHeader>
             
             <div className="space-y-4">
               <div>
-                <Label>Version Title</Label>
-                <Input placeholder="Enter version title" />
+                <DaisyLabel>Version Title</DaisyLabel>
+                <DaisyInput placeholder="Enter version title" />
               </div>
               <div>
-                <Label>Description</Label>
-                <Textarea placeholder="Describe the changes in this version" />
+                <DaisyLabel>Description</DaisyLabel>
+                <DaisyTextarea placeholder="Describe the changes in this version" />
               </div>
             </div>
             
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setShowVersionDialog(false)}>
+            <DaisyDialogFooter>
+              <DaisyButton variant="outline" onClick={() => setShowVersionDialog(false)}>
                 Cancel
-              </Button>
-              <Button onClick={() => {
+              </DaisyButton>
+              <DaisyButton onClick={() => {
                 handleCreateVersion('New Version', 'Updated questionnaire');
                 setShowVersionDialog(false);
               }}>
                 Create Version
-              </Button>
+              </DaisyButton>
             </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </Card>
-    </TooltipProvider>
+          </DaisyDialogContent>
+        </DaisyDialog>
+      </DaisyCard>
+    
   );
 } 
