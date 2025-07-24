@@ -64,7 +64,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
+import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipProvider, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 
 interface SidebarProps {
