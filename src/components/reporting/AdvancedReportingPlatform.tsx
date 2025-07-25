@@ -3,10 +3,10 @@
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisySelect } from '@/components/ui/DaisySelect';
 import {
   FileText,
   BarChart3,
@@ -133,9 +133,9 @@ const ReportTemplatesGrid: React.FC = () => {
     };
 
     return (
-      <Badge variant={variants[status]} className="text-caption">
+      <DaisyBadge variant={variants[status]} className="text-caption">
         {status.charAt(0).toUpperCase() + status.slice(1)}
-      </Badge>
+      </DaisyBadge>
     );
   };
 
@@ -147,29 +147,29 @@ const ReportTemplatesGrid: React.FC = () => {
     <div className="space-y-enterprise-4">
       {/* Category Filter */}
       <div className="flex items-center space-x-enterprise-2">
-        <Button
+        <DaisyButton
           variant={selectedCategory === 'all' ? 'default' : 'outline'}
           size="sm"
           onClick={() => setSelectedCategory('all')}
         >
           All Reports
-        </Button>
-        <Button
+        </DaisyButton>
+        <DaisyButton
           variant={selectedCategory === 'regulatory' ? 'default' : 'outline'}
           size="sm"
           onClick={() => setSelectedCategory('regulatory')}
         >
           <Shield className="h-3 w-3 mr-enterprise-1" />
           Regulatory
-        </Button>
-        <Button
+        </DaisyButton>
+        <DaisyButton
           variant={selectedCategory === 'executive' ? 'default' : 'outline'}
           size="sm"
           onClick={() => setSelectedCategory('executive')}
         >
           <BarChart3 className="h-3 w-3 mr-enterprise-1" />
           Executive
-        </Button>
+        </DaisyButton>
       </div>
 
       {/* Templates Grid */}
@@ -197,9 +197,9 @@ const ReportTemplatesGrid: React.FC = () => {
                     </span>
                   </div>
                 </div>
-                <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
                   <MoreHorizontal className="h-3 w-3" />
-                </Button>
+                </DaisyButton>
               </div>
 
               {/* Description */}
@@ -218,9 +218,9 @@ const ReportTemplatesGrid: React.FC = () => {
               {/* Compliance Tags */}
               <div className="flex flex-wrap gap-enterprise-1 mb-enterprise-3">
                 {template.compliance.slice(0, 2).map((framework) => (
-                  <Badge key={framework} variant="outline" className="text-caption">
+                  <DaisyBadge key={framework} variant="outline" className="text-caption">
                     {framework}
-                  </Badge>
+                  </DaisyBadge>
                 ))}
               </div>
 
@@ -233,15 +233,15 @@ const ReportTemplatesGrid: React.FC = () => {
                   </span>
                 </div>
                 <div className="flex items-center space-x-enterprise-1">
-                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                  <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
                     <Eye className="h-3 w-3" />
-                  </Button>
-                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                  </DaisyButton>
+                  <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
                     <Play className="h-3 w-3" />
-                  </Button>
-                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                  </DaisyButton>
+                  <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
                     <Edit className="h-3 w-3" />
-                  </Button>
+                  </DaisyButton>
                 </div>
               </div>
             </div>
@@ -312,10 +312,10 @@ const AutomatedInsightsPanel: React.FC = () => {
                   </div>
                 </div>
                 {insight.actionable && (
-                  <Button variant="ghost" size="sm" className="text-current">
+                  <DaisyButton variant="ghost" size="sm" className="text-current">
                     <Zap className="h-3 w-3 mr-enterprise-1" />
                     Action
-                  </Button>
+                  </DaisyButton>
                 )}
               </div>
             </div>
@@ -341,14 +341,14 @@ const ReportBuilderInterface: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center space-x-enterprise-2">
-          <Button variant="outline" size="sm">
+          <DaisyButton variant="outline" size="sm">
             <Eye className="h-3 w-3 mr-enterprise-1" />
             Preview
-          </Button>
-          <Button size="sm">
+          </DaisyButton>
+          <DaisyButton size="sm">
             <Download className="h-3 w-3 mr-enterprise-1" />
             Generate
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
@@ -424,24 +424,24 @@ export const AdvancedReportingPlatform: React.FC = () => {
       maxWidth="2xl"
     >
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6">
-        <TabsList>
-          <TabsTrigger value="templates">Report Templates</TabsTrigger>
-          <TabsTrigger value="builder">Report Builder</TabsTrigger>
-          <TabsTrigger value="insights">AI Insights</TabsTrigger>
-          <TabsTrigger value="distribution">Distribution</TabsTrigger>
-        </TabsList>
-      </Tabs>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6">
+        <DaisyTabsList>
+          <DaisyTabsTrigger value="templates">Report Templates</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="builder">Report Builder</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="insights">AI Insights</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="distribution">Distribution</DaisyTabsTrigger>
+        </DaisyTabsList>
+      </DaisyTabs>
 
-      <TabsContent value="templates" className="space-y-enterprise-6">
+      <DaisyTabsContent value="templates" className="space-y-enterprise-6">
         <ReportTemplatesGrid />
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="builder" className="space-y-enterprise-6">
+      <DaisyTabsContent value="builder" className="space-y-enterprise-6">
         <ReportBuilderInterface />
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="insights" className="space-y-enterprise-6">
+      <DaisyTabsContent value="insights" className="space-y-enterprise-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-enterprise-6">
           <AutomatedInsightsPanel />
           <ContentCard title="Predictive Analytics" className="shadow-notion-sm">
@@ -453,41 +453,41 @@ export const AdvancedReportingPlatform: React.FC = () => {
             </div>
           </ContentCard>
         </div>
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="distribution" className="space-y-enterprise-6">
+      <DaisyTabsContent value="distribution" className="space-y-enterprise-6">
         <ContentCard title="Scheduling & Distribution" className="shadow-notion-sm">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-enterprise-6">
             <div className="space-y-enterprise-3">
               <h4 className="text-body-sm font-semibold text-text-primary">Schedule</h4>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select frequency" />
+              <DaisySelect>
+                <DaisySelectTrigger>
+                  <DaisySelectValue placeholder="Select frequency" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="daily">Daily</SelectItem>
-                  <SelectItem value="weekly">Weekly</SelectItem>
-                  <SelectItem value="monthly">Monthly</SelectItem>
-                  <SelectItem value="quarterly">Quarterly</SelectItem>
+                <DaisySelectContent>
+                  <DaisySelectItem value="daily">Daily</SelectItem>
+                  <DaisySelectItem value="weekly">Weekly</SelectItem>
+                  <DaisySelectItem value="monthly">Monthly</SelectItem>
+                  <DaisySelectItem value="quarterly">Quarterly</SelectItem>
                 </SelectContent>
-              </Select>
+              </DaisySelect>
             </div>
             <div className="space-y-enterprise-3">
               <h4 className="text-body-sm font-semibold text-text-primary">Distribution</h4>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select delivery method" />
+              <DaisySelect>
+                <DaisySelectTrigger>
+                  <DaisySelectValue placeholder="Select delivery method" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="email">Email</SelectItem>
-                  <SelectItem value="slack">Slack</SelectItem>
-                  <SelectItem value="portal">Portal Only</SelectItem>
+                <DaisySelectContent>
+                  <DaisySelectItem value="email">Email</SelectItem>
+                  <DaisySelectItem value="slack">Slack</SelectItem>
+                  <DaisySelectItem value="portal">Portal Only</SelectItem>
                 </SelectContent>
-              </Select>
+              </DaisySelect>
             </div>
           </div>
         </ContentCard>
-      </TabsContent>
+      </DaisyTabsContent>
     </MainContentArea>
   );
 };

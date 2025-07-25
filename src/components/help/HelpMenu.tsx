@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import GuidedTour, { TourLauncher } from '@/components/help/GuidedTour';
 import {
   HelpCircle,
@@ -185,14 +185,14 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
       </div>
 
       {/* Quick Tours */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center gap-2">
             <Lightbulb className="w-5 h-5 text-yellow-500" />
             Guided Tours
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="grid gap-3">
             {helpResources.filter(r => r.type === 'tour').map((resource) => (
               <div
@@ -207,10 +207,10 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-medium text-gray-900">{resource.title}</h3>
                     {resource.isPopular && (
-                      <Badge variant="secondary" className="text-xs bg-yellow-100 text-yellow-700">
+                      <DaisyBadge variant="secondary" className="text-xs bg-yellow-100 text-yellow-700">
                         <Star className="w-3 h-3 mr-1" />
                         Popular
-                      </Badge>
+                      </DaisyBadge>
                     )}
                   </div>
                   <p className="text-sm text-gray-600 mb-2">{resource.description}</p>
@@ -220,30 +220,30 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
                       {resource.duration}
                     </span>
                     {resource.difficulty && (
-                      <Badge className={`text-xs ${getDifficultyColor(resource.difficulty)}`}>
+                      <DaisyBadge className={`text-xs ${getDifficultyColor(resource.difficulty)}`}>
                         {resource.difficulty}
-                      </Badge>
+                      </DaisyBadge>
                     )}
                   </div>
                 </div>
-                <Button variant="outline" size="sm">
+                <DaisyButton variant="outline" size="sm">
                   Start Tour
-                </Button>
+                </DaisyButton>
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Other Resources */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-green-600" />
             Documentation & Guides
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="grid gap-3">
             {helpResources.filter(r => r.type !== 'tour').map((resource) => (
               <div
@@ -258,9 +258,9 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-medium text-gray-900">{resource.title}</h3>
                     {resource.isNew && (
-                      <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-700">
+                      <DaisyBadge variant="secondary" className="text-xs bg-blue-100 text-blue-700">
                         New
-                      </Badge>
+                      </DaisyBadge>
                     )}
                   </div>
                   <p className="text-sm text-gray-600 mb-2">{resource.description}</p>
@@ -271,9 +271,9 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
                         {resource.duration}
                       </span>
                       {resource.difficulty && (
-                        <Badge className={`text-xs ${getDifficultyColor(resource.difficulty)}`}>
+                        <DaisyBadge className={`text-xs ${getDifficultyColor(resource.difficulty)}`}>
                           {resource.difficulty}
-                        </Badge>
+                        </DaisyBadge>
                       )}
                     </div>
                   )}
@@ -282,20 +282,20 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Quick Actions */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center gap-2">
             <Settings className="w-5 h-5 text-purple-600" />
             Quick Actions
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="grid grid-cols-2 gap-3">
-            <Button
+            <DaisyButton
               variant="outline"
               onClick={() => {
                 setSelectedTourId('platform-overview');
@@ -308,8 +308,8 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
                 <div className="font-medium">Restart Tour</div>
                 <div className="text-xs text-gray-500">Platform overview</div>
               </div>
-            </Button>
-            <Button
+            </DaisyButton>
+            <DaisyButton
               variant="outline"
               onClick={() => window.open('/help/keyboard-shortcuts', '_blank')}
               className="flex items-center gap-2 h-auto p-4"
@@ -319,10 +319,10 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
                 <div className="font-medium">Shortcuts</div>
                 <div className="text-xs text-gray-500">Keyboard shortcuts</div>
               </div>
-            </Button>
+            </DaisyButton>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </div>
   );
 } 

@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { 
   Contrast, 
   Eye, 
@@ -161,7 +161,7 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
 
   if (variant === 'badge') {
     return (
-      <Badge
+      <DaisyBadge
         className={`
           cursor-pointer transition-colors
           ${isHighContrast 
@@ -187,13 +187,13 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
             {isHighContrast ? 'High Contrast On' : 'High Contrast Off'}
           </span>
         )}
-      </Badge>
+      </DaisyBadge>
     );
   }
 
   // Default button variant
   return (
-    <Button
+    <DaisyButton
       variant={isHighContrast ? "default" : "secondary"}
       size={size === 'md' ? 'default' : size}
       onClick={toggleHighContrast}
@@ -215,7 +215,7 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
       <span className="sr-only">
         High contrast mode is {isHighContrast ? 'enabled' : 'disabled'}
       </span>
-    </Button>
+    </DaisyButton>
   );
 };
 
@@ -296,14 +296,14 @@ export const AccessibilityPanel: React.FC<{
           </p>
         </div>
         {onClose && (
-          <Button
+          <DaisyButton
             variant="ghost"
             size="sm"
             onClick={onClose}
             aria-label="Close accessibility settings"
           >
             ×
-          </Button>
+          </DaisyButton>
         )}
       </div>
 
@@ -367,7 +367,7 @@ export const AccessibilityPanel: React.FC<{
               { value: 'large', label: 'Large' },
               { value: 'extra-large', label: 'Extra Large' }
                          ].map((option) => (
-               <Button
+               <DaisyButton
                  key={option.value}
                  variant={fontSize === option.value ? "default" : "secondary"}
                  size="sm"
@@ -375,7 +375,7 @@ export const AccessibilityPanel: React.FC<{
                  aria-pressed={fontSize === option.value}
                >
                  {option.label}
-               </Button>
+               </DaisyButton>
              ))}
           </div>
         </div>

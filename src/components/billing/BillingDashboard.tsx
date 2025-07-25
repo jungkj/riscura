@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { toast } from 'sonner';
 import { 
   CreditCard, 
@@ -458,11 +458,11 @@ const BillingDashboard: React.FC = () => {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
-          <AlertTriangle className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
+          <DaisyAlertTriangle className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
           <p>Failed to load billing information</p>
-          <Button onClick={loadBillingData} className="mt-2">
+          <DaisyButton onClick={loadBillingData} className="mt-2">
             Retry
-          </Button>
+          </DaisyButton>
         </div>
       </div>
     );
@@ -482,41 +482,41 @@ const BillingDashboard: React.FC = () => {
         </div>
         
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
+          <DaisyButton variant="outline" size="sm">
             <Settings className="h-4 w-4 mr-2" />
             Billing Settings
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
       {/* Subscription Status Alert */}
       {billingData.subscription.status !== 'ACTIVE' && (
-        <Alert variant="destructive">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertTitle>Subscription Issue</AlertTitle>
-          <AlertDescription>
+        <DaisyAlert variant="error">
+          <DaisyAlertTriangle className="h-4 w-4" />
+          <DaisyAlertTitle>Subscription Issue</DaisyCardTitle>
+          <DaisyAlertDescription>
             Your subscription is {billingData.subscription.status.toLowerCase()}. 
             Please update your payment method to continue using premium features.
-          </AlertDescription>
-        </Alert>
+          
+        </DaisyAlert>
       )}
 
       {/* Current Subscription */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center gap-2">
             <CreditCard className="h-5 w-5" />
             Current Subscription
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <h3 className="text-lg font-semibold">{billingData.subscription.plan}</h3>
-                <Badge variant={billingData.subscription.status === 'ACTIVE' ? 'default' : 'destructive'}>
+                <DaisyBadge variant={billingData.subscription.status === 'ACTIVE' ? 'default' : 'destructive'}>
                   {billingData.subscription.status}
-                </Badge>
+                </DaisyBadge>
               </div>
               <p className="text-2xl font-bold">
                 {formatCurrency(billingData.subscription.amount)}
@@ -534,43 +534,43 @@ const BillingDashboard: React.FC = () => {
                 {format(new Date(billingData.subscription.currentPeriodEnd), 'MMM dd, yyyy')}
               </p>
               {billingData.subscription.cancelAtPeriodEnd && (
-                <Badge variant="secondary" className="mt-2">
+                <DaisyBadge variant="secondary" className="mt-2">
                   Cancels at period end
-                </Badge>
+                </DaisyBadge>
               )}
             </div>
 
             <div className="flex flex-col gap-2">
-              <Button variant="outline" size="sm">
+              <DaisyButton variant="outline" size="sm">
                 Change Plan
-              </Button>
+              </DaisyButton>
               {!billingData.subscription.cancelAtPeriodEnd && (
-                <Button 
+                <DaisyButton 
                   variant="outline" 
                   size="sm" 
                   onClick={handleCancelSubscription}
                   className="text-red-600 hover:text-red-700"
                 >
                   Cancel Subscription
-                </Button>
+                </DaisyButton>
               )}
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Usage Overview */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5" />
             Usage Overview
-          </CardTitle>
-          <CardDescription>
+          </DaisyCardTitle>
+          <DaisyCardDescription>
             Current usage across all features in your billing period
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </p>
+        
+        <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {Object.entries(billingData.usage).map(([key, usage]) => {
               const percentage = getUsagePercentage(usage.current, usage.limit);
@@ -587,7 +587,7 @@ const BillingDashboard: React.FC = () => {
                     </span>
                   </div>
                   {!isUnlimited && (
-                    <Progress 
+                    <DaisyProgress 
                       value={percentage} 
                       className="h-2"
                     />
@@ -601,29 +601,29 @@ const BillingDashboard: React.FC = () => {
               );
             })}
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Tabs */}
-      <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="invoices">Invoices</TabsTrigger>
-          <TabsTrigger value="plans">Plans</TabsTrigger>
-        </TabsList>
+      <DaisyTabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-4">
+        <DaisyTabsList className="grid w-full grid-cols-3">
+          <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="invoices">Invoices</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="plans">Plans</DaisyTabsTrigger>
+        </DaisyTabsList>
 
-        <TabsContent value="overview" className="space-y-4">
+        <DaisyTabsContent value="overview" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Upcoming Invoice */}
             {billingData.upcomingInvoice && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Calendar className="h-5 w-5" />
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="flex items-center gap-2">
+                    <DaisyCalendar className="h-5 w-5" />
                     Upcoming Invoice
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+                  </DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span>Amount:</span>
@@ -645,19 +645,19 @@ const BillingDashboard: React.FC = () => {
                       </span>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             )}
 
             {/* Payment Methods */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle className="flex items-center gap-2">
                   <CreditCard className="h-5 w-5" />
                   Payment Methods
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </DaisyCardTitle>
+              
+              <DaisyCardContent>
                 <div className="space-y-3">
                   {billingData.paymentMethods.map((method) => (
                     <div key={method.id} className="flex items-center justify-between p-3 border rounded-lg">
@@ -675,28 +675,28 @@ const BillingDashboard: React.FC = () => {
                         </div>
                       </div>
                       {method.isDefault && (
-                        <Badge variant="secondary">Default</Badge>
+                        <DaisyBadge variant="secondary">Default</DaisyBadge>
                       )}
                     </div>
                   ))}
-                  <Button variant="outline" size="sm" className="w-full">
+                  <DaisyButton variant="outline" size="sm" className="w-full">
                     Add Payment Method
-                  </Button>
+                  </DaisyButton>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="invoices" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+        <DaisyTabsContent value="invoices" className="space-y-4">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="flex items-center gap-2">
                 <FileText className="h-5 w-5" />
                 Invoice History
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+              </DaisyCardTitle>
+            
+            <DaisyCardContent>
               <div className="space-y-3">
                 {billingData.invoices.map((invoice) => (
                   <div key={invoice.id} className="flex items-center justify-between p-3 border rounded-lg">
@@ -714,7 +714,7 @@ const BillingDashboard: React.FC = () => {
                         <p className="font-medium">
                           {formatCurrency(invoice.amount, invoice.currency)}
                         </p>
-                        <Badge 
+                        <DaisyBadge 
                           variant={
                             invoice.status === 'PAID' ? 'default' :
                             invoice.status === 'PENDING' ? 'secondary' :
@@ -722,49 +722,49 @@ const BillingDashboard: React.FC = () => {
                           }
                         >
                           {invoice.status}
-                        </Badge>
+                        </DaisyBadge>
                       </div>
-                      <Button 
+                      <DaisyButton 
                         variant="outline" 
                         size="sm"
                         onClick={() => handleDownloadInvoice(invoice.id)}
                       >
                         <Download className="h-4 w-4" />
-                      </Button>
+                      </DaisyButton>
                     </div>
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
 
-        <TabsContent value="plans" className="space-y-4">
+        <DaisyTabsContent value="plans" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {availablePlans.map((plan) => (
-              <Card 
+              <DaisyCard 
                 key={plan.id} 
                 className={`relative ${plan.popular ? 'border-blue-500 shadow-lg' : ''}`}
               >
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-blue-500">Most Popular</Badge>
+                    <DaisyBadge className="bg-blue-500">Most Popular</DaisyBadge>
                   </div>
                 )}
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="flex items-center justify-between">
                     {plan.name}
                     {billingData.subscription.plan === plan.name.toUpperCase() && (
-                      <Badge variant="secondary">Current</Badge>
+                      <DaisyBadge variant="secondary">Current</DaisyBadge>
                     )}
-                  </CardTitle>
-                  <CardDescription>{plan.description}</CardDescription>
+                  </DaisyCardTitle>
+                  <DaisyCardDescription>{plan.description}</p>
                   <div className="text-3xl font-bold">
                     {formatCurrency(plan.price)}
                     <span className="text-sm font-normal text-gray-600">/{plan.interval}</span>
                   </div>
-                </CardHeader>
-                <CardContent>
+                
+                <DaisyCardContent>
                   <div className="space-y-3">
                     {plan.features.map((feature, index) => (
                       <div key={index} className="flex items-center gap-2">
@@ -780,20 +780,20 @@ const BillingDashboard: React.FC = () => {
                       </div>
                     ))}
                   </div>
-                  <Button 
+                  <DaisyButton 
                     className="w-full mt-6"
                     variant={billingData.subscription.plan === plan.name.toUpperCase() ? 'outline' : 'primary'}
                     disabled={billingData.subscription.plan === plan.name.toUpperCase()}
                     onClick={() => handlePlanUpgrade(plan.id)}
                   >
                     {billingData.subscription.plan === plan.name.toUpperCase() ? 'Current Plan' : 'Upgrade'}
-                  </Button>
-                </CardContent>
-              </Card>
+                  </DaisyButton>
+                </DaisyCardBody>
+              </DaisyCard>
             ))}
           </div>
-        </TabsContent>
-      </Tabs>
+        </DaisyTabsContent>
+      </DaisyTabs>
     </div>
   );
 };

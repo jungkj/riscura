@@ -2,8 +2,8 @@
 
 import React, { useState, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { 
   Select,
   SelectContent,
@@ -150,7 +150,7 @@ const FloatingLabelInput: React.FC<{
       {(field.helperText || error) && (
         <div className="flex items-start space-x-enterprise-2">
           {error ? (
-            <AlertCircle className="h-3 w-3 text-semantic-error mt-0.5 flex-shrink-0" />
+            <DaisyAlertCircle className="h-3 w-3 text-semantic-error mt-0.5 flex-shrink-0" />
           ) : (
             <Info className="h-3 w-3 text-text-tertiary mt-0.5 flex-shrink-0" />
           )}
@@ -180,19 +180,19 @@ const NotionSelect: React.FC<{
         {field.required && <span className="text-semantic-error ml-1">*</span>}
       </label>
       
-      <Select value={value} onValueChange={onChange} disabled={field.disabled}>
-        <SelectTrigger className={cn(
+      <DaisySelect value={value} onValueChange={onChange} disabled={field.disabled}>
+        <DaisySelectTrigger className={cn(
           "w-full h-12 px-enterprise-3 border rounded-lg bg-white transition-all duration-200",
           error 
             ? "border-semantic-error focus:border-semantic-error" 
             : "border-border hover:border-border-hover focus:border-interactive-primary focus:shadow-notion-sm",
           field.disabled && "bg-surface-secondary cursor-not-allowed opacity-60"
         )}>
-          <SelectValue placeholder={field.placeholder || `Select ${field.label.toLowerCase()}`} />
+          <DaisySelectValue placeholder={field.placeholder || `Select ${field.label.toLowerCase()}`} />
         </SelectTrigger>
-        <SelectContent className="max-h-64">
+        <DaisySelectContent className="max-h-64">
           {field.options?.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
+            <DaisySelectItem key={option.value} value={option.value}>
               <div className="flex flex-col">
                 <span className="text-body-sm font-medium">{option.label}</span>
                 {option.description && (
@@ -202,12 +202,12 @@ const NotionSelect: React.FC<{
             </SelectItem>
           ))}
         </SelectContent>
-      </Select>
+      </DaisySelect>
 
       {(field.helperText || error) && (
         <div className="flex items-start space-x-enterprise-2">
           {error ? (
-            <AlertCircle className="h-3 w-3 text-semantic-error mt-0.5 flex-shrink-0" />
+            <DaisyAlertCircle className="h-3 w-3 text-semantic-error mt-0.5 flex-shrink-0" />
           ) : (
             <Info className="h-3 w-3 text-text-tertiary mt-0.5 flex-shrink-0" />
           )}
@@ -268,7 +268,7 @@ const NotionToggle: React.FC<{
 
       {error && (
         <div className="flex items-start space-x-enterprise-2">
-          <AlertCircle className="h-3 w-3 text-semantic-error mt-0.5 flex-shrink-0" />
+          <DaisyAlertCircle className="h-3 w-3 text-semantic-error mt-0.5 flex-shrink-0" />
           <p className="text-caption text-semantic-error">{error}</p>
         </div>
       )}
@@ -364,7 +364,7 @@ const NotionFileUpload: React.FC<{
                   </p>
                 </div>
               </div>
-              <Button
+              <DaisyButton
                 type="button"
                 variant="ghost"
                 size="sm"
@@ -372,7 +372,7 @@ const NotionFileUpload: React.FC<{
                 className="h-6 w-6 p-0 text-text-tertiary hover:text-semantic-error"
               >
                 <X className="h-3 w-3" />
-              </Button>
+              </DaisyButton>
             </div>
           ))}
         </div>
@@ -380,7 +380,7 @@ const NotionFileUpload: React.FC<{
 
       {error && (
         <div className="flex items-start space-x-enterprise-2">
-          <AlertCircle className="h-3 w-3 text-semantic-error mt-0.5 flex-shrink-0" />
+          <DaisyAlertCircle className="h-3 w-3 text-semantic-error mt-0.5 flex-shrink-0" />
           <p className="text-caption text-semantic-error">{error}</p>
         </div>
       )}
@@ -464,7 +464,7 @@ const FormSection: React.FC<{
         </div>
         
         {section.collapsible && (
-          <Button
+          <DaisyButton
             type="button"
             variant="ghost"
             size="sm"
@@ -476,7 +476,7 @@ const FormSection: React.FC<{
             ) : (
               <ChevronRight className="h-4 w-4" />
             )}
-          </Button>
+          </DaisyButton>
         )}
       </div>
 
@@ -563,7 +563,7 @@ export const NotionForm: React.FC<{
         )}
       </div>
 
-      <Separator />
+      <DaisySeparator />
 
       {/* Form Sections */}
       <div className="space-y-enterprise-8">
@@ -576,7 +576,7 @@ export const NotionForm: React.FC<{
               onChange={handleFieldChange}
               autoSavedFields={autoSavedFields}
             />
-            {index < sections.length - 1 && <Separator />}
+            {index < sections.length - 1 && <DaisySeparator />}
           </React.Fragment>
         ))}
       </div>
@@ -585,26 +585,26 @@ export const NotionForm: React.FC<{
       <div className="flex items-center justify-between pt-enterprise-6 border-t border-border">
         <div className="flex items-center space-x-enterprise-2">
           {onCancel && (
-            <Button type="button" variant="outline" onClick={onCancel}>
+            <DaisyButton type="button" variant="outline" onClick={onCancel}>
               Cancel
-            </Button>
+            </DaisyButton>
           )}
-          <Button type="button" variant="ghost" disabled={loading}>
+          <DaisyButton type="button" variant="ghost" disabled={loading}>
             <RotateCcw className="h-4 w-4 mr-enterprise-1" />
             Reset
-          </Button>
+          </DaisyButton>
         </div>
         
         <div className="flex items-center space-x-enterprise-2">
           {!autoSave && (
-            <Button type="button" variant="outline" disabled={loading}>
+            <DaisyButton type="button" variant="outline" disabled={loading}>
               <Save className="h-4 w-4 mr-enterprise-1" />
               Save Draft
-            </Button>
+            </DaisyButton>
           )}
-          <Button type="submit" disabled={loading}>
+          <DaisyButton type="submit" disabled={loading}>
             {loading ? 'Submitting...' : 'Submit'}
-          </Button>
+          </DaisyButton>
         </div>
       </div>
     </form>

@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { Suspense } from 'react';
 import { useAuth } from '@/context/AuthContext';
 
@@ -30,11 +30,11 @@ function OAuthTestContent() {
 
   if (isLoading) {
     return (
-      <Card className="max-w-2xl mx-auto">
-        <CardContent className="p-8">
+      <DaisyCard className="max-w-2xl mx-auto">
+        <DaisyCardContent className="p-8">
           <div className="text-center">Loading...</div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     );
   }
 
@@ -48,11 +48,11 @@ function OAuthTestContent() {
   };
 
   return (
-    <Card className="max-w-2xl mx-auto">
-      <CardHeader>
-        <CardTitle>OAuth Test Page</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <DaisyCard className="max-w-2xl mx-auto">
+      <DaisyCardHeader>
+        <DaisyCardTitle>OAuth Test Page</DaisyCardTitle>
+      
+      <DaisyCardContent className="space-y-4">
         <div>
           <strong>Status:</strong> {isAuthenticated ? 'Authenticated' : 'Not authenticated'}
         </div>
@@ -71,14 +71,14 @@ function OAuthTestContent() {
             <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
               {JSON.stringify(user, null, 2)}
             </pre>
-            <Button onClick={handleLogout}>Sign Out</Button>
+            <DaisyButton onClick={handleLogout}>Sign Out</DaisyButton>
           </>
         ) : (
           <>
             <p>You are not signed in</p>
             <div className="space-x-4">
-              <Button onClick={handleGoogleLogin}>Sign in with Google</Button>
-              <Button onClick={() => router.push('/auth/login')}>Sign in with Credentials</Button>
+              <DaisyButton onClick={handleGoogleLogin}>Sign in with Google</DaisyButton>
+              <DaisyButton onClick={() => router.push('/auth/login')}>Sign in with Credentials</DaisyButton>
             </div>
           </>
         )}
@@ -98,8 +98,8 @@ function OAuthTestContent() {
             </li>
           </ul>
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 }
 
@@ -107,11 +107,11 @@ export default function TestOAuthPage() {
   return (
     <div className="container mx-auto p-8">
       <Suspense fallback={
-        <Card className="max-w-2xl mx-auto">
-          <CardContent className="p-8">
+        <DaisyCard className="max-w-2xl mx-auto">
+          <DaisyCardContent className="p-8">
             <div className="text-center">Loading...</div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       }>
         <OAuthTestContent />
       </Suspense>

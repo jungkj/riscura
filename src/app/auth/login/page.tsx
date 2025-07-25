@@ -4,14 +4,11 @@ import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Separator } from '@/components/ui/separator';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { Eye, EyeOff, Mail, Lock, AlertCircle, Shield, CheckCircle } from 'lucide-react';
-import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth } from '@/context/AuthContext';
 
 function LoginForm() {
@@ -40,10 +37,10 @@ function LoginForm() {
     }
   };
 
-  const handleCheckboxChange = (checked: boolean) => {
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
       ...prev,
-      rememberMe: checked,
+      rememberMe: e.target.checked,
     }));
   };
 
@@ -86,11 +83,8 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-4">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-grid-slate-200/50 dark:bg-grid-slate-700/25 bg-[size:20px_20px] [mask-image:radial-gradient(white,transparent_85%)]" />
-      
-      <div className="relative w-full max-w-md space-y-8">
+    <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
+      <div className="w-full max-w-md space-y-8">
         {/* Logo and Header */}
         <div className="text-center space-y-6">
           <div className="mx-auto flex justify-center">
@@ -105,133 +99,106 @@ function LoginForm() {
           </div>
           
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold text-primary">
               Welcome back
             </h1>
-            <p className="text-slate-600 dark:text-slate-400">
+            <p className="text-base-content/70">
               Sign in to your Riscura account
             </p>
           </div>
         </div>
 
         {/* Login Card */}
-        <Card className="backdrop-blur-sm bg-white/70 dark:bg-slate-800/70 border-slate-200/60 dark:border-slate-700/60 shadow-2xl shadow-slate-900/10">
-          <CardContent className="p-8 space-y-6">
+        <DaisyCard className="w-full">
+          <DaisyCardBody>
             {(error || authError) && (
-              <Alert variant="destructive" className="border-red-200 bg-red-50 dark:bg-red-950/50">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription className="text-red-700 dark:text-red-300">
-                  {error || authError}
-                </AlertDescription>
-              </Alert>
+              <DaisyAlert variant="error" className="mb-6">
+                {error || authError}
+              </DaisyAlert>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-slate-700 dark:text-slate-300 font-medium">
-                  Email Address
-                </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
-                  <Input
-                    id="email"
-                    name="email"
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Email Address</span>
+                </label>
+                <label className="input input-bordered flex items-center gap-2">
+                  <Mail className="h-4 w-4 opacity-70" />
+                  <input
                     type="email"
-                    placeholder="Enter your email"
+                    name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="pl-10 h-11 bg-white/50 dark:bg-slate-900/50 border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500/20"
+                    placeholder="Enter your email"
+                    className="grow"
                     required
                   />
-                </div>
+                </label>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-slate-700 dark:text-slate-300 font-medium">
-                  Password
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
-                  <Input
-                    id="password"
-                    name="password"
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Password</span>
+                </label>
+                <label className="input input-bordered flex items-center gap-2">
+                  <Lock className="h-4 w-4 opacity-70" />
+                  <input
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Enter your password"
+                    name="password"
                     value={formData.password}
                     onChange={handleInputChange}
-                    className="pl-10 pr-10 h-11 bg-white/50 dark:bg-slate-900/50 border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500/20"
+                    placeholder="Enter your password"
+                    className="grow"
                     required
                   />
-                  <Button
+                  <button
                     type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    className="btn btn-ghost btn-xs"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-slate-400" />
+                      <EyeOff className="h-4 w-4" />
                     ) : (
-                      <Eye className="h-4 w-4 text-slate-400" />
+                      <Eye className="h-4 w-4" />
                     )}
-                  </Button>
-                </div>
+                  </button>
+                </label>
               </div>
 
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="rememberMe"
+                <label className="label cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="rememberMe"
                     checked={formData.rememberMe}
-                    onCheckedChange={handleCheckboxChange}
-                    className="border-slate-300 dark:border-slate-600 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
+                    onChange={handleCheckboxChange}
+                    className="checkbox checkbox-primary checkbox-sm mr-2"
                   />
-                  <Label 
-                    htmlFor="rememberMe" 
-                    className="text-sm text-slate-600 dark:text-slate-400 cursor-pointer"
-                  >
-                    Stay logged in
-                  </Label>
-                </div>
+                  <span className="label-text">Stay logged in</span>
+                </label>
                 <Link
                   href="/auth/forgot-password"
-                  className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-500 hover:underline underline-offset-4"
+                  className="link link-primary text-sm"
                 >
                   Forgot password?
                 </Link>
               </div>
 
-              <Button 
+              <DaisyButton 
                 type="submit" 
-                className="w-full h-11 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium shadow-lg shadow-blue-500/25 transition-all duration-200" 
-                disabled={isLoading}
+                loading={isLoading}
+                block
+                size="lg"
               >
-                {isLoading ? (
-                  <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Signing in...</span>
-                  </div>
-                ) : (
-                  'Sign in'
-                )}
-              </Button>
+                Sign in
+              </DaisyButton>
             </form>
 
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <Separator className="w-full bg-slate-200 dark:bg-slate-700" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white/70 dark:bg-slate-800/70 px-2 text-slate-500 dark:text-slate-400 font-medium">
-                  Or continue with
-                </span>
-              </div>
-            </div>
+            <div className="divider">OR</div>
 
-            <Button
-              type="button"
+            <DaisyButton
               variant="outline"
-              className="w-full h-11 bg-white dark:bg-white border border-gray-300 dark:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-50 hover:shadow-md transition-all text-gray-700 dark:text-gray-700 font-medium"
+              block
               onClick={handleGoogleLogin}
               disabled={isLoading}
             >
@@ -254,47 +221,46 @@ function LoginForm() {
                 />
               </svg>
               Sign in with Google
-            </Button>
+            </DaisyButton>
 
             {/* Demo Credentials Section */}
             {process.env.NODE_ENV === 'development' && (
-              <div className="space-y-3">
-                <Separator className="bg-slate-200 dark:bg-slate-700" />
-                <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <CheckCircle className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                    <span className="text-sm font-medium text-blue-800 dark:text-blue-200">Demo Mode</span>
+              <>
+                <div className="divider"></div>
+                <div className="alert alert-info">
+                  <CheckCircle className="h-4 w-4" />
+                  <div>
+                    <h3 className="font-bold">Demo Mode</h3>
+                    <div className="text-xs">Use demo credentials to explore the platform</div>
                   </div>
-                  <p className="text-xs text-blue-700 dark:text-blue-300 mb-3">
-                    Use demo credentials to explore the platform
-                  </p>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    size="sm"
-                    className="w-full text-xs bg-blue-100 dark:bg-blue-900/50 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900"
-                    onClick={handleDemoLogin}
-                  >
-                    Use Demo Credentials (admin@riscura.com)
-                  </Button>
                 </div>
-              </div>
+                <DaisyButton
+                  variant="secondary"
+                  size="sm"
+                  block
+                  onClick={handleDemoLogin}
+                >
+                  Use Demo Credentials (admin@riscura.com)
+                </DaisyButton>
+              </>
             )}
 
-            <div className="text-center text-sm text-slate-600 dark:text-slate-400">
-              Don't have an account?{' '}
-              <Link
-                href="/auth/register"
-                className="text-blue-600 dark:text-blue-400 hover:text-blue-500 hover:underline underline-offset-4 font-medium"
-              >
-                Sign up
-              </Link>
+            <div className="text-center">
+              <p className="text-base-content/70">
+                Don't have an account?{' '}
+                <Link
+                  href="/auth/register"
+                  className="link link-primary"
+                >
+                  Sign up
+                </Link>
+              </p>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
         {/* Footer */}
-        <div className="text-center text-xs text-slate-500 dark:text-slate-400">
+        <div className="text-center text-xs text-base-content/50">
           © 2024 Riscura. All rights reserved.
         </div>
       </div>
@@ -306,10 +272,10 @@ export default function LoginPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+        <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
     }>
       <LoginForm />
     </Suspense>
   );
-} 
+}

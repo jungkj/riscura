@@ -1,0 +1,23 @@
+# Robots.txt for Riscura
+# Allow all web crawlers
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://riscura.com/sitemap.xml
+
+# Crawl-delay for considerate crawling
+Crawl-delay: 1
+
+# Disallow access to API endpoints
+Disallow: /api/
+
+# Disallow access to admin areas
+Disallow: /admin/
+Disallow: /dashboard/
+
+# Allow access to public assets
+Allow: /images/
+Allow: /blog/
+Allow: /resources/

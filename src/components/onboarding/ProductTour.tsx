@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { 
   X, 
   ChevronLeft, 
@@ -421,14 +421,14 @@ export const ProductTour: React.FC<ProductTourProps> = ({
 
   if (!isActive || !currentStepData) {
     return (
-      <Button
+      <DaisyButton
         onClick={startTour}
         className={`fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white shadow-lg ${className}`}
         size="lg"
       >
         <Play className="w-4 h-4 mr-2" />
         Start Tour
-      </Button>
+      </DaisyButton>
     );
   }
 
@@ -458,8 +458,8 @@ export const ProductTour: React.FC<ProductTourProps> = ({
           zIndex: 1002
         }}
       >
-        <Card className="bg-white shadow-xl border-0">
-          <CardContent className="p-6">
+        <DaisyCard className="bg-white shadow-xl border-0">
+          <DaisyCardContent className="p-6">
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center space-x-3">
@@ -468,19 +468,19 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">{currentStepData.title}</h3>
-                  <Badge variant="secondary" className="text-xs">
+                  <DaisyBadge variant="secondary" className="text-xs">
                     Step {currentStep + 1} of {filteredSteps.length}
-                  </Badge>
+                  </DaisyBadge>
                 </div>
               </div>
-              <Button
+              <DaisyButton
                 variant="ghost"
-                size="icon"
+                shape="square" size="md"
                 onClick={skipTour}
                 className="text-gray-400 hover:text-gray-600"
               >
                 <X className="w-4 h-4" />
-              </Button>
+              </DaisyButton>
             </div>
 
             {/* Content */}
@@ -495,49 +495,49 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                   <span>Progress</span>
                   <span>{Math.round(progress)}%</span>
                 </div>
-                <Progress value={progress} className="h-2" />
+                <DaisyProgress value={progress} className="h-2" />
               </div>
             )}
 
             {/* Controls */}
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   onClick={previousStep}
                   disabled={currentStep === 0}
                 >
                   <ChevronLeft className="w-4 h-4" />
-                </Button>
+                </DaisyButton>
                 
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsPlaying(!isPlaying)}
                   className="text-gray-600"
                 >
                   {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-                </Button>
+                </DaisyButton>
 
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   onClick={() => goToStep(0)}
                   className="text-gray-600"
                 >
                   <RotateCcw className="w-4 h-4" />
-                </Button>
+                </DaisyButton>
               </div>
 
               <div className="flex items-center space-x-2">
                 {tourConfig.allowSkip && (
-                  <Button variant="ghost" size="sm" onClick={skipTour}>
+                  <DaisyButton variant="ghost" size="sm" onClick={skipTour}>
                     Skip Tour
-                  </Button>
+                  </DaisyButton>
                 )}
                 
-                <Button onClick={nextStep} size="sm">
+                <DaisyButton onClick={nextStep} size="sm">
                   {currentStep === filteredSteps.length - 1 ? (
                     <>
                       <CheckCircle className="w-4 h-4 mr-2" />
@@ -549,7 +549,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                       <ChevronRight className="w-4 h-4 ml-2" />
                     </>
                   )}
-                </Button>
+                </DaisyButton>
               </div>
             </div>
 
@@ -564,8 +564,8 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                 </p>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
     </>
   );

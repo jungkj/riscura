@@ -138,7 +138,7 @@ interface ProgressModalProps {
   onClose: () => void;
 }
 
-const ProgressModal: React.FC<ProgressModalProps> = ({
+const ProgressModal: React.FC<DaisyProgressModalProps> = ({
   isOpen,
   progress,
   action,
@@ -450,7 +450,7 @@ export function BulkActionBar<T = any>({
       />
 
       {/* Progress Modal */}
-      <ProgressModal
+      <DaisyProgressModal
         isOpen={progressModal.isOpen}
         progress={progressModal.progress!}
         action={progressModal.action!}

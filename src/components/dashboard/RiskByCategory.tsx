@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 
 interface ChartDataItem {
   name: string;
@@ -26,7 +26,7 @@ export const RiskByCategory: React.FC = () => {
     { name: 'Technology', value: 5, color: '#8b5cf6' },
   ], []);
 
-  const CustomTooltip: React.FC<TooltipProps> = ({ active, payload }) => {
+  const CustomTooltip: React.FC<DaisyTooltipProps> = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const data = payload[0];
       return (
@@ -42,11 +42,11 @@ export const RiskByCategory: React.FC = () => {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Risk by Category</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <DaisyCard>
+      <DaisyCardHeader>
+        <DaisyCardTitle>Risk by Category</DaisyCardTitle>
+      
+      <DaisyCardContent>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -64,12 +64,12 @@ export const RiskByCategory: React.FC = () => {
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip content={<CustomTooltip />} />
+              <DaisyTooltip content={<CustomTooltip />} />
               <Legend />
             </PieChart>
           </ResponsiveContainer>
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 };

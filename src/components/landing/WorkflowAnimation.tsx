@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { 
   Upload, 
   Brain, 
@@ -105,12 +105,12 @@ const WorkflowAnimation = () => {
     >
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm font-medium text-gray-900">{title}</span>
-        <Badge 
+        <DaisyBadge 
           variant={risk === 'high' ? 'destructive' : risk === 'medium' ? 'secondary' : 'default'}
           className="text-xs"
         >
           {risk} risk
-        </Badge>
+        </DaisyBadge>
       </div>
       <div className="flex items-center text-xs text-gray-600">
         <CheckCircle className="w-3 h-3 mr-1 text-green-500" />
@@ -156,11 +156,11 @@ const WorkflowAnimation = () => {
                 transition={{ duration: 0.6, delay: index * 0.2 }}
                 className="relative"
               >
-                <Card className={`
+                <DaisyCard className={`
                   transition-all duration-500 transform
                   ${isActive ? `${step.bgColor} ${step.borderColor} scale-105 shadow-lg` : 'bg-white border-gray-200 hover:shadow-md'}
                 `}>
-                  <CardContent className="p-6 text-center">
+                  <DaisyCardContent className="p-6 text-center">
                     <div className={`
                       w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center
                       ${isActive ? `bg-gradient-to-r ${step.color}` : 'bg-gray-100'}
@@ -192,8 +192,8 @@ const WorkflowAnimation = () => {
                         <Sparkles className="w-5 h-5 text-yellow-500 mx-auto animate-pulse" />
                       </motion.div>
                     )}
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
 
                 {/* Arrow connector */}
                 {index < steps.length - 1 && (

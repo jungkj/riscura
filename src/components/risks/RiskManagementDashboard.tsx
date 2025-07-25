@@ -4,16 +4,16 @@ import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { cn } from '@/lib/utils';
 import { MainContentArea } from '@/components/layout/MainContentArea';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisySwitch } from '@/components/ui/DaisySwitch';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { EnhancedProboService } from '@/services/EnhancedProboService';
 import { CreateRiskModal } from './CreateRiskModal';
 import { NewRiskFlow } from './NewRiskFlow';
@@ -194,10 +194,10 @@ const RiskCard: React.FC<{ risk: Risk; onAction: (action: string, risk: Risk) =>
         <div className="flex-1">
           <div className="flex items-center space-x-enterprise-2 mb-enterprise-1">
             <span className="text-caption font-medium text-text-tertiary">{risk.id}</span>
-            <Badge variant={statusConfig.variant} className="text-caption">
+            <DaisyBadge variant={statusConfig.variant} className="text-caption">
               <StatusIcon className="h-3 w-3 mr-enterprise-1" />
               {risk.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-            </Badge>
+            </DaisyBadge>
           </div>
           <h3 className="text-body-base font-semibold text-text-primary mb-enterprise-1">
             {risk.title}
@@ -206,14 +206,14 @@ const RiskCard: React.FC<{ risk: Risk; onAction: (action: string, risk: Risk) =>
             {risk.description}
           </p>
         </div>
-        <Button 
+        <DaisyButton 
           variant="ghost" 
           size="sm" 
           className="h-6 w-6 p-0"
           onClick={() => onAction('menu', risk)}
         >
           <MoreHorizontal className="h-3 w-3" />
-        </Button>
+        </DaisyButton>
       </div>
 
       {/* Risk Level & Score */}
@@ -264,15 +264,15 @@ const RiskCard: React.FC<{ risk: Risk; onAction: (action: string, risk: Risk) =>
             </div>
             <span className="text-caption text-text-secondary">{risk.owner.name}</span>
           </div>
-          <Badge variant="outline" className="text-caption">
+          <DaisyBadge variant="outline" className="text-caption">
             {risk.category}
-          </Badge>
+          </DaisyBadge>
         </div>
 
         {/* Due Date */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-enterprise-2">
-            <Calendar className={cn(
+            <DaisyCalendar className={cn(
               "h-3 w-3",
               isOverdue ? "text-semantic-error" : "text-text-tertiary"
             )} />
@@ -292,14 +292,14 @@ const RiskCard: React.FC<{ risk: Risk; onAction: (action: string, risk: Risk) =>
         {/* Framework Tags */}
         <div className="flex flex-wrap gap-enterprise-1">
           {risk.framework.slice(0, 2).map((framework) => (
-            <Badge key={framework} variant="outline" className="text-caption">
+            <DaisyBadge key={framework} variant="outline" className="text-caption">
               {framework}
-            </Badge>
+            </DaisyBadge>
           ))}
           {risk.framework.length > 2 && (
-            <Badge variant="outline" className="text-caption">
+            <DaisyBadge variant="outline" className="text-caption">
               +{risk.framework.length - 2}
-            </Badge>
+            </DaisyBadge>
           )}
         </div>
       </div>
@@ -307,7 +307,7 @@ const RiskCard: React.FC<{ risk: Risk; onAction: (action: string, risk: Risk) =>
       {/* Actions */}
       <div className="flex items-center justify-between mt-enterprise-3 pt-enterprise-3 border-t border-border">
         <div className="flex items-center space-x-enterprise-1">
-          <Button 
+          <DaisyButton 
             variant="ghost" 
             size="sm" 
             className="h-6 px-enterprise-2"
@@ -315,8 +315,8 @@ const RiskCard: React.FC<{ risk: Risk; onAction: (action: string, risk: Risk) =>
           >
             <Eye className="h-3 w-3 mr-enterprise-1" />
             View
-          </Button>
-          <Button 
+          </DaisyButton>
+          <DaisyButton 
             variant="ghost" 
             size="sm" 
             className="h-6 px-enterprise-2"
@@ -324,7 +324,7 @@ const RiskCard: React.FC<{ risk: Risk; onAction: (action: string, risk: Risk) =>
           >
             <Edit className="h-3 w-3 mr-enterprise-1" />
             Edit
-          </Button>
+          </DaisyButton>
         </div>
         <span className="text-caption text-text-tertiary">
           Updated {risk.lastUpdated.toLocaleDateString()}
@@ -387,7 +387,7 @@ const RiskRegister: React.FC = () => {
           {/* Search */}
           <div className="relative">
             <Search className="absolute left-enterprise-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-text-tertiary" />
-            <Input
+            <DaisyInput
               placeholder="Search risks..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -396,52 +396,52 @@ const RiskRegister: React.FC = () => {
           </div>
 
           {/* Filters */}
-          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Category" />
+          <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory}>
+            <DaisySelectTrigger className="w-40">
+              <DaisySelectValue placeholder="Category" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="all">All Categories</SelectItem>
               {categories.map(category => (
-                <SelectItem key={category} value={category}>{category}</SelectItem>
+                <DaisySelectItem key={category} value={category}>{category}</SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </DaisySelect>
 
-          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Status" />
+          <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus}>
+            <DaisySelectTrigger className="w-40">
+              <DaisySelectValue placeholder="Status" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="all">All Status</SelectItem>
               {statuses.map(status => (
-                <SelectItem key={status} value={status}>
+                <DaisySelectItem key={status} value={status}>
                   {status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </DaisySelect>
         </div>
 
         {/* View Toggle */}
         <div className="flex items-center space-x-enterprise-2">
           <div className="flex items-center border border-border rounded-lg p-1">
-            <Button
+            <DaisyButton
               variant={viewMode === 'card' ? 'primary' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('card')}
               className="h-6 px-enterprise-2"
             >
               <LayoutGrid className="h-3 w-3" />
-            </Button>
-            <Button
+            </DaisyButton>
+            <DaisyButton
               variant={viewMode === 'table' ? 'primary' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('table')}
               className="h-6 px-enterprise-2"
             >
               <List className="h-3 w-3" />
-            </Button>
+            </DaisyButton>
           </div>
         </div>
       </div>
@@ -476,16 +476,16 @@ const RiskRegister: React.FC = () => {
       {/* Empty State */}
       {filteredRisks.length === 0 && (
         <div className="text-center py-enterprise-12">
-          <AlertTriangle className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
+          <DaisyAlertTriangle className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
             No risks found
           </h3>
           <p className="text-body-base text-text-secondary mb-enterprise-4">
             Try adjusting your filters or search terms.
           </p>
-          <Button variant="outline">
+          <DaisyButton variant="outline">
             Clear Filters
-          </Button>
+          </DaisyButton>
         </div>
       )}
     </div>
@@ -629,25 +629,25 @@ export const RiskManagementDashboard: React.FC = () => {
     >
       {/* Tabs */}
       <div className="flex items-center justify-between mb-enterprise-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList>
-            <TabsTrigger value="register">Risk Register</TabsTrigger>
-            <TabsTrigger value="assessment">Assessment</TabsTrigger>
-            <TabsTrigger value="heatmap">Heat Map</TabsTrigger>
-            <TabsTrigger value="controls">
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
+          <DaisyTabsList>
+            <DaisyTabsTrigger value="register">Risk Register</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="assessment">Assessment</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="heatmap">Heat Map</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="controls">
               <Shield className="h-4 w-4 mr-2" />
               Probo Controls
-            </TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          </TabsList>
-        </Tabs>
+            </DaisyTabsTrigger>
+            <DaisyTabsTrigger value="analytics">Analytics</DaisyTabsTrigger>
+          </DaisyTabsList>
+        </DaisyTabs>
         
         {/* Risk Creation Flow Toggle */}
         <div className="flex items-center space-x-2">
-          <Label htmlFor="flow-toggle" className="text-sm font-medium">
+          <DaisyLabel htmlFor="flow-toggle" className="text-sm font-medium">
             New Interactive Flow
-          </Label>
-          <Switch
+          </DaisyLabel>
+          <DaisySwitch
             id="flow-toggle"
             checked={useNewFlow}
             onCheckedChange={setUseNewFlow}
@@ -655,11 +655,11 @@ export const RiskManagementDashboard: React.FC = () => {
         </div>
       </div>
 
-      <TabsContent value="register">
+      <DaisyTabsContent value="register">
         <RiskRegister />
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="assessment">
+      <DaisyTabsContent value="assessment">
         <div className="text-center py-enterprise-12">
           <Target className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -669,9 +669,9 @@ export const RiskManagementDashboard: React.FC = () => {
             Interactive risk matrix and evaluation forms.
           </p>
         </div>
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="heatmap">
+      <DaisyTabsContent value="heatmap">
         <div className="text-center py-enterprise-12">
           <Map className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -681,51 +681,51 @@ export const RiskManagementDashboard: React.FC = () => {
             Interactive risk positioning and grouping.
           </p>
         </div>
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="controls" className="space-y-6">
+      <DaisyTabsContent value="controls" className="space-y-6">
         {/* Probo Integration Header */}
-        <Card>
-          <CardHeader>
+        <DaisyCard>
+          <DaisyCardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="p-2 bg-[#199BEC]/10 rounded-lg">
                   <Shield className="h-6 w-6 text-[#199BEC]" />
                 </div>
                 <div>
-                  <CardTitle className="text-lg">Probo Security Controls</CardTitle>
-                  <CardDescription>
+                  <DaisyCardTitle className="text-lg">Probo Security Controls</DaisyCardTitle>
+                  <DaisyCardDescription>
                     AI-powered risk-control mapping with 651+ industry-standard controls
-                  </CardDescription>
+                  </p>
                 </div>
               </div>
-              <Button onClick={handleImportProboControls} className="flex items-center space-x-2">
+              <DaisyButton onClick={handleImportProboControls} className="flex items-center space-x-2">
                 <Plus className="h-4 w-4" />
                 <span>Import Controls</span>
-              </Button>
+              </DaisyButton>
             </div>
-          </CardHeader>
-          <CardContent>
-            <Alert>
+          
+          <DaisyCardContent>
+            <DaisyAlert>
               <Zap className="h-4 w-4" />
-              <AlertDescription>
+              <DaisyAlertDescription>
                 Probo integration automatically maps your risks to relevant security controls, 
                 providing AI-powered recommendations for risk mitigation strategies.
-              </AlertDescription>
-            </Alert>
-          </CardContent>
-        </Card>
+              
+            </DaisyAlert>
+          </DaisyCardBody>
+        </DaisyCard>
 
         {/* Risk-Control Mappings */}
         {isLoadingMappings ? (
-          <Card>
-            <CardContent className="flex items-center justify-center py-8">
+          <DaisyCard>
+            <DaisyCardContent className="flex items-center justify-center py-8">
               <div className="text-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#199BEC] mx-auto mb-4"></div>
                 <p className="text-sm text-gray-600">Loading control mappings...</p>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         ) : (
           <div className="grid gap-4">
             {sampleRisks.map((risk) => {
@@ -734,33 +734,33 @@ export const RiskManagementDashboard: React.FC = () => {
               const controlCount = mapping?.controlIds?.length || 0;
               
               return (
-                <Card key={risk.id}>
-                  <CardHeader>
+                <DaisyCard key={risk.id}>
+                  <DaisyCardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
-                          <Badge variant="outline" className="text-xs">
+                          <DaisyBadge variant="outline" className="text-xs">
                             {risk.id}
-                          </Badge>
-                          <Badge 
+                          </DaisyBadge>
+                          <DaisyBadge 
                             variant={risk.riskLevel === 'critical' ? 'destructive' : 
                                    risk.riskLevel === 'high' ? 'secondary' : 'outline'}
                           >
                             {risk.riskLevel.toUpperCase()}
-                          </Badge>
+                          </DaisyBadge>
                         </div>
-                        <CardTitle className="text-base">{risk.title}</CardTitle>
-                        <CardDescription className="line-clamp-2">
+                        <DaisyCardTitle className="text-base">{risk.title}</DaisyCardTitle>
+                        <DaisyCardDescription className="line-clamp-2">
                           {risk.description}
-                        </CardDescription>
+                        </p>
                       </div>
                       <div className="text-right">
                         <div className="text-2xl font-bold text-[#199BEC]">{controlCount}</div>
                         <div className="text-xs text-gray-500">Controls</div>
                       </div>
                     </div>
-                  </CardHeader>
-                  <CardContent>
+                  
+                  <DaisyCardContent>
                     <div className="space-y-4">
                       {/* Coverage Progress */}
                       <div>
@@ -768,7 +768,7 @@ export const RiskManagementDashboard: React.FC = () => {
                           <span>Control Coverage</span>
                           <span>{coveragePercentage}%</span>
                         </div>
-                        <Progress value={coveragePercentage} className="h-2" />
+                        <DaisyProgress value={coveragePercentage} className="h-2" />
                       </div>
 
                       {/* Recommendations */}
@@ -788,25 +788,25 @@ export const RiskManagementDashboard: React.FC = () => {
 
                       {/* Actions */}
                       <div className="flex space-x-2 pt-2">
-                        <Button variant="outline" size="sm" className="flex items-center space-x-1">
+                        <DaisyButton variant="outline" size="sm" className="flex items-center space-x-1">
                           <Link2 className="h-3 w-3" />
                           <span>View Controls</span>
-                        </Button>
-                        <Button variant="outline" size="sm" className="flex items-center space-x-1">
+                        </DaisyButton>
+                        <DaisyButton variant="outline" size="sm" className="flex items-center space-x-1">
                           <Target className="h-3 w-3" />
                           <span>Create Tasks</span>
-                        </Button>
+                        </DaisyButton>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               );
             })}
           </div>
         )}
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="analytics">
+      <DaisyTabsContent value="analytics">
         <div className="text-center py-enterprise-12">
           <BarChart3 className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -816,7 +816,7 @@ export const RiskManagementDashboard: React.FC = () => {
             Comprehensive risk metrics and trends.
           </p>
         </div>
-      </TabsContent>
+      </DaisyTabsContent>
 
       {/* Create Risk Modal - Toggle between old and new flow */}
       {useNewFlow ? (

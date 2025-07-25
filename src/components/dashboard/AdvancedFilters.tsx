@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { X } from 'lucide-react';
 
 interface AdvancedFiltersProps {
@@ -20,9 +20,9 @@ export function AdvancedFilters({ filters, onChange, onClose }: AdvancedFiltersP
             Refine your dashboard view with advanced filtering options
           </p>
         </div>
-        <Button variant="ghost" size="sm" onClick={onClose} className="text-[#A8A8A8] hover:text-[#191919] hover:bg-[#D8C3A5]/20 font-inter">
+        <DaisyButton variant="ghost" size="sm" onClick={onClose} className="text-[#A8A8A8] hover:text-[#191919] hover:bg-[#D8C3A5]/20 font-inter">
           <X className="w-4 h-4" />
-        </Button>
+        </DaisyButton>
       </div>
       
       {/* Filter content would go here */}

@@ -2,10 +2,10 @@
 
 import React, { useState, useCallback, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Separator } from '@/components/ui/separator';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { 
   Select,
   SelectContent,
@@ -201,15 +201,15 @@ const WorkflowStepNode: React.FC<{
         
         <div className="flex items-center space-x-enterprise-1">
           {step.status && (
-            <Badge 
+            <DaisyBadge 
               variant={step.status === 'completed' ? 'default' : step.status === 'failed' ? 'destructive' : 'secondary'}
               className="text-caption"
             >
               {step.status}
-            </Badge>
+            </DaisyBadge>
           )}
           
-          <Button
+          <DaisyButton
             variant="ghost"
             size="sm"
             onClick={(e) => {
@@ -219,7 +219,7 @@ const WorkflowStepNode: React.FC<{
             className="h-6 w-6 p-0"
           >
             <MoreVertical className="h-3 w-3" />
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
@@ -289,7 +289,7 @@ const StepPalette: React.FC<{
           })}
         </div>
 
-        <Separator />
+        <DaisySeparator />
 
         <div>
           <h4 className="text-body-sm font-semibold text-text-primary mb-enterprise-2">
@@ -363,35 +363,35 @@ const WorkflowCanvas: React.FC<{
     <div className="flex-1 relative">
       {/* Canvas Toolbar */}
       <div className="absolute top-enterprise-4 left-enterprise-4 z-10 flex items-center space-x-enterprise-2">
-        <Button variant="outline" size="sm">
+        <DaisyButton variant="outline" size="sm">
           <Play className="h-4 w-4 mr-enterprise-1" />
           Test Run
-        </Button>
-        <Button variant="outline" size="sm">
+        </DaisyButton>
+        <DaisyButton variant="outline" size="sm">
           <Save className="h-4 w-4 mr-enterprise-1" />
           Save
-        </Button>
-        <Button variant="outline" size="sm">
+        </DaisyButton>
+        <DaisyButton variant="outline" size="sm">
           <Download className="h-4 w-4 mr-enterprise-1" />
           Export
-        </Button>
+        </DaisyButton>
         
-        <Separator orientation="vertical" className="h-6" />
+        <DaisySeparator orientation="vertical" className="h-6" />
         
         <div className="flex items-center space-x-enterprise-2">
           <span className="text-caption text-text-secondary">Zoom:</span>
-          <Select defaultValue="100">
-            <SelectTrigger className="w-20 h-8">
-              <SelectValue />
+          <DaisySelect defaultValue="100">
+            <DaisySelectTrigger className="w-20 h-8">
+              <DaisySelectValue />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="50">50%</SelectItem>
-              <SelectItem value="75">75%</SelectItem>
-              <SelectItem value="100">100%</SelectItem>
-              <SelectItem value="125">125%</SelectItem>
-              <SelectItem value="150">150%</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="50">50%</SelectItem>
+              <DaisySelectItem value="75">75%</SelectItem>
+              <DaisySelectItem value="100">100%</SelectItem>
+              <DaisySelectItem value="125">125%</SelectItem>
+              <DaisySelectItem value="150">150%</SelectItem>
             </SelectContent>
-          </Select>
+          </DaisySelect>
         </div>
       </div>
 
@@ -476,10 +476,10 @@ const WorkflowCanvas: React.FC<{
               <p className="text-body-base text-text-secondary mb-enterprise-4 max-w-md">
                 Drag workflow steps from the left panel to create your automated process.
               </p>
-              <Button onClick={() => handleAddStepToCanvas('form-submission')}>
+              <DaisyButton onClick={() => handleAddStepToCanvas('form-submission')}>
                 <Plus className="h-4 w-4 mr-enterprise-1" />
                 Add First Step
-              </Button>
+              </DaisyButton>
             </div>
           </div>
         )}
@@ -513,12 +513,12 @@ const StepPropertiesPanel: React.FC<{
               <p className="text-caption text-text-secondary">Step Configuration</p>
             </div>
           </div>
-          <Button variant="ghost" size="sm" onClick={onClose}>
+          <DaisyButton variant="ghost" size="sm" onClick={onClose}>
             <Trash2 className="h-4 w-4" />
-          </Button>
+          </DaisyButton>
         </div>
 
-        <Separator />
+        <DaisySeparator />
 
         {/* Basic Properties */}
         <div className="space-y-enterprise-4">
@@ -552,67 +552,67 @@ const StepPropertiesPanel: React.FC<{
             <label className="text-body-sm font-medium text-text-primary block mb-enterprise-1">
               Assignee
             </label>
-            <Select 
+            <DaisySelect 
               value={step.assignee || ''} 
               onValueChange={(value) => onUpdateStep({ ...step, assignee: value })}
             >
-              <SelectTrigger>
-                <SelectValue placeholder="Select assignee" />
+              <DaisySelectTrigger>
+                <DaisySelectValue placeholder="Select assignee" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="role:risk-analyst">Risk Analyst</SelectItem>
-                <SelectItem value="role:compliance-manager">Compliance Manager</SelectItem>
-                <SelectItem value="role:security-officer">Security Officer</SelectItem>
-                <SelectItem value="role:business-owner">Business Owner</SelectItem>
-                <SelectItem value="role:technical-lead">Technical Lead</SelectItem>
+              <DaisySelectContent>
+                <DaisySelectItem value="role:risk-analyst">Risk Analyst</SelectItem>
+                <DaisySelectItem value="role:compliance-manager">Compliance Manager</SelectItem>
+                <DaisySelectItem value="role:security-officer">Security Officer</SelectItem>
+                <DaisySelectItem value="role:business-owner">Business Owner</SelectItem>
+                <DaisySelectItem value="role:technical-lead">Technical Lead</SelectItem>
               </SelectContent>
-            </Select>
+            </DaisySelect>
           </div>
 
           <div>
             <label className="text-body-sm font-medium text-text-primary block mb-enterprise-1">
               SLA (Service Level Agreement)
             </label>
-            <Select 
+            <DaisySelect 
               value={step.sla || ''} 
               onValueChange={(value) => onUpdateStep({ ...step, sla: value })}
             >
-              <SelectTrigger>
-                <SelectValue placeholder="Select SLA" />
+              <DaisySelectTrigger>
+                <DaisySelectValue placeholder="Select SLA" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="2-hours">2 Hours</SelectItem>
-                <SelectItem value="4-hours">4 Hours</SelectItem>
-                <SelectItem value="24-hours">24 Hours</SelectItem>
-                <SelectItem value="48-hours">48 Hours</SelectItem>
-                <SelectItem value="72-hours">72 Hours</SelectItem>
-                <SelectItem value="1-week">1 Week</SelectItem>
+              <DaisySelectContent>
+                <DaisySelectItem value="2-hours">2 Hours</SelectItem>
+                <DaisySelectItem value="4-hours">4 Hours</SelectItem>
+                <DaisySelectItem value="24-hours">24 Hours</SelectItem>
+                <DaisySelectItem value="48-hours">48 Hours</SelectItem>
+                <DaisySelectItem value="72-hours">72 Hours</SelectItem>
+                <DaisySelectItem value="1-week">1 Week</SelectItem>
               </SelectContent>
-            </Select>
+            </DaisySelect>
           </div>
 
           <div>
             <label className="text-body-sm font-medium text-text-primary block mb-enterprise-1">
               Escalation Policy
             </label>
-            <Select 
+            <DaisySelect 
               value={step.escalation || ''} 
               onValueChange={(value) => onUpdateStep({ ...step, escalation: value })}
             >
-              <SelectTrigger>
-                <SelectValue placeholder="Select escalation policy" />
+              <DaisySelectTrigger>
+                <DaisySelectValue placeholder="Select escalation policy" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="auto-escalate-manager">Auto-escalate to Manager</SelectItem>
-                <SelectItem value="auto-escalate-director">Auto-escalate to Director</SelectItem>
-                <SelectItem value="notify-only">Notify Only</SelectItem>
-                <SelectItem value="no-escalation">No Escalation</SelectItem>
+              <DaisySelectContent>
+                <DaisySelectItem value="auto-escalate-manager">Auto-escalate to Manager</SelectItem>
+                <DaisySelectItem value="auto-escalate-director">Auto-escalate to Director</SelectItem>
+                <DaisySelectItem value="notify-only">Notify Only</SelectItem>
+                <DaisySelectItem value="no-escalation">No Escalation</SelectItem>
               </SelectContent>
-            </Select>
+            </DaisySelect>
           </div>
         </div>
 
-        <Separator />
+        <DaisySeparator />
 
         {/* Step-specific Configuration */}
         <div className="space-y-enterprise-4">
@@ -625,16 +625,16 @@ const StepPropertiesPanel: React.FC<{
               <label className="text-body-sm font-medium text-text-primary block mb-enterprise-1">
                 Form Template
               </label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select form template" />
+              <DaisySelect>
+                <DaisySelectTrigger>
+                  <DaisySelectValue placeholder="Select form template" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="risk-assessment-form">Risk Assessment Form</SelectItem>
-                  <SelectItem value="compliance-checklist">Compliance Checklist</SelectItem>
-                  <SelectItem value="incident-report">Incident Report</SelectItem>
+                <DaisySelectContent>
+                  <DaisySelectItem value="risk-assessment-form">Risk Assessment Form</SelectItem>
+                  <DaisySelectItem value="compliance-checklist">Compliance Checklist</SelectItem>
+                  <DaisySelectItem value="incident-report">Incident Report</SelectItem>
                 </SelectContent>
-              </Select>
+              </DaisySelect>
             </div>
           )}
 
@@ -643,16 +643,16 @@ const StepPropertiesPanel: React.FC<{
               <label className="text-body-sm font-medium text-text-primary block mb-enterprise-1">
                 Consensus Requirements
               </label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select consensus type" />
+              <DaisySelect>
+                <DaisySelectTrigger>
+                  <DaisySelectValue placeholder="Select consensus type" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="unanimous">Unanimous Agreement</SelectItem>
-                  <SelectItem value="majority">Majority Rule</SelectItem>
-                  <SelectItem value="any-approval">Any Approval</SelectItem>
+                <DaisySelectContent>
+                  <DaisySelectItem value="unanimous">Unanimous Agreement</SelectItem>
+                  <DaisySelectItem value="majority">Majority Rule</SelectItem>
+                  <DaisySelectItem value="any-approval">Any Approval</SelectItem>
                 </SelectContent>
-              </Select>
+              </DaisySelect>
             </div>
           )}
 
@@ -661,16 +661,16 @@ const StepPropertiesPanel: React.FC<{
               <label className="text-body-sm font-medium text-text-primary block mb-enterprise-1">
                 AI Engine
               </label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select AI engine" />
+              <DaisySelect>
+                <DaisySelectTrigger>
+                  <DaisySelectValue placeholder="Select AI engine" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="control-recommendation-ai">Control Recommendation AI</SelectItem>
-                  <SelectItem value="risk-scoring-ai">Risk Scoring AI</SelectItem>
-                  <SelectItem value="compliance-mapping-ai">Compliance Mapping AI</SelectItem>
+                <DaisySelectContent>
+                  <DaisySelectItem value="control-recommendation-ai">Control Recommendation AI</SelectItem>
+                  <DaisySelectItem value="risk-scoring-ai">Risk Scoring AI</SelectItem>
+                  <DaisySelectItem value="compliance-mapping-ai">Compliance Mapping AI</SelectItem>
                 </SelectContent>
-              </Select>
+              </DaisySelect>
             </div>
           )}
         </div>
@@ -690,32 +690,32 @@ export const WorkflowDesigner: React.FC = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-enterprise-4">
             <h1 className="text-heading-lg font-bold text-text-primary">New Workflow</h1>
-            <Badge variant="outline">draft</Badge>
-            <Badge variant="secondary">v1.0.0</Badge>
+            <DaisyBadge variant="outline">draft</DaisyBadge>
+            <DaisyBadge variant="secondary">v1.0.0</DaisyBadge>
           </div>
 
           <div className="flex items-center space-x-enterprise-2">
-            <Button variant="outline">Exit</Button>
-            <Button>
+            <DaisyButton variant="outline">Exit</DaisyButton>
+            <DaisyButton>
               <Save className="h-4 w-4 mr-enterprise-1" />
               Save Workflow
-            </Button>
+            </DaisyButton>
           </div>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-enterprise-4">
-          <TabsList>
-            <TabsTrigger value="design">Design</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
-            <TabsTrigger value="testing">Testing</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          </TabsList>
-        </Tabs>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mt-enterprise-4">
+          <DaisyTabsList>
+            <DaisyTabsTrigger value="design">Design</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="settings">Settings</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="testing">Testing</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="analytics">Analytics</DaisyTabsTrigger>
+          </DaisyTabsList>
+        </DaisyTabs>
       </div>
 
       {/* Content */}
       <div className="flex-1 flex">
-        <TabsContent value="design" className="flex-1 flex m-0">
+        <DaisyTabsContent value="design" className="flex-1 flex m-0">
           <div className="text-center py-enterprise-12 w-full">
             <Activity className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
             <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -725,7 +725,7 @@ export const WorkflowDesigner: React.FC = () => {
               Visual workflow designer coming soon.
             </p>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
       </div>
     </div>
   );

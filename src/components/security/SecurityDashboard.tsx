@@ -3,10 +3,10 @@
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Separator } from '@/components/ui/separator';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { 
   Select,
   SelectContent,
@@ -287,9 +287,9 @@ const ThreatAlertsPanel: React.FC = () => {
     };
 
     return (
-      <Badge variant={variants[severity]} className="text-caption">
+      <DaisyBadge variant={variants[severity]} className="text-caption">
         {severity.toUpperCase()}
-      </Badge>
+      </DaisyBadge>
     );
   };
 
@@ -301,9 +301,9 @@ const ThreatAlertsPanel: React.FC = () => {
     };
 
     return (
-      <Badge variant={variants[status]} className="text-caption">
+      <DaisyBadge variant={variants[status]} className="text-caption">
         {status.charAt(0).toUpperCase() + status.slice(1)}
-      </Badge>
+      </DaisyBadge>
     );
   };
 
@@ -347,9 +347,9 @@ const ThreatAlertsPanel: React.FC = () => {
                   <span>{alert.timestamp.toLocaleTimeString()}</span>
                 </div>
               </div>
-              <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+              <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
                 <MoreHorizontal className="h-3 w-3" />
-              </Button>
+              </DaisyButton>
             </div>
           </div>
         ))}
@@ -374,9 +374,9 @@ const ComplianceFrameworksPanel: React.FC = () => {
     };
 
     return (
-      <Badge variant={variants[status]} className="text-caption">
+      <DaisyBadge variant={variants[status]} className="text-caption">
         {status.replace('-', ' ')}
-      </Badge>
+      </DaisyBadge>
     );
   };
 
@@ -467,7 +467,7 @@ const ComplianceFrameworksPanel: React.FC = () => {
             </div>
 
             {/* Assessment Dates */}
-            <Separator className="my-enterprise-3" />
+            <DaisySeparator className="my-enterprise-3" />
             <div className="flex items-center justify-between text-caption text-text-secondary">
               <span>Last: {framework.lastAssessment.toLocaleDateString()}</span>
               <span>Next: {framework.nextAssessment.toLocaleDateString()}</span>
@@ -621,17 +621,17 @@ export const SecurityDashboard: React.FC = () => {
       maxWidth="2xl"
     >
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="threats">Threat Monitoring</TabsTrigger>
-          <TabsTrigger value="compliance">Compliance</TabsTrigger>
-          <TabsTrigger value="controls">Controls</TabsTrigger>
-          <TabsTrigger value="audit">Audit Trail</TabsTrigger>
-        </TabsList>
-      </Tabs>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6">
+        <DaisyTabsList>
+          <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="threats">Threat Monitoring</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="controls">Controls</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="audit">Audit Trail</DaisyTabsTrigger>
+        </DaisyTabsList>
+      </DaisyTabs>
 
-      <TabsContent value="overview" className="space-y-enterprise-6">
+      <DaisyTabsContent value="overview" className="space-y-enterprise-6">
         {/* Security Metrics */}
         <ContentSection 
           title="Security Metrics"
@@ -650,11 +650,11 @@ export const SecurityDashboard: React.FC = () => {
         <ContentSection>
           <ComplianceFrameworksPanel />
         </ContentSection>
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="threats" className="space-y-enterprise-6">
+      <DaisyTabsContent value="threats" className="space-y-enterprise-6">
         <div className="text-center py-enterprise-12">
-          <AlertTriangle className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
+          <DaisyAlertTriangle className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
             Threat Monitoring
           </h3>
@@ -662,9 +662,9 @@ export const SecurityDashboard: React.FC = () => {
             Advanced threat detection and incident response dashboard.
           </p>
         </div>
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="compliance" className="space-y-enterprise-6">
+      <DaisyTabsContent value="compliance" className="space-y-enterprise-6">
         <div className="text-center py-enterprise-12">
           <CheckCircle className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -674,9 +674,9 @@ export const SecurityDashboard: React.FC = () => {
             Framework compliance tracking and automated reporting.
           </p>
         </div>
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="controls" className="space-y-enterprise-6">
+      <DaisyTabsContent value="controls" className="space-y-enterprise-6">
         <div className="text-center py-enterprise-12">
           <Shield className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -686,9 +686,9 @@ export const SecurityDashboard: React.FC = () => {
             Control implementation and effectiveness monitoring.
           </p>
         </div>
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="audit" className="space-y-enterprise-6">
+      <DaisyTabsContent value="audit" className="space-y-enterprise-6">
         <div className="text-center py-enterprise-12">
           <Activity className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -698,7 +698,7 @@ export const SecurityDashboard: React.FC = () => {
             Comprehensive audit logging and compliance tracking.
           </p>
         </div>
-      </TabsContent>
+      </DaisyTabsContent>
 
       {/* Security Settings Modal */}
       <SecuritySettingsModal

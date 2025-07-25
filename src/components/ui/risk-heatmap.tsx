@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Target } from 'lucide-react';
 import { RiskDetailsModal } from './risk-details-modal';
 
@@ -328,14 +328,14 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
 
   return (
     <>
-      <Card className={className}>
-        <CardHeader>
-          <CardTitle className="flex items-center">
+      <DaisyCard className={className}>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center">
             <Target className="w-5 h-5 mr-2 text-blue-600" />
             Inherent Risk Heat Map
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="space-y-4">
             {/* Heat Map Grid */}
             <div className="overflow-x-auto">
@@ -417,8 +417,8 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Risk Details Modal */}
       <RiskDetailsModal

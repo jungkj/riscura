@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { cn } from '@/lib/utils';
 import { Calendar, Star, User, Calculator } from 'lucide-react';
 import { Cell, Column } from './SpreadsheetGrid';
@@ -113,9 +113,9 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
         
       case 'DROPDOWN':
         return (
-          <Badge variant="secondary" className="text-xs">
+          <DaisyBadge variant="secondary" className="text-xs">
             {value}
-          </Badge>
+          </DaisyBadge>
         );
         
       case 'CALCULATED':
@@ -148,24 +148,24 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
     switch (column.dataType) {
       case 'DROPDOWN':
         return (
-          <Select
+          <DaisySelect
             value={localValue}
             onValueChange={(value) => {
               handleInputChange(value);
               onSave(value);
             }}
           >
-            <SelectTrigger className="h-8 border-0 bg-blue-50 focus:ring-2 focus:ring-blue-500">
-              <SelectValue />
+            <DaisySelectTrigger className="h-8 border-0 bg-blue-50 focus:ring-2 focus:ring-blue-500">
+              <DaisySelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <DaisySelectContent>
               {column.dropdownOptions?.map((option) => (
-                <SelectItem key={option} value={option}>
+                <DaisySelectItem key={option} value={option}>
                   {option}
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </DaisySelect>
         );
 
       case 'RATING':
@@ -214,7 +214,7 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
 
       case 'NUMBER':
         return (
-          <Input
+          <DaisyInput
             ref={inputRef}
             type="number"
             value={localValue}
@@ -227,7 +227,7 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
 
       case 'DATE':
         return (
-          <Input
+          <DaisyInput
             ref={inputRef}
             type="date"
             value={localValue}
@@ -244,7 +244,7 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
         
         if (isMultiLine) {
           return (
-            <Textarea
+            <DaisyTextarea
               ref={textareaRef}
               value={localValue}
               onChange={(e) => handleInputChange(e.target.value)}
@@ -257,7 +257,7 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
         }
 
         return (
-          <Input
+          <DaisyInput
             ref={inputRef}
             value={localValue}
             onChange={(e) => handleInputChange(e.target.value)}

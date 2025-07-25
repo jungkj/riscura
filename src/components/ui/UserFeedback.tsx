@@ -193,7 +193,7 @@ const ToastComponent: React.FC<{ toast: Toast }> = ({ toast }) => {
       case 'error':
         return <XCircle className="w-5 h-5 text-red-500" />;
       case 'warning':
-        return <AlertTriangle className="w-5 h-5 text-yellow-500" />;
+        return <DaisyAlertTriangle className="w-5 h-5 text-yellow-500" />;
       case 'info':
         return <Info className="w-5 h-5 text-blue-500" />;
       case 'loading':
@@ -233,26 +233,26 @@ const ToastComponent: React.FC<{ toast: Toast }> = ({ toast }) => {
         <p className="text-sm text-muted-foreground">{toast.message}</p>
         
         {toast.action && (
-          <Button
+          <DaisyButton
             variant="link"
             size="sm"
             className="h-auto p-0 mt-2 text-xs"
             onClick={toast.action.onClick}
           >
             {toast.action.label}
-          </Button>
+          </DaisyButton>
         )}
       </div>
 
       {toast.dismissible && (
-        <Button
+        <DaisyButton
           variant="ghost"
           size="sm"
           className="h-auto p-1 hover:bg-transparent"
           onClick={() => removeToast(toast.id)}
         >
           <X className="w-4 h-4" />
-        </Button>
+        </DaisyButton>
       )}
     </div>
   );
@@ -322,17 +322,17 @@ export const useConfirmation = () => {
   }, [resolver]);
 
   const ConfirmationDialog = useCallback(() => (
-    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{options.title}</AlertDialogTitle>
-          <AlertDialogDescription>{options.description}</AlertDialogDescription>
+    <DaisyAlertDialog open={isOpen} onOpenChange={setIsOpen}>
+      <DaisyAlertDialogContent>
+        <DaisyAlertDialogHeader>
+          <DaisyAlertDialogTitle>{options.title}</AlertDialogTitle>
+          <DaisyAlertDialogDescription>{options.description}</AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel onClick={handleCancel}>
+        <DaisyAlertDialogFooter>
+          <DaisyAlertDialogCancel onClick={handleCancel}>
             {options.cancelText}
           </AlertDialogCancel>
-          <AlertDialogAction
+          <DaisyAlertDialogAction
             onClick={handleConfirm}
             className={options.variant === 'destructive' ? 'bg-destructive hover:bg-destructive/90' : ''}
           >
@@ -433,20 +433,20 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
+    <DaisyDialog open={isOpen} onOpenChange={onClose}>
+      <DaisyDialogContent className="sm:max-w-md">
+        <DaisyDialogHeader>
+          <DaisyDialogTitle className="flex items-center gap-2">
             <MessageSquare className="w-5 h-5" />
             {title}
-          </DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
-        </DialogHeader>
+          </DaisyDialogTitle>
+          <DaisyDialogDescription>{description}</DaisyDialogDescription>
+        </DaisyDialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Feedback Type */}
           <div className="space-y-2">
-            <Label>What type of feedback is this?</Label>
+            <DaisyLabel>What type of feedback is this?</DaisyLabel>
             <div className="flex flex-wrap gap-2">
               {[
                 { value: 'bug', label: 'Bug Report' },
@@ -473,14 +473,14 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
 
           {/* Rating */}
           <div className="space-y-2">
-            <Label>How would you rate your overall experience?</Label>
+            <DaisyLabel>How would you rate your overall experience?</DaisyLabel>
             {renderStars()}
           </div>
 
           {/* Message */}
           <div className="space-y-2">
-            <Label htmlFor="message">Your feedback *</Label>
-            <Textarea
+            <DaisyLabel htmlFor="message">Your feedback *</DaisyLabel>
+            <DaisyTextarea
               id="message"
               placeholder="Please describe your feedback in detail..."
               value={formData.message}
@@ -492,8 +492,8 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
 
           {/* Email */}
           <div className="space-y-2">
-            <Label htmlFor="email">Email (optional)</Label>
-            <Input
+            <DaisyLabel htmlFor="email">Email (optional)</DaisyLabel>
+            <DaisyInput
               id="email"
               type="email"
               placeholder="your@email.com"
@@ -505,11 +505,11 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
             </p>
           </div>
 
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+          <DaisyDialogFooter>
+            <DaisyButton type="button" variant="outline" onClick={onClose}>
               Cancel
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
+            </DaisyButton>
+            <DaisyButton type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -521,11 +521,11 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
                   Send Feedback
                 </>
               )}
-            </Button>
-          </DialogFooter>
+            </DaisyButton>
+          </DaisyDialogFooter>
         </form>
-      </DialogContent>
-    </Dialog>
+      </DaisyDialogContent>
+    </DaisyDialog>
   );
 };
 
@@ -605,7 +605,7 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
       case 'error':
         return <XCircle className="w-5 h-5 text-red-600" />;
       case 'warning':
-        return <AlertTriangle className="w-5 h-5 text-yellow-600" />;
+        return <DaisyAlertTriangle className="w-5 h-5 text-yellow-600" />;
       case 'info':
         return <Info className="w-5 h-5 text-blue-600" />;
     }
@@ -638,25 +638,25 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
 
       <div className="flex items-center gap-2">
         {action && (
-          <Button
+          <DaisyButton
             variant="link"
             size="sm"
             className="h-auto p-0 text-current hover:text-current/80"
             onClick={action.onClick}
           >
             {action.label}
-          </Button>
+          </DaisyButton>
         )}
 
         {dismissible && (
-          <Button
+          <DaisyButton
             variant="ghost"
             size="sm"
             className="h-auto p-1 hover:bg-current/10 text-current"
             onClick={onDismiss}
           >
             <X className="w-4 h-4" />
-          </Button>
+          </DaisyButton>
         )}
       </div>
     </div>

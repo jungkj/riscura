@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
   MoreHorizontal,
   Calendar,
@@ -123,25 +123,25 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
   };
 
   return (
-    <Card 
+    <DaisyCard 
       className={`border-0 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => onView?.(risk)}
     >
-      <CardContent className="p-6">
+      <DaisyCardContent className="p-6">
         <div className="flex items-start justify-between">
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-3 mb-3">
               <span className="text-sm font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded">
                 {risk.id}
               </span>
-              <Badge className={`text-xs border ${getSeverityColor(risk.severity)}`}>
+              <DaisyBadge className={`text-xs border ${getSeverityColor(risk.severity)}`}>
                 {risk.severity}
-              </Badge>
-              <Badge className={`text-xs border ${getStatusColor(risk.status)}`}>
+              </DaisyBadge>
+              <DaisyBadge className={`text-xs border ${getStatusColor(risk.status)}`}>
                 {risk.status}
-              </Badge>
+              </DaisyBadge>
               {getTrendIcon(risk.trend)}
             </div>
 
@@ -210,7 +210,7 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
                   <span className="text-xs text-gray-600">Progress</span>
                   <span className="text-sm font-medium">{risk.progress}%</span>
                 </div>
-                <Progress value={risk.progress} className="h-2" />
+                <DaisyProgress value={risk.progress} className="h-2" />
                 <div className="flex justify-between items-center text-xs text-gray-600">
                   <span>Actions</span>
                   <span>{risk.completedActions}/{Array.isArray(risk.mitigationActions) ? risk.mitigationActions.length : risk.mitigationActions}</span>
@@ -225,7 +225,7 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
                   <span className="text-xs">{risk.assignee}</span>
                 </div>
                 <div className="flex items-center space-x-1">
-                  <Calendar className="w-4 h-4" />
+                  <DaisyCalendar className="w-4 h-4" />
                   <span className={`text-xs ${getDueDateColor(risk.dueDate)}`}>
                     {formatDate(risk.dueDate)}
                   </span>
@@ -238,35 +238,35 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
           </div>
 
           <div className={`ml-4 transition-opacity duration-200 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
+            <DaisyDropdownMenu>
+              <DaisyDropdownMenuTrigger asChild>
+                <DaisyButton 
                   variant="ghost" 
                   size="sm"
                   className="h-8 w-8 p-0"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <MoreHorizontal className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onView?.(risk); }}>
+                </DaisyButton>
+              </DaisyDropdownMenuTrigger>
+              <DaisyDropdownMenuContent align="end" className="w-48">
+                <DaisyDropdownMenuItem onClick={(e) => { e.stopPropagation(); onView?.(risk); }}>
                   <Eye className="w-4 h-4 mr-2" />
                   View Details
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onEdit?.(risk); }}>
+                </DaisyDropdownMenuItem>
+                <DaisyDropdownMenuItem onClick={(e) => { e.stopPropagation(); onEdit?.(risk); }}>
                   <Edit className="w-4 h-4 mr-2" />
                   Edit Risk
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onArchive?.(risk); }}>
+                </DaisyDropdownMenuItem>
+                <DaisyDropdownMenuItem onClick={(e) => { e.stopPropagation(); onArchive?.(risk); }}>
                   <Archive className="w-4 h-4 mr-2" />
                   Archive
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                </DaisyDropdownMenuItem>
+              </DaisyDropdownMenuContent>
+            </DaisyDropdownMenu>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 }

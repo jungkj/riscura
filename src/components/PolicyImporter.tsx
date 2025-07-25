@@ -17,19 +17,19 @@ import {
   FileUp,
   FilePlus2
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisyInput } from '@/components/ui/DaisyInput';
 import { 
   Accordion, 
   AccordionContent, 
   AccordionItem, 
   AccordionTrigger 
 } from '@/components/ui/accordion';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Progress } from '@/components/ui/progress';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 
 interface ExtractedRisk {
   id: string;
@@ -328,14 +328,14 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
   return (
     <div className={`w-full max-w-4xl mx-auto space-y-6 ${className}`}>
       {/* File Upload Area */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center gap-2">
             <FileUp className="h-5 w-5 text-blue-600" />
             Policy Document Upload
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <AnimatePresence>
             {files.length === 0 ? (
               <div
@@ -397,7 +397,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Button
+                      <DaisyButton
                         onClick={uploadFile}
                         disabled={uploading}
                         className="bg-blue-600 hover:bg-blue-700"
@@ -413,15 +413,15 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                             Analyze Policy
                           </>
                         )}
-                      </Button>
-                      <Button
+                      </DaisyButton>
+                      <DaisyButton
                         variant="outline"
                         size="sm"
                         onClick={removeFile}
                         disabled={uploading}
                       >
                         <X className="h-4 w-4" />
-                      </Button>
+                      </DaisyButton>
                     </div>
                   </div>
                 ))}
@@ -432,7 +432,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                     animate={{ opacity: 1 }}
                     className="space-y-2"
                   >
-                    <Progress value={uploadProgress} className="h-2" />
+                    <DaisyProgress value={uploadProgress} className="h-2" />
                     <p className="text-sm text-gray-600 dark:text-gray-300 text-center">
                       Processing document and extracting risks & controls...
                     </p>
@@ -448,14 +448,14 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
               animate={{ opacity: 1, y: 0 }}
               className="mt-4"
             >
-              <Alert variant="destructive">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
+              <DaisyAlert variant="error">
+                <DaisyAlertTriangle className="h-4 w-4" />
+                <DaisyAlertDescription>{error}
+              </DaisyAlert>
             </motion.div>
           )}
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Analysis Results */}
       <AnimatePresence>
@@ -467,23 +467,23 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
             className="space-y-6"
           >
             {/* Summary Card */}
-            <Card>
-              <CardHeader>
+            <DaisyCard>
+              <DaisyCardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2">
+                  <DaisyCardTitle className="flex items-center gap-2">
                     <CheckCircle className="h-5 w-5 text-green-600" />
                     Analysis Complete
-                  </CardTitle>
-                  <Button
+                  </DaisyCardTitle>
+                  <DaisyButton
                     onClick={approveAll}
                     className="bg-green-600 hover:bg-green-700"
                   >
                     <CheckCircle className="h-4 w-4 mr-2" />
                     Approve All
-                  </Button>
+                  </DaisyButton>
                 </div>
-              </CardHeader>
-              <CardContent>
+              
+              <DaisyCardContent>
                 <div className="grid grid-cols-2 gap-6">
                   <div className="text-center p-4 bg-red-50 dark:bg-red-950/20 rounded-lg">
                     <div className="text-2xl font-bold text-red-600">
@@ -514,42 +514,42 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                 )}
 
                 {analysisResult.note && (
-                  <Alert className="mt-4">
-                    <AlertTriangle className="h-4 w-4" />
-                    <AlertDescription>{analysisResult.note}</AlertDescription>
-                  </Alert>
+                  <DaisyAlert className="mt-4">
+                    <DaisyAlertTriangle className="h-4 w-4" />
+                    <DaisyAlertDescription>{analysisResult.note}
+                  </DaisyAlert>
                 )}
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
             {/* Extracted Content */}
-            <Accordion type="multiple" className="space-y-4" defaultValue={['risks', 'controls']}>
+            <DaisyAccordion type="multiple" className="space-y-4" defaultValue={['risks', 'controls']}>
               {/* Risks Section */}
-              <AccordionItem value="risks" className="border rounded-lg">
-                <AccordionTrigger className="px-6 py-4 hover:no-underline">
+              <DaisyAccordionItem value="risks" className="border rounded-lg">
+                <DaisyAccordionTrigger className="px-6 py-4 hover:no-underline">
                   <div className="flex items-center gap-3">
-                    <AlertTriangle className="h-5 w-5 text-red-600" />
+                    <DaisyAlertTriangle className="h-5 w-5 text-red-600" />
                     <span className="text-lg font-semibold">
                       Identified Risks ({analysisResult.data.risks.length})
                     </span>
-                    <Badge variant="destructive" className="ml-2">
+                    <DaisyBadge variant="error" className="ml-2">
                       {analysisResult.data.risks.filter(r => r.approved).length} approved
-                    </Badge>
+                    </DaisyBadge>
                   </div>
-                </AccordionTrigger>
-                <AccordionContent className="px-6 pb-6">
+                </DaisyAccordionTrigger>
+                <DaisyAccordionContent className="px-6 pb-6">
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <p className="text-sm text-gray-600 dark:text-gray-300">
                         Review and approve risks identified in your policy document
                       </p>
-                      <Button
+                      <DaisyButton
                         variant="outline"
                         size="sm"
                         onClick={approveAllRisks}
                       >
                         Approve All Risks
-                      </Button>
+                      </DaisyButton>
                     </div>
                     
                     <div className="space-y-3">
@@ -570,18 +570,18 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex-1 space-y-2">
                               <div className="flex items-center gap-2">
-                                <Badge variant="outline" className="text-xs">
+                                <DaisyBadge variant="outline" className="text-xs">
                                   {risk.id}
-                                </Badge>
+                                </DaisyBadge>
                                 {risk.confidence && (
-                                  <Badge variant="secondary" className="text-xs">
+                                  <DaisyBadge variant="secondary" className="text-xs">
                                     {(risk.confidence * 100).toFixed(0)}% confidence
-                                  </Badge>
+                                  </DaisyBadge>
                                 )}
                               </div>
                               
                               {risk.editing ? (
-                                <Textarea
+                                <DaisyTextarea
                                   value={risk.text}
                                   onChange={(e) => updateRiskText(risk.id, e.target.value)}
                                   className="min-h-[80px]"
@@ -594,7 +594,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                             </div>
                             
                             <div className="flex items-center gap-2">
-                              <Button
+                              <DaisyButton
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => toggleRiskEditing(risk.id)}
@@ -604,8 +604,8 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                                 ) : (
                                   <Edit3 className="h-4 w-4" />
                                 )}
-                              </Button>
-                              <Button
+                              </DaisyButton>
+                              <DaisyButton
                                 variant={risk.approved ? "primary" : "outline"}
                                 size="sm"
                                 onClick={() => toggleRiskApproval(risk.id)}
@@ -616,42 +616,42 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                                 ) : (
                                   <XCircle className="h-4 w-4" />
                                 )}
-                              </Button>
+                              </DaisyButton>
                             </div>
                           </div>
                         </motion.div>
                       ))}
                     </div>
                   </div>
-                </AccordionContent>
-              </AccordionItem>
+                </DaisyAccordionContent>
+              </DaisyAccordionItem>
 
               {/* Controls Section */}
-              <AccordionItem value="controls" className="border rounded-lg">
-                <AccordionTrigger className="px-6 py-4 hover:no-underline">
+              <DaisyAccordionItem value="controls" className="border rounded-lg">
+                <DaisyAccordionTrigger className="px-6 py-4 hover:no-underline">
                   <div className="flex items-center gap-3">
                     <Shield className="h-5 w-5 text-blue-600" />
                     <span className="text-lg font-semibold">
                       Security Controls ({analysisResult.data.controls.length})
                     </span>
-                    <Badge variant="secondary" className="ml-2">
+                    <DaisyBadge variant="secondary" className="ml-2">
                       {analysisResult.data.controls.filter(c => c.approved).length} approved
-                    </Badge>
+                    </DaisyBadge>
                   </div>
-                </AccordionTrigger>
-                <AccordionContent className="px-6 pb-6">
+                </DaisyAccordionTrigger>
+                <DaisyAccordionContent className="px-6 pb-6">
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <p className="text-sm text-gray-600 dark:text-gray-300">
                         Review and approve security controls found in your policy
                       </p>
-                      <Button
+                      <DaisyButton
                         variant="outline"
                         size="sm"
                         onClick={approveAllControls}
                       >
                         Approve All Controls
-                      </Button>
+                      </DaisyButton>
                     </div>
                     
                     <div className="space-y-3">
@@ -672,18 +672,18 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex-1 space-y-2">
                               <div className="flex items-center gap-2">
-                                <Badge variant="outline" className="text-xs">
+                                <DaisyBadge variant="outline" className="text-xs">
                                   {control.id}
-                                </Badge>
+                                </DaisyBadge>
                                 {control.confidence && (
-                                  <Badge variant="secondary" className="text-xs">
+                                  <DaisyBadge variant="secondary" className="text-xs">
                                     {(control.confidence * 100).toFixed(0)}% confidence
-                                  </Badge>
+                                  </DaisyBadge>
                                 )}
                               </div>
                               
                               {control.editing ? (
-                                <Textarea
+                                <DaisyTextarea
                                   value={control.text}
                                   onChange={(e) => updateControlText(control.id, e.target.value)}
                                   className="min-h-[80px]"
@@ -696,7 +696,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                             </div>
                             
                             <div className="flex items-center gap-2">
-                              <Button
+                              <DaisyButton
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => toggleControlEditing(control.id)}
@@ -706,8 +706,8 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                                 ) : (
                                   <Edit3 className="h-4 w-4" />
                                 )}
-                              </Button>
-                              <Button
+                              </DaisyButton>
+                              <DaisyButton
                                 variant={control.approved ? "primary" : "outline"}
                                 size="sm"
                                 onClick={() => toggleControlApproval(control.id)}
@@ -718,16 +718,16 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                                 ) : (
                                   <XCircle className="h-4 w-4" />
                                 )}
-                              </Button>
+                              </DaisyButton>
                             </div>
                           </div>
                         </motion.div>
                       ))}
                     </div>
                   </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+                </DaisyAccordionContent>
+              </DaisyAccordionItem>
+            </DaisyAccordion>
           </motion.div>
         )}
       </AnimatePresence>

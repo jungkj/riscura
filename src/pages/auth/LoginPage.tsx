@@ -25,9 +25,9 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { Loader2, Eye, EyeOff, Shield } from 'lucide-react';
 
 // Enhanced components
@@ -103,7 +103,7 @@ export default function LoginPage() {
           className="w-full max-w-md relative z-10"
         >
           <HoverCard className="backdrop-blur-sm bg-card/90 dark:bg-card/90 border-border/20">
-            <CardHeader className="space-y-1 text-center">
+            <DaisyCardHeader className="space-y-1 text-center">
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
@@ -119,15 +119,15 @@ export default function LoginPage() {
                   priority
                 />
               </motion.div>
-              <CardTitle className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+              <DaisyCardTitle className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                 Welcome Back
-              </CardTitle>
-              <CardDescription>
+              </DaisyCardTitle>
+              <DaisyCardDescription>
                 Enter your credentials to access your RCSA dashboard
-              </CardDescription>
-            </CardHeader>
+              </p>
             
-            <CardContent>
+            
+            <DaisyCardContent>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                   <FormField
@@ -141,7 +141,7 @@ export default function LoginPage() {
                             whileFocus={{ scale: 1.02 }}
                             transition={{ type: 'spring', stiffness: 300 }}
                           >
-                            <Input 
+                            <DaisyInput 
                               placeholder="name@company.com" 
                               {...field} 
                               autoComplete="email"
@@ -166,14 +166,14 @@ export default function LoginPage() {
                             transition={{ type: 'spring', stiffness: 300 }}
                             className="relative"
                           >
-                            <Input 
+                            <DaisyInput 
                               type={showPassword ? 'text' : 'password'}
                               placeholder="••••••••" 
                               {...field} 
                               autoComplete="current-password"
                               className="transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 pr-10"
                             />
-                            <Button
+                            <DaisyButton
                               type="button"
                               variant="ghost"
                               size="sm"
@@ -185,7 +185,7 @@ export default function LoginPage() {
                               ) : (
                                 <Eye className="h-4 w-4 text-gray-400" />
                               )}
-                            </Button>
+                            </DaisyButton>
                           </motion.div>
                         </FormControl>
                         <FormMessage />
@@ -199,7 +199,7 @@ export default function LoginPage() {
                     render={({ field }) => (
                       <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                         <FormControl>
-                          <Checkbox
+                          <DaisyCheckbox
                             checked={field.value}
                             onCheckedChange={field.onChange}
                             className="border-slate-300 dark:border-slate-600 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
@@ -218,7 +218,7 @@ export default function LoginPage() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <Button 
+                    <DaisyButton 
                       type="submit" 
                       className="w-full bg-gradient-to-r from-[#191919] to-[#191919] hover:from-[#2a2a2a] hover:to-[#2a2a2a] transition-all duration-200" 
                       disabled={isLoading}
@@ -231,7 +231,7 @@ export default function LoginPage() {
                       ) : (
                         'Sign In'
                       )}
-                    </Button>
+                    </DaisyButton>
                   </motion.div>
                 </form>
               </Form>
@@ -244,9 +244,9 @@ export default function LoginPage() {
                   Forgot password?
                 </Link>
               </div>
-            </CardContent>
+            </DaisyCardBody>
             
-            <CardFooter className="flex justify-center">
+            <DaisyCardFooter className="flex justify-center">
               <p className="text-sm text-muted-foreground">
                 Don't have an account?{' '}
                 <Link 

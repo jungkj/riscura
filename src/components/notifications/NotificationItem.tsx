@@ -15,7 +15,7 @@ import {
   Settings,
   X,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { cn } from '@/lib/utils';
 
 interface NotificationItemProps {
@@ -108,9 +108,9 @@ export function NotificationItem({
               </p>
             </div>
             
-            <Button
+            <DaisyButton
               variant="ghost"
-              size="icon"
+              shape="square" size="md"
               className="h-6 w-6 opacity-0 group-hover:opacity-100"
               onClick={(e) => {
                 e.stopPropagation();
@@ -118,7 +118,7 @@ export function NotificationItem({
               }}
             >
               <X className="h-3 w-3" />
-            </Button>
+            </DaisyButton>
           </div>
           
           <div className="flex items-center gap-4 mt-2">

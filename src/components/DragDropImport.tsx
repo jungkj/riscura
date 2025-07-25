@@ -1,18 +1,23 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { motion } from 'framer-motion';
 import { toast } from '@/hooks/use-toast';
+import { useSharePointIntegration } from '@/hooks/useSharePointIntegration';
+import { SharePointFileBrowser } from '@/components/integrations/SharePointFileBrowser';
+import { useGoogleDriveIntegration } from '@/hooks/useGoogleDriveIntegration';
+import { GoogleDriveFileBrowser } from '@/components/integrations/GoogleDriveFileBrowser';
+import { FixedSizeList as List } from 'react-window';
 
 // UI Components
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import {
   Dialog,
   DialogContent,
@@ -34,7 +39,9 @@ import {
   X,
   FileImage,
   Zap,
-  ArrowRight
+  ArrowRight,
+  Cloud,
+  RefreshCw
 } from 'lucide-react';
 import Image from 'next/image';
 
@@ -58,7 +65,7 @@ interface ImportModeConfig {
   icon: React.ComponentType<any>;
   acceptedTypes: string[];
   maxFiles: number;
-  processingType: 'excel-rcsa' | 'policy-document' | 'bulk-upload';
+  processingType: 'excel-rcsa' | 'policy-document' | 'bulk-upload' | 'sharepoint' | 'googledrive';
   aiEnabled: boolean;
 }
 
@@ -90,6 +97,33 @@ const IMPORT_MODES: ImportModeConfig[] = [
     ],
     maxFiles: 10,
     processingType: 'policy-document',
+    aiEnabled: true
+  },
+  {
+    id: 'sharepoint',
+    name: 'SharePoint Import',
+    description: 'Import Excel RCSA files directly from your connected SharePoint sites. Browse and select files without downloading.',
+    icon: Cloud,
+    acceptedTypes: [
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ],
+    maxFiles: 10,
+    processingType: 'sharepoint',
+    aiEnabled: true
+  },
+  {
+    id: 'googledrive',
+    name: 'Google Drive Import',
+    description: 'Import Excel RCSA files directly from your Google Drive. Browse and select spreadsheets without downloading.',
+    icon: Cloud,
+    acceptedTypes: [
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'application/vnd.google-apps.spreadsheet'
+    ],
+    maxFiles: 10,
+    processingType: 'googledrive',
     aiEnabled: true
   },
   {
@@ -132,6 +166,22 @@ export default function DragDropImport({
   const [processingError, setProcessingError] = useState<string | null>(null);
   const [showResults, setShowResults] = useState(false);
   const [processingResults, setProcessingResults] = useState<any[]>([]);
+
+  // SharePoint integration
+  const { integrations, isLoading: isLoadingIntegrations } = useSharePointIntegration();
+  const [selectedIntegrationId, setSelectedIntegrationId] = useState<string | null>(null);
+  const [selectedSharePointFiles, setSelectedSharePointFiles] = useState<any[]>([]);
+
+  // Google Drive integration
+  const { isConnected: isGoogleDriveConnected, connect: connectGoogleDrive, checkConnection: checkGoogleDriveConnection } = useGoogleDriveIntegration();
+  const [selectedGoogleDriveFiles, setSelectedGoogleDriveFiles] = useState<any[]>([]);
+
+  // Check Google Drive connection when component mounts or mode changes
+  useEffect(() => {
+    if (selectedMode.id === 'googledrive') {
+      checkGoogleDriveConnection();
+    }
+  }, [selectedMode.id, checkGoogleDriveConnection]);
 
   // Processing options
   const [options, setOptions] = useState({
@@ -188,6 +238,133 @@ export default function DragDropImport({
   };
 
   const processFiles = async () => {
+    // Handle SharePoint mode differently
+    if (selectedMode.id === 'sharepoint') {
+      if (selectedSharePointFiles.length === 0) {
+        setProcessingError('Please select at least one file from SharePoint');
+        return;
+      }
+
+      setIsProcessing(true);
+      setProcessingError(null);
+      setProcessingResults([]);
+
+      try {
+        const results: any[] = [];
+
+        for (const sharePointFile of selectedSharePointFiles) {
+          const formData = new FormData();
+          formData.append('fileId', sharePointFile.id);
+          formData.append('integrationId', selectedIntegrationId!);
+          formData.append('mode', 'excel-rcsa'); // SharePoint files are processed as Excel RCSA
+          formData.append('organizationId', organizationId);
+          formData.append('userId', userId);
+          formData.append('options', JSON.stringify(options));
+
+          try {
+            const response = await fetch('/api/sharepoint/import', {
+              method: 'POST',
+              body: formData,
+            });
+
+            if (!response.ok) {
+              throw new Error(`Processing failed: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            results.push(result.data);
+
+          } catch (error) {
+            console.error(`Error processing SharePoint file ${sharePointFile.name}:`, error);
+            setProcessingError(error instanceof Error ? error.message : 'Processing failed');
+          }
+        }
+
+        setProcessingResults(results);
+        setShowResults(true);
+        
+        if (onComplete) {
+          onComplete(results);
+        }
+
+        toast({
+          title: "SharePoint Import Complete",
+          description: `Successfully processed ${results.length} file(s)`,
+        });
+
+      } catch (error) {
+        console.error('SharePoint import processing error:', error);
+        setProcessingError(error instanceof Error ? error.message : 'Processing failed');
+      } finally {
+        setIsProcessing(false);
+      }
+      return;
+    }
+
+    // Handle Google Drive mode
+    if (selectedMode.id === 'googledrive') {
+      if (selectedGoogleDriveFiles.length === 0) {
+        setProcessingError('Please select at least one file from Google Drive');
+        return;
+      }
+
+      setIsProcessing(true);
+      setProcessingError(null);
+      setProcessingResults([]);
+
+      try {
+        const results: any[] = [];
+
+        for (const googleDriveFile of selectedGoogleDriveFiles) {
+          const formData = new FormData();
+          formData.append('fileId', googleDriveFile.id);
+          formData.append('fileName', googleDriveFile.name);
+          formData.append('mode', 'excel-rcsa'); // Google Drive files are processed as Excel RCSA
+          formData.append('organizationId', organizationId);
+          formData.append('userId', userId);
+          formData.append('options', JSON.stringify(options));
+
+          try {
+            const response = await fetch('/api/google-drive/import', {
+              method: 'POST',
+              body: formData,
+            });
+
+            if (!response.ok) {
+              throw new Error(`Processing failed: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            results.push(result.data);
+
+          } catch (error) {
+            console.error(`Error processing Google Drive file ${googleDriveFile.name}:`, error);
+            setProcessingError(error instanceof Error ? error.message : 'Processing failed');
+          }
+        }
+
+        setProcessingResults(results);
+        setShowResults(true);
+        
+        if (onComplete) {
+          onComplete(results);
+        }
+
+        toast({
+          title: "Google Drive Import Complete",
+          description: `Successfully processed ${results.length} file(s)`,
+        });
+
+      } catch (error) {
+        console.error('Google Drive import processing error:', error);
+        setProcessingError(error instanceof Error ? error.message : 'Processing failed');
+      } finally {
+        setIsProcessing(false);
+      }
+      return;
+    }
+
+    // Original file upload logic
     if (files.length === 0) {
       setProcessingError('Please select at least one file');
       return;
@@ -280,6 +457,9 @@ export default function DragDropImport({
 
   const resetImport = () => {
     setFiles([]);
+    setSelectedSharePointFiles([]);
+    setSelectedGoogleDriveFiles([]);
+    setSelectedIntegrationId(null);
     setProcessingError(null);
     setProcessingResults([]);
     setShowResults(false);
@@ -303,15 +483,15 @@ export default function DragDropImport({
   return (
     <div className="space-y-6">
       {/* Import Mode Selection */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center gap-2">
             <Zap className="h-5 w-5 text-blue-600" />
             Import Mode Selection
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {IMPORT_MODES.map((mode) => {
               const IconComponent = mode.icon;
               return (
@@ -323,7 +503,21 @@ export default function DragDropImport({
                       ? 'border-blue-500 bg-blue-50' 
                       : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}
                   `}
-                  onClick={() => setSelectedMode(mode)}
+                  onClick={() => {
+                    setSelectedMode(mode);
+                    // Clear cloud storage selections when switching modes
+                    if (mode.id !== 'sharepoint') {
+                      setSelectedSharePointFiles([]);
+                      setSelectedIntegrationId(null);
+                    }
+                    if (mode.id !== 'googledrive') {
+                      setSelectedGoogleDriveFiles([]);
+                    }
+                    // Clear regular files when switching to cloud storage
+                    if (mode.id === 'sharepoint' || mode.id === 'googledrive') {
+                      setFiles([]);
+                    }
+                  }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -337,7 +531,7 @@ export default function DragDropImport({
                         {mode.description}
                       </p>
                       <div className="flex items-center gap-2 mt-2">
-                        <Badge 
+                        <DaisyBadge 
                           variant={mode.aiEnabled ? "default" : "secondary"} 
                           className={`text-xs ${mode.aiEnabled ? 'bg-[#199BEC]/10 text-[#199BEC] border-[#199BEC]/30' : ''}`}
                         >
@@ -355,7 +549,7 @@ export default function DragDropImport({
                           ) : (
                             'Standard Upload'
                           )}
-                        </Badge>
+                        </DaisyBadge>
                         <span className="text-xs text-gray-500">
                           Max {mode.maxFiles} files
                         </span>
@@ -366,145 +560,363 @@ export default function DragDropImport({
               );
             })}
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Processing Options */}
       {selectedMode.aiEnabled && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Processing Options</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle className="text-lg">Processing Options</DaisyCardTitle>
+          
+          <DaisyCardContent>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <div className="flex items-center space-x-2">
-                <Checkbox
+                <DaisyCheckbox
                   id="aiAnalysis"
                   checked={options.aiAnalysis}
                   onCheckedChange={(checked) => 
                     setOptions(prev => ({ ...prev, aiAnalysis: !!checked }))
                   }
                 />
-                <Label htmlFor="aiAnalysis" className="text-sm">
+                <DaisyLabel htmlFor="aiAnalysis" className="text-sm">
                   AI Analysis
-                </Label>
+                </DaisyLabel>
               </div>
               <div className="flex items-center space-x-2">
-                <Checkbox
+                <DaisyCheckbox
                   id="autoMap"
                   checked={options.autoMap}
                   onCheckedChange={(checked) => 
                     setOptions(prev => ({ ...prev, autoMap: !!checked }))
                   }
                 />
-                <Label htmlFor="autoMap" className="text-sm">
+                <DaisyLabel htmlFor="autoMap" className="text-sm">
                   Auto-map Fields
-                </Label>
+                </DaisyLabel>
               </div>
               <div className="flex items-center space-x-2">
-                <Checkbox
+                <DaisyCheckbox
                   id="validateData"
                   checked={options.validateData}
                   onCheckedChange={(checked) => 
                     setOptions(prev => ({ ...prev, validateData: !!checked }))
                   }
                 />
-                <Label htmlFor="validateData" className="text-sm">
+                <DaisyLabel htmlFor="validateData" className="text-sm">
                   Validate Data
-                </Label>
+                </DaisyLabel>
               </div>
               <div className="flex items-center space-x-2">
-                <Checkbox
+                <DaisyCheckbox
                   id="createMissing"
                   checked={options.createMissing}
                   onCheckedChange={(checked) => 
                     setOptions(prev => ({ ...prev, createMissing: !!checked }))
                   }
                 />
-                <Label htmlFor="createMissing" className="text-sm">
+                <DaisyLabel htmlFor="createMissing" className="text-sm">
                   Create Missing Items
-                </Label>
+                </DaisyLabel>
               </div>
               <div className="flex items-center space-x-2">
-                <Checkbox
+                <DaisyCheckbox
                   id="previewMode"
                   checked={options.previewMode}
                   onCheckedChange={(checked) => 
                     setOptions(prev => ({ ...prev, previewMode: !!checked }))
                   }
                 />
-                <Label htmlFor="previewMode" className="text-sm">
+                <DaisyLabel htmlFor="previewMode" className="text-sm">
                   Preview Mode
-                </Label>
+                </DaisyLabel>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       )}
 
-      {/* File Drop Zone */}
-      <Card>
-        <CardContent className="p-6">
-          <div
-            {...getRootProps()}
-            className={`
-              border-2 border-dashed rounded-lg p-8 text-center transition-colors duration-200
-              ${isDragActive 
-                ? 'border-blue-500 bg-blue-50' 
-                : 'border-gray-300 hover:border-gray-400'
-              }
-              ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-            `}
-          >
-            <input {...getInputProps()} />
-            <motion.div
-              initial={{ scale: 1 }}
-              animate={{ scale: isDragActive ? 1.05 : 1 }}
-              className="space-y-4"
+      {/* File Drop Zone - Only show for non-cloud storage modes */}
+      {selectedMode.id !== 'sharepoint' && selectedMode.id !== 'googledrive' && (
+        <DaisyCard>
+          <DaisyCardContent className="p-6">
+            <div
+              {...getRootProps()}
+              className={`
+                border-2 border-dashed rounded-lg p-8 text-center transition-colors duration-200
+                ${isDragActive 
+                  ? 'border-blue-500 bg-blue-50' 
+                  : 'border-gray-300 hover:border-gray-400'
+                }
+                ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+              `}
             >
-              <Upload className={`h-12 w-12 mx-auto ${isDragActive ? 'text-blue-500' : 'text-gray-400'}`} />
-              <div>
-                <h3 className="text-lg font-medium text-gray-900">
-                  {isDragActive 
-                    ? `Drop ${selectedMode.name.toLowerCase()} here` 
-                    : `Drag & drop ${selectedMode.name.toLowerCase()} here`
-                  }
-                </h3>
-                <p className="text-gray-600 mt-1">
-                  or click to browse (max {formatFileSize(maxFileSize)} per file)
-                </p>
-                <p className="text-sm text-gray-500 mt-2">
-                  Accepted: {selectedMode.acceptedTypes.map(type => {
-                    if (type.includes('excel') || type.includes('spreadsheet')) return 'Excel';
-                    if (type.includes('pdf')) return 'PDF';
-                    if (type.includes('word') || type.includes('document')) return 'Word';
-                    if (type.includes('text')) return 'Text';
-                    return type.split('/')[1];
-                  }).join(', ')}
-                </p>
+              <input {...getInputProps()} />
+              <motion.div
+                initial={{ scale: 1 }}
+                animate={{ scale: isDragActive ? 1.05 : 1 }}
+                className="space-y-4"
+              >
+                <Upload className={`h-12 w-12 mx-auto ${isDragActive ? 'text-blue-500' : 'text-gray-400'}`} />
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900">
+                    {isDragActive 
+                      ? `Drop ${selectedMode.name.toLowerCase()} here` 
+                      : `Drag & drop ${selectedMode.name.toLowerCase()} here`
+                    }
+                  </h3>
+                  <p className="text-gray-600 mt-1">
+                    or click to browse (max {formatFileSize(maxFileSize)} per file)
+                  </p>
+                  <p className="text-sm text-gray-500 mt-2">
+                    Accepted: {selectedMode.acceptedTypes.map(type => {
+                      if (type.includes('excel') || type.includes('spreadsheet')) return 'Excel';
+                      if (type.includes('pdf')) return 'PDF';
+                      if (type.includes('word') || type.includes('document')) return 'Word';
+                      if (type.includes('text')) return 'Text';
+                      return type.split('/')[1];
+                    }).join(', ')}
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+          </DaisyCardBody>
+        </DaisyCard>
+      )}
+
+      {/* SharePoint Integration Selection */}
+      {selectedMode.id === 'sharepoint' && (
+        <>
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="text-lg">Select SharePoint Site</DaisyCardTitle>
+            
+            <DaisyCardContent>
+              {isLoadingIntegrations ? (
+                <div className="flex items-center justify-center py-4">
+                  <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                  <span>Loading SharePoint connections...</span>
+                </div>
+              ) : integrations.length === 0 ? (
+                <DaisyAlert>
+                  <DaisyAlertCircle className="h-4 w-4" />
+                  <DaisyAlertDescription>
+                    No SharePoint sites connected. Please go to Settings → Integrations to connect a SharePoint site first.
+                  
+                </DaisyAlert>
+              ) : (
+                <div className="space-y-2">
+                  {integrations.map((integration) => (
+                    <div
+                      key={integration.id}
+                      className={`p-3 border rounded-lg cursor-pointer transition-all ${
+                        selectedIntegrationId === integration.id
+                          ? 'border-blue-500 bg-blue-50'
+                          : 'border-gray-300 hover:border-gray-400'
+                      }`}
+                      onClick={() => setSelectedIntegrationId(integration.id)}
+                    >
+                      <div className="flex items-center">
+                        <Cloud className="h-5 w-5 text-blue-600 mr-2" />
+                        <div>
+                          <p className="font-medium">{integration.displayName}</p>
+                          <p className="text-sm text-gray-600">Site ID: {integration.siteId}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </DaisyCardBody>
+          </DaisyCard>
+
+          {/* SharePoint File Browser */}
+          {selectedIntegrationId && (
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle className="text-lg">Select Excel Files</DaisyCardTitle>
+              
+              <DaisyCardContent>
+                <SharePointFileBrowser
+                  integrationId={selectedIntegrationId}
+                  onFileSelect={(file) => {
+                    const isSelected = selectedSharePointFiles.some(f => f.id === file.id);
+                    if (isSelected) {
+                      setSelectedSharePointFiles(prev => prev.filter(f => f.id !== file.id));
+                    } else {
+                      if (selectedSharePointFiles.length < selectedMode.maxFiles) {
+                        setSelectedSharePointFiles(prev => [...prev, file]);
+                      } else {
+                        toast({
+                          title: "Maximum files reached",
+                          description: `You can only select up to ${selectedMode.maxFiles} files`,
+                          variant: "destructive"
+                        });
+                      }
+                    }
+                  }}
+                  selectedFileId={selectedSharePointFiles[0]?.id}
+                />
+                {selectedSharePointFiles.length > 0 && (
+                  <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                    <p className="text-sm font-medium text-blue-900">
+                      Selected {selectedSharePointFiles.length} file{selectedSharePointFiles.length > 1 ? 's' : ''}
+                    </p>
+                    <div className="mt-2">
+                      {selectedSharePointFiles.length <= 5 ? (
+                        // For small lists, use regular rendering
+                        <div className="space-y-1">
+                          {selectedSharePointFiles.map((file) => (
+                            <div key={file.id} className="flex items-center justify-between text-sm">
+                              <span className="text-blue-700 truncate">{file.name}</span>
+                              <DaisyButton
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setSelectedSharePointFiles(prev => prev.filter(f => f.id !== file.id))}
+                              >
+                                <X className="h-3 w-3" />
+                              </DaisyButton>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        // For large lists, use virtualization
+                        <List
+                          height={150} // Fixed height for 5 items
+                          itemCount={selectedSharePointFiles.length}
+                          itemSize={30} // Height of each item
+                          width="100%"
+                        >
+                          {({ index, style }) => {
+                            const file = selectedSharePointFiles[index];
+                            return (
+                              <div key={file.id} style={style} className="flex items-center justify-between text-sm px-1">
+                                <span className="text-blue-700 truncate">{file.name}</span>
+                                <DaisyButton
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => setSelectedSharePointFiles(prev => prev.filter(f => f.id !== file.id))}
+                                >
+                                  <X className="h-3 w-3" />
+                                </DaisyButton>
+                              </div>
+                            );
+                          }}
+                        </List>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </DaisyCardBody>
+            </DaisyCard>
+          )}
+        </>
+      )}
+
+      {/* Google Drive Integration */}
+      {selectedMode.id === 'googledrive' && (
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle className="text-lg">Google Drive Connection</DaisyCardTitle>
+          
+          <DaisyCardContent>
+            {!isGoogleDriveConnected ? (
+              <div className="space-y-4">
+                <DaisyAlert>
+                  <DaisyAlertCircle className="h-4 w-4" />
+                  <DaisyAlertDescription>
+                    Connect your Google Drive account to import Excel files directly from your Drive.
+                  
+                </DaisyAlert>
+                <DaisyButton 
+                  onClick={connectGoogleDrive}
+                  className="w-full"
+                >
+                  <Cloud className="h-4 w-4 mr-2" />
+                  Connect Google Drive
+                </DaisyButton>
               </div>
-            </motion.div>
-          </div>
-        </CardContent>
-      </Card>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                  <div className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                    <span className="text-green-900 font-medium">Google Drive Connected</span>
+                  </div>
+                  <DaisyButton
+                    variant="ghost"
+                    size="sm"
+                    onClick={checkGoogleDriveConnection}
+                  >
+                    <RefreshCw className="h-4 w-4" />
+                  </DaisyButton>
+                </div>
+                
+                {/* Google Drive File Browser */}
+                <GoogleDriveFileBrowser
+                  onFileSelect={(file) => {
+                    const isSelected = selectedGoogleDriveFiles.some(f => f.id === file.id);
+                    if (isSelected) {
+                      setSelectedGoogleDriveFiles(prev => prev.filter(f => f.id !== file.id));
+                    } else {
+                      if (selectedGoogleDriveFiles.length < selectedMode.maxFiles) {
+                        setSelectedGoogleDriveFiles(prev => [...prev, file]);
+                      } else {
+                        toast({
+                          title: "Maximum files reached",
+                          description: `You can only select up to ${selectedMode.maxFiles} files`,
+                          variant: "destructive"
+                        });
+                      }
+                    }
+                  }}
+                  selectedFileId={selectedGoogleDriveFiles[0]?.id}
+                />
+                
+                {selectedGoogleDriveFiles.length > 0 && (
+                  <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                    <p className="text-sm font-medium text-blue-900">
+                      Selected {selectedGoogleDriveFiles.length} file{selectedGoogleDriveFiles.length > 1 ? 's' : ''}
+                    </p>
+                    <div className="mt-2 space-y-1">
+                      {selectedGoogleDriveFiles.map((file) => (
+                        <div key={file.id} className="flex items-center justify-between text-sm">
+                          <span className="text-blue-700 truncate">{file.name}</span>
+                          <DaisyButton
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setSelectedGoogleDriveFiles(prev => prev.filter(f => f.id !== file.id))}
+                          >
+                            <X className="h-3 w-3" />
+                          </DaisyButton>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </DaisyCardBody>
+        </DaisyCard>
+      )}
 
       {/* Selected Files */}
-      {files.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
+      {files.length > 0 && selectedMode.id !== 'sharepoint' && selectedMode.id !== 'googledrive' && (
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle className="flex items-center justify-between">
               <span>Selected Files ({files.length})</span>
-              <Button
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={resetImport}
                 disabled={isProcessing}
               >
                 Clear All
-              </Button>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+              </DaisyButton>
+            </DaisyCardTitle>
+          
+          <DaisyCardContent>
             <div className="space-y-3">
               {files.map((fileObj) => {
                 const FileIcon = getFileIcon(fileObj.file.type);
@@ -524,7 +936,7 @@ export default function DragDropImport({
                         {formatFileSize(fileObj.file.size)}
                       </p>
                       {fileObj.status === 'processing' && (
-                        <Progress value={fileObj.progress} className="mt-2" />
+                        <DaisyProgress value={fileObj.progress} className="mt-2" />
                       )}
                       {fileObj.error && (
                         <p className="text-sm text-red-600 mt-1">{fileObj.error}</p>
@@ -535,40 +947,42 @@ export default function DragDropImport({
                         <CheckCircle className="h-5 w-5 text-green-600" />
                       )}
                       {fileObj.status === 'error' && (
-                        <AlertCircle className="h-5 w-5 text-red-600" />
+                        <DaisyAlertCircle className="h-5 w-5 text-red-600" />
                       )}
                       {fileObj.status === 'processing' && (
                         <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
                       )}
-                      <Button
+                      <DaisyButton
                         variant="ghost"
                         size="sm"
                         onClick={() => removeFile(fileObj.id)}
                         disabled={isProcessing}
                       >
                         <X className="h-4 w-4" />
-                      </Button>
+                      </DaisyButton>
                     </div>
                   </motion.div>
                 );
               })}
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       )}
 
       {/* Error Display */}
       {processingError && (
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription>{processingError}</AlertDescription>
-        </Alert>
+        <DaisyAlert variant="error">
+          <DaisyAlertCircle className="h-4 w-4" />
+          <DaisyAlertDescription>{processingError}
+        </DaisyAlert>
       )}
 
       {/* Action Buttons */}
-      {files.length > 0 && (
+      {((files.length > 0 && selectedMode.id !== 'sharepoint' && selectedMode.id !== 'googledrive') || 
+        (selectedSharePointFiles.length > 0 && selectedMode.id === 'sharepoint') ||
+        (selectedGoogleDriveFiles.length > 0 && selectedMode.id === 'googledrive')) && (
         <div className="flex gap-4">
-          <Button
+          <DaisyButton
             onClick={processFiles}
             disabled={isProcessing}
             className="flex-1"
@@ -581,31 +995,36 @@ export default function DragDropImport({
             ) : (
               <>
                 <ArrowRight className="h-4 w-4 mr-2" />
-                Process {files.length} File{files.length > 1 ? 's' : ''}
+                Process {selectedMode.id === 'sharepoint' 
+                  ? `${selectedSharePointFiles.length} SharePoint File${selectedSharePointFiles.length > 1 ? 's' : ''}`
+                  : selectedMode.id === 'googledrive'
+                  ? `${selectedGoogleDriveFiles.length} Google Drive File${selectedGoogleDriveFiles.length > 1 ? 's' : ''}`
+                  : `${files.length} File${files.length > 1 ? 's' : ''}`
+                }
               </>
             )}
-          </Button>
+          </DaisyButton>
         </div>
       )}
 
       {/* Results Dialog */}
-      <Dialog open={showResults} onOpenChange={setShowResults}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Import Results</DialogTitle>
-            <DialogDescription>
+      <DaisyDialog open={showResults} onOpenChange={setShowResults}>
+        <DaisyDialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DaisyDialogHeader>
+            <DaisyDialogTitle>Import Results</DaisyDialogTitle>
+            <DaisyDialogDescription>
               Review the results of your import process
-            </DialogDescription>
-          </DialogHeader>
+            </DaisyDialogDescription>
+          </DaisyDialogHeader>
           <div className="space-y-4">
             {processingResults.map((result, idx) => (
-              <Card key={idx}>
-                <CardHeader>
-                  <CardTitle className="text-lg">
+              <DaisyCard key={idx}>
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="text-lg">
                     {result.filename || `File ${idx + 1}`}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+                  </DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <strong>Type:</strong> {result.type}
@@ -626,17 +1045,17 @@ export default function DragDropImport({
                       </div>
                     )}
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             ))}
           </div>
-          <DialogFooter>
-            <Button onClick={() => setShowResults(false)}>
+          <DaisyDialogFooter>
+            <DaisyButton onClick={() => setShowResults(false)}>
               Close
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            </DaisyButton>
+          </DaisyDialogFooter>
+        </DaisyDialogContent>
+      </DaisyDialog>
     </div>
   );
 } 

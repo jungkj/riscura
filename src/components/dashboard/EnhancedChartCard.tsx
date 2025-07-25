@@ -3,9 +3,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LucideIcon, MoreHorizontal, TrendingUp, TrendingDown } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -112,13 +112,13 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
       transition={{ duration: 0.4 }}
       className={className}
     >
-      <Card className={cn(
+      <DaisyCard className={cn(
         "relative overflow-hidden border-0 shadow-lg shadow-slate-200/50",
         "bg-gradient-to-br from-white to-slate-50/30",
         "hover:shadow-xl hover:shadow-slate-200/60 transition-all duration-300",
         "backdrop-blur-sm border border-slate-200/60"
       )}>
-        <CardHeader className="pb-4">
+        <DaisyCardHeader className="pb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <motion.div
@@ -129,9 +129,9 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
               </motion.div>
               
               <div>
-                <CardTitle className="text-lg font-semibold text-slate-800">
+                <DaisyCardTitle className="text-lg font-semibold text-slate-800">
                   {title}
-                </CardTitle>
+                </DaisyCardTitle>
                 {subtitle && (
                   <p className="text-sm text-slate-500 mt-1">{subtitle}</p>
                 )}
@@ -139,23 +139,23 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
             </div>
 
             {showActions && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+              <DaisyDropdownMenu>
+                <DaisyDropdownMenuTrigger asChild>
+                  <DaisyButton variant="ghost" size="sm" className="h-8 w-8 p-0">
                     <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem>View Details</DropdownMenuItem>
-                  <DropdownMenuItem>Export Data</DropdownMenuItem>
-                  <DropdownMenuItem>Configure</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                  </DaisyButton>
+                </DaisyDropdownMenuTrigger>
+                <DaisyDropdownMenuContent align="end">
+                  <DaisyDropdownMenuItem>View Details</DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuItem>Export Data</DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuItem>Configure</DaisyDropdownMenuItem>
+                </DaisyDropdownMenuContent>
+              </DaisyDropdownMenu>
             )}
           </div>
-        </CardHeader>
+        
 
-        <CardContent className="pt-0">
+        <DaisyCardContent className="pt-0">
           {isLoading ? (
             <LoadingSkeleton />
           ) : (
@@ -236,18 +236,18 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
               >
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-slate-500 font-medium">Total Items</span>
-                  <Badge variant="secondary" className="font-semibold">
+                  <DaisyBadge variant="secondary" className="font-semibold">
                     {totalValue}
-                  </Badge>
+                  </DaisyBadge>
                 </div>
               </motion.div>
             </div>
           )}
-        </CardContent>
+        </DaisyCardBody>
 
         {/* Decorative gradient overlay */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-slate-100/40 to-transparent opacity-60 pointer-events-none" />
-      </Card>
+      </DaisyCard>
     </motion.div>
   );
 }; 

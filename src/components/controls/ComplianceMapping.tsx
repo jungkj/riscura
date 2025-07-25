@@ -3,11 +3,11 @@
 import React, { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { ContentCard } from '@/components/layout/MainContentArea';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   Target,
@@ -265,10 +265,10 @@ const FrameworkOverviewCard: React.FC<{
             <h3 className="text-body-base font-semibold text-text-primary">
               {framework.name}
             </h3>
-            <Badge variant={statusConfig.variant} className="text-caption">
+            <DaisyBadge variant={statusConfig.variant} className="text-caption">
               <StatusIcon className="h-3 w-3 mr-enterprise-1" />
               {framework.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-            </Badge>
+            </DaisyBadge>
           </div>
           <p className="text-caption text-text-secondary line-clamp-2">
             {framework.description}
@@ -282,7 +282,7 @@ const FrameworkOverviewCard: React.FC<{
           <span className="text-caption text-text-secondary">Compliance Score</span>
           <span className="text-caption font-medium text-text-primary">{framework.complianceScore}%</span>
         </div>
-        <Progress value={framework.complianceScore} className="h-2" />
+        <DaisyProgress value={framework.complianceScore} className="h-2" />
       </div>
 
       {/* Statistics */}
@@ -331,14 +331,14 @@ const RequirementDetail: React.FC<{
         <div className="flex-1">
           <div className="flex items-center space-x-enterprise-2 mb-enterprise-1">
             <span className="text-caption font-medium text-text-tertiary">{requirement.id}</span>
-            <Badge variant={statusConfig.variant} className="text-caption">
+            <DaisyBadge variant={statusConfig.variant} className="text-caption">
               <StatusIcon className="h-3 w-3 mr-enterprise-1" />
               {requirement.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-            </Badge>
+            </DaisyBadge>
             {requirement.mandatory && (
-              <Badge variant="outline" className="text-caption">
+              <DaisyBadge variant="outline" className="text-caption">
                 Mandatory
-              </Badge>
+              </DaisyBadge>
             )}
           </div>
           <h4 className="text-body-sm font-medium text-text-primary mb-enterprise-1">
@@ -354,17 +354,17 @@ const RequirementDetail: React.FC<{
       <div className="mb-enterprise-2">
         <div className="flex items-center justify-between mb-enterprise-1">
           <span className="text-caption font-medium text-text-primary">Mapped Controls</span>
-          <Button variant="outline" size="sm" className="h-6 px-enterprise-2">
+          <DaisyButton variant="outline" size="sm" className="h-6 px-enterprise-2">
             <MapPin className="h-3 w-3 mr-enterprise-1" />
             Map Control
-          </Button>
+          </DaisyButton>
         </div>
         {requirement.mappedControls.length > 0 ? (
           <div className="flex flex-wrap gap-enterprise-1">
             {requirement.mappedControls.map((controlId) => (
-              <Badge key={controlId} variant="outline" className="text-caption">
+              <DaisyBadge key={controlId} variant="outline" className="text-caption">
                 {controlId}
-              </Badge>
+              </DaisyBadge>
             ))}
           </div>
         ) : (
@@ -379,7 +379,7 @@ const RequirementDetail: React.FC<{
           <div className="mt-enterprise-1 space-y-enterprise-1">
             {requirement.gaps.map((gap, index) => (
               <div key={index} className="flex items-start space-x-enterprise-2 text-caption text-semantic-error">
-                <AlertTriangle className="h-3 w-3 mt-0.5" />
+                <DaisyAlertTriangle className="h-3 w-3 mt-0.5" />
                 <span>{gap}</span>
               </div>
             ))}
@@ -393,10 +393,10 @@ const RequirementDetail: React.FC<{
           <span className="text-caption font-medium text-text-primary">Evidence</span>
           <div className="mt-enterprise-1 flex flex-wrap gap-enterprise-1">
             {requirement.evidence.map((evidenceId) => (
-              <Badge key={evidenceId} variant="secondary" className="text-caption">
+              <DaisyBadge key={evidenceId} variant="secondary" className="text-caption">
                 <FileText className="h-3 w-3 mr-enterprise-1" />
                 {evidenceId}
-              </Badge>
+              </DaisyBadge>
             ))}
           </div>
         </div>
@@ -552,10 +552,10 @@ export const ComplianceMapping: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center space-x-enterprise-2">
-          <Button variant="outline">
+          <DaisyButton variant="outline">
             <Download className="h-4 w-4 mr-enterprise-1" />
             Export Report
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
@@ -577,13 +577,13 @@ export const ComplianceMapping: React.FC = () => {
         <div className="space-y-enterprise-4">
           {/* Breadcrumb */}
           <div className="flex items-center space-x-enterprise-2">
-            <Button 
+            <DaisyButton 
               variant="ghost" 
               size="sm" 
               onClick={() => setSelectedFramework(null)}
             >
               ← Back to Frameworks
-            </Button>
+            </DaisyButton>
             <span className="text-text-tertiary">/</span>
             <span className="text-body-sm font-medium text-text-primary">
               {selectedFramework.name}
@@ -591,14 +591,14 @@ export const ComplianceMapping: React.FC = () => {
           </div>
 
           {/* Tabs */}
-          <Tabs value={activeView} onValueChange={(value: any) => setActiveView(value)}>
-            <TabsList>
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="mapping">Control Mapping</TabsTrigger>
-              <TabsTrigger value="gaps">Gap Analysis</TabsTrigger>
-            </TabsList>
+          <DaisyTabs value={activeView} onValueChange={(value: any) => setActiveView(value)}>
+            <DaisyTabsList>
+              <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="mapping">Control Mapping</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="gaps">Gap Analysis</DaisyTabsTrigger>
+            </DaisyTabsList>
 
-            <TabsContent value="overview" className="mt-enterprise-4">
+            <DaisyTabsContent value="overview" className="mt-enterprise-4">
               <div className="space-y-enterprise-4">
                 {/* Framework Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-enterprise-4">
@@ -637,7 +637,7 @@ export const ComplianceMapping: React.FC = () => {
                           {category.complianceScore}%
                         </div>
                       </div>
-                      <Progress value={category.complianceScore} className="h-2 mb-enterprise-2" />
+                      <DaisyProgress value={category.complianceScore} className="h-2 mb-enterprise-2" />
                       <p className="text-caption text-text-secondary">
                         {category.description}
                       </p>
@@ -645,9 +645,9 @@ export const ComplianceMapping: React.FC = () => {
                   ))}
                 </div>
               </div>
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="mapping" className="mt-enterprise-4">
+            <DaisyTabsContent value="mapping" className="mt-enterprise-4">
               <div className="space-y-enterprise-4">
                 {selectedFramework.categories.map((category) => (
                   <CategoryDetail
@@ -657,12 +657,12 @@ export const ComplianceMapping: React.FC = () => {
                   />
                 ))}
               </div>
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="gaps" className="mt-enterprise-4">
+            <DaisyTabsContent value="gaps" className="mt-enterprise-4">
               <GapAnalysisView framework={selectedFramework} />
-            </TabsContent>
-          </Tabs>
+            </DaisyTabsContent>
+          </DaisyTabs>
         </div>
       )}
     </div>

@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 
 export default function ContactPage() {
@@ -47,9 +47,9 @@ export default function ContactPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <Badge className="bg-[#199BEC]/10 text-[#199BEC] px-4 py-2 mb-6 text-sm">
+            <DaisyBadge className="bg-[#199BEC]/10 text-[#199BEC] px-4 py-2 mb-6 text-sm">
               Enterprise Sales
-            </Badge>
+            </DaisyBadge>
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
               Let's discuss your needs
             </h1>
@@ -70,23 +70,23 @@ export default function ContactPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <Card className="shadow-xl">
-                <CardHeader>
-                  <CardTitle className="text-2xl font-bold text-gray-900">
+              <DaisyCard className="shadow-xl">
+                <DaisyCardHeader>
+                  <DaisyCardTitle className="text-2xl font-bold text-gray-900">
                     Get in touch
-                  </CardTitle>
+                  </DaisyCardTitle>
                   <p className="text-gray-600">
                     Fill out the form below and we'll get back to you within 24 hours.
                   </p>
-                </CardHeader>
-                <CardContent>
+                
+                <DaisyCardContent>
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                           Full Name *
                         </label>
-                        <Input
+                        <DaisyInput
                           id="name"
                           name="name"
                           type="text"
@@ -100,7 +100,7 @@ export default function ContactPage() {
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                           Email Address *
                         </label>
-                        <Input
+                        <DaisyInput
                           id="email"
                           name="email"
                           type="email"
@@ -116,7 +116,7 @@ export default function ContactPage() {
                       <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
                         Company Name *
                       </label>
-                      <Input
+                      <DaisyInput
                         id="company"
                         name="company"
                         type="text"
@@ -131,7 +131,7 @@ export default function ContactPage() {
                       <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
                         Message *
                       </label>
-                      <Textarea
+                      <DaisyTextarea
                         id="message"
                         name="message"
                         required
@@ -142,17 +142,17 @@ export default function ContactPage() {
                       />
                     </div>
                     
-                    <Button 
+                    <DaisyButton 
                       type="submit" 
                       disabled={isSubmitting}
                       className="w-full bg-[#199BEC] hover:bg-[#0f7dc7] text-white py-3"
                     >
                       {isSubmitting ? 'Sending...' : 'Send Message'}
                       <Send className="w-4 h-4 ml-2" />
-                    </Button>
+                    </DaisyButton>
                   </form>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </motion.div>
 
             {/* Contact Information */}
@@ -162,8 +162,8 @@ export default function ContactPage() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="space-y-8"
             >
-              <Card className="shadow-lg">
-                <CardContent className="p-8">
+              <DaisyCard className="shadow-lg">
+                <DaisyCardContent className="p-8">
                   <h3 className="text-xl font-bold text-gray-900 mb-6">
                     Contact Information
                   </h3>
@@ -204,11 +204,11 @@ export default function ContactPage() {
                       </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
 
-              <Card className="shadow-lg bg-gradient-to-br from-[#199BEC]/5 to-white">
-                <CardContent className="p-8">
+              <DaisyCard className="shadow-lg bg-gradient-to-br from-[#199BEC]/5 to-white">
+                <DaisyCardContent className="p-8">
                   <h3 className="text-xl font-bold text-gray-900 mb-4">
                     Enterprise Features
                   </h3>
@@ -234,8 +234,8 @@ export default function ContactPage() {
                       White-label options available
                     </li>
                   </ul>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </motion.div>
           </div>
         </div>

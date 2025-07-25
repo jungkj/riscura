@@ -7,12 +7,12 @@ import { CreateControlModal } from './CreateControlModal';
 import ExportService from '@/services/ExportService';
 import { cn } from '@/lib/utils';
 import { MainContentArea } from '@/components/layout/MainContentArea';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import ControlTestingWorkflow from './ControlTestingWorkflow';
 import ComplianceMapping from './ComplianceMapping';
 import {
@@ -295,10 +295,10 @@ const ControlCard: React.FC<{
         <div className="flex-1">
           <div className="flex items-center space-x-enterprise-2 mb-enterprise-1">
             <span className="text-caption font-medium text-text-tertiary">{control.id}</span>
-            <Badge variant={statusConfig.variant} className="text-caption">
+            <DaisyBadge variant={statusConfig.variant} className="text-caption">
               <StatusIcon className="h-3 w-3 mr-enterprise-1" />
               {control.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-            </Badge>
+            </DaisyBadge>
           </div>
           <h3 className="text-body-base font-semibold text-text-primary mb-enterprise-1">
             {control.title}
@@ -307,14 +307,14 @@ const ControlCard: React.FC<{
             {control.description}
           </p>
         </div>
-        <Button 
+        <DaisyButton 
           variant="ghost" 
           size="sm" 
           className="h-6 w-6 p-0"
           onClick={() => onAction('menu', control)}
         >
           <MoreHorizontal className="h-3 w-3" />
-        </Button>
+        </DaisyButton>
       </div>
 
       {/* Effectiveness & Score */}
@@ -340,7 +340,7 @@ const ControlCard: React.FC<{
           <span className="text-caption text-text-secondary">Effectiveness</span>
           <span className="text-caption font-medium text-text-primary">{control.effectivenessScore}%</span>
         </div>
-        <Progress 
+        <DaisyProgress 
           value={control.effectivenessScore} 
           className="h-2"
         />
@@ -356,15 +356,15 @@ const ControlCard: React.FC<{
             </div>
             <span className="text-caption text-text-secondary">{control.owner.name}</span>
           </div>
-          <Badge variant="outline" className="text-caption">
+          <DaisyBadge variant="outline" className="text-caption">
             {control.category}
-          </Badge>
+          </DaisyBadge>
         </div>
 
         {/* Testing Schedule */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-enterprise-2">
-            <Calendar className={cn(
+            <DaisyCalendar className={cn(
               "h-3 w-3",
               isOverdue ? "text-semantic-error" : "text-text-tertiary"
             )} />
@@ -384,14 +384,14 @@ const ControlCard: React.FC<{
         {/* Framework Compliance */}
         <div className="flex flex-wrap gap-enterprise-1">
           {control.framework.slice(0, 2).map((framework) => (
-            <Badge key={framework} variant="outline" className="text-caption">
+            <DaisyBadge key={framework} variant="outline" className="text-caption">
               {framework}
-            </Badge>
+            </DaisyBadge>
           ))}
           {control.framework.length > 2 && (
-            <Badge variant="outline" className="text-caption">
+            <DaisyBadge variant="outline" className="text-caption">
               +{control.framework.length - 2}
-            </Badge>
+            </DaisyBadge>
           )}
         </div>
 
@@ -405,7 +405,7 @@ const ControlCard: React.FC<{
       {/* Actions */}
       <div className="flex items-center justify-between mt-enterprise-3 pt-enterprise-3 border-t border-border">
         <div className="flex items-center space-x-enterprise-1">
-          <Button 
+          <DaisyButton 
             variant="ghost" 
             size="sm" 
             className="h-6 px-enterprise-2"
@@ -413,8 +413,8 @@ const ControlCard: React.FC<{
           >
             <Eye className="h-3 w-3 mr-enterprise-1" />
             View
-          </Button>
-          <Button 
+          </DaisyButton>
+          <DaisyButton 
             variant="ghost" 
             size="sm" 
             className="h-6 px-enterprise-2"
@@ -422,7 +422,7 @@ const ControlCard: React.FC<{
           >
             <Activity className="h-3 w-3 mr-enterprise-1" />
             Test
-          </Button>
+          </DaisyButton>
         </div>
         <span className="text-caption text-text-tertiary">
           Priority: {control.priority}
@@ -484,7 +484,7 @@ const ControlLibrary: React.FC = () => {
           {/* Search */}
           <div className="relative">
             <Search className="absolute left-enterprise-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-text-tertiary" />
-            <Input
+            <DaisyInput
               placeholder="Search controls..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -493,43 +493,43 @@ const ControlLibrary: React.FC = () => {
           </div>
 
           {/* Filters */}
-          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Category" />
+          <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory}>
+            <DaisySelectTrigger className="w-40">
+              <DaisySelectValue placeholder="Category" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="all">All Categories</SelectItem>
               {categories.map(category => (
-                <SelectItem key={category} value={category}>{category}</SelectItem>
+                <DaisySelectItem key={category} value={category}>{category}</SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </DaisySelect>
 
-          <Select value={selectedFramework} onValueChange={setSelectedFramework}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Framework" />
+          <DaisySelect value={selectedFramework} onValueChange={setSelectedFramework}>
+            <DaisySelectTrigger className="w-40">
+              <DaisySelectValue placeholder="Framework" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Frameworks</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="all">All Frameworks</SelectItem>
               {frameworks.map(framework => (
-                <SelectItem key={framework} value={framework}>{framework}</SelectItem>
+                <DaisySelectItem key={framework} value={framework}>{framework}</SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </DaisySelect>
 
-          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Status" />
+          <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus}>
+            <DaisySelectTrigger className="w-40">
+              <DaisySelectValue placeholder="Status" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="all">All Status</SelectItem>
               {statuses.map(status => (
-                <SelectItem key={status} value={status}>
+                <DaisySelectItem key={status} value={status}>
                   {status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </DaisySelect>
         </div>
       </div>
 
@@ -561,9 +561,9 @@ const ControlLibrary: React.FC = () => {
           <p className="text-body-base text-text-secondary mb-enterprise-4">
             Try adjusting your filters or search terms.
           </p>
-          <Button variant="outline">
+          <DaisyButton variant="outline">
             Clear Filters
-          </Button>
+          </DaisyButton>
         </div>
       )}
     </div>
@@ -685,24 +685,24 @@ export const ControlsManagementDashboard: React.FC = () => {
       maxWidth="2xl"
     >
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6">
-        <TabsList>
-          <TabsTrigger value="library">Control Library</TabsTrigger>
-          <TabsTrigger value="probo">
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6">
+        <DaisyTabsList>
+          <DaisyTabsTrigger value="library">Control Library</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="probo">
             <Shield className="h-4 w-4 mr-2" />
             Probo Controls
-          </TabsTrigger>
-          <TabsTrigger value="testing">Testing</TabsTrigger>
-          <TabsTrigger value="compliance">Compliance</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-        </TabsList>
-      </Tabs>
+          </DaisyTabsTrigger>
+          <DaisyTabsTrigger value="testing">Testing</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="analytics">Analytics</DaisyTabsTrigger>
+        </DaisyTabsList>
+      </DaisyTabs>
 
-      <TabsContent value="library">
+      <DaisyTabsContent value="library">
         <ControlLibrary />
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="probo" className="space-y-6">
+      <DaisyTabsContent value="probo" className="space-y-6">
         <div className="bg-gradient-to-r from-[#199BEC]/5 to-[#199BEC]/10 rounded-lg p-6 border border-[#199BEC]/20">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
@@ -758,7 +758,7 @@ export const ControlsManagementDashboard: React.FC = () => {
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
-                      <Badge 
+                      <DaisyBadge 
                         variant={
                           control.importance === 'MANDATORY' ? 'destructive' :
                           control.importance === 'PREFERRED' ? 'secondary' : 'outline'
@@ -766,10 +766,10 @@ export const ControlsManagementDashboard: React.FC = () => {
                         className="text-xs"
                       >
                         {control.importance}
-                      </Badge>
-                      <Badge variant="outline" className="text-xs">
+                      </DaisyBadge>
+                      <DaisyBadge variant="outline" className="text-xs">
                         {control.category}
-                      </Badge>
+                      </DaisyBadge>
                     </div>
                     <h4 className="font-semibold text-gray-900 mb-1">{control.name}</h4>
                     <p className="text-sm text-gray-600 line-clamp-2">
@@ -791,29 +791,29 @@ export const ControlsManagementDashboard: React.FC = () => {
                     <span>{control.measureCount || 0} measures</span>
                   </div>
                   <div className="flex space-x-2">
-                    <Button variant="outline" size="sm">
+                    <DaisyButton variant="outline" size="sm">
                       Implement
-                    </Button>
-                    <Button variant="ghost" size="sm">
+                    </DaisyButton>
+                    <DaisyButton variant="ghost" size="sm">
                       View Details
-                    </Button>
+                    </DaisyButton>
                   </div>
                 </div>
               </div>
             ))}
           </div>
         )}
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="testing">
+      <DaisyTabsContent value="testing">
         <ControlTestingWorkflow />
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="compliance">
+      <DaisyTabsContent value="compliance">
         <ComplianceMapping />
-      </TabsContent>
+      </DaisyTabsContent>
 
-      <TabsContent value="analytics">
+      <DaisyTabsContent value="analytics">
         <div className="text-center py-enterprise-12">
           <BarChart3 className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -823,7 +823,7 @@ export const ControlsManagementDashboard: React.FC = () => {
             Comprehensive controls metrics and trends.
           </p>
         </div>
-      </TabsContent>
+      </DaisyTabsContent>
 
       {/* Create Control Modal */}
       <CreateControlModal

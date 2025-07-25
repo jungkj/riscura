@@ -34,10 +34,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
 
 // Icons
 import {
@@ -403,9 +403,9 @@ export default function QuestionnairePage() {
 
     const config = statusConfig[status] || { color: 'bg-gray-100 text-gray-800', label: 'Unknown' };
     return (
-      <Badge variant="outline" className={config.color}>
+      <DaisyBadge variant="outline" className={config.color}>
         {config.label}
-      </Badge>
+      </DaisyBadge>
     );
   };
 
@@ -421,16 +421,16 @@ export default function QuestionnairePage() {
 
   if (error) {
     return (
-      <Card className="bg-white border border-gray-100 shadow-sm">
-        <CardContent className="p-6">
+      <DaisyCard className="bg-white border border-gray-100 shadow-sm">
+        <DaisyCardContent className="p-6">
           <div className="text-center text-red-600">
             <p>Error loading questionnaires: {error}</p>
-            <Button onClick={() => window.location.reload()} className="mt-2 bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a]">
+            <DaisyButton onClick={() => window.location.reload()} className="mt-2 bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a]">
               Retry
-            </Button>
+            </DaisyButton>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     );
   }
 
@@ -454,177 +454,177 @@ export default function QuestionnairePage() {
             Create and manage dynamic questionnaires with AI assistance
           </p>
         </div>
-        <Button onClick={handleCreateNew} className="bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] border-0 shadow-md hover:shadow-lg transition-all duration-300 font-inter font-medium">
+        <DaisyButton onClick={handleCreateNew} className="bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] border-0 shadow-md hover:shadow-lg transition-all duration-300 font-inter font-medium">
           <Plus className="mr-2 h-4 w-4" />
           Create Questionnaire
-        </Button>
+        </DaisyButton>
       </div>
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Total Questionnaires</CardTitle>
+        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
+          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <DaisyCardTitle className="text-sm font-medium text-gray-600">Total Questionnaires</DaisyCardTitle>
             <FileText className="h-4 w-4 text-gray-400" />
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
             <p className="text-xs text-gray-600">
               Across all statuses
             </p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Active</CardTitle>
+        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
+          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <DaisyCardTitle className="text-sm font-medium text-gray-600">Active</DaisyCardTitle>
             <CheckCircle className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className="text-2xl font-bold text-green-600">{stats.active}</div>
             <p className="text-xs text-gray-600">
               Currently collecting responses
             </p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Completion Rate</CardTitle>
+        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
+          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <DaisyCardTitle className="text-sm font-medium text-gray-600">Completion Rate</DaisyCardTitle>
             <TrendingUp className="h-4 w-4 text-[#191919]" />
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className={`text-2xl font-bold ${getCompletionColor(stats.averageCompletion)}`}>
               {(stats.averageCompletion * 100).toFixed(1)}%
             </div>
             <p className="text-xs text-gray-600">
               Average across all questionnaires
             </p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Total Responses</CardTitle>
+        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
+          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <DaisyCardTitle className="text-sm font-medium text-gray-600">Total Responses</DaisyCardTitle>
             <BarChart3 className="h-4 w-4 text-[#191919]" />
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className="text-2xl font-bold text-[#191919]">{stats.totalResponses}</div>
             <p className="text-xs text-gray-600">
               All-time responses collected
             </p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
 
       {/* Questionnaires Table */}
-      <Card className="bg-white border border-gray-100 shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-gray-900 font-inter">Questionnaires</CardTitle>
-          <CardDescription className="text-gray-600 font-inter">
+      <DaisyCard className="bg-white border border-gray-100 shadow-sm">
+        <DaisyCardHeader>
+          <DaisyCardTitle className="text-gray-900 font-inter">Questionnaires</DaisyCardTitle>
+          <DaisyCardDescription className="text-gray-600 font-inter">
             Manage your questionnaires and track completion rates
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="text-gray-700 font-medium">Title</TableHead>
-                <TableHead className="text-gray-700 font-medium">Status</TableHead>
-                <TableHead className="text-gray-700 font-medium">Category</TableHead>
-                <TableHead className="text-gray-700 font-medium">Created</TableHead>
-                <TableHead className="text-gray-700 font-medium">Completion</TableHead>
-                <TableHead className="text-gray-700 font-medium">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+          </p>
+        
+        <DaisyCardContent>
+          <DaisyTable>
+            <DaisyTableHeader>
+              <DaisyTableRow>
+                <DaisyTableHead className="text-gray-700 font-medium">Title</DaisyTableHead>
+                <DaisyTableHead className="text-gray-700 font-medium">Status</DaisyTableHead>
+                <DaisyTableHead className="text-gray-700 font-medium">Category</DaisyTableHead>
+                <DaisyTableHead className="text-gray-700 font-medium">Created</DaisyTableHead>
+                <DaisyTableHead className="text-gray-700 font-medium">Completion</DaisyTableHead>
+                <DaisyTableHead className="text-gray-700 font-medium">Actions</DaisyTableHead>
+              </DaisyTableRow>
+            </DaisyTableHeader>
+            <DaisyTableBody>
               {questionnaires.map((questionnaire) => (
-                <TableRow key={questionnaire.id} className="hover:bg-[#D8C3A5]/20">
-                  <TableCell>
+                <DaisyTableRow key={questionnaire.id} className="hover:bg-[#D8C3A5]/20">
+                  <DaisyTableCell>
                     <div>
                       <div className="font-medium text-gray-900">{questionnaire.title}</div>
                       <div className="text-sm text-gray-600">{questionnaire.description}</div>
                     </div>
-                  </TableCell>
-                  <TableCell>{getStatusBadge(questionnaire.status)}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className="bg-secondary/20 text-muted-foreground border-0">
+                  </DaisyTableCell>
+                  <DaisyTableCell>{getStatusBadge(questionnaire.status)}</DaisyTableCell>
+                  <DaisyTableCell>
+                    <DaisyBadge variant="outline" className="bg-secondary/20 text-muted-foreground border-0">
                       {questionnaire.category.replace('_', ' ')}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-gray-600">
+                    </DaisyBadge>
+                  </DaisyTableCell>
+                  <DaisyTableCell className="text-gray-600">
                     {formatDate(questionnaire.createdAt.toISOString())}
-                  </TableCell>
-                  <TableCell>
+                  </DaisyTableCell>
+                  <DaisyTableCell>
                     <div className="flex items-center space-x-2">
-                      <Progress value={questionnaire.analytics.overview.completionRate * 100} className="w-16 bg-secondary/20 border border-border h-2" />
+                      <DaisyProgress value={questionnaire.analytics.overview.completionRate * 100} className="w-16 bg-secondary/20 border border-border h-2" />
                       <span className="text-sm text-gray-600">{(questionnaire.analytics.overview.completionRate * 100).toFixed(0)}%</span>
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0 text-gray-600 hover:text-gray-900 hover:bg-[#D8C3A5]/20">
+                  </DaisyTableCell>
+                  <DaisyTableCell>
+                    <DaisyDropdownMenu>
+                      <DaisyDropdownMenuTrigger asChild>
+                        <DaisyButton variant="ghost" className="h-8 w-8 p-0 text-gray-600 hover:text-gray-900 hover:bg-[#D8C3A5]/20">
                           <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="bg-white border border-gray-100 shadow-lg">
-                        <DropdownMenuLabel className="text-gray-900">Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
+                        </DaisyButton>
+                      </DaisyDropdownMenuTrigger>
+                      <DaisyDropdownMenuContent align="end" className="bg-white border border-gray-100 shadow-lg">
+                        <DaisyDropdownMenuLabel className="text-gray-900">Actions</DaisyDropdownMenuLabel>
+                        <DaisyDropdownMenuItem
                           onClick={() => handleEdit(questionnaire)}
                           className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium"
                         >
                           <Edit className="mr-2 h-4 w-4" />
                           Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
+                        </DaisyDropdownMenuItem>
+                        <DaisyDropdownMenuItem
                           onClick={() => handleDuplicate(questionnaire)}
                           className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium"
                         >
                           <Copy className="mr-2 h-4 w-4" />
                           Duplicate
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
+                        </DaisyDropdownMenuItem>
+                        <DaisyDropdownMenuItem
                           onClick={() => handleDistribute(questionnaire)}
                           className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium"
                         >
                           <Send className="mr-2 h-4 w-4" />
                           Distribute
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
+                        </DaisyDropdownMenuItem>
+                        <DaisyDropdownMenuItem
                           onClick={() => handleViewAnalytics(questionnaire)}
                           className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium"
                         >
                           <BarChart3 className="mr-2 h-4 w-4" />
                           Analytics
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator className="bg-gray-100" />
-                        <DropdownMenuItem
+                        </DaisyDropdownMenuItem>
+                        <DaisyDropdownMenuSeparator className="bg-gray-100" />
+                        <DaisyDropdownMenuItem
                           onClick={() => handleDelete(questionnaire.id)}
                           className="text-red-600 hover:bg-red-50 font-inter font-medium"
                         >
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
+                        </DaisyDropdownMenuItem>
+                      </DaisyDropdownMenuContent>
+                    </DaisyDropdownMenu>
+                  </DaisyTableCell>
+                </DaisyTableRow>
               ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+            </DaisyTableBody>
+          </DaisyTable>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Analytics Dialog */}
-      <Dialog open={showAnalytics} onOpenChange={setShowAnalytics}>
-        <DialogContent className="max-w-4xl bg-white border border-gray-100 shadow-lg">
-          <DialogHeader>
-            <DialogTitle className="text-gray-900">Questionnaire Analytics</DialogTitle>
-            <DialogDescription className="text-gray-600">
+      <DaisyDialog open={showAnalytics} onOpenChange={setShowAnalytics}>
+        <DaisyDialogContent className="max-w-4xl bg-white border border-gray-100 shadow-lg">
+          <DaisyDialogHeader>
+            <DaisyDialogTitle className="text-gray-900">Questionnaire Analytics</DaisyDialogTitle>
+            <DaisyDialogDescription className="text-gray-600">
               {selectedQuestionnaire?.title} - Response analytics and insights
-            </DialogDescription>
-          </DialogHeader>
+            </DaisyDialogDescription>
+          </DaisyDialogHeader>
           {selectedQuestionnaire && (
             <div className="space-y-4">
               <div className="grid grid-cols-3 gap-4 text-center">
@@ -653,8 +653,8 @@ export default function QuestionnairePage() {
               </div>
             </div>
           )}
-        </DialogContent>
-      </Dialog>
+        </DaisyDialogContent>
+      </DaisyDialog>
     </div>
   );
 } 

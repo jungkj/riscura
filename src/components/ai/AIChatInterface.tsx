@@ -2,11 +2,11 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import {
   Bot,
   User,
@@ -272,7 +272,7 @@ const ChatMessageComponent: React.FC<{
         {message.actions && message.actions.length > 0 && !isThinking && (
           <div className="flex flex-wrap gap-enterprise-2">
             {message.actions.map((action) => (
-              <Button
+              <DaisyButton
                 key={action.id}
                 size="sm"
                 variant={action.type === 'primary' ? 'primary' : 'outline'}
@@ -283,7 +283,7 @@ const ChatMessageComponent: React.FC<{
                 onClick={() => onAction(action.action)}
               >
                 {action.label}
-              </Button>
+              </DaisyButton>
             ))}
           </div>
         )}
@@ -292,14 +292,14 @@ const ChatMessageComponent: React.FC<{
         {message.suggestions && message.suggestions.length > 0 && (
           <div className="flex flex-wrap gap-enterprise-1">
             {message.suggestions.map((suggestion, index) => (
-              <Badge
+              <DaisyBadge
                 key={index}
                 variant="outline"
                 className="text-caption cursor-pointer hover:bg-purple-50"
                 onClick={() => onAction(`suggestion_${index}`)}
               >
                 {suggestion}
-              </Badge>
+              </DaisyBadge>
             ))}
           </div>
         )}
@@ -309,15 +309,15 @@ const ChatMessageComponent: React.FC<{
           <div className="flex items-center justify-between text-caption text-text-tertiary">
             <span>{message.timestamp.toLocaleTimeString()}</span>
             <div className="flex items-center space-x-enterprise-1">
-              <Button variant="ghost" size="sm" className="h-4 w-4 p-0">
+              <DaisyButton variant="ghost" size="sm" className="h-4 w-4 p-0">
                 <ThumbsUp className="h-3 w-3" />
-              </Button>
-              <Button variant="ghost" size="sm" className="h-4 w-4 p-0">
+              </DaisyButton>
+              <DaisyButton variant="ghost" size="sm" className="h-4 w-4 p-0">
                 <ThumbsDown className="h-3 w-3" />
-              </Button>
-              <Button variant="ghost" size="sm" className="h-4 w-4 p-0">
+              </DaisyButton>
+              <DaisyButton variant="ghost" size="sm" className="h-4 w-4 p-0">
                 <Copy className="h-3 w-3" />
-              </Button>
+              </DaisyButton>
             </div>
           </div>
         )}
@@ -445,16 +445,16 @@ export const AIChatInterface: React.FC<{
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl h-[80vh] flex flex-col p-0">
-        <DialogHeader className="px-enterprise-4 py-enterprise-3 border-b border-border">
+    <DaisyDialog open={isOpen} onOpenChange={onClose}>
+      <DaisyDialogContent className="max-w-2xl h-[80vh] flex flex-col p-0">
+        <DaisyDialogHeader className="px-enterprise-4 py-enterprise-3 border-b border-border">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-enterprise-2">
               <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
                 <Brain className="h-4 w-4 text-purple-600" />
               </div>
               <div>
-                <DialogTitle className="text-body-base">AI Assistant</DialogTitle>
+                <DaisyDialogTitle className="text-body-base">AI Assistant</DaisyDialogTitle>
                 <p className="text-caption text-text-secondary">Risk & Compliance Intelligence</p>
               </div>
             </div>
@@ -463,10 +463,10 @@ export const AIChatInterface: React.FC<{
               <span className="text-caption text-text-secondary">Online</span>
             </div>
           </div>
-        </DialogHeader>
+        </DaisyDialogHeader>
 
         {/* Chat Messages */}
-        <ScrollArea ref={scrollAreaRef} className="flex-1 px-enterprise-4 py-enterprise-3">
+        <DaisyScrollArea ref={scrollAreaRef} className="flex-1 px-enterprise-4 py-enterprise-3">
           <div className="space-y-enterprise-4">
             {messages.map((message) => (
               <ChatMessageComponent
@@ -476,7 +476,7 @@ export const AIChatInterface: React.FC<{
               />
             ))}
           </div>
-        </ScrollArea>
+        </DaisyScrollArea>
 
         {/* Quick Suggestions */}
         {messages.length <= 2 && (
@@ -489,7 +489,7 @@ export const AIChatInterface: React.FC<{
               {aiSuggestions.map((suggestion) => {
                 const IconComponent = suggestion.icon;
                 return (
-                  <Button
+                  <DaisyButton
                     key={suggestion.id}
                     variant="outline"
                     size="sm"
@@ -498,7 +498,7 @@ export const AIChatInterface: React.FC<{
                   >
                     <IconComponent className="h-3 w-3 mr-enterprise-1" />
                     {suggestion.text}
-                  </Button>
+                  </DaisyButton>
                 );
               })}
             </div>
@@ -509,7 +509,7 @@ export const AIChatInterface: React.FC<{
         <div className="px-enterprise-4 py-enterprise-3 border-t border-border">
           <div className="flex items-center space-x-enterprise-2">
             <div className="flex-1 relative">
-              <Input
+              <DaisyInput
                 ref={inputRef}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
@@ -519,14 +519,14 @@ export const AIChatInterface: React.FC<{
                 disabled={isTyping}
               />
               {inputValue && (
-                <Button
+                <DaisyButton
                   size="sm"
                   className="absolute right-enterprise-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 bg-purple-600 hover:bg-purple-700"
                   onClick={() => handleSendMessage(inputValue)}
                   disabled={isTyping}
                 >
                   <Send className="h-3 w-3" />
-                </Button>
+                </DaisyButton>
               )}
             </div>
           </div>
@@ -538,8 +538,8 @@ export const AIChatInterface: React.FC<{
             </div>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </DaisyDialogContent>
+    </DaisyDialog>
   );
 };
 

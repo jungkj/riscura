@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { 
   Trophy,
   Star,
@@ -307,8 +307,8 @@ const AchievementNotification: React.FC<AchievementNotificationProps> = ({
 
   return (
     <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-right duration-300">
-      <Card className={`border-2 ${tierColors[achievement.tier]} shadow-lg max-w-sm`}>
-        <CardContent className="p-4">
+      <DaisyCard className={`border-2 ${tierColors[achievement.tier]} shadow-lg max-w-sm`}>
+        <DaisyCardContent className="p-4">
           <div className="flex items-start space-x-3">
             <div className="p-2 bg-white rounded-lg">
               <Icon className="w-6 h-6" />
@@ -321,25 +321,25 @@ const AchievementNotification: React.FC<AchievementNotificationProps> = ({
               <h4 className="font-medium text-gray-900">{achievement.title}</h4>
               <p className="text-sm text-gray-600">{achievement.description}</p>
               <div className="flex items-center space-x-2 mt-2">
-                <Badge variant="secondary" className="text-xs">
+                <DaisyBadge variant="secondary" className="text-xs">
                   +{achievement.points} points
-                </Badge>
-                <Badge variant="outline" className="text-xs capitalize">
+                </DaisyBadge>
+                <DaisyBadge variant="outline" className="text-xs capitalize">
                   {achievement.tier}
-                </Badge>
+                </DaisyBadge>
               </div>
             </div>
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={onClose}
               className="text-gray-400 hover:text-gray-600"
             >
               ×
-            </Button>
+            </DaisyButton>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </div>
   );
 };
@@ -488,14 +488,14 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
       )}
 
       {/* Progress overview */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center space-x-2">
             <Trophy className="w-5 h-5" />
             <span>Your Progress</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="text-3xl font-bold text-blue-600 mb-1">
@@ -503,7 +503,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
               </div>
               <p className="text-sm text-gray-600">Current Level</p>
               <div className="mt-2">
-                <Progress 
+                <DaisyProgress 
                   value={(userProgress.totalPoints % 100)} 
                   className="h-2" 
                 />
@@ -529,17 +529,17 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
               </p>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Achievement filters */}
-      <Card>
-        <CardContent className="p-4">
+      <DaisyCard>
+        <DaisyCardContent className="p-4">
           <div className="flex flex-wrap gap-2 mb-4">
             {categories.map(category => {
               const Icon = category.icon;
               return (
-                <Button
+                <DaisyButton
                   key={category.id}
                   variant={selectedCategory === category.id ? 'default' : 'outline'}
                   size="sm"
@@ -548,7 +548,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
                 >
                   <Icon className="w-4 h-4" />
                   <span>{category.name}</span>
-                </Button>
+                </DaisyButton>
               );
             })}
           </div>
@@ -563,8 +563,8 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
               <span>Show completed</span>
             </label>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Achievements grid */}
       <div className="space-y-6">
@@ -582,7 +582,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
                 const progressPercentage = (achievement.progress / achievement.requirements.target) * 100;
                 
                 return (
-                  <Card
+                  <DaisyCard
                     key={achievement.id}
                     className={`transition-all duration-200 ${
                       achievement.unlocked 
@@ -590,7 +590,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
                         : 'hover:shadow-md'
                     }`}
                   >
-                    <CardContent className="p-4">
+                    <DaisyCardContent className="p-4">
                       <div className="flex items-start space-x-3">
                         <div className={`p-2 rounded-lg ${
                           achievement.unlocked 
@@ -631,12 +631,12 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
                               <span className="text-gray-500">
                                 {achievement.progress} / {achievement.requirements.target}
                               </span>
-                              <Badge variant="outline" className="text-xs capitalize">
+                              <DaisyBadge variant="outline" className="text-xs capitalize">
                                 {achievement.tier}
-                              </Badge>
+                              </DaisyBadge>
                             </div>
                             
-                            <Progress value={progressPercentage} className="h-1" />
+                            <DaisyProgress value={progressPercentage} className="h-1" />
                             
                             <div className="flex items-center justify-between">
                               <span className="text-xs text-gray-500">
@@ -651,8 +651,8 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
                           </div>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </DaisyCardBody>
+                  </DaisyCard>
                 );
               })}
             </div>
@@ -661,30 +661,30 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
       </div>
 
       {/* Quick actions for testing */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Quick Actions (Demo)</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle>Quick Actions (Demo)</DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="flex flex-wrap gap-2">
-            <Button size="sm" onClick={() => trackAction('create_risk')}>
+            <DaisyButton size="sm" onClick={() => trackAction('create_risk')}>
               Create Risk
-            </Button>
-            <Button size="sm" onClick={() => trackAction('add_control')}>
+            </DaisyButton>
+            <DaisyButton size="sm" onClick={() => trackAction('add_control')}>
               Add Control
-            </Button>
-            <Button size="sm" onClick={() => trackAction('generate_report')}>
+            </DaisyButton>
+            <DaisyButton size="sm" onClick={() => trackAction('generate_report')}>
               Generate Report
-            </Button>
-            <Button size="sm" onClick={() => trackAction('ai_query')}>
+            </DaisyButton>
+            <DaisyButton size="sm" onClick={() => trackAction('ai_query')}>
               Ask AI
-            </Button>
-            <Button size="sm" onClick={() => trackAction('dashboard')}>
+            </DaisyButton>
+            <DaisyButton size="sm" onClick={() => trackAction('dashboard')}>
               Explore Dashboard
-            </Button>
+            </DaisyButton>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </div>
   );
 };

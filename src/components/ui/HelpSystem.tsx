@@ -51,7 +51,7 @@ interface TooltipProps {
   disabled?: boolean;
 }
 
-export const Tooltip: React.FC<TooltipProps> = ({
+export const Tooltip: React.FC<DaisyTooltipProps> = ({
   content,
   children,
   side = 'top',
@@ -352,32 +352,32 @@ const TourStepCard: React.FC<TourStepCardProps> = ({ step }) => {
   const progress = ((currentStepIndex + 1) / currentTour.steps.length) * 100;
 
   return (
-    <Card className="fixed z-50 max-w-sm w-full top-4 right-4 shadow-2xl">
-      <CardHeader className="pb-3">
+    <DaisyCard className="fixed z-50 max-w-sm w-full top-4 right-4 shadow-2xl">
+      <DaisyCardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Badge variant="secondary">
+            <DaisyBadge variant="secondary">
               Step {currentStepIndex + 1} of {currentTour.steps.length}
-            </Badge>
-            <Badge variant="outline">{currentTour.category}</Badge>
+            </DaisyBadge>
+            <DaisyBadge variant="outline">{currentTour.category}</DaisyBadge>
           </div>
           <div className="flex items-center gap-1">
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={pauseTour}
               className="h-8 w-8 p-0"
             >
               <Pause className="w-4 h-4" />
-            </Button>
-            <Button
+            </DaisyButton>
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={endTour}
               className="h-8 w-8 p-0"
             >
               <X className="w-4 h-4" />
-            </Button>
+            </DaisyButton>
           </div>
         </div>
         
@@ -389,17 +389,17 @@ const TourStepCard: React.FC<TourStepCardProps> = ({ step }) => {
           />
         </div>
         
-        <CardTitle className="text-lg">{step.title}</CardTitle>
-      </CardHeader>
+        <DaisyCardTitle className="text-lg">{step.title}</DaisyCardTitle>
       
-      <CardContent className="space-y-4">
+      
+      <DaisyCardContent className="space-y-4">
         <div className="text-sm text-muted-foreground">
           {step.content}
         </div>
         
         <div className="flex items-center justify-between">
           <div className="flex gap-2">
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={previousStep}
@@ -407,29 +407,29 @@ const TourStepCard: React.FC<TourStepCardProps> = ({ step }) => {
             >
               <ChevronLeft className="w-4 h-4 mr-1" />
               Back
-            </Button>
+            </DaisyButton>
             
             {step.optional && (
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={skipStep}
               >
                 Skip
-              </Button>
+              </DaisyButton>
             )}
           </div>
           
-          <Button
+          <DaisyButton
             size="sm"
             onClick={nextStep}
           >
             {isLastStep ? 'Finish' : 'Next'}
             {!isLastStep && <ChevronRight className="w-4 h-4 ml-1" />}
-          </Button>
+          </DaisyButton>
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 };
 
@@ -480,30 +480,30 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
   });
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="gap-2">
+    <DaisyDialog>
+      <DaisyDialogTrigger asChild>
+        <DaisyButton variant="ghost" size="sm" className="gap-2">
           <HelpCircle className="w-4 h-4" />
           Help
-        </Button>
-      </DialogTrigger>
+        </DaisyButton>
+      </DaisyDialogTrigger>
       
-      <DialogContent className="max-w-4xl max-h-[80vh]">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
+      <DaisyDialogContent className="max-w-4xl max-h-[80vh]">
+        <DaisyDialogHeader>
+          <DaisyDialogTitle className="flex items-center gap-2">
             <BookOpen className="w-5 h-5" />
             Help Center
-          </DialogTitle>
-          <DialogDescription>
+          </DaisyDialogTitle>
+          <DaisyDialogDescription>
             Find answers, tutorials, and guided tours to help you get the most out of Riscura
-          </DialogDescription>
-        </DialogHeader>
+          </DaisyDialogDescription>
+        </DaisyDialogHeader>
         
         <div className="space-y-4">
           {/* Search */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
+            <DaisyInput
               placeholder="Search help articles and tutorials..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -511,36 +511,36 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
             />
           </div>
           
-          <Tabs defaultValue="articles" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="articles">Articles</TabsTrigger>
-              <TabsTrigger value="tours">Guided Tours</TabsTrigger>
-              <TabsTrigger value="support">Support</TabsTrigger>
-            </TabsList>
+          <DaisyTabs defaultValue="articles" className="w-full">
+            <DaisyTabsList className="grid w-full grid-cols-3">
+              <DaisyTabsTrigger value="articles">Articles</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="tours">Guided Tours</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="support">Support</DaisyTabsTrigger>
+            </DaisyTabsList>
             
-            <TabsContent value="articles" className="space-y-4">
+            <DaisyTabsContent value="articles" className="space-y-4">
               <div className="flex gap-2 flex-wrap">
                 {categories.map(category => (
-                  <Button
+                  <DaisyButton
                     key={category}
                     variant={selectedCategory === category ? 'primary' : 'outline'}
                     size="sm"
                     onClick={() => setSelectedCategory(category)}
                   >
                     {category.charAt(0).toUpperCase() + category.slice(1)}
-                  </Button>
+                  </DaisyButton>
                 ))}
               </div>
               
-              <ScrollArea className="h-96">
+              <DaisyScrollArea className="h-96">
                 <div className="space-y-3">
                   {filteredArticles.map(article => (
-                    <Card
+                    <DaisyCard
                       key={article.id}
                       className="cursor-pointer hover:shadow-md transition-shadow"
                       onClick={() => setSelectedArticle(article)}
                     >
-                      <CardContent className="p-4">
+                      <DaisyCardContent className="p-4">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <h3 className="font-medium mb-1">{article.title}</h3>
@@ -548,9 +548,9 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
                               {article.content.substring(0, 150)}...
                             </p>
                             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                              <Badge variant="outline" className="text-xs">
+                              <DaisyBadge variant="outline" className="text-xs">
                                 {article.category}
-                              </Badge>
+                              </DaisyBadge>
                               <span>{article.readTime} min read</span>
                               <span>•</span>
                               <span>{article.difficulty}</span>
@@ -558,19 +558,19 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
                           </div>
                           <ArrowRight className="w-4 h-4 text-muted-foreground" />
                         </div>
-                      </CardContent>
-                    </Card>
+                      </DaisyCardBody>
+                    </DaisyCard>
                   ))}
                 </div>
-              </ScrollArea>
-            </TabsContent>
+              </DaisyScrollArea>
+            </DaisyTabsContent>
             
-            <TabsContent value="tours" className="space-y-4">
-              <ScrollArea className="h-96">
+            <DaisyTabsContent value="tours" className="space-y-4">
+              <DaisyScrollArea className="h-96">
                 <div className="space-y-3">
                   {filteredTours.map(tour => (
-                    <Card key={tour.id}>
-                      <CardContent className="p-4">
+                    <DaisyCard key={tour.id}>
+                      <DaisyCardContent className="p-4">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <h3 className="font-medium mb-1">{tour.title}</h3>
@@ -578,9 +578,9 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
                               {tour.description}
                             </p>
                             <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
-                              <Badge variant="outline" className="text-xs">
+                              <DaisyBadge variant="outline" className="text-xs">
                                 {tour.category}
-                              </Badge>
+                              </DaisyBadge>
                               <span>{tour.estimatedTime} min</span>
                               <span>•</span>
                               <span>{tour.difficulty}</span>
@@ -589,87 +589,87 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
                             </div>
                           </div>
                         </div>
-                        <Button
+                        <DaisyButton
                           size="sm"
                           onClick={() => onStartTour(tour)}
                           className="w-full"
                         >
                           <Play className="w-4 h-4 mr-2" />
                           Start Tour
-                        </Button>
-                      </CardContent>
-                    </Card>
+                        </DaisyButton>
+                      </DaisyCardBody>
+                    </DaisyCard>
                   ))}
                 </div>
-              </ScrollArea>
-            </TabsContent>
+              </DaisyScrollArea>
+            </DaisyTabsContent>
             
-            <TabsContent value="support" className="space-y-4">
+            <DaisyTabsContent value="support" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-base flex items-center gap-2">
+                <DaisyCard>
+                  <DaisyCardHeader>
+                    <DaisyCardTitle className="text-base flex items-center gap-2">
                       <MessageCircle className="w-4 h-4" />
                       Contact Support
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
+                    </DaisyCardTitle>
+                  
+                  <DaisyCardContent>
                     <p className="text-sm text-muted-foreground mb-3">
                       Get help from our support team
                     </p>
-                    <Button variant="outline" className="w-full">
+                    <DaisyButton variant="outline" className="w-full">
                       <ExternalLink className="w-4 h-4 mr-2" />
                       Open Support Ticket
-                    </Button>
-                  </CardContent>
-                </Card>
+                    </DaisyButton>
+                  </DaisyCardBody>
+                </DaisyCard>
                 
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-base flex items-center gap-2">
+                <DaisyCard>
+                  <DaisyCardHeader>
+                    <DaisyCardTitle className="text-base flex items-center gap-2">
                       <Video className="w-4 h-4" />
                       Video Tutorials
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
+                    </DaisyCardTitle>
+                  
+                  <DaisyCardContent>
                     <p className="text-sm text-muted-foreground mb-3">
                       Watch step-by-step video guides
                     </p>
-                    <Button variant="outline" className="w-full">
+                    <DaisyButton variant="outline" className="w-full">
                       <ExternalLink className="w-4 h-4 mr-2" />
                       View Tutorials
-                    </Button>
-                  </CardContent>
-                </Card>
+                    </DaisyButton>
+                  </DaisyCardBody>
+                </DaisyCard>
               </div>
-            </TabsContent>
-          </Tabs>
+            </DaisyTabsContent>
+          </DaisyTabs>
         </div>
         
         {/* Article Modal */}
         {selectedArticle && (
-          <Dialog open={!!selectedArticle} onOpenChange={() => setSelectedArticle(null)}>
-            <DialogContent className="max-w-2xl max-h-[80vh]">
-              <DialogHeader>
-                <DialogTitle>{selectedArticle.title}</DialogTitle>
+          <DaisyDialog open={!!selectedArticle} onOpenChange={() => setSelectedArticle(null)}>
+            <DaisyDialogContent className="max-w-2xl max-h-[80vh]">
+              <DaisyDialogHeader>
+                <DaisyDialogTitle>{selectedArticle.title}</DaisyDialogTitle>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Badge variant="outline">{selectedArticle.category}</Badge>
+                  <DaisyBadge variant="outline">{selectedArticle.category}</DaisyBadge>
                   <span>{selectedArticle.readTime} min read</span>
                   <span>•</span>
                   <span>Updated {selectedArticle.lastUpdated}</span>
                 </div>
-              </DialogHeader>
+              </DaisyDialogHeader>
               
-              <ScrollArea className="max-h-96">
+              <DaisyScrollArea className="max-h-96">
                 <div className="prose prose-sm max-w-none">
                   {selectedArticle.content}
                 </div>
-              </ScrollArea>
-            </DialogContent>
-          </Dialog>
+              </DaisyScrollArea>
+            </DaisyDialogContent>
+          </DaisyDialog>
         )}
-      </DialogContent>
-    </Dialog>
+      </DaisyDialogContent>
+    </DaisyDialog>
   );
 };
 
@@ -687,13 +687,13 @@ export const QuickHelp: React.FC<QuickHelpProps> = ({
 }) => {
   if (helpText) {
     return (
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button variant="ghost" size="sm" className={cn("h-6 w-6 p-0", className)}>
+      <DaisyPopover>
+        <DaisyPopoverTrigger asChild>
+          <DaisyButton variant="ghost" size="sm" className={cn("h-6 w-6 p-0", className)}>
             <HelpCircle className="w-4 h-4" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-80">
+          </DaisyButton>
+        </DaisyPopoverTrigger>
+        <DaisyPopoverContent className="w-80">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <Info className="w-4 h-4 text-blue-500" />
@@ -701,17 +701,17 @@ export const QuickHelp: React.FC<QuickHelpProps> = ({
             </div>
             <p className="text-sm text-muted-foreground">{helpText}</p>
           </div>
-        </PopoverContent>
-      </Popover>
+        </DaisyPopoverContent>
+      </DaisyPopover>
     );
   }
 
   return (
-    <Tooltip content={tooltip}>
-      <Button variant="ghost" size="sm" className={cn("h-6 w-6 p-0", className)}>
+    <DaisyTooltip content={tooltip}>
+      <DaisyButton variant="ghost" size="sm" className={cn("h-6 w-6 p-0", className)}>
         <HelpCircle className="w-4 h-4" />
-      </Button>
-    </Tooltip>
+      </DaisyButton>
+    </DaisyTooltip>
   );
 };
 

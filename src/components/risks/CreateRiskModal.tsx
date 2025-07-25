@@ -2,19 +2,19 @@
 
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Checkbox } from '@/components/ui/checkbox';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DatePicker } from '@/components/ui/date-picker';
-import { Slider } from '@/components/ui/slider';
-import { Separator } from '@/components/ui/separator';
+import { DaisySlider } from '@/components/ui/DaisySlider';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { AlertTriangle, Calendar, Shield, Target, Users, FileText, Loader2 } from 'lucide-react';
 
 interface CreateRiskModalProps {
@@ -203,31 +203,31 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
   const currentRiskLevel = getRiskLevel(currentRiskScore);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center space-x-2">
-            <AlertTriangle className="h-5 w-5 text-orange-600" />
+    <DaisyDialog open={open} onOpenChange={onOpenChange}>
+      <DaisyDialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DaisyDialogHeader>
+          <DaisyDialogTitle className="flex items-center space-x-2">
+            <DaisyAlertTriangle className="h-5 w-5 text-orange-600" />
             <span>Create New Risk</span>
-          </DialogTitle>
-          <DialogDescription>
+          </DaisyDialogTitle>
+          <DaisyDialogDescription>
             Define a new risk and its characteristics for assessment and management.
-          </DialogDescription>
-        </DialogHeader>
+          </DaisyDialogDescription>
+        </DaisyDialogHeader>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="basic">Basic Info</TabsTrigger>
-            <TabsTrigger value="assessment">Assessment</TabsTrigger>
-            <TabsTrigger value="compliance">Compliance</TabsTrigger>
-            <TabsTrigger value="additional">Additional</TabsTrigger>
-          </TabsList>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <DaisyTabsList className="grid w-full grid-cols-4">
+            <DaisyTabsTrigger value="basic">Basic Info</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="assessment">Assessment</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="additional">Additional</DaisyTabsTrigger>
+          </DaisyTabsList>
 
-          <TabsContent value="basic" className="space-y-4">
+          <DaisyTabsContent value="basic" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="title">Risk Title *</Label>
-                <Input
+                <DaisyLabel htmlFor="title">Risk Title *</DaisyLabel>
+                <DaisyInput
                   id="title"
                   placeholder="Enter risk title"
                   value={formData.title}
@@ -238,29 +238,29 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="category">Category *</Label>
-                <Select
+                <DaisyLabel htmlFor="category">Category *</DaisyLabel>
+                <DaisySelect
                   value={formData.category}
                   onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
                 >
-                  <SelectTrigger className={errors.category ? 'border-red-500' : ''}>
-                    <SelectValue placeholder="Select category" />
+                  <DaisySelectTrigger className={errors.category ? 'border-red-500' : ''}>
+                    <DaisySelectValue placeholder="Select category" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <DaisySelectContent>
                     {riskCategories.map((category) => (
-                      <SelectItem key={category} value={category}>
+                      <DaisySelectItem key={category} value={category}>
                         {category}
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </DaisySelect>
                 {errors.category && <p className="text-sm text-red-600">{errors.category}</p>}
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description *</Label>
-              <Textarea
+              <DaisyLabel htmlFor="description">Description *</DaisyLabel>
+              <DaisyTextarea
                 id="description"
                 placeholder="Describe the risk in detail"
                 value={formData.description}
@@ -273,8 +273,8 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="owner">Risk Owner *</Label>
-                <Input
+                <DaisyLabel htmlFor="owner">Risk Owner *</DaisyLabel>
+                <DaisyInput
                   id="owner"
                   placeholder="Enter risk owner name"
                   value={formData.owner}
@@ -285,7 +285,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="dueDate">Due Date *</Label>
+                <DaisyLabel htmlFor="dueDate">Due Date *</DaisyLabel>
                 <DatePicker
                   value={formData.dueDate}
                   onChange={(date) => setFormData(prev => ({ ...prev, dueDate: date }))}
@@ -295,24 +295,24 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 {errors.dueDate && <p className="text-sm text-red-600">{errors.dueDate}</p>}
               </div>
             </div>
-          </TabsContent>
+          </DaisyTabsContent>
 
-          <TabsContent value="assessment" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
+          <DaisyTabsContent value="assessment" className="space-y-6">
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle className="flex items-center space-x-2">
                   <Target className="h-5 w-5" />
                   <span>Risk Assessment</span>
-                </CardTitle>
-                <CardDescription>
+                </DaisyCardTitle>
+                <DaisyCardDescription>
                   Evaluate the likelihood and impact of this risk
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
+                </p>
+              
+              <DaisyCardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
-                    <Label>Likelihood: {formData.likelihood}</Label>
-                    <Slider
+                    <DaisyLabel>Likelihood: {formData.likelihood}</DaisyLabel>
+                    <DaisySlider
                       value={[formData.likelihood]}
                       onValueChange={([value]) => setFormData(prev => ({ ...prev, likelihood: value }))}
                       max={5}
@@ -327,8 +327,8 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                   </div>
 
                   <div className="space-y-4">
-                    <Label>Impact: {formData.impact}</Label>
-                    <Slider
+                    <DaisyLabel>Impact: {formData.impact}</DaisyLabel>
+                    <DaisySlider
                       value={[formData.impact]}
                       onValueChange={([value]) => setFormData(prev => ({ ...prev, impact: value }))}
                       max={5}
@@ -343,30 +343,30 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                   </div>
                 </div>
 
-                <Separator />
+                <DaisySeparator />
 
                 <div className="text-center">
                   <div className="inline-flex items-center space-x-4">
                     <div className="text-sm text-gray-600">Risk Score:</div>
                     <div className="text-2xl font-bold">{currentRiskScore}</div>
-                    <Badge className={`${currentRiskLevel.color} ${currentRiskLevel.bg}`}>
+                    <DaisyBadge className={`${currentRiskLevel.color} ${currentRiskLevel.bg}`}>
                       {currentRiskLevel.level.toUpperCase()}
-                    </Badge>
+                    </DaisyBadge>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Risk Treatment Strategy</Label>
-                  <Select
+                  <DaisyLabel>Risk Treatment Strategy</DaisyLabel>
+                  <DaisySelect
                     value={formData.treatment}
                     onValueChange={(value) => setFormData(prev => ({ ...prev, treatment: value }))}
                   >
-                    <SelectTrigger>
-                      <SelectValue />
+                    <DaisySelectTrigger>
+                      <DaisySelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <DaisySelectContent>
                       {treatmentOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
+                        <DaisySelectItem key={option.value} value={option.value}>
                           <div>
                             <div className="font-medium">{option.label}</div>
                             <div className="text-sm text-gray-500">{option.description}</div>
@@ -374,66 +374,66 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                         </SelectItem>
                       ))}
                     </SelectContent>
-                  </Select>
+                  </DaisySelect>
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+              </DaisyCardBody>
+            </DaisyCard>
+          </DaisyTabsContent>
 
-          <TabsContent value="compliance" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
+          <DaisyTabsContent value="compliance" className="space-y-4">
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle className="flex items-center space-x-2">
                   <Shield className="h-5 w-5" />
                   <span>Compliance Frameworks</span>
-                </CardTitle>
-                <CardDescription>
+                </DaisyCardTitle>
+                <DaisyCardDescription>
                   Select applicable compliance frameworks for this risk
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
+                </p>
+              
+              <DaisyCardContent>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {complianceFrameworks.map((framework) => (
                     <div key={framework} className="flex items-center space-x-2">
-                      <Checkbox
+                      <DaisyCheckbox
                         id={framework}
                         checked={formData.framework.includes(framework)}
                         onCheckedChange={() => handleFrameworkToggle(framework)}
                       />
-                      <Label htmlFor={framework} className="text-sm">
+                      <DaisyLabel htmlFor={framework} className="text-sm">
                         {framework}
-                      </Label>
+                      </DaisyLabel>
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+              </DaisyCardBody>
+            </DaisyCard>
+          </DaisyTabsContent>
 
-          <TabsContent value="additional" className="space-y-4">
+          <DaisyTabsContent value="additional" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="businessUnit">Business Unit</Label>
-                <Select
+                <DaisyLabel htmlFor="businessUnit">Business Unit</DaisyLabel>
+                <DaisySelect
                   value={formData.businessUnit}
                   onValueChange={(value) => setFormData(prev => ({ ...prev, businessUnit: value }))}
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select business unit" />
+                  <DaisySelectTrigger>
+                    <DaisySelectValue placeholder="Select business unit" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <DaisySelectContent>
                     {businessUnits.map((unit) => (
-                      <SelectItem key={unit} value={unit}>
+                      <DaisySelectItem key={unit} value={unit}>
                         {unit}
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </DaisySelect>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="department">Department</Label>
-                <Input
+                <DaisyLabel htmlFor="department">Department</DaisyLabel>
+                <DaisyInput
                   id="department"
                   placeholder="Enter department"
                   value={formData.department}
@@ -441,18 +441,18 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 />
               </div>
             </div>
-          </TabsContent>
-        </Tabs>
+          </DaisyTabsContent>
+        </DaisyTabs>
 
         <div className="flex justify-end space-x-2 pt-4 border-t">
-          <Button
+          <DaisyButton
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={isSubmitting}
           >
             Cancel
-          </Button>
-          <Button
+          </DaisyButton>
+          <DaisyButton
             onClick={handleSubmit}
             disabled={isSubmitting}
           >
@@ -464,9 +464,9 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
             ) : (
               'Create Risk'
             )}
-          </Button>
+          </DaisyButton>
         </div>
-      </DialogContent>
-    </Dialog>
+      </DaisyDialogContent>
+    </DaisyDialog>
   );
 }; 

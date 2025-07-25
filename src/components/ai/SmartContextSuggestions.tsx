@@ -11,11 +11,11 @@ import {
   X
 } from 'lucide-react';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { SmartContextSuggestion } from '@/services/ContextIntelligenceService';
 
 interface SmartContextSuggestionsProps {
@@ -104,7 +104,7 @@ const SuggestionCard: React.FC<{
           </div>
 
           {suggestion.quickAction && (
-            <Button
+            <DaisyButton
               size="sm"
               variant="ghost"
               onClick={handleApply}
@@ -112,18 +112,18 @@ const SuggestionCard: React.FC<{
               className="text-xs px-2"
             >
               {isApplying ? 'Applying...' : suggestion.quickAction.label}
-            </Button>
+            </DaisyButton>
           )}
 
           {onDismiss && (
-            <Button
+            <DaisyButton
               size="sm"
               variant="ghost"
               onClick={onDismiss}
               className="h-6 w-6 p-0"
             >
               <X className="h-3 w-3" />
-            </Button>
+            </DaisyButton>
           )}
         </div>
       </motion.div>
@@ -137,23 +137,23 @@ const SuggestionCard: React.FC<{
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.2 }}
     >
-      <Card className="group hover:shadow-md transition-all">
-        <CardHeader className="pb-3">
+      <DaisyCard className="group hover:shadow-md transition-all">
+        <DaisyCardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
               <div className={`p-2 rounded-lg ${colorClasses}`}>
                 <Icon className="h-5 w-5" />
               </div>
               <div>
-                <CardTitle className="text-base">{suggestion.title}</CardTitle>
+                <DaisyCardTitle className="text-base">{suggestion.title}</DaisyCardTitle>
                 <div className="flex items-center gap-2 mt-1">
-                  <Badge variant="secondary" className="text-xs">
+                  <DaisyBadge variant="secondary" className="text-xs">
                     {getTypeLabel(suggestion.type)}
-                  </Badge>
+                  </DaisyBadge>
                   {suggestion.actionRequired && (
-                    <Badge variant="destructive" className="text-xs">
+                    <DaisyBadge variant="error" className="text-xs">
                       Action Required
-                    </Badge>
+                    </DaisyBadge>
                   )}
                 </div>
               </div>
@@ -163,7 +163,7 @@ const SuggestionCard: React.FC<{
               <div className="text-right">
                 <div className="text-xs text-muted-foreground">Relevance</div>
                 <div className="flex items-center gap-1">
-                  <Progress 
+                  <DaisyProgress 
                     value={suggestion.relevanceScore * 100} 
                     className="h-1 w-12"
                   />
@@ -174,23 +174,23 @@ const SuggestionCard: React.FC<{
               </div>
 
               {onDismiss && (
-                <Button
+                <DaisyButton
                   size="sm"
                   variant="ghost"
                   onClick={onDismiss}
                   className="opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   <X className="h-4 w-4" />
-                </Button>
+                </DaisyButton>
               )}
             </div>
           </div>
-        </CardHeader>
+        
 
-        <CardContent>
-          <CardDescription className="mb-4">
+        <DaisyCardContent>
+          <DaisyCardDescription className="mb-4">
             {suggestion.description}
-          </CardDescription>
+          </p>
 
           {suggestion.quickAction && (
             <div className="flex items-center justify-between">
@@ -199,7 +199,7 @@ const SuggestionCard: React.FC<{
                 Quick Action Available
               </div>
               
-              <Button
+              <DaisyButton
                 onClick={handleApply}
                 disabled={isApplying}
                 size="sm"
@@ -213,11 +213,11 @@ const SuggestionCard: React.FC<{
                     <ChevronRight className="h-3 w-3 ml-1 group-hover:translate-x-0.5 transition-transform" />
                   </>
                 )}
-              </Button>
+              </DaisyButton>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </motion.div>
   );
 };
@@ -270,9 +270,9 @@ export const SmartContextSuggestions: React.FC<SmartContextSuggestionsProps> = (
         
         {visibleSuggestions.length > 5 && (
           <div className="text-center">
-            <Button variant="ghost" size="sm" className="text-xs">
+            <DaisyButton variant="ghost" size="sm" className="text-xs">
               +{visibleSuggestions.length - 5} more suggestions
-            </Button>
+            </DaisyButton>
           </div>
         )}
       </div>
@@ -284,7 +284,7 @@ export const SmartContextSuggestions: React.FC<SmartContextSuggestionsProps> = (
       {urgentSuggestions.length > 0 && (
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <AlertCircle className="h-4 w-4 text-red-500" />
+            <DaisyAlertCircle className="h-4 w-4 text-red-500" />
             <h3 className="text-sm font-semibold text-red-700 dark:text-red-400">
               Action Required ({urgentSuggestions.length})
             </h3>
@@ -307,7 +307,7 @@ export const SmartContextSuggestions: React.FC<SmartContextSuggestionsProps> = (
 
       {otherSuggestions.length > 0 && (
         <div>
-          {urgentSuggestions.length > 0 && <Separator />}
+          {urgentSuggestions.length > 0 && <DaisySeparator />}
           
           <div className="flex items-center gap-2 mb-4">
             <Lightbulb className="h-4 w-4 text-blue-500" />

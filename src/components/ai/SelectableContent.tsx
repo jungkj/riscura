@@ -36,7 +36,7 @@ interface SelectionHighlight {
   temporary?: boolean;
 }
 
-export const SelectableContent: React.FC<SelectableContentProps> = ({
+export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
   children,
   contentType,
   contentId,
@@ -53,7 +53,7 @@ export const SelectableContent: React.FC<SelectableContentProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [showToolbar, setShowToolbar] = useState(false);
   const [toolbarPosition, setToolbarPosition] = useState({ x: 0, y: 0 });
-  const [highlights, setHighlights] = useState<SelectionHighlight[]>([]);
+  const [highlights, setHighlights] = useState<DaisySelectionHighlight[]>([]);
   const [qualityScore, setQualityScore] = useState<number | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 

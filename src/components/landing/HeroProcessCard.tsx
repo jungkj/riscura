@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { 
   Upload, 
   Brain, 
@@ -66,8 +66,8 @@ const HeroProcessCard = () => {
   return (
     <div className="relative w-full max-w-4xl mx-auto">
       {/* Main Process Card */}
-      <Card className="bg-white/80 backdrop-blur-xl border border-gray-200/60 shadow-2xl overflow-hidden w-full">
-        <CardContent className="p-0">
+      <DaisyCard className="bg-white/80 backdrop-blur-xl border border-gray-200/60 shadow-2xl overflow-hidden w-full">
+        <DaisyCardContent className="p-0">
           {/* Header with Browser Chrome */}
           <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
             <div className="flex items-center justify-between">
@@ -184,7 +184,7 @@ const HeroProcessCard = () => {
                     <div className="bg-white/50 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-4">
                         <h4 className="font-medium text-gray-900 text-sm">Risk Assessment Results</h4>
-                        <Badge className="bg-green-100 text-green-800 text-xs">Complete</Badge>
+                        <DaisyBadge className="bg-green-100 text-green-800 text-xs">Complete</DaisyBadge>
                       </div>
                       <div className="grid grid-cols-3 gap-3">
                         {currentStepData.results?.map((result, index) => (
@@ -202,12 +202,12 @@ const HeroProcessCard = () => {
                               }`}></div>
                             </div>
                             <div className="text-xs text-gray-900 font-medium mb-2">{result.name}</div>
-                            <Badge 
+                            <DaisyBadge 
                               variant={result.level === 'high' ? 'destructive' : result.level === 'medium' ? 'secondary' : 'default'}
                               className="text-xs mb-1"
                             >
                               {result.level}
-                            </Badge>
+                            </DaisyBadge>
                             <div className="text-xs font-mono text-gray-600 mt-1">{result.score}</div>
                           </motion.div>
                         ))}
@@ -234,8 +234,8 @@ const HeroProcessCard = () => {
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </div>
   );
 };

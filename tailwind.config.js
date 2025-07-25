@@ -505,5 +505,42 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("daisyui"),
+  ],
+  daisyui: {
+    themes: [
+      {
+        riscura: {
+          "primary": "#3b82f6",
+          "secondary": "#10b981",
+          "accent": "#f59e0b",
+          "neutral": "#1f2937",
+          "base-100": "#ffffff",
+          "base-200": "#f3f4f6",
+          "base-300": "#e5e7eb",
+          "info": "#3b82f6",
+          "success": "#10b981",
+          "warning": "#f59e0b",
+          "error": "#ef4444",
+        },
+      },
+      {
+        riscuraDark: {
+          "primary": "#60a5fa",
+          "secondary": "#34d399",
+          "accent": "#fbbf24",
+          "neutral": "#e5e7eb",
+          "base-100": "#1f2937",
+          "base-200": "#111827",
+          "base-300": "#030712",
+          "info": "#60a5fa",
+          "success": "#34d399",
+          "warning": "#fbbf24",
+          "error": "#f87171",
+        },
+      },
+    ],
+  },
 }

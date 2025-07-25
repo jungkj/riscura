@@ -3,9 +3,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { cn } from '@/lib/utils';
 import { 
   getStatusColor, 
@@ -169,7 +169,7 @@ export const EnhancedMetricCard: React.FC<EnhancedMetricCardProps> = ({
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className={cn("relative group", className)}
     >
-      <Card 
+      <DaisyCard 
         className={cn(
           "relative overflow-hidden border transition-all duration-200",
           "hover:shadow-lg hover:shadow-black/10",
@@ -198,7 +198,7 @@ export const EnhancedMetricCard: React.FC<EnhancedMetricCardProps> = ({
         {/* Accent border */}
         <div className={cn("absolute top-0 left-0 right-0 h-1", styles.accent)} />
         
-        <CardContent className={cn("relative", spacingClasses.padding.lg)}>
+        <DaisyCardContent className={cn("relative", spacingClasses.padding.lg)}>
           {isLoading ? (
             <LoadingSkeleton />
           ) : (
@@ -209,12 +209,12 @@ export const EnhancedMetricCard: React.FC<EnhancedMetricCardProps> = ({
                     {title}
                   </p>
                   {badge && (
-                    <Badge 
+                    <DaisyBadge 
                       variant={badge.variant === 'danger' ? 'destructive' : badge.variant === 'success' ? 'default' : badge.variant === 'warning' ? 'secondary' : 'default'} 
                       className="text-xs font-medium"
                     >
                       {badge.text}
-                    </Badge>
+                    </DaisyBadge>
                   )}
                 </div>
                 
@@ -282,7 +282,7 @@ export const EnhancedMetricCard: React.FC<EnhancedMetricCardProps> = ({
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4 }}
                   >
-                    <Progress 
+                    <DaisyProgress 
                       value={(progress.value / progress.max) * 100} 
                       className="h-2 bg-slate-200"
                     />
@@ -295,11 +295,11 @@ export const EnhancedMetricCard: React.FC<EnhancedMetricCardProps> = ({
               </div>
             </>
           )}
-        </CardContent>
+        </DaisyCardBody>
 
         {/* Hover effect overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-white/0 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
-      </Card>
+      </DaisyCard>
     </motion.div>
   );
 }; 

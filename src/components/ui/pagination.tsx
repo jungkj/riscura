@@ -40,7 +40,7 @@ PaginationItem.displayName = 'PaginationItem';
 
 type PaginationLinkProps = {
   isActive?: boolean;
-} & Pick<ButtonProps, 'size'> &
+} & Pick<DaisyButtonProps, 'size'> &
   React.ComponentProps<'a'>;
 
 const PaginationLink = ({

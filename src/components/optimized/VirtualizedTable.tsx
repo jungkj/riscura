@@ -8,10 +8,10 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import { debounce } from 'lodash-es';
 import { cn } from '@/lib/utils';
 import { ChevronUp, ChevronDown, Search, Filter } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard } from '@/components/ui/DaisyCard';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -431,7 +431,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
   if (loading) {
     return (
       <div className={cn('border rounded-lg', className)} style={{ height }}>
-        <TableHeader />
+        <DaisyTableHeader />
         <div className="flex items-center justify-center h-full">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           <span className="ml-2">Loading...</span>
@@ -444,7 +444,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
   if (processedData.length === 0) {
     return (
       <div className={cn('border rounded-lg', className)} style={{ height }}>
-        <TableHeader />
+        <DaisyTableHeader />
         <div className="flex items-center justify-center h-full text-gray-500">
           No data available
         </div>
@@ -463,7 +463,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
 
   return (
     <div ref={containerRef} className={cn('border rounded-lg overflow-hidden', className)}>
-      <TableHeader />
+      <DaisyTableHeader />
       
       <div style={{ height: height - headerHeight }}>
         <AutoSizer>

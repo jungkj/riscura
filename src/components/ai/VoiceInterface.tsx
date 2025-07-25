@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Slider } from '@/components/ui/slider';
-import { Switch } from '@/components/ui/switch';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisySlider } from '@/components/ui/DaisySlider';
+import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { CommunicationIcons, StatusIcons, ActionIcons, NavigationIcons } from '@/components/icons/IconLibrary';
 
 // Voice interface configuration
@@ -283,44 +283,44 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
   if (!isSupported) {
     return (
-      <Card className={className}>
-        <CardContent className="p-4">
+      <DaisyCard className={className}>
+        <DaisyCardContent className="p-4">
           <div className="text-center text-gray-500">
             <StatusIcons.XCircle className="h-8 w-8 mx-auto mb-2" />
             <p>Voice interface is not supported in this browser</p>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     );
   }
 
   return (
-    <Card className={className}>
-      <CardHeader className="pb-3">
+    <DaisyCard className={className}>
+      <DaisyCardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold flex items-center space-x-2">
+          <DaisyCardTitle className="text-lg font-semibold flex items-center space-x-2">
             <CommunicationIcons.Bell className="h-5 w-5" />
             <span>Voice Interface</span>
-          </CardTitle>
+          </DaisyCardTitle>
           <div className="flex items-center space-x-2">
-            <Badge variant={isListening ? 'destructive' : 'secondary'}>
+            <DaisyBadge variant={isListening ? 'destructive' : 'secondary'}>
               {isListening ? 'Listening' : 'Ready'}
-            </Badge>
-            <Button
+            </DaisyBadge>
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={() => setIsExpanded(!isExpanded)}
             >
               <ActionIcons.Settings className="h-4 w-4" />
-            </Button>
+            </DaisyButton>
           </div>
         </div>
-      </CardHeader>
+      
 
-      <CardContent className="space-y-4">
+      <DaisyCardContent className="space-y-4">
         {/* Main controls */}
         <div className="flex items-center space-x-4">
-          <Button
+          <DaisyButton
             onClick={toggleListening}
             disabled={!isEnabled}
             variant={isListening ? 'destructive' : 'default'}
@@ -337,17 +337,17 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                 Start Listening
               </>
             )}
-          </Button>
+          </DaisyButton>
 
           {isSpeaking && (
-            <Button
+            <DaisyButton
               onClick={stopSpeaking}
               variant="outline"
               className="flex-1"
             >
               <StatusIcons.X className="h-4 w-4 mr-2" />
               Stop Speaking
-            </Button>
+            </DaisyButton>
           )}
         </div>
 
@@ -357,9 +357,9 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium">Transcript:</span>
               {confidence > 0 && (
-                <Badge variant="outline" className="text-xs">
+                <DaisyBadge variant="outline" className="text-xs">
                   {Math.round(confidence * 100)}% confident
-                </Badge>
+                </DaisyBadge>
               )}
             </div>
             <p className="text-sm text-gray-700">{currentTranscript}</p>
@@ -391,7 +391,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
               
               <div className="flex items-center justify-between">
                 <span className="text-sm">Continuous listening</span>
-                <Switch
+                <DaisySwitch
                   checked={settings.continuous}
                   onCheckedChange={(checked) => updateSetting('continuous', checked)}
                 />
@@ -399,7 +399,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
               <div className="flex items-center justify-between">
                 <span className="text-sm">Show interim results</span>
-                <Switch
+                <DaisySwitch
                   checked={settings.interimResults}
                   onCheckedChange={(checked) => updateSetting('interimResults', checked)}
                 />
@@ -407,7 +407,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
               <div className="flex items-center justify-between">
                 <span className="text-sm">Auto-send on confidence</span>
-                <Switch
+                <DaisySwitch
                   checked={settings.autoSend}
                   onCheckedChange={(checked) => updateSetting('autoSend', checked)}
                 />
@@ -418,7 +418,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                   <span className="text-sm">Confidence threshold</span>
                   <span className="text-sm text-gray-500">{Math.round(settings.threshold * 100)}%</span>
                 </div>
-                <Slider
+                <DaisySlider
                   value={[settings.threshold]}
                   onValueChange={([value]) => updateSetting('threshold', value)}
                   min={0.1}
@@ -455,7 +455,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                   <span className="text-sm">Speech rate</span>
                   <span className="text-sm text-gray-500">{settings.speechRate.toFixed(1)}x</span>
                 </div>
-                <Slider
+                <DaisySlider
                   value={[settings.speechRate]}
                   onValueChange={([value]) => updateSetting('speechRate', value)}
                   min={0.1}
@@ -470,7 +470,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                   <span className="text-sm">Pitch</span>
                   <span className="text-sm text-gray-500">{settings.speechPitch.toFixed(1)}</span>
                 </div>
-                <Slider
+                <DaisySlider
                   value={[settings.speechPitch]}
                   onValueChange={([value]) => updateSetting('speechPitch', value)}
                   min={0.1}
@@ -485,7 +485,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                   <span className="text-sm">Volume</span>
                   <span className="text-sm text-gray-500">{Math.round(settings.speechVolume * 100)}%</span>
                 </div>
-                <Slider
+                <DaisySlider
                   value={[settings.speechVolume]}
                   onValueChange={([value]) => updateSetting('speechVolume', value)}
                   min={0.0}
@@ -496,7 +496,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
               </div>
 
               {/* Test speech */}
-              <Button
+              <DaisyButton
                 onClick={() => speakText('Hello! This is a test of the voice interface.')}
                 variant="outline"
                 size="sm"
@@ -505,7 +505,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
               >
                 <CommunicationIcons.Volume className="h-4 w-4 mr-2" />
                 Test Voice
-              </Button>
+              </DaisyButton>
             </div>
           </div>
         )}
@@ -524,7 +524,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
           </div>
           <span>Voice AI Ready</span>
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 };

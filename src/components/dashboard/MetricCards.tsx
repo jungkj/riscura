@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { 
   Shield, 
   AlertTriangle, 
@@ -169,14 +169,14 @@ export default function MetricCards() {
         const trendColorClass = getTrendColor(metric.change.type, metric.id);
 
         return (
-          <Card 
+          <DaisyCard 
             key={metric.id}
             className={`border-0 shadow-sm hover:shadow-md transition-all duration-300 transform ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}
             style={{ transitionDelay: `${index * 100}ms` }}
           >
-            <CardContent className="p-6">
+            <DaisyCardBody className="p-6">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <p className="text-sm font-medium text-gray-600 mb-2">
@@ -199,8 +199,8 @@ export default function MetricCards() {
                   <IconComponent className={`w-6 h-6 ${metric.color}`} />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         );
       })}
     </div>

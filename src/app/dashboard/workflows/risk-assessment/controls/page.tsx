@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { useToast } from '@/hooks/use-toast';
 import { 
   ArrowLeft, 
@@ -111,7 +111,7 @@ export default function ReviewRiskControlsPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'implemented': return <CheckCircle2 className="h-4 w-4 text-green-600" />;
-      case 'partial': return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
+      case 'partial': return <DaisyAlertTriangle className="h-4 w-4 text-yellow-600" />;
       case 'not-implemented': return <XCircle className="h-4 w-4 text-red-600" />;
       case 'under-review': return <Clock className="h-4 w-4 text-blue-600" />;
       default: return null;
@@ -132,31 +132,31 @@ export default function ReviewRiskControlsPage() {
         <div className="p-6">
           {/* Header */}
           <div className="mb-6">
-            <Button
+            <DaisyButton
               variant="ghost"
               onClick={() => router.push('/dashboard/quick-actions')}
               className="mb-4"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Quick Actions
-            </Button>
+            </DaisyButton>
             
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Review Risk Controls</h1>
                 <p className="text-gray-600 mt-1">Evaluate effectiveness of current risk controls</p>
               </div>
-              <Badge variant="outline" className="text-sm">
+              <DaisyBadge variant="outline" className="text-sm">
                 <Clock className="h-4 w-4 mr-1" />
                 20-30 min
-              </Badge>
+              </DaisyBadge>
             </div>
           </div>
 
           {/* Stats Overview */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-            <Card>
-              <CardContent className="p-4">
+            <DaisyCard>
+              <DaisyCardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Total Controls</p>
@@ -164,11 +164,11 @@ export default function ReviewRiskControlsPage() {
                   </div>
                   <Shield className="h-8 w-8 text-gray-400" />
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
-            <Card>
-              <CardContent className="p-4">
+            <DaisyCard>
+              <DaisyCardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Implemented</p>
@@ -176,23 +176,23 @@ export default function ReviewRiskControlsPage() {
                   </div>
                   <CheckCircle2 className="h-8 w-8 text-green-400" />
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
-            <Card>
-              <CardContent className="p-4">
+            <DaisyCard>
+              <DaisyCardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Partial</p>
                     <p className="text-2xl font-bold text-yellow-600">{stats.partial}</p>
                   </div>
-                  <AlertTriangle className="h-8 w-8 text-yellow-400" />
+                  <DaisyAlertTriangle className="h-8 w-8 text-yellow-400" />
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
-            <Card>
-              <CardContent className="p-4">
+            <DaisyCard>
+              <DaisyCardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Not Implemented</p>
@@ -200,11 +200,11 @@ export default function ReviewRiskControlsPage() {
                   </div>
                   <XCircle className="h-8 w-8 text-red-400" />
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
-            <Card>
-              <CardContent className="p-4">
+            <DaisyCard>
+              <DaisyCardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Avg. Effectiveness</p>
@@ -212,23 +212,23 @@ export default function ReviewRiskControlsPage() {
                   </div>
                   <TrendingUp className="h-8 w-8 text-blue-400" />
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           </div>
 
           {/* Main Content */}
-          <Tabs defaultValue="controls" className="space-y-4">
-            <TabsList>
-              <TabsTrigger value="controls">All Controls</TabsTrigger>
-              <TabsTrigger value="effectiveness">Effectiveness Analysis</TabsTrigger>
-              <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
-            </TabsList>
+          <DaisyTabs defaultValue="controls" className="space-y-4">
+            <DaisyTabsList>
+              <DaisyTabsTrigger value="controls">All Controls</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="effectiveness">Effectiveness Analysis</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="recommendations">Recommendations</DaisyTabsTrigger>
+            </DaisyTabsList>
 
             {/* Controls Tab */}
-            <TabsContent value="controls">
+            <DaisyTabsContent value="controls">
               {/* Filters */}
-              <Card className="mb-4">
-                <CardContent className="p-4">
+              <DaisyCard className="mb-4">
+                <DaisyCardContent className="p-4">
                   <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
                       <Filter className="h-4 w-4 text-gray-500" />
@@ -259,25 +259,25 @@ export default function ReviewRiskControlsPage() {
                     </select>
 
                     <div className="ml-auto">
-                      <Button size="sm">
+                      <DaisyButton size="sm">
                         <Plus className="h-4 w-4 mr-2" />
                         Add Control
-                      </Button>
+                      </DaisyButton>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
 
               {/* Controls List */}
               {loading ? (
-                <Card>
-                  <CardContent className="p-12 text-center">
+                <DaisyCard>
+                  <DaisyCardContent className="p-12 text-center">
                     <p className="text-gray-500">Loading controls...</p>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               ) : filteredControls.length === 0 ? (
-                <Card>
-                  <CardContent className="p-12 text-center">
+                <DaisyCard>
+                  <DaisyCardContent className="p-12 text-center">
                     <Shield className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No controls found</h3>
                     <p className="text-gray-600">
@@ -285,13 +285,13 @@ export default function ReviewRiskControlsPage() {
                         ? 'Try adjusting your filters'
                         : 'Add your first control to get started'}
                     </p>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               ) : (
                 <div className="grid gap-4">
                   {filteredControls.map((control) => (
-                    <Card key={control.id} className="hover:shadow-md transition-shadow">
-                      <CardContent className="p-6">
+                    <DaisyCard key={control.id} className="hover:shadow-md transition-shadow">
+                      <DaisyCardContent className="p-6">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
@@ -299,12 +299,12 @@ export default function ReviewRiskControlsPage() {
                               <h3 className="text-lg font-semibold text-gray-900">
                                 {control.title}
                               </h3>
-                              <Badge className={getStatusColor(control.status)}>
+                              <DaisyBadge className={getStatusColor(control.status)}>
                                 {control.status.replace('-', ' ').toUpperCase()}
-                              </Badge>
-                              <Badge variant="outline">
+                              </DaisyBadge>
+                              <DaisyBadge variant="outline">
                                 {control.framework}
-                              </Badge>
+                              </DaisyBadge>
                             </div>
                             
                             <p className="text-gray-600 mb-4">{control.description}</p>
@@ -313,7 +313,7 @@ export default function ReviewRiskControlsPage() {
                               <div>
                                 <p className="text-sm text-gray-500">Effectiveness</p>
                                 <div className="flex items-center gap-2 mt-1">
-                                  <Progress value={control.effectiveness} className="h-2 flex-1" />
+                                  <DaisyProgress value={control.effectiveness} className="h-2 flex-1" />
                                   <span className="text-sm font-medium">{control.effectiveness}%</span>
                                 </div>
                               </div>
@@ -335,24 +335,24 @@ export default function ReviewRiskControlsPage() {
                             </div>
                           </div>
                           
-                          <Button variant="outline" size="sm" className="ml-4">
+                          <DaisyButton variant="outline" size="sm" className="ml-4">
                             Review
-                          </Button>
+                          </DaisyButton>
                         </div>
-                      </CardContent>
-                    </Card>
+                      </DaisyCardBody>
+                    </DaisyCard>
                   ))}
                 </div>
               )}
-            </TabsContent>
+            </DaisyTabsContent>
 
             {/* Effectiveness Analysis Tab */}
-            <TabsContent value="effectiveness">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Control Effectiveness Overview</CardTitle>
-                </CardHeader>
-                <CardContent>
+            <DaisyTabsContent value="effectiveness">
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle>Control Effectiveness Overview</DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <div className="space-y-6">
                     <div>
                       <h4 className="text-sm font-medium text-gray-700 mb-3">Effectiveness by Category</h4>
@@ -367,7 +367,7 @@ export default function ReviewRiskControlsPage() {
                             <div key={category} className="flex items-center gap-4">
                               <div className="w-32 text-sm font-medium">{category}</div>
                               <div className="flex-1">
-                                <Progress value={avgEffectiveness} className="h-3" />
+                                <DaisyProgress value={avgEffectiveness} className="h-3" />
                               </div>
                               <div className="w-16 text-sm text-right">{avgEffectiveness}%</div>
                             </div>
@@ -386,7 +386,7 @@ export default function ReviewRiskControlsPage() {
                           </p>
                         </div>
                         <div className="flex items-start gap-2">
-                          <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                          <DaisyAlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
                           <p className="text-sm text-gray-600">
                             {stats.partial} controls require additional work for full implementation
                           </p>
@@ -400,17 +400,17 @@ export default function ReviewRiskControlsPage() {
                       </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
+                </DaisyCardBody>
+              </DaisyCard>
+            </DaisyTabsContent>
 
             {/* Recommendations Tab */}
-            <TabsContent value="recommendations">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Control Improvement Recommendations</CardTitle>
-                </CardHeader>
-                <CardContent>
+            <DaisyTabsContent value="recommendations">
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle>Control Improvement Recommendations</DaisyCardTitle>
+                
+                <DaisyCardContent>
                   <div className="space-y-4">
                     <div className="p-4 bg-red-50 rounded-lg">
                       <h4 className="font-medium text-red-900 mb-2">Critical Priority</h4>
@@ -438,20 +438,20 @@ export default function ReviewRiskControlsPage() {
                     </div>
 
                     <div className="flex justify-end gap-3 mt-6">
-                      <Button variant="outline">
+                      <DaisyButton variant="outline">
                         <FileText className="h-4 w-4 mr-2" />
                         Export Report
-                      </Button>
-                      <Button>
+                      </DaisyButton>
+                      <DaisyButton>
                         <BarChart3 className="h-4 w-4 mr-2" />
                         Create Action Plan
-                      </Button>
+                      </DaisyButton>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+                </DaisyCardBody>
+              </DaisyCard>
+            </DaisyTabsContent>
+          </DaisyTabs>
         </div>
       </div>
     </ProtectedRoute>

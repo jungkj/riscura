@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { 
   ArrowLeft,
   Save,
@@ -97,28 +97,28 @@ export default function EditAssessmentPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <Button
+          <DaisyButton
             variant="outline"
             onClick={handleCancel}
             className="flex items-center gap-2"
           >
             <ArrowLeft className="w-4 h-4" />
             Cancel
-          </Button>
+          </DaisyButton>
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Edit Assessment</h1>
             <p className="text-gray-600">Assessment ID: {assessmentId}</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" onClick={handleCancel}>
+          <DaisyButton variant="outline" onClick={handleCancel}>
             <X className="w-4 h-4 mr-2" />
             Cancel
-          </Button>
-          <Button onClick={handleSave} disabled={isLoading}>
+          </DaisyButton>
+          <DaisyButton onClick={handleSave} disabled={isLoading}>
             <Save className="w-4 h-4 mr-2" />
             {isLoading ? 'Saving...' : 'Save Changes'}
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
@@ -126,14 +126,14 @@ export default function EditAssessmentPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Form */}
         <div className="lg:col-span-2 space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Basic Information</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle>Basic Information</DaisyCardTitle>
+            
+            <DaisyCardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="title">Assessment Title</Label>
-                <Input
+                <DaisyLabel htmlFor="title">Assessment Title</DaisyLabel>
+                <DaisyInput
                   id="title"
                   value={formData.title}
                   onChange={(e) => handleInputChange('title', e.target.value)}
@@ -142,8 +142,8 @@ export default function EditAssessmentPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
-                <Textarea
+                <DaisyLabel htmlFor="description">Description</DaisyLabel>
+                <DaisyTextarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => handleInputChange('description', e.target.value)}
@@ -154,64 +154,64 @@ export default function EditAssessmentPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="status">Status</Label>
-                  <Select
+                  <DaisyLabel htmlFor="status">Status</DaisyLabel>
+                  <DaisySelect
                     value={formData.status}
                     onValueChange={(value) => handleInputChange('status', value)}
                   >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select status" />
+                    <DaisySelectTrigger>
+                      <DaisySelectValue placeholder="Select status" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Pending">Pending</SelectItem>
-                      <SelectItem value="In Progress">In Progress</SelectItem>
-                      <SelectItem value="Completed">Completed</SelectItem>
-                      <SelectItem value="On Hold">On Hold</SelectItem>
+                    <DaisySelectContent>
+                      <DaisySelectItem value="Pending">Pending</SelectItem>
+                      <DaisySelectItem value="In Progress">In Progress</SelectItem>
+                      <DaisySelectItem value="Completed">Completed</SelectItem>
+                      <DaisySelectItem value="On Hold">On Hold</SelectItem>
                     </SelectContent>
-                  </Select>
+                  </DaisySelect>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="priority">Priority</Label>
-                  <Select
+                  <DaisyLabel htmlFor="priority">Priority</DaisyLabel>
+                  <DaisySelect
                     value={formData.priority}
                     onValueChange={(value) => handleInputChange('priority', value)}
                   >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select priority" />
+                    <DaisySelectTrigger>
+                      <DaisySelectValue placeholder="Select priority" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Low">Low</SelectItem>
-                      <SelectItem value="Medium">Medium</SelectItem>
-                      <SelectItem value="High">High</SelectItem>
-                      <SelectItem value="Critical">Critical</SelectItem>
+                    <DaisySelectContent>
+                      <DaisySelectItem value="Low">Low</SelectItem>
+                      <DaisySelectItem value="Medium">Medium</SelectItem>
+                      <DaisySelectItem value="High">High</SelectItem>
+                      <DaisySelectItem value="Critical">Critical</SelectItem>
                     </SelectContent>
-                  </Select>
+                  </DaisySelect>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="assignee">Assignee</Label>
-                  <Select
+                  <DaisyLabel htmlFor="assignee">Assignee</DaisyLabel>
+                  <DaisySelect
                     value={formData.assignee}
                     onValueChange={(value) => handleInputChange('assignee', value)}
                   >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select assignee" />
+                    <DaisySelectTrigger>
+                      <DaisySelectValue placeholder="Select assignee" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Security Team">Security Team</SelectItem>
-                      <SelectItem value="Risk Team">Risk Team</SelectItem>
-                      <SelectItem value="Compliance Team">Compliance Team</SelectItem>
-                      <SelectItem value="IT Team">IT Team</SelectItem>
+                    <DaisySelectContent>
+                      <DaisySelectItem value="Security Team">Security Team</SelectItem>
+                      <DaisySelectItem value="Risk Team">Risk Team</SelectItem>
+                      <DaisySelectItem value="Compliance Team">Compliance Team</SelectItem>
+                      <DaisySelectItem value="IT Team">IT Team</SelectItem>
                     </SelectContent>
-                  </Select>
+                  </DaisySelect>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="dueDate">Due Date</Label>
-                  <Input
+                  <DaisyLabel htmlFor="dueDate">Due Date</DaisyLabel>
+                  <DaisyInput
                     id="dueDate"
                     type="date"
                     value={formData.dueDate}
@@ -219,110 +219,110 @@ export default function EditAssessmentPage() {
                   />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
           {/* Objectives */}
-          <Card>
-            <CardHeader>
+          <DaisyCard>
+            <DaisyCardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>Assessment Objectives</CardTitle>
-                <Button onClick={addObjective} size="sm" variant="outline">
+                <DaisyCardTitle>Assessment Objectives</DaisyCardTitle>
+                <DaisyButton onClick={addObjective} size="sm" variant="outline">
                   <Plus className="h-4 w-4 mr-2" />
                   Add Objective
-                </Button>
+                </DaisyButton>
               </div>
-            </CardHeader>
-            <CardContent className="space-y-3">
+            
+            <DaisyCardContent className="space-y-3">
               {formData.objectives.map((objective, index) => (
                 <div key={index} className="flex items-center space-x-2">
                   <Target className="h-4 w-4 text-blue-600 flex-shrink-0" />
-                  <Input
+                  <DaisyInput
                     value={objective}
                     onChange={(e) => handleObjectiveChange(index, e.target.value)}
                     placeholder="Enter objective"
                     className="flex-1"
                   />
                   {formData.objectives.length > 1 && (
-                    <Button
+                    <DaisyButton
                       onClick={() => removeObjective(index)}
                       size="sm"
                       variant="ghost"
                       className="text-red-600 hover:text-red-700 hover:bg-red-50"
                     >
                       <Trash2 className="h-4 w-4" />
-                    </Button>
+                    </DaisyButton>
                   )}
                 </div>
               ))}
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Assessment Status</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle>Assessment Status</DaisyCardTitle>
+            
+            <DaisyCardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Current Status</span>
-                <Badge className={
+                <DaisyBadge className={
                   formData.status === 'Completed' ? 'bg-green-100 text-green-800 border-green-200' :
                   formData.status === 'In Progress' ? 'bg-blue-100 text-blue-800 border-blue-200' :
                   formData.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
                   'bg-gray-100 text-gray-800 border-gray-200'
                 }>
                   {formData.status}
-                </Badge>
+                </DaisyBadge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Priority</span>
-                <Badge className={
+                <DaisyBadge className={
                   formData.priority === 'High' || formData.priority === 'Critical' ? 'bg-red-100 text-red-800 border-red-200' :
                   formData.priority === 'Medium' ? 'bg-orange-100 text-orange-800 border-orange-200' :
                   'bg-green-100 text-green-800 border-green-200'
                 }>
                   {formData.priority}
-                </Badge>
+                </DaisyBadge>
               </div>
               <div className="flex items-center space-x-2 text-sm">
                 <Users className="h-4 w-4 text-gray-500" />
                 <span>{formData.assignee}</span>
               </div>
               <div className="flex items-center space-x-2 text-sm">
-                <Calendar className="h-4 w-4 text-gray-500" />
+                <DaisyCalendar className="h-4 w-4 text-gray-500" />
                 <span>Due: {formData.dueDate}</span>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <Button variant="outline" className="w-full justify-start">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle>Quick Actions</DaisyCardTitle>
+            
+            <DaisyCardContent className="space-y-2">
+              <DaisyButton variant="outline" className="w-full justify-start">
                 <Target className="h-4 w-4 mr-2" />
                 View Assessment Details
-              </Button>
-              <Button variant="outline" className="w-full justify-start">
+              </DaisyButton>
+              <DaisyButton variant="outline" className="w-full justify-start">
                 <Users className="h-4 w-4 mr-2" />
                 Assign Team Members
-              </Button>
-              <Button variant="outline" className="w-full justify-start">
-                <Calendar className="h-4 w-4 mr-2" />
+              </DaisyButton>
+              <DaisyButton variant="outline" className="w-full justify-start">
+                <DaisyCalendar className="h-4 w-4 mr-2" />
                 Schedule Review
-              </Button>
-            </CardContent>
-          </Card>
+              </DaisyButton>
+            </DaisyCardBody>
+          </DaisyCard>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Assessment Progress</CardTitle>
-            </CardHeader>
-            <CardContent>
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle>Assessment Progress</DaisyCardTitle>
+            
+            <DaisyCardContent>
               <div className="text-center space-y-2">
                 <div className="text-2xl font-bold text-gray-900">65%</div>
                 <p className="text-sm text-gray-600">Completion Progress</p>
@@ -330,8 +330,8 @@ export default function EditAssessmentPage() {
                   <div className="bg-blue-600 h-2 rounded-full" style={{ width: '65%' }}></div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </div>
       </div>
     </div>

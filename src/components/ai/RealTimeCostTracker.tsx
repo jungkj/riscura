@@ -9,11 +9,11 @@ import {
   Maximize2,
   Minimize2
 } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
 import { useAI } from '@/context/AIContext';
 
 interface RealTimeCostTrackerProps {
@@ -84,19 +84,19 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
 
   if (!isVisible) {
     return (
-      <Button
+      <DaisyButton
         variant="outline"
         size="sm"
         className={getPositionClasses()}
         onClick={() => setIsVisible(true)}
       >
         <Eye className="h-4 w-4" />
-      </Button>
+      </DaisyButton>
     );
   }
 
   return (
-    <TooltipProvider>
+    <DaisyTooltipProvider>
       <motion.div
         className={getPositionClasses()}
         initial={{ opacity: 0, scale: 0.9 }}
@@ -107,8 +107,8 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
         }}
         transition={{ duration: 0.2 }}
       >
-        <Card className={`shadow-lg border-2 ${isNearLimit ? 'border-orange-200' : 'border-gray-200'} min-w-[280px]`}>
-          <CardContent className="p-3">
+        <DaisyCard className={`shadow-lg border-2 ${isNearLimit ? 'border-orange-200' : 'border-gray-200'} min-w-[280px]`}>
+          <DaisyCardContent className="p-3">
             {/* Header */}
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center space-x-2">
@@ -117,15 +117,15 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                 </div>
                 <span className="text-sm font-medium">Usage Tracker</span>
                 {hasActiveAlerts && (
-                  <Badge variant="destructive" className="text-xs">
+                  <DaisyBadge variant="error" className="text-xs">
                     {usageAlerts.length}
-                  </Badge>
+                  </DaisyBadge>
                 )}
               </div>
               <div className="flex items-center space-x-1">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
+                <DaisyTooltip>
+                  <DaisyTooltipTrigger asChild>
+                    <DaisyButton
                       variant="ghost"
                       size="sm"
                       className="h-6 w-6 p-0"
@@ -135,27 +135,27 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                         <Minimize2 className="h-3 w-3" /> : 
                         <Maximize2 className="h-3 w-3" />
                       }
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
+                    </DaisyButton>
+                  </DaisyTooltipTrigger>
+                  <DaisyTooltipContent>
                     {isExpanded ? 'Minimize' : 'Expand'}
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
+                  </DaisyTooltipContent>
+                </DaisyTooltip>
+                <DaisyTooltip>
+                  <DaisyTooltipTrigger asChild>
+                    <DaisyButton
                       variant="ghost"
                       size="sm"
                       className="h-6 w-6 p-0"
                       onClick={() => setIsVisible(false)}
                     >
                       <EyeOff className="h-3 w-3" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
+                    </DaisyButton>
+                  </DaisyTooltipTrigger>
+                  <DaisyTooltipContent>
                     Hide tracker
-                  </TooltipContent>
-                </Tooltip>
+                  </DaisyTooltipContent>
+                </DaisyTooltip>
               </div>
             </div>
 
@@ -190,7 +190,7 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                         {dailyPercentage.toFixed(1)}%
                       </span>
                     </div>
-                    <Progress 
+                    <DaisyProgress 
                       value={Math.min(dailyPercentage, 100)} 
                       className="h-1"
                     />
@@ -257,7 +257,7 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                           key={alert.id}
                           className="flex items-center space-x-2 p-2 bg-orange-50 rounded text-xs"
                         >
-                          <AlertTriangle className="h-3 w-3 text-orange-500" />
+                          <DaisyAlertTriangle className="h-3 w-3 text-orange-500" />
                           <span className="flex-1 text-orange-700">{alert.message}</span>
                         </div>
                       ))}
@@ -268,7 +268,7 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                   {!quotaCheck.allowed && (
                     <div className="p-2 bg-red-50 rounded text-xs">
                       <div className="flex items-center space-x-2 text-red-700">
-                        <AlertTriangle className="h-3 w-3" />
+                        <DaisyAlertTriangle className="h-3 w-3" />
                         <span>{quotaCheck.reason}</span>
                       </div>
                     </div>
@@ -276,14 +276,14 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
 
                   {/* View Details Button */}
                   {onViewDetails && (
-                    <Button
+                    <DaisyButton
                       variant="outline"
                       size="sm"
                       className="w-full text-xs"
                       onClick={onViewDetails}
                     >
                       View Detailed Analytics
-                    </Button>
+                    </DaisyButton>
                   )}
                 </motion.div>
               )}
@@ -306,10 +306,10 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                 </div>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </motion.div>
-    </TooltipProvider>
+    
   );
 };
 

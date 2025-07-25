@@ -363,7 +363,7 @@ const MetricCard: React.FC<{ metric: MetricData; index: number }> = ({ metric, i
             <span className="text-xs text-text-secondary">vs last month</span>
           </div>
 
-          <ProgressBar
+          <DaisyProgressBar
             progress={(metric.value / metric.target) * 100}
             color={metric.color}
             className="h-2"
@@ -408,7 +408,7 @@ const RiskItem: React.FC<{ risk: Risk; index: number }> = ({ risk, index }) => {
             width={60}
             height={40}
             className="rounded flex-shrink-0"
-            placeholder={<SkeletonLoader variant="rectangular" width={60} height={40} />}
+            placeholder={<DaisySkeletonLoader variant="rectangular" width={60} height={40} />}
           />
         )}
         
@@ -442,7 +442,7 @@ const RiskItem: React.FC<{ risk: Risk; index: number }> = ({ risk, index }) => {
             </div>
             
             <div className="flex items-center gap-2">
-              <ProgressBar
+              <DaisyProgressBar
                 progress={risk.progress}
                 className="w-16 h-1"
                 color={risk.progress > 75 ? 'success' : risk.progress > 50 ? 'warning' : 'error'}
@@ -633,7 +633,7 @@ const EnhancedRiskDashboard: React.FC = () => {
             {isLoading ? (
               <div className="p-6 space-y-4">
                 {Array.from({ length: 5 }).map((_, index) => (
-                  <SkeletonLoader key={index} variant="card" height={120} />
+                  <DaisySkeletonLoader key={index} variant="card" height={120} />
                 ))}
               </div>
             ) : filteredRisks.length === 0 ? (

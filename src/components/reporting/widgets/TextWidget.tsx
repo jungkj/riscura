@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Copy, Trash2 } from 'lucide-react';
 import { ReportWidget } from '@/lib/reporting/engine';
 
@@ -26,14 +26,14 @@ export function TextWidget({
   const content = widget.dataSource.source || 'Click to edit text content...';
 
   return (
-    <Card 
+    <DaisyCard 
       className={`h-full ${isSelected ? 'ring-2 ring-blue-500' : ''} cursor-pointer`}
       onClick={onSelect}
     >
-      <CardHeader className="pb-2 flex flex-row items-center justify-between">
-        <CardTitle className="text-sm font-medium">{widget.title}</CardTitle>
+      <DaisyCardHeader className="pb-2 flex flex-row items-center justify-between">
+        <DaisyCardTitle className="text-sm font-medium">{widget.title}</DaisyCardTitle>
         <div className="flex items-center space-x-1">
-          <Button
+          <DaisyButton
             variant="ghost"
             size="sm"
             onClick={(e) => {
@@ -42,8 +42,8 @@ export function TextWidget({
             }}
           >
             <Copy className="w-3 h-3" />
-          </Button>
-          <Button
+          </DaisyButton>
+          <DaisyButton
             variant="ghost"
             size="sm"
             onClick={(e) => {
@@ -52,14 +52,14 @@ export function TextWidget({
             }}
           >
             <Trash2 className="w-3 h-3" />
-          </Button>
+          </DaisyButton>
         </div>
-      </CardHeader>
-      <CardContent className="pt-0">
+      
+      <DaisyCardContent className="pt-0">
         <div className="text-sm text-gray-700 whitespace-pre-wrap">
           {content}
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 } 

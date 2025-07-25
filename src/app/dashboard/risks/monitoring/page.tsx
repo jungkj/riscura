@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { 
   Activity, 
   AlertTriangle, 
@@ -149,22 +149,22 @@ export default function RiskMonitoringPage() {
           <span className="text-sm text-gray-500">
             Last updated: {lastUpdated.toLocaleTimeString()}
           </span>
-          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={loading}>
+          <DaisyButton variant="outline" size="sm" onClick={handleRefresh} disabled={loading}>
             <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
             Refresh
-          </Button>
-          <Button variant="outline" size="sm">
+          </DaisyButton>
+          <DaisyButton variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
             Export
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {metrics.map((metric) => (
-          <Card key={metric.id}>
-            <CardContent className="p-6">
+          <DaisyCard key={metric.id}>
+            <DaisyCardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">{metric.title}</p>
@@ -174,7 +174,7 @@ export default function RiskMonitoringPage() {
                   {metric.status === 'good' ? (
                     <CheckCircle className="h-5 w-5" />
                   ) : metric.status === 'warning' ? (
-                    <AlertTriangle className="h-5 w-5" />
+                    <DaisyAlertTriangle className="h-5 w-5" />
                   ) : (
                     <Activity className="h-5 w-5" />
                   )}
@@ -196,68 +196,68 @@ export default function RiskMonitoringPage() {
                 </span>
                 <span className="text-sm text-gray-500 ml-1">from last week</span>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         ))}
       </div>
 
       {/* Main Content Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="alerts">Alerts</TabsTrigger>
-          <TabsTrigger value="trends">Trends</TabsTrigger>
-          <TabsTrigger value="reports">Reports</TabsTrigger>
-        </TabsList>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
+        <DaisyTabsList>
+          <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="alerts">Alerts</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="trends">Trends</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="reports">Reports</DaisyTabsTrigger>
+        </DaisyTabsList>
 
-        <TabsContent value="overview" className="space-y-6">
+        <DaisyTabsContent value="overview" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Risk Status Chart */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle className="flex items-center gap-2">
                   <Shield className="h-5 w-5" />
                   Risk Status Distribution
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </DaisyCardTitle>
+              
+              <DaisyCardContent>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Critical</span>
                     <span className="text-sm text-gray-600">4 risks</span>
                   </div>
-                  <Progress value={17} className="h-2" />
+                  <DaisyProgress value={17} className="h-2" />
                   
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">High</span>
                     <span className="text-sm text-gray-600">7 risks</span>
                   </div>
-                  <Progress value={30} className="h-2" />
+                  <DaisyProgress value={30} className="h-2" />
                   
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Medium</span>
                     <span className="text-sm text-gray-600">8 risks</span>
                   </div>
-                  <Progress value={35} className="h-2" />
+                  <DaisyProgress value={35} className="h-2" />
                   
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Low</span>
                     <span className="text-sm text-gray-600">4 risks</span>
                   </div>
-                  <Progress value={17} className="h-2" />
+                  <DaisyProgress value={17} className="h-2" />
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
             {/* Recent Activity */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle className="flex items-center gap-2">
                   <Clock className="h-5 w-5" />
                   Recent Activity
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </DaisyCardTitle>
+              
+              <DaisyCardContent>
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
@@ -281,29 +281,29 @@ export default function RiskMonitoringPage() {
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="alerts" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Active Alerts</CardTitle>
-            </CardHeader>
-            <CardContent>
+        <DaisyTabsContent value="alerts" className="space-y-6">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle>Active Alerts</DaisyCardTitle>
+            
+            <DaisyCardContent>
               <div className="space-y-4">
                 {alerts.map((alert) => (
                   <div key={alert.id} className="flex items-start gap-4 p-4 border rounded-lg">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         <h4 className="font-medium">{alert.title}</h4>
-                        <Badge className={getSeverityColor(alert.severity)}>
+                        <DaisyBadge className={getSeverityColor(alert.severity)}>
                           {alert.severity}
-                        </Badge>
-                        <Badge variant={alert.status === 'active' ? 'destructive' : 'secondary'}>
+                        </DaisyBadge>
+                        <DaisyBadge variant={alert.status === 'active' ? 'destructive' : 'secondary'}>
                           {alert.status}
-                        </Badge>
+                        </DaisyBadge>
                       </div>
                       <p className="text-sm text-gray-600 mb-2">{alert.description}</p>
                       <p className="text-xs text-gray-500">
@@ -311,44 +311,44 @@ export default function RiskMonitoringPage() {
                       </p>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
+                      <DaisyButton variant="outline" size="sm">
                         <Eye className="h-4 w-4" />
-                      </Button>
+                      </DaisyButton>
                       {alert.status === 'active' && (
-                        <Button variant="outline" size="sm">
+                        <DaisyButton variant="outline" size="sm">
                           Acknowledge
-                        </Button>
+                        </DaisyButton>
                       )}
                     </div>
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
 
-        <TabsContent value="trends" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Risk Trends</CardTitle>
-            </CardHeader>
-            <CardContent>
+        <DaisyTabsContent value="trends" className="space-y-6">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle>Risk Trends</DaisyCardTitle>
+            
+            <DaisyCardContent>
               <p className="text-gray-600">Risk trend analysis and historical data visualization will be displayed here.</p>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
 
-        <TabsContent value="reports" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Monitoring Reports</CardTitle>
-            </CardHeader>
-            <CardContent>
+        <DaisyTabsContent value="reports" className="space-y-6">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle>Monitoring Reports</DaisyCardTitle>
+            
+            <DaisyCardContent>
               <p className="text-gray-600">Automated monitoring reports and scheduled exports will be available here.</p>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
+      </DaisyTabs>
     </div>
   );
 } 

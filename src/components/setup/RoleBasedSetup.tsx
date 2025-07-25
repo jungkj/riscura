@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { 
   ChevronRight, 
   ChevronLeft,
@@ -116,8 +116,8 @@ const OrganizationSetup: React.FC<{ onUpdate: (data: any) => void }> = ({ onUpda
   return (
     <div className="space-y-6">
       <div>
-        <Label htmlFor="orgName">Organization Name</Label>
-        <Input
+        <DaisyLabel htmlFor="orgName">Organization Name</DaisyLabel>
+        <DaisyInput
           id="orgName"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -126,7 +126,7 @@ const OrganizationSetup: React.FC<{ onUpdate: (data: any) => void }> = ({ onUpda
       </div>
 
       <div>
-        <Label htmlFor="industry">Industry</Label>
+        <DaisyLabel htmlFor="industry">Industry</DaisyLabel>
         <select
           id="industry"
           className="w-full p-2 border border-gray-300 rounded-md"
@@ -141,7 +141,7 @@ const OrganizationSetup: React.FC<{ onUpdate: (data: any) => void }> = ({ onUpda
       </div>
 
       <div>
-        <Label htmlFor="size">Organization Size</Label>
+        <DaisyLabel htmlFor="size">Organization Size</DaisyLabel>
         <select
           id="size"
           className="w-full p-2 border border-gray-300 rounded-md"
@@ -156,7 +156,7 @@ const OrganizationSetup: React.FC<{ onUpdate: (data: any) => void }> = ({ onUpda
       </div>
 
       <div>
-        <Label htmlFor="framework">Risk Management Framework</Label>
+        <DaisyLabel htmlFor="framework">Risk Management Framework</DaisyLabel>
         <select
           id="framework"
           className="w-full p-2 border border-gray-300 rounded-md"
@@ -359,14 +359,14 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
             {USER_ROLES.map((role) => {
               const Icon = role.icon;
               return (
-                <Card
+                <DaisyCard
                   key={role.id}
                   className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
                     selectedRole?.id === role.id ? 'ring-2 ring-blue-500 bg-blue-50' : ''
                   }`}
                   onClick={() => handleRoleSelect(role)}
                 >
-                  <CardContent className="p-6">
+                  <DaisyCardContent className="p-6">
                     <div className="flex items-start space-x-4">
                       <div className={`p-3 rounded-lg ${role.color}`}>
                         <Icon className="w-6 h-6" />
@@ -379,17 +379,17 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
                             <span className="text-xs font-medium text-gray-500">Key Features:</span>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {role.features.slice(0, 3).map((feature) => (
-                                <Badge key={feature} variant="secondary" className="text-xs">
+                                <DaisyBadge key={feature} variant="secondary" className="text-xs">
                                   {feature}
-                                </Badge>
+                                </DaisyBadge>
                               ))}
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               );
             })}
           </div>
@@ -432,8 +432,8 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
   if (isCompleting) {
     return (
       <div className="max-w-md mx-auto">
-        <Card>
-          <CardContent className="p-8 text-center">
+        <DaisyCard>
+          <DaisyCardContent className="p-8 text-center">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="w-8 h-8 text-green-600 animate-pulse" />
             </div>
@@ -441,28 +441,28 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
             <p className="text-gray-600 mb-4">
               We're customizing Riscura based on your preferences.
             </p>
-            <Progress value={100} className="h-2" />
-          </CardContent>
-        </Card>
+            <DaisyProgress value={100} className="h-2" />
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
     );
   }
 
   return (
     <div className="max-w-4xl mx-auto">
-      <Card>
-        <CardHeader>
+      <DaisyCard>
+        <DaisyCardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Welcome to Riscura</CardTitle>
+              <DaisyCardTitle>Welcome to Riscura</DaisyCardTitle>
               <p className="text-gray-600 mt-1">
                 Let's set up your personalized risk management workspace
               </p>
             </div>
             {onSkip && (
-              <Button variant="ghost" onClick={onSkip}>
+              <DaisyButton variant="ghost" onClick={onSkip}>
                 Skip Setup
-              </Button>
+              </DaisyButton>
             )}
           </div>
           
@@ -471,33 +471,33 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
               <span>Step {currentStep + 1} of {steps.length}</span>
               <span>{Math.round(progress)}% complete</span>
             </div>
-            <Progress value={progress} className="h-2" />
+            <DaisyProgress value={progress} className="h-2" />
           </div>
-        </CardHeader>
+        
 
-        <CardContent className="p-6">
+        <DaisyCardContent className="p-6">
           {renderStepContent()}
 
           <div className="flex justify-between mt-8">
-            <Button
+            <DaisyButton
               variant="outline"
               onClick={previousStep}
               disabled={currentStep === 0}
             >
               <ChevronLeft className="w-4 h-4 mr-2" />
               Previous
-            </Button>
+            </DaisyButton>
 
-            <Button
+            <DaisyButton
               onClick={nextStep}
               disabled={currentStep === 0 && !selectedRole}
             >
               {currentStep === steps.length - 1 ? 'Complete Setup' : 'Next'}
               <ChevronRight className="w-4 h-4 ml-2" />
-            </Button>
+            </DaisyButton>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </div>
   );
 };

@@ -13,10 +13,10 @@ import { ARIAChat } from './ARIAChat';
 import { useARIAChat, RiskContext } from '@/hooks/useARIAChat';
 import { useAI } from '@/context/AIContext';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Card } from '@/components/ui/card';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
+import { DaisyCard } from '@/components/ui/DaisyCard';
 
 interface ARIAWidgetProps {
   initialContext?: RiskContext;
@@ -43,7 +43,7 @@ const ProactiveSuggestionCard: React.FC<{
 }> = ({ suggestion, onDismiss, onAccept }) => {
   const getIcon = (type: string) => {
     switch (type) {
-      case 'risk_alert': return <AlertCircle className="h-4 w-4 text-amber-500" />;
+      case 'risk_alert': return <DaisyAlertCircle className="h-4 w-4 text-amber-500" />;
       case 'insight': return <Sparkles className="h-4 w-4 text-blue-500" />;
       case 'recommendation': return <CheckCircle2 className="h-4 w-4 text-green-500" />;
       default: return <Bot className="h-4 w-4 text-gray-500" />;
@@ -66,7 +66,7 @@ const ProactiveSuggestionCard: React.FC<{
       exit={{ opacity: 0, x: 100, scale: 0.8 }}
       className="mb-3"
     >
-      <Card className={cn(
+      <DaisyCard className={cn(
         "p-3 shadow-lg border-l-4 max-w-sm",
         getPriorityColor(suggestion.priority)
       )}>
@@ -80,34 +80,34 @@ const ProactiveSuggestionCard: React.FC<{
               {suggestion.description}
             </p>
             <div className="flex items-center gap-2 mt-3">
-              <Button 
+              <DaisyButton 
                 size="sm" 
                 variant="outline" 
                 onClick={onAccept}
                 className="h-6 text-xs"
               >
                 Open ARIA
-              </Button>
-              <Button 
+              </DaisyButton>
+              <DaisyButton 
                 size="sm" 
                 variant="ghost" 
                 onClick={onDismiss}
                 className="h-6 text-xs"
               >
                 Dismiss
-              </Button>
+              </DaisyButton>
             </div>
           </div>
-          <Button 
+          <DaisyButton 
             variant="ghost" 
             size="sm" 
             onClick={onDismiss}
             className="h-5 w-5 p-0 text-muted-foreground hover:text-foreground"
           >
             <X className="h-3 w-3" />
-          </Button>
+          </DaisyButton>
         </div>
-      </Card>
+      </DaisyCard>
     </motion.div>
   );
 };
@@ -260,7 +260,7 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
   if (disabled || !isVisible) return null;
 
   return (
-    <TooltipProvider>
+    <DaisyTooltipProvider>
       <div className={cn('fixed z-50', getPositionClasses(), className)}>
         {/* Proactive Suggestions */}
         <AnimatePresence>
@@ -292,9 +292,9 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
           whileTap={{ scale: 0.95 }}
           className="relative"
         >
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
+          <DaisyTooltip>
+            <DaisyTooltipTrigger asChild>
+              <DaisyButton
                 onClick={handleToggleChat}
                 size="lg"
                 className={cn(
@@ -328,15 +328,15 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="left" className="bg-[#191919] text-[#FAFAFA] border-[#D8C3A5]">
+              </DaisyButton>
+            </DaisyTooltipTrigger>
+            <DaisyTooltipContent side="left" className="bg-[#191919] text-[#FAFAFA] border-[#D8C3A5]">
               <div className="flex flex-col items-center">
                 <span>{isOpen ? 'Close ARIA' : 'Open ARIA'}</span>
                 <span className="text-xs text-[#D8C3A5]">Ctrl+K</span>
               </div>
-            </TooltipContent>
-          </Tooltip>
+            </DaisyTooltipContent>
+          </DaisyTooltip>
 
           {/* Notification Badges */}
           <AnimatePresence>
@@ -347,11 +347,11 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
                 exit={{ scale: 0 }}
                 className="absolute -top-1 -right-1"
               >
-                <Badge 
+                <DaisyBadge 
                   className="h-6 w-6 rounded-full p-0 flex items-center justify-center text-xs animate-pulse bg-[#191919] text-[#FAFAFA] border-[#D8C3A5]"
                 >
                   {state.messages.filter(m => m.role === 'assistant').length}
-                </Badge>
+                </DaisyBadge>
               </motion.div>
             )}
           </AnimatePresence>
@@ -394,6 +394,6 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
           )} />
         </motion.div>
       </div>
-    </TooltipProvider>
+    
   );
 }; 

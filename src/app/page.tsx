@@ -3,11 +3,14 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import Image from 'next/image';
 import { TimeSavingChart } from '@/components/charts/TimeSavingChart';
+import { IntegrationPartners } from '@/components/landing/IntegrationPartners';
+import { TextFlipContainer } from '@/components/ui/TextFlipContainer';
+import { FloatingNav } from '@/components/ui/FloatingNav';
 
 // Icons
 import {
@@ -26,7 +29,11 @@ import {
   FileText,
   BarChart3,
   Sparkles,
-  AlertTriangle
+  AlertTriangle,
+  Home,
+  Briefcase,
+  DollarSign,
+  PlayCircle
 } from 'lucide-react';
 
 // New single-word typewriter effect
@@ -34,64 +41,16 @@ const cyclingWords = ["effortless", "intelligent", "automated", "proactive", "st
 
 // Single Word Typewriter Component
 function SingleWordTypewriter() {
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [displayText, setDisplayText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [typingSpeed, setTypingSpeed] = useState(150);
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isClient) return;
-    
-    const currentWord = cyclingWords[currentWordIndex];
-    
-    const timer = setTimeout(() => {
-      if (!isDeleting) {
-        // Typing
-        setDisplayText(currentWord.substring(0, displayText.length + 1));
-        setTypingSpeed(120);
-        
-        if (displayText === currentWord) {
-          // Start deleting after a pause
-          setTimeout(() => setIsDeleting(true), 2500);
-        }
-      } else {
-        // Deleting
-        setDisplayText(currentWord.substring(0, displayText.length - 1));
-        setTypingSpeed(80);
-        
-        if (displayText === '') {
-          setIsDeleting(false);
-          setCurrentWordIndex((prev) => (prev + 1) % cyclingWords.length);
-        }
-      }
-    }, typingSpeed);
-
-    return () => clearTimeout(timer);
-  }, [displayText, isDeleting, currentWordIndex, typingSpeed, isClient]);
-
   return (
     <div className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-center lg:text-left font-inter">
       <span className="text-gray-900">
         Risk management made{' '}
       </span>
-      <span className="relative inline-block min-w-[280px] sm:min-w-[320px] lg:min-w-[400px] text-left">
-        <span className="text-[#191919] font-bold">
-          {isClient ? displayText : 'effortless'}
-        </span>
-        {isClient && (
-          <motion.span
-            className="absolute top-0 w-0.5 h-full bg-[#199BEC] rounded-sm ml-1"
-            style={{ left: `${displayText.length * 0.6}em` }}
-            animate={{ opacity: [0, 1, 0] }}
-            transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
-          />
-        )}
-      </span>
+      <TextFlipContainer 
+        words={cyclingWords}
+        className="text-[#191919] font-bold min-w-[280px] sm:min-w-[320px] lg:min-w-[400px]"
+        cursorClassName="bg-[#199BEC]"
+      />
     </div>
   );
 }
@@ -147,8 +106,8 @@ function HeroProcessCard() {
   return (
     <div className="relative w-full max-w-4xl mx-auto">
       {/* Main Process Card */}
-      <Card className="bg-white/80 backdrop-blur-xl border border-gray-200/60 shadow-2xl overflow-hidden w-full">
-        <CardContent className="p-0">
+      <DaisyCard className="bg-white/80 backdrop-blur-xl border border-gray-200/60 shadow-2xl overflow-hidden w-full">
+        <DaisyCardContent className="p-0">
           {/* Header with Browser Chrome */}
           <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
             <div className="flex items-center justify-between">
@@ -265,7 +224,7 @@ function HeroProcessCard() {
                     <div className="bg-white/50 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-4">
                         <h4 className="font-medium text-gray-900 text-sm">Risk Assessment Results</h4>
-                        <Badge className="bg-green-100 text-green-800 text-xs">Complete</Badge>
+                        <DaisyBadge className="bg-green-100 text-green-800 text-xs">Complete</DaisyBadge>
                       </div>
                       <div className="grid grid-cols-3 gap-3">
                         {currentStepData.results?.map((result, index) => (
@@ -283,12 +242,12 @@ function HeroProcessCard() {
                               }`}></div>
                             </div>
                             <div className="text-xs text-gray-900 font-medium mb-2">{result.name}</div>
-                            <Badge 
+                            <DaisyBadge 
                               variant={result.level === 'high' ? 'destructive' : result.level === 'medium' ? 'secondary' : 'default'}
                               className="text-xs mb-1"
                             >
                               {result.level}
-                            </Badge>
+                            </DaisyBadge>
                             <div className="text-xs font-mono text-gray-600 mt-1">{result.score}</div>
                           </motion.div>
                         ))}
@@ -315,8 +274,8 @@ function HeroProcessCard() {
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </div>
   );
 }
@@ -332,53 +291,42 @@ export default function HomePage() {
     router.push('/auth/register');
   };
 
+  // Navigation items for FloatingNav
+  const navItems = [
+    {
+      name: "Platform",
+      link: "#platform",
+      icon: <Shield className="h-4 w-4" />,
+    },
+    {
+      name: "Enterprise",
+      link: "#enterprise",
+      icon: <Briefcase className="h-4 w-4" />,
+    },
+    {
+      name: "Pricing",
+      link: "#pricing",
+      icon: <DollarSign className="h-4 w-4" />,
+    },
+    {
+      name: "Demo",
+      link: "#demo",
+      icon: <PlayCircle className="h-4 w-4" />,
+    },
+  ];
+
   return (
     <div className="min-h-screen font-inter" style={{ backgroundColor: '#FFFFFF' }}>
-      {/* Enhanced Navigation with Dolphin Logo */}
-      <nav className="fixed inset-x-0 top-0 z-50 w-full bg-white/90 backdrop-blur-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-3">
-              <Image
-                src="/images/logo/riscura.png"
-                alt="Riscura Logo"
-                width={32}
-                height={32}
-                className="object-contain"
-                priority
-              />
-              <span className="text-2xl font-bold text-[#199BEC] font-inter">Riscura</span>
-            </div>
-            
-            {/* Center Navigation Links */}
-            <div className="hidden md:flex items-center space-x-8">
-              <button className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors">Platform</button>
-              <button className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors">Enterprise</button>
-              <button className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors">Pricing</button>
-              <button className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors">Demo</button>
-            </div>
-            
-            <div className="flex items-center space-x-4">
-              <Button 
-                variant="outline"
-                onClick={() => router.push('/auth/login')}
-                className="px-4 py-2 text-sm border-[#199BEC] text-[#199BEC] hover:bg-[#199BEC] hover:text-white"
-              >
-                Login
-              </Button>
-              <Button 
-                onClick={handleGetStarted}
-                className="px-4 py-2 text-sm bg-[#199BEC] hover:bg-[#199BEC]/80"
-              >
-                Get Started
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* Floating Navigation */}
+      <FloatingNav 
+        navItems={navItems} 
+        onLogin={() => router.push('/auth/login')}
+        onGetStarted={handleGetStarted}
+      />
+      
 
       {/* Enhanced Hero Section */}
-      <section className="pt-36 pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-card to-background">
+      <section className="pt-20 pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-card to-background">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left Column - Content */}
@@ -396,22 +344,22 @@ export default function HomePage() {
 
               {/* Primary CTA */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
-                <Button 
+                <DaisyButton 
                   onClick={handleGetStarted}
                   size="lg" 
                   className="px-10 py-5 text-xl rounded-xl font-semibold font-inter min-w-[200px] bg-[#199BEC] hover:bg-[#199BEC]/80"
                 >
                   Start free trial
                   <ArrowRight className="ml-3 h-6 w-6" />
-                </Button>
-                <Button 
+                </DaisyButton>
+                <DaisyButton 
                   onClick={handleRequestDemo}
                   variant="outline"
                   size="lg"
                   className="px-10 py-5 text-xl rounded-xl font-semibold font-inter min-w-[200px]"
                                   >
                     Book a demo
-                  </Button>
+                  </DaisyButton>
                 </div>
 
               {/* Social Proof Stats */}
@@ -444,6 +392,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Integration Partners Section */}
+      <IntegrationPartners />
+
       {/* Time Savings Chart Section */}
       <TimeSavingChart />
 
@@ -458,9 +409,9 @@ export default function HomePage() {
               viewport={{ once: true }}
               className="space-y-6 md:space-y-8"
             >
-              <Badge className="bg-[#191919] text-[#FAFAFA] px-4 py-2 text-sm font-inter">
+              <DaisyBadge className="bg-[#191919] text-[#FAFAFA] px-4 py-2 text-sm font-inter">
                 Enterprise Platform
-              </Badge>
+              </DaisyBadge>
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#191919] font-inter leading-tight">
                 Built for modern<br />enterprise security
               </h2>
@@ -517,8 +468,8 @@ export default function HomePage() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-white border border-[#D8C3A5]/30 h-full hover:shadow-xl hover:border-[#D8C3A5]/60 transition-all duration-300 group rounded-2xl">
-                  <CardContent className="p-8">
+                <DaisyCard className="bg-white border border-[#D8C3A5]/30 h-full hover:shadow-xl hover:border-[#D8C3A5]/60 transition-all duration-300 group rounded-2xl">
+                  <DaisyCardContent className="p-8">
                     <div className="w-14 h-14 rounded-2xl bg-[#199BEC]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                       <feature.icon className="h-7 w-7 text-[#199BEC]" />
                     </div>
@@ -536,8 +487,8 @@ export default function HomePage() {
                         </li>
                       ))}
                     </ul>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               </motion.div>
             ))}
           </div>
@@ -554,9 +505,9 @@ export default function HomePage() {
             viewport={{ once: true }}
             className="space-y-6 md:space-y-8"
           >
-            <Badge className="bg-[#199BEC] text-white px-6 py-2 text-sm font-inter rounded-full">
+            <DaisyBadge className="bg-[#199BEC] text-white px-6 py-2 text-sm font-inter rounded-full">
               Get Started Today
-            </Badge>
+            </DaisyBadge>
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#191919] font-inter leading-tight">
               Ready to secure<br />your enterprise?
             </h2>
@@ -566,22 +517,22 @@ export default function HomePage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button 
+              <DaisyButton 
                 onClick={handleGetStarted}
                 size="lg" 
                 className="px-12 py-4 text-lg font-semibold font-inter min-w-[220px] rounded-xl bg-[#199BEC] hover:bg-[#199BEC]/80"
               >
                 Start free trial
                 <ChevronRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button 
+              </DaisyButton>
+              <DaisyButton 
                 onClick={handleRequestDemo}
                 variant="outline"
                 size="lg"
                 className="px-12 py-4 text-lg font-semibold font-inter min-w-[220px] rounded-xl"
               >
                 Schedule demo
-              </Button>
+              </DaisyButton>
             </div>
 
             {/* Trust Elements */}
@@ -630,15 +581,15 @@ export default function HomePage() {
               Enterprise risk management platform powered by AI. Secure your business with intelligent automation.
             </p>
             <div className="flex items-center justify-center space-x-6 mb-8">
-              <Badge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
+              <DaisyBadge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
                 SOC 2 Type II
-              </Badge>
-              <Badge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
+              </DaisyBadge>
+              <DaisyBadge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
                 ISO 27001
-              </Badge>
-              <Badge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
+              </DaisyBadge>
+              <DaisyBadge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
                 GDPR Ready
-              </Badge>
+              </DaisyBadge>
             </div>
             <p className="text-[#A8A8A8] font-inter">
               © 2024 Riscura Inc. All rights reserved.

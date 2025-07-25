@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { useRouter, usePathname } from 'next/navigation';
 import { useRCSA } from '@/context/RCSAContext';
 import { cn } from '@/lib/utils';
@@ -258,12 +258,12 @@ export function RCSANavigationTabs({
       )}
       <span>{tab.label}</span>
       {tab.badge !== undefined && (
-        <Badge 
+        <DaisyBadge 
           variant={getBadgeVariant(tab.badge)}
           className="ml-1 text-xs"
         >
           {tab.badge}
-        </Badge>
+        </DaisyBadge>
       )}
     </div>
   );
@@ -272,7 +272,7 @@ export function RCSANavigationTabs({
     return (
       <div className={cn("flex flex-wrap gap-2 mb-6", className)}>
         {tabs.map((tab) => (
-                     <Button
+                     <DaisyButton
              key={tab.value}
              variant={currentTab === tab.value ? 'primary' : 'outline'}
              size="sm"
@@ -281,7 +281,7 @@ export function RCSANavigationTabs({
              className="h-auto py-2 px-3"
            >
             {getTabContent(tab)}
-          </Button>
+          </DaisyButton>
         ))}
         {children}
       </div>
@@ -290,13 +290,13 @@ export function RCSANavigationTabs({
 
   return (
     <div className={cn("border-b border-border mb-6", className)}>
-      <Tabs value={currentTab} onValueChange={handleTabChange}>
-        <TabsList className={cn(
+      <DaisyTabs value={currentTab} onValueChange={handleTabChange}>
+        <DaisyTabsList className={cn(
           "h-auto p-0 bg-transparent w-full justify-start",
           variant === 'compact' && "space-x-1"
         )}>
           {tabs.map((tab) => (
-            <TabsTrigger
+            <DaisyTabsTrigger
               key={tab.value}
               value={tab.value}
               disabled={tab.disabled}
@@ -308,10 +308,10 @@ export function RCSANavigationTabs({
               title={showDescriptions ? tab.description : undefined}
             >
               {getTabContent(tab)}
-            </TabsTrigger>
+            </DaisyTabsTrigger>
           ))}
-        </TabsList>
-      </Tabs>
+        </DaisyTabsList>
+      </DaisyTabs>
       
       {/* Description tooltip for current tab */}
       {showDescriptions && (
@@ -373,14 +373,14 @@ export function RCSAQuickNavigation({
         <h3 className="text-sm font-medium text-foreground">
           Related {type === 'risks' ? 'Risks' : 'Controls'}
         </h3>
-        <Badge variant="secondary" className="text-xs">
+        <DaisyBadge variant="secondary" className="text-xs">
           {entities.length}
-        </Badge>
+        </DaisyBadge>
       </div>
       
       <div className="flex flex-wrap gap-2">
         {entities.slice(0, 5).map((entity) => (
-          <Button
+          <DaisyButton
             key={entity.id}
             variant="outline"
             size="sm"
@@ -394,23 +394,23 @@ export function RCSAQuickNavigation({
           >
             <div className="flex items-center gap-1">
               {type === 'risks' ? (
-                <AlertTriangle className="h-3 w-3" />
+                <DaisyAlertTriangle className="h-3 w-3" />
               ) : (
                 <Shield className="h-3 w-3" />
               )}
               <span className="truncate">{entity.title}</span>
             </div>
-          </Button>
+          </DaisyButton>
         ))}
         
         {entities.length > 5 && (
-          <Button
+          <DaisyButton
             variant="ghost"
             size="sm"
             className="h-auto py-1 px-2 text-xs text-muted-foreground"
           >
             +{entities.length - 5} more
-          </Button>
+          </DaisyButton>
         )}
       </div>
     </div>

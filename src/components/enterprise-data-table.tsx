@@ -2,11 +2,11 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
+import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -64,9 +64,9 @@ const StatusBadgeCell: React.FC<{ value: any }> = ({ value }) => {
   };
 
   return (
-    <Badge variant={getVariant(value) as any} className="text-xs font-medium">
+    <DaisyBadge variant={getVariant(value) as any} className="text-xs font-medium">
       {value}
-    </Badge>
+    </DaisyBadge>
   );
 };
 
@@ -78,10 +78,10 @@ const UserAvatarCell: React.FC<{ value: any }> = ({ value }) => {
   
   return (
     <div className="flex items-center space-x-enterprise-2">
-      <Avatar className="w-6 h-6">
-        <AvatarImage src={user.avatar} alt={user.name} />
-        <AvatarFallback className="text-xs">{initials}</AvatarFallback>
-      </Avatar>
+      <DaisyAvatar className="w-6 h-6">
+        <DaisyAvatarImage src={user.avatar} alt={user.name} />
+        <DaisyAvatarFallback className="text-xs">{initials}</DaisyAvatarFallback>
+      </DaisyAvatar>
       <span className="text-body-sm text-text-primary truncate">{user.name}</span>
     </div>
   );
@@ -169,7 +169,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
       case 'date':
         return (
           <div className="flex items-center space-x-enterprise-1 text-body-sm">
-            <Calendar className="h-3 w-3 text-text-tertiary" />
+            <DaisyCalendar className="h-3 w-3 text-text-tertiary" />
             <span className="text-text-primary">
               {value ? new Date(value).toLocaleDateString() : '—'}
             </span>
@@ -177,19 +177,19 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
         );
       case 'actions':
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+          <DaisyDropdownMenu>
+            <DaisyDropdownMenuTrigger asChild>
+              <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
                 <MoreVertical className="h-3 w-3" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => onRowClick?.(row)}>
+              </DaisyButton>
+            </DaisyDropdownMenuTrigger>
+            <DaisyDropdownMenuContent align="end">
+              <DaisyDropdownMenuItem onClick={() => onRowClick?.(row)}>
                 <Eye className="h-3 w-3 mr-enterprise-1" />
                 View Details
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DaisyDropdownMenuItem>
+            </DaisyDropdownMenuContent>
+          </DaisyDropdownMenu>
         );
       default:
         return (
@@ -212,7 +212,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
     return (
       <div className="flex items-center justify-center h-64 bg-surface-primary rounded-lg border border-border">
         <div className="text-center">
-          <AlertTriangle className="h-8 w-8 text-semantic-error mx-auto mb-enterprise-2" />
+          <DaisyAlertTriangle className="h-8 w-8 text-semantic-error mx-auto mb-enterprise-2" />
           <div className="text-heading-sm text-text-primary mb-enterprise-1">Error loading data</div>
           <div className="text-body-sm text-text-secondary">{error}</div>
         </div>
@@ -227,7 +227,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
         <div className="flex items-center space-x-enterprise-3">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-text-tertiary" />
-            <Input
+            <DaisyInput
               placeholder="Search data..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -241,7 +241,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
                 {selectedRows.size} selected
               </span>
               {bulkActions.map(action => (
-                <Button
+                <DaisyButton
                   key={action.key}
                   variant={action.variant === 'destructive' ? 'danger' : 'outline'}
                   size="sm"
@@ -253,21 +253,21 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
                 >
                   {action.icon && <action.icon className="h-3 w-3 mr-enterprise-1" />}
                   {action.label}
-                </Button>
+                </DaisyButton>
               ))}
             </div>
           )}
         </div>
         
         <div className="flex items-center space-x-enterprise-2">
-          <Button variant="outline" size="sm" className="text-button border-border hover:border-interactive-primary">
+          <DaisyButton variant="outline" size="sm" className="text-button border-border hover:border-interactive-primary">
             <Download className="h-3 w-3 mr-enterprise-1" />
             Export
-          </Button>
+          </DaisyButton>
           
-          <Button variant="outline" size="sm" className="text-button border-border hover:border-interactive-primary">
+          <DaisyButton variant="outline" size="sm" className="text-button border-border hover:border-interactive-primary">
             <RefreshCw className="h-3 w-3" />
-          </Button>
+          </DaisyButton>
         </div>
       </div>
       
@@ -277,7 +277,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
           <thead className="bg-surface-secondary border-b border-border sticky top-0 z-10">
             <tr>
               <th className="w-12 p-enterprise-3 text-left">
-                <Checkbox
+                <DaisyCheckbox
                   checked={selectedRows.size === filteredData.length && filteredData.length > 0}
                   onCheckedChange={(checked) => {
                     if (checked) {
@@ -345,7 +345,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
                   onClick={() => onRowClick?.(row)}
                 >
                   <td className="w-12 p-enterprise-3">
-                    <Checkbox
+                    <DaisyCheckbox
                       checked={selectedRows.has(rowIndex)}
                       onCheckedChange={(checked) => {
                         const newSelection = new Set(selectedRows);

@@ -2,20 +2,20 @@
 
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Checkbox } from '@/components/ui/checkbox';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DatePicker } from '@/components/ui/date-picker';
-import { Slider } from '@/components/ui/slider';
-import { Separator } from '@/components/ui/separator';
-import { Switch } from '@/components/ui/switch';
+import { DaisySlider } from '@/components/ui/DaisySlider';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
+import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { Shield, Calendar, Target, Users, FileText, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
 
 interface CreateControlModalProps {
@@ -265,31 +265,31 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
   const currentPriorityConfig = getPriorityConfig(formData.priority);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center space-x-2">
+    <DaisyDialog open={open} onOpenChange={onOpenChange}>
+      <DaisyDialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DaisyDialogHeader>
+          <DaisyDialogTitle className="flex items-center space-x-2">
             <Shield className="h-5 w-5 text-blue-600" />
             <span>Create New Control</span>
-          </DialogTitle>
-          <DialogDescription>
+          </DaisyDialogTitle>
+          <DaisyDialogDescription>
             Define a new control to manage and mitigate risks in your organization.
-          </DialogDescription>
-        </DialogHeader>
+          </DaisyDialogDescription>
+        </DaisyDialogHeader>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="basic">Basic Info</TabsTrigger>
-            <TabsTrigger value="testing">Testing</TabsTrigger>
-            <TabsTrigger value="compliance">Compliance</TabsTrigger>
-            <TabsTrigger value="additional">Additional</TabsTrigger>
-          </TabsList>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <DaisyTabsList className="grid w-full grid-cols-4">
+            <DaisyTabsTrigger value="basic">Basic Info</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="testing">Testing</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="additional">Additional</DaisyTabsTrigger>
+          </DaisyTabsList>
 
-          <TabsContent value="basic" className="space-y-4">
+          <DaisyTabsContent value="basic" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="title">Control Title *</Label>
-                <Input
+                <DaisyLabel htmlFor="title">Control Title *</DaisyLabel>
+                <DaisyInput
                   id="title"
                   placeholder="Enter control title"
                   value={formData.title}
@@ -300,29 +300,29 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="category">Category *</Label>
-                <Select
+                <DaisyLabel htmlFor="category">Category *</DaisyLabel>
+                <DaisySelect
                   value={formData.category}
                   onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
                 >
-                  <SelectTrigger className={errors.category ? 'border-red-500' : ''}>
-                    <SelectValue placeholder="Select category" />
+                  <DaisySelectTrigger className={errors.category ? 'border-red-500' : ''}>
+                    <DaisySelectValue placeholder="Select category" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <DaisySelectContent>
                     {controlCategories.map((category) => (
-                      <SelectItem key={category} value={category}>
+                      <DaisySelectItem key={category} value={category}>
                         {category}
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </DaisySelect>
                 {errors.category && <p className="text-sm text-red-600">{errors.category}</p>}
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description *</Label>
-              <Textarea
+              <DaisyLabel htmlFor="description">Description *</DaisyLabel>
+              <DaisyTextarea
                 id="description"
                 placeholder="Describe the control in detail"
                 value={formData.description}
@@ -335,8 +335,8 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="owner">Control Owner *</Label>
-                <Input
+                <DaisyLabel htmlFor="owner">Control Owner *</DaisyLabel>
+                <DaisyInput
                   id="owner"
                   placeholder="Enter control owner name"
                   value={formData.owner}
@@ -347,42 +347,42 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
               </div>
 
               <div className="space-y-2">
-                <Label>Priority Level</Label>
-                <Select
+                <DaisyLabel>Priority Level</DaisyLabel>
+                <DaisySelect
                   value={formData.priority}
                   onValueChange={(value) => setFormData(prev => ({ ...prev, priority: value }))}
                 >
-                  <SelectTrigger>
-                    <SelectValue />
+                  <DaisySelectTrigger>
+                    <DaisySelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <DaisySelectContent>
                     {priorityLevels.map((priority) => (
-                      <SelectItem key={priority.value} value={priority.value}>
+                      <DaisySelectItem key={priority.value} value={priority.value}>
                         <div className="flex items-center space-x-2">
-                          <Badge className={`${priority.color} ${priority.bg}`}>
+                          <DaisyBadge className={`${priority.color} ${priority.bg}`}>
                             {priority.label}
-                          </Badge>
+                          </DaisyBadge>
                         </div>
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </DaisySelect>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Control Type</Label>
-                <Select
+                <DaisyLabel>Control Type</DaisyLabel>
+                <DaisySelect
                   value={formData.controlType}
                   onValueChange={(value) => setFormData(prev => ({ ...prev, controlType: value }))}
                 >
-                  <SelectTrigger>
-                    <SelectValue />
+                  <DaisySelectTrigger>
+                    <DaisySelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <DaisySelectContent>
                     {controlTypes.map((type) => (
-                      <SelectItem key={type.value} value={type.value}>
+                      <DaisySelectItem key={type.value} value={type.value}>
                         <div>
                           <div className="font-medium">{type.label}</div>
                           <div className="text-sm text-gray-500">{type.description}</div>
@@ -390,21 +390,21 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </DaisySelect>
               </div>
 
               <div className="space-y-2">
-                <Label>Implementation</Label>
-                <Select
+                <DaisyLabel>Implementation</DaisyLabel>
+                <DaisySelect
                   value={formData.implementation}
                   onValueChange={(value) => setFormData(prev => ({ ...prev, implementation: value }))}
                 >
-                  <SelectTrigger>
-                    <SelectValue />
+                  <DaisySelectTrigger>
+                    <DaisySelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <DaisySelectContent>
                     {implementationTypes.map((type) => (
-                      <SelectItem key={type.value} value={type.value}>
+                      <DaisySelectItem key={type.value} value={type.value}>
                         <div>
                           <div className="font-medium">{type.label}</div>
                           <div className="text-sm text-gray-500">{type.description}</div>
@@ -412,36 +412,36 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </DaisySelect>
               </div>
             </div>
-          </TabsContent>
+          </DaisyTabsContent>
 
-          <TabsContent value="testing" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Calendar className="h-5 w-5" />
+          <DaisyTabsContent value="testing" className="space-y-6">
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle className="flex items-center space-x-2">
+                  <DaisyCalendar className="h-5 w-5" />
                   <span>Testing Configuration</span>
-                </CardTitle>
-                <CardDescription>
+                </DaisyCardTitle>
+                <DaisyCardDescription>
                   Configure how and when this control will be tested
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
+                </p>
+              
+              <DaisyCardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Testing Frequency</Label>
-                    <Select
+                    <DaisyLabel>Testing Frequency</DaisyLabel>
+                    <DaisySelect
                       value={formData.testingFrequency}
                       onValueChange={handleFrequencyChange}
                     >
-                      <SelectTrigger>
-                        <SelectValue />
+                      <DaisySelectTrigger>
+                        <DaisySelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <DaisySelectContent>
                         {testingFrequencies.map((freq) => (
-                          <SelectItem key={freq.value} value={freq.value}>
+                          <DaisySelectItem key={freq.value} value={freq.value}>
                             <div>
                               <div className="font-medium">{freq.label}</div>
                               <div className="text-sm text-gray-500">{freq.description}</div>
@@ -449,11 +449,11 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                           </SelectItem>
                         ))}
                       </SelectContent>
-                    </Select>
+                    </DaisySelect>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="nextTestingDate">Next Testing Date *</Label>
+                    <DaisyLabel htmlFor="nextTestingDate">Next Testing Date *</DaisyLabel>
                     <DatePicker
                       value={formData.nextTestingDate}
                       onChange={(date) => setFormData(prev => ({ ...prev, nextTestingDate: date }))}
@@ -467,12 +467,12 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
-                      <Label>Evidence Required</Label>
+                      <DaisyLabel>Evidence Required</DaisyLabel>
                       <p className="text-sm text-gray-500">
                         Require evidence documentation for testing
                       </p>
                     </div>
-                    <Switch
+                    <DaisySwitch
                       checked={formData.evidenceRequired}
                       onCheckedChange={(checked) => setFormData(prev => ({ ...prev, evidenceRequired: checked }))}
                     />
@@ -480,12 +480,12 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
 
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
-                      <Label>Continuous Monitoring</Label>
+                      <DaisyLabel>Continuous Monitoring</DaisyLabel>
                       <p className="text-sm text-gray-500">
                         Enable continuous monitoring for this control
                       </p>
                     </div>
-                    <Switch
+                    <DaisySwitch
                       checked={formData.continuousMonitoring}
                       onCheckedChange={(checked) => setFormData(prev => ({ ...prev, continuousMonitoring: checked }))}
                     />
@@ -493,17 +493,17 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Automation Level</Label>
-                  <Select
+                  <DaisyLabel>Automation Level</DaisyLabel>
+                  <DaisySelect
                     value={formData.automationLevel}
                     onValueChange={(value) => setFormData(prev => ({ ...prev, automationLevel: value }))}
                   >
-                    <SelectTrigger>
-                      <SelectValue />
+                    <DaisySelectTrigger>
+                      <DaisySelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <DaisySelectContent>
                       {automationLevels.map((level) => (
-                        <SelectItem key={level.value} value={level.value}>
+                        <DaisySelectItem key={level.value} value={level.value}>
                           <div>
                             <div className="font-medium">{level.label}</div>
                             <div className="text-sm text-gray-500">{level.description}</div>
@@ -511,66 +511,66 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                         </SelectItem>
                       ))}
                     </SelectContent>
-                  </Select>
+                  </DaisySelect>
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+              </DaisyCardBody>
+            </DaisyCard>
+          </DaisyTabsContent>
 
-          <TabsContent value="compliance" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
+          <DaisyTabsContent value="compliance" className="space-y-4">
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle className="flex items-center space-x-2">
                   <CheckCircle className="h-5 w-5" />
                   <span>Compliance Frameworks</span>
-                </CardTitle>
-                <CardDescription>
+                </DaisyCardTitle>
+                <DaisyCardDescription>
                   Select applicable compliance frameworks for this control
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
+                </p>
+              
+              <DaisyCardContent>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {complianceFrameworks.map((framework) => (
                     <div key={framework} className="flex items-center space-x-2">
-                      <Checkbox
+                      <DaisyCheckbox
                         id={framework}
                         checked={formData.framework.includes(framework)}
                         onCheckedChange={() => handleFrameworkToggle(framework)}
                       />
-                      <Label htmlFor={framework} className="text-sm">
+                      <DaisyLabel htmlFor={framework} className="text-sm">
                         {framework}
-                      </Label>
+                      </DaisyLabel>
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+              </DaisyCardBody>
+            </DaisyCard>
+          </DaisyTabsContent>
 
-          <TabsContent value="additional" className="space-y-4">
+          <DaisyTabsContent value="additional" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="businessUnit">Business Unit</Label>
-                <Select
+                <DaisyLabel htmlFor="businessUnit">Business Unit</DaisyLabel>
+                <DaisySelect
                   value={formData.businessUnit}
                   onValueChange={(value) => setFormData(prev => ({ ...prev, businessUnit: value }))}
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select business unit" />
+                  <DaisySelectTrigger>
+                    <DaisySelectValue placeholder="Select business unit" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <DaisySelectContent>
                     {businessUnits.map((unit) => (
-                      <SelectItem key={unit} value={unit}>
+                      <DaisySelectItem key={unit} value={unit}>
                         {unit}
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </DaisySelect>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="department">Department</Label>
-                <Input
+                <DaisyLabel htmlFor="department">Department</DaisyLabel>
+                <DaisyInput
                   id="department"
                   placeholder="Enter department"
                   value={formData.department}
@@ -579,20 +579,20 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
               </div>
             </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Control Summary</CardTitle>
-                <CardDescription>
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle>Control Summary</DaisyCardTitle>
+                <DaisyCardDescription>
                   Review your control configuration
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+                </p>
+              
+              <DaisyCardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <span className="font-medium">Priority:</span>
-                    <Badge className={`ml-2 ${currentPriorityConfig.color} ${currentPriorityConfig.bg}`}>
+                    <DaisyBadge className={`ml-2 ${currentPriorityConfig.color} ${currentPriorityConfig.bg}`}>
                       {currentPriorityConfig.label}
-                    </Badge>
+                    </DaisyBadge>
                   </div>
                   <div>
                     <span className="font-medium">Testing:</span>
@@ -613,27 +613,27 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                     <span className="font-medium text-sm">Frameworks:</span>
                     <div className="flex flex-wrap gap-2 mt-1">
                       {formData.framework.map((fw) => (
-                        <Badge key={fw} variant="outline" className="text-xs">
+                        <DaisyBadge key={fw} variant="outline" className="text-xs">
                           {fw}
-                        </Badge>
+                        </DaisyBadge>
                       ))}
                     </div>
                   </div>
                 )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+              </DaisyCardBody>
+            </DaisyCard>
+          </DaisyTabsContent>
+        </DaisyTabs>
 
         <div className="flex justify-end space-x-2 pt-4 border-t">
-          <Button
+          <DaisyButton
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={isSubmitting}
           >
             Cancel
-          </Button>
-          <Button
+          </DaisyButton>
+          <DaisyButton
             onClick={handleSubmit}
             disabled={isSubmitting}
           >
@@ -645,9 +645,9 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
             ) : (
               'Create Control'
             )}
-          </Button>
+          </DaisyButton>
         </div>
-      </DialogContent>
-    </Dialog>
+      </DaisyDialogContent>
+    </DaisyDialog>
   );
 }; 

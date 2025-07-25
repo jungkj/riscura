@@ -2,16 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Search, Filter, Grid, List, MoreHorizontal, Edit, Trash2, Eye, Share2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { useRouter } from 'next/navigation';
 
 interface Spreadsheet {
@@ -168,50 +168,50 @@ export default function SpreadsheetsPage() {
   };
 
   const SpreadsheetCard = ({ spreadsheet }: { spreadsheet: Spreadsheet }) => (
-    <Card className="hover:shadow-md transition-shadow cursor-pointer group">
-      <CardHeader className="pb-2">
+    <DaisyCard className="hover:shadow-md transition-shadow cursor-pointer group">
+      <DaisyCardHeader className="pb-2">
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <CardTitle className="text-lg font-semibold group-hover:text-blue-600 transition-colors">
+            <DaisyCardTitle className="text-lg font-semibold group-hover:text-blue-600 transition-colors">
               {spreadsheet.name}
-            </CardTitle>
-            <CardDescription className="mt-1 line-clamp-2">
+            </DaisyCardTitle>
+            <DaisyCardDescription className="mt-1 line-clamp-2">
               {spreadsheet.description}
-            </CardDescription>
+            </p>
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
+          <DaisyDropdownMenu>
+            <DaisyDropdownMenuTrigger asChild>
+              <DaisyButton variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
                 <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => router.push(`/dashboard/spreadsheets/${spreadsheet.id}`)}>
+              </DaisyButton>
+            </DaisyDropdownMenuTrigger>
+            <DaisyDropdownMenuContent align="end">
+              <DaisyDropdownMenuItem onClick={() => router.push(`/dashboard/spreadsheets/${spreadsheet.id}`)}>
                 <Eye className="h-4 w-4 mr-2" />
                 View
-              </DropdownMenuItem>
-              <DropdownMenuItem>
+              </DaisyDropdownMenuItem>
+              <DaisyDropdownMenuItem>
                 <Edit className="h-4 w-4 mr-2" />
                 Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem>
+              </DaisyDropdownMenuItem>
+              <DaisyDropdownMenuItem>
                 <Share2 className="h-4 w-4 mr-2" />
                 Share
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600">
+              </DaisyDropdownMenuItem>
+              <DaisyDropdownMenuItem className="text-red-600">
                 <Trash2 className="h-4 w-4 mr-2" />
                 Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DaisyDropdownMenuItem>
+            </DaisyDropdownMenuContent>
+          </DaisyDropdownMenu>
         </div>
-      </CardHeader>
-      <CardContent>
+      
+      <DaisyCardContent>
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <Badge className={getTemplateTypeBadgeColor(spreadsheet.templateType)}>
+            <DaisyBadge className={getTemplateTypeBadgeColor(spreadsheet.templateType)}>
               {getTemplateTypeLabel(spreadsheet.templateType)}
-            </Badge>
+            </DaisyBadge>
             <span className="text-sm text-gray-500">
               {spreadsheet._count.sheets} sheet{spreadsheet._count.sheets !== 1 ? 's' : ''}
             </span>
@@ -222,8 +222,8 @@ export default function SpreadsheetsPage() {
             <span>{formatDate(spreadsheet.updatedAt)}</span>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 
   const SpreadsheetListItem = ({ spreadsheet }: { spreadsheet: Spreadsheet }) => (
@@ -236,40 +236,40 @@ export default function SpreadsheetsPage() {
             </h3>
             <p className="text-sm text-gray-500 mt-1">{spreadsheet.description}</p>
           </div>
-          <Badge className={getTemplateTypeBadgeColor(spreadsheet.templateType)}>
+          <DaisyBadge className={getTemplateTypeBadgeColor(spreadsheet.templateType)}>
             {getTemplateTypeLabel(spreadsheet.templateType)}
-          </Badge>
+          </DaisyBadge>
           <div className="text-sm text-gray-500 min-w-0">
             <div>{spreadsheet._count.sheets} sheets</div>
             <div>{formatDate(spreadsheet.updatedAt)}</div>
           </div>
         </div>
       </div>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
+      <DaisyDropdownMenu>
+        <DaisyDropdownMenuTrigger asChild>
+          <DaisyButton variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
             <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => router.push(`/dashboard/spreadsheets/${spreadsheet.id}`)}>
+          </DaisyButton>
+        </DaisyDropdownMenuTrigger>
+        <DaisyDropdownMenuContent align="end">
+          <DaisyDropdownMenuItem onClick={() => router.push(`/dashboard/spreadsheets/${spreadsheet.id}`)}>
             <Eye className="h-4 w-4 mr-2" />
             View
-          </DropdownMenuItem>
-          <DropdownMenuItem>
+          </DaisyDropdownMenuItem>
+          <DaisyDropdownMenuItem>
             <Edit className="h-4 w-4 mr-2" />
             Edit
-          </DropdownMenuItem>
-          <DropdownMenuItem>
+          </DaisyDropdownMenuItem>
+          <DaisyDropdownMenuItem>
             <Share2 className="h-4 w-4 mr-2" />
             Share
-          </DropdownMenuItem>
-          <DropdownMenuItem className="text-red-600">
+          </DaisyDropdownMenuItem>
+          <DaisyDropdownMenuItem className="text-red-600">
             <Trash2 className="h-4 w-4 mr-2" />
             Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+          </DaisyDropdownMenuItem>
+        </DaisyDropdownMenuContent>
+      </DaisyDropdownMenu>
     </div>
   );
 
@@ -299,24 +299,24 @@ export default function SpreadsheetsPage() {
             Create and manage risk assessment spreadsheets and matrices
           </p>
         </div>
-        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="flex items-center gap-2">
+        <DaisyDialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+          <DaisyDialogTrigger asChild>
+            <DaisyButton className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
               New Spreadsheet
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px]">
-            <DialogHeader>
-              <DialogTitle>Create New Spreadsheet</DialogTitle>
-              <DialogDescription>
+            </DaisyButton>
+          </DaisyDialogTrigger>
+          <DaisyDialogContent className="sm:max-w-[600px]">
+            <DaisyDialogHeader>
+              <DaisyDialogTitle>Create New Spreadsheet</DaisyDialogTitle>
+              <DaisyDialogDescription>
                 Choose a template and customize your spreadsheet for risk management and compliance tracking.
-              </DialogDescription>
-            </DialogHeader>
+              </DaisyDialogDescription>
+            </DaisyDialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
-                <Input
+                <DaisyLabel htmlFor="name">Name</DaisyLabel>
+                <DaisyInput
                   id="name"
                   placeholder="Enter spreadsheet name"
                   value={newSpreadsheet.name}
@@ -324,8 +324,8 @@ export default function SpreadsheetsPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
-                <Textarea
+                <DaisyLabel htmlFor="description">Description</DaisyLabel>
+                <DaisyTextarea
                   id="description"
                   placeholder="Enter a brief description"
                   value={newSpreadsheet.description}
@@ -333,17 +333,17 @@ export default function SpreadsheetsPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="templateType">Template Type</Label>
-                <Select
+                <DaisyLabel htmlFor="templateType">Template Type</DaisyLabel>
+                <DaisySelect
                   value={newSpreadsheet.templateType}
                   onValueChange={(value) => setNewSpreadsheet({ ...newSpreadsheet, templateType: value })}
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a template type" />
+                  <DaisySelectTrigger>
+                    <DaisySelectValue placeholder="Select a template type" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <DaisySelectContent>
                     {templateTypes.map((template) => (
-                      <SelectItem key={template.value} value={template.value}>
+                      <DaisySelectItem key={template.value} value={template.value}>
                         <div>
                           <div className="font-medium">{template.label}</div>
                           <div className="text-sm text-gray-500">{template.description}</div>
@@ -351,26 +351,26 @@ export default function SpreadsheetsPage() {
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </DaisySelect>
               </div>
             </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+            <DaisyDialogFooter>
+              <DaisyButton variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
                 Cancel
-              </Button>
-              <Button onClick={handleCreateSpreadsheet} disabled={!newSpreadsheet.name}>
+              </DaisyButton>
+              <DaisyButton onClick={handleCreateSpreadsheet} disabled={!newSpreadsheet.name}>
                 Create Spreadsheet
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+              </DaisyButton>
+            </DaisyDialogFooter>
+          </DaisyDialogContent>
+        </DaisyDialog>
       </div>
 
       {/* Filters and Search */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-          <Input
+          <DaisyInput
             placeholder="Search spreadsheets..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -378,37 +378,37 @@ export default function SpreadsheetsPage() {
           />
         </div>
         <div className="flex items-center gap-2">
-          <Select value={filterType} onValueChange={setFilterType}>
-            <SelectTrigger className="w-48">
+          <DaisySelect value={filterType} onValueChange={setFilterType}>
+            <DaisySelectTrigger className="w-48">
               <Filter className="h-4 w-4 mr-2" />
-              <SelectValue placeholder="Filter by type" />
+              <DaisySelectValue placeholder="Filter by type" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="all">All Types</SelectItem>
               {templateTypes.map((template) => (
-                <SelectItem key={template.value} value={template.value}>
+                <DaisySelectItem key={template.value} value={template.value}>
                   {template.label}
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </DaisySelect>
           <div className="flex items-center border rounded-md">
-            <Button
+            <DaisyButton
               variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('grid')}
               className="rounded-r-none"
             >
               <Grid className="h-4 w-4" />
-            </Button>
-            <Button
+            </DaisyButton>
+            <DaisyButton
               variant={viewMode === 'list' ? 'secondary' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('list')}
               className="rounded-l-none"
             >
               <List className="h-4 w-4" />
-            </Button>
+            </DaisyButton>
           </div>
         </div>
       </div>
@@ -424,10 +424,10 @@ export default function SpreadsheetsPage() {
             {searchTerm || filterType !== 'all' ? 'Try adjusting your search or filters' : 'Get started by creating your first spreadsheet'}
           </p>
           {!searchTerm && filterType === 'all' && (
-            <Button onClick={() => setIsCreateDialogOpen(true)}>
+            <DaisyButton onClick={() => setIsCreateDialogOpen(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Create New Spreadsheet
-            </Button>
+            </DaisyButton>
           )}
         </div>
       ) : (

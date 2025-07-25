@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Progress } from '@/components/ui/progress';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyAvatar, DaisyAvatarFallback } from '@/components/ui/DaisyAvatar';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisySelect } from '@/components/ui/DaisySelect';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -133,10 +133,10 @@ const StatusBadge: React.FC<{ status: EnhancedListItem['status'] }> = ({ status 
   const IconComponent = config.icon;
   
   return (
-    <Badge variant={config.variant} className="text-xs font-medium">
+    <DaisyBadge variant={config.variant} className="text-xs font-medium">
       <IconComponent className="h-3 w-3 mr-1" />
       {config.label}
-    </Badge>
+    </DaisyBadge>
   );
 };
 
@@ -145,9 +145,9 @@ const PriorityBadge: React.FC<{ priority: NonNullable<EnhancedListItem['priority
   const config = priorityConfig[priority];
   
   return (
-    <Badge variant={config.variant} className="text-xs font-medium">
+    <DaisyBadge variant={config.variant} className="text-xs font-medium">
       {config.label}
-    </Badge>
+    </DaisyBadge>
   );
 };
 
@@ -180,11 +180,11 @@ const UserAvatar: React.FC<{
 
   return (
     <div className="flex items-center gap-2">
-      <Avatar className={sizeClasses[size]}>
-        <AvatarFallback className="bg-[#199BEC]/10 text-[#199BEC] text-xs font-medium">
+      <DaisyAvatar className={sizeClasses[size]}>
+        <DaisyAvatarFallback className="bg-[#199BEC]/10 text-[#199BEC] text-xs font-medium">
           {user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-        </AvatarFallback>
-      </Avatar>
+        </DaisyAvatarFallback>
+      </DaisyAvatar>
       {showDetails && (
         <div className="flex flex-col min-w-0">
           <span className="text-sm font-medium text-[#191919] font-inter truncate">
@@ -212,14 +212,14 @@ const ContactInfo: React.FC<{
     return (
       <div className="flex items-center gap-3">
         {user.email && (
-          <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+          <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
             <Mail className="h-3 w-3 text-gray-500" />
-          </Button>
+          </DaisyButton>
         )}
         {metadata?.phone && (
-          <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+          <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
             <Phone className="h-3 w-3 text-gray-500" />
-          </Button>
+          </DaisyButton>
         )}
       </div>
     );
@@ -293,7 +293,7 @@ const DateDisplay: React.FC<{ date: Date | string; label?: string }> = ({ date, 
 
   return (
     <div className="flex items-center gap-2">
-      <Calendar className={cn("h-3 w-3 flex-shrink-0",
+      <DaisyCalendar className={cn("h-3 w-3 flex-shrink-0",
         isOverdue ? 'text-red-500' : 
         isUpcoming ? 'text-yellow-500' : 
         'text-gray-400'
@@ -326,14 +326,14 @@ const TagsDisplay: React.FC<{ tags: string[] }> = ({ tags }) => {
   return (
     <div className="flex items-center gap-1 flex-wrap">
       {displayTags.map((tag, index) => (
-        <Badge key={index} variant="secondary" className="text-xs">
+        <DaisyBadge key={index} variant="secondary" className="text-xs">
           {tag}
-        </Badge>
+        </DaisyBadge>
       ))}
       {remainingCount > 0 && (
-        <Badge variant="outline" className="text-xs">
+        <DaisyBadge variant="outline" className="text-xs">
           +{remainingCount}
-        </Badge>
+        </DaisyBadge>
       )}
     </div>
   );
@@ -347,9 +347,9 @@ const ActionsMenu: React.FC<{
   const device = useDevice();
   
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button 
+    <DaisyDropdownMenu>
+      <DaisyDropdownMenuTrigger asChild>
+        <DaisyButton 
           variant="ghost" 
           size="sm" 
           className={cn(
@@ -358,35 +358,35 @@ const ActionsMenu: React.FC<{
           )}
         >
           <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuItem onClick={() => onAction('view', item)}>
+        </DaisyButton>
+      </DaisyDropdownMenuTrigger>
+      <DaisyDropdownMenuContent align="end" className="w-48">
+        <DaisyDropdownMenuItem onClick={() => onAction('view', item)}>
           <Eye className="h-4 w-4 mr-2" />
           View Details
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onAction('edit', item)}>
+        </DaisyDropdownMenuItem>
+        <DaisyDropdownMenuItem onClick={() => onAction('edit', item)}>
           <Edit className="h-4 w-4 mr-2" />
           Edit
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onAction('copy', item)}>
+        </DaisyDropdownMenuItem>
+        <DaisyDropdownMenuItem onClick={() => onAction('copy', item)}>
           <Copy className="h-4 w-4 mr-2" />
           Duplicate
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => onAction('archive', item)}>
+        </DaisyDropdownMenuItem>
+        <DaisyDropdownMenuSeparator />
+        <DaisyDropdownMenuItem onClick={() => onAction('archive', item)}>
           <Archive className="h-4 w-4 mr-2" />
           Archive
-        </DropdownMenuItem>
-        <DropdownMenuItem 
+        </DaisyDropdownMenuItem>
+        <DaisyDropdownMenuItem 
           onClick={() => onAction('delete', item)}
           className="text-red-600 focus:text-red-600"
         >
           <Trash2 className="h-4 w-4 mr-2" />
           Delete
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        </DaisyDropdownMenuItem>
+      </DaisyDropdownMenuContent>
+    </DaisyDropdownMenu>
   );
 };
 
@@ -501,7 +501,7 @@ const DefaultListItem: React.FC<{
         {/* Progress */}
         {item.progress !== undefined && (
           <div>
-            <ProgressIndicator progress={item.progress} metadata={item.metadata} />
+            <DaisyProgressIndicator progress={item.progress} metadata={item.metadata} />
           </div>
         )}
 
@@ -596,7 +596,7 @@ const DetailedListItem: React.FC<{
             <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 font-inter">
               Progress
             </h4>
-            <ProgressIndicator progress={item.progress} metadata={item.metadata} />
+            <DaisyProgressIndicator progress={item.progress} metadata={item.metadata} />
           </div>
         )}
 
@@ -832,7 +832,7 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
           {searchable && (
             <div className="relative flex-1 min-w-0">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
+              <DaisyInput
                 placeholder="Search items..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -845,33 +845,33 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
           <div className="flex flex-wrap items-center gap-2">
             {filterable && (
               <>
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className={cn("gap-2", device.type === 'mobile' ? 'w-full' : 'w-36')}>
+                <DaisySelect value={statusFilter} onValueChange={setStatusFilter}>
+                  <DaisySelectTrigger className={cn("gap-2", device.type === 'mobile' ? 'w-full' : 'w-36')}>
                     <Filter className="h-4 w-4" />
-                    <SelectValue />
+                    <DaisySelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <DaisySelectContent>
                     {statusOptions.map(option => (
-                      <SelectItem key={option.value} value={option.value}>
+                      <DaisySelectItem key={option.value} value={option.value}>
                         {option.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </DaisySelect>
 
-                <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-                  <SelectTrigger className={cn("gap-2", device.type === 'mobile' ? 'w-full' : 'w-36')}>
+                <DaisySelect value={priorityFilter} onValueChange={setPriorityFilter}>
+                  <DaisySelectTrigger className={cn("gap-2", device.type === 'mobile' ? 'w-full' : 'w-36')}>
                     <Star className="h-4 w-4" />
-                    <SelectValue />
+                    <DaisySelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <DaisySelectContent>
                     {priorityOptions.map(option => (
-                      <SelectItem key={option.value} value={option.value}>
+                      <DaisySelectItem key={option.value} value={option.value}>
                         {option.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </DaisySelect>
               </>
             )}
 
@@ -879,30 +879,30 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
             {hasActiveFilters && (
               <div className="flex items-center gap-2">
                 {statusFilter !== 'all' && (
-                  <Badge variant="secondary" className="text-xs">
+                  <DaisyBadge variant="secondary" className="text-xs">
                     Status: {statusOptions.find(o => o.value === statusFilter)?.label}
-                    <Button
+                    <DaisyButton
                       variant="ghost"
                       size="sm"
                       className="h-3 w-3 p-0 ml-1"
                       onClick={() => setStatusFilter('all')}
                     >
                       <X className="h-2 w-2" />
-                    </Button>
-                  </Badge>
+                    </DaisyButton>
+                  </DaisyBadge>
                 )}
                 {priorityFilter !== 'all' && (
-                  <Badge variant="secondary" className="text-xs">
+                  <DaisyBadge variant="secondary" className="text-xs">
                     Priority: {priorityOptions.find(o => o.value === priorityFilter)?.label}
-                    <Button
+                    <DaisyButton
                       variant="ghost"
                       size="sm"
                       className="h-3 w-3 p-0 ml-1"
                       onClick={() => setPriorityFilter('all')}
                     >
                       <X className="h-2 w-2" />
-                    </Button>
-                  </Badge>
+                    </DaisyButton>
+                  </DaisyBadge>
                 )}
               </div>
             )}
@@ -912,21 +912,21 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
         {/* Sort Controls */}
         {sortable && device.type !== 'mobile' && (
           <div className="flex items-center gap-2">
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-32 gap-2">
+            <DaisySelect value={sortBy} onValueChange={setSortBy}>
+              <DaisySelectTrigger className="w-32 gap-2">
                 <ArrowUpDown className="h-4 w-4" />
-                <SelectValue />
+                <DaisySelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <DaisySelectContent>
                 {sortOptions.map(option => (
-                  <SelectItem key={option.value} value={option.value}>
+                  <DaisySelectItem key={option.value} value={option.value}>
                     {option.label}
                   </SelectItem>
                 ))}
               </SelectContent>
-            </Select>
+            </DaisySelect>
 
-            <Button
+            <DaisyButton
               variant="tertiary"
               size="sm"
               onClick={() => setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc')}
@@ -936,7 +936,7 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
               ) : (
                 <SortDesc className="h-4 w-4" />
               )}
-            </Button>
+            </DaisyButton>
           </div>
         )}
       </div>

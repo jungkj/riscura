@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import GuidedTour from '@/components/help/GuidedTour';
@@ -36,13 +36,19 @@ import {
   UserPlus,
   Share2,
   Bell,
-  Briefcase
+  Briefcase,
+  FileSpreadsheet,
+  Download,
+  Sparkles,
+  FileDown,
+  Link2
 } from 'lucide-react';
 import Image from 'next/image';
 
 // Import the interactive risk heat map component
 import { RiskHeatMap as InteractiveRiskHeatMap } from '@/components/ui/interactive-risk-heatmap';
 import RiskControlWidget from '@/components/dashboard/RiskControlWidget';
+import EmptyStateWizard from '@/components/dashboard/EmptyStateWizard';
 
 // Types
 interface DashboardStats {
@@ -103,6 +109,7 @@ export default function DashboardPage() {
   const [complianceData, setComplianceData] = useState<any[]>([]);
   const [controlsData, setControlsData] = useState<any[]>([]);
   const [pendingActionsData, setPendingActionsData] = useState<any[]>([]);
+  const [recentImports, setRecentImports] = useState<any[]>([]);
 
   // Fetch real dashboard data
   useEffect(() => {
@@ -216,76 +223,68 @@ export default function DashboardPage() {
     }
   }, [loading]);
 
+  // Load recent imports from localStorage
+  useEffect(() => {
+    try {
+      const imports = localStorage.getItem('recentExcelImports');
+      if (imports) {
+        const parsedImports = JSON.parse(imports);
+        // Sort by date and take the most recent 3
+        const sortedImports = parsedImports
+          .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
+          .slice(0, 3);
+        setRecentImports(sortedImports);
+      }
+    } catch (error) {
+      console.error('Failed to load recent imports:', error);
+    }
+  }, []);
+
   const quickActions: QuickAction[] = [
     {
-      id: 'probo-hub',
-      title: 'Probo Hub',
-      description: 'Access integrated risk & compliance platform',
-      icon: Briefcase,
-      href: '/dashboard/probo',
-      color: 'text-[#199BEC]',
-      badge: 'Hub'
+      id: 'import-excel',
+      title: 'Import Excel RCSA',
+      description: 'Convert your spreadsheets instantly',
+      icon: FileSpreadsheet,
+      href: '/dashboard/import',
+      color: 'text-green-600',
+      badge: 'Excel'
     },
     {
-      id: 'probo-vendor-assessment',
-      title: 'Assess Vendor',
-      description: 'AI-powered vendor security assessment',
-      icon: Shield,
-      href: '/dashboard/probo?tab=vendor-assessment',
-      color: 'text-[#199BEC]',
-      badge: 'Probo'
+      id: 'download-templates',
+      title: 'Download Templates',
+      description: 'Excel templates for easy migration',
+      icon: Download,
+      href: '/dashboard/templates',
+      color: 'text-blue-600',
+      badge: 'Templates'
+    },
+    {
+      id: 'ai-assistant',
+      title: 'AI Risk Assistant',
+      description: 'Generate risks 10x faster',
+      icon: Sparkles,
+      href: '/dashboard/aria',
+      color: 'text-purple-600',
+      badge: 'Beta'
+    },
+    {
+      id: 'export-reports',
+      title: 'Export Reports',
+      description: 'Back to Excel anytime',
+      icon: FileDown,
+      href: '/dashboard/reporting/export',
+      color: 'text-orange-600',
+      badge: 'Export'
     },
     {
       id: 'new-risk',
       title: 'Add New Risk',
-      description: 'Document and assess a new risk',
+      description: 'Create risk with AI assistance',
       icon: Shield,
       href: '/dashboard/risks/new',
       color: 'text-red-600',
       badge: 'Quick'
-    },
-    {
-      id: 'probo-controls',
-      title: 'Browse Controls',
-      description: 'Access security controls library',
-      icon: Target,
-      href: '/dashboard/probo?tab=controls-library',
-      color: 'text-emerald-600',
-      badge: 'Library'
-    },
-    {
-      id: 'import-rcsa',
-      title: 'Import RCSA',
-      description: 'Upload risk assessment data',
-      icon: Upload,
-      href: '/dashboard/import/rcsa',
-      color: 'text-blue-600'
-    },
-    {
-      id: 'ask-aria',
-      title: 'Ask ARIA',
-      description: 'Get AI-powered insights',
-      icon: () => <Image src="/images/logo/riscura.png" alt="Riscura" width={20} height={20} />,
-      href: '/dashboard/aria',
-      color: 'text-[#199BEC]',
-      badge: 'AI'
-    },
-    {
-      id: 'probo-soc2',
-      title: 'SOC 2 Assessment',
-      description: 'Framework compliance tracking',
-      icon: CheckCircle2,
-      href: '/dashboard/probo?tab=soc2-assessment',
-      color: 'text-purple-600',
-      badge: 'SOC 2'
-    },
-    {
-      id: 'generate-report',
-      title: 'Generate Report',
-      description: 'Create compliance reports',
-      icon: FileText,
-      href: '/dashboard/reporting',
-      color: 'text-green-600'
     },
     {
       id: 'risk-assessment',
@@ -293,7 +292,33 @@ export default function DashboardPage() {
       description: 'Conduct risk evaluation',
       icon: Target,
       href: '/dashboard/risks/assessment',
-      color: 'text-orange-600'
+      color: 'text-emerald-600'
+    },
+    {
+      id: 'control-mapping',
+      title: 'Map Controls',
+      description: 'Smart control suggestions',
+      icon: Link2,
+      href: '/dashboard/controls/mapping',
+      color: 'text-indigo-600',
+      badge: 'Smart'
+    },
+    {
+      id: 'compliance-check',
+      title: 'Compliance Check',
+      description: 'Instant compliance status',
+      icon: CheckCircle2,
+      href: '/dashboard/compliance',
+      color: 'text-teal-600'
+    },
+    {
+      id: 'team-collaborate',
+      title: 'Invite Team',
+      description: 'Collaborate on risk management',
+      icon: Users,
+      href: '/dashboard/team/invite',
+      color: 'text-pink-600',
+      badge: 'Team'
     }
   ];
 
@@ -557,42 +582,59 @@ export default function DashboardPage() {
         <div>
           <div className="flex items-center gap-3 mb-2">
             <h1 className="text-3xl font-bold text-[#191919]">Dashboard</h1>
-            <Badge variant="secondary" className="bg-[#D8C3A5] text-[#191919] font-semibold">
+            <DaisyBadge variant="secondary" className="bg-[#D8C3A5] text-[#191919] font-semibold">
               Live
-            </Badge>
+            </DaisyBadge>
           </div>
           <p className="text-[#A8A8A8] font-semibold">Welcome back! Here's your risk management overview.</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button 
+          <DaisyButton 
             variant="secondary" 
             onClick={() => setShowTour(true)}
             className="text-sm border-[#D8C3A5] text-[#191919] hover:bg-[#D8C3A5]"
           >
             <Lightbulb className="h-4 w-4 mr-2" />
             Take Tour
-          </Button>
-          <Button 
+          </DaisyButton>
+          <DaisyButton 
             onClick={() => router.push('/dashboard/risks/new')}
             className="bg-[#191919] text-white hover:bg-[#333333]"
           >
             <Plus className="h-4 w-4 mr-2" />
             Add Risk
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
+      {/* Show Empty State Wizard if no risks */}
+      {stats.totalRisks === 0 && !loading && (
+        <EmptyStateWizard 
+          onImportComplete={() => {
+            // Refresh dashboard data
+            window.location.reload();
+          }}
+          onRiskCreated={() => {
+            // Navigation handled in component
+          }}
+          onDemoStarted={() => {
+            // Demo mode will be handled later
+          }}
+        />
+      )}
+
       {/* Main Dashboard Grid - Enhanced Layout with Better Balance */}
+      {stats.totalRisks > 0 && (
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Left Column - Compact Stats & Quick Actions */}
         <div className="lg:col-span-4 space-y-4">
           {/* Quick Stats */}
           <div className="grid grid-cols-2 gap-3">
-            <Card 
+            <DaisyCard 
               className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
               onClick={() => handleStatsCardClick('totalRisks')}
             >
-              <CardContent className="p-4">
+              <DaisyCardContent className="p-4">
                 <div className="flex items-center">
                   <div className="p-2 bg-blue-50 rounded-lg">  
                     <Shield className="h-5 w-5 text-blue-600" />
@@ -602,31 +644,31 @@ export default function DashboardPage() {
                     <p className="text-xs text-gray-600">Total Risks</p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
-            <Card 
+            <DaisyCard 
               className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
               onClick={() => handleStatsCardClick('highRisks')}
             >
-              <CardContent className="p-4">
+              <DaisyCardContent className="p-4">
                 <div className="flex items-center">
                   <div className="p-2 bg-red-50 rounded-lg">
-                    <AlertTriangle className="h-5 w-5 text-red-600" />
+                    <DaisyAlertTriangle className="h-5 w-5 text-red-600" />
                   </div>
                   <div className="ml-3">
                     <p className="text-2xl font-bold text-red-600">{stats.highRisks}</p>
                     <p className="text-xs text-gray-600">High Priority</p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
-            <Card 
+            <DaisyCard 
               className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
               onClick={() => handleStatsCardClick('complianceScore')}
             >
-              <CardContent className="p-4">
+              <DaisyCardContent className="p-4">
                 <div className="flex items-center">
                   <div className="p-2 bg-green-50 rounded-lg">
                     <CheckCircle className="h-5 w-5 text-green-600" />
@@ -636,14 +678,14 @@ export default function DashboardPage() {
                     <p className="text-xs text-gray-600">Compliance</p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
-            <Card 
+            <DaisyCard 
               className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
               onClick={() => handleStatsCardClick('activeControls')}
             >
-              <CardContent className="p-4">
+              <DaisyCardContent className="p-4">
                 <div className="flex items-center">
                   <div className="p-2 bg-purple-50 rounded-lg">
                     <Settings className="h-5 w-5 text-purple-600" />
@@ -653,19 +695,19 @@ export default function DashboardPage() {
                     <p className="text-xs text-gray-600">Controls</p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           </div>
 
           {/* Quick Actions - Simplified Card */}
-          <Card className="bg-white border-gray-200">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2">
+          <DaisyCard className="bg-white border-gray-200">
+            <DaisyCardHeader className="pb-3">
+              <DaisyCardTitle className="flex items-center gap-2">
                 <Zap className="h-5 w-5 text-[#199BEC]" />
                 <span className="text-[#191919] font-bold text-base">Quick Actions</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
+              </DaisyCardTitle>
+            
+            <DaisyCardContent className="pt-0">
               <div className="grid grid-cols-2 gap-3 h-full">
                 {quickActions.slice(0, 4).map((action) => (
                   <QuickActionCard
@@ -679,8 +721,61 @@ export default function DashboardPage() {
                   />
                 ))}
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
+
+          {/* Recently Imported Section */}
+          {recentImports.length > 0 && (
+            <DaisyCard className="bg-white border-gray-200">
+              <DaisyCardHeader className="pb-3">
+                <DaisyCardTitle className="flex items-center gap-2">
+                  <FileSpreadsheet className="h-5 w-5 text-green-600" />
+                  <span className="text-[#191919] font-bold text-base">Recently Imported</span>
+                  <DaisyBadge variant="secondary" className="bg-green-100 text-green-800 font-semibold text-xs">
+                    {recentImports.length} files
+                  </DaisyBadge>
+                </DaisyCardTitle>
+              
+              <DaisyCardContent className="pt-0">
+                <div className="space-y-2">
+                  {recentImports.map((importItem, index) => (
+                    <div 
+                      key={index}
+                      className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-green-50 rounded-lg">
+                          <FileSpreadsheet className="h-4 w-4 text-green-600" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm text-[#191919]">{importItem.filename}</p>
+                          <p className="text-xs text-gray-500">
+                            {importItem.risksImported} risks • {new Date(importItem.date).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <DaisyButton
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => router.push('/dashboard/risks')}
+                        >
+                          View
+                        </DaisyButton>
+                        <DaisyButton
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => router.push('/dashboard/import')}
+                        >
+                          Re-import
+                        </DaisyButton>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </DaisyCardBody>
+            </DaisyCard>
+          )}
         </div>
 
         {/* Right Column - Expanded Risk Heat Map Showcase */}
@@ -691,8 +786,11 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+      )}
 
       {/* Probo Integration Section */}
+      {stats.totalRisks > 0 && (
+      <>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         <div className="lg:col-span-2">
           <RiskControlWidget variant="detailed" showActions={true} />
@@ -706,9 +804,9 @@ export default function DashboardPage() {
       {/* Bottom Section - AI Insights Only */}
       <div className="grid grid-cols-1 gap-6 md:gap-8">
         {/* AI Insights */}
-        <Card data-tour="ai-insights" className="bg-white border-gray-200">
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
+        <DaisyCard data-tour="ai-insights" className="bg-white border-gray-200">
+          <DaisyCardHeader>
+            <DaisyCardTitle className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Image 
                   src="/images/logo/riscura.png" 
@@ -718,12 +816,12 @@ export default function DashboardPage() {
                 />
                 <span className="text-[#191919] font-bold">AI Insights</span>
               </div>
-              <Badge variant="secondary" className="bg-purple-100 text-purple-800 font-semibold text-xs">
+              <DaisyBadge variant="secondary" className="bg-purple-100 text-purple-800 font-semibold text-xs">
                 {insights.length} Insights
-              </Badge>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+              </DaisyBadge>
+            </DaisyCardTitle>
+          
+          <DaisyCardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {insights.map((insight) => (
                 <div key={insight.id} className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
@@ -731,48 +829,48 @@ export default function DashboardPage() {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         <h4 className="font-medium text-gray-900">{insight.title}</h4>
-                        <Badge 
+                        <DaisyBadge 
                           variant={insight.priority === 'high' ? 'destructive' : insight.priority === 'medium' ? 'default' : 'secondary'}
                           className="text-xs"
                         >
                           {insight.priority}
-                        </Badge>
+                        </DaisyBadge>
                       </div>
                       <p className="text-sm text-gray-600 mb-3">{insight.description}</p>
                       {insight.action && (
-                        <Button variant="secondary" size="sm">
+                        <DaisyButton variant="secondary" size="sm">
                           {insight.action}
                           <ArrowRight className="h-3 w-3 ml-1" />
-                        </Button>
+                        </DaisyButton>
                       )}
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
 
       {/* Team Collaboration Section - Small Team Features */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         {/* Team Status */}
-        <Card className="bg-white border-gray-200">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        <DaisyCard className="bg-white border-gray-200">
+          <DaisyCardHeader>
+            <DaisyCardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5 text-blue-600" />
               <span className="text-[#191919] font-bold">Team Status</span>
-              <Badge variant="secondary" className="bg-blue-100 text-blue-800 font-semibold text-xs">
+              <DaisyBadge variant="secondary" className="bg-blue-100 text-blue-800 font-semibold text-xs">
                 Live
-              </Badge>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+              </DaisyBadge>
+            </DaisyCardTitle>
+          
+          <DaisyCardContent className="space-y-4">
             <div className="text-center py-8">
               <Users className="h-12 w-12 text-gray-300 mx-auto mb-3" />
               <p className="text-gray-500 text-sm">No team members yet</p>
               <p className="text-gray-400 text-xs mt-1">Invite your team to collaborate</p>
-              <Button
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 className="mt-4"
@@ -780,24 +878,24 @@ export default function DashboardPage() {
               >
                 <UserPlus className="h-4 w-4 mr-2" />
                 Invite Team
-              </Button>
+              </DaisyButton>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
         {/* Quick Team Actions */}
-        <Card className="bg-white border-gray-200">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        <DaisyCard className="bg-white border-gray-200">
+          <DaisyCardHeader>
+            <DaisyCardTitle className="flex items-center gap-2">
               <Briefcase className="h-5 w-5 text-purple-600" />
               <span className="text-[#191919] font-bold">Team Actions</span>
-              <Badge variant="secondary" className="bg-purple-100 text-purple-800 font-semibold text-xs">
+              <DaisyBadge variant="secondary" className="bg-purple-100 text-purple-800 font-semibold text-xs">
                 Small Team
-              </Badge>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <Button 
+              </DaisyBadge>
+            </DaisyCardTitle>
+          
+          <DaisyCardContent className="space-y-3">
+            <DaisyButton 
               variant="ghost" 
               className="w-full justify-start h-auto p-3 hover:bg-gray-50"
               onClick={() => router.push('/dashboard/team/delegate')}
@@ -811,8 +909,8 @@ export default function DashboardPage() {
                   <p className="text-xs text-gray-500">Assign ownership to team member</p>
                 </div>
               </div>
-            </Button>
-            <Button 
+            </DaisyButton>
+            <DaisyButton 
               variant="ghost" 
               className="w-full justify-start h-auto p-3 hover:bg-gray-50"
               onClick={() => router.push('/dashboard/team/chat')}
@@ -826,8 +924,8 @@ export default function DashboardPage() {
                   <p className="text-xs text-gray-500">Discuss risks and controls</p>
                 </div>
               </div>
-            </Button>
-            <Button 
+            </DaisyButton>
+            <DaisyButton 
               variant="ghost" 
               className="w-full justify-start h-auto p-3 hover:bg-gray-50"
               onClick={() => router.push('/dashboard/team/notifications')}
@@ -841,40 +939,40 @@ export default function DashboardPage() {
                   <p className="text-xs text-gray-500">Set up notifications for team</p>
                 </div>
               </div>
-            </Button>
-          </CardContent>
-        </Card>
+            </DaisyButton>
+          </DaisyCardBody>
+        </DaisyCard>
 
         {/* Small Team Insights */}
-        <Card className="bg-white border-gray-200">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        <DaisyCard className="bg-white border-gray-200">
+          <DaisyCardHeader>
+            <DaisyCardTitle className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-green-600" />
               <span className="text-[#191919] font-bold">Team Efficiency</span>
-              <Badge variant="secondary" className="bg-green-100 text-green-800 font-semibold text-xs">
+              <DaisyBadge variant="secondary" className="bg-green-100 text-green-800 font-semibold text-xs">
                 Optimized
-              </Badge>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+              </DaisyBadge>
+            </DaisyCardTitle>
+          
+          <DaisyCardContent className="space-y-4">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-gray-700">Risk Resolution Rate</span>
                 <span className="text-sm font-bold text-green-600">85%</span>
               </div>
-              <Progress value={85} className="h-2" />
+              <DaisyProgress value={85} className="h-2" />
               
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-gray-700">Team Collaboration</span>
                 <span className="text-sm font-bold text-blue-600">92%</span>
               </div>
-              <Progress value={92} className="h-2" />
+              <DaisyProgress value={92} className="h-2" />
               
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-gray-700">Response Time</span>
                 <span className="text-sm font-bold text-purple-600">2.1 hrs</span>
               </div>
-              <Progress value={78} className="h-2" />
+              <DaisyProgress value={78} className="h-2" />
             </div>
             
             <div className="pt-3 border-t border-gray-100">
@@ -883,9 +981,11 @@ export default function DashboardPage() {
                 <span>Team efficiency improved by 12% this month</span>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
+      </>
+      )}
 
       {/* Stats Modal */}
       <DashboardStatsModal
@@ -922,7 +1022,7 @@ function QuickActionCard({
           <Icon className={`w-4 h-4 ${color} group-hover:text-blue-600 transition-colors`} />
         </div>
         {badge && (
-          <Badge 
+          <DaisyBadge 
             variant="secondary" 
             className={`text-xs font-semibold ml-auto ${
               badge === 'Quick' ? 'bg-green-100 text-green-800' :
@@ -937,7 +1037,7 @@ function QuickActionCard({
             }`}
           >
             {badge}
-          </Badge>
+          </DaisyBadge>
         )}
       </div>
       <div className="flex-1">
@@ -1006,9 +1106,9 @@ function ActivityItem({
           <span className="text-xs text-gray-400">•</span>
           <p className="text-xs text-gray-500">{time}</p>
           <span className="text-xs text-gray-400">•</span>
-          <Badge className={`text-xs border ${getModuleBadgeColor(module)}`}>
+          <DaisyBadge className={`text-xs border ${getModuleBadgeColor(module)}`}>
             {module}
-          </Badge>
+          </DaisyBadge>
         </div>
       </div>
       <div className={`p-1 rounded-full ${config.bg} flex-shrink-0`}>

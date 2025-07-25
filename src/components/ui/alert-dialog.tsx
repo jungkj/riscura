@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
 
 import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 
 const AlertDialog = AlertDialogPrimitive.Root;
 
@@ -14,7 +14,7 @@ const AlertDialogOverlay = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Overlay
+  <DaisyAlertDialogPrimitive.Overlay
     className={cn(
       'fixed inset-0 z-50 bg-black/60 backdrop-blur-sm',
       'data-[state=open]:animate-in data-[state=closed]:animate-out',
@@ -32,9 +32,9 @@ const AlertDialogContent = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>
 >(({ className, ...props }, ref) => (
-  <AlertDialogPortal>
-    <AlertDialogOverlay />
-    <AlertDialogPrimitive.Content
+  <DaisyAlertDialogPortal>
+    <DaisyAlertDialogOverlay />
+    <DaisyAlertDialogPrimitive.Content
       ref={ref}
       className={cn(
         'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%]',
@@ -91,7 +91,7 @@ const AlertDialogTitle = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Title
+  <DaisyAlertDialogPrimitive.Title
     ref={ref}
     className={cn(
       'text-2xl font-semibold leading-tight tracking-tight',
@@ -108,7 +108,7 @@ const AlertDialogDescription = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Description
+  <DaisyAlertDialogPrimitive.Description
     ref={ref}
     className={cn(
       'text-sm leading-relaxed',
@@ -126,7 +126,7 @@ const AlertDialogAction = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Action>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Action>
 >(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Action
+  <DaisyAlertDialogPrimitive.Action
     ref={ref}
     className={cn(
       'inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-semibold',
@@ -146,7 +146,7 @@ const AlertDialogCancel = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Cancel>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Cancel>
 >(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Cancel
+  <DaisyAlertDialogPrimitive.Cancel
     ref={ref}
     className={cn(
       'inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-semibold',

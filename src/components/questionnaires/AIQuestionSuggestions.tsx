@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger } from '@/components/ui/DaisyTooltip';
 
 import {
   Brain, Sparkles, Target, Shield, CheckCircle, AlertTriangle,
@@ -245,12 +245,12 @@ export function AIQuestionSuggestions({
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center space-x-2">
-          <Badge variant="outline" className={getPriorityColor(suggestion.priority)}>
+          <DaisyBadge variant="outline" className={getPriorityColor(suggestion.priority)}>
             {suggestion.priority.toUpperCase()}
-          </Badge>
-          <Badge variant="outline" className="text-xs">
+          </DaisyBadge>
+          <DaisyBadge variant="outline" className="text-xs">
             {suggestion.category}
-          </Badge>
+          </DaisyBadge>
         </div>
         
         <div className="flex items-center space-x-1 text-xs text-notion-text-secondary">
@@ -288,9 +288,9 @@ export function AIQuestionSuggestions({
         <p className="text-xs text-notion-text-secondary mb-1">Context Factors:</p>
         <div className="flex flex-wrap gap-1">
           {suggestion.contextFactors.map((factor, index) => (
-            <Badge key={index} variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
+            <DaisyBadge key={index} variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
               {factor}
-            </Badge>
+            </DaisyBadge>
           ))}
         </div>
       </div>
@@ -300,9 +300,9 @@ export function AIQuestionSuggestions({
         <p className="text-xs text-notion-text-secondary mb-1">Tags:</p>
         <div className="flex flex-wrap gap-1">
           {suggestion.tags.map((tag, index) => (
-            <Badge key={index} variant="outline" className="text-xs">
+            <DaisyBadge key={index} variant="outline" className="text-xs">
               {tag}
-            </Badge>
+            </DaisyBadge>
           ))}
         </div>
       </div>
@@ -310,42 +310,42 @@ export function AIQuestionSuggestions({
       {/* Actions */}
       <div className="flex items-center justify-between pt-3 border-t border-notion-border">
         <div className="flex items-center space-x-1">
-          <Tooltip>
-            <TooltipTrigger>
-              <Button variant="ghost" size="sm">
+          <DaisyTooltip>
+            <DaisyTooltipTrigger>
+              <DaisyButton variant="ghost" size="sm">
                 <ThumbsUp className="w-3 h-3" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Good suggestion</TooltipContent>
-          </Tooltip>
+              </DaisyButton>
+            </DaisyTooltipTrigger>
+            <DaisyTooltipContent>Good suggestion</DaisyTooltipContent>
+          </DaisyTooltip>
           
-          <Tooltip>
-            <TooltipTrigger>
-              <Button variant="ghost" size="sm">
+          <DaisyTooltip>
+            <DaisyTooltipTrigger>
+              <DaisyButton variant="ghost" size="sm">
                 <ThumbsDown className="w-3 h-3" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Poor suggestion</TooltipContent>
-          </Tooltip>
+              </DaisyButton>
+            </DaisyTooltipTrigger>
+            <DaisyTooltipContent>Poor suggestion</DaisyTooltipContent>
+          </DaisyTooltip>
           
-          <Tooltip>
-            <TooltipTrigger>
-              <Button variant="ghost" size="sm">
+          <DaisyTooltip>
+            <DaisyTooltipTrigger>
+              <DaisyButton variant="ghost" size="sm">
                 <Copy className="w-3 h-3" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Copy question text</TooltipContent>
-          </Tooltip>
+              </DaisyButton>
+            </DaisyTooltipTrigger>
+            <DaisyTooltipContent>Copy question text</DaisyTooltipContent>
+          </DaisyTooltip>
         </div>
 
-        <Button 
+        <DaisyButton 
           size="sm" 
           onClick={() => onApplySuggestion(suggestion)}
           className="bg-notion-blue hover:bg-notion-blue/90"
         >
           <Plus className="w-3 h-3 mr-1" />
           Add
-        </Button>
+        </DaisyButton>
       </div>
     </motion.div>
   );
@@ -359,20 +359,20 @@ export function AIQuestionSuggestions({
           <h4 className="font-medium text-notion-text-primary">AI Question Generator</h4>
         </div>
         
-        <Select value={selectedContext} onValueChange={setSelectedContext}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select context" />
+        <DaisySelect value={selectedContext} onValueChange={setSelectedContext}>
+          <DaisySelectTrigger className="w-full">
+            <DaisySelectValue placeholder="Select context" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="industry">Industry Best Practices</SelectItem>
-            <SelectItem value="framework">Compliance Framework</SelectItem>
-            <SelectItem value="risk">Risk-Based Assessment</SelectItem>
-            <SelectItem value="maturity">Maturity Assessment</SelectItem>
-            <SelectItem value="audit">Audit Readiness</SelectItem>
+          <DaisySelectContent>
+            <DaisySelectItem value="industry">Industry Best Practices</SelectItem>
+            <DaisySelectItem value="framework">Compliance Framework</SelectItem>
+            <DaisySelectItem value="risk">Risk-Based Assessment</SelectItem>
+            <DaisySelectItem value="maturity">Maturity Assessment</SelectItem>
+            <DaisySelectItem value="audit">Audit Readiness</SelectItem>
           </SelectContent>
-        </Select>
+        </DaisySelect>
 
-        <Button 
+        <DaisyButton 
           onClick={generateContextualSuggestions}
           disabled={isGenerating}
           className="w-full"
@@ -388,7 +388,7 @@ export function AIQuestionSuggestions({
               Generate Questions
             </>
           )}
-        </Button>
+        </DaisyButton>
       </div>
 
       {/* Custom Prompt */}
@@ -398,14 +398,14 @@ export function AIQuestionSuggestions({
           <h5 className="font-medium text-notion-text-primary">Custom AI Prompt</h5>
         </div>
         
-        <Textarea
+        <DaisyTextarea
           placeholder="Describe a specific area you want to assess (e.g., 'remote work security challenges', 'third-party data sharing risks')..."
           value={customPrompt}
           onChange={(e) => setCustomPrompt(e.target.value)}
           rows={3}
         />
         
-        <Button 
+        <DaisyButton 
           onClick={generateCustomSuggestions}
           disabled={isGenerating || !customPrompt.trim()}
           size="sm"
@@ -413,36 +413,36 @@ export function AIQuestionSuggestions({
         >
           <Sparkles className="w-4 h-4 mr-2" />
           Generate Custom Question
-        </Button>
+        </DaisyButton>
       </div>
 
       {/* Filters */}
       <div className="grid grid-cols-2 gap-2">
-        <Select value={filterType} onValueChange={(value) => setFilterType(value as QuestionType | 'all')}>
-          <SelectTrigger>
-            <SelectValue placeholder="Type" />
+        <DaisySelect value={filterType} onValueChange={(value) => setFilterType(value as QuestionType | 'all')}>
+          <DaisySelectTrigger>
+            <DaisySelectValue placeholder="Type" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
-            <SelectItem value="text">Text</SelectItem>
-            <SelectItem value="single_choice">Single Choice</SelectItem>
-            <SelectItem value="multiple_choice">Multiple Choice</SelectItem>
-            <SelectItem value="scale">Scale</SelectItem>
-            <SelectItem value="boolean">Yes/No</SelectItem>
+          <DaisySelectContent>
+            <DaisySelectItem value="all">All Types</SelectItem>
+            <DaisySelectItem value="text">Text</SelectItem>
+            <DaisySelectItem value="single_choice">Single Choice</SelectItem>
+            <DaisySelectItem value="multiple_choice">Multiple Choice</SelectItem>
+            <DaisySelectItem value="scale">Scale</SelectItem>
+            <DaisySelectItem value="boolean">Yes/No</SelectItem>
           </SelectContent>
-        </Select>
+        </DaisySelect>
 
-        <Select value={filterPriority} onValueChange={(value) => setFilterPriority(value as 'high' | 'medium' | 'low' | 'all')}>
-          <SelectTrigger>
-            <SelectValue placeholder="Priority" />
+        <DaisySelect value={filterPriority} onValueChange={(value) => setFilterPriority(value as 'high' | 'medium' | 'low' | 'all')}>
+          <DaisySelectTrigger>
+            <DaisySelectValue placeholder="Priority" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Priorities</SelectItem>
-            <SelectItem value="high">High</SelectItem>
-            <SelectItem value="medium">Medium</SelectItem>
-            <SelectItem value="low">Low</SelectItem>
+          <DaisySelectContent>
+            <DaisySelectItem value="all">All Priorities</SelectItem>
+            <DaisySelectItem value="high">High</SelectItem>
+            <DaisySelectItem value="medium">Medium</SelectItem>
+            <DaisySelectItem value="low">Low</SelectItem>
           </SelectContent>
-        </Select>
+        </DaisySelect>
       </div>
 
       {/* Suggestions List */}
@@ -452,7 +452,7 @@ export function AIQuestionSuggestions({
             AI Suggestions ({filteredSuggestions.length})
           </h5>
           {suggestions.length > 0 && (
-            <Button 
+            <DaisyButton 
               variant="ghost" 
               size="sm"
               onClick={generateContextualSuggestions}
@@ -460,7 +460,7 @@ export function AIQuestionSuggestions({
             >
               <RefreshCw className="w-3 h-3 mr-1" />
               Refresh
-            </Button>
+            </DaisyButton>
           )}
         </div>
 
@@ -476,7 +476,7 @@ export function AIQuestionSuggestions({
                 <p className="text-sm text-notion-text-secondary">
                   AI is analyzing context and generating personalized questions...
                 </p>
-                <Progress value={75} className="w-32 mx-auto mt-3" />
+                <DaisyProgress value={75} className="w-32 mx-auto mt-3" />
               </motion.div>
             )}
             

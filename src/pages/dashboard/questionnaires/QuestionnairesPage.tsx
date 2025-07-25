@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisySelect } from '@/components/ui/DaisySelect';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 
@@ -685,7 +685,7 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
           </div>
 
           <div className="flex items-center space-x-2">
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={() => setShowAIPanel(!showAIPanel)}
@@ -693,21 +693,21 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
             >
               <Brain className="w-4 h-4 mr-2" />
               AI Assistant
-            </Button>
+            </DaisyButton>
             
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={() => setShowFilters(!showFilters)}
             >
               <Filter className="w-4 h-4 mr-2" />
               Filters
-            </Button>
+            </DaisyButton>
 
-            <Button onClick={handleCreateQuestionnaire}>
+            <DaisyButton onClick={handleCreateQuestionnaire}>
               <Plus className="w-4 h-4 mr-2" />
               Create Questionnaire
-            </Button>
+            </DaisyButton>
           </div>
         </div>
 
@@ -722,7 +722,7 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
             >
               <div className="flex items-center space-x-4">
                 <div className="flex-1">
-                  <Input
+                  <DaisyInput
                     placeholder="Search questionnaires..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -730,37 +730,37 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
                   />
                 </div>
                 
-                <Select value={selectedCategory} onValueChange={(value) => 
+                <DaisySelect value={selectedCategory} onValueChange={(value) => 
                   setSelectedCategory(value as QuestionnaireCategory | 'all')
                 }>
-                  <SelectTrigger className="w-48">
-                    <SelectValue placeholder="Category" />
+                  <DaisySelectTrigger className="w-48">
+                    <DaisySelectValue placeholder="Category" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="risk_assessment">Risk Assessment</SelectItem>
-                    <SelectItem value="compliance_audit">Compliance Audit</SelectItem>
-                    <SelectItem value="control_testing">Control Testing</SelectItem>
-                    <SelectItem value="vendor_assessment">Vendor Assessment</SelectItem>
-                    <SelectItem value="security_review">Security Review</SelectItem>
+                  <DaisySelectContent>
+                    <DaisySelectItem value="all">All Categories</SelectItem>
+                    <DaisySelectItem value="risk_assessment">Risk Assessment</SelectItem>
+                    <DaisySelectItem value="compliance_audit">Compliance Audit</SelectItem>
+                    <DaisySelectItem value="control_testing">Control Testing</SelectItem>
+                    <DaisySelectItem value="vendor_assessment">Vendor Assessment</SelectItem>
+                    <DaisySelectItem value="security_review">Security Review</SelectItem>
                   </SelectContent>
-                </Select>
+                </DaisySelect>
 
-                <Select value={selectedStatus} onValueChange={(value) =>
+                <DaisySelect value={selectedStatus} onValueChange={(value) =>
                   setSelectedStatus(value as QuestionnaireStatus | 'all')
                 }>
-                  <SelectTrigger className="w-48">
-                    <SelectValue placeholder="Status" />
+                  <DaisySelectTrigger className="w-48">
+                    <DaisySelectValue placeholder="Status" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="draft">Draft</SelectItem>
-                    <SelectItem value="review">Under Review</SelectItem>
-                    <SelectItem value="published">Published</SelectItem>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="archived">Archived</SelectItem>
+                  <DaisySelectContent>
+                    <DaisySelectItem value="all">All Status</SelectItem>
+                    <DaisySelectItem value="draft">Draft</SelectItem>
+                    <DaisySelectItem value="review">Under Review</SelectItem>
+                    <DaisySelectItem value="published">Published</SelectItem>
+                    <DaisySelectItem value="active">Active</SelectItem>
+                    <DaisySelectItem value="archived">Archived</SelectItem>
                   </SelectContent>
-                </Select>
+                </DaisySelect>
               </div>
             </motion.div>
           )}
@@ -792,18 +792,18 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
           </motion.div>
 
           {/* Main Content Tabs */}
-          <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
-            <TabsList className="grid w-full grid-cols-7">
-              <TabsTrigger value="list">Questionnaires</TabsTrigger>
-              <TabsTrigger value="enhanced-search">Advanced Search</TabsTrigger>
-              <TabsTrigger value="builder">Builder</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-              <TabsTrigger value="templates">Templates</TabsTrigger>
-              <TabsTrigger value="workflow">Workflow</TabsTrigger>
-              <TabsTrigger value="collaboration">Collaboration</TabsTrigger>
-            </TabsList>
+          <DaisyTabs value={activeView} onValueChange={setActiveView} className="space-y-6">
+            <DaisyTabsList className="grid w-full grid-cols-7">
+              <DaisyTabsTrigger value="list">Questionnaires</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="enhanced-search">Advanced Search</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="builder">Builder</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="analytics">Analytics</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="templates">Templates</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="workflow">Workflow</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="collaboration">Collaboration</DaisyTabsTrigger>
+            </DaisyTabsList>
 
-            <TabsContent value="list" className="space-y-6">
+            <DaisyTabsContent value="list" className="space-y-6">
               <QuestionnaireList
                 questionnaires={filteredQuestionnaires}
                 onEdit={handleEditQuestionnaire}
@@ -813,13 +813,13 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
                 viewMode={questionnaireViewMode}
                 onViewModeChange={setQuestionnaireViewMode}
               />
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="enhanced-search" className="space-y-6">
+            <DaisyTabsContent value="enhanced-search" className="space-y-6">
               <EnhancedQuestionnaireList />
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="builder" className="space-y-6">
+            <DaisyTabsContent value="builder" className="space-y-6">
               <EnhancedQuestionnaireBuilder
                 questionnaire={selectedQuestionnaire}
                 onSave={(questionnaire) => {
@@ -837,24 +837,24 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
                   setSelectedQuestionnaire(null);
                 }}
               />
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="analytics" className="space-y-6">
+            <DaisyTabsContent value="analytics" className="space-y-6">
               <AnalyticsDashboard />
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="templates" className="space-y-6">
+            <DaisyTabsContent value="templates" className="space-y-6">
               <TemplateLibrary />
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="workflow" className="space-y-6">
+            <DaisyTabsContent value="workflow" className="space-y-6">
               <WorkflowManagement />
-            </TabsContent>
+            </DaisyTabsContent>
 
-            <TabsContent value="collaboration" className="space-y-6">
+            <DaisyTabsContent value="collaboration" className="space-y-6">
               <CollaborativeQuestionnairePage mode="collaborate" />
-            </TabsContent>
-          </Tabs>
+            </DaisyTabsContent>
+          </DaisyTabs>
         </main>
 
         {/* AI Panel */}

@@ -5,10 +5,10 @@ import { motion } from 'framer-motion';
 
 // Components
 import DragDropImport from '@/components/DragDropImport';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 
 // Icons
 import {
@@ -127,16 +127,16 @@ export default function ImportPage() {
             {FEATURE_HIGHLIGHTS.map((feature, idx) => {
               const IconComponent = feature.icon;
               return (
-                <Card key={idx} className="hover:shadow-lg transition-shadow duration-200">
-                  <CardHeader>
+                <DaisyCard key={idx} className="hover:shadow-lg transition-shadow duration-200">
+                  <DaisyCardHeader>
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-blue-100 rounded-lg">
                         <IconComponent className="h-6 w-6 text-blue-600" />
                       </div>
-                      <CardTitle className="text-lg">{feature.title}</CardTitle>
+                      <DaisyCardTitle className="text-lg">{feature.title}</DaisyCardTitle>
                     </div>
-                  </CardHeader>
-                  <CardContent>
+                  
+                  <DaisyCardContent>
                     <p className="text-gray-600 mb-4">{feature.description}</p>
                     <div className="space-y-2">
                       {feature.features.map((feat, featIdx) => (
@@ -146,8 +146,8 @@ export default function ImportPage() {
                         </div>
                       ))}
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               );
             })}
           </div>
@@ -159,14 +159,14 @@ export default function ImportPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="flex items-center gap-2">
                 <Download className="h-5 w-5 text-blue-600" />
                 Sample Templates
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+              </DaisyCardTitle>
+            
+            <DaisyCardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {SAMPLE_TEMPLATES.map((template, idx) => {
                   const IconComponent = template.icon;
@@ -181,12 +181,12 @@ export default function ImportPage() {
                           <h3 className="font-medium text-gray-900">{template.name}</h3>
                           <p className="text-sm text-gray-600 mt-1">{template.description}</p>
                           <div className="flex items-center gap-2 mt-2">
-                            <Badge variant="secondary" className="text-xs">
+                            <DaisyBadge variant="secondary" className="text-xs">
                               {template.type}
-                            </Badge>
+                            </DaisyBadge>
                             <span className="text-xs text-gray-500">{template.size}</span>
                           </div>
-                          <Button
+                          <DaisyButton
                             variant="outline"
                             size="sm"
                             className="mt-3"
@@ -194,15 +194,15 @@ export default function ImportPage() {
                           >
                             <Download className="h-4 w-4 mr-2" />
                             Download
-                          </Button>
+                          </DaisyButton>
                         </div>
                       </div>
                     </div>
                   );
                 })}
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </motion.div>
 
         {/* Import Interface */}
@@ -211,21 +211,21 @@ export default function ImportPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="flex items-center gap-2">
                 <Upload className="h-5 w-5 text-blue-600" />
                 Import Your Files
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+              </DaisyCardTitle>
+            
+            <DaisyCardContent>
               <DragDropImport
                 organizationId={mockUser.organizationId}
                 userId={mockUser.id}
                 onComplete={handleImportComplete}
               />
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </motion.div>
 
         {/* Import Results */}
@@ -238,21 +238,21 @@ export default function ImportPage() {
             <h2 className="text-2xl font-bold text-gray-900">Import Results</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {importResults.map((result, idx) => (
-                <Card key={idx}>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
+                <DaisyCard key={idx}>
+                  <DaisyCardHeader>
+                    <DaisyCardTitle className="flex items-center gap-2">
                       {result.type === 'excel-rcsa' && <FileSpreadsheet className="h-5 w-5 text-green-600" />}
                       {result.type === 'policy-document' && <FileText className="h-5 w-5 text-blue-600" />}
                       {result.type === 'bulk-upload' && <Upload className="h-5 w-5 text-purple-600" />}
                       <span className="truncate">{result.filename}</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
+                    </DaisyCardTitle>
+                  
+                  <DaisyCardContent>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
-                        <Badge variant={result.status === 'completed' ? 'default' : 'destructive'}>
+                        <DaisyBadge variant={result.status === 'completed' ? 'default' : 'destructive'}>
                           {result.status}
-                        </Badge>
+                        </DaisyBadge>
                         <span className="text-sm text-gray-600 capitalize">
                           {result.type.replace('-', ' ')}
                         </span>
@@ -268,8 +268,8 @@ export default function ImportPage() {
                         </div>
                       )}
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               ))}
             </div>
           </motion.div>
@@ -281,14 +281,14 @@ export default function ImportPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Alert>
+          <DaisyAlert>
             <Info className="h-4 w-4" />
-            <AlertDescription>
+            <DaisyAlertDescription>
               <strong>Pro Tip:</strong> For best results with Excel RCSA templates, ensure your spreadsheets 
               have clear column headers like "Risk Title", "Description", "Likelihood", "Impact", "Control Title", etc. 
               The AI will automatically detect and map these fields to the appropriate data structures.
-            </AlertDescription>
-          </Alert>
+            
+          </DaisyAlert>
         </motion.div>
 
         {/* Security Notice */}

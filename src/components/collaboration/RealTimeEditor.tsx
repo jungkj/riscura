@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { toast } from '@/hooks/use-toast';
 import {
   Tooltip,
@@ -409,7 +409,7 @@ export function RealTimeEditor({
         >
           <div className="flex items-start justify-between">
             <div className="flex items-start space-x-3">
-              <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
+              <DaisyAlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
               <div>
                 <h4 className="font-medium text-yellow-800">Editing Conflict</h4>
                 <p className="text-sm text-yellow-700 mt-1">{conflict.description}</p>
@@ -417,9 +417,9 @@ export function RealTimeEditor({
                   {conflict.affectedUsers.map(userId => {
                     const user = activeUsers.find(u => u.id === userId);
                     return user ? (
-                      <Badge key={userId} variant="outline" className="text-xs">
+                      <DaisyBadge key={userId} variant="outline" className="text-xs">
                         {user.name}
-                      </Badge>
+                      </DaisyBadge>
                     ) : null;
                   })}
                 </div>
@@ -427,22 +427,22 @@ export function RealTimeEditor({
             </div>
             
             <div className="flex space-x-2">
-              <Button
+              <DaisyButton
                 size="sm"
                 variant="outline"
                 onClick={() => resolveConflict(conflict.id, 'accept_all')}
               >
                 <Merge className="w-4 h-4 mr-1" />
                 Merge
-              </Button>
-              <Button
+              </DaisyButton>
+              <DaisyButton
                 size="sm"
                 variant="outline"
                 onClick={() => resolveConflict(conflict.id, 'accept_last')}
               >
                 <CheckCircle className="w-4 h-4 mr-1" />
                 Keep Latest
-              </Button>
+              </DaisyButton>
             </div>
           </div>
         </motion.div>
@@ -451,7 +451,7 @@ export function RealTimeEditor({
   );
 
   return (
-    <TooltipProvider>
+    <DaisyTooltipProvider>
       <div className={`relative ${className}`}>
         {/* Header with collaboration status */}
         <div className="flex items-center justify-between mb-6 p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
@@ -463,55 +463,55 @@ export function RealTimeEditor({
               </span>
             </div>
             
-            <Separator orientation="vertical" className="h-4" />
+            <DaisySeparator orientation="vertical" className="h-4" />
             
             <div className="flex items-center space-x-1">
               {activeUsers.map(user => (
-                <Tooltip key={user.id}>
-                  <TooltipTrigger>
+                <DaisyTooltip key={user.id}>
+                  <DaisyTooltipTrigger>
                     <div className="relative">
-                      <Avatar className="w-6 h-6 ring-2 ring-white" style={{ borderColor: user.color }}>
-                        <AvatarImage src={user.avatar} />
-                        <AvatarFallback className="text-xs">
+                      <DaisyAvatar className="w-6 h-6 ring-2 ring-white" style={{ borderColor: user.color }}>
+                        <DaisyAvatarImage src={user.avatar} />
+                        <DaisyAvatarFallback className="text-xs">
                           {user.name.split(' ').map(n => n[0]).join('')}
-                        </AvatarFallback>
-                      </Avatar>
+                        </DaisyAvatarFallback>
+                      </DaisyAvatar>
                       {user.isTyping && (
                         <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full flex items-center justify-center">
                           <Edit3 className="w-2 h-2 text-white" />
                         </div>
                       )}
                     </div>
-                  </TooltipTrigger>
-                  <TooltipContent>
+                  </DaisyTooltipTrigger>
+                  <DaisyTooltipContent>
                     <p>{user.name} {user.isTyping ? '(typing...)' : ''}</p>
-                  </TooltipContent>
-                </Tooltip>
+                  </DaisyTooltipContent>
+                </DaisyTooltip>
               ))}
             </div>
           </div>
 
           <div className="flex items-center space-x-3">
             <div className="flex items-center space-x-2">
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={handleUndo}
                 disabled={undoStack.length === 0}
               >
                 <Undo className="w-4 h-4" />
-              </Button>
-              <Button
+              </DaisyButton>
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={handleRedo}
                 disabled={redoStack.length === 0}
               >
                 <Redo className="w-4 h-4" />
-              </Button>
+              </DaisyButton>
             </div>
 
-            <Separator orientation="vertical" className="h-4" />
+            <DaisySeparator orientation="vertical" className="h-4" />
 
             <div className="flex items-center space-x-2 text-sm text-gray-500">
               {isAutoSaving ? (
@@ -544,16 +544,16 @@ export function RealTimeEditor({
 
         {/* Editor content */}
         <div ref={editorRef} className="relative">
-          <Card>
-            <CardHeader>
+          <DaisyCard>
+            <DaisyCardHeader>
               <div className="space-y-4">
-                <Input
+                <DaisyInput
                   value={content.title}
                   onChange={(e) => handleContentEdit('title', 'title', e.target.value)}
                   className="text-xl font-bold border-none shadow-none p-0 focus-visible:ring-0"
                   placeholder="Questionnaire title..."
                 />
-                <Textarea
+                <DaisyTextarea
                   value={content.description}
                   onChange={(e) => handleContentEdit('description', 'description', e.target.value)}
                   className="border-none shadow-none p-0 focus-visible:ring-0 resize-none"
@@ -561,9 +561,9 @@ export function RealTimeEditor({
                   rows={2}
                 />
               </div>
-            </CardHeader>
             
-            <CardContent className="space-y-6">
+            
+            <DaisyCardContent className="space-y-6">
               {content.sections.map(section => (
                 <div key={section.id} className="space-y-4">
                   <h3 className="text-lg font-medium">{section.title}</h3>
@@ -574,7 +574,7 @@ export function RealTimeEditor({
                         <span className="text-sm font-medium text-gray-500 mt-1">
                           {index + 1}.
                         </span>
-                        <Textarea
+                        <DaisyTextarea
                           value={question.text}
                           onChange={(e) => handleContentEdit(question.id, 'question', e.target.value)}
                           className="flex-1 border-none shadow-none p-0 bg-transparent focus-visible:ring-0 resize-none"
@@ -585,8 +585,8 @@ export function RealTimeEditor({
                   ))}
                 </div>
               ))}
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
           {/* User cursors overlay */}
           {renderUserCursors()}
@@ -594,26 +594,26 @@ export function RealTimeEditor({
 
         {/* Operation history sidebar */}
         <div className="fixed right-4 top-1/2 transform -translate-y-1/2 w-80 max-h-96 overflow-hidden">
-          <Card className="bg-white/95 backdrop-blur-sm">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm flex items-center">
+          <DaisyCard className="bg-white/95 backdrop-blur-sm">
+            <DaisyCardHeader className="pb-3">
+              <DaisyCardTitle className="text-sm flex items-center">
                 <Activity className="w-4 h-4 mr-2" />
                 Recent Changes
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <ScrollArea className="h-60">
+              </DaisyCardTitle>
+            
+            <DaisyCardContent className="p-0">
+              <DaisyScrollArea className="h-60">
                 <div className="space-y-2 p-4">
                   {operationHistory.slice(-10).reverse().map(operation => {
                     const user = activeUsers.find(u => u.id === operation.userId);
                     return (
                       <div key={operation.id} className="flex items-start space-x-2 text-xs">
-                        <Avatar className="w-5 h-5 mt-0.5">
-                          <AvatarImage src={user?.avatar} />
-                          <AvatarFallback className="text-xs">
+                        <DaisyAvatar className="w-5 h-5 mt-0.5">
+                          <DaisyAvatarImage src={user?.avatar} />
+                          <DaisyAvatarFallback className="text-xs">
                             {user?.name.split(' ').map(n => n[0]).join('') || '?'}
-                          </AvatarFallback>
-                        </Avatar>
+                          </DaisyAvatarFallback>
+                        </DaisyAvatar>
                         <div className="flex-1">
                           <p className="text-gray-900">
                             <span className="font-medium">{user?.name || 'Unknown'}</span> edited {operation.elementType}
@@ -626,11 +626,11 @@ export function RealTimeEditor({
                     );
                   })}
                 </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
+              </DaisyScrollArea>
+            </DaisyCardBody>
+          </DaisyCard>
         </div>
       </div>
-    </TooltipProvider>
+    
   );
 } 

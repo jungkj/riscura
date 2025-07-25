@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
   Calendar,
   Clock,
@@ -404,28 +404,28 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
 
   // Render report card
   const renderReportCard = (report: ScheduledReport) => (
-    <Card key={report.id} className="hover:shadow-md transition-shadow">
-      <CardHeader className="pb-3">
+    <DaisyCard key={report.id} className="hover:shadow-md transition-shadow">
+      <DaisyCardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div>
-            <CardTitle className="text-lg">{report.name}</CardTitle>
+            <DaisyCardTitle className="text-lg">{report.name}</DaisyCardTitle>
             <p className="text-sm text-gray-600 mt-1">{report.description}</p>
           </div>
           <div className="flex items-center space-x-2">
-            <Badge className={getStatusColor(report.status)}>
+            <DaisyBadge className={getStatusColor(report.status)}>
               {report.status}
-            </Badge>
-            <Button
+            </DaisyBadge>
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={() => setSelectedReport(report.id)}
             >
               <MoreHorizontal className="w-4 h-4" />
-            </Button>
+            </DaisyButton>
           </div>
         </div>
-      </CardHeader>
-      <CardContent>
+      
+      <DaisyCardContent>
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
@@ -450,7 +450,7 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
 
           <div className="flex items-center justify-between pt-3 border-t border-gray-100">
             <div className="flex items-center space-x-2">
-              <Button
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={() => toggleReportStatus(report.id)}
@@ -466,49 +466,49 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
                     Resume
                   </>
                 )}
-              </Button>
-              <Button
+              </DaisyButton>
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={() => runReportNow(report.id)}
               >
                 <Play className="w-4 h-4 mr-2" />
                 Run Now
-              </Button>
+              </DaisyButton>
             </div>
             
             <div className="flex items-center space-x-1">
-              <Button variant="ghost" size="sm">
+              <DaisyButton variant="ghost" size="sm">
                 <Edit className="w-4 h-4" />
-              </Button>
-              <Button variant="ghost" size="sm">
+              </DaisyButton>
+              <DaisyButton variant="ghost" size="sm">
                 <Copy className="w-4 h-4" />
-              </Button>
-              <Button 
+              </DaisyButton>
+              <DaisyButton 
                 variant="ghost" 
                 size="sm" 
                 onClick={() => deleteReport(report.id)}
                 className="text-red-600 hover:text-red-700"
               >
                 <Trash2 className="w-4 h-4" />
-              </Button>
+              </DaisyButton>
             </div>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 
   // Render execution history
   const renderExecutionHistory = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center">
+    <DaisyCard>
+      <DaisyCardHeader>
+        <DaisyCardTitle className="flex items-center">
           <History className="w-5 h-5 mr-2" />
           Execution History
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+        </DaisyCardTitle>
+      
+      <DaisyCardContent>
         <div className="space-y-4">
           {executions.map(execution => {
             const report = reports.find(r => r.id === execution.reportId);
@@ -521,9 +521,9 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
                       Started: {execution.startTime.toLocaleString()}
                     </div>
                   </div>
-                  <Badge className={getStatusColor(execution.status)}>
+                  <DaisyBadge className={getStatusColor(execution.status)}>
                     {execution.status}
-                  </Badge>
+                  </DaisyBadge>
                 </div>
 
                 {execution.status === 'running' && (
@@ -532,7 +532,7 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
                       <span>Progress</span>
                       <span>{Math.floor(execution.progress)}%</span>
                     </div>
-                    <Progress value={execution.progress} className="h-2" />
+                    <DaisyProgress value={execution.progress} className="h-2" />
                   </div>
                 )}
 
@@ -567,10 +567,10 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
                     <div className="text-sm font-medium mb-2">Output Files:</div>
                     <div className="flex flex-wrap gap-2">
                       {execution.outputFiles.map(file => (
-                        <Button key={file} variant="outline" size="sm">
+                        <DaisyButton key={file} variant="outline" size="sm">
                           <Download className="w-3 h-3 mr-2" />
                           {file}
-                        </Button>
+                        </DaisyButton>
                       ))}
                     </div>
                   </div>
@@ -579,8 +579,8 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
             );
           })}
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 
   return (
@@ -592,28 +592,28 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
           <p className="text-gray-600">Schedule and manage automated report generation</p>
         </div>
         <div className="flex items-center space-x-3">
-          <Button
+          <DaisyButton
             variant="outline"
             onClick={() => setShowExecutionHistory(!showExecutionHistory)}
           >
             <History className="w-4 h-4 mr-2" />
             Execution History
-          </Button>
-          <Button onClick={() => setShowCreateForm(true)}>
+          </DaisyButton>
+          <DaisyButton onClick={() => setShowCreateForm(true)}>
             <Plus className="w-4 h-4 mr-2" />
             New Report
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
       {/* Filters and Search */}
-      <Card>
-        <CardContent className="pt-6">
+      <DaisyCard>
+        <DaisyCardContent className="pt-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <Search className="w-4 h-4 text-gray-400" />
-                <Input
+                <DaisyInput
                   placeholder="Search reports..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -634,31 +634,31 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
             </div>
 
             <div className="flex items-center space-x-2">
-              <Button
+              <DaisyButton
                 variant={currentView === 'list' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setCurrentView('list')}
               >
                 <FileText className="w-4 h-4" />
-              </Button>
-              <Button
+              </DaisyButton>
+              <DaisyButton
                 variant={currentView === 'calendar' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setCurrentView('calendar')}
               >
-                <Calendar className="w-4 h-4" />
-              </Button>
-              <Button
+                <DaisyCalendar className="w-4 h-4" />
+              </DaisyButton>
+              <DaisyButton
                 variant={currentView === 'analytics' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setCurrentView('analytics')}
               >
                 <Target className="w-4 h-4" />
-              </Button>
+              </DaisyButton>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Reports List */}
       {currentView === 'list' && (
@@ -669,31 +669,31 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
 
       {/* Calendar View */}
       {currentView === 'calendar' && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Calendar className="w-5 h-5 mr-2" />
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle className="flex items-center">
+              <DaisyCalendar className="w-5 h-5 mr-2" />
               Report Schedule Calendar
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+            </DaisyCardTitle>
+          
+          <DaisyCardContent>
             <div className="text-center py-12 text-gray-500">
-              <Calendar className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+              <DaisyCalendar className="w-16 h-16 mx-auto mb-4 text-gray-300" />
               <p>Calendar view coming soon</p>
               <p className="text-sm">Visualize report schedules in calendar format</p>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       )}
 
       {/* Analytics View */}
       {currentView === 'analytics' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm">Report Statistics</CardTitle>
-            </CardHeader>
-            <CardContent>
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="text-sm">Report Statistics</DaisyCardTitle>
+            
+            <DaisyCardContent>
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between text-sm">
@@ -714,32 +714,32 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm">Delivery Methods</CardTitle>
-            </CardHeader>
-            <CardContent>
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="text-sm">Delivery Methods</DaisyCardTitle>
+            
+            <DaisyCardContent>
               <div className="space-y-3">
                 {['email', 'slack', 'teams'].map(method => (
                   <div key={method} className="flex items-center justify-between">
                     <span className="text-sm capitalize">{method}</span>
-                    <Badge variant="secondary">
+                    <DaisyBadge variant="secondary">
                       {reports.filter(r => r.deliveryOptions.method === method).length}
-                    </Badge>
+                    </DaisyBadge>
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm">Upcoming Reports</CardTitle>
-            </CardHeader>
-            <CardContent>
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="text-sm">Upcoming Reports</DaisyCardTitle>
+            
+            <DaisyCardContent>
               <div className="space-y-3">
                 {reports
                   .filter(r => r.nextRun && r.status === 'active')
@@ -752,8 +752,8 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
                     </div>
                   ))}
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </div>
       )}
 
@@ -762,24 +762,24 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
 
       {/* Create Report Form */}
       {showCreateForm && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Create New Automated Report</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle>Create New Automated Report</DaisyCardTitle>
+          
+          <DaisyCardContent>
             <div className="text-center py-12 text-gray-500">
               <Plus className="w-16 h-16 mx-auto mb-4 text-gray-300" />
               <p>Report creation form coming soon</p>
               <p className="text-sm">Configure report templates, schedules, and delivery options</p>
-              <Button 
+              <DaisyButton 
                 className="mt-4" 
                 onClick={() => setShowCreateForm(false)}
               >
                 Close
-              </Button>
+              </DaisyButton>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       )}
     </div>
   );

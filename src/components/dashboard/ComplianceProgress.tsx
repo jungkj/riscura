@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import { DaisyCard, DaisyCardBody, DaisyCardHeader, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
   CheckCircle, 
   Clock, 
@@ -169,15 +169,15 @@ export default function ComplianceProgress() {
             Track progress across compliance frameworks and standards
           </p>
         </div>
-        <Button variant="outline" size="sm">
+        <DaisyButton variant="outline" size="sm">
           <FileText className="w-4 h-4 mr-2" />
           Generate Report
-        </Button>
+        </DaisyButton>
       </div>
 
       {/* Overall Progress */}
-      <Card className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-        <CardContent className="p-6">
+      <DaisyCard className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+        <DaisyCardBody className="p-6">
           <div className="flex items-center justify-between">
             <div>
               <h4 className="text-lg font-semibold text-gray-900 mb-2">Overall Compliance</h4>
@@ -195,15 +195,15 @@ export default function ComplianceProgress() {
                 </div>
               </div>
             </div>
-            <ProgressRing progress={overallProgress} size={120} strokeWidth={10} />
+            <DaisyProgressRing progress={overallProgress} size={120} strokeWidth={10} />
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Framework Progress Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {frameworks.map((framework, index) => (
-          <Card 
+          <DaisyCard 
             key={framework.id}
             className={`cursor-pointer hover:shadow-md transition-all duration-300 transform ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
@@ -211,18 +211,18 @@ export default function ComplianceProgress() {
             style={{ transitionDelay: `${index * 100}ms` }}
             onClick={() => setSelectedFramework(framework.id)}
           >
-            <CardHeader className="pb-3">
+            <DaisyCardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium">{framework.shortName}</CardTitle>
-                <Badge className={getStatusColor(framework.status)}>
+                <DaisyCardTitle className="text-sm font-medium">{framework.shortName}</DaisyCardTitle>
+                <DaisyBadge className={getStatusColor(framework.status)}>
                   {getStatusIcon(framework.status)}
                   <span className="ml-1 capitalize">{framework.status.replace('-', ' ')}</span>
-                </Badge>
+                </DaisyBadge>
               </div>
-            </CardHeader>
-            <CardContent className="pt-0">
+            
+            <DaisyCardBody className="pt-0">
               <div className="flex items-center justify-center mb-4">
-                <ProgressRing 
+                <DaisyProgressRing 
                   progress={framework.progress} 
                   size={80} 
                   strokeWidth={6}
@@ -241,34 +241,34 @@ export default function ComplianceProgress() {
                   <span className="font-medium text-right">{framework.nextDeadline}</span>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         ))}
       </div>
 
       {/* Detailed View */}
       {selectedFramework && (
-        <Card className="transition-all duration-500">
-          <CardHeader>
+        <DaisyCard className="transition-all duration-500">
+          <DaisyCardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-lg">
+                <DaisyCardTitle className="text-lg">
                   {frameworks.find(f => f.id === selectedFramework)?.name}
-                </CardTitle>
+                </DaisyCardTitle>
                 <p className="text-sm text-gray-600 mt-1">
                   Detailed compliance progress and upcoming tasks
                 </p>
               </div>
-              <Button 
+              <DaisyButton 
                 variant="ghost" 
                 size="sm"
                 onClick={() => setSelectedFramework(null)}
               >
                 ×
-              </Button>
+              </DaisyButton>
             </div>
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardBody>
             {(() => {
               const framework = frameworks.find(f => f.id === selectedFramework);
               if (!framework) return null;
@@ -283,7 +283,7 @@ export default function ComplianceProgress() {
                         <span className="text-sm text-gray-600">Completion Rate</span>
                         <span className="text-sm font-medium">{framework.progress}%</span>
                       </div>
-                      <Progress value={framework.progress} className="h-2" />
+                      <DaisyProgress value={framework.progress} className="h-2" />
                       <div className="flex justify-between">
                         <span className="text-sm text-gray-600">Completed Controls</span>
                         <span className="text-sm font-medium">
@@ -330,7 +330,7 @@ export default function ComplianceProgress() {
                     <h4 className="font-medium text-gray-900">Upcoming Tasks</h4>
                     <div className="space-y-3">
                       <div className="flex items-start space-x-3">
-                        <Calendar className="w-4 h-4 text-[#199BEC] mt-0.5" />
+                        <DaisyCalendar className="w-4 h-4 text-[#199BEC] mt-0.5" />
                         <div>
                           <p className="text-sm font-medium">Quarterly review</p>
                           <p className="text-xs text-gray-600">Due in 2 weeks</p>
@@ -355,8 +355,8 @@ export default function ComplianceProgress() {
                 </div>
               );
             })()}
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       )}
     </div>
   );

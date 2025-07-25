@@ -257,7 +257,7 @@ export const EnhancedSelectableContent: React.FC<EnhancedSelectableContentProps>
   const { handleSelection } = useContentSelection();
 
   return (
-    <SelectableContent
+    <DaisySelectableContent
       contentType={contentType}
       contentId={contentId}
       onSelection={handleSelection}

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
   BarChart, 
   Bar, 
@@ -171,53 +171,53 @@ export function LiveDashboard() {
         {/* Time Range Selector */}
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold tracking-tight">Dashboard Overview</h2>
-          <Tabs value={timeRange} onValueChange={setTimeRange} className="w-[400px]">
-            <TabsList>
-              <TabsTrigger value="7d">7 days</TabsTrigger>
-              <TabsTrigger value="30d">30 days</TabsTrigger>
-              <TabsTrigger value="90d">90 days</TabsTrigger>
-            </TabsList>
-          </Tabs>
+          <DaisyTabs value={timeRange} onValueChange={setTimeRange} className="w-[400px]">
+            <DaisyTabsList>
+              <DaisyTabsTrigger value="7d">7 days</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="30d">30 days</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="90d">90 days</DaisyTabsTrigger>
+            </DaisyTabsList>
+          </DaisyTabs>
         </div>
 
         {/* Summary Cards */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {[...Array(4)].map((_, i) => (
-            <Card key={i} className="animate-pulse">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <DaisyCard key={i} className="animate-pulse">
+              <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <div className="h-4 bg-gray-200 rounded w-1/2"></div>
                 <div className="h-4 w-4 bg-gray-200 rounded"></div>
-              </CardHeader>
-              <CardContent>
+              
+              <DaisyCardContent>
                 <div className="h-8 bg-gray-200 rounded w-1/3 mb-2"></div>
                 <div className="h-3 bg-gray-200 rounded w-2/3"></div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           ))}
         </div>
 
         {/* Charts and Recent Activity */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-          <Card className="col-span-4 animate-pulse">
-            <CardHeader>
-              <CardTitle>Risk Distribution</CardTitle>
-            </CardHeader>
-            <CardContent className="pl-2">
+          <DaisyCard className="col-span-4 animate-pulse">
+            <DaisyCardHeader>
+              <DaisyCardTitle>Risk Distribution</DaisyCardTitle>
+            
+            <DaisyCardContent className="pl-2">
               <div className="h-80 bg-gray-200 rounded"></div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
-          <Card className="col-span-3 animate-pulse">
-            <CardHeader>
-              <CardTitle>Recent Activity</CardTitle>
-              <CardDescription>
+          <DaisyCard className="col-span-3 animate-pulse">
+            <DaisyCardHeader>
+              <DaisyCardTitle>Recent Activity</DaisyCardTitle>
+              <DaisyCardDescription>
                 Latest updates in your organization
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </p>
+            
+            <DaisyCardContent>
               <div className="h-80 bg-gray-200 rounded"></div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </div>
       </div>
     );
@@ -225,17 +225,17 @@ export function LiveDashboard() {
 
   if (error) {
     return (
-      <Card className="col-span-full">
-        <CardContent className="flex items-center justify-center py-8">
+      <DaisyCard className="col-span-full">
+        <DaisyCardContent className="flex items-center justify-center py-8">
           <div className="text-center">
-            <AlertCircle className="h-8 w-8 text-red-500 mx-auto mb-2" />
+            <DaisyAlertCircle className="h-8 w-8 text-red-500 mx-auto mb-2" />
             <p className="text-sm text-muted-foreground">{error}</p>
-            <Button onClick={fetchDashboardData} variant="outline" className="mt-2">
+            <DaisyButton onClick={fetchDashboardData} variant="outline" className="mt-2">
               Retry
-            </Button>
+            </DaisyButton>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     );
   }
 
@@ -248,105 +248,105 @@ export function LiveDashboard() {
       {/* Time Range Selector */}
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold tracking-tight">Dashboard Overview</h2>
-        <Tabs value={timeRange} onValueChange={setTimeRange} className="w-[400px]">
-          <TabsList>
-            <TabsTrigger value="7d">7 days</TabsTrigger>
-            <TabsTrigger value="30d">30 days</TabsTrigger>
-            <TabsTrigger value="90d">90 days</TabsTrigger>
-          </TabsList>
-        </Tabs>
+        <DaisyTabs value={timeRange} onValueChange={setTimeRange} className="w-[400px]">
+          <DaisyTabsList>
+            <DaisyTabsTrigger value="7d">7 days</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="30d">30 days</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="90d">90 days</DaisyTabsTrigger>
+          </DaisyTabsList>
+        </DaisyTabs>
       </div>
 
       {/* Summary Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Risks</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
+        <DaisyCard>
+          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <DaisyCardTitle className="text-sm font-medium">Total Risks</DaisyCardTitle>
+            <DaisyAlertTriangle className="h-4 w-4 text-muted-foreground" />
+          
+          <DaisyCardContent>
             <div className="text-2xl font-bold">{data.summary.risks.total}</div>
             <div className="flex gap-2 mt-2">
-              <Badge variant={getRiskLevelColor('critical')} className="text-xs">
+              <DaisyBadge variant={getRiskLevelColor('critical')} className="text-xs">
                 {data.summary.risks.critical} Critical
-              </Badge>
-              <Badge variant={getRiskLevelColor('high')} className="text-xs">
+              </DaisyBadge>
+              <DaisyBadge variant={getRiskLevelColor('high')} className="text-xs">
                 {data.summary.risks.high} High
-              </Badge>
+              </DaisyBadge>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Controls</CardTitle>
+        <DaisyCard>
+          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <DaisyCardTitle className="text-sm font-medium">Controls</DaisyCardTitle>
             <Shield className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className="text-2xl font-bold">{data.summary.controls.total}</div>
             <div className="flex gap-2 mt-2">
-              <Badge variant={getControlStatusColor('operational')} className="text-xs">
+              <DaisyBadge variant={getControlStatusColor('operational')} className="text-xs">
                 {data.summary.controls.operational} Operational
-              </Badge>
+              </DaisyBadge>
             </div>
             <div className="text-xs text-muted-foreground mt-1">
               Avg. Effectiveness: {Math.round(data.summary.controls.averageEffectiveness * 100)}%
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Documents</CardTitle>
+        <DaisyCard>
+          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <DaisyCardTitle className="text-sm font-medium">Documents</DaisyCardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className="text-2xl font-bold">{data.summary.documents}</div>
             <p className="text-xs text-muted-foreground">
               Policies, procedures & reports
             </p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Compliance Score</CardTitle>
+        <DaisyCard>
+          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <DaisyCardTitle className="text-sm font-medium">Compliance Score</DaisyCardTitle>
             <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className="text-2xl font-bold">{data.summary.compliance.overall}%</div>
-            <Progress value={data.summary.compliance.overall} className="mt-2" />
-          </CardContent>
-        </Card>
+            <DaisyProgress value={data.summary.compliance.overall} className="mt-2" />
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
 
       {/* Charts and Recent Activity */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4">
-          <CardHeader>
-            <CardTitle>Risk Distribution</CardTitle>
-          </CardHeader>
-          <CardContent className="pl-2">
+        <DaisyCard className="col-span-4">
+          <DaisyCardHeader>
+            <DaisyCardTitle>Risk Distribution</DaisyCardTitle>
+          
+          <DaisyCardContent className="pl-2">
             <ResponsiveContainer width="100%" height={350}>
               <BarChart data={data.summary.risks.breakdown}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="level" />
                 <YAxis />
-                <Tooltip />
+                <DaisyTooltip />
                 <Bar dataKey="count" fill="#8884d8" />
               </BarChart>
             </ResponsiveContainer>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card className="col-span-3">
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>
+        <DaisyCard className="col-span-3">
+          <DaisyCardHeader>
+            <DaisyCardTitle>Recent Activity</DaisyCardTitle>
+            <DaisyCardDescription>
               Latest updates in your organization
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+            </p>
+          
+          <DaisyCardContent>
             <div className="space-y-4">
               {data.recentActivity.slice(0, 5).map((activity) => (
                 <div key={activity.id} className="flex items-center space-x-4">
@@ -363,17 +363,17 @@ export function LiveDashboard() {
                 </div>
               ))}
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
 
       {/* Recent Items */}
       <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Risks</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle>Recent Risks</DaisyCardTitle>
+          
+          <DaisyCardContent>
             <div className="space-y-4">
               {data.recentRisks.map((risk) => (
                 <div key={risk.id} className="flex items-center justify-between">
@@ -381,20 +381,20 @@ export function LiveDashboard() {
                     <p className="text-sm font-medium">{risk.title}</p>
                     <p className="text-xs text-muted-foreground">{risk.category}</p>
                   </div>
-                  <Badge variant={getRiskLevelColor(risk.riskLevel)}>
+                  <DaisyBadge variant={getRiskLevelColor(risk.riskLevel)}>
                     {risk.riskLevel}
-                  </Badge>
+                  </DaisyBadge>
                 </div>
               ))}
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Controls</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle>Recent Controls</DaisyCardTitle>
+          
+          <DaisyCardContent>
             <div className="space-y-4">
               {data.recentControls.map((control) => (
                 <div key={control.id} className="flex items-center justify-between">
@@ -403,9 +403,9 @@ export function LiveDashboard() {
                     <p className="text-xs text-muted-foreground">{control.type}</p>
                   </div>
                   <div className="text-right">
-                    <Badge variant={getControlStatusColor(control.status)}>
+                    <DaisyBadge variant={getControlStatusColor(control.status)}>
                       {control.status}
-                    </Badge>
+                    </DaisyBadge>
                     {control.effectiveness && (
                       <p className="text-xs text-muted-foreground mt-1">
                         {Math.round(control.effectiveness * 100)}% effective
@@ -415,8 +415,8 @@ export function LiveDashboard() {
                 </div>
               ))}
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
     </div>
   );

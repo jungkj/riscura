@@ -241,7 +241,7 @@ interface ProgressRingProps {
   className?: string;
 }
 
-export const EnhancedProgressRing: React.FC<ProgressRingProps> = ({
+export const EnhancedProgressRing: React.FC<DaisyProgressRingProps> = ({
   progress,
   size = 60,
   strokeWidth = 6,

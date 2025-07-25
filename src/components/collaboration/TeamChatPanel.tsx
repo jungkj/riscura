@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import { Send, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -98,13 +98,13 @@ export default function TeamChatPanel({ isOpen, onClose }: TeamChatPanelProps) {
       {/* Header */}
       <div className="border-b p-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold">Team Chat</h2>
-        <Button variant="ghost" size="icon" onClick={onClose}>
+        <DaisyButton variant="ghost" shape="square" size="md" onClick={onClose}>
           <X className="h-5 w-5" />
-        </Button>
+        </DaisyButton>
       </div>
       
       {/* Messages */}
-      <ScrollArea className="flex-1 p-4">
+      <DaisyScrollArea className="flex-1 p-4">
         <div className="space-y-4">
           {messages.map((message) => (
             <div 
@@ -114,10 +114,10 @@ export default function TeamChatPanel({ isOpen, onClose }: TeamChatPanelProps) {
                 message.isCurrentUser && "flex-row-reverse"
               )}
             >
-              <Avatar className="h-8 w-8 flex-shrink-0">
-                <AvatarImage src={message.user.avatar} />
-                <AvatarFallback>{message.user.initials}</AvatarFallback>
-              </Avatar>
+              <DaisyAvatar className="h-8 w-8 flex-shrink-0">
+                <DaisyAvatarImage src={message.user.avatar} />
+                <DaisyAvatarFallback>{message.user.initials}</DaisyAvatarFallback>
+              </DaisyAvatar>
               
               <div className={cn(
                 "rounded-lg p-3 max-w-[80%]",
@@ -138,21 +138,21 @@ export default function TeamChatPanel({ isOpen, onClose }: TeamChatPanelProps) {
             </div>
           ))}
         </div>
-      </ScrollArea>
+      </DaisyScrollArea>
       
       {/* Input Area */}
       <div className="border-t p-4">
         <div className="flex items-center gap-2">
-          <Input
+          <DaisyInput
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type a message..."
             className="flex-1"
           />
-          <Button size="icon" onClick={handleSendMessage} disabled={!newMessage.trim()}>
+          <DaisyButton shape="square" size="md" onClick={handleSendMessage} disabled={!newMessage.trim()}>
             <Send className="h-4 w-4" />
-          </Button>
+          </DaisyButton>
         </div>
       </div>
     </div>

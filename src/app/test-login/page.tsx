@@ -4,9 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { AuthStorage } from '@/lib/auth/storage';
 import { LoginStatus } from '@/components/auth/LoginStatus';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 
 export default function TestLoginPage() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -44,15 +44,15 @@ export default function TestLoginPage() {
           Login Status Test Page
         </h1>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Authentication Status</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle>Authentication Status</DaisyCardTitle>
+          
+          <DaisyCardContent className="space-y-4">
             <div className="flex items-center space-x-4">
-              <Badge variant={isAuthenticated ? "default" : "destructive"}>
+              <DaisyBadge variant={isAuthenticated ? "default" : "destructive"}>
                 {isAuthenticated ? "Authenticated" : "Not Authenticated"}
-              </Badge>
+              </DaisyBadge>
               {isAuthenticated && <LoginStatus />}
             </div>
 
@@ -65,18 +65,18 @@ export default function TestLoginPage() {
             )}
 
             {isAuthenticated && (
-              <Button onClick={handleLogout} variant="outline">
+              <DaisyButton onClick={handleLogout} variant="outline">
                 Logout
-              </Button>
+              </DaisyButton>
             )}
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Token Storage Debug Info</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle>Token Storage Debug Info</DaisyCardTitle>
+          
+          <DaisyCardContent>
             <div className="space-y-2 font-mono text-sm">
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -91,14 +91,14 @@ export default function TestLoginPage() {
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Test Instructions</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle>Test Instructions</DaisyCardTitle>
+          
+          <DaisyCardContent className="space-y-4">
             <div className="space-y-2">
               <h3 className="font-semibold">To test "Stay logged in" feature:</h3>
               <ol className="list-decimal list-inside space-y-1 text-sm">
@@ -121,8 +121,8 @@ export default function TestLoginPage() {
                 <li>Close the browser tab and reopen - you should be logged out</li>
               </ol>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
     </div>
   );

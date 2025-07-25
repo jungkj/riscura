@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
   Brain, 
   TrendingUp, 
@@ -187,7 +187,7 @@ export function EnterpriseRiskDashboard() {
             <option value="monthly">Monthly</option>
             <option value="quarterly">Quarterly</option>
           </select>
-          <Button 
+          <DaisyButton 
             variant="outline" 
             size="sm" 
             onClick={handleRefresh}
@@ -196,15 +196,15 @@ export function EnterpriseRiskDashboard() {
           >
             <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
             <span>Refresh AI Analysis</span>
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
       {/* Key Risk Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {riskMetrics.map((metric) => (
-          <Card key={metric.id} className="bg-white border-gray-200">
-            <CardContent className="p-6">
+          <DaisyCard key={metric.id} className="bg-white border-gray-200">
+            <DaisyCardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-medium text-gray-600">{metric.title}</h3>
                 {getTrendIcon(metric.trend)}
@@ -220,20 +220,20 @@ export function EnterpriseRiskDashboard() {
                   <span>Target: {metric.target}{metric.unit}</span>
                   <span>{Math.round((metric.value / metric.target) * 100)}%</span>
                 </div>
-                <Progress 
+                <DaisyProgress 
                   value={(metric.value / metric.target) * 100} 
                   className="h-2"
                 />
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         ))}
       </div>
 
       {/* AI-Powered Insights */}
-      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-3">
+      <DaisyCard className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center space-x-3">
             <div className="p-2 bg-blue-600 rounded-lg">
               <Brain className="w-5 h-5 text-white" />
             </div>
@@ -241,12 +241,12 @@ export function EnterpriseRiskDashboard() {
               <span className="text-lg font-bold">AI Risk Intelligence</span>
               <p className="text-sm text-gray-600 font-normal">Machine learning insights and predictions</p>
             </div>
-            <Badge className="bg-blue-600 text-white">
+            <DaisyBadge className="bg-blue-600 text-white">
               {aiInsights.length} Insights
-            </Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+            </DaisyBadge>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent className="space-y-4">
           {aiInsights.map((insight) => (
             <div 
               key={insight.id} 
@@ -260,9 +260,9 @@ export function EnterpriseRiskDashboard() {
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-1">
                       <h4 className="font-semibold text-gray-900">{insight.title}</h4>
-                      <Badge className={`text-xs ${getInsightBadgeColor(insight.type)}`}>
+                      <DaisyBadge className={`text-xs ${getInsightBadgeColor(insight.type)}`}>
                         {insight.type}
-                      </Badge>
+                      </DaisyBadge>
                     </div>
                     <p className="text-sm text-gray-600">{insight.description}</p>
                   </div>
@@ -282,60 +282,60 @@ export function EnterpriseRiskDashboard() {
                   <div className="text-xs text-gray-500">
                     Confidence Score
                   </div>
-                  <Progress value={insight.confidence} className="w-20 h-2" />
+                  <DaisyProgress value={insight.confidence} className="w-20 h-2" />
                 </div>
                 {insight.action && (
-                  <Button size="sm" variant="outline" className="text-xs">
+                  <DaisyButton size="sm" variant="outline" className="text-xs">
                     {insight.action}
-                  </Button>
+                  </DaisyButton>
                 )}
               </div>
             </div>
           ))}
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-white border-gray-200 hover:border-blue-300 transition-colors cursor-pointer">
-          <CardContent className="p-4 text-center">
+        <DaisyCard className="bg-white border-gray-200 hover:border-blue-300 transition-colors cursor-pointer">
+          <DaisyCardContent className="p-4 text-center">
             <div className="p-3 bg-blue-50 rounded-lg w-fit mx-auto mb-3">
               <Activity className="w-6 h-6 text-blue-600" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-1">Real-time Monitoring</h3>
             <p className="text-xs text-gray-600">Live risk indicators</p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card className="bg-white border-gray-200 hover:border-green-300 transition-colors cursor-pointer">
-          <CardContent className="p-4 text-center">
+        <DaisyCard className="bg-white border-gray-200 hover:border-green-300 transition-colors cursor-pointer">
+          <DaisyCardContent className="p-4 text-center">
             <div className="p-3 bg-green-50 rounded-lg w-fit mx-auto mb-3">
               <Shield className="w-6 h-6 text-green-600" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-1">Control Assessment</h3>
             <p className="text-xs text-gray-600">Automated testing</p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card className="bg-white border-gray-200 hover:border-purple-300 transition-colors cursor-pointer">
-          <CardContent className="p-4 text-center">
+        <DaisyCard className="bg-white border-gray-200 hover:border-purple-300 transition-colors cursor-pointer">
+          <DaisyCardContent className="p-4 text-center">
             <div className="p-3 bg-purple-50 rounded-lg w-fit mx-auto mb-3">
               <Globe className="w-6 h-6 text-purple-600" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-1">Regulatory Intel</h3>
             <p className="text-xs text-gray-600">Compliance tracking</p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card className="bg-white border-gray-200 hover:border-orange-300 transition-colors cursor-pointer">
-          <CardContent className="p-4 text-center">
+        <DaisyCard className="bg-white border-gray-200 hover:border-orange-300 transition-colors cursor-pointer">
+          <DaisyCardContent className="p-4 text-center">
             <div className="p-3 bg-orange-50 rounded-lg w-fit mx-auto mb-3">
               <BarChart3 className="w-6 h-6 text-orange-600" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-1">Impact Analysis</h3>
             <p className="text-xs text-gray-600">Financial modeling</p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
     </div>
   );

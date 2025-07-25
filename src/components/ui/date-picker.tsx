@@ -4,7 +4,7 @@ import * as React from "react"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { DaisyButton } from '@/components/ui/DaisyButton'
 import { Calendar } from "@/components/ui/calendar"
 import {
   Popover,
@@ -30,9 +30,9 @@ export function DatePicker({
   const [open, setOpen] = React.useState(false)
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
+    <DaisyPopover open={open} onOpenChange={setOpen}>
+      <DaisyPopoverTrigger asChild>
+        <DaisyButton
           variant={"outline"}
           className={cn(
             "w-full justify-start text-left font-normal",
@@ -41,12 +41,12 @@ export function DatePicker({
           )}
           disabled={disabled}
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
+          <DaisyCalendarIcon className="mr-2 h-4 w-4" />
           {value ? format(value, "PPP") : <span>{placeholder}</span>}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
-        <Calendar
+        </DaisyButton>
+      </DaisyPopoverTrigger>
+      <DaisyPopoverContent className="w-auto p-0">
+        <DaisyCalendar
           mode="single"
           selected={value || undefined}
           onSelect={(date) => {
@@ -55,7 +55,7 @@ export function DatePicker({
           }}
           initialFocus
         />
-      </PopoverContent>
-    </Popover>
+      </DaisyPopoverContent>
+    </DaisyPopover>
   )
 } 

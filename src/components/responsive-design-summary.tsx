@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { 
   Smartphone, 
   Tablet, 
@@ -34,89 +34,89 @@ export const ResponsiveDesignSummary: React.FC = () => {
       </div>
 
       {/* Key Features */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-[#191919] font-inter">
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter">
             <Layout className="h-5 w-5 text-[#199BEC]" />
             Key Responsive Features Implemented
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Badge variant="success" className="gap-1">
+              <DaisyBadge variant="success" className="gap-1">
                 <CheckCircle className="h-3 w-3" />
                 Device Detection
-              </Badge>
+              </DaisyBadge>
               <p className="text-sm text-gray-600 font-inter">
                 Smart device detection with breakpoint management (mobile: &lt;768px, tablet: 768-1024px, desktop: &gt;1024px)
               </p>
             </div>
 
             <div className="space-y-2">
-              <Badge variant="success" className="gap-1">
+              <DaisyBadge variant="success" className="gap-1">
                 <CheckCircle className="h-3 w-3" />
                 Adaptive Navigation
-              </Badge>
+              </DaisyBadge>
               <p className="text-sm text-gray-600 font-inter">
                 Collapsible sidebar for mobile, overlay navigation, swipe gestures, and desktop keyboard shortcuts
               </p>
             </div>
 
             <div className="space-y-2">
-              <Badge variant="success" className="gap-1">
+              <DaisyBadge variant="success" className="gap-1">
                 <CheckCircle className="h-3 w-3" />
                 Touch Optimization
-              </Badge>
+              </DaisyBadge>
               <p className="text-sm text-gray-600 font-inter">
                 Touch-friendly button sizes (44px minimum), swipe gestures, and mobile action bars
               </p>
             </div>
 
             <div className="space-y-2">
-              <Badge variant="success" className="gap-1">
+              <DaisyBadge variant="success" className="gap-1">
                 <CheckCircle className="h-3 w-3" />
                 Responsive Tables
-              </Badge>
+              </DaisyBadge>
               <p className="text-sm text-gray-600 font-inter">
                 Mobile card views, horizontal scrolling, adaptive column hiding, and optimized pagination
               </p>
             </div>
 
             <div className="space-y-2">
-              <Badge variant="success" className="gap-1">
+              <DaisyBadge variant="success" className="gap-1">
                 <CheckCircle className="h-3 w-3" />
                 Content Adaptation
-              </Badge>
+              </DaisyBadge>
               <p className="text-sm text-gray-600 font-inter">
                 Smart content prioritization, truncation, and layout adjustments based on screen size
               </p>
             </div>
 
             <div className="space-y-2">
-              <Badge variant="success" className="gap-1">
+              <DaisyBadge variant="success" className="gap-1">
                 <CheckCircle className="h-3 w-3" />
                 Safe Area Support
-              </Badge>
+              </DaisyBadge>
               <p className="text-sm text-gray-600 font-inter">
                 iPhone notch support, proper padding for gesture areas, and device-specific optimizations
               </p>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Device-Specific Adaptations */}
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Mobile */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-[#191919] font-inter">
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter">
               <Smartphone className="h-5 w-5 text-[#199BEC]" />
               Mobile (≤ 768px)
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </DaisyCardTitle>
+          
+          <DaisyCardContent className="space-y-4">
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <Move className="h-4 w-4 text-[#199BEC] mt-0.5" />
@@ -162,24 +162,24 @@ export const ResponsiveDesignSummary: React.FC = () => {
             <div className="pt-3 border-t border-gray-200">
               <h5 className="font-medium text-[#191919] font-inter mb-2">Key Features:</h5>
               <div className="flex flex-wrap gap-1">
-                <Badge variant="secondary" className="text-xs">Single Column</Badge>
-                <Badge variant="secondary" className="text-xs">Swipe Navigation</Badge>
-                <Badge variant="secondary" className="text-xs">Compact Headers</Badge>
-                <Badge variant="secondary" className="text-xs">Touch Actions</Badge>
+                <DaisyBadge variant="secondary" className="text-xs">Single Column</DaisyBadge>
+                <DaisyBadge variant="secondary" className="text-xs">Swipe Navigation</DaisyBadge>
+                <DaisyBadge variant="secondary" className="text-xs">Compact Headers</DaisyBadge>
+                <DaisyBadge variant="secondary" className="text-xs">Touch Actions</DaisyBadge>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
         {/* Tablet */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-[#191919] font-inter">
-              <Tablet className="h-5 w-5 text-[#199BEC]" />
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter">
+              <DaisyTablet className="h-5 w-5 text-[#199BEC]" />
               Tablet (768px - 1024px)
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </DaisyCardTitle>
+          
+          <DaisyCardContent className="space-y-4">
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <Layout className="h-4 w-4 text-[#199BEC] mt-0.5" />
@@ -225,24 +225,24 @@ export const ResponsiveDesignSummary: React.FC = () => {
             <div className="pt-3 border-t border-gray-200">
               <h5 className="font-medium text-[#191919] font-inter mb-2">Key Features:</h5>
               <div className="flex flex-wrap gap-1">
-                <Badge variant="secondary" className="text-xs">Hybrid Layout</Badge>
-                <Badge variant="secondary" className="text-xs">Icon Sidebar</Badge>
-                <Badge variant="secondary" className="text-xs">Medium Spacing</Badge>
-                <Badge variant="secondary" className="text-xs">Touch Ready</Badge>
+                <DaisyBadge variant="secondary" className="text-xs">Hybrid Layout</DaisyBadge>
+                <DaisyBadge variant="secondary" className="text-xs">Icon Sidebar</DaisyBadge>
+                <DaisyBadge variant="secondary" className="text-xs">Medium Spacing</DaisyBadge>
+                <DaisyBadge variant="secondary" className="text-xs">Touch Ready</DaisyBadge>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
         {/* Desktop */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-[#191919] font-inter">
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter">
               <Monitor className="h-5 w-5 text-[#199BEC]" />
               Desktop (≥ 1024px)
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </DaisyCardTitle>
+          
+          <DaisyCardContent className="space-y-4">
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <Layout className="h-4 w-4 text-[#199BEC] mt-0.5" />
@@ -288,22 +288,22 @@ export const ResponsiveDesignSummary: React.FC = () => {
             <div className="pt-3 border-t border-gray-200">
               <h5 className="font-medium text-[#191919] font-inter mb-2">Key Features:</h5>
               <div className="flex flex-wrap gap-1">
-                <Badge variant="secondary" className="text-xs">Full Layout</Badge>
-                <Badge variant="secondary" className="text-xs">Keyboard Nav</Badge>
-                <Badge variant="secondary" className="text-xs">Hover Effects</Badge>
-                <Badge variant="secondary" className="text-xs">Multi-column</Badge>
+                <DaisyBadge variant="secondary" className="text-xs">Full Layout</DaisyBadge>
+                <DaisyBadge variant="secondary" className="text-xs">Keyboard Nav</DaisyBadge>
+                <DaisyBadge variant="secondary" className="text-xs">Hover Effects</DaisyBadge>
+                <DaisyBadge variant="secondary" className="text-xs">Multi-column</DaisyBadge>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
 
       {/* Component Adaptations */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-[#191919] font-inter">Component Responsive Adaptations</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="text-[#191919] font-inter">Component Responsive Adaptations</DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <h4 className="font-semibold text-[#191919] font-inter flex items-center gap-2">
@@ -357,15 +357,15 @@ export const ResponsiveDesignSummary: React.FC = () => {
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Technical Implementation */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-[#191919] font-inter">Technical Implementation Details</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="text-[#191919] font-inter">Technical Implementation Details</DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <h4 className="font-semibold text-[#191919] font-inter">Responsive Hooks</h4>
@@ -391,15 +391,15 @@ export const ResponsiveDesignSummary: React.FC = () => {
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* User Experience Features */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-[#191919] font-inter">Enhanced User Experience Features</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="text-[#191919] font-inter">Enhanced User Experience Features</DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="grid md:grid-cols-3 gap-4">
             <div className="space-y-3">
               <div className="flex items-center gap-2">
@@ -440,18 +440,18 @@ export const ResponsiveDesignSummary: React.FC = () => {
               </ul>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Implementation Status */}
-      <Card className="border-green-200 bg-green-50">
-        <CardHeader>
-          <CardTitle className="text-green-800 font-inter flex items-center gap-2">
+      <DaisyCard className="border-green-200 bg-green-50">
+        <DaisyCardHeader>
+          <DaisyCardTitle className="text-green-800 font-inter flex items-center gap-2">
             <CheckCircle className="h-5 w-5" />
             Implementation Complete ✅
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <p className="text-green-700 font-inter">
             The RCSA platform now features a comprehensive responsive design system that seamlessly adapts to mobile, tablet, 
             and desktop devices. All components maintain the clean Notion-like aesthetic while providing optimal user 
@@ -462,28 +462,28 @@ export const ResponsiveDesignSummary: React.FC = () => {
             <div>
               <h4 className="font-semibold text-green-800 font-inter mb-2">Completed Components:</h4>
               <div className="flex flex-wrap gap-1">
-                <Badge className="text-xs bg-green-100 text-green-800">Responsive Hooks</Badge>
-                <Badge className="text-xs bg-green-100 text-green-800">Adaptive Sidebar</Badge>
-                <Badge className="text-xs bg-green-100 text-green-800">Mobile Tables</Badge>
-                <Badge className="text-xs bg-green-100 text-green-800">Touch Navigation</Badge>
-                <Badge className="text-xs bg-green-100 text-green-800">Responsive Lists</Badge>
-                <Badge className="text-xs bg-green-100 text-green-800">ARIA Chat</Badge>
+                <DaisyBadge className="text-xs bg-green-100 text-green-800">Responsive Hooks</DaisyBadge>
+                <DaisyBadge className="text-xs bg-green-100 text-green-800">Adaptive Sidebar</DaisyBadge>
+                <DaisyBadge className="text-xs bg-green-100 text-green-800">Mobile Tables</DaisyBadge>
+                <DaisyBadge className="text-xs bg-green-100 text-green-800">Touch Navigation</DaisyBadge>
+                <DaisyBadge className="text-xs bg-green-100 text-green-800">Responsive Lists</DaisyBadge>
+                <DaisyBadge className="text-xs bg-green-100 text-green-800">ARIA Chat</DaisyBadge>
               </div>
             </div>
             
             <div>
               <h4 className="font-semibold text-green-800 font-inter mb-2">Key Benefits:</h4>
               <div className="flex flex-wrap gap-1">
-                <Badge variant="secondary" className="text-xs">Cross-Platform</Badge>
-                <Badge variant="secondary" className="text-xs">Touch Optimized</Badge>
-                <Badge variant="secondary" className="text-xs">Keyboard Friendly</Badge>
-                <Badge variant="secondary" className="text-xs">Accessible</Badge>
-                <Badge variant="secondary" className="text-xs">Performance</Badge>
+                <DaisyBadge variant="secondary" className="text-xs">Cross-Platform</DaisyBadge>
+                <DaisyBadge variant="secondary" className="text-xs">Touch Optimized</DaisyBadge>
+                <DaisyBadge variant="secondary" className="text-xs">Keyboard Friendly</DaisyBadge>
+                <DaisyBadge variant="secondary" className="text-xs">Accessible</DaisyBadge>
+                <DaisyBadge variant="secondary" className="text-xs">Performance</DaisyBadge>
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </div>
   );
 }; 

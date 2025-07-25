@@ -3,9 +3,9 @@
 import React, { useMemo, useState } from 'react';
 import { useRisks } from '@/context/RiskContext';
 import { Risk } from '@/types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import {
   Select,
   SelectContent,
@@ -174,7 +174,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
               tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
             />
             <YAxis />
-            <Tooltip content={customTooltip} />
+            <DaisyTooltip content={customTooltip} />
             <Legend />
             <Area type="monotone" dataKey="critical" stackId="1" stroke="#dc2626" fill="#fecaca" />
             <Area type="monotone" dataKey="high" stackId="1" stroke="#ea580c" fill="#fed7aa" />
@@ -192,7 +192,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
               tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
             />
             <YAxis />
-            <Tooltip content={customTooltip} />
+            <DaisyTooltip content={customTooltip} />
             <Legend />
             <Bar dataKey="critical" stackId="a" fill="#dc2626" />
             <Bar dataKey="high" stackId="a" fill="#ea580c" />
@@ -211,7 +211,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
             />
             <YAxis yAxisId="left" />
             <YAxis yAxisId="right" orientation="right" />
-            <Tooltip content={customTooltip} />
+            <DaisyTooltip content={customTooltip} />
             <Legend />
             <Bar yAxisId="left" dataKey="new" fill="#3b82f6" name="New Risks" />
             <Bar yAxisId="left" dataKey="resolved" fill="#10b981" name="Resolved Risks" />
@@ -228,7 +228,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
               tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
             />
             <YAxis />
-            <Tooltip content={customTooltip} />
+            <DaisyTooltip content={customTooltip} />
             <Legend />
             <Line type="monotone" dataKey="critical" stroke="#dc2626" strokeWidth={2} dot={{ r: 4 }} />
             <Line type="monotone" dataKey="high" stroke="#ea580c" strokeWidth={2} dot={{ r: 4 }} />
@@ -240,38 +240,38 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
   };
 
   return (
-    <Card className={className}>
-      <CardHeader>
+    <DaisyCard className={className}>
+      <DaisyCardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
+          <DaisyCardTitle className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5" />
             Risk Trends
-          </CardTitle>
+          </DaisyCardTitle>
           
           <div className="flex items-center gap-2">
-            <Select value={selectedTimeRange} onValueChange={(value) => setSelectedTimeRange(value as typeof selectedTimeRange)}>
-              <SelectTrigger className="w-24">
-                <SelectValue />
+            <DaisySelect value={selectedTimeRange} onValueChange={(value) => setSelectedTimeRange(value as typeof selectedTimeRange)}>
+              <DaisySelectTrigger className="w-24">
+                <DaisySelectValue />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="7d">7 days</SelectItem>
-                <SelectItem value="30d">30 days</SelectItem>
-                <SelectItem value="90d">90 days</SelectItem>
-                <SelectItem value="1y">1 year</SelectItem>
+              <DaisySelectContent>
+                <DaisySelectItem value="7d">7 days</SelectItem>
+                <DaisySelectItem value="30d">30 days</SelectItem>
+                <DaisySelectItem value="90d">90 days</SelectItem>
+                <DaisySelectItem value="1y">1 year</SelectItem>
               </SelectContent>
-            </Select>
+            </DaisySelect>
             
-            <Select value={selectedChartType} onValueChange={(value) => setSelectedChartType(value as typeof selectedChartType)}>
-              <SelectTrigger className="w-32">
-                <SelectValue />
+            <DaisySelect value={selectedChartType} onValueChange={(value) => setSelectedChartType(value as typeof selectedChartType)}>
+              <DaisySelectTrigger className="w-32">
+                <DaisySelectValue />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="line">Line Chart</SelectItem>
-                <SelectItem value="area">Area Chart</SelectItem>
-                <SelectItem value="bar">Bar Chart</SelectItem>
-                <SelectItem value="composed">Composed</SelectItem>
+              <DaisySelectContent>
+                <DaisySelectItem value="line">Line Chart</SelectItem>
+                <DaisySelectItem value="area">Area Chart</SelectItem>
+                <DaisySelectItem value="bar">Bar Chart</SelectItem>
+                <DaisySelectItem value="composed">Composed</SelectItem>
               </SelectContent>
-            </Select>
+            </DaisySelect>
           </div>
         </div>
         
@@ -311,9 +311,9 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
             </div>
           </div>
         )}
-      </CardHeader>
       
-      <CardContent>
+      
+      <DaisyCardContent>
         <div style={{ width: '100%', height: 400 }}>
           <ResponsiveContainer>
             {renderChart()}
@@ -339,7 +339,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
             <span>Low</span>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 }; 

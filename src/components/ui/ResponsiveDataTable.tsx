@@ -2,15 +2,15 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
-import { Progress } from '@/components/ui/progress';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import { 
   SwipeableCard, 
   TouchButton, 
@@ -183,18 +183,18 @@ const formatCellValue = (value: any, type?: string) => {
 // Default Cell Renderers
 const defaultCellRenderers = {
   badge: (value: any) => (
-    <Badge variant={value?.variant || 'default'} className="capitalize">
+    <DaisyBadge variant={value?.variant || 'default'} className="capitalize">
       {value?.label || value}
-    </Badge>
+    </DaisyBadge>
   ),
   user: (value: any) => (
     <div className="flex items-center space-x-2">
-      <Avatar className="h-6 w-6">
-        <AvatarImage src={value?.avatar} />
-        <AvatarFallback className="text-xs">
+      <DaisyAvatar className="h-6 w-6">
+        <DaisyAvatarImage src={value?.avatar} />
+        <DaisyAvatarFallback className="text-xs">
           {value?.name?.split(' ').map((n: string) => n[0]).join('') || '?'}
-        </AvatarFallback>
-      </Avatar>
+        </DaisyAvatarFallback>
+      </DaisyAvatar>
       <span className="truncate">{value?.name || value}</span>
     </div>
   ),
@@ -204,7 +204,7 @@ const defaultCellRenderers = {
         <span>{value?.label || 'Progress'}</span>
         <span>{value?.value || value}%</span>
       </div>
-      <Progress value={value?.value || value} className="h-1" />
+      <DaisyProgress value={value?.value || value} className="h-1" />
     </div>
   ),
   actions: (value: any, item: any) => (
@@ -268,13 +268,13 @@ const MobileCardLayout: React.FC<{
             onSwipeLeft={() => console.log('Archive', item)}
             onSwipeRight={() => console.log('Favorite', item)}
           >
-            <CardContent className="p-enterprise-4">
+            <DaisyCardContent className="p-enterprise-4">
               <div className="space-y-enterprise-3">
                 {/* Header with selection */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-enterprise-2">
                     {selectable && (
-                      <Checkbox
+                      <DaisyCheckbox
                         checked={isSelected}
                         onCheckedChange={(checked) => onRowSelect?.(item, checked as boolean)}
                       />
@@ -350,7 +350,7 @@ const MobileCardLayout: React.FC<{
                   })}
                 </div>
               </div>
-            </CardContent>
+            </DaisyCardBody>
           </SwipeableCard>
         );
       })}
@@ -383,14 +383,14 @@ const TabletListLayout: React.FC<{
   const visibleColumns = columns.filter(col => !col.priority || col.priority <= 5);
 
   return (
-    <Card>
-      <CardContent className="p-0">
+    <DaisyCard>
+      <DaisyCardContent className="p-0">
         {/* Header */}
         <div className="grid gap-enterprise-3 p-enterprise-4 border-b border-border bg-surface-secondary">
           <div className="grid grid-cols-12 gap-enterprise-3 items-center text-caption font-medium text-text-secondary uppercase tracking-wide">
             {selectable && (
               <div className="col-span-1">
-                <Checkbox />
+                <DaisyCheckbox />
               </div>
             )}
             {visibleColumns.map((column, index) => (
@@ -444,7 +444,7 @@ const TabletListLayout: React.FC<{
               >
                 {selectable && (
                   <div className="col-span-1">
-                    <Checkbox
+                    <DaisyCheckbox
                       checked={isSelected}
                       onCheckedChange={(checked) => {
                         onRowSelect?.(item, checked as boolean);
@@ -498,8 +498,8 @@ const TabletListLayout: React.FC<{
             );
           })}
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 };
 
@@ -539,14 +539,14 @@ const DesktopTableLayout: React.FC<{
   };
 
   return (
-    <Card>
+    <DaisyCard>
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="border-b border-border bg-surface-secondary">
               {selectable && (
                 <th className="w-12 px-enterprise-4 py-enterprise-3">
-                  <Checkbox
+                  <DaisyCheckbox
                     checked={allSelected}
                     ref={(el) => {
                       if (el) el.indeterminate = someSelected;
@@ -613,7 +613,7 @@ const DesktopTableLayout: React.FC<{
                 >
                   {selectable && (
                     <td className="px-enterprise-4 py-enterprise-3">
-                      <Checkbox
+                      <DaisyCheckbox
                         checked={isSelected}
                         onCheckedChange={(checked) => onRowSelect?.(item, checked as boolean)}
                         onClick={(e) => e.stopPropagation()}
@@ -682,7 +682,7 @@ const DesktopTableLayout: React.FC<{
           </tbody>
         </table>
       </div>
-    </Card>
+    </DaisyCard>
   );
 };
 
@@ -766,8 +766,8 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
 
   if (loading) {
     return (
-      <Card className={className}>
-        <CardContent className="p-enterprise-6">
+      <DaisyCard className={className}>
+        <DaisyCardContent className="p-enterprise-6">
           <div className="space-y-enterprise-4">
             <div className="animate-pulse space-y-enterprise-3">
               <div className="h-4 bg-surface-secondary rounded w-1/4" />
@@ -778,15 +778,15 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     );
   }
 
   if (filteredData.length === 0) {
     return (
-      <Card className={className}>
-        <CardContent className="p-enterprise-6">
+      <DaisyCard className={className}>
+        <DaisyCardContent className="p-enterprise-6">
           {emptyState || (
             <div className="text-center space-y-enterprise-4">
               <div className="w-16 h-16 mx-auto bg-surface-secondary rounded-full flex items-center justify-center">
@@ -806,23 +806,23 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
               )}
             </div>
           )}
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     );
   }
 
   return (
     <div className={cn("space-y-enterprise-4", className)}>
       {/* Toolbar */}
-      <Card>
-        <CardContent className="p-enterprise-4">
+      <DaisyCard>
+        <DaisyCardContent className="p-enterprise-4">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between space-y-enterprise-3 lg:space-y-0">
             <div className="flex flex-col sm:flex-row sm:items-center space-y-enterprise-2 sm:space-y-0 sm:space-x-enterprise-3">
               {/* Search */}
               {searchable && (
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-text-secondary" />
-                  <Input
+                  <DaisyInput
                     placeholder="Search..."
                     value={searchQuery}
                     onChange={(e) => handleSearch(e.target.value)}
@@ -842,9 +842,9 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
               {/* Selected count */}
               {selectable && selectedItems.length > 0 && (
                 <div className="flex items-center space-x-enterprise-2">
-                  <Badge variant="secondary">
+                  <DaisyBadge variant="secondary">
                     {selectedItems.length} selected
-                  </Badge>
+                  </DaisyBadge>
                   <TouchButton
                     variant="ghost"
                     size="sm"
@@ -878,8 +878,8 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
               )}
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Data Display */}
       {device.type === 'mobile' && mobileLayout === 'cards' && (
@@ -894,7 +894,7 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
       )}
 
       {device.type === 'tablet' && (
-        <TabletListLayout
+        <DaisyTabletListLayout
           data={paginatedData}
           columns={columns}
           selectedItems={selectedItems}
@@ -925,8 +925,8 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
 
       {/* Pagination */}
       {pagination && totalPages > 1 && (
-        <Card>
-          <CardContent className="p-enterprise-4">
+        <DaisyCard>
+          <DaisyCardContent className="p-enterprise-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-enterprise-2 sm:space-y-0">
               <div className="text-body-sm text-text-secondary">
                 Showing {(currentPage - 1) * pageSize + 1} to{' '}
@@ -978,8 +978,8 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
                 </TouchButton>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       )}
     </div>
   );

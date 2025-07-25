@@ -3,11 +3,11 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyInput } from '@/components/ui/DaisyInput';
 import { 
   Shield, 
   Target, 
@@ -134,125 +134,125 @@ function ProboPageContent() {
           {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Button
+              <DaisyButton
                 variant="ghost"
                 onClick={() => router.push('/dashboard')}
                 className="text-gray-600 hover:text-gray-900"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Dashboard
-              </Button>
+              </DaisyButton>
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Risk Control Center</h1>
                 <p className="text-gray-600">AI-Powered Vendor & Compliance Management</p>
               </div>
             </div>
-            <Badge variant="secondary" className="bg-blue-100 text-blue-800 font-semibold">
+            <DaisyBadge variant="secondary" className="bg-blue-100 text-blue-800 font-semibold">
               <Zap className="h-3 w-3 mr-1" />
               AI Enhanced
-            </Badge>
+            </DaisyBadge>
           </div>
 
           {/* Tabs */}
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="overview" className="flex items-center gap-2">
+          <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+            <DaisyTabsList className="grid w-full grid-cols-4">
+              <DaisyTabsTrigger value="overview" className="flex items-center gap-2">
                 <Activity className="h-4 w-4" />
                 Overview
-              </TabsTrigger>
-              <TabsTrigger value="vendor-assessment" className="flex items-center gap-2">
+              </DaisyTabsTrigger>
+              <DaisyTabsTrigger value="vendor-assessment" className="flex items-center gap-2">
                 <Shield className="h-4 w-4" />
                 Vendor Assessment
-              </TabsTrigger>
-              <TabsTrigger value="controls-library" className="flex items-center gap-2">
+              </DaisyTabsTrigger>
+              <DaisyTabsTrigger value="controls-library" className="flex items-center gap-2">
                 <Target className="h-4 w-4" />
                 Controls Library
-              </TabsTrigger>
-              <TabsTrigger value="soc2-assessment" className="flex items-center gap-2">
+              </DaisyTabsTrigger>
+              <DaisyTabsTrigger value="soc2-assessment" className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4" />
                 SOC 2
-              </TabsTrigger>
-            </TabsList>
+              </DaisyTabsTrigger>
+            </DaisyTabsList>
 
             {/* Overview Tab */}
-            <TabsContent value="overview" className="space-y-6">
+            <DaisyTabsContent value="overview" className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Card className="hover:shadow-md transition-shadow">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Vendor Assessments</CardTitle>
+                <DaisyCard className="hover:shadow-md transition-shadow">
+                  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <DaisyCardTitle className="text-sm font-medium">Vendor Assessments</DaisyCardTitle>
                     <Building2 className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
+                  
+                  <DaisyCardContent>
                     <div className="text-2xl font-bold">{loading ? '...' : stats.vendorAssessments}</div>
                     <p className="text-xs text-muted-foreground">
                       {loading ? 'Loading...' : stats.vendorAssessments === 0 ? 'No assessments yet' : 'Total assessments'}
                     </p>
-                  </CardContent>
-                </Card>
-                <Card className="hover:shadow-md transition-shadow">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Security Controls</CardTitle>
+                  </DaisyCardBody>
+                </DaisyCard>
+                <DaisyCard className="hover:shadow-md transition-shadow">
+                  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <DaisyCardTitle className="text-sm font-medium">Security Controls</DaisyCardTitle>
                     <Shield className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
+                  
+                  <DaisyCardContent>
                     <div className="text-2xl font-bold">{loading ? '...' : stats.securityControls}</div>
                     <p className="text-xs text-muted-foreground">
                       {loading ? 'Loading...' : stats.securityControls === 0 ? 'No controls added' : 'Active controls'}
                     </p>
-                  </CardContent>
-                </Card>
-                <Card className="hover:shadow-md transition-shadow">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Compliance Score</CardTitle>
+                  </DaisyCardBody>
+                </DaisyCard>
+                <DaisyCard className="hover:shadow-md transition-shadow">
+                  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <DaisyCardTitle className="text-sm font-medium">Compliance Score</DaisyCardTitle>
                     <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
+                  
+                  <DaisyCardContent>
                     <div className="text-2xl font-bold">{loading ? '...' : `${stats.complianceScore}%`}</div>
                     <p className="text-xs text-muted-foreground">
                       {loading ? 'Loading...' : stats.complianceScore === 0 ? 'Not assessed' : 'Average compliance'}
                     </p>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Quick Start Actions</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <Button 
+                <DaisyCard>
+                  <DaisyCardHeader>
+                    <DaisyCardTitle>Quick Start Actions</DaisyCardTitle>
+                  
+                  <DaisyCardContent className="space-y-3">
+                    <DaisyButton 
                       className="w-full justify-start" 
                       variant="outline"
                       onClick={() => setActiveTab('vendor-assessment')}
                     >
                       <Shield className="h-4 w-4 mr-2" />
                       Start Vendor Assessment
-                    </Button>
-                    <Button 
+                    </DaisyButton>
+                    <DaisyButton 
                       className="w-full justify-start" 
                       variant="outline"
                       onClick={() => setActiveTab('controls-library')}
                     >
                       <Target className="h-4 w-4 mr-2" />
                       Browse Controls Library
-                    </Button>
-                    <Button 
+                    </DaisyButton>
+                    <DaisyButton 
                       className="w-full justify-start" 
                       variant="outline"
                       onClick={() => setActiveTab('soc2-assessment')}
                     >
                       <CheckCircle2 className="h-4 w-4 mr-2" />
                       Setup SOC 2 Framework
-                    </Button>
-                  </CardContent>
-                </Card>
+                    </DaisyButton>
+                  </DaisyCardBody>
+                </DaisyCard>
 
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Platform Features</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
+                <DaisyCard>
+                  <DaisyCardHeader>
+                    <DaisyCardTitle>Platform Features</DaisyCardTitle>
+                  
+                  <DaisyCardContent className="space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-green-100 rounded-lg">
                         <CheckCircle2 className="h-4 w-4 text-green-600" />
@@ -280,47 +280,47 @@ function ProboPageContent() {
                         <p className="text-sm text-gray-600">Real-time regulatory tracking</p>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               </div>
-            </TabsContent>
+            </DaisyTabsContent>
 
             {/* Vendor Assessment Tab */}
-            <TabsContent value="vendor-assessment" className="space-y-6">
+            <DaisyTabsContent value="vendor-assessment" className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900">Vendor Security Assessment</h2>
                   <p className="text-gray-600">Analyze vendor security posture with AI</p>
                 </div>
-                <Button className="bg-blue-600 hover:bg-blue-700">
+                <DaisyButton className="bg-blue-600 hover:bg-blue-700">
                   <Plus className="h-4 w-4 mr-2" />
                   Start New Assessment
-                </Button>
+                </DaisyButton>
               </div>
 
               {loading ? (
-                <Card>
-                  <CardContent className="p-12 text-center">
+                <DaisyCard>
+                  <DaisyCardContent className="p-12 text-center">
                     <p className="text-gray-500">Loading vendor assessments...</p>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               ) : vendorAssessmentData.length === 0 ? (
-                <Card>
-                  <CardContent className="p-12 text-center">
+                <DaisyCard>
+                  <DaisyCardContent className="p-12 text-center">
                     <Building2 className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No vendor assessments yet</h3>
                     <p className="text-gray-600 mb-4">Start your first vendor security assessment to track third-party risks</p>
-                    <Button className="bg-blue-600 hover:bg-blue-700">
+                    <DaisyButton className="bg-blue-600 hover:bg-blue-700">
                       <Plus className="h-4 w-4 mr-2" />
                       Start First Assessment
-                    </Button>
-                  </CardContent>
-                </Card>
+                    </DaisyButton>
+                  </DaisyCardBody>
+                </DaisyCard>
               ) : (
                 <div className="grid grid-cols-1 gap-4">
                   {vendorAssessmentData.map((vendor) => (
-                    <Card key={vendor.id} className="hover:shadow-md transition-shadow">
-                      <CardContent className="p-6">
+                    <DaisyCard key={vendor.id} className="hover:shadow-md transition-shadow">
+                      <DaisyCardContent className="p-6">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4">
                             <div className="p-3 bg-blue-100 rounded-lg">
@@ -334,7 +334,7 @@ function ProboPageContent() {
                           <div className="flex items-center gap-4">
                             <div className="text-center">
                               <p className="text-sm text-gray-600">Risk Score</p>
-                              <Badge 
+                              <DaisyBadge 
                                 className={
                                   vendor.riskScore === 'Low' ? 'bg-green-100 text-green-800' :
                                   vendor.riskScore === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
@@ -342,7 +342,7 @@ function ProboPageContent() {
                                 }
                               >
                                 {vendor.riskScore}
-                              </Badge>
+                              </DaisyBadge>
                             </div>
                             <div className="text-center">
                               <p className="text-sm text-gray-600">Compliance</p>
@@ -352,7 +352,7 @@ function ProboPageContent() {
                               <p className="text-sm text-gray-600">Controls</p>
                               <p className="font-bold text-lg">{vendor.controls}</p>
                             </div>
-                            <Badge 
+                            <DaisyBadge 
                               className={
                                 vendor.status === 'Completed' ? 'bg-green-100 text-green-800' :
                                 vendor.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
@@ -360,18 +360,18 @@ function ProboPageContent() {
                               }
                             >
                               {vendor.status}
-                            </Badge>
+                            </DaisyBadge>
                           </div>
                         </div>
-                      </CardContent>
-                    </Card>
+                      </DaisyCardBody>
+                    </DaisyCard>
                   ))}
                 </div>
               )}
-            </TabsContent>
+            </DaisyTabsContent>
 
             {/* Controls Library Tab */}
-            <TabsContent value="controls-library" className="space-y-6">
+            <DaisyTabsContent value="controls-library" className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900">Security Controls Library</h2>
@@ -380,58 +380,58 @@ function ProboPageContent() {
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                    <Input
+                    <DaisyInput
                       placeholder="Search controls..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="pl-10 w-64"
                     />
                   </div>
-                  <Button className="bg-green-600 hover:bg-green-700">
+                  <DaisyButton className="bg-green-600 hover:bg-green-700">
                     <Plus className="h-4 w-4 mr-2" />
                     Add Custom Control
-                  </Button>
+                  </DaisyButton>
                 </div>
               </div>
 
               {loading ? (
-                <Card>
-                  <CardContent className="p-12 text-center">
+                <DaisyCard>
+                  <DaisyCardContent className="p-12 text-center">
                     <p className="text-gray-500">Loading controls library...</p>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               ) : filteredControls.length === 0 && searchQuery === '' ? (
-                <Card>
-                  <CardContent className="p-12 text-center">
+                <DaisyCard>
+                  <DaisyCardContent className="p-12 text-center">
                     <Target className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No security controls yet</h3>
                     <p className="text-gray-600 mb-4">Add your first control to start building your security framework</p>
-                    <Button className="bg-green-600 hover:bg-green-700">
+                    <DaisyButton className="bg-green-600 hover:bg-green-700">
                       <Plus className="h-4 w-4 mr-2" />
                       Add First Control
-                    </Button>
-                  </CardContent>
-                </Card>
+                    </DaisyButton>
+                  </DaisyCardBody>
+                </DaisyCard>
               ) : filteredControls.length === 0 ? (
-                <Card>
-                  <CardContent className="p-12 text-center">
+                <DaisyCard>
+                  <DaisyCardContent className="p-12 text-center">
                     <Search className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No controls found</h3>
                     <p className="text-gray-600">Try adjusting your search query</p>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               ) : (
                 <div className="grid grid-cols-1 gap-4">
                   {filteredControls.map((control) => (
-                    <Card key={control.id} className="hover:shadow-md transition-shadow">
-                      <CardContent className="p-6">
+                    <DaisyCard key={control.id} className="hover:shadow-md transition-shadow">
+                      <DaisyCardContent className="p-6">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
-                              <Badge variant="outline" className="font-mono text-xs">
+                              <DaisyBadge variant="outline" className="font-mono text-xs">
                                 {control.id}
-                              </Badge>
-                              <Badge 
+                              </DaisyBadge>
+                              <DaisyBadge 
                                 className={
                                   control.implementation === 'Implemented' ? 'bg-green-100 text-green-800' :
                                   control.implementation === 'In Progress' ? 'bg-blue-100 text-blue-800' :
@@ -439,78 +439,78 @@ function ProboPageContent() {
                                 }
                               >
                                 {control.implementation}
-                              </Badge>
-                              <Badge variant="outline" className="text-xs">
+                              </DaisyBadge>
+                              <DaisyBadge variant="outline" className="text-xs">
                                 {control.framework}
-                              </Badge>
+                              </DaisyBadge>
                             </div>
                             <h3 className="font-semibold text-lg mb-2">{control.title}</h3>
                             <p className="text-gray-600 mb-3">{control.description}</p>
                             <div className="flex items-center gap-2">
-                              <Badge variant="outline" className="text-xs">
+                              <DaisyBadge variant="outline" className="text-xs">
                                 {control.category}
-                              </Badge>
+                              </DaisyBadge>
                             </div>
                           </div>
                           <div className="flex items-center gap-2 ml-4">
-                            <Button variant="outline" size="sm">
+                            <DaisyButton variant="outline" size="sm">
                               <Eye className="h-4 w-4 mr-1" />
                               View Details
-                            </Button>
-                            <Button size="sm">
+                            </DaisyButton>
+                            <DaisyButton size="sm">
                               Implement
-                            </Button>
+                            </DaisyButton>
                           </div>
                         </div>
-                      </CardContent>
-                    </Card>
+                      </DaisyCardBody>
+                    </DaisyCard>
                   ))}
                 </div>
               )}
-            </TabsContent>
+            </DaisyTabsContent>
 
             {/* SOC 2 Assessment Tab */}
-            <TabsContent value="soc2-assessment" className="space-y-6">
+            <DaisyTabsContent value="soc2-assessment" className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900">SOC 2 Framework Assessment</h2>
                   <p className="text-gray-600">Track compliance across SOC 2 categories</p>
                 </div>
-                <Button className="bg-purple-600 hover:bg-purple-700">
+                <DaisyButton className="bg-purple-600 hover:bg-purple-700">
                   <FileText className="h-4 w-4 mr-2" />
                   Generate SOC 2 Report
-                </Button>
+                </DaisyButton>
               </div>
 
               {loading ? (
-                <Card>
-                  <CardContent className="p-12 text-center">
+                <DaisyCard>
+                  <DaisyCardContent className="p-12 text-center">
                     <p className="text-gray-500">Loading SOC 2 assessment data...</p>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               ) : soc2Score.overallScore === 0 && soc2Score.categories.length === 0 ? (
-                <Card>
-                  <CardContent className="p-12 text-center">
+                <DaisyCard>
+                  <DaisyCardContent className="p-12 text-center">
                     <CheckCircle2 className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No SOC 2 assessment yet</h3>
                     <p className="text-gray-600 mb-4">Start your SOC 2 compliance journey by setting up your framework</p>
-                    <Button className="bg-purple-600 hover:bg-purple-700">
+                    <DaisyButton className="bg-purple-600 hover:bg-purple-700">
                       <Plus className="h-4 w-4 mr-2" />
                       Set Up SOC 2 Framework
-                    </Button>
-                  </CardContent>
-                </Card>
+                    </DaisyButton>
+                  </DaisyCardBody>
+                </DaisyCard>
               ) : (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
+                <DaisyCard>
+                  <DaisyCardHeader>
+                    <DaisyCardTitle className="flex items-center justify-between">
                       <span>Overall SOC 2 Compliance</span>
-                      <Badge className="bg-green-100 text-green-800 text-lg px-3 py-1">
+                      <DaisyBadge className="bg-green-100 text-green-800 text-lg px-3 py-1">
                         {soc2Score.overallScore}%
-                      </Badge>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
+                      </DaisyBadge>
+                    </DaisyCardTitle>
+                  
+                  <DaisyCardContent>
                     {soc2Score.categories.length === 0 ? (
                       <div className="text-center py-8">
                         <p className="text-gray-600">No category data available yet</p>
@@ -518,17 +518,17 @@ function ProboPageContent() {
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {soc2Score.categories.map((category) => (
-                          <Card key={category.name} className="border-2 hover:shadow-md transition-shadow">
-                            <CardContent className="p-4">
+                          <DaisyCard key={category.name} className="border-2 hover:shadow-md transition-shadow">
+                            <DaisyCardContent className="p-4">
                               <div className="flex items-center justify-between mb-3">
                                 <h3 className="font-semibold">{category.name}</h3>
-                                <Badge 
+                                <DaisyBadge 
                                   className={
                                     category.status === 'Compliant' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                                   }
                                 >
                                   {category.status}
-                                </Badge>
+                                </DaisyBadge>
                               </div>
                               <div className="space-y-2">
                                 <div className="flex justify-between">
@@ -540,16 +540,16 @@ function ProboPageContent() {
                                   <span className="font-bold">{category.controls}</span>
                                 </div>
                               </div>
-                            </CardContent>
-                          </Card>
+                            </DaisyCardBody>
+                          </DaisyCard>
                         ))}
                       </div>
                     )}
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               )}
-            </TabsContent>
-          </Tabs>
+            </DaisyTabsContent>
+          </DaisyTabs>
         </div>
       </div>
     </ProtectedRoute>

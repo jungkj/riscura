@@ -343,7 +343,7 @@ export function NotionRCSASpreadsheet() {
             </div>
           ) : (
             <div className="flex items-center gap-1 text-gray-400">
-              <AlertCircle className="h-4 w-4" />
+              <DaisyAlertCircle className="h-4 w-4" />
               <span>No</span>
             </div>
           );

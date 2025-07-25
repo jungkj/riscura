@@ -3,14 +3,14 @@
 import React, { useState } from 'react';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisySelect } from '@/components/ui/DaisySelect';
 // Date range picker would be imported here if available
-import { Progress } from '@/components/ui/progress';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
 import {
@@ -418,46 +418,46 @@ export default function AnalyticsTrendsPage() {
       >
         {/* Controls */}
         <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-50 rounded-lg mb-6">
-          <Select value={selectedTimeRange} onValueChange={setSelectedTimeRange}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Time Range" />
+          <DaisySelect value={selectedTimeRange} onValueChange={setSelectedTimeRange}>
+            <DaisySelectTrigger className="w-40">
+              <DaisySelectValue placeholder="Time Range" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="1month">Last Month</SelectItem>
-              <SelectItem value="3months">Last 3 Months</SelectItem>
-              <SelectItem value="6months">Last 6 Months</SelectItem>
-              <SelectItem value="1year">Last Year</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="1month">Last Month</SelectItem>
+              <DaisySelectItem value="3months">Last 3 Months</SelectItem>
+              <DaisySelectItem value="6months">Last 6 Months</SelectItem>
+              <DaisySelectItem value="1year">Last Year</SelectItem>
             </SelectContent>
-          </Select>
+          </DaisySelect>
 
-          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Category" />
+          <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory}>
+            <DaisySelectTrigger className="w-40">
+              <DaisySelectValue placeholder="Category" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
-              <SelectItem value="risk">Risk</SelectItem>
-              <SelectItem value="compliance">Compliance</SelectItem>
-              <SelectItem value="security">Security</SelectItem>
-              <SelectItem value="performance">Performance</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="all">All Categories</SelectItem>
+              <DaisySelectItem value="risk">Risk</SelectItem>
+              <DaisySelectItem value="compliance">Compliance</SelectItem>
+              <DaisySelectItem value="security">Security</SelectItem>
+              <DaisySelectItem value="performance">Performance</SelectItem>
             </SelectContent>
-          </Select>
+          </DaisySelect>
 
           <div className="text-sm text-gray-600 ml-auto">
             Last updated: {new Date().toLocaleString()}
           </div>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
-          <TabsList>
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="metrics">Metric Details</TabsTrigger>
-            <TabsTrigger value="predictions">Predictive Insights</TabsTrigger>
-            <TabsTrigger value="comparisons">Comparisons</TabsTrigger>
-          </TabsList>
-        </Tabs>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
+          <DaisyTabsList>
+            <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="metrics">Metric Details</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="predictions">Predictive Insights</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="comparisons">Comparisons</DaisyTabsTrigger>
+          </DaisyTabsList>
+        </DaisyTabs>
 
-        <TabsContent value="overview" className="space-y-6">
+        <DaisyTabsContent value="overview" className="space-y-6">
           {/* Key Metrics Overview */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredMetrics.slice(0, 6).map((metric) => {
@@ -467,20 +467,20 @@ export default function AnalyticsTrendsPage() {
               const CategoryIcon = categoryConfig.icon;
 
               return (
-                <Card 
+                <DaisyCard 
                   key={metric.id}
                   className="cursor-pointer hover:shadow-md transition-shadow"
                   onClick={() => handleDrillDown(metric.id)}
                 >
-                  <CardHeader className="pb-3">
+                  <DaisyCardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
                         <div className={cn("p-1.5 rounded-full", categoryConfig.bg)}>
                           <CategoryIcon className={cn("h-4 w-4", categoryConfig.color)} />
                         </div>
-                        <Badge variant="outline" className={cn("text-xs", statusConfig.color)}>
+                        <DaisyBadge variant="outline" className={cn("text-xs", statusConfig.color)}>
                           {statusConfig.label}
-                        </Badge>
+                        </DaisyBadge>
                       </div>
                       <TrendIcon className={cn(
                         "h-4 w-4",
@@ -488,9 +488,9 @@ export default function AnalyticsTrendsPage() {
                         metric.trend === 'down' ? 'text-red-600' : 'text-gray-600'
                       )} />
                     </div>
-                    <CardTitle className="text-sm font-medium">{metric.name}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
+                    <DaisyCardTitle className="text-sm font-medium">{metric.name}</DaisyCardTitle>
+                  
+                  <DaisyCardContent>
                     <div className="space-y-3">
                       <div className="flex items-baseline space-x-2">
                         <span className="text-2xl font-bold">
@@ -511,7 +511,7 @@ export default function AnalyticsTrendsPage() {
                             <span>Progress to Target</span>
                             <span>{Math.round((metric.currentValue / metric.target) * 100)}%</span>
                           </div>
-                          <Progress 
+                          <DaisyProgress 
                             value={(metric.currentValue / metric.target) * 100} 
                             className="h-2"
                           />
@@ -522,24 +522,24 @@ export default function AnalyticsTrendsPage() {
                         {metric.description}
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               );
             })}
           </div>
 
           {/* Trend Summary */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="flex items-center space-x-2">
                 <TrendingUp className="h-5 w-5 text-blue-600" />
                 <span>Trend Summary</span>
-              </CardTitle>
-              <CardDescription>
+              </DaisyCardTitle>
+              <DaisyCardDescription>
                 Overall performance trends across all categories
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </p>
+            
+            <DaisyCardContent>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-green-50 rounded-lg">
                   <div className="flex items-center space-x-2 mb-2">
@@ -585,11 +585,11 @@ export default function AnalyticsTrendsPage() {
                   <div className="text-sm text-yellow-700">near target goals</div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
 
-        <TabsContent value="metrics" className="space-y-6">
+        <DaisyTabsContent value="metrics" className="space-y-6">
           <div className="space-y-4">
             {filteredMetrics.map((metric) => {
               const categoryConfig = getCategoryConfig(metric.category);
@@ -598,23 +598,23 @@ export default function AnalyticsTrendsPage() {
               const CategoryIcon = categoryConfig.icon;
 
               return (
-                <Card key={metric.id} className="border-l-4" style={{ borderLeftColor: categoryConfig.color.replace('text-', '') }}>
-                  <CardHeader>
+                <DaisyCard key={metric.id} className="border-l-4" style={{ borderLeftColor: categoryConfig.color.replace('text-', '') }}>
+                  <DaisyCardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex items-center space-x-3">
                         <div className={cn("p-2 rounded-full", categoryConfig.bg)}>
                           <CategoryIcon className={cn("h-5 w-5", categoryConfig.color)} />
                         </div>
                         <div>
-                          <CardTitle className="text-lg">{metric.name}</CardTitle>
-                          <CardDescription>{metric.description}</CardDescription>
+                          <DaisyCardTitle className="text-lg">{metric.name}</DaisyCardTitle>
+                          <DaisyCardDescription>{metric.description}</p>
                         </div>
                       </div>
                       <div className="text-right">
                         <div className="flex items-center space-x-2 mb-1">
-                          <Badge variant="outline" className={cn("text-xs", statusConfig.color)}>
+                          <DaisyBadge variant="outline" className={cn("text-xs", statusConfig.color)}>
                             {statusConfig.label}
-                          </Badge>
+                          </DaisyBadge>
                           <TrendIcon className={cn(
                             "h-4 w-4",
                             metric.trend === 'up' ? 'text-green-600' :
@@ -633,8 +633,8 @@ export default function AnalyticsTrendsPage() {
                         </div>
                       </div>
                     </div>
-                  </CardHeader>
-                  <CardContent>
+                  
+                  <DaisyCardContent>
                     <div className="space-y-4">
                       {/* Progress to Target */}
                       {metric.target && (
@@ -645,7 +645,7 @@ export default function AnalyticsTrendsPage() {
                               {Math.round((metric.currentValue / metric.target) * 100)}%
                             </span>
                           </div>
-                          <Progress 
+                          <DaisyProgress 
                             value={(metric.currentValue / metric.target) * 100} 
                             className="h-3"
                           />
@@ -676,74 +676,74 @@ export default function AnalyticsTrendsPage() {
 
                       {/* Actions */}
                       <div className="flex space-x-2 pt-2 border-t">
-                        <Button
+                        <DaisyButton
                           variant="outline"
                           size="sm"
                           onClick={() => handleDrillDown(metric.id)}
                         >
                           <Eye className="h-4 w-4 mr-1" />
                           Drill Down
-                        </Button>
-                        <Button variant="outline" size="sm">
+                        </DaisyButton>
+                        <DaisyButton variant="outline" size="sm">
                           <LineChart className="h-4 w-4 mr-1" />
                           View Chart
-                        </Button>
-                        <Button variant="outline" size="sm">
+                        </DaisyButton>
+                        <DaisyButton variant="outline" size="sm">
                           <Download className="h-4 w-4 mr-1" />
                           Export Data
-                        </Button>
+                        </DaisyButton>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               );
             })}
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="predictions" className="space-y-6">
-          <Alert>
+        <DaisyTabsContent value="predictions" className="space-y-6">
+          <DaisyAlert>
             <Zap className="h-4 w-4" />
-            <AlertDescription>
+            <DaisyAlertDescription>
               Predictive insights are generated using AI analysis of historical trends and patterns.
               Confidence levels indicate the reliability of each prediction.
-            </AlertDescription>
-          </Alert>
+            
+          </DaisyAlert>
 
           <div className="space-y-4">
             {sampleInsights.map((insight) => {
               const impactConfig = getImpactConfig(insight.impact);
 
               return (
-                <Card key={insight.id}>
-                  <CardHeader>
+                <DaisyCard key={insight.id}>
+                  <DaisyCardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
-                          <Badge variant="outline" className={cn("text-xs", impactConfig.color)}>
+                          <DaisyBadge variant="outline" className={cn("text-xs", impactConfig.color)}>
                             {impactConfig.label}
-                          </Badge>
-                          <Badge variant="outline" className="text-xs">
+                          </DaisyBadge>
+                          <DaisyBadge variant="outline" className="text-xs">
                             {insight.category}
-                          </Badge>
-                          <Badge variant="outline" className="text-xs">
+                          </DaisyBadge>
+                          <DaisyBadge variant="outline" className="text-xs">
                             {insight.timeframe}
-                          </Badge>
+                          </DaisyBadge>
                         </div>
-                        <CardTitle className="text-lg">{insight.title}</CardTitle>
-                        <CardDescription className="mt-1">
+                        <DaisyCardTitle className="text-lg">{insight.title}</DaisyCardTitle>
+                        <DaisyCardDescription className="mt-1">
                           {insight.description}
-                        </CardDescription>
+                        </p>
                       </div>
                       <div className="text-right ml-4">
                         <div className="text-2xl font-bold text-blue-600">{insight.confidence}%</div>
                         <div className="text-sm text-gray-500">Confidence</div>
                       </div>
                     </div>
-                  </CardHeader>
-                  <CardContent>
+                  
+                  <DaisyCardContent>
                     <div className="space-y-4">
-                      <Progress value={insight.confidence} className="h-2" />
+                      <DaisyProgress value={insight.confidence} className="h-2" />
                       
                       <div className="p-3 bg-blue-50 rounded-lg">
                         <h4 className="font-medium text-sm text-blue-900 mb-1">
@@ -755,28 +755,28 @@ export default function AnalyticsTrendsPage() {
                       </div>
 
                       <div className="flex space-x-2">
-                        <Button variant="outline" size="sm">
+                        <DaisyButton variant="outline" size="sm">
                           <Target className="h-4 w-4 mr-1" />
                           Create Action Plan
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          <Calendar className="h-4 w-4 mr-1" />
+                        </DaisyButton>
+                        <DaisyButton variant="outline" size="sm">
+                          <DaisyCalendar className="h-4 w-4 mr-1" />
                           Set Reminder
-                        </Button>
-                        <Button variant="outline" size="sm">
+                        </DaisyButton>
+                        <DaisyButton variant="outline" size="sm">
                           <FileText className="h-4 w-4 mr-1" />
                           View Details
-                        </Button>
+                        </DaisyButton>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               );
             })}
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="comparisons">
+        <DaisyTabsContent value="comparisons">
           <div className="text-center py-12">
             <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -785,12 +785,12 @@ export default function AnalyticsTrendsPage() {
             <p className="text-gray-600 mb-4">
               Compare metrics across time periods, categories, and benchmarks
             </p>
-            <Button>
+            <DaisyButton>
               <PieChart className="h-4 w-4 mr-2" />
               Create Comparison
-            </Button>
+            </DaisyButton>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
       </MainContentArea>
     </ProtectedRoute>
   );

@@ -14,15 +14,15 @@ import {
   Activity
 } from 'lucide-react';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisySwitch } from '@/components/ui/DaisySwitch';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 
 import { Risk, Control } from '@/types';
 import { 
@@ -73,36 +73,36 @@ const FrameworkCard: React.FC<{
   const info = frameworkInfo[framework];
 
   return (
-    <Card 
+    <DaisyCard 
       className={`cursor-pointer transition-all hover:shadow-md ${
         selected ? 'ring-2 ring-primary border-primary' : ''
       }`}
       onClick={onSelect}
     >
-      <CardHeader className="pb-3">
+      <DaisyCardHeader className="pb-3">
         <div className="flex items-center gap-3">
           <div className={`p-2 rounded-lg bg-secondary/10 ${info.color}`}>
             {info.icon}
           </div>
           <div>
-            <CardTitle className="text-lg">{info.name}</CardTitle>
-            <CardDescription>{info.description}</CardDescription>
+            <DaisyCardTitle className="text-lg">{info.name}</DaisyCardTitle>
+            <DaisyCardDescription>{info.description}</p>
           </div>
         </div>
-      </CardHeader>
-      <CardContent>
+      
+      <DaisyCardContent>
         <div className="space-y-2">
           <p className="text-sm text-muted-foreground">Categories:</p>
           <div className="flex flex-wrap gap-1">
             {info.categories.map(category => (
-              <Badge key={category} variant="outline" className="text-xs">
+              <DaisyBadge key={category} variant="outline" className="text-xs">
                 {category}
-              </Badge>
+              </DaisyBadge>
             ))}
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 };
 
@@ -111,51 +111,51 @@ const QuantitativeResultsView: React.FC<{ results: QuantitativeResults }> = ({ r
     <div className="space-y-6">
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription>Expected Value</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <DaisyCard>
+          <DaisyCardHeader className="pb-2">
+            <DaisyCardDescription>Expected Value</p>
+          
+          <DaisyCardContent>
             <div className="text-2xl font-bold">
               {results.expectedValue.toFixed(2)}
             </div>
             <p className="text-xs text-muted-foreground">
               σ = {results.standardDeviation.toFixed(2)}
             </p>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription>95% Confidence Interval</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <DaisyCard>
+          <DaisyCardHeader className="pb-2">
+            <DaisyCardDescription>95% Confidence Interval</p>
+          
+          <DaisyCardContent>
             <div className="text-lg font-semibold">
               {results.confidenceIntervals.find(ci => ci.level === 95)?.lower.toFixed(2)} -{' '}
               {results.confidenceIntervals.find(ci => ci.level === 95)?.upper.toFixed(2)}
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription>Value at Risk (95%)</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <DaisyCard>
+          <DaisyCardHeader className="pb-2">
+            <DaisyCardDescription>Value at Risk (95%)</p>
+          
+          <DaisyCardContent>
             <div className="text-lg font-semibold text-red-600">
               {results.valueAtRisk.find(varItem => varItem.confidence === 95)?.value.toFixed(2)}
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
 
       {/* Distribution Chart Placeholder */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Risk Distribution</CardTitle>
-          <CardDescription>Monte Carlo simulation results</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle>Risk Distribution</DaisyCardTitle>
+          <DaisyCardDescription>Monte Carlo simulation results</p>
+        
+        <DaisyCardContent>
           <div className="h-64 bg-secondary/10 rounded-lg flex items-center justify-center">
             <div className="text-center text-muted-foreground">
               <BarChart3 className="h-12 w-12 mx-auto mb-2" />
@@ -163,15 +163,15 @@ const QuantitativeResultsView: React.FC<{ results: QuantitativeResults }> = ({ r
               <p className="text-sm">Bins: {results.distribution.bins.length}</p>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Percentiles */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Key Percentiles</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle>Key Percentiles</DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {Object.entries(results.distribution.percentiles).map(([percentile, value]) => (
               <div key={percentile} className="text-center">
@@ -180,8 +180,8 @@ const QuantitativeResultsView: React.FC<{ results: QuantitativeResults }> = ({ r
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </div>
   );
 };
@@ -190,12 +190,12 @@ const CorrelationAnalysisView: React.FC<{ analysis: RiskCorrelationAnalysis }> =
   return (
     <div className="space-y-6">
       {/* Network Metrics */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Network Metrics</CardTitle>
-          <CardDescription>Risk interconnectedness analysis</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle>Network Metrics</DaisyCardTitle>
+          <DaisyCardDescription>Risk interconnectedness analysis</p>
+        
+        <DaisyCardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
               <p className="text-sm text-muted-foreground">Density</p>
@@ -214,21 +214,21 @@ const CorrelationAnalysisView: React.FC<{ analysis: RiskCorrelationAnalysis }> =
               <p className="text-2xl font-bold">{analysis.networkMetrics.criticalPaths.length}</p>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Systemic Risk Indicators */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Systemic Risk Indicators</CardTitle>
-          <CardDescription>System-wide risk assessment</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle>Systemic Risk Indicators</DaisyCardTitle>
+          <DaisyCardDescription>System-wide risk assessment</p>
+        
+        <DaisyCardContent>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Contagion Risk</span>
               <div className="flex items-center gap-2">
-                <Progress value={analysis.systemicRisk.contagionRisk * 100} className="w-24" />
+                <DaisyProgress value={analysis.systemicRisk.contagionRisk * 100} className="w-24" />
                 <span className="text-sm">{(analysis.systemicRisk.contagionRisk * 100).toFixed(1)}%</span>
               </div>
             </div>
@@ -236,7 +236,7 @@ const CorrelationAnalysisView: React.FC<{ analysis: RiskCorrelationAnalysis }> =
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Vulnerability Index</span>
               <div className="flex items-center gap-2">
-                <Progress value={analysis.systemicRisk.vulnerabilityIndex * 100} className="w-24" />
+                <DaisyProgress value={analysis.systemicRisk.vulnerabilityIndex * 100} className="w-24" />
                 <span className="text-sm">{(analysis.systemicRisk.vulnerabilityIndex * 100).toFixed(1)}%</span>
               </div>
             </div>
@@ -244,46 +244,46 @@ const CorrelationAnalysisView: React.FC<{ analysis: RiskCorrelationAnalysis }> =
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Resilience</span>
               <div className="flex items-center gap-2">
-                <Progress value={analysis.systemicRisk.resilience * 100} className="w-24" />
+                <DaisyProgress value={analysis.systemicRisk.resilience * 100} className="w-24" />
                 <span className="text-sm">{(analysis.systemicRisk.resilience * 100).toFixed(1)}%</span>
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Risk Clusters */}
       {analysis.clusters.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Risk Clusters</CardTitle>
-            <CardDescription>Identified risk groupings</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle>Risk Clusters</DaisyCardTitle>
+            <DaisyCardDescription>Identified risk groupings</p>
+          
+          <DaisyCardContent>
             <div className="space-y-3">
               {analysis.clusters.map((cluster, index) => (
                 <div key={cluster.id} className="p-3 border rounded-lg">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium">{cluster.name}</h4>
-                    <Badge variant="outline">
+                    <DaisyBadge variant="outline">
                       {cluster.riskIds.length} risks
-                    </Badge>
+                    </DaisyBadge>
                   </div>
                   <p className="text-sm text-muted-foreground mb-2">
                     Aggregate Risk: {cluster.aggregateRisk.toFixed(2)}
                   </p>
                   <div className="flex flex-wrap gap-1">
                     {cluster.commonFactors.map(factor => (
-                      <Badge key={factor} variant="secondary" className="text-xs">
+                      <DaisyBadge key={factor} variant="secondary" className="text-xs">
                         {factor}
-                      </Badge>
+                      </DaisyBadge>
                     ))}
                   </div>
                 </div>
               ))}
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       )}
     </div>
   );
@@ -307,7 +307,7 @@ const RecommendationsView: React.FC<{
     switch (type) {
       case 'mitigation': return <CheckCircle className="h-4 w-4" />;
       case 'transfer': return <TrendingUp className="h-4 w-4" />;
-      case 'avoidance': return <AlertTriangle className="h-4 w-4" />;
+      case 'avoidance': return <DaisyAlertTriangle className="h-4 w-4" />;
       case 'acceptance': return <Clock className="h-4 w-4" />;
       default: return <Settings className="h-4 w-4" />;
     }
@@ -316,27 +316,27 @@ const RecommendationsView: React.FC<{
   return (
     <div className="space-y-4">
       {recommendations.map((recommendation) => (
-        <Card key={recommendation.id}>
-          <CardHeader>
+        <DaisyCard key={recommendation.id}>
+          <DaisyCardHeader>
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-secondary/10 rounded-lg">
                   {getTypeIcon(recommendation.type)}
                 </div>
                 <div>
-                  <CardTitle className="text-lg">{recommendation.title}</CardTitle>
-                  <CardDescription>{recommendation.description}</CardDescription>
+                  <DaisyCardTitle className="text-lg">{recommendation.title}</DaisyCardTitle>
+                  <DaisyCardDescription>{recommendation.description}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <div className={`h-2 w-2 rounded-full ${getPriorityColor(recommendation.priority)}`} />
-                <Badge variant="outline" className="capitalize">
+                <DaisyBadge variant="outline" className="capitalize">
                   {recommendation.priority}
-                </Badge>
+                </DaisyBadge>
               </div>
             </div>
-          </CardHeader>
-          <CardContent>
+          
+          <DaisyCardContent>
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div>
@@ -364,16 +364,16 @@ const RecommendationsView: React.FC<{
               </div>
 
               <div className="flex justify-end gap-2">
-                <Button variant="outline" size="sm">
+                <DaisyButton variant="outline" size="sm">
                   View Details
-                </Button>
-                <Button size="sm" onClick={() => onApply(recommendation)}>
+                </DaisyButton>
+                <DaisyButton size="sm" onClick={() => onApply(recommendation)}>
                   Apply Recommendation
-                </Button>
+                </DaisyButton>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       ))}
     </div>
   );
@@ -440,74 +440,74 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
 
   return (
     <div className={`space-y-6 ${className}`}>
-      <Card>
-        <CardHeader>
+      <DaisyCard>
+        <DaisyCardHeader>
           <div className="flex items-center gap-3">
             <div className="p-2 bg-blue-50 rounded-lg">
               <Brain className="h-6 w-6 text-blue-600" />
             </div>
             <div>
-              <CardTitle>AI-Powered Risk Analysis</CardTitle>
-              <CardDescription>
+              <DaisyCardTitle>AI-Powered Risk Analysis</DaisyCardTitle>
+              <DaisyCardDescription>
                 Comprehensive risk assessment using industry-standard frameworks
-              </CardDescription>
+              </p>
             </div>
           </div>
-        </CardHeader>
-      </Card>
+        
+      </DaisyCard>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="framework">Framework</TabsTrigger>
-          <TabsTrigger value="configuration">Configuration</TabsTrigger>
-          <TabsTrigger value="report" disabled={!currentReport}>Report</TabsTrigger>
-          <TabsTrigger value="recommendations" disabled={!currentReport?.recommendations.length}>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
+        <DaisyTabsList className="grid w-full grid-cols-5">
+          <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="framework">Framework</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="configuration">Configuration</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="report" disabled={!currentReport}>Report</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="recommendations" disabled={!currentReport?.recommendations.length}>
             Recommendations
-          </TabsTrigger>
-        </TabsList>
+          </DaisyTabsTrigger>
+        </DaisyTabsList>
 
-        <TabsContent value="overview">
+        <DaisyTabsContent value="overview">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardDescription>Available Risks</CardDescription>
-              </CardHeader>
-              <CardContent>
+            <DaisyCard>
+              <DaisyCardHeader className="pb-2">
+                <DaisyCardDescription>Available Risks</p>
+              
+              <DaisyCardContent>
                 <div className="text-2xl font-bold">{risks.length}</div>
                 <p className="text-xs text-muted-foreground">
                   {risks.filter(r => r.riskScore >= 15).length} high risk
                 </p>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardDescription>Associated Controls</CardDescription>
-              </CardHeader>
-              <CardContent>
+            <DaisyCard>
+              <DaisyCardHeader className="pb-2">
+                <DaisyCardDescription>Associated Controls</p>
+              
+              <DaisyCardContent>
                 <div className="text-2xl font-bold">{controls.length}</div>
                 <p className="text-xs text-muted-foreground">
                   {controls.filter(c => c.effectiveness === 'high').length} highly effective
                 </p>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardDescription>Selected Framework</CardDescription>
-              </CardHeader>
-              <CardContent>
+            <DaisyCard>
+              <DaisyCardHeader className="pb-2">
+                <DaisyCardDescription>Selected Framework</p>
+              
+              <DaisyCardContent>
                 <div className="text-lg font-semibold">{selectedFramework.toUpperCase()}</div>
                 <p className="text-xs text-muted-foreground">Industry standard</p>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardDescription>Analysis Status</CardDescription>
-              </CardHeader>
-              <CardContent>
+            <DaisyCard>
+              <DaisyCardHeader className="pb-2">
+                <DaisyCardDescription>Analysis Status</p>
+              
+              <DaisyCardContent>
                 <div className="flex items-center gap-2">
                   {currentReport ? (
                     <CheckCircle className="h-5 w-5 text-green-600" />
@@ -518,12 +518,12 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
                     {currentReport ? 'Complete' : 'Pending'}
                   </span>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="framework">
+        <DaisyTabsContent value="framework">
           <div className="space-y-6">
             <div>
               <h3 className="text-lg font-semibold mb-4">Select Risk Framework</h3>
@@ -546,48 +546,48 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
               </div>
             </div>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="configuration">
+        <DaisyTabsContent value="configuration">
           <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Analysis Configuration</CardTitle>
-                <CardDescription>Configure analysis parameters and options</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle>Analysis Configuration</DaisyCardTitle>
+                <DaisyCardDescription>Configure analysis parameters and options</p>
+              
+              <DaisyCardContent className="space-y-6">
                 <div>
-                  <Label htmlFor="risk-select">Select Risk for Analysis</Label>
-                  <Select
+                  <DaisyLabel htmlFor="risk-select">Select Risk for Analysis</DaisyLabel>
+                  <DaisySelect
                     value={selectedRisk?.id || ''}
                     onValueChange={(value) => setSelectedRisk(risks.find(r => r.id === value) || null)}
                   >
-                    <SelectTrigger id="risk-select">
-                      <SelectValue placeholder="Choose a risk to analyze" />
+                    <DaisySelectTrigger id="risk-select">
+                      <DaisySelectValue placeholder="Choose a risk to analyze" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <DaisySelectContent>
                       {risks.map((risk) => (
-                        <SelectItem key={risk.id} value={risk.id}>
+                        <DaisySelectItem key={risk.id} value={risk.id}>
                           {risk.title} (Score: {risk.riskScore})
                         </SelectItem>
                       ))}
                     </SelectContent>
-                  </Select>
+                  </DaisySelect>
                 </div>
 
-                <Separator />
+                <DaisySeparator />
 
                 <div className="space-y-4">
                   <h4 className="text-sm font-semibold">Analysis Options</h4>
                   
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
-                      <Label htmlFor="quantitative">Quantitative Analysis</Label>
+                      <DaisyLabel htmlFor="quantitative">Quantitative Analysis</DaisyLabel>
                       <p className="text-sm text-muted-foreground">
                         Include Monte Carlo simulation and statistical analysis
                       </p>
                     </div>
-                    <Switch
+                    <DaisySwitch
                       id="quantitative"
                       checked={includeQuantitative}
                       onCheckedChange={setIncludeQuantitative}
@@ -596,12 +596,12 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
 
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
-                      <Label htmlFor="correlation">Correlation Analysis</Label>
+                      <DaisyLabel htmlFor="correlation">Correlation Analysis</DaisyLabel>
                       <p className="text-sm text-muted-foreground">
                         Analyze relationships between multiple risks
                       </p>
                     </div>
-                    <Switch
+                    <DaisySwitch
                       id="correlation"
                       checked={includeCorrelation}
                       onCheckedChange={setIncludeCorrelation}
@@ -609,10 +609,10 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
                   </div>
                 </div>
 
-                <Separator />
+                <DaisySeparator />
 
                 <div className="flex justify-end gap-2">
-                  <Button
+                  <DaisyButton
                     onClick={handleAnalyzeRisk}
                     disabled={!selectedRisk || isAnalyzing}
                     className="gap-2"
@@ -628,33 +628,33 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
                         Start Analysis
                       </>
                     )}
-                  </Button>
+                  </DaisyButton>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="report">
+        <DaisyTabsContent value="report">
           {currentReport && (
             <div className="space-y-6">
-              <Card>
-                <CardHeader>
+              <DaisyCard>
+                <DaisyCardHeader>
                   <div className="flex items-center justify-between">
                     <div>
-                      <CardTitle>Risk Assessment Report</CardTitle>
-                      <CardDescription>
+                      <DaisyCardTitle>Risk Assessment Report</DaisyCardTitle>
+                      <DaisyCardDescription>
                         Framework: {currentReport.framework.toUpperCase()} | 
                         Generated: {currentReport.assessmentDate.toLocaleDateString()}
-                      </CardDescription>
+                      </p>
                     </div>
-                    <Button onClick={exportReport} variant="outline" className="gap-2">
+                    <DaisyButton onClick={exportReport} variant="outline" className="gap-2">
                       <Download className="h-4 w-4" />
                       Export
-                    </Button>
+                    </DaisyButton>
                   </div>
-                </CardHeader>
-                <CardContent>
+                
+                <DaisyCardContent>
                   <div className="space-y-4">
                     <div>
                       <h4 className="font-semibold mb-2">Executive Summary</h4>
@@ -677,33 +677,33 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
                       </div>
                     )}
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </div>
           )}
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="recommendations">
+        <DaisyTabsContent value="recommendations">
           {currentReport?.recommendations && currentReport.recommendations.length > 0 && (
             <div className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>AI-Generated Recommendations</CardTitle>
-                  <CardDescription>
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle>AI-Generated Recommendations</DaisyCardTitle>
+                  <DaisyCardDescription>
                     Actionable recommendations based on risk analysis
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
+                  </p>
+                
+                <DaisyCardContent>
                   <RecommendationsView
                     recommendations={currentReport.recommendations}
                     onApply={handleApplyRecommendation}
                   />
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </div>
           )}
-        </TabsContent>
-      </Tabs>
+        </DaisyTabsContent>
+      </DaisyTabs>
     </div>
   );
 }; 

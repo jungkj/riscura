@@ -26,10 +26,10 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { debounce, throttle } from 'lodash-es';
 import { cn } from '@/lib/utils';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Slider } from '@/components/ui/slider';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisySwitch } from '@/components/ui/DaisySwitch';
+import { DaisySlider } from '@/components/ui/DaisySlider';
 import { 
   Select, 
   SelectContent, 
@@ -190,7 +190,7 @@ const OptimizedLineChart = React.memo<{
           interval="preserveStartEnd"
         />
         <YAxis tick={{ fontSize: 12 }} />
-        {config.enableTooltip && <Tooltip />}
+        {config.enableTooltip && <DaisyTooltip />}
         {config.enableLegend && <Legend />}
         
         {config.yKeys.map((key, index) => (
@@ -237,7 +237,7 @@ const OptimizedAreaChart = React.memo<{
           interval="preserveStartEnd"
         />
         <YAxis tick={{ fontSize: 12 }} />
-        {config.enableTooltip && <Tooltip />}
+        {config.enableTooltip && <DaisyTooltip />}
         {config.enableLegend && <Legend />}
         
         {config.yKeys.map((key, index) => (
@@ -284,7 +284,7 @@ const OptimizedBarChart = React.memo<{
           interval="preserveStartEnd"
         />
         <YAxis tick={{ fontSize: 12 }} />
-        {config.enableTooltip && <Tooltip />}
+        {config.enableTooltip && <DaisyTooltip />}
         {config.enableLegend && <Legend />}
         
         {config.yKeys.map((key, index) => (
@@ -338,7 +338,7 @@ const OptimizedPieChart = React.memo<{
             />
           ))}
         </Pie>
-        {config.enableTooltip && <Tooltip />}
+        {config.enableTooltip && <DaisyTooltip />}
         {config.enableLegend && <Legend />}
       </PieChart>
     </ResponsiveContainer>
@@ -374,7 +374,7 @@ const OptimizedScatterChart = React.memo<{
           tick={{ fontSize: 12 }} 
           type="number"
         />
-        {config.enableTooltip && <Tooltip />}
+        {config.enableTooltip && <DaisyTooltip />}
         {config.enableLegend && <Legend />}
         
         <Scatter

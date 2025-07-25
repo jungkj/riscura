@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, Save, Calendar, User2, Shield, TrendingUp, AlertTriangle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { useRiskFlow } from '../RiskFlowContext';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -145,7 +145,7 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
                   <span>Likelihood: {validLikelihood}/5</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <AlertTriangle className="w-4 h-4 text-muted-foreground" />
+                  <DaisyAlertTriangle className="w-4 h-4 text-muted-foreground" />
                   <span>Impact: {validImpact}/5</span>
                 </div>
               </div>
@@ -175,14 +175,14 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
 
           <div className="flex items-center gap-4 pt-2 border-t text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
-              <Calendar className="w-4 h-4" />
+              <DaisyCalendar className="w-4 h-4" />
               <span>Identified: {riskData.dateIdentified instanceof Date && !isNaN(riskData.dateIdentified.getTime()) 
                 ? format(riskData.dateIdentified, 'MMM dd, yyyy') 
                 : 'Today'}</span>
             </div>
             {riskData.nextReview instanceof Date && !isNaN(riskData.nextReview.getTime()) && (
               <div className="flex items-center gap-1">
-                <Calendar className="w-4 h-4" />
+                <DaisyCalendar className="w-4 h-4" />
                 <span>Next Review: {format(riskData.nextReview, 'MMM dd, yyyy')}</span>
               </div>
             )}
@@ -196,11 +196,11 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
         transition={{ delay: 0.2 }}
         className="flex justify-between pt-4"
       >
-        <Button onClick={onBack} variant="outline" size="lg" disabled={isCreating}>
+        <DaisyButton onClick={onBack} variant="outline" size="lg" disabled={isCreating}>
           <ChevronLeft className="w-4 h-4 mr-2" />
           Back
-        </Button>
-        <Button 
+        </DaisyButton>
+        <DaisyButton 
           onClick={handleCreate} 
           size="lg" 
           className="min-w-[140px]"
@@ -214,7 +214,7 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
               Create Risk
             </>
           )}
-        </Button>
+        </DaisyButton>
       </motion.div>
     </div>
   );

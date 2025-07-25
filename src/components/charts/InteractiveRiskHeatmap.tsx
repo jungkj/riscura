@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
 import { 
   ResponsiveContainer, 
   Cell, 
@@ -255,7 +255,7 @@ export default function InteractiveRiskHeatmap({
             <div>Impact: <span className="font-medium">{risk.impact}</span></div>
             <div>Risk Score: <span className="font-medium">{risk.riskScore}</span></div>
             <div>Owner: <span className="font-medium">{risk.owner}</span></div>
-            <div>Status: <Badge variant="outline" className="text-xs">{risk.status}</Badge></div>
+            <div>Status: <DaisyBadge variant="outline" className="text-xs">{risk.status}</DaisyBadge></div>
           </div>
         </div>
       );
@@ -399,63 +399,63 @@ export default function InteractiveRiskHeatmap({
   };
 
   return (
-    <Card className={`${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
-      <CardHeader className="pb-3">
+    <DaisyCard className={`${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
+      <DaisyCardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <AlertTriangle className="w-5 h-5 text-orange-600" />
-            <CardTitle className="text-lg">Risk Heatmap</CardTitle>
-            <Badge variant="secondary" className="text-xs">
+            <DaisyAlertTriangle className="w-5 h-5 text-orange-600" />
+            <DaisyCardTitle className="text-lg">Risk Heatmap</DaisyCardTitle>
+            <DaisyBadge variant="secondary" className="text-xs">
               {filteredData.length} risks
-            </Badge>
+            </DaisyBadge>
           </div>
           
           {showControls && (
             <div className="flex items-center space-x-1">
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={() => setViewMode(viewMode === 'heatmap' ? 'scatter' : 'heatmap')}
                 className="p-2"
               >
                 <Eye className="w-4 h-4" />
-              </Button>
+              </DaisyButton>
               
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowTooltip(!showTooltip)}
                 className="p-2"
               >
                 <Settings className="w-4 h-4" />
-              </Button>
+              </DaisyButton>
               
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={exportHeatmap}
                 className="p-2"
               >
                 <Download className="w-4 h-4" />
-              </Button>
+              </DaisyButton>
               
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={resetView}
                 className="p-2"
               >
                 <RotateCcw className="w-4 h-4" />
-              </Button>
+              </DaisyButton>
               
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsFullscreen(!isFullscreen)}
                 className="p-2"
               >
                 <Maximize2 className="w-4 h-4" />
-              </Button>
+              </DaisyButton>
             </div>
           )}
         </div>
@@ -464,59 +464,59 @@ export default function InteractiveRiskHeatmap({
         <div className="flex items-center space-x-4 mt-3">
           <div className="flex items-center space-x-2">
             <Filter className="w-4 h-4 text-gray-500" />
-            <Select value={filterCategory} onValueChange={setFilterCategory}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Category" />
+            <DaisySelect value={filterCategory} onValueChange={setFilterCategory}>
+              <DaisySelectTrigger className="w-40">
+                <DaisySelectValue placeholder="Category" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
+              <DaisySelectContent>
+                <DaisySelectItem value="all">All Categories</SelectItem>
                 {categories.map(category => (
-                  <SelectItem key={category} value={category}>
+                  <DaisySelectItem key={category} value={category}>
                     {category}
                   </SelectItem>
                 ))}
               </SelectContent>
-            </Select>
+            </DaisySelect>
             
-            <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger className="w-32">
-                <SelectValue placeholder="Status" />
+            <DaisySelect value={filterStatus} onValueChange={setFilterStatus}>
+              <DaisySelectTrigger className="w-32">
+                <DaisySelectValue placeholder="Status" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
+              <DaisySelectContent>
+                <DaisySelectItem value="all">All Status</SelectItem>
                 {statuses.map(status => (
-                  <SelectItem key={status} value={status}>
+                  <DaisySelectItem key={status} value={status}>
                     {status}
                   </SelectItem>
                 ))}
               </SelectContent>
-            </Select>
+            </DaisySelect>
           </div>
           
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-600">View:</span>
-            <Button
+            <DaisyButton
               variant={viewMode === 'heatmap' ? 'primary' : 'outline'}
               size="sm"
               onClick={() => setViewMode('heatmap')}
             >
               Heatmap
-            </Button>
-            <Button
+            </DaisyButton>
+            <DaisyButton
               variant={viewMode === 'scatter' ? 'primary' : 'outline'}
               size="sm"
               onClick={() => setViewMode('scatter')}
             >
               Scatter
-            </Button>
+            </DaisyButton>
           </div>
         </div>
-      </CardHeader>
+      
 
-      <CardContent>
-        <TooltipProvider>
+      <DaisyCardContent>
+        <DaisyTooltipProvider>
           {viewMode === 'heatmap' ? renderHeatmapGrid() : renderScatterPlot()}
-        </TooltipProvider>
+        
         
         {/* Legend */}
         <div className="mt-4 flex items-center justify-center space-x-6">
@@ -546,13 +546,13 @@ export default function InteractiveRiskHeatmap({
               <h4 className="font-medium">
                 {selectedCell.label} - {selectedCell.count} Risk{selectedCell.count !== 1 ? 's' : ''}
               </h4>
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={() => setSelectedCell(null)}
               >
                 ×
-              </Button>
+              </DaisyButton>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-32 overflow-y-auto">
@@ -565,16 +565,16 @@ export default function InteractiveRiskHeatmap({
                   <div className="font-medium text-sm truncate">{risk.title}</div>
                   <div className="flex items-center justify-between mt-1">
                     <span className="text-xs text-gray-600">{risk.category}</span>
-                    <Badge variant="outline" className="text-xs">
+                    <DaisyBadge variant="outline" className="text-xs">
                       {risk.status}
-                    </Badge>
+                    </DaisyBadge>
                   </div>
                 </div>
               ))}
             </div>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 } 

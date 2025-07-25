@@ -2,16 +2,16 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, Reorder, AnimatePresence } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Slider } from '@/components/ui/slider';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisySwitch } from '@/components/ui/DaisySwitch';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisySlider } from '@/components/ui/DaisySlider';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { toast } from '@/hooks/use-toast';
 import {
   Dialog,
@@ -179,7 +179,7 @@ export function MatrixQuestionComponent({
                         className="w-4 h-4"
                       />
                     ) : config.style === 'scale' ? (
-                      <Button
+                      <DaisyButton
                         variant={responses[row.id] === column.id ? "primary" : "outline"}
                         size="sm"
                         onClick={() => handleResponse(row.id, column.id, true)}
@@ -187,24 +187,24 @@ export function MatrixQuestionComponent({
                         className="w-8 h-8 p-0"
                       >
                         {column.value}
-                      </Button>
+                      </DaisyButton>
                     ) : (
-                      <Select
+                      <DaisySelect
                         value={responses[row.id] || ''}
                         onValueChange={(value) => handleResponse(row.id, value, true)}
                         disabled={readonly}
                       >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select..." />
+                        <DaisySelectTrigger className="w-full">
+                          <DaisySelectValue placeholder="Select..." />
                         </SelectTrigger>
-                        <SelectContent>
+                        <DaisySelectContent>
                           {displayColumns.map((col) => (
-                            <SelectItem key={col.id} value={col.id}>
+                            <DaisySelectItem key={col.id} value={col.id}>
                               {col.text}
                             </SelectItem>
                           ))}
                         </SelectContent>
-                      </Select>
+                      </DaisySelect>
                     )}
                   </td>
                 ))}
@@ -350,13 +350,13 @@ export function RankingQuestionComponent({
                             )}
                           </div>
                         </div>
-                        <Button
+                        <DaisyButton
                           variant="ghost"
                           size="sm"
                           onClick={() => removeFromRanking(itemId)}
                         >
                           <Trash2 className="w-4 h-4" />
-                        </Button>
+                        </DaisyButton>
                       </div>
                     </motion.div>
                   </Reorder.Item>
@@ -368,12 +368,12 @@ export function RankingQuestionComponent({
       </div>
 
       {config.minRankings && rankedItems.length < config.minRankings && (
-        <Alert>
-          <AlertTriangle className="w-4 h-4" />
-          <AlertDescription>
+        <DaisyAlert>
+          <DaisyAlertTriangle className="w-4 h-4" />
+          <DaisyAlertDescription>
             Please rank at least {config.minRankings} items.
-          </AlertDescription>
-        </Alert>
+          
+        </DaisyAlert>
       )}
     </div>
   );
@@ -465,12 +465,12 @@ export function ImageQuestionComponent({
   return (
     <div className="space-y-4">
       {config.selectionType === 'hotspot' && (
-        <Alert>
+        <DaisyAlert>
           <Info className="w-4 h-4" />
-          <AlertDescription>
+          <DaisyAlertDescription>
             Click on the image to mark important areas or points of interest.
-          </AlertDescription>
-        </Alert>
+          
+        </DaisyAlert>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -527,7 +527,7 @@ export function ImageQuestionComponent({
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
             <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
             <p className="text-sm text-gray-600 mb-2">Upload an image</p>
-            <Input
+            <DaisyInput
               type="file"
               accept="image/*"
               onChange={(e) => {
@@ -537,11 +537,11 @@ export function ImageQuestionComponent({
               className="hidden"
               id="image-upload"
             />
-            <Label htmlFor="image-upload" className="cursor-pointer">
-              <Button variant="outline" size="sm" asChild>
+            <DaisyLabel htmlFor="image-upload" className="cursor-pointer">
+              <DaisyButton variant="outline" size="sm" asChild>
                 <span>Choose File</span>
-              </Button>
-            </Label>
+              </DaisyButton>
+            </DaisyLabel>
           </div>
         )}
       </div>
@@ -669,10 +669,10 @@ export function SignatureQuestionComponent({
           </div>
           
           {config.clearable && (
-            <Button variant="outline" size="sm" onClick={clearSignature}>
+            <DaisyButton variant="outline" size="sm" onClick={clearSignature}>
               <RotateCcw className="w-4 h-4 mr-2" />
               Clear
-            </Button>
+            </DaisyButton>
           )}
         </div>
       </div>
@@ -684,12 +684,12 @@ export function SignatureQuestionComponent({
       )}
 
       {config.required && !signature && (
-        <Alert>
-          <AlertTriangle className="w-4 h-4" />
-          <AlertDescription>
+        <DaisyAlert>
+          <DaisyAlertTriangle className="w-4 h-4" />
+          <DaisyAlertDescription>
             Signature is required to continue.
-          </AlertDescription>
-        </Alert>
+          
+        </DaisyAlert>
       )}
     </div>
   );
@@ -770,20 +770,20 @@ export function LocationQuestionComponent({
     <div className="space-y-4">
       {config.allowSearch && (
         <div className="flex space-x-2">
-          <Input
+          <DaisyInput
             placeholder="Search for a location..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && searchLocation()}
             disabled={readonly}
           />
-          <Button onClick={searchLocation} disabled={isSearching || readonly}>
+          <DaisyButton onClick={searchLocation} disabled={isSearching || readonly}>
             {isSearching ? 'Searching...' : 'Search'}
-          </Button>
-          <Button variant="outline" onClick={getCurrentLocation} disabled={readonly}>
+          </DaisyButton>
+          <DaisyButton variant="outline" onClick={getCurrentLocation} disabled={readonly}>
             <MapPin className="w-4 h-4 mr-2" />
             Current
-          </Button>
+          </DaisyButton>
         </div>
       )}
 
@@ -814,17 +814,17 @@ export function LocationQuestionComponent({
 
         {/* Mock satellite view toggle */}
         <div className="p-2 border-t bg-gray-50 flex justify-between items-center">
-          <Select value={config.mapType} disabled>
-            <SelectTrigger className="w-32">
-              <SelectValue />
+          <DaisySelect value={config.mapType} disabled>
+            <DaisySelectTrigger className="w-32">
+              <DaisySelectValue />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="roadmap">Roadmap</SelectItem>
-              <SelectItem value="satellite">Satellite</SelectItem>
-              <SelectItem value="terrain">Terrain</SelectItem>
-              <SelectItem value="hybrid">Hybrid</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="roadmap">Roadmap</SelectItem>
+              <DaisySelectItem value="satellite">Satellite</SelectItem>
+              <DaisySelectItem value="terrain">Terrain</SelectItem>
+              <DaisySelectItem value="hybrid">Hybrid</SelectItem>
             </SelectContent>
-          </Select>
+          </DaisySelect>
           
           <div className="text-sm text-gray-600">
             Zoom: {config.zoom}x
@@ -839,12 +839,12 @@ export function LocationQuestionComponent({
       )}
 
       {config.requireAccuracy && !selectedLocation && (
-        <Alert>
-          <AlertTriangle className="w-4 h-4" />
-          <AlertDescription>
+        <DaisyAlert>
+          <DaisyAlertTriangle className="w-4 h-4" />
+          <DaisyAlertDescription>
             Please select a location to continue.
-          </AlertDescription>
-        </Alert>
+          
+        </DaisyAlert>
       )}
     </div>
   );
@@ -913,36 +913,36 @@ export function CustomHTMLQuestionComponent({
       <div className="flex items-center justify-between">
         <h4 className="font-medium">Custom Content</h4>
         <div className="flex space-x-2">
-          <Button
+          <DaisyButton
             variant="outline"
             size="sm"
             onClick={() => setShowCode(!showCode)}
           >
             <Code2 className="w-4 h-4 mr-2" />
             {showCode ? 'Hide Code' : 'Show Code'}
-          </Button>
+          </DaisyButton>
           {config.sandbox && (
-            <Badge variant="secondary" className="text-xs">
+            <DaisyBadge variant="secondary" className="text-xs">
               Sandboxed
-            </Badge>
+            </DaisyBadge>
           )}
         </div>
       </div>
 
       {showCode && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm">HTML Content</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Textarea
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle className="text-sm">HTML Content</DaisyCardTitle>
+          
+          <DaisyCardContent>
+            <DaisyTextarea
               value={config.htmlContent}
               readOnly
               rows={8}
               className="font-mono text-sm"
             />
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       )}
 
       <div className="border rounded-lg overflow-hidden">
@@ -955,26 +955,26 @@ export function CustomHTMLQuestionComponent({
       </div>
 
       {config.allowUserInput && config.inputFields && config.inputFields.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm">Additional Input</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <DaisyCard>
+          <DaisyCardHeader>
+            <DaisyCardTitle className="text-sm">Additional Input</DaisyCardTitle>
+          
+          <DaisyCardContent className="space-y-4">
             {config.inputFields.map((field) => (
               <div key={field.name}>
-                <Label htmlFor={field.name}>
+                <DaisyLabel htmlFor={field.name}>
                   {field.name}
                   {field.required && <span className="text-red-500 ml-1">*</span>}
-                </Label>
+                </DaisyLabel>
                 {field.type === 'textarea' ? (
-                  <Textarea
+                  <DaisyTextarea
                     id={field.name}
                     value={inputValues[field.name] || ''}
                     onChange={(e) => handleInputChange(field.name, e.target.value)}
                     disabled={readonly}
                   />
                 ) : (
-                  <Input
+                  <DaisyInput
                     id={field.name}
                     type={field.type}
                     value={inputValues[field.name] || ''}
@@ -984,8 +984,8 @@ export function CustomHTMLQuestionComponent({
                 )}
               </div>
             ))}
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       )}
     </div>
   );

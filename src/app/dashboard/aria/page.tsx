@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import { Bot, MessageSquare, Shield, Brain, Target, Send, Sparkles, TrendingUp, CheckCircle } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyInput } from '@/components/ui/DaisyInput';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 
 interface Message {
@@ -104,13 +104,13 @@ function ARIAChat() {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <Badge variant="success" className="text-sm font-medium">
+              <DaisyBadge variant="success" className="text-sm font-medium">
                 <div className="w-2 h-2 bg-green-500 rounded-full mr-2" />
                 Online
-              </Badge>
-              <Badge variant="outline" className="text-sm font-medium">
+              </DaisyBadge>
+              <DaisyBadge variant="outline" className="text-sm font-medium">
                 v2.0.0
-              </Badge>
+              </DaisyBadge>
             </div>
           </div>
         </div>
@@ -130,8 +130,8 @@ function ARIAChat() {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             {featureCards.map((feature, index) => (
-              <Card key={index} className="border border-gray-200 bg-white hover:shadow-lg transition-all duration-200">
-                <CardContent className="p-6">
+              <DaisyCard key={index} className="border border-gray-200 bg-white hover:shadow-lg transition-all duration-200">
+                <DaisyCardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <div className={`p-3 rounded-lg ${feature.bgColor} ${feature.borderColor} border`}>
                       <feature.icon className={`h-6 w-6 ${feature.color}`} />
@@ -141,53 +141,53 @@ function ARIAChat() {
                       <p className="text-sm text-gray-600 font-inter leading-relaxed">{feature.description}</p>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             ))}
           </div>
 
           {/* Stats Row */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <Card className="border border-gray-200">
-              <CardContent className="p-4 text-center">
+            <DaisyCard className="border border-gray-200">
+              <DaisyCardContent className="p-4 text-center">
                 <div className="text-2xl font-bold text-[#191919] font-inter mb-1">1,200+</div>
                 <div className="text-sm text-gray-600 font-inter">Risks Analyzed</div>
-              </CardContent>
-            </Card>
-            <Card className="border border-gray-200">
-              <CardContent className="p-4 text-center">
+              </DaisyCardBody>
+            </DaisyCard>
+            <DaisyCard className="border border-gray-200">
+              <DaisyCardContent className="p-4 text-center">
                 <div className="text-2xl font-bold text-[#191919] font-inter mb-1">94%</div>
                 <div className="text-sm text-gray-600 font-inter">Accuracy Rate</div>
-              </CardContent>
-            </Card>
-            <Card className="border border-gray-200">
-              <CardContent className="p-4 text-center">
+              </DaisyCardBody>
+            </DaisyCard>
+            <DaisyCard className="border border-gray-200">
+              <DaisyCardContent className="p-4 text-center">
                 <div className="text-2xl font-bold text-[#191919] font-inter mb-1">15min</div>
                 <div className="text-sm text-gray-600 font-inter">Avg Response</div>
-              </CardContent>
-            </Card>
-            <Card className="border border-gray-200">
-              <CardContent className="p-4 text-center">
+              </DaisyCardBody>
+            </DaisyCard>
+            <DaisyCard className="border border-gray-200">
+              <DaisyCardContent className="p-4 text-center">
                 <div className="text-2xl font-bold text-[#191919] font-inter mb-1">24/7</div>
                 <div className="text-sm text-gray-600 font-inter">Availability</div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           </div>
         </div>
 
         {/* Chat Interface */}
-        <Card className="max-w-4xl mx-auto border border-gray-200 shadow-lg">
-          <CardHeader className="border-b border-gray-200 bg-white">
-            <CardTitle className="flex items-center gap-3 text-[#191919] font-inter">
+        <DaisyCard className="max-w-4xl mx-auto border border-gray-200 shadow-lg">
+          <DaisyCardHeader className="border-b border-gray-200 bg-white">
+            <DaisyCardTitle className="flex items-center gap-3 text-[#191919] font-inter">
               <MessageSquare className="h-6 w-6 text-[#199BEC]" />
               Chat with ARIA
-              <Badge variant="purple" className="text-xs font-medium ml-auto">
+              <DaisyBadge variant="purple" className="text-xs font-medium ml-auto">
                 <Sparkles className="h-3 w-3 mr-1" />
                 AI Powered
-              </Badge>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
+              </DaisyBadge>
+            </DaisyCardTitle>
+          
+          <DaisyCardContent className="p-0">
             {/* Messages Area */}
             <div className="h-[500px] overflow-y-auto p-6 space-y-6 bg-white">
               {messages.map((message) => (
@@ -237,7 +237,7 @@ function ARIAChat() {
                   <p className="text-sm text-gray-600 font-inter font-medium mb-3">Quick questions to get started:</p>
                   <div className="grid grid-cols-2 gap-3">
                     {quickQuestions.map((question, index) => (
-                      <Button
+                      <DaisyButton
                         key={index}
                         variant="ghost"
                         size="sm"
@@ -245,7 +245,7 @@ function ARIAChat() {
                         onClick={() => setInput(question)}
                       >
                         {question}
-                      </Button>
+                      </DaisyButton>
                     ))}
                   </div>
                 </div>
@@ -255,7 +255,7 @@ function ARIAChat() {
             {/* Input Area */}
             <div className="border-t border-gray-200 bg-white p-6">
               <div className="flex gap-3">
-                <Input
+                <DaisyInput
                   placeholder="Ask ARIA about risks, controls, or compliance..."
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
@@ -263,17 +263,17 @@ function ARIAChat() {
                   disabled={isLoading}
                   className="flex-1 text-sm"
                 />
-                <Button 
+                <DaisyButton 
                   onClick={handleSend} 
                   disabled={isLoading || !input.trim()}
                   className="px-6 font-inter font-medium"
                 >
                   <Send className="h-4 w-4" />
-                </Button>
+                </DaisyButton>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
         {/* Help Section */}
         <div className="mt-12 max-w-4xl mx-auto">
@@ -285,7 +285,7 @@ function ARIAChat() {
               ARIA can help you with various risk management tasks. Here are some things you can try:
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
-              <Card className="border border-gray-200 p-4">
+              <DaisyCard className="border border-gray-200 p-4">
                 <div className="flex items-center gap-3 mb-2">
                   <TrendingUp className="h-5 w-5 text-blue-600" />
                   <h4 className="font-semibold text-[#191919] font-inter text-sm">Risk Assessment</h4>
@@ -293,8 +293,8 @@ function ARIAChat() {
                 <p className="text-xs text-gray-600 font-inter">
                   "Analyze our cybersecurity risks" or "What are the top risks in our industry?"
                 </p>
-              </Card>
-              <Card className="border border-gray-200 p-4">
+              </DaisyCard>
+              <DaisyCard className="border border-gray-200 p-4">
                 <div className="flex items-center gap-3 mb-2">
                   <CheckCircle className="h-5 w-5 text-green-600" />
                   <h4 className="font-semibold text-[#191919] font-inter text-sm">Control Review</h4>
@@ -302,8 +302,8 @@ function ARIAChat() {
                 <p className="text-xs text-gray-600 font-inter">
                   "Review our access controls" or "Suggest improvements for our security policies"
                 </p>
-              </Card>
-              <Card className="border border-gray-200 p-4">
+              </DaisyCard>
+              <DaisyCard className="border border-gray-200 p-4">
                 <div className="flex items-center gap-3 mb-2">
                   <Target className="h-5 w-5 text-purple-600" />
                   <h4 className="font-semibold text-[#191919] font-inter text-sm">Compliance</h4>
@@ -311,7 +311,7 @@ function ARIAChat() {
                 <p className="text-xs text-gray-600 font-inter">
                   "Check SOX compliance status" or "Generate GDPR assessment report"
                 </p>
-              </Card>
+              </DaisyCard>
             </div>
           </div>
         </div>

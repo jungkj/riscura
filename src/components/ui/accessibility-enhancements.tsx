@@ -10,7 +10,7 @@ import React, {
   PropsWithChildren 
 } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { 
   AlertTriangle, 
   CheckCircle, 
@@ -354,7 +354,7 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
           <h2 id="modal-title" className="text-lg font-semibold text-[#191919] font-inter">
             {title}
           </h2>
-          <Button
+          <DaisyButton
             variant="ghost"
             size="sm"
             onClick={onClose}
@@ -362,7 +362,7 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
             className="h-8 w-8 p-0"
           >
             <X className="h-4 w-4" />
-          </Button>
+          </DaisyButton>
         </div>
         {children}
       </div>
@@ -478,7 +478,7 @@ export const StatusMessage: React.FC<StatusMessageProps> = ({
       <Icon className="h-5 w-5 flex-shrink-0" />
       <span className="flex-1 text-sm font-medium font-inter">{message}</span>
       {onClose && (
-        <Button
+        <DaisyButton
           variant="ghost"
           size="sm"
           onClick={onClose}
@@ -486,7 +486,7 @@ export const StatusMessage: React.FC<StatusMessageProps> = ({
           className="h-6 w-6 p-0 hover:bg-transparent"
         >
           <X className="h-4 w-4" />
-        </Button>
+        </DaisyButton>
       )}
     </div>
   );

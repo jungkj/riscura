@@ -9,12 +9,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { format } from 'date-fns';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/ui/DaisyToast';
 import { NotificationItem } from './NotificationItem';
 import { NotificationPreferences } from './NotificationPreferences';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
@@ -161,50 +161,50 @@ export function NotificationCenter() {
 
   return (
     <>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="relative">
+      <DaisyDropdownMenu>
+        <DaisyDropdownMenuTrigger asChild>
+          <DaisyButton variant="ghost" shape="square" size="md" className="relative">
             <Bell className="h-5 w-5" />
             {unreadCount > 0 && (
-              <Badge
-                variant="destructive"
+              <DaisyBadge
+                variant="error"
                 className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center"
               >
                 {unreadCount > 99 ? '99+' : unreadCount}
-              </Badge>
+              </DaisyBadge>
             )}
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[400px]">
+          </DaisyButton>
+        </DaisyDropdownMenuTrigger>
+        <DaisyDropdownMenuContent align="end" className="w-[400px]">
           <div className="flex items-center justify-between p-4 border-b">
             <h3 className="font-semibold">Notifications</h3>
             <div className="flex items-center gap-2">
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowPreferences(true)}
               >
                 <Settings className="h-4 w-4" />
-              </Button>
+              </DaisyButton>
               {unreadCount > 0 && (
-                <Button variant="ghost" size="sm" onClick={markAllAsRead}>
+                <DaisyButton variant="ghost" size="sm" onClick={markAllAsRead}>
                   <Check className="h-4 w-4 mr-1" />
                   Mark all read
-                </Button>
+                </DaisyButton>
               )}
             </div>
           </div>
 
-          <Tabs value={filter} onValueChange={(v) => setFilter(v as 'all' | 'unread')}>
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="unread">
+          <DaisyTabs value={filter} onValueChange={(v) => setFilter(v as 'all' | 'unread')}>
+            <DaisyTabsList className="grid w-full grid-cols-2">
+              <DaisyTabsTrigger value="all">All</DaisyTabsTrigger>
+              <DaisyTabsTrigger value="unread">
                 Unread {unreadCount > 0 && `(${unreadCount})`}
-              </TabsTrigger>
-            </TabsList>
+              </DaisyTabsTrigger>
+            </DaisyTabsList>
             
-            <TabsContent value={filter} className="mt-0">
-              <ScrollArea className="h-[400px]">
+            <DaisyTabsContent value={filter} className="mt-0">
+              <DaisyScrollArea className="h-[400px]">
                 {loading ? (
                   <div className="p-8 text-center text-muted-foreground">
                     Loading notifications...
@@ -226,21 +226,21 @@ export function NotificationCenter() {
                     ))}
                   </div>
                 )}
-              </ScrollArea>
-            </TabsContent>
-          </Tabs>
+              </DaisyScrollArea>
+            </DaisyTabsContent>
+          </DaisyTabs>
 
-          <DropdownMenuSeparator />
-          <DropdownMenuItem asChild>
+          <DaisyDropdownMenuSeparator />
+          <DaisyDropdownMenuItem asChild>
             <a
               href="/notifications"
               className="w-full text-center py-2 text-sm text-muted-foreground hover:text-foreground"
             >
               View all notifications
             </a>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+          </DaisyDropdownMenuItem>
+        </DaisyDropdownMenuContent>
+      </DaisyDropdownMenu>
 
       {showPreferences && (
         <NotificationPreferences

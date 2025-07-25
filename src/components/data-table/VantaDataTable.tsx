@@ -2,12 +2,12 @@
 
 import React, { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -106,10 +106,10 @@ const StatusBadgeCell: React.FC<{ value: string }> = ({ value }) => {
   const IconComponent = config.icon;
 
   return (
-    <Badge variant={config.variant} className="text-caption">
+    <DaisyBadge variant={config.variant} className="text-caption">
       <IconComponent className="h-3 w-3 mr-enterprise-1" />
       {value.charAt(0).toUpperCase() + value.slice(1)}
-    </Badge>
+    </DaisyBadge>
   );
 };
 
@@ -173,7 +173,7 @@ const DateCell: React.FC<{ value: Date }> = ({ value }) => {
 
   return (
     <div className="flex items-center space-x-enterprise-1">
-      <Calendar className={cn("h-3 w-3", 
+      <DaisyCalendar className={cn("h-3 w-3", 
         isOverdue ? 'text-semantic-error' : 
         isUpcoming ? 'text-semantic-warning' : 
         'text-text-tertiary'
@@ -191,39 +191,39 @@ const DateCell: React.FC<{ value: Date }> = ({ value }) => {
 
 const ActionsCell: React.FC<{ row: any, onAction: (action: string, row: any) => void }> = ({ row, onAction }) => {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+    <DaisyDropdownMenu>
+      <DaisyDropdownMenuTrigger asChild>
+        <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
           <MoreHorizontal className="h-3 w-3" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuItem onClick={() => onAction('view', row)}>
+        </DaisyButton>
+      </DaisyDropdownMenuTrigger>
+      <DaisyDropdownMenuContent align="end" className="w-40">
+        <DaisyDropdownMenuItem onClick={() => onAction('view', row)}>
           <Eye className="h-3 w-3 mr-enterprise-2" />
           View Details
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onAction('edit', row)}>
+        </DaisyDropdownMenuItem>
+        <DaisyDropdownMenuItem onClick={() => onAction('edit', row)}>
           <Edit className="h-3 w-3 mr-enterprise-2" />
           Edit
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onAction('duplicate', row)}>
+        </DaisyDropdownMenuItem>
+        <DaisyDropdownMenuItem onClick={() => onAction('duplicate', row)}>
           <Copy className="h-3 w-3 mr-enterprise-2" />
           Duplicate
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => onAction('archive', row)}>
+        </DaisyDropdownMenuItem>
+        <DaisyDropdownMenuSeparator />
+        <DaisyDropdownMenuItem onClick={() => onAction('archive', row)}>
           <Archive className="h-3 w-3 mr-enterprise-2" />
           Archive
-        </DropdownMenuItem>
-        <DropdownMenuItem 
+        </DaisyDropdownMenuItem>
+        <DaisyDropdownMenuItem 
           onClick={() => onAction('delete', row)}
           className="text-semantic-error focus:text-semantic-error"
         >
           <Trash2 className="h-3 w-3 mr-enterprise-2" />
           Delete
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        </DaisyDropdownMenuItem>
+      </DaisyDropdownMenuContent>
+    </DaisyDropdownMenu>
   );
 };
 
@@ -238,24 +238,24 @@ const AdvancedFilters: React.FC<{
   const hasActiveFilters = Object.keys(filters).length > 0;
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className="relative">
+    <DaisyPopover>
+      <DaisyPopoverTrigger asChild>
+        <DaisyButton variant="outline" size="sm" className="relative">
           <Filter className="h-3 w-3 mr-enterprise-1" />
           Filters
           {hasActiveFilters && (
             <div className="absolute -top-1 -right-1 h-2 w-2 bg-interactive-primary rounded-full" />
           )}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-80 p-enterprise-4" align="start">
+        </DaisyButton>
+      </DaisyPopoverTrigger>
+      <DaisyPopoverContent className="w-80 p-enterprise-4" align="start">
         <div className="space-y-enterprise-4">
           <div className="flex items-center justify-between">
             <h4 className="text-body-sm font-semibold text-text-primary">Advanced Filters</h4>
             {hasActiveFilters && (
-              <Button variant="ghost" size="sm" onClick={onClearFilters}>
+              <DaisyButton variant="ghost" size="sm" onClick={onClearFilters}>
                 Clear All
-              </Button>
+              </DaisyButton>
             )}
           </div>
 
@@ -265,7 +265,7 @@ const AdvancedFilters: React.FC<{
                 {column.title}
               </label>
               {column.filterOptions ? (
-                <Select
+                <DaisySelect
                   value={filters[column.key] as string || ''}
                   onValueChange={(value) => {
                     const newFilters = { ...filters };
@@ -277,20 +277,20 @@ const AdvancedFilters: React.FC<{
                     onFiltersChange(newFilters);
                   }}
                 >
-                  <SelectTrigger className="h-8">
-                    <SelectValue placeholder={`Filter by ${column.title.toLowerCase()}`} />
+                  <DaisySelectTrigger className="h-8">
+                    <DaisySelectValue placeholder={`Filter by ${column.title.toLowerCase()}`} />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">All</SelectItem>
+                  <DaisySelectContent>
+                    <DaisySelectItem value="">All</SelectItem>
                     {column.filterOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
+                      <DaisySelectItem key={option.value} value={option.value}>
                         {option.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </DaisySelect>
               ) : (
-                <Input
+                <DaisyInput
                   placeholder={`Filter by ${column.title.toLowerCase()}`}
                   value={filters[column.key] as string || ''}
                   onChange={(e) => {
@@ -308,8 +308,8 @@ const AdvancedFilters: React.FC<{
             </div>
           ))}
         </div>
-      </PopoverContent>
-    </Popover>
+      </DaisyPopoverContent>
+    </DaisyPopover>
   );
 };
 
@@ -427,7 +427,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
       case 'user':
         return <UserAvatarCell value={value} />;
       case 'progress':
-        return <ProgressCell value={value} />;
+        return <DaisyProgressCell value={value} />;
       case 'date':
         return <DateCell value={new Date(value)} />;
       case 'actions':
@@ -458,7 +458,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
           {searchable && (
             <div className="relative">
               <Search className="absolute left-enterprise-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-text-tertiary" />
-              <Input
+              <DaisyInput
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -479,9 +479,9 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
 
           {/* Active Filter Indicators */}
           {Object.entries(filters).map(([key, value]) => (
-            <Badge key={key} variant="secondary" className="text-caption">
+            <DaisyBadge key={key} variant="secondary" className="text-caption">
               {columns.find(col => col.key === key)?.title}: {String(value)}
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 className="h-3 w-3 p-0 ml-enterprise-1"
@@ -492,8 +492,8 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
                 }}
               >
                 <X className="h-2 w-2" />
-              </Button>
-            </Badge>
+              </DaisyButton>
+            </DaisyBadge>
           ))}
         </div>
 
@@ -501,55 +501,55 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
           {/* Bulk Actions */}
           {selectedRows.length > 0 && (
             <div className="flex items-center space-x-enterprise-2">
-              <Badge variant="outline" className="text-caption">
+              <DaisyBadge variant="outline" className="text-caption">
                 {selectedRows.length} selected
-              </Badge>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm">
+              </DaisyBadge>
+              <DaisyDropdownMenu>
+                <DaisyDropdownMenuTrigger asChild>
+                  <DaisyButton variant="outline" size="sm">
                     Bulk Actions
                     <ChevronDown className="h-3 w-3 ml-enterprise-1" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => onBulkAction?.('export', selectedRows.map(id => data.find(row => row.id === id)!))}>
+                  </DaisyButton>
+                </DaisyDropdownMenuTrigger>
+                <DaisyDropdownMenuContent>
+                  <DaisyDropdownMenuItem onClick={() => onBulkAction?.('export', selectedRows.map(id => data.find(row => row.id === id)!))}>
                     <Download className="h-3 w-3 mr-enterprise-2" />
                     Export Selected
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onBulkAction?.('archive', selectedRows.map(id => data.find(row => row.id === id)!))}>
+                  </DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuItem onClick={() => onBulkAction?.('archive', selectedRows.map(id => data.find(row => row.id === id)!))}>
                     <Archive className="h-3 w-3 mr-enterprise-2" />
                     Archive Selected
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem 
+                  </DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuSeparator />
+                  <DaisyDropdownMenuItem 
                     onClick={() => onBulkAction?.('delete', selectedRows.map(id => data.find(row => row.id === id)!))}
                     className="text-semantic-error focus:text-semantic-error"
                   >
                     <Trash2 className="h-3 w-3 mr-enterprise-2" />
                     Delete Selected
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                  </DaisyDropdownMenuItem>
+                </DaisyDropdownMenuContent>
+              </DaisyDropdownMenu>
             </div>
           )}
 
           {/* Table Actions */}
-          <Button variant="outline" size="sm">
+          <DaisyButton variant="outline" size="sm">
             <RefreshCw className="h-3 w-3 mr-enterprise-1" />
             Refresh
-          </Button>
+          </DaisyButton>
           
           {exportable && (
-            <Button variant="outline" size="sm">
+            <DaisyButton variant="outline" size="sm">
               <Download className="h-3 w-3 mr-enterprise-1" />
               Export
-            </Button>
+            </DaisyButton>
           )}
 
-          <Button variant="outline" size="sm">
+          <DaisyButton variant="outline" size="sm">
             <Settings className="h-3 w-3 mr-enterprise-1" />
             Columns
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
@@ -562,7 +562,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
               <tr>
                 {selectable && (
                   <th className="w-12 px-enterprise-3 py-enterprise-3">
-                    <Checkbox
+                    <DaisyCheckbox
                       checked={selectedRows.length === paginatedData.length && paginatedData.length > 0}
                       onCheckedChange={handleSelectAll}
                     />
@@ -617,7 +617,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
                   >
                     {selectable && (
                       <td className="px-enterprise-3 py-enterprise-3">
-                        <Checkbox
+                        <DaisyCheckbox
                           checked={selectedRows.includes(row.id)}
                           onCheckedChange={(checked) => handleSelectRow(row.id, !!checked)}
                         />
@@ -650,20 +650,20 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
             </div>
             
             <div className="flex items-center space-x-enterprise-2">
-              <Button
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
               >
                 Previous
-              </Button>
+              </DaisyButton>
               
               <div className="flex items-center space-x-enterprise-1">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                   const pageNum = i + 1;
                   return (
-                    <Button
+                    <DaisyButton
                       key={pageNum}
                       variant={currentPage === pageNum ? 'primary' : 'outline'}
                       size="sm"
@@ -671,19 +671,19 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
                       className="w-8 h-8 p-0"
                     >
                       {pageNum}
-                    </Button>
+                    </DaisyButton>
                   );
                 })}
               </div>
               
-              <Button
+              <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                 disabled={currentPage === totalPages}
               >
                 Next
-              </Button>
+              </DaisyButton>
             </div>
           </div>
         )}

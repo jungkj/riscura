@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { motion, PanInfo } from 'framer-motion';
-import { Button } from '@/components/ui/button';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { useRiskFlow } from '../RiskFlowContext';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, Info } from 'lucide-react';
@@ -220,13 +220,13 @@ export function RiskMatrixStep({ onNext, onBack }: RiskMatrixStepProps) {
         transition={{ delay: 0.4 }}
         className="flex justify-between pt-4"
       >
-        <Button onClick={onBack} variant="outline" size="lg">
+        <DaisyButton onClick={onBack} variant="outline" size="lg">
           <ChevronLeft className="w-4 h-4 mr-2" />
           Back
-        </Button>
-        <Button onClick={onNext} size="lg" className="min-w-[120px]">
+        </DaisyButton>
+        <DaisyButton onClick={onNext} size="lg" className="min-w-[120px]">
           Next
-        </Button>
+        </DaisyButton>
       </motion.div>
     </div>
   );

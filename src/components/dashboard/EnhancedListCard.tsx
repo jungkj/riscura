@@ -3,9 +3,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LucideIcon, ChevronRight, AlertTriangle, Shield, Target } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import { cn } from '@/lib/utils';
 
 interface ListItem {
@@ -135,14 +135,14 @@ const ListItemComponent: React.FC<{
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
-            <Badge 
+            <DaisyBadge 
               className={cn(
                 "text-xs font-semibold border uppercase tracking-wider",
                 priorityStyle.badge
               )}
             >
               {item.priority}
-            </Badge>
+            </DaisyBadge>
             
             <div className="text-right">
               <motion.div 
@@ -216,13 +216,13 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
       transition={{ duration: 0.4 }}
       className={className}
     >
-      <Card className={cn(
+      <DaisyCard className={cn(
         "relative overflow-hidden border-0 shadow-lg shadow-slate-200/50",
         "bg-gradient-to-br from-white to-slate-50/30",
         "hover:shadow-xl hover:shadow-slate-200/60 transition-all duration-300",
         "backdrop-blur-sm border border-slate-200/60"
       )}>
-        <CardHeader className="pb-4">
+        <DaisyCardHeader className="pb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <motion.div
@@ -233,9 +233,9 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
               </motion.div>
               
               <div>
-                <CardTitle className="text-lg font-semibold text-slate-800">
+                <DaisyCardTitle className="text-lg font-semibold text-slate-800">
                   {title}
-                </CardTitle>
+                </DaisyCardTitle>
                 {subtitle && (
                   <p className="text-sm text-slate-500 mt-1">{subtitle}</p>
                 )}
@@ -243,7 +243,7 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
             </div>
 
             {showViewAll && hasMoreItems && (
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={onViewAll}
@@ -251,12 +251,12 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
               >
                 View All
                 <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
+              </DaisyButton>
             )}
           </div>
-        </CardHeader>
+        
 
-        <CardContent className="pt-0">
+        <DaisyCardContent className="pt-0">
           {isLoading ? (
             <LoadingSkeleton />
           ) : items.length === 0 ? (
@@ -281,7 +281,7 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
                   transition={{ delay: 0.3 }}
                   className="pt-4 mt-4 border-t border-slate-100"
                 >
-                  <Button
+                  <DaisyButton
                     variant="outline"
                     size="sm"
                     onClick={onViewAll}
@@ -289,16 +289,16 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
                   >
                     View {items.length - maxItems} more items
                     <ChevronRight className="h-4 w-4 ml-2" />
-                  </Button>
+                  </DaisyButton>
                 </motion.div>
               )}
             </div>
           )}
-        </CardContent>
+        </DaisyCardBody>
 
         {/* Decorative gradient overlay */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-slate-100/40 to-transparent opacity-60 pointer-events-none" />
-      </Card>
+      </DaisyCard>
     </motion.div>
   );
 }; 

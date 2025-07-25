@@ -2,14 +2,14 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { toast } from '@/hooks/use-toast';
 import {
   DropdownMenu,
@@ -433,11 +433,11 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.2 }}
     >
-      <Card className="h-full hover:shadow-md transition-shadow duration-200">
-        <CardHeader className="pb-3">
+      <DaisyCard className="h-full hover:shadow-md transition-shadow duration-200">
+        <DaisyCardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="flex items-center space-x-2">
-              <Checkbox
+              <DaisyCheckbox
                 checked={selectedItems.includes(questionnaire.id)}
                 onCheckedChange={() => {
                   setSelectedItems(prev =>
@@ -448,78 +448,78 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
                 }}
               />
               {getCategoryIcon(questionnaire.category)}
-              <CardTitle className="text-lg font-semibold line-clamp-2">
+              <DaisyCardTitle className="text-lg font-semibold line-clamp-2">
                 {questionnaire.title}
-              </CardTitle>
+              </DaisyCardTitle>
             </div>
             <div className="flex items-center space-x-1">
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={() => toggleStar(questionnaire.id)}
                 className={questionnaire.isStarred ? 'text-yellow-500' : 'text-gray-400'}
               >
                 <Star className={`w-4 h-4 ${questionnaire.isStarred ? 'fill-current' : ''}`} />
-              </Button>
+              </DaisyButton>
               
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm">
+              <DaisyDropdownMenu>
+                <DaisyDropdownMenuTrigger asChild>
+                  <DaisyButton variant="ghost" size="sm">
                     <MoreVertical className="w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => handleView(questionnaire.id)}>
+                  </DaisyButton>
+                </DaisyDropdownMenuTrigger>
+                <DaisyDropdownMenuContent>
+                  <DaisyDropdownMenuItem onClick={() => handleView(questionnaire.id)}>
                     <Eye className="w-4 h-4 mr-2" />
                     View
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleEdit(questionnaire.id)}>
+                  </DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuItem onClick={() => handleEdit(questionnaire.id)}>
                     <Edit3 className="w-4 h-4 mr-2" />
                     Edit
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleDuplicate(questionnaire.id)}>
+                  </DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuItem onClick={() => handleDuplicate(questionnaire.id)}>
                     <Copy className="w-4 h-4 mr-2" />
                     Duplicate
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  </DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuSeparator />
+                  <DaisyDropdownMenuItem>
                     <Share2 className="w-4 h-4 mr-2" />
                     Share
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  </DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuItem>
                     <Download className="w-4 h-4 mr-2" />
                     Export
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem 
+                  </DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuSeparator />
+                  <DaisyDropdownMenuItem 
                     onClick={() => handleDelete(questionnaire.id)}
                     className="text-red-600"
                   >
                     <Trash2 className="w-4 h-4 mr-2" />
                     Delete
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                  </DaisyDropdownMenuItem>
+                </DaisyDropdownMenuContent>
+              </DaisyDropdownMenu>
             </div>
           </div>
           
           <p className="text-sm text-muted-foreground line-clamp-2 mt-2">
             {questionnaire.description}
           </p>
-        </CardHeader>
         
-        <CardContent className="space-y-4">
+        
+        <DaisyCardContent className="space-y-4">
           {/* Status and Priority Badges */}
           <div className="flex items-center space-x-2">
-            <Badge className={getStatusColor(questionnaire.status)}>
+            <DaisyBadge className={getStatusColor(questionnaire.status)}>
               {questionnaire.status.replace('_', ' ')}
-            </Badge>
-            <Badge className={getPriorityColor(questionnaire.priority)}>
+            </DaisyBadge>
+            <DaisyBadge className={getPriorityColor(questionnaire.priority)}>
               {questionnaire.priority}
-            </Badge>
-            <Badge variant="outline">
+            </DaisyBadge>
+            <DaisyBadge variant="outline">
               v{questionnaire.version}
-            </Badge>
+            </DaisyBadge>
           </div>
 
           {/* Metrics */}
@@ -548,16 +548,16 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
               {questionnaire.tags.slice(0, 3).map(tagId => {
                 const tag = tags.find(t => t.id === tagId);
                 return tag ? (
-                  <Badge key={tagId} variant="outline" className="text-xs">
+                  <DaisyBadge key={tagId} variant="outline" className="text-xs">
                     <Tag className="w-3 h-3 mr-1" />
                     {tag.name}
-                  </Badge>
+                  </DaisyBadge>
                 ) : null;
               })}
               {questionnaire.tags.length > 3 && (
-                <Badge variant="outline" className="text-xs">
+                <DaisyBadge variant="outline" className="text-xs">
                   +{questionnaire.tags.length - 3} more
-                </Badge>
+                </DaisyBadge>
               )}
             </div>
           )}
@@ -569,7 +569,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
               <span>{questionnaire.createdBy}</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Calendar className="w-3 h-3" />
+              <DaisyCalendar className="w-3 h-3" />
               <span>{questionnaire.lastModified.toLocaleDateString()}</span>
             </div>
           </div>
@@ -577,12 +577,12 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
           {/* Deadline Warning */}
           {questionnaire.hasDeadline && questionnaire.deadline && (
             <div className="flex items-center space-x-2 text-xs text-orange-600 bg-orange-50 p-2 rounded">
-              <AlertCircle className="w-3 h-3" />
+              <DaisyAlertCircle className="w-3 h-3" />
               <span>Due: {questionnaire.deadline.toLocaleDateString()}</span>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </motion.div>
   );
 
@@ -598,7 +598,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
       className="border-b last:border-b-0"
     >
       <div className="flex items-center space-x-4 p-4 hover:bg-gray-50">
-        <Checkbox
+        <DaisyCheckbox
           checked={selectedItems.includes(questionnaire.id)}
           onCheckedChange={() => {
             setSelectedItems(prev =>
@@ -614,12 +614,12 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
             {getCategoryIcon(questionnaire.category)}
             <h3 className="font-semibold truncate">{questionnaire.title}</h3>
             <div className="flex items-center space-x-2">
-              <Badge className={getStatusColor(questionnaire.status)}>
+              <DaisyBadge className={getStatusColor(questionnaire.status)}>
                 {questionnaire.status.replace('_', ' ')}
-              </Badge>
-              <Badge className={getPriorityColor(questionnaire.priority)}>
+              </DaisyBadge>
+              <DaisyBadge className={getPriorityColor(questionnaire.priority)}>
                 {questionnaire.priority}
-              </Badge>
+              </DaisyBadge>
             </div>
           </div>
           <p className="text-sm text-muted-foreground mt-1 truncate">
@@ -635,44 +635,44 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
         </div>
 
         <div className="flex items-center space-x-2">
-          <Button
+          <DaisyButton
             variant="ghost"
             size="sm"
             onClick={() => toggleStar(questionnaire.id)}
             className={questionnaire.isStarred ? 'text-yellow-500' : 'text-gray-400'}
           >
             <Star className={`w-4 h-4 ${questionnaire.isStarred ? 'fill-current' : ''}`} />
-          </Button>
+          </DaisyButton>
           
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm">
+          <DaisyDropdownMenu>
+            <DaisyDropdownMenuTrigger asChild>
+              <DaisyButton variant="ghost" size="sm">
                 <MoreVertical className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => handleView(questionnaire.id)}>
+              </DaisyButton>
+            </DaisyDropdownMenuTrigger>
+            <DaisyDropdownMenuContent>
+              <DaisyDropdownMenuItem onClick={() => handleView(questionnaire.id)}>
                 <Eye className="w-4 h-4 mr-2" />
                 View
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleEdit(questionnaire.id)}>
+              </DaisyDropdownMenuItem>
+              <DaisyDropdownMenuItem onClick={() => handleEdit(questionnaire.id)}>
                 <Edit3 className="w-4 h-4 mr-2" />
                 Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDuplicate(questionnaire.id)}>
+              </DaisyDropdownMenuItem>
+              <DaisyDropdownMenuItem onClick={() => handleDuplicate(questionnaire.id)}>
                 <Copy className="w-4 h-4 mr-2" />
                 Duplicate
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem 
+              </DaisyDropdownMenuItem>
+              <DaisyDropdownMenuSeparator />
+              <DaisyDropdownMenuItem 
                 onClick={() => handleDelete(questionnaire.id)}
                 className="text-red-600"
               >
                 <Trash2 className="w-4 h-4 mr-2" />
                 Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DaisyDropdownMenuItem>
+            </DaisyDropdownMenuContent>
+          </DaisyDropdownMenu>
         </div>
       </div>
     </motion.div>
@@ -694,48 +694,48 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
-            <Label className="text-sm font-medium">Sort by:</Label>
-            <Select value={sortField} onValueChange={(value) => setSortField(value as keyof EnhancedQuestionnaire)}>
-              <SelectTrigger className="w-40">
-                <SelectValue />
+            <DaisyLabel className="text-sm font-medium">Sort by:</DaisyLabel>
+            <DaisySelect value={sortField} onValueChange={(value) => setSortField(value as keyof EnhancedQuestionnaire)}>
+              <DaisySelectTrigger className="w-40">
+                <DaisySelectValue />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="lastModified">Last Modified</SelectItem>
-                <SelectItem value="title">Title</SelectItem>
-                <SelectItem value="createdAt">Created Date</SelectItem>
-                <SelectItem value="responseCount">Response Count</SelectItem>
-                <SelectItem value="completionRate">Completion Rate</SelectItem>
-                <SelectItem value="averageScore">Average Score</SelectItem>
-                <SelectItem value="priority">Priority</SelectItem>
-                <SelectItem value="status">Status</SelectItem>
+              <DaisySelectContent>
+                <DaisySelectItem value="lastModified">Last Modified</SelectItem>
+                <DaisySelectItem value="title">Title</SelectItem>
+                <DaisySelectItem value="createdAt">Created Date</SelectItem>
+                <DaisySelectItem value="responseCount">Response Count</SelectItem>
+                <DaisySelectItem value="completionRate">Completion Rate</SelectItem>
+                <DaisySelectItem value="averageScore">Average Score</SelectItem>
+                <DaisySelectItem value="priority">Priority</SelectItem>
+                <DaisySelectItem value="status">Status</SelectItem>
               </SelectContent>
-            </Select>
+            </DaisySelect>
             
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={() => setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')}
             >
               {sortDirection === 'asc' ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />}
-            </Button>
+            </DaisyButton>
           </div>
         </div>
 
         <div className="flex items-center space-x-2">
-          <Button
+          <DaisyButton
             variant={viewMode === 'grid' ? 'primary' : 'outline'}
             size="sm"
             onClick={() => setViewMode('grid')}
           >
             <Grid className="w-4 h-4" />
-          </Button>
-          <Button
+          </DaisyButton>
+          <DaisyButton
             variant={viewMode === 'list' ? 'primary' : 'outline'}
             size="sm"
             onClick={() => setViewMode('list')}
           >
             <List className="w-4 h-4" />
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
@@ -765,11 +765,11 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
                 {sortedQuestionnaires.map(renderQuestionnaireCard)}
               </div>
             ) : (
-              <Card>
+              <DaisyCard>
                 <div className="divide-y">
                   {sortedQuestionnaires.map(renderQuestionnaireListItem)}
                 </div>
-              </Card>
+              </DaisyCard>
             )}
           </motion.div>
         )}

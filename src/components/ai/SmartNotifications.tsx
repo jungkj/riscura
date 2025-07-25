@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import {
   Bell,
   AlertTriangle,
@@ -306,7 +306,7 @@ const NotificationCard: React.FC<{
   const totalChannels = notification.channels.length;
 
   return (
-    <Card className={cn(
+    <DaisyCard className={cn(
       "transition-all duration-200 hover:shadow-notion-sm relative overflow-hidden",
       !notification.read && "bg-purple-50/30",
       notification.priority === 'critical' && "border-l-4 border-l-semantic-error"
@@ -316,7 +316,7 @@ const NotificationCard: React.FC<{
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-indigo-600"></div>
       )}
 
-      <CardHeader className="pb-enterprise-3">
+      <DaisyCardHeader className="pb-enterprise-3">
         <div className="flex items-start justify-between">
           <div className="flex items-start space-x-enterprise-3 flex-1">
             <div className={cn("p-enterprise-2 rounded-lg", typeConfig.bg)}>
@@ -324,15 +324,15 @@ const NotificationCard: React.FC<{
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center space-x-enterprise-2 mb-enterprise-1">
-                <CardTitle className={cn(
+                <DaisyCardTitle className={cn(
                   "text-body-sm line-clamp-1",
                   !notification.read && "font-bold"
                 )}>
                   {notification.title}
-                </CardTitle>
-                <Badge variant="outline" className={cn("text-caption", priorityConfig.color)}>
+                </DaisyCardTitle>
+                <DaisyBadge variant="outline" className={cn("text-caption", priorityConfig.color)}>
                   {notification.priority.toUpperCase()}
-                </Badge>
+                </DaisyBadge>
                 {notification.aiGenerated && notification.confidence && (
                   <div className="flex items-center space-x-enterprise-1">
                     <Sparkles className="h-3 w-3 text-purple-500" />
@@ -340,35 +340,35 @@ const NotificationCard: React.FC<{
                   </div>
                 )}
               </div>
-              <CardDescription className="text-caption line-clamp-2">
+              <DaisyCardDescription className="text-caption line-clamp-2">
                 {notification.message}
-              </CardDescription>
+              </p>
             </div>
           </div>
           <div className="flex items-start space-x-enterprise-1 flex-shrink-0">
             {!notification.read && (
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 className="h-6 w-6 p-0"
                 onClick={() => onMarkRead(notification.id)}
               >
                 <Eye className="h-3 w-3" />
-              </Button>
+              </DaisyButton>
             )}
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               className="h-6 w-6 p-0"
               onClick={() => onDismiss(notification.id)}
             >
               <X className="h-3 w-3" />
-            </Button>
+            </DaisyButton>
           </div>
         </div>
-      </CardHeader>
+      
 
-      <CardContent className="space-y-enterprise-3">
+      <DaisyCardContent className="space-y-enterprise-3">
         {/* Metadata */}
         <div className="flex items-center justify-between text-caption text-text-secondary">
           <div className="flex items-center space-x-enterprise-4">
@@ -394,7 +394,7 @@ const NotificationCard: React.FC<{
         {notification.actions && notification.actions.length > 0 && (
           <div className="flex items-center space-x-enterprise-2 pt-enterprise-2 border-t border-border">
             {notification.actions.map((action) => (
-              <Button
+              <DaisyButton
                 key={action.id}
                 size="sm"
                 variant={action.type === 'primary' ? 'primary' : 'outline'}
@@ -406,12 +406,12 @@ const NotificationCard: React.FC<{
               >
                 {action.label}
                 {action.url && <ExternalLink className="h-3 w-3 ml-enterprise-1" />}
-              </Button>
+              </DaisyButton>
             ))}
           </div>
         )}
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 };
 
@@ -437,20 +437,20 @@ const NotificationSettings: React.FC<{
   });
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
-          <DialogTitle>Smart Notification Settings</DialogTitle>
-        </DialogHeader>
+    <DaisyDialog open={isOpen} onOpenChange={onClose}>
+      <DaisyDialogContent className="max-w-2xl">
+        <DaisyDialogHeader>
+          <DaisyDialogTitle>Smart Notification Settings</DaisyDialogTitle>
+        </DaisyDialogHeader>
 
-        <Tabs defaultValue="channels" className="mt-enterprise-4">
-          <TabsList>
-            <TabsTrigger value="channels">Channels</TabsTrigger>
-            <TabsTrigger value="categories">Categories</TabsTrigger>
-            <TabsTrigger value="ai">AI Settings</TabsTrigger>
-          </TabsList>
+        <DaisyTabs defaultValue="channels" className="mt-enterprise-4">
+          <DaisyTabsList>
+            <DaisyTabsTrigger value="channels">Channels</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="categories">Categories</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="ai">AI Settings</DaisyTabsTrigger>
+          </DaisyTabsList>
 
-          <TabsContent value="channels" className="space-y-enterprise-4">
+          <DaisyTabsContent value="channels" className="space-y-enterprise-4">
             <div className="space-y-enterprise-4">
               {Object.entries(channels).map(([channel, settings]) => {
                 const ChannelIcon = {
@@ -477,7 +477,7 @@ const NotificationSettings: React.FC<{
                       </div>
                     </div>
                     <div className="flex items-center space-x-enterprise-2">
-                      <Button
+                      <DaisyButton
                         variant={settings.enabled ? "primary" : "outline"}
                         size="sm"
                         onClick={() => setChannels(prev => ({
@@ -486,15 +486,15 @@ const NotificationSettings: React.FC<{
                         }))}
                       >
                         {settings.enabled ? 'Enabled' : 'Disabled'}
-                      </Button>
+                      </DaisyButton>
                     </div>
                   </div>
                 );
               })}
             </div>
-          </TabsContent>
+          </DaisyTabsContent>
 
-          <TabsContent value="categories" className="space-y-enterprise-4">
+          <DaisyTabsContent value="categories" className="space-y-enterprise-4">
             <div className="space-y-enterprise-4">
               {Object.entries(categories).map(([category, settings]) => {
                 const CategoryIcon = {
@@ -521,8 +521,8 @@ const NotificationSettings: React.FC<{
                       </div>
                     </div>
                     <div className="flex items-center space-x-enterprise-2">
-                      <Badge variant="outline" className="capitalize">{settings.priority}</Badge>
-                      <Button
+                      <DaisyBadge variant="outline" className="capitalize">{settings.priority}</DaisyBadge>
+                      <DaisyButton
                         variant={settings.enabled ? "primary" : "outline"}
                         size="sm"
                         onClick={() => setCategories(prev => ({
@@ -531,15 +531,15 @@ const NotificationSettings: React.FC<{
                         }))}
                       >
                         {settings.enabled ? 'Enabled' : 'Disabled'}
-                      </Button>
+                      </DaisyButton>
                     </div>
                   </div>
                 );
               })}
             </div>
-          </TabsContent>
+          </DaisyTabsContent>
 
-          <TabsContent value="ai" className="space-y-enterprise-4">
+          <DaisyTabsContent value="ai" className="space-y-enterprise-4">
             <div className="space-y-enterprise-4">
               <div className="p-enterprise-4 border border-border rounded-lg">
                 <div className="flex items-center space-x-enterprise-2 mb-enterprise-3">
@@ -549,30 +549,30 @@ const NotificationSettings: React.FC<{
                 <div className="space-y-enterprise-3">
                   <div className="flex items-center justify-between">
                     <span className="text-body-sm">Minimum confidence threshold</span>
-                    <Badge variant="outline">75%</Badge>
+                    <DaisyBadge variant="outline">75%</DaisyBadge>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-body-sm">Auto-dismiss low confidence predictions</span>
-                    <Button variant="outline" size="sm">Enabled</Button>
+                    <DaisyButton variant="outline" size="sm">Enabled</DaisyButton>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-body-sm">Smart notification frequency</span>
-                    <Badge variant="outline">Adaptive</Badge>
+                    <DaisyBadge variant="outline">Adaptive</DaisyBadge>
                   </div>
                 </div>
               </div>
             </div>
-          </TabsContent>
-        </Tabs>
+          </DaisyTabsContent>
+        </DaisyTabs>
 
         <div className="flex justify-end pt-enterprise-4 border-t border-border">
           <div className="flex space-x-enterprise-2">
-            <Button variant="outline" onClick={onClose}>Cancel</Button>
-            <Button className="bg-purple-600 hover:bg-purple-700">Save Settings</Button>
+            <DaisyButton variant="outline" onClick={onClose}>Cancel</DaisyButton>
+            <DaisyButton className="bg-purple-600 hover:bg-purple-700">Save Settings</DaisyButton>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </DaisyDialogContent>
+    </DaisyDialog>
   );
 };
 
@@ -623,29 +623,29 @@ export const SmartNotifications: React.FC<{
 
   if (isPanel) {
     return (
-      <Card className="w-80">
-        <CardHeader className="pb-enterprise-3">
+      <DaisyCard className="w-80">
+        <DaisyCardHeader className="pb-enterprise-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-body-base">Smart Notifications</CardTitle>
+            <DaisyCardTitle className="text-body-base">Smart Notifications</DaisyCardTitle>
             <div className="flex items-center space-x-enterprise-1">
               {unreadCount > 0 && (
-                <Badge variant="destructive" className="text-caption">
+                <DaisyBadge variant="error" className="text-caption">
                   {unreadCount}
-                </Badge>
+                </DaisyBadge>
               )}
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 className="h-6 w-6 p-0"
                 onClick={() => setShowSettings(true)}
               >
                 <Settings className="h-3 w-3" />
-              </Button>
+              </DaisyButton>
             </div>
           </div>
-        </CardHeader>
-        <CardContent className="p-0">
-          <ScrollArea style={{ maxHeight }} className="px-enterprise-4">
+        
+        <DaisyCardContent className="p-0">
+          <DaisyScrollArea style={{ maxHeight }} className="px-enterprise-4">
             <div className="space-y-enterprise-3 pb-enterprise-4">
               {filteredNotifications.slice(0, 5).map((notification) => (
                 <NotificationCard
@@ -663,9 +663,9 @@ export const SmartNotifications: React.FC<{
                 </div>
               )}
             </div>
-          </ScrollArea>
-        </CardContent>
-      </Card>
+          </DaisyScrollArea>
+        </DaisyCardBody>
+      </DaisyCard>
     );
   }
 
@@ -680,21 +680,21 @@ export const SmartNotifications: React.FC<{
           </p>
         </div>
         <div className="flex items-center space-x-enterprise-2">
-          <Button variant="outline" onClick={handleMarkAllRead} disabled={unreadCount === 0}>
+          <DaisyButton variant="outline" onClick={handleMarkAllRead} disabled={unreadCount === 0}>
             <CheckCircle className="h-4 w-4 mr-enterprise-2" />
             Mark All Read
-          </Button>
-          <Button variant="outline" onClick={() => setShowSettings(true)}>
+          </DaisyButton>
+          <DaisyButton variant="outline" onClick={() => setShowSettings(true)}>
             <Settings className="h-4 w-4 mr-enterprise-2" />
             Settings
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-enterprise-4">
-        <Card>
-          <CardContent className="p-enterprise-4">
+        <DaisyCard>
+          <DaisyCardContent className="p-enterprise-4">
             <div className="flex items-center space-x-enterprise-2">
               <Bell className="h-4 w-4 text-text-secondary" />
               <div>
@@ -702,21 +702,21 @@ export const SmartNotifications: React.FC<{
                 <div className="text-caption text-text-secondary">Unread</div>
               </div>
             </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-enterprise-4">
+          </DaisyCardBody>
+        </DaisyCard>
+        <DaisyCard>
+          <DaisyCardContent className="p-enterprise-4">
             <div className="flex items-center space-x-enterprise-2">
-              <AlertTriangle className="h-4 w-4 text-semantic-error" />
+              <DaisyAlertTriangle className="h-4 w-4 text-semantic-error" />
               <div>
                 <div className="text-heading-sm font-bold text-semantic-error">{criticalCount}</div>
                 <div className="text-caption text-text-secondary">Critical</div>
               </div>
             </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-enterprise-4">
+          </DaisyCardBody>
+        </DaisyCard>
+        <DaisyCard>
+          <DaisyCardContent className="p-enterprise-4">
             <div className="flex items-center space-x-enterprise-2">
               <Brain className="h-4 w-4 text-purple-600" />
               <div>
@@ -724,10 +724,10 @@ export const SmartNotifications: React.FC<{
                 <div className="text-caption text-text-secondary">AI Generated</div>
               </div>
             </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-enterprise-4">
+          </DaisyCardBody>
+        </DaisyCard>
+        <DaisyCard>
+          <DaisyCardContent className="p-enterprise-4">
             <div className="flex items-center space-x-enterprise-2">
               <Activity className="h-4 w-4 text-text-secondary" />
               <div>
@@ -735,20 +735,20 @@ export const SmartNotifications: React.FC<{
                 <div className="text-caption text-text-secondary">Total Active</div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
 
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="unread">Unread ({unreadCount})</TabsTrigger>
-          <TabsTrigger value="ai">AI Generated</TabsTrigger>
-          <TabsTrigger value="critical">Critical</TabsTrigger>
-        </TabsList>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
+        <DaisyTabsList>
+          <DaisyTabsTrigger value="all">All</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="unread">Unread ({unreadCount})</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="ai">AI Generated</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="critical">Critical</DaisyTabsTrigger>
+        </DaisyTabsList>
 
-        <TabsContent value="all" className="space-y-enterprise-4">
+        <DaisyTabsContent value="all" className="space-y-enterprise-4">
           <div className="space-y-enterprise-4">
             {filteredNotifications.map((notification) => (
               <NotificationCard
@@ -760,9 +760,9 @@ export const SmartNotifications: React.FC<{
               />
             ))}
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="unread" className="space-y-enterprise-4">
+        <DaisyTabsContent value="unread" className="space-y-enterprise-4">
           <div className="space-y-enterprise-4">
             {filteredNotifications.map((notification) => (
               <NotificationCard
@@ -774,9 +774,9 @@ export const SmartNotifications: React.FC<{
               />
             ))}
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="ai" className="space-y-enterprise-4">
+        <DaisyTabsContent value="ai" className="space-y-enterprise-4">
           <div className="space-y-enterprise-4">
             {filteredNotifications.map((notification) => (
               <NotificationCard
@@ -788,9 +788,9 @@ export const SmartNotifications: React.FC<{
               />
             ))}
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="critical" className="space-y-enterprise-4">
+        <DaisyTabsContent value="critical" className="space-y-enterprise-4">
           <div className="space-y-enterprise-4">
             {filteredNotifications.map((notification) => (
               <NotificationCard
@@ -802,8 +802,8 @@ export const SmartNotifications: React.FC<{
               />
             ))}
           </div>
-        </TabsContent>
-      </Tabs>
+        </DaisyTabsContent>
+      </DaisyTabs>
 
       {/* Settings Dialog */}
       <NotificationSettings

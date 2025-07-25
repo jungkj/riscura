@@ -6,17 +6,17 @@ import { useDropzone } from 'react-dropzone';
 import { toast } from '@/hooks/use-toast';
 
 // UI Components
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import {
   Dialog,
   DialogContent,
@@ -412,8 +412,8 @@ export default function RiskAssessmentWizard({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="name">Assessment Name *</Label>
-                  <Input
+                  <DaisyLabel htmlFor="name">Assessment Name *</DaisyLabel>
+                  <DaisyInput
                     id="name"
                     value={config.name}
                     onChange={(e) => setConfig(prev => ({ ...prev, name: e.target.value }))}
@@ -421,8 +421,8 @@ export default function RiskAssessmentWizard({
                   />
                 </div>
                 <div>
-                  <Label htmlFor="scope">Scope</Label>
-                  <Input
+                  <DaisyLabel htmlFor="scope">Scope</DaisyLabel>
+                  <DaisyInput
                     id="scope"
                     value={config.scope}
                     onChange={(e) => setConfig(prev => ({ ...prev, scope: e.target.value }))}
@@ -430,8 +430,8 @@ export default function RiskAssessmentWizard({
                   />
                 </div>
                 <div>
-                  <Label htmlFor="department">Department</Label>
-                  <Input
+                  <DaisyLabel htmlFor="department">Department</DaisyLabel>
+                  <DaisyInput
                     id="department"
                     value={config.department}
                     onChange={(e) => setConfig(prev => ({ ...prev, department: e.target.value }))}
@@ -441,8 +441,8 @@ export default function RiskAssessmentWizard({
               </div>
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
+                  <DaisyLabel htmlFor="description">Description</DaisyLabel>
+                  <DaisyTextarea
                     id="description"
                     value={config.description}
                     onChange={(e) => setConfig(prev => ({ ...prev, description: e.target.value }))}
@@ -451,24 +451,24 @@ export default function RiskAssessmentWizard({
                   />
                 </div>
                 <div>
-                  <Label htmlFor="assessmentType">Assessment Type</Label>
-                  <Select
+                  <DaisyLabel htmlFor="assessmentType">Assessment Type</DaisyLabel>
+                  <DaisySelect
                     value={config.assessmentType}
                     onValueChange={(value: any) => setConfig(prev => ({ ...prev, assessmentType: value }))}
                   >
-                    <SelectTrigger>
-                      <SelectValue />
+                    <DaisySelectTrigger>
+                      <DaisySelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="self">Self Assessment</SelectItem>
-                      <SelectItem value="third-party">Third Party Assessment</SelectItem>
-                      <SelectItem value="regulatory">Regulatory Assessment</SelectItem>
+                    <DaisySelectContent>
+                      <DaisySelectItem value="self">Self Assessment</SelectItem>
+                      <DaisySelectItem value="third-party">Third Party Assessment</SelectItem>
+                      <DaisySelectItem value="regulatory">Regulatory Assessment</SelectItem>
                     </SelectContent>
-                  </Select>
+                  </DaisySelect>
                 </div>
                 <div>
-                  <Label htmlFor="dueDate">Due Date</Label>
-                  <Input
+                  <DaisyLabel htmlFor="dueDate">Due Date</DaisyLabel>
+                  <DaisyInput
                     id="dueDate"
                     type="date"
                     value={config.dueDate}
@@ -478,65 +478,65 @@ export default function RiskAssessmentWizard({
               </div>
             </div>
 
-            <Separator />
+            <DaisySeparator />
 
             <div className="space-y-4">
               <div>
-                <Label>Stakeholders</Label>
+                <DaisyLabel>Stakeholders</DaisyLabel>
                 <div className="flex gap-2 mt-2">
-                  <Input
+                  <DaisyInput
                     value={newStakeholder}
                     onChange={(e) => setNewStakeholder(e.target.value)}
                     placeholder="Add stakeholder email"
                     onKeyPress={(e) => e.key === 'Enter' && addStakeholder()}
                   />
-                  <Button onClick={addStakeholder} size="sm">
+                  <DaisyButton onClick={addStakeholder} size="sm">
                     <Plus className="h-4 w-4" />
-                  </Button>
+                  </DaisyButton>
                 </div>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {config.stakeholders.map((stakeholder, idx) => (
-                    <Badge key={idx} variant="secondary" className="flex items-center gap-1">
+                    <DaisyBadge key={idx} variant="secondary" className="flex items-center gap-1">
                       {stakeholder}
                       <button onClick={() => removeStakeholder(idx)}>
                         <X className="h-3 w-3" />
                       </button>
-                    </Badge>
+                    </DaisyBadge>
                   ))}
                 </div>
               </div>
 
               <div>
-                <Label>Risk Categories</Label>
+                <DaisyLabel>Risk Categories</DaisyLabel>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
                   {RISK_CATEGORIES.map(category => (
                     <div key={category} className="flex items-center space-x-2">
-                      <Checkbox
+                      <DaisyCheckbox
                         id={`risk-${category}`}
                         checked={config.riskCategories.includes(category)}
                         onCheckedChange={() => toggleRiskCategory(category)}
                       />
-                      <Label htmlFor={`risk-${category}`} className="text-sm">
+                      <DaisyLabel htmlFor={`risk-${category}`} className="text-sm">
                         {category}
-                      </Label>
+                      </DaisyLabel>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div>
-                <Label>Compliance Frameworks</Label>
+                <DaisyLabel>Compliance Frameworks</DaisyLabel>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
                   {COMPLIANCE_FRAMEWORKS.map(framework => (
                     <div key={framework} className="flex items-center space-x-2">
-                      <Checkbox
+                      <DaisyCheckbox
                         id={`framework-${framework}`}
                         checked={config.complianceFrameworks.includes(framework)}
                         onCheckedChange={() => toggleComplianceFramework(framework)}
                       />
-                      <Label htmlFor={`framework-${framework}`} className="text-sm">
+                      <DaisyLabel htmlFor={`framework-${framework}`} className="text-sm">
                         {framework}
-                      </Label>
+                      </DaisyLabel>
                     </div>
                   ))}
                 </div>
@@ -604,12 +604,12 @@ export default function RiskAssessmentWizard({
                         </p>
                         <div className="flex items-center gap-2 text-sm text-gray-500">
                           <span>{formatFileSize(fileObj.file.size)}</span>
-                          <Badge variant="outline" className="text-xs">
+                          <DaisyBadge variant="outline" className="text-xs">
                             {fileObj.type.replace('-', ' ')}
-                          </Badge>
+                          </DaisyBadge>
                         </div>
                         {fileObj.status === 'processing' && (
-                          <Progress value={fileObj.progress} className="mt-2" />
+                          <DaisyProgress value={fileObj.progress} className="mt-2" />
                         )}
                         {fileObj.error && (
                           <p className="text-sm text-red-600 mt-1">{fileObj.error}</p>
@@ -620,19 +620,19 @@ export default function RiskAssessmentWizard({
                           <CheckCircle className="h-5 w-5 text-green-600" />
                         )}
                         {fileObj.status === 'error' && (
-                          <AlertCircle className="h-5 w-5 text-red-600" />
+                          <DaisyAlertCircle className="h-5 w-5 text-red-600" />
                         )}
                         {fileObj.status === 'processing' && (
                           <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
                         )}
-                        <Button
+                        <DaisyButton
                           variant="ghost"
                           size="sm"
                           onClick={() => removeFile(fileObj.id)}
                           disabled={isProcessing}
                         >
                           <Trash2 className="h-4 w-4" />
-                        </Button>
+                        </DaisyButton>
                       </div>
                     </motion.div>
                   );
@@ -655,7 +655,7 @@ export default function RiskAssessmentWizard({
                     This will extract risks, controls, and generate insights.
                   </p>
                 </div>
-                <Button
+                <DaisyButton
                   onClick={processFiles}
                   disabled={files.length === 0 || isProcessing}
                   size="lg"
@@ -672,7 +672,7 @@ export default function RiskAssessmentWizard({
                       Start AI Analysis
                     </>
                   )}
-                </Button>
+                </DaisyButton>
               </div>
             ) : (
               <div className="space-y-6">
@@ -682,32 +682,32 @@ export default function RiskAssessmentWizard({
                 </div>
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <Card>
-                    <CardContent className="p-4 text-center">
+                  <DaisyCard>
+                    <DaisyCardContent className="p-4 text-center">
                       <div className="text-2xl font-bold text-blue-600">{analysisResults.totalFiles}</div>
                       <div className="text-sm text-gray-600">Files Processed</div>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardContent className="p-4 text-center">
+                    </DaisyCardBody>
+                  </DaisyCard>
+                  <DaisyCard>
+                    <DaisyCardContent className="p-4 text-center">
                       <div className="text-2xl font-bold text-red-600">{analysisResults.totalRisks}</div>
                       <div className="text-sm text-gray-600">Risks Identified</div>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardContent className="p-4 text-center">
+                    </DaisyCardBody>
+                  </DaisyCard>
+                  <DaisyCard>
+                    <DaisyCardContent className="p-4 text-center">
                       <div className="text-2xl font-bold text-green-600">{analysisResults.totalControls}</div>
                       <div className="text-sm text-gray-600">Controls Found</div>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardContent className="p-4 text-center">
+                    </DaisyCardBody>
+                  </DaisyCard>
+                  <DaisyCard>
+                    <DaisyCardContent className="p-4 text-center">
                       <div className="text-2xl font-bold text-purple-600">
                         {Math.round((analysisResults.processedFiles / analysisResults.totalFiles) * 100)}%
                       </div>
                       <div className="text-sm text-gray-600">Success Rate</div>
-                    </CardContent>
-                  </Card>
+                    </DaisyCardBody>
+                  </DaisyCard>
                 </div>
               </div>
             )}
@@ -728,24 +728,24 @@ export default function RiskAssessmentWizard({
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Assessment Details</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle>Assessment Details</DaisyCardTitle>
+                
+                <DaisyCardContent className="space-y-2">
                   <div><strong>Name:</strong> {config.name}</div>
                   <div><strong>Type:</strong> {config.assessmentType}</div>
                   <div><strong>Department:</strong> {config.department}</div>
                   <div><strong>Due Date:</strong> {config.dueDate}</div>
                   <div><strong>Stakeholders:</strong> {config.stakeholders.length}</div>
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Analysis Results</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
+              <DaisyCard>
+                <DaisyCardHeader>
+                  <DaisyCardTitle>Analysis Results</DaisyCardTitle>
+                
+                <DaisyCardContent className="space-y-2">
                   {analysisResults ? (
                     <>
                       <div><strong>Files Processed:</strong> {analysisResults.totalFiles}</div>
@@ -756,15 +756,15 @@ export default function RiskAssessmentWizard({
                   ) : (
                     <div className="text-gray-500">No analysis results available</div>
                   )}
-                </CardContent>
-              </Card>
+                </DaisyCardBody>
+              </DaisyCard>
             </div>
 
             <div className="text-center">
-              <Button onClick={completeAssessment} size="lg" className="mt-4">
+              <DaisyButton onClick={completeAssessment} size="lg" className="mt-4">
                 <CheckCircle className="h-5 w-5 mr-2" />
                 Complete Assessment
-              </Button>
+              </DaisyButton>
             </div>
           </div>
         );
@@ -815,17 +815,17 @@ export default function RiskAssessmentWizard({
       </div>
 
       {/* Step Content */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center gap-2">
             {(() => {
               const IconComponent = steps[currentStep].icon;
               return <IconComponent className="h-6 w-6 text-blue-600" />;
             })()}
             {steps[currentStep].title}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <AnimatePresence mode="wait">
             <motion.div
               key={currentStep}
@@ -837,22 +837,22 @@ export default function RiskAssessmentWizard({
               {renderStepContent()}
             </motion.div>
           </AnimatePresence>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Navigation */}
       <div className="flex justify-between">
-        <Button
+        <DaisyButton
           variant="outline"
           onClick={prevStep}
           disabled={currentStep === 0}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Previous
-        </Button>
+        </DaisyButton>
         
         {currentStep < steps.length - 1 ? (
-          <Button
+          <DaisyButton
             onClick={nextStep}
             disabled={
               (currentStep === 0 && !config.name) ||
@@ -862,7 +862,7 @@ export default function RiskAssessmentWizard({
           >
             Next
             <ArrowRight className="h-4 w-4 ml-2" />
-          </Button>
+          </DaisyButton>
         ) : null}
       </div>
     </div>

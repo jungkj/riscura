@@ -8,9 +8,9 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
 // UI Components
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
 import {
   Tooltip,
   TooltipContent,
@@ -334,22 +334,22 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
             <div className="text-xs text-slate-500">risks</div>
           </div>
         </div>
-        <Button
+        <DaisyButton
           size="sm"
           className="absolute top-1 right-1 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
           onClick={() => setSelectedCell(cell)}
         >
           <Eye className="h-3 w-3" />
-        </Button>
+        </DaisyButton>
       </div>
     );
   };
 
   // Enhanced risk item component
   const RiskItem: React.FC<{ risk: Risk; isSelected: boolean }> = ({ risk, isSelected }) => (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
+    <DaisyTooltipProvider>
+      <DaisyTooltip>
+        <DaisyTooltipTrigger asChild>
           <div
             draggable
             onDragStart={(e) => handleDragStart(e, risk)}
@@ -368,22 +368,22 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
             <div className="font-medium truncate">{risk.title}</div>
             <div className="text-xs opacity-75 truncate">{risk.owner}</div>
             <div className="flex items-center justify-between mt-1">
-              <Badge className="text-xs px-1 py-0" variant="secondary">
+              <DaisyBadge className="text-xs px-1 py-0" variant="secondary">
                 {risk.riskScore}
-              </Badge>
+              </DaisyBadge>
               <div className="text-xs opacity-50">
                 {risk.likelihood}×{risk.impact}
               </div>
             </div>
           </div>
-        </TooltipTrigger>
-        <TooltipContent side="top" className="max-w-xs">
+        </DaisyTooltipTrigger>
+        <DaisyTooltipContent side="top" className="max-w-xs">
           <div>
             <div className="font-medium">{risk.title}</div>
             <div className="text-sm text-slate-600 mt-1 line-clamp-2">{risk.description}</div>
             <div className="flex items-center gap-2 mt-2">
-              <Badge variant="outline" className="text-xs">{risk.category}</Badge>
-              <Badge variant="secondary" className="text-xs">{risk.status}</Badge>
+              <DaisyBadge variant="outline" className="text-xs">{risk.category}</DaisyBadge>
+              <DaisyBadge variant="secondary" className="text-xs">{risk.status}</DaisyBadge>
             </div>
             <div className="text-xs mt-2 text-slate-500">
               Risk Score: {risk.riskScore} ({getRiskLevel(risk.riskScore).toUpperCase()})
@@ -392,92 +392,92 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
               Last Updated: {new Date(risk.updatedAt).toLocaleDateString()}
             </div>
           </div>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+        </DaisyTooltipContent>
+      </DaisyTooltip>
+    
   );
 
   return (
     <div className="space-y-4">
       {/* Enhanced Controls */}
-      <Card className="p-4">
+      <DaisyCard className="p-4">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-2">
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={handleZoomIn}
               disabled={viewSettings.zoom >= 3}
             >
               <ZoomIn className="h-4 w-4" />
-            </Button>
-            <Button
+            </DaisyButton>
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={handleZoomOut}
               disabled={viewSettings.zoom <= 0.5}
             >
               <ZoomOut className="h-4 w-4" />
-            </Button>
-            <Button
+            </DaisyButton>
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={handleResetView}
             >
               <RotateCcw className="h-4 w-4" />
-            </Button>
+            </DaisyButton>
             <div className="text-sm text-slate-600 px-2">
               Zoom: {Math.round(viewSettings.zoom * 100)}%
             </div>
           </div>
 
           {enableExport && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" disabled={isExporting}>
+            <DaisyDropdownMenu>
+              <DaisyDropdownMenuTrigger asChild>
+                <DaisyButton variant="outline" size="sm" disabled={isExporting}>
                   <Download className="h-4 w-4 mr-2" />
                   Export
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Export Options</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={exportToPNG}>
+                </DaisyButton>
+              </DaisyDropdownMenuTrigger>
+              <DaisyDropdownMenuContent align="end">
+                <DaisyDropdownMenuLabel>Export Options</DaisyDropdownMenuLabel>
+                <DaisyDropdownMenuSeparator />
+                <DaisyDropdownMenuItem onClick={exportToPNG}>
                   Export as PNG
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={exportToPDF}>
+                </DaisyDropdownMenuItem>
+                <DaisyDropdownMenuItem onClick={exportToPDF}>
                   Export as PDF
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={exportToSVG}>
+                </DaisyDropdownMenuItem>
+                <DaisyDropdownMenuItem onClick={exportToSVG}>
                   Export as SVG
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                </DaisyDropdownMenuItem>
+              </DaisyDropdownMenuContent>
+            </DaisyDropdownMenu>
           )}
         </div>
-      </Card>
+      </DaisyCard>
 
       {/* Enhanced Matrix */}
-      <Card className={className}>
-        <CardHeader className="pb-4">
+      <DaisyCard className={className}>
+        <DaisyCardHeader className="pb-4">
           <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
+            <DaisyCardTitle className="flex items-center gap-2">
               <Grid3X3 className="h-5 w-5" />
               Risk Matrix
-              <Badge variant="secondary" className="ml-2">
+              <DaisyBadge variant="secondary" className="ml-2">
                 {risks.length} risks
-              </Badge>
-            </CardTitle>
+              </DaisyBadge>
+            </DaisyCardTitle>
             <div className="flex items-center gap-2">
-              <Badge variant="outline">
+              <DaisyBadge variant="outline">
                 {viewMode === 'matrix' ? 'Matrix View' : 
                  viewMode === 'heatmap' ? 'Heatmap View' : 'Density View'}
-              </Badge>
+              </DaisyBadge>
             </div>
           </div>
-        </CardHeader>
         
-        <CardContent className="p-6">
+        
+        <DaisyCardContent className="p-6">
           <div 
             ref={matrixRef}
             className="relative overflow-hidden rounded-lg border"
@@ -604,20 +604,20 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Cell Detail Dialog */}
-      <Dialog open={!!selectedCell} onOpenChange={() => setSelectedCell(null)}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>
+      <DaisyDialog open={!!selectedCell} onOpenChange={() => setSelectedCell(null)}>
+        <DaisyDialogContent className="max-w-2xl">
+          <DaisyDialogHeader>
+            <DaisyDialogTitle>
               Cell Details - Likelihood: {selectedCell?.likelihood}, Impact: {selectedCell?.impact}
-            </DialogTitle>
-            <DialogDescription>
+            </DaisyDialogTitle>
+            <DaisyDialogDescription>
               Risk Score: {selectedCell?.riskScore} ({selectedCell?.level.toUpperCase()})
-            </DialogDescription>
-          </DialogHeader>
+            </DaisyDialogDescription>
+          </DaisyDialogHeader>
           
           {selectedCell && (
             <div className="space-y-4">
@@ -636,8 +636,8 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
                         <div className="font-medium">{risk.title}</div>
                         <div className="text-sm text-slate-600">{risk.description}</div>
                         <div className="flex items-center gap-2 mt-1">
-                          <Badge variant="outline" className="text-xs">{risk.category}</Badge>
-                          <Badge variant="secondary" className="text-xs">{risk.status}</Badge>
+                          <DaisyBadge variant="outline" className="text-xs">{risk.category}</DaisyBadge>
+                          <DaisyBadge variant="secondary" className="text-xs">{risk.status}</DaisyBadge>
                         </div>
                       </div>
                       <div className="text-right">
@@ -650,8 +650,8 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
               </div>
             </div>
           )}
-        </DialogContent>
-      </Dialog>
+        </DaisyDialogContent>
+      </DaisyDialog>
     </div>
   );
 }; 

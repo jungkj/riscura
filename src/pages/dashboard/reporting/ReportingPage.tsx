@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisySelect } from '@/components/ui/DaisySelect';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 
@@ -632,25 +632,25 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
           <p className="text-gray-600">Generate insights and create custom reports for your risk management program.</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" className="text-sm">
+          <DaisyButton variant="outline" className="text-sm">
             <Filter className="h-4 w-4 mr-2" />
             Filters
-          </Button>
-          <Button variant="outline" className="text-sm">
+          </DaisyButton>
+          <DaisyButton variant="outline" className="text-sm">
             <Download className="h-4 w-4 mr-2" />
             Export
-          </Button>
-          <Button>
+          </DaisyButton>
+          <DaisyButton>
             <Plus className="h-4 w-4 mr-2" />
             New Report
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
       {/* Analytics Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
-          <CardContent className="p-6">
+        <DaisyCard className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+          <DaisyCardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-blue-600">Total Reports</p>
@@ -658,11 +658,11 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               </div>
               <FileText className="h-8 w-8 text-blue-600" />
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
-          <CardContent className="p-6">
+        <DaisyCard className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+          <DaisyCardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-green-600">Active Generations</p>
@@ -670,23 +670,23 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               </div>
               <Activity className="h-8 w-8 text-green-600" />
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
-          <CardContent className="p-6">
+        <DaisyCard className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+          <DaisyCardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-purple-600">Scheduled Reports</p>
                 <p className="text-3xl font-bold text-purple-900">{analytics.scheduledReports}</p>
               </div>
-              <Calendar className="h-8 w-8 text-purple-600" />
+              <DaisyCalendar className="h-8 w-8 text-purple-600" />
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card className="bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200">
-          <CardContent className="p-6">
+        <DaisyCard className="bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200">
+          <DaisyCardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Views</p>
@@ -694,11 +694,11 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               </div>
               <Eye className="h-8 w-8 text-gray-600" />
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card className="bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200">
-          <CardContent className="p-6">
+        <DaisyCard className="bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200">
+          <DaisyCardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-indigo-600">AI Insights</p>
@@ -706,11 +706,11 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               </div>
               <Brain className="h-8 w-8 text-indigo-600" />
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
 
-        <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
-          <CardContent className="p-6">
+        <DaisyCard className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+          <DaisyCardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-orange-600">Avg Gen Time</p>
@@ -718,21 +718,21 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               </div>
               <Clock className="h-8 w-8 text-orange-600" />
             </div>
-          </CardContent>
-        </Card>
+          </DaisyCardBody>
+        </DaisyCard>
       </div>
 
       {/* Main Content Tabs */}
-      <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-          <TabsTrigger value="library">Report Library</TabsTrigger>
-          <TabsTrigger value="builder">Report Builder</TabsTrigger>
-          <TabsTrigger value="scheduled">Scheduled Reports</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-        </TabsList>
+      <DaisyTabs value={activeView} onValueChange={setActiveView} className="space-y-6">
+        <DaisyTabsList className="grid w-full grid-cols-5">
+          <DaisyTabsTrigger value="dashboard">Dashboard</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="library">Report Library</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="builder">Report Builder</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="scheduled">Scheduled Reports</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="analytics">Analytics</DaisyTabsTrigger>
+        </DaisyTabsList>
 
-        <TabsContent value="dashboard" className="space-y-6">
+        <DaisyTabsContent value="dashboard" className="space-y-6">
           <div className="text-center py-12">
             <BarChart3 className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
@@ -742,9 +742,9 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               Real-time reporting dashboard will be available here
             </p>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="library" className="space-y-6">
+        <DaisyTabsContent value="library" className="space-y-6">
           <div className="text-center py-12">
             <FileText className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
@@ -754,9 +754,9 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               Comprehensive report templates library will be available here
             </p>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="builder" className="space-y-6">
+        <DaisyTabsContent value="builder" className="space-y-6">
           <div className="text-center py-12">
             <Plus className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
@@ -766,11 +766,11 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               Drag-and-drop report builder with AI assistance will be available here
             </p>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="scheduled" className="space-y-6">
+        <DaisyTabsContent value="scheduled" className="space-y-6">
           <div className="text-center py-12">
-            <Calendar className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
+            <DaisyCalendar className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
               Scheduled Reports Coming Soon
             </h3>
@@ -778,9 +778,9 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               Automated report scheduling and distribution will be available here
             </p>
           </div>
-        </TabsContent>
+        </DaisyTabsContent>
 
-        <TabsContent value="analytics" className="space-y-6">
+        <DaisyTabsContent value="analytics" className="space-y-6">
           <div className="text-center py-12">
             <TrendingUp className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
@@ -790,8 +790,8 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               Deep reporting analytics and usage insights will be available here
             </p>
           </div>
-        </TabsContent>
-      </Tabs>
+        </DaisyTabsContent>
+      </DaisyTabs>
     </div>
   );
 } 

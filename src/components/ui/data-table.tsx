@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
+import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
+import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger } from '@/components/ui/DaisyTooltip';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -150,7 +150,7 @@ const StatusBadgeCell: React.FC<{ value: any; colorMapping?: Record<string, stri
   const customColor = colorMapping[value];
   
   return (
-    <Badge 
+    <DaisyBadge 
       variant={getVariant(value) as any}
       className={cn(
         "text-xs font-medium",
@@ -158,7 +158,7 @@ const StatusBadgeCell: React.FC<{ value: any; colorMapping?: Record<string, stri
       )}
     >
       {value}
-    </Badge>
+    </DaisyBadge>
   );
 };
 
@@ -170,10 +170,10 @@ const UserAvatarCell: React.FC<{ value: any }> = ({ value }) => {
   
   return (
     <div className="flex items-center space-x-enterprise-2">
-      <Avatar className="w-6 h-6">
-        <AvatarImage src={user.avatar} alt={user.name} />
-        <AvatarFallback className="text-xs">{initials}</AvatarFallback>
-      </Avatar>
+      <DaisyAvatar className="w-6 h-6">
+        <DaisyAvatarImage src={user.avatar} alt={user.name} />
+        <DaisyAvatarFallback className="text-xs">{initials}</DaisyAvatarFallback>
+      </DaisyAvatar>
       <span className="text-body-sm text-text-primary truncate">{user.name}</span>
     </div>
   );
@@ -205,17 +205,17 @@ const DateCell: React.FC<{ value: any }> = ({ value }) => {
   };
   
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
+    <DaisyTooltip>
+      <DaisyTooltipTrigger asChild>
         <div className="flex items-center space-x-enterprise-1 text-body-sm">
-          <Calendar className="h-3 w-3 text-text-tertiary" />
+          <DaisyCalendar className="h-3 w-3 text-text-tertiary" />
           <span className="text-text-primary">{getRelativeTime(diffDays)}</span>
         </div>
-      </TooltipTrigger>
-      <TooltipContent>
+      </DaisyTooltipTrigger>
+      <DaisyTooltipContent>
         <p>{formatDate(date)}</p>
-      </TooltipContent>
-    </Tooltip>
+      </DaisyTooltipContent>
+    </DaisyTooltip>
   );
 };
 
@@ -417,28 +417,28 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
         return <DateCell value={value} />;
       case 'actions':
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+          <DaisyDropdownMenu>
+            <DaisyDropdownMenuTrigger asChild>
+              <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
                 <MoreVertical className="h-3 w-3" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => onRowClick?.(row)}>
+              </DaisyButton>
+            </DaisyDropdownMenuTrigger>
+            <DaisyDropdownMenuContent align="end">
+              <DaisyDropdownMenuItem onClick={() => onRowClick?.(row)}>
                 <Eye className="h-3 w-3 mr-enterprise-1" />
                 View Details
-              </DropdownMenuItem>
-              <DropdownMenuItem>
+              </DaisyDropdownMenuItem>
+              <DaisyDropdownMenuItem>
                 <Share className="h-3 w-3 mr-enterprise-1" />
                 Share
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive">
+              </DaisyDropdownMenuItem>
+              <DaisyDropdownMenuSeparator />
+              <DaisyDropdownMenuItem className="text-destructive">
                 <X className="h-3 w-3 mr-enterprise-1" />
                 Remove
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DaisyDropdownMenuItem>
+            </DaisyDropdownMenuContent>
+          </DaisyDropdownMenu>
         );
       default:
         return (
@@ -462,7 +462,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
     return (
       <div className="flex items-center justify-center h-64 bg-surface-primary rounded-lg border border-border">
         <div className="text-center">
-          <AlertTriangle className="h-8 w-8 text-semantic-error mx-auto mb-enterprise-2" />
+          <DaisyAlertTriangle className="h-8 w-8 text-semantic-error mx-auto mb-enterprise-2" />
           <div className="text-heading-sm text-text-primary mb-enterprise-1">Error loading data</div>
           <div className="text-body-sm text-text-secondary">{error}</div>
         </div>
@@ -478,7 +478,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
           {/* Search */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-text-tertiary" />
-            <Input
+            <DaisyInput
               placeholder="Search across all columns..."
               value={searchQuery}
               onChange={(e) => {
@@ -496,7 +496,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
                 {selectedRows.size} selected
               </span>
               {bulkActions.map(action => (
-                <Button
+                <DaisyButton
                   key={action.key}
                   variant={action.variant === 'destructive' ? 'destructive' : 'outline' as any}
                   size="sm"
@@ -508,7 +508,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
                 >
                   {action.icon && <action.icon className="h-3 w-3 mr-enterprise-1" />}
                   {action.label}
-                </Button>
+                </DaisyButton>
               ))}
             </div>
           )}
@@ -516,41 +516,41 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
         
         <div className="flex items-center space-x-enterprise-2">
           {/* View Management */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="text-button">
+          <DaisyDropdownMenu>
+            <DaisyDropdownMenuTrigger asChild>
+              <DaisyButton variant="outline" size="sm" className="text-button">
                 <Bookmark className="h-3 w-3 mr-enterprise-1" />
                 Views
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuLabel>Saved Views</DropdownMenuLabel>
+              </DaisyButton>
+            </DaisyDropdownMenuTrigger>
+            <DaisyDropdownMenuContent align="end" className="w-48">
+              <DaisyDropdownMenuLabel>Saved Views</DaisyDropdownMenuLabel>
               {savedViews.map(view => (
-                <DropdownMenuItem key={view.id} onClick={() => setActiveView(view)}>
+                <DaisyDropdownMenuItem key={view.id} onClick={() => setActiveView(view)}>
                   {view.name}
-                  {view.isDefault && <Badge variant="secondary" className="ml-auto text-xs">Default</Badge>}
-                </DropdownMenuItem>
+                  {view.isDefault && <DaisyBadge variant="secondary" className="ml-auto text-xs">Default</DaisyBadge>}
+                </DaisyDropdownMenuItem>
               ))}
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DaisyDropdownMenuSeparator />
+              <DaisyDropdownMenuItem>
                 <Plus className="h-3 w-3 mr-enterprise-1" />
                 Save Current View
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DaisyDropdownMenuItem>
+            </DaisyDropdownMenuContent>
+          </DaisyDropdownMenu>
           
           {/* Column Settings */}
-          <DropdownMenu open={showColumnSettings} onOpenChange={setShowColumnSettings}>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="text-button">
+          <DaisyDropdownMenu open={showColumnSettings} onOpenChange={setShowColumnSettings}>
+            <DaisyDropdownMenuTrigger asChild>
+              <DaisyButton variant="outline" size="sm" className="text-button">
                 <Settings className="h-3 w-3 mr-enterprise-1" />
                 Columns
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>Column Visibility</DropdownMenuLabel>
+              </DaisyButton>
+            </DaisyDropdownMenuTrigger>
+            <DaisyDropdownMenuContent align="end" className="w-56">
+              <DaisyDropdownMenuLabel>Column Visibility</DaisyDropdownMenuLabel>
               {columns.map(column => (
-                <DropdownMenuCheckboxItem
+                <DaisyDropdownMenuCheckboxItem
                   key={column.key}
                   checked={!column.hidden}
                   onCheckedChange={() => toggleColumnVisibility(column.key)}
@@ -558,19 +558,19 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
                   {column.label}
                 </DropdownMenuCheckboxItem>
               ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </DaisyDropdownMenuContent>
+          </DaisyDropdownMenu>
           
           {/* Export */}
-          <Button variant="outline" size="sm" className="text-button">
+          <DaisyButton variant="outline" size="sm" className="text-button">
             <Download className="h-3 w-3 mr-enterprise-1" />
             Export
-          </Button>
+          </DaisyButton>
           
           {/* Refresh */}
-          <Button variant="outline" size="sm" className="text-button">
+          <DaisyButton variant="outline" size="sm" className="text-button">
             <RefreshCw className="h-3 w-3" />
-          </Button>
+          </DaisyButton>
         </div>
       </div>
       
@@ -581,27 +581,27 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
           {filters.map((filter, index) => {
             const column = columns.find(c => c.key === filter.column);
             return (
-              <Badge key={index} variant="outline" className="text-caption">
+              <DaisyBadge key={index} variant="outline" className="text-caption">
                 {column?.label}: {String(filter.value)}
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   onClick={() => handleFilter(filter.column, filter.operator, null)}
                   className="ml-enterprise-1 h-3 w-3 p-0 hover:bg-destructive hover:text-white"
                 >
                   <X className="h-2 w-2" />
-                </Button>
-              </Badge>
+                </DaisyButton>
+              </DaisyBadge>
             );
           })}
-          <Button
+          <DaisyButton
             variant="ghost"
             size="sm"
             onClick={() => setFilters([])}
             className="text-caption text-text-tertiary hover:text-destructive"
           >
             Clear all
-          </Button>
+          </DaisyButton>
         </div>
       )}
       
@@ -613,7 +613,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
             <tr>
               {/* Select All Checkbox */}
               <th className="w-12 p-enterprise-3 text-left">
-                <Checkbox
+                <DaisyCheckbox
                   checked={selectedRows.size === filteredData.length && filteredData.length > 0}
                   onCheckedChange={handleSelectAll}
                   aria-label="Select all rows"
@@ -644,58 +644,58 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
                       {column.sortable && getSortIcon(column.key)}
                       
                       {/* Column Actions */}
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
+                      <DaisyDropdownMenu>
+                        <DaisyDropdownMenuTrigger asChild>
+                          <DaisyButton
                             variant="ghost"
                             size="sm"
                             className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
                           >
                             <MoreVertical className="h-3 w-3" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start">
+                          </DaisyButton>
+                        </DaisyDropdownMenuTrigger>
+                        <DaisyDropdownMenuContent align="start">
                           {column.sortable && (
                             <>
-                              <DropdownMenuItem onClick={() => handleSort(column.key)}>
+                              <DaisyDropdownMenuItem onClick={() => handleSort(column.key)}>
                                 <SortAsc className="h-3 w-3 mr-enterprise-1" />
                                 Sort Ascending
-                              </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleSort(column.key)}>
+                              </DaisyDropdownMenuItem>
+                              <DaisyDropdownMenuItem onClick={() => handleSort(column.key)}>
                                 <SortDesc className="h-3 w-3 mr-enterprise-1" />
                                 Sort Descending
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator />
+                              </DaisyDropdownMenuItem>
+                              <DaisyDropdownMenuSeparator />
                             </>
                           )}
                           
                           {column.pinnable && (
-                            <DropdownMenuItem onClick={() => toggleColumnPin(column.key)}>
+                            <DaisyDropdownMenuItem onClick={() => toggleColumnPin(column.key)}>
                               {pinnedColumns.has(column.key) ? (
                                 <PinOff className="h-3 w-3 mr-enterprise-1" />
                               ) : (
                                 <Pin className="h-3 w-3 mr-enterprise-1" />
                               )}
                               {pinnedColumns.has(column.key) ? 'Unpin' : 'Pin'} Column
-                            </DropdownMenuItem>
+                            </DaisyDropdownMenuItem>
                           )}
                           
-                          <DropdownMenuItem onClick={() => toggleColumnVisibility(column.key)}>
+                          <DaisyDropdownMenuItem onClick={() => toggleColumnVisibility(column.key)}>
                             <EyeOff className="h-3 w-3 mr-enterprise-1" />
                             Hide Column
-                          </DropdownMenuItem>
+                          </DaisyDropdownMenuItem>
                           
                           {column.filterable && (
                             <>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem>
+                              <DaisyDropdownMenuSeparator />
+                              <DaisyDropdownMenuItem>
                                 <Filter className="h-3 w-3 mr-enterprise-1" />
                                 Add Filter
-                              </DropdownMenuItem>
+                              </DaisyDropdownMenuItem>
                             </>
                           )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                        </DaisyDropdownMenuContent>
+                      </DaisyDropdownMenu>
                     </div>
                   </div>
                 </th>
@@ -741,7 +741,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
                 >
                   {/* Select Checkbox */}
                   <td className="w-12 p-enterprise-3">
-                    <Checkbox
+                    <DaisyCheckbox
                       checked={selectedRows.has(rowIndex)}
                       onCheckedChange={(checked) => handleRowSelect(rowIndex, checked as boolean)}
                       onClick={(e) => e.stopPropagation()}
@@ -781,21 +781,21 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
               Showing {((currentPage - 1) * pageSize) + 1} to {Math.min(currentPage * pageSize, totalCount)} of {totalCount} results
             </span>
             
-            <Select value={String(pageSize)} onValueChange={(value) => onPageSizeChange?.(Number(value))}>
-              <SelectTrigger className="w-24 h-8">
-                <SelectValue />
+            <DaisySelect value={String(pageSize)} onValueChange={(value) => onPageSizeChange?.(Number(value))}>
+              <DaisySelectTrigger className="w-24 h-8">
+                <DaisySelectValue />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="25">25</SelectItem>
-                <SelectItem value="50">50</SelectItem>
-                <SelectItem value="100">100</SelectItem>
-                <SelectItem value="200">200</SelectItem>
+              <DaisySelectContent>
+                <DaisySelectItem value="25">25</SelectItem>
+                <DaisySelectItem value="50">50</SelectItem>
+                <DaisySelectItem value="100">100</SelectItem>
+                <DaisySelectItem value="200">200</SelectItem>
               </SelectContent>
-            </Select>
+            </DaisySelect>
           </div>
           
           <div className="flex items-center space-x-enterprise-2">
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={() => onPageChange?.(currentPage - 1)}
@@ -803,13 +803,13 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
               className="text-button"
             >
               Previous
-            </Button>
+            </DaisyButton>
             
             <span className="text-body-sm text-text-primary px-enterprise-2">
               Page {currentPage} of {Math.ceil(totalCount / pageSize)}
             </span>
             
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={() => onPageChange?.(currentPage + 1)}
@@ -817,7 +817,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
               className="text-button"
             >
               Next
-            </Button>
+            </DaisyButton>
           </div>
         </div>
       )}

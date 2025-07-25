@@ -2,17 +2,17 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Progress } from '@/components/ui/progress';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
+import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
+import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import {
   Plus,
   MoreHorizontal,
@@ -429,7 +429,7 @@ const TaskCard: React.FC<{
   const completedSubtasks = task.subtasks.filter(s => s.completed).length;
 
   return (
-    <Card 
+    <DaisyCard 
       className={cn(
         "group cursor-pointer transition-all duration-200 hover:shadow-notion-sm border border-border",
         isDragging && "opacity-50 transform rotate-1"
@@ -438,7 +438,7 @@ const TaskCard: React.FC<{
       onDragStart={() => setIsDragging(true)}
       onDragEnd={() => setIsDragging(false)}
     >
-      <CardContent className="p-enterprise-4">
+      <DaisyCardContent className="p-enterprise-4">
         {/* Header */}
         <div className="flex items-start justify-between mb-enterprise-3">
           <div className="flex items-center space-x-enterprise-2">
@@ -448,38 +448,38 @@ const TaskCard: React.FC<{
             </div>
           </div>
           
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button 
+          <DaisyDropdownMenu>
+            <DaisyDropdownMenuTrigger asChild>
+              <DaisyButton 
                 variant="ghost" 
                 size="sm" 
                 className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <MoreHorizontal className="h-3 w-3" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => onEdit(task)}>
+              </DaisyButton>
+            </DaisyDropdownMenuTrigger>
+            <DaisyDropdownMenuContent align="end">
+              <DaisyDropdownMenuItem onClick={() => onEdit(task)}>
                 <Edit className="h-3 w-3 mr-enterprise-2" />
                 Edit Task
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {}}>
+              </DaisyDropdownMenuItem>
+              <DaisyDropdownMenuItem onClick={() => {}}>
                 <Copy className="h-3 w-3 mr-enterprise-2" />
                 Duplicate
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {}}>
+              </DaisyDropdownMenuItem>
+              <DaisyDropdownMenuItem onClick={() => {}}>
                 <Archive className="h-3 w-3 mr-enterprise-2" />
                 Archive
-              </DropdownMenuItem>
-              <DropdownMenuItem 
+              </DaisyDropdownMenuItem>
+              <DaisyDropdownMenuItem 
                 onClick={() => onDelete(task.id)}
                 className="text-semantic-error"
               >
                 <Trash2 className="h-3 w-3 mr-enterprise-2" />
                 Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DaisyDropdownMenuItem>
+            </DaisyDropdownMenuContent>
+          </DaisyDropdownMenu>
         </div>
 
         {/* Title & Description */}
@@ -499,7 +499,7 @@ const TaskCard: React.FC<{
               <span>Progress</span>
               <span>{task.progress}%</span>
             </div>
-            <Progress value={task.progress} className="h-1" />
+            <DaisyProgress value={task.progress} className="h-1" />
           </div>
         )}
 
@@ -517,14 +517,14 @@ const TaskCard: React.FC<{
         {task.tags.length > 0 && (
           <div className="flex flex-wrap gap-enterprise-1 mb-enterprise-3">
             {task.tags.slice(0, 3).map((tag) => (
-              <Badge key={tag} variant="secondary" className="text-caption px-enterprise-1 py-0">
+              <DaisyBadge key={tag} variant="secondary" className="text-caption px-enterprise-1 py-0">
                 {tag}
-              </Badge>
+              </DaisyBadge>
             ))}
             {task.tags.length > 3 && (
-              <Badge variant="secondary" className="text-caption px-enterprise-1 py-0">
+              <DaisyBadge variant="secondary" className="text-caption px-enterprise-1 py-0">
                 +{task.tags.length - 3}
-              </Badge>
+              </DaisyBadge>
             )}
           </div>
         )}
@@ -535,12 +535,12 @@ const TaskCard: React.FC<{
             {/* Assignee */}
             {task.assignee && (
               <div className="flex items-center space-x-enterprise-1">
-                <Avatar className="h-5 w-5">
-                  <AvatarImage src={task.assignee.avatar} />
-                  <AvatarFallback className="text-caption">
+                <DaisyAvatar className="h-5 w-5">
+                  <DaisyAvatarImage src={task.assignee.avatar} />
+                  <DaisyAvatarFallback className="text-caption">
                     {task.assignee.name.split(' ').map(n => n[0]).join('')}
-                  </AvatarFallback>
-                </Avatar>
+                  </DaisyAvatarFallback>
+                </DaisyAvatar>
               </div>
             )}
 
@@ -592,8 +592,8 @@ const TaskCard: React.FC<{
             </div>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 };
 
@@ -631,25 +631,25 @@ const KanbanColumn: React.FC<{
       <div className="flex items-center justify-between p-enterprise-4 border-b border-border">
         <div className="flex items-center space-x-enterprise-2">
           <h3 className="text-body-sm font-medium">{column.title}</h3>
-          <Badge variant="outline" className="text-caption">
+          <DaisyBadge variant="outline" className="text-caption">
             {tasks.length}
             {column.limit && `/${column.limit}`}
-          </Badge>
+          </DaisyBadge>
           {isOverLimit && (
-            <Badge variant="destructive" className="text-caption">
+            <DaisyBadge variant="error" className="text-caption">
               Over Limit
-            </Badge>
+            </DaisyBadge>
           )}
         </div>
         
-        <Button
+        <DaisyButton
           variant="ghost"
           size="sm"
           className="h-6 w-6 p-0"
           onClick={() => onAddTask(column.status)}
         >
           <Plus className="h-3 w-3" />
-        </Button>
+        </DaisyButton>
       </div>
 
       {/* Column Description */}
@@ -795,47 +795,47 @@ export const WorkflowKanban: React.FC<{
         <div className="flex items-center space-x-enterprise-3">
           {/* Filters */}
           <div className="flex items-center space-x-enterprise-2">
-            <Input
+            <DaisyInput
               placeholder="Search tasks..."
               value={filterBy.search || ''}
               onChange={(e) => setFilterBy(prev => ({ ...prev, search: e.target.value }))}
               className="w-48"
             />
             
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm">
+            <DaisyDropdownMenu>
+              <DaisyDropdownMenuTrigger asChild>
+                <DaisyButton variant="outline" size="sm">
                   <Filter className="h-3 w-3 mr-enterprise-2" />
                   Filter
                   <ChevronDown className="h-3 w-3 ml-enterprise-1" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setFilterBy(prev => ({ ...prev, priority: 'critical' }))}>
+                </DaisyButton>
+              </DaisyDropdownMenuTrigger>
+              <DaisyDropdownMenuContent>
+                <DaisyDropdownMenuItem onClick={() => setFilterBy(prev => ({ ...prev, priority: 'critical' }))}>
                   Critical Priority
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFilterBy(prev => ({ ...prev, priority: 'high' }))}>
+                </DaisyDropdownMenuItem>
+                <DaisyDropdownMenuItem onClick={() => setFilterBy(prev => ({ ...prev, priority: 'high' }))}>
                   High Priority
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFilterBy({})}>
+                </DaisyDropdownMenuItem>
+                <DaisyDropdownMenuItem onClick={() => setFilterBy({})}>
                   Clear Filters
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                </DaisyDropdownMenuItem>
+              </DaisyDropdownMenuContent>
+            </DaisyDropdownMenu>
           </div>
 
-          <Button onClick={() => handleAddTask('backlog')}>
+          <DaisyButton onClick={() => handleAddTask('backlog')}>
             <Plus className="h-4 w-4 mr-enterprise-2" />
             Add Task
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
       {/* Metrics */}
       {showMetrics && (
         <div className="grid grid-cols-4 gap-enterprise-4 p-enterprise-6 border-b border-border">
-          <Card>
-            <CardContent className="p-enterprise-4">
+          <DaisyCard>
+            <DaisyCardContent className="p-enterprise-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-caption text-text-secondary">Total Tasks</p>
@@ -843,11 +843,11 @@ export const WorkflowKanban: React.FC<{
                 </div>
                 <Layers className="h-5 w-5 text-blue-600" />
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
-          <Card>
-            <CardContent className="p-enterprise-4">
+          <DaisyCard>
+            <DaisyCardContent className="p-enterprise-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-caption text-text-secondary">Completed</p>
@@ -855,23 +855,23 @@ export const WorkflowKanban: React.FC<{
                 </div>
                 <CheckCircle2 className="h-5 w-5 text-green-600" />
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
-          <Card>
-            <CardContent className="p-enterprise-4">
+          <DaisyCard>
+            <DaisyCardContent className="p-enterprise-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-caption text-text-secondary">Overdue</p>
                   <p className="text-heading-xs font-semibold text-red-600">{overdueTasks}</p>
                 </div>
-                <AlertTriangle className="h-5 w-5 text-red-600" />
+                <DaisyAlertTriangle className="h-5 w-5 text-red-600" />
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
-          <Card>
-            <CardContent className="p-enterprise-4">
+          <DaisyCard>
+            <DaisyCardContent className="p-enterprise-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-caption text-text-secondary">Avg Progress</p>
@@ -879,8 +879,8 @@ export const WorkflowKanban: React.FC<{
                 </div>
                 <TrendingUp className="h-5 w-5 text-blue-600" />
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </div>
       )}
 
@@ -902,20 +902,20 @@ export const WorkflowKanban: React.FC<{
       </div>
 
       {/* Task Dialog */}
-      <Dialog open={showTaskDialog} onOpenChange={setShowTaskDialog}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>
+      <DaisyDialog open={showTaskDialog} onOpenChange={setShowTaskDialog}>
+        <DaisyDialogContent className="max-w-2xl">
+          <DaisyDialogHeader>
+            <DaisyDialogTitle>
               {selectedTask?.id.startsWith('task-') ? 'Edit Task' : 'Create Task'}
-            </DialogTitle>
-          </DialogHeader>
+            </DaisyDialogTitle>
+          </DaisyDialogHeader>
           
           {selectedTask && (
             <div className="space-y-enterprise-4">
               <div className="grid grid-cols-2 gap-enterprise-4">
                 <div>
                   <label className="text-body-sm font-medium">Title</label>
-                  <Input 
+                  <DaisyInput 
                     value={selectedTask.title}
                     onChange={(e) => setSelectedTask({
                       ...selectedTask,
@@ -927,9 +927,9 @@ export const WorkflowKanban: React.FC<{
                 
                 <div>
                   <label className="text-body-sm font-medium">Priority</label>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="w-full mt-enterprise-1 justify-start">
+                  <DaisyDropdownMenu>
+                    <DaisyDropdownMenuTrigger asChild>
+                      <DaisyButton variant="outline" className="w-full mt-enterprise-1 justify-start">
                         <div className={cn("w-2 h-2 rounded-full mr-enterprise-2", 
                           selectedTask.priority === 'critical' ? 'bg-red-500' :
                           selectedTask.priority === 'high' ? 'bg-orange-500' :
@@ -938,11 +938,11 @@ export const WorkflowKanban: React.FC<{
                         )} />
                         {selectedTask.priority.charAt(0).toUpperCase() + selectedTask.priority.slice(1)}
                         <ChevronDown className="h-3 w-3 ml-auto" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
+                      </DaisyButton>
+                    </DaisyDropdownMenuTrigger>
+                    <DaisyDropdownMenuContent>
                       {(['critical', 'high', 'medium', 'low'] as const).map((priority) => (
-                        <DropdownMenuItem 
+                        <DaisyDropdownMenuItem 
                           key={priority}
                           onClick={() => setSelectedTask({
                             ...selectedTask,
@@ -956,16 +956,16 @@ export const WorkflowKanban: React.FC<{
                             'bg-green-500'
                           )} />
                           {priority.charAt(0).toUpperCase() + priority.slice(1)}
-                        </DropdownMenuItem>
+                        </DaisyDropdownMenuItem>
                       ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                    </DaisyDropdownMenuContent>
+                  </DaisyDropdownMenu>
                 </div>
               </div>
 
               <div>
                 <label className="text-body-sm font-medium">Description</label>
-                <Textarea 
+                <DaisyTextarea 
                   value={selectedTask.description}
                   onChange={(e) => setSelectedTask({
                     ...selectedTask,
@@ -979,7 +979,7 @@ export const WorkflowKanban: React.FC<{
               <div className="grid grid-cols-2 gap-enterprise-4">
                 <div>
                   <label className="text-body-sm font-medium">Due Date</label>
-                  <Input 
+                  <DaisyInput 
                     type="date"
                     value={selectedTask.dueDate.toISOString().split('T')[0]}
                     onChange={(e) => setSelectedTask({
@@ -992,7 +992,7 @@ export const WorkflowKanban: React.FC<{
 
                 <div>
                   <label className="text-body-sm font-medium">Estimated Hours</label>
-                  <Input 
+                  <DaisyInput 
                     type="number"
                     value={selectedTask.estimatedHours}
                     onChange={(e) => setSelectedTask({
@@ -1005,13 +1005,13 @@ export const WorkflowKanban: React.FC<{
               </div>
 
               <div className="flex justify-end space-x-enterprise-2">
-                <Button 
+                <DaisyButton 
                   variant="outline" 
                   onClick={() => setShowTaskDialog(false)}
                 >
                   Cancel
-                </Button>
-                <Button 
+                </DaisyButton>
+                <DaisyButton 
                   onClick={() => {
                     if (selectedTask.id.includes(Date.now().toString())) {
                       // New task, already added to state
@@ -1025,12 +1025,12 @@ export const WorkflowKanban: React.FC<{
                   }}
                 >
                   Save Task
-                </Button>
+                </DaisyButton>
               </div>
             </div>
           )}
-        </DialogContent>
-      </Dialog>
+        </DaisyDialogContent>
+      </DaisyDialog>
     </div>
   );
 };

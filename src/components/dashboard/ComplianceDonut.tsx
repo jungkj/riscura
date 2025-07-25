@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DaisySkeleton } from '@/components/ui/DaisySkeleton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 
 interface ComplianceDonutProps {
   isLoading?: boolean;
@@ -44,7 +44,7 @@ export const ComplianceDonut: React.FC<ComplianceDonutProps> = ({ isLoading = fa
     }
   }, [isLoading, data]);
   
-  const CustomTooltip: React.FC<TooltipProps> = ({ active, payload }) => {
+  const CustomTooltip: React.FC<DaisyTooltipProps> = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const data = payload[0];
       return (
@@ -58,15 +58,15 @@ export const ComplianceDonut: React.FC<ComplianceDonutProps> = ({ isLoading = fa
   };
 
   if (isLoading) {
-    return <Skeleton className="h-[280px] w-full" />;
+    return <DaisySkeleton className="h-[280px] w-full" />;
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Compliance Status</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <DaisyCard>
+      <DaisyCardHeader>
+        <DaisyCardTitle>Compliance Status</DaisyCardTitle>
+      
+      <DaisyCardContent>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -83,7 +83,7 @@ export const ComplianceDonut: React.FC<ComplianceDonutProps> = ({ isLoading = fa
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip content={<CustomTooltip />} />
+              <DaisyTooltip content={<CustomTooltip />} />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -101,7 +101,7 @@ export const ComplianceDonut: React.FC<ComplianceDonutProps> = ({ isLoading = fa
             </div>
           ))}
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 };

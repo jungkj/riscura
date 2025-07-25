@@ -1,17 +1,17 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Switch } from '@/components/ui/switch';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyTable, DaisyTableBody, DaisyTableCell, DaisyTableHead, DaisyTableHeader, DaisyTableRow } from '@/components/ui/DaisyTable';
+import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { 
   Calendar, 
   Clock, 
@@ -414,9 +414,9 @@ export default function ReportScheduler({
     };
 
     return (
-      <Badge className={colors[frequency as keyof typeof colors] || 'bg-gray-100 text-gray-800'}>
+      <DaisyBadge className={colors[frequency as keyof typeof colors] || 'bg-gray-100 text-gray-800'}>
         {frequency}
-      </Badge>
+      </DaisyBadge>
     );
   };
 
@@ -426,7 +426,7 @@ export default function ReportScheduler({
     }
     
     if (schedule.failureCount > 0) {
-      return <AlertCircle className="h-4 w-4 text-red-500" />;
+      return <DaisyAlertCircle className="h-4 w-4 text-red-500" />;
     }
     
     return <CheckCircle className="h-4 w-4 text-green-500" />;
@@ -436,8 +436,8 @@ export default function ReportScheduler({
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="name">Schedule Name</Label>
-          <Input
+          <DaisyLabel htmlFor="name">Schedule Name</DaisyLabel>
+          <DaisyInput
             id="name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -445,28 +445,28 @@ export default function ReportScheduler({
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="reportType">Report Type</Label>
-          <Select
+          <DaisyLabel htmlFor="reportType">Report Type</DaisyLabel>
+          <DaisySelect
             value={formData.reportType}
             onValueChange={(value) => setFormData({ ...formData, reportType: value })}
           >
-            <SelectTrigger>
-              <SelectValue placeholder="Select report type" />
+            <DaisySelectTrigger>
+              <DaisySelectValue placeholder="Select report type" />
             </SelectTrigger>
-            <SelectContent>
+            <DaisySelectContent>
               {reportTypes.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
+                <DaisySelectItem key={type.value} value={type.value}>
                   {type.label}
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </DaisySelect>
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description (Optional)</Label>
-        <Input
+        <DaisyLabel htmlFor="description">Description (Optional)</DaisyLabel>
+        <DaisyInput
           id="description"
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -476,48 +476,48 @@ export default function ReportScheduler({
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>Frequency</Label>
-          <Select
+          <DaisyLabel>Frequency</DaisyLabel>
+          <DaisySelect
             value={formData.frequency}
             onValueChange={(value) => setFormData({ ...formData, frequency: value as any })}
           >
-            <SelectTrigger>
-              <SelectValue />
+            <DaisySelectTrigger>
+              <DaisySelectValue />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="daily">Daily</SelectItem>
-              <SelectItem value="weekly">Weekly</SelectItem>
-              <SelectItem value="monthly">Monthly</SelectItem>
-              <SelectItem value="quarterly">Quarterly</SelectItem>
+            <DaisySelectContent>
+              <DaisySelectItem value="daily">Daily</SelectItem>
+              <DaisySelectItem value="weekly">Weekly</SelectItem>
+              <DaisySelectItem value="monthly">Monthly</SelectItem>
+              <DaisySelectItem value="quarterly">Quarterly</SelectItem>
             </SelectContent>
-          </Select>
+          </DaisySelect>
         </div>
 
         {formData.frequency === 'weekly' && (
           <div className="space-y-2">
-            <Label>Day of Week</Label>
-            <Select
+            <DaisyLabel>Day of Week</DaisyLabel>
+            <DaisySelect
               value={formData.dayOfWeek?.toString()}
               onValueChange={(value) => setFormData({ ...formData, dayOfWeek: parseInt(value) })}
             >
-              <SelectTrigger>
-                <SelectValue />
+              <DaisySelectTrigger>
+                <DaisySelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <DaisySelectContent>
                 {daysOfWeek.map((day) => (
-                  <SelectItem key={day.value} value={day.value.toString()}>
+                  <DaisySelectItem key={day.value} value={day.value.toString()}>
                     {day.label}
                   </SelectItem>
                 ))}
               </SelectContent>
-            </Select>
+            </DaisySelect>
           </div>
         )}
 
         {formData.frequency === 'monthly' && (
           <div className="space-y-2">
-            <Label>Day of Month</Label>
-            <Input
+            <DaisyLabel>Day of Month</DaisyLabel>
+            <DaisyInput
               type="number"
               min="1"
               max="31"
@@ -531,39 +531,39 @@ export default function ReportScheduler({
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>Time</Label>
-          <Input
+          <DaisyLabel>Time</DaisyLabel>
+          <DaisyInput
             type="time"
             value={formData.time}
             onChange={(e) => setFormData({ ...formData, time: e.target.value })}
           />
         </div>
         <div className="space-y-2">
-          <Label>Timezone</Label>
-          <Select
+          <DaisyLabel>Timezone</DaisyLabel>
+          <DaisySelect
             value={formData.timezone}
             onValueChange={(value) => setFormData({ ...formData, timezone: value })}
           >
-            <SelectTrigger>
-              <SelectValue />
+            <DaisySelectTrigger>
+              <DaisySelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <DaisySelectContent>
               {timezones.map((tz) => (
-                <SelectItem key={tz.value} value={tz.value}>
+                <DaisySelectItem key={tz.value} value={tz.value}>
                   {tz.label}
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </DaisySelect>
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label>Output Formats</Label>
+        <DaisyLabel>Output Formats</DaisyLabel>
         <div className="flex gap-4">
           {['pdf', 'excel', 'csv'].map((format) => (
             <div key={format} className="flex items-center space-x-2">
-              <Checkbox
+              <DaisyCheckbox
                 id={format}
                 checked={formData.format?.includes(format)}
                 onCheckedChange={(checked) => {
@@ -574,23 +574,23 @@ export default function ReportScheduler({
                   }
                 }}
               />
-              <Label htmlFor={format} className="capitalize">{format}</Label>
+              <DaisyLabel htmlFor={format} className="capitalize">{format}</DaisyLabel>
             </div>
           ))}
         </div>
       </div>
 
       <div className="flex items-center space-x-2">
-        <Switch
+        <DaisySwitch
           id="enabled"
           checked={formData.enabled}
           onCheckedChange={(checked) => setFormData({ ...formData, enabled: checked })}
         />
-        <Label htmlFor="enabled">Enable this schedule</Label>
+        <DaisyLabel htmlFor="enabled">Enable this schedule</DaisyLabel>
       </div>
 
       <div className="flex justify-end gap-2">
-        <Button
+        <DaisyButton
           variant="outline"
           onClick={() => {
             if (isEdit) {
@@ -602,10 +602,10 @@ export default function ReportScheduler({
           }}
         >
           Cancel
-        </Button>
-        <Button onClick={isEdit ? handleUpdate : handleCreate}>
+        </DaisyButton>
+        <DaisyButton onClick={isEdit ? handleUpdate : handleCreate}>
           {isEdit ? 'Update Schedule' : 'Create Schedule'}
-        </Button>
+        </DaisyButton>
       </div>
     </div>
   );
@@ -621,70 +621,70 @@ export default function ReportScheduler({
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button onClick={loadSchedules} variant="outline" size="sm">
+          <DaisyButton onClick={loadSchedules} variant="outline" size="sm">
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
-          </Button>
-          <Button onClick={() => setIsCreateDialogOpen(true)}>
+          </DaisyButton>
+          <DaisyButton onClick={() => setIsCreateDialogOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             New Schedule
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
       {/* Schedules Table */}
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Frequency</TableHead>
-                <TableHead>Next Run</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Recipients</TableHead>
-                <TableHead>Stats</TableHead>
-                <TableHead className="w-32">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+      <DaisyCard>
+        <DaisyCardContent className="p-0">
+          <DaisyTable>
+            <DaisyTableHeader>
+              <DaisyTableRow>
+                <DaisyTableHead>Name</DaisyTableHead>
+                <DaisyTableHead>Type</DaisyTableHead>
+                <DaisyTableHead>Frequency</DaisyTableHead>
+                <DaisyTableHead>Next Run</DaisyTableHead>
+                <DaisyTableHead>Status</DaisyTableHead>
+                <DaisyTableHead>Recipients</DaisyTableHead>
+                <DaisyTableHead>Stats</DaisyTableHead>
+                <DaisyTableHead className="w-32">Actions</DaisyTableHead>
+              </DaisyTableRow>
+            </DaisyTableHeader>
+            <DaisyTableBody>
               {isLoading ? (
-                <TableRow>
-                  <TableCell colSpan={8} className="text-center py-8">
+                <DaisyTableRow>
+                  <DaisyTableCell colSpan={8} className="text-center py-8">
                     <div className="flex items-center justify-center gap-2">
                       <RefreshCw className="h-4 w-4 animate-spin" />
                       Loading schedules...
                     </div>
-                  </TableCell>
-                </TableRow>
+                  </DaisyTableCell>
+                </DaisyTableRow>
               ) : schedules.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={8} className="text-center py-8">
+                <DaisyTableRow>
+                  <DaisyTableCell colSpan={8} className="text-center py-8">
                     <div className="flex flex-col items-center gap-2">
-                      <Calendar className="h-8 w-8 text-muted-foreground" />
+                      <DaisyCalendar className="h-8 w-8 text-muted-foreground" />
                       <p className="text-muted-foreground">No scheduled reports found</p>
                     </div>
-                  </TableCell>
-                </TableRow>
+                  </DaisyTableCell>
+                </DaisyTableRow>
               ) : (
                 schedules.map((schedule) => (
-                  <TableRow key={schedule.id}>
-                    <TableCell>
+                  <DaisyTableRow key={schedule.id}>
+                    <DaisyTableCell>
                       <div className="flex flex-col">
                         <span className="font-medium">{schedule.name}</span>
                         {schedule.description && (
                           <span className="text-xs text-muted-foreground">{schedule.description}</span>
                         )}
                       </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{schedule.reportType.replace('_', ' ')}</Badge>
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
+                      <DaisyBadge variant="outline">{schedule.reportType.replace('_', ' ')}</DaisyBadge>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       {getFrequencyBadge(schedule.frequency)}
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       {schedule.nextRun ? (
                         <div className="flex flex-col">
                           <span className="text-sm">{format(new Date(schedule.nextRun), 'MMM dd, yyyy')}</span>
@@ -693,95 +693,95 @@ export default function ReportScheduler({
                       ) : (
                         <span className="text-muted-foreground">-</span>
                       )}
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <div className="flex items-center gap-2">
                         {getStatusIcon(schedule)}
                         <span className="text-sm">
                           {schedule.enabled ? 'Active' : 'Paused'}
                         </span>
                       </div>
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <div className="flex items-center gap-1">
                         <Mail className="h-4 w-4 text-muted-foreground" />
                         <span className="text-sm">{schedule.recipients.length}</span>
                       </div>
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <div className="flex flex-col text-xs">
                         <span>Runs: {schedule.runCount}</span>
                         {schedule.failureCount > 0 && (
                           <span className="text-red-600">Failures: {schedule.failureCount}</span>
                         )}
                       </div>
-                    </TableCell>
-                    <TableCell>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <div className="flex items-center gap-1">
-                        <Button
+                        <DaisyButton
                           variant="ghost"
                           size="sm"
                           onClick={() => handleRunNow(schedule.id)}
                           disabled={!schedule.enabled}
                         >
                           <Play className="h-4 w-4" />
-                        </Button>
-                        <Button
+                        </DaisyButton>
+                        <DaisyButton
                           variant="ghost"
                           size="sm"
                           onClick={() => handleToggle(schedule.id, !schedule.enabled)}
                         >
                           {schedule.enabled ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-                        </Button>
-                        <Button
+                        </DaisyButton>
+                        <DaisyButton
                           variant="ghost"
                           size="sm"
                           onClick={() => openEditDialog(schedule)}
                         >
                           <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
+                        </DaisyButton>
+                        <DaisyButton
                           variant="ghost"
                           size="sm"
                           onClick={() => handleDelete(schedule.id)}
                         >
                           <Trash2 className="h-4 w-4" />
-                        </Button>
+                        </DaisyButton>
                       </div>
-                    </TableCell>
-                  </TableRow>
+                    </DaisyTableCell>
+                  </DaisyTableRow>
                 ))
               )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+            </DaisyTableBody>
+          </DaisyTable>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Create Schedule Dialog */}
-      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Create New Schedule</DialogTitle>
-            <DialogDescription>
+      <DaisyDialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+        <DaisyDialogContent className="max-w-2xl">
+          <DaisyDialogHeader>
+            <DaisyDialogTitle>Create New Schedule</DaisyDialogTitle>
+            <DaisyDialogDescription>
               Set up automated report generation and delivery
-            </DialogDescription>
-          </DialogHeader>
+            </DaisyDialogDescription>
+          </DaisyDialogHeader>
           <ScheduleForm />
-        </DialogContent>
-      </Dialog>
+        </DaisyDialogContent>
+      </DaisyDialog>
 
       {/* Edit Schedule Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Edit Schedule</DialogTitle>
-            <DialogDescription>
+      <DaisyDialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DaisyDialogContent className="max-w-2xl">
+          <DaisyDialogHeader>
+            <DaisyDialogTitle>Edit Schedule</DaisyDialogTitle>
+            <DaisyDialogDescription>
               Update the scheduled report configuration
-            </DialogDescription>
-          </DialogHeader>
+            </DaisyDialogDescription>
+          </DaisyDialogHeader>
           <ScheduleForm isEdit />
-        </DialogContent>
-      </Dialog>
+        </DaisyDialogContent>
+      </DaisyDialog>
     </div>
   );
 } 

@@ -6,16 +6,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from '@/hooks/use-toast';
 
 // UI Components
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import {
   Sheet,
   SheetContent,
@@ -295,20 +295,20 @@ export default function DocumentUpload({
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+    <DaisyCard className="w-full max-w-4xl mx-auto">
+      <DaisyCardHeader>
+        <DaisyCardTitle className="flex items-center gap-2">
           <Upload className="h-5 w-5" />
           Upload Documents
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
+        </DaisyCardTitle>
+      
+      <DaisyCardContent className="space-y-6">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Document Metadata */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Title *</Label>
-              <Input
+              <DaisyLabel htmlFor="title">Title *</DaisyLabel>
+              <DaisyInput
                 id="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -318,56 +318,56 @@ export default function DocumentUpload({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="category">Category *</Label>
-              <Select value={category} onValueChange={setCategory} required>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
+              <DaisyLabel htmlFor="category">Category *</DaisyLabel>
+              <DaisySelect value={category} onValueChange={setCategory} required>
+                <DaisySelectTrigger>
+                  <DaisySelectValue placeholder="Select category" />
                 </SelectTrigger>
-                <SelectContent>
+                <DaisySelectContent>
                   {DOCUMENT_CATEGORIES.map(cat => (
-                    <SelectItem key={cat.value} value={cat.value}>
+                    <DaisySelectItem key={cat.value} value={cat.value}>
                       {cat.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
-              </Select>
+              </DaisySelect>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="type">Type *</Label>
-              <Select value={type} onValueChange={setType} required>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select type" />
+              <DaisyLabel htmlFor="type">Type *</DaisyLabel>
+              <DaisySelect value={type} onValueChange={setType} required>
+                <DaisySelectTrigger>
+                  <DaisySelectValue placeholder="Select type" />
                 </SelectTrigger>
-                <SelectContent>
+                <DaisySelectContent>
                   {DOCUMENT_TYPES.map(docType => (
-                    <SelectItem key={docType.value} value={docType.value}>
+                    <DaisySelectItem key={docType.value} value={docType.value}>
                       {docType.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
-              </Select>
+              </DaisySelect>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confidentiality">Confidentiality</Label>
-              <Select value={confidentiality} onValueChange={setConfidentiality}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select confidentiality level" />
+              <DaisyLabel htmlFor="confidentiality">Confidentiality</DaisyLabel>
+              <DaisySelect value={confidentiality} onValueChange={setConfidentiality}>
+                <DaisySelectTrigger>
+                  <DaisySelectValue placeholder="Select confidentiality level" />
                 </SelectTrigger>
-                <SelectContent>
+                <DaisySelectContent>
                   {CONFIDENTIALITY_LEVELS.map(level => (
-                    <SelectItem key={level.value} value={level.value}>
+                    <DaisySelectItem key={level.value} value={level.value}>
                       {level.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
-              </Select>
+              </DaisySelect>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="businessUnit">Business Unit</Label>
-              <Input
+              <DaisyLabel htmlFor="businessUnit">Business Unit</DaisyLabel>
+              <DaisyInput
                 id="businessUnit"
                 value={businessUnit}
                 onChange={(e) => setBusinessUnit(e.target.value)}
@@ -376,8 +376,8 @@ export default function DocumentUpload({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="department">Department</Label>
-              <Input
+              <DaisyLabel htmlFor="department">Department</DaisyLabel>
+              <DaisyInput
                 id="department"
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
@@ -387,8 +387,8 @@ export default function DocumentUpload({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea
+            <DaisyLabel htmlFor="description">Description</DaisyLabel>
+            <DaisyTextarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -399,8 +399,8 @@ export default function DocumentUpload({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="tags">Tags (comma-separated)</Label>
-              <Input
+              <DaisyLabel htmlFor="tags">Tags (comma-separated)</DaisyLabel>
+              <DaisyInput
                 id="tags"
                 value={tags}
                 onChange={(e) => setTags(e.target.value)}
@@ -409,8 +409,8 @@ export default function DocumentUpload({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="riskIds">Related Risk IDs (comma-separated)</Label>
-              <Input
+              <DaisyLabel htmlFor="riskIds">Related Risk IDs (comma-separated)</DaisyLabel>
+              <DaisyInput
                 id="riskIds"
                 value={riskIds}
                 onChange={(e) => setRiskIds(e.target.value)}
@@ -420,8 +420,8 @@ export default function DocumentUpload({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="controlIds">Related Control IDs (comma-separated)</Label>
-            <Input
+            <DaisyLabel htmlFor="controlIds">Related Control IDs (comma-separated)</DaisyLabel>
+            <DaisyInput
               id="controlIds"
               value={controlIds}
               onChange={(e) => setControlIds(e.target.value)}
@@ -431,19 +431,19 @@ export default function DocumentUpload({
 
           {/* AI Analysis Option */}
           <div className="flex items-center space-x-2">
-            <Checkbox
+            <DaisyCheckbox
               id="aiAnalysis"
               checked={aiAnalysis}
               onCheckedChange={(checked) => setAiAnalysis(checked as boolean)}
             />
-            <Label htmlFor="aiAnalysis" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            <DaisyLabel htmlFor="aiAnalysis" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               Enable AI analysis for automatic content extraction and classification
-            </Label>
+            </DaisyLabel>
           </div>
 
           {/* File Upload Area */}
           <div className="space-y-4">
-            <Label>Files</Label>
+            <DaisyLabel>Files</DaisyLabel>
             
             <div
               {...getRootProps()}
@@ -479,7 +479,7 @@ export default function DocumentUpload({
             {/* File List */}
             {files.length > 0 && (
               <div className="space-y-2">
-                <Label>Selected Files ({files.length}/{maxFiles})</Label>
+                <DaisyLabel>Selected Files ({files.length}/{maxFiles})</DaisyLabel>
                 
                 <div className="space-y-2 max-h-60 overflow-y-auto">
                   {files.map((file) => (
@@ -502,7 +502,7 @@ export default function DocumentUpload({
                         
                         {file.status === 'uploading' && (
                           <div className="mt-1">
-                            <Progress value={file.progress} className="h-1" />
+                            <DaisyProgress value={file.progress} className="h-1" />
                             <p className="text-xs text-gray-500 mt-1">{file.progress}% uploaded</p>
                           </div>
                         )}
@@ -517,18 +517,18 @@ export default function DocumentUpload({
                           <CheckCircle className="h-4 w-4 text-green-500" />
                         )}
                         {file.status === 'error' && (
-                          <AlertCircle className="h-4 w-4 text-red-500" />
+                          <DaisyAlertCircle className="h-4 w-4 text-red-500" />
                         )}
                         
                         {!isUploading && (
-                          <Button
+                          <DaisyButton
                             type="button"
                             variant="ghost"
                             size="sm"
                             onClick={() => removeFile(file.id)}
                           >
                             <X className="h-4 w-4" />
-                          </Button>
+                          </DaisyButton>
                         )}
                       </div>
                     </div>
@@ -540,25 +540,25 @@ export default function DocumentUpload({
 
           {/* Error/Success Messages */}
           {uploadError && (
-            <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{uploadError}</AlertDescription>
-            </Alert>
+            <DaisyAlert variant="error">
+              <DaisyAlertCircle className="h-4 w-4" />
+              <DaisyAlertDescription>{uploadError}
+            </DaisyAlert>
           )}
 
           {uploadSuccess && (
-            <Alert>
+            <DaisyAlert>
               <CheckCircle className="h-4 w-4" />
-              <AlertDescription>
+              <DaisyAlertDescription>
                 Document uploaded successfully! 
                 {aiAnalysis && ' AI analysis is processing in the background.'}
-              </AlertDescription>
-            </Alert>
+              
+            </DaisyAlert>
           )}
 
           {/* Submit Button */}
           <div className="flex space-x-4">
-            <Button
+            <DaisyButton
               type="submit"
               disabled={isUploading || files.length === 0 || !title || !category || !type}
               className="flex-1"
@@ -574,19 +574,19 @@ export default function DocumentUpload({
                   Upload Document
                 </>
               )}
-            </Button>
+            </DaisyButton>
             
-            <Button
+            <DaisyButton
               type="button"
               variant="outline"
               onClick={resetForm}
               disabled={isUploading}
             >
               Reset
-            </Button>
+            </DaisyButton>
           </div>
         </form>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 } 

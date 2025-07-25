@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
   FileText,
   Plus,
@@ -408,7 +408,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
     const Icon = component.icon;
     
     return (
-      <Card
+      <DaisyCard
         key={component.id}
         className={`relative transition-all duration-200 hover:shadow-lg cursor-pointer ${
           selectedComponent === component.id ? 'ring-2 ring-blue-500' : ''
@@ -421,14 +421,14 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
         }}
         onClick={() => setSelectedComponent(component.id)}
       >
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center justify-between text-sm">
+        <DaisyCardHeader className="pb-2">
+          <DaisyCardTitle className="flex items-center justify-between text-sm">
             <div className="flex items-center space-x-2">
               <Icon className="w-4 h-4" />
               <span>{component.title}</span>
             </div>
             <div className="flex items-center space-x-1">
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={(e) => {
@@ -437,8 +437,8 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
                 }}
               >
                 <Settings className="w-3 h-3" />
-              </Button>
-              <Button
+              </DaisyButton>
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={(e) => {
@@ -447,14 +447,14 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
                 }}
               >
                 <Trash2 className="w-3 h-3" />
-              </Button>
+              </DaisyButton>
             </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="pt-0">
+          </DaisyCardTitle>
+        
+        <DaisyCardContent className="pt-0">
           {renderComponentContent(component)}
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     );
   };
 
@@ -476,7 +476,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
             </div>
             <div className="flex items-center justify-between text-sm">
               <span>Risk Score</span>
-              <Badge variant="secondary">{component.data?.riskScore}/5</Badge>
+              <DaisyBadge variant="secondary">{component.data?.riskScore}/5</DaisyBadge>
             </div>
           </div>
         );
@@ -492,9 +492,9 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
               {component.data?.frameworks?.slice(0, 2).map((framework: any, index: number) => (
                 <div key={index} className="flex items-center justify-between text-sm">
                   <span>{framework.name}</span>
-                  <Badge variant={framework.status === 'compliant' ? 'default' : 'secondary'}>
+                  <DaisyBadge variant={framework.status === 'compliant' ? 'default' : 'secondary'}>
                     {framework.score}%
-                  </Badge>
+                  </DaisyBadge>
                 </div>
               ))}
             </div>
@@ -520,9 +520,9 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
               <div key={index} className="p-2 bg-purple-50 rounded">
                 <div className="font-medium text-sm">{rec.title}</div>
                 <div className="text-xs text-gray-600">{rec.description}</div>
-                <Badge variant="outline" className="text-xs mt-1">
+                <DaisyBadge variant="outline" className="text-xs mt-1">
                   {rec.confidence}% confidence
-                </Badge>
+                </DaisyBadge>
               </div>
             ))}
           </div>
@@ -555,7 +555,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
             <h4 className="font-medium text-gray-900 mb-3">Quick Templates</h4>
             <div className="space-y-2">
               {REPORT_TEMPLATES.map(template => (
-                <Button
+                <DaisyButton
                   key={template.id}
                   variant="outline"
                   size="sm"
@@ -564,7 +564,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
                 >
                   <FileText className="w-4 h-4 mr-2" />
                   {template.name}
-                </Button>
+                </DaisyButton>
               ))}
             </div>
           </div>
@@ -610,42 +610,42 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
         <div className="bg-white border-b border-gray-200 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Input
+              <DaisyInput
                 value={reportTitle}
                 onChange={(e) => setReportTitle(e.target.value)}
                 className="font-semibold text-lg border-none p-0 h-auto focus:ring-0"
                 placeholder="Report Title"
               />
-              <Badge variant="secondary" className="text-xs">
+              <DaisyBadge variant="secondary" className="text-xs">
                 {components.length} components
-              </Badge>
+              </DaisyBadge>
             </div>
             
             <div className="flex items-center space-x-2">
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowComponentLibrary(!showComponentLibrary)}
               >
                 <Layout className="w-4 h-4" />
-              </Button>
+              </DaisyButton>
               
-              <Button
+              <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsPreviewMode(!isPreviewMode)}
               >
                 <Eye className="w-4 h-4" />
                 {isPreviewMode ? 'Edit' : 'Preview'}
-              </Button>
+              </DaisyButton>
               
-              <Button variant="outline" size="sm" onClick={saveReport}>
+              <DaisyButton variant="outline" size="sm" onClick={saveReport}>
                 <Save className="w-4 h-4 mr-2" />
                 Save
-              </Button>
+              </DaisyButton>
               
               <div className="flex items-center space-x-1">
-                <Button
+                <DaisyButton
                   variant="outline"
                   size="sm"
                   onClick={() => exportReport('pdf')}
@@ -653,12 +653,12 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
                 >
                   <Download className="w-4 h-4 mr-2" />
                   {isGenerating ? 'Generating...' : 'Export'}
-                </Button>
+                </DaisyButton>
                 
-                <Button variant="outline" size="sm" onClick={() => onShare?.({ title: reportTitle, components })}>
+                <DaisyButton variant="outline" size="sm" onClick={() => onShare?.({ title: reportTitle, components })}>
                   <Share className="w-4 h-4 mr-2" />
                   Share
-                </Button>
+                </DaisyButton>
               </div>
             </div>
           </div>
@@ -685,10 +685,10 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
                 <p className="text-sm mb-4">
                   Drag components from the sidebar or choose a template to get started
                 </p>
-                <Button onClick={() => loadTemplate('executive-summary')}>
+                <DaisyButton onClick={() => loadTemplate('executive-summary')}>
                   <Plus className="w-4 h-4 mr-2" />
                   Use Executive Summary Template
-                </Button>
+                </DaisyButton>
               </div>
             </div>
           ) : (
@@ -706,7 +706,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
           {/* Component configuration options would go here */}
           <div className="space-y-4">
             <div>
-              <Label>Data Source</Label>
+              <DaisyLabel>Data Source</DaisyLabel>
               <select className="w-full mt-1 p-2 border border-gray-300 rounded">
                 <option>Live Data</option>
                 <option>Sample Data</option>
@@ -714,7 +714,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
               </select>
             </div>
             <div>
-              <Label>Time Range</Label>
+              <DaisyLabel>Time Range</DaisyLabel>
               <select className="w-full mt-1 p-2 border border-gray-300 rounded">
                 <option>Last 30 days</option>
                 <option>Last 90 days</option>
@@ -723,7 +723,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
               </select>
             </div>
             <div>
-              <Label>Refresh Rate</Label>
+              <DaisyLabel>Refresh Rate</DaisyLabel>
               <select className="w-full mt-1 p-2 border border-gray-300 rounded">
                 <option>Real-time</option>
                 <option>Every 5 minutes</option>

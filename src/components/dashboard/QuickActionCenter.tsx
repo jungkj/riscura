@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { useRouter } from 'next/navigation';
 
 import {
@@ -140,7 +140,7 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
       id: 'schedule-audit',
       title: 'Schedule Audit',
       description: 'Plan compliance audit',
-      icon: <Calendar className="w-5 h-5" />,
+      icon: <DaisyCalendar className="w-5 h-5" />,
       color: 'bg-orange-50 hover:bg-orange-100 border-orange-200 text-orange-700',
       href: '/dashboard/workflows/audit',
       roles: ['executive', 'auditor']
@@ -149,7 +149,7 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
       id: 'review-alerts',
       title: 'Review Alerts',
       description: 'Check critical notifications',
-      icon: <AlertTriangle className="w-5 h-5" />,
+      icon: <DaisyAlertTriangle className="w-5 h-5" />,
       color: 'bg-yellow-50 hover:bg-yellow-100 border-yellow-200 text-yellow-700',
       href: '/dashboard/alerts',
       badge: '3',
@@ -244,19 +244,19 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
   };
 
   return (
-    <Card className="bg-[#FAFAFA] border-[#D8C3A5]">
-      <CardHeader>
+    <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+      <DaisyCardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold text-[#191919] font-inter">
+          <DaisyCardTitle className="text-lg font-semibold text-[#191919] font-inter">
             Quick Actions
-          </CardTitle>
+          </DaisyCardTitle>
           <p className="text-sm text-[#A8A8A8] font-inter">
             {viewMode === 'executive' ? 'Executive shortcuts' : 'Analyst tools'}
           </p>
         </div>
-      </CardHeader>
+      
 
-      <CardContent>
+      <DaisyCardContent>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {getPrioritizedActions().map((action, index) => (
             <motion.div
@@ -267,7 +267,7 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <Button
+              <DaisyButton
                 variant="outline"
                 className={`h-auto p-2 border-2 transition-all duration-200 hover:shadow-md ${action.color}`}
                 onClick={() => handleActionClick(action)}
@@ -276,12 +276,12 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
                   <div className="relative">
                     {action.icon}
                     {action.badge && (
-                      <Badge 
+                      <DaisyBadge 
                         className="absolute -top-1 -right-1 text-xs px-1 py-0 h-3 min-w-3"
                         variant={action.badge === 'AI' ? 'default' : action.badge === 'New' ? 'secondary' : 'destructive'}
                       >
                         {action.badge}
-                      </Badge>
+                      </DaisyBadge>
                     )}
                   </div>
                   <div>
@@ -298,7 +298,7 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
                     )}
                   </div>
                 </div>
-              </Button>
+              </DaisyButton>
             </motion.div>
           ))}
         </div>
@@ -341,7 +341,7 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
             <span>Pro tip: Use keyboard shortcuts for faster navigation</span>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </DaisyCardBody>
+    </DaisyCard>
   );
 } 

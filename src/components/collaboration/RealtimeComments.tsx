@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import { 
   MessageCircle,
   Send,
@@ -393,15 +393,15 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
           comment.isPinned ? 'bg-yellow-50 p-3 rounded-lg' : ''
         }`}
       >
-        <Avatar className="w-8 h-8">
-          <AvatarImage src={comment.author.avatar} />
-          <AvatarFallback>{comment.author.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-        </Avatar>
+        <DaisyAvatar className="w-8 h-8">
+          <DaisyAvatarImage src={comment.author.avatar} />
+          <DaisyAvatarFallback>{comment.author.name.split(' ').map(n => n[0]).join('')}</DaisyAvatarFallback>
+        </DaisyAvatar>
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-2 mb-1">
             <span className="font-medium text-sm">{comment.author.name}</span>
-            <Badge variant="outline" className="text-xs">{comment.author.role}</Badge>
+            <DaisyBadge variant="outline" className="text-xs">{comment.author.role}</DaisyBadge>
             {comment.author.isOnline && (
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
             )}
@@ -410,30 +410,30 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
             </span>
             {comment.isPinned && <Pin className="w-3 h-3 text-yellow-600" />}
             {comment.isResolved && <CheckCircle className="w-3 h-3 text-green-600" />}
-            <Badge 
+            <DaisyBadge 
               variant={comment.priority === 'high' ? 'destructive' : 
                       comment.priority === 'medium' ? 'default' : 'secondary'}
               className="text-xs"
             >
               {comment.priority}
-            </Badge>
+            </DaisyBadge>
           </div>
 
           {isEditing ? (
             <div className="space-y-2">
-              <Textarea
+              <DaisyTextarea
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 className="text-sm"
                 rows={3}
               />
               <div className="flex space-x-2">
-                <Button size="sm" onClick={() => setEditingComment(null)}>
+                <DaisyButton size="sm" onClick={() => setEditingComment(null)}>
                   Save
-                </Button>
-                <Button variant="outline" size="sm" onClick={() => setEditingComment(null)}>
+                </DaisyButton>
+                <DaisyButton variant="outline" size="sm" onClick={() => setEditingComment(null)}>
                   Cancel
-                </Button>
+                </DaisyButton>
               </div>
             </div>
           ) : (
@@ -445,9 +445,9 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
               {comment.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1 mb-2">
                   {comment.tags.map(tag => (
-                    <Badge key={tag} variant="secondary" className="text-xs">
+                    <DaisyBadge key={tag} variant="secondary" className="text-xs">
                       #{tag}
-                    </Badge>
+                    </DaisyBadge>
                   ))}
                 </div>
               )}
@@ -455,7 +455,7 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
               {comment.reactions.length > 0 && (
                 <div className="flex space-x-1 mb-2">
                   {comment.reactions.map(reaction => (
-                    <Button
+                    <DaisyButton
                       key={reaction.emoji}
                       variant="ghost"
                       size="sm"
@@ -463,13 +463,13 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
                       onClick={() => toggleReaction(comment.id, reaction.emoji)}
                     >
                       {reaction.emoji} {reaction.count}
-                    </Button>
+                    </DaisyButton>
                   ))}
                 </div>
               )}
 
               <div className="flex items-center space-x-2 text-xs">
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   className="h-6 px-2"
@@ -477,9 +477,9 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
                 >
                   <Reply className="w-3 h-3 mr-1" />
                   Reply
-                </Button>
+                </DaisyButton>
 
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   className="h-6 px-2"
@@ -487,11 +487,11 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
                 >
                   <Heart className="w-3 h-3 mr-1" />
                   Like
-                </Button>
+                </DaisyButton>
 
                 {isAuthor && (
                   <>
-                    <Button
+                    <DaisyButton
                       variant="ghost"
                       size="sm"
                       className="h-6 px-2"
@@ -499,8 +499,8 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
                     >
                       <Edit className="w-3 h-3 mr-1" />
                       Edit
-                    </Button>
-                    <Button
+                    </DaisyButton>
+                    <DaisyButton
                       variant="ghost"
                       size="sm"
                       className="h-6 px-2 text-red-600"
@@ -508,11 +508,11 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
                     >
                       <Trash2 className="w-3 h-3 mr-1" />
                       Delete
-                    </Button>
+                    </DaisyButton>
                   </>
                 )}
 
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   className="h-6 px-2"
@@ -520,9 +520,9 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
                 >
                   <Pin className="w-3 h-3 mr-1" />
                   {comment.isPinned ? 'Unpin' : 'Pin'}
-                </Button>
+                </DaisyButton>
 
-                <Button
+                <DaisyButton
                   variant="ghost"
                   size="sm"
                   className="h-6 px-2"
@@ -530,7 +530,7 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
                 >
                   <CheckCircle className="w-3 h-3 mr-1" />
                   {comment.isResolved ? 'Unresolve' : 'Resolve'}
-                </Button>
+                </DaisyButton>
               </div>
             </>
           )}
@@ -549,16 +549,16 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
             Comments & Collaboration
           </h3>
           <div className="flex items-center space-x-2">
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={() => setNotifications(!notifications)}
             >
               {notifications ? <Bell className="w-4 h-4" /> : <BellOff className="w-4 h-4" />}
-            </Button>
-            <Badge variant="secondary" className="text-xs">
+            </DaisyButton>
+            <DaisyBadge variant="secondary" className="text-xs">
               {participants.filter(p => p.isOnline).length} online
-            </Badge>
+            </DaisyBadge>
           </div>
         </div>
 
@@ -567,19 +567,19 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
           <span className="text-sm text-gray-600">Active:</span>
           <div className="flex -space-x-2">
             {participants.filter(p => p.isOnline).map(participant => (
-              <Avatar key={participant.id} className="w-6 h-6 border-2 border-white">
-                <AvatarImage src={participant.avatar} />
-                <AvatarFallback className="text-xs">
+              <DaisyAvatar key={participant.id} className="w-6 h-6 border-2 border-white">
+                <DaisyAvatarImage src={participant.avatar} />
+                <DaisyAvatarFallback className="text-xs">
                   {participant.name.split(' ').map(n => n[0]).join('')}
-                </AvatarFallback>
-              </Avatar>
+                </DaisyAvatarFallback>
+              </DaisyAvatar>
             ))}
           </div>
         </div>
 
         {/* Filters */}
         <div className="flex items-center space-x-2">
-          <Input
+          <DaisyInput
             placeholder="Search comments..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -595,7 +595,7 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
             <option value="medium">Medium</option>
             <option value="low">Low</option>
           </select>
-          <Button
+          <DaisyButton
             variant="ghost"
             size="sm"
             onClick={() => setShowResolved(!showResolved)}
@@ -603,7 +603,7 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
           >
             <CheckCircle className="w-4 h-4 mr-1" />
             Resolved
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
@@ -645,25 +645,25 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
         {replyingTo && (
           <div className="mb-2 p-2 bg-blue-50 rounded text-sm">
             <span className="text-blue-600">Replying to comment</span>
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               className="ml-2 h-auto p-0 text-blue-600"
               onClick={() => setReplyingTo(null)}
             >
               Cancel
-            </Button>
+            </DaisyButton>
           </div>
         )}
 
         <div className="flex space-x-2">
-          <Avatar className="w-8 h-8">
-            <AvatarImage src={currentUser.avatar} />
-            <AvatarFallback>{currentUser.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-          </Avatar>
+          <DaisyAvatar className="w-8 h-8">
+            <DaisyAvatarImage src={currentUser.avatar} />
+            <DaisyAvatarFallback>{currentUser.name.split(' ').map(n => n[0]).join('')}</DaisyAvatarFallback>
+          </DaisyAvatar>
           
           <div className="flex-1">
-            <Textarea
+            <DaisyTextarea
               placeholder="Add a comment... Use @username to mention someone or #tag to add tags"
               value={newComment}
               onChange={(e) => {
@@ -681,22 +681,22 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
             
             <div className="flex items-center justify-between mt-2">
               <div className="flex items-center space-x-2">
-                <Button variant="ghost" size="sm">
+                <DaisyButton variant="ghost" size="sm">
                   <Paperclip className="w-4 h-4" />
-                </Button>
-                <Button variant="ghost" size="sm">
+                </DaisyButton>
+                <DaisyButton variant="ghost" size="sm">
                   <Smile className="w-4 h-4" />
-                </Button>
-                <Button variant="ghost" size="sm">
+                </DaisyButton>
+                <DaisyButton variant="ghost" size="sm">
                   <AtSign className="w-4 h-4" />
-                </Button>
+                </DaisyButton>
               </div>
               
               <div className="flex items-center space-x-2">
                 <span className="text-xs text-gray-500">Cmd+Enter to send</span>
-                <Button onClick={addComment} disabled={!newComment.trim()}>
+                <DaisyButton onClick={addComment} disabled={!newComment.trim()}>
                   <Send className="w-4 h-4" />
-                </Button>
+                </DaisyButton>
               </div>
             </div>
           </div>

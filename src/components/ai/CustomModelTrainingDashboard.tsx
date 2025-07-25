@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
   Brain, 
   Database,
@@ -392,7 +392,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
       case 'training':
       case 'running': return <Play className="h-4 w-4 text-blue-600" />;
       case 'pending': return <Clock className="h-4 w-4 text-yellow-600" />;
-      case 'failed': return <AlertTriangle className="h-4 w-4 text-red-600" />;
+      case 'failed': return <DaisyAlertTriangle className="h-4 w-4 text-red-600" />;
       default: return <Monitor className="h-4 w-4 text-gray-600" />;
     }
   };
@@ -401,14 +401,14 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
 
   if (loading && !metrics) {
     return (
-      <Card className={cn("w-full", className)}>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <DaisyCard className={cn("w-full", className)}>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-blue-600 animate-pulse" />
             Loading Custom Model Training Dashboard...
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="space-y-3">
             {[...Array(3)].map((_, i) => (
               <div key={i} className="animate-pulse">
@@ -417,8 +417,8 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     );
   }
 
@@ -434,26 +434,26 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
           <p className="text-gray-600">Train and deploy organization-specific AI models</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
+          <DaisyButton variant="outline" size="sm">
             <Upload className="h-4 w-4 mr-1" />
             Import Data
-          </Button>
-          <Button variant="outline" size="sm" onClick={fetchTrainingData} disabled={loading}>
+          </DaisyButton>
+          <DaisyButton variant="outline" size="sm" onClick={fetchTrainingData} disabled={loading}>
             <RefreshCw className={cn("h-4 w-4 mr-1", loading && "animate-spin")} />
             Refresh
-          </Button>
-          <Button size="sm">
+          </DaisyButton>
+          <DaisyButton size="sm">
             <Play className="h-4 w-4 mr-1" />
             New Training Job
-          </Button>
+          </DaisyButton>
         </div>
       </div>
 
       {/* Training Metrics Overview */}
       {metrics && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card>
-            <CardContent className="p-4">
+          <DaisyCard>
+            <DaisyCardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Active Training Jobs</p>
@@ -464,11 +464,11 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
               <div className="text-xs text-gray-500 mt-1">
                 {metrics.totalJobs} total jobs
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
-          <Card>
-            <CardContent className="p-4">
+          <DaisyCard>
+            <DaisyCardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Deployed Models</p>
@@ -479,11 +479,11 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
               <div className="text-xs text-gray-500 mt-1">
                 {metrics.totalModels} trained models
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
-          <Card>
-            <CardContent className="p-4">
+          <DaisyCard>
+            <DaisyCardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Knowledge Bases</p>
@@ -494,11 +494,11 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
               <div className="text-xs text-gray-500 mt-1">
                 Active knowledge sources
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
 
-          <Card>
-            <CardContent className="p-4">
+          <DaisyCard>
+            <DaisyCardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">A/B Experiments</p>
@@ -509,33 +509,33 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
               <div className="text-xs text-gray-500 mt-1">
                 Running experiments
               </div>
-            </CardContent>
-          </Card>
+            </DaisyCardBody>
+          </DaisyCard>
         </div>
       )}
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-6">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="training">Training Jobs</TabsTrigger>
-          <TabsTrigger value="knowledge">Knowledge Bases</TabsTrigger>
-          <TabsTrigger value="experiments">A/B Testing</TabsTrigger>
-          <TabsTrigger value="deployments">Deployments</TabsTrigger>
-          <TabsTrigger value="performance">Performance</TabsTrigger>
-        </TabsList>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
+        <DaisyTabsList className="grid w-full grid-cols-6">
+          <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="training">Training Jobs</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="knowledge">Knowledge Bases</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="experiments">A/B Testing</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="deployments">Deployments</DaisyTabsTrigger>
+          <DaisyTabsTrigger value="performance">Performance</DaisyTabsTrigger>
+        </DaisyTabsList>
 
         {/* Overview Tab */}
-        <TabsContent value="overview" className="space-y-6">
+        <DaisyTabsContent value="overview" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Training Status Distribution */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-blue-600" />
                   Training Job Status
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </DaisyCardTitle>
+              
+              <DaisyCardContent>
                 {metrics && (
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
@@ -558,23 +558,23 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                           ))}
                         </Pie>
-                        <Tooltip />
+                        <DaisyTooltip />
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
                 )}
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
             {/* Model Performance Overview */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-green-600" />
                   Model Performance Trends
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </DaisyCardTitle>
+              
+              <DaisyCardContent>
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={performance.slice(0, 7).map((p, i) => ({
@@ -585,7 +585,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="day" tick={{ fontSize: 10 }} />
                       <YAxis tick={{ fontSize: 10 }} />
-                      <Tooltip />
+                      <DaisyTooltip />
                       <Legend />
                       <Line 
                         type="monotone" 
@@ -604,19 +604,19 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           </div>
 
           {/* Recent Models */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="flex items-center gap-2">
                 <Brain className="h-5 w-5 text-purple-600" />
                 Recent Models
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+              </DaisyCardTitle>
+            
+            <DaisyCardContent>
               <div className="space-y-3">
                 {modelOverviews.slice(0, 5).map((model) => (
                   <div key={model.id} className="flex items-center justify-between p-3 border rounded">
@@ -634,27 +634,27 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                         <span className="text-gray-500">Accuracy:</span>
                         <span className="ml-1 font-medium">{(model.accuracy * 100).toFixed(1)}%</span>
                       </div>
-                      <Badge className={getStatusColor(model.deploymentStatus)}>
+                      <DaisyBadge className={getStatusColor(model.deploymentStatus)}>
                         {model.deploymentStatus}
-                      </Badge>
+                      </DaisyBadge>
                     </div>
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
 
         {/* Training Jobs Tab */}
-        <TabsContent value="training" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+        <DaisyTabsContent value="training" className="space-y-4">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="flex items-center gap-2">
                 <Play className="h-5 w-5 text-blue-600" />
                 Training Jobs ({trainingJobs.length})
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+              </DaisyCardTitle>
+            
+            <DaisyCardContent>
               <div className="space-y-3">
                 {trainingJobs.map((job) => (
                   <div key={job.id} className="border rounded p-4">
@@ -669,17 +669,17 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Badge className={getStatusColor(job.status)}>
+                        <DaisyBadge className={getStatusColor(job.status)}>
                           {job.status}
-                        </Badge>
+                        </DaisyBadge>
                         {job.status === 'pending' && (
-                          <Button 
+                          <DaisyButton 
                             size="sm" 
                             onClick={() => handleStartTraining(job.id)}
                           >
                             <Play className="h-3 w-3 mr-1" />
                             Start
-                          </Button>
+                          </DaisyButton>
                         )}
                       </div>
                     </div>
@@ -692,7 +692,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                           <span>{job.progress?.progressPercentage?.toFixed(1) || 0}%</span>
                         </div>
                         {/* @ts-ignore */}
-                        <Progress value={job.progress?.progressPercentage || 0} />
+                        <DaisyProgress value={job.progress?.progressPercentage || 0} />
                         <div className="grid grid-cols-3 gap-4 text-xs text-gray-500">
                           <div>
                             {/* @ts-ignore */}
@@ -747,20 +747,20 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
 
         {/* Knowledge Bases Tab */}
-        <TabsContent value="knowledge" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+        <DaisyTabsContent value="knowledge" className="space-y-4">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="flex items-center gap-2">
                 <BookOpen className="h-5 w-5 text-purple-600" />
                 Knowledge Bases ({knowledgeBases.length})
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+              </DaisyCardTitle>
+            
+            <DaisyCardContent>
               <div className="space-y-4">
                 {knowledgeBases.map((kb) => (
                   <div key={kb.id} className="border rounded p-4">
@@ -770,11 +770,11 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                         <p className="text-sm text-gray-500">{kb.description}</p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Badge variant="outline">v{kb.version}</Badge>
-                        <Button size="sm" variant="outline">
+                        <DaisyBadge variant="outline">v{kb.version}</DaisyBadge>
+                        <DaisyButton size="sm" variant="outline">
                           <Settings className="h-3 w-3 mr-1" />
                           Manage
-                        </Button>
+                        </DaisyButton>
                       </div>
                     </div>
                     
@@ -799,20 +799,20 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
 
         {/* A/B Testing Tab */}
-        <TabsContent value="experiments" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+        <DaisyTabsContent value="experiments" className="space-y-4">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="flex items-center gap-2">
                 <TestTube className="h-5 w-5 text-orange-600" />
                 A/B Test Experiments ({experiments.length})
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+              </DaisyCardTitle>
+            
+            <DaisyCardContent>
               <div className="space-y-4">
                 {experiments.map((experiment) => (
                   <div key={experiment.id} className="border rounded p-4">
@@ -821,9 +821,9 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                         <h4 className="font-medium">{experiment.name}</h4>
                         <p className="text-sm text-gray-500">{experiment.hypothesis}</p>
                       </div>
-                      <Badge className={getStatusColor(experiment.status)}>
+                      <DaisyBadge className={getStatusColor(experiment.status)}>
                         {experiment.status}
-                      </Badge>
+                      </DaisyBadge>
                     </div>
                     
                     <div className="space-y-3">
@@ -866,20 +866,20 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
 
         {/* Deployments Tab */}
-        <TabsContent value="deployments" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+        <DaisyTabsContent value="deployments" className="space-y-4">
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="flex items-center gap-2">
                 <Rocket className="h-5 w-5 text-green-600" />
                 Model Deployments ({deployments.length})
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+              </DaisyCardTitle>
+            
+            <DaisyCardContent>
               <div className="space-y-4">
                 {deployments.map((deployment) => (
                   <div key={deployment.id} className="border rounded p-4">
@@ -893,12 +893,12 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Badge className={getStatusColor(deployment.status)}>
+                        <DaisyBadge className={getStatusColor(deployment.status)}>
                           {deployment.status}
-                        </Badge>
-                        <Badge className={getStatusColor(deployment.health?.status || 'unknown')}>
+                        </DaisyBadge>
+                        <DaisyBadge className={getStatusColor(deployment.health?.status || 'unknown')}>
                           {deployment.health?.status || 'unknown'}
-                        </Badge>
+                        </DaisyBadge>
                       </div>
                     </div>
                     
@@ -923,18 +923,18 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </DaisyCardBody>
+          </DaisyCard>
+        </DaisyTabsContent>
 
         {/* Performance Tab */}
-        <TabsContent value="performance" className="space-y-4">
+        <DaisyTabsContent value="performance" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Performance Metrics</CardTitle>
-              </CardHeader>
-              <CardContent>
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle>Performance Metrics</DaisyCardTitle>
+              
+              <DaisyCardContent>
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={performance.slice(0, 7).map((p, i) => ({
@@ -946,7 +946,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="day" tick={{ fontSize: 10 }} />
                       <YAxis tick={{ fontSize: 10 }} />
-                      <Tooltip />
+                      <DaisyTooltip />
                       <Legend />
                       <Area 
                         type="monotone" 
@@ -969,14 +969,14 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Business Impact</CardTitle>
-              </CardHeader>
-              <CardContent>
+            <DaisyCard>
+              <DaisyCardHeader>
+                <DaisyCardTitle>Business Impact</DaisyCardTitle>
+              
+              <DaisyCardContent>
                 <div className="space-y-4">
                   {performance.slice(0, 1).map((p) => (
                     <div key={p.modelId} className="space-y-3">
@@ -1000,7 +1000,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                         <div className="space-y-2">
                           {p.feedbackAnalysis?.commonIssues?.map((issue, index) => (
                             <div key={index} className="text-sm text-gray-600 flex items-center gap-2">
-                              <AlertTriangle className="h-3 w-3 text-yellow-500" />
+                              <DaisyAlertTriangle className="h-3 w-3 text-yellow-500" />
                               {issue}
                             </div>
                           )) || <div className="text-sm text-gray-600">No issues reported</div>}
@@ -1013,9 +1013,9 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                           {p.recommendations?.map((rec, index) => (
                             <div key={index} className="text-sm">
                               <div className="flex items-center gap-2">
-                                <Badge className={getStatusColor(rec.priority)}>
+                                <DaisyBadge className={getStatusColor(rec.priority)}>
                                   {rec.priority}
-                                </Badge>
+                                </DaisyBadge>
                                 <span className="font-medium">{rec.type}</span>
                               </div>
                               <p className="text-gray-600 mt-1">{rec.description}</p>
@@ -1026,11 +1026,11 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
+              </DaisyCardBody>
+            </DaisyCard>
           </div>
-        </TabsContent>
-      </Tabs>
+        </DaisyTabsContent>
+      </DaisyTabs>
     </div>
   );
 }; 

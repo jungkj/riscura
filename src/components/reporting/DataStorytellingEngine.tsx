@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
   BookOpen,
   Brain,
@@ -411,19 +411,19 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
               if (!viz) return null;
 
               return (
-                <Card key={vizId} className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <CardTitle className="text-lg">{viz.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
+                <DaisyCard key={vizId} className="hover:shadow-lg transition-shadow">
+                  <DaisyCardHeader>
+                    <DaisyCardTitle className="text-lg">{viz.title}</DaisyCardTitle>
+                  
+                  <DaisyCardContent>
                     <div className="h-64 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg flex items-center justify-center">
                       <div className="text-center">
                         <BarChart3 className="w-16 h-16 mx-auto mb-4 text-blue-600" />
                         <p className="text-sm text-gray-600">{viz.narrative}</p>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </DaisyCardBody>
+                </DaisyCard>
               );
             })}
           </div>
@@ -442,30 +442,30 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
 
                   const Icon = getInsightIcon(insight.type);
                   return (
-                    <Card key={insightId} className={`border-l-4 ${getImpactColor(insight.impact)}`}>
-                      <CardContent className="pt-4">
+                    <DaisyCard key={insightId} className={`border-l-4 ${getImpactColor(insight.impact)}`}>
+                      <DaisyCardContent className="pt-4">
                         <div className="flex items-start space-x-3">
                           <Icon className="w-5 h-5 mt-1" />
                           <div>
                             <h4 className="font-medium text-gray-900">{insight.title}</h4>
                             <p className="text-sm text-gray-600 mt-1">{insight.description}</p>
                             <div className="flex items-center space-x-2 mt-2">
-                              <Badge variant="outline" className="text-xs">
+                              <DaisyBadge variant="outline" className="text-xs">
                                 {insight.confidence}% confidence
-                              </Badge>
-                              <Badge variant="outline" className="text-xs capitalize">
+                              </DaisyBadge>
+                              <DaisyBadge variant="outline" className="text-xs capitalize">
                                 {insight.impact} impact
-                              </Badge>
+                              </DaisyBadge>
                               {insight.actionable && (
-                                <Badge variant="default" className="text-xs">
+                                <DaisyBadge variant="default" className="text-xs">
                                   Actionable
-                                </Badge>
+                                </DaisyBadge>
                               )}
                             </div>
                           </div>
                         </div>
-                      </CardContent>
-                    </Card>
+                      </DaisyCardBody>
+                    </DaisyCard>
                   );
                 })}
               </div>
@@ -506,12 +506,12 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
               <p className="text-blue-100 mt-1">{story.subtitle}</p>
             </div>
             <div className="flex items-center space-x-2">
-              <Badge variant="secondary" className="text-xs">
+              <DaisyBadge variant="secondary" className="text-xs">
                 {story.metadata.audience}
-              </Badge>
-              <Badge variant="secondary" className="text-xs">
+              </DaisyBadge>
+              <DaisyBadge variant="secondary" className="text-xs">
                 {Math.floor(story.metadata.duration / 60)}m {story.metadata.duration % 60}s
-              </Badge>
+              </DaisyBadge>
             </div>
           </div>
 
@@ -521,7 +521,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
               <span>Chapter {currentChapter + 1} of {story.chapters.length}</span>
               <span>{Math.round(storyProgress)}% complete</span>
             </div>
-            <Progress value={storyProgress} className="h-2 bg-blue-500" />
+            <DaisyProgress value={storyProgress} className="h-2 bg-blue-500" />
           </div>
         </div>
       </div>
@@ -530,31 +530,31 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
       <div className="bg-white border-b border-gray-200 p-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={previousChapter}
               disabled={currentChapter === 0}
             >
               <ChevronLeft className="w-4 h-4" />
-            </Button>
+            </DaisyButton>
             
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={togglePlayback}
             >
               {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-            </Button>
+            </DaisyButton>
             
-            <Button
+            <DaisyButton
               variant="outline"
               size="sm"
               onClick={nextChapter}
               disabled={currentChapter === story.chapters.length - 1}
             >
               <ChevronRight className="w-4 h-4" />
-            </Button>
+            </DaisyButton>
 
             <select
               value={playbackSpeed}
@@ -569,39 +569,39 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
           </div>
 
           <div className="flex items-center space-x-2">
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={() => setNarrationEnabled(!narrationEnabled)}
             >
               {narrationEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-            </Button>
+            </DaisyButton>
             
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={() => setShowInsights(!showInsights)}
             >
               <Brain className="w-4 h-4" />
-            </Button>
+            </DaisyButton>
             
-            <Button
+            <DaisyButton
               variant="ghost"
               size="sm"
               onClick={() => setIsFullscreen(!isFullscreen)}
             >
               {isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}
-            </Button>
+            </DaisyButton>
 
-            <Button variant="outline" size="sm" onClick={() => onShareStory?.(story)}>
+            <DaisyButton variant="outline" size="sm" onClick={() => onShareStory?.(story)}>
               <Share className="w-4 h-4 mr-2" />
               Share
-            </Button>
+            </DaisyButton>
             
-            <Button variant="outline" size="sm" onClick={() => onSaveStory?.(story)}>
+            <DaisyButton variant="outline" size="sm" onClick={() => onSaveStory?.(story)}>
               <Download className="w-4 h-4 mr-2" />
               Export
-            </Button>
+            </DaisyButton>
           </div>
         </div>
       </div>
@@ -612,14 +612,14 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
       </div>
 
       {/* Story Generation Panel */}
-      <Card className="max-w-6xl mx-auto m-6">
-        <CardHeader>
-          <CardTitle className="flex items-center">
+      <DaisyCard className="max-w-6xl mx-auto m-6">
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center">
             <Wand2 className="w-5 h-5 mr-2" />
             AI Story Generation
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-600">
@@ -632,7 +632,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
                 <span>• Multi-audience optimization</span>
               </div>
             </div>
-            <Button onClick={generateStory} disabled={isGenerating}>
+            <DaisyButton onClick={generateStory} disabled={isGenerating}>
               {isGenerating ? (
                 <>
                   <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
@@ -644,7 +644,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
                   Generate Story
                 </>
               )}
-            </Button>
+            </DaisyButton>
           </div>
           
           {isGenerating && (
@@ -653,21 +653,21 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
                 <span>Analyzing data patterns...</span>
                 <span>Step 2 of 5</span>
               </div>
-              <Progress value={40} className="h-2" />
+              <DaisyProgress value={40} className="h-2" />
             </div>
           )}
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
 
       {/* Story Summary */}
-      <Card className="max-w-6xl mx-auto m-6">
-        <CardHeader>
-          <CardTitle className="flex items-center">
+      <DaisyCard className="max-w-6xl mx-auto m-6">
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center">
             <BookOpen className="w-5 h-5 mr-2" />
             Story Summary
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </DaisyCardTitle>
+        
+        <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <h4 className="font-medium text-gray-900 mb-2">Key Findings</h4>
@@ -698,8 +698,8 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
             <h4 className="font-medium text-blue-900 mb-2">Executive Summary</h4>
             <p className="text-sm text-blue-800">{story.narrative.executiveSummary}</p>
           </div>
-        </CardContent>
-      </Card>
+        </DaisyCardBody>
+      </DaisyCard>
     </div>
   );
 };
