@@ -634,7 +634,7 @@ export default function DashboardPage() {
               className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
               onClick={() => handleStatsCardClick('totalRisks')}
             >
-              <DaisyCardContent className="p-4">
+              <DaisyCardBody className="p-4">
                 <div className="flex items-center">
                   <div className="p-2 bg-blue-50 rounded-lg">  
                     <Shield className="h-5 w-5 text-blue-600" />
@@ -651,7 +651,7 @@ export default function DashboardPage() {
               className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
               onClick={() => handleStatsCardClick('highRisks')}
             >
-              <DaisyCardContent className="p-4">
+              <DaisyCardBody className="p-4">
                 <div className="flex items-center">
                   <div className="p-2 bg-red-50 rounded-lg">
                     <DaisyAlertTriangle className="h-5 w-5 text-red-600" />
@@ -668,7 +668,7 @@ export default function DashboardPage() {
               className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
               onClick={() => handleStatsCardClick('complianceScore')}
             >
-              <DaisyCardContent className="p-4">
+              <DaisyCardBody className="p-4">
                 <div className="flex items-center">
                   <div className="p-2 bg-green-50 rounded-lg">
                     <CheckCircle className="h-5 w-5 text-green-600" />
@@ -685,7 +685,7 @@ export default function DashboardPage() {
               className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
               onClick={() => handleStatsCardClick('activeControls')}
             >
-              <DaisyCardContent className="p-4">
+              <DaisyCardBody className="p-4">
                 <div className="flex items-center">
                   <div className="p-2 bg-purple-50 rounded-lg">
                     <Settings className="h-5 w-5 text-purple-600" />
@@ -707,7 +707,7 @@ export default function DashboardPage() {
                 <span className="text-[#191919] font-bold text-base">Quick Actions</span>
               </DaisyCardTitle>
             
-            <DaisyCardContent className="pt-0">
+            <DaisyCardBody className="pt-0">
               <div className="grid grid-cols-2 gap-3 h-full">
                 {quickActions.slice(0, 4).map((action) => (
                   <QuickActionCard
@@ -736,7 +736,7 @@ export default function DashboardPage() {
                   </DaisyBadge>
                 </DaisyCardTitle>
               
-              <DaisyCardContent className="pt-0">
+              <DaisyCardBody className="pt-0">
                 <div className="space-y-2">
                   {recentImports.map((importItem, index) => (
                     <div 
@@ -821,7 +821,7 @@ export default function DashboardPage() {
               </DaisyBadge>
             </DaisyCardTitle>
           
-          <DaisyCardContent>
+          <DaisyCardBody>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {insights.map((insight) => (
                 <div key={insight.id} className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
@@ -865,7 +865,7 @@ export default function DashboardPage() {
               </DaisyBadge>
             </DaisyCardTitle>
           
-          <DaisyCardContent className="space-y-4">
+          <DaisyCardBody className="space-y-4">
             <div className="text-center py-8">
               <Users className="h-12 w-12 text-gray-300 mx-auto mb-3" />
               <p className="text-gray-500 text-sm">No team members yet</p>
@@ -894,7 +894,7 @@ export default function DashboardPage() {
               </DaisyBadge>
             </DaisyCardTitle>
           
-          <DaisyCardContent className="space-y-3">
+          <DaisyCardBody className="space-y-3">
             <DaisyButton 
               variant="ghost" 
               className="w-full justify-start h-auto p-3 hover:bg-gray-50"
@@ -954,7 +954,7 @@ export default function DashboardPage() {
               </DaisyBadge>
             </DaisyCardTitle>
           
-          <DaisyCardContent className="space-y-4">
+          <DaisyCardBody className="space-y-4">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-gray-700">Risk Resolution Rate</span>

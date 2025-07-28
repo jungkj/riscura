@@ -316,7 +316,7 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
 
         {/* Search and Filters Bar */}
         <DaisyCard className="notion-card">
-          <DaisyCardContent className="p-4">
+          <DaisyCardBody className="p-4">
             <div className="flex flex-col lg:flex-row gap-4">
               <div className="flex-1">
                 <div className="relative">
@@ -393,7 +393,7 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
                   <DaisyCardTitle className="text-sm font-medium">Total Controls</DaisyCardTitle>
                   <Shield className="h-4 w-4 text-muted-foreground" />
                 
-                <DaisyCardContent>
+                <DaisyCardBody>
                   <div className="text-2xl font-bold">{stats.total}</div>
                   <p className="text-xs text-muted-foreground">
                     Active framework controls
@@ -406,7 +406,7 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
                   <DaisyCardTitle className="text-sm font-medium">Avg Effectiveness</DaisyCardTitle>
                   <Zap className="h-4 w-4 text-green-500" />
                 
-                <DaisyCardContent>
+                <DaisyCardBody>
                   <div className="text-2xl font-bold text-green-600">{Math.round(stats.avgEffectiveness)}%</div>
                   <DaisyProgress value={stats.avgEffectiveness} className="w-full mt-2" />
                 </DaisyCardBody>
@@ -417,7 +417,7 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
                   <DaisyCardTitle className="text-sm font-medium">Avg Maturity</DaisyCardTitle>
                   <BarChart3 className="h-4 w-4 text-blue-500" />
                 
-                <DaisyCardContent>
+                <DaisyCardBody>
                   <div className="text-2xl font-bold text-blue-600">{stats.avgMaturity.toFixed(1)}</div>
                   <p className="text-xs text-muted-foreground">
                     Out of 5 levels
@@ -430,7 +430,7 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
                   <DaisyCardTitle className="text-sm font-medium">Tests Due</DaisyCardTitle>
                   <Clock className="h-4 w-4 text-orange-500" />
                 
-                <DaisyCardContent>
+                <DaisyCardBody>
                   <div className="text-2xl font-bold text-orange-600">
                     {stats.byTestingStatus.scheduled || 0}
                   </div>
@@ -446,7 +446,7 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
               <DaisyCardHeader>
                 <DaisyCardTitle>Framework Distribution</DaisyCardTitle>
               
-              <DaisyCardContent>
+              <DaisyCardBody>
                 <div className="space-y-3">
                   {Object.entries(stats.byFramework).map(([framework, count]) => (
                     <div key={framework} className="flex items-center justify-between">
@@ -474,7 +474,7 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
           {/* Controls Tab */}
           <DaisyTabsContent value="controls" className="space-y-6">
             <DaisyCard className="notion-card">
-              <DaisyCardContent className="p-0">
+              <DaisyCardBody className="p-0">
                 <div className="divide-y">
                   <AnimatePresence>
                     {filteredControls.map((control) => (
@@ -593,7 +593,7 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
               <DaisyCardHeader>
                 <DaisyCardTitle>Control Testing Dashboard</DaisyCardTitle>
               
-              <DaisyCardContent className="text-center py-8">
+              <DaisyCardBody className="text-center py-8">
                 <TestTube className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
                 <h3 className="text-lg font-medium mb-2">Testing Workflows</h3>
                 <p className="text-muted-foreground">
@@ -621,19 +621,19 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
                 {/* Control Overview */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <DaisyCard className="notion-card-minimal">
-                    <DaisyCardContent className="p-4 text-center">
+                    <DaisyCardBody className="p-4 text-center">
                       <div className="text-2xl font-bold">{selectedControl.effectivenessScore}%</div>
                       <div className="text-sm text-muted-foreground">Effectiveness</div>
                     </DaisyCardBody>
                   </DaisyCard>
                   <DaisyCard className="notion-card-minimal">
-                    <DaisyCardContent className="p-4 text-center">
+                    <DaisyCardBody className="p-4 text-center">
                       <div className="text-2xl font-bold">{selectedControl.maturityLevel}</div>
                       <div className="text-sm text-muted-foreground">Maturity Level</div>
                     </DaisyCardBody>
                   </DaisyCard>
                   <DaisyCard className="notion-card-minimal">
-                    <DaisyCardContent className="p-4 text-center">
+                    <DaisyCardBody className="p-4 text-center">
                       <div className="text-2xl font-bold">{selectedControl.mappedRisks.length}</div>
                       <div className="text-sm text-muted-foreground">Mapped Risks</div>
                     </DaisyCardBody>
@@ -644,7 +644,7 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
                 <div>
                   <h3 className="text-lg font-semibold mb-2">Framework Details</h3>
                   <DaisyCard className="notion-card-minimal">
-                    <DaisyCardContent className="p-4">
+                    <DaisyCardBody className="p-4">
                       <div className="space-y-2">
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Framework:</span>
@@ -674,7 +674,7 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
                   <div>
                     <h3 className="text-lg font-semibold mb-2">AI Assessment</h3>
                     <DaisyCard className="notion-card-minimal">
-                      <DaisyCardContent className="p-4">
+                      <DaisyCardBody className="p-4">
                         <div className="grid grid-cols-2 gap-4">
                           <div>
                             <div className="text-sm text-muted-foreground">Overall Score</div>
@@ -698,7 +698,7 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
         {(isLoading || aiAnalyzing) && (
           <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
             <DaisyCard className="notion-card">
-              <DaisyCardContent className="p-6 text-center">
+              <DaisyCardBody className="p-6 text-center">
                 <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4" />
                 <p className="text-lg font-medium">
                   {aiAnalyzing ? 'Running AI Assessment...' : 'Processing...'}

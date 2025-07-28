@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardHeader } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -213,7 +213,7 @@ export default function AIInsightsPage() {
       case 'recommendation':
         return <Lightbulb className="h-5 w-5 text-yellow-500" />;
       case 'anomaly':
-        return <DaisyAlertTriangle className="h-5 w-5 text-orange-500" />;
+        return <AlertTriangle className="h-5 w-5 text-orange-500" />;
     }
   };
 
@@ -296,8 +296,8 @@ export default function AIInsightsPage() {
                 <Zap className="h-5 w-5 text-primary" />
                 Predictive Risk Analysis
               </DaisyCardTitle>
-            
-            <DaisyCardContent>
+            </DaisyCardHeader>
+            <DaisyCardBody>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-primary mb-2">
@@ -372,7 +372,7 @@ export default function AIInsightsPage() {
           >
             {insights.map((insight) => (
               <DaisyCard key={insight.id} className="hover:shadow-md transition-shadow">
-                <DaisyCardContent className="p-6">
+                <DaisyCardBody className="p-6">
                   <div className="flex items-start gap-4">
                     {getInsightIcon(insight.type)}
                     <div className="flex-1">
@@ -413,7 +413,7 @@ export default function AIInsightsPage() {
           >
             {recommendations.map((rec) => (
               <DaisyCard key={rec.id} className={`border-l-4 ${getPriorityColor(rec.priority)}`}>
-                <DaisyCardContent className="p-6">
+                <DaisyCardBody className="p-6">
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <h3 className="font-semibold mb-1">{rec.title}</h3>
@@ -467,8 +467,8 @@ export default function AIInsightsPage() {
                   <Shield className="h-5 w-5" />
                   Risk Correlation Matrix
                 </DaisyCardTitle>
-              
-              <DaisyCardContent>
+              </DaisyCardHeader>
+              <DaisyCardBody>
                 <p className="text-muted-foreground mb-4">
                   AI-identified correlations between different risk categories
                 </p>
@@ -504,8 +504,8 @@ export default function AIInsightsPage() {
                   <Users className="h-5 w-5" />
                   Department Risk Profiles
                 </DaisyCardTitle>
-              
-              <DaisyCardContent>
+              </DaisyCardHeader>
+              <DaisyCardBody>
                 <p className="text-muted-foreground mb-4">
                   Risk distribution and patterns across departments
                 </p>

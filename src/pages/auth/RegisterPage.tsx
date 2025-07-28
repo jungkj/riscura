@@ -114,13 +114,13 @@ function RegisterForm() {
 
         {/* Register Card */}
         <DaisyCard className="backdrop-blur-sm bg-white/70 dark:bg-slate-800/70 border-slate-200/60 dark:border-slate-700/60 shadow-2xl shadow-slate-900/10">
-          <DaisyCardContent className="p-8 space-y-6">
+          <DaisyCardBody className="p-8 space-y-6">
             {(error || authError) && (
               <DaisyAlert variant="error" className="border-red-200 bg-red-50 dark:bg-red-950/50">
-                <DaisyAlertCircle className="h-4 w-4" />
-                <DaisyAlertDescription className="text-red-700 dark:text-red-300">
+                <AlertCircle className="h-4 w-4" />
+                <div className="text-red-700 dark:text-red-300">
                   {error || authError}
-                
+                </div>
               </DaisyAlert>
             )}
 

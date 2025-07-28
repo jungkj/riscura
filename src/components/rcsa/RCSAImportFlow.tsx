@@ -496,7 +496,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
                   {analysis.riskGaps.map((gap, index) => (
                     <DaisyAlert key={index}>
                       <AlertCircle className="h-4 w-4" />
-                      <p>
+                      <div>
                         <div className="flex justify-between items-start">
                           <div>
                             <p className="font-medium">{gap.issue}</p>
@@ -511,7 +511,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
                             {gap.severity}
                           </DaisyBadge>
                         </div>
-                      
+                      </div>
                     </DaisyAlert>
                   ))}
                 </DaisyTabsContent>
@@ -520,7 +520,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
                   {analysis.controlGaps.map((gap, index) => (
                     <DaisyAlert key={index}>
                       <AlertCircle className="h-4 w-4" />
-                      <p>
+                      <div>
                         <div className="flex justify-between items-start">
                           <div>
                             <p className="font-medium">{gap.controlId}: {gap.issue}</p>
@@ -535,7 +535,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
                             {gap.severity}
                           </DaisyBadge>
                         </div>
-                      
+                      </div>
                     </DaisyAlert>
                   ))}
                 </DaisyTabsContent>
@@ -549,7 +549,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
           <DaisyCardHeader>
             <DaisyCardTitle>Review Risks</DaisyCardTitle>
             <p>Edit risk details before importing</p>
-          
+          </DaisyCardHeader>
           <DaisyCardBody>
             {editedRisks.length > 10 ? (
               <FixedSizeList
@@ -575,7 +575,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
           <DaisyCardHeader>
             <DaisyCardTitle>Review Controls</DaisyCardTitle>
             <p>Edit control details before importing</p>
-          
+          </DaisyCardHeader>
           <DaisyCardBody>
             {editedControls.length > 10 ? (
               <FixedSizeList
