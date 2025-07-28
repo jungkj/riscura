@@ -236,7 +236,7 @@ export default function AIControlGenerator({
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <DaisyAlertTriangle className="h-4 w-4 text-orange-600" />
+              <AlertTriangle className="h-4 w-4 text-orange-600" />
               <div>
                 <p className="text-xs text-gray-500">Severity</p>
                 <DaisyBadge className={getPriorityColor(riskSeverity)}>{riskSeverity}</DaisyBadge>
@@ -278,7 +278,7 @@ export default function AIControlGenerator({
                   <Building2 className="h-5 w-5" />
                   Organization Context
                 </DaisyCardTitle>
-              
+              </DaisyCardHeader>
               <DaisyCardBody className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -356,7 +356,7 @@ export default function AIControlGenerator({
                   <Settings className="h-5 w-5" />
                   Generation Constraints
                 </DaisyCardTitle>
-              
+              </DaisyCardHeader>
               <DaisyCardBody className="space-y-4">
                 <div className="space-y-2">
                   <DaisyLabel>Max Implementation Hours</DaisyLabel>
@@ -452,7 +452,7 @@ export default function AIControlGenerator({
                 <Cpu className="h-5 w-5" />
                 AI Control Generation in Progress
               </DaisyCardTitle>
-            
+            </DaisyCardHeader>
             <DaisyCardBody className="space-y-6">
               {isGenerating ? (
                 <div className="space-y-4">
@@ -583,7 +583,7 @@ export default function AIControlGenerator({
                       </DaisyButton>
                     </div>
                   </div>
-                
+                </DaisyCardHeader>
                 <DaisyCardBody>
                   <div className="space-y-4">
                     {generatedResponse.controls.map((control) => {

@@ -195,7 +195,7 @@ export default function ComplianceProgress() {
                 </div>
               </div>
             </div>
-            <DaisyProgressRing progress={overallProgress} size={120} strokeWidth={10} />
+            <ProgressRing progress={overallProgress} size={120} strokeWidth={10} />
           </div>
         </DaisyCardBody>
       </DaisyCard>
@@ -267,7 +267,7 @@ export default function ComplianceProgress() {
                 ×
               </DaisyButton>
             </div>
-          
+          </DaisyCardHeader>
           <DaisyCardBody>
             {(() => {
               const framework = frameworks.find(f => f.id === selectedFramework);
@@ -330,7 +330,7 @@ export default function ComplianceProgress() {
                     <h4 className="font-medium text-gray-900">Upcoming Tasks</h4>
                     <div className="space-y-3">
                       <div className="flex items-start space-x-3">
-                        <DaisyCalendar className="w-4 h-4 text-[#199BEC] mt-0.5" />
+                        <Calendar className="w-4 h-4 text-[#199BEC] mt-0.5" />
                         <div>
                           <p className="text-sm font-medium">Quarterly review</p>
                           <p className="text-xs text-gray-600">Due in 2 weeks</p>

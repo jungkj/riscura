@@ -480,7 +480,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
             <DaisyCardHeader>
               <DaisyCardTitle>Gap Analysis</DaisyCardTitle>
               <p>Issues identified in your RCSA data</p>
-            
+            </DaisyCardHeader>
             <DaisyCardBody>
               <DaisyTabs defaultValue="risks">
                 <DaisyTabsList>
@@ -495,7 +495,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
                 <DaisyTabsContent value="risks" className="space-y-3 mt-4">
                   {analysis.riskGaps.map((gap, index) => (
                     <DaisyAlert key={index}>
-                      <DaisyAlertCircle className="h-4 w-4" />
+                      <AlertCircle className="h-4 w-4" />
                       <p>
                         <div className="flex justify-between items-start">
                           <div>
@@ -519,7 +519,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
                 <DaisyTabsContent value="controls" className="space-y-3 mt-4">
                   {analysis.controlGaps.map((gap, index) => (
                     <DaisyAlert key={index}>
-                      <DaisyAlertCircle className="h-4 w-4" />
+                      <AlertCircle className="h-4 w-4" />
                       <p>
                         <div className="flex justify-between items-start">
                           <div>

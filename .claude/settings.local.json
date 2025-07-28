@@ -15,7 +15,13 @@
       "Bash(git fetch:*)",
       "Bash(gh pr:*)",
       "Bash(npm run dev:*)",
-      "Bash(npm run type-check:*)"
+      "Bash(npm run type-check:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfix: resolve JSX syntax errors blocking Vercel deployment\n\n- Fixed missing closing tags for DaisyCardHeader components\n- Corrected component name mismatches between imports and usage\n- Updated Select components to match their actual import names\n- Fixed Dialog component references to use correct imported names\n\nAll syntax errors have been resolved across 4 affected components.\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git config --global user.email \"andyjung2001@gmail.com\")",
+      "Bash(git config --global user.name \"Andy Jung\")",
+      "Bash(git config --global --list)",
+      "Bash(yarn type-check)",
+      "Bash(npx tsc:*)"
     ],
     "deny": []
   }

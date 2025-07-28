@@ -16,7 +16,7 @@ const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
-  <DaisyDialogPrimitive.Overlay
+  <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
       'fixed inset-0 z-50 bg-black/60 backdrop-blur-sm',
@@ -34,9 +34,9 @@ const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
-  <DaisyDialogPortal>
-    <DaisyDialogOverlay />
-    <DaisyDialogPrimitive.Content
+  <DialogPortal>
+    <DialogOverlay />
+    <DialogPrimitive.Content
       ref={ref}
       className={cn(
         'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%]',
@@ -55,7 +55,7 @@ const DialogContent = React.forwardRef<
       {...props}
     >
       {children}
-      <DaisyDialogPrimitive.Close className={cn(
+      <DialogPrimitive.Close className={cn(
         'absolute right-6 top-6 rounded-lg p-2',
         'text-[#A8A8A8] hover:text-[#191919]',
         'bg-transparent hover:bg-[#F5F1E9]',
@@ -106,7 +106,7 @@ const DialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
-  <DaisyDialogPrimitive.Title
+  <DialogPrimitive.Title
     ref={ref}
     className={cn(
       'text-2xl font-semibold leading-tight tracking-tight text-[#191919] font-inter',
@@ -121,7 +121,7 @@ const DialogDescription = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
-  <DaisyDialogPrimitive.Description
+  <DialogPrimitive.Description
     ref={ref}
     className={cn(
       'text-sm leading-relaxed text-[#A8A8A8] font-inter',
@@ -136,9 +136,9 @@ const DialogLarge = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
-  <DaisyDialogPortal>
-    <DaisyDialogOverlay />
-    <DaisyDialogPrimitive.Content
+  <DialogPortal>
+    <DialogOverlay />
+    <DialogPrimitive.Content
       ref={ref}
       className={cn(
         'fixed left-[50%] top-[50%] z-50 grid w-full max-w-4xl translate-x-[-50%] translate-y-[-50%]',
@@ -157,7 +157,7 @@ const DialogLarge = React.forwardRef<
       )}
       {...props}
     >
-      <DaisyDialogPrimitive.Close className={cn(
+      <DialogPrimitive.Close className={cn(
         'absolute right-6 top-6 rounded-lg p-2',
         'text-[#A8A8A8] hover:text-[#191919]',
         'bg-transparent hover:bg-[#F5F1E9]',
@@ -180,9 +180,9 @@ const DialogFullscreen = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
-  <DaisyDialogPortal>
-    <DaisyDialogOverlay />
-    <DaisyDialogPrimitive.Content
+  <DialogPortal>
+    <DialogOverlay />
+    <DialogPrimitive.Content
       ref={ref}
       className={cn(
         'fixed inset-0 z-50 flex flex-col',
@@ -196,7 +196,7 @@ const DialogFullscreen = React.forwardRef<
       )}
       {...props}
     >
-      <DaisyDialogPrimitive.Close className={cn(
+      <DialogPrimitive.Close className={cn(
         'absolute right-6 top-6 rounded-lg p-3',
         'text-[#A8A8A8] hover:text-[#191919]',
         'bg-white hover:bg-[#F5F1E9]',
