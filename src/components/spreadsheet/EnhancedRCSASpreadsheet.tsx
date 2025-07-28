@@ -615,18 +615,18 @@ export default function EnhancedRCSASpreadsheet() {
           );
         } else if (column.type === 'select' && column.options) {
           return (
-            <DaisySelect value={editValue} onValueChange={setEditValue}>
-              <DaisySelectTrigger className="h-full border-0 p-0 focus:ring-0">
-                <DaisySelectValue />
+            <Select value={editValue} onValueChange={setEditValue}>
+              <SelectTrigger className="h-full border-0 p-0 focus:ring-0">
+                <SelectValue />
               </SelectTrigger>
-              <DaisySelectContent>
+              <SelectContent>
                 {column.options.map(opt => (
-                  <DaisySelectItem key={opt.value} value={opt.value}>
+                  <SelectItem key={opt.value} value={opt.value}>
                     {opt.label}
                   </SelectItem>
                 ))}
               </SelectContent>
-            </DaisySelect>
+            </Select>
           );
         } else {
           return (

@@ -219,10 +219,10 @@ export default function ComplianceProgress() {
                   <span className="ml-1 capitalize">{framework.status.replace('-', ' ')}</span>
                 </DaisyBadge>
               </div>
-            
+            </DaisyCardHeader>
             <DaisyCardBody className="pt-0">
               <div className="flex items-center justify-center mb-4">
-                <DaisyProgressRing 
+                <ProgressRing 
                   progress={framework.progress} 
                   size={80} 
                   strokeWidth={6}

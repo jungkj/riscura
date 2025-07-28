@@ -384,7 +384,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
           <p>
             Upload an Excel file or paste your RCSA data to begin the analysis
           </p>
-        
+        </DaisyCardHeader>
         <DaisyCardBody>
           <DaisyTabs value={uploadMethod} onValueChange={(v) => setUploadMethod(v as 'file' | 'paste')}>
             <DaisyTabsList className="grid w-full grid-cols-2">

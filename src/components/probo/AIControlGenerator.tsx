@@ -686,7 +686,4 @@ export default function AIControlGenerator({
       </DaisyTabs>
     </div>
   );
-}
-
-// Export the component
-export { AIControlGenerator }; 
+} 

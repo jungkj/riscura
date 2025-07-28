@@ -408,7 +408,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
               {totalRisks} Total Risks
             </DaisyBadge>
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent className="pb-4">
           <div className="space-y-3">
             {/* Compact Heat Map Grid */}
@@ -527,7 +527,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Risk Details Modal */}
