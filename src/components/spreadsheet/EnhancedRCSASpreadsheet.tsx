@@ -738,16 +738,16 @@ export default function EnhancedRCSASpreadsheet() {
           </h1>
           
           {/* View mode selector */}
-          <DaisySelect value={viewMode} onValueChange={(v: any) => setViewMode(v)}>
-            <DaisySelectTrigger className="w-40">
-              <DaisySelectValue />
+          <Select value={viewMode} onValueChange={(v: any) => setViewMode(v)}>
+            <SelectTrigger className="w-40">
+              <SelectValue />
             </SelectTrigger>
-            <DaisySelectContent>
-              <DaisySelectItem value="combined">Combined View</SelectItem>
-              <DaisySelectItem value="risks">Risks Only</SelectItem>
-              <DaisySelectItem value="controls">Controls Only</SelectItem>
+            <SelectContent>
+              <SelectItem value="combined">Combined View</SelectItem>
+              <SelectItem value="risks">Risks Only</SelectItem>
+              <SelectItem value="controls">Controls Only</SelectItem>
             </SelectContent>
-          </DaisySelect>
+          </Select>
 
           {/* Status indicator */}
           {isAutoSaving && (
@@ -776,44 +776,44 @@ export default function EnhancedRCSASpreadsheet() {
           />
 
           {/* Filters */}
-          <DaisySelect value={filterStatus} onValueChange={setFilterStatus}>
-            <DaisySelectTrigger className="w-40">
-              <DaisySelectValue placeholder="All Status" />
+          <Select value={filterStatus} onValueChange={setFilterStatus}>
+            <SelectTrigger className="w-40">
+              <SelectValue placeholder="All Status" />
             </SelectTrigger>
-            <DaisySelectContent>
-              <DaisySelectItem value="all">All Status</SelectItem>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
               {viewMode !== 'controls' && (
                 <>
-                  <DaisySelectItem value={RiskStatus.IDENTIFIED}>Identified</SelectItem>
-                  <DaisySelectItem value={RiskStatus.ASSESSED}>Assessed</SelectItem>
-                  <DaisySelectItem value={RiskStatus.MITIGATED}>Mitigated</SelectItem>
-                  <DaisySelectItem value={RiskStatus.ACCEPTED}>Accepted</SelectItem>
+                  <SelectItem value={RiskStatus.IDENTIFIED}>Identified</SelectItem>
+                  <SelectItem value={RiskStatus.ASSESSED}>Assessed</SelectItem>
+                  <SelectItem value={RiskStatus.MITIGATED}>Mitigated</SelectItem>
+                  <SelectItem value={RiskStatus.ACCEPTED}>Accepted</SelectItem>
                 </>
               )}
               {viewMode !== 'risks' && (
                 <>
-                  <DaisySelectItem value={ControlStatus.PLANNED}>Planned</SelectItem>
-                  <DaisySelectItem value={ControlStatus.IMPLEMENTED}>Implemented</SelectItem>
-                  <DaisySelectItem value={ControlStatus.TESTED}>Tested</SelectItem>
-                  <DaisySelectItem value={ControlStatus.EFFECTIVE}>Effective</SelectItem>
+                  <SelectItem value={ControlStatus.PLANNED}>Planned</SelectItem>
+                  <SelectItem value={ControlStatus.IMPLEMENTED}>Implemented</SelectItem>
+                  <SelectItem value={ControlStatus.TESTED}>Tested</SelectItem>
+                  <SelectItem value={ControlStatus.EFFECTIVE}>Effective</SelectItem>
                 </>
               )}
             </SelectContent>
-          </DaisySelect>
+          </Select>
 
           {viewMode !== 'controls' && (
-            <DaisySelect value={filterRiskLevel} onValueChange={setFilterRiskLevel}>
-              <DaisySelectTrigger className="w-40">
-                <DaisySelectValue placeholder="All Risk Levels" />
+            <Select value={filterRiskLevel} onValueChange={setFilterRiskLevel}>
+              <SelectTrigger className="w-40">
+                <SelectValue placeholder="All Risk Levels" />
               </SelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="all">All Risk Levels</SelectItem>
-                <DaisySelectItem value="LOW">Low</SelectItem>
-                <DaisySelectItem value="MEDIUM">Medium</SelectItem>
-                <DaisySelectItem value="HIGH">High</SelectItem>
-                <DaisySelectItem value="CRITICAL">Critical</SelectItem>
+              <SelectContent>
+                <SelectItem value="all">All Risk Levels</SelectItem>
+                <SelectItem value="LOW">Low</SelectItem>
+                <SelectItem value="MEDIUM">Medium</SelectItem>
+                <SelectItem value="HIGH">High</SelectItem>
+                <SelectItem value="CRITICAL">Critical</SelectItem>
               </SelectContent>
-            </DaisySelect>
+            </Select>
           )}
 
           {/* Actions */}

@@ -455,7 +455,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
           <DaisyCardHeader>
             <DaisyCardTitle>RCSA Analysis Complete</DaisyCardTitle>
             <p>{analysis.overallAssessment}</p>
-          
+          </DaisyCardHeader>
           <DaisyCardBody>
             <div className="grid grid-cols-3 gap-4">
               <div className="text-center">

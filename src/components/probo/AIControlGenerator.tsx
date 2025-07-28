@@ -225,7 +225,7 @@ export default function AIControlGenerator({
               </DaisyBadge>
             </div>
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardBody>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="flex items-center space-x-2">

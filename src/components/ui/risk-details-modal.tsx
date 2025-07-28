@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardHeader, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { 
   AlertTriangle, 
@@ -70,7 +70,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
   const getRiskLevelIcon = (level: string) => {
     switch (level) {
       case 'critical':
-        return <DaisyAlertTriangle className="w-4 h-4" />;
+        return <AlertTriangle className="w-4 h-4" />;
       case 'high':
         return <TrendingUp className="w-4 h-4" />;
       case 'medium':
@@ -97,25 +97,25 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
   };
 
   return (
-    <DaisyDialog open={isOpen} onOpenChange={onClose}>
-      <DaisyDialogContent className="max-w-4xl max-h-[80vh]">
-        <DaisyDialogHeader>
-          <DaisyDialogTitle className="flex items-center space-x-2">
-            <DaisyAlertTriangle className="w-5 h-5 text-orange-600" />
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-4xl max-h-[80vh]">
+        <DialogHeader>
+          <DialogTitle className="flex items-center space-x-2">
+            <AlertTriangle className="w-5 h-5 text-orange-600" />
             <span>
               Risks: {impact} Impact × {likelihood} Likelihood
             </span>
-          </DaisyDialogTitle>
-          <DaisyDialogDescription>
+          </DialogTitle>
+          <DialogDescription>
             {risks.length} risk{risks.length !== 1 ? 's' : ''} found in this category
-          </DaisyDialogDescription>
-        </DaisyDialogHeader>
+          </DialogDescription>
+        </DialogHeader>
 
         <DaisyScrollArea className="max-h-[60vh] pr-4">
           <div className="space-y-4">
             {risks.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
-                <DaisyAlertTriangle className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <AlertTriangle className="w-12 h-12 mx-auto mb-4 opacity-50" />
                 <p>No risks found in this category</p>
               </div>
             ) : (
@@ -127,7 +127,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                         <DaisyCardTitle className="text-lg font-semibold">
                           {risk.title}
                         </DaisyCardTitle>
-                        <DaisyCardDescription className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-600">
                           ID: {risk.id}
                         </p>
                       </div>
@@ -146,9 +146,8 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                         </DaisyBadge>
                       </div>
                     </div>
-                  
-                  
-                  <DaisyCardContent className="space-y-4">
+                  </DaisyCardHeader>
+                  <DaisyCardBody className="space-y-4">
                     <p className="text-sm text-gray-700 dark:text-gray-300">
                       {risk.description}
                     </p>
@@ -179,7 +178,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                       </div>
                       
                       <div className="flex items-center space-x-2">
-                        <DaisyCalendar className="w-4 h-4 text-gray-500" />
+                        <Calendar className="w-4 h-4 text-gray-500" />
                         <div>
                           <p className="font-medium">Last Updated</p>
                           <p className="text-gray-600">
@@ -240,7 +239,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
             </DaisyButton>
           )}
         </div>
-      </DaisyDialogContent>
-    </DaisyDialog>
+      </DialogContent>
+    </Dialog>
   );
 }; 
