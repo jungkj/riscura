@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DaisyCard, DaisyCardBody, DaisyCardHeader, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
@@ -148,10 +148,10 @@ export default function ComplianceProgress() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'on-track': return <CheckCircle className="w-4 h-4" />;
-      case 'at-risk': return <Clock className="w-4 h-4" />;
-      case 'behind': return <AlertTriangle className="w-4 h-4" />;
-      default: return <Shield className="w-4 h-4" />;
+      case 'on-track': return (<CheckCircle className="w-4 h-4" />);
+      case 'at-risk': return (<Clock className="w-4 h-4" />);
+      case 'behind': return (<AlertTriangle className="w-4 h-4" />);
+      default: return (<Shield className="w-4 h-4" />);
     }
   };
 

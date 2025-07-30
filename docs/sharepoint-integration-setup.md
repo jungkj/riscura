@@ -95,12 +95,21 @@ This guide provides step-by-step instructions for setting up SharePoint integrat
 
 2. **Import Certificate to Key Vault**
    ```bash
-   # Import the PFX certificate
+   # Import the PFX certificate using secure password from file
+   # Method 1: Using password file (recommended)
    az keyvault certificate import \
      --vault-name "riscura-keyvault" \
      --name "sharepoint-integration-cert" \
      --file riscura-sharepoint.pfx \
-     --password "your-secure-password"
+     --password $(cat cert_password.txt)
+   
+   # Method 2: Using environment variable
+   # export CERT_PASSWORD=$(cat cert_password.txt)
+   # az keyvault certificate import \
+   #   --vault-name "riscura-keyvault" \
+   #   --name "sharepoint-integration-cert" \
+   #   --file riscura-sharepoint.pfx \
+   #   --password "$CERT_PASSWORD"
    ```
 
 3. **Configure Access Policy**
@@ -141,6 +150,7 @@ AZURE_AD_CLIENT_ID=your-client-id
 # Azure Key Vault
 AZURE_KEY_VAULT_NAME=riscura-keyvault
 AZURE_KEY_VAULT_CERTIFICATE_NAME=sharepoint-integration-cert
+CERTIFICATE_PASSWORD=your-certificate-password  # Only if certificate is password-protected
 
 # SharePoint Configuration
 SHAREPOINT_SITE_ID=your-site-id
@@ -154,48 +164,99 @@ GRAPH_API_SCOPE=https://graph.microsoft.com/.default
 
 1. **Test Authentication**
    ```typescript
-   // Production example using certificate-based authentication
+   // Production example using certificate-based authentication with proper error handling
    import { ClientCertificateCredential } from '@azure/identity';
    import { SecretClient } from '@azure/keyvault-secrets';
    import { DefaultAzureCredential } from '@azure/identity';
    import { Client } from '@microsoft/microsoft-graph-client';
    import { TokenCredentialAuthenticationProvider } from '@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials';
    
-   // Retrieve certificate from Azure Key Vault
-   const keyVaultUrl = `https://${process.env.AZURE_KEY_VAULT_NAME}.vault.azure.net`;
-   const secretClient = new SecretClient(keyVaultUrl, new DefaultAzureCredential());
+   async function testSharePointAuthentication() {
+     try {
+       // Validate required environment variables
+       const requiredEnvVars = [
+         'AZURE_KEY_VAULT_NAME',
+         'AZURE_KEY_VAULT_CERTIFICATE_NAME',
+         'AZURE_AD_TENANT_ID',
+         'AZURE_AD_CLIENT_ID'
+       ];
+       
+       for (const envVar of requiredEnvVars) {
+         if (!process.env[envVar]) {
+           throw new Error(`Missing required environment variable: ${envVar}`);
+         }
+       }
+       
+       // Retrieve certificate from Azure Key Vault
+       const keyVaultUrl = `https://${process.env.AZURE_KEY_VAULT_NAME}.vault.azure.net`;
+       const secretClient = new SecretClient(keyVaultUrl, new DefaultAzureCredential());
+       
+       let certificateSecret;
+       try {
+         certificateSecret = await secretClient.getSecret(process.env.AZURE_KEY_VAULT_CERTIFICATE_NAME);
+       } catch (error) {
+         throw new Error(`Failed to retrieve certificate from Key Vault: ${error.message}`);
+       }
+       
+       if (!certificateSecret.value) {
+         throw new Error('Certificate secret value is empty');
+       }
+       
+       const certificateBuffer = Buffer.from(certificateSecret.value, 'base64');
+       
+       // Create certificate credential with optional password
+       const credentialOptions: any = {
+         certificate: certificateBuffer
+       };
+       
+       if (process.env.CERTIFICATE_PASSWORD) {
+         credentialOptions.certificatePassword = process.env.CERTIFICATE_PASSWORD;
+       }
+       
+       const credential = new ClientCertificateCredential(
+         process.env.AZURE_AD_TENANT_ID,
+         process.env.AZURE_AD_CLIENT_ID,
+         credentialOptions
+       );
    
-   const certificateSecret = await secretClient.getSecret(process.env.AZURE_KEY_VAULT_CERTIFICATE_NAME!);
-   const certificateBuffer = Buffer.from(certificateSecret.value!, 'base64');
-   
-   // Create certificate credential
-   const credential = new ClientCertificateCredential(
-     process.env.AZURE_AD_TENANT_ID!,
-     process.env.AZURE_AD_CLIENT_ID!,
-     {
-       certificate: certificateBuffer,
-       certificatePassword: process.env.CERTIFICATE_PASSWORD // Optional, if certificate is password-protected
+       // For development/testing with client secret (not recommended for production)
+       // const credential = new ClientSecretCredential(
+       //   process.env.AZURE_AD_TENANT_ID,
+       //   process.env.AZURE_AD_CLIENT_ID,
+       //   process.env.AZURE_AD_CLIENT_SECRET!
+       // );
+       
+       if (!process.env.GRAPH_API_SCOPE) {
+         throw new Error('Missing required environment variable: GRAPH_API_SCOPE');
+       }
+       
+       const authProvider = new TokenCredentialAuthenticationProvider(credential, {
+         scopes: [process.env.GRAPH_API_SCOPE]
+       });
+       
+       const client = Client.initWithMiddleware({
+         authProvider: authProvider
+       });
+       
+       // Test: Get site information
+       if (!process.env.SHAREPOINT_SITE_ID) {
+         throw new Error('Missing required environment variable: SHAREPOINT_SITE_ID');
+       }
+       
+       const site = await client.api(`/sites/${process.env.SHAREPOINT_SITE_ID}`).get();
+       console.log('✅ Successfully authenticated! Site:', site);
+       
+       return { success: true, site };
+     } catch (error) {
+       console.error('❌ Authentication failed:', error.message);
+       throw error;
      }
-   );
+   }
    
-   // For development/testing with client secret (not recommended for production)
-   // const credential = new ClientSecretCredential(
-   //   process.env.AZURE_AD_TENANT_ID!,
-   //   process.env.AZURE_AD_CLIENT_ID!,
-   //   process.env.AZURE_AD_CLIENT_SECRET!
-   // );
-   
-   const authProvider = new TokenCredentialAuthenticationProvider(credential, {
-     scopes: [process.env.GRAPH_API_SCOPE!]
-   });
-   
-   const client = Client.initWithMiddleware({
-     authProvider: authProvider
-   });
-   
-   // Test: Get site information
-   const site = await client.api(`/sites/${process.env.SHAREPOINT_SITE_ID}`).get();
-   console.log('Site:', site);
+   // Run the test
+   testSharePointAuthentication()
+     .then(() => console.log('Test completed successfully'))
+     .catch((error) => console.error('Test failed:', error));
    ```
 
 ## Security Best Practices

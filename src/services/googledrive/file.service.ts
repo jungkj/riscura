@@ -25,6 +25,12 @@ export class GoogleDriveFileService {
       let query = "(mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType='application/vnd.ms-excel')";
       
       if (folderId) {
+        // Validate folderId to prevent injection attacks
+        // Google Drive folder IDs are alphanumeric with hyphens and underscores
+        const isValidFolderId = /^[a-zA-Z0-9_-]+$/.test(folderId);
+        if (!isValidFolderId) {
+          throw new Error('Invalid folder ID format');
+        }
         query += ` and '${folderId}' in parents`;
       }
       
@@ -124,11 +130,20 @@ export class GoogleDriveFileService {
       const authService = getGoogleDriveAuthService();
       const drive = await authService.getDriveClient(userId);
       
-      // Sanitize query to prevent injection and syntax errors
+      // Comprehensive sanitization to prevent injection and syntax errors
+      // Google Drive query syntax special characters that need escaping
       const sanitizedQuery = query
-        .replace(/\\/g, '\\\\')  // Escape backslashes
-        .replace(/'/g, "\\'")    // Escape single quotes
-        .replace(/"/g, '\\"');   // Escape double quotes
+        .replace(/\\/g, '\\\\')     // Escape backslashes first
+        .replace(/'/g, "\\'")       // Escape single quotes
+        .replace(/"/g, '\\"')       // Escape double quotes
+        .replace(/\(/g, '\\(')      // Escape opening parentheses
+        .replace(/\)/g, '\\)')      // Escape closing parentheses
+        .replace(/\*/g, '\\*')      // Escape asterisks
+        .replace(/\?/g, '\\?')      // Escape question marks
+        .replace(/\[/g, '\\[')      // Escape opening brackets
+        .replace(/\]/g, '\\]')      // Escape closing brackets
+        .replace(/\{/g, '\\{')      // Escape opening braces
+        .replace(/\}/g, '\\}');     // Escape closing braces
       
       // Search for Excel files containing the query
       const searchQuery = `(mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType='application/vnd.ms-excel') and name contains '${sanitizedQuery}'`;

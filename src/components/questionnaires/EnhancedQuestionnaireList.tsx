@@ -424,7 +424,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
   };
 
   // Render questionnaire card
-  const renderQuestionnaireCard = (questionnaire: EnhancedQuestionnaire) => (
+  const renderQuestionnaireCard = (questionnaire: EnhancedQuestionnaire) => {return (
     <motion.div
       key={questionnaire.id}
       layout
@@ -584,7 +584,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
         </DaisyCardBody>
       </DaisyCard>
     </motion.div>
-  );
+  );}
 
   // Render questionnaire list item
   const renderQuestionnaireListItem = (questionnaire: EnhancedQuestionnaire) => (

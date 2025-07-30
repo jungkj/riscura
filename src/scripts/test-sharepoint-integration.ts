@@ -32,7 +32,7 @@ async function testSharePointIntegration() {
     const authService = getSharePointAuthService();
     const token = await authService.getAccessToken();
     console.log('✅ Successfully acquired access token');
-    console.log(`   Token preview: ${token.substring(0, 20)}...`);
+    // Do not log sensitive token information
   } catch (error) {
     console.error('❌ Authentication failed:', error);
     console.log('\nTroubleshooting tips:');

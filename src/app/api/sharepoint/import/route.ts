@@ -2,6 +2,7 @@ import { withApiMiddleware } from '@/lib/api/middleware';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { getImportJobService } from '@/services/import/job.service';
+import { Prisma } from '@prisma/client';
 
 const importSchema = z.object({
   integrationId: z.string().min(1),
@@ -32,52 +33,71 @@ export const POST = withApiMiddleware({
       };
     }
 
-    // Check for active imports to prevent duplicates
-    const activeImport = await prisma.importJob.findFirst({
-      where: {
-        organizationId,
-        status: {
-          in: ['QUEUED', 'PROCESSING']
-        },
-        metadata: {
-          path: ['fileId'],
-          equals: fileId
-        }
-      }
-    });
-
-    if (activeImport) {
-      return {
-        error: 'This file is already being imported',
-        jobId: activeImport.id
-      };
-    }
-
-    // Validate driveId
+    // Validate driveId before transaction
     if (!integration.driveId || integration.driveId.trim() === '') {
       return {
         error: 'SharePoint integration is missing driveId. Please reconnect to SharePoint and select a document library.'
       };
     }
 
-    // Create import job
-    const jobService = getImportJobService();
-    const jobId = await jobService.createImportJob({
-      organizationId,
-      userId: user.id,
-      integrationId,
-      siteId: integration.siteId,
-      driveId: integration.driveId,
-      fileId,
-      fileName,
-      sourceUrl: `sharepoint://${integration.siteId}/${fileId}`,
-      metadata: {
-        fileId,
-        fileName,
-        integrationId,
-        importedBy: user.email || user.name || user.id
+    // Use transaction to prevent race condition
+    const result = await prisma.$transaction(async (tx) => {
+      // Check for active imports within transaction
+      const activeImport = await tx.importJob.findFirst({
+        where: {
+          organizationId,
+          status: {
+            in: ['QUEUED', 'PROCESSING']
+          },
+          metadata: {
+            path: ['fileId'],
+            equals: fileId
+          }
+        }
+      });
+
+      if (activeImport) {
+        return {
+          error: 'This file is already being imported',
+          jobId: activeImport.id,
+          isError: true
+        };
       }
+
+      // Create import job within the same transaction
+      const importJob = await tx.importJob.create({
+        data: {
+          organizationId,
+          userId: user.id,
+          type: 'sharepoint',
+          status: 'QUEUED',
+          sourceUrl: `sharepoint://${integration.siteId}/${fileId}`,
+          metadata: {
+            fileId,
+            fileName,
+            integrationId,
+            siteId: integration.siteId,
+            driveId: integration.driveId,
+            importedBy: user.email || user.name || user.id
+          }
+        }
+      });
+
+      return {
+        jobId: importJob.id,
+        isError: false
+      };
     });
+
+    // Check if transaction returned an error
+    if (result.isError) {
+      return {
+        error: result.error,
+        jobId: result.jobId
+      };
+    }
+
+    const jobId = result.jobId;
 
     return {
       jobId,
@@ -104,9 +124,9 @@ export const GET = withApiMiddleware({
   const limit = parseInt(searchParams.get('limit') || '10');
   const offset = parseInt(searchParams.get('offset') || '0');
 
-  const where: any = {
+  const where: Prisma.ImportJobWhereInput = {
     organizationId,
-    type: 'sharepoint-excel-import'
+    type: 'sharepoint'
   };
 
   if (integrationId) {

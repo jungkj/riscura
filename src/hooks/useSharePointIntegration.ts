@@ -38,11 +38,35 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
       const data = await response.json();
       
       if (data.integrations) {
-        setIntegrations(data.integrations.map((integration: any) => ({
-          ...integration,
-          lastSyncedAt: integration.lastSyncedAt ? new Date(integration.lastSyncedAt) : undefined,
-          createdAt: new Date(integration.createdAt)
-        })));
+        setIntegrations(data.integrations.map((integration: any) => {
+          // Validate and parse dates safely
+          let lastSyncedAt: Date | undefined;
+          let createdAt: Date | undefined;
+          
+          if (integration.lastSyncedAt) {
+            try {
+              const date = new Date(integration.lastSyncedAt);
+              lastSyncedAt = isNaN(date.getTime()) ? undefined : date;
+            } catch {
+              lastSyncedAt = undefined;
+            }
+          }
+          
+          if (integration.createdAt) {
+            try {
+              const date = new Date(integration.createdAt);
+              createdAt = isNaN(date.getTime()) ? undefined : date;
+            } catch {
+              createdAt = undefined;
+            }
+          }
+          
+          return {
+            ...integration,
+            lastSyncedAt,
+            createdAt
+          };
+        }));
       } else if (data.error) {
         setError(data.error);
       }
@@ -108,7 +132,9 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
     try {
       setError(null);
       
-      const response = await api.delete(`/api/sharepoint/connect?integrationId=${integrationId}`);
+      // Use URLSearchParams to safely encode the integrationId
+      const params = new URLSearchParams({ integrationId });
+      const response = await api.delete(`/api/sharepoint/connect?${params.toString()}`);
       const data = await response.json();
       
       if (data.message) {

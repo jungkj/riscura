@@ -1,3 +1,5 @@
+const { categories } = require('./src/lib/blog/mdx');
+
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
   siteUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://riscura.com',
@@ -22,20 +24,14 @@ module.exports = {
     const result = [];
     
     // Add blog categories with higher priority
-    const categories = [
-      'risk-management-basics',
-      'excel-to-grc-migration',
-      'compliance-guides',
-      'small-business-resources',
-      'product-updates',
-      'industry-insights',
-      'best-practices',
-      'case-studies',
-    ];
+    // Transform categories to URL-friendly slugs
+    const categorySlug = categories.map(category => 
+      category.toLowerCase().replace(/\s+/g, '-')
+    );
     
-    categories.forEach((category) => {
+    categorySlug.forEach((slug) => {
       result.push({
-        loc: `/blog/category/${category}`,
+        loc: `/blog/category/${slug}`,
         changefreq: 'weekly',
         priority: 0.8,
       });

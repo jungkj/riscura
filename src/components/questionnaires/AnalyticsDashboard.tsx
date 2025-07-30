@@ -104,7 +104,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
   const avgCompletionRate = Math.round((totalCompletions / totalResponses) * 100);
   const avgScore = Math.round(data.performanceMetrics.reduce((sum, metric) => sum + metric.avgScore, 0) / data.performanceMetrics.length);
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }: any): JSX.Element | null => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white dark:bg-gray-800 p-3 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg">

@@ -43,7 +43,7 @@ export function AnalyticsCards({ analytics, className }: AnalyticsCardsProps) {
       id: 'total-questionnaires',
       label: 'Total Questionnaires',
       value: analytics.totalQuestionnaires,
-      icon: <FileText className="w-5 h-5" />,
+      icon: (<FileText className="w-5 h-5" />),
       iconBgColor: 'bg-blue-50 dark:bg-blue-900/20',
       iconColor: 'text-blue-600 dark:text-blue-400',
       delay: 0.1
@@ -52,7 +52,7 @@ export function AnalyticsCards({ analytics, className }: AnalyticsCardsProps) {
       id: 'active-responses',
       label: 'Active Responses',
       value: analytics.activeResponses,
-      icon: <TrendingUp className="w-5 h-5" />,
+      icon: (<TrendingUp className="w-5 h-5" />),
       iconBgColor: 'bg-green-50 dark:bg-green-900/20',
       iconColor: 'text-green-600 dark:text-green-400',
       delay: 0.15
@@ -61,7 +61,7 @@ export function AnalyticsCards({ analytics, className }: AnalyticsCardsProps) {
       id: 'completion-rate',
       label: 'Completion Rate',
       value: `${analytics.completionRate}%`,
-      icon: <CheckCircle className="w-5 h-5" />,
+      icon: (<CheckCircle className="w-5 h-5" />),
       iconBgColor: 'bg-blue-50 dark:bg-blue-900/20',
       iconColor: 'text-blue-600 dark:text-blue-400',
       delay: 0.2
@@ -70,7 +70,7 @@ export function AnalyticsCards({ analytics, className }: AnalyticsCardsProps) {
       id: 'average-score',
       label: 'Average Score',
       value: analytics.averageScore,
-      icon: <Target className="w-5 h-5" />,
+      icon: (<Target className="w-5 h-5" />),
       iconBgColor: 'bg-gray-50 dark:bg-gray-800/50',
       iconColor: 'text-gray-700 dark:text-gray-300',
       delay: 0.25
@@ -79,7 +79,7 @@ export function AnalyticsCards({ analytics, className }: AnalyticsCardsProps) {
       id: 'ai-questions',
       label: 'AI Questions',
       value: analytics.aiGeneratedQuestions,
-      icon: <Settings className="w-5 h-5" />,
+      icon: (<Settings className="w-5 h-5" />),
       iconBgColor: 'bg-purple-50 dark:bg-purple-900/20',
       iconColor: 'text-purple-600 dark:text-purple-400',
       delay: 0.3
@@ -88,7 +88,7 @@ export function AnalyticsCards({ analytics, className }: AnalyticsCardsProps) {
       id: 'risk-assessments',
       label: 'Risk Assessments',
       value: analytics.riskAssessments,
-      icon: <Shield className="w-5 h-5" />,
+      icon: (<Shield className="w-5 h-5" />),
       iconBgColor: 'bg-red-50 dark:bg-red-900/20',
       iconColor: 'text-red-600 dark:text-red-400',
       delay: 0.35

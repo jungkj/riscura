@@ -36,15 +36,12 @@ export class ImportJobService {
   private static instance: ImportJobService;
 
   constructor() {
+    // Validate Redis configuration
+    const redisConfig = this.validateRedisConfig();
+    
     // Initialize Bull queue with Redis connection
     this.queue = new Bull<JobData>('import-jobs', {
-      redis: {
-        host: process.env.REDIS_HOST || 'localhost',
-        port: parseInt(process.env.REDIS_PORT || '6379'),
-        password: process.env.REDIS_PASSWORD,
-        db: parseInt(process.env.REDIS_DB || '0'),
-        tls: process.env.REDIS_TLS === 'true' ? {} : undefined
-      },
+      redis: redisConfig,
       defaultJobOptions: {
         removeOnComplete: 100, // Keep last 100 completed jobs
         removeOnFail: 50, // Keep last 50 failed jobs
@@ -58,6 +55,48 @@ export class ImportJobService {
 
     this.setupWorkers();
     this.setupEventHandlers();
+  }
+
+  /**
+   * Validate Redis configuration
+   */
+  private validateRedisConfig() {
+    const redisUrl = process.env.REDIS_URL;
+    
+    if (redisUrl) {
+      // Parse Redis URL if provided
+      try {
+        const url = new URL(redisUrl);
+        return {
+          host: url.hostname,
+          port: parseInt(url.port || '6379'),
+          password: url.password || undefined,
+          username: url.username || undefined,
+          db: parseInt(url.pathname.slice(1) || '0'),
+          tls: url.protocol === 'rediss:' ? {} : undefined
+        };
+      } catch (error) {
+        console.error('Invalid REDIS_URL format:', error);
+        throw new Error('Invalid REDIS_URL configuration');
+      }
+    }
+    
+    // Fall back to individual Redis environment variables
+    const host = process.env.REDIS_HOST || 'localhost';
+    const port = parseInt(process.env.REDIS_PORT || '6379');
+    
+    // Validate port number
+    if (isNaN(port) || port < 1 || port > 65535) {
+      throw new Error('Invalid REDIS_PORT: must be a number between 1 and 65535');
+    }
+    
+    return {
+      host,
+      port,
+      password: process.env.REDIS_PASSWORD,
+      db: parseInt(process.env.REDIS_DB || '0'),
+      tls: process.env.REDIS_TLS === 'true' ? {} : undefined
+    };
   }
 
   /**
