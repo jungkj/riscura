@@ -658,7 +658,7 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               </div>
               <FileText className="h-8 w-8 text-blue-600" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
@@ -670,7 +670,7 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               </div>
               <Activity className="h-8 w-8 text-green-600" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
@@ -682,7 +682,7 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               </div>
               <DaisyCalendar className="h-8 w-8 text-purple-600" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200">
@@ -694,7 +694,7 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               </div>
               <Eye className="h-8 w-8 text-gray-600" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200">
@@ -706,7 +706,7 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               </div>
               <Brain className="h-8 w-8 text-indigo-600" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
@@ -718,7 +718,7 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               </div>
               <Clock className="h-8 w-8 text-orange-600" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 

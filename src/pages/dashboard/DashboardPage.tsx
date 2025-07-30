@@ -644,7 +644,7 @@ export default function DashboardPage() {
                     <p className="text-xs text-gray-600">Total Risks</p>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard 
@@ -661,7 +661,7 @@ export default function DashboardPage() {
                     <p className="text-xs text-gray-600">High Priority</p>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard 
@@ -678,7 +678,7 @@ export default function DashboardPage() {
                     <p className="text-xs text-gray-600">Compliance</p>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard 
@@ -695,7 +695,7 @@ export default function DashboardPage() {
                     <p className="text-xs text-gray-600">Controls</p>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
 
@@ -721,7 +721,7 @@ export default function DashboardPage() {
                   />
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Recently Imported Section */}
@@ -773,7 +773,7 @@ export default function DashboardPage() {
                     </div>
                   ))}
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           )}
         </div>
@@ -848,7 +848,7 @@ export default function DashboardPage() {
                 </div>
               ))}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -880,7 +880,7 @@ export default function DashboardPage() {
                 Invite Team
               </DaisyButton>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Quick Team Actions */}
@@ -940,7 +940,7 @@ export default function DashboardPage() {
                 </div>
               </div>
             </DaisyButton>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Small Team Insights */}
@@ -981,7 +981,7 @@ export default function DashboardPage() {
                 <span>Team efficiency improved by 12% this month</span>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
       </>

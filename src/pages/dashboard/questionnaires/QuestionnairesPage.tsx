@@ -735,15 +735,15 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
                 }>
                   <DaisySelectTrigger className="w-48">
                     <DaisySelectValue placeholder="Category" />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
-                    <DaisySelectItem value="all">All Categories</SelectItem>
-                    <DaisySelectItem value="risk_assessment">Risk Assessment</SelectItem>
-                    <DaisySelectItem value="compliance_audit">Compliance Audit</SelectItem>
-                    <DaisySelectItem value="control_testing">Control Testing</SelectItem>
-                    <DaisySelectItem value="vendor_assessment">Vendor Assessment</SelectItem>
-                    <DaisySelectItem value="security_review">Security Review</SelectItem>
-                  </SelectContent>
+                    <DaisySelectItem value="all">All Categories</DaisySelectItem>
+                    <DaisySelectItem value="risk_assessment">Risk Assessment</DaisySelectItem>
+                    <DaisySelectItem value="compliance_audit">Compliance Audit</DaisySelectItem>
+                    <DaisySelectItem value="control_testing">Control Testing</DaisySelectItem>
+                    <DaisySelectItem value="vendor_assessment">Vendor Assessment</DaisySelectItem>
+                    <DaisySelectItem value="security_review">Security Review</DaisySelectItem>
+                  </DaisySelectContent>
                 </DaisySelect>
 
                 <DaisySelect value={selectedStatus} onValueChange={(value) =>
@@ -751,15 +751,15 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
                 }>
                   <DaisySelectTrigger className="w-48">
                     <DaisySelectValue placeholder="Status" />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
-                    <DaisySelectItem value="all">All Status</SelectItem>
-                    <DaisySelectItem value="draft">Draft</SelectItem>
-                    <DaisySelectItem value="review">Under Review</SelectItem>
-                    <DaisySelectItem value="published">Published</SelectItem>
-                    <DaisySelectItem value="active">Active</SelectItem>
-                    <DaisySelectItem value="archived">Archived</SelectItem>
-                  </SelectContent>
+                    <DaisySelectItem value="all">All Status</DaisySelectItem>
+                    <DaisySelectItem value="draft">Draft</DaisySelectItem>
+                    <DaisySelectItem value="review">Under Review</DaisySelectItem>
+                    <DaisySelectItem value="published">Published</DaisySelectItem>
+                    <DaisySelectItem value="active">Active</DaisySelectItem>
+                    <DaisySelectItem value="archived">Archived</DaisySelectItem>
+                  </DaisySelectContent>
                 </DaisySelect>
               </div>
             </motion.div>

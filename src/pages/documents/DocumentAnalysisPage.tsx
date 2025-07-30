@@ -176,7 +176,7 @@ export default function DocumentAnalysisPage() {
                 <p className="text-sm text-muted-foreground">Total Documents</p>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard>
@@ -188,7 +188,7 @@ export default function DocumentAnalysisPage() {
                 <p className="text-sm text-muted-foreground">Analyzed</p>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard>
@@ -200,7 +200,7 @@ export default function DocumentAnalysisPage() {
                 <p className="text-sm text-muted-foreground">Risks Found</p>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard>
@@ -212,7 +212,7 @@ export default function DocumentAnalysisPage() {
                 <p className="text-sm text-muted-foreground">Avg Confidence</p>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </motion.div>
 
@@ -295,7 +295,7 @@ export default function DocumentAnalysisPage() {
                     </div>
                   ))}
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </motion.div>
         </DaisyTabsContent>
@@ -344,7 +344,7 @@ export default function DocumentAnalysisPage() {
                     </div>
                   ))}
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </motion.div>
         </DaisyTabsContent>
@@ -404,7 +404,7 @@ export default function DocumentAnalysisPage() {
                     </p>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </motion.div>
         </DaisyTabsContent>
