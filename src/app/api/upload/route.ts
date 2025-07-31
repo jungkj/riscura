@@ -13,16 +13,13 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
   try {
     const formData = await req.formData();
     const file = formData.get('file') as File;
-    const bucket = formData.get('bucket') as string || 'attachments';
+    const bucket = (formData.get('bucket') as string) || 'attachments';
     const metadata = formData.get('metadata');
-    
+
     if (!file) {
-      return NextResponse.json(
-        { success: false, error: 'No file provided' },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: 'No file provided' }, { status: 400 });
     }
-    
+
     // Check file size (10MB limit)
     if (file.size > 10 * 1024 * 1024) {
       return NextResponse.json(
@@ -30,7 +27,7 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
         { status: 400 }
       );
     }
-    
+
     // Upload to Supabase Storage
     const uploadedFile = await storageService.uploadFile({
       bucket: bucket as any,
@@ -39,14 +36,14 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
       userId: user.id,
       metadata: metadata ? JSON.parse(metadata as string) : undefined,
     });
-    
+
     // Get signed URL for immediate access
     const signedUrl = await storageService.getSignedUrl(
       uploadedFile.bucket,
       uploadedFile.path,
       3600 // 1 hour expiry
     );
-    
+
     return NextResponse.json({
       success: true,
       data: {
@@ -56,10 +53,7 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
     });
   } catch (error) {
     console.error('Upload error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Failed to upload file' },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: 'Failed to upload file' }, { status: 500 });
   }
 });
 
@@ -72,10 +66,10 @@ export const GET = withApiMiddleware(async (req: NextRequest) => {
 
   try {
     const stats = await storageService.getStorageStats(user.organizationId);
-    
+
     // Add usage percentage (1GB = 1073741824 bytes)
     const usagePercentage = (stats.totalSize / 1073741824) * 100;
-    
+
     return NextResponse.json({
       success: true,
       data: {

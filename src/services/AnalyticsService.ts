@@ -1,4 +1,12 @@
-import { startOfDay, subDays, format, eachDayOfInterval, startOfWeek, startOfMonth, endOfMonth } from 'date-fns';
+import {
+  startOfDay,
+  subDays,
+  format,
+  eachDayOfInterval,
+  startOfWeek,
+  startOfMonth,
+  endOfMonth,
+} from 'date-fns';
 import { prisma } from '@/lib/prisma';
 
 export interface AnalyticsMetrics {
@@ -63,10 +71,7 @@ export interface TimeRange {
 }
 
 export class AnalyticsService {
-  async getAnalyticsData(
-    organizationId: string,
-    timeRange: TimeRange
-  ): Promise<AnalyticsMetrics> {
+  async getAnalyticsData(organizationId: string, timeRange: TimeRange): Promise<AnalyticsMetrics> {
     const [risks, controls, tasks, activities] = await Promise.all([
       this.getRiskAnalytics(organizationId, timeRange),
       this.getControlAnalytics(organizationId, timeRange),
@@ -147,10 +152,11 @@ export class AnalyticsService {
     const byFrequency = this.groupAndCount(controls, 'frequency');
 
     // Calculate testing coverage
-    const testedControls = controls.filter(control =>
-      control.testScripts.some(ts => ts.testScript.testExecutions.length > 0)
+    const testedControls = controls.filter((control) =>
+      control.testScripts.some((ts) => ts.testScript.testExecutions.length > 0)
     );
-    const testingCoverage = controls.length > 0 ? (testedControls.length / controls.length) * 100 : 0;
+    const testingCoverage =
+      controls.length > 0 ? (testedControls.length / controls.length) * 100 : 0;
 
     // Get trend data
     const trend = await this.getControlTrend(organizationId, timeRange);
@@ -179,9 +185,9 @@ export class AnalyticsService {
 
     // Calculate distributions
     const byStatus = this.groupAndCount(tasks, 'status');
-    const completedTasks = tasks.filter(t => t.status === 'COMPLETED');
+    const completedTasks = tasks.filter((t) => t.status === 'COMPLETED');
     const overdueTasks = tasks.filter(
-      t => t.dueDate && t.dueDate < new Date() && t.status !== 'COMPLETED'
+      (t) => t.dueDate && t.dueDate < new Date() && t.status !== 'COMPLETED'
     );
 
     // Calculate completion metrics
@@ -219,11 +225,13 @@ export class AnalyticsService {
     });
 
     // Format recent actions
-    const recentActions: ActivityData[] = activities.slice(0, 10).map(activity => ({
+    const recentActions: ActivityData[] = activities.slice(0, 10).map((activity) => ({
       id: activity.id,
       type: activity.activityType,
       description: this.formatActivityDescription(activity),
-      user: activity.createdBy ? `${activity.createdBy.firstName} ${activity.createdBy.lastName}` : 'System',
+      user: activity.createdBy
+        ? `${activity.createdBy.firstName} ${activity.createdBy.lastName}`
+        : 'System',
       timestamp: activity.createdAt,
       entityType: activity.entityType,
       entityId: activity.entityId,
@@ -244,19 +252,13 @@ export class AnalyticsService {
     };
   }
 
-  private async getComplianceAnalytics(
-    organizationId: string,
-    risks: any,
-    controls: any
-  ) {
+  private async getComplianceAnalytics(organizationId: string, risks: any, controls: any) {
     // Calculate overall compliance score
     const effectiveControls = Object.entries(controls.byEffectiveness)
       .filter(([status]) => status === 'EFFECTIVE')
       .reduce((sum, [, count]) => sum + count, 0);
 
-    const overallScore = controls.total > 0
-      ? (effectiveControls / controls.total) * 100
-      : 0;
+    const overallScore = controls.total > 0 ? (effectiveControls / controls.total) * 100 : 0;
 
     // Get framework compliance (simplified for now)
     const frameworks = [
@@ -282,18 +284,21 @@ export class AnalyticsService {
 
   // Helper methods
   private groupAndCount<T>(items: T[], key: keyof T): Record<string, number> {
-    return items.reduce((acc, item) => {
-      const value = String(item[key]);
-      acc[value] = (acc[value] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    return items.reduce(
+      (acc, item) => {
+        const value = String(item[key]);
+        acc[value] = (acc[value] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
   }
 
   private calculateRiskDistribution(risks: any[]) {
     const distribution: Array<{ category: string; severity: string; count: number }> = [];
     const grouped = new Map<string, number>();
 
-    risks.forEach(risk => {
+    risks.forEach((risk) => {
       const key = `${risk.category}-${risk.severity}`;
       grouped.set(key, (grouped.get(key) || 0) + 1);
     });
@@ -308,7 +313,7 @@ export class AnalyticsService {
 
   private async getRiskTrend(organizationId: string, timeRange: TimeRange): Promise<TrendData[]> {
     const days = eachDayOfInterval({ start: timeRange.start, end: timeRange.end });
-    
+
     // Query actual risk data for each day
     const trendData = await Promise.all(
       days.map(async (day) => {
@@ -337,9 +342,12 @@ export class AnalyticsService {
     return trendData;
   }
 
-  private async getControlTrend(organizationId: string, timeRange: TimeRange): Promise<TrendData[]> {
+  private async getControlTrend(
+    organizationId: string,
+    timeRange: TimeRange
+  ): Promise<TrendData[]> {
     const days = eachDayOfInterval({ start: timeRange.start, end: timeRange.end });
-    
+
     // Query actual control data for each day
     const trendData = await Promise.all(
       days.map(async (day) => {
@@ -370,7 +378,7 @@ export class AnalyticsService {
 
   private async getTaskTrend(organizationId: string, timeRange: TimeRange): Promise<TrendData[]> {
     const days = eachDayOfInterval({ start: timeRange.start, end: timeRange.end });
-    
+
     // Query actual task completion data for each day
     const trendData = await Promise.all(
       days.map(async (day) => {
@@ -423,7 +431,7 @@ export class AnalyticsService {
   private calculateUserActivity(activities: any[]): Array<{ user: string; count: number }> {
     const userMap = new Map<string, number>();
 
-    activities.forEach(activity => {
+    activities.forEach((activity) => {
       if (activity.createdBy) {
         const userName = `${activity.createdBy.firstName} ${activity.createdBy.lastName}`;
         userMap.set(userName, (userMap.get(userName) || 0) + 1);
@@ -440,12 +448,12 @@ export class AnalyticsService {
     const days = eachDayOfInterval({ start: timeRange.start, end: timeRange.end });
     const dayMap = new Map<string, number>();
 
-    activities.forEach(activity => {
+    activities.forEach((activity) => {
       const day = format(activity.createdAt, 'MMM dd');
       dayMap.set(day, (dayMap.get(day) || 0) + 1);
     });
 
-    return days.map(day => ({
+    return days.map((day) => ({
       date: format(day, 'MMM dd'),
       value: dayMap.get(format(day, 'MMM dd')) || 0,
     }));
@@ -459,7 +467,7 @@ export class AnalyticsService {
     for (let i = 0; i < days; i++) {
       score += Math.random() * 2 - 0.5;
       score = Math.max(0, Math.min(100, score));
-      
+
       trend.push({
         date: format(subDays(new Date(), days - i), 'MMM dd'),
         value: Math.round(score),

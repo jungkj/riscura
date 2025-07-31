@@ -17,7 +17,7 @@ export class OrganizationFactory {
 
   static create(options: CreateOrganizationOptions = {}): Organization {
     const id = options.id || `org-${this.counter++}`;
-    
+
     return {
       id,
       name: options.name || `Test Organization ${this.counter}`,
@@ -120,22 +120,22 @@ export const testOrganizations = {
     name: 'Default Test Organization',
     domain: 'test.com',
   }),
-  
+
   enterprise: OrganizationFactory.createEnterprise({
     id: 'org-enterprise',
     name: 'Enterprise Test Org',
     domain: 'enterprise.com',
   }),
-  
+
   pro: OrganizationFactory.createPro({
     id: 'org-pro',
     name: 'Pro Test Org',
     domain: 'pro.com',
   }),
-  
+
   free: OrganizationFactory.createFree({
     id: 'org-free',
     name: 'Free Test Org',
     domain: 'free.com',
   }),
-}; 
+};

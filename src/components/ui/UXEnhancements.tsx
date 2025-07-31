@@ -1,14 +1,14 @@
 'use client';
 
-import React, { 
-  Component, 
-  ReactNode, 
-  useState, 
-  useEffect, 
-  useCallback, 
+import React, {
+  Component,
+  ReactNode,
+  useState,
+  useEffect,
+  useCallback,
   useRef,
   useMemo,
-  Suspense 
+  Suspense,
 } from 'react';
 import { cn } from '@/lib/utils';
 import { useAccessibility } from '@/lib/accessibility/AccessibilityProvider';
@@ -65,7 +65,7 @@ export class ErrorBoundary extends Component<
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     this.setState({ errorInfo });
     this.props.onError?.(error, errorInfo);
-    
+
     // Auto-reset after 5 seconds
     this.resetTimeoutId = window.setTimeout(() => {
       this.setState({ hasError: false, error: undefined, errorInfo: undefined });
@@ -75,12 +75,12 @@ export class ErrorBoundary extends Component<
   componentDidUpdate(prevProps: any) {
     const { resetOnPropsChange, resetKeys } = this.props;
     const { hasError } = this.state;
-    
+
     if (hasError && resetOnPropsChange && resetKeys) {
       const hasResetKeyChanged = resetKeys.some(
         (key, index) => key !== prevProps.resetKeys?.[index]
       );
-      
+
       if (hasResetKeyChanged) {
         this.setState({ hasError: false, error: undefined, errorInfo: undefined });
       }
@@ -97,20 +97,29 @@ export class ErrorBoundary extends Component<
     if (this.state.hasError) {
       if (this.props.fallback) {
         return this.props.fallback;
-      };
+      }
 
-  return (
+      return (
         <div className="flex flex-col items-center justify-center p-8 text-center">
           <div className="mb-4 text-error">
-            <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.732 15.5c-.77.833.192 2.5 1.732 2.5z" />
+            <svg
+              className="w-16 h-16 mx-auto"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.732 15.5c-.77.833.192 2.5 1.732 2.5z"
+              />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-text-primary mb-2">
-            Something went wrong
-          </h3>
+          <h3 className="text-lg font-semibold text-text-primary mb-2">Something went wrong</h3>
           <p className="text-text-secondary mb-4">
-            We're sorry, but something unexpected happened. The page will automatically reload shortly.
+            We're sorry, but something unexpected happened. The page will automatically reload
+            shortly.
           </p>
           <button
             onClick={() => window.location.reload()}
@@ -156,9 +165,18 @@ export const LoadingDots: React.FC<{
   className?: string;
 }> = ({ className }) => (
   <div className={cn('flex space-x-1', className)} role="status" aria-label="Loading">
-    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+    <div
+      className="w-2 h-2 bg-primary rounded-full animate-bounce"
+      style={{ animationDelay: '0ms' }}
+    />
+    <div
+      className="w-2 h-2 bg-primary rounded-full animate-bounce"
+      style={{ animationDelay: '150ms' }}
+    />
+    <div
+      className="w-2 h-2 bg-primary rounded-full animate-bounce"
+      style={{ animationDelay: '300ms' }}
+    />
     <span className="sr-only">Loading...</span>
   </div>
 );
@@ -172,9 +190,9 @@ export const LoadingPulse: React.FC<{
       <div
         key={index}
         className="h-4 bg-surface-secondary rounded animate-pulse"
-        style={{ 
+        style={{
           width: `${Math.random() * 40 + 60}%`,
-          animationDelay: `${index * 200}ms`
+          animationDelay: `${index * 200}ms`,
         }}
       />
     ))}
@@ -189,7 +207,7 @@ export const SkeletonLoader: React.FC<{
   className?: string;
 }> = ({ variant = 'text', width, height, className }) => {
   const baseClasses = 'animate-pulse bg-surface-secondary';
-  
+
   const variantClasses = {
     text: 'h-4 rounded',
     rectangular: 'rounded-md',
@@ -222,9 +240,7 @@ export const LoadingOverlay: React.FC<{
   className?: string;
 }> = ({ isLoading, children, loadingComponent, blur = true, className }) => (
   <div className={cn('relative', className)}>
-    <div className={cn(isLoading && blur && 'blur-sm transition-all duration-300')}>
-      {children}
-    </div>
+    <div className={cn(isLoading && blur && 'blur-sm transition-all duration-300')}>{children}</div>
     {isLoading && (
       <div className="absolute inset-0 flex items-center justify-center bg-surface-primary/80 backdrop-blur-sm">
         {loadingComponent || <LoadingSpinner size="lg" />}
@@ -242,7 +258,7 @@ export const ProgressBar: React.FC<{
   color?: 'primary' | 'success' | 'warning' | 'error';
 }> = ({ progress, max = 100, className, showLabel = false, color = 'primary' }) => {
   const percentage = Math.min((progress / max) * 100, 100);
-  
+
   const colorClasses = {
     primary: 'bg-primary',
     success: 'bg-success',
@@ -266,9 +282,7 @@ export const ProgressBar: React.FC<{
         />
       </div>
       {showLabel && (
-        <div className="mt-2 text-sm text-text-secondary text-right">
-          {Math.round(percentage)}%
-        </div>
+        <div className="mt-2 text-sm text-text-secondary text-right">{Math.round(percentage)}%</div>
       )}
     </div>
   );
@@ -282,20 +296,20 @@ export const CircularProgress: React.FC<{
   className?: string;
   showLabel?: boolean;
   color?: 'primary' | 'success' | 'warning' | 'error';
-}> = ({ 
-  progress, 
-  max = 100, 
-  size = 120, 
-  strokeWidth = 8, 
-  className, 
+}> = ({
+  progress,
+  max = 100,
+  size = 120,
+  strokeWidth = 8,
+  className,
   showLabel = true,
-  color = 'primary' 
+  color = 'primary',
 }) => {
   const percentage = Math.min((progress / max) * 100, 100);
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
-  
+
   const colorClasses = {
     primary: 'stroke-primary',
     success: 'stroke-success',
@@ -402,14 +416,7 @@ export const SlideIn: React.FC<{
   delay?: number;
   distance?: number;
   className?: string;
-}> = ({ 
-  children, 
-  direction = 'up', 
-  duration = 500, 
-  delay = 0, 
-  distance = 20, 
-  className 
-}) => {
+}> = ({ children, direction = 'up', duration = 500, delay = 0, distance = 20, className }) => {
   const [isVisible, setIsVisible] = useState(false);
   const elementRef = useRef<HTMLDivElement>(null);
   const { isReducedMotion } = useAccessibility();
@@ -495,7 +502,7 @@ export const Toast: React.FC<{
 
   useEffect(() => {
     announceToScreenReader(message, type === 'error' ? 'assertive' : 'polite');
-    
+
     const timer = setTimeout(onClose, duration);
     return () => clearTimeout(timer);
   }, [message, type, duration, onClose, announceToScreenReader]);
@@ -573,30 +580,35 @@ export const useLoadingState = (initialState = false) => {
 };
 
 export const useToast = () => {
-  const [toasts, setToasts] = useState<Array<{
-    id: string;
-    message: string;
-    type: 'success' | 'error' | 'warning' | 'info';
-    duration?: number;
-  }>>([]);
+  const [toasts, setToasts] = useState<
+    Array<{
+      id: string;
+      message: string;
+      type: 'success' | 'error' | 'warning' | 'info';
+      duration?: number;
+    }>
+  >([]);
 
-  const addToast = useCallback((
-    message: string,
-    type: 'success' | 'error' | 'warning' | 'info' = 'info',
-    duration?: number
-  ) => {
-    const id = Math.random().toString(36).substr(2, 9);
-    setToasts(prev => [...prev, { id, message, type, duration }]);
-  }, []);
+  const addToast = useCallback(
+    (
+      message: string,
+      type: 'success' | 'error' | 'warning' | 'info' = 'info',
+      duration?: number
+    ) => {
+      const id = Math.random().toString(36).substr(2, 9);
+      setToasts((prev) => [...prev, { id, message, type, duration }]);
+    },
+    []
+  );
 
   const removeToast = useCallback((id: string) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id));
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
   }, []);
 
   const ToastContainer = useMemo(() => {
     const Component = ({ className }: { className?: string }) => (
       <div className={cn('fixed top-4 right-4 z-50 space-y-2', className)}>
-        {toasts.map(toast => (
+        {toasts.map((toast) => (
           <Toast
             key={toast.id}
             message={toast.message}
@@ -628,7 +640,7 @@ export const useProgressiveEnhancement = () => {
     const hasJS = true; // We're in React, so JS is available
     const hasModernFeatures = 'IntersectionObserver' in window && 'fetch' in window;
     const hasGoodConnection = settings.enableCodeSplitting;
-    
+
     setIsEnhanced(hasJS && hasModernFeatures && hasGoodConnection);
   }, [settings.enableCodeSplitting]);
 

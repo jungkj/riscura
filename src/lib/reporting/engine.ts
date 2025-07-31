@@ -125,9 +125,10 @@ export interface ReportTemplate {
 }
 
 export class ReportingEngine {
-
   // Create a new report
-  async createReport(config: Omit<ReportConfig, 'id' | 'createdAt' | 'updatedAt'>): Promise<ReportConfig> {
+  async createReport(
+    config: Omit<ReportConfig, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<ReportConfig> {
     const report = await db.client.report.create({
       data: {
         ...config,
@@ -157,7 +158,10 @@ export class ReportingEngine {
   }
 
   // Generate report data
-  async generateReportData(reportId: string, filters: Record<string, any> = {}): Promise<{
+  async generateReportData(
+    reportId: string,
+    filters: Record<string, any> = {}
+  ): Promise<{
     widgets: Array<{
       id: string;
       data: any[];
@@ -198,7 +202,10 @@ export class ReportingEngine {
       })
     );
 
-    const totalDataPoints = widgetData.reduce((sum, widget) => sum + widget.metadata.totalRecords, 0);
+    const totalDataPoints = widgetData.reduce(
+      (sum, widget) => sum + widget.metadata.totalRecords,
+      0
+    );
 
     return {
       widgets: widgetData,
@@ -211,7 +218,10 @@ export class ReportingEngine {
   }
 
   // Generate data for a specific widget
-  private async generateWidgetData(widget: ReportWidget, globalFilters: Record<string, any>): Promise<{
+  private async generateWidgetData(
+    widget: ReportWidget,
+    globalFilters: Record<string, any>
+  ): Promise<{
     records: any[];
     total: number;
     executionTime: number;
@@ -223,7 +233,10 @@ export class ReportingEngine {
 
     switch (widget.dataSource.type) {
       case 'query':
-        const result = await this.executeQuery(widget.dataSource, { ...globalFilters, ...this.parseWidgetFilters(widget.filters) });
+        const result = await this.executeQuery(widget.dataSource, {
+          ...globalFilters,
+          ...this.parseWidgetFilters(widget.filters),
+        });
         data = result.records;
         total = result.total;
         break;
@@ -251,7 +264,10 @@ export class ReportingEngine {
   }
 
   // Execute database query
-  private async executeQuery(dataSource: DataSourceConfig, filters: Record<string, any>): Promise<{
+  private async executeQuery(
+    dataSource: DataSourceConfig,
+    filters: Record<string, any>
+  ): Promise<{
     records: any[];
     total: number;
   }> {
@@ -263,14 +279,14 @@ export class ReportingEngine {
 
     // Build parameterized query with filters
     const mergedParams = { ...parameters, ...filters };
-    
+
     // This is a simplified example - in practice you'd want proper query building
     const records = await db.client.$queryRaw`
       SELECT * FROM (${query}) AS subquery 
       WHERE 1=1 
-      ${Object.entries(filters).map(([key, value]) => 
-        value !== undefined ? `AND ${key} = ${value}` : ''
-      ).join(' ')}
+      ${Object.entries(filters)
+        .map(([key, value]) => (value !== undefined ? `AND ${key} = ${value}` : ''))
+        .join(' ')}
     `;
 
     return {
@@ -280,7 +296,10 @@ export class ReportingEngine {
   }
 
   // Call external API
-  private async callExternalAPI(dataSource: DataSourceConfig, filters: Record<string, any>): Promise<{
+  private async callExternalAPI(
+    dataSource: DataSourceConfig,
+    filters: Record<string, any>
+  ): Promise<{
     data: any[];
     total: number;
   }> {
@@ -348,7 +367,7 @@ export class ReportingEngine {
   // Group and average data
   private groupAndAverage(data: any[], groupBy: string, field: string): any[] {
     const grouped = this.groupAndSum(data, groupBy, field);
-    return grouped.map(item => ({
+    return grouped.map((item) => ({
       ...item,
       [field]: item[field] / item.count,
     }));
@@ -386,12 +405,15 @@ export class ReportingEngine {
 
   // Parse widget filters
   private parseWidgetFilters(filters: WidgetFilter[]): Record<string, any> {
-    return filters.reduce((acc, filter) => {
-      if (filter.value !== undefined && filter.value !== null) {
-        acc[filter.field] = filter.value;
-      }
-      return acc;
-    }, {} as Record<string, any>);
+    return filters.reduce(
+      (acc, filter) => {
+        if (filter.value !== undefined && filter.value !== null) {
+          acc[filter.field] = filter.value;
+        }
+        return acc;
+      },
+      {} as Record<string, any>
+    );
   }
 
   // Export report to PDF
@@ -417,10 +439,7 @@ export class ReportingEngine {
 
     return await db.client.reportTemplate.findMany({
       where,
-      orderBy: [
-        { isSystem: 'desc' },
-        { name: 'asc' },
-      ],
+      orderBy: [{ isSystem: 'desc' }, { name: 'asc' }],
     });
   }
 
@@ -432,7 +451,10 @@ export class ReportingEngine {
   }
 
   // Calculate KPI value
-  async calculateKPI(kpiId: string, dateRange: { from: Date; to: Date }): Promise<{
+  async calculateKPI(
+    kpiId: string,
+    dateRange: { from: Date; to: Date }
+  ): Promise<{
     value: number;
     previousValue?: number;
     trend: 'up' | 'down' | 'stable';
@@ -448,10 +470,12 @@ export class ReportingEngine {
 
     // Execute KPI formula (simplified implementation)
     const value = await this.executeKPIFormula(kpi.formula, dateRange);
-    
+
     // Calculate previous period for trend
     const previousPeriod = {
-      from: new Date(dateRange.from.getTime() - (dateRange.to.getTime() - dateRange.from.getTime())),
+      from: new Date(
+        dateRange.from.getTime() - (dateRange.to.getTime() - dateRange.from.getTime())
+      ),
       to: dateRange.from,
     };
     const previousValue = await this.executeKPIFormula(kpi.formula, previousPeriod);
@@ -470,15 +494,18 @@ export class ReportingEngine {
   }
 
   // Execute KPI formula
-  private async executeKPIFormula(formula: string, dateRange: { from: Date; to: Date }): Promise<number> {
+  private async executeKPIFormula(
+    formula: string,
+    dateRange: { from: Date; to: Date }
+  ): Promise<number> {
     // This is a simplified implementation
     // In practice, you'd want a proper formula parser
-    
+
     // Example formulas:
     // "COUNT(risks WHERE status='open')"
     // "AVG(risks.likelihood * risks.impact)"
     // "SUM(controls.effectiveness_score) / COUNT(controls)"
-    
+
     if (formula.includes('COUNT(risks')) {
       const count = await db.client.risk.count({
         where: {
@@ -494,7 +521,10 @@ export class ReportingEngine {
   }
 
   // Schedule report generation
-  async scheduleReport(reportId: string, schedule: Omit<ScheduledRun, 'id' | 'lastRun' | 'nextRun'>): Promise<ScheduledRun> {
+  async scheduleReport(
+    reportId: string,
+    schedule: Omit<ScheduledRun, 'id' | 'lastRun' | 'nextRun'>
+  ): Promise<ScheduledRun> {
     const nextRun = this.calculateNextRun(schedule);
 
     const scheduledRun = await db.client.scheduledRun.create({
@@ -509,7 +539,9 @@ export class ReportingEngine {
   }
 
   // Calculate next run time for scheduled report
-  private calculateNextRun(schedule: Pick<ScheduledRun, 'frequency' | 'dayOfWeek' | 'dayOfMonth' | 'time' | 'timezone'>): Date {
+  private calculateNextRun(
+    schedule: Pick<ScheduledRun, 'frequency' | 'dayOfWeek' | 'dayOfMonth' | 'time' | 'timezone'>
+  ): Date {
     const now = new Date();
     const [hours, minutes] = schedule.time.split(':').map(Number);
 
@@ -527,7 +559,7 @@ export class ReportingEngine {
         const targetDay = schedule.dayOfWeek || 1; // Default to Monday
         const currentDay = nextRun.getDay();
         const daysUntilTarget = (targetDay - currentDay + 7) % 7;
-        
+
         nextRun.setDate(nextRun.getDate() + daysUntilTarget);
         if (nextRun <= now) {
           nextRun.setDate(nextRun.getDate() + 7);
@@ -576,7 +608,7 @@ export class ReportingEngine {
     for (const scheduledRun of dueReports) {
       try {
         await this.generateScheduledReport(scheduledRun);
-        
+
         // Update next run time
         const nextRun = this.calculateNextRun(scheduledRun);
         await db.client.scheduledRun.update({
@@ -586,7 +618,6 @@ export class ReportingEngine {
             nextRun,
           },
         });
-
       } catch (error) {
         console.error(`Failed to generate scheduled report ${scheduledRun.id}:`, error);
       }
@@ -639,7 +670,12 @@ export class ReportingEngine {
   }
 
   // Deliver report file to user
-  private async deliverReportFile(recipientId: string, filename: string, fileBuffer: Buffer, mimeType: string): Promise<void> {
+  private async deliverReportFile(
+    recipientId: string,
+    filename: string,
+    fileBuffer: Buffer,
+    mimeType: string
+  ): Promise<void> {
     // Implementation would store file and notify user
     console.log('Delivering report file:', filename, 'to user:', recipientId);
   }
@@ -669,4 +705,4 @@ export interface DrillDownConfig {
   parameters: Record<string, string>;
 }
 
-export const reportingEngine = new ReportingEngine(); 
+export const reportingEngine = new ReportingEngine();

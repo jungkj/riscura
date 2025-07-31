@@ -65,8 +65,8 @@ export interface PerformanceIssue {
 // Default configuration
 export const DEFAULT_OPTIMIZATION_CONFIG: OptimizationConfig = {
   lcpTarget: 2500, // 2.5s
-  fidTarget: 100,  // 100ms
-  clsTarget: 0.1,  // 0.1
+  fidTarget: 100, // 100ms
+  clsTarget: 0.1, // 0.1
   fcpTarget: 1800, // 1.8s
   ttfbTarget: 600, // 600ms
   enableMonitoring: true,
@@ -77,8 +77,8 @@ export const DEFAULT_OPTIMIZATION_CONFIG: OptimizationConfig = {
     enableLazyLoading: true,
     enableResponsive: true,
     compressionQuality: 85,
-    enableBlurPlaceholder: true
-  }
+    enableBlurPlaceholder: true,
+  },
 };
 
 export const DEFAULT_IMAGE_CONFIG: ImageOptimizationConfig = {
@@ -86,24 +86,24 @@ export const DEFAULT_IMAGE_CONFIG: ImageOptimizationConfig = {
     webp: true,
     avif: true,
     jpeg: true,
-    png: true
+    png: true,
   },
   quality: {
     high: 90,
     medium: 75,
-    low: 60
+    low: 60,
   },
   breakpoints: [320, 640, 768, 1024, 1280, 1920],
   lazyLoading: {
     enabled: true,
     rootMargin: '50px',
-    threshold: 0.1
+    threshold: 0.1,
   },
   placeholder: {
     enabled: true,
     blurRadius: 10,
-    quality: 20
-  }
+    quality: 20,
+  },
 };
 
 export class CoreWebVitalsOptimizer {
@@ -201,12 +201,12 @@ export class CoreWebVitalsOptimizer {
     try {
       const inpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries() as PerformanceEventTiming[];
-        
+
         entries.forEach((entry) => {
           if (entry.processingStart && entry.startTime) {
             const inp = entry.processingStart - entry.startTime;
             this.metrics.inp = Math.max(this.metrics.inp || 0, inp);
-            
+
             // Check INP threshold (target: <200ms)
             if (inp > 200) {
               this.reportIssue({
@@ -218,9 +218,9 @@ export class CoreWebVitalsOptimizer {
                   'Optimize JavaScript execution',
                   'Reduce main thread blocking',
                   'Use event delegation',
-                  'Implement proper debouncing'
+                  'Implement proper debouncing',
                 ],
-                timestamp: new Date()
+                timestamp: new Date(),
               });
             }
           }
@@ -243,12 +243,13 @@ export class CoreWebVitalsOptimizer {
     try {
       const resourceObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries() as PerformanceResourceTiming[];
-        
+
         entries.forEach((entry) => {
           // Check for slow loading resources
-          if (entry.duration > 1000) { // 1 second
+          if (entry.duration > 1000) {
+            // 1 second
             console.warn(`Slow resource detected: ${entry.name} (${entry.duration}ms)`);
-            
+
             // Suggest optimizations based on resource type
             if (entry.name.includes('.js')) {
               this.suggestJSOptimization(entry);
@@ -277,7 +278,7 @@ export class CoreWebVitalsOptimizer {
     try {
       const clsObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries() as PerformanceEntry[];
-        
+
         entries.forEach((entry: any) => {
           if (entry.value > 0.1) {
             console.warn('Large layout shift detected:', entry);
@@ -299,13 +300,13 @@ export class CoreWebVitalsOptimizer {
   private applyOptimizations(): void {
     // Optimize LCP
     this.optimizeLCP();
-    
+
     // Optimize FID
     this.optimizeFID();
-    
+
     // Optimize CLS
     this.optimizeCLS();
-    
+
     // Optimize resource loading
     this.optimizeResourceLoading();
   }
@@ -316,10 +317,10 @@ export class CoreWebVitalsOptimizer {
   private optimizeLCP(): void {
     // Preload LCP elements
     this.preloadLCPElements();
-    
+
     // Optimize critical resources
     this.optimizeCriticalResources();
-    
+
     // Remove render-blocking resources
     this.removeRenderBlockingResources();
   }
@@ -338,7 +339,7 @@ export class CoreWebVitalsOptimizer {
         // Remove lazy loading from above-the-fold images
         if (this.isAboveTheFold(element)) {
           element.loading = 'eager';
-          
+
           // Add preload hint
           const link = document.createElement('link');
           link.rel = 'preload';
@@ -370,7 +371,7 @@ export class CoreWebVitalsOptimizer {
     // Preload critical CSS
     const cssLinks = document.querySelectorAll('link[rel="stylesheet"]');
     const criticalCSS = Array.from(cssLinks).slice(0, 2); // First 2 stylesheets
-    
+
     criticalCSS.forEach((link: any) => {
       const preloadLink = document.createElement('link');
       preloadLink.rel = 'preload';
@@ -387,9 +388,12 @@ export class CoreWebVitalsOptimizer {
     // Make non-critical CSS non-blocking
     const cssLinks = document.querySelectorAll('link[rel="stylesheet"]');
     cssLinks.forEach((link: any, index) => {
-      if (index > 1) { // Keep first 2 stylesheets blocking
+      if (index > 1) {
+        // Keep first 2 stylesheets blocking
         link.media = 'print';
-        link.onload = () => { link.media = 'all'; };
+        link.onload = () => {
+          link.media = 'all';
+        };
       }
     });
 
@@ -408,10 +412,10 @@ export class CoreWebVitalsOptimizer {
   private optimizeFID(): void {
     // Break up long tasks
     this.breakUpLongTasks();
-    
+
     // Optimize event handlers
     this.optimizeEventHandlers();
-    
+
     // Use scheduler API if available
     this.useSchedulerAPI();
   }
@@ -426,7 +430,8 @@ export class CoreWebVitalsOptimizer {
         const longTaskObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           entries.forEach((entry) => {
-            if (entry.duration > 50) { // Long task threshold
+            if (entry.duration > 50) {
+              // Long task threshold
               console.warn(`Long task detected: ${entry.duration}ms`);
               this.suggestTaskOptimization(entry);
             }
@@ -447,8 +452,8 @@ export class CoreWebVitalsOptimizer {
   private optimizeEventHandlers(): void {
     // Add passive event listeners for better performance
     const events = ['touchstart', 'touchmove', 'wheel', 'scroll'];
-    
-    events.forEach(eventType => {
+
+    events.forEach((eventType) => {
       document.addEventListener(eventType, () => {}, { passive: true });
     });
 
@@ -472,10 +477,10 @@ export class CoreWebVitalsOptimizer {
   private optimizeCLS(): void {
     // Set size attributes for images and videos
     this.setSizeAttributesForMedia();
-    
+
     // Reserve space for dynamic content
     this.reserveSpaceForDynamicContent();
-    
+
     // Optimize font loading
     this.optimizeFontLoading();
   }
@@ -485,14 +490,14 @@ export class CoreWebVitalsOptimizer {
    */
   private setSizeAttributesForMedia(): void {
     const mediaElements = document.querySelectorAll('img:not([width]), video:not([width])');
-    
+
     mediaElements.forEach((element: any) => {
       // Set intrinsic size if available
       if (element.naturalWidth && element.naturalHeight) {
         const aspectRatio = element.naturalWidth / element.naturalHeight;
         element.style.aspectRatio = aspectRatio.toString();
       }
-      
+
       // Set minimum dimensions
       if (!element.width && !element.style.width) {
         element.style.width = '100%';
@@ -507,7 +512,7 @@ export class CoreWebVitalsOptimizer {
   private reserveSpaceForDynamicContent(): void {
     // Add placeholder dimensions for lazy-loaded content
     const lazyElements = document.querySelectorAll('[data-lazy], .lazy-load');
-    
+
     lazyElements.forEach((element: any) => {
       if (!element.style.minHeight) {
         element.style.minHeight = '200px'; // Default placeholder height
@@ -529,12 +534,9 @@ export class CoreWebVitalsOptimizer {
     document.head.appendChild(style);
 
     // Preload critical fonts
-    const criticalFonts = [
-      '/fonts/inter-var.woff2',
-      '/fonts/inter-regular.woff2'
-    ];
+    const criticalFonts = ['/fonts/inter-var.woff2', '/fonts/inter-regular.woff2'];
 
-    criticalFonts.forEach(fontUrl => {
+    criticalFonts.forEach((fontUrl) => {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'font';
@@ -551,10 +553,10 @@ export class CoreWebVitalsOptimizer {
   private optimizeResourceLoading(): void {
     // Implement resource hints
     this.addResourceHints();
-    
+
     // Optimize images
     this.optimizeImages();
-    
+
     // Enable compression
     this.enableCompression();
   }
@@ -567,10 +569,10 @@ export class CoreWebVitalsOptimizer {
       { rel: 'dns-prefetch', href: '//fonts.googleapis.com' },
       { rel: 'dns-prefetch', href: '//fonts.gstatic.com' },
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-      { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous' }
+      { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous' },
     ];
 
-    hints.forEach(hint => {
+    hints.forEach((hint) => {
       const link = document.createElement('link');
       link.rel = hint.rel;
       link.href = hint.href;
@@ -590,7 +592,7 @@ export class CoreWebVitalsOptimizer {
     // Set up intersection observer for lazy loading
     this.intersectionObserver = new IntersectionObserver(
       (entries) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             this.loadImage(entry.target as HTMLImageElement);
             this.intersectionObserver?.unobserve(entry.target);
@@ -599,7 +601,7 @@ export class CoreWebVitalsOptimizer {
       },
       {
         rootMargin: '50px',
-        threshold: 0.1
+        threshold: 0.1,
       }
     );
 
@@ -612,8 +614,8 @@ export class CoreWebVitalsOptimizer {
    */
   private applyLazyLoading(): void {
     const images = document.querySelectorAll('img[data-src], img[loading="lazy"]');
-    
-    images.forEach(img => {
+
+    images.forEach((img) => {
       if (!this.isAboveTheFold(img as HTMLImageElement)) {
         this.intersectionObserver?.observe(img);
       }
@@ -631,7 +633,7 @@ export class CoreWebVitalsOptimizer {
     const optimizedSrc = this.getOptimizedImageUrl(src, {
       width: img.width || 800,
       quality: this.config.imageOptimization.compressionQuality,
-      format: 'auto'
+      format: 'auto',
     });
 
     // Load the image
@@ -647,7 +649,7 @@ export class CoreWebVitalsOptimizer {
    * Get optimized image URL
    */
   private getOptimizedImageUrl(
-    src: string, 
+    src: string,
     options: { width: number; quality: number; format: string }
   ): string {
     // This would integrate with your image optimization service
@@ -674,14 +676,14 @@ export class CoreWebVitalsOptimizer {
     if (value > target) {
       const severity = this.getSeverity(metric, value, target);
       const recommendations = this.getRecommendations(metric, value);
-      
+
       this.reportIssue({
         metric,
         value,
         target,
         severity,
         recommendations,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -695,7 +697,7 @@ export class CoreWebVitalsOptimizer {
     target: number
   ): 'warning' | 'error' | 'critical' {
     const ratio = value / target;
-    
+
     if (ratio > 2) return 'critical';
     if (ratio > 1.5) return 'error';
     return 'warning';
@@ -711,36 +713,36 @@ export class CoreWebVitalsOptimizer {
         'Use CDN for static assets',
         'Preload critical resources',
         'Optimize images',
-        'Remove render-blocking resources'
+        'Remove render-blocking resources',
       ],
       fid: [
         'Reduce JavaScript execution time',
         'Break up long tasks',
         'Use web workers for heavy computation',
         'Implement code splitting',
-        'Optimize third-party scripts'
+        'Optimize third-party scripts',
       ],
       cls: [
         'Set size attributes for images and videos',
         'Reserve space for dynamic content',
         'Avoid inserting content above existing content',
         'Use CSS transforms instead of layout changes',
-        'Optimize font loading'
+        'Optimize font loading',
       ],
       fcp: [
         'Eliminate render-blocking resources',
         'Minify CSS and JavaScript',
         'Use efficient cache policy',
         'Preload critical resources',
-        'Optimize server response time'
+        'Optimize server response time',
       ],
       ttfb: [
         'Optimize server performance',
         'Use CDN',
         'Implement proper caching',
         'Optimize database queries',
-        'Use HTTP/2 or HTTP/3'
-      ]
+        'Use HTTP/2 or HTTP/3',
+      ],
     };
 
     return recommendations[metric] || [];
@@ -751,7 +753,7 @@ export class CoreWebVitalsOptimizer {
    */
   private reportIssue(issue: PerformanceIssue): void {
     this.issues.push(issue);
-    
+
     // Keep only recent issues
     if (this.issues.length > 100) {
       this.issues = this.issues.slice(-50);
@@ -759,7 +761,9 @@ export class CoreWebVitalsOptimizer {
 
     // Log critical issues
     if (issue.severity === 'critical') {
-      console.error(`Critical performance issue: ${issue.metric} = ${issue.value}ms (target: ${issue.target}ms)`);
+      console.error(
+        `Critical performance issue: ${issue.metric} = ${issue.value}ms (target: ${issue.target}ms)`
+      );
     }
   }
 
@@ -778,12 +782,12 @@ export class CoreWebVitalsOptimizer {
           delta: metric.delta,
           timestamp: Date.now(),
           url: window.location.href,
-          userAgent: navigator.userAgent
+          userAgent: navigator.userAgent,
         }),
         headers: {
-          'Content-Type': 'application/json'
-        }
-      }).catch(error => {
+          'Content-Type': 'application/json',
+        },
+      }).catch((error) => {
         console.warn('Failed to report metric:', error);
       });
     }
@@ -862,7 +866,7 @@ export class CoreWebVitalsOptimizer {
       metrics: this.metrics,
       issues: this.issues,
       score,
-      recommendations: topRecommendations
+      recommendations: topRecommendations,
     };
   }
 
@@ -890,11 +894,14 @@ export class CoreWebVitalsOptimizer {
    */
   private getTopRecommendations(): string[] {
     const allRecommendations = this.issues
-      .flatMap(issue => issue.recommendations)
-      .reduce((acc, rec) => {
-        acc[rec] = (acc[rec] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
+      .flatMap((issue) => issue.recommendations)
+      .reduce(
+        (acc, rec) => {
+          acc[rec] = (acc[rec] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>
+      );
 
     return Object.entries(allRecommendations)
       .sort(([, a], [, b]) => b - a)
@@ -907,9 +914,9 @@ export class CoreWebVitalsOptimizer {
    */
   stopMonitoring(): void {
     this.isMonitoring = false;
-    this.observers.forEach(observer => observer.disconnect());
+    this.observers.forEach((observer) => observer.disconnect());
     this.observers = [];
-    
+
     if (this.intersectionObserver) {
       this.intersectionObserver.disconnect();
     }
@@ -935,4 +942,4 @@ if (typeof window !== 'undefined') {
   });
 }
 
-export default CoreWebVitalsOptimizer; 
+export default CoreWebVitalsOptimizer;

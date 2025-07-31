@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import { documentEncryption } from './document-encryption';
 
 // Permission types for granular access control
-export type Permission = 
+export type Permission =
   | 'document:read'
   | 'document:write'
   | 'document:delete'
@@ -34,24 +34,17 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     'risk:write',
     'compliance:read',
     'compliance:write',
-    'user:read'
+    'user:read',
   ],
-  USER: [
-    'document:read',
-    'document:download',
-    'risk:read',
-    'compliance:read'
-  ],
+  USER: ['document:read', 'document:download', 'risk:read', 'compliance:read'],
   AUDITOR: [
     'document:read',
     'document:download',
     'risk:read',
     'compliance:read',
-    'compliance:admin'
+    'compliance:admin',
   ],
-  GUEST: [
-    'document:read'
-  ]
+  GUEST: ['document:read'],
 };
 
 // Document sensitivity levels
@@ -60,7 +53,7 @@ export enum DocumentSensitivity {
   INTERNAL = 'internal',
   CONFIDENTIAL = 'confidential',
   RESTRICTED = 'restricted',
-  TOP_SECRET = 'top_secret'
+  TOP_SECRET = 'top_secret',
 }
 
 // Access control policy
@@ -134,7 +127,7 @@ export class AccessControlService {
     // Check admin permissions
     const [resource, action] = requiredPermission.split(':');
     const adminPermission = `${resource}:admin` as Permission;
-    
+
     return userPermissions.includes(adminPermission);
   }
 
@@ -144,7 +137,7 @@ export class AccessControlService {
   public getUserPermissions(role: string, customPermissions?: Permission[]): Permission[] {
     const rolePermissions = ROLE_PERMISSIONS[role] || [];
     const allPermissions = [...rolePermissions, ...(customPermissions || [])];
-    
+
     // Remove duplicates
     return Array.from(new Set(allPermissions));
   }
@@ -168,36 +161,76 @@ export class AccessControlService {
     try {
       // Get document access policy (this would typically come from database)
       const policy = await this.getDocumentPolicy(documentId);
-      
+
       if (!policy) {
-        await this.logAccess(userId, action, 'document', documentId, 'denied', 'Document not found', request);
+        await this.logAccess(
+          userId,
+          action,
+          'document',
+          documentId,
+          'denied',
+          'Document not found',
+          request
+        );
         return { allowed: false, reason: 'Document not found' };
       }
 
       // Check basic permission
-      const hasRequiredPermission = policy.requiredPermissions.some(perm => 
+      const hasRequiredPermission = policy.requiredPermissions.some((perm) =>
         this.hasPermission(userPermissions, perm)
       );
 
       if (!hasRequiredPermission) {
-        await this.logAccess(userId, action, 'document', documentId, 'denied', 'Insufficient permissions', request);
+        await this.logAccess(
+          userId,
+          action,
+          'document',
+          documentId,
+          'denied',
+          'Insufficient permissions',
+          request
+        );
         return { allowed: false, reason: 'Insufficient permissions' };
       }
 
       // Check role-based access
       if (policy.allowedRoles.length > 0 && !policy.allowedRoles.includes(userRole)) {
-        await this.logAccess(userId, action, 'document', documentId, 'denied', 'Role not allowed', request);
+        await this.logAccess(
+          userId,
+          action,
+          'document',
+          documentId,
+          'denied',
+          'Role not allowed',
+          request
+        );
         return { allowed: false, reason: 'Role not allowed' };
       }
 
       // Check user whitelist/blacklist
       if (policy.deniedUsers.includes(userId)) {
-        await this.logAccess(userId, action, 'document', documentId, 'denied', 'User explicitly denied', request);
+        await this.logAccess(
+          userId,
+          action,
+          'document',
+          documentId,
+          'denied',
+          'User explicitly denied',
+          request
+        );
         return { allowed: false, reason: 'Access denied' };
       }
 
       if (policy.allowedUsers.length > 0 && !policy.allowedUsers.includes(userId)) {
-        await this.logAccess(userId, action, 'document', documentId, 'denied', 'User not in whitelist', request);
+        await this.logAccess(
+          userId,
+          action,
+          'document',
+          documentId,
+          'denied',
+          'User not in whitelist',
+          request
+        );
         return { allowed: false, reason: 'User not authorized' };
       }
 
@@ -205,7 +238,15 @@ export class AccessControlService {
       if (policy.ipWhitelist && policy.ipWhitelist.length > 0) {
         const clientIP = this.getClientIP(request);
         if (!policy.ipWhitelist.includes(clientIP)) {
-          await this.logAccess(userId, action, 'document', documentId, 'denied', 'IP not whitelisted', request);
+          await this.logAccess(
+            userId,
+            action,
+            'document',
+            documentId,
+            'denied',
+            'IP not whitelisted',
+            request
+          );
           return { allowed: false, reason: 'Access from this location not allowed' };
         }
       }
@@ -215,24 +256,50 @@ export class AccessControlService {
         const now = new Date();
         const currentDay = now.getDay();
         const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-        
-        if (!policy.timeRestrictions.daysOfWeek.includes(currentDay) ||
-            currentTime < policy.timeRestrictions.startTime ||
-            currentTime > policy.timeRestrictions.endTime) {
-          await this.logAccess(userId, action, 'document', documentId, 'denied', 'Outside allowed time window', request);
+
+        if (
+          !policy.timeRestrictions.daysOfWeek.includes(currentDay) ||
+          currentTime < policy.timeRestrictions.startTime ||
+          currentTime > policy.timeRestrictions.endTime
+        ) {
+          await this.logAccess(
+            userId,
+            action,
+            'document',
+            documentId,
+            'denied',
+            'Outside allowed time window',
+            request
+          );
           return { allowed: false, reason: 'Access not allowed at this time' };
         }
       }
 
       // Check document expiration
       if (policy.expiresAt && new Date() > policy.expiresAt) {
-        await this.logAccess(userId, action, 'document', documentId, 'denied', 'Document expired', request);
+        await this.logAccess(
+          userId,
+          action,
+          'document',
+          documentId,
+          'denied',
+          'Document expired',
+          request
+        );
         return { allowed: false, reason: 'Document has expired' };
       }
 
       // Check action-specific restrictions
       if (action === 'download' && !policy.downloadable) {
-        await this.logAccess(userId, action, 'document', documentId, 'denied', 'Download not allowed', request);
+        await this.logAccess(
+          userId,
+          action,
+          'document',
+          documentId,
+          'denied',
+          'Download not allowed',
+          request
+        );
         return { allowed: false, reason: 'Download not permitted' };
       }
 
@@ -249,11 +316,18 @@ export class AccessControlService {
       return {
         allowed: true,
         requiresWatermark: policy.watermarkRequired,
-        token
+        token,
       };
-
     } catch (error) {
-      await this.logAccess(userId, action, 'document', documentId, 'denied', 'System error', request);
+      await this.logAccess(
+        userId,
+        action,
+        'document',
+        documentId,
+        'denied',
+        'System error',
+        request
+      );
       return { allowed: false, reason: 'System error' };
     }
   }
@@ -278,8 +352,8 @@ export class AccessControlService {
       timeRestrictions: {
         startTime: '08:00',
         endTime: '18:00',
-        daysOfWeek: [1, 2, 3, 4, 5] // Monday to Friday
-      }
+        daysOfWeek: [1, 2, 3, 4, 5], // Monday to Friday
+      },
     };
   }
 
@@ -320,8 +394,8 @@ export class AccessControlService {
       userAgent: request?.headers.get('user-agent') || 'unknown',
       timestamp: new Date(),
       metadata: {
-        documentSensitivity: resource === 'document' ? 'confidential' : undefined
-      }
+        documentSensitivity: resource === 'document' ? 'confidential' : undefined,
+      },
     };
 
     // Store in audit log (in production, this would go to database or logging service)
@@ -348,19 +422,19 @@ export class AccessControlService {
 
     if (filters) {
       if (filters.userId) {
-        filteredLog = filteredLog.filter(entry => entry.userId === filters.userId);
+        filteredLog = filteredLog.filter((entry) => entry.userId === filters.userId);
       }
       if (filters.action) {
-        filteredLog = filteredLog.filter(entry => entry.action === filters.action);
+        filteredLog = filteredLog.filter((entry) => entry.action === filters.action);
       }
       if (filters.result) {
-        filteredLog = filteredLog.filter(entry => entry.result === filters.result);
+        filteredLog = filteredLog.filter((entry) => entry.result === filters.result);
       }
       if (filters.startDate) {
-        filteredLog = filteredLog.filter(entry => entry.timestamp >= filters.startDate!);
+        filteredLog = filteredLog.filter((entry) => entry.timestamp >= filters.startDate!);
       }
       if (filters.endDate) {
-        filteredLog = filteredLog.filter(entry => entry.timestamp <= filters.endDate!);
+        filteredLog = filteredLog.filter((entry) => entry.timestamp <= filters.endDate!);
       }
     }
 
@@ -383,7 +457,7 @@ export class AccessControlService {
       'modify-permissions': 'user:admin',
       'view-audit-log': 'org:admin',
       'system-settings': 'org:admin',
-      'security-settings': 'org:admin'
+      'security-settings': 'org:admin',
     };
 
     const requiredPermission = adminActions[action];
@@ -408,14 +482,17 @@ export class AccessControlService {
 
     // In production, store sharing link in database with expiration
     const shareId = crypto.randomUUID();
-    
+
     return `${process.env.APP_URL}/share/${shareId}?token=${encodeURIComponent(shareToken)}`;
   }
 
   /**
    * Verify sharing link
    */
-  public verifySharingLink(shareId: string, token: string): {
+  public verifySharingLink(
+    shareId: string,
+    token: string
+  ): {
     valid: boolean;
     documentId?: string;
     permissions?: Permission[];
@@ -423,7 +500,7 @@ export class AccessControlService {
   } {
     try {
       const tokenResult = documentEncryption.verifySecureToken(token);
-      
+
       if (!tokenResult.valid) {
         return { valid: false, expired: tokenResult.expired };
       }
@@ -432,7 +509,7 @@ export class AccessControlService {
         valid: true,
         documentId: tokenResult.payload.documentId,
         permissions: tokenResult.payload.permissions,
-        expired: false
+        expired: false,
       };
     } catch (error) {
       return { valid: false };
@@ -444,12 +521,18 @@ export class AccessControlService {
 export const accessControl = AccessControlService.getInstance();
 
 // Utility functions
-export function hasAnyPermission(userPermissions: Permission[], requiredPermissions: Permission[]): boolean {
-  return requiredPermissions.some(perm => accessControl.hasPermission(userPermissions, perm));
+export function hasAnyPermission(
+  userPermissions: Permission[],
+  requiredPermissions: Permission[]
+): boolean {
+  return requiredPermissions.some((perm) => accessControl.hasPermission(userPermissions, perm));
 }
 
-export function hasAllPermissions(userPermissions: Permission[], requiredPermissions: Permission[]): boolean {
-  return requiredPermissions.every(perm => accessControl.hasPermission(userPermissions, perm));
+export function hasAllPermissions(
+  userPermissions: Permission[],
+  requiredPermissions: Permission[]
+): boolean {
+  return requiredPermissions.every((perm) => accessControl.hasPermission(userPermissions, perm));
 }
 
 export function getSensitivityLevel(sensitivity: DocumentSensitivity): number {
@@ -458,22 +541,25 @@ export function getSensitivityLevel(sensitivity: DocumentSensitivity): number {
     [DocumentSensitivity.INTERNAL]: 2,
     [DocumentSensitivity.CONFIDENTIAL]: 3,
     [DocumentSensitivity.RESTRICTED]: 4,
-    [DocumentSensitivity.TOP_SECRET]: 5
+    [DocumentSensitivity.TOP_SECRET]: 5,
   };
   return levels[sensitivity] || 1;
 }
 
-export function canAccessSensitivityLevel(userRole: string, documentSensitivity: DocumentSensitivity): boolean {
+export function canAccessSensitivityLevel(
+  userRole: string,
+  documentSensitivity: DocumentSensitivity
+): boolean {
   const roleMaxLevels = {
     GUEST: 1,
     USER: 2,
     MANAGER: 3,
     AUDITOR: 4,
-    ADMIN: 5
+    ADMIN: 5,
   };
 
   const userMaxLevel = roleMaxLevels[userRole] || 1;
   const documentLevel = getSensitivityLevel(documentSensitivity);
 
   return userMaxLevel >= documentLevel;
-} 
+}

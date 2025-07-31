@@ -13,21 +13,18 @@ interface RouteParams {
 }
 
 // GET /api/compliance/frameworks/[id]/requirements - Get framework requirements
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
-    if (!user) {
-      return ApiResponseFormatter.authError('User not authenticated');
-    }
+      if (!user) {
+        return ApiResponseFormatter.authError('User not authenticated');
+      }
 
-    const requirements = await complianceService.getRequirements(id);
+      const requirements = await complianceService.getRequirements(id);
 
-    return ApiResponseFormatter.success(requirements);
+      return ApiResponseFormatter.success(requirements);
     },
     { requireAuth: true }
   )(req);
@@ -44,50 +41,47 @@ const createRequirementSchema = z.object({
   order: z.number().optional(),
 });
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
-    if (!user || !['ADMIN', 'MANAGER'].includes(user.role)) {
-      return ApiResponseFormatter.forbiddenError('Insufficient permissions');
-    }
+      if (!user || !['ADMIN', 'MANAGER'].includes(user.role)) {
+        return ApiResponseFormatter.forbiddenError('Insufficient permissions');
+      }
 
-    const body = await request.json();
-    
-    // Handle bulk creation
-    if (Array.isArray(body)) {
-      const parsedRequirements = body.map(item => createRequirementSchema.parse(item));
-      const requirements = parsedRequirements.map(req => ({
-        requirementId: req.requirementId,
-        title: req.title,
-        description: req.description,
-        category: req.category,
-        criticality: req.criticality,
-        parentId: req.parentId,
-        order: req.order
-      }));
-      const count = await complianceService.bulkCreateRequirements(id, requirements);
-      return ApiResponseFormatter.success({ count });
-    }
+      const body = await request.json();
 
-    // Handle single creation
-    const validatedData = createRequirementSchema.parse(body);
-    const requirement = await complianceService.createRequirement({
-      frameworkId: id,
-      requirementId: validatedData.requirementId,
-      title: validatedData.title,
-      description: validatedData.description,
-      category: validatedData.category,
-      criticality: validatedData.criticality,
-      parentId: validatedData.parentId,
-      order: validatedData.order
-    });
+      // Handle bulk creation
+      if (Array.isArray(body)) {
+        const parsedRequirements = body.map((item) => createRequirementSchema.parse(item));
+        const requirements = parsedRequirements.map((req) => ({
+          requirementId: req.requirementId,
+          title: req.title,
+          description: req.description,
+          category: req.category,
+          criticality: req.criticality,
+          parentId: req.parentId,
+          order: req.order,
+        }));
+        const count = await complianceService.bulkCreateRequirements(id, requirements);
+        return ApiResponseFormatter.success({ count });
+      }
 
-    return ApiResponseFormatter.success(requirement);
+      // Handle single creation
+      const validatedData = createRequirementSchema.parse(body);
+      const requirement = await complianceService.createRequirement({
+        frameworkId: id,
+        requirementId: validatedData.requirementId,
+        title: validatedData.title,
+        description: validatedData.description,
+        category: validatedData.category,
+        criticality: validatedData.criticality,
+        parentId: validatedData.parentId,
+        order: validatedData.order,
+      });
+
+      return ApiResponseFormatter.success(requirement);
     },
     { requireAuth: true }
   )(req);

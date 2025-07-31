@@ -17,7 +17,7 @@ export class StripeService {
 
   constructor() {
     this.isEnabled = !!process.env.STRIPE_SECRET_KEY;
-    
+
     if (!process.env.STRIPE_SECRET_KEY) {
       console.warn('STRIPE_SECRET_KEY not configured - billing features will be disabled');
       this.stripe = null;
@@ -32,12 +32,19 @@ export class StripeService {
 
   private ensureStripeEnabled(): void {
     if (!this.isEnabled || !this.stripe) {
-      throw new Error('Stripe is not configured. Please set STRIPE_SECRET_KEY environment variable.');
+      throw new Error(
+        'Stripe is not configured. Please set STRIPE_SECRET_KEY environment variable.'
+      );
     }
   }
 
   // Customer Management
-  async createCustomer(organizationId: string, email: string, name: string, metadata?: Record<string, any>): Promise<Stripe.Customer> {
+  async createCustomer(
+    organizationId: string,
+    email: string,
+    name: string,
+    metadata?: Record<string, any>
+  ): Promise<Stripe.Customer> {
     this.ensureStripeEnabled();
     const customer = await this.stripe!.customers.create({
       email,
@@ -60,7 +67,10 @@ export class StripeService {
     return customer;
   }
 
-  async updateCustomer(customerId: string, updates: Stripe.CustomerUpdateParams): Promise<Stripe.Customer> {
+  async updateCustomer(
+    customerId: string,
+    updates: Stripe.CustomerUpdateParams
+  ): Promise<Stripe.Customer> {
     this.ensureStripeEnabled();
     return await this.stripe!.customers.update(customerId, updates);
   }
@@ -68,7 +78,7 @@ export class StripeService {
   async getCustomer(customerId: string): Promise<Stripe.Customer | null> {
     this.ensureStripeEnabled();
     try {
-      return await this.stripe!.customers.retrieve(customerId) as Stripe.Customer;
+      return (await this.stripe!.customers.retrieve(customerId)) as Stripe.Customer;
     } catch (error) {
       if (error instanceof Stripe.errors.StripeError && error.code === 'resource_missing') {
         return null;
@@ -109,9 +119,11 @@ export class StripeService {
 
     // Add coupon if provided
     if (options?.coupon) {
-      subscriptionParams.discounts = [{
-        coupon: options.coupon,
-      }];
+      subscriptionParams.discounts = [
+        {
+          coupon: options.coupon,
+        },
+      ];
     }
 
     const subscription = await this.stripe!.subscriptions.create(subscriptionParams);
@@ -122,12 +134,18 @@ export class StripeService {
     return subscription;
   }
 
-  async updateSubscription(subscriptionId: string, updates: Stripe.SubscriptionUpdateParams): Promise<Stripe.Subscription> {
+  async updateSubscription(
+    subscriptionId: string,
+    updates: Stripe.SubscriptionUpdateParams
+  ): Promise<Stripe.Subscription> {
     this.ensureStripeEnabled();
     return await this.stripe!.subscriptions.update(subscriptionId, updates);
   }
 
-  async cancelSubscription(subscriptionId: string, cancelAtPeriodEnd: boolean = true): Promise<Stripe.Subscription> {
+  async cancelSubscription(
+    subscriptionId: string,
+    cancelAtPeriodEnd: boolean = true
+  ): Promise<Stripe.Subscription> {
     this.ensureStripeEnabled();
     if (cancelAtPeriodEnd) {
       return await this.stripe!.subscriptions.update(subscriptionId, {
@@ -156,7 +174,10 @@ export class StripeService {
   }
 
   // Payment Method Management
-  async attachPaymentMethod(paymentMethodId: string, customerId: string): Promise<Stripe.PaymentMethod> {
+  async attachPaymentMethod(
+    paymentMethodId: string,
+    customerId: string
+  ): Promise<Stripe.PaymentMethod> {
     this.ensureStripeEnabled();
     return await this.stripe.paymentMethods.attach(paymentMethodId, {
       customer: customerId,
@@ -168,7 +189,10 @@ export class StripeService {
     return await this.stripe.paymentMethods.detach(paymentMethodId);
   }
 
-  async setDefaultPaymentMethod(customerId: string, paymentMethodId: string): Promise<Stripe.Customer> {
+  async setDefaultPaymentMethod(
+    customerId: string,
+    paymentMethodId: string
+  ): Promise<Stripe.Customer> {
     this.ensureStripeEnabled();
     return await this.stripe.customers.update(customerId, {
       invoice_settings: {
@@ -182,7 +206,10 @@ export class StripeService {
     return await this.stripe.paymentMethods.retrieve(paymentMethodId);
   }
 
-  async listPaymentMethods(customerId: string, type?: Stripe.PaymentMethodListParams.Type): Promise<Stripe.PaymentMethod[]> {
+  async listPaymentMethods(
+    customerId: string,
+    type?: Stripe.PaymentMethodListParams.Type
+  ): Promise<Stripe.PaymentMethod[]> {
     this.ensureStripeEnabled();
     const paymentMethods = await this.stripe.paymentMethods.list({
       customer: customerId,
@@ -193,7 +220,10 @@ export class StripeService {
   }
 
   // Invoice Management
-  async createInvoice(customerId: string, params?: Stripe.InvoiceCreateParams): Promise<Stripe.Invoice> {
+  async createInvoice(
+    customerId: string,
+    params?: Stripe.InvoiceCreateParams
+  ): Promise<Stripe.Invoice> {
     this.ensureStripeEnabled();
     return await this.stripe.invoices.create({
       customer: customerId,
@@ -227,7 +257,13 @@ export class StripeService {
   }
 
   // Usage-based Billing (using manual invoice items)
-  async createUsageRecord(organizationId: string, customerId: string, description: string, quantity: number, unitAmount: number): Promise<Stripe.InvoiceItem> {
+  async createUsageRecord(
+    organizationId: string,
+    customerId: string,
+    description: string,
+    quantity: number,
+    unitAmount: number
+  ): Promise<Stripe.InvoiceItem> {
     this.ensureStripeEnabled();
     return await this.stripe.invoiceItems.create({
       customer: customerId,
@@ -243,12 +279,16 @@ export class StripeService {
     });
   }
 
-  async listUsageRecords(customerId: string, startDate?: Date, endDate?: Date): Promise<Stripe.InvoiceItem[]> {
+  async listUsageRecords(
+    customerId: string,
+    startDate?: Date,
+    endDate?: Date
+  ): Promise<Stripe.InvoiceItem[]> {
     this.ensureStripeEnabled();
     const params: any = {
       customer: customerId,
     };
-    
+
     if (startDate || endDate) {
       params.created = {};
       if (startDate) {
@@ -260,7 +300,7 @@ export class StripeService {
     }
 
     const usageRecords = await this.stripe.invoiceItems.list(params);
-    return usageRecords.data.filter(item => item.metadata?.type === 'usage');
+    return usageRecords.data.filter((item) => item.metadata?.type === 'usage');
   }
 
   // Payment Intents
@@ -291,10 +331,13 @@ export class StripeService {
     return await this.stripe.paymentIntents.create(params);
   }
 
-  async confirmPaymentIntent(paymentIntentId: string, paymentMethodId?: string): Promise<Stripe.PaymentIntent> {
+  async confirmPaymentIntent(
+    paymentIntentId: string,
+    paymentMethodId?: string
+  ): Promise<Stripe.PaymentIntent> {
     this.ensureStripeEnabled();
     const params: any = {};
-    
+
     if (paymentMethodId) {
       params.payment_method = paymentMethodId;
     }
@@ -303,7 +346,10 @@ export class StripeService {
   }
 
   // Customer Portal
-  async createCustomerPortalSession(customerId: string, returnUrl: string): Promise<Stripe.BillingPortal.Session> {
+  async createCustomerPortalSession(
+    customerId: string,
+    returnUrl: string
+  ): Promise<Stripe.BillingPortal.Session> {
     this.ensureStripeEnabled();
     return await this.stripe.billingPortal.sessions.create({
       customer: customerId,
@@ -347,7 +393,7 @@ export class StripeService {
   async handleWebhook(event: Stripe.Event): Promise<void> {
     try {
       await this.processWebhookEvent(event);
-      
+
       // Log successful processing
       await this.logBillingEvent({
         type: event.type as any,
@@ -356,10 +402,9 @@ export class StripeService {
         processed: true,
         processedAt: new Date(),
       });
-
     } catch (error) {
       console.error('Webhook processing failed:', error);
-      
+
       // Log failed processing
       await this.logBillingEvent({
         type: event.type as any,
@@ -575,10 +620,13 @@ export class StripeService {
   }
 
   // Helper Methods
-  private async storeSubscription(subscription: Stripe.Subscription, organizationId: string): Promise<void> {
+  private async storeSubscription(
+    subscription: Stripe.Subscription,
+    organizationId: string
+  ): Promise<void> {
     const planId = subscription.items.data[0]?.price.id;
     const sub = subscription as any; // Use any to avoid type issues
-    
+
     console.log('Storing subscription:', {
       stripeSubscriptionId: subscription.id,
       organizationId,
@@ -618,7 +666,8 @@ export class StripeService {
         currentPeriodStart: new Date(sub.current_period_start * 1000),
         currentPeriodEnd: new Date(sub.current_period_end * 1000),
         cancelAtPeriodEnd: sub.cancel_at_period_end,
-        billingCycle: subscription.items.data[0]?.price.recurring?.interval === 'year' ? 'yearly' : 'monthly',
+        billingCycle:
+          subscription.items.data[0]?.price.recurring?.interval === 'year' ? 'yearly' : 'monthly',
         quantity: subscription.items.data[0]?.quantity || 1,
         unitPrice: (subscription.items.data[0]?.price.unit_amount || 0) / 100, // Convert from cents
         metadata: subscription.metadata,
@@ -633,9 +682,9 @@ export class StripeService {
       invoiceNumber: invoice.number,
       total: invoice.total,
     });
-    
+
     const inv = invoice as any; // Use any to avoid type issues
-    const lineItems = invoice.lines.data.map(line => {
+    const lineItems = invoice.lines.data.map((line) => {
       const lineAny = line as any;
       return {
         id: line.id,
@@ -644,10 +693,12 @@ export class StripeService {
         quantity: line.quantity || 1,
         unitPrice: (lineAny.price?.unit_amount || 0) / 100, // Convert from cents
         amount: line.amount / 100, // Convert from cents
-        period: lineAny.period ? {
-          start: new Date(lineAny.period.start * 1000),
-          end: new Date(lineAny.period.end * 1000),
-        } : undefined,
+        period: lineAny.period
+          ? {
+              start: new Date(lineAny.period.start * 1000),
+              end: new Date(lineAny.period.end * 1000),
+            }
+          : undefined,
         metadata: line.metadata,
       };
     });
@@ -666,9 +717,11 @@ export class StripeService {
         status: invoice.status as any,
         subtotal: invoice.subtotal / 100, // Convert from cents
         taxAmount: (inv.tax || 0) / 100,
-        discountAmount: ((inv.discount?.amount || inv.discounts?.[0]?.amount || 0) / 100),
+        discountAmount: (inv.discount?.amount || inv.discounts?.[0]?.amount || 0) / 100,
         total: invoice.total / 100,
-        paidAt: inv.status_transitions?.paid_at ? new Date(inv.status_transitions.paid_at * 1000) : null,
+        paidAt: inv.status_transitions?.paid_at
+          ? new Date(inv.status_transitions.paid_at * 1000)
+          : null,
         lineItems,
         updatedAt: new Date(),
       },
@@ -681,16 +734,21 @@ export class StripeService {
         type: 'subscription',
         subtotal: invoice.subtotal / 100,
         taxAmount: (inv.tax || 0) / 100,
-        discountAmount: ((inv.discount?.amount || inv.discounts?.[0]?.amount || 0) / 100),
+        discountAmount: (inv.discount?.amount || inv.discounts?.[0]?.amount || 0) / 100,
         total: invoice.total / 100,
         currency: invoice.currency.toUpperCase(),
-        billingPeriod: inv.period_start && inv.period_end ? {
-          start: new Date(inv.period_start * 1000),
-          end: new Date(inv.period_end * 1000),
-        } : null,
+        billingPeriod:
+          inv.period_start && inv.period_end
+            ? {
+                start: new Date(inv.period_start * 1000),
+                end: new Date(inv.period_end * 1000),
+              }
+            : null,
         lineItems,
         dueDate: inv.due_date ? new Date(inv.due_date * 1000) : new Date(),
-        paidAt: inv.status_transitions?.paid_at ? new Date(inv.status_transitions.paid_at * 1000) : null,
+        paidAt: inv.status_transitions?.paid_at
+          ? new Date(inv.status_transitions.paid_at * 1000)
+          : null,
         metadata: invoice.metadata,
       },
     });
@@ -698,10 +756,14 @@ export class StripeService {
 
   private async logBillingEvent(eventData: Partial<BillingEvent>): Promise<void> {
     console.log('Billing event:', eventData);
-    
+
     // Determine organization ID from event data
     let organizationId = 'system';
-    if (eventData.eventData && typeof eventData.eventData === 'object' && 'object' in eventData.eventData) {
+    if (
+      eventData.eventData &&
+      typeof eventData.eventData === 'object' &&
+      'object' in eventData.eventData
+    ) {
       const stripeObject = eventData.eventData.object as any;
       if (stripeObject.metadata?.organizationId) {
         organizationId = stripeObject.metadata.organizationId;
@@ -713,7 +775,7 @@ export class StripeService {
         if (org) organizationId = org.id;
       }
     }
-    
+
     await db.client.billingEvent.create({
       data: {
         organizationId,
@@ -737,4 +799,4 @@ export class StripeService {
   }
 }
 
-export const stripeService = new StripeService(); 
+export const stripeService = new StripeService();

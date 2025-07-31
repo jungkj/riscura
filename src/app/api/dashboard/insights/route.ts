@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId') || 'default-user';
     const timeRange = searchParams.get('timeRange') || '30d';
-    
+
     // Mock dashboard configuration
     const config = {
       userId,
@@ -16,17 +16,17 @@ export async function GET(request: NextRequest) {
         refreshRate: 30000,
         notificationLevel: 'standard' as const,
         showPredictions: true,
-        enableInteractiveHelp: true
+        enableInteractiveHelp: true,
       },
       context: {
         currentView: 'dashboard',
         activeFilters: {},
         timeRange: {
           start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-          end: new Date()
+          end: new Date(),
         },
-        selectedEntities: [] as any[]
-      }
+        selectedEntities: [] as any[],
+      },
     };
 
     // Mock risks and controls data
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
         evidence: [] as any[],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-      }
+      },
     ];
 
     const mockControls = [
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
         lastTested: new Date(),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-      }
+      },
     ];
 
     const insights = await dashboardIntelligenceService.generateDashboardInsights(
@@ -78,15 +78,12 @@ export async function GET(request: NextRequest) {
       config: {
         userId,
         timeRange,
-        insightCount: insights.length
-      }
+        insightCount: insights.length,
+      },
     });
   } catch (error) {
     console.error('Dashboard Insights API Error:', error);
-    return NextResponse.json(
-      { error: 'Failed to generate dashboard insights' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to generate dashboard insights' }, { status: 500 });
   }
 }
 
@@ -96,10 +93,7 @@ export async function POST(request: NextRequest) {
     const { userId, preferences, context } = body;
 
     if (!userId) {
-      return NextResponse.json(
-        { error: 'Missing required field: userId' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Missing required field: userId' }, { status: 400 });
     }
 
     // Update user preferences for dashboard insights
@@ -111,28 +105,25 @@ export async function POST(request: NextRequest) {
         refreshRate: preferences?.refreshRate || 30000,
         notificationLevel: preferences?.notificationLevel || 'standard',
         showPredictions: preferences?.showPredictions ?? true,
-        enableInteractiveHelp: preferences?.enableInteractiveHelp ?? true
+        enableInteractiveHelp: preferences?.enableInteractiveHelp ?? true,
       },
       context: context || {
         currentView: 'dashboard',
         activeFilters: {},
         timeRange: {
           start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-          end: new Date()
+          end: new Date(),
         },
-        selectedEntities: [] as any[]
-      }
+        selectedEntities: [] as any[],
+      },
     };
 
     return NextResponse.json({
       message: 'Dashboard preferences updated successfully',
-      config: updatedConfig
+      config: updatedConfig,
     });
   } catch (error) {
     console.error('Dashboard Preferences Update Error:', error);
-    return NextResponse.json(
-      { error: 'Failed to update dashboard preferences' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to update dashboard preferences' }, { status: 500 });
   }
-} 
+}

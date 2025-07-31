@@ -1,7 +1,7 @@
 // Standardized RCSA types aligned with Prisma schema
-import { 
+import {
   RiskCategory as PrismaRiskCategory,
-  RiskStatus as PrismaRiskStatus, 
+  RiskStatus as PrismaRiskStatus,
   RiskLevel as PrismaRiskLevel,
   ControlType as PrismaControlType,
   ControlStatus as PrismaControlStatus,
@@ -12,7 +12,7 @@ import {
   ControlEffort as PrismaControlEffort,
   TestScriptType as PrismaTestScriptType,
   TestFrequency as PrismaTestFrequency,
-  TestStatus as PrismaTestStatus
+  TestStatus as PrismaTestStatus,
 } from '@prisma/client';
 
 // Re-export Prisma enums for consistency
@@ -64,7 +64,7 @@ export interface Risk {
   createdAt: Date;
   updatedAt: Date;
   createdBy?: string;
-  
+
   // Computed fields for UI
   evidence?: Document[];
   comments?: Comment[];
@@ -88,31 +88,31 @@ export interface Control {
   reviewerId?: string;
   status: ControlStatus;
   priority?: Priority;
-  
+
   // Testing fields
   lastTestDate?: Date;
   nextTestDate?: Date;
   testResults?: string;
-  
+
   // Business context
   businessUnit?: string;
   department?: string;
   location?: string;
   cost?: number;
   effort?: ControlEffort;
-  
-  // Custom fields  
+
+  // Custom fields
   tags: string[];
   customFields?: Record<string, any>;
-  
+
   // Multi-tenant isolation
   organizationId: string;
-  
+
   // Audit fields
   createdAt: Date;
   updatedAt: Date;
   createdBy?: string;
-  
+
   // Computed fields for UI
   evidence?: Document[];
   comments?: Comment[];
@@ -129,7 +129,7 @@ export interface ControlRiskMapping {
   effectiveness: number; // 0-1 scale (STANDARDIZED)
   createdAt: Date;
   updatedAt: Date;
-  
+
   // Populated relationships for UI
   risk?: Risk;
   control?: Control;
@@ -146,7 +146,7 @@ export interface AssessmentEvidence {
   fileUrl?: string;
   uploadedBy: string;
   uploadedAt: Date;
-  
+
   // Populated relationships
   control?: Control;
   uploader?: User;
@@ -165,7 +165,7 @@ export interface AssessmentFinding {
   assignedTo?: string;
   createdAt: Date;
   updatedAt: Date;
-  
+
   // Populated relationships
   control?: Control;
   assignee?: User;
@@ -173,16 +173,16 @@ export interface AssessmentFinding {
 
 export enum FindingSeverity {
   LOW = 'LOW',
-  MEDIUM = 'MEDIUM', 
+  MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',
-  CRITICAL = 'CRITICAL'
+  CRITICAL = 'CRITICAL',
 }
 
 export enum FindingStatus {
   OPEN = 'OPEN',
   IN_PROGRESS = 'IN_PROGRESS',
   RESOLVED = 'RESOLVED',
-  CLOSED = 'CLOSED'
+  CLOSED = 'CLOSED',
 }
 
 // Request/Response types for API
@@ -452,7 +452,7 @@ export interface TestScript {
   createdBy?: string;
   createdAt: Date;
   updatedAt: Date;
-  
+
   // Relations
   controls?: ControlTestScript[];
   testExecutions?: TestExecution[];
@@ -469,16 +469,18 @@ export interface ControlTestScript {
   isMandatory: boolean;
   createdAt: Date;
   updatedAt: Date;
-  
+
   // Relations - can be either full objects or partial depending on context
-  control?: Control | {
-    id: string;
-    title: string;
-    type: ControlType;
-    status: ControlStatus;
-    category?: ControlCategory;
-    effectiveness?: number;
-  };
+  control?:
+    | Control
+    | {
+        id: string;
+        title: string;
+        type: ControlType;
+        status: ControlStatus;
+        category?: ControlCategory;
+        effectiveness?: number;
+      };
   testScript?: TestScript;
 }
 
@@ -498,7 +500,7 @@ export interface TestExecution {
   duration?: number;
   createdAt: Date;
   updatedAt: Date;
-  
+
   // Relations
   testScript?: TestScript;
   executor?: User;
@@ -580,4 +582,4 @@ export interface GenerateTestScriptResponse {
   confidence: number;
   reasoning: string;
   suggestions?: string[];
-} 
+}

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useEffect } from 'react';
 
@@ -16,12 +16,12 @@ export default function ClientProvider({ children }: ClientProviderProps) {
         'data-lastpass-icon-root',
         'data-1p-ignore',
         'data-grammarly-shadow-root',
-        'spellcheck'
+        'spellcheck',
       ];
 
-      extensionAttributes.forEach(attr => {
+      extensionAttributes.forEach((attr) => {
         const elements = document.querySelectorAll(`[${attr}]`);
-        elements.forEach(el => {
+        elements.forEach((el) => {
           if (el.getAttribute(attr)) {
             el.removeAttribute(attr);
           }
@@ -38,14 +38,17 @@ export default function ClientProvider({ children }: ClientProviderProps) {
         if (mutation.type === 'attributes') {
           const target = mutation.target as Element;
           const attributeName = mutation.attributeName;
-          
+
           // Remove problematic attributes added by extensions
-          if (attributeName && [
-            'cz-shortcut-listen',
-            'data-lastpass-icon-root',
-            'data-1p-ignore',
-            'data-grammarly-shadow-root'
-          ].includes(attributeName)) {
+          if (
+            attributeName &&
+            [
+              'cz-shortcut-listen',
+              'data-lastpass-icon-root',
+              'data-1p-ignore',
+              'data-grammarly-shadow-root',
+            ].includes(attributeName)
+          ) {
             target.removeAttribute(attributeName);
           }
         }
@@ -59,9 +62,9 @@ export default function ClientProvider({ children }: ClientProviderProps) {
         'cz-shortcut-listen',
         'data-lastpass-icon-root',
         'data-1p-ignore',
-        'data-grammarly-shadow-root'
+        'data-grammarly-shadow-root',
       ],
-      subtree: true
+      subtree: true,
     });
 
     // Cleanup observer on unmount
@@ -71,4 +74,4 @@ export default function ClientProvider({ children }: ClientProviderProps) {
   }, []);
 
   return <>{children}</>;
-} 
+}

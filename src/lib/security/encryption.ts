@@ -17,14 +17,15 @@ function getEncryptionKey(): Buffer {
   if (!key) {
     throw new Error('ENCRYPTION_KEY environment variable is required');
   }
-  
+
   // If key is shorter than required, pad it
-  if (key.length < KEY_LENGTH * 2) { // *2 because it's hex
+  if (key.length < KEY_LENGTH * 2) {
+    // *2 because it's hex
     const hash = crypto.createHash('sha256');
     hash.update(key);
     return hash.digest();
   }
-  
+
   return Buffer.from(key.slice(0, KEY_LENGTH * 2), 'hex');
 }
 
@@ -40,7 +41,10 @@ export class EncryptionService {
 
   private constructor(config: EncryptionConfiguration) {
     this.config = config;
-    this.keyDerivationSalt = Buffer.from(process.env.ENCRYPTION_SALT || 'riscura-default-salt', 'utf8');
+    this.keyDerivationSalt = Buffer.from(
+      process.env.ENCRYPTION_SALT || 'riscura-default-salt',
+      'utf8'
+    );
     this.initializeMasterKey();
   }
 
@@ -54,13 +58,22 @@ export class EncryptionService {
 
   private initializeMasterKey(): void {
     const keyMaterial = process.env.MASTER_ENCRYPTION_KEY || 'riscura-default-master-key';
-    this.masterKey = crypto.pbkdf2Sync(keyMaterial, this.keyDerivationSalt, KEY_DERIVATION_ITERATIONS, 32, 'sha512');
+    this.masterKey = crypto.pbkdf2Sync(
+      keyMaterial,
+      this.keyDerivationSalt,
+      KEY_DERIVATION_ITERATIONS,
+      32,
+      'sha512'
+    );
   }
 
   /**
    * Encrypt sensitive data with authenticated encryption
    */
-  public async encryptData(plaintext: string | Buffer, additionalData?: string): Promise<{
+  public async encryptData(
+    plaintext: string | Buffer,
+    additionalData?: string
+  ): Promise<{
     encrypted: string;
     iv: string;
     tag: string;
@@ -73,20 +86,17 @@ export class EncryptionService {
 
       // Derive encryption key
       const key = crypto.pbkdf2Sync(this.masterKey, salt, KEY_DERIVATION_ITERATIONS, 32, 'sha512');
-      
+
       // Create cipher
       const cipher = crypto.createCipheriv(ENCRYPTION_ALGORITHM, key, iv);
-      
+
       // Add additional authenticated data if provided
       if (additionalData) {
         cipher.setAAD(Buffer.from(additionalData, 'utf8'));
       }
 
       // Encrypt data
-      const encrypted = Buffer.concat([
-        cipher.update(data),
-        cipher.final()
-      ]);
+      const encrypted = Buffer.concat([cipher.update(data), cipher.final()]);
 
       const tag = cipher.getAuthTag();
 
@@ -94,25 +104,30 @@ export class EncryptionService {
         encrypted: encrypted.toString('base64'),
         iv: iv.toString('base64'),
         tag: tag.toString('base64'),
-        salt: salt.toString('base64')
+        salt: salt.toString('base64'),
       };
     } catch (error) {
-      throw new Error(`Encryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Encryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
   /**
    * Decrypt data with authentication verification
    */
-  public async decryptData(encryptedData: {
-    encrypted: string;
-    iv: string;
-    tag: string;
-    salt: string;
-  }, additionalData?: string): Promise<Buffer> {
+  public async decryptData(
+    encryptedData: {
+      encrypted: string;
+      iv: string;
+      tag: string;
+      salt: string;
+    },
+    additionalData?: string
+  ): Promise<Buffer> {
     try {
       const { encrypted, iv, tag, salt } = encryptedData;
-      
+
       // Convert from base64
       const encryptedBuffer = Buffer.from(encrypted, 'base64');
       const ivBuffer = Buffer.from(iv, 'base64');
@@ -120,33 +135,42 @@ export class EncryptionService {
       const saltBuffer = Buffer.from(salt, 'base64');
 
       // Derive decryption key
-      const key = crypto.pbkdf2Sync(this.masterKey, saltBuffer, KEY_DERIVATION_ITERATIONS, 32, 'sha512');
-      
+      const key = crypto.pbkdf2Sync(
+        this.masterKey,
+        saltBuffer,
+        KEY_DERIVATION_ITERATIONS,
+        32,
+        'sha512'
+      );
+
       // Create decipher
       const decipher = crypto.createDecipheriv(ENCRYPTION_ALGORITHM, key, ivBuffer);
       decipher.setAuthTag(tagBuffer);
-      
+
       // Add additional authenticated data if provided
       if (additionalData) {
         decipher.setAAD(Buffer.from(additionalData, 'utf8'));
       }
 
       // Decrypt data
-      const decrypted = Buffer.concat([
-        decipher.update(encryptedBuffer),
-        decipher.final()
-      ]);
+      const decrypted = Buffer.concat([decipher.update(encryptedBuffer), decipher.final()]);
 
       return decrypted;
     } catch (error) {
-      throw new Error(`Decryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Decryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
   /**
    * Encrypt file content for secure storage
    */
-  public async encryptFile(fileBuffer: Buffer, fileName: string, userId: string): Promise<{
+  public async encryptFile(
+    fileBuffer: Buffer,
+    fileName: string,
+    userId: string
+  ): Promise<{
     encryptedContent: string;
     iv: string;
     tag: string;
@@ -162,18 +186,18 @@ export class EncryptionService {
   }> {
     // Calculate original file hash for integrity verification
     const originalHash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
-    
+
     // Create additional authenticated data
     const aad = JSON.stringify({
       fileName,
       userId,
       timestamp: new Date().toISOString(),
-      originalHash
+      originalHash,
     });
 
     // Encrypt file content
     const encryptionResult = await this.encryptData(fileBuffer, aad);
-    
+
     return {
       encryptedContent: encryptionResult.encrypted,
       iv: encryptionResult.iv,
@@ -185,8 +209,8 @@ export class EncryptionService {
         encryptedSize: Buffer.from(encryptionResult.encrypted, 'base64').length,
         fileName,
         userId,
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     };
   }
 
@@ -206,22 +230,25 @@ export class EncryptionService {
     metadata: any;
   }> {
     const { encryptedContent, iv, tag, salt, hash, metadata } = encryptedFile;
-    
+
     // Create AAD for verification
     const aad = JSON.stringify({
       fileName: metadata.fileName,
       userId: metadata.userId,
       timestamp: metadata.timestamp,
-      originalHash: hash
+      originalHash: hash,
     });
 
     // Decrypt content
-    const decryptedContent = await this.decryptData({
-      encrypted: encryptedContent,
-      iv,
-      tag,
-      salt
-    }, aad);
+    const decryptedContent = await this.decryptData(
+      {
+        encrypted: encryptedContent,
+        iv,
+        tag,
+        salt,
+      },
+      aad
+    );
 
     // Verify integrity
     const calculatedHash = crypto.createHash('sha256').update(decryptedContent).digest('hex');
@@ -230,25 +257,33 @@ export class EncryptionService {
     return {
       content: decryptedContent,
       verified,
-      metadata
+      metadata,
     };
   }
 
   /**
    * Generate secure token for document access
    */
-  public generateSecureToken(documentId: string, userId: string, permissions: string[], expiresIn: number = 3600): string {
+  public generateSecureToken(
+    documentId: string,
+    userId: string,
+    permissions: string[],
+    expiresIn: number = 3600
+  ): string {
     const payload = {
       documentId,
       userId,
       permissions,
       iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + expiresIn
+      exp: Math.floor(Date.now() / 1000) + expiresIn,
     };
 
     const payloadString = JSON.stringify(payload);
-    const signature = crypto.createHmac('sha256', this.masterKey).update(payloadString).digest('hex');
-    
+    const signature = crypto
+      .createHmac('sha256', this.masterKey)
+      .update(payloadString)
+      .digest('hex');
+
     return Buffer.from(JSON.stringify({ payload, signature })).toString('base64');
   }
 
@@ -263,12 +298,13 @@ export class EncryptionService {
     try {
       const decoded = JSON.parse(Buffer.from(token, 'base64').toString('utf8'));
       const { payload, signature } = decoded;
-      
+
       // Verify signature
-      const expectedSignature = crypto.createHmac('sha256', this.masterKey)
+      const expectedSignature = crypto
+        .createHmac('sha256', this.masterKey)
         .update(JSON.stringify(payload))
         .digest('hex');
-      
+
       if (signature !== expectedSignature) {
         return { valid: false };
       }
@@ -294,12 +330,15 @@ export class EncryptionService {
       userId,
       userEmail,
       timestamp: new Date().toISOString(),
-      nonce: crypto.randomBytes(16).toString('hex')
+      nonce: crypto.randomBytes(16).toString('hex'),
     };
 
     const watermarkString = JSON.stringify(watermarkData);
-    const signature = crypto.createHmac('sha256', this.masterKey).update(watermarkString).digest('hex');
-    
+    const signature = crypto
+      .createHmac('sha256', this.masterKey)
+      .update(watermarkString)
+      .digest('hex');
+
     return Buffer.from(JSON.stringify({ data: watermarkData, signature })).toString('base64');
   }
 
@@ -313,14 +352,15 @@ export class EncryptionService {
     try {
       const decoded = JSON.parse(Buffer.from(watermark, 'base64').toString('utf8'));
       const { data, signature } = decoded;
-      
-      const expectedSignature = crypto.createHmac('sha256', this.masterKey)
+
+      const expectedSignature = crypto
+        .createHmac('sha256', this.masterKey)
         .update(JSON.stringify(data))
         .digest('hex');
-      
+
       return {
         valid: signature === expectedSignature,
-        data: signature === expectedSignature ? data : undefined
+        data: signature === expectedSignature ? data : undefined,
       };
     } catch (error) {
       return { valid: false };
@@ -333,18 +373,15 @@ export class EncryptionService {
       const plaintext = Buffer.isBuffer(data) ? data : Buffer.from(data, 'utf8');
       const key = keyId ? await this.getDataKey(keyId) : this.masterKey;
       const salt = crypto.randomBytes(32);
-      
+
       // Generate random IV for each encryption
       const iv = crypto.randomBytes(12);
       const cipher = crypto.createCipheriv(this.algorithm, key, iv) as crypto.CipherGCM;
-      
-      const encrypted = Buffer.concat([
-        cipher.update(plaintext),
-        cipher.final()
-      ]);
-      
+
+      const encrypted = Buffer.concat([cipher.update(plaintext), cipher.final()]);
+
       const authTag = cipher.getAuthTag();
-      
+
       return {
         encrypted: encrypted.toString('base64'),
         iv: iv.toString('base64'),
@@ -355,7 +392,9 @@ export class EncryptionService {
         timestamp: new Date(),
       };
     } catch (error) {
-      throw new Error(`Encryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Encryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -366,7 +405,11 @@ export class EncryptionService {
       const keyMaterial = keyId === 'default' ? this.masterKey : await this.getDataKey(keyId);
 
       // Decrypt the data
-      const decipher = crypto.createDecipherGCM(encryptedData.algorithm || this.algorithm, keyMaterial, encryptedData.iv);
+      const decipher = crypto.createDecipherGCM(
+        encryptedData.algorithm || this.algorithm,
+        keyMaterial,
+        encryptedData.iv
+      );
       decipher.setAuthTag(encryptedData.tag);
 
       let decrypted = decipher.update(encryptedData.data);
@@ -374,7 +417,9 @@ export class EncryptionService {
 
       return decrypted;
     } catch (error) {
-      throw new Error(`Decryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Decryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -390,7 +435,7 @@ export class EncryptionService {
 
     const stringValue = typeof value === 'string' ? value : JSON.stringify(value);
     const encrypted = await this.encryptData(stringValue, `field:${fieldName}`);
-    
+
     return this.serializeEncryptedData(encrypted);
   }
 
@@ -402,7 +447,7 @@ export class EncryptionService {
     try {
       const encrypted = this.deserializeEncryptedData(encryptedValue);
       const decrypted = await this.decryptData(encrypted);
-      
+
       // Try to parse as JSON, fallback to string
       try {
         return JSON.parse(decrypted.toString('utf8'));
@@ -436,23 +481,23 @@ export class EncryptionService {
   private generateSearchTokens(value: string): string[] {
     const tokens = new Set<string>();
     const cleanValue = value.toLowerCase().trim();
-    
+
     // Add full value
     tokens.add(cleanValue);
-    
+
     // Add prefixes (for prefix matching)
     for (let i = 1; i <= Math.min(cleanValue.length, 10); i++) {
       tokens.add(cleanValue.substring(0, i));
     }
-    
+
     // Add words
     const words = cleanValue.split(/\s+/);
-    words.forEach(word => {
+    words.forEach((word) => {
       if (word.length > 2) {
         tokens.add(word);
       }
     });
-    
+
     return Array.from(tokens);
   }
 
@@ -514,7 +559,7 @@ export class EncryptionService {
 
     const encryptedKey = this.deserializeEncryptedData(keyRecord.encryptedKey);
     const keyMaterial = await this.decryptDataRest(encryptedKey);
-    
+
     return keyMaterial;
   }
 
@@ -571,15 +616,17 @@ export class EncryptionService {
   }
 
   // Batch operations for performance
-  async encryptBatch(items: Array<{ id: string; data: any; fieldName?: string }>): Promise<Array<{ id: string; encrypted: string }>> {
+  async encryptBatch(
+    items: Array<{ id: string; data: any; fieldName?: string }>
+  ): Promise<Array<{ id: string; encrypted: string }>> {
     const results: Array<{ id: string; encrypted: string }> = [];
 
     for (const item of items) {
       try {
-        const encrypted = item.fieldName 
+        const encrypted = item.fieldName
           ? await this.encryptField(item.data, item.fieldName)
           : this.serializeEncryptedData(await this.encryptData(JSON.stringify(item.data)));
-        
+
         results.push({
           id: item.id,
           encrypted,
@@ -596,15 +643,21 @@ export class EncryptionService {
     return results;
   }
 
-  async decryptBatch(items: Array<{ id: string; encrypted: string; fieldName?: string }>): Promise<Array<{ id: string; decrypted: any }>> {
+  async decryptBatch(
+    items: Array<{ id: string; encrypted: string; fieldName?: string }>
+  ): Promise<Array<{ id: string; decrypted: any }>> {
     const results: Array<{ id: string; decrypted: any }> = [];
 
     for (const item of items) {
       try {
         const decrypted = item.fieldName
           ? await this.decryptField(item.encrypted, item.fieldName)
-          : JSON.parse((await this.decryptData(this.deserializeEncryptedData(item.encrypted))).toString('utf8'));
-        
+          : JSON.parse(
+              (await this.decryptData(this.deserializeEncryptedData(item.encrypted))).toString(
+                'utf8'
+              )
+            );
+
         results.push({
           id: item.id,
           decrypted,
@@ -647,32 +700,32 @@ export class EncryptionService {
 
   // Database encryption helpers
   async encryptModel<T extends Record<string, any>>(
-    model: T, 
+    model: T,
     encryptedFields: string[]
   ): Promise<T> {
     const encrypted = { ...model } as T & Record<string, any>;
-    
+
     for (const field of encryptedFields) {
       if (field in encrypted && encrypted[field] != null) {
         (encrypted as any)[field] = await this.encryptField(encrypted[field], field);
       }
     }
-    
+
     return encrypted;
   }
 
   async decryptModel<T extends Record<string, any>>(
-    model: T, 
+    model: T,
     encryptedFields: string[]
   ): Promise<T> {
     const decrypted = { ...model } as T & Record<string, any>;
-    
+
     for (const field of encryptedFields) {
       if (field in decrypted && decrypted[field] != null) {
         (decrypted as any)[field] = await this.decryptField(decrypted[field], field);
       }
     }
-    
+
     return decrypted;
   }
 
@@ -706,8 +759,10 @@ export class EncryptionService {
       operationsCount: this.operationsCount,
       totalEncryptionTime: this.totalEncryptionTime,
       totalDecryptionTime: this.totalDecryptionTime,
-      averageEncryptionTime: this.operationsCount > 0 ? this.totalEncryptionTime / this.operationsCount : 0,
-      averageDecryptionTime: this.operationsCount > 0 ? this.totalDecryptionTime / this.operationsCount : 0,
+      averageEncryptionTime:
+        this.operationsCount > 0 ? this.totalEncryptionTime / this.operationsCount : 0,
+      averageDecryptionTime:
+        this.operationsCount > 0 ? this.totalDecryptionTime / this.operationsCount : 0,
       keyRotations: this.keyRotations,
       lastKeyRotation: this.lastKeyRotation,
     };
@@ -719,7 +774,10 @@ export class EncryptionService {
   private keyRotations = 0;
   private lastKeyRotation?: Date;
 
-  private measureOperation<T>(operation: () => Promise<T>, type: 'encrypt' | 'decrypt'): Promise<T> {
+  private measureOperation<T>(
+    operation: () => Promise<T>,
+    type: 'encrypt' | 'decrypt'
+  ): Promise<T> {
     const startTime = Date.now();
     return operation().finally(() => {
       const duration = Date.now() - startTime;
@@ -874,14 +932,20 @@ export class FieldEncryption {
   /**
    * Decrypt sensitive field from database
    */
-  public async decryptField(encryptedValue: string, fieldName: string, recordId: string): Promise<string> {
+  public async decryptField(
+    encryptedValue: string,
+    fieldName: string,
+    recordId: string
+  ): Promise<string> {
     try {
       const encryptedData = JSON.parse(encryptedValue);
       const aad = `${fieldName}:${recordId}`;
       const decrypted = await this.encryptionService.decryptData(encryptedData, aad);
       return decrypted.toString('utf8');
     } catch (error) {
-      throw new Error(`Failed to decrypt field ${fieldName}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to decrypt field ${fieldName}: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 }
@@ -921,15 +985,15 @@ export async function encrypt(plaintext: string): Promise<string> {
   try {
     const key = getEncryptionKey();
     const iv = crypto.randomBytes(IV_LENGTH);
-    
+
     const cipher = crypto.createCipheriv(ENCRYPTION_ALGORITHM, key, iv);
     cipher.setAAD(Buffer.from('riscura-mfa', 'utf8'));
-    
+
     let encrypted = cipher.update(plaintext, 'utf8', 'hex');
     encrypted += cipher.final('hex');
-    
+
     const tag = cipher.getAuthTag();
-    
+
     // Combine iv, tag, and encrypted data
     const combined = Buffer.concat([iv, tag, Buffer.from(encrypted, 'hex')]);
     return combined.toString('base64');
@@ -945,19 +1009,19 @@ export async function decrypt(encryptedData: string): Promise<string> {
   try {
     const key = getEncryptionKey();
     const combined = Buffer.from(encryptedData, 'base64');
-    
+
     // Extract iv, tag, and encrypted data
     const iv = combined.slice(0, IV_LENGTH);
     const tag = combined.slice(IV_LENGTH, IV_LENGTH + TAG_LENGTH);
     const encrypted = combined.slice(IV_LENGTH + TAG_LENGTH);
-    
+
     const decipher = crypto.createDecipheriv(ENCRYPTION_ALGORITHM, key, iv);
     decipher.setAAD(Buffer.from('riscura-mfa', 'utf8'));
     decipher.setAuthTag(tag);
-    
+
     let decrypted = decipher.update(encrypted, undefined, 'utf8');
     decrypted += decipher.final('utf8');
-    
+
     return decrypted;
   } catch (error) {
     throw new Error('Decryption failed');
@@ -987,8 +1051,8 @@ export function verifyHash(data: string, hashedData: string): boolean {
   const [salt, hash] = hashedData.split(':');
   const hashBuffer = Buffer.from(hash, 'hex');
   const saltBuffer = Buffer.from(salt, 'hex');
-  
+
   const verifyHash = crypto.pbkdf2Sync(data, saltBuffer, 10000, 32, 'sha256');
-  
+
   return crypto.timingSafeEqual(hashBuffer, verifyHash);
-} 
+}

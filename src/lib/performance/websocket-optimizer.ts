@@ -64,7 +64,7 @@ export const DEFAULT_WEBSOCKET_CONFIG: WebSocketConfig = {
   enableCompression: true,
   enableBinaryProtocol: false,
   messageQueueSize: 100,
-  enableMetrics: true
+  enableMetrics: true,
 };
 
 export class WebSocketOptimizer {
@@ -79,7 +79,7 @@ export class WebSocketOptimizer {
     averageLatency: 0,
     connectionUptime: 0,
     bandwidthUsage: 0,
-    errorRate: 0
+    errorRate: 0,
   };
   private heartbeatInterval: NodeJS.Timeout | null = null;
   private metricsInterval: NodeJS.Timeout | null = null;
@@ -92,7 +92,7 @@ export class WebSocketOptimizer {
       connections: new Map(),
       maxSize: this.config.maxConnections,
       activeCount: 0,
-      messageBuffer: new Map()
+      messageBuffer: new Map(),
     };
     this.initializeOptimizer();
   }
@@ -103,15 +103,15 @@ export class WebSocketOptimizer {
   private initializeOptimizer(): void {
     // Start heartbeat monitoring
     this.startHeartbeatMonitoring();
-    
+
     // Start metrics collection
     if (this.config.enableMetrics) {
       this.startMetricsCollection();
     }
-    
+
     // Register cleanup handlers
     this.registerCleanupHandlers();
-    
+
     // Set up global error handlers
     this.setupGlobalErrorHandlers();
   }
@@ -136,7 +136,7 @@ export class WebSocketOptimizer {
     }
 
     const connectionId = `ws-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    
+
     const connectionState: ConnectionState = {
       id: connectionId,
       url,
@@ -146,7 +146,7 @@ export class WebSocketOptimizer {
       reconnectAttempts: 0,
       messageQueue: [],
       metadata: { ...metadata, priority, autoReconnect },
-      createdAt: new Date()
+      createdAt: new Date(),
     };
 
     this.connectionPool.connections.set(connectionId, connectionState);
@@ -171,7 +171,7 @@ export class WebSocketOptimizer {
     return new Promise((resolve, reject) => {
       try {
         const socket = new WebSocket(connectionState.url, protocols);
-        
+
         // Configure WebSocket
         if (this.config.enableBinaryProtocol) {
           socket.binaryType = 'arraybuffer';
@@ -253,11 +253,11 @@ export class WebSocketOptimizer {
     this.metrics.activeConnections = Math.max(0, this.metrics.activeConnections - 1);
 
     // Emit close event
-    this.emitEvent('connection:close', { 
-      connectionId: connectionState.id, 
+    this.emitEvent('connection:close', {
+      connectionId: connectionState.id,
       event,
       code: event.code,
-      reason: event.reason
+      reason: event.reason,
     });
 
     // Attempt reconnection if enabled and not a clean close
@@ -281,9 +281,9 @@ export class WebSocketOptimizer {
     this.metrics.errorRate = this.metrics.failedConnections / this.metrics.totalConnections;
 
     // Emit error event
-    this.emitEvent('connection:error', { 
-      connectionId: connectionState.id, 
-      error: error.message 
+    this.emitEvent('connection:error', {
+      connectionId: connectionState.id,
+      error: error.message,
     });
 
     console.error(`WebSocket connection ${connectionState.id} error:`, error);
@@ -294,11 +294,11 @@ export class WebSocketOptimizer {
    */
   private handleMessage(connectionState: ConnectionState, event: MessageEvent): void {
     this.metrics.messagesIncoming++;
-    
+
     try {
       // Parse message based on type
       let parsedData: any;
-      
+
       if (typeof event.data === 'string') {
         parsedData = JSON.parse(event.data);
       } else if (event.data instanceof ArrayBuffer) {
@@ -320,17 +320,16 @@ export class WebSocketOptimizer {
       connectionState.lastHeartbeat = new Date();
 
       // Emit message event
-      this.emitEvent('message', { 
-        connectionId: connectionState.id, 
+      this.emitEvent('message', {
+        connectionId: connectionState.id,
         data: parsedData,
-        originalEvent: event
+        originalEvent: event,
       });
-
     } catch (error) {
       console.error(`Failed to parse WebSocket message from ${connectionState.id}:`, error);
-      this.emitEvent('message:error', { 
-        connectionId: connectionState.id, 
-        error: error instanceof Error ? error.message : String(error)
+      this.emitEvent('message:error', {
+        connectionId: connectionState.id,
+        error: error instanceof Error ? error.message : String(error),
       });
     }
   }
@@ -348,12 +347,7 @@ export class WebSocketOptimizer {
       trackLatency?: boolean;
     } = {}
   ): Promise<void> {
-    const {
-      priority = 'normal',
-      retry = true,
-      maxRetries = 3,
-      trackLatency = false
-    } = options;
+    const { priority = 'normal', retry = true, maxRetries = 3, trackLatency = false } = options;
 
     const connectionState = this.connectionPool.connections.get(connectionId);
     if (!connectionState) {
@@ -366,7 +360,7 @@ export class WebSocketOptimizer {
       priority,
       timestamp: new Date(),
       retries: 0,
-      maxRetries: retry ? maxRetries : 0
+      maxRetries: retry ? maxRetries : 0,
     };
 
     // Track latency if requested
@@ -400,7 +394,7 @@ export class WebSocketOptimizer {
         serializedData = JSON.stringify({
           messageId: message.id,
           timestamp: message.timestamp,
-          data: message.data
+          data: message.data,
         });
       }
 
@@ -411,16 +405,16 @@ export class WebSocketOptimizer {
       console.log(`Message ${message.id} sent to connection ${connectionState.id}`);
     } catch (error) {
       console.error(`Failed to send message ${message.id}:`, error);
-      
+
       // Retry if configured
       if (message.retries < message.maxRetries) {
         message.retries++;
         this.queueMessage(connectionState, message);
       } else {
-        this.emitEvent('message:failed', { 
-          connectionId: connectionState.id, 
+        this.emitEvent('message:failed', {
+          connectionId: connectionState.id,
           messageId: message.id,
-          error: error instanceof Error ? error.message : String(error)
+          error: error instanceof Error ? error.message : String(error),
         });
       }
     }
@@ -433,7 +427,7 @@ export class WebSocketOptimizer {
     // Check queue size limit
     if (connectionState.messageQueue.length >= this.config.messageQueueSize) {
       // Remove oldest low-priority message
-      const lowPriorityIndex = connectionState.messageQueue.findIndex(m => m.priority === 'low');
+      const lowPriorityIndex = connectionState.messageQueue.findIndex((m) => m.priority === 'low');
       if (lowPriorityIndex !== -1) {
         connectionState.messageQueue.splice(lowPriorityIndex, 1);
       } else {
@@ -442,7 +436,7 @@ export class WebSocketOptimizer {
     }
 
     connectionState.messageQueue.push(message);
-    
+
     // Sort by priority
     connectionState.messageQueue.sort((a, b) => {
       const priorityOrder = { critical: 4, high: 3, normal: 2, low: 1 };
@@ -463,7 +457,7 @@ export class WebSocketOptimizer {
       try {
         await this.sendMessageImmediate(connectionState, message);
         // Add small delay to prevent overwhelming the connection
-        await new Promise(resolve => setTimeout(resolve, 10));
+        await new Promise((resolve) => setTimeout(resolve, 10));
       } catch (error) {
         console.error(`Failed to process queued message ${message.id}:`, error);
         // Re-queue if retries available
@@ -489,13 +483,16 @@ export class WebSocketOptimizer {
     connectionState.reconnectAttempts++;
 
     const delay = this.config.reconnectDelay * Math.pow(2, connectionState.reconnectAttempts - 1);
-    
+
     setTimeout(async () => {
       try {
         await this.establishConnection(connectionState);
         this.emitEvent('connection:reconnected', { connectionId: connectionState.id });
       } catch (error) {
-        console.error(`Reconnection attempt ${connectionState.reconnectAttempts} failed for ${connectionState.id}:`, error);
+        console.error(
+          `Reconnection attempt ${connectionState.reconnectAttempts} failed for ${connectionState.id}:`,
+          error
+        );
         this.attemptReconnection(connectionState);
       }
     }, delay);
@@ -532,10 +529,10 @@ export class WebSocketOptimizer {
     for (const [connectionId, connectionState] of this.connectionPool.connections.entries()) {
       if (connectionState.status === 'connected') {
         const timeSinceLastHeartbeat = now.getTime() - connectionState.lastHeartbeat.getTime();
-        
+
         if (timeSinceLastHeartbeat > heartbeatTimeout) {
           console.warn(`Heartbeat timeout for connection ${connectionId}`);
-          
+
           // Send ping to check if connection is alive
           this.sendPing(connectionState);
         }
@@ -551,9 +548,9 @@ export class WebSocketOptimizer {
       try {
         const pingData = {
           type: 'ping',
-          timestamp: Date.now()
+          timestamp: Date.now(),
         };
-        
+
         connectionState.socket.send(JSON.stringify(pingData));
       } catch (error) {
         console.error(`Failed to send ping to ${connectionState.id}:`, error);
@@ -604,8 +601,10 @@ export class WebSocketOptimizer {
     this.metrics.connectionUptime = connectedCount > 0 ? totalUptime / connectedCount : 0;
 
     // Update error rate
-    this.metrics.errorRate = this.metrics.totalConnections > 0 ? 
-      this.metrics.failedConnections / this.metrics.totalConnections : 0;
+    this.metrics.errorRate =
+      this.metrics.totalConnections > 0
+        ? this.metrics.failedConnections / this.metrics.totalConnections
+        : 0;
   }
 
   /**
@@ -616,7 +615,7 @@ export class WebSocketOptimizer {
       this.metrics.averageLatency = latency;
     } else {
       // Rolling average
-      this.metrics.averageLatency = (this.metrics.averageLatency * 0.9) + (latency * 0.1);
+      this.metrics.averageLatency = this.metrics.averageLatency * 0.9 + latency * 0.1;
     }
   }
 
@@ -633,9 +632,11 @@ export class WebSocketOptimizer {
    */
   private shouldUseBinary(data: any): boolean {
     // Simple heuristic: use binary for large objects or specific data types
-    return data instanceof ArrayBuffer || 
-           data instanceof Uint8Array ||
-           (typeof data === 'object' && JSON.stringify(data).length > 1024);
+    return (
+      data instanceof ArrayBuffer ||
+      data instanceof Uint8Array ||
+      (typeof data === 'object' && JSON.stringify(data).length > 1024)
+    );
   }
 
   private serializeToBinary(data: any): ArrayBuffer {
@@ -657,7 +658,7 @@ export class WebSocketOptimizer {
   private emitEvent(eventName: string, data: any): void {
     const handlers = this.eventHandlers.get(eventName);
     if (handlers) {
-      handlers.forEach(handler => {
+      handlers.forEach((handler) => {
         try {
           handler(data);
         } catch (error) {
@@ -761,14 +762,16 @@ export class WebSocketOptimizer {
     queuedMessages: number;
     utilizationPercent: number;
   } {
-    const queuedMessages = Array.from(this.connectionPool.connections.values())
-      .reduce((total, state) => total + state.messageQueue.length, 0);
+    const queuedMessages = Array.from(this.connectionPool.connections.values()).reduce(
+      (total, state) => total + state.messageQueue.length,
+      0
+    );
 
     return {
       totalConnections: this.connectionPool.connections.size,
       activeConnections: this.connectionPool.activeCount,
       queuedMessages,
-      utilizationPercent: (this.connectionPool.activeCount / this.connectionPool.maxSize) * 100
+      utilizationPercent: (this.connectionPool.activeCount / this.connectionPool.maxSize) * 100,
     };
   }
 
@@ -809,4 +812,4 @@ if (typeof window !== 'undefined') {
   (window as any).__WEBSOCKET_OPTIMIZER__ = webSocketOptimizer;
 }
 
-export default WebSocketOptimizer; 
+export default WebSocketOptimizer;

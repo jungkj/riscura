@@ -2,38 +2,152 @@
 
 import React from 'react';
 import {
-  Home, Menu, X, ChevronLeft, ChevronRight, ChevronUp, ChevronDown,
-  ArrowLeft, ArrowRight, ArrowUp, ArrowDown, MoreHorizontal, MoreVertical,
-  Plus, Minus, Edit, Trash2, Save, Copy, Download, Upload, Search, Filter,
-  Settings, User, Users, Bell, Mail, Phone, MessageSquare, Calendar,
-  Clock, MapPin, Star, Heart, Bookmark, Share, ExternalLink, Link,
-  Eye, EyeOff, Lock, Unlock, Shield, AlertTriangle, AlertCircle,
-  CheckCircle, XCircle, Info, HelpCircle, FileText, File, Folder,
-  FolderOpen, Image, Video, Music, Archive, Database, Server, Cloud,
-  Wifi, Battery, Zap, Activity, TrendingUp, TrendingDown, BarChart3,
-  PieChart, LineChart, Target, Award, Flag, Tag, Hash, AtSign,
-  DollarSign, CreditCard, ShoppingCart, Package, Truck, Globe,
-  Building, Car, Plane, Ship, Sun, Moon, CloudRain, Snowflake,
-  Thermometer, Droplets, Wind, Leaf, Flower, TreePine, Mountain,
-  Camera, Mic, MicOff, Speaker, Volume, Volume2, VolumeX, Play, Pause, Square,
-  SkipBack, SkipForward, Repeat, Shuffle, Radio, Tv, Monitor,
-  Smartphone, Tablet, Laptop, Mouse, Keyboard, Printer, Scan,
-  Wifi as WifiIcon, Bluetooth, Usb, HardDrive, Cpu, MemoryStick,
-  CircuitBoard, Router, Gamepad2, Headphones, Webcam
+  Home,
+  Menu,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  ChevronDown,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  ArrowDown,
+  MoreHorizontal,
+  MoreVertical,
+  Plus,
+  Minus,
+  Edit,
+  Trash2,
+  Save,
+  Copy,
+  Download,
+  Upload,
+  Search,
+  Filter,
+  Settings,
+  User,
+  Users,
+  Bell,
+  Mail,
+  Phone,
+  MessageSquare,
+  Calendar,
+  Clock,
+  MapPin,
+  Star,
+  Heart,
+  Bookmark,
+  Share,
+  ExternalLink,
+  Link,
+  Eye,
+  EyeOff,
+  Lock,
+  Unlock,
+  Shield,
+  AlertTriangle,
+  AlertCircle,
+  CheckCircle,
+  XCircle,
+  Info,
+  HelpCircle,
+  FileText,
+  File,
+  Folder,
+  FolderOpen,
+  Image,
+  Video,
+  Music,
+  Archive,
+  Database,
+  Server,
+  Cloud,
+  Wifi,
+  Battery,
+  Zap,
+  Activity,
+  TrendingUp,
+  TrendingDown,
+  BarChart3,
+  PieChart,
+  LineChart,
+  Target,
+  Award,
+  Flag,
+  Tag,
+  Hash,
+  AtSign,
+  DollarSign,
+  CreditCard,
+  ShoppingCart,
+  Package,
+  Truck,
+  Globe,
+  Building,
+  Car,
+  Plane,
+  Ship,
+  Sun,
+  Moon,
+  CloudRain,
+  Snowflake,
+  Thermometer,
+  Droplets,
+  Wind,
+  Leaf,
+  Flower,
+  TreePine,
+  Mountain,
+  Camera,
+  Mic,
+  MicOff,
+  Speaker,
+  Volume,
+  Volume2,
+  VolumeX,
+  Play,
+  Pause,
+  Square,
+  SkipBack,
+  SkipForward,
+  Repeat,
+  Shuffle,
+  Radio,
+  Tv,
+  Monitor,
+  Smartphone,
+  Tablet,
+  Laptop,
+  Mouse,
+  Keyboard,
+  Printer,
+  Scan,
+  Wifi as WifiIcon,
+  Bluetooth,
+  Usb,
+  HardDrive,
+  Cpu,
+  MemoryStick,
+  CircuitBoard,
+  Router,
+  Gamepad2,
+  Headphones,
+  Webcam,
 } from 'lucide-react';
 
 // Type definitions
 export type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
-export type IconColor = 
-  | 'primary' 
-  | 'secondary' 
-  | 'tertiary' 
-  | 'disabled' 
-  | 'inverse' 
-  | 'success' 
-  | 'warning' 
-  | 'error' 
+export type IconColor =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'disabled'
+  | 'inverse'
+  | 'success'
+  | 'warning'
+  | 'error'
   | 'info'
   | 'brand'
   | 'current';
@@ -76,18 +190,12 @@ const createIcon = (LucideIcon: React.ComponentType<any>) => {
 
       const classes = `${sizeClasses[size]} ${colorClasses[color]} ${className}`.trim();
 
-             return (
-         <LucideIcon
-           ref={ref}
-           className={classes}
-           {...props}
-         />
-       );
-     }
-   );
-   
-   IconComponent.displayName = `Icon(${LucideIcon.displayName || LucideIcon.name || 'Unknown'})`;
-   return IconComponent;
+      return <LucideIcon ref={ref} className={classes} {...props} />;
+    }
+  );
+
+  IconComponent.displayName = `Icon(${LucideIcon.displayName || LucideIcon.name || 'Unknown'})`;
+  return IconComponent;
 };
 
 // Icon categories
@@ -230,4 +338,4 @@ export const IconLibrary = {
   RiskManagement: RiskManagementIcons,
 };
 
-export default IconLibrary; 
+export default IconLibrary;

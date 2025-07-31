@@ -36,8 +36,9 @@ export class CustomModelTrainingService {
    * Get training jobs for an organization
    */
   public async getOrganizationModels(organizationId: string): Promise<TrainingJob[]> {
-    return Array.from(this.trainingJobs.values())
-      .filter(job => job.config.organizationId === organizationId);
+    return Array.from(this.trainingJobs.values()).filter(
+      (job) => job.config.organizationId === organizationId
+    );
   }
 
   /**
@@ -55,7 +56,7 @@ export class CustomModelTrainingService {
 
     // Update status to training
     job.status = 'training';
-    
+
     // Simulate training completion after 5 seconds
     setTimeout(() => {
       const currentJob = this.trainingJobs.get(jobId);
@@ -68,15 +69,18 @@ export class CustomModelTrainingService {
   /**
    * Create a new training job
    */
-  async createTrainingJob(config: { organizationId: string; modelName: string }): Promise<TrainingJob> {
+  async createTrainingJob(config: {
+    organizationId: string;
+    modelName: string;
+  }): Promise<TrainingJob> {
     const jobId = generateId('training_job');
-    
+
     const job: TrainingJob = {
       id: jobId,
       name: config.modelName,
       status: 'pending',
       config,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
 
     this.trainingJobs.set(jobId, job);
@@ -267,4 +271,4 @@ export interface ModelPerformance {
     expectedImpact: string;
     effort: string;
   }>;
-} 
+}

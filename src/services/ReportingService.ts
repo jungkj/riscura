@@ -1,4 +1,10 @@
-import { generatePDF, ReportData, ReportSection, formatTableData, formatChartData } from '@/lib/pdf/pdf-generator-mock';
+import {
+  generatePDF,
+  ReportData,
+  ReportSection,
+  formatTableData,
+  formatChartData,
+} from '@/lib/pdf/pdf-generator-mock';
 import { exportToExcel, exportToCSV, ExcelWorkbookData } from '@/lib/pdf/excel-exporter';
 import { format, addDays, addWeeks, addMonths } from 'date-fns';
 import nodemailer from 'nodemailer';
@@ -10,7 +16,13 @@ export interface ReportTemplate {
   id: string;
   name: string;
   description: string;
-  type: 'risk_assessment' | 'compliance_status' | 'control_effectiveness' | 'executive_summary' | 'audit_trail' | 'custom';
+  type:
+    | 'risk_assessment'
+    | 'compliance_status'
+    | 'control_effectiveness'
+    | 'executive_summary'
+    | 'audit_trail'
+    | 'custom';
   category: 'operational' | 'compliance' | 'executive' | 'technical';
   sections: ReportSectionTemplate[];
   parameters?: ReportParameter[];
@@ -153,14 +165,14 @@ export enum ReportType {
   CUSTOM = 'custom',
   VENDOR_ASSESSMENT = 'vendor_assessment',
   SECURITY_DASHBOARD = 'security_dashboard',
-  PERFORMANCE_METRICS = 'performance_metrics'
+  PERFORMANCE_METRICS = 'performance_metrics',
 }
 
 export enum ReportFormat {
   PDF = 'pdf',
   EXCEL = 'excel',
   CSV = 'csv',
-  JSON = 'json'
+  JSON = 'json',
 }
 
 export class ReportingService {
@@ -185,7 +197,7 @@ export class ReportingService {
 
       // Generate reports in requested formats
       const reports: GeneratedReport[] = [];
-      
+
       for (const format of config.format) {
         const report = await this.generateReportInFormat(config, data, format);
         reports.push(report);
@@ -202,7 +214,9 @@ export class ReportingService {
       return reports;
     } catch (error) {
       console.error('Error generating report:', error);
-      throw new Error(`Failed to generate report: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to generate report: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -216,27 +230,31 @@ export class ReportingService {
 
     // Save scheduled report configuration
     const savedConfig = await this.saveScheduledReport(config);
-    
+
     // Create cron job
     const cronExpression = this.buildCronExpression(config.schedule);
-    const job = cron.schedule(cronExpression, async () => {
-      try {
-        await this.generateReport(savedConfig);
-        console.log(`Scheduled report generated: ${savedConfig.name}`);
-      } catch (error) {
-        console.error(`Failed to generate scheduled report: ${savedConfig.name}`, error);
-      }
-                }, {
+    const job = cron.schedule(
+      cronExpression,
+      async () => {
+        try {
+          await this.generateReport(savedConfig);
+          console.log(`Scheduled report generated: ${savedConfig.name}`);
+        } catch (error) {
+          console.error(`Failed to generate scheduled report: ${savedConfig.name}`, error);
+        }
+      },
+      {
         timezone: config.schedule.timezone,
-      });
-
-      // Start the job if enabled
-      if (config.schedule.enabled) {
-        job.start();
       }
+    );
 
-      // Store job reference
-      this.scheduledJobs.set(savedConfig.id!, job);
+    // Start the job if enabled
+    if (config.schedule.enabled) {
+      job.start();
+    }
+
+    // Store job reference
+    this.scheduledJobs.set(savedConfig.id!, job);
 
     return savedConfig.id!;
   }
@@ -339,19 +357,19 @@ export class ReportingService {
     switch (type) {
       case ReportType.RISK_ASSESSMENT:
         return await this.aggregateRiskData(organizationId, filters);
-      
+
       case ReportType.COMPLIANCE_STATUS:
         return await this.aggregateComplianceData(organizationId, filters);
-      
+
       case ReportType.CONTROL_EFFECTIVENESS:
         return await this.aggregateControlData(organizationId, filters);
-      
+
       case ReportType.EXECUTIVE_SUMMARY:
         return await this.aggregateExecutiveData(organizationId, filters);
-      
+
       case ReportType.AUDIT_TRAIL:
         return await this.aggregateAuditData(organizationId, filters);
-      
+
       default:
         throw new Error(`Unsupported report type: ${type}`);
     }
@@ -399,39 +417,43 @@ export class ReportingService {
     // Risk summary calculations
     const summary = {
       totalRisks: risks.length,
-      criticalRisks: risks.filter(r => r.riskLevel === 'CRITICAL').length,
-      highRisks: risks.filter(r => r.riskLevel === 'HIGH').length,
-      mediumRisks: risks.filter(r => r.riskLevel === 'MEDIUM').length,
-      lowRisks: risks.filter(r => r.riskLevel === 'LOW').length,
+      criticalRisks: risks.filter((r) => r.riskLevel === 'CRITICAL').length,
+      highRisks: risks.filter((r) => r.riskLevel === 'HIGH').length,
+      mediumRisks: risks.filter((r) => r.riskLevel === 'MEDIUM').length,
+      lowRisks: risks.filter((r) => r.riskLevel === 'LOW').length,
       averageScore: risks.reduce((sum, r) => sum + r.riskScore, 0) / risks.length || 0,
     };
 
     // Risk by category
-    const risksByCategory = risks.reduce((acc, risk) => {
-      if (!acc[risk.category]) acc[risk.category] = 0;
-      acc[risk.category]++;
-      return acc;
-    }, {} as Record<string, number>);
+    const risksByCategory = risks.reduce(
+      (acc, risk) => {
+        if (!acc[risk.category]) acc[risk.category] = 0;
+        acc[risk.category]++;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     return {
       risks,
       summary,
       risksByCategory,
-      topRisks: risks
-        .sort((a, b) => b.riskScore - a.riskScore)
-        .slice(0, 10),
+      topRisks: risks.sort((a, b) => b.riskScore - a.riskScore).slice(0, 10),
       generatedAt: new Date(),
       filters,
     };
   }
 
-  private async aggregateComplianceData(organizationId: string, filters: ReportFilters): Promise<any> {
+  private async aggregateComplianceData(
+    organizationId: string,
+    filters: ReportFilters
+  ): Promise<any> {
     if (!prisma) {
       throw new Error('Prisma client not initialized');
     }
 
     const whereClause: any = { organizationId };
-    
+
     if (filters.dateRange) {
       whereClause.createdAt = {
         gte: filters.dateRange.from,
@@ -444,12 +466,14 @@ export class ReportingService {
       include: {
         requirements: true,
         assessments: {
-          where: filters.dateRange ? {
-            createdAt: {
-              gte: filters.dateRange.from,
-              lte: filters.dateRange.to,
-            },
-          } : undefined,
+          where: filters.dateRange
+            ? {
+                createdAt: {
+                  gte: filters.dateRange.from,
+                  lte: filters.dateRange.to,
+                },
+              }
+            : undefined,
           include: {
             items: true,
             gaps: true,
@@ -461,17 +485,21 @@ export class ReportingService {
     // Calculate compliance scores
     const complianceScores = frameworks.map((framework: any) => {
       const totalRequirements = framework.requirements?.length || 0;
-      const metRequirements = framework.requirements?.filter((req: any) => 
-        req.controls && req.controls.length > 0 && req.controls.some((controlId: string) => {
-          // Check if any control referenced in the requirement is implemented
-          return framework.assessments.some((assessment: any) => 
-            assessment.items.some((item: any) => 
-              item.controlId === controlId && item.status === 'COMPLIANT'
-            )
-          );
-        })
-      ).length || 0;
-      
+      const metRequirements =
+        framework.requirements?.filter(
+          (req: any) =>
+            req.controls &&
+            req.controls.length > 0 &&
+            req.controls.some((controlId: string) => {
+              // Check if any control referenced in the requirement is implemented
+              return framework.assessments.some((assessment: any) =>
+                assessment.items.some(
+                  (item: any) => item.controlId === controlId && item.status === 'COMPLIANT'
+                )
+              );
+            })
+        ).length || 0;
+
       return {
         frameworkId: framework.id,
         frameworkName: framework.name,
@@ -484,7 +512,9 @@ export class ReportingService {
     return {
       frameworks,
       complianceScores,
-      overallCompliance: complianceScores.reduce((sum: number, score: any) => sum + score.score, 0) / complianceScores.length || 0,
+      overallCompliance:
+        complianceScores.reduce((sum: number, score: any) => sum + score.score, 0) /
+          complianceScores.length || 0,
       generatedAt: new Date(),
       filters,
     };
@@ -522,27 +552,39 @@ export class ReportingService {
     });
 
     // Calculate effectiveness metrics
-    const effectivenessStats = controls.reduce((acc, control) => {
-      const rating = control.effectivenessRating || 'INEFFECTIVE';
-      if (!acc[rating]) acc[rating] = 0;
-      acc[rating]++;
-      return acc;
-    }, {} as Record<string, number>);
+    const effectivenessStats = controls.reduce(
+      (acc, control) => {
+        const rating = control.effectivenessRating || 'INEFFECTIVE';
+        if (!acc[rating]) acc[rating] = 0;
+        acc[rating]++;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     return {
       controls,
       effectivenessStats,
       totalControls: controls.length,
-      averageEffectiveness: controls.reduce((sum, c) => {
-        const ratingMap = { 'EFFECTIVE': 4, 'MOSTLY_EFFECTIVE': 3, 'PARTIALLY_EFFECTIVE': 2, 'INEFFECTIVE': 1 };
-        return sum + (ratingMap[c.effectivenessRating as keyof typeof ratingMap] || 0);
-      }, 0) / controls.length || 0,
+      averageEffectiveness:
+        controls.reduce((sum, c) => {
+          const ratingMap = {
+            EFFECTIVE: 4,
+            MOSTLY_EFFECTIVE: 3,
+            PARTIALLY_EFFECTIVE: 2,
+            INEFFECTIVE: 1,
+          };
+          return sum + (ratingMap[c.effectivenessRating as keyof typeof ratingMap] || 0);
+        }, 0) / controls.length || 0,
       generatedAt: new Date(),
       filters,
     };
   }
 
-  private async aggregateExecutiveData(organizationId: string, filters: ReportFilters): Promise<any> {
+  private async aggregateExecutiveData(
+    organizationId: string,
+    filters: ReportFilters
+  ): Promise<any> {
     // Aggregate high-level metrics for executive summary
     const [riskData, complianceData, controlData] = await Promise.all([
       this.aggregateRiskData(organizationId, filters),
@@ -606,19 +648,21 @@ export class ReportingService {
       case ReportFormat.EXCEL:
         const excelData: ExcelWorkbookData = {
           title: config.name,
-          sheets: [{
-            name: 'Data',
-            data: {
-              title: config.name,
-              headers: data.headers || ['Item', 'Value'],
-              rows: data.rows || []
-            }
-          }],
+          sheets: [
+            {
+              name: 'Data',
+              data: {
+                title: config.name,
+                headers: data.headers || ['Item', 'Value'],
+                rows: data.rows || [],
+              },
+            },
+          ],
           metadata: {
             author: 'Riscura Platform',
             created: new Date(),
-            description: config.description || 'Report generated by Riscura'
-          }
+            description: config.description || 'Report generated by Riscura',
+          },
         };
         const excelBuffer = await exportToExcel(excelData, {
           fileName: `${fileName}.xlsx`,
@@ -633,7 +677,7 @@ export class ReportingService {
         const csvData = {
           title: config.name,
           headers: data.headers || ['Item', 'Value'],
-          rows: data.rows || []
+          rows: data.rows || [],
         };
         const csvContent = exportToCSV(csvData);
         filePath = `/tmp/reports/${fileName}.csv`;
@@ -674,7 +718,7 @@ export class ReportingService {
   private async emailReports(config: ReportConfig, reports: GeneratedReport[]): Promise<void> {
     if (!config.recipients?.length) return;
 
-    const attachments = reports.map(report => ({
+    const attachments = reports.map((report) => ({
       filename: `${report.name}.${report.format}`,
       path: report.filePath,
     }));
@@ -686,7 +730,7 @@ export class ReportingService {
         <h2>Your requested report is ready</h2>
         <p><strong>Report Name:</strong> ${config.name}</p>
         <p><strong>Generated:</strong> ${new Date().toLocaleString()}</p>
-        <p><strong>Formats:</strong> ${reports.map(r => r.format.toUpperCase()).join(', ')}</p>
+        <p><strong>Formats:</strong> ${reports.map((r) => r.format.toUpperCase()).join(', ')}</p>
         <p>Please find the attached report files.</p>
       `,
       attachments,
@@ -702,16 +746,16 @@ export class ReportingService {
     switch (schedule.frequency) {
       case 'daily':
         return `${minute} ${hour} * * *`;
-      
+
       case 'weekly':
         return `${minute} ${hour} * * ${schedule.dayOfWeek || 0}`;
-      
+
       case 'monthly':
         return `${minute} ${hour} ${schedule.dayOfMonth || 1} * *`;
-      
+
       case 'quarterly':
         return `${minute} ${hour} 1 */3 *`;
-      
+
       default:
         throw new Error(`Unsupported frequency: ${schedule.frequency}`);
     }
@@ -766,7 +810,10 @@ export class ReportingService {
   /**
    * Save report metadata to database
    */
-  private async saveReportMetadata(config: ReportConfig, reports: GeneratedReport[]): Promise<void> {
+  private async saveReportMetadata(
+    config: ReportConfig,
+    reports: GeneratedReport[]
+  ): Promise<void> {
     if (!prisma) {
       throw new Error('Prisma client not initialized');
     }
@@ -781,22 +828,24 @@ export class ReportingService {
           createdBy: config.createdBy,
           parameters: config.parameters,
           data: {
-            reports: reports.map(r => ({
+            reports: reports.map((r) => ({
               id: r.id,
               format: r.format,
               filePath: r.filePath,
               fileSize: r.fileSize,
               generatedAt: r.generatedAt,
-            }))
+            })),
           },
         },
       });
     } catch (error) {
       console.error('Error saving report metadata:', error);
-      throw new Error(`Failed to save report metadata: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to save report metadata: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 }
 
 // Create and export a singleton instance
-export const reportingService = new ReportingService(); 
+export const reportingService = new ReportingService();

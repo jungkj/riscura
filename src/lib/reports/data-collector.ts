@@ -88,12 +88,13 @@ export class ReportDataCollector {
 
     // High and critical risks
     const highCriticalRisks = risks.filter(
-      r => r.severity === 'HIGH' || r.severity === 'CRITICAL'
+      (r) => r.severity === 'HIGH' || r.severity === 'CRITICAL'
     );
 
     // Risks with inadequate controls
     const risksWithInadequateControls = risks.filter(
-      r => r.controls.length === 0 || r.controls.some(rc => rc.control.effectiveness !== 'EFFECTIVE')
+      (r) =>
+        r.controls.length === 0 || r.controls.some((rc) => rc.control.effectiveness !== 'EFFECTIVE')
     );
 
     return {
@@ -138,13 +139,15 @@ export class ReportDataCollector {
           type: 'table',
           data: {
             headers: ['Risk Name', 'Category', 'Severity', 'Status', 'Controls', 'Owner'],
-            rows: risks.map(risk => [
+            rows: risks.map((risk) => [
               risk.name,
               risk.category,
               risk.severity,
               risk.status,
               risk.controls.length,
-              risk.assignedTo ? `${risk.assignedTo.firstName} ${risk.assignedTo.lastName}` : 'Unassigned',
+              risk.assignedTo
+                ? `${risk.assignedTo.firstName} ${risk.assignedTo.lastName}`
+                : 'Unassigned',
             ]),
           },
         },
@@ -153,7 +156,7 @@ export class ReportDataCollector {
           type: 'table',
           data: {
             headers: ['Risk Name', 'Description', 'Impact', 'Mitigation Strategy'],
-            rows: highCriticalRisks.map(risk => [
+            rows: highCriticalRisks.map((risk) => [
               risk.name,
               risk.description || '',
               risk.impact || '',
@@ -167,7 +170,7 @@ export class ReportDataCollector {
         keyMetrics: {
           highCriticalRisks: highCriticalRisks.length,
           risksWithInadequateControls: risksWithInadequateControls.length,
-          unassignedRisks: risks.filter(r => !r.assignedTo).length,
+          unassignedRisks: risks.filter((r) => !r.assignedTo).length,
         },
         highlights: [
           `${highCriticalRisks.length} high or critical risks require immediate attention`,
@@ -227,18 +230,19 @@ export class ReportDataCollector {
     // Calculate control effectiveness metrics
     const controlsByType = this.groupBy(controls, 'type');
     const controlsByEffectiveness = this.groupBy(controls, 'effectiveness');
-    
+
     // Controls with recent test failures
-    const failedControls = controls.filter(control => 
-      control.testScripts.some(ts => 
-        ts.testScript.testExecutions.some(te => te.status === 'FAILED')
+    const failedControls = controls.filter((control) =>
+      control.testScripts.some((ts) =>
+        ts.testScript.testExecutions.some((te) => te.status === 'FAILED')
       )
     );
 
     // Controls without recent testing
-    const untestedControls = controls.filter(control =>
-      control.testScripts.length === 0 ||
-      control.testScripts.every(ts => ts.testScript.testExecutions.length === 0)
+    const untestedControls = controls.filter(
+      (control) =>
+        control.testScripts.length === 0 ||
+        control.testScripts.every((ts) => ts.testScript.testExecutions.length === 0)
     );
 
     return {
@@ -283,9 +287,9 @@ export class ReportDataCollector {
           type: 'table',
           data: {
             headers: ['Control Name', 'Type', 'Frequency', 'Effectiveness', 'Last Test', 'Status'],
-            rows: controls.map(control => {
+            rows: controls.map((control) => {
               const lastTest = control.testScripts
-                .flatMap(ts => ts.testScript.testExecutions)
+                .flatMap((ts) => ts.testScript.testExecutions)
                 .sort((a, b) => b.executionDate.getTime() - a.executionDate.getTime())[0];
 
               return [
@@ -304,10 +308,10 @@ export class ReportDataCollector {
           type: 'table',
           data: {
             headers: ['Control Name', 'Description', 'Last Test Date', 'Failure Reason'],
-            rows: failedControls.map(control => {
+            rows: failedControls.map((control) => {
               const failedTest = control.testScripts
-                .flatMap(ts => ts.testScript.testExecutions)
-                .find(te => te.status === 'FAILED');
+                .flatMap((ts) => ts.testScript.testExecutions)
+                .find((te) => te.status === 'FAILED');
 
               return [
                 control.name,
@@ -325,12 +329,15 @@ export class ReportDataCollector {
           effectiveControls: controlsByEffectiveness['EFFECTIVE']?.length || 0,
           failedControls: failedControls.length,
           untestedControls: untestedControls.length,
-          controlCoverage: controls.length > 0 ? ((controls.length - untestedControls.length) / controls.length * 100) : 0,
+          controlCoverage:
+            controls.length > 0
+              ? ((controls.length - untestedControls.length) / controls.length) * 100
+              : 0,
         },
         highlights: [
           `${failedControls.length} controls failed recent testing`,
           `${untestedControls.length} controls have not been tested recently`,
-          `${controls.length > 0 ? Math.round(((controls.length - untestedControls.length) / controls.length * 100)) : 0}% control test coverage`,
+          `${controls.length > 0 ? Math.round(((controls.length - untestedControls.length) / controls.length) * 100) : 0}% control test coverage`,
         ],
       },
     };
@@ -400,8 +407,8 @@ export class ReportDataCollector {
     const [risks, controls, tasks] = await Promise.all([
       prisma.risk.findMany({ where: { organizationId } }),
       prisma.control.findMany({ where: { organizationId } }),
-      prisma.task.findMany({ 
-        where: { 
+      prisma.task.findMany({
+        where: {
           organizationId,
           createdAt: { gte: dateFrom, lte: dateTo },
         },
@@ -409,16 +416,12 @@ export class ReportDataCollector {
     ]);
 
     const highCriticalRisks = risks.filter(
-      r => r.severity === 'HIGH' || r.severity === 'CRITICAL'
+      (r) => r.severity === 'HIGH' || r.severity === 'CRITICAL'
     );
 
-    const effectiveControls = controls.filter(
-      c => c.effectiveness === 'EFFECTIVE'
-    );
+    const effectiveControls = controls.filter((c) => c.effectiveness === 'EFFECTIVE');
 
-    const completedTasks = tasks.filter(
-      t => t.status === 'COMPLETED'
-    );
+    const completedTasks = tasks.filter((t) => t.status === 'COMPLETED');
 
     return {
       title: 'Executive Dashboard',
@@ -434,7 +437,7 @@ export class ReportDataCollector {
             totalControls: controls.length,
             effectiveControls: effectiveControls.length,
             tasksCompleted: completedTasks.length,
-            taskCompletionRate: tasks.length > 0 ? (completedTasks.length / tasks.length * 100) : 0,
+            taskCompletionRate: tasks.length > 0 ? (completedTasks.length / tasks.length) * 100 : 0,
           },
         },
         {
@@ -445,7 +448,7 @@ export class ReportDataCollector {
             data: [
               { label: 'Total Risks', value: risks.length },
               { label: 'High/Critical', value: highCriticalRisks.length },
-              { label: 'Mitigated', value: risks.filter(r => r.status === 'MITIGATED').length },
+              { label: 'Mitigated', value: risks.filter((r) => r.status === 'MITIGATED').length },
             ],
           },
         },
@@ -456,9 +459,18 @@ export class ReportDataCollector {
             type: 'pie',
             data: [
               { label: 'Effective', value: effectiveControls.length },
-              { label: 'Partially Effective', value: controls.filter(c => c.effectiveness === 'PARTIALLY_EFFECTIVE').length },
-              { label: 'Ineffective', value: controls.filter(c => c.effectiveness === 'INEFFECTIVE').length },
-              { label: 'Not Evaluated', value: controls.filter(c => c.effectiveness === 'NOT_EVALUATED').length },
+              {
+                label: 'Partially Effective',
+                value: controls.filter((c) => c.effectiveness === 'PARTIALLY_EFFECTIVE').length,
+              },
+              {
+                label: 'Ineffective',
+                value: controls.filter((c) => c.effectiveness === 'INEFFECTIVE').length,
+              },
+              {
+                label: 'Not Evaluated',
+                value: controls.filter((c) => c.effectiveness === 'NOT_EVALUATED').length,
+              },
             ],
           },
         },
@@ -467,12 +479,13 @@ export class ReportDataCollector {
         totalItems: risks.length + controls.length + tasks.length,
         keyMetrics: {
           riskScore: this.calculateAverageRiskScore(risks),
-          controlEffectiveness: controls.length > 0 ? (effectiveControls.length / controls.length * 100) : 0,
-          taskCompletionRate: tasks.length > 0 ? (completedTasks.length / tasks.length * 100) : 0,
+          controlEffectiveness:
+            controls.length > 0 ? (effectiveControls.length / controls.length) * 100 : 0,
+          taskCompletionRate: tasks.length > 0 ? (completedTasks.length / tasks.length) * 100 : 0,
         },
         highlights: [
           `${highCriticalRisks.length} high/critical risks identified`,
-          `${controls.length > 0 ? Math.round(effectiveControls.length / controls.length * 100) : 0}% controls rated as effective`,
+          `${controls.length > 0 ? Math.round((effectiveControls.length / controls.length) * 100) : 0}% controls rated as effective`,
           `${completedTasks.length} tasks completed in reporting period`,
         ],
       },
@@ -481,14 +494,17 @@ export class ReportDataCollector {
 
   // Helper methods
   private groupBy<T>(items: T[], key: keyof T): Record<string, T[]> {
-    return items.reduce((groups, item) => {
-      const groupKey = String(item[key]);
-      if (!groups[groupKey]) {
-        groups[groupKey] = [];
-      }
-      groups[groupKey].push(item);
-      return groups;
-    }, {} as Record<string, T[]>);
+    return items.reduce(
+      (groups, item) => {
+        const groupKey = String(item[key]);
+        if (!groups[groupKey]) {
+          groups[groupKey] = [];
+        }
+        groups[groupKey].push(item);
+        return groups;
+      },
+      {} as Record<string, T[]>
+    );
   }
 
   private calculateAverageRiskScore(risks: any[]): number {

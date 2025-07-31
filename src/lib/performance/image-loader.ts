@@ -59,7 +59,7 @@ class ImageOptimizer {
   // Optimize local images
   private optimizeLocalImage(src: string, width: number, quality?: number): string {
     const cacheKey = `${src}-${width}-${quality}`;
-    
+
     if (this.cache.has(cacheKey)) {
       return this.cache.get(cacheKey)!;
     }
@@ -79,7 +79,7 @@ class ImageOptimizer {
 
     const optimizedUrl = `/_next/image?${params.toString()}`;
     this.cache.set(cacheKey, optimizedUrl);
-    
+
     return optimizedUrl;
   }
 
@@ -91,7 +91,7 @@ class ImageOptimizer {
     link.rel = 'preload';
     link.as = 'image';
     link.href = src;
-    
+
     if (sizes) {
       link.setAttribute('imagesizes', sizes);
     }
@@ -110,9 +110,7 @@ class ImageOptimizer {
   // Generate responsive srcset
   private generateResponsiveSrcSet(src: string): string {
     const widths = [640, 750, 828, 1080, 1200, 1920];
-    return widths
-      .map(width => `${this.optimizeLocalImage(src, width)} ${width}w`)
-      .join(', ');
+    return widths.map((width) => `${this.optimizeLocalImage(src, width)} ${width}w`).join(', ');
   }
 
   // Lazy load images with intersection observer
@@ -125,7 +123,7 @@ class ImageOptimizer {
           if (entry.isIntersecting) {
             const img = entry.target as HTMLImageElement;
             const src = img.dataset.src;
-            
+
             if (src && !this.loadingImages.has(src)) {
               this.loadingImages.add(src);
               this.loadImageWithFallback(img, src);
@@ -184,7 +182,7 @@ class ImageOptimizer {
   // Generate blur placeholder
   public generateBlurPlaceholder(src: string): string {
     if (!this.config.enableBlur) return '';
-    
+
     // Generate a low-quality placeholder
     return this.optimizeLocalImage(src, 10, 10);
   }
@@ -213,28 +211,36 @@ export default imageOptimizer.loader;
 export { imageOptimizer };
 
 // Utility functions for responsive images
-export const generateSrcSet = (src: string, widths: number[] = [640, 750, 828, 1080, 1200, 1920]): string => {
+export const generateSrcSet = (
+  src: string,
+  widths: number[] = [640, 750, 828, 1080, 1200, 1920]
+): string => {
   return widths
-    .map(width => `${imageOptimizer.loader({ src, width, quality: 85 })} ${width}w`)
+    .map((width) => `${imageOptimizer.loader({ src, width, quality: 85 })} ${width}w`)
     .join(', ');
 };
 
-export const generateSizes = (breakpoints: Record<string, string> = {
-  '(max-width: 640px)': '100vw',
-  '(max-width: 1200px)': '50vw',
-  default: '33vw'
-}): string => {
+export const generateSizes = (
+  breakpoints: Record<string, string> = {
+    '(max-width: 640px)': '100vw',
+    '(max-width: 1200px)': '50vw',
+    default: '33vw',
+  }
+): string => {
   const entries = Object.entries(breakpoints);
   const mediaQueries = entries.slice(0, -1).map(([query, size]) => `${query} ${size}`);
   const defaultSize = breakpoints.default || '100vw';
-  
+
   return [...mediaQueries, defaultSize].join(', ');
 };
 
 // Hook for optimized images in React components
-export const useOptimizedImage = (src: string, options: Partial<OptimizedImageLoaderConfig> = {}) => {
+export const useOptimizedImage = (
+  src: string,
+  options: Partial<OptimizedImageLoaderConfig> = {}
+) => {
   const optimizer = new ImageOptimizer(options);
-  
+
   return {
     loader: optimizer.loader,
     preload: (sizes?: string) => optimizer.preloadImage(src, sizes),
@@ -276,4 +282,4 @@ if (typeof window !== 'undefined') {
     childList: true,
     subtree: true,
   });
-} 
+}

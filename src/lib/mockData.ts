@@ -6,12 +6,9 @@ import { toast } from 'sonner';
 const API_BASE = '/api';
 
 // Generic API request function with error handling
-async function apiRequest<T>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<T> {
+async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const url = `${API_BASE}${endpoint}`;
-  
+
   const defaultOptions: RequestInit = {
     headers: {
       'Content-Type': 'application/json',
@@ -22,7 +19,7 @@ async function apiRequest<T>(
 
   try {
     const response = await fetch(url, defaultOptions);
-    
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
       throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
@@ -32,7 +29,9 @@ async function apiRequest<T>(
     return data.data || data;
   } catch (error) {
     console.error(`API request failed for ${endpoint}:`, error);
-    toast.error(`Failed to ${options.method || 'fetch'} data: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    toast.error(
+      `Failed to ${options.method || 'fetch'} data: ${error instanceof Error ? error.message : 'Unknown error'}`
+    );
     throw error;
   }
 }
@@ -133,7 +132,7 @@ export const riskAPI = {
         searchParams.append(key, String(value));
       }
     });
-    
+
     return apiRequest<ApiResponse<Risk[]>>(`/risks?${searchParams}`);
   },
 
@@ -191,7 +190,7 @@ export const controlAPI = {
         searchParams.append(key, String(value));
       }
     });
-    
+
     return apiRequest<ApiResponse<Control[]>>(`/controls?${searchParams}`);
   },
 
@@ -232,7 +231,17 @@ export interface Document {
   id: string;
   title: string;
   description?: string;
-  category: 'POLICY' | 'PROCEDURE' | 'GUIDELINE' | 'FRAMEWORK' | 'STANDARD' | 'TEMPLATE' | 'REPORT' | 'EVIDENCE' | 'CONTRACT' | 'OTHER';
+  category:
+    | 'POLICY'
+    | 'PROCEDURE'
+    | 'GUIDELINE'
+    | 'FRAMEWORK'
+    | 'STANDARD'
+    | 'TEMPLATE'
+    | 'REPORT'
+    | 'EVIDENCE'
+    | 'CONTRACT'
+    | 'OTHER';
   type: string;
   size: number;
   mimeType: string;
@@ -256,7 +265,7 @@ export const documentAPI = {
         searchParams.append(key, String(value));
       }
     });
-    
+
     return apiRequest<ApiResponse<Document[]>>(`/documents?${searchParams}`);
   },
 
@@ -317,7 +326,7 @@ export const assessmentAPI = {
         searchParams.append(key, String(value));
       }
     });
-    
+
     return apiRequest<ApiResponse<Assessment[]>>(`/assessments?${searchParams}`);
   },
 
@@ -346,7 +355,13 @@ export interface Questionnaire {
   id: string;
   title: string;
   description?: string;
-  type: 'RISK_ASSESSMENT' | 'CONTROL_EVALUATION' | 'COMPLIANCE_CHECK' | 'VENDOR_ASSESSMENT' | 'SELF_ASSESSMENT' | 'CUSTOM';
+  type:
+    | 'RISK_ASSESSMENT'
+    | 'CONTROL_EVALUATION'
+    | 'COMPLIANCE_CHECK'
+    | 'VENDOR_ASSESSMENT'
+    | 'SELF_ASSESSMENT'
+    | 'CUSTOM';
   status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
   isActive: boolean;
   questions: any[];
@@ -367,7 +382,7 @@ export const questionnaireAPI = {
         searchParams.append(key, String(value));
       }
     });
-    
+
     return apiRequest<ApiResponse<Questionnaire[]>>(`/questionnaires?${searchParams}`);
   },
 
@@ -399,7 +414,13 @@ export interface Report {
   id: string;
   title: string;
   description?: string;
-  type: 'RISK_ASSESSMENT' | 'CONTROL_EFFECTIVENESS' | 'COMPLIANCE' | 'AUDIT' | 'EXECUTIVE_DASHBOARD' | 'CUSTOM';
+  type:
+    | 'RISK_ASSESSMENT'
+    | 'CONTROL_EFFECTIVENESS'
+    | 'COMPLIANCE'
+    | 'AUDIT'
+    | 'EXECUTIVE_DASHBOARD'
+    | 'CUSTOM';
   status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
   parameters?: any;
   data?: any;
@@ -417,7 +438,7 @@ export const reportAPI = {
         searchParams.append(key, String(value));
       }
     });
-    
+
     return apiRequest<ApiResponse<Report[]>>(`/reports?${searchParams}`);
   },
 
@@ -463,14 +484,16 @@ export interface Notification {
 
 export const notificationAPI = {
   // Get user notifications
-  async getNotifications(params: { page?: number; limit?: number; unreadOnly?: boolean } = {}): Promise<ApiResponse<Notification[]>> {
+  async getNotifications(
+    params: { page?: number; limit?: number; unreadOnly?: boolean } = {}
+  ): Promise<ApiResponse<Notification[]>> {
     const searchParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== '') {
         searchParams.append(key, String(value));
       }
     });
-    
+
     return apiRequest<ApiResponse<Notification[]>>(`/notifications?${searchParams}`);
   },
 
@@ -530,7 +553,10 @@ export const userAPI = {
   },
 
   // Change password
-  async changePassword(currentPassword: string, newPassword: string): Promise<{ success: boolean }> {
+  async changePassword(
+    currentPassword: string,
+    newPassword: string
+  ): Promise<{ success: boolean }> {
     return apiRequest('/users/me/password', {
       method: 'POST',
       body: JSON.stringify({
@@ -718,4 +744,4 @@ export function generateMockControls(): any[] {
   ];
 }
 
-export default api; 
+export default api;

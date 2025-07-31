@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
 
     // Find or create organization
     let organization = await prisma.organization.findFirst({
-      where: { domain: 'riscura.com' }
+      where: { domain: 'riscura.com' },
     });
 
     if (!organization) {
@@ -26,7 +26,13 @@ export async function POST(request: NextRequest) {
           isActive: true,
           settings: {
             riskMatrixSize: 5,
-            defaultRiskCategories: ['OPERATIONAL', 'FINANCIAL', 'STRATEGIC', 'COMPLIANCE', 'TECHNOLOGY'],
+            defaultRiskCategories: [
+              'OPERATIONAL',
+              'FINANCIAL',
+              'STRATEGIC',
+              'COMPLIANCE',
+              'TECHNOLOGY',
+            ],
           },
         },
       });
@@ -39,7 +45,7 @@ export async function POST(request: NextRequest) {
 
     // Check if user already exists
     let user = await prisma.user.findUnique({
-      where: { email: testUserEmail }
+      where: { email: testUserEmail },
     });
 
     if (user) {
@@ -65,12 +71,12 @@ export async function POST(request: NextRequest) {
             'reports:read',
             'reports:write',
             'ai:access',
-            'dashboard:access'
+            'dashboard:access',
           ],
           isActive: true,
           emailVerified: new Date(),
-          lastLogin: new Date()
-        }
+          lastLogin: new Date(),
+        },
       });
     } else {
       // Create new user
@@ -95,12 +101,12 @@ export async function POST(request: NextRequest) {
             'reports:read',
             'reports:write',
             'ai:access',
-            'dashboard:access'
+            'dashboard:access',
           ],
           isActive: true,
           emailVerified: new Date(),
-          organizationId: organization.id
-        }
+          organizationId: organization.id,
+        },
       });
     }
 
@@ -113,19 +119,21 @@ export async function POST(request: NextRequest) {
         firstName: user.firstName,
         lastName: user.lastName,
         role: user.role,
-        organization: organization.name
+        organization: organization.name,
       },
       credentials: {
         email: testUserEmail,
-        password: testUserPassword
-      }
+        password: testUserPassword,
+      },
     });
-
   } catch (error) {
     console.error('Error creating test user:', error);
     return NextResponse.json(
-      { error: 'Failed to create test user', details: error instanceof Error ? error.message : 'Unknown error' },
+      {
+        error: 'Failed to create test user',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
       { status: 500 }
     );
   }
-} 
+}

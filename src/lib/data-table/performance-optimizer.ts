@@ -57,7 +57,7 @@ export class DataTablePerformanceOptimizer<T = any> {
     sortTime: 0,
     memoryUsage: 0,
     rowsProcessed: 0,
-    cacheHitRate: 0
+    cacheHitRate: 0,
   };
 
   constructor(
@@ -73,22 +73,24 @@ export class DataTablePerformanceOptimizer<T = any> {
    */
   private buildIndexes(indexFields: string[] = []): void {
     const startTime = performance.now();
-    
-    indexFields.forEach(field => {
+
+    indexFields.forEach((field) => {
       const index = new Map<any, T[]>();
-      
-      this.data.forEach(item => {
+
+      this.data.forEach((item) => {
         const value = this.getNestedValue(item, field);
         if (!index.has(value)) {
           index.set(value, []);
         }
         index.get(value)!.push(item);
       });
-      
+
       this.indexedFields.set(field, index);
     });
-    
-    console.log(`Built indexes for ${indexFields.length} fields in ${performance.now() - startTime}ms`);
+
+    console.log(
+      `Built indexes for ${indexFields.length} fields in ${performance.now() - startTime}ms`
+    );
   }
 
   /**
@@ -97,7 +99,7 @@ export class DataTablePerformanceOptimizer<T = any> {
   filterData(filters: FilterState[]): T[] {
     const startTime = performance.now();
     const cacheKey = this.generateFilterCacheKey(filters);
-    
+
     // Check cache first
     if (this.filterCache.has(cacheKey)) {
       this.metrics.cacheHitRate++;
@@ -109,10 +111,10 @@ export class DataTablePerformanceOptimizer<T = any> {
 
     // Apply filters in order of selectivity (most selective first)
     const sortedFilters = this.sortFiltersBySelectivity(filters);
-    
+
     for (const filter of sortedFilters) {
       filteredData = this.applyFilter(filteredData, filter);
-      
+
       // Early exit if no data remains
       if (filteredData.length === 0) break;
     }
@@ -131,7 +133,7 @@ export class DataTablePerformanceOptimizer<T = any> {
   sortData(data: T[], sorts: SortState[]): T[] {
     const startTime = performance.now();
     const cacheKey = this.generateSortCacheKey(data, sorts);
-    
+
     // Check cache first
     if (this.sortCache.has(cacheKey)) {
       this.metrics.cacheHitRate++;
@@ -143,7 +145,7 @@ export class DataTablePerformanceOptimizer<T = any> {
       for (const sort of sorts) {
         const aValue = this.getNestedValue(a, sort.field);
         const bValue = this.getNestedValue(b, sort.field);
-        
+
         const comparison = this.compareValues(aValue, bValue);
         if (comparison !== 0) {
           return sort.direction === 'asc' ? comparison : -comparison;
@@ -172,7 +174,7 @@ export class DataTablePerformanceOptimizer<T = any> {
     offsetY: number;
   } {
     const startTime = performance.now();
-    
+
     const items = data.slice(startIndex, endIndex + 1);
     const totalHeight = data.length * this.virtualizationConfig.rowHeight;
     const offsetY = startIndex * this.virtualizationConfig.rowHeight;
@@ -182,7 +184,7 @@ export class DataTablePerformanceOptimizer<T = any> {
     return {
       items,
       totalHeight,
-      offsetY
+      offsetY,
     };
   }
 
@@ -200,23 +202,23 @@ export class DataTablePerformanceOptimizer<T = any> {
 
     // Process batches with controlled concurrency
     const semaphore = new Semaphore(this.bulkConfig.maxConcurrent);
-    
+
     const batchPromises = batches.map(async (batch, index) => {
       await semaphore.acquire();
-      
+
       try {
         const batchResults = await this.retryOperation(
           () => operation(batch),
           this.bulkConfig.retryAttempts
         );
-        
+
         results.push(...batchResults);
         completed += batch.length;
-        
+
         if (onProgress) {
           onProgress(completed, items.length);
         }
-        
+
         return batchResults;
       } finally {
         semaphore.release();
@@ -236,31 +238,36 @@ export class DataTablePerformanceOptimizer<T = any> {
     columns: { field: string; header: string; formatter?: (value: any) => string }[]
   ): AsyncGenerator<string, void, unknown> {
     const startTime = performance.now();
-    
+
     if (config.format === 'csv') {
       // Yield headers
       if (config.includeHeaders) {
-        yield columns.map(col => this.escapeCsvValue(col.header)).join(',') + '\n';
+        yield columns.map((col) => this.escapeCsvValue(col.header)).join(',') + '\n';
       }
-      
+
       // Stream data in chunks
       for (let i = 0; i < data.length; i += config.chunkSize) {
         const chunk = data.slice(i, i + config.chunkSize);
-        const csvChunk = chunk.map(row => 
-          columns.map(col => {
-            const value = this.getNestedValue(row, col.field);
-            const formatted = col.formatter ? col.formatter(value) : String(value || '');
-            return this.escapeCsvValue(formatted);
-          }).join(',')
-        ).join('\n') + '\n';
-        
+        const csvChunk =
+          chunk
+            .map((row) =>
+              columns
+                .map((col) => {
+                  const value = this.getNestedValue(row, col.field);
+                  const formatted = col.formatter ? col.formatter(value) : String(value || '');
+                  return this.escapeCsvValue(formatted);
+                })
+                .join(',')
+            )
+            .join('\n') + '\n';
+
         yield csvChunk;
       }
     } else if (config.format === 'excel') {
       // For Excel, we'd use a library like exceljs with streaming
       yield* this.streamExcelExport(data, columns, config);
     }
-    
+
     this.metrics.exportTime = performance.now() - startTime;
   }
 
@@ -269,15 +276,15 @@ export class DataTablePerformanceOptimizer<T = any> {
    */
   searchData(query: string, searchFields: string[]): T[] {
     const normalizedQuery = query.toLowerCase().trim();
-    
+
     if (!normalizedQuery) return this.data;
-    
+
     const searchTerms = normalizedQuery.split(/\s+/);
-    
-    return this.data.filter(item => {
-      return searchFields.some(field => {
+
+    return this.data.filter((item) => {
+      return searchFields.some((field) => {
         const value = String(this.getNestedValue(item, field) || '').toLowerCase();
-        return searchTerms.every(term => value.includes(term));
+        return searchTerms.every((term) => value.includes(term));
       });
     });
   }
@@ -293,22 +300,23 @@ export class DataTablePerformanceOptimizer<T = any> {
     }[]
   ): Record<string, Record<string, any>> {
     const results: Record<string, Record<string, any>> = {};
-    
+
     aggregations.forEach(({ field, operations }) => {
-      const values = data.map(item => this.getNestedValue(item, field)).filter(v => v != null);
-      const numericValues = values.filter(v => typeof v === 'number');
-      
+      const values = data.map((item) => this.getNestedValue(item, field)).filter((v) => v != null);
+      const numericValues = values.filter((v) => typeof v === 'number');
+
       results[field] = {};
-      
-      operations.forEach(op => {
+
+      operations.forEach((op) => {
         switch (op) {
           case 'sum':
             results[field][op] = numericValues.reduce((sum, val) => sum + val, 0);
             break;
           case 'avg':
-            results[field][op] = numericValues.length > 0 
-              ? numericValues.reduce((sum, val) => sum + val, 0) / numericValues.length 
-              : 0;
+            results[field][op] =
+              numericValues.length > 0
+                ? numericValues.reduce((sum, val) => sum + val, 0) / numericValues.length
+                : 0;
             break;
           case 'min':
             results[field][op] = Math.min(...numericValues);
@@ -325,7 +333,7 @@ export class DataTablePerformanceOptimizer<T = any> {
         }
       });
     });
-    
+
     return results;
   }
 
@@ -341,7 +349,7 @@ export class DataTablePerformanceOptimizer<T = any> {
       return index.get(filter.value) || [];
     }
 
-    return data.filter(item => {
+    return data.filter((item) => {
       const value = this.getNestedValue(item, filter.field);
       return this.evaluateFilter(value, filter);
     });
@@ -374,11 +382,11 @@ export class DataTablePerformanceOptimizer<T = any> {
     if (a === b) return 0;
     if (a == null) return -1;
     if (b == null) return 1;
-    
+
     if (typeof a === 'string' && typeof b === 'string') {
       return a.localeCompare(b);
     }
-    
+
     return a < b ? -1 : 1;
   }
 
@@ -403,7 +411,9 @@ export class DataTablePerformanceOptimizer<T = any> {
   }
 
   private generateFilterCacheKey(filters: FilterState[]): string {
-    return JSON.stringify(filters.map(f => ({ field: f.field, operator: f.operator, value: f.value })));
+    return JSON.stringify(
+      filters.map((f) => ({ field: f.field, operator: f.operator, value: f.value }))
+    );
   }
 
   private generateSortCacheKey(data: T[], sorts: SortState[]): string {
@@ -424,25 +434,22 @@ export class DataTablePerformanceOptimizer<T = any> {
     return batches;
   }
 
-  private async retryOperation<R>(
-    operation: () => Promise<R>,
-    maxRetries: number
-  ): Promise<R> {
+  private async retryOperation<R>(operation: () => Promise<R>, maxRetries: number): Promise<R> {
     let lastError: Error;
-    
+
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         return await operation();
       } catch (error) {
         lastError = error as Error;
-        
+
         if (attempt < maxRetries) {
           const delay = Math.min(1000 * Math.pow(2, attempt), 10000);
-          await new Promise(resolve => setTimeout(resolve, delay));
+          await new Promise((resolve) => setTimeout(resolve, delay));
         }
       }
     }
-    
+
     throw lastError!;
   }
 
@@ -484,15 +491,21 @@ export class DataTablePerformanceOptimizer<T = any> {
    */
   optimizeMemory(): void {
     const maxCacheSize = 100;
-    
+
     if (this.filterCache.size > maxCacheSize) {
-      const keysToDelete = Array.from(this.filterCache.keys()).slice(0, this.filterCache.size - maxCacheSize);
-      keysToDelete.forEach(key => this.filterCache.delete(key));
+      const keysToDelete = Array.from(this.filterCache.keys()).slice(
+        0,
+        this.filterCache.size - maxCacheSize
+      );
+      keysToDelete.forEach((key) => this.filterCache.delete(key));
     }
-    
+
     if (this.sortCache.size > maxCacheSize) {
-      const keysToDelete = Array.from(this.sortCache.keys()).slice(0, this.sortCache.size - maxCacheSize);
-      keysToDelete.forEach(key => this.sortCache.delete(key));
+      const keysToDelete = Array.from(this.sortCache.keys()).slice(
+        0,
+        this.sortCache.size - maxCacheSize
+      );
+      keysToDelete.forEach((key) => this.sortCache.delete(key));
     }
   }
 }
@@ -514,7 +527,7 @@ class Semaphore {
       return;
     }
 
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.waiting.push(resolve);
     });
   }
@@ -565,14 +578,20 @@ export const useDataTableOptimizer = <T>(
   );
 
   const performBulkOperation = useCallback(
-    <R>(items: T[], operation: (batch: T[]) => Promise<R[]>, onProgress?: (completed: number, total: number) => void) =>
-      optimizer.performBulkOperation(items, operation, onProgress),
+    <R>(
+      items: T[],
+      operation: (batch: T[]) => Promise<R[]>,
+      onProgress?: (completed: number, total: number) => void
+    ) => optimizer.performBulkOperation(items, operation, onProgress),
     [optimizer]
   );
 
   const streamExport = useCallback(
-    (data: T[], config: ExportConfig, columns: { field: string; header: string; formatter?: (value: any) => string }[]) =>
-      optimizer.streamExport(data, config, columns),
+    (
+      data: T[],
+      config: ExportConfig,
+      columns: { field: string; header: string; formatter?: (value: any) => string }[]
+    ) => optimizer.streamExport(data, config, columns),
     [optimizer]
   );
 
@@ -582,8 +601,13 @@ export const useDataTableOptimizer = <T>(
   );
 
   const computeAggregations = useCallback(
-    (data: T[], aggregations: { field: string; operations: ('sum' | 'avg' | 'min' | 'max' | 'count' | 'distinct')[] }[]) =>
-      optimizer.computeAggregations(data, aggregations),
+    (
+      data: T[],
+      aggregations: {
+        field: string;
+        operations: ('sum' | 'avg' | 'min' | 'max' | 'count' | 'distinct')[];
+      }[]
+    ) => optimizer.computeAggregations(data, aggregations),
     [optimizer]
   );
 
@@ -597,6 +621,6 @@ export const useDataTableOptimizer = <T>(
     computeAggregations,
     getMetrics: () => optimizer.getMetrics(),
     clearCaches: () => optimizer.clearCaches(),
-    optimizeMemory: () => optimizer.optimizeMemory()
+    optimizeMemory: () => optimizer.optimizeMemory(),
   };
-}; 
+};

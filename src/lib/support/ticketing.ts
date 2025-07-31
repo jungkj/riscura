@@ -47,38 +47,38 @@ interface SupportTicket {
   category: TicketCategory;
   priority: TicketPriority;
   status: TicketStatus;
-  
+
   // Customer information
   customerId: string;
   customerEmail: string;
   customerName: string;
   organizationId: string;
   organizationName: string;
-  
+
   // Assignment and tracking
   assignedTo?: string;
   assignedTeam?: string;
-  
+
   // Timestamps
   createdAt: number;
   updatedAt: number;
   firstResponseAt?: number;
   resolvedAt?: number;
   closedAt?: number;
-  
+
   // SLA tracking
   slaTarget: number; // Response time target in minutes
   slaBreached: boolean;
-  
+
   // Metadata
   tags: string[];
   attachments: string[];
   relatedTickets: string[];
-  
+
   // Internal notes and customer communication
   notes: TicketNote[];
   responses: TicketResponse[];
-  
+
   // Analytics
   viewCount: number;
   escalationCount: number;
@@ -171,7 +171,7 @@ class SupportTicketingSystem {
   private tickets: Map<string, SupportTicket> = new Map();
   private knowledgeBase: Map<string, KnowledgeBaseArticle> = new Map();
   private escalationRules: EscalationRule[] = [];
-  
+
   private slaConfig: SLAConfig = {
     [TicketPriority.LOW]: { firstResponseTime: 480, resolutionTime: 2880 }, // 8h, 48h
     [TicketPriority.MEDIUM]: { firstResponseTime: 240, resolutionTime: 1440 }, // 4h, 24h
@@ -192,10 +192,13 @@ class SupportTicketingSystem {
   async createTicket(ticketData: Partial<SupportTicket>): Promise<SupportTicket> {
     const ticketId = this.generateTicketId();
     const now = Date.now();
-    
+
     // Auto-classify the ticket
-    const classification = await this.classifyTicket(ticketData.title || '', ticketData.description || '');
-    
+    const classification = await this.classifyTicket(
+      ticketData.title || '',
+      ticketData.description || ''
+    );
+
     const ticket: SupportTicket = {
       id: ticketId,
       title: ticketData.title || 'Untitled Ticket',
@@ -203,26 +206,26 @@ class SupportTicketingSystem {
       category: classification.category || TicketCategory.OTHER,
       priority: classification.priority || TicketPriority.MEDIUM,
       status: TicketStatus.OPEN,
-      
+
       customerId: ticketData.customerId || '',
       customerEmail: ticketData.customerEmail || '',
       customerName: ticketData.customerName || '',
       organizationId: ticketData.organizationId || '',
       organizationName: ticketData.organizationName || '',
-      
+
       createdAt: now,
       updatedAt: now,
-      
+
       slaTarget: this.slaConfig[classification.priority || TicketPriority.MEDIUM].firstResponseTime,
       slaBreached: false,
-      
+
       tags: classification.suggestedTags || [],
       attachments: ticketData.attachments || [],
       relatedTickets: [],
-      
+
       notes: [],
       responses: [],
-      
+
       viewCount: 0,
       escalationCount: 0,
     };
@@ -287,14 +290,14 @@ class SupportTicketingSystem {
     // Set first response time if this is the first staff response
     if (!response.isFromCustomer && !ticket.firstResponseAt) {
       ticket.firstResponseAt = Date.now();
-      
+
       // Check SLA compliance
       const responseTime = ticket.firstResponseAt - ticket.createdAt;
       const slaTarget = this.slaConfig[ticket.priority].firstResponseTime * 60 * 1000; // Convert to ms
-      
+
       if (responseTime > slaTarget) {
         ticket.slaBreached = true;
-        
+
         // Log SLA breach
         Sentry.captureMessage('SLA breach - First response time exceeded', {
           level: 'warning',
@@ -322,15 +325,20 @@ class SupportTicketingSystem {
     getAnalytics().trackBusinessEvent('support_response_added', {
       ticket_id: ticketId,
       is_from_customer: response.isFromCustomer,
-      response_time_minutes: ticket.firstResponseAt ? 
-        (ticket.firstResponseAt - ticket.createdAt) / 1000 / 60 : null,
+      response_time_minutes: ticket.firstResponseAt
+        ? (ticket.firstResponseAt - ticket.createdAt) / 1000 / 60
+        : null,
     });
   }
 
   /**
    * Update ticket status
    */
-  async updateTicketStatus(ticketId: string, newStatus: TicketStatus, updatedBy: string): Promise<void> {
+  async updateTicketStatus(
+    ticketId: string,
+    newStatus: TicketStatus,
+    updatedBy: string
+  ): Promise<void> {
     const ticket = this.tickets.get(ticketId);
     if (!ticket) {
       throw new Error('Ticket not found');
@@ -343,11 +351,11 @@ class SupportTicketingSystem {
     // Set resolution/closure timestamps
     if (newStatus === TicketStatus.RESOLVED && !ticket.resolvedAt) {
       ticket.resolvedAt = Date.now();
-      
+
       // Check resolution SLA
       const resolutionTime = ticket.resolvedAt - ticket.createdAt;
       const slaTarget = this.slaConfig[ticket.priority].resolutionTime * 60 * 1000;
-      
+
       if (resolutionTime > slaTarget && !ticket.slaBreached) {
         ticket.slaBreached = true;
       }
@@ -404,16 +412,19 @@ class SupportTicketingSystem {
   /**
    * Auto-classify ticket using keywords and patterns
    */
-  private async classifyTicket(title: string, description: string): Promise<{
+  private async classifyTicket(
+    title: string,
+    description: string
+  ): Promise<{
     category: TicketCategory;
     priority: TicketPriority;
     suggestedTags: string[];
   }> {
     const text = `${title} ${description}`.toLowerCase();
-    
+
     // Category classification
     let category = TicketCategory.OTHER;
-    
+
     if (text.includes('bug') || text.includes('error') || text.includes('crash')) {
       category = TicketCategory.BUG_REPORT;
     } else if (text.includes('billing') || text.includes('payment') || text.includes('invoice')) {
@@ -426,7 +437,11 @@ class SupportTicketingSystem {
       category = TicketCategory.INTEGRATION;
     } else if (text.includes('training') || text.includes('help') || text.includes('how to')) {
       category = TicketCategory.TRAINING;
-    } else if (text.includes('feature') || text.includes('enhancement') || text.includes('request')) {
+    } else if (
+      text.includes('feature') ||
+      text.includes('enhancement') ||
+      text.includes('request')
+    ) {
       category = TicketCategory.FEATURE_REQUEST;
     } else if (text.includes('account') || text.includes('login') || text.includes('password')) {
       category = TicketCategory.ACCOUNT;
@@ -434,8 +449,13 @@ class SupportTicketingSystem {
 
     // Priority classification
     let priority = TicketPriority.MEDIUM;
-    
-    if (text.includes('urgent') || text.includes('critical') || text.includes('down') || text.includes('outage')) {
+
+    if (
+      text.includes('urgent') ||
+      text.includes('critical') ||
+      text.includes('down') ||
+      text.includes('outage')
+    ) {
       priority = TicketPriority.CRITICAL;
     } else if (text.includes('asap') || text.includes('immediately') || text.includes('broken')) {
       priority = TicketPriority.URGENT;
@@ -447,7 +467,7 @@ class SupportTicketingSystem {
 
     // Generate suggested tags
     const suggestedTags: string[] = [];
-    
+
     if (text.includes('rcsa')) suggestedTags.push('rcsa');
     if (text.includes('assessment')) suggestedTags.push('assessment');
     if (text.includes('document')) suggestedTags.push('document');
@@ -612,7 +632,7 @@ Contact support if issues persist.`,
       },
     ];
 
-    articles.forEach(article => this.knowledgeBase.set(article.id, article));
+    articles.forEach((article) => this.knowledgeBase.set(article.id, article));
   }
 
   /**
@@ -620,9 +640,12 @@ Contact support if issues persist.`,
    */
   private startEscalationMonitoring(): void {
     // Check for escalations every 5 minutes
-    setInterval(() => {
-      this.checkEscalations();
-    }, 5 * 60 * 1000);
+    setInterval(
+      () => {
+        this.checkEscalations();
+      },
+      5 * 60 * 1000
+    );
   }
 
   /**
@@ -630,7 +653,7 @@ Contact support if issues persist.`,
    */
   private checkEscalations(): void {
     const now = Date.now();
-    
+
     for (const ticket of this.tickets.values()) {
       if (ticket.status === TicketStatus.CLOSED || ticket.status === TicketStatus.RESOLVED) {
         continue;
@@ -670,7 +693,13 @@ Contact support if issues persist.`,
     }
 
     if (rule.actions.increasePriority && ticket.priority !== TicketPriority.CRITICAL) {
-      const priorities = [TicketPriority.LOW, TicketPriority.MEDIUM, TicketPriority.HIGH, TicketPriority.URGENT, TicketPriority.CRITICAL];
+      const priorities = [
+        TicketPriority.LOW,
+        TicketPriority.MEDIUM,
+        TicketPriority.HIGH,
+        TicketPriority.URGENT,
+        TicketPriority.CRITICAL,
+      ];
       const currentIndex = priorities.indexOf(ticket.priority);
       if (currentIndex < priorities.length - 1) {
         ticket.priority = priorities[currentIndex + 1];
@@ -729,7 +758,10 @@ Contact support if issues persist.`,
   /**
    * Send response notifications
    */
-  private async sendResponseNotifications(ticket: SupportTicket, response: TicketResponse): Promise<void> {
+  private async sendResponseNotifications(
+    ticket: SupportTicket,
+    response: TicketResponse
+  ): Promise<void> {
     // Implementation would notify appropriate parties
     console.log(`Sending response notification for ticket ${ticket.id}`);
   }
@@ -737,7 +769,10 @@ Contact support if issues persist.`,
   /**
    * Send escalation notification
    */
-  private async sendEscalationNotification(ticket: SupportTicket, rule: EscalationRule): Promise<void> {
+  private async sendEscalationNotification(
+    ticket: SupportTicket,
+    rule: EscalationRule
+  ): Promise<void> {
     // Implementation would notify management
     console.log(`Sending escalation notification for ticket ${ticket.id} (rule: ${rule.name})`);
   }
@@ -772,7 +807,7 @@ Contact support if issues persist.`,
     customerId?: string;
     organizationId?: string;
   }): SupportTicket[] {
-    return Array.from(this.tickets.values()).filter(ticket => {
+    return Array.from(this.tickets.values()).filter((ticket) => {
       if (query.status && !query.status.includes(ticket.status)) return false;
       if (query.priority && !query.priority.includes(ticket.priority)) return false;
       if (query.category && !query.category.includes(ticket.category)) return false;
@@ -792,24 +827,36 @@ Contact support if issues persist.`,
     satisfactionScore: number;
   } {
     const tickets = Array.from(this.tickets.values());
-    const openTickets = tickets.filter(t => t.status !== TicketStatus.CLOSED && t.status !== TicketStatus.RESOLVED);
-    
-    const ticketsWithFirstResponse = tickets.filter(t => t.firstResponseAt);
-    const avgFirstResponseTime = ticketsWithFirstResponse.length > 0
-      ? ticketsWithFirstResponse.reduce((sum, t) => sum + (t.firstResponseAt! - t.createdAt), 0) / ticketsWithFirstResponse.length / 1000 / 60
-      : 0;
+    const openTickets = tickets.filter(
+      (t) => t.status !== TicketStatus.CLOSED && t.status !== TicketStatus.RESOLVED
+    );
 
-    const resolvedTickets = tickets.filter(t => t.resolvedAt);
-    const avgResolutionTime = resolvedTickets.length > 0
-      ? resolvedTickets.reduce((sum, t) => sum + (t.resolvedAt! - t.createdAt), 0) / resolvedTickets.length / 1000 / 60
-      : 0;
+    const ticketsWithFirstResponse = tickets.filter((t) => t.firstResponseAt);
+    const avgFirstResponseTime =
+      ticketsWithFirstResponse.length > 0
+        ? ticketsWithFirstResponse.reduce((sum, t) => sum + (t.firstResponseAt! - t.createdAt), 0) /
+          ticketsWithFirstResponse.length /
+          1000 /
+          60
+        : 0;
 
-    const slaBreaches = tickets.filter(t => t.slaBreached).length;
+    const resolvedTickets = tickets.filter((t) => t.resolvedAt);
+    const avgResolutionTime =
+      resolvedTickets.length > 0
+        ? resolvedTickets.reduce((sum, t) => sum + (t.resolvedAt! - t.createdAt), 0) /
+          resolvedTickets.length /
+          1000 /
+          60
+        : 0;
 
-    const ticketsWithRating = tickets.filter(t => t.satisfactionRating);
-    const satisfactionScore = ticketsWithRating.length > 0
-      ? ticketsWithRating.reduce((sum, t) => sum + t.satisfactionRating!, 0) / ticketsWithRating.length
-      : 0;
+    const slaBreaches = tickets.filter((t) => t.slaBreached).length;
+
+    const ticketsWithRating = tickets.filter((t) => t.satisfactionRating);
+    const satisfactionScore =
+      ticketsWithRating.length > 0
+        ? ticketsWithRating.reduce((sum, t) => sum + t.satisfactionRating!, 0) /
+          ticketsWithRating.length
+        : 0;
 
     return {
       totalTickets: tickets.length,
@@ -823,11 +870,12 @@ Contact support if issues persist.`,
 
   searchKnowledgeBase(query: string): KnowledgeBaseArticle[] {
     const searchTerms = query.toLowerCase().split(' ');
-    
+
     return Array.from(this.knowledgeBase.values())
-      .filter(article => {
-        const content = `${article.title} ${article.content} ${article.tags.join(' ')}`.toLowerCase();
-        return searchTerms.some(term => content.includes(term));
+      .filter((article) => {
+        const content =
+          `${article.title} ${article.content} ${article.tags.join(' ')}`.toLowerCase();
+        return searchTerms.some((term) => content.includes(term));
       })
       .sort((a, b) => b.popularity - a.popularity)
       .slice(0, 10);
@@ -851,4 +899,4 @@ export {
   type TicketResponse,
   type KnowledgeBaseArticle,
   type EscalationRule,
-}; 
+};

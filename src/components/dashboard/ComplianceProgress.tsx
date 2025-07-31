@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { DaisyCard, DaisyCardBody, DaisyCardHeader, DaisyCardTitle, DaisyCardContent } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
@@ -362,7 +362,6 @@ export default function ComplianceProgress() {
                 </div>
               );
             })()}
-          </DaisyProgress>
         </DaisyCard>
       )}
     </div>

@@ -8,16 +8,28 @@ import { TextEncoder, TextDecoder } from 'util';
 // Add Request and Response polyfills for Next.js server components
 if (typeof globalThis.Request === 'undefined') {
   globalThis.Request = class Request {
-    constructor(public url: string, public init?: RequestInit) {}
+    constructor(
+      public url: string,
+      public init?: RequestInit
+    ) {}
   } as any;
 }
 
 if (typeof globalThis.Response === 'undefined') {
   globalThis.Response = class Response {
-    constructor(public body?: any, public init?: ResponseInit) {}
-    json() { return Promise.resolve(this.body); }
-    text() { return Promise.resolve(String(this.body)); }
-    clone() { return this; }
+    constructor(
+      public body?: any,
+      public init?: ResponseInit
+    ) {}
+    json() {
+      return Promise.resolve(this.body);
+    }
+    text() {
+      return Promise.resolve(String(this.body));
+    }
+    clone() {
+      return this;
+    }
   } as any;
 }
 
@@ -52,7 +64,7 @@ jest.mock('next/navigation', () => ({
 Object.defineProperty(process.env, 'NODE_ENV', {
   value: 'test',
   writable: true,
-  configurable: true
+  configurable: true,
 });
 
 // Mock environment variables
@@ -100,20 +112,16 @@ const originalWarn = console.warn;
 
 beforeAll(() => {
   console.error = (...args: any[]) => {
-    if (
-      typeof args[0] === 'string' &&
-      args[0].includes('Warning: ReactDOM.render is deprecated')
-    ) {
+    if (typeof args[0] === 'string' && args[0].includes('Warning: ReactDOM.render is deprecated')) {
       return;
     }
     originalError.call(console, ...args);
   };
-  
+
   console.warn = (...args: any[]) => {
     if (
       typeof args[0] === 'string' &&
-      (args[0].includes('componentWillReceiveProps') ||
-       args[0].includes('componentWillUpdate'))
+      (args[0].includes('componentWillReceiveProps') || args[0].includes('componentWillUpdate'))
     ) {
       return;
     }
@@ -133,7 +141,7 @@ global.testUtils = {
     status,
     ok: status < 400,
   }),
-  
+
   createMockUser: (overrides = {}) => ({
     id: 'test-user-id',
     email: 'test@example.com',
@@ -145,7 +153,7 @@ global.testUtils = {
     updatedAt: new Date(),
     ...overrides,
   }),
-  
+
   createMockOrganization: (overrides = {}) => ({
     id: 'test-org-id',
     name: 'Test Organization',
@@ -162,7 +170,7 @@ declare global {
       toBeWithinRange(a: number, b: number): R;
     }
   }
-  
+
   var testUtils: {
     mockApiResponse: (data: any, status?: number) => any;
     createMockUser: (overrides?: any) => any;
@@ -176,16 +184,14 @@ expect.extend({
     const pass = received >= floor && received <= ceiling;
     if (pass) {
       return {
-        message: () =>
-          `expected ${received} not to be within range ${floor} - ${ceiling}`,
+        message: () => `expected ${received} not to be within range ${floor} - ${ceiling}`,
         pass: true,
       };
     } else {
       return {
-        message: () =>
-          `expected ${received} to be within range ${floor} - ${ceiling}`,
+        message: () => `expected ${received} to be within range ${floor} - ${ceiling}`,
         pass: false,
       };
     }
   },
-}); 
+});

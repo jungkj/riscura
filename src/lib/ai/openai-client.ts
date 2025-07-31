@@ -18,7 +18,7 @@ export const MODEL_CONFIGS = {
     outputCostPer1k: 0.015,
     supportsStreaming: true,
     contextWindow: 128000,
-    description: 'Most capable model for complex reasoning'
+    description: 'Most capable model for complex reasoning',
   },
   'gpt-4o-mini': {
     name: 'gpt-4o-mini',
@@ -27,7 +27,7 @@ export const MODEL_CONFIGS = {
     outputCostPer1k: 0.0006,
     supportsStreaming: true,
     contextWindow: 128000,
-    description: 'Fast and efficient for most tasks'
+    description: 'Fast and efficient for most tasks',
   },
   'gpt-4-turbo': {
     name: 'gpt-4-turbo',
@@ -36,7 +36,7 @@ export const MODEL_CONFIGS = {
     outputCostPer1k: 0.03,
     supportsStreaming: true,
     contextWindow: 128000,
-    description: 'High performance for complex tasks'
+    description: 'High performance for complex tasks',
   },
   'gpt-3.5-turbo': {
     name: 'gpt-3.5-turbo',
@@ -45,8 +45,8 @@ export const MODEL_CONFIGS = {
     outputCostPer1k: 0.002,
     supportsStreaming: true,
     contextWindow: 16385,
-    description: 'Cost-effective for simpler tasks'
-  }
+    description: 'Cost-effective for simpler tasks',
+  },
 } as const;
 
 export type ModelName = keyof typeof MODEL_CONFIGS;
@@ -67,11 +67,7 @@ export const OpenAIUtils = {
   /**
    * Calculate cost for a completion
    */
-  calculateCost(
-    promptTokens: number,
-    completionTokens: number,
-    modelName: ModelName
-  ): number {
+  calculateCost(promptTokens: number, completionTokens: number, modelName: ModelName): number {
     const config = MODEL_CONFIGS[modelName];
     const promptCost = (promptTokens / 1000) * config.inputCostPer1k;
     const completionCost = (completionTokens / 1000) * config.outputCostPer1k;
@@ -95,17 +91,20 @@ export const OpenAIUtils = {
     costSensitive?: boolean;
     needsStreaming?: boolean;
   }): ModelName {
-    const { complexity, maxTokens = 4000, costSensitive = false, needsStreaming = false } = requirements;
+    const {
+      complexity,
+      maxTokens = 4000,
+      costSensitive = false,
+      needsStreaming = false,
+    } = requirements;
 
     // Filter models that support streaming if required
-    const availableModels = Object.entries(MODEL_CONFIGS).filter(([_, config]) => 
-      !needsStreaming || config.supportsStreaming
+    const availableModels = Object.entries(MODEL_CONFIGS).filter(
+      ([_, config]) => !needsStreaming || config.supportsStreaming
     );
 
     // Filter models that can handle the token requirement
-    const suitableModels = availableModels.filter(([_, config]) => 
-      config.maxTokens >= maxTokens
-    );
+    const suitableModels = availableModels.filter(([_, config]) => config.maxTokens >= maxTokens);
 
     if (suitableModels.length === 0) {
       throw new Error(`No suitable model found for ${maxTokens} tokens`);
@@ -130,15 +129,17 @@ export const OpenAIUtils = {
     conversationHistory?: Array<{ role: 'user' | 'assistant'; content: string }>
   ): OpenAI.Chat.Completions.ChatCompletionMessageParam[] {
     const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
-      { role: 'system', content: systemPrompt }
+      { role: 'system', content: systemPrompt },
     ];
 
     // Add conversation history if provided
     if (conversationHistory && conversationHistory.length > 0) {
-      messages.push(...conversationHistory.map(msg => ({
-        role: msg.role,
-        content: msg.content
-      })));
+      messages.push(
+        ...conversationHistory.map((msg) => ({
+          role: msg.role,
+          content: msg.content,
+        }))
+      );
     }
 
     // Add current user message
@@ -163,7 +164,7 @@ export const OpenAIUtils = {
     } = {}
   ): OpenAI.Chat.Completions.ChatCompletionCreateParams {
     const modelConfig = MODEL_CONFIGS[modelName];
-    
+
     return {
       model: modelName,
       messages,
@@ -191,7 +192,7 @@ export const OpenAIUtils = {
 
     for await (const chunk of stream) {
       const delta = chunk.choices[0]?.delta;
-      
+
       if (delta?.content) {
         fullContent += delta.content;
         onChunk(delta.content);
@@ -221,20 +222,22 @@ export const OpenAIUtils = {
         return await operation();
       } catch (error) {
         lastError = error as Error;
-        
+
         // Don't retry on certain error types
         if (error instanceof Error) {
           const errorMessage = error.message.toLowerCase();
-          if (errorMessage.includes('invalid') || 
-              errorMessage.includes('unauthorized') ||
-              errorMessage.includes('forbidden')) {
+          if (
+            errorMessage.includes('invalid') ||
+            errorMessage.includes('unauthorized') ||
+            errorMessage.includes('forbidden')
+          ) {
             throw error;
           }
         }
 
         if (attempt < maxRetries) {
           const delay = baseDelay * Math.pow(2, attempt); // Exponential backoff
-          await new Promise(resolve => setTimeout(resolve, delay));
+          await new Promise((resolve) => setTimeout(resolve, delay));
         }
       }
     }
@@ -258,7 +261,7 @@ export const OpenAIUtils = {
       ...config,
       isGPT4: modelName.startsWith('gpt-4'),
       isGPT35: modelName.startsWith('gpt-3.5'),
-      recommendedFor: this.getRecommendedUseCases(modelName)
+      recommendedFor: this.getRecommendedUseCases(modelName),
     };
   },
 
@@ -278,7 +281,7 @@ export const OpenAIUtils = {
       default:
         return ['General purpose'];
     }
-  }
+  },
 };
 
 // Error handling utilities
@@ -330,10 +333,12 @@ export class OpenAIClient {
   private get client(): OpenAI {
     if (this._client === null) {
       const apiKey = process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY;
-      
+
       if (!apiKey) {
         this.isEnabled = false;
-        throw new Error('OpenAI API key not configured. Please set OPENAI_API_KEY environment variable.');
+        throw new Error(
+          'OpenAI API key not configured. Please set OPENAI_API_KEY environment variable.'
+        );
       }
 
       this._client = new OpenAI({
@@ -355,13 +360,17 @@ export class OpenAIClient {
     return this.isEnabled;
   }
 
-  async createChatCompletion(params: OpenAI.Chat.ChatCompletionCreateParams): Promise<OpenAI.Chat.ChatCompletion> {
+  async createChatCompletion(
+    params: OpenAI.Chat.ChatCompletionCreateParams
+  ): Promise<OpenAI.Chat.ChatCompletion> {
     if (!this.checkEnabled()) {
-      throw new Error('OpenAI client is not configured. Please set OPENAI_API_KEY environment variable.');
+      throw new Error(
+        'OpenAI client is not configured. Please set OPENAI_API_KEY environment variable.'
+      );
     }
 
     await this.checkRateLimit();
-    
+
     try {
       const response = await this.client.chat.completions.create(params);
       this.updateRateLimit();
@@ -375,13 +384,17 @@ export class OpenAIClient {
     }
   }
 
-  async createEmbedding(params: OpenAI.EmbeddingCreateParams): Promise<OpenAI.CreateEmbeddingResponse> {
+  async createEmbedding(
+    params: OpenAI.EmbeddingCreateParams
+  ): Promise<OpenAI.CreateEmbeddingResponse> {
     if (!this.checkEnabled()) {
-      throw new Error('OpenAI client is not configured. Please set OPENAI_API_KEY environment variable.');
+      throw new Error(
+        'OpenAI client is not configured. Please set OPENAI_API_KEY environment variable.'
+      );
     }
 
     await this.checkRateLimit();
-    
+
     try {
       const response = await this.client.embeddings.create(params);
       this.updateRateLimit();
@@ -424,12 +437,12 @@ export class OpenAIClient {
       messages: [
         {
           role: 'system',
-          content: 'You are an expert analyst. Provide clear, actionable analysis.'
+          content: 'You are an expert analyst. Provide clear, actionable analysis.',
         },
         {
           role: 'user',
-          content: `${prompt}\n\nText to analyze: ${text}`
-        }
+          content: `${prompt}\n\nText to analyze: ${text}`,
+        },
       ],
       max_tokens: 1000,
       temperature: 0.3,
@@ -444,12 +457,13 @@ export class OpenAIClient {
       messages: [
         {
           role: 'system',
-          content: 'You are an expert advisor. Provide specific, actionable recommendations in a numbered list format.'
+          content:
+            'You are an expert advisor. Provide specific, actionable recommendations in a numbered list format.',
         },
         {
           role: 'user',
-          content: `Context: ${context}\n\nRequirements: ${requirements}\n\nProvide 3-5 specific recommendations:`
-        }
+          content: `Context: ${context}\n\nRequirements: ${requirements}\n\nProvide 3-5 specific recommendations:`,
+        },
       ],
       max_tokens: 800,
       temperature: 0.4,
@@ -465,7 +479,10 @@ export class OpenAIClient {
 
     for (const line of lines) {
       const trimmed = line.trim();
-      if (trimmed && (trimmed.match(/^\d+\./) || trimmed.startsWith('-') || trimmed.startsWith('•'))) {
+      if (
+        trimmed &&
+        (trimmed.match(/^\d+\./) || trimmed.startsWith('-') || trimmed.startsWith('•'))
+      ) {
         recommendations.push(trimmed.replace(/^\d+\.\s*/, '').replace(/^[-•]\s*/, ''));
       }
     }
@@ -485,4 +502,4 @@ export const getOpenAIClient = (): OpenAIClient => {
 };
 
 // For backward compatibility
-export const openaiClient = getOpenAIClient(); 
+export const openaiClient = getOpenAIClient();

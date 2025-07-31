@@ -8,13 +8,13 @@ const CreateChannelSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
   type: z.nativeEnum(ChannelType),
-  members: z.array(z.string()).optional()
+  members: z.array(z.string()).optional(),
 });
 
 export const GET = withApiMiddleware(
   async (req: NextRequest) => {
     const user = (req as any).user;
-    
+
     if (!user || !user.organizationId) {
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
@@ -23,14 +23,11 @@ export const GET = withApiMiddleware(
     }
 
     try {
-      const channels = await ChatService.getUserChannels(
-        user.id,
-        user.organizationId
-      );
+      const channels = await ChatService.getUserChannels(user.id, user.organizationId);
 
       return NextResponse.json({
         success: true,
-        data: channels
+        data: channels,
       });
     } catch (error) {
       console.error('Get channels error:', error);
@@ -46,7 +43,7 @@ export const GET = withApiMiddleware(
 export const POST = withApiMiddleware(
   async (req: NextRequest) => {
     const user = (req as any).user;
-    
+
     if (!user || !user.organizationId) {
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
@@ -64,13 +61,16 @@ export const POST = withApiMiddleware(
         type: validatedData.type,
         organizationId: user.organizationId,
         createdBy: user.id,
-        members: validatedData.members || []
+        members: validatedData.members || [],
       });
 
-      return NextResponse.json({
-        success: true,
-        data: channel
-      }, { status: 201 });
+      return NextResponse.json(
+        {
+          success: true,
+          data: channel,
+        },
+        { status: 201 }
+      );
     } catch (error) {
       if (error instanceof z.ZodError) {
         return NextResponse.json(
@@ -85,8 +85,8 @@ export const POST = withApiMiddleware(
       );
     }
   },
-  { 
+  {
     requireAuth: true,
-    validateBody: CreateChannelSchema 
+    validateBody: CreateChannelSchema,
   }
 );

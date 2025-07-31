@@ -4,7 +4,7 @@ import { testUtils } from '../utils/test-helpers';
 
 /**
  * Comprehensive API Routes Testing
- * 
+ *
  * This test suite covers:
  * - Authentication API endpoints
  * - Risk management APIs
@@ -31,20 +31,19 @@ describe('API Routes Comprehensive Tests', () => {
           method: 'POST',
           body: {
             email: 'testuser@riscura.com',
-            password: 'test123'
-          }
+            password: 'test123',
+          },
         });
 
         // Mock successful authentication
-        jest.spyOn(require('@/lib/auth/auth-service'), 'authenticateUser')
-          .mockResolvedValue({
-            success: true,
-            user: mockUser,
-            token: 'mock-jwt-token'
-          });
+        jest.spyOn(require('@/lib/auth/auth-service'), 'authenticateUser').mockResolvedValue({
+          success: true,
+          user: mockUser,
+          token: 'mock-jwt-token',
+        });
 
         const response = await testUtils.callApiRoute('/api/auth/login', req, res);
-        
+
         expect(response.status).toBe(200);
         expect(response.data).toHaveProperty('success', true);
         expect(response.data).toHaveProperty('user');
@@ -56,18 +55,17 @@ describe('API Routes Comprehensive Tests', () => {
           method: 'POST',
           body: {
             email: 'invalid@example.com',
-            password: 'wrongpassword'
-          }
+            password: 'wrongpassword',
+          },
         });
 
-        jest.spyOn(require('@/lib/auth/auth-service'), 'authenticateUser')
-          .mockResolvedValue({
-            success: false,
-            error: 'Invalid credentials'
-          });
+        jest.spyOn(require('@/lib/auth/auth-service'), 'authenticateUser').mockResolvedValue({
+          success: false,
+          error: 'Invalid credentials',
+        });
 
         const response = await testUtils.callApiRoute('/api/auth/login', req, res);
-        
+
         expect(response.status).toBe(401);
         expect(response.data).toHaveProperty('success', false);
         expect(response.data).toHaveProperty('error');
@@ -78,12 +76,12 @@ describe('API Routes Comprehensive Tests', () => {
           method: 'POST',
           body: {
             email: '', // Missing email
-            password: 'test123'
-          }
+            password: 'test123',
+          },
         });
 
         const response = await testUtils.callApiRoute('/api/auth/login', req, res);
-        
+
         expect(response.status).toBe(400);
         expect(response.data).toHaveProperty('error');
         expect(response.data.error).toContain('email');
@@ -91,27 +89,27 @@ describe('API Routes Comprehensive Tests', () => {
 
       it('should implement rate limiting', async () => {
         const requests = [];
-        
+
         // Make multiple rapid requests
         for (let i = 0; i < 10; i++) {
           const { req, res } = createMocks({
             method: 'POST',
             body: {
               email: 'test@example.com',
-              password: 'wrongpassword'
+              password: 'wrongpassword',
             },
             headers: {
-              'x-forwarded-for': '192.168.1.1' // Same IP for rate limiting
-            }
+              'x-forwarded-for': '192.168.1.1', // Same IP for rate limiting
+            },
           });
 
           requests.push(testUtils.callApiRoute('/api/auth/login', req, res));
         }
 
         const responses = await Promise.all(requests);
-        
+
         // At least one should be rate limited
-        const rateLimitedResponses = responses.filter(r => r.status === 429);
+        const rateLimitedResponses = responses.filter((r) => r.status === 429);
         expect(rateLimitedResponses.length).toBeGreaterThan(0);
       });
     });
@@ -121,15 +119,14 @@ describe('API Routes Comprehensive Tests', () => {
         const { req, res } = createMocks({
           method: 'GET',
           headers: {
-            authorization: 'Bearer valid-jwt-token'
-          }
+            authorization: 'Bearer valid-jwt-token',
+          },
         });
 
-        jest.spyOn(require('@/lib/auth/jwt'), 'verifyToken')
-          .mockResolvedValue(mockUser);
+        jest.spyOn(require('@/lib/auth/jwt'), 'verifyToken').mockResolvedValue(mockUser);
 
         const response = await testUtils.callApiRoute('/api/auth/session', req, res);
-        
+
         expect(response.status).toBe(200);
         expect(response.data).toHaveProperty('user');
         expect(response.data.user.id).toBe(mockUser.id);
@@ -139,15 +136,16 @@ describe('API Routes Comprehensive Tests', () => {
         const { req, res } = createMocks({
           method: 'GET',
           headers: {
-            authorization: 'Bearer invalid-token'
-          }
+            authorization: 'Bearer invalid-token',
+          },
         });
 
-        jest.spyOn(require('@/lib/auth/jwt'), 'verifyToken')
+        jest
+          .spyOn(require('@/lib/auth/jwt'), 'verifyToken')
           .mockRejectedValue(new Error('Invalid token'));
 
         const response = await testUtils.callApiRoute('/api/auth/session', req, res);
-        
+
         expect(response.status).toBe(401);
       });
     });
@@ -157,12 +155,12 @@ describe('API Routes Comprehensive Tests', () => {
         const { req, res } = createMocks({
           method: 'POST',
           headers: {
-            authorization: 'Bearer valid-jwt-token'
-          }
+            authorization: 'Bearer valid-jwt-token',
+          },
         });
 
         const response = await testUtils.callApiRoute('/api/auth/logout', req, res);
-        
+
         expect(response.status).toBe(200);
         expect(response.data).toHaveProperty('success', true);
       });
@@ -172,35 +170,34 @@ describe('API Routes Comprehensive Tests', () => {
   describe('Risk Management APIs', () => {
     beforeEach(() => {
       // Mock authentication for these tests
-      jest.spyOn(require('@/lib/auth/middleware'), 'requireAuth')
-        .mockImplementation((req: any) => {
-          req.user = mockUser;
-          return Promise.resolve();
-        });
+      jest.spyOn(require('@/lib/auth/middleware'), 'requireAuth').mockImplementation((req: any) => {
+        req.user = mockUser;
+        return Promise.resolve();
+      });
     });
 
     describe('GET /api/risks', () => {
       it('should return risks for authenticated user organization', async () => {
         const mockRisks = [
           { id: 'risk-1', title: 'Test Risk 1', organizationId: mockUser.organizationId },
-          { id: 'risk-2', title: 'Test Risk 2', organizationId: mockUser.organizationId }
+          { id: 'risk-2', title: 'Test Risk 2', organizationId: mockUser.organizationId },
         ];
 
         jest.spyOn(require('@/lib/db'), 'default').mockImplementation(() => ({
           risk: {
-            findMany: jest.fn().mockResolvedValue(mockRisks)
-          }
+            findMany: jest.fn().mockResolvedValue(mockRisks),
+          },
         }));
 
         const { req, res } = createMocks({
           method: 'GET',
           headers: {
-            authorization: 'Bearer valid-jwt-token'
-          }
+            authorization: 'Bearer valid-jwt-token',
+          },
         });
 
         const response = await testUtils.callApiRoute('/api/risks', req, res);
-        
+
         expect(response.status).toBe(200);
         expect(response.data).toHaveProperty('risks');
         expect(response.data.risks).toHaveLength(2);
@@ -211,15 +208,15 @@ describe('API Routes Comprehensive Tests', () => {
           method: 'GET',
           query: {
             page: '2',
-            limit: '10'
+            limit: '10',
           },
           headers: {
-            authorization: 'Bearer valid-jwt-token'
-          }
+            authorization: 'Bearer valid-jwt-token',
+          },
         });
 
         const response = await testUtils.callApiRoute('/api/risks', req, res);
-        
+
         expect(response.status).toBe(200);
         expect(response.data).toHaveProperty('pagination');
         expect(response.data.pagination.page).toBe(2);
@@ -230,15 +227,15 @@ describe('API Routes Comprehensive Tests', () => {
         const { req, res } = createMocks({
           method: 'GET',
           query: {
-            search: 'security'
+            search: 'security',
           },
           headers: {
-            authorization: 'Bearer valid-jwt-token'
-          }
+            authorization: 'Bearer valid-jwt-token',
+          },
         });
 
         const response = await testUtils.callApiRoute('/api/risks', req, res);
-        
+
         expect(response.status).toBe(200);
         // Verify search was applied (implementation dependent)
       });
@@ -251,32 +248,32 @@ describe('API Routes Comprehensive Tests', () => {
           description: 'A test security risk',
           category: 'security',
           likelihood: 3,
-          impact: 4
+          impact: 4,
         };
 
         const mockCreatedRisk = {
           id: 'new-risk-id',
           ...newRiskData,
           organizationId: mockUser.organizationId,
-          createdBy: mockUser.id
+          createdBy: mockUser.id,
         };
 
         jest.spyOn(require('@/lib/db'), 'default').mockImplementation(() => ({
           risk: {
-            create: jest.fn().mockResolvedValue(mockCreatedRisk)
-          }
+            create: jest.fn().mockResolvedValue(mockCreatedRisk),
+          },
         }));
 
         const { req, res } = createMocks({
           method: 'POST',
           body: newRiskData,
           headers: {
-            authorization: 'Bearer valid-jwt-token'
-          }
+            authorization: 'Bearer valid-jwt-token',
+          },
         });
 
         const response = await testUtils.callApiRoute('/api/risks', req, res);
-        
+
         expect(response.status).toBe(201);
         expect(response.data).toHaveProperty('risk');
         expect(response.data.risk.title).toBe(newRiskData.title);
@@ -286,19 +283,19 @@ describe('API Routes Comprehensive Tests', () => {
       it('should validate required fields', async () => {
         const invalidRiskData = {
           // Missing required title
-          description: 'A test risk without title'
+          description: 'A test risk without title',
         };
 
         const { req, res } = createMocks({
           method: 'POST',
           body: invalidRiskData,
           headers: {
-            authorization: 'Bearer valid-jwt-token'
-          }
+            authorization: 'Bearer valid-jwt-token',
+          },
         });
 
         const response = await testUtils.callApiRoute('/api/risks', req, res);
-        
+
         expect(response.status).toBe(400);
         expect(response.data).toHaveProperty('error');
         expect(response.data.error).toContain('title');
@@ -309,19 +306,19 @@ describe('API Routes Comprehensive Tests', () => {
           title: 'Test Risk',
           description: 'Test description',
           likelihood: 10, // Invalid: should be 1-5
-          impact: -1 // Invalid: should be 1-5
+          impact: -1, // Invalid: should be 1-5
         };
 
         const { req, res } = createMocks({
           method: 'POST',
           body: invalidRiskData,
           headers: {
-            authorization: 'Bearer valid-jwt-token'
-          }
+            authorization: 'Bearer valid-jwt-token',
+          },
         });
 
         const response = await testUtils.callApiRoute('/api/risks', req, res);
-        
+
         expect(response.status).toBe(400);
         expect(response.data).toHaveProperty('error');
       });
@@ -332,21 +329,21 @@ describe('API Routes Comprehensive Tests', () => {
         const riskId = 'existing-risk-id';
         const updateData = {
           title: 'Updated Risk Title',
-          likelihood: 4
+          likelihood: 4,
         };
 
         const mockUpdatedRisk = {
           id: riskId,
           title: updateData.title,
           likelihood: updateData.likelihood,
-          organizationId: mockUser.organizationId
+          organizationId: mockUser.organizationId,
         };
 
         jest.spyOn(require('@/lib/db'), 'default').mockImplementation(() => ({
           risk: {
             findUnique: jest.fn().mockResolvedValue(mockUpdatedRisk),
-            update: jest.fn().mockResolvedValue(mockUpdatedRisk)
-          }
+            update: jest.fn().mockResolvedValue(mockUpdatedRisk),
+          },
         }));
 
         const { req, res } = createMocks({
@@ -354,12 +351,12 @@ describe('API Routes Comprehensive Tests', () => {
           body: updateData,
           query: { id: riskId },
           headers: {
-            authorization: 'Bearer valid-jwt-token'
-          }
+            authorization: 'Bearer valid-jwt-token',
+          },
         });
 
         const response = await testUtils.callApiRoute(`/api/risks/${riskId}`, req, res);
-        
+
         expect(response.status).toBe(200);
         expect(response.data).toHaveProperty('risk');
         expect(response.data.risk.title).toBe(updateData.title);
@@ -370,13 +367,13 @@ describe('API Routes Comprehensive Tests', () => {
         const otherOrgRisk = {
           id: riskId,
           title: 'Other Org Risk',
-          organizationId: 'other-org-id' // Different organization
+          organizationId: 'other-org-id', // Different organization
         };
 
         jest.spyOn(require('@/lib/db'), 'default').mockImplementation(() => ({
           risk: {
-            findUnique: jest.fn().mockResolvedValue(otherOrgRisk)
-          }
+            findUnique: jest.fn().mockResolvedValue(otherOrgRisk),
+          },
         }));
 
         const { req, res } = createMocks({
@@ -384,12 +381,12 @@ describe('API Routes Comprehensive Tests', () => {
           body: { title: 'Hacked title' },
           query: { id: riskId },
           headers: {
-            authorization: 'Bearer valid-jwt-token'
-          }
+            authorization: 'Bearer valid-jwt-token',
+          },
         });
 
         const response = await testUtils.callApiRoute(`/api/risks/${riskId}`, req, res);
-        
+
         expect(response.status).toBe(403);
         expect(response.data).toHaveProperty('error');
       });
@@ -401,26 +398,26 @@ describe('API Routes Comprehensive Tests', () => {
         const mockRisk = {
           id: riskId,
           title: 'Risk to Delete',
-          organizationId: mockUser.organizationId
+          organizationId: mockUser.organizationId,
         };
 
         jest.spyOn(require('@/lib/db'), 'default').mockImplementation(() => ({
           risk: {
             findUnique: jest.fn().mockResolvedValue(mockRisk),
-            delete: jest.fn().mockResolvedValue(mockRisk)
-          }
+            delete: jest.fn().mockResolvedValue(mockRisk),
+          },
         }));
 
         const { req, res } = createMocks({
           method: 'DELETE',
           query: { id: riskId },
           headers: {
-            authorization: 'Bearer valid-jwt-token'
-          }
+            authorization: 'Bearer valid-jwt-token',
+          },
         });
 
         const response = await testUtils.callApiRoute(`/api/risks/${riskId}`, req, res);
-        
+
         expect(response.status).toBe(200);
         expect(response.data).toHaveProperty('success', true);
       });
@@ -430,7 +427,8 @@ describe('API Routes Comprehensive Tests', () => {
   describe('User Management APIs', () => {
     describe('GET /api/users/profile', () => {
       it('should return current user profile', async () => {
-        jest.spyOn(require('@/lib/auth/middleware'), 'requireAuth')
+        jest
+          .spyOn(require('@/lib/auth/middleware'), 'requireAuth')
           .mockImplementation((req: any) => {
             req.user = mockUser;
             return Promise.resolve();
@@ -439,12 +437,12 @@ describe('API Routes Comprehensive Tests', () => {
         const { req, res } = createMocks({
           method: 'GET',
           headers: {
-            authorization: 'Bearer valid-jwt-token'
-          }
+            authorization: 'Bearer valid-jwt-token',
+          },
         });
 
         const response = await testUtils.callApiRoute('/api/users/profile', req, res);
-        
+
         expect(response.status).toBe(200);
         expect(response.data).toHaveProperty('user');
         expect(response.data.user.id).toBe(mockUser.id);
@@ -456,10 +454,11 @@ describe('API Routes Comprehensive Tests', () => {
       it('should update user profile', async () => {
         const updateData = {
           firstName: 'Updated',
-          lastName: 'Name'
+          lastName: 'Name',
         };
 
-        jest.spyOn(require('@/lib/auth/middleware'), 'requireAuth')
+        jest
+          .spyOn(require('@/lib/auth/middleware'), 'requireAuth')
           .mockImplementation((req: any) => {
             req.user = mockUser;
             return Promise.resolve();
@@ -469,21 +468,21 @@ describe('API Routes Comprehensive Tests', () => {
           user: {
             update: jest.fn().mockResolvedValue({
               ...mockUser,
-              ...updateData
-            })
-          }
+              ...updateData,
+            }),
+          },
         }));
 
         const { req, res } = createMocks({
           method: 'PUT',
           body: updateData,
           headers: {
-            authorization: 'Bearer valid-jwt-token'
-          }
+            authorization: 'Bearer valid-jwt-token',
+          },
         });
 
         const response = await testUtils.callApiRoute('/api/users/profile', req, res);
-        
+
         expect(response.status).toBe(200);
         expect(response.data.user.firstName).toBe(updateData.firstName);
       });
@@ -494,11 +493,11 @@ describe('API Routes Comprehensive Tests', () => {
     describe('GET /api/health', () => {
       it('should return system health status', async () => {
         const { req, res } = createMocks({
-          method: 'GET'
+          method: 'GET',
         });
 
         const response = await testUtils.callApiRoute('/api/health', req, res);
-        
+
         expect(response.status).toBe(200);
         expect(response.data).toHaveProperty('status', 'ok');
         expect(response.data).toHaveProperty('timestamp');
@@ -509,15 +508,15 @@ describe('API Routes Comprehensive Tests', () => {
       it('should return database connectivity status', async () => {
         jest.spyOn(require('@/lib/db'), 'default').mockImplementation(() => ({
           $connect: jest.fn().mockResolvedValue(undefined),
-          $disconnect: jest.fn().mockResolvedValue(undefined)
+          $disconnect: jest.fn().mockResolvedValue(undefined),
         }));
 
         const { req, res } = createMocks({
-          method: 'GET'
+          method: 'GET',
         });
 
         const response = await testUtils.callApiRoute('/api/health/database', req, res);
-        
+
         expect(response.status).toBe(200);
         expect(response.data).toHaveProperty('database', 'connected');
       });
@@ -528,11 +527,11 @@ describe('API Routes Comprehensive Tests', () => {
     describe('CORS Middleware', () => {
       it('should include CORS headers', async () => {
         const { req, res } = createMocks({
-          method: 'OPTIONS'
+          method: 'OPTIONS',
         });
 
         const response = await testUtils.callApiRoute('/api/health', req, res);
-        
+
         expect(response.headers).toHaveProperty('access-control-allow-origin');
         expect(response.headers).toHaveProperty('access-control-allow-methods');
       });
@@ -541,15 +540,15 @@ describe('API Routes Comprehensive Tests', () => {
     describe('Security Headers', () => {
       it('should include security headers', async () => {
         const { req, res } = createMocks({
-          method: 'GET'
+          method: 'GET',
         });
 
         const response = await testUtils.callApiRoute('/api/health', req, res);
-        
+
         expect(response.headers).toMatchObject({
           'x-content-type-options': 'nosniff',
           'x-frame-options': 'DENY',
-          'x-xss-protection': '1; mode=block'
+          'x-xss-protection': '1; mode=block',
         });
       });
     });
@@ -559,13 +558,13 @@ describe('API Routes Comprehensive Tests', () => {
         const { req, res } = createMocks({
           method: 'POST',
           headers: {
-            'content-type': 'text/plain' // Invalid content type
+            'content-type': 'text/plain', // Invalid content type
           },
-          body: 'invalid body'
+          body: 'invalid body',
         });
 
         const response = await testUtils.callApiRoute('/api/risks', req, res);
-        
+
         expect(response.status).toBe(400);
         expect(response.data).toHaveProperty('error');
       });
@@ -583,25 +582,23 @@ describe('API Routes Comprehensive Tests', () => {
 
       jest.spyOn(require('@/lib/db'), 'default').mockImplementation(() => ({
         risk: {
-          findMany: jest.fn()
-            .mockImplementation(({ where }) => {
-              if (where.organizationId === 'org-1') return Promise.resolve(org1Risks);
-              if (where.organizationId === 'org-2') return Promise.resolve(org2Risks);
-              return Promise.resolve([]);
-            })
-        }
+          findMany: jest.fn().mockImplementation(({ where }) => {
+            if (where.organizationId === 'org-1') return Promise.resolve(org1Risks);
+            if (where.organizationId === 'org-2') return Promise.resolve(org2Risks);
+            return Promise.resolve([]);
+          }),
+        },
       }));
 
       // Test user 1 can only see org 1 risks
-      jest.spyOn(require('@/lib/auth/middleware'), 'requireAuth')
-        .mockImplementation((req: any) => {
-          req.user = user1;
-          return Promise.resolve();
-        });
+      jest.spyOn(require('@/lib/auth/middleware'), 'requireAuth').mockImplementation((req: any) => {
+        req.user = user1;
+        return Promise.resolve();
+      });
 
       const { req: req1, res: res1 } = createMocks({
         method: 'GET',
-        headers: { authorization: 'Bearer token1' }
+        headers: { authorization: 'Bearer token1' },
       });
 
       const response1 = await testUtils.callApiRoute('/api/risks', req1, res1);
@@ -609,15 +606,14 @@ describe('API Routes Comprehensive Tests', () => {
       expect(response1.data.risks[0].organizationId).toBe('org-1');
 
       // Test user 2 can only see org 2 risks
-      jest.spyOn(require('@/lib/auth/middleware'), 'requireAuth')
-        .mockImplementation((req: any) => {
-          req.user = user2;
-          return Promise.resolve();
-        });
+      jest.spyOn(require('@/lib/auth/middleware'), 'requireAuth').mockImplementation((req: any) => {
+        req.user = user2;
+        return Promise.resolve();
+      });
 
       const { req: req2, res: res2 } = createMocks({
         method: 'GET',
-        headers: { authorization: 'Bearer token2' }
+        headers: { authorization: 'Bearer token2' },
       });
 
       const response2 = await testUtils.callApiRoute('/api/risks', req2, res2);

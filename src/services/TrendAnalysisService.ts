@@ -2,7 +2,7 @@ import {
   TimeWindow,
   TrendAnalysis,
   PredictionData,
-  SeasonalPattern
+  SeasonalPattern,
 } from '@/types/proactive-monitoring.types';
 import {
   TrendDirection,
@@ -10,7 +10,7 @@ import {
   RiskTrendPrediction,
   InfluencingFactor,
   PredictionScenario,
-  TrendPrediction
+  TrendPrediction,
 } from '@/types/risk-intelligence.types';
 import { Risk } from '@/types';
 import { generateId } from '@/lib/utils';
@@ -253,55 +253,57 @@ export class TrendAnalysisService {
   ): Promise<TrendAnalysisResult> {
     try {
       console.log(`Analyzing risk trends for ${historicalData.length} data points`);
-      
+
       const analysisConfig = this.mergeConfig(config);
-      
+
       // Validate and prepare data
       const processedData = await this.preprocessRiskData(historicalData, timeWindow);
-      
+
       if (processedData.length < analysisConfig.minDataPoints) {
-        throw new Error(`Insufficient data points. Need at least ${analysisConfig.minDataPoints}, got ${processedData.length}`);
+        throw new Error(
+          `Insufficient data points. Need at least ${analysisConfig.minDataPoints}, got ${processedData.length}`
+        );
       }
 
       // Extract time series for analysis
       const timeSeries = this.extractTimeSeries(processedData, 'riskScore');
-      
+
       // Perform trend analysis
       const trendAnalysis = await this.performTrendAnalysis(timeSeries, analysisConfig);
-      
+
       // Detect seasonality
-      const seasonality = analysisConfig.includeSeasonality 
+      const seasonality = analysisConfig.includeSeasonality
         ? await this.detectSeasonality(timeSeries)
         : undefined;
-      
+
       // Generate predictions
       const prediction = await this.generatePredictions(
-        timeSeries, 
-        trendAnalysis, 
+        timeSeries,
+        trendAnalysis,
         analysisConfig.predictionHorizon,
         seasonality
       );
-      
+
       // Detect anomalies
       const anomalies = analysisConfig.anomalyDetection
         ? await this.detectAnomalies(timeSeries, trendAnalysis)
         : [];
-      
+
       // Identify influencing factors
       const influencingFactors = await this.identifyInfluencingFactors(
-        processedData, 
+        processedData,
         trendAnalysis,
         analysisConfig.includeExternalFactors
       );
-      
+
       // Assess analysis quality
       const quality = await this.assessAnalysisQuality(
-        processedData, 
-        trendAnalysis, 
-        prediction, 
+        processedData,
+        trendAnalysis,
+        prediction,
         analysisConfig
       );
-      
+
       // Generate recommendations
       const recommendations = await this.generateTrendRecommendations(
         trendAnalysis,
@@ -317,8 +319,8 @@ export class TrendAnalysisService {
         entityType: 'risk',
         analysisType: 'risk_trend',
         timeRange: {
-          start: new Date(Math.min(...processedData.map(d => d.timestamp.getTime()))),
-          end: new Date(Math.max(...processedData.map(d => d.timestamp.getTime())))
+          start: new Date(Math.min(...processedData.map((d) => d.timestamp.getTime()))),
+          end: new Date(Math.max(...processedData.map((d) => d.timestamp.getTime()))),
         },
         trend: trendAnalysis,
         prediction: {
@@ -326,11 +328,11 @@ export class TrendAnalysisService {
           confidenceInterval: {
             lower: 0.4,
             upper: 0.8,
-            confidence: 95
+            confidence: 95,
           },
           timeframe: '30 days',
           assumptions: ['Historical patterns continue', 'No major external changes'],
-          scenarios: []
+          scenarios: [],
         },
         anomalies,
         influencingFactors,
@@ -341,9 +343,9 @@ export class TrendAnalysisService {
         metadata: {
           dataPointCount: processedData.length,
           analysisConfig,
-          modelVersion: '2.1.0'
+          modelVersion: '2.1.0',
         },
-        generatedAt: new Date()
+        generatedAt: new Date(),
       };
 
       // Cache result
@@ -354,11 +356,10 @@ export class TrendAnalysisService {
         analysisId: result.id,
         entityId: result.entityId,
         trendDirection: trendAnalysis.direction,
-        confidence: quality.overall
+        confidence: quality.overall,
       });
 
       return result;
-
     } catch (error) {
       console.error('Error analyzing risk trends:', error);
       throw new Error('Failed to analyze risk trends');
@@ -379,7 +380,7 @@ export class TrendAnalysisService {
         // Get historical data for this risk
         const historicalData = await this.dataService.getRiskHistoricalData(risk.id, {
           duration: 12,
-          unit: 'months'
+          unit: 'months',
         });
 
         if (historicalData.length < 6) {
@@ -388,14 +389,14 @@ export class TrendAnalysisService {
         }
 
         // Apply industry factors relevant to this risk
-        const relevantFactors = industryFactors.filter(factor => 
+        const relevantFactors = industryFactors.filter((factor) =>
           this.isFactorRelevantToRisk(factor, risk)
         );
 
         // Generate trend prediction
         const trendAnalysis = await this.analyzeRiskTrends(historicalData, {
           duration: 6,
-          unit: 'months'
+          unit: 'months',
         });
 
         // Create prediction scenarios
@@ -420,14 +421,13 @@ export class TrendAnalysisService {
           confidence,
           influencingFactors: trendAnalysis.influencingFactors,
           scenarios,
-          recommendations: trendAnalysis.recommendations.map(r => r.description)
+          recommendations: trendAnalysis.recommendations.map((r) => r.description),
         };
 
         predictions.push(prediction);
       }
 
       return predictions;
-
     } catch (error) {
       console.error('Error predicting future risks:', error);
       throw new Error('Failed to predict future risks');
@@ -444,11 +444,14 @@ export class TrendAnalysisService {
     try {
       // Convert single data point to array for processing
       const dataArray = Array.isArray(data) ? data : [data];
-      
+
       const anomalies: Anomaly[] = [];
 
       // Statistical anomaly detection
-      const statisticalAnomalies = await this.detectStatisticalAnomalies(dataArray, baselinePattern);
+      const statisticalAnomalies = await this.detectStatisticalAnomalies(
+        dataArray,
+        baselinePattern
+      );
       anomalies.push(...statisticalAnomalies);
 
       // Pattern-based anomaly detection
@@ -468,7 +471,6 @@ export class TrendAnalysisService {
       const prioritizedAnomalies = this.prioritizeAnomalies(uniqueAnomalies);
 
       return prioritizedAnomalies;
-
     } catch (error) {
       console.error('Error identifying pattern anomalies:', error);
       throw new Error('Failed to identify pattern anomalies');
@@ -497,7 +499,6 @@ export class TrendAnalysisService {
       const comparison = await this.performTrendComparison(trendResults, comparisonType);
 
       return comparison;
-
     } catch (error) {
       console.error('Error comparing trends:', error);
       throw new Error('Failed to compare trends');
@@ -513,24 +514,24 @@ export class TrendAnalysisService {
   ): Promise<TrendDashboardData> {
     try {
       const userContext = await this.dataService.getUserContext(userId);
-      
+
       // Get relevant entities for user
       const relevantEntities = await this.getRelevantEntitiesForUser(userId, userContext);
-      
+
       // Apply filters
       const filteredEntities = this.applyDashboardFilters(relevantEntities, filters);
-      
+
       // Generate trend summaries
       const trendSummaries = await Promise.all(
-        filteredEntities.map(entity => this.generateTrendSummary(entity))
+        filteredEntities.map((entity) => this.generateTrendSummary(entity))
       );
-      
+
       // Identify key insights
       const keyInsights = await this.identifyKeyTrendInsights(trendSummaries);
-      
+
       // Generate alerts
       const trendAlerts = await this.generateTrendAlerts(trendSummaries);
-      
+
       return {
         userId,
         entities: filteredEntities,
@@ -538,9 +539,8 @@ export class TrendAnalysisService {
         keyInsights,
         alerts: trendAlerts,
         lastUpdated: new Date(),
-        refreshInterval: this.calculateRefreshInterval(filteredEntities)
+        refreshInterval: this.calculateRefreshInterval(filteredEntities),
       };
-
     } catch (error) {
       console.error('Error generating trend dashboard:', error);
       throw new Error('Failed to generate trend dashboard');
@@ -558,7 +558,7 @@ export class TrendAnalysisService {
       anomalyDetection: true,
       predictionHorizon: 3,
       smoothingFactor: 0.3,
-      minDataPoints: 10
+      minDataPoints: 10,
     };
 
     return { ...defaultConfig, ...config };
@@ -567,26 +567,26 @@ export class TrendAnalysisService {
   private async preprocessRiskData(data: RiskData[], timeWindow: TimeWindow): Promise<RiskData[]> {
     // Filter data within time window
     const cutoffDate = this.calculateCutoffDate(timeWindow);
-    const filteredData = data.filter(d => d.timestamp >= cutoffDate);
-    
+    const filteredData = data.filter((d) => d.timestamp >= cutoffDate);
+
     // Sort by timestamp
     const sortedData = filteredData.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
-    
+
     // Clean and validate data
     const cleanedData = await this.cleanAndValidateData(sortedData);
-    
+
     return cleanedData;
   }
 
   private extractTimeSeries(data: RiskData[], metric: keyof RiskData): TimeSeriesData[] {
-    return data.map(d => ({
+    return data.map((d) => ({
       timestamp: d.timestamp,
       value: Number(d[metric]),
       context: {
         riskId: d.riskId,
         probability: d.probability,
-        impact: d.impact
-      }
+        impact: d.impact,
+      },
     }));
   }
 
@@ -604,7 +604,7 @@ export class TrendAnalysisService {
     const magnitude = Math.abs(linearTrend.slope * 100); // Convert to percentage
 
     // Calculate trend stability
-    const stability = 100 - (volatility * 100);
+    const stability = 100 - volatility * 100;
 
     // Calculate acceleration (second derivative)
     const acceleration = await this.calculateAcceleration(timeSeries);
@@ -614,22 +614,24 @@ export class TrendAnalysisService {
       magnitude,
       duration: this.calculateTrendDuration(timeSeries),
       acceleration,
-      stability
+      stability,
     };
   }
 
-  private async detectSeasonality(timeSeries: TimeSeriesData[]): Promise<SeasonalPattern | undefined> {
+  private async detectSeasonality(
+    timeSeries: TimeSeriesData[]
+  ): Promise<SeasonalPattern | undefined> {
     if (timeSeries.length < 24) return undefined; // Need at least 2 years of monthly data
 
     const seasonalAnalysis = await this.statisticsService.detectSeasonality(timeSeries);
-    
+
     if (!seasonalAnalysis.detected) return undefined;
 
     return {
       detected: true,
       period: seasonalAnalysis.period,
       amplitude: seasonalAnalysis.amplitude,
-      confidence: seasonalAnalysis.confidence
+      confidence: seasonalAnalysis.confidence,
     };
   }
 
@@ -643,14 +645,14 @@ export class TrendAnalysisService {
     const forecasts = await Promise.all([
       this.forecastingService.linearForecast(timeSeries, horizonMonths),
       this.forecastingService.exponentialSmoothingForecast(timeSeries, horizonMonths),
-      this.forecastingService.arima(timeSeries, horizonMonths)
+      this.forecastingService.arima(timeSeries, horizonMonths),
     ]);
 
     // Ensemble the forecasts
     const ensembleForecast = this.ensembleForecasts(forecasts);
 
     // Apply seasonality if detected
-    const seasonallyAdjustedForecast = seasonality 
+    const seasonallyAdjustedForecast = seasonality
       ? this.applySeasonality(ensembleForecast, seasonality)
       : ensembleForecast;
 
@@ -661,17 +663,14 @@ export class TrendAnalysisService {
     );
 
     // Generate scenarios
-    const scenarios = await this.generatePredictionScenarios(
-      seasonallyAdjustedForecast,
-      trend
-    );
+    const scenarios = await this.generatePredictionScenarios(seasonallyAdjustedForecast, trend);
 
     return {
       forecast: seasonallyAdjustedForecast,
       confidenceInterval,
       timeframe: `${horizonMonths} months`,
       assumptions: this.generateAssumptions(trend, seasonality),
-      scenarios
+      scenarios,
     };
   }
 
@@ -725,18 +724,19 @@ export class TrendAnalysisService {
   ): Promise<AnalysisQuality> {
     // Data completeness
     const dataCompleteness = this.assessDataCompleteness(data, config.timeWindow);
-    
+
     // Data consistency
     const dataConsistency = this.assessDataConsistency(data);
-    
+
     // Model accuracy
     const modelAccuracy = await this.assessModelAccuracy(data, trend);
-    
+
     // Prediction reliability
     const predictionReliability = this.assessPredictionReliability(prediction, trend);
-    
+
     // Overall quality
-    const overall = (dataCompleteness + dataConsistency + modelAccuracy + predictionReliability) / 4;
+    const overall =
+      (dataCompleteness + dataConsistency + modelAccuracy + predictionReliability) / 4;
 
     return {
       overall,
@@ -745,11 +745,31 @@ export class TrendAnalysisService {
       modelAccuracy,
       predictionReliability,
       factors: [
-        { factor: 'Data Completeness', score: dataCompleteness, impact: 0.25, description: 'Availability of required data points' },
-        { factor: 'Data Consistency', score: dataConsistency, impact: 0.25, description: 'Consistency of data patterns' },
-        { factor: 'Model Accuracy', score: modelAccuracy, impact: 0.25, description: 'Accuracy of trend detection' },
-        { factor: 'Prediction Reliability', score: predictionReliability, impact: 0.25, description: 'Reliability of forecasts' }
-      ]
+        {
+          factor: 'Data Completeness',
+          score: dataCompleteness,
+          impact: 0.25,
+          description: 'Availability of required data points',
+        },
+        {
+          factor: 'Data Consistency',
+          score: dataConsistency,
+          impact: 0.25,
+          description: 'Consistency of data patterns',
+        },
+        {
+          factor: 'Model Accuracy',
+          score: modelAccuracy,
+          impact: 0.25,
+          description: 'Accuracy of trend detection',
+        },
+        {
+          factor: 'Prediction Reliability',
+          score: predictionReliability,
+          impact: 0.25,
+          description: 'Reliability of forecasts',
+        },
+      ],
     };
   }
 
@@ -774,17 +794,19 @@ export class TrendAnalysisService {
         actions: [
           'Review and strengthen current controls',
           'Investigate root causes of increase',
-          'Consider additional mitigation measures'
+          'Consider additional mitigation measures',
         ],
         expectedOutcome: 'Stabilization or reduction of risk levels',
         timeframe: '1-3 months',
-        confidence: Math.min(quality.overall, 85)
+        confidence: Math.min(quality.overall, 85),
       });
     }
 
     // Recommendations based on anomalies
     if (anomalies.length > 0) {
-      const criticalAnomalies = anomalies.filter(a => a.severity === 'critical' || a.severity === 'high');
+      const criticalAnomalies = anomalies.filter(
+        (a) => a.severity === 'critical' || a.severity === 'high'
+      );
       if (criticalAnomalies.length > 0) {
         recommendations.push({
           id: generateId('recommendation'),
@@ -796,17 +818,17 @@ export class TrendAnalysisService {
           actions: [
             'Investigate anomaly root causes',
             'Validate data accuracy',
-            'Review monitoring processes'
+            'Review monitoring processes',
           ],
           expectedOutcome: 'Understanding and resolution of anomalous patterns',
           timeframe: '2-4 weeks',
-          confidence: 75
+          confidence: 75,
         });
       }
     }
 
     // Recommendations based on influencing factors
-    const strongFactors = factors.filter(f => Math.abs(f.influence) > 50);
+    const strongFactors = factors.filter((f) => Math.abs(f.influence) > 50);
     if (strongFactors.length > 0) {
       recommendations.push({
         id: generateId('recommendation'),
@@ -818,11 +840,11 @@ export class TrendAnalysisService {
         actions: [
           'Establish monitoring for key factors',
           'Set up alerts for factor changes',
-          'Include factors in regular reviews'
+          'Include factors in regular reviews',
         ],
         expectedOutcome: 'Early detection of trend changes',
         timeframe: 'Ongoing',
-        confidence: 70
+        confidence: 70,
       });
     }
 
@@ -832,35 +854,35 @@ export class TrendAnalysisService {
   private extractEntityId(data: RiskData[]): string {
     // Extract the most common risk ID from the dataset
     const idCounts = new Map<string, number>();
-    
+
     for (const item of data) {
       const count = idCounts.get(item.riskId) || 0;
       idCounts.set(item.riskId, count + 1);
     }
-    
+
     let maxCount = 0;
     let mostCommonId = '';
-    
+
     for (const [id, count] of idCounts) {
       if (count > maxCount) {
         maxCount = count;
         mostCommonId = id;
       }
     }
-    
+
     return mostCommonId;
   }
 
   private calculateCutoffDate(timeWindow: TimeWindow): Date {
     const now = new Date();
     const cutoff = new Date(now);
-    
+
     switch (timeWindow.unit) {
       case 'days':
         cutoff.setDate(now.getDate() - timeWindow.duration);
         break;
       case 'weeks':
-        cutoff.setDate(now.getDate() - (timeWindow.duration * 7));
+        cutoff.setDate(now.getDate() - timeWindow.duration * 7);
         break;
       case 'months':
         cutoff.setMonth(now.getMonth() - timeWindow.duration);
@@ -871,34 +893,38 @@ export class TrendAnalysisService {
       default:
         cutoff.setMonth(now.getMonth() - timeWindow.duration);
     }
-    
+
     return cutoff;
   }
 
   private async cleanAndValidateData(data: RiskData[]): Promise<RiskData[]> {
-    return data.filter(item => {
+    return data.filter((item) => {
       // Remove invalid entries
-      return item.riskScore != null && 
-             item.riskScore >= 0 && 
-             item.riskScore <= 100 &&
-             item.timestamp instanceof Date &&
-             !isNaN(item.timestamp.getTime());
+      return (
+        item.riskScore != null &&
+        item.riskScore >= 0 &&
+        item.riskScore <= 100 &&
+        item.timestamp instanceof Date &&
+        !isNaN(item.timestamp.getTime())
+      );
     });
   }
 
-  private async calculateLinearTrend(timeSeries: TimeSeriesData[]): Promise<{ slope: number; intercept: number; r2: number }> {
+  private async calculateLinearTrend(
+    timeSeries: TimeSeriesData[]
+  ): Promise<{ slope: number; intercept: number; r2: number }> {
     return await this.statisticsService.linearRegression(timeSeries);
   }
 
   private async calculateMomentum(timeSeries: TimeSeriesData[]): Promise<number> {
     if (timeSeries.length < 2) return 0;
-    
+
     const recent = timeSeries.slice(-Math.min(5, timeSeries.length));
     const earlier = timeSeries.slice(0, Math.min(5, timeSeries.length));
-    
+
     const recentAvg = recent.reduce((sum, d) => sum + d.value, 0) / recent.length;
     const earlierAvg = earlier.reduce((sum, d) => sum + d.value, 0) / earlier.length;
-    
+
     return (recentAvg - earlierAvg) / earlierAvg;
   }
 
@@ -913,12 +939,12 @@ export class TrendAnalysisService {
 
   private calculateTrendDuration(timeSeries: TimeSeriesData[]): string {
     if (timeSeries.length < 2) return '0 days';
-    
+
     const start = timeSeries[0].timestamp;
     const end = timeSeries[timeSeries.length - 1].timestamp;
     const durationMs = end.getTime() - start.getTime();
     const durationDays = Math.floor(durationMs / (1000 * 60 * 60 * 24));
-    
+
     if (durationDays < 30) return `${durationDays} days`;
     if (durationDays < 365) return `${Math.floor(durationDays / 30)} months`;
     return `${Math.floor(durationDays / 365)} years`;
@@ -926,32 +952,32 @@ export class TrendAnalysisService {
 
   private async calculateAcceleration(timeSeries: TimeSeriesData[]): Promise<number> {
     if (timeSeries.length < 3) return 0;
-    
+
     // Calculate second derivative to measure acceleration
     const derivatives: number[] = [];
     for (let i = 1; i < timeSeries.length - 1; i++) {
       const prev = timeSeries[i - 1].value;
       const curr = timeSeries[i].value;
       const next = timeSeries[i + 1].value;
-      
+
       const secondDerivative = next - 2 * curr + prev;
       derivatives.push(secondDerivative);
     }
-    
+
     return derivatives.reduce((sum, d) => sum + d, 0) / derivatives.length;
   }
 
   // Placeholder methods for complex statistical operations
   private ensembleForecasts(forecasts: number[][]): number[] {
     // Simple average ensemble for now
-    const ensembleLength = Math.min(...forecasts.map(f => f.length));
+    const ensembleLength = Math.min(...forecasts.map((f) => f.length));
     const ensemble: number[] = [];
-    
+
     for (let i = 0; i < ensembleLength; i++) {
       const average = forecasts.reduce((sum, forecast) => sum + forecast[i], 0) / forecasts.length;
       ensemble.push(average);
     }
-    
+
     return ensemble;
   }
 
@@ -963,25 +989,29 @@ export class TrendAnalysisService {
     });
   }
 
-  private calculateConfidenceInterval(forecast: number[], forecasts: number[][]): ConfidenceInterval {
+  private calculateConfidenceInterval(
+    forecast: number[],
+    forecasts: number[][]
+  ): ConfidenceInterval {
     // Calculate confidence interval from ensemble variance
     const variance = this.calculateEnsembleVariance(forecasts);
     const stdDev = Math.sqrt(variance);
-    
+
     return {
       lower: Math.max(0, forecast[forecast.length - 1] - 1.96 * stdDev),
       upper: forecast[forecast.length - 1] + 1.96 * stdDev,
-      confidence: 95
+      confidence: 95,
     };
   }
 
   private calculateEnsembleVariance(forecasts: number[][]): number {
     if (forecasts.length < 2) return 0;
-    
-    const lastValues = forecasts.map(f => f[f.length - 1]);
+
+    const lastValues = forecasts.map((f) => f[f.length - 1]);
     const mean = lastValues.reduce((sum, val) => sum + val, 0) / lastValues.length;
-    const variance = lastValues.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / (lastValues.length - 1);
-    
+    const variance =
+      lastValues.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / (lastValues.length - 1);
+
     return variance;
   }
 
@@ -990,7 +1020,7 @@ export class TrendAnalysisService {
     trend: TrendAnalysis
   ): Promise<PredictionScenario[]> {
     const scenarios: PredictionScenario[] = [];
-    
+
     // Base scenario (most likely)
     scenarios.push({
       name: 'Most Likely',
@@ -998,31 +1028,33 @@ export class TrendAnalysisService {
       outcome: forecast[forecast.length - 1],
       description: 'Current trend continues with normal variation',
       impact: 'moderate',
-      mitigationOptions: ['Continue monitoring', 'Maintain current controls']
+      mitigationOptions: ['Continue monitoring', 'Maintain current controls'],
     });
-    
+
     // Optimistic scenario
-    const optimisticOutcome = forecast[forecast.length - 1] * (trend.direction === 'increasing' ? 0.8 : 1.2);
+    const optimisticOutcome =
+      forecast[forecast.length - 1] * (trend.direction === 'increasing' ? 0.8 : 1.2);
     scenarios.push({
       name: 'Optimistic',
       probability: 20,
       outcome: optimisticOutcome,
       description: 'Favorable conditions lead to better outcomes',
       impact: 'positive',
-      mitigationOptions: ['Capitalize on improvements', 'Document lessons learned']
+      mitigationOptions: ['Capitalize on improvements', 'Document lessons learned'],
     });
-    
+
     // Pessimistic scenario
-    const pessimisticOutcome = forecast[forecast.length - 1] * (trend.direction === 'increasing' ? 1.2 : 0.8);
+    const pessimisticOutcome =
+      forecast[forecast.length - 1] * (trend.direction === 'increasing' ? 1.2 : 0.8);
     scenarios.push({
       name: 'Pessimistic',
       probability: 20,
       outcome: pessimisticOutcome,
       description: 'Adverse conditions lead to worse outcomes',
       impact: 'negative',
-      mitigationOptions: ['Implement additional controls', 'Increase monitoring frequency']
+      mitigationOptions: ['Implement additional controls', 'Increase monitoring frequency'],
     });
-    
+
     return scenarios;
   }
 
@@ -1030,17 +1062,17 @@ export class TrendAnalysisService {
     const assumptions = [
       'Historical patterns continue',
       'No major external disruptions',
-      'Current controls remain effective'
+      'Current controls remain effective',
     ];
-    
+
     if (seasonality?.detected) {
       assumptions.push('Seasonal patterns remain consistent');
     }
-    
+
     if (trend.stability < 70) {
       assumptions.push('Volatility levels remain within normal range');
     }
-    
+
     return assumptions;
   }
 
@@ -1049,7 +1081,10 @@ export class TrendAnalysisService {
     return await this.statisticsService.detectOutliers(timeSeries);
   }
 
-  private async detectTrendDeviations(timeSeries: TimeSeriesData[], trend: TrendAnalysis): Promise<Anomaly[]> {
+  private async detectTrendDeviations(
+    timeSeries: TimeSeriesData[],
+    trend: TrendAnalysis
+  ): Promise<Anomaly[]> {
     // Mock implementation
     return [];
   }
@@ -1064,12 +1099,18 @@ export class TrendAnalysisService {
     return anomalies;
   }
 
-  private async analyzeInternalFactors(data: RiskData[], trend: TrendAnalysis): Promise<InfluencingFactor[]> {
+  private async analyzeInternalFactors(
+    data: RiskData[],
+    trend: TrendAnalysis
+  ): Promise<InfluencingFactor[]> {
     // Mock implementation
     return [];
   }
 
-  private async analyzeExternalFactors(data: RiskData[], trend: TrendAnalysis): Promise<InfluencingFactor[]> {
+  private async analyzeExternalFactors(
+    data: RiskData[],
+    trend: TrendAnalysis
+  ): Promise<InfluencingFactor[]> {
     // Mock implementation
     return [];
   }
@@ -1095,11 +1136,16 @@ export class TrendAnalysisService {
   private calculateExpectedDataPoints(timeWindow: TimeWindow): number {
     // Calculate expected number of data points based on time window
     switch (timeWindow.unit) {
-      case 'days': return timeWindow.duration;
-      case 'weeks': return timeWindow.duration * 7;
-      case 'months': return timeWindow.duration * 30;
-      case 'years': return timeWindow.duration * 365;
-      default: return timeWindow.duration;
+      case 'days':
+        return timeWindow.duration;
+      case 'weeks':
+        return timeWindow.duration * 7;
+      case 'months':
+        return timeWindow.duration * 30;
+      case 'years':
+        return timeWindow.duration * 365;
+      default:
+        return timeWindow.duration;
     }
   }
 
@@ -1127,34 +1173,46 @@ export class TrendAnalysisService {
     return Math.min(100, quality.overall * 0.8 + factors.length * 2);
   }
 
-  private async generateTrendPredictions(risk: Risk, prediction: PredictionData): Promise<TrendPrediction[]> {
+  private async generateTrendPredictions(
+    risk: Risk,
+    prediction: PredictionData
+  ): Promise<TrendPrediction[]> {
     // Mock implementation
     return [];
   }
 
-  private async detectStatisticalAnomalies(data: TimeSeriesData[], pattern: Pattern): Promise<Anomaly[]> {
+  private async detectStatisticalAnomalies(
+    data: TimeSeriesData[],
+    pattern: Pattern
+  ): Promise<Anomaly[]> {
     return [];
   }
 
-  private async detectPatternAnomalies(data: TimeSeriesData[], pattern: Pattern): Promise<Anomaly[]> {
+  private async detectPatternAnomalies(
+    data: TimeSeriesData[],
+    pattern: Pattern
+  ): Promise<Anomaly[]> {
     return [];
   }
 
-  private async detectContextualAnomalies(data: TimeSeriesData[], pattern: Pattern): Promise<Anomaly[]> {
+  private async detectContextualAnomalies(
+    data: TimeSeriesData[],
+    pattern: Pattern
+  ): Promise<Anomaly[]> {
     return [];
   }
 
   private deduplicateAnomalies(anomalies: Anomaly[]): Anomaly[] {
     // Remove duplicate anomalies
     const unique = new Map<string, Anomaly>();
-    
+
     for (const anomaly of anomalies) {
       const key = `${anomaly.timestamp.getTime()}-${anomaly.type}`;
       if (!unique.has(key) || unique.get(key)!.confidence < anomaly.confidence) {
         unique.set(key, anomaly);
       }
     }
-    
+
     return Array.from(unique.values());
   }
 
@@ -1164,44 +1222,51 @@ export class TrendAnalysisService {
       const severityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
       const aSeverityScore = severityOrder[a.severity];
       const bSeverityScore = severityOrder[b.severity];
-      
+
       if (aSeverityScore !== bSeverityScore) {
         return bSeverityScore - aSeverityScore;
       }
-      
+
       return b.confidence - a.confidence;
     });
   }
 
   // Placeholder methods for additional functionality
-  private async getEntityHistoricalData(entity: { id: string; type: string }, timeWindow: TimeWindow): Promise<RiskData[]> {
+  private async getEntityHistoricalData(
+    entity: { id: string; type: string },
+    timeWindow: TimeWindow
+  ): Promise<RiskData[]> {
     return [];
   }
 
-  private async analyzeEntityTrend(_entity: { id: string; type: string }, _data: RiskData[], _timeWindow: TimeWindow): Promise<TrendAnalysisResult> {
+  private async analyzeEntityTrend(
+    _entity: { id: string; type: string },
+    _data: RiskData[],
+    _timeWindow: TimeWindow
+  ): Promise<TrendAnalysisResult> {
     return {
       id: generateId('trend-analysis'),
       entityId: 'mock-entity',
       entityType: 'risk',
       analysisType: 'risk_trend',
       timeRange: { start: new Date(), end: new Date() },
-      trend: { 
-        direction: 'stable', 
+      trend: {
+        direction: 'stable',
         magnitude: 0.5,
         duration: '30 days',
         acceleration: 0.1,
-        stability: 0.8
+        stability: 0.8,
       },
       prediction: {
         forecast: [0.5, 0.6, 0.7],
         confidenceInterval: {
           lower: 0.4,
           upper: 0.8,
-          confidence: 95
+          confidence: 95,
         },
         timeframe: '30 days',
         assumptions: ['Historical patterns continue', 'No major external changes'],
-        scenarios: []
+        scenarios: [],
       },
       anomalies: [],
       influencingFactors: [],
@@ -1212,17 +1277,20 @@ export class TrendAnalysisService {
         dataConsistency: 90,
         modelAccuracy: 88,
         predictionReliability: 82,
-        factors: []
+        factors: [],
       },
       recommendations: [],
       metadata: {
-        modelVersion: '2.1.0'
+        modelVersion: '2.1.0',
       },
-      generatedAt: new Date()
+      generatedAt: new Date(),
     };
   }
 
-  private async performTrendComparison(_results: TrendAnalysisResult[], _type: string): Promise<TrendComparisonResult> {
+  private async performTrendComparison(
+    _results: TrendAnalysisResult[],
+    _type: string
+  ): Promise<TrendComparisonResult> {
     return {
       id: 'comp-1',
       comparisonType: 'temporal',
@@ -1233,14 +1301,20 @@ export class TrendAnalysisService {
     };
   }
 
-  private async getRelevantEntitiesForUser(userId: string, userContext: unknown): Promise<Array<{ id: string; type: string }>> {
+  private async getRelevantEntitiesForUser(
+    userId: string,
+    userContext: unknown
+  ): Promise<Array<{ id: string; type: string }>> {
     return [
       { id: 'risk-1', type: 'risk' },
       { id: 'control-1', type: 'control' },
     ];
   }
 
-  private applyDashboardFilters(entities: Array<{ id: string; type: string }>, filters?: TrendDashboardFilters): Array<{ id: string; type: string }> {
+  private applyDashboardFilters(
+    entities: Array<{ id: string; type: string }>,
+    filters?: TrendDashboardFilters
+  ): Array<{ id: string; type: string }> {
     return entities; // No filtering applied in mock
   }
 
@@ -1253,10 +1327,10 @@ export class TrendAnalysisService {
         magnitude: 0.5,
         duration: '30 days',
         acceleration: 0.1,
-        stability: 0.8
+        stability: 0.8,
       },
       status: 'stable',
-      confidence: 0.8
+      confidence: 0.8,
     };
   }
 
@@ -1292,8 +1366,12 @@ interface EventService {
 }
 
 interface StatisticsService {
-  detectSeasonality(data: TimeSeriesData[]): Promise<{ detected: boolean; period: string; amplitude: number; confidence: number }>;
-  linearRegression(data: TimeSeriesData[]): Promise<{ slope: number; intercept: number; r2: number }>;
+  detectSeasonality(
+    data: TimeSeriesData[]
+  ): Promise<{ detected: boolean; period: string; amplitude: number; confidence: number }>;
+  linearRegression(
+    data: TimeSeriesData[]
+  ): Promise<{ slope: number; intercept: number; r2: number }>;
   calculateVolatility(data: TimeSeriesData[]): Promise<number>;
   detectOutliers(data: TimeSeriesData[]): Promise<Anomaly[]>;
 }
@@ -1353,4 +1431,4 @@ interface TrendAlert {
   message: string;
   entityId: string;
   timestamp: Date;
-} 
+}

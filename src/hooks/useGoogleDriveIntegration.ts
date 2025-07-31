@@ -21,7 +21,7 @@ export const useGoogleDriveIntegration = (): UseGoogleDriveIntegrationReturn => 
       // Try to list files to check if authenticated
       const response = await api.post('/api/google-drive/files', {});
       const data = await response.json();
-      
+
       setIsConnected(!data.error || data.code !== 'AUTH_REQUIRED');
     } catch (err) {
       setIsConnected(false);
@@ -33,10 +33,10 @@ export const useGoogleDriveIntegration = (): UseGoogleDriveIntegrationReturn => 
     try {
       setIsConnecting(true);
       setError(null);
-      
+
       const response = await api.get('/api/google-drive/auth');
       const data = await response.json();
-      
+
       if (data.authUrl) {
         // Redirect to Google OAuth
         window.location.href = data.authUrl;
@@ -55,10 +55,10 @@ export const useGoogleDriveIntegration = (): UseGoogleDriveIntegrationReturn => 
   const disconnect = useCallback(async (): Promise<boolean> => {
     try {
       setError(null);
-      
+
       const response = await api.delete('/api/google-drive/auth');
       const data = await response.json();
-      
+
       if (data.message) {
         setIsConnected(false);
         return true;
@@ -66,7 +66,7 @@ export const useGoogleDriveIntegration = (): UseGoogleDriveIntegrationReturn => 
         setError(data.error);
         return false;
       }
-      
+
       return false;
     } catch (err) {
       console.error('Error disconnecting from Google Drive:', err);
@@ -81,6 +81,6 @@ export const useGoogleDriveIntegration = (): UseGoogleDriveIntegrationReturn => 
     error,
     connect,
     disconnect,
-    checkConnection
+    checkConnection,
   };
 };

@@ -29,11 +29,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ received: true });
   } catch (error) {
     console.error('Stripe webhook error:', error);
-    
+
     if (error instanceof Error && error.message.includes('signature')) {
       return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
     }
 
     return NextResponse.json({ error: 'Webhook processing failed' }, { status: 500 });
   }
-} 
+}

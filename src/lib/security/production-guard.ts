@@ -6,9 +6,9 @@ import { env } from '@/config/env';
  */
 export class ProductionGuard {
   private static instance: ProductionGuard;
-  
+
   private constructor() {}
-  
+
   public static getInstance(): ProductionGuard {
     if (!ProductionGuard.instance) {
       ProductionGuard.instance = new ProductionGuard();
@@ -35,9 +35,9 @@ export class ProductionGuard {
    */
   isDemoMode(): boolean {
     // Demo mode should only be enabled in development or explicit staging
-    return !this.isProduction() && (
-      process.env.DEMO_MODE === 'true' ||
-      process.env.NODE_ENV === 'development'
+    return (
+      !this.isProduction() &&
+      (process.env.DEMO_MODE === 'true' || process.env.NODE_ENV === 'development')
     );
   }
 
@@ -70,7 +70,7 @@ export class ProductionGuard {
       'COOKIE_SECRET',
       'INTERNAL_API_KEY',
       'DATABASE_ENCRYPTION_KEY',
-      'FILE_ENCRYPTION_KEY'
+      'FILE_ENCRYPTION_KEY',
     ];
 
     // Check for development/test values in production
@@ -83,12 +83,12 @@ export class ProductionGuard {
       'change-me',
       'please-change',
       'development',
-      'testing'
+      'testing',
     ];
 
     for (const secret of requiredSecrets) {
       const value = process.env[secret];
-      
+
       if (!value) {
         errors.push(`Missing required secret: ${secret}`);
         continue;
@@ -99,7 +99,7 @@ export class ProductionGuard {
       }
 
       // Check for development values
-      const hasDevValue = developmentValues.some(devValue => 
+      const hasDevValue = developmentValues.some((devValue) =>
         value.toLowerCase().includes(devValue.toLowerCase())
       );
 
@@ -110,7 +110,7 @@ export class ProductionGuard {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -126,7 +126,7 @@ export class ProductionGuard {
     const urls = {
       APP_URL: process.env.APP_URL,
       NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-      DATABASE_URL: process.env.DATABASE_URL
+      DATABASE_URL: process.env.DATABASE_URL,
     };
 
     for (const [name, url] of Object.entries(urls)) {
@@ -143,7 +143,7 @@ export class ProductionGuard {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -177,7 +177,7 @@ export class ProductionGuard {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -194,7 +194,7 @@ export class ProductionGuard {
     process.env.MOCK_DATA = 'false';
     process.env.SKIP_EMAIL_VERIFICATION = 'false';
     process.env.BYPASS_RATE_LIMITING = 'false';
-    
+
     // Force security features on
     process.env.ENABLE_CSRF_PROTECTION = 'true';
     process.env.ENABLE_RATE_LIMITING = 'true';
@@ -204,16 +204,16 @@ export class ProductionGuard {
   /**
    * Comprehensive production readiness check
    */
-  validateProduction(): { 
-    isReady: boolean; 
-    errors: string[]; 
-    warnings: string[] 
+  validateProduction(): {
+    isReady: boolean;
+    errors: string[];
+    warnings: string[];
   } {
     if (!this.isProduction()) {
-      return { 
-        isReady: true, 
-        errors: [], 
-        warnings: ['Not in production environment'] 
+      return {
+        isReady: true,
+        errors: [],
+        warnings: ['Not in production environment'],
       };
     }
 
@@ -233,12 +233,7 @@ export class ProductionGuard {
     errors.push(...dbCheck.errors);
 
     // Check required environment variables
-    const requiredVars = [
-      'APP_URL',
-      'DATABASE_URL',
-      'JWT_SECRET',
-      'NEXTAUTH_SECRET'
-    ];
+    const requiredVars = ['APP_URL', 'DATABASE_URL', 'JWT_SECRET', 'NEXTAUTH_SECRET'];
 
     for (const varName of requiredVars) {
       if (!process.env[varName]) {
@@ -247,11 +242,7 @@ export class ProductionGuard {
     }
 
     // Check optional but recommended variables
-    const recommendedVars = [
-      'SMTP_HOST',
-      'OPENAI_API_KEY',
-      'SENTRY_DSN'
-    ];
+    const recommendedVars = ['SMTP_HOST', 'OPENAI_API_KEY', 'SENTRY_DSN'];
 
     for (const varName of recommendedVars) {
       if (!process.env[varName]) {
@@ -262,7 +253,7 @@ export class ProductionGuard {
     return {
       isReady: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   }
 
@@ -275,10 +266,11 @@ export class ProductionGuard {
     }
 
     // Skip during build time
-    const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build' || 
-                       process.env.npm_lifecycle_event === 'build' ||
-                       process.env.CI === 'true';
-    
+    const isBuildTime =
+      process.env.NEXT_PHASE === 'phase-production-build' ||
+      process.env.npm_lifecycle_event === 'build' ||
+      process.env.CI === 'true';
+
     if (isBuildTime) {
       console.log('🔧 Build time detected - skipping production security initialization');
       return;
@@ -292,19 +284,21 @@ export class ProductionGuard {
 
     // Validate production readiness
     const validation = this.validateProduction();
-    
+
     if (!validation.isReady) {
       console.error('❌ Production validation failed:');
-      validation.errors.forEach(error => console.error(`  - ${error}`));
-      
+      validation.errors.forEach((error) => console.error(`  - ${error}`));
+
       if (process.env.STRICT_PRODUCTION_MODE !== 'false') {
-        throw new Error('Production validation failed. Set STRICT_PRODUCTION_MODE=false to bypass.');
+        throw new Error(
+          'Production validation failed. Set STRICT_PRODUCTION_MODE=false to bypass.'
+        );
       }
     }
 
     if (validation.warnings.length > 0) {
       console.warn('⚠️ Production warnings:');
-      validation.warnings.forEach(warning => console.warn(`  - ${warning}`));
+      validation.warnings.forEach((warning) => console.warn(`  - ${warning}`));
     }
 
     console.log('✅ Production security initialized');
@@ -317,7 +311,7 @@ export class ProductionGuard {
     return {
       'X-Environment': this.isProduction() ? 'production' : 'development',
       'X-Security-Level': this.isProduction() ? 'high' : 'development',
-      'X-Demo-Mode': this.isDemoMode() ? 'true' : 'false'
+      'X-Demo-Mode': this.isDemoMode() ? 'true' : 'false',
     };
   }
 
@@ -330,7 +324,7 @@ export class ProductionGuard {
       event,
       environment: process.env.NODE_ENV,
       isProduction: this.isProduction(),
-      ...details
+      ...details,
     };
 
     if (this.isProduction()) {
@@ -360,11 +354,11 @@ export class ProductionGuard {
       'GOOGLE_CLIENT_SECRET',
       'SMTP_PASS',
       'AWS_SECRET_ACCESS_KEY',
-      'DATABASE_URL'
+      'DATABASE_URL',
     ];
 
     for (const [key, value] of Object.entries(process.env)) {
-      if (sensitiveKeys.some(sensitive => key.includes(sensitive))) {
+      if (sensitiveKeys.some((sensitive) => key.includes(sensitive))) {
         sanitized[key] = value ? '***REDACTED***' : 'not set';
       } else {
         sanitized[key] = value || 'not set';
@@ -380,10 +374,11 @@ export const productionGuard = ProductionGuard.getInstance();
 
 // Auto-initialize in production (but not during build time)
 if (process.env.NODE_ENV === 'production') {
-  const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build' || 
-                     process.env.npm_lifecycle_event === 'build' ||
-                     process.env.CI === 'true';
-  
+  const isBuildTime =
+    process.env.NEXT_PHASE === 'phase-production-build' ||
+    process.env.npm_lifecycle_event === 'build' ||
+    process.env.CI === 'true';
+
   if (!isBuildTime) {
     try {
       productionGuard.initializeProduction();
@@ -421,4 +416,4 @@ export function onlyInProduction<T>(fn: () => T): T | null {
     return fn();
   }
   return null;
-} 
+}

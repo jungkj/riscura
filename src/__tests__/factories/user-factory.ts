@@ -18,7 +18,7 @@ export class UserFactory {
 
   static create(options: CreateUserOptions = {}): User {
     const id = options.id || `user-${this.counter++}`;
-    
+
     return {
       id,
       email: options.email || `user${this.counter}@example.com`,
@@ -92,25 +92,25 @@ export const testUsers = {
     firstName: 'Admin',
     lastName: 'User',
   }),
-  
+
   user: UserFactory.create({
     id: 'user-1',
     email: 'user@test.com',
     firstName: 'Regular',
     lastName: 'User',
   }),
-  
+
   riskManager: UserFactory.createRiskManager({
     id: 'risk-manager-1',
     email: 'riskmanager@test.com',
     firstName: 'Risk',
     lastName: 'Manager',
   }),
-  
+
   auditor: UserFactory.createAuditor({
     id: 'auditor-1',
     email: 'auditor@test.com',
     firstName: 'Auditor',
     lastName: 'User',
   }),
-}; 
+};

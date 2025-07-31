@@ -7,7 +7,7 @@ function getOpenAIClient() {
   if (!apiKey) {
     throw new Error('OpenAI API key not configured');
   }
-  
+
   return new OpenAI({
     apiKey,
     organization: process.env.OPENAI_ORG_ID,
@@ -60,7 +60,6 @@ export interface GeneratedDocument {
 }
 
 export class DocumentTemplateService {
-  
   // Get available templates for organization
   async getTemplates(organizationId: string, category?: string): Promise<DocumentTemplate[]> {
     const where: any = {
@@ -92,7 +91,10 @@ export class DocumentTemplateService {
   }
 
   // Create custom template
-  async createTemplate(template: Omit<DocumentTemplate, 'id'>, userId: string): Promise<DocumentTemplate> {
+  async createTemplate(
+    template: Omit<DocumentTemplate, 'id'>,
+    userId: string
+  ): Promise<DocumentTemplate> {
     try {
       const created = await db.client.documentTemplate.create({
         data: {
@@ -193,7 +195,10 @@ export class DocumentTemplateService {
           variables: validatedVariables,
           aiEnhanced: options.aiEnhanced,
         },
-        suggestions: options.aiEnhanced && process.env.OPENAI_API_KEY ? await this.generateSuggestions(content, template) : undefined,
+        suggestions:
+          options.aiEnhanced && process.env.OPENAI_API_KEY
+            ? await this.generateSuggestions(content, template)
+            : undefined,
       };
     } catch (error) {
       console.error('Error generating document:', error);
@@ -202,7 +207,10 @@ export class DocumentTemplateService {
   }
 
   // Validate template variables
-  private validateVariables(templateVars: TemplateVariable[], inputVars: Record<string, any>): Record<string, any> {
+  private validateVariables(
+    templateVars: TemplateVariable[],
+    inputVars: Record<string, any>
+  ): Record<string, any> {
     const validated: Record<string, any> = {};
 
     for (const templateVar of templateVars) {
@@ -228,17 +236,21 @@ export class DocumentTemplateService {
   // Interpolate template with variables
   private interpolateTemplate(template: string, variables: Record<string, any>): string {
     let result = template;
-    
+
     for (const [key, value] of Object.entries(variables)) {
       const regex = new RegExp(`{{\\s*${key}\\s*}}`, 'g');
       result = result.replace(regex, String(value));
     }
-    
+
     return result;
   }
 
   // Enhance content with AI
-  private async enhanceWithAI(content: string, template: DocumentTemplate, variables: Record<string, any>): Promise<string> {
+  private async enhanceWithAI(
+    content: string,
+    template: DocumentTemplate,
+    variables: Record<string, any>
+  ): Promise<string> {
     try {
       if (!process.env.OPENAI_API_KEY) {
         return content + '\n\n[AI Enhancement: Not available in demo mode]';
@@ -246,16 +258,16 @@ export class DocumentTemplateService {
 
       const openai = getOpenAIClient();
       const response = await openai.chat.completions.create({
-        model: "gpt-4",
+        model: 'gpt-4',
         messages: [
           {
-            role: "system",
-            content: `You are an expert document writer. Enhance the following ${template.category} document while maintaining its structure and purpose.`
+            role: 'system',
+            content: `You are an expert document writer. Enhance the following ${template.category} document while maintaining its structure and purpose.`,
           },
           {
-            role: "user",
-            content: `Please enhance this document content:\n\n${content}`
-          }
+            role: 'user',
+            content: `Please enhance this document content:\n\n${content}`,
+          },
         ],
         temperature: 0.3,
         max_tokens: 2000,
@@ -289,7 +301,7 @@ This document was generated using the Riscura platform.
   // Generate document title
   private generateTitle(template: DocumentTemplate, variables: Record<string, any>): string {
     let title = template.name;
-    
+
     // Try to use common variables for title
     if (variables.title) {
       title = variables.title;
@@ -298,12 +310,15 @@ This document was generated using the Riscura platform.
     } else if (variables.project) {
       title = `${template.name} - ${variables.project}`;
     }
-    
+
     return title;
   }
 
   // Generate AI suggestions
-  private async generateSuggestions(content: string, template: DocumentTemplate): Promise<string[]> {
+  private async generateSuggestions(
+    content: string,
+    template: DocumentTemplate
+  ): Promise<string[]> {
     try {
       if (!process.env.OPENAI_API_KEY) {
         return ['AI suggestions not available in demo mode'];
@@ -311,25 +326,27 @@ This document was generated using the Riscura platform.
 
       const openai = getOpenAIClient();
       const response = await openai.chat.completions.create({
-        model: "gpt-4",
+        model: 'gpt-4',
         messages: [
           {
-            role: "system",
-            content: "You are an expert document reviewer. Provide 3-5 actionable suggestions to improve this document."
+            role: 'system',
+            content:
+              'You are an expert document reviewer. Provide 3-5 actionable suggestions to improve this document.',
           },
           {
-            role: "user",
-            content: content.substring(0, 2000)
-          }
+            role: 'user',
+            content: content.substring(0, 2000),
+          },
         ],
         temperature: 0.3,
         max_tokens: 500,
       });
 
-      const suggestions = response.choices[0]?.message?.content?.split('\n')
-        .filter(line => line.trim().length > 0)
-        .map(line => line.replace(/^\d+\.\s*/, '').trim())
-        .filter(suggestion => suggestion.length > 10)
+      const suggestions = response.choices[0]?.message?.content
+        ?.split('\n')
+        .filter((line) => line.trim().length > 0)
+        .map((line) => line.replace(/^\d+\.\s*/, '').trim())
+        .filter((suggestion) => suggestion.length > 10)
         .slice(0, 5);
 
       return suggestions || ['No suggestions available'];
@@ -400,8 +417,20 @@ This assessment requires review and approval from the Risk Committee.
       { name: 'startDate', type: 'date', label: 'Assessment Start Date', required: true },
       { name: 'endDate', type: 'date', label: 'Assessment End Date', required: true },
       { name: 'assessorName', type: 'text', label: 'Lead Assessor', required: true },
-      { name: 'riskCategories', type: 'multi-select', label: 'Risk Categories', required: true, 
-        options: ['Operational', 'Financial', 'Strategic', 'Compliance', 'Technology', 'Reputational'] },
+      {
+        name: 'riskCategories',
+        type: 'multi-select',
+        label: 'Risk Categories',
+        required: true,
+        options: [
+          'Operational',
+          'Financial',
+          'Strategic',
+          'Compliance',
+          'Technology',
+          'Reputational',
+        ],
+      },
     ],
     isActive: true,
   },
@@ -468,15 +497,31 @@ Results must be reported to {{reportingManager}} within {{reportingTimeframe}} d
       { name: 'controlArea', type: 'text', label: 'Control Area', required: true },
       { name: 'controlId', type: 'text', label: 'Control ID', required: true },
       { name: 'controlOwner', type: 'text', label: 'Control Owner', required: true },
-      { name: 'controlType', type: 'select', label: 'Control Type', required: true,
-        options: ['Preventive', 'Detective', 'Corrective', 'Directive'] },
+      {
+        name: 'controlType',
+        type: 'select',
+        label: 'Control Type',
+        required: true,
+        options: ['Preventive', 'Detective', 'Corrective', 'Directive'],
+      },
       { name: 'testingPeriod', type: 'text', label: 'Testing Period', required: true },
-      { name: 'testingFrequency', type: 'select', label: 'Testing Frequency', required: true,
-        options: ['Monthly', 'Quarterly', 'Semi-annually', 'Annually'] },
+      {
+        name: 'testingFrequency',
+        type: 'select',
+        label: 'Testing Frequency',
+        required: true,
+        options: ['Monthly', 'Quarterly', 'Semi-annually', 'Annually'],
+      },
       { name: 'populationSize', type: 'number', label: 'Population Size', required: false },
       { name: 'sampleSize', type: 'number', label: 'Sample Size', required: false },
       { name: 'reportingManager', type: 'text', label: 'Reporting Manager', required: true },
-      { name: 'reportingTimeframe', type: 'number', label: 'Reporting Timeframe (days)', required: true, defaultValue: 5 },
+      {
+        name: 'reportingTimeframe',
+        type: 'number',
+        label: 'Reporting Timeframe (days)',
+        required: true,
+        defaultValue: 5,
+      },
     ],
     isActive: true,
   },
@@ -542,7 +587,12 @@ Compliance with this policy will be monitored through {{monitoringMethod}}.
       { name: 'organizationName', type: 'text', label: 'Organization Name', required: true },
       { name: 'policySubject', type: 'text', label: 'Policy Subject', required: true },
       { name: 'scopeDescription', type: 'text', label: 'Scope Description', required: true },
-      { name: 'policyCommitment', type: 'text', label: 'Policy Commitment Statement', required: true },
+      {
+        name: 'policyCommitment',
+        type: 'text',
+        label: 'Policy Commitment Statement',
+        required: true,
+      },
       { name: 'monitoringMethod', type: 'text', label: 'Monitoring Method', required: true },
       { name: 'effectiveDate', type: 'date', label: 'Effective Date', required: true },
       { name: 'reviewDate', type: 'date', label: 'Review Date', required: true },
@@ -550,5 +600,5 @@ Compliance with this policy will be monitored through {{monitoringMethod}}.
       { name: 'approvedBy', type: 'text', label: 'Approved By', required: true },
     ],
     isActive: true,
-  }
-]; 
+  },
+];

@@ -4,17 +4,14 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
   try {
     return NextResponse.json(
-      { 
-        error: 'Questionnaire response submission not implemented'
+      {
+        error: 'Questionnaire response submission not implemented',
       },
       { status: 501 }
     );
   } catch (error) {
     console.error('Submit questionnaire response error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -22,17 +19,14 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     return NextResponse.json(
-      { 
+      {
         error: 'List questionnaire responses not implemented',
-        data: []
+        data: [],
       },
       { status: 501 }
     );
   } catch (error) {
     console.error('Get questionnaire responses error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-} 
+}

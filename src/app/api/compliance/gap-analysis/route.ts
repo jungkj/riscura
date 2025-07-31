@@ -16,7 +16,7 @@ const roadmapSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -32,17 +32,17 @@ export async function POST(request: NextRequest) {
         // TODO: Get existing controls and risks from database
         const existingControls: any[] = [] as any[];
         const risks: any[] = [] as any[];
-        
+
         const gaps = await complianceAIService.identifyComplianceGaps(
           analysisData.frameworkName,
           existingControls,
           risks
         );
-        
+
         return NextResponse.json({
           success: true,
           data: { gaps },
-          message: `Gap analysis completed for ${analysisData.frameworkName}`
+          message: `Gap analysis completed for ${analysisData.frameworkName}`,
         });
 
       case 'roadmap':
@@ -66,32 +66,25 @@ export async function POST(request: NextRequest) {
           estimatedCosts: {},
           aiInsights: [] as any[],
           createdAt: new Date(),
-          lastUpdated: new Date()
+          lastUpdated: new Date(),
         };
-        
+
         const roadmap = await complianceAIService.generateComplianceRoadmap(
           [roadmapData.frameworkName],
           currentAssessment
         );
-        
+
         return NextResponse.json({
           success: true,
           data: roadmap,
-          message: `Implementation roadmap generated for ${roadmapData.frameworkName}`
+          message: `Implementation roadmap generated for ${roadmapData.frameworkName}`,
         });
 
       default:
-        return NextResponse.json(
-          { error: 'Invalid action' },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
     }
-
   } catch (error) {
     console.error('Error processing gap analysis request:', error);
-    return NextResponse.json(
-      { error: 'Failed to process gap analysis' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to process gap analysis' }, { status: 500 });
   }
-} 
+}

@@ -5,21 +5,21 @@
 
 import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
 import { BillingManager } from '@/lib/billing/manager';
-import { 
+import {
   createMockPrismaClient,
   createTestSubscriptionPlan,
   createTestSubscription,
   createTestOrganization,
   cleanupTestData,
-  type MockPrismaClient
+  type MockPrismaClient,
 } from '../../utils/test-helpers';
 
 // Mock the database
 const mockPrisma = createMockPrismaClient();
 jest.mock('@/lib/db', () => ({
   db: {
-    client: mockPrisma
-  }
+    client: mockPrisma,
+  },
 }));
 
 // Mock the Stripe service
@@ -27,7 +27,7 @@ const mockStripeService = {
   getPaymentMethod: jest.fn<any, any>(),
 };
 jest.mock('@/lib/billing/stripe', () => ({
-  stripeService: mockStripeService
+  stripeService: mockStripeService,
 }));
 
 describe('BillingManager', () => {
@@ -113,8 +113,9 @@ describe('BillingManager', () => {
 
         mockPrisma.subscriptionPlan.create.mockRejectedValue(new Error('Database error'));
 
-        await expect(billingManager.createSubscriptionPlan(planData))
-          .rejects.toThrow('Database error');
+        await expect(billingManager.createSubscriptionPlan(planData)).rejects.toThrow(
+          'Database error'
+        );
       });
     });
 
@@ -175,11 +176,9 @@ describe('BillingManager', () => {
         mockPrisma.subscriptionPlan.findUnique.mockResolvedValue(testPlan);
         mockPrisma.organizationSubscription.create.mockResolvedValue(testSubscription);
 
-        const result = await billingManager.createSubscription(
-          testOrg.id,
-          testPlan.id,
-          { trialDays: 14 }
-        );
+        const result = await billingManager.createSubscription(testOrg.id, testPlan.id, {
+          trialDays: 14,
+        });
 
         expect(mockPrisma.organization.findUnique).toHaveBeenCalledWith({
           where: { id: testOrg.id },
@@ -206,16 +205,18 @@ describe('BillingManager', () => {
       it('should throw error when organization not found', async () => {
         mockPrisma.organization.findUnique.mockResolvedValue(null);
 
-        await expect(billingManager.createSubscription('invalid-org', 'plan-123'))
-          .rejects.toThrow('Organization not found');
+        await expect(billingManager.createSubscription('invalid-org', 'plan-123')).rejects.toThrow(
+          'Organization not found'
+        );
       });
 
       it('should throw error when plan not found', async () => {
         mockPrisma.organization.findUnique.mockResolvedValue(testOrg);
         mockPrisma.subscriptionPlan.findUnique.mockResolvedValue(null);
 
-        await expect(billingManager.createSubscription(testOrg.id, 'invalid-plan'))
-          .rejects.toThrow('Subscription plan not found');
+        await expect(billingManager.createSubscription(testOrg.id, 'invalid-plan')).rejects.toThrow(
+          'Subscription plan not found'
+        );
       });
     });
 
@@ -257,10 +258,7 @@ describe('BillingManager', () => {
           unitPrice: newPlan.price,
         });
 
-        const result = await billingManager.changeSubscriptionPlan(
-          testSubscription.id,
-          newPlan.id
-        );
+        const result = await billingManager.changeSubscriptionPlan(testSubscription.id, newPlan.id);
 
         expect(mockPrisma.organizationSubscription.update).toHaveBeenCalledWith({
           where: { id: testSubscription.id },
@@ -278,8 +276,9 @@ describe('BillingManager', () => {
       it('should throw error when subscription not found', async () => {
         mockPrisma.organizationSubscription.findUnique.mockResolvedValue(null);
 
-        await expect(billingManager.changeSubscriptionPlan('invalid-sub', 'plan-123'))
-          .rejects.toThrow('Subscription not found');
+        await expect(
+          billingManager.changeSubscriptionPlan('invalid-sub', 'plan-123')
+        ).rejects.toThrow('Subscription not found');
       });
     });
 
@@ -375,8 +374,9 @@ describe('BillingManager', () => {
       it('should throw error when no active subscription found', async () => {
         mockPrisma.organizationSubscription.findFirst.mockResolvedValue(null);
 
-        await expect(billingManager.trackUsage(testOrg.id, 'aiQueries', 1))
-          .rejects.toThrow('No active subscription found for organization');
+        await expect(billingManager.trackUsage(testOrg.id, 'aiQueries', 1)).rejects.toThrow(
+          'No active subscription found for organization'
+        );
       });
     });
   });
@@ -412,11 +412,7 @@ describe('BillingManager', () => {
           isActive: true,
         });
 
-        const result = await billingManager.addPaymentMethod(
-          testOrg.id,
-          'pm_test123',
-          true
-        );
+        const result = await billingManager.addPaymentMethod(testOrg.id, 'pm_test123', true);
 
         expect(mockStripeService.getPaymentMethod).toHaveBeenCalledWith('pm_test123');
         expect(mockPrisma.paymentMethod.updateMany).toHaveBeenCalledWith({
@@ -437,8 +433,9 @@ describe('BillingManager', () => {
       it('should throw error when organization not found', async () => {
         mockPrisma.organization.findUnique.mockResolvedValue(null);
 
-        await expect(billingManager.addPaymentMethod('invalid-org', 'pm_test123'))
-          .rejects.toThrow('Organization not found');
+        await expect(billingManager.addPaymentMethod('invalid-org', 'pm_test123')).rejects.toThrow(
+          'Organization not found'
+        );
       });
     });
   });
@@ -451,16 +448,20 @@ describe('BillingManager', () => {
     describe('getBillingAnalytics', () => {
       it('should return comprehensive billing analytics', async () => {
         const mockSubscriptions = [testSubscription];
-        const mockInvoices = [{
-          id: 'inv-123',
-          total: 99,
-          type: 'subscription',
-          createdAt: new Date(),
-        }];
-        const mockPlans = [{
-          ...testPlan,
-          subscriptions: [testSubscription],
-        }];
+        const mockInvoices = [
+          {
+            id: 'inv-123',
+            total: 99,
+            type: 'subscription',
+            createdAt: new Date(),
+          },
+        ];
+        const mockPlans = [
+          {
+            ...testPlan,
+            subscriptions: [testSubscription],
+          },
+        ];
 
         mockPrisma.organizationSubscription.findMany.mockResolvedValue(mockSubscriptions);
         mockPrisma.invoice.findMany.mockResolvedValue(mockInvoices);
@@ -518,8 +519,7 @@ describe('BillingManager', () => {
       expect(activeSubscription).not.toBeNull();
 
       // Track usage
-      await expect(billingManager.trackUsage(testOrg.id, 'aiQueries', 1))
-        .resolves.not.toThrow();
+      await expect(billingManager.trackUsage(testOrg.id, 'aiQueries', 1)).resolves.not.toThrow();
 
       // Cancel subscription
       mockPrisma.organizationSubscription.update.mockResolvedValue({

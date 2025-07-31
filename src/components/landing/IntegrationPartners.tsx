@@ -21,7 +21,7 @@ const integrationPartners: IntegrationPartner[] = [
     logo: '/logos/sharepoint.png',
     color: '#0078D4',
     description: 'SharePoint document management integration',
-    available: true
+    available: true,
   },
   {
     id: 'google',
@@ -29,7 +29,7 @@ const integrationPartners: IntegrationPartner[] = [
     logo: '/logos/googledrive.png',
     color: '#4285F4',
     description: 'Google Drive file import and sync',
-    available: true
+    available: true,
   },
   {
     id: 'dropbox',
@@ -37,7 +37,7 @@ const integrationPartners: IntegrationPartner[] = [
     logo: '/logos/dropbox.png',
     color: '#0061FF',
     description: 'Dropbox Business integration',
-    available: true
+    available: true,
   },
   {
     id: 'slack',
@@ -45,7 +45,7 @@ const integrationPartners: IntegrationPartner[] = [
     logo: '/logos/Slack.png',
     color: '#4A154B',
     description: 'Slack notifications and alerts',
-    available: true
+    available: true,
   },
   {
     id: 'teams',
@@ -53,7 +53,7 @@ const integrationPartners: IntegrationPartner[] = [
     logo: '/logos/Teams.png',
     color: '#6264A7',
     description: 'Teams collaboration integration',
-    available: true
+    available: true,
   },
   {
     id: 'openai',
@@ -61,8 +61,8 @@ const integrationPartners: IntegrationPartner[] = [
     logo: '/logos/OPenAi.png',
     color: '#000000',
     description: 'AI-powered risk analysis',
-    available: true
-  }
+    available: true,
+  },
 ];
 
 export const IntegrationPartners: React.FC = () => {
@@ -96,15 +96,15 @@ export const IntegrationPartners: React.FC = () => {
     const animate = () => {
       if (!isPaused && scrollContainer) {
         scrollPosition += scrollSpeed;
-        
+
         // Reset scroll when reaching the end
         if (scrollPosition >= scrollContainer.scrollWidth / 2) {
           scrollPosition = 0;
         }
-        
+
         scrollContainer.scrollLeft = scrollPosition;
       }
-      
+
       animationRef.current = requestAnimationFrame(animate);
     };
 
@@ -125,7 +125,9 @@ export const IntegrationPartners: React.FC = () => {
             Trusted by Leading Organizations
           </h2>
           <p className="text-xl text-gray-600">
-            Integrated with <span className="font-semibold text-blue-600">{integrationPartners.length}+</span> industry-leading platforms
+            Integrated with{' '}
+            <span className="font-semibold text-blue-600">{integrationPartners.length}+</span>{' '}
+            industry-leading platforms
           </p>
         </div>
 
@@ -133,7 +135,7 @@ export const IntegrationPartners: React.FC = () => {
           {/* Gradient overlays for smooth edges */}
           <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none" />
-          
+
           {/* Scrolling container */}
           <div
             ref={scrollRef}
@@ -145,7 +147,7 @@ export const IntegrationPartners: React.FC = () => {
             }}
             role="region"
             aria-label="Integration partners carousel"
-            aria-live={prefersReducedMotion ? "polite" : "off"}
+            aria-live={prefersReducedMotion ? 'polite' : 'off'}
           >
             {/* Duplicate the partners array for infinite scroll effect */}
             {[...integrationPartners, ...integrationPartners].map((partner, index) => (
@@ -169,7 +171,7 @@ export const IntegrationPartners: React.FC = () => {
                 aria-label={`${partner.name} - ${partner.available ? partner.description : 'Coming soon'}`}
               >
                 <div className="relative w-32 h-24 flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus-within:scale-110">
-                  <div 
+                  <div
                     className={`
                       w-full h-full flex flex-col items-center justify-center rounded-lg p-4
                       ${hoveredPartner === partner.id ? 'bg-white shadow-lg' : 'bg-transparent'}
@@ -184,24 +186,27 @@ export const IntegrationPartners: React.FC = () => {
                         fill
                         className="object-contain"
                         style={{
-                          filter: hoveredPartner === partner.id ? 'none' : 'grayscale(100%) opacity(0.6)'
+                          filter:
+                            hoveredPartner === partner.id ? 'none' : 'grayscale(100%) opacity(0.6)',
                         }}
                       />
                     </div>
-                    
+
                     {/* Name */}
-                    <div className={`
+                    <div
+                      className={`
                       text-center font-medium text-xs leading-tight
                       ${hoveredPartner === partner.id ? 'text-gray-900' : 'text-gray-500'}
                       transition-colors duration-300
-                    `}>
+                    `}
+                    >
                       {partner.name}
                     </div>
                   </div>
-                  
+
                   {/* Tooltip on hover/focus */}
                   {hoveredPartner === partner.id && (
-                    <div 
+                    <div
                       role="tooltip"
                       aria-hidden="false"
                       className={`absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 text-white text-xs rounded whitespace-nowrap opacity-0 animate-fadeIn ${
@@ -209,9 +214,11 @@ export const IntegrationPartners: React.FC = () => {
                       }`}
                     >
                       {partner.available ? partner.description : '✨ Coming soon!'}
-                      <div className={`absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent ${
-                        partner.available ? 'border-t-gray-900' : 'border-t-blue-600'
-                      }`} />
+                      <div
+                        className={`absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent ${
+                          partner.available ? 'border-t-gray-900' : 'border-t-blue-600'
+                        }`}
+                      />
                     </div>
                   )}
                 </div>
@@ -243,7 +250,7 @@ export const IntegrationPartners: React.FC = () => {
             transform: translate(-50%, 0);
           }
         }
-        
+
         .animate-fadeIn {
           animation: fadeIn 0.2s ease-out forwards;
         }

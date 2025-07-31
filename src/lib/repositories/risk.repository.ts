@@ -235,10 +235,7 @@ export class RiskRepository extends BaseRepository<Risk> {
   }
 
   // Find high-priority risks
-  async findHighPriority(
-    organizationId: string,
-    options: PaginationOptions = {}
-  ): Promise<Risk[]> {
+  async findHighPriority(organizationId: string, options: PaginationOptions = {}): Promise<Risk[]> {
     return this.model.findMany({
       where: {
         organizationId,
@@ -246,10 +243,7 @@ export class RiskRepository extends BaseRepository<Risk> {
           in: ['HIGH', 'CRITICAL'],
         },
       },
-      orderBy: [
-        { riskScore: 'desc' },
-        { createdAt: 'desc' },
-      ],
+      orderBy: [{ riskScore: 'desc' }, { createdAt: 'desc' }],
       take: options.limit || 10,
       include: {
         creator: {
@@ -269,10 +263,7 @@ export class RiskRepository extends BaseRepository<Risk> {
   }
 
   // Find risks due for review
-  async findDueForReview(
-    organizationId: string,
-    daysAhead: number = 30
-  ): Promise<Risk[]> {
+  async findDueForReview(organizationId: string, daysAhead: number = 30): Promise<Risk[]> {
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + daysAhead);
 
@@ -311,49 +302,43 @@ export class RiskRepository extends BaseRepository<Risk> {
     averageScore: number;
     dueForReview: number;
   }> {
-    const [
-      total,
-      byCategory,
-      byLevel,
-      byStatus,
-      averageScoreResult,
-      dueForReview,
-    ] = await Promise.all([
-      this.count(organizationId),
-      
-      this.model.groupBy({
-        by: ['category'],
-        where: { organizationId },
-        _count: { _all: true },
-      }),
-      
-      this.model.groupBy({
-        by: ['riskLevel'],
-        where: { organizationId },
-        _count: { _all: true },
-      }),
-      
-      this.model.groupBy({
-        by: ['status'],
-        where: { organizationId },
-        _count: { _all: true },
-      }),
-      
-      this.model.aggregate({
-        where: { organizationId },
-        _avg: { riskScore: true },
-      }),
-      
-      this.model.count({
-        where: {
-          organizationId,
-          nextReview: {
-            lte: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+    const [total, byCategory, byLevel, byStatus, averageScoreResult, dueForReview] =
+      await Promise.all([
+        this.count(organizationId),
+
+        this.model.groupBy({
+          by: ['category'],
+          where: { organizationId },
+          _count: { _all: true },
+        }),
+
+        this.model.groupBy({
+          by: ['riskLevel'],
+          where: { organizationId },
+          _count: { _all: true },
+        }),
+
+        this.model.groupBy({
+          by: ['status'],
+          where: { organizationId },
+          _count: { _all: true },
+        }),
+
+        this.model.aggregate({
+          where: { organizationId },
+          _avg: { riskScore: true },
+        }),
+
+        this.model.count({
+          where: {
+            organizationId,
+            nextReview: {
+              lte: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+            },
+            status: { not: 'CLOSED' },
           },
-          status: { not: 'CLOSED' },
-        },
-      }),
-    ]);
+        }),
+      ]);
 
     // Transform grouped results into records
     const categoryStats = {} as Record<PrismaRiskCategory, number>;
@@ -433,11 +418,7 @@ export class RiskRepository extends BaseRepository<Risk> {
   }
 
   // Unlink control from risk
-  async unlinkControl(
-    riskId: string,
-    controlId: string,
-    organizationId: string
-  ): Promise<void> {
+  async unlinkControl(riskId: string, controlId: string, organizationId: string): Promise<void> {
     await this.prisma.controlRiskMapping.deleteMany({
       where: {
         riskId,
@@ -469,4 +450,4 @@ export class RiskRepository extends BaseRepository<Risk> {
       },
     });
   }
-} 
+}

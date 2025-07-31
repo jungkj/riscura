@@ -87,7 +87,7 @@ class MemoryCache {
       this.cleanup();
     }
 
-    const expires = Date.now() + (ttl * 1000);
+    const expires = Date.now() + ttl * 1000;
     this.cache.set(key, { value, expires });
   }
 
@@ -243,11 +243,7 @@ export class CacheManager {
     memoryCache.clear();
   }
 
-  async getOrSet<T>(
-    key: string,
-    fetcher: () => Promise<T>,
-    ttl?: number
-  ): Promise<T> {
+  async getOrSet<T>(key: string, fetcher: () => Promise<T>, ttl?: number): Promise<T> {
     const cached = await this.get<T>(key);
     if (cached !== null) {
       return cached;
@@ -259,15 +255,15 @@ export class CacheManager {
   }
 
   async mget<T = any>(keys: string[]): Promise<(T | null)[]> {
-    const cacheKeys = keys.map(key => this.generateKey(key));
-    
+    const cacheKeys = keys.map((key) => this.generateKey(key));
+
     try {
       // Try Redis first
       if (redisClient.isHealthy()) {
         const client = redisClient.getClient();
         if (client) {
           const values = await client.mget(...cacheKeys);
-          return values.map(value => value ? this.deserialize(value) : null);
+          return values.map((value) => (value ? this.deserialize(value) : null));
         }
       }
     } catch (error) {
@@ -275,7 +271,7 @@ export class CacheManager {
     }
 
     // Fallback to memory cache
-    return cacheKeys.map(key => memoryCache.get(key));
+    return cacheKeys.map((key) => memoryCache.get(key));
   }
 
   async mset(entries: Array<{ key: string; value: any; ttl?: number }>): Promise<void> {
@@ -387,9 +383,11 @@ export class CacheWarmer {
     this.cacheManager = cacheManager;
   }
 
-  async warmCache(entries: Array<{ key: string; fetcher: () => Promise<any>; ttl?: number }>): Promise<void> {
+  async warmCache(
+    entries: Array<{ key: string; fetcher: () => Promise<any>; ttl?: number }>
+  ): Promise<void> {
     console.log(`🔥 Warming cache with ${entries.length} entries...`);
-    
+
     const startTime = performance.now();
     const promises = entries.map(async (entry) => {
       try {
@@ -436,4 +434,4 @@ export async function getCacheHealth(): Promise<{
     memory: true,
     memorySize: memoryCache.size(),
   };
-} 
+}

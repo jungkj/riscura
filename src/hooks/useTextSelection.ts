@@ -69,7 +69,9 @@ export function useTextSelection(
     }
 
     const boundingRect = range.getBoundingClientRect();
-    const elementId = generateElementId(range.commonAncestorContainer.parentElement || range.commonAncestorContainer as Element);
+    const elementId = generateElementId(
+      range.commonAncestorContainer.parentElement || (range.commonAncestorContainer as Element)
+    );
 
     return {
       text: selectedText,
@@ -92,19 +94,19 @@ export function useTextSelection(
 
     selectionTimeoutRef.current = setTimeout(() => {
       const selectionInfo = getSelectionInfo();
-      
+
       if (selectionInfo) {
         setCurrentSelection(selectionInfo);
-        
+
         if (persistSelection) {
-          setSelectionHistory(prev => [...prev.slice(-9), selectionInfo]);
+          setSelectionHistory((prev) => [...prev.slice(-9), selectionInfo]);
         }
       } else {
         if (!persistSelection) {
           setCurrentSelection(null);
         }
       }
-      
+
       setIsSelecting(false);
     }, debounceMs);
   }, [enabled, getSelectionInfo, persistSelection, debounceMs]);
@@ -121,54 +123,66 @@ export function useTextSelection(
   }, [enabled, handleSelectionChange]);
 
   // Touch event handlers for mobile support
-  const handleTouchStart = useCallback((event: TouchEvent) => {
-    if (!enabled) return;
-    
-    const touch = event.touches[0];
-    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
-    setIsSelecting(true);
-  }, [enabled]);
+  const handleTouchStart = useCallback(
+    (event: TouchEvent) => {
+      if (!enabled) return;
 
-  const handleTouchEnd = useCallback((event: TouchEvent) => {
-    if (!enabled || !touchStartRef.current) return;
+      const touch = event.touches[0];
+      touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+      setIsSelecting(true);
+    },
+    [enabled]
+  );
 
-    const touch = event.changedTouches[0];
-    const distance = Math.sqrt(
-      Math.pow(touch.clientX - touchStartRef.current.x, 2) +
-      Math.pow(touch.clientY - touchStartRef.current.y, 2)
-    );
+  const handleTouchEnd = useCallback(
+    (event: TouchEvent) => {
+      if (!enabled || !touchStartRef.current) return;
 
-    // Only trigger selection if touch moved significantly (long press behavior)
-    if (distance < 10) {
-      setTimeout(handleSelectionChange, 100);
-    } else {
-      handleSelectionChange();
-    }
+      const touch = event.changedTouches[0];
+      const distance = Math.sqrt(
+        Math.pow(touch.clientX - touchStartRef.current.x, 2) +
+          Math.pow(touch.clientY - touchStartRef.current.y, 2)
+      );
 
-    touchStartRef.current = null;
-  }, [enabled, handleSelectionChange]);
+      // Only trigger selection if touch moved significantly (long press behavior)
+      if (distance < 10) {
+        setTimeout(handleSelectionChange, 100);
+      } else {
+        handleSelectionChange();
+      }
+
+      touchStartRef.current = null;
+    },
+    [enabled, handleSelectionChange]
+  );
 
   // Keyboard selection support
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    if (!enabled) return;
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (!enabled) return;
 
-    // Handle Shift + Arrow keys for keyboard selection
-    if (event.shiftKey && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
-      setIsSelecting(true);
-      setTimeout(handleSelectionChange, 50);
-    }
+      // Handle Shift + Arrow keys for keyboard selection
+      if (
+        event.shiftKey &&
+        ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)
+      ) {
+        setIsSelecting(true);
+        setTimeout(handleSelectionChange, 50);
+      }
 
-    // Handle Escape to clear selection
-    if (event.key === 'Escape') {
-      clearSelection();
-    }
-  }, [enabled, handleSelectionChange]);
+      // Handle Escape to clear selection
+      if (event.key === 'Escape') {
+        clearSelection();
+      }
+    },
+    [enabled, handleSelectionChange]
+  );
 
   // Clear current selection
   const clearSelection = useCallback(() => {
     setCurrentSelection(null);
     setIsSelecting(false);
-    
+
     const selection = window.getSelection();
     if (selection) {
       selection.removeAllRanges();
@@ -181,14 +195,17 @@ export function useTextSelection(
   }, []);
 
   // Get selection by index from history
-  const getHistorySelection = useCallback((index: number): TextSelection | null => {
-    return selectionHistory[index] || null;
-  }, [selectionHistory]);
+  const getHistorySelection = useCallback(
+    (index: number): TextSelection | null => {
+      return selectionHistory[index] || null;
+    },
+    [selectionHistory]
+  );
 
   // Restore a previous selection
   const restoreSelection = useCallback((selection: TextSelection) => {
     setCurrentSelection(selection);
-    
+
     // Try to restore the actual DOM selection (best effort)
     try {
       const element = document.getElementById(selection.elementId);
@@ -196,9 +213,12 @@ export function useTextSelection(
         const range = document.createRange();
         const textNode = element.childNodes[0];
         if (textNode && textNode.nodeType === Node.TEXT_NODE) {
-          range.setStart(textNode, Math.min(selection.startOffset, textNode.textContent?.length || 0));
+          range.setStart(
+            textNode,
+            Math.min(selection.startOffset, textNode.textContent?.length || 0)
+          );
           range.setEnd(textNode, Math.min(selection.endOffset, textNode.textContent?.length || 0));
-          
+
           const windowSelection = window.getSelection();
           if (windowSelection) {
             windowSelection.removeAllRanges();
@@ -219,14 +239,14 @@ export function useTextSelection(
     // Mouse events
     container.addEventListener('mousedown', handleMouseDown);
     container.addEventListener('mouseup', handleMouseUp);
-    
+
     // Touch events
     container.addEventListener('touchstart', handleTouchStart);
     container.addEventListener('touchend', handleTouchEnd);
-    
+
     // Keyboard events
     container.addEventListener('keydown', handleKeyDown);
-    
+
     // Selection change event
     document.addEventListener('selectionchange', handleSelectionChange);
 
@@ -237,7 +257,7 @@ export function useTextSelection(
       container.removeEventListener('touchend', handleTouchEnd);
       container.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('selectionchange', handleSelectionChange);
-      
+
       if (selectionTimeoutRef.current) {
         clearTimeout(selectionTimeoutRef.current);
       }
@@ -263,4 +283,4 @@ export function useTextSelection(
     hasSelection: currentSelection !== null,
     historyCount: selectionHistory.length,
   };
-} 
+}

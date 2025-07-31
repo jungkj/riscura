@@ -178,7 +178,7 @@ export class ThemeManager {
 
   addListener(listener: (theme: ThemeConfig, settings: ThemeSettings) => void): () => void {
     this.listeners.push(listener);
-    
+
     return () => {
       const index = this.listeners.indexOf(listener);
       if (index > -1) {
@@ -189,7 +189,7 @@ export class ThemeManager {
 
   private notifyListeners(): void {
     const theme = this.getCurrentTheme();
-    this.listeners.forEach(listener => listener(theme, this.settings));
+    this.listeners.forEach((listener) => listener(theme, this.settings));
   }
 
   getSettings(): ThemeSettings {
@@ -212,7 +212,7 @@ export const ThemeContext = createContext<{
     highContrast: false,
   },
   updateSettings: () => {},
-  manager: new ThemeManager()
+  manager: new ThemeManager(),
 });
 
 export const useTheme = () => {
@@ -252,4 +252,4 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   );
 };
 
-export default ThemeManager; 
+export default ThemeManager;

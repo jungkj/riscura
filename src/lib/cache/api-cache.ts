@@ -117,11 +117,7 @@ class APICache {
       staleTime: 60, // 1 minute stale tolerance
       revalidateTime: 300, // 5 minutes revalidation interval
       varyHeaders: ['authorization', 'accept-language', 'user-agent'],
-      excludePatterns: [
-        /\/api\/auth\//,
-        /\/api\/upload\//,
-        /\/api\/websocket\//,
-      ],
+      excludePatterns: [/\/api\/auth\//, /\/api\/upload\//, /\/api\/websocket\//],
       includePatterns: [
         /\/api\/risks\//,
         /\/api\/compliance\//,
@@ -157,9 +153,7 @@ class APICache {
           ttl: 1800, // 30 minutes
           maxAge: 1800,
           tags: ['reports'],
-          conditions: [
-            { query: 'format', value: 'pdf' },
-          ],
+          conditions: [{ query: 'format', value: 'pdf' }],
         },
         // Real-time data
         'GET:/api/realtime/*': {
@@ -199,13 +193,13 @@ class APICache {
     }
 
     // Check exclude patterns
-    if (this.config.excludePatterns.some(pattern => pattern.test(pathname))) {
+    if (this.config.excludePatterns.some((pattern) => pattern.test(pathname))) {
       return false;
     }
 
     // Check include patterns
     if (this.config.includePatterns.length > 0) {
-      return this.config.includePatterns.some(pattern => pattern.test(pathname));
+      return this.config.includePatterns.some((pattern) => pattern.test(pathname));
     }
 
     return true;
@@ -225,10 +219,13 @@ class APICache {
       method: method.toUpperCase(),
       url: this.normalizeURL(url),
       query: this.sortObject(query),
-      vary: varyHeaders.reduce((acc, header) => {
-        acc[header.toLowerCase()] = headers[header.toLowerCase()];
-        return acc;
-      }, {} as Record<string, string>),
+      vary: varyHeaders.reduce(
+        (acc, header) => {
+          acc[header.toLowerCase()] = headers[header.toLowerCase()];
+          return acc;
+        },
+        {} as Record<string, string>
+      ),
     };
 
     const hash = crypto
@@ -253,7 +250,7 @@ class APICache {
     const sorted: Record<string, any> = {};
     Object.keys(obj)
       .sort()
-      .forEach(key => {
+      .forEach((key) => {
         sorted[key] = obj[key];
       });
     return sorted;
@@ -261,20 +258,18 @@ class APICache {
 
   private findMatchingStrategy(method: string, url: string): CacheStrategy | null {
     const key = `${method.toUpperCase()}:${url}`;
-    
+
     for (const [pattern, strategy] of Object.entries(this.config.cacheStrategies)) {
       if (this.matchesPattern(key, pattern)) {
         return strategy;
       }
     }
-    
+
     return null;
   }
 
   private matchesPattern(key: string, pattern: string): boolean {
-    const regexPattern = pattern
-      .replace(/\*/g, '.*')
-      .replace(/\?/g, '\\?');
+    const regexPattern = pattern.replace(/\*/g, '.*').replace(/\?/g, '\\?');
     const regex = new RegExp(`^${regexPattern}$`);
     return regex.test(key);
   }
@@ -288,7 +283,12 @@ class APICache {
     this.metrics.totalRequests++;
 
     try {
-      const cacheKey = this.generateCacheKey(request.method, request.url, request.headers, request.query);
+      const cacheKey = this.generateCacheKey(
+        request.method,
+        request.url,
+        request.headers,
+        request.query
+      );
       const strategy = this.findMatchingStrategy(request.method, request.url);
 
       const cached = await redisClient.get<CacheEntry>(cacheKey);
@@ -301,8 +301,8 @@ class APICache {
 
       const now = Date.now();
       const age = now - cached.metadata.timestamp;
-      const isStale = age > (cached.metadata.ttl * 1000);
-      const isVeryStale = age > ((cached.metadata.ttl + this.config.staleTime) * 1000);
+      const isStale = age > cached.metadata.ttl * 1000;
+      const isVeryStale = age > (cached.metadata.ttl + this.config.staleTime) * 1000;
 
       // If very stale, treat as miss
       if (isVeryStale) {
@@ -334,7 +334,7 @@ class APICache {
           'Cache-Control': this.generateCacheControlHeader(cached.metadata.ttl, isStale),
           'X-Cache': isStale ? 'STALE' : 'HIT',
           'X-Cache-Age': Math.floor(age / 1000).toString(),
-          ...(this.config.enableETag && { 'ETag': cached.metadata.etag }),
+          ...(this.config.enableETag && { ETag: cached.metadata.etag }),
         },
       });
 
@@ -365,13 +365,17 @@ class APICache {
         return;
       }
 
-      const cacheKey = this.generateCacheKey(request.method, request.url, request.headers, request.query);
+      const cacheKey = this.generateCacheKey(
+        request.method,
+        request.url,
+        request.headers,
+        request.query
+      );
       const now = Date.now();
       const finalTTL = ttl || this.config.defaultTTL;
 
       // Generate ETag
-      const etag = this.config.enableETag ? 
-        `"${hashKey(JSON.stringify(responseData))}"` : '';
+      const etag = this.config.enableETag ? `"${hashKey(JSON.stringify(responseData))}"` : '';
 
       // Compress if enabled and beneficial
       let dataToCache = responseData;
@@ -379,8 +383,9 @@ class APICache {
       if (this.config.enableCompression && responseSize > 1024) {
         const compressedData = await this.compress(responseData);
         const compressionRatio = compressedData.length / responseSize;
-        
-        if (compressionRatio < 0.8) { // Only use if >20% savings
+
+        if (compressionRatio < 0.8) {
+          // Only use if >20% savings
           dataToCache = compressedData;
           compressed = true;
           this.metrics.compressionSavings += responseSize - compressedData.length;
@@ -408,7 +413,6 @@ class APICache {
       // Cache with appropriate tags
       const tags = this.generateCacheTags(request);
       await redisClient.set(cacheKey, cacheEntry, finalTTL, tags);
-
     } catch (error) {
       logger.error('API cache set error:', error);
     }
@@ -436,11 +440,16 @@ class APICache {
     const promises = endpoints.map(async ({ url, method = 'GET' }) => {
       try {
         const request = new NextRequest(url, { method });
-        
+
         if (this.shouldCache(request)) {
-          const cacheKey = this.generateCacheKey(request.method, request.url, request.headers, request.query);
+          const cacheKey = this.generateCacheKey(
+            request.method,
+            request.url,
+            request.headers,
+            request.query
+          );
           const exists = await redisClient.exists(cacheKey);
-          
+
           if (!exists) {
             // Trigger background fetch to warm cache
             this.scheduleRevalidation(cacheKey, request);
@@ -485,7 +494,7 @@ class APICache {
 
   private extractRelevantHeaders(request: NextRequest): Record<string, string> {
     const headers: Record<string, string> = {};
-    this.config.varyHeaders.forEach(header => {
+    this.config.varyHeaders.forEach((header) => {
       const value = request.headers.get(header);
       if (value) {
         headers[header] = value;
@@ -546,7 +555,7 @@ class APICache {
         // In a real implementation, this would trigger a background job
         // to fetch fresh data and update the cache
         logger.info(`Revalidating cache for: ${request.url}`);
-        
+
         // Remove from queue after processing
         this.revalidationQueue.delete(cacheKey);
       } catch (error) {
@@ -566,12 +575,15 @@ class APICache {
     }
 
     // Update averages
-    this.metrics.avgResponseTime = 
+    this.metrics.avgResponseTime =
       this.responseTimes.reduce((sum, time) => sum + time, 0) / this.responseTimes.length;
 
-    const totalRequests = this.metrics.cacheHits + this.metrics.cacheMisses + this.metrics.staleHits;
-    this.metrics.hitRate = totalRequests > 0 ? 
-      ((this.metrics.cacheHits + this.metrics.staleHits) / totalRequests) * 100 : 0;
+    const totalRequests =
+      this.metrics.cacheHits + this.metrics.cacheMisses + this.metrics.staleHits;
+    this.metrics.hitRate =
+      totalRequests > 0
+        ? ((this.metrics.cacheHits + this.metrics.staleHits) / totalRequests) * 100
+        : 0;
   }
 
   // Handle conditional requests
@@ -592,7 +604,7 @@ class APICache {
         return {
           status: 304,
           headers: {
-            'etag': cachedResponse.etag,
+            etag: cachedResponse.etag,
             'cache-control': `max-age=${cachedResponse.ttl}`,
           },
         };
@@ -603,7 +615,7 @@ class APICache {
     if (ifModifiedSince && cachedResponse.lastModified) {
       const modifiedTime = new Date(cachedResponse.lastModified).getTime();
       const requestTime = new Date(ifModifiedSince).getTime();
-      
+
       if (modifiedTime <= requestTime) {
         return {
           status: 304,
@@ -629,8 +641,8 @@ class APICache {
     return {
       ...headers,
       'cache-control': `public, max-age=${maxAge}`,
-      'age': age.toString(),
-      'etag': response.etag || '',
+      age: age.toString(),
+      etag: response.etag || '',
       'last-modified': response.lastModified || '',
       'x-cache': 'HIT',
     };
@@ -643,7 +655,7 @@ class APICache {
     try {
       for (const tag of tags) {
         const keys = await redisClient.smembers(`tag:${tag}`);
-        
+
         if (keys.length > 0) {
           for (const key of keys) {
             await redisClient.del(key);
@@ -692,10 +704,10 @@ class APICache {
   // Purge cache
   public async purge(pattern?: string): Promise<number> {
     try {
-      const fullPattern = pattern 
-        ? `${this.config.keyPrefix}${pattern}` 
+      const fullPattern = pattern
+        ? `${this.config.keyPrefix}${pattern}`
         : `${this.config.keyPrefix}*`;
-      
+
       const invalidated = await redisClient.invalidatePattern(fullPattern);
       logger.info(`Purged ${invalidated} API cache entries`);
       return invalidated;
@@ -764,14 +776,14 @@ export const withAPICache = (
 
     // Try to get cached response
     const { response: cachedResponse, isStale } = await cache.getCachedResponse(request);
-    
+
     if (cachedResponse && !isStale) {
       return cachedResponse;
     }
 
     // Execute handler and cache response
     const response = await handler(request);
-    
+
     // Only cache successful responses
     if (response.status >= 200 && response.status < 300) {
       await cache.cacheResponse(request, response);
@@ -780,7 +792,7 @@ export const withAPICache = (
     // Add cache headers
     const headers = new Headers(response.headers);
     headers.set('X-Cache', 'MISS');
-    
+
     return new NextResponse(response.body, {
       status: response.status,
       statusText: response.statusText,
@@ -791,25 +803,25 @@ export const withAPICache = (
 
 // Utility functions for common invalidation patterns
 export const invalidateUserAPI = async (userId?: string): Promise<number> => {
-  const patterns = userId ? 
-    [`resource:users:${userId}`, 'endpoint:/api/users'] : 
-    ['resource:users', 'endpoint:/api/users'];
-  
+  const patterns = userId
+    ? [`resource:users:${userId}`, 'endpoint:/api/users']
+    : ['resource:users', 'endpoint:/api/users'];
+
   return await redisClient.invalidateByTags(patterns);
 };
 
 export const invalidateRiskAPI = async (riskId?: string): Promise<number> => {
-  const patterns = riskId ? 
-    [`resource:risks:${riskId}`, 'endpoint:/api/risks'] : 
-    ['resource:risks', 'endpoint:/api/risks'];
-  
+  const patterns = riskId
+    ? [`resource:risks:${riskId}`, 'endpoint:/api/risks']
+    : ['resource:risks', 'endpoint:/api/risks'];
+
   return await redisClient.invalidateByTags(patterns);
 };
 
 export const invalidateComplianceAPI = async (complianceId?: string): Promise<number> => {
-  const patterns = complianceId ? 
-    [`resource:compliance:${complianceId}`, 'endpoint:/api/compliance'] : 
-    ['resource:compliance', 'endpoint:/api/compliance'];
-  
+  const patterns = complianceId
+    ? [`resource:compliance:${complianceId}`, 'endpoint:/api/compliance']
+    : ['resource:compliance', 'endpoint:/api/compliance'];
+
   return await redisClient.invalidateByTags(patterns);
-}; 
+};

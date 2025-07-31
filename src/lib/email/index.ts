@@ -67,7 +67,9 @@ const createTransporter = () => {
     };
   }
 
-  throw new Error('No email service configured. Please set up SMTP, SendGrid, or Gmail credentials.');
+  throw new Error(
+    'No email service configured. Please set up SMTP, SendGrid, or Gmail credentials.'
+  );
 };
 
 let transporter: any = null;
@@ -155,11 +157,15 @@ export const emailTemplates = {
           </div>
           <div class="content">
             <p>${data.message}</p>
-            ${data.actionUrl ? `
+            ${
+              data.actionUrl
+                ? `
               <a href="${data.actionUrl}" class="button">
                 ${data.actionText || 'View Details'}
               </a>
-            ` : ''}
+            `
+                : ''
+            }
           </div>
           <div class="footer">
             <p>This is an automated message from Riscura.</p>
@@ -182,17 +188,23 @@ export const emailTemplates = {
     }>;
   }) => {
     const notificationsList = data.notifications
-      .map(category => `
+      .map(
+        (category) => `
         <h3>${category.category}</h3>
         <ul>
-          ${category.items.map(item => `
+          ${category.items
+            .map(
+              (item) => `
             <li>
               <strong>${item.title}:</strong> ${item.message}
               ${item.actionUrl ? `<a href="${item.actionUrl}">View</a>` : ''}
             </li>
-          `).join('')}
+          `
+            )
+            .join('')}
         </ul>
-      `)
+      `
+      )
       .join('');
 
     return `

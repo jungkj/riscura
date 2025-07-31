@@ -148,40 +148,40 @@ export const riscuraTheme: Theme = {
       700: '#A8915F',
       800: '#8A7A4A',
       900: '#6B5F38',
-      950: '#4A4028'
+      950: '#4A4028',
     },
     background: {
-      primary: '#F5F1E9',    // Cream background
-      secondary: '#FAFAFA',  // Soft white for cards
-      tertiary: '#FFFFFF',   // Pure white for emphasis
+      primary: '#F5F1E9', // Cream background
+      secondary: '#FAFAFA', // Soft white for cards
+      tertiary: '#FFFFFF', // Pure white for emphasis
       overlay: 'rgba(25, 25, 25, 0.8)',
-      card: '#FAFAFA'        // Consistent card background
+      card: '#FAFAFA', // Consistent card background
     },
     text: {
-      primary: '#191919',    // Bold black text
-      secondary: '#191919',  // All text bold black for consistency
-      muted: '#191919',      // Even muted text is bold black
-      disabled: '#A8A8A8',   // Only disabled text is gray
-      inverse: '#FFFFFF'     // White text on dark backgrounds
+      primary: '#191919', // Bold black text
+      secondary: '#191919', // All text bold black for consistency
+      muted: '#191919', // Even muted text is bold black
+      disabled: '#A8A8A8', // Only disabled text is gray
+      inverse: '#FFFFFF', // White text on dark backgrounds
     },
     semantic: {
       success: '#059669',
       warning: '#D97706',
       error: '#DC2626',
-      info: '#2563EB'
+      info: '#2563EB',
     },
     status: {
       online: '#10B981',
       offline: '#6B7280',
       away: '#F59E0B',
-      busy: '#EF4444'
+      busy: '#EF4444',
     },
     border: {
-      primary: '#191919',    // Bold black borders
-      secondary: '#191919',  // All borders bold black
-      focus: '#191919',      // Focus borders also bold black
-      error: '#DC2626'       // Error borders remain red
-    }
+      primary: '#191919', // Bold black borders
+      secondary: '#191919', // All borders bold black
+      focus: '#191919', // Focus borders also bold black
+      error: '#DC2626', // Error borders remain red
+    },
   },
   spacing: {
     xs: '0.25rem',
@@ -191,12 +191,12 @@ export const riscuraTheme: Theme = {
     xl: '2rem',
     '2xl': '3rem',
     '3xl': '4rem',
-    '4xl': '6rem'
+    '4xl': '6rem',
   },
   typography: {
     fontFamily: {
       sans: ['Inter', 'system-ui', 'sans-serif'],
-      mono: ['Monaco', 'Consolas', 'monospace']
+      mono: ['Monaco', 'Consolas', 'monospace'],
     },
     fontSize: {
       xs: ['0.75rem', '1rem'],
@@ -206,19 +206,19 @@ export const riscuraTheme: Theme = {
       xl: ['1.25rem', '1.75rem'],
       '2xl': ['1.5rem', '2rem'],
       '3xl': ['1.875rem', '2.25rem'],
-      '4xl': ['2.25rem', '2.5rem']
+      '4xl': ['2.25rem', '2.5rem'],
     },
     fontWeight: {
-      normal: '600',     // Changed from 400 to 600 for bold text
-      medium: '600',     // All weights are bold
-      semibold: '700',   // Semibold is now extra bold
-      bold: '800'        // Bold is now extra heavy
+      normal: '600', // Changed from 400 to 600 for bold text
+      medium: '600', // All weights are bold
+      semibold: '700', // Semibold is now extra bold
+      bold: '800', // Bold is now extra heavy
     },
     lineHeight: {
       tight: '1.25',
       normal: '1.5',
-      relaxed: '1.75'
-    }
+      relaxed: '1.75',
+    },
   },
   borderRadius: {
     none: '0',
@@ -226,28 +226,28 @@ export const riscuraTheme: Theme = {
     md: '0.375rem',
     lg: '0.5rem',
     xl: '0.75rem',
-    full: '9999px'
+    full: '9999px',
   },
   shadows: {
     sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
     md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
     lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
     xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-    inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)'
+    inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
   },
   animations: {
     duration: {
       fast: '150ms',
       normal: '300ms',
-      slow: '500ms'
+      slow: '500ms',
     },
     easing: {
       linear: 'linear',
       easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
       easeOut: 'cubic-bezier(0, 0, 0.2, 1)',
-      easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)'
-    }
-  }
+      easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    },
+  },
 };
 
 // Theme utilities
@@ -271,12 +271,12 @@ export class ThemeService {
   }
 
   private static notifyListeners(theme: Theme): void {
-    this.listeners.forEach(callback => callback(theme));
+    this.listeners.forEach((callback) => callback(theme));
   }
 
   private static updateCSSVariables(theme: Theme): void {
     const root = document.documentElement;
-    
+
     // Update CSS custom properties
     Object.entries(theme.colors.primary).forEach(([key, value]) => {
       root.style.setProperty(`--color-primary-${key}`, value);
@@ -305,12 +305,12 @@ export class ThemeService {
   public static getColor(colorPath: string): string {
     const paths = colorPath.split('.');
     let current: any = this.currentTheme.colors;
-    
+
     for (const path of paths) {
       current = current[path];
       if (!current) return '#000000';
     }
-    
+
     return current;
   }
 
@@ -348,18 +348,22 @@ export class ThemeService {
     // Simple contrast calculation - in production, use a proper contrast library
     const rgb = this.hexToRgb(backgroundColor);
     if (!rgb) return this.currentTheme.colors.text.primary;
-    
+
     const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
-    return brightness > 128 ? this.currentTheme.colors.text.primary : this.currentTheme.colors.text.inverse;
+    return brightness > 128
+      ? this.currentTheme.colors.text.primary
+      : this.currentTheme.colors.text.inverse;
   }
 
   private static hexToRgb(hex: string): { r: number; g: number; b: number } | null {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16)
-    } : null;
+    return result
+      ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16),
+        }
+      : null;
   }
 
   // Initialize theme on load
@@ -387,7 +391,7 @@ export function useTheme() {
     getAnimationDuration: ThemeService.getAnimationDuration,
     getAnimationEasing: ThemeService.getAnimationEasing,
     isDarkMode: ThemeService.isDarkMode,
-    getContrastColor: ThemeService.getContrastColor
+    getContrastColor: ThemeService.getContrastColor,
   };
 }
 
@@ -397,4 +401,4 @@ if (typeof document !== 'undefined') {
 }
 
 // Add React import declaration
-declare const React: typeof import('react'); 
+declare const React: typeof import('react');

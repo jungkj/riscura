@@ -5,29 +5,26 @@ import { db } from '@/lib/db';
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions) as any;
-    
+    const session = (await getServerSession(authOptions)) as any;
+
     if (!session?.user) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
 
     const user = session.user as any;
-    
+
     // Get organization subscription status
     const organization = await db.client.organization.findUnique({
       where: { id: user.organizationId },
       include: {
         subscriptions: {
           where: {
-            status: { in: ['ACTIVE', 'TRIALING', 'PAST_DUE'] }
+            status: { in: ['ACTIVE', 'TRIALING', 'PAST_DUE'] },
           },
           orderBy: { createdAt: 'desc' },
-          take: 1
-        }
-      }
+          take: 1,
+        },
+      },
     });
 
     if (!organization) {
@@ -38,7 +35,7 @@ export async function GET(req: NextRequest) {
         trialEnd: null,
         trialDaysLeft: null,
         isTrialExpired: false,
-        needsUpgrade: true
+        needsUpgrade: true,
       });
     }
 
@@ -53,7 +50,7 @@ export async function GET(req: NextRequest) {
         trialEnd: null,
         trialDaysLeft: null,
         isTrialExpired: false,
-        needsUpgrade: true
+        needsUpgrade: true,
       });
     }
 
@@ -67,7 +64,7 @@ export async function GET(req: NextRequest) {
       const timeDiff = trialEnd.getTime() - now.getTime();
       trialDaysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
       isTrialExpired = timeDiff <= 0;
-      
+
       if (isTrialExpired && subscription.status === 'TRIALING') {
         isActive = false;
         status = 'FREE';
@@ -91,23 +88,32 @@ export async function GET(req: NextRequest) {
       isTrialExpired,
       needsUpgrade: !isActive && plan === 'free',
       features: getPlanFeatures(plan),
-      limits: getPlanLimits(plan)
+      limits: getPlanLimits(plan),
     });
-
   } catch (error) {
     console.error('Error getting subscription status:', error);
-    return NextResponse.json(
-      { error: 'Failed to get subscription status' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to get subscription status' }, { status: 500 });
   }
 }
 
 function getPlanFeatures(plan: string) {
   const features = {
     free: ['Basic risk management', 'Up to 10 risks', 'Basic reporting'],
-    pro: ['Advanced risk management', 'Unlimited risks', 'Advanced reporting', 'AI insights', 'Integrations'],
-    enterprise: ['Enterprise features', 'Unlimited everything', 'Custom reporting', 'Advanced AI', 'SSO', 'API access']
+    pro: [
+      'Advanced risk management',
+      'Unlimited risks',
+      'Advanced reporting',
+      'AI insights',
+      'Integrations',
+    ],
+    enterprise: [
+      'Enterprise features',
+      'Unlimited everything',
+      'Custom reporting',
+      'Advanced AI',
+      'SSO',
+      'API access',
+    ],
   };
   return features[plan as keyof typeof features] || features.free;
 }
@@ -116,7 +122,7 @@ function getPlanLimits(plan: string) {
   const limits = {
     free: { users: 3, risks: 10, storage: '100MB', aiQueries: 50 },
     pro: { users: 25, risks: -1, storage: '10GB', aiQueries: 1000 },
-    enterprise: { users: -1, risks: -1, storage: 'Unlimited', aiQueries: -1 }
+    enterprise: { users: -1, risks: -1, storage: 'Unlimited', aiQueries: -1 },
   };
   return limits[plan as keyof typeof limits] || limits.free;
-} 
+}

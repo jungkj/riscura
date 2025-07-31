@@ -35,49 +35,54 @@ export function useAI(): UseAIReturn {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const generate = useCallback(async (options: AIGenerateOptions): Promise<AIGenerateResponse | null> => {
-    setLoading(true);
-    setError(null);
+  const generate = useCallback(
+    async (options: AIGenerateOptions): Promise<AIGenerateResponse | null> => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      const response = await fetch('/api/ai/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(options),
-      });
+      try {
+        const response = await fetch('/api/ai/generate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify(options),
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error?.message || `AI generation failed: ${response.status}`);
+        if (!response.ok) {
+          throw new Error(data.error?.message || `AI generation failed: ${response.status}`);
+        }
+
+        if (!data.success) {
+          throw new Error(data.error?.message || 'AI generation failed');
+        }
+
+        return data.data;
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to generate AI content';
+        setError(errorMessage);
+
+        // Handle specific error cases
+        if (errorMessage.includes('quota exceeded')) {
+          toast.error(
+            'AI generation quota exceeded. Please upgrade your plan or wait for the quota to reset.'
+          );
+        } else if (errorMessage.includes('rate limit')) {
+          toast.error('Too many requests. Please wait a moment before trying again.');
+        } else {
+          toast.error(errorMessage);
+        }
+
+        return null;
+      } finally {
+        setLoading(false);
       }
-
-      if (!data.success) {
-        throw new Error(data.error?.message || 'AI generation failed');
-      }
-
-      return data.data;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to generate AI content';
-      setError(errorMessage);
-      
-      // Handle specific error cases
-      if (errorMessage.includes('quota exceeded')) {
-        toast.error('AI generation quota exceeded. Please upgrade your plan or wait for the quota to reset.');
-      } else if (errorMessage.includes('rate limit')) {
-        toast.error('Too many requests. Please wait a moment before trying again.');
-      } else {
-        toast.error(errorMessage);
-      }
-      
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   return {
     generate,
@@ -88,9 +93,9 @@ export function useAI(): UseAIReturn {
 
 /**
  * Example usage:
- * 
+ *
  * const { generate, loading } = useAI();
- * 
+ *
  * const handleGenerate = async () => {
  *   const result = await generate({
  *     prompt: 'Generate a risk assessment for data breach',
@@ -98,7 +103,7 @@ export function useAI(): UseAIReturn {
  *     temperature: 0.7,
  *     model: 'gpt-4'
  *   });
- *   
+ *
  *   if (result) {
  *     console.log(result.content);
  *   }

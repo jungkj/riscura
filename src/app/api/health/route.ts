@@ -38,7 +38,7 @@ interface ServiceStatus {
 // Main health check endpoint
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const startTime = Date.now();
-  
+
   try {
     const dbHealth = await checkDatabase();
 
@@ -51,8 +51,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       database: dbHealth,
     };
 
-    const hasError = Object.values(services).some(s => s.status === 'error');
-    const hasWarning = Object.values(services).some(s => s.status === 'warning');
+    const hasError = Object.values(services).some((s) => s.status === 'error');
+    const hasWarning = Object.values(services).some((s) => s.status === 'warning');
 
     const overallStatus = hasError ? 'error' : hasWarning ? 'warning' : 'ok';
 
@@ -95,10 +95,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         'X-Response-Time': `${Date.now() - startTime}ms`,
       },
     });
-
   } catch (error) {
     console.error('Health check failed:', error);
-    
+
     return NextResponse.json(
       {
         status: 'error',
@@ -123,17 +122,16 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 // Database health check
 async function checkDatabase(): Promise<ServiceStatus> {
   const start = Date.now();
-  
+
   try {
     // Test database connection with a simple query
     await db.client.$queryRaw`SELECT 1 as health_check`;
-    
+
     return {
       status: 'ok',
       message: 'Database is healthy',
       responseTime: Date.now() - start,
     };
-
   } catch (error) {
     return {
       status: 'error',
@@ -146,7 +144,7 @@ async function checkDatabase(): Promise<ServiceStatus> {
 // Storage health check (S3)
 async function checkStorage(): Promise<ServiceStatus> {
   const start = Date.now();
-  
+
   try {
     // For now, just check if configured
     if (!process.env.AWS_S3_BUCKET) {
@@ -166,7 +164,6 @@ async function checkStorage(): Promise<ServiceStatus> {
         region: process.env.AWS_REGION,
       },
     };
-
   } catch (error) {
     return {
       status: 'error',
@@ -179,7 +176,7 @@ async function checkStorage(): Promise<ServiceStatus> {
 // AI service health check
 async function checkAI(): Promise<ServiceStatus> {
   const start = Date.now();
-  
+
   try {
     if (!process.env.OPENAI_API_KEY) {
       return {
@@ -198,7 +195,6 @@ async function checkAI(): Promise<ServiceStatus> {
         maxTokens: process.env.AI_MAX_TOKENS || '2000',
       },
     };
-
   } catch (error) {
     return {
       status: 'error',
@@ -211,7 +207,7 @@ async function checkAI(): Promise<ServiceStatus> {
 // Billing service health check
 async function checkBilling(): Promise<ServiceStatus> {
   const start = Date.now();
-  
+
   try {
     if (!process.env.STRIPE_SECRET_KEY) {
       return {
@@ -230,7 +226,6 @@ async function checkBilling(): Promise<ServiceStatus> {
         webhookConfigured: !!process.env.STRIPE_WEBHOOK_SECRET,
       },
     };
-
   } catch (error) {
     return {
       status: 'error',
@@ -249,4 +244,4 @@ export async function HEAD() {
   } catch {
     return new Response(null, { status: 503 });
   }
-} 
+}

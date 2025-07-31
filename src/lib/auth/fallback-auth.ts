@@ -31,26 +31,28 @@ const demoUsers = [
     permissions: ['risk:read', 'control:read'],
     avatar: null,
     isActive: true,
-  }
+  },
 ];
 
 export const fallbackAuthOptions: NextAuthOptions = {
   providers: [
     // Google OAuth provider (if configured)
-    ...(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET ? [
-      GoogleProvider({
-        clientId: env.GOOGLE_CLIENT_ID,
-        clientSecret: env.GOOGLE_CLIENT_SECRET,
-        authorization: {
-          params: {
-            prompt: 'consent',
-            access_type: 'offline',
-            response_type: 'code',
-          },
-        },
-      })
-    ] : []),
-    
+    ...(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
+      ? [
+          GoogleProvider({
+            clientId: env.GOOGLE_CLIENT_ID,
+            clientSecret: env.GOOGLE_CLIENT_SECRET,
+            authorization: {
+              params: {
+                prompt: 'consent',
+                access_type: 'offline',
+                response_type: 'code',
+              },
+            },
+          }),
+        ]
+      : []),
+
     // Credentials provider with demo users
     CredentialsProvider({
       name: 'credentials',
@@ -64,8 +66,8 @@ export const fallbackAuthOptions: NextAuthOptions = {
         }
 
         // Find demo user
-        const user = demoUsers.find(u => 
-          u.email === credentials.email && u.password === credentials.password
+        const user = demoUsers.find(
+          (u) => u.email === credentials.email && u.password === credentials.password
         );
 
         if (user && user.isActive) {
@@ -81,7 +83,7 @@ export const fallbackAuthOptions: NextAuthOptions = {
 
         return null;
       },
-    })
+    }),
   ],
   secret: env.NEXTAUTH_SECRET,
   session: {
@@ -97,7 +99,7 @@ export const fallbackAuthOptions: NextAuthOptions = {
         provider: account?.provider,
         email: user?.email,
       });
-      
+
       // Always allow sign in for fallback mode
       return true;
     },
@@ -127,11 +129,11 @@ export const fallbackAuthOptions: NextAuthOptions = {
     },
     async redirect({ url, baseUrl }) {
       // Allows relative callback URLs
-      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      if (url.startsWith('/')) return `${baseUrl}${url}`;
       // Allows callback URLs on the same origin
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl + '/dashboard';
-    }
+    },
   },
   pages: {
     signIn: '/auth/login',
@@ -143,6 +145,6 @@ export const fallbackAuthOptions: NextAuthOptions = {
 export function createFallbackAuth(): NextAuthOptions {
   console.log('[FallbackAuth] Creating fallback authentication configuration');
   console.log('[FallbackAuth] Available providers:', fallbackAuthOptions.providers.length);
-  
+
   return fallbackAuthOptions;
 }

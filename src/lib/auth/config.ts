@@ -12,7 +12,7 @@ export const getCurrentUser = async (): Promise<User | null> => {
     id: 'user_123',
     email: 'user@example.com',
     name: 'John Doe',
-    role: 'admin'
+    role: 'admin',
   };
 };
 
@@ -46,4 +46,4 @@ export const authOptions = {
       return session;
     },
   },
-}; 
+};

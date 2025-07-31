@@ -1,9 +1,9 @@
 import { aiSecurityService, type AIAction } from './AISecurityService';
-import type { 
-  SecurityContext, 
-  SecurityValidationResult, 
-  SecurityViolation, 
-  SecurityWarning 
+import type {
+  SecurityContext,
+  SecurityValidationResult,
+  SecurityViolation,
+  SecurityWarning,
 } from '@/types/ai-security.types';
 import { generateId } from '@/lib/utils';
 
@@ -13,9 +13,9 @@ import { generateId } from '@/lib/utils';
  */
 export class AISecurityMiddleware {
   private static instance: AISecurityMiddleware;
-  
+
   private constructor() {}
-  
+
   public static getInstance(): AISecurityMiddleware {
     if (!AISecurityMiddleware.instance) {
       AISecurityMiddleware.instance = new AISecurityMiddleware();
@@ -46,9 +46,11 @@ export class AISecurityMiddleware {
   }> {
     // 1. Pre-execution security validation
     const preValidation = await this.validatePreExecution(context, request);
-    
+
     if (!preValidation.isValid) {
-      throw new Error(`Security validation failed: ${preValidation.violations.map(v => v.description).join(', ')}`);
+      throw new Error(
+        `Security validation failed: ${preValidation.violations.map((v) => v.description).join(', ')}`
+      );
     }
 
     // 2. Process request through security pipeline
@@ -57,7 +59,7 @@ export class AISecurityMiddleware {
       userId: context.userId,
       sessionId: context.sessionId,
       action: request.action,
-      metadata: request.metadata
+      metadata: request.metadata,
     });
 
     if (!securityResult.securityApproved) {
@@ -79,7 +81,7 @@ export class AISecurityMiddleware {
 
       // 5. Post-execution validation
       const postValidation = await this.validatePostExecution(context, result, responseResult);
-      
+
       if (!postValidation.isValid) {
         // Log security violation but don't block (response already generated)
         console.warn('Post-execution security validation failed:', postValidation.violations);
@@ -91,10 +93,13 @@ export class AISecurityMiddleware {
           auditLogId: securityResult.auditLogId,
           riskScore: await this.calculateResponseRiskScore(result, responseResult),
           approved: responseResult.approved,
-          warnings: [...securityResult.warnings, ...responseResult.warnings, ...postValidation.warnings.map(w => w.message)]
-        }
+          warnings: [
+            ...securityResult.warnings,
+            ...responseResult.warnings,
+            ...postValidation.warnings.map((w) => w.message),
+          ],
+        },
       };
-
     } catch (error) {
       // Log security incident
       await this.logSecurityIncident(context, request, error);
@@ -121,7 +126,7 @@ export class AISecurityMiddleware {
         description: 'Invalid user authentication',
         evidence: { context },
         remediation: 'Provide valid user credentials',
-        reportable: true
+        reportable: true,
       });
     }
 
@@ -133,7 +138,7 @@ export class AISecurityMiddleware {
         description: 'Rate limit exceeded',
         evidence: { userId: context.userId },
         remediation: 'Reduce request frequency',
-        reportable: true
+        reportable: true,
       });
     }
 
@@ -143,7 +148,7 @@ export class AISecurityMiddleware {
         type: 'unusual_activity' as const,
         message: 'Unusual activity pattern detected',
         actionRequired: true,
-        deadline: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
+        deadline: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
       });
     }
 
@@ -155,7 +160,7 @@ export class AISecurityMiddleware {
         description: 'Request does not meet maximum security requirements',
         evidence: { securityLevel: context.securityLevel, request },
         remediation: 'Upgrade request security parameters',
-        reportable: true
+        reportable: true,
       });
     }
 
@@ -166,7 +171,7 @@ export class AISecurityMiddleware {
       violations,
       warnings,
       recommendations,
-      riskScore
+      riskScore,
     };
   }
 
@@ -190,7 +195,7 @@ export class AISecurityMiddleware {
         description: 'Potential data leakage detected in AI response',
         evidence: { response: result },
         remediation: 'Review and sanitize response content',
-        reportable: true
+        reportable: true,
       });
     }
 
@@ -199,7 +204,7 @@ export class AISecurityMiddleware {
       warnings.push({
         type: 'potential_risk' as const,
         message: 'AI response flagged by content filters',
-        actionRequired: false
+        actionRequired: false,
       });
     }
 
@@ -207,14 +212,19 @@ export class AISecurityMiddleware {
     const complianceIssues = await this.validateResponseCompliance(result, context);
     violations.push(...complianceIssues);
 
-    const riskScore = await this.calculatePostExecutionRiskScore(result, responseResult, violations, warnings);
+    const riskScore = await this.calculatePostExecutionRiskScore(
+      result,
+      responseResult,
+      violations,
+      warnings
+    );
 
     return {
       isValid: violations.length === 0,
       violations,
       warnings,
       recommendations,
-      riskScore
+      riskScore,
     };
   }
 
@@ -239,15 +249,19 @@ export class AISecurityMiddleware {
     if (typeof originalResult === 'string') {
       return filteredResponse;
     }
-    
+
     // If result is an object with content property, sanitize it
-    if (typeof originalResult === 'object' && originalResult !== null && 'content' in originalResult) {
+    if (
+      typeof originalResult === 'object' &&
+      originalResult !== null &&
+      'content' in originalResult
+    ) {
       return {
         ...originalResult,
-        content: filteredResponse
+        content: filteredResponse,
       };
     }
-    
+
     return originalResult;
   }
 
@@ -258,29 +272,36 @@ export class AISecurityMiddleware {
     // Simple rate limiting check (in production, use Redis or similar)
     const key = `rate_limit_${userId}`;
     const stored = localStorage.getItem(key);
-    
+
     if (!stored) {
-      localStorage.setItem(key, JSON.stringify({
-        count: 1,
-        resetTime: Date.now() + 60 * 1000 // 1 minute
-      }));
+      localStorage.setItem(
+        key,
+        JSON.stringify({
+          count: 1,
+          resetTime: Date.now() + 60 * 1000, // 1 minute
+        })
+      );
       return false;
     }
-    
+
     const rateData = JSON.parse(stored);
-    
+
     if (Date.now() > rateData.resetTime) {
-      localStorage.setItem(key, JSON.stringify({
-        count: 1,
-        resetTime: Date.now() + 60 * 1000
-      }));
+      localStorage.setItem(
+        key,
+        JSON.stringify({
+          count: 1,
+          resetTime: Date.now() + 60 * 1000,
+        })
+      );
       return false;
     }
-    
-    if (rateData.count >= 10) { // 10 requests per minute
+
+    if (rateData.count >= 10) {
+      // 10 requests per minute
       return true;
     }
-    
+
     rateData.count++;
     localStorage.setItem(key, JSON.stringify(rateData));
     return false;
@@ -299,10 +320,10 @@ export class AISecurityMiddleware {
       /ignore\s*previous/i,
       /jailbreak/i,
       /bypass\s*filter/i,
-      /admin\s*access/i
+      /admin\s*access/i,
     ];
-    
-    return suspiciousPatterns.some(pattern => pattern.test(request.content));
+
+    return suspiciousPatterns.some((pattern) => pattern.test(request.content));
   }
 
   /**
@@ -322,12 +343,19 @@ export class AISecurityMiddleware {
    */
   private containsSensitiveKeywords(content: string): boolean {
     const sensitiveKeywords = [
-      'password', 'secret', 'token', 'api_key', 'private_key',
-      'ssn', 'credit_card', 'bank_account', 'social_security'
+      'password',
+      'secret',
+      'token',
+      'api_key',
+      'private_key',
+      'ssn',
+      'credit_card',
+      'bank_account',
+      'social_security',
     ];
-    
+
     const lowerContent = content.toLowerCase();
-    return sensitiveKeywords.some(keyword => lowerContent.includes(keyword));
+    return sensitiveKeywords.some((keyword) => lowerContent.includes(keyword));
   }
 
   /**
@@ -335,16 +363,16 @@ export class AISecurityMiddleware {
    */
   private async detectDataLeakage(result: unknown): Promise<boolean> {
     const resultString = JSON.stringify(result);
-    
+
     // Check for patterns that might indicate data leakage
     const leakagePatterns = [
       /\b\d{3}-\d{2}-\d{4}\b/, // SSN
       /\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b/, // Credit card
       /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/, // Email
-      /\b(?:\d{1,3}\.){3}\d{1,3}\b/ // IP address
+      /\b(?:\d{1,3}\.){3}\d{1,3}\b/, // IP address
     ];
-    
-    return leakagePatterns.some(pattern => pattern.test(resultString));
+
+    return leakagePatterns.some((pattern) => pattern.test(resultString));
   }
 
   /**
@@ -353,14 +381,16 @@ export class AISecurityMiddleware {
   private async validateResponseCompliance(
     result: unknown,
     context: SecurityContext
-  ): Promise<Array<{
-    type: 'compliance_breach';
-    severity: 'low' | 'medium' | 'high' | 'critical';
-    description: string;
-    evidence: Record<string, unknown>;
-    remediation: string;
-    reportable: boolean;
-  }>> {
+  ): Promise<
+    Array<{
+      type: 'compliance_breach';
+      severity: 'low' | 'medium' | 'high' | 'critical';
+      description: string;
+      evidence: Record<string, unknown>;
+      remediation: string;
+      reportable: boolean;
+    }>
+  > {
     const violations: Array<{
       type: 'compliance_breach';
       severity: 'low' | 'medium' | 'high' | 'critical';
@@ -370,7 +400,7 @@ export class AISecurityMiddleware {
       reportable: boolean;
     }> = [];
     const resultString = JSON.stringify(result);
-    
+
     // GDPR compliance check
     if (this.containsPersonalData(resultString)) {
       violations.push({
@@ -379,10 +409,10 @@ export class AISecurityMiddleware {
         description: 'Response may contain personal data without proper consent',
         evidence: { result, standard: 'GDPR' },
         remediation: 'Remove or anonymize personal data in response',
-        reportable: true
+        reportable: true,
       });
     }
-    
+
     // Check for classification level compliance
     if (context.securityLevel === 'maximum' && this.containsClassifiedInfo(resultString)) {
       violations.push({
@@ -391,10 +421,10 @@ export class AISecurityMiddleware {
         description: 'Response contains classified information at maximum security level',
         evidence: { result, securityLevel: context.securityLevel },
         remediation: 'Remove classified information from response',
-        reportable: true
+        reportable: true,
       });
     }
-    
+
     return violations;
   }
 
@@ -405,10 +435,10 @@ export class AISecurityMiddleware {
     const personalDataPatterns = [
       /\b[A-Z][a-z]+ [A-Z][a-z]+\b/, // Names
       /\b\d{3}-\d{2}-\d{4}\b/, // SSN
-      /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/ // Email
+      /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/, // Email
     ];
-    
-    return personalDataPatterns.some(pattern => pattern.test(content));
+
+    return personalDataPatterns.some((pattern) => pattern.test(content));
   }
 
   /**
@@ -416,12 +446,17 @@ export class AISecurityMiddleware {
    */
   private containsClassifiedInfo(content: string): boolean {
     const classifiedKeywords = [
-      'confidential', 'secret', 'top secret', 'classified',
-      'restricted', 'internal only', 'proprietary'
+      'confidential',
+      'secret',
+      'top secret',
+      'classified',
+      'restricted',
+      'internal only',
+      'proprietary',
     ];
-    
+
     const lowerContent = content.toLowerCase();
-    return classifiedKeywords.some(keyword => lowerContent.includes(keyword));
+    return classifiedKeywords.some((keyword) => lowerContent.includes(keyword));
   }
 
   /**
@@ -434,19 +469,19 @@ export class AISecurityMiddleware {
     warnings: SecurityWarning[]
   ): number {
     let score = 0;
-    
+
     // Base score from violations and warnings
     score += violations.length * 25;
     score += warnings.length * 10;
-    
+
     // Content-based risk factors
     if (request.content.length > 10000) score += 10;
     if (this.containsSensitiveKeywords(request.content)) score += 15;
-    
+
     // Context-based risk factors
     if (context.securityLevel === 'basic') score += 5;
     if (!context.ipAddress || context.ipAddress === 'unknown') score += 10;
-    
+
     return Math.min(score, 100);
   }
 
@@ -460,20 +495,20 @@ export class AISecurityMiddleware {
     warnings: SecurityWarning[]
   ): Promise<number> {
     let score = 0;
-    
+
     // Base score from violations and warnings
     score += violations.length * 30;
     score += warnings.length * 15;
-    
+
     // Response-based risk factors
     if (!responseResult.approved) score += 20;
     score += responseResult.warnings.length * 5;
-    
+
     // Content analysis
     const resultString = JSON.stringify(result);
     if (this.containsPersonalData(resultString)) score += 25;
     if (this.containsClassifiedInfo(resultString)) score += 35;
-    
+
     return Math.min(score, 100);
   }
 
@@ -485,14 +520,14 @@ export class AISecurityMiddleware {
     responseResult: { approved: boolean; warnings: string[] }
   ): Promise<number> {
     let score = 0;
-    
+
     if (!responseResult.approved) score += 30;
     score += responseResult.warnings.length * 10;
-    
+
     const resultString = JSON.stringify(result);
     if (await this.detectDataLeakage(resultString)) score += 40;
     if (this.containsClassifiedInfo(resultString)) score += 25;
-    
+
     return Math.min(score, 100);
   }
 
@@ -512,11 +547,11 @@ export class AISecurityMiddleware {
       context,
       request,
       error: error instanceof Error ? error.message : String(error),
-      resolved: false
+      resolved: false,
     };
-    
+
     console.error('Security incident logged:', incident);
-    
+
     // In production, send to security monitoring system
     // await securityMonitoringService.reportIncident(incident);
   }
@@ -541,7 +576,7 @@ export class AISecurityMiddleware {
       securityLevel,
       ipAddress,
       userAgent,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
 
@@ -553,7 +588,7 @@ export class AISecurityMiddleware {
     defaultContext: SecurityContext
   ): T {
     const wrappedService = {} as T;
-    
+
     for (const [methodName, method] of Object.entries(service)) {
       if (typeof method === 'function') {
         wrappedService[methodName as keyof T] = (async (...args: unknown[]) => {
@@ -566,7 +601,7 @@ export class AISecurityMiddleware {
               content = String((args[0] as { content: unknown }).content);
             }
           }
-          
+
           const request = {
             content,
             action: {
@@ -574,25 +609,25 @@ export class AISecurityMiddleware {
               source: service.constructor.name,
               method: methodName,
               ipAddress: defaultContext.ipAddress,
-              userAgent: defaultContext.userAgent
-            }
+              userAgent: defaultContext.userAgent,
+            },
           };
-          
+
           const secureResult = await this.secureAICall(
             method.bind(service),
             defaultContext,
             request,
             ...args
           );
-          
+
           return secureResult.result;
         }) as T[keyof T];
       }
     }
-    
+
     return wrappedService;
   }
 }
 
 // Export singleton instance
-export const aiSecurityMiddleware = AISecurityMiddleware.getInstance(); 
+export const aiSecurityMiddleware = AISecurityMiddleware.getInstance();

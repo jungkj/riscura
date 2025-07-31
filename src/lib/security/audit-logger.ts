@@ -48,12 +48,7 @@ export type AuditCategory =
   | 'technical'
   | 'privacy';
 
-export type AuditSeverity =
-  | 'critical'
-  | 'high'
-  | 'medium'
-  | 'low'
-  | 'info';
+export type AuditSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 
 export interface AuditFilter {
   startDate?: Date;
@@ -148,7 +143,7 @@ class AuditLogger {
     }, this.config.flushInterval);
 
     // Initialize alert counters
-    Object.keys(this.config.alertThresholds).forEach(eventType => {
+    Object.keys(this.config.alertThresholds).forEach((eventType) => {
       this.alertCounts[eventType as AuditEventType] = 0;
     });
 
@@ -388,11 +383,11 @@ class AuditLogger {
     const forwarded = request.headers.get('x-forwarded-for');
     const realIP = request.headers.get('x-real-ip');
     const cfConnectingIP = request.headers.get('cf-connecting-ip');
-    
+
     if (cfConnectingIP) return cfConnectingIP;
     if (realIP) return realIP;
     if (forwarded) return forwarded.split(',')[0].trim();
-    
+
     return request.ip || '127.0.0.1';
   }
 
@@ -425,7 +420,7 @@ class AuditLogger {
     const levels = ['info', 'low', 'medium', 'high', 'critical'];
     const configLevel = levels.indexOf(this.config.logLevel);
     const eventLevel = levels.indexOf(severity);
-    
+
     return eventLevel >= configLevel;
   }
 
@@ -456,7 +451,7 @@ class AuditLogger {
     const timestamp = new Date(event.timestamp).toISOString();
     const level = event.severity.toUpperCase();
     const message = `[${timestamp}] ${level} ${event.eventType}:${event.action} - ${event.outcome}`;
-    
+
     const logData = {
       ...event,
       // Mask sensitive fields
@@ -486,7 +481,7 @@ class AuditLogger {
     }
 
     const masked = { ...data };
-    sensitiveFields.forEach(field => {
+    sensitiveFields.forEach((field) => {
       if (field in masked) {
         masked[field] = '***MASKED***';
       }
@@ -498,7 +493,7 @@ class AuditLogger {
   // Check alert thresholds
   private checkAlertThresholds(event: AuditEvent): void {
     this.alertCounts[event.eventType]++;
-    
+
     const threshold = this.config.alertThresholds[event.eventType];
     if (this.alertCounts[event.eventType] >= threshold) {
       this.sendAlert(event.eventType, this.alertCounts[event.eventType]);
@@ -585,7 +580,7 @@ class AuditLogger {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.AUDIT_API_KEY}`,
+          Authorization: `Bearer ${process.env.AUDIT_API_KEY}`,
         },
         body: JSON.stringify({ events }),
       });
@@ -601,47 +596,48 @@ class AuditLogger {
 
     // Apply filters
     if (filter.startDate) {
-      events = events.filter(e => e.timestamp >= filter.startDate!.getTime());
+      events = events.filter((e) => e.timestamp >= filter.startDate!.getTime());
     }
 
     if (filter.endDate) {
-      events = events.filter(e => e.timestamp <= filter.endDate!.getTime());
+      events = events.filter((e) => e.timestamp <= filter.endDate!.getTime());
     }
 
     if (filter.eventTypes && filter.eventTypes.length > 0) {
-      events = events.filter(e => filter.eventTypes!.includes(e.eventType));
+      events = events.filter((e) => filter.eventTypes!.includes(e.eventType));
     }
 
     if (filter.categories && filter.categories.length > 0) {
-      events = events.filter(e => filter.categories!.includes(e.category));
+      events = events.filter((e) => filter.categories!.includes(e.category));
     }
 
     if (filter.severities && filter.severities.length > 0) {
-      events = events.filter(e => filter.severities!.includes(e.severity));
+      events = events.filter((e) => filter.severities!.includes(e.severity));
     }
 
     if (filter.userIds && filter.userIds.length > 0) {
-      events = events.filter(e => e.userId && filter.userIds!.includes(e.userId));
+      events = events.filter((e) => e.userId && filter.userIds!.includes(e.userId));
     }
 
     if (filter.clientIPs && filter.clientIPs.length > 0) {
-      events = events.filter(e => filter.clientIPs!.includes(e.clientIP));
+      events = events.filter((e) => filter.clientIPs!.includes(e.clientIP));
     }
 
     if (filter.resources && filter.resources.length > 0) {
-      events = events.filter(e => filter.resources!.includes(e.resource));
+      events = events.filter((e) => filter.resources!.includes(e.resource));
     }
 
     if (filter.outcomes && filter.outcomes.length > 0) {
-      events = events.filter(e => filter.outcomes!.includes(e.outcome));
+      events = events.filter((e) => filter.outcomes!.includes(e.outcome));
     }
 
     if (filter.searchText) {
       const searchLower = filter.searchText.toLowerCase();
-      events = events.filter(e =>
-        e.action.toLowerCase().includes(searchLower) ||
-        e.resource.toLowerCase().includes(searchLower) ||
-        JSON.stringify(e.details).toLowerCase().includes(searchLower)
+      events = events.filter(
+        (e) =>
+          e.action.toLowerCase().includes(searchLower) ||
+          e.resource.toLowerCase().includes(searchLower) ||
+          JSON.stringify(e.details).toLowerCase().includes(searchLower)
       );
     }
 
@@ -666,7 +662,7 @@ class AuditLogger {
     };
 
     // Count by type, category, severity, outcome
-    events.forEach(event => {
+    events.forEach((event) => {
       report.eventsByType[event.eventType] = (report.eventsByType[event.eventType] || 0) + 1;
       report.eventsByCategory[event.category] = (report.eventsByCategory[event.category] || 0) + 1;
       report.eventsBySeverity[event.severity] = (report.eventsBySeverity[event.severity] || 0) + 1;
@@ -678,7 +674,7 @@ class AuditLogger {
     const ipCounts = new Map<string, number>();
     const resourceCounts = new Map<string, number>();
 
-    events.forEach(event => {
+    events.forEach((event) => {
       if (event.userId) {
         userCounts.set(event.userId, (userCounts.get(event.userId) || 0) + 1);
       }
@@ -703,7 +699,7 @@ class AuditLogger {
 
     // Timeline (daily counts)
     const dailyCounts = new Map<string, number>();
-    events.forEach(event => {
+    events.forEach((event) => {
       const date = new Date(event.timestamp).toISOString().split('T')[0];
       dailyCounts.set(date, (dailyCounts.get(date) || 0) + 1);
     });
@@ -713,10 +709,13 @@ class AuditLogger {
       .sort((a, b) => a.date.localeCompare(b.date));
 
     // Suspicious activities (high/critical severity failures)
-    report.suspiciousActivities = events.filter(event =>
-      (event.severity === 'high' || event.severity === 'critical') &&
-      event.outcome === 'failure'
-    ).slice(0, 20);
+    report.suspiciousActivities = events
+      .filter(
+        (event) =>
+          (event.severity === 'high' || event.severity === 'critical') &&
+          event.outcome === 'failure'
+      )
+      .slice(0, 20);
 
     return report;
   }
@@ -725,8 +724,8 @@ class AuditLogger {
   public getCorrelatedEvents(correlationId: string): AuditEvent[] {
     const eventIds = this.correlationMap.get(correlationId) || [];
     return eventIds
-      .map(id => this.eventStore.get(id))
-      .filter(event => event !== undefined) as AuditEvent[];
+      .map((id) => this.eventStore.get(id))
+      .filter((event) => event !== undefined) as AuditEvent[];
   }
 
   // Shutdown logger
@@ -737,7 +736,7 @@ class AuditLogger {
 
     // Final flush
     await this.flushBuffer();
-    
+
     console.log('Audit logger shutdown complete');
   }
 
@@ -770,4 +769,4 @@ export const logAdminAction = auditLogger.logAdminAction.bind(auditLogger);
 export const logAPIAccess = auditLogger.logAPIAccess.bind(auditLogger);
 
 // Export class for custom instances
-export { AuditLogger }; 
+export { AuditLogger };

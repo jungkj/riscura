@@ -6,12 +6,12 @@ import { useAuth } from '@/context/AuthContext';
 export function AuthDebugger() {
   const auth = useAuth();
   const [mounted, setMounted] = useState(false);
-  
+
   useEffect(() => {
     setMounted(true);
     console.log('[AuthDebugger] Component mounted, auth state:', auth);
   }, []);
-  
+
   useEffect(() => {
     if (mounted) {
       console.log('[AuthDebugger] Auth state changed:', {
@@ -22,10 +22,10 @@ export function AuthDebugger() {
       });
     }
   }, [auth.isAuthenticated, auth.isLoading, auth.isInitialized, auth.user, mounted]);
-  
+
   if (process.env.NODE_ENV === 'production') {
     return null;
-  };
+  }
 
   return (
     <div className="fixed bottom-4 right-4 p-4 bg-black bg-opacity-80 text-white text-xs rounded-lg max-w-sm">

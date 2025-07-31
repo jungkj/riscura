@@ -68,7 +68,7 @@ export async function uploadFile(
 
     // Use provided path or generate one
     const fullPath = join(getStorageRoot(), path);
-    
+
     // Ensure directory exists
     const dirPath = join(getStorageRoot(), path.split('/').slice(0, -1).join('/'));
     await mkdir(dirPath, { recursive: true });
@@ -144,7 +144,9 @@ export async function validateFile(file: File): Promise<FileValidationResult> {
 
   // Check file size
   if (file.size > maxSize) {
-    errors.push(`File size ${formatFileSize(file.size)} exceeds maximum allowed size ${formatFileSize(maxSize)}`);
+    errors.push(
+      `File size ${formatFileSize(file.size)} exceeds maximum allowed size ${formatFileSize(maxSize)}`
+    );
   }
 
   // Check file type
@@ -173,17 +175,16 @@ export async function validateFile(file: File): Promise<FileValidationResult> {
 /**
  * Validate file before upload (legacy with options)
  */
-export function validateFileWithOptions(
-  file: File,
-  options: UploadOptions
-): FileValidationResult {
+export function validateFileWithOptions(file: File, options: UploadOptions): FileValidationResult {
   const errors: string[] = [];
   const maxSize = options.maxSize || DEFAULT_MAX_SIZE;
   const allowedTypes = options.allowedTypes || DEFAULT_ALLOWED_TYPES;
 
   // Check file size
   if (file.size > maxSize) {
-    errors.push(`File size ${formatFileSize(file.size)} exceeds maximum allowed size ${formatFileSize(maxSize)}`);
+    errors.push(
+      `File size ${formatFileSize(file.size)} exceeds maximum allowed size ${formatFileSize(maxSize)}`
+    );
   }
 
   // Check file type
@@ -216,7 +217,7 @@ function generateFilePath(organizationId: string, filename: string): string {
   const date = new Date();
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  
+
   return join(organizationId, year.toString(), month, filename);
 }
 
@@ -227,7 +228,7 @@ function getDirectoryPath(organizationId: string): string {
   const date = new Date();
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  
+
   return join(organizationId, year.toString(), month);
 }
 
@@ -261,11 +262,11 @@ function getFileExtension(filename: string): string {
  */
 export function formatFileSize(bytes: number): string {
   if (bytes === 0) return '0 Bytes';
-  
+
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  
+
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
@@ -274,7 +275,7 @@ export function formatFileSize(bytes: number): string {
  */
 export function getMimeType(filename: string): string {
   const extension = getFileExtension(filename).toLowerCase();
-  
+
   const mimeTypes: Record<string, string> = {
     '.pdf': 'application/pdf',
     '.doc': 'application/msword',
@@ -289,7 +290,7 @@ export function getMimeType(filename: string): string {
     '.gif': 'image/gif',
     '.webp': 'image/webp',
   };
-  
+
   return mimeTypes[extension] || 'application/octet-stream';
 }
 
@@ -300,11 +301,11 @@ export function generateSecureFilename(originalName: string, hash?: string): str
   const extension = getFileExtension(originalName);
   const timestamp = Date.now();
   const random = Math.random().toString(36).substring(2, 8);
-  
+
   if (hash) {
     return `${hash.substring(0, 16)}_${timestamp}${extension}`;
   }
-  
+
   return `${timestamp}_${random}${extension}`;
 }
 
@@ -323,15 +324,19 @@ export function cleanFilename(filename: string): string {
 /**
  * Generate secure path for file upload
  */
-export function generateSecurePath(organizationId: string, category: string, filename: string): string {
+export function generateSecurePath(
+  organizationId: string,
+  category: string,
+  filename: string
+): string {
   const date = new Date();
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
-  
+
   const cleanName = cleanFilename(filename);
   const timestamp = Date.now();
   const secureFilename = `${timestamp}_${cleanName}`;
-  
+
   return join(organizationId, category, year.toString(), month, day, secureFilename);
-} 
+}

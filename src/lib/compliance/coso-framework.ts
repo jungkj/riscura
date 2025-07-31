@@ -235,7 +235,7 @@ export class COSOFrameworkService {
         'Board oversight',
         'Management philosophy',
         'Organizational structure',
-        'Competence and development'
+        'Competence and development',
       ],
       assessmentCriteria: [
         {
@@ -247,10 +247,10 @@ export class COSOFrameworkService {
             scale: 'effective',
             score: 100,
             description: 'Strong tone at the top with clear ethical standards',
-            criteria: ['Clear code of conduct', 'Regular ethics training', 'Consistent messaging']
-          }
-        }
-      ]
+            criteria: ['Clear code of conduct', 'Regular ethics training', 'Consistent messaging'],
+          },
+        },
+      ],
     };
 
     // Risk Assessment Component
@@ -264,22 +264,26 @@ export class COSOFrameworkService {
         'Risk identification',
         'Risk analysis',
         'Fraud risk assessment',
-        'Change management'
+        'Change management',
       ],
       assessmentCriteria: [
         {
           criterion: 'Risk identification process',
           description: 'Organization has systematic process for identifying risks',
           evidenceRequired: ['Risk registers', 'Risk assessments', 'Process documentation'],
-          testingProcedures: ['Review risk process', 'Test risk identification', 'Validate completeness'],
+          testingProcedures: [
+            'Review risk process',
+            'Test risk identification',
+            'Validate completeness',
+          ],
           ratingScale: {
             scale: 'effective',
             score: 100,
             description: 'Comprehensive and systematic risk identification',
-            criteria: ['Documented process', 'Regular updates', 'Stakeholder involvement']
-          }
-        }
-      ]
+            criteria: ['Documented process', 'Regular updates', 'Stakeholder involvement'],
+          },
+        },
+      ],
     };
 
     // Control Activities Component
@@ -293,22 +297,30 @@ export class COSOFrameworkService {
         'Technology controls',
         'Policy deployment',
         'Segregation of duties',
-        'Authorization controls'
+        'Authorization controls',
       ],
       assessmentCriteria: [
         {
           criterion: 'Control design',
           description: 'Controls are designed to address identified risks',
           evidenceRequired: ['Control documentation', 'Risk-control matrices', 'Testing results'],
-          testingProcedures: ['Review control design', 'Test control operation', 'Validate effectiveness'],
+          testingProcedures: [
+            'Review control design',
+            'Test control operation',
+            'Validate effectiveness',
+          ],
           ratingScale: {
             scale: 'effective',
             score: 100,
             description: 'Well-designed controls that effectively address risks',
-            criteria: ['Clear control objectives', 'Appropriate control activities', 'Regular testing']
-          }
-        }
-      ]
+            criteria: [
+              'Clear control objectives',
+              'Appropriate control activities',
+              'Regular testing',
+            ],
+          },
+        },
+      ],
     };
 
     // Information & Communication Component
@@ -322,7 +334,7 @@ export class COSOFrameworkService {
         'Internal communication',
         'External communication',
         'Information systems',
-        'Data governance'
+        'Data governance',
       ],
       assessmentCriteria: [
         {
@@ -334,10 +346,10 @@ export class COSOFrameworkService {
             scale: 'effective',
             score: 100,
             description: 'High-quality information supports decision making',
-            criteria: ['Accurate data', 'Timely reporting', 'Accessible information']
-          }
-        }
-      ]
+            criteria: ['Accurate data', 'Timely reporting', 'Accessible information'],
+          },
+        },
+      ],
     };
 
     // Monitoring Activities Component
@@ -351,22 +363,26 @@ export class COSOFrameworkService {
         'Separate evaluations',
         'Deficiency reporting',
         'Corrective actions',
-        'Management oversight'
+        'Management oversight',
       ],
       assessmentCriteria: [
         {
           criterion: 'Monitoring effectiveness',
           description: 'Monitoring activities effectively evaluate internal control',
           evidenceRequired: ['Monitoring reports', 'Evaluation procedures', 'Corrective actions'],
-          testingProcedures: ['Review monitoring process', 'Test evaluation procedures', 'Validate reporting'],
+          testingProcedures: [
+            'Review monitoring process',
+            'Test evaluation procedures',
+            'Validate reporting',
+          ],
           ratingScale: {
             scale: 'effective',
             score: 100,
             description: 'Effective monitoring identifies and addresses deficiencies',
-            criteria: ['Regular monitoring', 'Timely reporting', 'Appropriate follow-up']
-          }
-        }
-      ]
+            criteria: ['Regular monitoring', 'Timely reporting', 'Appropriate follow-up'],
+          },
+        },
+      ],
     };
 
     // Store components
@@ -396,7 +412,7 @@ export class COSOFrameworkService {
           'Establishes tone at the top',
           'Establishes standards of conduct',
           'Evaluates adherence to standards',
-          'Addresses deviations in a timely manner'
+          'Addresses deviations in a timely manner',
         ],
         evidenceTypes: ['Code of conduct', 'Ethics training', 'Disciplinary actions'],
         maturityLevels: [
@@ -405,16 +421,16 @@ export class COSOFrameworkService {
             name: 'Initial',
             description: 'Ad hoc approach to ethics',
             characteristics: ['Informal ethics guidance', 'Inconsistent messaging'],
-            evidenceIndicators: ['Basic code of conduct exists']
+            evidenceIndicators: ['Basic code of conduct exists'],
           },
           {
             level: 5,
             name: 'Optimized',
             description: 'Embedded ethical culture',
             characteristics: ['Strong ethical culture', 'Continuous improvement'],
-            evidenceIndicators: ['Regular ethics assessments', 'Proactive ethics initiatives']
-          }
-        ]
+            evidenceIndicators: ['Regular ethics assessments', 'Proactive ethics initiatives'],
+          },
+        ],
       },
       {
         id: 'principle-2',
@@ -426,7 +442,7 @@ export class COSOFrameworkService {
           'Establishes oversight responsibilities',
           'Applies relevant expertise',
           'Operates independently',
-          'Provides oversight for internal control'
+          'Provides oversight for internal control',
         ],
         evidenceTypes: ['Board charter', 'Meeting minutes', 'Independence assessments'],
         maturityLevels: [
@@ -435,23 +451,23 @@ export class COSOFrameworkService {
             name: 'Initial',
             description: 'Limited board oversight',
             characteristics: ['Minimal board involvement', 'Unclear responsibilities'],
-            evidenceIndicators: ['Basic board structure exists']
+            evidenceIndicators: ['Basic board structure exists'],
           },
           {
             level: 5,
             name: 'Optimized',
             description: 'Effective board oversight',
             characteristics: ['Active board engagement', 'Clear accountability'],
-            evidenceIndicators: ['Regular board assessments', 'Strong oversight practices']
-          }
-        ]
-      }
+            evidenceIndicators: ['Regular board assessments', 'Strong oversight practices'],
+          },
+        ],
+      },
       // Additional principles would be added here...
     ];
 
-    principles.forEach(principle => {
+    principles.forEach((principle) => {
       this.principles.set(principle.id, principle);
-      
+
       // Add principle to its component
       const component = this.components.get(principle.component);
       if (component) {
@@ -470,36 +486,31 @@ export class COSOFrameworkService {
     assessor: string,
     scope: string = 'entity-wide'
   ): Promise<COSOAssessment> {
-    
     const componentAssessments: ComponentAssessment[] = [];
-    
+
     // Assess each component
     for (const [componentId, component] of this.components) {
-      const componentAssessment = await this.assessComponent(
-        component,
-        risks,
-        controls
-      );
+      const componentAssessment = await this.assessComponent(component, risks, controls);
       componentAssessments.push(componentAssessment);
     }
-    
+
     // Calculate overall rating and score
     const overallScore = this.calculateOverallScore(componentAssessments);
     const overallRating = this.determineOverallRating(overallScore);
-    
+
     // Identify deficiencies and material weaknesses
     const deficiencies = this.identifyDeficiencies(componentAssessments);
     const materialWeaknesses = this.identifyMaterialWeaknesses(deficiencies);
-    
+
     // Generate recommendations
     const recommendations = await this.generateCOSORecommendations(
       componentAssessments,
       deficiencies
     );
-    
+
     // Create action plan
     const actionPlan = this.createActionPlan(recommendations, materialWeaknesses);
-    
+
     return {
       organizationId,
       assessmentDate: new Date(),
@@ -512,7 +523,7 @@ export class COSOFrameworkService {
       materialWeaknesses,
       recommendations,
       actionPlan,
-      nextAssessment: this.calculateNextAssessmentDate(overallScore)
+      nextAssessment: this.calculateNextAssessmentDate(overallScore),
     };
   }
 
@@ -523,12 +534,11 @@ export class COSOFrameworkService {
     currentAssessment: COSOAssessment,
     targetMaturity: number = 85
   ): Promise<COSOGapAnalysis> {
-    
     const componentGaps: ComponentGap[] = [];
     const principleGaps: PrincipleGap[] = [];
-    
+
     // Analyze component gaps
-    currentAssessment.componentAssessments.forEach(compAssessment => {
+    currentAssessment.componentAssessments.forEach((compAssessment) => {
       const gap: ComponentGap = {
         componentId: compAssessment.componentId,
         currentMaturity: compAssessment.componentScore,
@@ -537,12 +547,12 @@ export class COSOFrameworkService {
         impact: this.determineGapImpact(targetMaturity - compAssessment.componentScore),
         effort: this.determineGapEffort(targetMaturity - compAssessment.componentScore),
         priority: this.calculateGapPriority(compAssessment),
-        recommendations: compAssessment.recommendations
+        recommendations: compAssessment.recommendations,
       };
       componentGaps.push(gap);
-      
+
       // Analyze principle gaps within component
-      compAssessment.principleAssessments.forEach(princAssessment => {
+      compAssessment.principleAssessments.forEach((princAssessment) => {
         const principleGap: PrincipleGap = {
           principleId: princAssessment.principleId,
           currentScore: princAssessment.score,
@@ -550,33 +560,33 @@ export class COSOFrameworkService {
           gap: targetMaturity - princAssessment.score,
           deficiencies: princAssessment.deficiencies,
           recommendations: this.generatePrincipleRecommendations(princAssessment),
-          effort: this.determineGapEffort(targetMaturity - princAssessment.score)
+          effort: this.determineGapEffort(targetMaturity - princAssessment.score),
         };
         principleGaps.push(principleGap);
       });
     });
-    
+
     // Calculate overall maturity
     const overallMaturity = currentAssessment.overallScore;
-    
+
     // Identify priority areas
     const priorityAreas = componentGaps
-      .filter(gap => gap.impact === 'high' && gap.gap > 20)
-      .map(gap => this.components.get(gap.componentId)?.name || gap.componentId);
-    
+      .filter((gap) => gap.impact === 'high' && gap.gap > 20)
+      .map((gap) => this.components.get(gap.componentId)?.name || gap.componentId);
+
     // Identify quick wins
     const quickWins = componentGaps
-      .filter(gap => gap.effort === 'low' && gap.gap > 10)
-      .map(gap => this.components.get(gap.componentId)?.name || gap.componentId);
-    
+      .filter((gap) => gap.effort === 'low' && gap.gap > 10)
+      .map((gap) => this.components.get(gap.componentId)?.name || gap.componentId);
+
     // Identify long-term initiatives
     const longTermInitiatives = componentGaps
-      .filter(gap => gap.effort === 'high' && gap.impact === 'high')
-      .map(gap => this.components.get(gap.componentId)?.name || gap.componentId);
-    
+      .filter((gap) => gap.effort === 'high' && gap.impact === 'high')
+      .map((gap) => this.components.get(gap.componentId)?.name || gap.componentId);
+
     // Calculate risk exposure
     const riskExposure = Math.max(0, 100 - overallMaturity);
-    
+
     return {
       componentGaps,
       principleGaps,
@@ -584,7 +594,7 @@ export class COSOFrameworkService {
       priorityAreas,
       quickWins,
       longTermInitiatives,
-      riskExposure
+      riskExposure,
     };
   }
 
@@ -593,12 +603,12 @@ export class COSOFrameworkService {
    */
   async mapControlsToCOSO(controls: Control[]): Promise<Map<string, string[]>> {
     const mapping = new Map<string, string[]>();
-    
-    controls.forEach(control => {
+
+    controls.forEach((control) => {
       const mappedPrinciples = this.identifyRelevantPrinciples(control);
       mapping.set(control.id, mappedPrinciples);
     });
-    
+
     return mapping;
   }
 
@@ -616,34 +626,33 @@ export class COSOFrameworkService {
     actionPlan: string[];
     timeline: string;
   }> {
-    
     const executiveSummary = this.generateExecutiveSummary(assessment, gapAnalysis);
-    
-    const componentSummaries = assessment.componentAssessments.map(comp => ({
+
+    const componentSummaries = assessment.componentAssessments.map((comp) => ({
       component: this.components.get(comp.componentId)?.name || comp.componentId,
       summary: this.generateComponentSummary(comp),
-      score: comp.componentScore
+      score: comp.componentScore,
     }));
-    
+
     const keyFindings = this.extractKeyFindings(assessment);
-    
-    const recommendations = assessment.recommendations.map(rec => 
-      `${rec.title}: ${rec.description}`
+
+    const recommendations = assessment.recommendations.map(
+      (rec) => `${rec.title}: ${rec.description}`
     );
-    
-    const actionPlan = assessment.actionPlan.map(action => 
-      `${action.title} (Due: ${action.dueDate.toDateString()})`
+
+    const actionPlan = assessment.actionPlan.map(
+      (action) => `${action.title} (Due: ${action.dueDate.toDateString()})`
     );
-    
+
     const timeline = this.generateImplementationTimeline(assessment.actionPlan);
-    
+
     return {
       executiveSummary,
       componentSummaries,
       keyFindings,
       recommendations,
       actionPlan,
-      timeline
+      timeline,
     };
   }
 
@@ -654,32 +663,35 @@ export class COSOFrameworkService {
     controls: Control[]
   ): Promise<ComponentAssessment> {
     const principleAssessments: PrincipleAssessment[] = [];
-    
+
     // Assess each principle in the component
-    component.principles.forEach(principle => {
+    component.principles.forEach((principle) => {
       const assessment = this.assessPrinciple(principle, risks, controls);
       principleAssessments.push(assessment);
     });
-    
+
     // Calculate component score and rating
-    const componentScore = principleAssessments.length > 0 
-      ? Math.round(principleAssessments.reduce((sum, p) => sum + p.score, 0) / principleAssessments.length)
-      : 0;
-    
+    const componentScore =
+      principleAssessments.length > 0
+        ? Math.round(
+            principleAssessments.reduce((sum, p) => sum + p.score, 0) / principleAssessments.length
+          )
+        : 0;
+
     const componentRating = this.determineRating(componentScore);
-    
+
     // Identify strengths and deficiencies
     const strengths = principleAssessments
-      .filter(p => p.score >= 80)
-      .map(p => `Strong ${this.principles.get(p.principleId)?.title}`);
-    
+      .filter((p) => p.score >= 80)
+      .map((p) => `Strong ${this.principles.get(p.principleId)?.title}`);
+
     const deficiencies = principleAssessments
-      .filter(p => p.score < 60)
-      .flatMap(p => p.deficiencies);
-    
+      .filter((p) => p.score < 60)
+      .flatMap((p) => p.deficiencies);
+
     // Generate component-level recommendations
     const recommendations = this.generateComponentRecommendations(component, principleAssessments);
-    
+
     return {
       componentId: component.id,
       principleAssessments,
@@ -687,7 +699,7 @@ export class COSOFrameworkService {
       componentScore,
       strengths,
       deficiencies,
-      recommendations
+      recommendations,
     };
   }
 
@@ -697,44 +709,46 @@ export class COSOFrameworkService {
     controls: Control[]
   ): PrincipleAssessment {
     // Simplified assessment logic - in practice would be more sophisticated
-    const relevantControls = controls.filter(control => 
+    const relevantControls = controls.filter((control) =>
       this.isControlRelevantToPrinciple(control, principle)
     );
-    
+
     let score = 50; // baseline
-    
+
     // Increase score based on relevant controls
     if (relevantControls.length > 0) {
-      const avgEffectiveness = relevantControls.reduce((sum, control) => {
-        const effectiveness = typeof control.effectiveness === 'number' 
-          ? control.effectiveness 
-          : this.convertEffectivenessToNumber(control.effectiveness);
-        return sum + effectiveness;
-      }, 0) / relevantControls.length;
-      
+      const avgEffectiveness =
+        relevantControls.reduce((sum, control) => {
+          const effectiveness =
+            typeof control.effectiveness === 'number'
+              ? control.effectiveness
+              : this.convertEffectivenessToNumber(control.effectiveness);
+          return sum + effectiveness;
+        }, 0) / relevantControls.length;
+
       score = Math.round((score + avgEffectiveness) / 2);
     }
-    
+
     const rating = this.determineRating(score);
-    
+
     // Generate mock evidence and testing results
-    const evidence: Evidence[] = relevantControls.map(control => ({
+    const evidence: Evidence[] = relevantControls.map((control) => ({
       type: 'Control Documentation',
       description: `Control: ${control.title}`,
       source: 'Control Registry',
       quality: 'medium',
       relevance: 'direct',
-      date: new Date()
+      date: new Date(),
     }));
-    
+
     const testingResults: TestingResult[] = [];
     const findings: string[] = [];
     const deficiencies: string[] = [];
-    
+
     if (score < 60) {
       deficiencies.push(`Insufficient controls for ${principle.title}`);
     }
-    
+
     return {
       principleId: principle.id,
       rating,
@@ -742,27 +756,31 @@ export class COSOFrameworkService {
       evidence,
       testingResults,
       findings,
-      deficiencies
+      deficiencies,
     };
   }
 
   private calculateOverallScore(componentAssessments: ComponentAssessment[]): number {
     if (componentAssessments.length === 0) return 0;
-    
+
     return Math.round(
-      componentAssessments.reduce((sum, comp) => sum + comp.componentScore, 0) / 
-      componentAssessments.length
+      componentAssessments.reduce((sum, comp) => sum + comp.componentScore, 0) /
+        componentAssessments.length
     );
   }
 
-  private determineOverallRating(score: number): 'effective' | 'largely_effective' | 'partially_effective' | 'ineffective' {
+  private determineOverallRating(
+    score: number
+  ): 'effective' | 'largely_effective' | 'partially_effective' | 'ineffective' {
     if (score >= 85) return 'effective';
     if (score >= 70) return 'largely_effective';
     if (score >= 50) return 'partially_effective';
     return 'ineffective';
   }
 
-  private determineRating(score: number): 'effective' | 'largely_effective' | 'partially_effective' | 'ineffective' {
+  private determineRating(
+    score: number
+  ): 'effective' | 'largely_effective' | 'partially_effective' | 'ineffective' {
     if (score >= 85) return 'effective';
     if (score >= 70) return 'largely_effective';
     if (score >= 50) return 'partially_effective';
@@ -771,12 +789,16 @@ export class COSOFrameworkService {
 
   private convertEffectivenessToNumber(effectiveness: string | number): number {
     if (typeof effectiveness === 'number') return effectiveness;
-    
+
     switch (effectiveness.toLowerCase()) {
-      case 'high': return 80;
-      case 'medium': return 60;
-      case 'low': return 40;
-      default: return 50;
+      case 'high':
+        return 80;
+      case 'medium':
+        return 60;
+      case 'low':
+        return 40;
+      default:
+        return 50;
     }
   }
 
@@ -784,17 +806,17 @@ export class COSOFrameworkService {
     // Simplified mapping logic - would be more sophisticated in practice
     const controlKeywords = [control.title.toLowerCase(), control.description.toLowerCase()];
     const principleKeywords = principle.title.toLowerCase();
-    
-    return controlKeywords.some(keyword => 
-      principleKeywords.includes(keyword) || keyword.includes(principleKeywords)
+
+    return controlKeywords.some(
+      (keyword) => principleKeywords.includes(keyword) || keyword.includes(principleKeywords)
     );
   }
 
   private identifyDeficiencies(componentAssessments: ComponentAssessment[]): Deficiency[] {
     const deficiencies: Deficiency[] = [];
-    
-    componentAssessments.forEach(compAssessment => {
-      compAssessment.principleAssessments.forEach(princAssessment => {
+
+    componentAssessments.forEach((compAssessment) => {
+      compAssessment.principleAssessments.forEach((princAssessment) => {
         if (princAssessment.score < 60) {
           princAssessment.deficiencies.forEach((deficiency, index) => {
             deficiencies.push({
@@ -809,20 +831,20 @@ export class COSOFrameworkService {
               recommendation: 'Enhance control design and implementation',
               timeline: '90 days',
               owner: 'Management',
-              status: 'open'
+              status: 'open',
             });
           });
         }
       });
     });
-    
+
     return deficiencies;
   }
 
   private identifyMaterialWeaknesses(deficiencies: Deficiency[]): MaterialWeakness[] {
-    const materialDeficiencies = deficiencies.filter(def => def.severity === 'material');
-    
-    return materialDeficiencies.map(def => ({
+    const materialDeficiencies = deficiencies.filter((def) => def.severity === 'material');
+
+    return materialDeficiencies.map((def) => ({
       id: `mw-${def.id}`,
       title: `Material Weakness in ${def.component}`,
       description: def.description,
@@ -839,9 +861,9 @@ export class COSOFrameworkService {
         owner: def.owner,
         budget: 50000,
         milestones: [],
-        status: 'planned'
+        status: 'planned',
       },
-      disclosure: true
+      disclosure: true,
     }));
   }
 
@@ -850,9 +872,9 @@ export class COSOFrameworkService {
     deficiencies: Deficiency[]
   ): Promise<COSORecommendation[]> {
     const recommendations: COSORecommendation[] = [];
-    
+
     // Generate recommendations for each component with low scores
-    componentAssessments.forEach(compAssessment => {
+    componentAssessments.forEach((compAssessment) => {
       if (compAssessment.componentScore < 70) {
         recommendations.push({
           id: `rec-${compAssessment.componentId}`,
@@ -865,11 +887,11 @@ export class COSOFrameworkService {
           timeline: 90,
           cost: 25000,
           benefit: 'Improved internal control effectiveness',
-          success: ['Score improvement to >70%', 'Reduced deficiencies']
+          success: ['Score improvement to >70%', 'Reduced deficiencies'],
         });
       }
     });
-    
+
     return recommendations;
   }
 
@@ -878,9 +900,9 @@ export class COSOFrameworkService {
     materialWeaknesses: MaterialWeakness[]
   ): ActionItem[] {
     const actionItems: ActionItem[] = [];
-    
+
     // Create action items for recommendations
-    recommendations.forEach(rec => {
+    recommendations.forEach((rec) => {
       actionItems.push({
         id: `action-${rec.id}`,
         title: rec.title,
@@ -890,12 +912,12 @@ export class COSOFrameworkService {
         priority: rec.priority === 'high' ? 'critical' : 'medium',
         status: 'not_started',
         dependencies: [],
-        progress: 0
+        progress: 0,
       });
     });
-    
+
     // Create action items for material weaknesses
-    materialWeaknesses.forEach(mw => {
+    materialWeaknesses.forEach((mw) => {
       actionItems.push({
         id: `action-mw-${mw.id}`,
         title: `Remediate ${mw.title}`,
@@ -905,21 +927,21 @@ export class COSOFrameworkService {
         priority: 'critical',
         status: 'not_started',
         dependencies: [],
-        progress: 0
+        progress: 0,
       });
     });
-    
+
     return actionItems;
   }
 
   private calculateNextAssessmentDate(overallScore: number): Date {
     const now = new Date();
     let monthsUntilNext = 12; // Default annual
-    
+
     // More frequent assessments for lower scores
     if (overallScore < 50) monthsUntilNext = 6;
     else if (overallScore < 70) monthsUntilNext = 9;
-    
+
     now.setMonth(now.getMonth() + monthsUntilNext);
     return now;
   }
@@ -946,13 +968,13 @@ export class COSOFrameworkService {
 
   private generatePrincipleRecommendations(assessment: PrincipleAssessment): string[] {
     const recommendations: string[] = [];
-    
+
     if (assessment.score < 60) {
       recommendations.push('Strengthen control design and implementation');
       recommendations.push('Enhance documentation and evidence');
       recommendations.push('Implement regular testing procedures');
     }
-    
+
     return recommendations;
   }
 
@@ -961,31 +983,31 @@ export class COSOFrameworkService {
     principleAssessments: PrincipleAssessment[]
   ): string[] {
     const recommendations: string[] = [];
-    
-    const lowScoringPrinciples = principleAssessments.filter(p => p.score < 60);
-    
+
+    const lowScoringPrinciples = principleAssessments.filter((p) => p.score < 60);
+
     if (lowScoringPrinciples.length > 0) {
       recommendations.push(`Address deficiencies in ${lowScoringPrinciples.length} principles`);
       recommendations.push('Enhance overall component effectiveness');
       recommendations.push('Implement comprehensive testing program');
     }
-    
+
     return recommendations;
   }
 
   private identifyRelevantPrinciples(control: Control): string[] {
     // Simplified mapping - would use more sophisticated logic in practice
     const relevantPrinciples: string[] = [];
-    
+
     // Map based on control type and description
     if (control.type === 'preventive') {
       relevantPrinciples.push('principle-1'); // Integrity and ethical values
     }
-    
+
     if (control.description.toLowerCase().includes('risk')) {
       relevantPrinciples.push('principle-6'); // Risk assessment (if it existed)
     }
-    
+
     return relevantPrinciples;
   }
 
@@ -1004,7 +1026,7 @@ export class COSOFrameworkService {
       
       Key areas for improvement include: ${gapAnalysis.priorityAreas.join(', ')}.
       
-      Immediate actions required: ${assessment.actionPlan.filter(a => a.priority === 'critical').length} critical items.
+      Immediate actions required: ${assessment.actionPlan.filter((a) => a.priority === 'critical').length} critical items.
     `;
   }
 
@@ -1019,29 +1041,31 @@ export class COSOFrameworkService {
 
   private extractKeyFindings(assessment: COSOAssessment): string[] {
     const findings: string[] = [];
-    
+
     // Overall findings
     findings.push(`Overall internal control effectiveness: ${assessment.overallRating}`);
-    
+
     // Component findings
-    assessment.componentAssessments.forEach(comp => {
+    assessment.componentAssessments.forEach((comp) => {
       if (comp.componentScore < 60) {
-        findings.push(`${this.components.get(comp.componentId)?.name} requires significant improvement`);
+        findings.push(
+          `${this.components.get(comp.componentId)?.name} requires significant improvement`
+        );
       }
     });
-    
+
     // Material weakness findings
     if (assessment.materialWeaknesses.length > 0) {
       findings.push(`${assessment.materialWeaknesses.length} material weaknesses identified`);
     }
-    
+
     return findings;
   }
 
   private generateImplementationTimeline(actionPlan: ActionItem[]): string {
-    const criticalItems = actionPlan.filter(a => a.priority === 'critical').length;
-    const highItems = actionPlan.filter(a => a.priority === 'high').length;
-    
+    const criticalItems = actionPlan.filter((a) => a.priority === 'critical').length;
+    const highItems = actionPlan.filter((a) => a.priority === 'high').length;
+
     return `
       Implementation Timeline:
       - Critical items (${criticalItems}): 0-90 days
@@ -1053,4 +1077,4 @@ export class COSOFrameworkService {
   }
 }
 
-export const cosoFrameworkService = new COSOFrameworkService(); 
+export const cosoFrameworkService = new COSOFrameworkService();

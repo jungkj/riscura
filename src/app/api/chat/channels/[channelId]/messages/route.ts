@@ -19,27 +19,22 @@ export async function GET(
         return ApiResponseFormatter.authError('User not authenticated');
       }
 
-    try {
-      const { searchParams } = new URL(request.url);
-      const limit = parseInt(searchParams.get('limit') || '50');
-      const before = searchParams.get('before') || undefined;
+      try {
+        const { searchParams } = new URL(request.url);
+        const limit = parseInt(searchParams.get('limit') || '50');
+        const before = searchParams.get('before') || undefined;
 
-      const messages = await ChatService.getChannelMessages(
-        channelId,
-        user.id,
-        limit,
-        before
-      );
+        const messages = await ChatService.getChannelMessages(channelId, user.id, limit, before);
 
-      return ApiResponseFormatter.success(messages);
-    } catch (error) {
-      console.error('Failed to fetch messages:', error);
-      return ApiResponseFormatter.error(
-        'CHAT_ERROR',
-        error instanceof Error ? error.message : 'Failed to fetch messages',
-        { status: error instanceof Error && error.message === 'Access denied' ? 403 : 500 }
-      );
-    }
+        return ApiResponseFormatter.success(messages);
+      } catch (error) {
+        console.error('Failed to fetch messages:', error);
+        return ApiResponseFormatter.error(
+          'CHAT_ERROR',
+          error instanceof Error ? error.message : 'Failed to fetch messages',
+          { status: error instanceof Error && error.message === 'Access denied' ? 403 : 500 }
+        );
+      }
     },
     { requireAuth: true }
   )(req);
@@ -65,36 +60,35 @@ export async function POST(
         return ApiResponseFormatter.authError('User not authenticated');
       }
 
-    try {
-      const body = await request.json();
-      const validatedData = sendMessageSchema.parse(body);
+      try {
+        const body = await request.json();
+        const validatedData = sendMessageSchema.parse(body);
 
-      const message = await ChatService.sendMessage({
-        channelId: channelId,
-        userId: user.id,
-        content: validatedData.content,
-        type: validatedData.type,
-        attachments: validatedData.attachments,
-        parentId: validatedData.parentId,
-      });
+        const message = await ChatService.sendMessage({
+          channelId: channelId,
+          userId: user.id,
+          content: validatedData.content,
+          type: validatedData.type,
+          attachments: validatedData.attachments,
+          parentId: validatedData.parentId,
+        });
 
-      return ApiResponseFormatter.success(message);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
+        return ApiResponseFormatter.success(message);
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          return ApiResponseFormatter.error('VALIDATION_ERROR', 'Invalid request data', {
+            status: 400,
+            details: error.errors,
+          });
+        }
+
+        console.error('Failed to send message:', error);
         return ApiResponseFormatter.error(
-          'VALIDATION_ERROR',
-          'Invalid request data',
-          { status: 400, details: error.errors }
+          'CHAT_ERROR',
+          error instanceof Error ? error.message : 'Failed to send message',
+          { status: error instanceof Error && error.message === 'Access denied' ? 403 : 500 }
         );
       }
-      
-      console.error('Failed to send message:', error);
-      return ApiResponseFormatter.error(
-        'CHAT_ERROR',
-        error instanceof Error ? error.message : 'Failed to send message',
-        { status: error instanceof Error && error.message === 'Access denied' ? 403 : 500 }
-      );
-    }
     },
     { requireAuth: true }
   )(req);

@@ -7,7 +7,7 @@ export const breakpoints = {
   md: 768,
   lg: 1024,
   xl: 1280,
-  '2xl': 1536
+  '2xl': 1536,
 } as const;
 
 export type Breakpoint = keyof typeof breakpoints;
@@ -33,15 +33,15 @@ export class MediaQueryUtils {
 
     const mediaQuery = window.matchMedia(this.getMediaQuery(breakpoint, type));
     const handleChange = (e: MediaQueryListEvent) => callback(e.matches);
-    
+
     mediaQuery.addEventListener('change', handleChange);
-    
+
     return () => mediaQuery.removeEventListener('change', handleChange);
   }
 
   public static getCurrentBreakpoint(): Breakpoint {
     const width = typeof window !== 'undefined' ? window.innerWidth : 1024;
-    
+
     if (width >= breakpoints['2xl']) return '2xl';
     if (width >= breakpoints.xl) return 'xl';
     if (width >= breakpoints.lg) return 'lg';
@@ -55,7 +55,9 @@ export class MediaQueryUtils {
 export class DeviceUtils {
   public static isMobile(): boolean {
     if (typeof window === 'undefined') return false;
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
   }
 
   public static isTablet(): boolean {
@@ -76,7 +78,7 @@ export class DeviceUtils {
     if (typeof window === 'undefined') return { width: 1024, height: 768 };
     return {
       width: window.innerWidth,
-      height: window.innerHeight
+      height: window.innerHeight,
     };
   }
 
@@ -94,17 +96,17 @@ export class ResponsiveUtils {
   ): T {
     const currentBreakpoint = MediaQueryUtils.getCurrentBreakpoint();
     const breakpointOrder: Breakpoint[] = ['2xl', 'xl', 'lg', 'md', 'sm', 'xs'];
-    
+
     // Find the largest breakpoint that has a value and is <= current breakpoint
     const currentIndex = breakpointOrder.indexOf(currentBreakpoint);
-    
+
     for (let i = currentIndex; i < breakpointOrder.length; i++) {
       const bp = breakpointOrder[i];
       if (breakpointValues[bp] !== undefined) {
         return breakpointValues[bp]!;
       }
     }
-    
+
     return fallback;
   }
 
@@ -113,13 +115,13 @@ export class ResponsiveUtils {
     values: Partial<Record<Breakpoint, string | number>>
   ): string {
     const classes: string[] = [];
-    
+
     Object.entries(values).forEach(([breakpoint, value]) => {
       const bp = breakpoint as Breakpoint;
       const prefix = bp === 'xs' ? '' : `${bp}:`;
       classes.push(`${prefix}${property}-${value}`);
     });
-    
+
     return classes.join(' ');
   }
 
@@ -136,15 +138,15 @@ export class ResponsiveUtils {
     const fromWidth = breakpoints[fromBreakpoint];
     const toWidth = breakpoints[toBreakpoint];
     const currentWidth = DeviceUtils.getViewportSize().width;
-    
+
     if (currentWidth <= toWidth) {
       return value * scaleFactor;
     }
-    
+
     if (currentWidth >= fromWidth) {
       return value;
     }
-    
+
     // Linear interpolation between breakpoints
     const ratio = (currentWidth - toWidth) / (fromWidth - toWidth);
     return value * (scaleFactor + ratio * (1 - scaleFactor));
@@ -212,11 +214,11 @@ export class TouchUtils {
       const endX = e.changedTouches[0].clientX;
       const endY = e.changedTouches[0].clientY;
       const endTime = Date.now();
-      
+
       const deltaX = endX - startX;
       const deltaY = endY - startY;
       const deltaTime = endTime - startTime;
-      
+
       // Ignore if too slow or too short
       if (deltaTime > 300 || (Math.abs(deltaX) < threshold && Math.abs(deltaY) < threshold)) {
         return;
@@ -243,7 +245,7 @@ export class TouchUtils {
 
 // React hooks for responsive design
 export function useBreakpoint(): Breakpoint {
-  const [breakpoint, setBreakpoint] = React.useState<Breakpoint>(() => 
+  const [breakpoint, setBreakpoint] = React.useState<Breakpoint>(() =>
     MediaQueryUtils.getCurrentBreakpoint()
   );
 
@@ -259,13 +261,8 @@ export function useBreakpoint(): Breakpoint {
   return breakpoint;
 }
 
-export function useMediaQuery(
-  breakpoint: Breakpoint,
-  type: 'min' | 'max' = 'min'
-): boolean {
-  const [matches, setMatches] = React.useState(() => 
-    MediaQueryUtils.matches(breakpoint, type)
-  );
+export function useMediaQuery(breakpoint: Breakpoint, type: 'min' | 'max' = 'min'): boolean {
+  const [matches, setMatches] = React.useState(() => MediaQueryUtils.matches(breakpoint, type));
 
   React.useEffect(() => {
     return MediaQueryUtils.addListener(breakpoint, setMatches, type);
@@ -290,9 +287,7 @@ export function useViewportSize() {
 }
 
 export function useOrientation() {
-  const [orientation, setOrientation] = React.useState(() => 
-    DeviceUtils.getOrientation()
-  );
+  const [orientation, setOrientation] = React.useState(() => DeviceUtils.getOrientation());
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -311,7 +306,7 @@ export function useDeviceType() {
     isMobile: DeviceUtils.isMobile(),
     isTablet: DeviceUtils.isTablet(),
     isDesktop: DeviceUtils.isDesktop(),
-    isTouchDevice: DeviceUtils.isTouchDevice()
+    isTouchDevice: DeviceUtils.isTouchDevice(),
   }));
 
   React.useEffect(() => {
@@ -320,7 +315,7 @@ export function useDeviceType() {
         isMobile: DeviceUtils.isMobile(),
         isTablet: DeviceUtils.isTablet(),
         isDesktop: DeviceUtils.isDesktop(),
-        isTouchDevice: DeviceUtils.isTouchDevice()
+        isTouchDevice: DeviceUtils.isTouchDevice(),
       });
     };
 
@@ -336,7 +331,7 @@ export function useResponsiveValue<T>(
   fallback: T
 ): T {
   const breakpoint = useBreakpoint();
-  
+
   return React.useMemo(() => {
     return ResponsiveUtils.getResponsiveValue(breakpointValues, fallback);
   }, [breakpointValues, fallback, breakpoint]);
@@ -350,7 +345,7 @@ export function useSwipeGesture(
 
   React.useEffect(() => {
     if (!ref.current) return;
-    
+
     return TouchUtils.addSwipeGesture(ref.current, onSwipe, threshold);
   }, [onSwipe, threshold]);
 
@@ -370,17 +365,17 @@ export interface ResponsiveProps {
 export const ResponsiveRender: React.FC<ResponsiveProps> = (props) => {
   const breakpoint = useBreakpoint();
   const breakpointOrder: Breakpoint[] = ['2xl', 'xl', 'lg', 'md', 'sm', 'xs'];
-  
+
   // Find the best matching breakpoint
   const currentIndex = breakpointOrder.indexOf(breakpoint);
-  
+
   for (let i = currentIndex; i < breakpointOrder.length; i++) {
     const bp = breakpointOrder[i];
     if (props[bp] !== undefined) {
       return React.createElement(React.Fragment, {}, props[bp]);
     }
   }
-  
+
   return null;
 };
 
@@ -390,10 +385,10 @@ export function generateResponsiveStyles(
   values: Partial<Record<Breakpoint, string | number>>
 ): Record<string, any> {
   const styles: Record<string, any> = {};
-  
+
   Object.entries(values).forEach(([breakpoint, value]) => {
     const bp = breakpoint as Breakpoint;
-    
+
     if (bp === 'xs') {
       styles[property] = value;
     } else {
@@ -404,6 +399,6 @@ export function generateResponsiveStyles(
       styles[`@media ${mediaQuery}`][property] = value;
     }
   });
-  
+
   return styles;
-} 
+}

@@ -39,18 +39,18 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
 
     const animate = (currentTime: number) => {
       const elapsed = currentTime - startTime;
-      
+
       if (elapsed < 0) {
         animationFrame = requestAnimationFrame(animate);
         return;
       }
 
       const progress = Math.min(elapsed / duration, 1);
-      
+
       // Easing function (ease-out cubic)
       const easeOut = 1 - Math.pow(1 - progress, 3);
       const currentValue = startValue + (endValue - startValue) * easeOut;
-      
+
       setDisplayValue(currentValue);
 
       if (progress < 1) {
@@ -70,10 +70,10 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   const formatNumber = (num: number): string => {
     const rounded = Number(num.toFixed(decimals));
     const parts = rounded.toString().split('.');
-    
+
     // Add thousand separators
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator);
-    
+
     return parts.join('.');
   };
 
@@ -128,16 +128,10 @@ export const CounterCard: React.FC<CounterCardProps> = ({
       whileHover={{ scale: 1.02 }}
     >
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
-          {title}
-        </h3>
-        {icon && (
-          <div className="text-gray-400 dark:text-gray-500">
-            {icon}
-          </div>
-        )}
+        <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">{title}</h3>
+        {icon && <div className="text-gray-400 dark:text-gray-500">{icon}</div>}
       </div>
-      
+
       <div className="flex items-end justify-between">
         <AnimatedCounter
           value={value}
@@ -147,7 +141,7 @@ export const CounterCard: React.FC<CounterCardProps> = ({
           className="text-2xl font-bold text-gray-900 dark:text-white"
           duration={1500}
         />
-        
+
         {trend && (
           <motion.div
             className={cn(
@@ -158,9 +152,7 @@ export const CounterCard: React.FC<CounterCardProps> = ({
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <span className="mr-1">
-              {trend.isPositive ? '↗' : '↘'}
-            </span>
+            <span className="mr-1">{trend.isPositive ? '↗' : '↘'}</span>
             {Math.abs(trend.value)}%
           </motion.div>
         )}
@@ -186,10 +178,7 @@ interface MetricsGridProps {
   className?: string;
 }
 
-export const MetricsGrid: React.FC<MetricsGridProps> = ({
-  metrics,
-  className,
-}) => {
+export const MetricsGrid: React.FC<MetricsGridProps> = ({ metrics, className }) => {
   return (
     <div className={cn('grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4', className)}>
       {metrics.map((metric, index) => (
@@ -204,4 +193,4 @@ export const MetricsGrid: React.FC<MetricsGridProps> = ({
       ))}
     </div>
   );
-}; 
+};

@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const post = getPostBySlug(params.slug);
-  
+
   if (!post) {
     notFound();
   }
@@ -68,18 +68,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               {post.category}
             </Link>
             <span className="text-gray-500">•</span>
-            <span className="text-gray-500 text-sm">
-              {post.readingTime?.text}
-            </span>
+            <span className="text-gray-500 text-sm">{post.readingTime?.text}</span>
           </div>
-          
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            {post.title}
-          </h1>
-          
-          <p className="text-xl text-gray-600 mb-6">
-            {post.excerpt}
-          </p>
+
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{post.title}</h1>
+
+          <p className="text-xl text-gray-600 mb-6">{post.excerpt}</p>
 
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center">
@@ -91,31 +85,28 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 className="rounded-full mr-4"
               />
               <div>
-                <p className="font-medium text-gray-900">
-                  {post.author.name}
-                </p>
+                <p className="font-medium text-gray-900">{post.author.name}</p>
                 <p className="text-sm text-gray-500">
-                  Published on {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                  Published on{' '}
+                  {new Date(post.publishedAt).toLocaleDateString('en-US', {
                     month: 'long',
                     day: 'numeric',
-                    year: 'numeric'
+                    year: 'numeric',
                   })}
                   {post.updatedAt && post.updatedAt !== post.publishedAt && (
                     <span className="ml-2">
-                      • Updated {new Date(post.updatedAt).toLocaleDateString('en-US', {
+                      • Updated{' '}
+                      {new Date(post.updatedAt).toLocaleDateString('en-US', {
                         month: 'long',
                         day: 'numeric',
-                        year: 'numeric'
+                        year: 'numeric',
                       })}
                     </span>
                   )}
                 </p>
               </div>
             </div>
-            <ShareButtons 
-              url={`https://riscura.com/blog/${post.slug}`}
-              title={post.title}
-            />
+            <ShareButtons url={`https://riscura.com/blog/${post.slug}`} title={post.title} />
           </div>
         </header>
 
@@ -143,15 +134,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           {/* Main Content */}
           <div className="lg:col-span-9">
             <div className="prose prose-lg prose-gray max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h3:text-xl prose-code:before:content-none prose-code:after:content-none prose-pre:bg-gray-900">
-              <MDXRemote 
+              <MDXRemote
                 source={post.content}
                 options={{
                   mdxOptions: {
                     remarkPlugins: [remarkGfm],
-                    rehypePlugins: [
-                      rehypeSlug,
-                      [rehypePrismPlus, { showLineNumbers: true }],
-                    ],
+                    rehypePlugins: [rehypeSlug, [rehypePrismPlus, { showLineNumbers: true }]],
                   },
                 }}
               />
@@ -204,9 +192,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
 
         {/* Related Posts */}
-        {relatedPosts.length > 0 && (
-          <RelatedPosts posts={relatedPosts} />
-        )}
+        {relatedPosts.length > 0 && <RelatedPosts posts={relatedPosts} />}
 
         {/* Newsletter */}
         <NewsletterCTA />

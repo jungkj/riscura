@@ -633,19 +633,16 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
           <p className="text-gray-600">Generate insights and create custom reports for your risk management program.</p>
         </div>
         <div className="flex items-center gap-3">
-          <DaisyButton variant="outline" className="text-sm" >
-  <Filter className="h-4 w-4 mr-2" />
-</DaisyButton>
+          <DaisyButton variant="outline" className="text-sm">
+            <Filter className="h-4 w-4 mr-2" />
             Filters
           </DaisyButton>
-          <DaisyButton variant="outline" className="text-sm" >
-  <Download className="h-4 w-4 mr-2" />
-</DaisyButton>
+          <DaisyButton variant="outline" className="text-sm">
+            <Download className="h-4 w-4 mr-2" />
             Export
           </DaisyButton>
-          <DaisyButton >
-  <Plus className="h-4 w-4 mr-2" />
-</DaisyButton>
+          <DaisyButton>
+            <Plus className="h-4 w-4 mr-2" />
             New Report
           </DaisyButton>
         </div>
@@ -810,4 +807,6 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
       </DaisyTabs>
     </div>
   );
-} 
+}
+
+export default ReportingPage; 

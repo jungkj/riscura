@@ -1,33 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-config';
-import { ReportingService, ReportConfig, ReportFormat, ReportType } from '@/services/ReportingService';
+import {
+  ReportingService,
+  ReportConfig,
+  ReportFormat,
+  ReportType,
+} from '@/services/ReportingService';
 import { db } from '@/lib/db';
 
 export async function POST(request: NextRequest) {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Parse request body
     const body = await request.json();
-    
+
     // Validate required fields
-    const {
-      name,
-      type,
-      template,
-      format,
-      filters = {},
-      parameters = {},
-      recipients = [],
-    } = body;
+    const { name, type, template, format, filters = {}, parameters = {}, recipients = [] } = body;
 
     if (!name || !type || !format) {
       return NextResponse.json(
@@ -38,15 +32,12 @@ export async function POST(request: NextRequest) {
 
     // Validate report type
     if (!Object.values(ReportType).includes(type)) {
-      return NextResponse.json(
-        { error: `Invalid report type: ${type}` },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: `Invalid report type: ${type}` }, { status: 400 });
     }
 
     // Validate formats
     const validFormats = Array.isArray(format) ? format : [format];
-    const invalidFormats = validFormats.filter(f => !Object.values(ReportFormat).includes(f));
+    const invalidFormats = validFormats.filter((f) => !Object.values(ReportFormat).includes(f));
     if (invalidFormats.length > 0) {
       return NextResponse.json(
         { error: `Invalid format(s): ${invalidFormats.join(', ')}` },
@@ -61,10 +52,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user?.organizationId) {
-      return NextResponse.json(
-        { error: 'User organization not found' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'User organization not found' }, { status: 400 });
     }
 
     // Check permissions for sensitive report types
@@ -85,10 +73,12 @@ export async function POST(request: NextRequest) {
       filters: {
         ...filters,
         // Ensure date filters are Date objects
-        dateRange: filters.dateRange ? {
-          from: new Date(filters.dateRange.from),
-          to: new Date(filters.dateRange.to),
-        } : undefined,
+        dateRange: filters.dateRange
+          ? {
+              from: new Date(filters.dateRange.from),
+              to: new Date(filters.dateRange.to),
+            }
+          : undefined,
       },
       format: validFormats,
       organizationId: user.organizationId,
@@ -106,7 +96,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'Report generated successfully',
-      reports: reports.map(report => ({
+      reports: reports.map((report) => ({
         id: report.id,
         name: report.name,
         type: report.type,
@@ -116,10 +106,9 @@ export async function POST(request: NextRequest) {
         downloadUrl: report.downloadUrl,
       })),
     });
-
   } catch (error) {
     console.error('Report generation error:', error);
-    
+
     // Handle specific error types
     const errorMessage = error instanceof Error ? error.message : String(error);
     if (errorMessage.includes('Missing required configuration')) {
@@ -146,12 +135,9 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get user's organization
@@ -161,10 +147,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!user?.organizationId) {
-      return NextResponse.json(
-        { error: 'User organization not found' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'User organization not found' }, { status: 400 });
     }
 
     // Initialize reporting service
@@ -179,12 +162,8 @@ export async function GET(request: NextRequest) {
       reportTypes: Object.values(ReportType),
       formats: Object.values(ReportFormat),
     });
-
   } catch (error) {
     console.error('Error fetching report templates:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch report templates' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch report templates' }, { status: 500 });
   }
-} 
+}

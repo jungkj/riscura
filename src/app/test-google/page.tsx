@@ -1,5 +1,4 @@
 export default function TestGoogle() {
-
   return (
     <html>
       <head>
@@ -8,10 +7,10 @@ export default function TestGoogle() {
       <body style={{ fontFamily: 'Arial', padding: '50px', textAlign: 'center' }}>
         <h1>Simple Google OAuth Test</h1>
         <p>This bypasses NextAuth completely</p>
-        
+
         <div style={{ marginTop: '30px' }}>
-          <a 
-            href="/api/google-oauth/login" 
+          <a
+            href="/api/google-oauth/login"
             style={{
               background: '#4285f4',
               color: 'white',
@@ -19,14 +18,16 @@ export default function TestGoogle() {
               textDecoration: 'none',
               borderRadius: '5px',
               fontSize: '18px',
-              display: 'inline-block'
+              display: 'inline-block',
             }}
           >
             Sign in with Google (Simple OAuth)
           </a>
         </div>
-        
-        <div style={{ marginTop: '50px', background: '#f0f0f0', padding: '20px', borderRadius: '5px' }}>
+
+        <div
+          style={{ marginTop: '50px', background: '#f0f0f0', padding: '20px', borderRadius: '5px' }}
+        >
           <h3>How this works:</h3>
           <ul style={{ textAlign: 'left', maxWidth: '400px', margin: '0 auto' }}>
             <li>Clicking the button goes to: /api/google-oauth/login</li>
@@ -35,7 +36,7 @@ export default function TestGoogle() {
             <li>Success redirects to: /dashboard</li>
           </ul>
         </div>
-        
+
         <div style={{ marginTop: '30px' }}>
           <p>Current endpoints status:</p>
           <ul style={{ listStyle: 'none', padding: 0 }}>

@@ -48,28 +48,37 @@ export const generatePDF = async (reportData: any): Promise<Buffer> => {
     This is a mock PDF report. In production, this would be generated using @react-pdf/renderer.
     
     Report sections:
-    ${reportData.sections?.map((section: any, index: number) => 
-      `${index + 1}. ${section.title || 'Untitled Section'}`
-    ).join('\n    ') || 'No sections'}
+    ${
+      reportData.sections
+        ?.map(
+          (section: any, index: number) => `${index + 1}. ${section.title || 'Untitled Section'}`
+        )
+        .join('\n    ') || 'No sections'
+    }
   `;
-  
+
   return Buffer.from(mockPdfContent, 'utf-8');
 };
 
 // Mock formatting functions
 export const formatTableData = (data: any[], columns: any[]) => {
   return {
-    headers: columns.map(col => col.header),
-    rows: data.map(item => columns.map(col => item[col.key] || ''))
+    headers: columns.map((col) => col.header),
+    rows: data.map((item) => columns.map((col) => item[col.key] || '')),
   };
 };
 
-export const formatChartData = (data: any[], labelKey: string, valueKey: string, chartType?: string) => {
+export const formatChartData = (
+  data: any[],
+  labelKey: string,
+  valueKey: string,
+  chartType?: string
+) => {
   return {
     type: chartType || 'pie',
-    data: data.map(item => ({
+    data: data.map((item) => ({
       label: item[labelKey],
-      value: item[valueKey]
-    }))
+      value: item[valueKey],
+    })),
   };
-}; 
+};

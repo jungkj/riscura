@@ -1,10 +1,5 @@
 import { db } from '@/lib/db';
-import { 
-  ActivityType,
-  EntityType,
-  User,
-  Control
-} from '@prisma/client';
+import { ActivityType, EntityType, User, Control } from '@prisma/client';
 
 // Define the evidence types based on the actual Prisma schema
 type AssessmentEvidence = {
@@ -83,7 +78,12 @@ export interface AuditPackage {
 
 export interface AuditDeliverable {
   id: string;
-  type: 'evidence-package' | 'control-matrix' | 'gap-analysis' | 'test-results' | 'management-letter';
+  type:
+    | 'evidence-package'
+    | 'control-matrix'
+    | 'gap-analysis'
+    | 'test-results'
+    | 'management-letter';
   name: string;
   description: string;
   status: 'not-started' | 'in-progress' | 'completed' | 'reviewed';
@@ -151,7 +151,6 @@ export interface EvidenceNotification {
 }
 
 export class ComplianceEvidenceManager {
-
   // Create evidence record
   async createEvidence(evidenceData: {
     assessmentId: string;
@@ -318,7 +317,9 @@ export class ComplianceEvidenceManager {
   }
 
   // Create evidence request
-  async createEvidenceRequest(request: Omit<EvidenceRequest, 'id' | 'createdAt'>): Promise<EvidenceRequest> {
+  async createEvidenceRequest(
+    request: Omit<EvidenceRequest, 'id' | 'createdAt'>
+  ): Promise<EvidenceRequest> {
     const newRequest = await db.client.evidenceRequest.create({
       data: {
         ...request,
@@ -335,7 +336,12 @@ export class ComplianceEvidenceManager {
         recipientId: userId,
         entityType: 'EVIDENCE_REQUEST',
         entityId: newRequest.id,
-        urgency: request.priority === 'critical' ? 'urgent' : request.priority === 'high' ? 'high' : 'medium',
+        urgency:
+          request.priority === 'critical'
+            ? 'urgent'
+            : request.priority === 'high'
+              ? 'high'
+              : 'medium',
         data: {
           dueDate: request.dueDate,
           controlId: request.controlId,
@@ -383,7 +389,9 @@ export class ComplianceEvidenceManager {
   }
 
   // Create audit package
-  async createAuditPackage(packageData: Omit<AuditPackage, 'id' | 'createdAt'>): Promise<AuditPackage> {
+  async createAuditPackage(
+    packageData: Omit<AuditPackage, 'id' | 'createdAt'>
+  ): Promise<AuditPackage> {
     const auditPackage = await db.client.auditPackage.create({
       data: {
         ...packageData,
@@ -426,7 +434,7 @@ export class ComplianceEvidenceManager {
     await db.client.auditPackage.update({
       where: { id: auditPackageId },
       data: {
-        evidence: evidence.map(e => e.id),
+        evidence: evidence.map((e) => e.id),
       },
     });
   }
@@ -481,13 +489,15 @@ export class ComplianceEvidenceManager {
         category: evidence.control?.category || 'unknown',
         controlId: evidence.controlId,
         requirementId: evidence.assessmentId,
-        file: evidence.fileUrl ? {
-          filename: evidence.name,
-          path: evidence.fileUrl,
-          size: 0, // Assuming size is not available in fileUrl
-          mimeType: '', // Assuming mimeType is not available in fileUrl
-          hash: '', // Assuming hash is not available in fileUrl
-        } : null,
+        file: evidence.fileUrl
+          ? {
+              filename: evidence.name,
+              path: evidence.fileUrl,
+              size: 0, // Assuming size is not available in fileUrl
+              mimeType: '', // Assuming mimeType is not available in fileUrl
+              hash: '', // Assuming hash is not available in fileUrl
+            }
+          : null,
         metadata: {
           source: 'system',
           author: evidence.uploader?.firstName + ' ' + evidence.uploader?.lastName || 'system',
@@ -505,7 +515,7 @@ export class ComplianceEvidenceManager {
 
     // In a real implementation, this would create an actual ZIP file
     const packageFilename = `audit_evidence_${auditPackage.id}_${Date.now()}.json`;
-    
+
     // Store package metadata
     await db.client.file.create({
       data: {
@@ -541,14 +551,17 @@ export class ComplianceEvidenceManager {
       })),
       summary: {
         totalControls: auditPackage.controls.length,
-        effectiveControls: auditPackage.controls.filter((c: any) => c.effectivenessScore >= 80).length,
+        effectiveControls: auditPackage.controls.filter((c: any) => c.effectivenessScore >= 80)
+          .length,
         testedControls: auditPackage.controls.filter((c: any) => c.lastTested).length,
-        overallMaturity: auditPackage.controls.reduce((sum: number, c: any) => sum + c.effectivenessScore, 0) / auditPackage.controls.length,
+        overallMaturity:
+          auditPackage.controls.reduce((sum: number, c: any) => sum + c.effectivenessScore, 0) /
+          auditPackage.controls.length,
       },
     };
 
     const matrixFilename = `control_matrix_${auditPackage.id}_${Date.now()}.json`;
-    
+
     await db.client.file.create({
       data: {
         filename: matrixFilename,
@@ -584,7 +597,7 @@ export class ComplianceEvidenceManager {
     };
 
     const reportFilename = `gap_analysis_${auditPackage.id}_${Date.now()}.json`;
-    
+
     await db.client.file.create({
       data: {
         filename: reportFilename,
@@ -617,7 +630,9 @@ export class ComplianceEvidenceManager {
           deficiencies: control.deficiencies || [],
           exceptions: control.exceptions || [],
         },
-        evidence: auditPackage.evidence.filter((e: any) => e.controlId === control.id && e.evidenceType === 'test-result'),
+        evidence: auditPackage.evidence.filter(
+          (e: any) => e.controlId === control.id && e.evidenceType === 'test-result'
+        ),
       })),
       summary: {
         totalTests: 0, // Would be calculated
@@ -628,7 +643,7 @@ export class ComplianceEvidenceManager {
     };
 
     const resultsFilename = `test_results_${auditPackage.id}_${Date.now()}.json`;
-    
+
     await db.client.file.create({
       data: {
         filename: resultsFilename,
@@ -646,7 +661,9 @@ export class ComplianceEvidenceManager {
   }
 
   // Setup automated evidence collection
-  async setupAutomatedCollection(collection: Omit<EvidenceCollection, 'id'>): Promise<EvidenceCollection> {
+  async setupAutomatedCollection(
+    collection: Omit<EvidenceCollection, 'id'>
+  ): Promise<EvidenceCollection> {
     const newCollection = await db.client.evidenceCollection.create({
       data: collection,
     });
@@ -663,7 +680,7 @@ export class ComplianceEvidenceManager {
   private async scheduleEvidenceCollection(collectionId: string): Promise<void> {
     // This would integrate with a job scheduler like node-cron
     console.log(`Scheduling evidence collection: ${collectionId}`);
-    
+
     // In a real implementation, this would:
     // 1. Set up cron jobs based on collection frequency
     // 2. Connect to various evidence sources
@@ -741,7 +758,10 @@ export class ComplianceEvidenceManager {
   }
 
   // Get evidence statistics
-  async getEvidenceStatistics(organizationId: string, frameworkId?: string): Promise<{
+  async getEvidenceStatistics(
+    organizationId: string,
+    frameworkId?: string
+  ): Promise<{
     total: number;
     byType: Record<string, number>;
     byStatus: Record<string, number>;
@@ -775,27 +795,33 @@ export class ComplianceEvidenceManager {
 
     return {
       total: evidence.length,
-      byType: evidence.reduce((acc, e) => {
-        acc[e.evidenceType] = (acc[e.evidenceType] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>),
-      byStatus: evidence.reduce((acc, e) => {
-        acc[e.status] = (acc[e.status] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>),
-      byCategory: evidence.reduce((acc, e) => {
-        acc[e.control?.category] = (acc[e.control?.category] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>),
-      expiringCount: evidence.filter(e => 
-        e.metadata.expirationDate && 
-        new Date(e.metadata.expirationDate) <= thirtyDaysFromNow
+      byType: evidence.reduce(
+        (acc, e) => {
+          acc[e.evidenceType] = (acc[e.evidenceType] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>
+      ),
+      byStatus: evidence.reduce(
+        (acc, e) => {
+          acc[e.status] = (acc[e.status] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>
+      ),
+      byCategory: evidence.reduce(
+        (acc, e) => {
+          acc[e.control?.category] = (acc[e.control?.category] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>
+      ),
+      expiringCount: evidence.filter(
+        (e) => e.metadata.expirationDate && new Date(e.metadata.expirationDate) <= thirtyDaysFromNow
       ).length,
-      recentlyAdded: evidence.filter(e => 
-        new Date(e.uploadedAt) >= sevenDaysAgo
-      ).length,
+      recentlyAdded: evidence.filter((e) => new Date(e.uploadedAt) >= sevenDaysAgo).length,
     };
   }
 }
 
-export const complianceEvidenceManager = new ComplianceEvidenceManager(); 
+export const complianceEvidenceManager = new ComplianceEvidenceManager();

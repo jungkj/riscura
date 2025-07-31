@@ -36,7 +36,7 @@ describe('RiskAssessmentWizard', () => {
   beforeEach(() => {
     user = userEvent.setup();
     jest.clearAllMocks();
-    
+
     // Mock useDropzone implementation
     const mockUseDropzone = require('react-dropzone').useDropzone;
     mockUseDropzone.mockReturnValue({
@@ -248,7 +248,9 @@ describe('RiskAssessmentWizard', () => {
     it('should display uploaded files in the list', async () => {
       // Mock dropzone with files
       const mockFiles = [
-        new File(['test content'], 'test-rcsa.xlsx', { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }),
+        new File(['test content'], 'test-rcsa.xlsx', {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        }),
         new File(['policy content'], 'policy.pdf', { type: 'application/pdf' }),
       ];
 
@@ -265,7 +267,7 @@ describe('RiskAssessmentWizard', () => {
 
       // Re-render component to trigger file addition
       const { rerender } = render(<RiskAssessmentWizard {...defaultProps} />);
-      
+
       // Simulate file drop
       const dropzoneCallback = mockUseDropzone.mock.calls[0][0].onDrop;
       dropzoneCallback(mockFiles, []);
@@ -337,7 +339,13 @@ describe('RiskAssessmentWizard', () => {
       const mockAnalysisResults = {
         risks: [
           { id: '1', title: 'Data Breach Risk', category: 'Technology', likelihood: 3, impact: 4 },
-          { id: '2', title: 'Compliance Violation', category: 'Compliance', likelihood: 2, impact: 5 },
+          {
+            id: '2',
+            title: 'Compliance Violation',
+            category: 'Compliance',
+            likelihood: 2,
+            impact: 5,
+          },
         ],
         controls: [
           { id: '1', title: 'Access Control', effectiveness: 85 },
@@ -482,4 +490,4 @@ describe('RiskAssessmentWizard', () => {
       expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Document Upload');
     });
   });
-}); 
+});

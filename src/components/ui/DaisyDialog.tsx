@@ -26,9 +26,7 @@ export const DaisyDialog = ({ open, onOpenChange, children, className }: DialogP
 
   return (
     <dialog ref={dialogRef} className="modal" onClose={handleClose}>
-      <div className={cn('modal-box', className)}>
-        {children}
-      </div>
+      <div className={cn('modal-box', className)}>{children}</div>
       <form method="dialog" className="modal-backdrop">
         <button>close</button>
       </form>
@@ -36,7 +34,11 @@ export const DaisyDialog = ({ open, onOpenChange, children, className }: DialogP
   );
 };
 
-export const DaisyDialogContent = ({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
+export const DaisyDialogContent = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => {
   return (
     <div className={cn('relative', className)} {...props}>
       {children}
@@ -44,7 +46,11 @@ export const DaisyDialogContent = ({ className, children, ...props }: React.HTML
   );
 };
 
-export const DaisyDialogHeader = ({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
+export const DaisyDialogHeader = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => {
   return (
     <div className={cn('mb-4', className)} {...props}>
       {children}
@@ -52,7 +58,11 @@ export const DaisyDialogHeader = ({ className, children, ...props }: React.HTMLA
   );
 };
 
-export const DaisyDialogTitle = ({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
+export const DaisyDialogTitle = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) => {
   return (
     <h3 className={cn('font-bold text-lg', className)} {...props}>
       {children}
@@ -60,7 +70,11 @@ export const DaisyDialogTitle = ({ className, children, ...props }: React.HTMLAt
   );
 };
 
-export const DaisyDialogDescription = ({ className, children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => {
+export const DaisyDialogDescription = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLParagraphElement>) => {
   return (
     <p className={cn('text-sm text-base-content/70', className)} {...props}>
       {children}
@@ -68,7 +82,11 @@ export const DaisyDialogDescription = ({ className, children, ...props }: React.
   );
 };
 
-export const DaisyDialogFooter = ({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
+export const DaisyDialogFooter = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => {
   return (
     <div className={cn('modal-action', className)} {...props}>
       {children}
@@ -76,7 +94,11 @@ export const DaisyDialogFooter = ({ className, children, ...props }: React.HTMLA
   );
 };
 
-export const DaisyDialogClose = ({ className, children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+export const DaisyDialogClose = ({
+  className,
+  children,
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <form method="dialog" className="absolute right-2 top-2">
       <button className={cn('btn btn-sm btn-circle btn-ghost', className)} {...props}>

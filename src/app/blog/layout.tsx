@@ -2,12 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { categories } from '@/lib/blog/mdx';
 
-export default function BlogLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-
+export default function BlogLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-10">
@@ -23,8 +18,8 @@ export default function BlogLayout({
               <Link href="/demo" className="text-gray-700 hover:text-gray-900 font-medium">
                 Demo
               </Link>
-              <Link 
-                href="/signup" 
+              <Link
+                href="/signup"
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Start Free Trial
@@ -34,9 +29,7 @@ export default function BlogLayout({
         </div>
       </nav>
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {children}
-      </main>
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">{children}</main>
 
       <footer className="bg-gray-900 text-white mt-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -48,9 +41,7 @@ export default function BlogLayout({
               </p>
             </div>
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-wider mb-4">
-                Resources
-              </h4>
+              <h4 className="text-sm font-semibold uppercase tracking-wider mb-4">Resources</h4>
               <ul className="space-y-2">
                 <li>
                   <Link href="/blog" className="text-gray-400 hover:text-white">
@@ -70,9 +61,7 @@ export default function BlogLayout({
               </ul>
             </div>
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-wider mb-4">
-                Company
-              </h4>
+              <h4 className="text-sm font-semibold uppercase tracking-wider mb-4">Company</h4>
               <ul className="space-y-2">
                 <li>
                   <Link href="/about" className="text-gray-400 hover:text-white">
@@ -92,9 +81,7 @@ export default function BlogLayout({
               </ul>
             </div>
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-wider mb-4">
-                Subscribe
-              </h4>
+              <h4 className="text-sm font-semibold uppercase tracking-wider mb-4">Subscribe</h4>
               <p className="text-gray-400 mb-4">
                 Get the latest risk management insights delivered to your inbox.
               </p>

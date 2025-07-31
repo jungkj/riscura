@@ -1,4 +1,10 @@
-import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand, HeadObjectCommand } from '@aws-sdk/client-s3';
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+  DeleteObjectCommand,
+  HeadObjectCommand,
+} from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
@@ -89,7 +95,7 @@ async function uploadToS3(
   try {
     const result = await s3Client.send(command);
     const url = `https://${BUCKET_NAME}.s3.${process.env.AWS_REGION || 'us-east-1'}.amazonaws.com/${key}`;
-    
+
     return {
       key,
       url,
@@ -116,7 +122,7 @@ async function uploadToLocal(
   try {
     const filePath = path.join(LOCAL_STORAGE_PATH, key);
     await fs.writeFile(filePath, buffer);
-    
+
     // Store metadata in JSON file
     const metadataPath = path.join(LOCAL_STORAGE_PATH, `${key}.meta.json`);
     const metadataContent = {
@@ -130,9 +136,9 @@ async function uploadToLocal(
       version: metadata.version || 1,
     };
     await fs.writeFile(metadataPath, JSON.stringify(metadataContent, null, 2));
-    
+
     const url = `/api/documents/download/${key}`;
-    
+
     return {
       key,
       url,
@@ -168,7 +174,7 @@ async function getFromS3(key: string): Promise<{ buffer: Buffer; metadata: FileM
 
     const result = await s3Client.send(command);
     const buffer = Buffer.from(await result.Body!.transformToByteArray());
-    
+
     const metadata: FileMetadata = {
       originalName: result.Metadata?.originalName || key,
       size: result.ContentLength || buffer.length,
@@ -194,11 +200,11 @@ async function getFromLocal(key: string): Promise<{ buffer: Buffer; metadata: Fi
   try {
     const filePath = path.join(LOCAL_STORAGE_PATH, key);
     const metadataPath = path.join(LOCAL_STORAGE_PATH, `${key}.meta.json`);
-    
+
     const buffer = await fs.readFile(filePath);
     const metadataContent = await fs.readFile(metadataPath, 'utf-8');
     const metadata = JSON.parse(metadataContent);
-    
+
     return {
       buffer,
       metadata: {
@@ -247,7 +253,7 @@ async function deleteFromLocal(key: string): Promise<void> {
   try {
     const filePath = path.join(LOCAL_STORAGE_PATH, key);
     const metadataPath = path.join(LOCAL_STORAGE_PATH, `${key}.meta.json`);
-    
+
     await Promise.all([
       fs.unlink(filePath).catch(() => {}), // Ignore if file doesn't exist
       fs.unlink(metadataPath).catch(() => {}),
@@ -330,7 +336,7 @@ export async function getFileMetadata(key: string): Promise<FileMetadata> {
       });
 
       const result = await s3Client.send(command);
-      
+
       return {
         originalName: result.Metadata?.originalName || key,
         size: result.ContentLength || 0,
@@ -346,4 +352,4 @@ export async function getFileMetadata(key: string): Promise<FileMetadata> {
       throw new Error('Failed to retrieve file metadata from S3');
     }
   }
-} 
+}

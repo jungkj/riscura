@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 function LoginRedirectContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   useEffect(() => {
     // Preserve all query parameters when redirecting
     const queryString = searchParams?.toString();
@@ -22,13 +22,14 @@ function LoginRedirectContent() {
 }
 
 export default function LoginRedirect() {
-
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Loading...</p>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <p>Loading...</p>
+        </div>
+      }
+    >
       <LoginRedirectContent />
     </Suspense>
   );

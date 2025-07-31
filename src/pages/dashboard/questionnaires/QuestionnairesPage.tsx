@@ -879,4 +879,6 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
       </div>
     </div>
   );
-} 
+}
+
+export default QuestionnairesPage; 

@@ -2,14 +2,14 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { designTokens } from '@/lib/design-system/tokens';
-import { 
-  ActionIcons, 
-  StatusIcons, 
+import {
+  ActionIcons,
+  StatusIcons,
   NavigationIcons,
   RiskManagementIcons,
   CommunicationIcons,
   DataIcons,
-  TimeIcons
+  TimeIcons,
 } from '@/components/icons/IconLibrary';
 import { LoadingStates, DotsLoading } from '@/components/states/LoadingState';
 import { EmptyStates } from '@/components/states/EmptyState';
@@ -19,85 +19,86 @@ const smartFeatures = {
   suggestedPrompts: [
     {
       id: 'analyze-risks',
-      text: "Analyze current high-risk items",
+      text: 'Analyze current high-risk items',
       category: 'risk-analysis',
       icon: RiskManagementIcons.Risk,
-      description: "Get AI insights on your highest priority risks"
+      description: 'Get AI insights on your highest priority risks',
     },
     {
       id: 'compliance-summary',
-      text: "Generate compliance summary",
+      text: 'Generate compliance summary',
       category: 'compliance',
       icon: RiskManagementIcons.Compliance,
-      description: "Review your compliance status across all frameworks"
+      description: 'Review your compliance status across all frameworks',
     },
     {
       id: 'control-improvements',
-      text: "Recommend control improvements",
+      text: 'Recommend control improvements',
       category: 'controls',
       icon: RiskManagementIcons.Control,
-      description: "Discover ways to strengthen your risk controls"
+      description: 'Discover ways to strengthen your risk controls',
     },
     {
       id: 'trend-analysis',
-      text: "Show risk trends over time",
+      text: 'Show risk trends over time',
       category: 'analytics',
       icon: DataIcons.TrendingUp,
-      description: "Analyze how your risk profile has changed"
+      description: 'Analyze how your risk profile has changed',
     },
     {
       id: 'audit-preparation',
-      text: "Help prepare for upcoming audit",
+      text: 'Help prepare for upcoming audit',
       category: 'audit',
       icon: RiskManagementIcons.Audit,
-      description: "Get guidance on audit readiness and documentation"
+      description: 'Get guidance on audit readiness and documentation',
     },
     {
       id: 'regulatory-updates',
-      text: "What are the latest regulatory changes?",
+      text: 'What are the latest regulatory changes?',
       category: 'regulatory',
       icon: StatusIcons.Info,
-      description: "Stay informed about relevant regulatory developments"
-    }
+      description: 'Stay informed about relevant regulatory developments',
+    },
   ],
   contextualAssistance: {
     riskAssessment: {
-      title: "Risk Assessment AI Assistant",
-      description: "AI can help assess impact and likelihood based on industry data and best practices",
+      title: 'Risk Assessment AI Assistant',
+      description:
+        'AI can help assess impact and likelihood based on industry data and best practices',
       capabilities: [
-        "Impact scoring based on business context",
-        "Likelihood assessment using historical data",
-        "Risk categorization and prioritization",
-        "Mitigation strategy recommendations"
-      ]
+        'Impact scoring based on business context',
+        'Likelihood assessment using historical data',
+        'Risk categorization and prioritization',
+        'Mitigation strategy recommendations',
+      ],
     },
     complianceReview: {
-      title: "Compliance Review AI Assistant", 
-      description: "AI can identify gaps and suggest improvements for regulatory compliance",
+      title: 'Compliance Review AI Assistant',
+      description: 'AI can identify gaps and suggest improvements for regulatory compliance',
       capabilities: [
-        "Gap analysis across frameworks",
-        "Control effectiveness evaluation",
-        "Remediation action planning",
-        "Evidence collection guidance"
-      ]
+        'Gap analysis across frameworks',
+        'Control effectiveness evaluation',
+        'Remediation action planning',
+        'Evidence collection guidance',
+      ],
     },
     auditPreparation: {
-      title: "Audit Preparation AI Assistant",
-      description: "AI can help organize documentation and identify potential audit findings",
+      title: 'Audit Preparation AI Assistant',
+      description: 'AI can help organize documentation and identify potential audit findings',
       capabilities: [
-        "Documentation completeness check",
-        "Control testing preparation",
-        "Finding prediction and prevention",
-        "Audit trail optimization"
-      ]
-    }
+        'Documentation completeness check',
+        'Control testing preparation',
+        'Finding prediction and prevention',
+        'Audit trail optimization',
+      ],
+    },
   },
   quickActions: [
     { id: 'export-chat', label: 'Export Chat', icon: ActionIcons.Download },
     { id: 'share-insights', label: 'Share Insights', icon: CommunicationIcons.Share },
     { id: 'save-analysis', label: 'Save Analysis', icon: ActionIcons.Save },
-    { id: 'schedule-followup', label: 'Schedule Follow-up', icon: TimeIcons.Calendar }
-  ]
+    { id: 'schedule-followup', label: 'Schedule Follow-up', icon: TimeIcons.Calendar },
+  ],
 };
 
 // Message types
@@ -131,7 +132,7 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
   context = 'general',
   initialPrompt,
   onInsightGenerated,
-  className = ''
+  className = '',
 }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -155,8 +156,8 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
         content: getWelcomeMessage(context),
         timestamp: new Date(),
         metadata: {
-          category: 'welcome'
-        }
+          category: 'welcome',
+        },
       };
       setMessages([welcomeMessage]);
     }
@@ -171,11 +172,16 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
 
   const getWelcomeMessage = (context: ARIAContext): string => {
     const contextMessages = {
-      'risk-assessment': "Hi! I'm ARIA, your AI risk assessment assistant. I can help you analyze risks, assess impact and likelihood, and recommend mitigation strategies. What would you like to explore?",
-      'compliance': "Hello! I'm ARIA, your AI compliance assistant. I can help you review compliance status, identify gaps, and suggest improvements across your frameworks. How can I assist you today?",
-      'audit': "Welcome! I'm ARIA, your AI audit assistant. I can help you prepare for audits, organize documentation, and identify potential findings. What audit-related task can I help with?",
-      'dashboard': "Hi there! I'm ARIA, your AI risk management assistant. I can provide insights on your current risk posture, compliance status, and recommend actions. What insights would you like?",
-      'general': "Hello! I'm ARIA, your AI-powered risk management assistant. I'm here to help you with risk analysis, compliance reviews, audit preparation, and strategic insights. How can I help you today?"
+      'risk-assessment':
+        "Hi! I'm ARIA, your AI risk assessment assistant. I can help you analyze risks, assess impact and likelihood, and recommend mitigation strategies. What would you like to explore?",
+      compliance:
+        "Hello! I'm ARIA, your AI compliance assistant. I can help you review compliance status, identify gaps, and suggest improvements across your frameworks. How can I assist you today?",
+      audit:
+        "Welcome! I'm ARIA, your AI audit assistant. I can help you prepare for audits, organize documentation, and identify potential findings. What audit-related task can I help with?",
+      dashboard:
+        "Hi there! I'm ARIA, your AI risk management assistant. I can provide insights on your current risk posture, compliance status, and recommend actions. What insights would you like?",
+      general:
+        "Hello! I'm ARIA, your AI-powered risk management assistant. I'm here to help you with risk analysis, compliance reviews, audit preparation, and strategic insights. How can I help you today?",
     };
     return contextMessages[context] || contextMessages.general;
   };
@@ -189,29 +195,29 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
       id: `user-${Date.now()}`,
       type: 'user',
       content: messageText,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
 
     try {
       // Simulate AI response (replace with actual API call)
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       const aiResponse = await generateAIResponse(messageText, context);
-      
+
       const assistantMessage: ChatMessage = {
         id: `assistant-${Date.now()}`,
         type: 'assistant',
         content: aiResponse.content,
         timestamp: new Date(),
-        metadata: aiResponse.metadata
+        metadata: aiResponse.metadata,
       };
 
-      setMessages(prev => [...prev, assistantMessage]);
-      
+      setMessages((prev) => [...prev, assistantMessage]);
+
       // Trigger insight callback if provided
       if (onInsightGenerated && aiResponse.metadata?.category !== 'general') {
         onInsightGenerated(aiResponse);
@@ -220,11 +226,12 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
       const errorMessage: ChatMessage = {
         id: `error-${Date.now()}`,
         type: 'system',
-        content: "I apologize, but I'm having trouble processing your request right now. Please try again in a moment.",
+        content:
+          "I apologize, but I'm having trouble processing your request right now. Please try again in a moment.",
         timestamp: new Date(),
-        metadata: { category: 'error' }
+        metadata: { category: 'error' },
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -258,9 +265,9 @@ Would you like me to dive deeper into any of these risks or help you create acti
           sources: ['Risk Register', 'Compliance Dashboard', 'Vendor Database'],
           actions: [
             { id: 'create-action-plan', label: 'Create Action Plan', action: () => {} },
-            { id: 'schedule-review', label: 'Schedule Risk Review', action: () => {} }
-          ]
-        }
+            { id: 'schedule-review', label: 'Schedule Risk Review', action: () => {} },
+          ],
+        },
       },
       'compliance-summary': {
         content: `Here's your current compliance status across all frameworks:
@@ -293,9 +300,9 @@ Would you like detailed remediation plans for any specific framework?`,
           sources: ['Compliance Dashboard', 'Framework Assessments', 'Audit Reports'],
           actions: [
             { id: 'generate-report', label: 'Generate Full Report', action: () => {} },
-            { id: 'create-remediation-plan', label: 'Create Remediation Plan', action: () => {} }
-          ]
-        }
+            { id: 'create-remediation-plan', label: 'Create Remediation Plan', action: () => {} },
+          ],
+        },
       },
       'control-improvements': {
         content: `I've analyzed your current controls and identified several improvement opportunities:
@@ -332,10 +339,10 @@ Which improvements would you like to prioritize?`,
           sources: ['Control Assessments', 'Industry Benchmarks', 'Cost-Benefit Analysis'],
           actions: [
             { id: 'prioritize-improvements', label: 'Create Priority Matrix', action: () => {} },
-            { id: 'estimate-costs', label: 'Get Cost Estimates', action: () => {} }
-          ]
-        }
-      }
+            { id: 'estimate-costs', label: 'Get Cost Estimates', action: () => {} },
+          ],
+        },
+      },
     };
 
     // Simple keyword matching for demo (replace with actual AI)
@@ -366,8 +373,8 @@ Could you provide more specific details about what you'd like to explore? For ex
       metadata: {
         category: 'general',
         confidence: 0.7,
-        sources: ['General Knowledge Base']
-      }
+        sources: ['General Knowledge Base'],
+      },
     };
   };
 
@@ -383,33 +390,37 @@ Could you provide more specific details about what you'd like to explore? For ex
     }
   };
 
-  const filteredPrompts = selectedCategory 
-    ? smartFeatures.suggestedPrompts.filter(p => p.category === selectedCategory)
+  const filteredPrompts = selectedCategory
+    ? smartFeatures.suggestedPrompts.filter((p) => p.category === selectedCategory)
     : smartFeatures.suggestedPrompts;
 
-  const categories = [...new Set(smartFeatures.suggestedPrompts.map(p => p.category))];
+  const categories = [...new Set(smartFeatures.suggestedPrompts.map((p) => p.category))];
 
   const getContextualGreeting = (context: ARIAContext): string => {
     const contextMessages: { [key in ARIAContext]: string } = {
-      'risk-assessment': 'Welcome! I can help you with risk identification, assessment, and mitigation strategies.',
-      'compliance': 'Hi! I\'m here to assist with compliance frameworks, requirements, and assessment questions.',
-      'audit': 'Hello! I can help you prepare for audits, understand requirements, and track findings.',
-      'dashboard': 'Welcome! I can help you interpret your dashboard data and provide insights.',
-      'general': 'Hello! I\'m ARIA, your AI assistant for risk management and compliance. How can I help you today?'
+      'risk-assessment':
+        'Welcome! I can help you with risk identification, assessment, and mitigation strategies.',
+      compliance:
+        "Hi! I'm here to assist with compliance frameworks, requirements, and assessment questions.",
+      audit:
+        'Hello! I can help you prepare for audits, understand requirements, and track findings.',
+      dashboard: 'Welcome! I can help you interpret your dashboard data and provide insights.',
+      general:
+        "Hello! I'm ARIA, your AI assistant for risk management and compliance. How can I help you today?",
     };
-    
+
     return contextMessages[context] || contextMessages.general;
   };
 
   const getContextKey = (context: ARIAContext): keyof typeof smartFeatures.contextualAssistance => {
     const contextMap: Record<ARIAContext, keyof typeof smartFeatures.contextualAssistance> = {
       'risk-assessment': 'riskAssessment',
-      'compliance': 'complianceReview',
-      'audit': 'auditPreparation',
-      'dashboard': 'riskAssessment', // fallback
-      'general': 'riskAssessment' // fallback
+      compliance: 'complianceReview',
+      audit: 'auditPreparation',
+      dashboard: 'riskAssessment', // fallback
+      general: 'riskAssessment', // fallback
     };
-    
+
     return contextMap[context] || 'riskAssessment';
   };
 
@@ -424,7 +435,8 @@ Could you provide more specific details about what you'd like to explore? For ex
           <div>
             <h3 className="font-semibold text-gray-900">ARIA AI Assistant</h3>
             <p className="text-xs text-gray-500">
-              {smartFeatures.contextualAssistance[getContextKey(context)]?.title || 'AI-Powered Risk Management'}
+              {smartFeatures.contextualAssistance[getContextKey(context)]?.title ||
+                'AI-Powered Risk Management'}
             </p>
           </div>
         </div>
@@ -450,14 +462,16 @@ Could you provide more specific details about what you'd like to explore? For ex
             {smartFeatures.contextualAssistance[getContextKey(context)].description}
           </p>
           <div className="flex flex-wrap gap-2">
-            {smartFeatures.contextualAssistance[getContextKey(context)].capabilities.map((capability: string, index: number) => (
-              <span
-                key={index}
-                className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-              >
-                {capability}
-              </span>
-            ))}
+            {smartFeatures.contextualAssistance[getContextKey(context)].capabilities.map(
+              (capability: string, index: number) => (
+                <span
+                  key={index}
+                  className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                >
+                  {capability}
+                </span>
+              )
+            )}
           </div>
         </div>
       )}
@@ -471,14 +485,14 @@ Could you provide more specific details about what you'd like to explore? For ex
               <button
                 onClick={() => setSelectedCategory(null)}
                 className={`px-2 py-1 text-xs rounded-md transition-colors ${
-                  !selectedCategory 
-                    ? 'bg-blue-100 text-blue-700' 
+                  !selectedCategory
+                    ? 'bg-blue-100 text-blue-700'
                     : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
                 }`}
               >
                 All
               </button>
-              {categories.map(category => (
+              {categories.map((category) => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
@@ -500,16 +514,14 @@ Could you provide more specific details about what you'd like to explore? For ex
                 onClick={() => handleSuggestedPrompt(prompt)}
                 className="flex items-start space-x-3 p-3 text-left rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors group"
               >
-                                 <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
-                   <prompt.icon size="sm" color="secondary" />
+                <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                  <prompt.icon size="sm" color="secondary" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 group-hover:text-blue-900">
                     {prompt.text}
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    {prompt.description}
-                  </p>
+                  <p className="text-xs text-gray-500 mt-1">{prompt.description}</p>
                 </div>
               </button>
             ))}
@@ -520,7 +532,7 @@ Could you provide more specific details about what you'd like to explore? For ex
       {/* Messages */}
       <div className={`${isExpanded ? 'h-96' : 'h-64'} overflow-y-auto p-4 space-y-4`}>
         {messages.length === 0 ? (
-          <EmptyStates.NoData 
+          <EmptyStates.NoData
             title="Start a conversation"
             description="Ask me anything about risk management, compliance, or audit preparation."
           />
@@ -535,14 +547,12 @@ Could you provide more specific details about what you'd like to explore? For ex
                   message.type === 'user'
                     ? 'bg-blue-600 text-white'
                     : message.type === 'system'
-                    ? 'bg-red-50 text-red-800 border border-red-200'
-                    : 'bg-gray-100 text-gray-900'
+                      ? 'bg-red-50 text-red-800 border border-red-200'
+                      : 'bg-gray-100 text-gray-900'
                 }`}
               >
-                <div className="whitespace-pre-wrap text-sm">
-                  {message.content}
-                </div>
-                
+                <div className="whitespace-pre-wrap text-sm">{message.content}</div>
+
                 {/* Message metadata */}
                 {message.metadata && (
                   <div className="mt-3 pt-3 border-t border-gray-200">
@@ -561,7 +571,7 @@ Could you provide more specific details about what you'd like to explore? For ex
                         </span>
                       </div>
                     )}
-                    
+
                     {/* Sources */}
                     {message.metadata.sources && (
                       <div className="mb-2">
@@ -578,7 +588,7 @@ Could you provide more specific details about what you'd like to explore? For ex
                         </div>
                       </div>
                     )}
-                    
+
                     {/* Actions */}
                     {message.metadata.actions && (
                       <div className="flex flex-wrap gap-2">
@@ -595,7 +605,7 @@ Could you provide more specific details about what you'd like to explore? For ex
                     )}
                   </div>
                 )}
-                
+
                 <div className="text-xs text-gray-400 mt-2">
                   {message.timestamp.toLocaleTimeString()}
                 </div>
@@ -603,15 +613,15 @@ Could you provide more specific details about what you'd like to explore? For ex
             </div>
           ))
         )}
-        
-                 {isLoading && (
-           <div className="flex justify-start">
-             <div className="bg-gray-100 rounded-lg px-4 py-2">
-               <DotsLoading size="sm" />
-             </div>
-           </div>
-         )}
-        
+
+        {isLoading && (
+          <div className="flex justify-start">
+            <div className="bg-gray-100 rounded-lg px-4 py-2">
+              <DotsLoading size="sm" />
+            </div>
+          </div>
+        )}
+
         <div ref={messagesEndRef} />
       </div>
 
@@ -635,11 +645,11 @@ Could you provide more specific details about what you'd like to explore? For ex
               className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 text-blue-600 hover:text-blue-700 disabled:text-gray-400 disabled:cursor-not-allowed"
               aria-label="Send message"
             >
-                             <CommunicationIcons.MessageSquare size="sm" />
+              <CommunicationIcons.MessageSquare size="sm" />
             </button>
           </div>
         </div>
-        
+
         {/* Quick Actions */}
         <div className="flex items-center justify-between mt-3">
           <div className="flex space-x-2">
@@ -653,13 +663,11 @@ Could you provide more specific details about what you'd like to explore? For ex
               </button>
             ))}
           </div>
-          <div className="text-xs text-gray-400">
-            Press Enter to send, Shift+Enter for new line
-          </div>
+          <div className="text-xs text-gray-400">Press Enter to send, Shift+Enter for new line</div>
         </div>
       </div>
     </div>
   );
 };
 
-export default ARIAChat; 
+export default ARIAChat;

@@ -8,13 +8,14 @@ async function authHandler(req: NextRequest, context: any) {
     // Log the request for debugging
     const pathname = req.nextUrl.pathname;
     console.log(`[NextAuth] Handling ${req.method} ${pathname}`);
-    
+
     // Check if this is an API call expecting JSON
     const acceptHeader = req.headers.get('accept') || '';
-    const isApiCall = acceptHeader.includes('application/json') || 
-                      req.headers.get('content-type')?.includes('application/json') ||
-                      pathname.includes('/api/auth/');
-    
+    const isApiCall =
+      acceptHeader.includes('application/json') ||
+      req.headers.get('content-type')?.includes('application/json') ||
+      pathname.includes('/api/auth/');
+
     // Special handling for session endpoint when NextAuth is not properly configured
     if (pathname.endsWith('/api/auth/session') && req.method === 'GET') {
       // Check if we have a simple OAuth session first
@@ -25,18 +26,18 @@ async function authHandler(req: NextRequest, context: any) {
           if (new Date(sessionData.expires) > new Date()) {
             return NextResponse.json({
               user: sessionData.user,
-              expires: sessionData.expires
+              expires: sessionData.expires,
             });
           }
         } catch (e) {
           console.log('[NextAuth] Invalid simple OAuth session token');
         }
       }
-      
+
       // Return null session if no valid session found
       return NextResponse.json(null);
     }
-    
+
     // Initialize NextAuth with better error handling
     let handlers;
     try {
@@ -44,28 +45,32 @@ async function authHandler(req: NextRequest, context: any) {
       console.log('[NextAuth] Handlers initialized successfully');
     } catch (initError) {
       console.error('[NextAuth] Failed to initialize:', initError);
-      
+
       // For session endpoint, return null instead of error to allow fallback
       if (pathname.endsWith('/api/auth/session')) {
         console.log('[NextAuth] Returning null session due to initialization error');
         return NextResponse.json(null);
       }
-      
+
       // For other endpoints, provide a fallback response
       return NextResponse.json(
         {
           error: 'Authentication temporarily unavailable',
           message: 'Please try again or use demo credentials (admin@riscura.com / admin123)',
           fallback: true,
-          details: process.env.NODE_ENV === 'development' ? {
-            error: initError instanceof Error ? initError.message : 'Unknown initialization error',
-            stack: initError instanceof Error ? initError.stack : undefined,
-          } : undefined,
+          details:
+            process.env.NODE_ENV === 'development'
+              ? {
+                  error:
+                    initError instanceof Error ? initError.message : 'Unknown initialization error',
+                  stack: initError instanceof Error ? initError.stack : undefined,
+                }
+              : undefined,
         },
         { status: 503 } // Service Unavailable instead of Internal Server Error
       );
     }
-    
+
     // Get the appropriate handler
     let handler;
     if (req.method === 'GET' && typeof handlers.GET === 'function') {
@@ -77,18 +82,15 @@ async function authHandler(req: NextRequest, context: any) {
       handler = handlers;
     } else {
       // No handler found
-      return NextResponse.json(
-        { error: `Method ${req.method} not allowed` },
-        { status: 405 }
-      );
+      return NextResponse.json({ error: `Method ${req.method} not allowed` }, { status: 405 });
     }
-    
+
     const response = await handler(req, context);
-    
+
     // If NextAuth returns an HTML error page for an API call, convert to JSON
     if (response && isApiCall && response.headers.get('content-type')?.includes('text/html')) {
       console.warn('[NextAuth] HTML response detected for API call, converting to JSON');
-      
+
       // Try to parse the HTML to get error details
       let errorMessage = 'Authentication configuration error';
       try {
@@ -99,7 +101,7 @@ async function authHandler(req: NextRequest, context: any) {
           errorMessage = 'Database connection error';
         }
       } catch {}
-      
+
       return NextResponse.json(
         {
           error: errorMessage,
@@ -108,19 +110,22 @@ async function authHandler(req: NextRequest, context: any) {
         },
         {
           status: response.status || 500,
-          headers: { 
+          headers: {
             'Content-Type': 'application/json',
             'Cache-Control': 'no-store, must-revalidate',
           },
         }
       );
     }
-    
+
     return response;
   } catch (error) {
     console.error('[NextAuth] Error in auth handler:', error);
-    console.error('[NextAuth] Error stack:', error instanceof Error ? error.stack : 'No stack trace');
-    
+    console.error(
+      '[NextAuth] Error stack:',
+      error instanceof Error ? error.stack : 'No stack trace'
+    );
+
     // Log environment variables (without exposing secrets)
     console.log('[NextAuth] Environment check:', {
       hasGoogleClientId: !!process.env.GOOGLE_CLIENT_ID,
@@ -130,16 +135,19 @@ async function authHandler(req: NextRequest, context: any) {
       nextAuthUrl: process.env.NEXTAUTH_URL,
       nodeEnv: process.env.NODE_ENV,
     });
-    
+
     // Return a more informative error response
     return new Response(
       JSON.stringify({
         error: 'Authentication configuration error',
         message: error instanceof Error ? error.message : 'Unknown error',
-        details: process.env.NODE_ENV === 'development' ? {
-          nextAuthUrl: process.env.NEXTAUTH_URL,
-          hasGoogleAuth: !!process.env.GOOGLE_CLIENT_ID,
-        } : undefined,
+        details:
+          process.env.NODE_ENV === 'development'
+            ? {
+                nextAuthUrl: process.env.NEXTAUTH_URL,
+                hasGoogleAuth: !!process.env.GOOGLE_CLIENT_ID,
+              }
+            : undefined,
       }),
       {
         status: 500,
@@ -149,4 +157,4 @@ async function authHandler(req: NextRequest, context: any) {
   }
 }
 
-export { authHandler as GET, authHandler as POST, authHandler as PUT, authHandler as DELETE }; 
+export { authHandler as GET, authHandler as POST, authHandler as PUT, authHandler as DELETE };

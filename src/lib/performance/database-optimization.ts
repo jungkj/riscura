@@ -20,7 +20,7 @@ class DatabaseOptimizer {
     options: QueryCacheOptions = {}
   ): Promise<T> {
     const { ttl = 300, tags = [] } = options; // Default 5 minutes
-    
+
     // Check cache first
     const cached = this.queryCache.get(queryKey);
     if (cached && Date.now() < cached.expires) {
@@ -44,7 +44,7 @@ class DatabaseOptimizer {
 
     this.queryCache.set(queryKey, {
       data,
-      expires: Date.now() + (ttl * 1000),
+      expires: Date.now() + ttl * 1000,
       tags,
     });
 
@@ -54,7 +54,7 @@ class DatabaseOptimizer {
   // Cache invalidation by tags
   invalidateByTags(tags: string[]): void {
     for (const [key, entry] of this.queryCache.entries()) {
-      if (entry.tags.some(tag => tags.includes(tag))) {
+      if (entry.tags.some((tag) => tags.includes(tag))) {
         this.queryCache.delete(key);
       }
     }
@@ -78,7 +78,7 @@ class DatabaseOptimizer {
     orderBy?: any
   ): Promise<{ data: T[]; total: number; hasMore: boolean }> {
     const skip = (page - 1) * pageSize;
-    
+
     // Execute count and data queries in parallel
     const [data, total] = await Promise.all([
       baseQuery
@@ -96,13 +96,9 @@ class DatabaseOptimizer {
   }
 
   // Batch operations
-  async batchCreate<T>(
-    model: any,
-    data: any[],
-    batchSize = 100
-  ): Promise<T[]> {
+  async batchCreate<T>(model: any, data: any[], batchSize = 100): Promise<T[]> {
     const results: T[] = [];
-    
+
     for (let i = 0; i < data.length; i += batchSize) {
       const batch = data.slice(i, i + batchSize);
       const batchResults = await model.createMany({
@@ -111,7 +107,7 @@ class DatabaseOptimizer {
       });
       results.push(batchResults);
     }
-    
+
     return results;
   }
 
@@ -122,11 +118,11 @@ class DatabaseOptimizer {
     activeConnections?: number;
   }> {
     const start = performance.now();
-    
+
     try {
       await db.client.$queryRaw`SELECT 1`;
       const latency = performance.now() - start;
-      
+
       return {
         connected: true,
         latency,
@@ -152,27 +148,28 @@ export const optimizedQueries = {
   getUserWithOrg: async (userId: string) => {
     return dbOptimizer.cachedQuery(
       `user_with_org:${userId}`,
-      () => db.client.user.findUnique({
-        where: { id: userId },
-        include: {
-          organization: {
-            select: {
-              id: true,
-              name: true,
-              plan: true,
-              isActive: true,
+      () =>
+        db.client.user.findUnique({
+          where: { id: userId },
+          include: {
+            organization: {
+              select: {
+                id: true,
+                name: true,
+                plan: true,
+                isActive: true,
+              },
             },
           },
-        },
-      }),
+        }),
       { ttl: 1800, tags: ['user', 'organization'] } // 30 minutes
     );
   },
 
   // Get organization risks with pagination
   getOrganizationRisks: async (
-    organizationId: string, 
-    page: number, 
+    organizationId: string,
+    page: number,
     pageSize: number,
     filters?: any
   ) => {
@@ -193,12 +190,10 @@ export const optimizedQueries = {
       },
     });
 
-    return dbOptimizer.paginatedQuery(
-      baseQuery,
-      page,
-      pageSize,
-      { severity: 'desc', createdAt: 'desc' }
-    );
+    return dbOptimizer.paginatedQuery(baseQuery, page, pageSize, {
+      severity: 'desc',
+      createdAt: 'desc',
+    });
   },
 
   // Get dashboard statistics (heavily cached)
@@ -206,32 +201,27 @@ export const optimizedQueries = {
     return dbOptimizer.cachedQuery(
       `dashboard_stats:${organizationId}`,
       async () => {
-        const [
-          totalRisks,
-          highRisks,
-          totalControls,
-          activeControls,
-          recentActivities,
-        ] = await Promise.all([
-          db.client.risk.count({ where: { organizationId } }),
-          db.client.risk.count({
-            where: { organizationId, severity: { in: ['HIGH', 'CRITICAL'] } },
-          }),
-          db.client.control.count({ where: { organizationId } }),
-          db.client.control.count({
-            where: { organizationId, status: 'ACTIVE' },
-          }),
-          db.client.activity.findMany({
-            where: { organizationId },
-            take: 10,
-            orderBy: { createdAt: 'desc' },
-            include: {
-              user: {
-                select: { firstName: true, lastName: true },
+        const [totalRisks, highRisks, totalControls, activeControls, recentActivities] =
+          await Promise.all([
+            db.client.risk.count({ where: { organizationId } }),
+            db.client.risk.count({
+              where: { organizationId, severity: { in: ['HIGH', 'CRITICAL'] } },
+            }),
+            db.client.control.count({ where: { organizationId } }),
+            db.client.control.count({
+              where: { organizationId, status: 'ACTIVE' },
+            }),
+            db.client.activity.findMany({
+              where: { organizationId },
+              take: 10,
+              orderBy: { createdAt: 'desc' },
+              include: {
+                user: {
+                  select: { firstName: true, lastName: true },
+                },
               },
-            },
-          }),
-        ]);
+            }),
+          ]);
 
         return {
           risks: { total: totalRisks, high: highRisks },
@@ -252,24 +242,24 @@ export const requiredIndexes = [
   // User and organization indexes
   'CREATE INDEX IF NOT EXISTS idx_users_organization_email ON "User"("organizationId", "email");',
   'CREATE INDEX IF NOT EXISTS idx_users_active ON "User"("isActive", "createdAt");',
-  
+
   // Risk indexes
   'CREATE INDEX IF NOT EXISTS idx_risks_organization_created ON "Risk"("organizationId", "createdAt");',
   'CREATE INDEX IF NOT EXISTS idx_risks_organization_severity ON "Risk"("organizationId", "severity");',
   'CREATE INDEX IF NOT EXISTS idx_risks_status ON "Risk"("status", "updatedAt");',
-  
+
   // Control indexes
   'CREATE INDEX IF NOT EXISTS idx_controls_organization_status ON "Control"("organizationId", "status");',
   'CREATE INDEX IF NOT EXISTS idx_controls_type ON "Control"("type", "createdAt");',
-  
+
   // Document indexes
   'CREATE INDEX IF NOT EXISTS idx_documents_organization_type ON "Document"("organizationId", "type");',
   'CREATE INDEX IF NOT EXISTS idx_documents_status ON "Document"("status", "uploadedAt");',
-  
+
   // Activity indexes
   'CREATE INDEX IF NOT EXISTS idx_activities_user_created ON "Activity"("userId", "createdAt");',
   'CREATE INDEX IF NOT EXISTS idx_activities_organization_type ON "Activity"("organizationId", "type");',
-  
+
   // Session indexes
   'CREATE INDEX IF NOT EXISTS idx_sessions_user_expires ON "Session"("userId", "expiresAt");',
   'CREATE INDEX IF NOT EXISTS idx_sessions_active ON "Session"("expiresAt") WHERE "expiresAt" > NOW();',
@@ -278,7 +268,7 @@ export const requiredIndexes = [
 // Function to create indexes
 export async function createOptimizationIndexes(): Promise<void> {
   console.log('🏗️ Creating database optimization indexes...');
-  
+
   for (const indexSql of requiredIndexes) {
     try {
       await db.client.$executeRawUnsafe(indexSql);
@@ -287,7 +277,7 @@ export async function createOptimizationIndexes(): Promise<void> {
       console.warn(`⚠️ Index creation failed: ${error}`);
     }
   }
-  
+
   console.log('✅ Database optimization indexes created');
 }
 
@@ -302,10 +292,10 @@ export class DatabasePerformanceMonitor {
     if (!this.queryTimes.has(operation)) {
       this.queryTimes.set(operation, []);
     }
-    
+
     const times = this.queryTimes.get(operation)!;
     times.push(duration);
-    
+
     // Keep only last 100 measurements
     if (times.length > 100) {
       times.shift();
@@ -317,7 +307,7 @@ export class DatabasePerformanceMonitor {
       const times = this.queryTimes.get(operation) || [];
       return this.calculateStats(times);
     }
-    
+
     const stats: { [key: string]: any } = {};
     for (const [op, times] of this.queryTimes.entries()) {
       stats[op] = this.calculateStats(times);
@@ -327,7 +317,7 @@ export class DatabasePerformanceMonitor {
 
   private calculateStats(times: number[]) {
     if (times.length === 0) return null;
-    
+
     const sorted = [...times].sort((a, b) => a - b);
     return {
       count: times.length,
@@ -340,4 +330,4 @@ export class DatabasePerformanceMonitor {
   }
 }
 
-export const dbMonitor = new DatabasePerformanceMonitor(); 
+export const dbMonitor = new DatabasePerformanceMonitor();

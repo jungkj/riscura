@@ -89,17 +89,17 @@ class Logger {
     const timestamp = entry.timestamp.split('T')[1].split('.')[0];
     const level = entry.level.toUpperCase().padEnd(5);
     const context = entry.context ? `[${entry.context}]` : '';
-    
+
     let message = `${timestamp} ${level} ${context} ${entry.message}`;
-    
+
     if (entry.data) {
       message += `\n${JSON.stringify(entry.data, null, 2)}`;
     }
-    
+
     if (entry.error) {
       message += `\n${entry.error.stack}`;
     }
-    
+
     return message;
   }
 
@@ -211,4 +211,4 @@ class Logger {
 export const logger = Logger.getInstance();
 
 // Export class for testing
-export { Logger }; 
+export { Logger };

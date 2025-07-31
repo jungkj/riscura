@@ -6,13 +6,13 @@ import { z } from 'zod';
 const CreateMappingSchema = z.object({
   riskId: z.string(),
   controlId: z.string(),
-  effectiveness: z.number().min(0).max(100).optional()
+  effectiveness: z.number().min(0).max(100).optional(),
 });
 
 export const GET = withApiMiddleware(
   async (req: NextRequest) => {
     const user = (req as any).user;
-    
+
     if (!user || !user.organizationId) {
       console.warn('[Mappings API] Missing user or organizationId', { user });
       return NextResponse.json(
@@ -22,12 +22,15 @@ export const GET = withApiMiddleware(
     }
 
     try {
-      console.log('[Mappings API] Fetching control-risk mappings for organization:', user.organizationId);
-      
+      console.log(
+        '[Mappings API] Fetching control-risk mappings for organization:',
+        user.organizationId
+      );
+
       // First check if there are any risks or controls at all
       const [risksCount, controlsCount] = await Promise.all([
         db.client.risk.count({ where: { organizationId: user.organizationId } }),
-        db.client.control.count({ where: { organizationId: user.organizationId } })
+        db.client.control.count({ where: { organizationId: user.organizationId } }),
       ]);
 
       console.log(`[Mappings API] Found ${risksCount} risks and ${controlsCount} controls`);
@@ -36,7 +39,7 @@ export const GET = withApiMiddleware(
         return NextResponse.json({
           success: true,
           data: [],
-          message: 'No mappings possible - missing risks or controls'
+          message: 'No mappings possible - missing risks or controls',
         });
       }
 
@@ -44,9 +47,9 @@ export const GET = withApiMiddleware(
       const mappings = await db.client.controlRiskMapping.findMany({
         where: {
           risk: {
-            organizationId: user.organizationId
-          }
-        }
+            organizationId: user.organizationId,
+          },
+        },
       });
 
       console.log(`[Mappings API] Found ${mappings.length} mappings`);
@@ -55,7 +58,7 @@ export const GET = withApiMiddleware(
         return NextResponse.json({
           success: true,
           data: [],
-          message: 'No control-risk mappings found'
+          message: 'No control-risk mappings found',
         });
       }
 
@@ -64,8 +67,8 @@ export const GET = withApiMiddleware(
         const mappingsWithRelations = await db.client.controlRiskMapping.findMany({
           where: {
             risk: {
-              organizationId: user.organizationId
-            }
+              organizationId: user.organizationId,
+            },
           },
           include: {
             risk: {
@@ -73,29 +76,32 @@ export const GET = withApiMiddleware(
                 id: true,
                 title: true,
                 category: true,
-                riskLevel: true
-              }
+                riskLevel: true,
+              },
             },
             control: {
               select: {
                 id: true,
                 title: true,
                 type: true,
-                effectiveness: true
-              }
-            }
-          }
+                effectiveness: true,
+              },
+            },
+          },
         });
 
         return NextResponse.json({
           success: true,
-          data: mappingsWithRelations
+          data: mappingsWithRelations,
         });
       } catch (relationError) {
-        console.warn('[Mappings API] Error fetching relationships, returning basic data:', relationError);
+        console.warn(
+          '[Mappings API] Error fetching relationships, returning basic data:',
+          relationError
+        );
         return NextResponse.json({
           success: true,
-          data: mappings
+          data: mappings,
         });
       }
     } catch (error) {
@@ -103,14 +109,14 @@ export const GET = withApiMiddleware(
         error,
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined,
-        organizationId: user.organizationId
+        organizationId: user.organizationId,
       });
-      
+
       return NextResponse.json(
-        { 
-          success: false, 
+        {
+          success: false,
           error: 'Failed to fetch control-risk mappings',
-          details: error instanceof Error ? error.message : 'Unknown error'
+          details: error instanceof Error ? error.message : 'Unknown error',
         },
         { status: 500 }
       );
@@ -122,7 +128,7 @@ export const GET = withApiMiddleware(
 export const POST = withApiMiddleware(
   async (req: NextRequest) => {
     const user = (req as any).user;
-    
+
     if (!user || !user.organizationId) {
       console.warn('[Mappings API] Missing user or organizationId in POST', { user });
       return NextResponse.json(
@@ -134,35 +140,35 @@ export const POST = withApiMiddleware(
     try {
       const body = await req.json();
       console.log('[Mappings API] Creating mapping with data:', body);
-      
+
       const validatedData = CreateMappingSchema.parse(body);
 
       // Verify the risk and control belong to the organization
       console.log('[Mappings API] Verifying risk and control ownership...');
-      
+
       const [risk, control] = await Promise.all([
         db.client.risk.findFirst({
           where: {
             id: validatedData.riskId,
-            organizationId: user.organizationId
-          }
+            organizationId: user.organizationId,
+          },
         }),
         db.client.control.findFirst({
           where: {
             id: validatedData.controlId,
-            organizationId: user.organizationId
-          }
-        })
+            organizationId: user.organizationId,
+          },
+        }),
       ]);
 
       console.log('[Mappings API] Risk found:', !!risk, 'Control found:', !!control);
 
       if (!risk) {
         return NextResponse.json(
-          { 
-            success: false, 
+          {
+            success: false,
             error: 'Risk not found',
-            details: `Risk ${validatedData.riskId} not found in organization ${user.organizationId}`
+            details: `Risk ${validatedData.riskId} not found in organization ${user.organizationId}`,
           },
           { status: 404 }
         );
@@ -170,10 +176,10 @@ export const POST = withApiMiddleware(
 
       if (!control) {
         return NextResponse.json(
-          { 
-            success: false, 
+          {
+            success: false,
             error: 'Control not found',
-            details: `Control ${validatedData.controlId} not found in organization ${user.organizationId}`
+            details: `Control ${validatedData.controlId} not found in organization ${user.organizationId}`,
           },
           { status: 404 }
         );
@@ -185,18 +191,18 @@ export const POST = withApiMiddleware(
           where: {
             riskId_controlId: {
               riskId: validatedData.riskId,
-              controlId: validatedData.controlId
-            }
-          }
+              controlId: validatedData.controlId,
+            },
+          },
         });
 
         if (existingMapping) {
           console.log('[Mappings API] Mapping already exists:', existingMapping.id);
           return NextResponse.json(
-            { 
-              success: false, 
+            {
+              success: false,
               error: 'Mapping already exists',
-              details: `Mapping between risk ${validatedData.riskId} and control ${validatedData.controlId} already exists`
+              details: `Mapping between risk ${validatedData.riskId} and control ${validatedData.controlId} already exists`,
             },
             { status: 409 }
           );
@@ -208,15 +214,15 @@ export const POST = withApiMiddleware(
 
       // Create the mapping
       console.log('[Mappings API] Creating new mapping...');
-      
+
       const mappingData = {
         riskId: validatedData.riskId,
         controlId: validatedData.controlId,
-        effectiveness: validatedData.effectiveness || 0
+        effectiveness: validatedData.effectiveness || 0,
       };
 
       const mapping = await db.client.controlRiskMapping.create({
-        data: mappingData
+        data: mappingData,
       });
 
       console.log('[Mappings API] Mapping created successfully:', mapping.id);
@@ -227,20 +233,26 @@ export const POST = withApiMiddleware(
           where: { id: mapping.id },
           include: {
             risk: true,
-            control: true
-          }
+            control: true,
+          },
         });
 
-        return NextResponse.json({
-          success: true,
-          data: mappingWithRelations || mapping
-        }, { status: 201 });
+        return NextResponse.json(
+          {
+            success: true,
+            data: mappingWithRelations || mapping,
+          },
+          { status: 201 }
+        );
       } catch (relationError) {
         console.warn('[Mappings API] Error fetching relations for new mapping:', relationError);
-        return NextResponse.json({
-          success: true,
-          data: mapping
-        }, { status: 201 });
+        return NextResponse.json(
+          {
+            success: true,
+            data: mapping,
+          },
+          { status: 201 }
+        );
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -250,33 +262,33 @@ export const POST = withApiMiddleware(
           { status: 400 }
         );
       }
-      
+
       console.error('[Mappings API] Create mapping error:', {
         error,
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined,
-        user: { id: user.id, organizationId: user.organizationId }
+        user: { id: user.id, organizationId: user.organizationId },
       });
-      
+
       return NextResponse.json(
-        { 
-          success: false, 
+        {
+          success: false,
           error: 'Failed to create control-risk mapping',
-          details: error instanceof Error ? error.message : 'Unknown error'
+          details: error instanceof Error ? error.message : 'Unknown error',
         },
         { status: 500 }
       );
     }
   },
-  { 
-    requireAuth: true
+  {
+    requireAuth: true,
   }
 );
 
 export const DELETE = withApiMiddleware(
   async (req: NextRequest) => {
     const user = (req as any).user;
-    
+
     if (!user || !user.organizationId) {
       console.warn('[Mappings API] Missing user or organizationId in DELETE', { user });
       return NextResponse.json(
@@ -294,10 +306,10 @@ export const DELETE = withApiMiddleware(
 
       if (!riskId || !controlId) {
         return NextResponse.json(
-          { 
-            success: false, 
+          {
+            success: false,
             error: 'Both riskId and controlId are required',
-            details: { riskId: !!riskId, controlId: !!controlId }
+            details: { riskId: !!riskId, controlId: !!controlId },
           },
           { status: 400 }
         );
@@ -305,24 +317,28 @@ export const DELETE = withApiMiddleware(
 
       // Verify the mapping exists and belongs to the organization
       console.log('[Mappings API] Verifying mapping ownership...');
-      
+
       const mapping = await db.client.controlRiskMapping.findFirst({
         where: {
           riskId,
           controlId,
           risk: {
-            organizationId: user.organizationId
-          }
-        }
+            organizationId: user.organizationId,
+          },
+        },
       });
 
       if (!mapping) {
-        console.warn('[Mappings API] Mapping not found:', { riskId, controlId, organizationId: user.organizationId });
+        console.warn('[Mappings API] Mapping not found:', {
+          riskId,
+          controlId,
+          organizationId: user.organizationId,
+        });
         return NextResponse.json(
-          { 
-            success: false, 
+          {
+            success: false,
             error: 'Mapping not found',
-            details: `No mapping found between risk ${riskId} and control ${controlId}`
+            details: `No mapping found between risk ${riskId} and control ${controlId}`,
           },
           { status: 404 }
         );
@@ -335,9 +351,9 @@ export const DELETE = withApiMiddleware(
         where: {
           riskId_controlId: {
             riskId,
-            controlId
-          }
-        }
+            controlId,
+          },
+        },
       });
 
       console.log('[Mappings API] Mapping deleted successfully');
@@ -345,21 +361,21 @@ export const DELETE = withApiMiddleware(
       return NextResponse.json({
         success: true,
         message: 'Mapping deleted successfully',
-        data: { riskId, controlId }
+        data: { riskId, controlId },
       });
     } catch (error) {
       console.error('[Mappings API] Delete mapping error:', {
         error,
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined,
-        user: { id: user.id, organizationId: user.organizationId }
+        user: { id: user.id, organizationId: user.organizationId },
       });
-      
+
       return NextResponse.json(
-        { 
-          success: false, 
+        {
+          success: false,
           error: 'Failed to delete control-risk mapping',
-          details: error instanceof Error ? error.message : 'Unknown error'
+          details: error instanceof Error ? error.message : 'Unknown error',
         },
         { status: 500 }
       );

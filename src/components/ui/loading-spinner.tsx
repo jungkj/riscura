@@ -11,14 +11,10 @@ interface LoadingSpinnerProps {
 const sizeClasses = {
   sm: 'h-4 w-4',
   md: 'h-6 w-6',
-  lg: 'h-8 w-8'
+  lg: 'h-8 w-8',
 };
 
-export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-  size = 'md',
-  className,
-  text
-}) => {
+export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ size = 'md', className, text }) => {
   return (
     <div className={cn('flex items-center justify-center', className)}>
       <Loader2 className={cn('animate-spin', sizeClasses[size])} />
@@ -35,4 +31,4 @@ export const PageLoadingSpinner: React.FC<{ text?: string }> = ({ text = 'Loadin
 
 export const InlineLoadingSpinner: React.FC<{ text?: string }> = ({ text }) => (
   <LoadingSpinner size="sm" text={text} className="py-2" />
-); 
+);

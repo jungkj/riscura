@@ -69,7 +69,7 @@ export const DEFAULT_TASK_CONFIG: TaskConfig = {
   concurrency: 2,
   useWebWorkers: true,
   enablePersistence: false,
-  enableProgressTracking: true
+  enableProgressTracking: true,
 };
 
 export const DEFAULT_SCHEDULER_CONFIG: SchedulerConfig = {
@@ -79,7 +79,7 @@ export const DEFAULT_SCHEDULER_CONFIG: SchedulerConfig = {
   workerPoolSize: navigator.hardwareConcurrency || 4,
   enablePrioritization: true,
   enableBatching: true,
-  persistenceTTL: 3600 // 1 hour
+  persistenceTTL: 3600, // 1 hour
 };
 
 export class BackgroundTaskOptimizer {
@@ -97,7 +97,7 @@ export class BackgroundTaskOptimizer {
     throughput: 0,
     workerUtilization: 0,
     queueLength: 0,
-    memoryUsage: 0
+    memoryUsage: 0,
   };
   private isProcessing: boolean = false;
   private processInterval: NodeJS.Timeout | null = null;
@@ -115,16 +115,16 @@ export class BackgroundTaskOptimizer {
   private initializeOptimizer(): void {
     // Start task processing
     this.startProcessing();
-    
+
     // Start metrics collection
     this.startMetricsCollection();
-    
+
     // Initialize default worker pools
     this.initializeDefaultWorkerPools();
-    
+
     // Set up persistence if enabled
     this.initializePersistence();
-    
+
     // Register cleanup handlers
     this.registerCleanupHandlers();
   }
@@ -138,13 +138,13 @@ export class BackgroundTaskOptimizer {
       'file-upload',
       'image-processing',
       'analytics',
-      'notifications'
+      'notifications',
     ];
 
-    defaultPools.forEach(poolName => {
+    defaultPools.forEach((poolName) => {
       this.createWorkerPool(poolName, {
         maxWorkers: Math.ceil(this.config.workerPoolSize / defaultPools.length),
-        taskTypes: [poolName]
+        taskTypes: [poolName],
       });
     });
   }
@@ -161,13 +161,13 @@ export class BackgroundTaskOptimizer {
     }
   ): void {
     const { maxWorkers, taskTypes, workerScript } = options;
-    
+
     const pool: WorkerPool = {
       workers: [],
       busyWorkers: new Set(),
       taskQueue: new Map(),
       maxWorkers,
-      currentTasks: 0
+      currentTasks: 0,
     };
 
     // Create workers
@@ -187,7 +187,7 @@ export class BackgroundTaskOptimizer {
    */
   private createWorker(poolName: string, customScript?: string): Worker | null {
     const workerScript = customScript || this.getDefaultWorkerScript();
-    
+
     try {
       const blob = new Blob([workerScript], { type: 'application/javascript' });
       const workerUrl = URL.createObjectURL(blob);
@@ -483,10 +483,7 @@ export class BackgroundTaskOptimizer {
   /**
    * Register task processor
    */
-  registerProcessor<T, R>(
-    taskType: string,
-    processor: TaskProcessor<T, R>
-  ): void {
+  registerProcessor<T, R>(taskType: string, processor: TaskProcessor<T, R>): void {
     this.processors.set(taskType, processor);
   }
 
@@ -499,7 +496,7 @@ export class BackgroundTaskOptimizer {
     config: Partial<TaskConfig> = {}
   ): Promise<string> {
     const taskConfig: TaskConfig = { ...DEFAULT_TASK_CONFIG, ...config };
-    
+
     const task: Task<T, R> = {
       id: `task-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       type: taskType,
@@ -507,7 +504,7 @@ export class BackgroundTaskOptimizer {
       config: taskConfig,
       status: 'pending',
       createdAt: new Date(),
-      attempts: 0
+      attempts: 0,
     };
 
     // Check queue size limit
@@ -538,15 +535,15 @@ export class BackgroundTaskOptimizer {
    */
   private sortTasksByPriority(): void {
     const priorityOrder = { critical: 4, high: 3, normal: 2, low: 1 };
-    
+
     this.taskQueue.sort((a, b) => {
       const aPriority = priorityOrder[a.config.priority];
       const bPriority = priorityOrder[b.config.priority];
-      
+
       if (aPriority !== bPriority) {
         return bPriority - aPriority; // Higher priority first
       }
-      
+
       // Same priority, sort by creation time
       return a.createdAt.getTime() - b.createdAt.getTime();
     });
@@ -586,7 +583,7 @@ export class BackgroundTaskOptimizer {
     if (availableSlots <= 0) return;
 
     const tasksToProcess = this.taskQueue.splice(0, availableSlots);
-    
+
     for (const task of tasksToProcess) {
       try {
         await this.executeTask(task);
@@ -604,7 +601,7 @@ export class BackgroundTaskOptimizer {
     task.status = 'running';
     task.startedAt = new Date();
     task.attempts++;
-    
+
     this.runningTasks.set(task.id, task);
 
     try {
@@ -620,7 +617,7 @@ export class BackgroundTaskOptimizer {
       task.status = 'completed';
       task.result = result;
       task.completedAt = new Date();
-      
+
       this.runningTasks.delete(task.id);
       this.completedTasks.set(task.id, task);
       this.metrics.completedTasks++;
@@ -638,14 +635,14 @@ export class BackgroundTaskOptimizer {
     // Find appropriate worker pool
     const poolName = this.findWorkerPool(task.type);
     const pool = this.workerPools.get(poolName);
-    
+
     if (!pool || pool.workers.length === 0) {
       throw new Error(`No workers available for task type: ${task.type}`);
     }
 
     // Find available worker
-    const availableWorker = pool.workers.find(worker => !pool.busyWorkers.has(worker));
-    
+    const availableWorker = pool.workers.find((worker) => !pool.busyWorkers.has(worker));
+
     if (!availableWorker) {
       throw new Error('No available workers in pool');
     }
@@ -657,7 +654,7 @@ export class BackgroundTaskOptimizer {
 
       const handleMessage = (event: MessageEvent) => {
         const { type, taskId, result, error, progress } = event.data;
-        
+
         if (taskId !== task.id) return;
 
         switch (type) {
@@ -667,14 +664,14 @@ export class BackgroundTaskOptimizer {
             pool.busyWorkers.delete(availableWorker);
             resolve(result);
             break;
-            
+
           case 'TASK_ERROR':
             clearTimeout(timeout);
             availableWorker.removeEventListener('message', handleMessage);
             pool.busyWorkers.delete(availableWorker);
             reject(new Error(error));
             break;
-            
+
           case 'TASK_PROGRESS':
             if (task.config.enableProgressTracking) {
               task.progress = progress;
@@ -691,7 +688,7 @@ export class BackgroundTaskOptimizer {
         type: 'EXECUTE_TASK',
         taskId: task.id,
         taskType: task.type,
-        data: task.data
+        data: task.data,
       });
     });
   }
@@ -701,7 +698,7 @@ export class BackgroundTaskOptimizer {
    */
   private async executeTaskInMainThread(task: Task): Promise<any> {
     const processor = this.processors.get(task.type);
-    
+
     if (!processor) {
       throw new Error(`No processor registered for task type: ${task.type}`);
     }
@@ -724,8 +721,8 @@ export class BackgroundTaskOptimizer {
       'data-processing': 'data-processing',
       'file-upload': 'file-upload',
       'image-processing': 'image-processing',
-      'analytics': 'analytics',
-      'notifications': 'notifications'
+      analytics: 'analytics',
+      notifications: 'notifications',
     };
 
     return typeMap[taskType] || 'data-processing'; // Default pool
@@ -767,7 +764,7 @@ export class BackgroundTaskOptimizer {
    */
   private handleWorkerError(worker: Worker, error: ErrorEvent): void {
     console.error('Worker error:', error);
-    
+
     // Find and restart worker
     for (const [poolName, pool] of this.workerPools.entries()) {
       const workerIndex = pool.workers.indexOf(worker);
@@ -775,13 +772,13 @@ export class BackgroundTaskOptimizer {
         // Remove failed worker
         pool.workers.splice(workerIndex, 1);
         pool.busyWorkers.delete(worker);
-        
+
         // Create replacement worker
         const newWorker = this.createWorker(poolName);
         if (newWorker) {
           pool.workers.push(newWorker);
         }
-        
+
         break;
       }
     }
@@ -813,30 +810,35 @@ export class BackgroundTaskOptimizer {
    */
   private updateMetrics(): void {
     // Calculate average execution time
-    const completedTasks = Array.from(this.completedTasks.values())
-      .filter(task => task.completedAt && task.startedAt);
-    
+    const completedTasks = Array.from(this.completedTasks.values()).filter(
+      (task) => task.completedAt && task.startedAt
+    );
+
     if (completedTasks.length > 0) {
       const totalTime = completedTasks.reduce((sum, task) => {
         const executionTime = task.completedAt!.getTime() - task.startedAt!.getTime();
         return sum + executionTime;
       }, 0);
-      
+
       this.metrics.averageExecutionTime = totalTime / completedTasks.length;
     }
 
     // Calculate throughput (tasks per second)
-    const recentTasks = completedTasks.filter(task => 
-      Date.now() - task.completedAt!.getTime() < 60000 // Last minute
+    const recentTasks = completedTasks.filter(
+      (task) => Date.now() - task.completedAt!.getTime() < 60000 // Last minute
     );
     this.metrics.throughput = recentTasks.length / 60;
 
     // Calculate worker utilization
-    const totalWorkers = Array.from(this.workerPools.values())
-      .reduce((sum, pool) => sum + pool.workers.length, 0);
-    const busyWorkers = Array.from(this.workerPools.values())
-      .reduce((sum, pool) => sum + pool.busyWorkers.size, 0);
-    
+    const totalWorkers = Array.from(this.workerPools.values()).reduce(
+      (sum, pool) => sum + pool.workers.length,
+      0
+    );
+    const busyWorkers = Array.from(this.workerPools.values()).reduce(
+      (sum, pool) => sum + pool.busyWorkers.size,
+      0
+    );
+
     this.metrics.workerUtilization = totalWorkers > 0 ? (busyWorkers / totalWorkers) * 100 : 0;
 
     // Update queue length
@@ -886,10 +888,12 @@ export class BackgroundTaskOptimizer {
    * Get task status
    */
   getTaskStatus(taskId: string): Task | null {
-    return this.runningTasks.get(taskId) || 
-           this.completedTasks.get(taskId) || 
-           this.taskQueue.find(task => task.id === taskId) || 
-           null;
+    return (
+      this.runningTasks.get(taskId) ||
+      this.completedTasks.get(taskId) ||
+      this.taskQueue.find((task) => task.id === taskId) ||
+      null
+    );
   }
 
   /**
@@ -897,7 +901,7 @@ export class BackgroundTaskOptimizer {
    */
   cancelTask(taskId: string): boolean {
     // Remove from queue
-    const queueIndex = this.taskQueue.findIndex(task => task.id === taskId);
+    const queueIndex = this.taskQueue.findIndex((task) => task.id === taskId);
     if (queueIndex !== -1) {
       const task = this.taskQueue.splice(queueIndex, 1)[0];
       task.status = 'cancelled';
@@ -937,7 +941,7 @@ export class BackgroundTaskOptimizer {
       pending: this.taskQueue.length,
       running: this.runningTasks.size,
       completed: this.metrics.completedTasks,
-      failed: this.metrics.failedTasks
+      failed: this.metrics.failedTasks,
     };
   }
 
@@ -956,7 +960,7 @@ export class BackgroundTaskOptimizer {
 
     // Terminate all workers
     for (const pool of this.workerPools.values()) {
-      pool.workers.forEach(worker => worker.terminate());
+      pool.workers.forEach((worker) => worker.terminate());
     }
 
     // Clear data structures
@@ -978,4 +982,4 @@ if (typeof window !== 'undefined') {
   (window as any).__BACKGROUND_TASK_OPTIMIZER__ = backgroundTaskOptimizer;
 }
 
-export default BackgroundTaskOptimizer; 
+export default BackgroundTaskOptimizer;

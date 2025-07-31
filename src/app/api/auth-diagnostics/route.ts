@@ -43,13 +43,14 @@ export async function GET() {
       hasDb: !!dbModule.db,
       hasClient: false,
     };
-    
+
     // Try to access the client
     try {
       const client = dbModule.db.client;
       diagnostics.tests.dbModule.hasClient = !!client;
     } catch (clientError) {
-      diagnostics.tests.dbModule.clientError = clientError instanceof Error ? clientError.message : 'Unknown error';
+      diagnostics.tests.dbModule.clientError =
+        clientError instanceof Error ? clientError.message : 'Unknown error';
     }
   } catch (error) {
     diagnostics.tests.dbModule = {
@@ -84,7 +85,7 @@ export async function GET() {
     const prisma = new PrismaClient({
       log: ['error'],
     });
-    
+
     // Don't actually connect, just test initialization
     diagnostics.tests.prismaClient = {
       success: true,
@@ -113,8 +114,8 @@ export async function GET() {
   }
 
   const statusCode = diagnostics.errors.length > 0 ? 500 : 200;
-  
-  return NextResponse.json(diagnostics, { 
+
+  return NextResponse.json(diagnostics, {
     status: statusCode,
     headers: {
       'Content-Type': 'application/json',

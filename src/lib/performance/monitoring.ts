@@ -18,12 +18,16 @@ export interface PerformanceReport {
 
 export class MonitoringService {
   private metrics = new Map<string, Metric[]>();
-  
+
   constructor() {
     // Simplified initialization
   }
 
-  async recordMetric(name: string, value: number, tags: Record<string, string> = {}): Promise<void> {
+  async recordMetric(
+    name: string,
+    value: number,
+    tags: Record<string, string> = {}
+  ): Promise<void> {
     const metric: Metric = {
       name,
       value,
@@ -33,11 +37,11 @@ export class MonitoringService {
 
     const existing = this.metrics.get(name) || [];
     existing.push(metric);
-    
+
     if (existing.length > 1000) {
       existing.splice(0, existing.length - 1000);
     }
-    
+
     this.metrics.set(name, existing);
   }
 
@@ -83,4 +87,4 @@ export function getWebVitals() {
     fcp: 0,
     ttfb: 0,
   };
-} 
+}

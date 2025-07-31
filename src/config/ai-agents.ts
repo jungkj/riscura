@@ -72,45 +72,76 @@ export interface RiskContext {
 export const RISK_FRAMEWORKS = {
   COSO: {
     name: 'Committee of Sponsoring Organizations (COSO)',
-    components: ['Control Environment', 'Risk Assessment', 'Control Activities', 'Information & Communication', 'Monitoring'],
-    principles: 17
+    components: [
+      'Control Environment',
+      'Risk Assessment',
+      'Control Activities',
+      'Information & Communication',
+      'Monitoring',
+    ],
+    principles: 17,
   },
   ISO_31000: {
     name: 'ISO 31000 Risk Management',
-    principles: ['Integration', 'Structured & Comprehensive', 'Customized', 'Inclusive', 'Dynamic', 'Best Available Information', 'Human & Cultural Factors', 'Continual Improvement'],
-    process: ['Communication & Consultation', 'Scope & Context', 'Risk Assessment', 'Risk Treatment', 'Monitoring & Review']
+    principles: [
+      'Integration',
+      'Structured & Comprehensive',
+      'Customized',
+      'Inclusive',
+      'Dynamic',
+      'Best Available Information',
+      'Human & Cultural Factors',
+      'Continual Improvement',
+    ],
+    process: [
+      'Communication & Consultation',
+      'Scope & Context',
+      'Risk Assessment',
+      'Risk Treatment',
+      'Monitoring & Review',
+    ],
   },
   NIST: {
     name: 'NIST Risk Management Framework',
     steps: ['Categorize', 'Select', 'Implement', 'Assess', 'Authorize', 'Monitor'],
-    focus: 'Information Systems and Cybersecurity'
+    focus: 'Information Systems and Cybersecurity',
   },
   COBIT: {
     name: 'Control Objectives for Information and Related Technologies',
-    domains: ['Plan and Organize', 'Acquire and Implement', 'Deliver and Support', 'Monitor and Evaluate'],
-    focus: 'IT Governance and Management'
-  }
+    domains: [
+      'Plan and Organize',
+      'Acquire and Implement',
+      'Deliver and Support',
+      'Monitor and Evaluate',
+    ],
+    focus: 'IT Governance and Management',
+  },
 };
 
 export const RISK_METHODOLOGIES = {
   QUANTITATIVE: {
     name: 'Quantitative Risk Assessment',
-    methods: ['Monte Carlo Simulation', 'Value at Risk (VaR)', 'Expected Loss Calculation', 'Probabilistic Risk Assessment'],
+    methods: [
+      'Monte Carlo Simulation',
+      'Value at Risk (VaR)',
+      'Expected Loss Calculation',
+      'Probabilistic Risk Assessment',
+    ],
     benefits: ['Objective measurement', 'Statistical rigor', 'Comparative analysis'],
-    limitations: ['Data requirements', 'Complexity', 'Model assumptions']
+    limitations: ['Data requirements', 'Complexity', 'Model assumptions'],
   },
   QUALITATIVE: {
     name: 'Qualitative Risk Assessment',
     methods: ['Risk Matrices', 'Expert Judgment', 'Scenario Analysis', 'Delphi Technique'],
     benefits: ['Quick assessment', 'Expert knowledge', 'Subjective factors'],
-    limitations: ['Subjectivity', 'Inconsistency', 'Limited precision']
+    limitations: ['Subjectivity', 'Inconsistency', 'Limited precision'],
   },
   SEMI_QUANTITATIVE: {
     name: 'Semi-Quantitative Risk Assessment',
     methods: ['Scoring Systems', 'Weighted Risk Factors', 'Hybrid Matrices', 'Fuzzy Logic'],
     benefits: ['Balance of rigor and practicality', 'Scalable', 'Flexible'],
-    limitations: ['Moderate complexity', 'Calibration needs', 'Interpretation challenges']
-  }
+    limitations: ['Moderate complexity', 'Calibration needs', 'Interpretation challenges'],
+  },
 };
 
 // Agent Configurations
@@ -119,7 +150,8 @@ export const AI_AGENTS: Record<AgentType, AgentConfig> = {
     id: 'risk_analyzer',
     name: 'Risk Analyzer',
     title: 'Senior Risk Assessment Specialist',
-    description: 'Expert in comprehensive risk identification, assessment, and quantification using industry-standard methodologies.',
+    description:
+      'Expert in comprehensive risk identification, assessment, and quantification using industry-standard methodologies.',
     expertise: [
       'Risk identification and categorization',
       'Quantitative and qualitative risk assessment',
@@ -128,7 +160,7 @@ export const AI_AGENTS: Record<AgentType, AgentConfig> = {
       'Scenario modeling and stress testing',
       'Key Risk Indicator (KRI) development',
       'Risk appetite and tolerance setting',
-      'Industry-specific risk frameworks'
+      'Industry-specific risk frameworks',
     ],
     systemPrompt: `You are a Senior Risk Assessment Specialist with 15+ years of experience in enterprise risk management. Your expertise spans across multiple industries and risk domains.
 
@@ -166,9 +198,10 @@ INDUSTRY STANDARDS REFERENCE:
 • Industry-specific regulations and best practices
 
 Always provide actionable insights that support informed decision-making at the enterprise level.`,
-    
-    welcomeMessage: "Hello! I'm your Risk Analyzer assistant. I specialize in comprehensive risk assessment using industry-standard methodologies like COSO, ISO 31000, and NIST. I can help you identify, assess, and quantify risks across your organization. What risk would you like me to analyze today?",
-    
+
+    welcomeMessage:
+      "Hello! I'm your Risk Analyzer assistant. I specialize in comprehensive risk assessment using industry-standard methodologies like COSO, ISO 31000, and NIST. I can help you identify, assess, and quantify risks across your organization. What risk would you like me to analyze today?",
+
     capabilities: [
       'Comprehensive risk identification and categorization',
       'Quantitative risk modeling and simulation',
@@ -179,21 +212,22 @@ Always provide actionable insights that support informed decision-making at the 
       'Risk appetite and tolerance recommendations',
       'Industry benchmark analysis',
       'Regulatory compliance risk assessment',
-      'Risk treatment strategy recommendations'
+      'Risk treatment strategy recommendations',
     ],
-    
+
     limitations: [
       'Requires accurate and complete risk data for optimal analysis',
       'Cannot access real-time market data or external databases',
       'Recommendations should be validated by domain experts',
-      'Quantitative models require proper calibration and validation'
+      'Quantitative models require proper calibration and validation',
     ],
-    
+
     promptTemplates: {
       comprehensive_assessment: {
         id: 'comprehensive_assessment',
         name: 'Comprehensive Risk Assessment',
-        description: 'Complete risk analysis including identification, assessment, and treatment recommendations',
+        description:
+          'Complete risk analysis including identification, assessment, and treatment recommendations',
         template: `Conduct a comprehensive risk assessment for the following:
 
 RISK DETAILS:
@@ -251,10 +285,17 @@ Please provide:
 
 Format your response as a professional risk assessment report suitable for executive review.`,
         requiredContext: ['riskTitle', 'riskDescription', 'riskCategory', 'likelihood', 'impact'],
-        optionalContext: ['riskOwner', 'lastAssessment', 'industry', 'orgSize', 'riskAppetite', 'frameworks'],
-        examples: []
+        optionalContext: [
+          'riskOwner',
+          'lastAssessment',
+          'industry',
+          'orgSize',
+          'riskAppetite',
+          'frameworks',
+        ],
+        examples: [],
       },
-      
+
       quick_assessment: {
         id: 'quick_assessment',
         name: 'Quick Risk Assessment',
@@ -274,9 +315,9 @@ Provide:
 Keep the assessment concise but comprehensive, suitable for management review.`,
         requiredContext: ['riskTitle', 'riskDescription'],
         optionalContext: ['riskCategory', 'urgency'],
-        examples: []
+        examples: [],
       },
-      
+
       scenario_analysis: {
         id: 'scenario_analysis',
         name: 'Scenario Analysis',
@@ -302,38 +343,39 @@ For each scenario, provide:
 Include overall scenario planning recommendations and contingency planning guidance.`,
         requiredContext: ['riskTitle', 'baseScenario'],
         optionalContext: ['industry', 'orgSize', 'timeframe'],
-        examples: []
-      }
+        examples: [],
+      },
     },
-    
+
     responseFormat: {
       structure: 'Executive Summary → Detailed Analysis → Recommendations → Appendices',
       requiredSections: ['Executive Summary', 'Risk Assessment', 'Recommendations'],
       optionalSections: ['Quantitative Analysis', 'Scenario Results', 'Monitoring Framework'],
       confidenceDisplay: true,
       citationsRequired: true,
-      actionItemsSupported: true
+      actionItemsSupported: true,
     },
-    
+
     confidenceThresholds: {
       high: 0.85,
-      medium: 0.70,
+      medium: 0.7,
       low: 0.55,
-      minimum: 0.40
+      minimum: 0.4,
     },
-    
+
     fallbackResponses: [
-      "I need more specific information about the risk to provide a comprehensive assessment. Could you provide details about the risk description, category, and potential impacts?",
-      "Based on the limited information provided, I can offer a preliminary assessment, but I recommend gathering additional data for a more accurate analysis.",
-      "This risk appears to require specialized domain expertise. I recommend consulting with subject matter experts in addition to this analysis."
-    ]
+      'I need more specific information about the risk to provide a comprehensive assessment. Could you provide details about the risk description, category, and potential impacts?',
+      'Based on the limited information provided, I can offer a preliminary assessment, but I recommend gathering additional data for a more accurate analysis.',
+      'This risk appears to require specialized domain expertise. I recommend consulting with subject matter experts in addition to this analysis.',
+    ],
   },
 
   control_advisor: {
     id: 'control_advisor',
     name: 'Control Advisor',
     title: 'Senior Control Design Specialist',
-    description: 'Expert in control framework design, implementation, and optimization across enterprise environments.',
+    description:
+      'Expert in control framework design, implementation, and optimization across enterprise environments.',
     expertise: [
       'Control design and architecture',
       'Preventive, detective, and corrective controls',
@@ -342,7 +384,7 @@ Include overall scenario planning recommendations and contingency planning guida
       'Segregation of duties design',
       'Automated control implementation',
       'Control optimization and efficiency',
-      'Framework compliance (SOX, COBIT, COSO)'
+      'Framework compliance (SOX, COBIT, COSO)',
     ],
     systemPrompt: `You are a Senior Control Design Specialist with extensive experience in enterprise control frameworks, implementation, and optimization across multiple industries.
 
@@ -380,9 +422,10 @@ RESPONSE GUIDELINES:
 • Ensure controls are sustainable and maintainable
 
 Always focus on controls that provide measurable risk reduction while maintaining operational effectiveness.`,
-    
-    welcomeMessage: "Hi! I'm your Control Advisor. I specialize in designing and optimizing control frameworks using proven methodologies like COSO, COBIT, and SOX. I can help you design effective controls, assess control gaps, and optimize your control environment. What control challenge can I help you address?",
-    
+
+    welcomeMessage:
+      "Hi! I'm your Control Advisor. I specialize in designing and optimizing control frameworks using proven methodologies like COSO, COBIT, and SOX. I can help you design effective controls, assess control gaps, and optimize your control environment. What control challenge can I help you address?",
+
     capabilities: [
       'Comprehensive control design and architecture',
       'Control gap analysis and remediation',
@@ -393,16 +436,16 @@ Always focus on controls that provide measurable risk reduction while maintainin
       'Segregation of duties optimization',
       'Cost-benefit analysis for controls',
       'Compliance mapping and validation',
-      'Control monitoring and reporting design'
+      'Control monitoring and reporting design',
     ],
-    
+
     limitations: [
       'Requires detailed understanding of business processes for optimal control design',
       'Cannot access specific system configurations or technical architectures',
       'Implementation recommendations require validation by technical teams',
-      'Cost estimates are approximate and require detailed analysis'
+      'Cost estimates are approximate and require detailed analysis',
     ],
-    
+
     promptTemplates: {
       control_design: {
         id: 'control_design',
@@ -467,10 +510,17 @@ Please recommend:
 
 Include control design confidence level and implementation risk assessment.`,
         requiredContext: ['riskTitle', 'riskDescription', 'riskCategory', 'riskScore'],
-        optionalContext: ['riskOwner', 'industry', 'businessProcess', 'systemEnvironment', 'complianceReqs', 'budget'],
-        examples: []
+        optionalContext: [
+          'riskOwner',
+          'industry',
+          'businessProcess',
+          'systemEnvironment',
+          'complianceReqs',
+          'budget',
+        ],
+        examples: [],
       },
-      
+
       control_assessment: {
         id: 'control_assessment',
         name: 'Control Effectiveness Assessment',
@@ -520,14 +570,22 @@ Evaluate:
 
 Provide overall effectiveness rating and improvement priority ranking.`,
         requiredContext: ['controlName', 'controlDescription', 'controlType'],
-        optionalContext: ['frequency', 'controlOwner', 'lastTesting', 'recentIssues', 'testingResults', 'operationalMetrics'],
-        examples: []
+        optionalContext: [
+          'frequency',
+          'controlOwner',
+          'lastTesting',
+          'recentIssues',
+          'testingResults',
+          'operationalMetrics',
+        ],
+        examples: [],
       },
-      
+
       control_optimization: {
         id: 'control_optimization',
         name: 'Control Environment Optimization',
-        description: 'Holistic optimization of control environment for efficiency and effectiveness',
+        description:
+          'Holistic optimization of control environment for efficiency and effectiveness',
         template: `Optimize the control environment for: {processArea}
 
 CURRENT STATE:
@@ -573,38 +631,44 @@ Provide:
 Include expected benefits quantification and implementation risk mitigation strategies.`,
         requiredContext: ['processArea', 'controlCount'],
         optionalContext: ['challenges', 'constraints', 'performanceIssues'],
-        examples: []
-      }
+        examples: [],
+      },
     },
-    
+
     responseFormat: {
-      structure: 'Control Recommendations → Implementation Plan → Testing Strategy → Monitoring Framework',
+      structure:
+        'Control Recommendations → Implementation Plan → Testing Strategy → Monitoring Framework',
       requiredSections: ['Control Design', 'Implementation Plan', 'Testing Strategy'],
-      optionalSections: ['Cost-Benefit Analysis', 'Alternative Options', 'Optimization Opportunities'],
+      optionalSections: [
+        'Cost-Benefit Analysis',
+        'Alternative Options',
+        'Optimization Opportunities',
+      ],
       confidenceDisplay: true,
       citationsRequired: true,
-      actionItemsSupported: true
+      actionItemsSupported: true,
     },
-    
+
     confidenceThresholds: {
       high: 0.85,
-      medium: 0.70,
+      medium: 0.7,
       low: 0.55,
-      minimum: 0.40
+      minimum: 0.4,
     },
-    
+
     fallbackResponses: [
-      "I need more details about the risk or business process to design effective controls. Could you provide information about the specific risk scenario and operational context?",
-      "To recommend optimal controls, I need to understand your current control environment and any specific compliance requirements. Can you share more details?",
-      "This control scenario may require specialized technical expertise. I recommend involving system administrators or process owners in the control design validation."
-    ]
+      'I need more details about the risk or business process to design effective controls. Could you provide information about the specific risk scenario and operational context?',
+      'To recommend optimal controls, I need to understand your current control environment and any specific compliance requirements. Can you share more details?',
+      'This control scenario may require specialized technical expertise. I recommend involving system administrators or process owners in the control design validation.',
+    ],
   },
 
   compliance_expert: {
     id: 'compliance_expert',
     name: 'Compliance Expert',
     title: 'Senior Regulatory Compliance Specialist',
-    description: 'Expert in regulatory compliance, governance frameworks, and audit preparation across multiple jurisdictions.',
+    description:
+      'Expert in regulatory compliance, governance frameworks, and audit preparation across multiple jurisdictions.',
     expertise: [
       'Multi-jurisdictional regulatory compliance',
       'Governance framework implementation',
@@ -613,7 +677,7 @@ Include expected benefits quantification and implementation risk mitigation stra
       'Regulatory change management',
       'Ethics and conduct programs',
       'Data privacy and protection',
-      'Industry-specific regulations'
+      'Industry-specific regulations',
     ],
     systemPrompt: `You are a Senior Regulatory Compliance Specialist with expertise across multiple regulatory frameworks and jurisdictions, with particular focus on enterprise compliance programs.
 
@@ -650,9 +714,10 @@ RESPONSE GUIDELINES:
 • Highlight enforcement trends and regulatory focus areas
 
 Always balance compliance requirements with business practicality while maintaining the highest ethical standards.`,
-    
-    welcomeMessage: "Greetings! I'm your Compliance Expert. I specialize in regulatory compliance across multiple frameworks including SOX, GDPR, HIPAA, and industry-specific regulations. I can help you understand requirements, assess compliance gaps, and build effective compliance programs. What compliance challenge can I assist you with today?",
-    
+
+    welcomeMessage:
+      "Greetings! I'm your Compliance Expert. I specialize in regulatory compliance across multiple frameworks including SOX, GDPR, HIPAA, and industry-specific regulations. I can help you understand requirements, assess compliance gaps, and build effective compliance programs. What compliance challenge can I assist you with today?",
+
     capabilities: [
       'Multi-framework regulatory interpretation',
       'Compliance gap analysis and remediation',
@@ -663,16 +728,16 @@ Always balance compliance requirements with business practicality while maintain
       'Training program recommendations',
       'Monitoring and reporting framework design',
       'Regulatory risk assessment',
-      'Cross-jurisdictional compliance guidance'
+      'Cross-jurisdictional compliance guidance',
     ],
-    
+
     limitations: [
       'Cannot provide legal advice - recommendations should be validated by legal counsel',
       'Regulatory landscapes change frequently - verify current requirements',
       'Industry-specific nuances may require specialized legal expertise',
-      'Implementation guidance is general - specific situations may require customization'
+      'Implementation guidance is general - specific situations may require customization',
     ],
-    
+
     promptTemplates: {
       compliance_assessment: {
         id: 'compliance_assessment',
@@ -737,10 +802,20 @@ ASSESSMENT REQUIREMENTS:
 
 Provide assessment confidence level and highlight critical compliance risks requiring immediate attention.`,
         requiredContext: ['industry', 'primaryRegulations'],
-        optionalContext: ['orgSize', 'geography', 'businessActivities', 'secondaryRegulations', 'recentChanges', 'existingFrameworks', 'auditFindings', 'knownGaps', 'resources'],
-        examples: []
+        optionalContext: [
+          'orgSize',
+          'geography',
+          'businessActivities',
+          'secondaryRegulations',
+          'recentChanges',
+          'existingFrameworks',
+          'auditFindings',
+          'knownGaps',
+          'resources',
+        ],
+        examples: [],
       },
-      
+
       regulatory_interpretation: {
         id: 'regulatory_interpretation',
         name: 'Regulatory Requirement Interpretation',
@@ -797,10 +872,16 @@ INTERPRETATION REQUEST:
 
 Include interpretation confidence level and recommendations for legal review where appropriate.`,
         requiredContext: ['regulationName', 'requirementText'],
-        optionalContext: ['section', 'effectiveDate', 'industry', 'businessActivity', 'currentPractices'],
-        examples: []
+        optionalContext: [
+          'section',
+          'effectiveDate',
+          'industry',
+          'businessActivity',
+          'currentPractices',
+        ],
+        examples: [],
       },
-      
+
       audit_preparation: {
         id: 'audit_preparation',
         name: 'Audit Preparation Guidance',
@@ -860,39 +941,53 @@ PREPARATION GUIDANCE:
 
 Include preparation timeline, critical success factors, and risk mitigation strategies.`,
         requiredContext: ['auditType', 'auditScope'],
-        optionalContext: ['regulator', 'timeline', 'focusAreas', 'previousResults', 'knownWeaknesses', 'recentChanges', 'resources'],
-        examples: []
-      }
+        optionalContext: [
+          'regulator',
+          'timeline',
+          'focusAreas',
+          'previousResults',
+          'knownWeaknesses',
+          'recentChanges',
+          'resources',
+        ],
+        examples: [],
+      },
     },
-    
+
     responseFormat: {
-      structure: 'Regulatory Overview → Compliance Analysis → Implementation Guidance → Monitoring Framework',
-      requiredSections: ['Regulatory Analysis', 'Compliance Requirements', 'Implementation Guidance'],
+      structure:
+        'Regulatory Overview → Compliance Analysis → Implementation Guidance → Monitoring Framework',
+      requiredSections: [
+        'Regulatory Analysis',
+        'Compliance Requirements',
+        'Implementation Guidance',
+      ],
       optionalSections: ['Gap Analysis', 'Audit Considerations', 'Best Practices'],
       confidenceDisplay: true,
       citationsRequired: true,
-      actionItemsSupported: true
+      actionItemsSupported: true,
     },
-    
+
     confidenceThresholds: {
       high: 0.85,
-      medium: 0.70,
+      medium: 0.7,
       low: 0.55,
-      minimum: 0.40
+      minimum: 0.4,
     },
-    
+
     fallbackResponses: [
-      "This regulatory question requires specific legal expertise. I recommend consulting with qualified legal counsel for authoritative interpretation.",
-      "Regulatory requirements can vary significantly by jurisdiction and specific circumstances. Please verify these recommendations with your legal and compliance teams.",
-      "This appears to be a complex regulatory scenario that may require specialized industry expertise beyond my general compliance knowledge."
-    ]
+      'This regulatory question requires specific legal expertise. I recommend consulting with qualified legal counsel for authoritative interpretation.',
+      'Regulatory requirements can vary significantly by jurisdiction and specific circumstances. Please verify these recommendations with your legal and compliance teams.',
+      'This appears to be a complex regulatory scenario that may require specialized industry expertise beyond my general compliance knowledge.',
+    ],
   },
 
   general_assistant: {
     id: 'general_assistant',
     name: 'ARIA',
     title: 'AI Risk Intelligence Assistant',
-    description: 'Comprehensive AI assistant for enterprise risk management with broad domain knowledge and adaptive expertise.',
+    description:
+      'Comprehensive AI assistant for enterprise risk management with broad domain knowledge and adaptive expertise.',
     expertise: [
       'Enterprise risk management strategy',
       'Risk governance and oversight',
@@ -901,7 +996,7 @@ Include preparation timeline, critical success factors, and risk mitigation stra
       'Vendor and third-party risk',
       'Operational risk management',
       'Strategic risk assessment',
-      'Risk communication and reporting'
+      'Risk communication and reporting',
     ],
     systemPrompt: `You are ARIA (AI Risk Intelligence Assistant), a comprehensive enterprise risk management assistant with broad expertise across all aspects of risk management, governance, and business resilience.
 
@@ -941,9 +1036,10 @@ INTERACTION GUIDELINES:
 • Focus on value creation and business enablement through effective risk management
 
 You serve as the primary interface for risk management questions, routing to specialized agents when deep expertise is needed while providing comprehensive general guidance across all risk domains.`,
-    
-    welcomeMessage: "Hello! I'm ARIA, your AI Risk Intelligence Assistant. I'm here to help you with all aspects of enterprise risk management - from strategic risk governance to operational risk management, compliance, crisis management, and everything in between. I can provide guidance, analysis, and recommendations across the full spectrum of risk management disciplines. What can I help you with today?",
-    
+
+    welcomeMessage:
+      "Hello! I'm ARIA, your AI Risk Intelligence Assistant. I'm here to help you with all aspects of enterprise risk management - from strategic risk governance to operational risk management, compliance, crisis management, and everything in between. I can provide guidance, analysis, and recommendations across the full spectrum of risk management disciplines. What can I help you with today?",
+
     capabilities: [
       'Enterprise risk strategy and governance guidance',
       'Cross-functional risk assessment and analysis',
@@ -954,16 +1050,16 @@ You serve as the primary interface for risk management questions, routing to spe
       'Emerging risk identification and assessment',
       'Risk management training and education support',
       'Risk culture and awareness program development',
-      'Integration with business strategy and operations'
+      'Integration with business strategy and operations',
     ],
-    
+
     limitations: [
       'General guidance may require validation by specialized experts',
       'Complex technical implementations require subject matter expertise',
       'Regulatory advice should be confirmed with legal counsel',
-      'Industry-specific risks may require specialized knowledge'
+      'Industry-specific risks may require specialized knowledge',
     ],
-    
+
     promptTemplates: {
       enterprise_strategy: {
         id: 'enterprise_strategy',
@@ -1019,10 +1115,19 @@ STRATEGIC GUIDANCE NEEDED:
 
 Provide strategic recommendations with implementation considerations and success factors.`,
         requiredContext: ['industry', 'orgSize'],
-        optionalContext: ['geography', 'businessModel', 'stakeholders', 'maturity', 'frameworks', 'keyRisks', 'constraints', 'objectives'],
-        examples: []
+        optionalContext: [
+          'geography',
+          'businessModel',
+          'stakeholders',
+          'maturity',
+          'frameworks',
+          'keyRisks',
+          'constraints',
+          'objectives',
+        ],
+        examples: [],
       },
-      
+
       crisis_management: {
         id: 'crisis_management',
         name: 'Crisis Management Planning',
@@ -1075,10 +1180,17 @@ CRISIS MANAGEMENT FRAMEWORK:
 
 Include crisis response timeline, key decision points, and stakeholder communication templates.`,
         requiredContext: ['crisisType', 'potentialImpact'],
-        optionalContext: ['affectedOps', 'timeline', 'industry', 'dependencies', 'stakeholders', 'regulations'],
-        examples: []
+        optionalContext: [
+          'affectedOps',
+          'timeline',
+          'industry',
+          'dependencies',
+          'stakeholders',
+          'regulations',
+        ],
+        examples: [],
       },
-      
+
       risk_communication: {
         id: 'risk_communication',
         name: 'Risk Communication Strategy',
@@ -1131,39 +1243,47 @@ COMMUNICATION FRAMEWORK:
 
 Provide communication templates, timing recommendations, and effectiveness measurement approaches.`,
         requiredContext: ['purpose', 'audience'],
-        optionalContext: ['keyMessages', 'timeline', 'riskAreas', 'riskLevel', 'recentChanges', 'actionItems'],
-        examples: []
-      }
+        optionalContext: [
+          'keyMessages',
+          'timeline',
+          'riskAreas',
+          'riskLevel',
+          'recentChanges',
+          'actionItems',
+        ],
+        examples: [],
+      },
     },
-    
+
     responseFormat: {
-      structure: 'Context Assessment → Strategic Guidance → Implementation Recommendations → Next Steps',
+      structure:
+        'Context Assessment → Strategic Guidance → Implementation Recommendations → Next Steps',
       requiredSections: ['Analysis', 'Recommendations', 'Implementation Guidance'],
       optionalSections: ['Strategic Context', 'Best Practices', 'Templates and Tools'],
       confidenceDisplay: true,
       citationsRequired: false,
-      actionItemsSupported: true
+      actionItemsSupported: true,
     },
-    
+
     confidenceThresholds: {
-      high: 0.80,
+      high: 0.8,
       medium: 0.65,
-      low: 0.50,
-      minimum: 0.35
+      low: 0.5,
+      minimum: 0.35,
     },
-    
+
     fallbackResponses: [
       "I'd be happy to help with your risk management question. Could you provide more specific details about your situation and objectives?",
-      "This appears to be a specialized area that would benefit from expert consultation. I can provide general guidance and help you identify the right expertise needed.",
-      "Let me provide some general guidance on this topic, and I recommend following up with specialized experts for detailed implementation planning."
-    ]
-  }
+      'This appears to be a specialized area that would benefit from expert consultation. I can provide general guidance and help you identify the right expertise needed.',
+      'Let me provide some general guidance on this topic, and I recommend following up with specialized experts for detailed implementation planning.',
+    ],
+  },
 };
 
 // Context Injection Functions
 export function injectRiskContext(template: string, context: RiskContext): string {
   let processedTemplate = template;
-  
+
   if (context.risk) {
     processedTemplate = processedTemplate
       .replace(/{riskTitle}/g, context.risk.title || '')
@@ -1173,39 +1293,53 @@ export function injectRiskContext(template: string, context: RiskContext): strin
       .replace(/{impact}/g, context.risk.impact?.toString() || '')
       .replace(/{riskScore}/g, context.risk.riskScore?.toString() || '')
       .replace(/{riskOwner}/g, context.risk.owner || '')
-      .replace(/{lastAssessment}/g, context.risk.lastAssessed?.toLocaleDateString() || 'Not specified');
+      .replace(
+        /{lastAssessment}/g,
+        context.risk.lastAssessed?.toLocaleDateString() || 'Not specified'
+      );
   }
-  
+
   if (context.organizationContext) {
     processedTemplate = processedTemplate
       .replace(/{industry}/g, context.organizationContext.industry || 'Not specified')
       .replace(/{orgSize}/g, context.organizationContext.size || 'Not specified')
       .replace(/{riskAppetite}/g, context.organizationContext.riskAppetite || 'Not specified')
-      .replace(/{frameworks}/g, context.organizationContext.frameworks?.join(', ') || 'Not specified');
+      .replace(
+        /{frameworks}/g,
+        context.organizationContext.frameworks?.join(', ') || 'Not specified'
+      );
   }
-  
+
   // Clean up any remaining placeholders
   processedTemplate = processedTemplate.replace(/{[^}]+}/g, 'Not specified');
-  
+
   return processedTemplate;
 }
 
-export function calculateConfidenceScore(agentType: AgentType, contextCompleteness: number, complexity: number): number {
+export function calculateConfidenceScore(
+  agentType: AgentType,
+  contextCompleteness: number,
+  complexity: number
+): number {
   const agent = AI_AGENTS[agentType];
   const baseConfidence = agent.confidenceThresholds.high;
-  
+
   // Adjust based on context completeness (0-1)
   const contextAdjustment = contextCompleteness * 0.2;
-  
+
   // Adjust based on complexity (0-1, where 1 is most complex)
   const complexityAdjustment = (1 - complexity) * 0.15;
-  
+
   const adjustedConfidence = baseConfidence + contextAdjustment + complexityAdjustment;
-  
+
   return Math.min(Math.max(adjustedConfidence, agent.confidenceThresholds.minimum), 1.0);
 }
 
-export function formatAgentResponse(agentType: AgentType, content: string, confidence: number): {
+export function formatAgentResponse(
+  agentType: AgentType,
+  content: string,
+  confidence: number
+): {
   content: string;
   confidence: number;
   confidenceLevel: 'high' | 'medium' | 'low';
@@ -1216,7 +1350,7 @@ export function formatAgentResponse(agentType: AgentType, content: string, confi
   };
 } {
   const agent = AI_AGENTS[agentType];
-  
+
   let confidenceLevel: 'high' | 'medium' | 'low';
   if (confidence >= agent.confidenceThresholds.high) {
     confidenceLevel = 'high';
@@ -1225,13 +1359,14 @@ export function formatAgentResponse(agentType: AgentType, content: string, confi
   } else {
     confidenceLevel = 'low';
   }
-  
+
   // Add confidence disclaimer for low confidence responses
   let formattedContent = content;
   if (confidenceLevel === 'low') {
-    formattedContent += '\n\n⚠️ **Note**: This response has lower confidence due to limited context or complexity. Please validate recommendations with domain experts.';
+    formattedContent +=
+      '\n\n⚠️ **Note**: This response has lower confidence due to limited context or complexity. Please validate recommendations with domain experts.';
   }
-  
+
   return {
     content: formattedContent,
     confidence,
@@ -1239,10 +1374,10 @@ export function formatAgentResponse(agentType: AgentType, content: string, confi
     metadata: {
       agentType,
       responseFormat: agent.responseFormat,
-      timestamp: new Date()
-    }
+      timestamp: new Date(),
+    },
   };
 }
 
 // Export default
-export default AI_AGENTS; 
+export default AI_AGENTS;

@@ -13,7 +13,7 @@ const ProboMetricsSchema = z.object({
   vendorAssessments: z.number(),
   complianceFrameworks: z.number(),
   riskReduction: z.number(),
-  lastUpdated: z.date().or(z.string().transform(str => new Date(str))),
+  lastUpdated: z.date().or(z.string().transform((str) => new Date(str))),
 });
 
 const ProboComplianceStatusSchema = z.object({
@@ -23,8 +23,8 @@ const ProboComplianceStatusSchema = z.object({
   controlsImplemented: z.number(),
   totalControls: z.number(),
   proboControlsAvailable: z.number(),
-  lastAssessed: z.date().or(z.string().transform(str => new Date(str))),
-  nextDue: z.date().or(z.string().transform(str => new Date(str))),
+  lastAssessed: z.date().or(z.string().transform((str) => new Date(str))),
+  nextDue: z.date().or(z.string().transform((str) => new Date(str))),
 });
 
 const ProboInsightSchema = z.object({
@@ -34,7 +34,7 @@ const ProboInsightSchema = z.object({
   description: z.string(),
   recommendation: z.string(),
   affectedFrameworks: z.array(z.string()),
-  timestamp: z.date().or(z.string().transform(str => new Date(str))),
+  timestamp: z.date().or(z.string().transform((str) => new Date(str))),
 });
 
 const ProboInsightsSchema = z.object({
@@ -108,19 +108,21 @@ export class EnhancedProboService {
 
   constructor() {
     this.proboIntegration = ProboIntegrationService.getInstance();
-    
+
     // Skip key initialization during build
     if (process.env.BUILDING === 'true' || process.env.NEXT_PHASE === 'phase-production-build') {
       this.encryptionKey = Buffer.alloc(32); // Dummy key for build time
       return;
     }
-    
+
     // Enforce secure key requirement
     const keySource = process.env.PROBO_ENCRYPTION_KEY || process.env.NEXTAUTH_SECRET;
     if (!keySource) {
-      throw new Error('Encryption key not configured. Please set PROBO_ENCRYPTION_KEY or NEXTAUTH_SECRET environment variable.');
+      throw new Error(
+        'Encryption key not configured. Please set PROBO_ENCRYPTION_KEY or NEXTAUTH_SECRET environment variable.'
+      );
     }
-    
+
     // Derive a proper 256-bit key from the source
     this.encryptionKey = this.deriveKey(keySource);
   }
@@ -137,17 +139,23 @@ export class EnhancedProboService {
     } catch (error) {
       console.error('Metric value validation failed:', error);
       if (error instanceof z.ZodError) {
-        throw new Error(`Invalid metric data structure: ${error.errors.map(e => e.message).join(', ')}`);
+        throw new Error(
+          `Invalid metric data structure: ${error.errors.map((e) => e.message).join(', ')}`
+        );
       }
       throw new Error('Invalid metric data structure');
     }
   }
 
   // Integration Management
-  async setupIntegration(organizationId: string, apiKey: string, webhookUrl?: string): Promise<ProboIntegration> {
+  async setupIntegration(
+    organizationId: string,
+    apiKey: string,
+    webhookUrl?: string
+  ): Promise<ProboIntegration> {
     // Encrypt API key
     const encryptedKey = this.encryptApiKey(apiKey);
-    
+
     // Generate webhook secret
     const webhookSecret = webhookUrl ? crypto.randomBytes(32).toString('hex') : null;
 
@@ -202,7 +210,7 @@ export class EnhancedProboService {
       const metrics = await this.proboIntegration.getIntegrationMetrics();
       const complianceStatus = await this.proboIntegration.getComplianceStatus();
       const proboInsights = await this.proboIntegration.getProboInsights();
-      
+
       // Transform insights to match expected format
       const insights: ProboInsights = {
         summary: `${proboInsights.recommendations.length} insights identified`,
@@ -215,8 +223,8 @@ export class EnhancedProboService {
           description: rec,
           recommendation: `Implement ${rec}`,
           affectedFrameworks: ['SOC2', 'ISO27001'],
-          timestamp: new Date()
-        }))
+          timestamp: new Date(),
+        })),
       };
 
       // Store metrics in database
@@ -301,7 +309,10 @@ export class EnhancedProboService {
       }
     }
 
-    return this.validateMetricValue(latestMetric.metricValue, z.array(ProboComplianceStatusSchema)) as ProboComplianceStatus[];
+    return this.validateMetricValue(
+      latestMetric.metricValue,
+      z.array(ProboComplianceStatusSchema)
+    ) as ProboComplianceStatus[];
   }
 
   async getInsights(organizationId: string): Promise<ProboInsights> {
@@ -333,7 +344,7 @@ export class EnhancedProboService {
   async getVendorSummary(organizationId: string): Promise<ProboVendorSummary> {
     // Get vendor data from ProboIntegrationService
     const vendorSummary = await this.proboIntegration.getVendorAssessmentSummary();
-    
+
     return vendorSummary;
   }
 
@@ -360,20 +371,20 @@ export class EnhancedProboService {
     try {
       // Generate random IV
       const iv = crypto.randomBytes(EnhancedProboService.IV_LENGTH);
-      
+
       // Create cipher
       const cipher = crypto.createCipheriv(EnhancedProboService.ALGORITHM, this.encryptionKey, iv);
-      
+
       // Encrypt the API key
       let encrypted = cipher.update(apiKey, 'utf8');
       encrypted = Buffer.concat([encrypted, cipher.final()]);
-      
+
       // Get the authentication tag
       const tag = cipher.getAuthTag();
-      
+
       // Combine IV, tag, and encrypted data
       const combined = Buffer.concat([iv, tag, encrypted]);
-      
+
       // Return as base64 string
       return combined.toString('base64');
     } catch (error) {
@@ -386,20 +397,29 @@ export class EnhancedProboService {
     try {
       // Decode from base64
       const combined = Buffer.from(encryptedKey, 'base64');
-      
+
       // Extract IV, tag, and encrypted data
       const iv = combined.slice(0, EnhancedProboService.IV_LENGTH);
-      const tag = combined.slice(EnhancedProboService.IV_LENGTH, EnhancedProboService.IV_LENGTH + EnhancedProboService.TAG_LENGTH);
-      const encrypted = combined.slice(EnhancedProboService.IV_LENGTH + EnhancedProboService.TAG_LENGTH);
-      
+      const tag = combined.slice(
+        EnhancedProboService.IV_LENGTH,
+        EnhancedProboService.IV_LENGTH + EnhancedProboService.TAG_LENGTH
+      );
+      const encrypted = combined.slice(
+        EnhancedProboService.IV_LENGTH + EnhancedProboService.TAG_LENGTH
+      );
+
       // Create decipher
-      const decipher = crypto.createDecipheriv(EnhancedProboService.ALGORITHM, this.encryptionKey, iv);
+      const decipher = crypto.createDecipheriv(
+        EnhancedProboService.ALGORITHM,
+        this.encryptionKey,
+        iv
+      );
       decipher.setAuthTag(tag);
-      
+
       // Decrypt the data
       let decrypted = decipher.update(encrypted);
       decrypted = Buffer.concat([decrypted, decipher.final()]);
-      
+
       return decrypted.toString('utf8');
     } catch (error) {
       console.error('Decryption failed:', error);
@@ -473,7 +493,7 @@ export class EnhancedProboService {
         description: 'MFA is not enabled for all user accounts',
         recommendation: 'Implement multi-factor authentication across all systems',
         affectedFrameworks: ['SOC2', 'ISO27001'],
-        timestamp: new Date()
+        timestamp: new Date(),
       },
       {
         type: 'compliance_gap',
@@ -482,7 +502,7 @@ export class EnhancedProboService {
         description: 'Current policies do not meet GDPR requirements',
         recommendation: 'Review and update data retention policies',
         affectedFrameworks: ['GDPR'],
-        timestamp: new Date()
+        timestamp: new Date(),
       },
       {
         type: 'vendor_risk',
@@ -491,7 +511,7 @@ export class EnhancedProboService {
         description: 'Quarterly assessments not completed for 5 vendors',
         recommendation: 'Conduct quarterly vendor risk assessments',
         affectedFrameworks: ['SOC2'],
-        timestamp: new Date()
+        timestamp: new Date(),
       },
       {
         type: 'security_awareness',
@@ -500,7 +520,7 @@ export class EnhancedProboService {
         description: 'Employee training materials need update',
         recommendation: 'Enhance employee security awareness training',
         affectedFrameworks: ['ISO27001'],
-        timestamp: new Date()
+        timestamp: new Date(),
       },
       {
         type: 'monitoring_gap',
@@ -509,24 +529,20 @@ export class EnhancedProboService {
         description: 'Compliance checks are performed manually',
         recommendation: 'Implement automated compliance monitoring',
         affectedFrameworks: ['SOC2', 'ISO27001'],
-        timestamp: new Date()
-      }
+        timestamp: new Date(),
+      },
     ];
 
     return {
       summary: '5 critical insights requiring attention',
       totalInsights: 5,
       criticalInsights: 2,
-      recommendations
+      recommendations,
     };
   }
 
   // Webhook Handler
-  async handleWebhook(
-    organizationId: string,
-    webhookData: any,
-    signature: string
-  ): Promise<void> {
+  async handleWebhook(organizationId: string, webhookData: any, signature: string): Promise<void> {
     const integration = await this.getIntegration(organizationId);
     if (!integration?.webhookSecret) {
       throw new Error('Webhook not configured');

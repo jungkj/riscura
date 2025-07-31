@@ -9,4 +9,4 @@ const DataManagementDashboard: React.FC = () => {
   );
 };
 
-export default DataManagementDashboard; 
+export default DataManagementDashboard;

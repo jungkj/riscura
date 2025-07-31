@@ -7,18 +7,20 @@ export const loginSchema = z.object({
   rememberMe: z.boolean().optional().default(false),
 });
 
-export const registerSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
-  organizationName: z.string().min(1, 'Organization name is required'),
-  role: z.enum(['admin', 'risk_manager', 'auditor', 'user']).optional(),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+export const registerSchema = z
+  .object({
+    email: z.string().email('Invalid email address'),
+    firstName: z.string().min(1, 'First name is required'),
+    lastName: z.string().min(1, 'Last name is required'),
+    organizationName: z.string().min(1, 'Organization name is required'),
+    role: z.enum(['admin', 'risk_manager', 'auditor', 'user']).optional(),
+    password: z.string().min(8, 'Password must be at least 8 characters'),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  });
 
 export const profileUpdateSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
@@ -93,4 +95,4 @@ export type RiskFormData = z.infer<typeof riskSchema>;
 export type ControlFormData = z.infer<typeof controlSchema>;
 export type DocumentUploadFormData = z.infer<typeof documentUploadSchema>;
 export type QuestionnaireFormData = z.infer<typeof questionnaireSchema>;
-export type WorkflowFormData = z.infer<typeof workflowSchema>; 
+export type WorkflowFormData = z.infer<typeof workflowSchema>;

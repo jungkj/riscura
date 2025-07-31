@@ -7,7 +7,7 @@ import { db } from '@/lib/db';
 export async function POST(request: NextRequest) {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -19,10 +19,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user?.organizationId) {
-      return NextResponse.json(
-        { error: 'User organization not found' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'User organization not found' }, { status: 400 });
     }
 
     const body = await request.json();
@@ -46,15 +43,12 @@ export async function POST(request: NextRequest) {
 
     // Validate recipients
     if (!Array.isArray(recipients) || recipients.length === 0) {
-      return NextResponse.json(
-        { error: 'recipients must be a non-empty array' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'recipients must be a non-empty array' }, { status: 400 });
     }
 
     // Validate email addresses
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const invalidEmails = recipients.filter(email => !emailRegex.test(email));
+    const invalidEmails = recipients.filter((email) => !emailRegex.test(email));
     if (invalidEmails.length > 0) {
       return NextResponse.json(
         { error: `Invalid email addresses: ${invalidEmails.join(', ')}` },
@@ -78,7 +72,7 @@ export async function POST(request: NextRequest) {
         frequency,
         time: '00:00',
         timezone: 'UTC',
-        enabled: true
+        enabled: true,
       },
       recipients,
     });
@@ -99,7 +93,7 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -111,10 +105,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!user?.organizationId) {
-      return NextResponse.json(
-        { error: 'User organization not found' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'User organization not found' }, { status: 400 });
     }
 
     const scheduledReports = await db.client.reportSchedule.findMany({
@@ -144,17 +135,14 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error fetching scheduled reports:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch scheduled reports' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch scheduled reports' }, { status: 500 });
   }
 }
 
 export async function PUT(request: NextRequest) {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -166,10 +154,7 @@ export async function PUT(request: NextRequest) {
     });
 
     if (!user?.organizationId) {
-      return NextResponse.json(
-        { error: 'User organization not found' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'User organization not found' }, { status: 400 });
     }
 
     const body = await request.json();
@@ -177,10 +162,7 @@ export async function PUT(request: NextRequest) {
 
     // Validate required fields
     if (!id) {
-      return NextResponse.json(
-        { error: 'id is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'id is required' }, { status: 400 });
     }
 
     // Validate frequency if provided
@@ -201,7 +183,7 @@ export async function PUT(request: NextRequest) {
       }
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const invalidEmails = recipients.filter(email => !emailRegex.test(email));
+      const invalidEmails = recipients.filter((email) => !emailRegex.test(email));
       if (invalidEmails.length > 0) {
         return NextResponse.json(
           { error: `Invalid email addresses: ${invalidEmails.join(', ')}` },
@@ -251,7 +233,7 @@ export async function PUT(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -263,20 +245,14 @@ export async function DELETE(request: NextRequest) {
     });
 
     if (!user?.organizationId) {
-      return NextResponse.json(
-        { error: 'User organization not found' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'User organization not found' }, { status: 400 });
     }
 
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'id parameter is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'id parameter is required' }, { status: 400 });
     }
 
     await db.client.report.delete({
@@ -297,4 +273,4 @@ export async function DELETE(request: NextRequest) {
       { status: 500 }
     );
   }
-} 
+}

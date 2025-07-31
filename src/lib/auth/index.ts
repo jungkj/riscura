@@ -68,21 +68,30 @@ export {
 
 // Common authentication errors
 export class AuthenticationError extends Error {
-  constructor(message: string, public code?: string) {
+  constructor(
+    message: string,
+    public code?: string
+  ) {
     super(message);
     this.name = 'AuthenticationError';
   }
 }
 
 export class AuthorizationError extends Error {
-  constructor(message: string, public code?: string) {
+  constructor(
+    message: string,
+    public code?: string
+  ) {
     super(message);
     this.name = 'AuthorizationError';
   }
 }
 
 export class SessionError extends Error {
-  constructor(message: string, public code?: string) {
+  constructor(
+    message: string,
+    public code?: string
+  ) {
     super(message);
     this.name = 'SessionError';
   }
@@ -105,58 +114,58 @@ export const PERMISSIONS = {
   RISK_READ: 'risk:read',
   RISK_UPDATE: 'risk:update',
   RISK_DELETE: 'risk:delete',
-  
+
   // Control Management
   CONTROL_CREATE: 'control:create',
   CONTROL_READ: 'control:read',
   CONTROL_UPDATE: 'control:update',
   CONTROL_DELETE: 'control:delete',
-  
+
   // Document Management
   DOCUMENT_CREATE: 'document:create',
   DOCUMENT_READ: 'document:read',
   DOCUMENT_UPDATE: 'document:update',
   DOCUMENT_DELETE: 'document:delete',
-  
+
   // Assessment Management
   ASSESSMENT_CREATE: 'assessment:create',
   ASSESSMENT_READ: 'assessment:read',
   ASSESSMENT_UPDATE: 'assessment:update',
   ASSESSMENT_DELETE: 'assessment:delete',
-  
+
   // Workflow Management
   WORKFLOW_CREATE: 'workflow:create',
   WORKFLOW_READ: 'workflow:read',
   WORKFLOW_UPDATE: 'workflow:update',
   WORKFLOW_DELETE: 'workflow:delete',
-  
+
   // Report Management
   REPORT_CREATE: 'report:create',
   REPORT_READ: 'report:read',
   REPORT_UPDATE: 'report:update',
   REPORT_DELETE: 'report:delete',
-  
+
   // User Management
   USER_CREATE: 'user:create',
   USER_READ: 'user:read',
   USER_UPDATE: 'user:update',
   USER_DELETE: 'user:delete',
-  
+
   // Organization Management
   ORG_ADMIN: 'org:admin',
   ORG_SETTINGS: 'org:settings',
   ORG_BILLING: 'org:billing',
-  
+
   // System Administration
   SYSTEM_ADMIN: 'system:admin',
   SYSTEM_MONITORING: 'system:monitoring',
   SYSTEM_BACKUP: 'system:backup',
-  
+
   // AI Features
   AI_CHAT: 'ai:chat',
   AI_ANALYSIS: 'ai:analysis',
   AI_GENERATION: 'ai:generation',
-  
+
   // Bulk Operations
   BULK_IMPORT: 'bulk:import',
   BULK_EXPORT: 'bulk:export',
@@ -223,17 +232,23 @@ export function hasPermission(userPermissions: string[], requiredPermission: str
 /**
  * Check if user has any of the required permissions
  */
-export function hasAnyPermission(userPermissions: string[], requiredPermissions: string[]): boolean {
+export function hasAnyPermission(
+  userPermissions: string[],
+  requiredPermissions: string[]
+): boolean {
   if (userPermissions.includes('*')) return true;
-  return requiredPermissions.some(permission => userPermissions.includes(permission));
+  return requiredPermissions.some((permission) => userPermissions.includes(permission));
 }
 
 /**
  * Check if user has all of the required permissions
  */
-export function hasAllPermissions(userPermissions: string[], requiredPermissions: string[]): boolean {
+export function hasAllPermissions(
+  userPermissions: string[],
+  requiredPermissions: string[]
+): boolean {
   if (userPermissions.includes('*')) return true;
-  return requiredPermissions.every(permission => userPermissions.includes(permission));
+  return requiredPermissions.every((permission) => userPermissions.includes(permission));
 }
 
 /**
@@ -262,7 +277,7 @@ export function getAllPermissions(): string[] {
  */
 export function getPermissionsByCategory(): Record<string, string[]> {
   const categories: Record<string, string[]> = {};
-  
+
   Object.entries(PERMISSIONS).forEach(([key, permission]) => {
     const category = permission.split(':')[0];
     if (!categories[category]) {
@@ -270,7 +285,7 @@ export function getPermissionsByCategory(): Record<string, string[]> {
     }
     categories[category].push(permission);
   });
-  
+
   return categories;
 }
 
@@ -281,7 +296,7 @@ export function formatPermission(permission: string): string {
   const [category, action] = permission.split(':');
   const capitalizedCategory = category.charAt(0).toUpperCase() + category.slice(1);
   const capitalizedAction = action.charAt(0).toUpperCase() + action.slice(1);
-  
+
   return `${capitalizedCategory} ${capitalizedAction}`;
 }
 
@@ -306,14 +321,14 @@ export function getEffectivePermissions(
 ): string[] {
   const rolePermissions = getDefaultPermissions(userRole as keyof typeof ROLE_PERMISSIONS);
   const allPermissions = [...rolePermissions, ...explicitPermissions];
-  
+
   // Remove duplicates and return
   return [...new Set(allPermissions)];
 }
 
 // Type exports
-export type Permission = typeof PERMISSIONS[keyof typeof PERMISSIONS];
+export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
 export type Role = keyof typeof ROLE_PERMISSIONS;
 
 export * from './auth-options';
-export { default } from './auth-options'; 
+export { default } from './auth-options';

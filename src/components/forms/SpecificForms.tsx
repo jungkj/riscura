@@ -3,15 +3,15 @@
 import React, { useState } from 'react';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { NotionForm, FormSectionConfig } from './NotionForms';
-import { 
-  Shield, 
-  Users, 
-  Settings, 
+import {
+  Shield,
+  Users,
+  Settings,
   FileCheck,
   AlertTriangle,
   UserPlus,
   Cog,
-  Save
+  Save,
 } from 'lucide-react';
 
 // ========== RISK ASSESSMENT FORM ==========
@@ -32,7 +32,7 @@ export const RiskAssessmentForm: React.FC = () => {
           required: true,
           placeholder: 'Enter a descriptive title for this risk',
           helperText: 'Use a clear, concise title that describes the risk',
-          width: 'full'
+          width: 'full',
         },
         {
           id: 'risk-category',
@@ -45,7 +45,7 @@ export const RiskAssessmentForm: React.FC = () => {
             { value: 'operational', label: 'Operational' },
             { value: 'financial', label: 'Financial' },
             { value: 'regulatory', label: 'Regulatory' },
-          ]
+          ],
         },
         {
           id: 'risk-description',
@@ -53,14 +53,14 @@ export const RiskAssessmentForm: React.FC = () => {
           type: 'textarea',
           required: true,
           placeholder: 'Provide a detailed description of the risk...',
-          width: 'full'
-        }
-      ]
-    }
+          width: 'full',
+        },
+      ],
+    },
   ];
 
   const handleFormChange = (fieldId: string, value: any) => {
-    setFormValues(prev => ({ ...prev, [fieldId]: value }));
+    setFormValues((prev) => ({ ...prev, [fieldId]: value }));
   };
 
   const handleSubmit = (values: Record<string, any>) => {
@@ -113,7 +113,7 @@ export const ControlTestingForm: React.FC = () => {
           type: 'text',
           required: true,
           placeholder: 'e.g., AC-001',
-          width: 'half'
+          width: 'half',
         },
         {
           id: 'control-name',
@@ -121,7 +121,7 @@ export const ControlTestingForm: React.FC = () => {
           type: 'text',
           required: true,
           placeholder: 'e.g., Access Control Management',
-          width: 'half'
+          width: 'half',
         },
         {
           id: 'framework',
@@ -134,7 +134,7 @@ export const ControlTestingForm: React.FC = () => {
             { value: 'iso27001', label: 'ISO 27001' },
             { value: 'nist', label: 'NIST CSF' },
             { value: 'gdpr', label: 'GDPR' },
-          ]
+          ],
         },
         {
           id: 'test-frequency',
@@ -147,9 +147,9 @@ export const ControlTestingForm: React.FC = () => {
             { value: 'semi-annual', label: 'Semi-Annual' },
             { value: 'annual', label: 'Annual' },
             { value: 'continuous', label: 'Continuous' },
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     },
     {
       id: 'test-details',
@@ -162,7 +162,7 @@ export const ControlTestingForm: React.FC = () => {
           type: 'text',
           required: true,
           placeholder: 'YYYY-MM-DD',
-          width: 'half'
+          width: 'half',
         },
         {
           id: 'tester',
@@ -174,7 +174,7 @@ export const ControlTestingForm: React.FC = () => {
             { value: 'internal', label: 'Internal Team' },
             { value: 'external', label: 'External Auditor' },
             { value: 'consultant', label: 'Consultant' },
-          ]
+          ],
         },
         {
           id: 'test-method',
@@ -187,14 +187,14 @@ export const ControlTestingForm: React.FC = () => {
             { value: 'observation', label: 'Observation' },
             { value: 'inquiry', label: 'Inquiry' },
             { value: 'reperformance', label: 'Reperformance' },
-          ]
+          ],
         },
         {
           id: 'sample-size',
           label: 'Sample Size',
           type: 'text',
           placeholder: 'e.g., 25 items',
-          width: 'half'
+          width: 'half',
         },
         {
           id: 'test-procedures',
@@ -202,9 +202,9 @@ export const ControlTestingForm: React.FC = () => {
           type: 'textarea',
           required: true,
           placeholder: 'Describe the testing procedures performed...',
-          width: 'full'
-        }
-      ]
+          width: 'full',
+        },
+      ],
     },
     {
       id: 'results',
@@ -218,38 +218,42 @@ export const ControlTestingForm: React.FC = () => {
           required: true,
           width: 'half',
           options: [
-            { value: 'effective', label: 'Effective', description: 'Control is operating effectively' },
+            {
+              value: 'effective',
+              label: 'Effective',
+              description: 'Control is operating effectively',
+            },
             { value: 'deficient', label: 'Deficient', description: 'Control has deficiencies' },
             { value: 'ineffective', label: 'Ineffective', description: 'Control is not effective' },
-          ]
+          ],
         },
         {
           id: 'exceptions',
           label: 'Exceptions Found',
           type: 'text',
           placeholder: 'Number of exceptions',
-          width: 'half'
+          width: 'half',
         },
         {
           id: 'findings',
           label: 'Detailed Findings',
           type: 'textarea',
           placeholder: 'Document specific findings, exceptions, and observations...',
-          width: 'full'
+          width: 'full',
         },
         {
           id: 'evidence',
           label: 'Supporting Evidence',
           type: 'file',
           helperText: 'Upload screenshots, documents, or other evidence',
-          width: 'full'
-        }
-      ]
-    }
+          width: 'full',
+        },
+      ],
+    },
   ];
 
   const handleFormChange = (fieldId: string, value: any) => {
-    setFormValues(prev => ({ ...prev, [fieldId]: value }));
+    setFormValues((prev) => ({ ...prev, [fieldId]: value }));
   };
 
   const handleSubmit = (values: Record<string, any>) => {
@@ -301,21 +305,21 @@ export const UserManagementForm: React.FC = () => {
           label: 'First Name',
           type: 'text',
           required: true,
-          width: 'half'
+          width: 'half',
         },
         {
           id: 'last-name',
           label: 'Last Name',
           type: 'text',
           required: true,
-          width: 'half'
+          width: 'half',
         },
         {
           id: 'email',
           label: 'Email Address',
           type: 'email',
           required: true,
-          width: 'half'
+          width: 'half',
         },
         {
           id: 'department',
@@ -330,9 +334,9 @@ export const UserManagementForm: React.FC = () => {
             { value: 'audit', label: 'Internal Audit' },
             { value: 'legal', label: 'Legal' },
             { value: 'it', label: 'Information Technology' },
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     },
     {
       id: 'access-control',
@@ -348,9 +352,13 @@ export const UserManagementForm: React.FC = () => {
           options: [
             { value: 'admin', label: 'Administrator', description: 'Full system access' },
             { value: 'manager', label: 'Manager', description: 'Department management access' },
-            { value: 'analyst', label: 'Analyst', description: 'Read/write access to assigned areas' },
+            {
+              value: 'analyst',
+              label: 'Analyst',
+              description: 'Read/write access to assigned areas',
+            },
             { value: 'viewer', label: 'Viewer', description: 'Read-only access' },
-          ]
+          ],
         },
         {
           id: 'additional-roles',
@@ -362,14 +370,14 @@ export const UserManagementForm: React.FC = () => {
             { value: 'auditor', label: 'Auditor' },
             { value: 'approver', label: 'Approver' },
             { value: 'reviewer', label: 'Reviewer' },
-          ]
+          ],
         },
         {
           id: 'mfa-required',
           label: 'Multi-Factor Authentication',
           type: 'toggle',
           helperText: 'Require MFA for this user account',
-          width: 'half'
+          width: 'half',
         },
         {
           id: 'session-timeout',
@@ -382,9 +390,9 @@ export const UserManagementForm: React.FC = () => {
             { value: '60', label: '1 hour' },
             { value: '240', label: '4 hours' },
             { value: '480', label: '8 hours' },
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     },
     {
       id: 'notifications',
@@ -398,14 +406,14 @@ export const UserManagementForm: React.FC = () => {
           label: 'Email Notifications',
           type: 'toggle',
           helperText: 'Send notifications via email',
-          width: 'half'
+          width: 'half',
         },
         {
           id: 'slack-notifications',
           label: 'Slack Notifications',
           type: 'toggle',
           helperText: 'Send notifications via Slack',
-          width: 'half'
+          width: 'half',
         },
         {
           id: 'notification-frequency',
@@ -416,14 +424,14 @@ export const UserManagementForm: React.FC = () => {
             { value: 'immediate', label: 'Immediate' },
             { value: 'daily', label: 'Daily Digest' },
             { value: 'weekly', label: 'Weekly Summary' },
-          ]
-        }
-      ]
-    }
+          ],
+        },
+      ],
+    },
   ];
 
   const handleFormChange = (fieldId: string, value: any) => {
-    setFormValues(prev => ({ ...prev, [fieldId]: value }));
+    setFormValues((prev) => ({ ...prev, [fieldId]: value }));
   };
 
   const handleSubmit = (values: Record<string, any>) => {
@@ -484,7 +492,7 @@ export const SettingsForm: React.FC = () => {
             { value: 'light', label: 'Light', description: 'Clean and bright interface' },
             { value: 'dark', label: 'Dark', description: 'Easy on the eyes' },
             { value: 'auto', label: 'Auto', description: 'Follow system preference' },
-          ]
+          ],
         },
         {
           id: 'density',
@@ -494,16 +502,16 @@ export const SettingsForm: React.FC = () => {
           options: [
             { value: 'comfortable', label: 'Comfortable' },
             { value: 'compact', label: 'Compact' },
-          ]
+          ],
         },
         {
           id: 'sidebar-collapsed',
           label: 'Collapse Sidebar by Default',
           type: 'toggle',
           helperText: 'Start with a collapsed sidebar for more screen space',
-          width: 'full'
-        }
-      ]
+          width: 'full',
+        },
+      ],
     },
     {
       id: 'behavior',
@@ -515,14 +523,14 @@ export const SettingsForm: React.FC = () => {
           label: 'Auto-save',
           type: 'toggle',
           helperText: 'Automatically save changes as you work',
-          width: 'half'
+          width: 'half',
         },
         {
           id: 'confirm-destructive',
           label: 'Confirm Destructive Actions',
           type: 'toggle',
           helperText: 'Show confirmation dialogs for delete operations',
-          width: 'half'
+          width: 'half',
         },
         {
           id: 'default-page',
@@ -534,7 +542,7 @@ export const SettingsForm: React.FC = () => {
             { value: 'risks', label: 'Risk Register' },
             { value: 'controls', label: 'Controls' },
             { value: 'compliance', label: 'Compliance' },
-          ]
+          ],
         },
         {
           id: 'items-per-page',
@@ -546,9 +554,9 @@ export const SettingsForm: React.FC = () => {
             { value: '25', label: '25 items' },
             { value: '50', label: '50 items' },
             { value: '100', label: '100 items' },
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     },
     {
       id: 'integrations',
@@ -562,35 +570,35 @@ export const SettingsForm: React.FC = () => {
           label: 'Slack Integration',
           type: 'toggle',
           helperText: 'Receive notifications in Slack',
-          width: 'half'
+          width: 'half',
         },
         {
           id: 'teams-integration',
           label: 'Microsoft Teams',
           type: 'toggle',
           helperText: 'Connect with Microsoft Teams',
-          width: 'half'
+          width: 'half',
         },
         {
           id: 'jira-integration',
           label: 'Jira Integration',
           type: 'toggle',
           helperText: 'Sync with Jira for issue tracking',
-          width: 'half'
+          width: 'half',
         },
         {
           id: 'api-access',
           label: 'API Access',
           type: 'toggle',
           helperText: 'Enable programmatic access via API',
-          width: 'half'
-        }
-      ]
-    }
+          width: 'half',
+        },
+      ],
+    },
   ];
 
   const handleFormChange = (fieldId: string, value: any) => {
-    setFormValues(prev => ({ ...prev, [fieldId]: value }));
+    setFormValues((prev) => ({ ...prev, [fieldId]: value }));
   };
 
   const handleSubmit = (values: Record<string, any>) => {
@@ -601,9 +609,7 @@ export const SettingsForm: React.FC = () => {
     <MainContentArea
       title="Settings"
       subtitle="Configure your workspace preferences and integrations"
-      breadcrumbs={[
-        { label: 'Settings', current: true },
-      ]}
+      breadcrumbs={[{ label: 'Settings', current: true }]}
       primaryAction={{
         label: 'Save Settings',
         onClick: () => console.log('Save'),
@@ -630,4 +636,4 @@ export default {
   ControlTestingForm,
   UserManagementForm,
   SettingsForm,
-}; 
+};

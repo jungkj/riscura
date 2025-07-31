@@ -62,11 +62,7 @@ const typeIcons: Record<string, any> = {
   ACTION_REQUIRED: AlertCircle,
 };
 
-export function NotificationItem({
-  notification,
-  onRead,
-  onDismiss,
-}: NotificationItemProps) {
+export function NotificationItem({ notification, onRead, onDismiss }: NotificationItemProps) {
   const CategoryIcon = categoryIcons[notification.category] || Info;
   const TypeIcon = typeIcons[notification.type] || Info;
   const typeColor = typeColors[notification.type] || 'text-gray-600 bg-gray-50';
@@ -92,25 +88,26 @@ export function NotificationItem({
         <div className={cn('p-2 rounded-lg', typeColor)}>
           <CategoryIcon className="h-5 w-5" />
         </div>
-        
+
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1">
-              <p className={cn(
-                'font-medium text-sm',
-                !notification.read && 'text-foreground',
-                notification.read && 'text-muted-foreground'
-              )}>
+              <p
+                className={cn(
+                  'font-medium text-sm',
+                  !notification.read && 'text-foreground',
+                  notification.read && 'text-muted-foreground'
+                )}
+              >
                 {notification.title}
               </p>
-              <p className="text-sm text-muted-foreground mt-1">
-                {notification.message}
-              </p>
+              <p className="text-sm text-muted-foreground mt-1">{notification.message}</p>
             </div>
-            
+
             <DaisyButton
               variant="ghost"
-              shape="square" size="md"
+              shape="square"
+              size="md"
               className="h-6 w-6 opacity-0 group-hover:opacity-100"
               onClick={(e) => {
                 e.stopPropagation();
@@ -120,25 +117,25 @@ export function NotificationItem({
               <X className="h-3 w-3" />
             </DaisyButton>
           </div>
-          
+
           <div className="flex items-center gap-4 mt-2">
             <span className="text-xs text-muted-foreground">
               {formatDistanceToNow(new Date(notification.createdAt), {
                 addSuffix: true,
               })}
             </span>
-            
+
             {notification.priority === 'URGENT' && (
               <span className="text-xs font-medium text-red-600">Urgent</span>
             )}
-            
+
             {notification.priority === 'HIGH' && (
               <span className="text-xs font-medium text-orange-600">High Priority</span>
             )}
           </div>
         </div>
       </div>
-      
+
       {!notification.read && (
         <div className="absolute left-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-blue-600 rounded-full" />
       )}

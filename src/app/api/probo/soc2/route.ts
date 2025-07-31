@@ -6,50 +6,44 @@ import { authOptions } from '@/lib/auth/auth.config';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const proboService = new ProboService();
     const framework = await proboService.getSOC2Framework();
-    
+
     return NextResponse.json(framework);
   } catch (error) {
     console.error('SOC 2 framework API error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch SOC 2 framework' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch SOC 2 framework' }, { status: 500 });
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { organizationId } = await request.json();
-    
+
     if (!organizationId) {
-      return NextResponse.json(
-        { error: 'Organization ID is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Organization ID is required' }, { status: 400 });
     }
 
     const proboService = new ProboService();
     const framework = await proboService.getSOC2Framework();
-    
+
     // Import SOC 2 framework into the organization
     const existingFramework = await db.client.complianceFramework.findFirst({
       where: {
         organizationId,
         name: framework.name,
-        version: framework.version
-      }
+        version: framework.version,
+      },
     });
 
     if (existingFramework) {
@@ -67,7 +61,7 @@ export async function POST(request: NextRequest) {
         description: 'SOC 2 Type II compliance framework imported from Probo',
         type: 'SOC2',
         organizationId,
-      }
+      },
     });
 
     // Create framework requirements
@@ -79,8 +73,8 @@ export async function POST(request: NextRequest) {
           title: requirement.title,
           description: requirement.description,
           category: 'SOC2',
-          criticality: 'HIGH'
-        }
+          criticality: 'HIGH',
+        },
       });
     }
 
@@ -90,8 +84,8 @@ export async function POST(request: NextRequest) {
       let existingControl = await db.client.control.findFirst({
         where: {
           organizationId,
-          title: control.name
-        }
+          title: control.name,
+        },
       });
 
       // Create control if it doesn't exist
@@ -105,8 +99,8 @@ export async function POST(request: NextRequest) {
             frequency: 'QUARTERLY',
             organizationId,
             createdBy: (session.user as any).id || 'system',
-            status: 'PLANNED'
-          }
+            status: 'PLANNED',
+          },
         });
       }
 
@@ -118,16 +112,13 @@ export async function POST(request: NextRequest) {
     const completeFramework = await db.client.complianceFramework.findUnique({
       where: { id: createdFramework.id },
       include: {
-        requirements: true
-      }
+        requirements: true,
+      },
     });
 
     return NextResponse.json(completeFramework);
   } catch (error) {
     console.error('SOC 2 import error:', error);
-    return NextResponse.json(
-      { error: 'Failed to import SOC 2 framework' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to import SOC 2 framework' }, { status: 500 });
   }
-} 
+}

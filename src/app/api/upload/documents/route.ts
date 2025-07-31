@@ -9,7 +9,18 @@ import { z } from 'zod';
 const fileUploadSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().optional(),
-  category: z.enum(['POLICY', 'PROCEDURE', 'GUIDELINE', 'FRAMEWORK', 'STANDARD', 'TEMPLATE', 'REPORT', 'EVIDENCE', 'CONTRACT', 'OTHER']),
+  category: z.enum([
+    'POLICY',
+    'PROCEDURE',
+    'GUIDELINE',
+    'FRAMEWORK',
+    'STANDARD',
+    'TEMPLATE',
+    'REPORT',
+    'EVIDENCE',
+    'CONTRACT',
+    'OTHER',
+  ]),
   tags: z.array(z.string()).optional().default([]),
   confidentiality: z.enum(['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED']).default('INTERNAL'),
   linkedRiskIds: z.array(z.string().uuid()).optional().default([]),
@@ -103,7 +114,9 @@ export const POST = withAPI(async (req: NextRequest): Promise<NextResponse> => {
           where: { id: document.id },
           data: {
             controlEvidence: {
-              connect: validatedMetadata.linkedControlIds.map((controlId: string) => ({ id: controlId })),
+              connect: validatedMetadata.linkedControlIds.map((controlId: string) => ({
+                id: controlId,
+              })),
             },
           },
         });
@@ -217,7 +230,8 @@ export const PUT = withAPI(async (req: NextRequest) => {
       throw new Error('Only ZIP files are supported for bulk upload');
     }
 
-    if (zipFile.size > 100 * 1024 * 1024) { // 100MB limit
+    if (zipFile.size > 100 * 1024 * 1024) {
+      // 100MB limit
       throw new Error('ZIP file too large (max 100MB)');
     }
 
@@ -229,7 +243,9 @@ export const PUT = withAPI(async (req: NextRequest) => {
       // Validate each extracted file
       const validation = await validateFile(extractedFile.file);
       if (!validation.isValid) {
-        console.warn(`Skipping invalid file ${extractedFile.name}: ${validation.errors.join(', ')}`);
+        console.warn(
+          `Skipping invalid file ${extractedFile.name}: ${validation.errors.join(', ')}`
+        );
         continue;
       }
 
@@ -312,7 +328,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
 async function extractZipFile(zipFile: File): Promise<Array<{ name: string; file: File }>> {
   // Mock implementation - in production would use a ZIP library like JSZip
   const files: Array<{ name: string; file: File }> = [];
-  
+
   // For now, return the ZIP file itself as a single file
   // In production, this would extract all files from the ZIP
   files.push({
@@ -395,4 +411,4 @@ async function deleteFileFromStorage(filePath: string): Promise<void> {
   // Implementation would depend on storage provider (AWS S3, Azure Blob, etc.)
   // For now, this is a placeholder
   console.log(`Deleting file from storage: ${filePath}`);
-} 
+}

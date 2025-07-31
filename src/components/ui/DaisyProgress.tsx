@@ -6,12 +6,12 @@ interface ProgressProps extends React.HTMLAttributes<HTMLProgressElement> {
   color?: 'primary' | 'secondary' | 'accent' | 'info' | 'success' | 'warning' | 'error';
 }
 
-export const DaisyProgress = ({ 
-  className, 
-  value, 
-  max = 100, 
-  color = 'primary', 
-  ...props 
+export const DaisyProgress = ({
+  className,
+  value,
+  max = 100,
+  color = 'primary',
+  ...props
 }: ProgressProps) => {
   const colorClasses = {
     primary: 'progress-primary',
@@ -25,11 +25,7 @@ export const DaisyProgress = ({
 
   return (
     <progress
-      className={cn(
-        'progress w-full',
-        colorClasses[color],
-        className
-      )}
+      className={cn('progress w-full', colorClasses[color], className)}
       value={value}
       max={max}
       {...props}

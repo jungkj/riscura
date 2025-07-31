@@ -18,7 +18,7 @@ describe('Authentication Integration Tests', () => {
     apiClient = new RCSAApiClient();
     mockFetch = global.fetch as jest.MockedFunction<typeof fetch>;
     mockGetSession = getSession as jest.MockedFunction<typeof getSession>;
-    
+
     // Reset mocks
     mockFetch.mockReset();
     mockGetSession.mockReset();
@@ -207,7 +207,7 @@ describe('Authentication Integration Tests', () => {
       await apiClient.healthCheck();
 
       // Verify all calls include credentials
-      mockFetch.mock.calls.forEach(call => {
+      mockFetch.mock.calls.forEach((call) => {
         expect(call[1]).toEqual(
           expect.objectContaining({
             credentials: 'include',
@@ -234,7 +234,7 @@ describe('Authentication Integration Tests', () => {
       await apiClient.getControls();
 
       // Extract request IDs from headers
-      const requestIds = mockFetch.mock.calls.map(call => {
+      const requestIds = mockFetch.mock.calls.map((call) => {
         const headers = call[1]?.headers as Record<string, string>;
         return headers['x-request-id'];
       });
@@ -242,7 +242,7 @@ describe('Authentication Integration Tests', () => {
       // Verify all request IDs are unique and properly formatted
       expect(requestIds).toHaveLength(2);
       expect(requestIds[0]).not.toBe(requestIds[1]);
-      requestIds.forEach(id => {
+      requestIds.forEach((id) => {
         expect(id).toMatch(/^req_\d+_[a-z0-9]+$/);
       });
     });
@@ -264,10 +264,11 @@ describe('Authentication Integration Tests', () => {
       // Mock successful creation response
       mockFetch.mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve({ 
-          success: true, 
-          data: { id: 'risk-123', title: 'Test Risk' } 
-        }),
+        json: () =>
+          Promise.resolve({
+            success: true,
+            data: { id: 'risk-123', title: 'Test Risk' },
+          }),
       } as Response);
 
       const riskData = {
@@ -299,10 +300,11 @@ describe('Authentication Integration Tests', () => {
       // Mock successful update response
       mockFetch.mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve({ 
-          success: true, 
-          data: { id: 'risk-123', title: 'Updated Risk' } 
-        }),
+        json: () =>
+          Promise.resolve({
+            success: true,
+            data: { id: 'risk-123', title: 'Updated Risk' },
+          }),
       } as Response);
 
       const updates = { title: 'Updated Risk' };
@@ -373,7 +375,8 @@ describe('Authentication Integration Tests', () => {
       });
 
       // Verify URL includes query parameters
-      const expectedUrl = '/api/risks?page=1&limit=10&category=OPERATIONAL&category=FINANCIAL&status=IDENTIFIED';
+      const expectedUrl =
+        '/api/risks?page=1&limit=10&category=OPERATIONAL&category=FINANCIAL&status=IDENTIFIED';
       expect(mockFetch).toHaveBeenCalledWith(
         expectedUrl,
         expect.objectContaining({

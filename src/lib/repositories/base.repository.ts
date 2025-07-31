@@ -1,5 +1,10 @@
 import { PrismaClient } from '@prisma/client';
-import db, { PaginationOptions, buildPaginationQuery, withOrganization, withAuditFields } from '@/lib/db';
+import db, {
+  PaginationOptions,
+  buildPaginationQuery,
+  withOrganization,
+  withAuditFields,
+} from '@/lib/db';
 
 // Base repository interface
 export interface IBaseRepository<T> {
@@ -37,12 +42,9 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
   }
 
   // Find many with pagination and organization isolation
-  async findMany(
-    organizationId: string, 
-    options: PaginationOptions = {}
-  ): Promise<T[]> {
+  async findMany(organizationId: string, options: PaginationOptions = {}): Promise<T[]> {
     const paginationQuery = buildPaginationQuery(options);
-    
+
     return this.model.findMany({
       where: {
         organizationId,
@@ -52,11 +54,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
   }
 
   // Create with organization and audit fields
-  async create(
-    data: Partial<T>, 
-    organizationId: string, 
-    userId?: string
-  ): Promise<T> {
+  async create(data: Partial<T>, organizationId: string, userId?: string): Promise<T> {
     return this.model.create({
       data: {
         ...data,
@@ -67,12 +65,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
   }
 
   // Update with audit fields
-  async update(
-    id: string, 
-    data: Partial<T>, 
-    organizationId: string, 
-    userId?: string
-  ): Promise<T> {
+  async update(id: string, data: Partial<T>, organizationId: string, userId?: string): Promise<T> {
     return this.model.update({
       where: {
         id,
@@ -120,12 +113,12 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
 
   // Find with custom filters
   async findWhere(
-    where: Record<string, any>, 
+    where: Record<string, any>,
     organizationId: string,
     options: PaginationOptions = {}
   ): Promise<T[]> {
     const paginationQuery = buildPaginationQuery(options);
-    
+
     return this.model.findMany({
       where: {
         ...where,
@@ -143,11 +136,11 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
     options: PaginationOptions = {}
   ): Promise<T[]> {
     const paginationQuery = buildPaginationQuery(options);
-    
+
     return this.model.findMany({
       where: {
         organizationId,
-        OR: searchFields.map(field => ({
+        OR: searchFields.map((field) => ({
           [field]: {
             contains: searchTerm,
             mode: 'insensitive',
@@ -160,12 +153,12 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
 
   // Bulk operations
   async createMany(
-    data: Partial<T>[], 
-    organizationId: string, 
+    data: Partial<T>[],
+    organizationId: string,
     userId?: string
   ): Promise<{ count: number }> {
     return this.model.createMany({
-      data: data.map(item => ({
+      data: data.map((item) => ({
         ...item,
         organizationId,
         ...withAuditFields(userId),
@@ -191,10 +184,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
     });
   }
 
-  async deleteMany(
-    where: Record<string, any>,
-    organizationId: string
-  ): Promise<{ count: number }> {
+  async deleteMany(where: Record<string, any>, organizationId: string): Promise<{ count: number }> {
     return this.model.deleteMany({
       where: {
         ...where,
@@ -204,10 +194,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
   }
 
   // Aggregation helpers
-  async aggregate(
-    organizationId: string,
-    aggregation: Record<string, any>
-  ): Promise<any> {
+  async aggregate(organizationId: string, aggregation: Record<string, any>): Promise<any> {
     return this.model.aggregate({
       where: {
         organizationId,
@@ -233,7 +220,12 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
   // Transaction support
   async transaction<R>(
     organizationId: string,
-    fn: (prisma: Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'>) => Promise<R>
+    fn: (
+      prisma: Omit<
+        PrismaClient,
+        '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'
+      >
+    ) => Promise<R>
   ): Promise<R> {
     return this.prisma.$transaction(fn);
   }
@@ -259,7 +251,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
     options: PaginationOptions = {}
   ): Promise<T[]> {
     const paginationQuery = buildPaginationQuery(options);
-    
+
     return this.model.findMany({
       where: {
         organizationId,
@@ -305,4 +297,4 @@ export function createPaginatedResult<T>(
     limit,
     totalPages: Math.ceil(total / limit),
   };
-} 
+}

@@ -59,7 +59,11 @@ export class ExcelExporter {
   }
 
   // Create a new worksheet with data
-  addWorksheet(name: string, data: ExcelTableData, options: ExcelExportOptions = {}): ExcelJS.Worksheet {
+  addWorksheet(
+    name: string,
+    data: ExcelTableData,
+    options: ExcelExportOptions = {}
+  ): ExcelJS.Worksheet {
     const worksheet = this.workbook.addWorksheet(name);
 
     // Add title if provided
@@ -78,12 +82,12 @@ export class ExcelExporter {
       worksheet.addRow(['Summary']);
       const summaryTitleRow = worksheet.getRow(summaryStartRow);
       summaryTitleRow.font = { bold: true, size: 14 };
-      
+
       Object.entries(data.summary).forEach(([key, value]) => {
         const row = worksheet.addRow([this.formatLabel(key), this.formatValue(value)]);
         row.getCell(1).font = { bold: true };
       });
-      
+
       worksheet.addRow([]); // Empty row
     }
 
@@ -93,25 +97,25 @@ export class ExcelExporter {
     headerRow.fill = {
       type: 'pattern',
       pattern: 'solid',
-      fgColor: { argb: 'FFE5E7EB' }
+      fgColor: { argb: 'FFE5E7EB' },
     };
     headerRow.border = {
       top: { style: 'thin' },
       left: { style: 'thin' },
       bottom: { style: 'thin' },
-      right: { style: 'thin' }
+      right: { style: 'thin' },
     };
 
     // Add data rows
     data.rows.forEach((row, index) => {
-      const dataRow = worksheet.addRow(row.map(cell => this.formatCellValue(cell)));
-      
+      const dataRow = worksheet.addRow(row.map((cell) => this.formatCellValue(cell)));
+
       // Alternate row colors
       if (index % 2 === 0) {
         dataRow.fill = {
           type: 'pattern',
           pattern: 'solid',
-          fgColor: { argb: 'FFF9FAFB' }
+          fgColor: { argb: 'FFF9FAFB' },
         };
       }
 
@@ -120,7 +124,7 @@ export class ExcelExporter {
         top: { style: 'thin' },
         left: { style: 'thin' },
         bottom: { style: 'thin' },
-        right: { style: 'thin' }
+        right: { style: 'thin' },
       };
     });
 
@@ -130,7 +134,7 @@ export class ExcelExporter {
         const header = data.headers[index];
         const maxLength = Math.max(
           header?.length || 0,
-          ...data.rows.map(row => String(row[index] || '').length)
+          ...data.rows.map((row) => String(row[index] || '').length)
         );
         column.width = Math.min(Math.max(maxLength + 2, 10), 50);
       });
@@ -149,7 +153,7 @@ export class ExcelExporter {
     worksheet.addRow(['Chart: ' + (chartData.title || 'Data Visualization')]);
     const chartRow = worksheet.getRow(chartStartRow);
     chartRow.font = { bold: true, size: 12 };
-    
+
     // Add chart data summary
     if (chartData.data && Array.isArray(chartData.data)) {
       chartData.data.forEach((item: any, index: number) => {
@@ -160,7 +164,7 @@ export class ExcelExporter {
 
   // Generate buffer for download
   async generateBuffer(): Promise<Buffer> {
-    return await this.workbook.xlsx.writeBuffer() as Buffer;
+    return (await this.workbook.xlsx.writeBuffer()) as Buffer;
   }
 
   // Save to file (Node.js environment)
@@ -180,7 +184,7 @@ export class ExcelExporter {
   }
 
   private formatLabel(key: string): string {
-    return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+    return key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase());
   }
 
   private formatValue(value: any): any {
@@ -205,7 +209,7 @@ export const exportToExcel = async (
   options: ExcelExportOptions = {}
 ): Promise<Buffer> => {
   const exporter = new ExcelExporter();
-  
+
   // Set workbook metadata
   if (data.metadata) {
     exporter['workbook'].creator = data.metadata.author;
@@ -216,9 +220,9 @@ export const exportToExcel = async (
   }
 
   // Add worksheets
-  data.sheets.forEach(sheet => {
+  data.sheets.forEach((sheet) => {
     const worksheet = exporter.addWorksheet(sheet.name, sheet.data, options);
-    
+
     // Add chart if provided
     if (sheet.chartData && options.includeCharts) {
       exporter.addChart(worksheet, sheet.chartData);
@@ -235,15 +239,17 @@ export const exportTableToExcel = async (
 ): Promise<Buffer> => {
   const workbookData: ExcelWorkbookData = {
     title: tableData.title || 'Data Export',
-    sheets: [{
-      name: options.worksheetName || 'Data',
-      data: tableData
-    }],
+    sheets: [
+      {
+        name: options.worksheetName || 'Data',
+        data: tableData,
+      },
+    ],
     metadata: {
       author: 'Riscura Platform',
       created: new Date(),
-      description: 'Data export from Riscura platform'
-    }
+      description: 'Data export from Riscura platform',
+    },
   };
 
   return await exportToExcel(workbookData, options);
@@ -252,7 +258,7 @@ export const exportTableToExcel = async (
 // CSV Export functionality
 export const exportToCSV = (data: ExcelTableData): string => {
   const csvRows: string[] = [];
-  
+
   // Add title as comment if provided
   if (data.title) {
     csvRows.push(`# ${data.title}`);
@@ -269,18 +275,23 @@ export const exportToCSV = (data: ExcelTableData): string => {
   }
 
   // Add headers
-  csvRows.push(data.headers.map(header => `"${header}"`).join(','));
+  csvRows.push(data.headers.map((header) => `"${header}"`).join(','));
 
   // Add data rows
-  data.rows.forEach(row => {
-    const csvRow = row.map(cell => {
-      const value = formatCellValue(cell);
-      // Escape quotes and wrap in quotes if contains comma, quote, or newline
-      if (typeof value === 'string' && (value.includes(',') || value.includes('"') || value.includes('\n'))) {
-        return `"${value.replace(/"/g, '""')}"`;
-      }
-      return String(value);
-    }).join(',');
+  data.rows.forEach((row) => {
+    const csvRow = row
+      .map((cell) => {
+        const value = formatCellValue(cell);
+        // Escape quotes and wrap in quotes if contains comma, quote, or newline
+        if (
+          typeof value === 'string' &&
+          (value.includes(',') || value.includes('"') || value.includes('\n'))
+        ) {
+          return `"${value.replace(/"/g, '""')}"`;
+        }
+        return String(value);
+      })
+      .join(',');
     csvRows.push(csvRow);
   });
 
@@ -289,7 +300,7 @@ export const exportToCSV = (data: ExcelTableData): string => {
 
 // Utility functions for CSV
 const formatLabel = (key: string): string => {
-  return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+  return key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase());
 };
 
 const formatValue = (value: any): string => {
@@ -319,11 +330,11 @@ export const createRiskAssessmentExport = (risks: any[]): ExcelWorkbookData => (
         headers: ['Metric', 'Value'],
         rows: [
           ['Total Risks', risks.length],
-          ['High Severity', risks.filter(r => r.severity === 'High').length],
-          ['Medium Severity', risks.filter(r => r.severity === 'Medium').length],
-          ['Low Severity', risks.filter(r => r.severity === 'Low').length],
-          ['Open Risks', risks.filter(r => r.status === 'Open').length],
-          ['Mitigated Risks', risks.filter(r => r.status === 'Mitigated').length],
+          ['High Severity', risks.filter((r) => r.severity === 'High').length],
+          ['Medium Severity', risks.filter((r) => r.severity === 'Medium').length],
+          ['Low Severity', risks.filter((r) => r.severity === 'Low').length],
+          ['Open Risks', risks.filter((r) => r.status === 'Open').length],
+          ['Mitigated Risks', risks.filter((r) => r.status === 'Mitigated').length],
         ],
       },
     },
@@ -331,8 +342,20 @@ export const createRiskAssessmentExport = (risks: any[]): ExcelWorkbookData => (
       name: 'Risk Details',
       data: {
         title: 'Detailed Risk Information',
-        headers: ['Risk ID', 'Title', 'Description', 'Category', 'Severity', 'Probability', 'Impact', 'Status', 'Owner', 'Created Date', 'Last Updated'],
-        rows: risks.map(risk => [
+        headers: [
+          'Risk ID',
+          'Title',
+          'Description',
+          'Category',
+          'Severity',
+          'Probability',
+          'Impact',
+          'Status',
+          'Owner',
+          'Created Date',
+          'Last Updated',
+        ],
+        rows: risks.map((risk) => [
           risk.id,
           risk.title,
           risk.description,
@@ -364,10 +387,26 @@ export const createComplianceExport = (complianceData: any[]): ExcelWorkbookData
         title: 'Compliance Status Summary',
         headers: ['Status', 'Count', 'Percentage'],
         rows: [
-          ['Compliant', complianceData.filter(c => c.status === 'Compliant').length, `${((complianceData.filter(c => c.status === 'Compliant').length / complianceData.length) * 100).toFixed(1)}%`],
-          ['Non-Compliant', complianceData.filter(c => c.status === 'Non-Compliant').length, `${((complianceData.filter(c => c.status === 'Non-Compliant').length / complianceData.length) * 100).toFixed(1)}%`],
-          ['In Progress', complianceData.filter(c => c.status === 'In Progress').length, `${((complianceData.filter(c => c.status === 'In Progress').length / complianceData.length) * 100).toFixed(1)}%`],
-          ['Not Started', complianceData.filter(c => c.status === 'Not Started').length, `${((complianceData.filter(c => c.status === 'Not Started').length / complianceData.length) * 100).toFixed(1)}%`],
+          [
+            'Compliant',
+            complianceData.filter((c) => c.status === 'Compliant').length,
+            `${((complianceData.filter((c) => c.status === 'Compliant').length / complianceData.length) * 100).toFixed(1)}%`,
+          ],
+          [
+            'Non-Compliant',
+            complianceData.filter((c) => c.status === 'Non-Compliant').length,
+            `${((complianceData.filter((c) => c.status === 'Non-Compliant').length / complianceData.length) * 100).toFixed(1)}%`,
+          ],
+          [
+            'In Progress',
+            complianceData.filter((c) => c.status === 'In Progress').length,
+            `${((complianceData.filter((c) => c.status === 'In Progress').length / complianceData.length) * 100).toFixed(1)}%`,
+          ],
+          [
+            'Not Started',
+            complianceData.filter((c) => c.status === 'Not Started').length,
+            `${((complianceData.filter((c) => c.status === 'Not Started').length / complianceData.length) * 100).toFixed(1)}%`,
+          ],
         ],
       },
     },
@@ -375,8 +414,19 @@ export const createComplianceExport = (complianceData: any[]): ExcelWorkbookData
       name: 'Compliance Details',
       data: {
         title: 'Detailed Compliance Information',
-        headers: ['Requirement ID', 'Requirement', 'Framework', 'Category', 'Status', 'Last Reviewed', 'Next Review', 'Owner', 'Evidence', 'Notes'],
-        rows: complianceData.map(item => [
+        headers: [
+          'Requirement ID',
+          'Requirement',
+          'Framework',
+          'Category',
+          'Status',
+          'Last Reviewed',
+          'Next Review',
+          'Owner',
+          'Evidence',
+          'Notes',
+        ],
+        rows: complianceData.map((item) => [
           item.id,
           item.requirement,
           item.framework,
@@ -405,8 +455,18 @@ export const createAuditTrailExport = (auditData: any[]): ExcelWorkbookData => (
       name: 'Audit Trail',
       data: {
         title: 'System Audit Trail',
-        headers: ['Timestamp', 'User', 'Action', 'Resource Type', 'Resource ID', 'IP Address', 'User Agent', 'Status', 'Details'],
-        rows: auditData.map(entry => [
+        headers: [
+          'Timestamp',
+          'User',
+          'Action',
+          'Resource Type',
+          'Resource ID',
+          'IP Address',
+          'User Agent',
+          'Status',
+          'Details',
+        ],
+        rows: auditData.map((entry) => [
           entry.timestamp,
           entry.user,
           entry.action,
@@ -436,13 +496,13 @@ export async function exportDataToExcel(
 ): Promise<ExportResult> {
   const reportsDir = '/tmp/reports';
   await fs.mkdir(reportsDir, { recursive: true });
-  
+
   const filePath = path.join(reportsDir, options.fileName);
-  
+
   try {
     // Create workbook
     const workbook = XLSX.utils.book_new();
-    
+
     // Handle different data structures
     if (Array.isArray(data)) {
       // Simple array of objects
@@ -462,12 +522,12 @@ export async function exportDataToExcel(
       const worksheet = XLSX.utils.json_to_sheet([data]);
       XLSX.utils.book_append_sheet(workbook, worksheet, options.worksheetName || 'Data');
     }
-    
+
     // Write file
     XLSX.writeFile(workbook, filePath);
-    
+
     const stats = await fs.stat(filePath);
-    
+
     return {
       filePath,
       fileSize: stats.size,
@@ -507,7 +567,7 @@ async function createReportWorkbook(workbook: XLSX.WorkBook, data: any): Promise
     const summarySheet = XLSX.utils.json_to_sheet(summaryData);
     XLSX.utils.book_append_sheet(workbook, summarySheet, 'Summary');
   }
-  
+
   // Risks sheet
   if (data.risks && Array.isArray(data.risks)) {
     const risksData = data.risks.map((risk: any) => ({
@@ -521,13 +581,15 @@ async function createReportWorkbook(workbook: XLSX.WorkBook, data: any): Promise
       Impact: risk.impact,
       Status: risk.status,
       Owner: risk.owner,
-      'Date Identified': risk.dateIdentified ? new Date(risk.dateIdentified).toLocaleDateString() : '',
+      'Date Identified': risk.dateIdentified
+        ? new Date(risk.dateIdentified).toLocaleDateString()
+        : '',
       'Last Assessed': risk.lastAssessed ? new Date(risk.lastAssessed).toLocaleDateString() : '',
     }));
     const risksSheet = XLSX.utils.json_to_sheet(risksData);
     XLSX.utils.book_append_sheet(workbook, risksSheet, 'Risks');
   }
-  
+
   // Controls sheet
   if (data.controls && Array.isArray(data.controls)) {
     const controlsData = data.controls.map((control: any) => ({
@@ -539,13 +601,15 @@ async function createReportWorkbook(workbook: XLSX.WorkBook, data: any): Promise
       Status: control.status,
       'Effectiveness Rating': control.effectivenessRating,
       Owner: control.owner,
-      'Implementation Date': control.implementationDate ? new Date(control.implementationDate).toLocaleDateString() : '',
+      'Implementation Date': control.implementationDate
+        ? new Date(control.implementationDate).toLocaleDateString()
+        : '',
       'Last Tested': control.lastTested ? new Date(control.lastTested).toLocaleDateString() : '',
     }));
     const controlsSheet = XLSX.utils.json_to_sheet(controlsData);
     XLSX.utils.book_append_sheet(workbook, controlsSheet, 'Controls');
   }
-  
+
   // Compliance frameworks sheet
   if (data.frameworks && Array.isArray(data.frameworks)) {
     const frameworksData = data.frameworks.map((framework: any) => ({
@@ -554,14 +618,15 @@ async function createReportWorkbook(workbook: XLSX.WorkBook, data: any): Promise
       Description: framework.description,
       Version: framework.version,
       'Total Requirements': framework.requirements?.length || 0,
-      'Met Requirements': framework.requirements?.filter((req: any) => 
-        req.controls?.some((control: any) => control.status === 'IMPLEMENTED')
-      ).length || 0,
+      'Met Requirements':
+        framework.requirements?.filter((req: any) =>
+          req.controls?.some((control: any) => control.status === 'IMPLEMENTED')
+        ).length || 0,
     }));
     const frameworksSheet = XLSX.utils.json_to_sheet(frameworksData);
     XLSX.utils.book_append_sheet(workbook, frameworksSheet, 'Frameworks');
   }
-  
+
   // Category distribution sheet
   if (data.categoryDistribution) {
     const categoryData = Object.entries(data.categoryDistribution).map(([category, count]) => ({
@@ -571,7 +636,7 @@ async function createReportWorkbook(workbook: XLSX.WorkBook, data: any): Promise
     const categorySheet = XLSX.utils.json_to_sheet(categoryData);
     XLSX.utils.book_append_sheet(workbook, categorySheet, 'Category Distribution');
   }
-  
+
   // Compliance scores sheet
   if (data.complianceScores && Array.isArray(data.complianceScores)) {
     const complianceData = data.complianceScores.map((score: any) => ({
@@ -599,33 +664,34 @@ export async function exportMultipleSheetsToExcel(
 ): Promise<ExportResult> {
   const reportsDir = '/tmp/reports';
   await fs.mkdir(reportsDir, { recursive: true });
-  
+
   const filePath = path.join(reportsDir, fileName);
-  
+
   try {
     const workbook = XLSX.utils.book_new();
-    
-    datasets.forEach(dataset => {
+
+    datasets.forEach((dataset) => {
       let worksheet: XLSX.WorkSheet;
-      
+
       if (dataset.headers) {
         // Use provided headers
-        const tableData = [dataset.headers, ...dataset.data.map(row => 
-          dataset.headers!.map(header => row[header] || '')
-        )];
+        const tableData = [
+          dataset.headers,
+          ...dataset.data.map((row) => dataset.headers!.map((header) => row[header] || '')),
+        ];
         worksheet = XLSX.utils.aoa_to_sheet(tableData);
       } else {
         // Auto-generate from data
         worksheet = XLSX.utils.json_to_sheet(dataset.data);
       }
-      
+
       XLSX.utils.book_append_sheet(workbook, worksheet, dataset.name);
     });
-    
+
     XLSX.writeFile(workbook, filePath);
-    
+
     const stats = await fs.stat(filePath);
-    
+
     return {
       filePath,
       fileSize: stats.size,
@@ -650,27 +716,27 @@ export async function exportToExcelWithFormatting(
 ): Promise<ExportResult> {
   const reportsDir = '/tmp/reports';
   await fs.mkdir(reportsDir, { recursive: true });
-  
+
   const filePath = path.join(reportsDir, options.fileName);
-  
+
   try {
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.json_to_sheet(data);
-    
+
     // Apply column widths
     if (options.columnWidths) {
-      const cols = options.columnWidths.map(width => ({ width }));
+      const cols = options.columnWidths.map((width) => ({ width }));
       worksheet['!cols'] = cols;
     }
-    
+
     // Apply formatting (basic implementation)
     // Note: Advanced formatting requires additional libraries like xlsx-style
-    
+
     XLSX.utils.book_append_sheet(workbook, worksheet, options.worksheetName || 'Data');
     XLSX.writeFile(workbook, filePath);
-    
+
     const stats = await fs.stat(filePath);
-    
+
     return {
       filePath,
       fileSize: stats.size,
@@ -687,12 +753,12 @@ export async function exportToExcelWithFormatting(
  */
 export function validateExportData(data: any): { isValid: boolean; errors: string[] } {
   const errors: string[] = [];
-  
+
   if (!data) {
     errors.push('Data is required');
     return { isValid: false, errors };
   }
-  
+
   if (Array.isArray(data)) {
     if (data.length === 0) {
       errors.push('Data array is empty');
@@ -704,7 +770,7 @@ export function validateExportData(data: any): { isValid: boolean; errors: strin
   } else {
     errors.push('Data must be an array or object');
   }
-  
+
   return {
     isValid: errors.length === 0,
     errors,
@@ -720,7 +786,7 @@ export function getExportRecommendations(data: any): {
   estimatedSize: string;
 } {
   let recordCount = 0;
-  
+
   if (Array.isArray(data)) {
     recordCount = data.length;
   } else if (data.risks) {
@@ -730,9 +796,9 @@ export function getExportRecommendations(data: any): {
   } else {
     recordCount = 1;
   }
-  
+
   const estimatedSizeKB = recordCount * 0.5; // Rough estimate
-  
+
   if (recordCount > 10000) {
     return {
       recommendedFormat: 'csv',
@@ -746,4 +812,4 @@ export function getExportRecommendations(data: any): {
       estimatedSize: `~${Math.round(estimatedSizeKB * 1.5)}KB`,
     };
   }
-} 
+}

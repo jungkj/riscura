@@ -8,7 +8,10 @@ export async function POST(request: NextRequest) {
 
     if (action === 'query') {
       if (!query || !context || !userId) {
-        return NextResponse.json({ error: 'Query, context, and user ID required' }, { status: 400 });
+        return NextResponse.json(
+          { error: 'Query, context, and user ID required' },
+          { status: 400 }
+        );
       }
 
       const response = await complianceAIIntelligence.processComplianceQuery(
@@ -49,7 +52,10 @@ export async function POST(request: NextRequest) {
 
     if (action === 'assess-impact') {
       if (!updateId || !organizationId || !assessorId) {
-        return NextResponse.json({ error: 'Update ID, organization ID, and assessor ID required' }, { status: 400 });
+        return NextResponse.json(
+          { error: 'Update ID, organization ID, and assessor ID required' },
+          { status: 400 }
+        );
       }
 
       const impact = await complianceAIIntelligence.assessRegulatoryImpact(
@@ -64,16 +70,9 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    return NextResponse.json(
-      { error: 'Invalid action' },
-      { status: 400 }
-    );
-
+    return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
   } catch (error) {
     console.error('Error in AI compliance intelligence:', error);
-    return NextResponse.json(
-      { error: 'Failed to process AI compliance request' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to process AI compliance request' }, { status: 500 });
   }
-} 
+}

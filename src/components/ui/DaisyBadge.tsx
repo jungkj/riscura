@@ -6,7 +6,14 @@ interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   outline?: boolean;
 }
 
-export const DaisyBadge = ({ className, variant = 'primary', size = 'md', outline, children, ...props }: BadgeProps) => {
+export const DaisyBadge = ({
+  className,
+  variant = 'primary',
+  size = 'md',
+  outline,
+  children,
+  ...props
+}: BadgeProps) => {
   const variantClasses = {
     primary: 'badge-primary',
     secondary: 'badge-secondary',
@@ -26,14 +33,14 @@ export const DaisyBadge = ({ className, variant = 'primary', size = 'md', outlin
   };
 
   return (
-    <span 
+    <span
       className={cn(
         'badge',
         variantClasses[variant],
         sizeClasses[size],
         outline && 'badge-outline',
         className
-      )} 
+      )}
       {...props}
     >
       {children}

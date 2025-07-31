@@ -61,8 +61,8 @@ export class ExcelValidatorService {
   private readonly requiredSheets = ['Risk Register', 'Controls', 'Assessments'];
   private readonly alternateSheetNames = {
     'Risk Register': ['Risks', 'Risk_Register', 'RiskRegister'],
-    'Controls': ['Control', 'Control_Library', 'ControlLibrary'],
-    'Assessments': ['Assessment', 'Control_Assessments', 'ControlAssessments']
+    Controls: ['Control', 'Control_Library', 'ControlLibrary'],
+    Assessments: ['Assessment', 'Control_Assessments', 'ControlAssessments'],
   };
 
   /**
@@ -71,31 +71,32 @@ export class ExcelValidatorService {
   async validateRCSAFile(buffer: Buffer): Promise<ValidationResult> {
     const errors: ValidationError[] = [];
     const warnings: ValidationError[] = [];
-    
+
     try {
       // Parse Excel file
       const workbook = XLSX.read(buffer, { type: 'buffer', cellDates: true });
-      
+
       // Basic file validation
       const fileSize = buffer.length;
-      if (fileSize > 50 * 1024 * 1024) { // 50MB limit
+      if (fileSize > 50 * 1024 * 1024) {
+        // 50MB limit
         errors.push({
           type: 'error',
-          message: 'File size exceeds 50MB limit'
+          message: 'File size exceeds 50MB limit',
         });
       }
 
       // Get sheet names
       const sheetNames = workbook.SheetNames;
-      
+
       // Validate required sheets
       const foundSheets = this.validateSheets(workbook, errors);
-      
+
       // Initialize metadata
       const metadata: ValidationResult['metadata'] = {
         rowCount: 0,
         fileSize: fileSize,
-        sheets: sheetNames
+        sheets: sheetNames,
       };
 
       // If we have the required sheets, validate their content
@@ -114,7 +115,10 @@ export class ExcelValidatorService {
       }
 
       if (foundSheets.assessmentSheet) {
-        const assessmentData = this.parseSheet<AssessmentData>(workbook, foundSheets.assessmentSheet);
+        const assessmentData = this.parseSheet<AssessmentData>(
+          workbook,
+          foundSheets.assessmentSheet
+        );
         this.validateAssessmentData(assessmentData, errors, warnings);
         metadata.assessmentCount = assessmentData.length;
         metadata.rowCount += assessmentData.length;
@@ -129,14 +133,14 @@ export class ExcelValidatorService {
         isValid: errors.length === 0,
         errors,
         warnings,
-        metadata
+        metadata,
       };
     } catch (error) {
       errors.push({
         type: 'error',
-        message: `Failed to parse Excel file: ${error instanceof Error ? error.message : 'Unknown error'}`
+        message: `Failed to parse Excel file: ${error instanceof Error ? error.message : 'Unknown error'}`,
       });
-      
+
       return {
         isValid: false,
         errors,
@@ -144,8 +148,8 @@ export class ExcelValidatorService {
         metadata: {
           rowCount: 0,
           fileSize: buffer.length,
-          sheets: []
-        }
+          sheets: [],
+        },
       };
     }
   }
@@ -154,39 +158,42 @@ export class ExcelValidatorService {
    * Validate sheet presence and structure
    */
   private validateSheets(
-    workbook: XLSX.WorkBook, 
+    workbook: XLSX.WorkBook,
     errors: ValidationError[]
   ): { riskSheet?: string; controlSheet?: string; assessmentSheet?: string } {
     const foundSheets: { riskSheet?: string; controlSheet?: string; assessmentSheet?: string } = {};
-    
+
     for (const requiredSheet of this.requiredSheets) {
       let sheetFound = false;
-      
+
       // Check exact name first
       if (workbook.SheetNames.includes(requiredSheet)) {
         sheetFound = true;
         this.assignFoundSheet(foundSheets, requiredSheet, requiredSheet);
       } else {
         // Check alternate names
-        const alternates = this.alternateSheetNames[requiredSheet as keyof typeof this.alternateSheetNames];
+        const alternates =
+          this.alternateSheetNames[requiredSheet as keyof typeof this.alternateSheetNames];
         for (const altName of alternates) {
-          if (workbook.SheetNames.some(s => s.toLowerCase() === altName.toLowerCase())) {
+          if (workbook.SheetNames.some((s) => s.toLowerCase() === altName.toLowerCase())) {
             sheetFound = true;
-            const actualName = workbook.SheetNames.find(s => s.toLowerCase() === altName.toLowerCase())!;
+            const actualName = workbook.SheetNames.find(
+              (s) => s.toLowerCase() === altName.toLowerCase()
+            )!;
             this.assignFoundSheet(foundSheets, requiredSheet, actualName);
             break;
           }
         }
       }
-      
+
       if (!sheetFound) {
         errors.push({
           type: 'error',
-          message: `Required sheet '${requiredSheet}' not found. Accepted names: ${requiredSheet}, ${this.alternateSheetNames[requiredSheet as keyof typeof this.alternateSheetNames].join(', ')}`
+          message: `Required sheet '${requiredSheet}' not found. Accepted names: ${requiredSheet}, ${this.alternateSheetNames[requiredSheet as keyof typeof this.alternateSheetNames].join(', ')}`,
         });
       }
     }
-    
+
     return foundSheets;
   }
 
@@ -219,18 +226,20 @@ export class ExcelValidatorService {
     if (!worksheet) {
       throw new Error(`Sheet "${sheetName}" not found in the workbook`);
     }
-    
+
     const jsonData = XLSX.utils.sheet_to_json(worksheet, {
       raw: false,
       defval: undefined,
-      blankrows: false
+      blankrows: false,
     });
-    
+
     // Runtime validation to ensure the parsed data is an array
     if (!Array.isArray(jsonData)) {
-      throw new Error(`Invalid data format for sheet "${sheetName}": expected an array but got ${typeof jsonData}`);
+      throw new Error(
+        `Invalid data format for sheet "${sheetName}": expected an array but got ${typeof jsonData}`
+      );
     }
-    
+
     return jsonData as T[];
   }
 
@@ -238,34 +247,34 @@ export class ExcelValidatorService {
    * Validate risk data
    */
   private validateRiskData(
-    data: RiskData[], 
-    errors: ValidationError[], 
+    data: RiskData[],
+    errors: ValidationError[],
     warnings: ValidationError[]
   ): void {
     if (data.length === 0) {
       errors.push({
         type: 'error',
         sheet: 'Risk Register',
-        message: 'Risk Register sheet is empty'
+        message: 'Risk Register sheet is empty',
       });
       return;
     }
 
     const seenRiskIds = new Set<string>();
-    
+
     data.forEach((row, index) => {
       const rowNum = index + 2; // Excel rows start at 1, plus header row
-      
+
       // Validate required fields
       if (!row.riskId && !row.riskName) {
         errors.push({
           type: 'error',
           sheet: 'Risk Register',
           row: rowNum,
-          message: 'Risk must have either Risk ID or Risk Name'
+          message: 'Risk must have either Risk ID or Risk Name',
         });
       }
-      
+
       if (row.riskId) {
         if (seenRiskIds.has(row.riskId)) {
           errors.push({
@@ -273,12 +282,12 @@ export class ExcelValidatorService {
             sheet: 'Risk Register',
             row: rowNum,
             field: 'riskId',
-            message: `Duplicate Risk ID: ${row.riskId}`
+            message: `Duplicate Risk ID: ${row.riskId}`,
           });
         }
         seenRiskIds.add(row.riskId);
       }
-      
+
       // Validate risk scores
       if (row.likelihood !== undefined) {
         const likelihood = parseRiskScore(row.likelihood);
@@ -288,11 +297,11 @@ export class ExcelValidatorService {
             sheet: 'Risk Register',
             row: rowNum,
             field: 'likelihood',
-            message: 'Likelihood should be between 1 and 5'
+            message: 'Likelihood should be between 1 and 5',
           });
         }
       }
-      
+
       if (row.impact !== undefined) {
         const impact = parseRiskScore(row.impact);
         if (impact < 1 || impact > 5) {
@@ -301,11 +310,11 @@ export class ExcelValidatorService {
             sheet: 'Risk Register',
             row: rowNum,
             field: 'impact',
-            message: 'Impact should be between 1 and 5'
+            message: 'Impact should be between 1 and 5',
           });
         }
       }
-      
+
       // Validate category
       if (!row.category) {
         warnings.push({
@@ -313,7 +322,7 @@ export class ExcelValidatorService {
           sheet: 'Risk Register',
           row: rowNum,
           field: 'category',
-          message: 'Risk category is missing'
+          message: 'Risk category is missing',
         });
       }
     });
@@ -323,34 +332,34 @@ export class ExcelValidatorService {
    * Validate control data
    */
   private validateControlData(
-    data: ControlData[], 
-    errors: ValidationError[], 
+    data: ControlData[],
+    errors: ValidationError[],
     warnings: ValidationError[]
   ): void {
     if (data.length === 0) {
       errors.push({
         type: 'error',
         sheet: 'Controls',
-        message: 'Controls sheet is empty'
+        message: 'Controls sheet is empty',
       });
       return;
     }
 
     const seenControlIds = new Set<string>();
-    
+
     data.forEach((row, index) => {
       const rowNum = index + 2;
-      
+
       // Validate required fields
       if (!row.controlId && !row.controlName) {
         errors.push({
           type: 'error',
           sheet: 'Controls',
           row: rowNum,
-          message: 'Control must have either Control ID or Control Name'
+          message: 'Control must have either Control ID or Control Name',
         });
       }
-      
+
       if (row.controlId) {
         if (seenControlIds.has(row.controlId)) {
           errors.push({
@@ -358,12 +367,12 @@ export class ExcelValidatorService {
             sheet: 'Controls',
             row: rowNum,
             field: 'controlId',
-            message: `Duplicate Control ID: ${row.controlId}`
+            message: `Duplicate Control ID: ${row.controlId}`,
           });
         }
         seenControlIds.add(row.controlId);
       }
-      
+
       // Validate control type
       if (!row.controlType) {
         warnings.push({
@@ -371,10 +380,10 @@ export class ExcelValidatorService {
           sheet: 'Controls',
           row: rowNum,
           field: 'controlType',
-          message: 'Control type is missing'
+          message: 'Control type is missing',
         });
       }
-      
+
       // Validate effectiveness
       if (row.effectiveness !== undefined) {
         const effectiveness = parseRiskScore(row.effectiveness);
@@ -384,11 +393,11 @@ export class ExcelValidatorService {
             sheet: 'Controls',
             row: rowNum,
             field: 'effectiveness',
-            message: 'Effectiveness should be between 1 and 5'
+            message: 'Effectiveness should be between 1 and 5',
           });
         }
       }
-      
+
       // Validate risk linkage
       if (!row.riskId) {
         warnings.push({
@@ -396,7 +405,7 @@ export class ExcelValidatorService {
           sheet: 'Controls',
           row: rowNum,
           field: 'riskId',
-          message: 'Control is not linked to any risk'
+          message: 'Control is not linked to any risk',
         });
       }
     });
@@ -406,22 +415,22 @@ export class ExcelValidatorService {
    * Validate assessment data
    */
   private validateAssessmentData(
-    data: AssessmentData[], 
-    errors: ValidationError[], 
+    data: AssessmentData[],
+    errors: ValidationError[],
     warnings: ValidationError[]
   ): void {
     if (data.length === 0) {
       warnings.push({
         type: 'warning',
         sheet: 'Assessments',
-        message: 'Assessments sheet is empty'
+        message: 'Assessments sheet is empty',
       });
       return;
     }
-    
+
     data.forEach((row, index) => {
       const rowNum = index + 2;
-      
+
       // Validate required fields
       if (!row.controlId) {
         errors.push({
@@ -429,10 +438,10 @@ export class ExcelValidatorService {
           sheet: 'Assessments',
           row: rowNum,
           field: 'controlId',
-          message: 'Assessment must reference a Control ID'
+          message: 'Assessment must reference a Control ID',
         });
       }
-      
+
       // Validate date
       if (!row.assessmentDate) {
         warnings.push({
@@ -440,7 +449,7 @@ export class ExcelValidatorService {
           sheet: 'Assessments',
           row: rowNum,
           field: 'assessmentDate',
-          message: 'Assessment date is missing'
+          message: 'Assessment date is missing',
         });
       } else {
         const date = new Date(row.assessmentDate);
@@ -450,11 +459,11 @@ export class ExcelValidatorService {
             sheet: 'Assessments',
             row: rowNum,
             field: 'assessmentDate',
-            message: 'Invalid date format'
+            message: 'Invalid date format',
           });
         }
       }
-      
+
       // Validate status
       if (!row.status) {
         warnings.push({
@@ -462,7 +471,7 @@ export class ExcelValidatorService {
           sheet: 'Assessments',
           row: rowNum,
           field: 'status',
-          message: 'Assessment status is missing'
+          message: 'Assessment status is missing',
         });
       }
     });
@@ -479,12 +488,12 @@ export class ExcelValidatorService {
   ): void {
     // Get all risk IDs
     const riskData = this.parseSheet<RiskData>(workbook, foundSheets.riskSheet!);
-    const validRiskIds = new Set(riskData.map(r => r.riskId).filter(Boolean));
-    
+    const validRiskIds = new Set(riskData.map((r) => r.riskId).filter(Boolean));
+
     // Get all control IDs
     const controlData = this.parseSheet<ControlData>(workbook, foundSheets.controlSheet!);
-    const validControlIds = new Set(controlData.map(c => c.controlId).filter(Boolean));
-    
+    const validControlIds = new Set(controlData.map((c) => c.controlId).filter(Boolean));
+
     // Validate control risk references
     controlData.forEach((control, index) => {
       if (control.riskId && !validRiskIds.has(control.riskId)) {
@@ -493,11 +502,11 @@ export class ExcelValidatorService {
           sheet: 'Controls',
           row: index + 2,
           field: 'riskId',
-          message: `Referenced Risk ID '${control.riskId}' not found in Risk Register`
+          message: `Referenced Risk ID '${control.riskId}' not found in Risk Register`,
         });
       }
     });
-    
+
     // Validate assessment control references
     if (foundSheets.assessmentSheet) {
       const assessmentData = this.parseSheet<AssessmentData>(workbook, foundSheets.assessmentSheet);
@@ -508,13 +517,12 @@ export class ExcelValidatorService {
             sheet: 'Assessments',
             row: index + 2,
             field: 'controlId',
-            message: `Referenced Control ID '${assessment.controlId}' not found in Controls sheet`
+            message: `Referenced Control ID '${assessment.controlId}' not found in Controls sheet`,
           });
         }
       });
     }
   }
-
 }
 
 // Singleton instance

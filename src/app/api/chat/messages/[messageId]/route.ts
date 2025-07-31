@@ -36,10 +36,12 @@ export async function PATCH(
         if (error instanceof z.ZodError) {
           return ApiResponseFormatter.validationError(error.errors);
         }
-        
+
         console.error('Failed to update message:', error);
         return ApiResponseFormatter.error(
-          error instanceof Error && error.message === 'Access denied' ? 'ACCESS_DENIED' : 'INTERNAL_ERROR',
+          error instanceof Error && error.message === 'Access denied'
+            ? 'ACCESS_DENIED'
+            : 'INTERNAL_ERROR',
           error instanceof Error ? error.message : 'Failed to update message',
           { status: error instanceof Error && error.message === 'Access denied' ? 403 : 500 }
         );
@@ -69,7 +71,9 @@ export async function DELETE(
       } catch (error) {
         console.error('Failed to delete message:', error);
         return ApiResponseFormatter.error(
-          error instanceof Error && error.message === 'Access denied' ? 'ACCESS_DENIED' : 'INTERNAL_ERROR',
+          error instanceof Error && error.message === 'Access denied'
+            ? 'ACCESS_DENIED'
+            : 'INTERNAL_ERROR',
           error instanceof Error ? error.message : 'Failed to delete message',
           { status: error instanceof Error && error.message === 'Access denied' ? 403 : 500 }
         );

@@ -11,30 +11,27 @@ interface RouteParams {
 }
 
 // GET /api/compliance/frameworks/[id] - Get single framework with requirements
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
-    if (!user) {
-      return ApiResponseFormatter.authError('User not authenticated');
-    }
+      if (!user) {
+        return ApiResponseFormatter.authError('User not authenticated');
+      }
 
-    const framework = await complianceService.getFramework(id);
-    
-    if (!framework) {
-      return ApiResponseFormatter.notFoundError('Framework not found');
-    }
+      const framework = await complianceService.getFramework(id);
 
-    // Verify user has access to this framework
-    if (framework.organizationId !== user.organizationId) {
-      return ApiResponseFormatter.forbiddenError('Access denied');
-    }
+      if (!framework) {
+        return ApiResponseFormatter.notFoundError('Framework not found');
+      }
 
-    return ApiResponseFormatter.success(framework);
+      // Verify user has access to this framework
+      if (framework.organizationId !== user.organizationId) {
+        return ApiResponseFormatter.forbiddenError('Access denied');
+      }
+
+      return ApiResponseFormatter.success(framework);
     },
     { requireAuth: true }
   )(req);

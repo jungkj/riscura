@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GET, POST } from '@/app/api/risks/route';
-import { GET as GetSingle, PUT as PutSingle, DELETE as DeleteSingle } from '@/app/api/risks/[id]/route';
+import {
+  GET as GetSingle,
+  PUT as PutSingle,
+  DELETE as DeleteSingle,
+} from '@/app/api/risks/[id]/route';
 import { RiskFactory, testRisks } from '../../factories/risk-factory';
 import { UserFactory, testUsers } from '../../factories/user-factory';
 import { OrganizationFactory, testOrganizations } from '../../factories/organization-factory';
@@ -28,7 +32,7 @@ jest.mock('@/lib/db', () => ({
 }));
 
 const mockDb = {
-  risk: mockRiskOperations
+  risk: mockRiskOperations,
 } as any;
 
 // Mock authentication
@@ -47,7 +51,7 @@ describe('/api/risks', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     mockUser = testUsers.user;
     mockOrganization = testOrganizations.default;
     mockRisk = testRisks.operational;
@@ -139,7 +143,7 @@ describe('/api/risks', () => {
 
     it('should support search functionality', async () => {
       const searchRisks = [RiskFactory.create({ title: 'Data Security Risk' })];
-            (mockDb.risk.findMany as jest.Mock).mockResolvedValue(searchRisks);
+      (mockDb.risk.findMany as jest.Mock).mockResolvedValue(searchRisks);
 
       const request = new NextRequest('http://localhost:3000/api/risks?search=security');
       const response = await GET(request);
@@ -153,7 +157,9 @@ describe('/api/risks', () => {
           where: expect.objectContaining({
             OR: expect.arrayContaining([
               { title: expect.objectContaining({ contains: 'security', mode: 'insensitive' }) },
-              { description: expect.objectContaining({ contains: 'security', mode: 'insensitive' }) },
+              {
+                description: expect.objectContaining({ contains: 'security', mode: 'insensitive' }),
+              },
             ]),
           }),
         })
@@ -174,7 +180,9 @@ describe('/api/risks', () => {
     });
 
     it('should handle database errors gracefully', async () => {
-      (mockDb.risk.findMany as jest.Mock).mockRejectedValue(new Error('Database connection failed'));
+      (mockDb.risk.findMany as jest.Mock).mockRejectedValue(
+        new Error('Database connection failed')
+      );
 
       const request = new NextRequest('http://localhost:3000/api/risks');
       const response = await GET(request);
@@ -339,9 +347,9 @@ describe('/api/risks', () => {
       expect(data.data).toHaveProperty('creator');
 
       expect(mockDb.risk.findUnique).toHaveBeenCalledWith({
-        where: { 
+        where: {
           id: riskId,
-          organizationId: mockUser.organizationId 
+          organizationId: mockUser.organizationId,
         },
         include: expect.objectContaining({
           controls: true,
@@ -379,9 +387,9 @@ describe('/api/risks', () => {
       expect(data.error).toBe('Risk not found');
 
       expect(mockDb.risk.findUnique).toHaveBeenCalledWith({
-        where: { 
+        where: {
           id: riskId,
-          organizationId: mockUser.organizationId // Ensures org isolation
+          organizationId: mockUser.organizationId, // Ensures org isolation
         },
         include: expect.any(Object),
       });
@@ -479,7 +487,7 @@ describe('/api/risks', () => {
   describe('DELETE /api/risks/[id]', () => {
     it('should delete an existing risk', async () => {
       const riskId = 'test-risk-id';
-      
+
       (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(mockRisk);
       (mockDb.risk.delete as jest.Mock).mockResolvedValue(mockRisk);
 
@@ -517,7 +525,7 @@ describe('/api/risks', () => {
 
     it('should handle foreign key constraints', async () => {
       const riskId = 'risk-with-dependencies';
-      
+
       (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(mockRisk);
       (mockDb.risk.delete as jest.Mock).mockRejectedValue({
         code: 'P2003', // Prisma foreign key constraint error
@@ -541,7 +549,7 @@ describe('/api/risks', () => {
     it('should only return risks from user organization', async () => {
       const userOrgRisks = RiskFactory.createForOrganization(mockUser.organizationId, 3);
       const otherOrgRisks = RiskFactory.createForOrganization('other-org-id', 2);
-      
+
       // Mock should only return risks from user's organization
       (mockDb.risk.findMany as jest.Mock).mockResolvedValue(userOrgRisks);
 
@@ -551,7 +559,9 @@ describe('/api/risks', () => {
 
       expect(response.status).toBe(200);
       expect(data.data).toHaveLength(3);
-      expect(data.data.every((risk: any) => risk.organizationId === mockUser.organizationId)).toBe(true);
+      expect(data.data.every((risk: any) => risk.organizationId === mockUser.organizationId)).toBe(
+        true
+      );
 
       expect(mockDb.risk.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -564,7 +574,7 @@ describe('/api/risks', () => {
 
     it('should prevent cross-organization risk access', async () => {
       const otherOrgRiskId = 'other-org-risk-id';
-      
+
       // Risk exists but in different organization
       (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(null);
 
@@ -576,13 +586,12 @@ describe('/api/risks', () => {
       expect(data.error).toBe('Risk not found');
 
       expect(mockDb.risk.findUnique).toHaveBeenCalledWith({
-        where: { 
+        where: {
           id: otherOrgRiskId,
-          organizationId: mockUser.organizationId // Enforces isolation
+          organizationId: mockUser.organizationId, // Enforces isolation
         },
         include: expect.any(Object),
       });
     });
   });
 });
- 

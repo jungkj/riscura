@@ -10,7 +10,7 @@ interface PopoverProps {
 export const DaisyPopover = ({ children, open: controlledOpen, onOpenChange }: PopoverProps) => {
   const [internalOpen, setInternalOpen] = useState(false);
   const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
-  
+
   const handleOpenChange = (newOpen: boolean) => {
     if (controlledOpen === undefined) {
       setInternalOpen(newOpen);
@@ -20,7 +20,7 @@ export const DaisyPopover = ({ children, open: controlledOpen, onOpenChange }: P
 
   return (
     <div className="relative inline-block">
-      {React.Children.map(children, child => {
+      {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           return React.cloneElement(child, { open, onOpenChange: handleOpenChange } as any);
         }
@@ -37,7 +37,12 @@ interface PopoverTriggerProps {
   onOpenChange?: (open: boolean) => void;
 }
 
-export const DaisyPopoverTrigger = ({ children, asChild, open, onOpenChange }: PopoverTriggerProps) => {
+export const DaisyPopoverTrigger = ({
+  children,
+  asChild,
+  open,
+  onOpenChange,
+}: PopoverTriggerProps) => {
   const handleClick = () => {
     onOpenChange?.(!open);
   };
@@ -46,7 +51,7 @@ export const DaisyPopoverTrigger = ({ children, asChild, open, onOpenChange }: P
     return React.cloneElement(children, {
       onClick: handleClick,
     } as any);
-  };
+  }
 
   return (
     <button onClick={handleClick} className="cursor-pointer">
@@ -62,14 +67,14 @@ interface PopoverContentProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange?: (open: boolean) => void;
 }
 
-export const DaisyPopoverContent = ({ 
-  children, 
-  className, 
-  align = 'center', 
+export const DaisyPopoverContent = ({
+  children,
+  className,
+  align = 'center',
   side = 'bottom',
   open,
   onOpenChange,
-  ...props 
+  ...props
 }: PopoverContentProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -82,9 +87,9 @@ export const DaisyPopoverContent = ({
 
     if (open) {
       document.addEventListener('mousedown', handleClickOutside);
-    };
+    }
 
-  return () => {
+    return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [open, onOpenChange]);
@@ -100,7 +105,10 @@ export const DaisyPopoverContent = ({
 
   const alignClasses = {
     start: side === 'top' || side === 'bottom' ? 'left-0' : 'top-0',
-    center: side === 'top' || side === 'bottom' ? 'left-1/2 -translate-x-1/2' : 'top-1/2 -translate-y-1/2',
+    center:
+      side === 'top' || side === 'bottom'
+        ? 'left-1/2 -translate-x-1/2'
+        : 'top-1/2 -translate-y-1/2',
     end: side === 'top' || side === 'bottom' ? 'right-0' : 'bottom-0',
   };
 

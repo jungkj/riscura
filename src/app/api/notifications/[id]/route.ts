@@ -12,73 +12,64 @@ interface RouteParams {
 }
 
 // GET /api/notifications/[id] - Get single notification
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
-    if (!user) {
-      return ApiResponseFormatter.authError('User not authenticated');
-    }
-
-    // Get single notification by ID
-    const notification = await db.client.notification.findFirst({
-      where: {
-        id: id,
-        userId: user.id
+      if (!user) {
+        return ApiResponseFormatter.authError('User not authenticated');
       }
-    });
 
-    if (!notification) {
-      return ApiResponseFormatter.notFoundError('Notification not found');
-    }
+      // Get single notification by ID
+      const notification = await db.client.notification.findFirst({
+        where: {
+          id: id,
+          userId: user.id,
+        },
+      });
 
-    return ApiResponseFormatter.success(notification);
+      if (!notification) {
+        return ApiResponseFormatter.notFoundError('Notification not found');
+      }
+
+      return ApiResponseFormatter.success(notification);
     },
     { requireAuth: true }
   )(req);
 }
 
 // PATCH /api/notifications/[id] - Update notification (mark as read)
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
-    if (!user) {
-      return ApiResponseFormatter.authError('User not authenticated');
-    }
+      if (!user) {
+        return ApiResponseFormatter.authError('User not authenticated');
+      }
 
-    const notification = await notificationService.markAsRead(id, user.id);
+      const notification = await notificationService.markAsRead(id, user.id);
 
-    return ApiResponseFormatter.success(notification);
+      return ApiResponseFormatter.success(notification);
     },
     { requireAuth: true }
   )(req);
 }
 
 // DELETE /api/notifications/[id] - Dismiss notification
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
-    if (!user) {
-      return ApiResponseFormatter.authError('User not authenticated');
-    }
+      if (!user) {
+        return ApiResponseFormatter.authError('User not authenticated');
+      }
 
-    const notification = await notificationService.dismissNotification(id, user.id);
+      const notification = await notificationService.dismissNotification(id, user.id);
 
-    return ApiResponseFormatter.success(notification);
+      return ApiResponseFormatter.success(notification);
     },
     { requireAuth: true }
   )(req);

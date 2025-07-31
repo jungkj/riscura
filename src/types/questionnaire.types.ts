@@ -8,34 +8,34 @@ export interface Questionnaire {
   type: QuestionnaireType;
   version: string;
   status: QuestionnaireStatus;
-  
+
   // Configuration
   config: QuestionnaireConfig;
   template?: QuestionnaireTemplate;
-  
+
   // Content
   sections: QuestionnaireSection[];
   scoring: ScoringConfig;
-  
+
   // Metadata
   createdBy: string;
   createdAt: Date;
   updatedAt: Date;
   publishedAt?: Date;
   archivedAt?: Date;
-  
+
   // Analytics
   analytics: QuestionnaireAnalytics;
-  
+
   // AI Features
   aiSettings: AISettings;
-  
+
   // Collaboration
   workflow?: WorkflowConfig;
   permissions: QuestionnairePermissions;
 }
 
-export type QuestionnaireCategory = 
+export type QuestionnaireCategory =
   | 'risk_assessment'
   | 'compliance_audit'
   | 'control_testing'
@@ -48,14 +48,9 @@ export type QuestionnaireCategory =
   | 'strategic_assessment'
   | 'custom';
 
-export type QuestionnaireType = 
-  | 'static'
-  | 'dynamic'
-  | 'adaptive'
-  | 'branching'
-  | 'ai_generated';
+export type QuestionnaireType = 'static' | 'dynamic' | 'adaptive' | 'branching' | 'ai_generated';
 
-export type QuestionnaireStatus = 
+export type QuestionnaireStatus =
   | 'draft'
   | 'review'
   | 'approved'
@@ -106,28 +101,28 @@ export interface Question {
   description?: string;
   required: boolean;
   order: number;
-  
+
   // Question Configuration
   config: QuestionConfig;
-  
+
   // Validation
   validation?: ValidationRule[];
-  
+
   // Conditional Logic
   conditions?: Condition[];
   triggers?: Trigger[];
-  
+
   // AI Features
   aiGenerated: boolean;
   aiContext?: AIQuestionContext;
-  
+
   // Metadata
   tags: string[];
   category?: string;
   riskIndicators?: RiskIndicator[];
 }
 
-export type QuestionType = 
+export type QuestionType =
   | 'text'
   | 'textarea'
   | 'number'
@@ -205,7 +200,7 @@ export interface ValidationRule {
   condition?: Condition;
 }
 
-export type ValidationType = 
+export type ValidationType =
   | 'required'
   | 'min_length'
   | 'max_length'
@@ -225,7 +220,7 @@ export interface Condition {
   nested?: Condition[];
 }
 
-export type ConditionOperator = 
+export type ConditionOperator =
   | 'equals'
   | 'not_equals'
   | 'contains'
@@ -245,7 +240,7 @@ export interface Trigger {
   actions: TriggerAction[];
 }
 
-export type TriggerEvent = 
+export type TriggerEvent =
   | 'on_answer'
   | 'on_section_complete'
   | 'on_questionnaire_start'
@@ -260,7 +255,7 @@ export interface TriggerAction {
   delay?: number;
 }
 
-export type ActionType = 
+export type ActionType =
   | 'show_question'
   | 'hide_question'
   | 'show_section'
@@ -427,20 +422,20 @@ export interface QuestionnaireResponse {
   questionnaireId: string;
   version: string;
   respondent: RespondentInfo;
-  
+
   // Response Data
   responses: Response[];
   metadata: ResponseMetadata;
-  
+
   // Status
   status: ResponseStatus;
   progress: ResponseProgress;
-  
+
   // Scores and Analysis
   scores: ScoreResult[];
   analysis: ResponseAnalysis;
   riskAssessment?: RiskAssessmentResult;
-  
+
   // Timeline
   startedAt: Date;
   lastSavedAt: Date;
@@ -496,7 +491,7 @@ export interface ResponseFlag {
   details?: Record<string, unknown>;
 }
 
-export type ResponseStatus = 
+export type ResponseStatus =
   | 'not_started'
   | 'in_progress'
   | 'completed'
@@ -740,7 +735,7 @@ export interface WorkflowNotification {
   conditions?: Condition[];
 }
 
-export type WorkflowTrigger = 
+export type WorkflowTrigger =
   | 'step_started'
   | 'step_completed'
   | 'approval_required'
@@ -1006,7 +1001,7 @@ export interface NotificationSettings {
   recipients: NotificationRecipient[];
 }
 
-export type NotificationType = 
+export type NotificationType =
   | 'response_submitted'
   | 'review_required'
   | 'approval_needed'
@@ -1026,7 +1021,13 @@ export interface NotificationRecipient {
 }
 
 export interface ContextSource {
-  type: 'organization' | 'industry' | 'framework' | 'previous_responses' | 'risk_register' | 'external';
+  type:
+    | 'organization'
+    | 'industry'
+    | 'framework'
+    | 'previous_responses'
+    | 'risk_register'
+    | 'external';
   source: string;
   weight: number;
 }
@@ -1037,4 +1038,4 @@ export interface GenerationRule {
   maxQuestions: number;
   categories: string[];
   riskFocus: string[];
-} 
+}

@@ -10,11 +10,7 @@ export const DaisyTextarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <textarea
         ref={ref}
-        className={cn(
-          'textarea textarea-bordered w-full',
-          error && 'textarea-error',
-          className
-        )}
+        className={cn('textarea textarea-bordered w-full', error && 'textarea-error', className)}
         {...props}
       />
     );

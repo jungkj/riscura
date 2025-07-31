@@ -75,8 +75,16 @@ export class EmailService {
       const mailOptions = {
         from: this.config.from,
         to: Array.isArray(options.to) ? options.to.join(', ') : options.to,
-        cc: options.cc ? (Array.isArray(options.cc) ? options.cc.join(', ') : options.cc) : undefined,
-        bcc: options.bcc ? (Array.isArray(options.bcc) ? options.bcc.join(', ') : options.bcc) : undefined,
+        cc: options.cc
+          ? Array.isArray(options.cc)
+            ? options.cc.join(', ')
+            : options.cc
+          : undefined,
+        bcc: options.bcc
+          ? Array.isArray(options.bcc)
+            ? options.bcc.join(', ')
+            : options.bcc
+          : undefined,
         subject: options.subject,
         text: options.text,
         html: options.html,
@@ -199,16 +207,21 @@ export class EmailService {
             </p>
           </div>
           
-          ${retryInfo ? `
+          ${
+            retryInfo
+              ? `
             <div style="background: ${retryInfo.willRetry ? '#bee3f8' : '#feebc8'}; padding: 15px; border-radius: 6px; margin: 20px 0;">
               <p style="margin: 0; color: ${retryInfo.willRetry ? '#2c5282' : '#c05621'};">
-                ${retryInfo.willRetry 
-                  ? `<strong>Retry Scheduled:</strong> Attempt ${retryInfo.attemptNumber + 1} will occur at ${retryInfo.nextRetry?.toLocaleString()}`
-                  : `<strong>No Retry:</strong> Maximum retry attempts reached (${retryInfo.attemptNumber})`
+                ${
+                  retryInfo.willRetry
+                    ? `<strong>Retry Scheduled:</strong> Attempt ${retryInfo.attemptNumber + 1} will occur at ${retryInfo.nextRetry?.toLocaleString()}`
+                    : `<strong>No Retry:</strong> Maximum retry attempts reached (${retryInfo.attemptNumber})`
                 }
               </p>
             </div>
-          ` : ''}
+          `
+              : ''
+          }
           
           <div style="margin: 20px 0;">
             <p>Please check the system logs for more details or contact your system administrator.</p>
@@ -247,20 +260,28 @@ export class EmailService {
         <div style="padding: 20px; background: white; border: 1px solid #e2e8f0; border-radius: 8px;">
           <h3 style="color: #2d3748; margin-top: 0;">Report: ${reportName}</h3>
           
-          ${additionalMessage ? `
+          ${
+            additionalMessage
+              ? `
             <div style="margin: 20px 0; padding: 15px; background: #edf2f7; border-radius: 6px;">
               <p style="margin: 0; color: #4a5568;">${additionalMessage}</p>
             </div>
-          ` : ''}
+          `
+              : ''
+          }
           
           <div style="margin: 20px 0;">
             <p><strong>Generated:</strong> ${new Date().toLocaleString()}</p>
-            <p><strong>Formats:</strong> ${reportPaths.map(r => r.format.toUpperCase()).join(', ')}</p>
+            <p><strong>Formats:</strong> ${reportPaths.map((r) => r.format.toUpperCase()).join(', ')}</p>
             <p><strong>Files:</strong></p>
             <ul style="margin: 10px 0; padding-left: 20px;">
-              ${reportPaths.map(report => `
+              ${reportPaths
+                .map(
+                  (report) => `
                 <li style="margin: 5px 0;">${report.filename}</li>
-              `).join('')}
+              `
+                )
+                .join('')}
             </ul>
           </div>
           
@@ -336,4 +357,4 @@ export class EmailService {
       html,
     });
   }
-} 
+}

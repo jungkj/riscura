@@ -6,10 +6,11 @@ const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://riscura.com';
 
 export async function GET() {
   const posts = getAllPosts();
-  
+
   const feed = new Feed({
     title: 'Riscura Blog',
-    description: 'Expert insights on risk management, compliance, and GRC for small teams. Learn how to migrate from Excel to automated risk management.',
+    description:
+      'Expert insights on risk management, compliance, and GRC for small teams. Learn how to migrate from Excel to automated risk management.',
     id: baseUrl,
     link: baseUrl,
     language: 'en',
@@ -52,14 +53,14 @@ export async function GET() {
           name: tag,
         })),
       ],
-      image: post.featuredImage.src.startsWith('http') 
-        ? post.featuredImage.src 
+      image: post.featuredImage.src.startsWith('http')
+        ? post.featuredImage.src
         : `${baseUrl}${post.featuredImage.src}`,
     });
   });
 
   const rss = feed.rss2();
-  
+
   return new NextResponse(rss, {
     headers: {
       'Content-Type': 'application/xml; charset=utf-8',

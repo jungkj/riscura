@@ -273,7 +273,12 @@ export interface Report {
   id: string;
   templateId: string;
   title: string;
-  type: 'risk_assessment' | 'control_effectiveness' | 'compliance' | 'audit' | 'executive_dashboard';
+  type:
+    | 'risk_assessment'
+    | 'control_effectiveness'
+    | 'compliance'
+    | 'audit'
+    | 'executive_dashboard';
   status: 'draft' | 'published' | 'archived';
   createdBy: string;
   createdAt: string;
@@ -386,7 +391,13 @@ export interface SubTask {
 // Activity Feed Types
 export interface Activity {
   id: string;
-  type: 'risk_created' | 'control_updated' | 'task_completed' | 'comment_added' | 'workflow_approved' | 'document_uploaded';
+  type:
+    | 'risk_created'
+    | 'control_updated'
+    | 'task_completed'
+    | 'comment_added'
+    | 'workflow_approved'
+    | 'document_uploaded';
   userId: string;
   entityType: string;
   entityId: string;

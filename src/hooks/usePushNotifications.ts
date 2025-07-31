@@ -60,9 +60,9 @@ export const NOTIFICATION_TEMPLATES: Record<string, NotificationTemplate> = {
     icon: '/images/icons/risk-alert.png',
     actions: [
       { action: 'view', title: 'View Risk', icon: '/images/icons/view.png' },
-      { action: 'dismiss', title: 'Dismiss', icon: '/images/icons/dismiss.png' }
+      { action: 'dismiss', title: 'Dismiss', icon: '/images/icons/dismiss.png' },
     ],
-    data: { type: 'risk', priority: 'high' }
+    data: { type: 'risk', priority: 'high' },
   },
   COMPLIANCE_REMINDER: {
     id: 'compliance-reminder',
@@ -71,9 +71,9 @@ export const NOTIFICATION_TEMPLATES: Record<string, NotificationTemplate> = {
     icon: '/images/icons/compliance.png',
     actions: [
       { action: 'view-tasks', title: 'View Tasks', icon: '/images/icons/tasks.png' },
-      { action: 'snooze', title: 'Snooze', icon: '/images/icons/snooze.png' }
+      { action: 'snooze', title: 'Snooze', icon: '/images/icons/snooze.png' },
     ],
-    data: { type: 'compliance', category: 'reminder' }
+    data: { type: 'compliance', category: 'reminder' },
   },
   AUDIT_SCHEDULED: {
     id: 'audit-scheduled',
@@ -82,9 +82,9 @@ export const NOTIFICATION_TEMPLATES: Record<string, NotificationTemplate> = {
     icon: '/images/icons/audit.png',
     actions: [
       { action: 'view-audit', title: 'View Details', icon: '/images/icons/view.png' },
-      { action: 'calendar', title: 'Add to Calendar', icon: '/images/icons/calendar.png' }
+      { action: 'calendar', title: 'Add to Calendar', icon: '/images/icons/calendar.png' },
     ],
-    data: { type: 'audit', status: 'scheduled' }
+    data: { type: 'audit', status: 'scheduled' },
   },
   DOCUMENT_APPROVAL: {
     id: 'document-approval',
@@ -93,9 +93,9 @@ export const NOTIFICATION_TEMPLATES: Record<string, NotificationTemplate> = {
     icon: '/images/icons/document.png',
     actions: [
       { action: 'approve', title: 'Approve', icon: '/images/icons/approve.png' },
-      { action: 'review', title: 'Review', icon: '/images/icons/review.png' }
+      { action: 'review', title: 'Review', icon: '/images/icons/review.png' },
     ],
-    data: { type: 'document', action: 'approval' }
+    data: { type: 'document', action: 'approval' },
   },
   SYSTEM_UPDATE: {
     id: 'system-update',
@@ -104,10 +104,10 @@ export const NOTIFICATION_TEMPLATES: Record<string, NotificationTemplate> = {
     icon: '/images/icons/update.png',
     actions: [
       { action: 'update', title: 'Update Now', icon: '/images/icons/download.png' },
-      { action: 'later', title: 'Later', icon: '/images/icons/later.png' }
+      { action: 'later', title: 'Later', icon: '/images/icons/later.png' },
     ],
-    data: { type: 'system', category: 'update' }
-  }
+    data: { type: 'system', category: 'update' },
+  },
 };
 
 export const usePushNotifications = (vapidPublicKey?: string) => {
@@ -124,13 +124,11 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
   // Check if push notifications are supported
   useEffect(() => {
     const checkSupport = () => {
-      const supported = 
-        'Notification' in window &&
-        'serviceWorker' in navigator &&
-        'PushManager' in window;
-      
+      const supported =
+        'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
+
       setIsSupported(supported);
-      
+
       if (supported) {
         setPermission(Notification.permission);
       }
@@ -140,25 +138,26 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
   }, []);
 
   // Get service worker registration
-  const getServiceWorkerRegistration = useCallback(async (): Promise<ServiceWorkerRegistration | null> => {
-    if (serviceWorkerRef.current) {
-      return serviceWorkerRef.current;
-    }
-
-    if ('serviceWorker' in navigator) {
-      try {
-        const registration = await navigator.serviceWorker.ready;
-        serviceWorkerRef.current = registration;
-        return registration;
-      } catch (error) {
-        console.error('Failed to get service worker registration:', error);
-        setLastError('Service worker not available');
-        return null;
+  const getServiceWorkerRegistration =
+    useCallback(async (): Promise<ServiceWorkerRegistration | null> => {
+      if (serviceWorkerRef.current) {
+        return serviceWorkerRef.current;
       }
-    }
 
-    return null;
-  }, []);
+      if ('serviceWorker' in navigator) {
+        try {
+          const registration = await navigator.serviceWorker.ready;
+          serviceWorkerRef.current = registration;
+          return registration;
+        } catch (error) {
+          console.error('Failed to get service worker registration:', error);
+          setLastError('Service worker not available');
+          return null;
+        }
+      }
+
+      return null;
+    }, []);
 
   // Request notification permission
   const requestPermission = useCallback(async (): Promise<NotificationPermission> => {
@@ -212,14 +211,15 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
       // Create new subscription
       const newSubscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
+        applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
       });
 
       setSubscription(newSubscription);
       processNotificationQueue();
       return newSubscription;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to subscribe to push notifications';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to subscribe to push notifications';
       setLastError(errorMessage);
       console.error('Failed to subscribe to push notifications:', error);
       throw new Error(errorMessage);
@@ -260,85 +260,88 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
       endpoint: subscription.endpoint,
       keys: {
         p256dh: arrayBufferToBase64(key),
-        auth: arrayBufferToBase64(auth)
-      }
+        auth: arrayBufferToBase64(auth),
+      },
     };
   }, [subscription]);
 
   // Show local notification
-  const showNotification = useCallback(async (config: NotificationConfig): Promise<Notification | null> => {
-    if (!isSupported) {
-      throw new Error('Notifications not supported');
-    }
-
-    if (permission !== 'granted') {
-      // Queue notification if permission not granted
-      notificationQueueRef.current.push(config);
-      const newPermission = await requestPermission();
-      if (newPermission !== 'granted') {
-        throw new Error('Notification permission denied');
+  const showNotification = useCallback(
+    async (config: NotificationConfig): Promise<Notification | null> => {
+      if (!isSupported) {
+        throw new Error('Notifications not supported');
       }
-    }
 
-    try {
-      const registration = await getServiceWorkerRegistration();
-      
-      if (registration) {
-        // Show notification through service worker with proper type handling
-        await registration.showNotification(config.title, {
-          body: config.body,
-          icon: config.icon || '/images/logo/riscura.png',
-          badge: config.badge || '/images/logo/riscura.png',
-          tag: config.tag,
-          data: config.data,
-          requireInteraction: config.requireInteraction,
-          silent: config.silent,
-          timestamp: config.timestamp || Date.now(),
-          dir: config.dir,
-          lang: config.lang,
-          renotify: config.renotify,
-          image: config.image,
-          // Actions and vibrate are supported in service worker context
-          ...(config.actions && { actions: config.actions }),
-          ...(config.vibrate && { vibrate: config.vibrate })
-        } as any); // Type assertion needed for extended notification options
-        
-        setLastError(null);
-        return null; // Service worker notifications don't return Notification objects
-      } else {
-        // Fallback to regular notification (limited options)
-        const notification = new Notification(config.title, {
-          body: config.body,
-          icon: config.icon || '/images/logo/riscura.png',
-          tag: config.tag,
-          data: config.data,
-          requireInteraction: config.requireInteraction,
-          silent: config.silent,
-          dir: config.dir,
-          lang: config.lang
-          // Note: actions, vibrate, and renotify are not supported in regular Notification constructor
-        });
-
-        setNotifications(prev => [...prev, notification]);
-        
-        // Auto-close after 5 seconds if not requiring interaction
-        if (!config.requireInteraction) {
-          setTimeout(() => {
-            notification.close();
-            setNotifications(prev => prev.filter(n => n !== notification));
-          }, 5000);
+      if (permission !== 'granted') {
+        // Queue notification if permission not granted
+        notificationQueueRef.current.push(config);
+        const newPermission = await requestPermission();
+        if (newPermission !== 'granted') {
+          throw new Error('Notification permission denied');
         }
-
-        setLastError(null);
-        return notification;
       }
-    } catch (error) {
-      const errorMessage = 'Failed to show notification';
-      setLastError(errorMessage);
-      console.error('Failed to show notification:', error);
-      throw new Error(errorMessage);
-    }
-  }, [isSupported, permission, getServiceWorkerRegistration, requestPermission]);
+
+      try {
+        const registration = await getServiceWorkerRegistration();
+
+        if (registration) {
+          // Show notification through service worker with proper type handling
+          await registration.showNotification(config.title, {
+            body: config.body,
+            icon: config.icon || '/images/logo/riscura.png',
+            badge: config.badge || '/images/logo/riscura.png',
+            tag: config.tag,
+            data: config.data,
+            requireInteraction: config.requireInteraction,
+            silent: config.silent,
+            timestamp: config.timestamp || Date.now(),
+            dir: config.dir,
+            lang: config.lang,
+            renotify: config.renotify,
+            image: config.image,
+            // Actions and vibrate are supported in service worker context
+            ...(config.actions && { actions: config.actions }),
+            ...(config.vibrate && { vibrate: config.vibrate }),
+          } as any); // Type assertion needed for extended notification options
+
+          setLastError(null);
+          return null; // Service worker notifications don't return Notification objects
+        } else {
+          // Fallback to regular notification (limited options)
+          const notification = new Notification(config.title, {
+            body: config.body,
+            icon: config.icon || '/images/logo/riscura.png',
+            tag: config.tag,
+            data: config.data,
+            requireInteraction: config.requireInteraction,
+            silent: config.silent,
+            dir: config.dir,
+            lang: config.lang,
+            // Note: actions, vibrate, and renotify are not supported in regular Notification constructor
+          });
+
+          setNotifications((prev) => [...prev, notification]);
+
+          // Auto-close after 5 seconds if not requiring interaction
+          if (!config.requireInteraction) {
+            setTimeout(() => {
+              notification.close();
+              setNotifications((prev) => prev.filter((n) => n !== notification));
+            }, 5000);
+          }
+
+          setLastError(null);
+          return notification;
+        }
+      } catch (error) {
+        const errorMessage = 'Failed to show notification';
+        setLastError(errorMessage);
+        console.error('Failed to show notification:', error);
+        throw new Error(errorMessage);
+      }
+    },
+    [isSupported, permission, getServiceWorkerRegistration, requestPermission]
+  );
 
   // Process queued notifications
   const processNotificationQueue = useCallback(async () => {
@@ -361,62 +364,69 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
   }, [permission, showNotification]);
 
   // Show notification from template
-  const showTemplateNotification = useCallback(async (
-    templateId: keyof typeof NOTIFICATION_TEMPLATES,
-    customData?: Partial<NotificationConfig>
-  ): Promise<Notification | null> => {
-    const template = NOTIFICATION_TEMPLATES[templateId];
-    if (!template) {
-      throw new Error(`Notification template '${templateId}' not found`);
-    }
-
-    const config: NotificationConfig = {
-      ...template,
-      ...customData,
-      data: { ...template.data, ...customData?.data }
-    };
-
-    return showNotification(config);
-  }, [showNotification]);
-
-  // Register with server
-  const registerWithServer = useCallback(async (endpoint: string): Promise<void> => {
-    const subscriptionInfo = getSubscriptionInfo();
-    if (!subscriptionInfo) {
-      throw new Error('No subscription data available');
-    }
-
-    setIsRegistering(true);
-    setLastError(null);
-
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          subscription: subscriptionInfo,
-          userAgent: navigator.userAgent,
-          timestamp: Date.now()
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
+  const showTemplateNotification = useCallback(
+    async (
+      templateId: keyof typeof NOTIFICATION_TEMPLATES,
+      customData?: Partial<NotificationConfig>
+    ): Promise<Notification | null> => {
+      const template = NOTIFICATION_TEMPLATES[templateId];
+      if (!template) {
+        throw new Error(`Notification template '${templateId}' not found`);
       }
 
-      const result = await response.json();
-      console.log('Successfully registered with server:', result);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to register with server';
-      setLastError(errorMessage);
-      console.error('Failed to register push subscription with server:', error);
-      throw new Error(errorMessage);
-    } finally {
-      setIsRegistering(false);
-    }
-  }, [getSubscriptionInfo]);
+      const config: NotificationConfig = {
+        ...template,
+        ...customData,
+        data: { ...template.data, ...customData?.data },
+      };
+
+      return showNotification(config);
+    },
+    [showNotification]
+  );
+
+  // Register with server
+  const registerWithServer = useCallback(
+    async (endpoint: string): Promise<void> => {
+      const subscriptionInfo = getSubscriptionInfo();
+      if (!subscriptionInfo) {
+        throw new Error('No subscription data available');
+      }
+
+      setIsRegistering(true);
+      setLastError(null);
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            subscription: subscriptionInfo,
+            userAgent: navigator.userAgent,
+            timestamp: Date.now(),
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        console.log('Successfully registered with server:', result);
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : 'Failed to register with server';
+        setLastError(errorMessage);
+        console.error('Failed to register push subscription with server:', error);
+        throw new Error(errorMessage);
+      } finally {
+        setIsRegistering(false);
+      }
+    },
+    [getSubscriptionInfo]
+  );
 
   // Test notification
   const testNotification = useCallback(async (): Promise<void> => {
@@ -429,8 +439,8 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
       vibrate: [200, 100, 200],
       actions: [
         { action: 'ok', title: 'OK' },
-        { action: 'dismiss', title: 'Dismiss' }
-      ]
+        { action: 'dismiss', title: 'Dismiss' },
+      ],
     });
   }, [showNotification]);
 
@@ -443,7 +453,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
       activeNotifications: notifications.length,
       queuedNotifications: notificationQueueRef.current.length,
       subscriptionEndpoint: subscription?.endpoint || null,
-      lastError
+      lastError,
     };
   }, [isSupported, permission, subscription, notifications.length, lastError]);
 
@@ -451,14 +461,14 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
   const clearAllNotifications = useCallback(async (): Promise<void> => {
     try {
       const registration = await getServiceWorkerRegistration();
-      
+
       if (registration) {
         const notifications = await registration.getNotifications();
-        notifications.forEach(notification => notification.close());
+        notifications.forEach((notification) => notification.close());
       }
 
       // Clear local notifications
-      notifications.forEach(notification => notification.close());
+      notifications.forEach((notification) => notification.close());
       setNotifications([]);
     } catch (error) {
       console.error('Failed to clear notifications:', error);
@@ -469,7 +479,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
   const getActiveNotifications = useCallback(async (): Promise<Notification[]> => {
     try {
       const registration = await getServiceWorkerRegistration();
-      
+
       if (registration) {
         return await registration.getNotifications();
       }
@@ -527,7 +537,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
     notifications,
     lastError,
     isRegistering,
-    
+
     // Actions
     requestPermission,
     subscribe,
@@ -536,26 +546,24 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
     clearAllNotifications,
     getActiveNotifications,
     getSubscriptionInfo,
-    
+
     // Computed
     isSubscribed: !!subscription,
     canSubscribe: isSupported && permission === 'granted',
-    
+
     // New actions
     processNotificationQueue,
     showTemplateNotification,
     registerWithServer,
     testNotification,
-    getNotificationStats
+    getNotificationStats,
   };
 };
 
 // Utility functions
 function urlBase64ToUint8Array(base64String: string): Uint8Array {
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding)
-    .replace(/-/g, '+')
-    .replace(/_/g, '/');
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
 
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
@@ -588,15 +596,15 @@ export const NotificationTemplates = {
       {
         action: 'view',
         title: 'View Risk',
-        icon: '/images/icons/view.png'
+        icon: '/images/icons/view.png',
       },
       {
         action: 'dismiss',
         title: 'Dismiss',
-        icon: '/images/icons/dismiss.png'
-      }
+        icon: '/images/icons/dismiss.png',
+      },
     ],
-    data: { type: 'risk', severity }
+    data: { type: 'risk', severity },
   }),
 
   complianceReminder: (framework: string, dueDate: string): NotificationConfig => ({
@@ -609,15 +617,15 @@ export const NotificationTemplates = {
       {
         action: 'start',
         title: 'Start Assessment',
-        icon: '/images/icons/start.png'
+        icon: '/images/icons/start.png',
       },
       {
         action: 'snooze',
         title: 'Remind Later',
-        icon: '/images/icons/snooze.png'
-      }
+        icon: '/images/icons/snooze.png',
+      },
     ],
-    data: { type: 'compliance', framework }
+    data: { type: 'compliance', framework },
   }),
 
   systemUpdate: (message: string): NotificationConfig => ({
@@ -626,8 +634,8 @@ export const NotificationTemplates = {
     icon: '/images/icons/system.png',
     tag: 'system-update',
     silent: true,
-    data: { type: 'system' }
-  })
+    data: { type: 'system' },
+  }),
 };
 
 // Default export for backward compatibility
@@ -639,18 +647,18 @@ export const useNotificationTemplates = () => {
     createRiskAlert: (riskData: any) => ({
       ...NOTIFICATION_TEMPLATES.RISK_ALERT,
       body: `Risk "${riskData.title}" requires attention`,
-      data: { ...NOTIFICATION_TEMPLATES.RISK_ALERT.data, ...riskData }
+      data: { ...NOTIFICATION_TEMPLATES.RISK_ALERT.data, ...riskData },
     }),
     createSystemUpdate: (updateData: any) => ({
       ...NOTIFICATION_TEMPLATES.SYSTEM_UPDATE,
       body: updateData.message || NOTIFICATION_TEMPLATES.SYSTEM_UPDATE.body,
-      data: { ...NOTIFICATION_TEMPLATES.SYSTEM_UPDATE.data, ...updateData }
+      data: { ...NOTIFICATION_TEMPLATES.SYSTEM_UPDATE.data, ...updateData },
     }),
     createComplianceReminder: (reminderData: any) => ({
       ...NOTIFICATION_TEMPLATES.COMPLIANCE_REMINDER,
       body: reminderData.message || NOTIFICATION_TEMPLATES.COMPLIANCE_REMINDER.body,
-      data: { ...NOTIFICATION_TEMPLATES.COMPLIANCE_REMINDER.data, ...reminderData }
-    })
+      data: { ...NOTIFICATION_TEMPLATES.COMPLIANCE_REMINDER.data, ...reminderData },
+    }),
   };
 };
 
@@ -669,6 +677,6 @@ export const useNotificationScheduler = () => {
           new Notification(notification.title, notification);
         }
       }, interval);
-    }
+    },
   };
-}; 
+};

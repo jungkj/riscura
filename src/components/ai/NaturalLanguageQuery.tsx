@@ -2,15 +2,15 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { designTokens } from '@/lib/design-system/tokens';
-import { 
-  StatusIcons, 
+import {
+  StatusIcons,
   RiskManagementIcons,
   ActionIcons,
   DataIcons,
   CommunicationIcons,
   TimeIcons,
   UserIcons,
-  FileIcons
+  FileIcons,
 } from '@/components/icons/IconLibrary';
 import { LoadingStates, Spinner, InlineLoading } from '@/components/states/LoadingState';
 import { EmptyStates } from '@/components/states/EmptyState';
@@ -57,7 +57,7 @@ const queryCategories = {
       category: 'Risk Analysis',
       description: 'Display risks with high severity scores',
       icon: RiskManagementIcons.Risk,
-      popularity: 95
+      popularity: 95,
     },
     {
       id: 'risk-trends',
@@ -65,7 +65,7 @@ const queryCategories = {
       category: 'Risk Analysis',
       description: 'Analyze risk score changes over time',
       icon: DataIcons.TrendingUp,
-      popularity: 87
+      popularity: 87,
     },
     {
       id: 'risk-by-category',
@@ -73,17 +73,17 @@ const queryCategories = {
       category: 'Risk Analysis',
       description: 'Group and count risks by their categories',
       icon: DataIcons.PieChart,
-      popularity: 82
-    }
+      popularity: 82,
+    },
   ],
-  'Compliance': [
+  Compliance: [
     {
       id: 'compliance-status',
       text: 'What is our overall compliance status?',
       category: 'Compliance',
       description: 'Summary of compliance across all frameworks',
       icon: RiskManagementIcons.Compliance,
-      popularity: 91
+      popularity: 91,
     },
     {
       id: 'compliance-gaps',
@@ -91,7 +91,7 @@ const queryCategories = {
       category: 'Compliance',
       description: 'Identify areas with compliance deficiencies',
       icon: StatusIcons.AlertTriangle,
-      popularity: 88
+      popularity: 88,
     },
     {
       id: 'upcoming-deadlines',
@@ -99,17 +99,17 @@ const queryCategories = {
       category: 'Compliance',
       description: 'List upcoming compliance review dates',
       icon: TimeIcons.Calendar,
-      popularity: 79
-    }
+      popularity: 79,
+    },
   ],
-  'Controls': [
+  Controls: [
     {
       id: 'control-effectiveness',
       text: 'How effective are our security controls?',
       category: 'Controls',
       description: 'Analyze control performance and effectiveness',
       icon: UserIcons.Shield,
-      popularity: 84
+      popularity: 84,
     },
     {
       id: 'control-gaps',
@@ -117,17 +117,17 @@ const queryCategories = {
       category: 'Controls',
       description: 'Identify risks without sufficient controls',
       icon: RiskManagementIcons.Risk,
-      popularity: 76
-    }
+      popularity: 76,
+    },
   ],
-  'Reporting': [
+  Reporting: [
     {
       id: 'executive-summary',
       text: 'Generate an executive risk summary',
       category: 'Reporting',
       description: 'Create a high-level risk overview for leadership',
       icon: FileIcons.FileText,
-      popularity: 93
+      popularity: 93,
     },
     {
       id: 'department-risks',
@@ -135,18 +135,18 @@ const queryCategories = {
       category: 'Reporting',
       description: 'Break down risk exposure by organizational unit',
       icon: UserIcons.Users,
-      popularity: 71
-    }
-  ]
+      popularity: 71,
+    },
+  ],
 };
 
 // Mock query processing function
 const processNaturalLanguageQuery = async (query: string): Promise<QueryResult> => {
   // Simulate AI processing time
-  await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1500 + Math.random() * 1000));
 
   const lowerQuery = query.toLowerCase();
-  
+
   // Simple keyword matching for demo (replace with actual NLP service)
   if (lowerQuery.includes('high risk') || lowerQuery.includes('critical')) {
     return {
@@ -157,13 +157,31 @@ const processNaturalLanguageQuery = async (query: string): Promise<QueryResult> 
         summary: 'Found 12 high-risk items requiring immediate attention',
         data: [
           { id: 1, title: 'Data Breach Risk', severity: 'Critical', score: 95, department: 'IT' },
-          { id: 2, title: 'Vendor Security Risk', severity: 'High', score: 87, department: 'Procurement' },
-          { id: 3, title: 'Compliance Gap - GDPR', severity: 'High', score: 82, department: 'Legal' },
-          { id: 4, title: 'System Downtime Risk', severity: 'High', score: 79, department: 'Operations' }
+          {
+            id: 2,
+            title: 'Vendor Security Risk',
+            severity: 'High',
+            score: 87,
+            department: 'Procurement',
+          },
+          {
+            id: 3,
+            title: 'Compliance Gap - GDPR',
+            severity: 'High',
+            score: 82,
+            department: 'Legal',
+          },
+          {
+            id: 4,
+            title: 'System Downtime Risk',
+            severity: 'High',
+            score: 79,
+            department: 'Operations',
+          },
         ],
         totalCount: 12,
         criticalCount: 3,
-        highCount: 9
+        highCount: 9,
       },
       confidence: 0.94,
       timestamp: new Date(),
@@ -175,13 +193,13 @@ const processNaturalLanguageQuery = async (query: string): Promise<QueryResult> 
           data: {
             type: 'bar',
             categories: ['Critical', 'High'],
-            values: [3, 9]
-          }
-        }
-      ]
+            values: [3, 9],
+          },
+        },
+      ],
     };
   }
-  
+
   if (lowerQuery.includes('compliance') && lowerQuery.includes('status')) {
     return {
       id: `query-${Date.now()}`,
@@ -193,10 +211,10 @@ const processNaturalLanguageQuery = async (query: string): Promise<QueryResult> 
           { name: 'ISO 27001', score: 89, status: 'Good' },
           { name: 'GDPR', score: 78, status: 'Needs Attention' },
           { name: 'SOX', score: 92, status: 'Excellent' },
-          { name: 'HIPAA', score: 87, status: 'Good' }
+          { name: 'HIPAA', score: 87, status: 'Good' },
         ],
         overallScore: 84,
-        trend: '+3% from last quarter'
+        trend: '+3% from last quarter',
       },
       confidence: 0.91,
       timestamp: new Date(),
@@ -205,12 +223,12 @@ const processNaturalLanguageQuery = async (query: string): Promise<QueryResult> 
       visualizations: [
         {
           type: 'metric',
-          data: { value: 84, label: 'Overall Compliance Score', trend: '+3%' }
-        }
-      ]
+          data: { value: 84, label: 'Overall Compliance Score', trend: '+3%' },
+        },
+      ],
     };
   }
-  
+
   if (lowerQuery.includes('trend') || lowerQuery.includes('over time')) {
     return {
       id: `query-${Date.now()}`,
@@ -222,7 +240,7 @@ const processNaturalLanguageQuery = async (query: string): Promise<QueryResult> 
           'Cybersecurity risks decreased by 22%',
           'Operational risks increased by 8%',
           'Compliance risks decreased by 31%',
-          'Financial risks remained stable'
+          'Financial risks remained stable',
         ],
         trendData: [
           { month: 'Jan', score: 72 },
@@ -230,8 +248,8 @@ const processNaturalLanguageQuery = async (query: string): Promise<QueryResult> 
           { month: 'Mar', score: 71 },
           { month: 'Apr', score: 68 },
           { month: 'May', score: 65 },
-          { month: 'Jun', score: 61 }
-        ]
+          { month: 'Jun', score: 61 },
+        ],
       },
       confidence: 0.87,
       timestamp: new Date(),
@@ -243,10 +261,10 @@ const processNaturalLanguageQuery = async (query: string): Promise<QueryResult> 
           data: {
             type: 'line',
             xAxis: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-            yAxis: [72, 69, 71, 68, 65, 61]
-          }
-        }
-      ]
+            yAxis: [72, 69, 71, 68, 65, 61],
+          },
+        },
+      ],
     };
   }
 
@@ -259,24 +277,24 @@ const processNaturalLanguageQuery = async (query: string): Promise<QueryResult> 
       summary: `I understand you're asking about "${query}". Here are some suggestions:`,
       recommendations: [
         'Try being more specific about the time period (e.g., "last 3 months")',
-        'Specify the type of data you\'re looking for (risks, compliance, controls)',
+        "Specify the type of data you're looking for (risks, compliance, controls)",
         'Use keywords like "high", "critical", "trends", or "status"',
-        'Ask about specific departments or categories'
-      ]
+        'Ask about specific departments or categories',
+      ],
     },
     confidence: 0.6,
     timestamp: new Date(),
     executionTime: 0.3,
     dataSource: ['Query Suggestions'],
-    visualizations: []
+    visualizations: [],
   };
 };
 
 export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
   onQueryResult,
   onQuerySave,
-  placeholder = "Ask me anything about your risks, compliance, or controls...",
-  className = ''
+  placeholder = 'Ask me anything about your risks, compliance, or controls...',
+  className = '',
 }) => {
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -289,8 +307,8 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
 
   // Get all suggestions flattened
   const allSuggestions = Object.values(queryCategories).flat();
-  const filteredSuggestions = selectedCategory 
-    ? allSuggestions.filter(s => s.category === selectedCategory)
+  const filteredSuggestions = selectedCategory
+    ? allSuggestions.filter((s) => s.category === selectedCategory)
     : allSuggestions.sort((a, b) => b.popularity - a.popularity).slice(0, 6);
 
   // Handle query submission
@@ -303,13 +321,15 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
 
     try {
       const result = await processNaturalLanguageQuery(queryToProcess);
-      setResults(prev => [result, ...prev]);
-      setRecentQueries(prev => [queryToProcess, ...prev.filter(q => q !== queryToProcess)].slice(0, 5));
-      
+      setResults((prev) => [result, ...prev]);
+      setRecentQueries((prev) =>
+        [queryToProcess, ...prev.filter((q) => q !== queryToProcess)].slice(0, 5)
+      );
+
       if (onQueryResult) {
         onQueryResult(result);
       }
-      
+
       setQuery('');
     } catch (error) {
       console.error('Query processing failed:', error);
@@ -364,13 +384,17 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
         <div className="flex items-start justify-between mb-3">
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-1">
-                              <StatusIcons.Info size="sm" color="primary" />
+              <StatusIcons.Info size="sm" color="primary" />
               <span className="text-sm font-medium text-gray-900">AI Analysis</span>
-              <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                result.confidence > 0.9 ? 'bg-green-100 text-green-800' :
-                result.confidence > 0.7 ? 'bg-yellow-100 text-yellow-800' :
-                'bg-gray-100 text-gray-800'
-              }`}>
+              <span
+                className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                  result.confidence > 0.9
+                    ? 'bg-green-100 text-green-800'
+                    : result.confidence > 0.7
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : 'bg-gray-100 text-gray-800'
+                }`}
+              >
                 {Math.round(result.confidence * 100)}% confidence
               </span>
             </div>
@@ -392,9 +416,7 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
         <div className="space-y-4">
           {/* Summary */}
           <div className="p-3 bg-blue-50 rounded-md">
-            <p className="text-sm text-blue-900 font-medium">
-              {result.result.summary}
-            </p>
+            <p className="text-sm text-blue-900 font-medium">{result.result.summary}</p>
           </div>
 
           {/* Data Visualization */}
@@ -405,7 +427,8 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
                   {viz.type === 'metric' && (
                     <div className="text-center">
                       <div className="text-2xl font-bold text-gray-900">
-                        {viz.data.value}{viz.data.value < 100 ? '%' : ''}
+                        {viz.data.value}
+                        {viz.data.value < 100 ? '%' : ''}
                       </div>
                       <div className="text-sm text-gray-600">{viz.data.label}</div>
                       {viz.data.trend && (
@@ -440,11 +463,15 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
                     <tr key={index} className="border-b border-gray-100">
                       <td className="py-2 text-gray-900">{item.title}</td>
                       <td className="py-2">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                          item.severity === 'Critical' ? 'bg-red-100 text-red-800' :
-                          item.severity === 'High' ? 'bg-orange-100 text-orange-800' :
-                          'bg-yellow-100 text-yellow-800'
-                        }`}>
+                        <span
+                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                            item.severity === 'Critical'
+                              ? 'bg-red-100 text-red-800'
+                              : item.severity === 'High'
+                                ? 'bg-orange-100 text-orange-800'
+                                : 'bg-yellow-100 text-yellow-800'
+                          }`}
+                        >
                           {item.severity}
                         </span>
                       </td>
@@ -543,11 +570,7 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
               className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 text-blue-600 hover:text-blue-700 disabled:text-gray-400 disabled:cursor-not-allowed"
               aria-label="Submit query"
             >
-              {isLoading ? (
-                <Spinner size="sm" />
-              ) : (
-                <CommunicationIcons.MessageSquare size="sm" />
-              )}
+              {isLoading ? <Spinner size="sm" /> : <CommunicationIcons.MessageSquare size="sm" />}
             </button>
           </div>
         </div>
@@ -561,14 +584,14 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
                 <button
                   onClick={() => setSelectedCategory(null)}
                   className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                    !selectedCategory 
-                      ? 'bg-blue-100 text-blue-700' 
+                    !selectedCategory
+                      ? 'bg-blue-100 text-blue-700'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
                   All
                 </button>
-                {Object.keys(queryCategories).map(category => (
+                {Object.keys(queryCategories).map((category) => (
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
@@ -621,9 +644,7 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
                       <p className="text-sm font-medium text-gray-900 leading-tight">
                         {suggestion.text}
                       </p>
-                      <p className="text-xs text-gray-500 mt-0.5">
-                        {suggestion.description}
-                      </p>
+                      <p className="text-xs text-gray-500 mt-0.5">{suggestion.description}</p>
                     </div>
                   </button>
                 ))}
@@ -652,9 +673,7 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
         {results.length > 0 && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-medium text-gray-900">
-                Query Results ({results.length})
-              </h3>
+              <h3 className="font-medium text-gray-900">Query Results ({results.length})</h3>
               <button
                 onClick={() => setResults([])}
                 className="text-sm text-gray-500 hover:text-gray-700"
@@ -662,10 +681,8 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
                 Clear All
               </button>
             </div>
-            
-            <div className="space-y-4">
-              {results.map(renderResult)}
-            </div>
+
+            <div className="space-y-4">{results.map(renderResult)}</div>
           </div>
         )}
       </div>
@@ -673,4 +690,4 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
   );
 };
 
-export default NaturalLanguageQuery; 
+export default NaturalLanguageQuery;

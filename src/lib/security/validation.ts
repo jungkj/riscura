@@ -9,7 +9,7 @@ export class InputSanitizer {
    */
   public static sanitizeHtml(input: string): string {
     if (!input || typeof input !== 'string') return '';
-    
+
     // Basic HTML entity encoding
     return input
       .replace(/&/g, '&amp;')
@@ -19,13 +19,13 @@ export class InputSanitizer {
       .replace(/'/g, '&#x27;')
       .replace(/\//g, '&#x2F;');
   }
-  
+
   /**
    * Sanitize plain text input
    */
   public static sanitizeText(input: string): string {
     if (!input || typeof input !== 'string') return '';
-    
+
     return input
       .replace(/[<>'"&]/g, (char) => {
         const entities: Record<string, string> = {
@@ -39,40 +39,40 @@ export class InputSanitizer {
       })
       .trim();
   }
-  
+
   /**
    * Validate and sanitize file names
    */
   public static sanitizeFileName(filename: string): string {
     if (!filename || typeof filename !== 'string') return '';
-    
+
     return filename
       .replace(/[^a-zA-Z0-9.-]/g, '_')
       .replace(/\.{2,}/g, '.')
       .substring(0, 255);
   }
-  
+
   /**
    * Sanitize URL to prevent open redirects
    */
   public static sanitizeUrl(url: string, allowedDomains: string[] = []): string | null {
     if (!url || typeof url !== 'string') return null;
-    
+
     try {
       const parsedUrl = new URL(url);
-      
+
       // Only allow HTTP and HTTPS
       if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
         return null;
       }
-      
+
       // Check against allowed domains if provided
       if (allowedDomains.length > 0) {
-        if (!allowedDomains.some(domain => parsedUrl.hostname.endsWith(domain))) {
+        if (!allowedDomains.some((domain) => parsedUrl.hostname.endsWith(domain))) {
           return null;
         }
       }
-      
+
       return parsedUrl.toString();
     } catch {
       return null;
@@ -91,21 +91,32 @@ export const ApiValidationSchemas = {
     rememberMe: z.boolean().optional(),
     csrfToken: z.string().optional(),
   }),
-  
+
   // User Registration
   registerSchema: z.object({
     email: z.string().email('Invalid email format').max(255),
-    password: z.string()
+    password: z
+      .string()
       .min(8, 'Password must be at least 8 characters')
       .max(128)
-      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/, 
-        'Password must contain uppercase, lowercase, number and special character'),
-    firstName: z.string().min(1).max(50).regex(/^[a-zA-Z\s]+$/, 'Invalid first name'),
-    lastName: z.string().min(1).max(50).regex(/^[a-zA-Z\s]+$/, 'Invalid last name'),
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
+        'Password must contain uppercase, lowercase, number and special character'
+      ),
+    firstName: z
+      .string()
+      .min(1)
+      .max(50)
+      .regex(/^[a-zA-Z\s]+$/, 'Invalid first name'),
+    lastName: z
+      .string()
+      .min(1)
+      .max(50)
+      .regex(/^[a-zA-Z\s]+$/, 'Invalid last name'),
     organizationName: z.string().min(1).max(100).optional(),
     csrfToken: z.string().optional(),
   }),
-  
+
   // Risk Management
   riskSchema: z.object({
     title: z.string().min(1, 'Title is required').max(200),
@@ -117,7 +128,7 @@ export const ApiValidationSchemas = {
     dateIdentified: z.string().datetime().optional(),
     nextReview: z.string().datetime().optional(),
   }),
-  
+
   // Control Management
   controlSchema: z.object({
     title: z.string().min(1, 'Title is required').max(200),
@@ -129,7 +140,7 @@ export const ApiValidationSchemas = {
     lastTestDate: z.string().datetime().optional(),
     nextTestDate: z.string().datetime().optional(),
   }),
-  
+
   // Search and Pagination
   searchSchema: z.object({
     query: z.string().max(500).optional(),
@@ -153,20 +164,18 @@ export class RequestValidator {
   ): { success: true; data: T } | { success: false; errors: string[] } {
     try {
       const result = schema.safeParse(data);
-      
+
       if (result.success) {
         return { success: true, data: result.data };
       } else {
-        const errors = result.error.errors.map(err => 
-          `${err.path.join('.')}: ${err.message}`
-        );
+        const errors = result.error.errors.map((err) => `${err.path.join('.')}: ${err.message}`);
         return { success: false, errors };
       }
     } catch (error) {
       return { success: false, errors: ['Validation error occurred'] };
     }
   }
-  
+
   /**
    * Validate and sanitize request
    */
@@ -177,20 +186,20 @@ export class RequestValidator {
   ): { success: true; data: T } | { success: false; errors: string[] } {
     // First validate structure
     const validation = this.validateBody(schema, data);
-    
+
     if (!validation.success) {
       return validation;
     }
-    
+
     // Then sanitize string fields if requested
     if (sanitizeHtml && typeof validation.data === 'object' && validation.data !== null) {
       const sanitized = this.sanitizeObject(validation.data);
       return { success: true, data: sanitized as T };
     }
-    
+
     return validation;
   }
-  
+
   /**
    * Recursively sanitize object properties
    */
@@ -198,11 +207,11 @@ export class RequestValidator {
     if (typeof obj === 'string') {
       return InputSanitizer.sanitizeText(obj);
     }
-    
+
     if (Array.isArray(obj)) {
-      return obj.map(item => this.sanitizeObject(item));
+      return obj.map((item) => this.sanitizeObject(item));
     }
-    
+
     if (typeof obj === 'object' && obj !== null) {
       const sanitized: any = {};
       for (const [key, value] of Object.entries(obj)) {
@@ -210,7 +219,7 @@ export class RequestValidator {
       }
       return sanitized;
     }
-    
+
     return obj;
   }
 }
@@ -228,9 +237,9 @@ export class FileUploadValidator {
     'text/plain',
     'text/csv',
   ]);
-  
+
   private static readonly MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
-  
+
   /**
    * Validate file upload
    */
@@ -241,34 +250,36 @@ export class FileUploadValidator {
     buffer?: Buffer;
   }): { valid: true } | { valid: false; errors: string[] } {
     const errors: string[] = [];
-    
+
     // Check file name
     if (!file.name || file.name.length > 255) {
       errors.push('Invalid file name');
     }
-    
+
     // Check file extension
     const allowedExtensions = ['.pdf', '.docx', '.xlsx', '.jpg', '.jpeg', '.png', '.txt', '.csv'];
     const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
-    
+
     if (!allowedExtensions.includes(fileExtension)) {
       errors.push(`File extension ${fileExtension} not allowed`);
     }
-    
+
     // Check MIME type
     if (!this.ALLOWED_MIME_TYPES.has(file.type)) {
       errors.push(`MIME type ${file.type} not allowed`);
     }
-    
+
     // Check file size
     if (file.size > this.MAX_FILE_SIZE) {
-      errors.push(`File size exceeds maximum allowed size of ${this.MAX_FILE_SIZE / 1024 / 1024}MB`);
+      errors.push(
+        `File size exceeds maximum allowed size of ${this.MAX_FILE_SIZE / 1024 / 1024}MB`
+      );
     }
-    
+
     if (errors.length > 0) {
       return { valid: false, errors };
     }
-    
+
     return { valid: true };
   }
-} 
+}

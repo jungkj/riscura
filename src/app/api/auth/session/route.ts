@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
     } catch (nextAuthError) {
       console.log('[Session] NextAuth session check failed:', nextAuthError);
     }
-    
+
     // Check for simple OAuth session
     const sessionToken = req.cookies.get('session-token')?.value;
     if (sessionToken) {
@@ -22,14 +22,14 @@ export async function GET(req: NextRequest) {
         if (new Date(sessionData.expires) > new Date()) {
           return NextResponse.json({
             user: sessionData.user,
-            expires: sessionData.expires
+            expires: sessionData.expires,
           });
         }
       } catch (e) {
         console.log('[Session] Invalid simple OAuth session token');
       }
     }
-    
+
     // Check for demo user session
     const demoUserCookie = req.cookies.get('demo-user')?.value;
     if (demoUserCookie) {
@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
         console.log('[Session] Invalid demo user cookie');
       }
     }
-    
+
     // No valid session found
     return NextResponse.json(null);
   } catch (error) {

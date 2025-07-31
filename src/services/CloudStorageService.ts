@@ -34,7 +34,7 @@ export class CloudStorageService {
 
       // Return relative path that can be used to construct URLs
       const relativePath = path.relative(this.baseDir, filePath);
-      
+
       // In production, this would return a CDN URL
       // For now, return a path that can be served by Next.js API
       return `/api/files/${relativePath.replace(/\\/g, '/')}`;
@@ -53,7 +53,7 @@ export class CloudStorageService {
       // Security check - ensure path doesn't escape base directory
       const resolvedPath = path.resolve(fullPath);
       const resolvedBase = path.resolve(this.baseDir);
-      
+
       if (!resolvedPath.startsWith(resolvedBase)) {
         throw new Error('Invalid file path');
       }
@@ -76,7 +76,7 @@ export class CloudStorageService {
       // Security check
       const resolvedPath = path.resolve(fullPath);
       const resolvedBase = path.resolve(this.baseDir);
-      
+
       if (!resolvedPath.startsWith(resolvedBase)) {
         throw new Error('Invalid file path');
       }
@@ -100,7 +100,7 @@ export class CloudStorageService {
       // Security check
       const resolvedPath = path.resolve(fullPath);
       const resolvedBase = path.resolve(this.baseDir);
-      
+
       if (!resolvedPath.startsWith(resolvedBase)) {
         return false;
       }
@@ -124,7 +124,7 @@ export class CloudStorageService {
       // Security check
       const resolvedPath = path.resolve(fullPath);
       const resolvedBase = path.resolve(this.baseDir);
-      
+
       if (!resolvedPath.startsWith(resolvedBase)) {
         return null;
       }
@@ -160,7 +160,7 @@ export class CloudStorageService {
   async generateSignedUrl(filePath: string, expiresIn: number = 3600): Promise<string> {
     // In production with S3/GCS, this would generate actual signed URLs
     // For now, just return the file path with an expiry timestamp
-    const timestamp = Date.now() + (expiresIn * 1000);
+    const timestamp = Date.now() + expiresIn * 1000;
     const signature = crypto
       .createHash('sha256')
       .update(`${filePath}:${timestamp}:${process.env.NEXTAUTH_SECRET || 'secret'}`)

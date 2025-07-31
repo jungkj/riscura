@@ -204,23 +204,35 @@ class PerformanceAnalytics {
     };
 
     // Track clicks
-    document.addEventListener('click', (event) => {
-      trackInteraction('click', event);
-    }, { passive: true });
+    document.addEventListener(
+      'click',
+      (event) => {
+        trackInteraction('click', event);
+      },
+      { passive: true }
+    );
 
     // Track scrolling (throttled)
     let scrollTimeout: number;
-    document.addEventListener('scroll', (event) => {
-      clearTimeout(scrollTimeout);
-      scrollTimeout = window.setTimeout(() => {
-        trackInteraction('scroll', event);
-      }, 100);
-    }, { passive: true });
+    document.addEventListener(
+      'scroll',
+      (event) => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = window.setTimeout(() => {
+          trackInteraction('scroll', event);
+        }, 100);
+      },
+      { passive: true }
+    );
 
     // Track input interactions
-    document.addEventListener('input', (event) => {
-      trackInteraction('input', event);
-    }, { passive: true });
+    document.addEventListener(
+      'input',
+      (event) => {
+        trackInteraction('input', event);
+      },
+      { passive: true }
+    );
   }
 
   private setupResourceTimingTracking(): void {
@@ -230,7 +242,7 @@ class PerformanceAnalytics {
       for (const entry of list.getEntries()) {
         if (entry.entryType === 'resource') {
           const resourceEntry = entry as PerformanceResourceTiming;
-          
+
           const resource: ResourceMetric = {
             name: resourceEntry.name,
             type: this.getResourceType(resourceEntry.name),
@@ -319,14 +331,25 @@ class PerformanceAnalytics {
   private setupNavigationTracking(): void {
     // Track navigation timing
     window.addEventListener('load', () => {
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-      
+      const navigation = performance.getEntriesByType(
+        'navigation'
+      )[0] as PerformanceNavigationTiming;
+
       if (navigation) {
-        this.recordCustomMetric('dom_content_loaded', navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart);
+        this.recordCustomMetric(
+          'dom_content_loaded',
+          navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart
+        );
         this.recordCustomMetric('load_event', navigation.loadEventEnd - navigation.loadEventStart);
-        this.recordCustomMetric('dns_lookup', navigation.domainLookupEnd - navigation.domainLookupStart);
+        this.recordCustomMetric(
+          'dns_lookup',
+          navigation.domainLookupEnd - navigation.domainLookupStart
+        );
         this.recordCustomMetric('tcp_connect', navigation.connectEnd - navigation.connectStart);
-        this.recordCustomMetric('server_response', navigation.responseEnd - navigation.requestStart);
+        this.recordCustomMetric(
+          'server_response',
+          navigation.responseEnd - navigation.requestStart
+        );
       }
     });
   }
@@ -339,7 +362,7 @@ class PerformanceAnalytics {
       const longTaskObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           this.recordCustomMetric('long_task', entry.duration);
-          
+
           if (this.config.enableDebugMode) {
             console.log('Long task detected:', entry.duration);
           }
@@ -382,7 +405,7 @@ class PerformanceAnalytics {
 
   public startTiming(name: string): () => void {
     const startTime = performance.now();
-    
+
     return () => {
       const duration = performance.now() - startTime;
       this.recordCustomMetric(name, duration);
@@ -432,7 +455,7 @@ class PerformanceAnalytics {
 
   public sendReport(immediate = false): void {
     const report = this.getMetrics();
-    
+
     if (report.webVitals.length === 0 && report.interactions.length === 0) {
       return; // No data to report
     }
@@ -467,10 +490,7 @@ class PerformanceAnalytics {
 
       if (immediate && 'sendBeacon' in navigator) {
         // Use sendBeacon for immediate sending (e.g., page unload)
-        navigator.sendBeacon(
-          this.config.reportingEndpoint!,
-          JSON.stringify(payload)
-        );
+        navigator.sendBeacon(this.config.reportingEndpoint!, JSON.stringify(payload));
       } else {
         // Use fetch for regular reporting
         await fetch(this.config.reportingEndpoint!, {
@@ -507,7 +527,7 @@ class PerformanceAnalytics {
     };
 
     const [good, poor] = thresholds[metricName] || [0, Infinity];
-    
+
     if (value <= good) return 'good';
     if (value <= poor) return 'needs-improvement';
     return 'poor';
@@ -515,14 +535,19 @@ class PerformanceAnalytics {
 
   private getNavigationType(): string {
     if ('navigation' in performance) {
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      const navigation = performance.getEntriesByType(
+        'navigation'
+      )[0] as PerformanceNavigationTiming;
       return navigation?.type || 'unknown';
     }
     return 'unknown';
   }
 
   private getConnectionType(): string {
-    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    const connection =
+      (navigator as any).connection ||
+      (navigator as any).mozConnection ||
+      (navigator as any).webkitConnection;
     return connection?.effectiveType || 'unknown';
   }
 
@@ -538,7 +563,7 @@ class PerformanceAnalytics {
 
   private getResourceType(url: string): string {
     const extension = url.split('.').pop()?.toLowerCase();
-    
+
     const typeMap: Record<string, string> = {
       js: 'script',
       css: 'stylesheet',
@@ -559,7 +584,7 @@ class PerformanceAnalytics {
 
   public disconnect(): void {
     // Disconnect all performance observers
-    this.observers.forEach(observer => observer.disconnect());
+    this.observers.forEach((observer) => observer.disconnect());
     this.observers.clear();
 
     // Send final report
@@ -578,14 +603,11 @@ export const trackCustomEvent = (name: string, value?: number): void => {
   performanceAnalytics.recordCustomMetric(name, value || 1);
 };
 
-export const timeFunction = <T extends (...args: any[]) => any>(
-  name: string,
-  fn: T
-): T => {
+export const timeFunction = <T extends (...args: any[]) => any>(name: string, fn: T): T => {
   return ((...args: any[]) => {
     const endTiming = performanceAnalytics.startTiming(name);
     const result = fn(...args);
-    
+
     if (result instanceof Promise) {
       return result.finally(() => endTiming());
     } else {
@@ -600,7 +622,7 @@ export const withPerformanceTracking = <T extends React.ComponentType<any>>(
   name?: string
 ): T => {
   const componentName = name || Component.displayName || Component.name || 'Component';
-  
+
   const WrappedComponent = React.forwardRef<any, React.ComponentProps<T>>((props, ref) => {
     React.useEffect(() => {
       const endTiming = performanceAnalytics.startTiming(`render_${componentName}`);
@@ -609,8 +631,8 @@ export const withPerformanceTracking = <T extends React.ComponentType<any>>(
 
     return React.createElement(Component, { ...props, ref });
   });
-  
+
   WrappedComponent.displayName = `withPerformanceTracking(${componentName})`;
-  
+
   return WrappedComponent as unknown as T;
-}; 
+};

@@ -122,8 +122,8 @@ export const DEFAULT_MASTER_CONFIG: MasterPerformanceConfig = {
     webVitalsFID: 100, // 100ms
     webVitalsCLS: 0.1, // 0.1 score
     taskQueueLength: 100, // 100 tasks
-    webSocketConnections: 80 // 80% of max
-  }
+    webSocketConnections: 80, // 80% of max
+  },
 };
 
 export class MasterPerformanceSystem {
@@ -135,14 +135,14 @@ export class MasterPerformanceSystem {
   private coreWebVitalsOptimizer?: CoreWebVitalsOptimizer;
   private backgroundTaskOptimizer?: BackgroundTaskOptimizer;
   private webSocketOptimizer?: WebSocketOptimizer;
-  
+
   private metrics: SystemPerformanceMetrics = {
     database: {
       connectionPoolUtilization: 0,
       averageQueryTime: 0,
       cacheHitRate: 0,
       activeConnections: 0,
-      slowQueries: 0
+      slowQueries: 0,
     },
     memory: {
       usedJSHeapSize: 0,
@@ -152,39 +152,39 @@ export class MasterPerformanceSystem {
         intervals: 0,
         timeouts: 0,
         webSockets: 0,
-        fileHandles: 0
-      }
+        fileHandles: 0,
+      },
     },
     webVitals: {
       lcp: 0,
       fid: 0,
       cls: 0,
       fcp: 0,
-      ttfb: 0
+      ttfb: 0,
     },
     tasks: {
       totalTasks: 0,
       queueLength: 0,
       workerUtilization: 0,
-      throughput: 0
+      throughput: 0,
     },
     webSockets: {
       activeConnections: 0,
       averageLatency: 0,
       errorRate: 0,
-      bandwidthUsage: 0
+      bandwidthUsage: 0,
     },
     fileUploads: {
       activeUploads: 0,
       averageUploadSpeed: 0,
-      failureRate: 0
+      failureRate: 0,
     },
     system: {
       overallScore: 100,
       alertsActive: 0,
       optimizationsApplied: 0,
-      lastOptimization: new Date()
-    }
+      lastOptimization: new Date(),
+    },
   };
 
   private alerts: PerformanceAlert[] = [];
@@ -230,7 +230,7 @@ export class MasterPerformanceSystem {
         this.coreWebVitalsOptimizer = new CoreWebVitalsOptimizer({
           enableMonitoring: true,
           enableOptimizations: true,
-          reportingEndpoint: this.config.reportingEndpoint
+          reportingEndpoint: this.config.reportingEndpoint,
         });
         console.log('✅ Core Web Vitals optimization initialized');
       }
@@ -260,7 +260,6 @@ export class MasterPerformanceSystem {
       if (this.config.enableAutoOptimization) {
         setTimeout(() => this.runAutoOptimization(), 5000);
       }
-
     } catch (error) {
       console.error('❌ Failed to initialize Master Performance System:', error);
       throw error;
@@ -275,7 +274,7 @@ export class MasterPerformanceSystem {
       await this.collectMetrics();
       this.analyzePerformance();
       this.checkAlertThresholds();
-      
+
       if (this.config.enableAutoOptimization) {
         await this.runAutoOptimization();
       }
@@ -297,7 +296,7 @@ export class MasterPerformanceSystem {
           averageQueryTime: dbMetrics.averageQueryTime,
           cacheHitRate: dbMetrics.cacheHitRate,
           activeConnections: dbMetrics.activeConnections,
-          slowQueries: dbMetrics.slowQueries
+          slowQueries: dbMetrics.slowQueries,
         };
       }
 
@@ -307,7 +306,7 @@ export class MasterPerformanceSystem {
         this.metrics.memory = {
           usedJSHeapSize: memMetrics.usedJSHeapSize,
           memoryUsagePercent: memMetrics.memoryUsagePercent,
-          resourceCount: memMetrics.resourceCount
+          resourceCount: memMetrics.resourceCount,
         };
       }
 
@@ -319,7 +318,7 @@ export class MasterPerformanceSystem {
           fid: vitalsMetrics.fid || 0,
           cls: vitalsMetrics.cls || 0,
           fcp: vitalsMetrics.fcp || 0,
-          ttfb: vitalsMetrics.ttfb || 0
+          ttfb: vitalsMetrics.ttfb || 0,
         };
       }
 
@@ -330,7 +329,7 @@ export class MasterPerformanceSystem {
           totalTasks: taskMetrics.totalTasks,
           queueLength: taskMetrics.queueLength,
           workerUtilization: taskMetrics.workerUtilization,
-          throughput: taskMetrics.throughput
+          throughput: taskMetrics.throughput,
         };
       }
 
@@ -341,13 +340,12 @@ export class MasterPerformanceSystem {
           activeConnections: wsMetrics.activeConnections,
           averageLatency: wsMetrics.averageLatency,
           errorRate: wsMetrics.errorRate,
-          bandwidthUsage: wsMetrics.bandwidthUsage
+          bandwidthUsage: wsMetrics.bandwidthUsage,
         };
       }
 
       // Calculate overall system score
       this.calculateOverallScore();
-
     } catch (error) {
       console.error('Failed to collect metrics:', error);
     }
@@ -360,16 +358,20 @@ export class MasterPerformanceSystem {
     let score = 100;
     const weights = {
       database: 0.25,
-      memory: 0.20,
+      memory: 0.2,
       webVitals: 0.25,
       tasks: 0.15,
-      webSockets: 0.10,
-      uploads: 0.05
+      webSockets: 0.1,
+      uploads: 0.05,
     };
 
     // Database score
-    const dbScore = Math.max(0, 100 - (this.metrics.database.connectionPoolUtilization * 0.5) - 
-                           (this.metrics.database.averageQueryTime / 10));
+    const dbScore = Math.max(
+      0,
+      100 -
+        this.metrics.database.connectionPoolUtilization * 0.5 -
+        this.metrics.database.averageQueryTime / 10
+    );
     score -= (100 - dbScore) * weights.database;
 
     // Memory score
@@ -377,19 +379,24 @@ export class MasterPerformanceSystem {
     score -= (100 - memScore) * weights.memory;
 
     // Web Vitals score
-    const vitalsScore = Math.max(0, 100 - 
-      ((this.metrics.webVitals.lcp > 2500 ? 20 : 0) +
-       (this.metrics.webVitals.fid > 100 ? 20 : 0) +
-       (this.metrics.webVitals.cls > 0.1 ? 20 : 0)));
+    const vitalsScore = Math.max(
+      0,
+      100 -
+        ((this.metrics.webVitals.lcp > 2500 ? 20 : 0) +
+          (this.metrics.webVitals.fid > 100 ? 20 : 0) +
+          (this.metrics.webVitals.cls > 0.1 ? 20 : 0))
+    );
     score -= (100 - vitalsScore) * weights.webVitals;
 
     // Task score
-    const taskScore = Math.max(0, 100 - (this.metrics.tasks.queueLength / 10) - 
-                             (100 - this.metrics.tasks.workerUtilization));
+    const taskScore = Math.max(
+      0,
+      100 - this.metrics.tasks.queueLength / 10 - (100 - this.metrics.tasks.workerUtilization)
+    );
     score -= (100 - taskScore) * weights.tasks;
 
     // WebSocket score
-    const wsScore = Math.max(0, 100 - (this.metrics.webSockets.errorRate * 100));
+    const wsScore = Math.max(0, 100 - this.metrics.webSockets.errorRate * 100);
     score -= (100 - wsScore) * weights.webSockets;
 
     this.metrics.system.overallScore = Math.max(0, Math.round(score));
@@ -451,46 +458,70 @@ export class MasterPerformanceSystem {
 
     // Check memory usage
     if (this.metrics.memory.memoryUsagePercent > thresholds.memoryUsage) {
-      this.createAlert('memory', 'critical', 
+      this.createAlert(
+        'memory',
+        'critical',
         `Memory usage at ${this.metrics.memory.memoryUsagePercent}%`,
-        this.metrics.memory.memoryUsagePercent, thresholds.memoryUsage);
+        this.metrics.memory.memoryUsagePercent,
+        thresholds.memoryUsage
+      );
     }
 
     // Check database connection pool
     if (this.metrics.database.connectionPoolUtilization > thresholds.connectionPoolUtilization) {
-      this.createAlert('database', 'warning',
+      this.createAlert(
+        'database',
+        'warning',
         `Database connection pool utilization at ${this.metrics.database.connectionPoolUtilization}%`,
-        this.metrics.database.connectionPoolUtilization, thresholds.connectionPoolUtilization);
+        this.metrics.database.connectionPoolUtilization,
+        thresholds.connectionPoolUtilization
+      );
     }
 
     // Check Core Web Vitals
     if (this.metrics.webVitals.lcp > thresholds.webVitalsLCP) {
-      this.createAlert('webvitals', 'error',
+      this.createAlert(
+        'webvitals',
+        'error',
         `LCP at ${this.metrics.webVitals.lcp}ms exceeds threshold`,
-        this.metrics.webVitals.lcp, thresholds.webVitalsLCP);
+        this.metrics.webVitals.lcp,
+        thresholds.webVitalsLCP
+      );
     }
 
     if (this.metrics.webVitals.fid > thresholds.webVitalsFID) {
-      this.createAlert('webvitals', 'error',
+      this.createAlert(
+        'webvitals',
+        'error',
         `FID at ${this.metrics.webVitals.fid}ms exceeds threshold`,
-        this.metrics.webVitals.fid, thresholds.webVitalsFID);
+        this.metrics.webVitals.fid,
+        thresholds.webVitalsFID
+      );
     }
 
     if (this.metrics.webVitals.cls > thresholds.webVitalsCLS) {
-      this.createAlert('webvitals', 'error',
+      this.createAlert(
+        'webvitals',
+        'error',
         `CLS at ${this.metrics.webVitals.cls} exceeds threshold`,
-        this.metrics.webVitals.cls, thresholds.webVitalsCLS);
+        this.metrics.webVitals.cls,
+        thresholds.webVitalsCLS
+      );
     }
 
     // Check task queue
     if (this.metrics.tasks.queueLength > thresholds.taskQueueLength) {
-      this.createAlert('tasks', 'warning',
+      this.createAlert(
+        'tasks',
+        'warning',
         `Task queue length at ${this.metrics.tasks.queueLength} tasks`,
-        this.metrics.tasks.queueLength, thresholds.taskQueueLength);
+        this.metrics.tasks.queueLength,
+        thresholds.taskQueueLength
+      );
     }
 
     // Update active alerts count
-    this.metrics.system.alertsActive = this.alerts.filter(alert => !alert.resolved).length;
+    this.metrics.system.alertsActive = this.alerts.filter((alert) => !alert.resolved).length;
   }
 
   /**
@@ -504,10 +535,8 @@ export class MasterPerformanceSystem {
     threshold: number
   ): void {
     // Check if similar alert already exists
-    const existingAlert = this.alerts.find(alert => 
-      alert.category === category && 
-      alert.message === message && 
-      !alert.resolved
+    const existingAlert = this.alerts.find(
+      (alert) => alert.category === category && alert.message === message && !alert.resolved
     );
 
     if (existingAlert) return;
@@ -520,11 +549,11 @@ export class MasterPerformanceSystem {
       value,
       threshold,
       timestamp: new Date(),
-      resolved: false
+      resolved: false,
     };
 
     this.alerts.push(alert);
-    
+
     // Keep only recent alerts
     if (this.alerts.length > 200) {
       this.alerts = this.alerts.slice(-100);
@@ -570,11 +599,14 @@ export class MasterPerformanceSystem {
       }
 
       if (optimizations.length > 0) {
-        this.recordOptimization('automatic', 'system', 
-          `Auto-optimization: ${optimizations.join(', ')}`, 'medium');
+        this.recordOptimization(
+          'automatic',
+          'system',
+          `Auto-optimization: ${optimizations.join(', ')}`,
+          'medium'
+        );
         console.log('🔧 Auto-optimizations applied:', optimizations);
       }
-
     } catch (error) {
       console.error('Failed to run auto-optimization:', error);
     }
@@ -600,8 +632,8 @@ export class MasterPerformanceSystem {
       metrics: {
         before: this.metrics.system.overallScore,
         after: this.metrics.system.overallScore, // Will be updated on next collection
-        improvement: 0
-      }
+        improvement: 0,
+      },
     };
 
     this.optimizationHistory.push(optimization);
@@ -628,8 +660,8 @@ export class MasterPerformanceSystem {
           type: 'performance_alert',
           alert,
           metrics: this.metrics,
-          timestamp: new Date().toISOString()
-        })
+          timestamp: new Date().toISOString(),
+        }),
       });
     } catch (error) {
       console.error('Failed to report alert:', error);
@@ -647,7 +679,7 @@ export class MasterPerformanceSystem {
    * Get active alerts
    */
   getActiveAlerts(): PerformanceAlert[] {
-    return this.alerts.filter(alert => !alert.resolved);
+    return this.alerts.filter((alert) => !alert.resolved);
   }
 
   /**
@@ -673,7 +705,7 @@ export class MasterPerformanceSystem {
   } {
     const score = this.metrics.system.overallScore;
     let systemStatus: 'excellent' | 'good' | 'warning' | 'critical';
-    
+
     if (score >= 90) systemStatus = 'excellent';
     else if (score >= 75) systemStatus = 'good';
     else if (score >= 60) systemStatus = 'warning';
@@ -686,11 +718,11 @@ export class MasterPerformanceSystem {
         overallScore: score,
         alertsActive: this.metrics.system.alertsActive,
         optimizationsApplied: this.metrics.system.optimizationsApplied,
-        systemStatus
+        systemStatus,
       },
       metrics: this.metrics,
       alerts: this.getActiveAlerts(),
-      recommendations
+      recommendations,
     };
   }
 
@@ -709,7 +741,9 @@ export class MasterPerformanceSystem {
     }
 
     if (this.metrics.webVitals.lcp > 2500) {
-      recommendations.push('Optimize Largest Contentful Paint with image optimization and critical resource preloading');
+      recommendations.push(
+        'Optimize Largest Contentful Paint with image optimization and critical resource preloading'
+      );
     }
 
     if (this.metrics.tasks.queueLength > 100) {
@@ -717,7 +751,9 @@ export class MasterPerformanceSystem {
     }
 
     if (this.metrics.webSockets.errorRate > 0.05) {
-      recommendations.push('Investigate WebSocket connection stability and implement better error handling');
+      recommendations.push(
+        'Investigate WebSocket connection stability and implement better error handling'
+      );
     }
 
     return recommendations;
@@ -735,11 +771,11 @@ export class MasterPerformanceSystem {
    * Resolve alert
    */
   resolveAlert(alertId: string, resolutionAction?: string): void {
-    const alert = this.alerts.find(a => a.id === alertId);
+    const alert = this.alerts.find((a) => a.id === alertId);
     if (alert) {
       alert.resolved = true;
       alert.resolutionAction = resolutionAction;
-      this.metrics.system.alertsActive = this.alerts.filter(a => !a.resolved).length;
+      this.metrics.system.alertsActive = this.alerts.filter((a) => !a.resolved).length;
       console.log(`✅ Alert ${alertId} resolved: ${resolutionAction}`);
     }
   }
@@ -773,4 +809,4 @@ if (typeof window !== 'undefined') {
   (window as any).__MASTER_PERFORMANCE_SYSTEM__ = masterPerformanceSystem;
 }
 
-export default MasterPerformanceSystem; 
+export default MasterPerformanceSystem;

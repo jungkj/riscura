@@ -11,13 +11,13 @@ interface LoadingSpinnerProps {
 const sizeClasses = {
   sm: 'loading-sm',
   md: 'loading-md',
-  lg: 'loading-lg'
+  lg: 'loading-lg',
 };
 
 export const DaisyLoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = 'md',
   className,
-  text
+  text,
 }) => {
   return (
     <div className={cn('flex items-center justify-center', className)}>

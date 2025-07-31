@@ -6,16 +6,23 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   glass?: boolean;
 }
 
-export const DaisyCard = ({ className, children, compact, bordered, glass, ...props }: CardProps) => {
+export const DaisyCard = ({
+  className,
+  children,
+  compact,
+  bordered,
+  glass,
+  ...props
+}: CardProps) => {
   return (
-    <div 
+    <div
       className={cn(
         'card bg-base-100 shadow-xl',
         compact && 'card-compact',
         bordered && 'card-bordered',
         glass && 'glass',
         className
-      )} 
+      )}
       {...props}
     >
       {children}
@@ -23,7 +30,11 @@ export const DaisyCard = ({ className, children, compact, bordered, glass, ...pr
   );
 };
 
-export const DaisyCardBody = ({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
+export const DaisyCardBody = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => {
   return (
     <div className={cn('card-body', className)} {...props}>
       {children}
@@ -31,7 +42,11 @@ export const DaisyCardBody = ({ className, children, ...props }: React.HTMLAttri
   );
 };
 
-export const DaisyCardTitle = ({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
+export const DaisyCardTitle = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) => {
   return (
     <h2 className={cn('card-title', className)} {...props}>
       {children}
@@ -39,7 +54,11 @@ export const DaisyCardTitle = ({ className, children, ...props }: React.HTMLAttr
   );
 };
 
-export const DaisyCardActions = ({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
+export const DaisyCardActions = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => {
   return (
     <div className={cn('card-actions justify-end', className)} {...props}>
       {children}

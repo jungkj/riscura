@@ -11,7 +11,7 @@ const listFilesSchema = z.object({
 export const POST = withApiMiddleware({
   requireAuth: true,
   bodySchema: listFilesSchema,
-  rateLimiters: ['standard']
+  rateLimiters: ['standard'],
 })(async (context, { integrationId, path }) => {
   const { organizationId } = context;
 
@@ -21,13 +21,13 @@ export const POST = withApiMiddleware({
       where: {
         id: integrationId,
         organizationId,
-        isActive: true
-      }
+        isActive: true,
+      },
     });
 
     if (!integration) {
       return {
-        error: 'SharePoint integration not found'
+        error: 'SharePoint integration not found',
       };
     }
 
@@ -45,28 +45,28 @@ export const POST = withApiMiddleware({
     // Update last synced timestamp
     await prisma.sharePointIntegration.update({
       where: { id: integrationId },
-      data: { lastSyncedAt: new Date() }
+      data: { lastSyncedAt: new Date() },
     });
 
     return {
-      files: files.map(file => ({
+      files: files.map((file) => ({
         id: file.id,
         name: file.name,
         size: file.size,
         modifiedDate: file.modifiedDate,
         webUrl: file.webUrl,
-        path: file.path
+        path: file.path,
       })),
       integration: {
         id: integration.id,
-        displayName: integration.displayName
-      }
+        displayName: integration.displayName,
+      },
     };
   } catch (error) {
     console.error('Error listing SharePoint files:', error);
-    
+
     return {
-      error: 'Failed to list files from SharePoint. Please check your connection and try again.'
+      error: 'Failed to list files from SharePoint. Please check your connection and try again.',
     };
   }
 });
@@ -75,13 +75,13 @@ export const POST = withApiMiddleware({
 const searchFilesSchema = z.object({
   integrationId: z.string().min(1),
   query: z.string().min(1),
-  fileTypes: z.array(z.string()).optional()
+  fileTypes: z.array(z.string()).optional(),
 });
 
 export const PUT = withApiMiddleware({
   requireAuth: true,
   bodySchema: searchFilesSchema,
-  rateLimiters: ['standard']
+  rateLimiters: ['standard'],
 })(async (context, { integrationId, query, fileTypes }) => {
   const { organizationId } = context;
 
@@ -91,13 +91,13 @@ export const PUT = withApiMiddleware({
       where: {
         id: integrationId,
         organizationId,
-        isActive: true
-      }
+        isActive: true,
+      },
     });
 
     if (!integration) {
       return {
-        error: 'SharePoint integration not found'
+        error: 'SharePoint integration not found',
       };
     }
 
@@ -112,21 +112,21 @@ export const PUT = withApiMiddleware({
     );
 
     return {
-      files: files.map(file => ({
+      files: files.map((file) => ({
         id: file.id,
         name: file.name,
         size: file.size,
         modifiedDate: file.modifiedDate,
-        webUrl: file.webUrl
+        webUrl: file.webUrl,
       })),
       query,
-      resultCount: files.length
+      resultCount: files.length,
     };
   } catch (error) {
     console.error('Error searching SharePoint files:', error);
-    
+
     return {
-      error: 'Failed to search files in SharePoint. Please try again.'
+      error: 'Failed to search files in SharePoint. Please try again.',
     };
   }
 });

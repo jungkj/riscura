@@ -16,11 +16,11 @@ export class CompressionService {
     threshold = 1024
   ): Promise<CompressionResult> {
     const startTime = Date.now();
-    
+
     try {
       const jsonString = JSON.stringify(data);
       const originalSize = Buffer.byteLength(jsonString, 'utf8');
-      
+
       // Skip compression for small responses
       if (originalSize < threshold) {
         return {
@@ -33,9 +33,9 @@ export class CompressionService {
           duration: Date.now() - startTime,
         };
       }
-      
+
       let compressed: Buffer;
-      
+
       switch (encoding) {
         case 'gzip':
           compressed = await gzip(jsonString, { level: 6 });
@@ -53,12 +53,12 @@ export class CompressionService {
         default:
           throw new Error(`Unsupported encoding: ${encoding}`);
       }
-      
+
       const compressedSize = compressed.byteLength;
       const compressionRatio = ((originalSize - compressedSize) / originalSize) * 100;
-      
+
       this.recordStats(encoding, originalSize, compressedSize, Date.now() - startTime);
-      
+
       return {
         compressed: true,
         data: compressed,
@@ -84,13 +84,10 @@ export class CompressionService {
   }
 
   // Decompress Data
-  async decompressData(
-    data: Buffer,
-    encoding: CompressionEncoding
-  ): Promise<string> {
+  async decompressData(data: Buffer, encoding: CompressionEncoding): Promise<string> {
     try {
       let decompressed: Buffer;
-      
+
       switch (encoding) {
         case 'gzip':
           decompressed = await gunzip(data);
@@ -104,10 +101,12 @@ export class CompressionService {
         default:
           throw new Error(`Unsupported encoding: ${encoding}`);
       }
-      
+
       return decompressed.toString('utf8');
     } catch (error) {
-      throw new Error(`Decompression failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Decompression failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -119,13 +118,13 @@ export class CompressionService {
   ): Promise<CompressionResult> {
     const fs = await import('fs/promises');
     const startTime = Date.now();
-    
+
     try {
       const fileData = await fs.readFile(filePath);
       const originalSize = fileData.byteLength;
-      
+
       let compressed: Buffer;
-      
+
       switch (encoding) {
         case 'gzip':
           compressed = await gzip(fileData, { level: 9 }); // Max compression for static assets
@@ -140,12 +139,12 @@ export class CompressionService {
         default:
           throw new Error(`Unsupported encoding for static assets: ${encoding}`);
       }
-      
+
       await fs.writeFile(outputPath, compressed);
-      
+
       const compressedSize = compressed.byteLength;
       const compressionRatio = ((originalSize - compressedSize) / originalSize) * 100;
-      
+
       return {
         compressed: true,
         data: compressed,
@@ -180,7 +179,7 @@ export class CompressionService {
         result: await this.compressAPIResponse(data, encoding),
       }))
     );
-    
+
     return results;
   }
 
@@ -229,24 +228,25 @@ export class CompressionService {
       totalDuration: 0,
       averageCompressionRatio: 0,
     };
-    
+
     existing.totalOperations++;
     existing.totalOriginalSize += originalSize;
     existing.totalCompressedSize += compressedSize;
     existing.totalDuration += duration;
-    existing.averageCompressionRatio = 
-      ((existing.totalOriginalSize - existing.totalCompressedSize) / existing.totalOriginalSize) * 100;
-    
+    existing.averageCompressionRatio =
+      ((existing.totalOriginalSize - existing.totalCompressedSize) / existing.totalOriginalSize) *
+      100;
+
     this.compressionStats.set(encoding, existing);
   }
 
   getStats(): Record<string, CompressionStats> {
     const stats: Record<string, CompressionStats> = {};
-    
+
     for (const [encoding, stat] of this.compressionStats) {
       stats[encoding] = { ...stat };
     }
-    
+
     return stats;
   }
 
@@ -258,24 +258,24 @@ export class CompressionService {
     if (acceptedEncodings.length === 0) {
       return 'gzip'; // Default fallback
     }
-    
+
     if (acceptedEncodings.length === 1) {
       return acceptedEncodings[0];
     }
-    
+
     // Test each encoding and select the best
     const results = await Promise.all(
-      acceptedEncodings.map(async encoding => ({
+      acceptedEncodings.map(async (encoding) => ({
         encoding,
         result: await this.compressAPIResponse(data, encoding),
       }))
     );
-    
+
     // Select encoding with best compression ratio
-    const best = results.reduce((prev, current) => 
+    const best = results.reduce((prev, current) =>
       current.result.compressionRatio > prev.result.compressionRatio ? current : prev
     );
-    
+
     return best.encoding;
   }
 
@@ -293,16 +293,16 @@ export class CompressionService {
       'application/gzip',
       'application/pdf',
     ];
-    
-    if (incompressibleTypes.some(type => contentType.includes(type))) {
+
+    if (incompressibleTypes.some((type) => contentType.includes(type))) {
       return false;
     }
-    
+
     // Don't compress tiny responses
     if (size < 1024) {
       return false;
     }
-    
+
     // Compress text-based content
     const compressibleTypes = [
       'text/',
@@ -312,8 +312,8 @@ export class CompressionService {
       'application/x-javascript',
       'application/svg+xml',
     ];
-    
-    return compressibleTypes.some(type => contentType.includes(type));
+
+    return compressibleTypes.some((type) => contentType.includes(type));
   }
 
   // Health check
@@ -321,7 +321,7 @@ export class CompressionService {
     try {
       const testData = { test: 'health check data'.repeat(100) };
       const result = await this.compressAPIResponse(testData, 'gzip');
-      
+
       return {
         healthy: result.compressed && result.compressionRatio > 0,
         latency: result.duration,
@@ -370,34 +370,34 @@ export interface CompressionHealthCheck {
 // Middleware for Express/Next.js
 export function compressionMiddleware(options: CompressionOptions = {}) {
   const service = new CompressionService();
-  
+
   return async (req: any, res: any, next: any) => {
     // Check if compression is acceptable
     const acceptedEncodings = parseAcceptEncoding(req.headers['accept-encoding'] || '');
     if (acceptedEncodings.length === 0) {
       return next();
     }
-    
+
     // Store original send method
     const originalSend = res.send;
-    
+
     // Override send method
-    res.send = async function(data: any) {
+    res.send = async function (data: any) {
       // Check if should compress
       const contentType = res.get('Content-Type') || 'text/html';
       const shouldCompress = service.shouldCompress(contentType, Buffer.byteLength(data));
-      
+
       if (!shouldCompress) {
         return originalSend.call(res, data);
       }
-      
+
       try {
         // Select optimal encoding
         const encoding = await service.selectOptimalEncoding(data, acceptedEncodings);
-        
+
         // Compress data
         const result = await service.compressAPIResponse(data, encoding, options.threshold);
-        
+
         if (result.compressed) {
           res.set('Content-Encoding', encoding);
           res.set('Vary', 'Accept-Encoding');
@@ -406,11 +406,11 @@ export function compressionMiddleware(options: CompressionOptions = {}) {
       } catch (error) {
         console.error('Compression middleware error:', error);
       }
-      
+
       // Fallback to uncompressed
       return originalSend.call(res, data);
     };
-    
+
     next();
   };
 }
@@ -418,11 +418,11 @@ export function compressionMiddleware(options: CompressionOptions = {}) {
 // Utility functions
 function parseAcceptEncoding(acceptEncoding: string): CompressionEncoding[] {
   const encodings: CompressionEncoding[] = [];
-  
+
   if (acceptEncoding.includes('br')) encodings.push('br');
   if (acceptEncoding.includes('gzip')) encodings.push('gzip');
   if (acceptEncoding.includes('deflate')) encodings.push('deflate');
-  
+
   return encodings;
 }
 
@@ -434,4 +434,4 @@ export interface CompressionOptions {
 }
 
 // Global compression service instance
-export const compressionService = new CompressionService(); 
+export const compressionService = new CompressionService();

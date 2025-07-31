@@ -5,14 +5,14 @@ export type {
   KnowledgeBase,
   ModelPerformance,
   ABTestExperiment,
-  ModelDeployment
+  ModelDeployment,
 } from '@/services/CustomModelTrainingService';
 
 // Import types for type guards
-import type { 
-  TrainingJob, 
-  KnowledgeBase, 
-  ModelDeployment 
+import type {
+  TrainingJob,
+  KnowledgeBase,
+  ModelDeployment,
 } from '@/services/CustomModelTrainingService';
 
 // Extended training system types
@@ -42,7 +42,7 @@ export interface PipelineStage {
   resources: ResourceRequirements;
 }
 
-export type StageType = 
+export type StageType =
   | 'data_ingestion'
   | 'data_preprocessing'
   | 'feature_engineering'
@@ -104,7 +104,7 @@ export interface NotificationConfig {
   recipients: string[];
 }
 
-export type NotificationEvent = 
+export type NotificationEvent =
   | 'pipeline_started'
   | 'pipeline_completed'
   | 'pipeline_failed'
@@ -113,13 +113,7 @@ export type NotificationEvent =
   | 'model_deployed'
   | 'performance_degraded';
 
-export type PipelineStatus = 
-  | 'active'
-  | 'inactive'
-  | 'running'
-  | 'completed'
-  | 'failed'
-  | 'paused';
+export type PipelineStatus = 'active' | 'inactive' | 'running' | 'completed' | 'failed' | 'paused';
 
 export interface PipelineRun {
   id: string;
@@ -136,7 +130,7 @@ export interface PipelineRun {
   metrics: PipelineMetrics;
 }
 
-export type PipelineRunStatus = 
+export type PipelineRunStatus =
   | 'queued'
   | 'running'
   | 'completed'
@@ -810,25 +804,23 @@ export interface ApiKeyAccess {
 
 // Utility types for type guards and validation
 export const isTrainingJob = (obj: unknown): obj is TrainingJob => {
-  return typeof obj === 'object' && 
-         obj !== null && 
-         'id' in obj && 
-         'status' in obj && 
-         'config' in obj;
+  return (
+    typeof obj === 'object' && obj !== null && 'id' in obj && 'status' in obj && 'config' in obj
+  );
 };
 
 export const isKnowledgeBase = (obj: unknown): obj is KnowledgeBase => {
-  return typeof obj === 'object' && 
-         obj !== null && 
-         'id' in obj && 
-         'documents' in obj && 
-         'embeddings' in obj;
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'id' in obj &&
+    'documents' in obj &&
+    'embeddings' in obj
+  );
 };
 
 export const isModelDeployment = (obj: unknown): obj is ModelDeployment => {
-  return typeof obj === 'object' && 
-         obj !== null && 
-         'id' in obj && 
-         'modelId' in obj && 
-         'status' in obj;
-}; 
+  return (
+    typeof obj === 'object' && obj !== null && 'id' in obj && 'modelId' in obj && 'status' in obj
+  );
+};

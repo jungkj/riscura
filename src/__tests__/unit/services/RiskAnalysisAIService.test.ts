@@ -68,7 +68,7 @@ describe('RiskAnalysisAIService', () => {
 
         const highAppRisk = createAppRisk(highImpactRisk);
         const lowAppRisk = createAppRisk(lowImpactRisk);
-        
+
         const highResult = await service.generateAutomatedRiskScore(highAppRisk, 'coso');
         const lowResult = await service.generateAutomatedRiskScore(lowAppRisk, 'coso');
 
@@ -105,7 +105,11 @@ describe('RiskAnalysisAIService', () => {
           riskTolerance: 'high' as const,
         };
 
-        const financialResult = await service.generateAutomatedRiskScore(mockRisk, 'coso', financialContext);
+        const financialResult = await service.generateAutomatedRiskScore(
+          mockRisk,
+          'coso',
+          financialContext
+        );
         const techResult = await service.generateAutomatedRiskScore(mockRisk, 'coso', techContext);
 
         expect(financialResult.factors).toContainEqual(
@@ -133,7 +137,11 @@ describe('RiskAnalysisAIService', () => {
           controls: [],
         };
 
-        const minimalResult = await service.generateAutomatedRiskScore(mockRisk, 'coso', minimalContext);
+        const minimalResult = await service.generateAutomatedRiskScore(
+          mockRisk,
+          'coso',
+          minimalContext
+        );
         const richResult = await service.generateAutomatedRiskScore(mockRisk, 'coso', richContext);
 
         expect(richResult.confidence).toBeGreaterThanOrEqual(minimalResult.confidence);
@@ -163,14 +171,14 @@ describe('RiskAnalysisAIService', () => {
       const parameters = {
         likelihoodDistribution: {
           type: 'normal' as const,
-          parameters: { mean: 3, stddev: 0.5 }
+          parameters: { mean: 3, stddev: 0.5 },
         },
         impactDistribution: {
           type: 'normal' as const,
-          parameters: { mean: 4, stddev: 0.8 }
+          parameters: { mean: 4, stddev: 0.8 },
         },
         timeHorizon: 12,
-        iterations: 1000
+        iterations: 1000,
       };
 
       const result = await service.performMonteCarloSimulation(mockRisk, parameters, 1000);
@@ -202,7 +210,7 @@ describe('RiskAnalysisAIService', () => {
         };
 
         const result = await service.performMonteCarloSimulation(mockRisk, parameters, 100);
-        
+
         expect(result.expectedValue).toBeGreaterThan(0);
         expect(result.variance).toBeGreaterThanOrEqual(0);
         expect(result.distribution.bins.length).toBeGreaterThan(0);
@@ -213,14 +221,14 @@ describe('RiskAnalysisAIService', () => {
       const parameters = {
         likelihoodDistribution: {
           type: 'normal' as const,
-          parameters: { mean: 3, stddev: 0.1 } // Low variance
+          parameters: { mean: 3, stddev: 0.1 }, // Low variance
         },
         impactDistribution: {
           type: 'normal' as const,
-          parameters: { mean: 4, stddev: 0.1 } // Low variance
+          parameters: { mean: 4, stddev: 0.1 }, // Low variance
         },
         timeHorizon: 12,
-        iterations: 10000
+        iterations: 10000,
       };
 
       const result = await service.performMonteCarloSimulation(mockRisk, parameters, 10000);
@@ -228,12 +236,12 @@ describe('RiskAnalysisAIService', () => {
       // With low variance, expected value should be close to mean product
       const expectedMean = 3 * 4; // likelihood * impact
       expect(result.expectedValue).toBeCloseTo(expectedMean, 0);
-      
+
       // Standard deviation should be relatively small
       expect(result.standardDeviation).toBeLessThan(expectedMean * 0.5);
-      
+
       // Confidence intervals should be ordered
-      const ci95 = result.confidenceIntervals.find(ci => ci.level === 0.95);
+      const ci95 = result.confidenceIntervals.find((ci) => ci.level === 0.95);
       expect(ci95).toBeDefined();
       expect(ci95!.lower).toBeLessThan(result.expectedValue);
       expect(ci95!.upper).toBeGreaterThan(result.expectedValue);
@@ -268,16 +276,23 @@ describe('RiskAnalysisAIService', () => {
         description: 'Critical system failure that could impact operations',
       });
 
-      const report = await service.assessRisk({
-        ...highRisk,
-        controls: [],
-        evidence: [],
-      } as unknown as AppRisk, 'coso');
+      const report = await service.assessRisk(
+        {
+          ...highRisk,
+          controls: [],
+          evidence: [],
+        } as unknown as AppRisk,
+        'coso'
+      );
 
       expect(report.findings.length).toBeGreaterThan(0);
-      expect(report.findings.some(f => f.impact === 'critical' || f.impact === 'high')).toBe(true);
+      expect(report.findings.some((f) => f.impact === 'critical' || f.impact === 'high')).toBe(
+        true
+      );
       expect(report.recommendations.length).toBeGreaterThan(0);
-      expect(report.recommendations.some(r => r.priority === 'critical' || r.priority === 'high')).toBe(true);
+      expect(
+        report.recommendations.some((r) => r.priority === 'critical' || r.priority === 'high')
+      ).toBe(true);
     });
 
     it('should generate appropriate recommendations for different risk types', async () => {
@@ -293,27 +308,36 @@ describe('RiskAnalysisAIService', () => {
         impact: 5,
       });
 
-      const opReport = await service.assessRisk({
-        ...operationalRisk,
-        controls: [],
-        evidence: [],
-      } as unknown as AppRisk, 'coso');
-      const compReport = await service.assessRisk({
-        ...complianceRisk,
-        controls: [],
-        evidence: [],
-      } as unknown as AppRisk, 'coso');
+      const opReport = await service.assessRisk(
+        {
+          ...operationalRisk,
+          controls: [],
+          evidence: [],
+        } as unknown as AppRisk,
+        'coso'
+      );
+      const compReport = await service.assessRisk(
+        {
+          ...complianceRisk,
+          controls: [],
+          evidence: [],
+        } as unknown as AppRisk,
+        'coso'
+      );
 
       expect(opReport.recommendations.length).toBeGreaterThan(0);
       expect(compReport.recommendations.length).toBeGreaterThan(0);
 
       // Compliance risks should have specific recommendation types
       const complianceRecs = compReport.recommendations;
-      expect(complianceRecs.some(r => 
-        r.type === 'mitigation' && 
-        (r.title.toLowerCase().includes('compliance') || 
-         r.description.toLowerCase().includes('regulatory'))
-      )).toBe(true);
+      expect(
+        complianceRecs.some(
+          (r) =>
+            r.type === 'mitigation' &&
+            (r.title.toLowerCase().includes('compliance') ||
+              r.description.toLowerCase().includes('regulatory'))
+        )
+      ).toBe(true);
     });
   });
 
@@ -325,13 +349,14 @@ describe('RiskAnalysisAIService', () => {
         RiskFactory.create({ category: 'FINANCIAL' }),
       ];
 
-      const analysis = await service.analyzeRiskCorrelations([
-        { ...risks[0], controls: [], evidence: [] } as unknown as AppRisk,
-        { ...risks[1], controls: [], evidence: [] } as unknown as AppRisk,
-        { ...risks[2], controls: [], evidence: [] } as unknown as AppRisk,
-      ], {
-        
-      });
+      const analysis = await service.analyzeRiskCorrelations(
+        [
+          { ...risks[0], controls: [], evidence: [] } as unknown as AppRisk,
+          { ...risks[1], controls: [], evidence: [] } as unknown as AppRisk,
+          { ...risks[2], controls: [], evidence: [] } as unknown as AppRisk,
+        ],
+        {}
+      );
 
       expect(analysis.riskPairs).toBeInstanceOf(Array);
       expect(analysis.networkMetrics).toBeDefined();
@@ -371,9 +396,10 @@ describe('RiskAnalysisAIService', () => {
       ]);
 
       // Should find some correlation between technology risks
-      const techCorrelations = analysis.riskPairs.filter(pair => 
-        (pair.risk1Id === techRisk1.id && pair.risk2Id === techRisk2.id) ||
-        (pair.risk1Id === techRisk2.id && pair.risk2Id === techRisk1.id)
+      const techCorrelations = analysis.riskPairs.filter(
+        (pair) =>
+          (pair.risk1Id === techRisk1.id && pair.risk2Id === techRisk2.id) ||
+          (pair.risk1Id === techRisk2.id && pair.risk2Id === techRisk1.id)
       );
 
       expect(techCorrelations.length).toBeGreaterThan(0);
@@ -410,11 +436,11 @@ describe('RiskAnalysisAIService', () => {
       const extremeParameters = {
         likelihoodDistribution: {
           type: 'normal' as const,
-          parameters: { mean: 5, stddev: 10 } // High variance
+          parameters: { mean: 5, stddev: 10 }, // High variance
         },
         impactDistribution: {
           type: 'triangular' as const,
-          parameters: { min: 1, max: 1000, mode: 5 } // Extreme range
+          parameters: { min: 1, max: 1000, mode: 5 }, // Extreme range
         },
         timeHorizon: 12,
       };
@@ -452,7 +478,6 @@ describe('RiskAnalysisAIService', () => {
         includeQuantitative: true,
         includeCorrelation: false,
         assessor: 'test-assessor',
-        
       });
 
       expect(report.id).toBeDefined();
@@ -473,32 +498,32 @@ describe('RiskAnalysisAIService', () => {
   describe('Performance and Optimization', () => {
     it('should complete risk assessment within reasonable time', async () => {
       const startTime = Date.now();
-      
+
       await service.assessRisk(mockRisk, 'coso', {
         includeQuantitative: true,
         includeCorrelation: false,
       });
-      
+
       const endTime = Date.now();
       const duration = endTime - startTime;
-      
+
       expect(duration).toBeLessThan(5000); // Should complete within 5 seconds
     });
 
     it('should handle batch risk scoring efficiently', async () => {
       const risks = RiskFactory.createBatch(10);
       const startTime = Date.now();
-      
+
       const results = await Promise.all(
-        risks.map(risk => service.generateAutomatedRiskScore(risk as any, 'coso'))
+        risks.map((risk) => service.generateAutomatedRiskScore(risk as any, 'coso'))
       );
-      
+
       const endTime = Date.now();
       const duration = endTime - startTime;
-      
+
       expect(results).toHaveLength(10);
       expect(duration).toBeLessThan(10000); // Should complete within 10 seconds
-      expect(results.every(r => r.score > 0)).toBe(true);
+      expect(results.every((r) => r.score > 0)).toBe(true);
     });
   });
-}); 
+});

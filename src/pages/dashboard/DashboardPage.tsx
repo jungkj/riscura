@@ -1,5 +1,6 @@
 'use client';
 
+/** @jsxImportSource react */
 import React, { useState, useEffect } from 'react';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
@@ -556,13 +557,12 @@ export default function DashboardPage() {
   };
 
   if (loading) {
-
-  return (
-    <div className="flex items-center justify-center min-h-screen">
+    return (
+      <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="p-6 space-y-6 md:space-y-8" data-tour="dashboard-main">
@@ -583,9 +583,8 @@ export default function DashboardPage() {
         <div>
           <div className="flex items-center gap-3 mb-2">
             <h1 className="text-3xl font-bold text-[#191919]">Dashboard</h1>
-            <DaisyBadge variant="secondary" className="bg-[#D8C3A5] text-[#191919] font-semibold" >
-  Live
-</DaisyBadge>
+            <DaisyBadge variant="secondary" className="bg-[#D8C3A5] text-[#191919] font-semibold">
+              Live
             </DaisyBadge>
           </div>
           <p className="text-[#A8A8A8] font-semibold">Welcome back! Here's your risk management overview.</p>
@@ -594,13 +593,13 @@ export default function DashboardPage() {
           <DaisyButton 
             variant="secondary" 
             onClick={() => setShowTour(true)}
-            className="text-sm border-[#D8C3A5] text-[#191919] hover:bg-[#D8C3A5]" />
+            className="text-sm border-[#D8C3A5] text-[#191919] hover:bg-[#D8C3A5]">
             <Lightbulb className="h-4 w-4 mr-2" />
             Take Tour
           </DaisyButton>
           <DaisyButton 
             onClick={() => router.push('/dashboard/risks/new')}
-            className="bg-[#191919] text-white hover:bg-[#333333]" />
+            className="bg-[#191919] text-white hover:bg-[#333333]">
             <Plus className="h-4 w-4 mr-2" />
             Add Risk
           </DaisyButton>
@@ -632,10 +631,9 @@ export default function DashboardPage() {
           <div className="grid grid-cols-2 gap-3">
             <DaisyCard 
               className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
-              onClick={() => handleStatsCardClick('totalRisks')} />
-              <DaisyCardContent className="p-4" >
-  <div className="flex items-center">
-</DaisyCard>
+              onClick={() => handleStatsCardClick('totalRisks')}>
+              <DaisyCardContent className="p-4">
+                <div className="flex items-center">
                   <div className="p-2 bg-blue-50 rounded-lg">  
                     <Shield className="h-5 w-5 text-blue-600" />
                   </div>
@@ -649,14 +647,12 @@ export default function DashboardPage() {
 
             <DaisyCard 
               className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
-              onClick={() => handleStatsCardClick('highRisks')} />
-              <DaisyCardContent className="p-4" >
-  <div className="flex items-center">
-</DaisyCard>
+              onClick={() => handleStatsCardClick('highRisks')}>
+              <DaisyCardContent className="p-4">
+                <div className="flex items-center">
                   <div className="p-2 bg-red-50 rounded-lg">
-                    <DaisyAlertTriangle className="h-5 w-5 text-red-600" >
-  </div>
-</DaisyAlertTriangle>
+                    <AlertTriangle className="h-5 w-5 text-red-600" />
+                  </div>
                   <div className="ml-3">
                     <p className="text-2xl font-bold text-red-600">{stats.highRisks}</p>
                     <p className="text-xs text-gray-600">High Priority</p>
@@ -667,10 +663,9 @@ export default function DashboardPage() {
 
             <DaisyCard 
               className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
-              onClick={() => handleStatsCardClick('complianceScore')} />
-              <DaisyCardContent className="p-4" >
-  <div className="flex items-center">
-</DaisyCard>
+              onClick={() => handleStatsCardClick('complianceScore')}>
+              <DaisyCardContent className="p-4">
+                <div className="flex items-center">
                   <div className="p-2 bg-green-50 rounded-lg">
                     <CheckCircle className="h-5 w-5 text-green-600" />
                   </div>
@@ -684,10 +679,9 @@ export default function DashboardPage() {
 
             <DaisyCard 
               className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
-              onClick={() => handleStatsCardClick('activeControls')} />
-              <DaisyCardContent className="p-4" >
-  <div className="flex items-center">
-</DaisyCard>
+              onClick={() => handleStatsCardClick('activeControls')}>
+              <DaisyCardContent className="p-4">
+                <div className="flex items-center">
                   <div className="p-2 bg-purple-50 rounded-lg">
                     <Settings className="h-5 w-5 text-purple-600" />
                   </div>
@@ -1137,3 +1131,5 @@ function ActivityItem({
     </div>
   );
 }
+
+export default DashboardPage;

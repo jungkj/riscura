@@ -17,7 +17,9 @@ interface UseSharePointIntegrationReturn {
   isLoading: boolean;
   isConnecting: boolean;
   error: string | null;
-  connect: (siteUrl: string) => Promise<{ success: boolean; integration?: SharePointIntegration; error?: string }>;
+  connect: (
+    siteUrl: string
+  ) => Promise<{ success: boolean; integration?: SharePointIntegration; error?: string }>;
   disconnect: (integrationId: string) => Promise<boolean>;
   refresh: () => Promise<void>;
 }
@@ -33,40 +35,42 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       const response = await api.get('/api/sharepoint/connect');
       const data = await response.json();
-      
+
       if (data.integrations) {
-        setIntegrations(data.integrations.map((integration: any) => {
-          // Validate and parse dates safely
-          let lastSyncedAt: Date | undefined;
-          let createdAt: Date | undefined;
-          
-          if (integration.lastSyncedAt) {
-            try {
-              const date = new Date(integration.lastSyncedAt);
-              lastSyncedAt = isNaN(date.getTime()) ? undefined : date;
-            } catch {
-              lastSyncedAt = undefined;
+        setIntegrations(
+          data.integrations.map((integration: any) => {
+            // Validate and parse dates safely
+            let lastSyncedAt: Date | undefined;
+            let createdAt: Date | undefined;
+
+            if (integration.lastSyncedAt) {
+              try {
+                const date = new Date(integration.lastSyncedAt);
+                lastSyncedAt = isNaN(date.getTime()) ? undefined : date;
+              } catch {
+                lastSyncedAt = undefined;
+              }
             }
-          }
-          
-          if (integration.createdAt) {
-            try {
-              const date = new Date(integration.createdAt);
-              createdAt = isNaN(date.getTime()) ? undefined : date;
-            } catch {
-              createdAt = undefined;
+
+            if (integration.createdAt) {
+              try {
+                const date = new Date(integration.createdAt);
+                createdAt = isNaN(date.getTime()) ? undefined : date;
+              } catch {
+                createdAt = undefined;
+              }
             }
-          }
-          
-          return {
-            ...integration,
-            lastSyncedAt,
-            createdAt
-          };
-        }));
+
+            return {
+              ...integration,
+              lastSyncedAt,
+              createdAt,
+            };
+          })
+        );
       } else if (data.error) {
         setError(data.error);
       }
@@ -79,73 +83,82 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
   }, []);
 
   // Connect to SharePoint
-  const connect = useCallback(async (siteUrl: string): Promise<{ 
-    success: boolean; 
-    integration?: SharePointIntegration; 
-    error?: string 
-  }> => {
-    try {
-      setIsConnecting(true);
-      setError(null);
-      
-      const response = await api.post('/api/sharepoint/connect', {
-        siteUrl
-      });
-      
-      const data = await response.json();
-      
-      if (data.integration) {
-        const newIntegration: SharePointIntegration = {
-          ...data.integration,
-          lastSyncedAt: data.integration.lastSyncedAt ? new Date(data.integration.lastSyncedAt) : undefined,
-          createdAt: data.integration.createdAt ? new Date(data.integration.createdAt) : new Date()
-        };
-        
-        // Update integrations list
-        setIntegrations(prev => {
-          const existing = prev.find(i => i.id === newIntegration.id);
-          if (existing) {
-            return prev.map(i => i.id === newIntegration.id ? newIntegration : i);
-          }
-          return [...prev, newIntegration];
+  const connect = useCallback(
+    async (
+      siteUrl: string
+    ): Promise<{
+      success: boolean;
+      integration?: SharePointIntegration;
+      error?: string;
+    }> => {
+      try {
+        setIsConnecting(true);
+        setError(null);
+
+        const response = await api.post('/api/sharepoint/connect', {
+          siteUrl,
         });
-        
-        return { success: true, integration: newIntegration };
-      } else if (data.error) {
-        setError(data.error);
-        return { success: false, error: data.error };
+
+        const data = await response.json();
+
+        if (data.integration) {
+          const newIntegration: SharePointIntegration = {
+            ...data.integration,
+            lastSyncedAt: data.integration.lastSyncedAt
+              ? new Date(data.integration.lastSyncedAt)
+              : undefined,
+            createdAt: data.integration.createdAt
+              ? new Date(data.integration.createdAt)
+              : new Date(),
+          };
+
+          // Update integrations list
+          setIntegrations((prev) => {
+            const existing = prev.find((i) => i.id === newIntegration.id);
+            if (existing) {
+              return prev.map((i) => (i.id === newIntegration.id ? newIntegration : i));
+            }
+            return [...prev, newIntegration];
+          });
+
+          return { success: true, integration: newIntegration };
+        } else if (data.error) {
+          setError(data.error);
+          return { success: false, error: data.error };
+        }
+
+        return { success: false, error: 'Unknown error occurred' };
+      } catch (err) {
+        console.error('Error connecting to SharePoint:', err);
+        const errorMessage = 'Failed to connect to SharePoint';
+        setError(errorMessage);
+        return { success: false, error: errorMessage };
+      } finally {
+        setIsConnecting(false);
       }
-      
-      return { success: false, error: 'Unknown error occurred' };
-    } catch (err) {
-      console.error('Error connecting to SharePoint:', err);
-      const errorMessage = 'Failed to connect to SharePoint';
-      setError(errorMessage);
-      return { success: false, error: errorMessage };
-    } finally {
-      setIsConnecting(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   // Disconnect from SharePoint
   const disconnect = useCallback(async (integrationId: string): Promise<boolean> => {
     try {
       setError(null);
-      
+
       // Use URLSearchParams to safely encode the integrationId
       const params = new URLSearchParams({ integrationId });
       const response = await api.delete(`/api/sharepoint/connect?${params.toString()}`);
       const data = await response.json();
-      
+
       if (data.message) {
         // Remove from integrations list
-        setIntegrations(prev => prev.filter(i => i.id !== integrationId));
+        setIntegrations((prev) => prev.filter((i) => i.id !== integrationId));
         return true;
       } else if (data.error) {
         setError(data.error);
         return false;
       }
-      
+
       return false;
     } catch (err) {
       console.error('Error disconnecting from SharePoint:', err);
@@ -171,6 +184,6 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
     error,
     connect,
     disconnect,
-    refresh
+    refresh,
   };
 };

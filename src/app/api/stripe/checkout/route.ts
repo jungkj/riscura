@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { withApiMiddleware, createAPIResponse, ForbiddenError, ValidationError } from '@/lib/api/middleware';
+import {
+  withApiMiddleware,
+  createAPIResponse,
+  ForbiddenError,
+  ValidationError,
+} from '@/lib/api/middleware';
 import { stripe, createCheckoutSession, SUBSCRIPTION_PLANS, FREE_TRIAL_CONFIG } from '@/lib/stripe';
 import { db } from '@/lib/db';
 import { z } from 'zod';
@@ -8,7 +13,7 @@ const checkoutSchema = z.object({
   plan: z.enum(['PRO', 'ENTERPRISE']),
   isTrial: z.boolean().optional().default(false),
   successUrl: z.string().url(),
-  cancelUrl: z.string().url()
+  cancelUrl: z.string().url(),
 });
 
 // POST /api/stripe/checkout - Create Stripe checkout session
@@ -16,97 +21,96 @@ export const POST = withApiMiddleware(
   async (req: NextRequest) => {
     const user = (req as any).user;
 
-  try {
-    const body = await req.json();
-    const { plan, isTrial, successUrl, cancelUrl } = checkoutSchema.parse(body);
+    try {
+      const body = await req.json();
+      const { plan, isTrial, successUrl, cancelUrl } = checkoutSchema.parse(body);
 
-    // Get the subscription plan
-    const selectedPlan = SUBSCRIPTION_PLANS[plan];
-    if (!selectedPlan.priceId) {
-      throw new ValidationError('Invalid subscription plan');
-    }
-
-    // Check if user already has a subscription
-    const existingSubscription = await db.client.organizationSubscription.findFirst({
-      where: {
-        organizationId: user.organizationId,
-        status: {
-          in: ['ACTIVE', 'TRIALING']
-        }
+      // Get the subscription plan
+      const selectedPlan = SUBSCRIPTION_PLANS[plan];
+      if (!selectedPlan.priceId) {
+        throw new ValidationError('Invalid subscription plan');
       }
-    });
 
-    if (existingSubscription && !isTrial) {
-      throw new ValidationError('Organization already has an active subscription');
-    }
-
-    // Get or create Stripe customer
-    const organization = await db.client.organization.findUnique({
-      where: { id: user.organizationId }
-    });
-    let stripeCustomerId = organization?.stripeCustomerId;
-    
-    if (!stripeCustomerId) {
-      const customer = await stripe.customers.create({
-        email: user.email,
-        name: `${user.firstName} ${user.lastName}`,
-        metadata: {
-          userId: user.id,
+      // Check if user already has a subscription
+      const existingSubscription = await db.client.organizationSubscription.findFirst({
+        where: {
           organizationId: user.organizationId,
-        }
+          status: {
+            in: ['ACTIVE', 'TRIALING'],
+          },
+        },
       });
-      
-      stripeCustomerId = customer.id;
-      
-      // Update organization with Stripe customer ID
-      await db.client.organization.update({
+
+      if (existingSubscription && !isTrial) {
+        throw new ValidationError('Organization already has an active subscription');
+      }
+
+      // Get or create Stripe customer
+      const organization = await db.client.organization.findUnique({
         where: { id: user.organizationId },
-        data: { stripeCustomerId }
       });
-    }
+      let stripeCustomerId = organization?.stripeCustomerId;
 
-    // Create checkout session
-    const session = await createCheckoutSession({
-      priceId: selectedPlan.priceId,
-      customerId: stripeCustomerId,
-      userId: user.id,
-      organizationId: user.organizationId,
-      successUrl,
-      cancelUrl,
-      trialPeriodDays: isTrial ? FREE_TRIAL_CONFIG.duration : undefined
-    });
+      if (!stripeCustomerId) {
+        const customer = await stripe.customers.create({
+          email: user.email,
+          name: `${user.firstName} ${user.lastName}`,
+          metadata: {
+            userId: user.id,
+            organizationId: user.organizationId,
+          },
+        });
 
-    // Log the checkout attempt
-    await db.client.billingEvent.create({
-      data: {
+        stripeCustomerId = customer.id;
+
+        // Update organization with Stripe customer ID
+        await db.client.organization.update({
+          where: { id: user.organizationId },
+          data: { stripeCustomerId },
+        });
+      }
+
+      // Create checkout session
+      const session = await createCheckoutSession({
+        priceId: selectedPlan.priceId,
+        customerId: stripeCustomerId,
+        userId: user.id,
         organizationId: user.organizationId,
-        type: 'CHECKOUT_CREATED',
-        eventData: {
-          plan,
-          isTrial,
+        successUrl,
+        cancelUrl,
+        trialPeriodDays: isTrial ? FREE_TRIAL_CONFIG.duration : undefined,
+      });
+
+      // Log the checkout attempt
+      await db.client.billingEvent.create({
+        data: {
+          organizationId: user.organizationId,
+          type: 'CHECKOUT_CREATED',
+          eventData: {
+            plan,
+            isTrial,
+            sessionId: session.id,
+            amount: (selectedPlan.price || 0) * 100, // Store in cents
+            currency: 'USD',
+          },
+        },
+      });
+
+      return createAPIResponse({
+        data: {
           sessionId: session.id,
-          amount: (selectedPlan.price || 0) * 100, // Store in cents
-          currency: 'USD'
-        }
-      }
-    });
+          url: session.url,
+        },
+      });
+    } catch (error) {
+      console.error('Error creating checkout session:', error);
 
-    return createAPIResponse({
-      data: {
-        sessionId: session.id,
-        url: session.url
+      if (error instanceof z.ZodError) {
+        throw new ValidationError('Invalid request data');
       }
-    });
 
-  } catch (error) {
-    console.error('Error creating checkout session:', error);
-    
-    if (error instanceof z.ZodError) {
-      throw new ValidationError('Invalid request data');
+      throw error;
     }
-    
-    throw error;
-  }
-},
+  },
   { requireAuth: true }
-); 
+);

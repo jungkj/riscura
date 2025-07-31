@@ -36,12 +36,12 @@ export class MemoryRateLimitStore implements RateLimitStore {
   async increment(key: string, windowMs: number): Promise<{ totalHits: number; reset: Date }> {
     const now = new Date();
     const windowStart = new Date(now.getTime() - windowMs);
-    
+
     // Clean up expired entries
     this.cleanup(windowStart);
-    
+
     const existing = this.store.get(key);
-    
+
     if (!existing || existing.reset <= now) {
       // Create new entry
       const reset = new Date(now.getTime() + windowMs);
@@ -89,25 +89,25 @@ export class RedisRateLimitStore implements RateLimitStore {
     const now = Date.now();
     const windowStart = now - windowMs;
     const reset = new Date(now + windowMs);
-    
+
     // Use Redis pipeline for atomic operations
     const pipeline = this.redis.pipeline();
-    
+
     // Remove expired entries
     pipeline.zremrangebyscore(key, 0, windowStart);
-    
+
     // Add current request
     pipeline.zadd(key, now, `${now}-${Math.random()}`);
-    
+
     // Count current requests in window
     pipeline.zcard(key);
-    
+
     // Set expiration
     pipeline.expire(key, Math.ceil(windowMs / 1000));
-    
+
     const results = await pipeline.exec();
     const totalHits = results[2][1]; // Count result
-    
+
     return { totalHits, reset };
   }
 
@@ -140,22 +140,22 @@ export class RateLimiter {
       skipFailedRequests: config.skipFailedRequests || false,
       message: config.message || 'Too many requests, please try again later',
       standardHeaders: config.standardHeaders !== false,
-      legacyHeaders: config.legacyHeaders !== false
+      legacyHeaders: config.legacyHeaders !== false,
     };
   }
 
   async checkLimit(request: NextRequest): Promise<RateLimitResult> {
     const key = this.config.keyGenerator(request);
     const { totalHits, reset } = await this.store.increment(key, this.config.windowMs);
-    
+
     const remaining = Math.max(0, this.config.max - totalHits);
     const success = totalHits <= this.config.max;
-    
+
     const result: RateLimitResult = {
       success,
       limit: this.config.max,
       remaining,
-      reset
+      reset,
     };
 
     if (!success) {
@@ -167,11 +167,11 @@ export class RateLimiter {
 
   async handleRequest(request: NextRequest): Promise<RateLimitResult> {
     const result = await this.checkLimit(request);
-    
+
     if (!result.success) {
       throw createRateLimitError(result.retryAfter!, result.limit, result.remaining);
     }
-    
+
     return result;
   }
 
@@ -180,7 +180,7 @@ export class RateLimiter {
     const forwarded = request.headers.get('x-forwarded-for');
     const ip = forwarded ? forwarded.split(',')[0] : request.headers.get('x-real-ip') || 'unknown';
     const userId = request.headers.get('x-user-id'); // Assuming user ID is set in headers after auth
-    
+
     return userId || ip;
   }
 
@@ -208,62 +208,70 @@ export class RateLimiter {
 }
 
 // Pre-configured rate limiters for different endpoint types
-export const createStandardRateLimiter = () => new RateLimiter({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 1000, // 1000 requests per 15 minutes
-  message: 'Too many requests from this client'
-});
+export const createStandardRateLimiter = () =>
+  new RateLimiter({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 1000, // 1000 requests per 15 minutes
+    message: 'Too many requests from this client',
+  });
 
-export const createAuthRateLimiter = () => new RateLimiter({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // 5 login attempts per 15 minutes
-  keyGenerator: (request) => {
-    const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 
-               request.headers.get('x-real-ip') || 'unknown';
-    return `auth:${ip}`;
-  },
-  message: 'Too many authentication attempts, please try again later'
-});
+export const createAuthRateLimiter = () =>
+  new RateLimiter({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5, // 5 login attempts per 15 minutes
+    keyGenerator: (request) => {
+      const ip =
+        request.headers.get('x-forwarded-for')?.split(',')[0] ||
+        request.headers.get('x-real-ip') ||
+        'unknown';
+      return `auth:${ip}`;
+    },
+    message: 'Too many authentication attempts, please try again later',
+  });
 
-export const createFileUploadRateLimiter = () => new RateLimiter({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 50, // 50 file uploads per hour
-  keyGenerator: (request) => {
-    const userId = request.headers.get('x-user-id') || 'anonymous';
-    return `upload:${userId}`;
-  },
-  message: 'Too many file uploads, please try again later'
-});
+export const createFileUploadRateLimiter = () =>
+  new RateLimiter({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 50, // 50 file uploads per hour
+    keyGenerator: (request) => {
+      const userId = request.headers.get('x-user-id') || 'anonymous';
+      return `upload:${userId}`;
+    },
+    message: 'Too many file uploads, please try again later',
+  });
 
-export const createExpensiveOperationRateLimiter = () => new RateLimiter({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 10, // 10 expensive operations per hour (like assessment execution)
-  keyGenerator: (request) => {
-    const userId = request.headers.get('x-user-id') || 'anonymous';
-    return `expensive:${userId}`;
-  },
-  message: 'Too many resource-intensive operations, please try again later'
-});
+export const createExpensiveOperationRateLimiter = () =>
+  new RateLimiter({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 10, // 10 expensive operations per hour (like assessment execution)
+    keyGenerator: (request) => {
+      const userId = request.headers.get('x-user-id') || 'anonymous';
+      return `expensive:${userId}`;
+    },
+    message: 'Too many resource-intensive operations, please try again later',
+  });
 
-export const createBulkOperationRateLimiter = () => new RateLimiter({
-  windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 5, // 5 bulk operations per 10 minutes
-  keyGenerator: (request) => {
-    const userId = request.headers.get('x-user-id') || 'anonymous';
-    return `bulk:${userId}`;
-  },
-  message: 'Too many bulk operations, please try again later'
-});
+export const createBulkOperationRateLimiter = () =>
+  new RateLimiter({
+    windowMs: 10 * 60 * 1000, // 10 minutes
+    max: 5, // 5 bulk operations per 10 minutes
+    keyGenerator: (request) => {
+      const userId = request.headers.get('x-user-id') || 'anonymous';
+      return `bulk:${userId}`;
+    },
+    message: 'Too many bulk operations, please try again later',
+  });
 
-export const createReportGenerationRateLimiter = () => new RateLimiter({
-  windowMs: 30 * 60 * 1000, // 30 minutes
-  max: 20, // 20 reports per 30 minutes
-  keyGenerator: (request) => {
-    const userId = request.headers.get('x-user-id') || 'anonymous';
-    return `report:${userId}`;
-  },
-  message: 'Too many report generation requests, please try again later'
-});
+export const createReportGenerationRateLimiter = () =>
+  new RateLimiter({
+    windowMs: 30 * 60 * 1000, // 30 minutes
+    max: 20, // 20 reports per 30 minutes
+    keyGenerator: (request) => {
+      const userId = request.headers.get('x-user-id') || 'anonymous';
+      return `report:${userId}`;
+    },
+    message: 'Too many report generation requests, please try again later',
+  });
 
 // Rate limiter manager
 export class RateLimiterManager {
@@ -293,14 +301,14 @@ export class RateLimiterManager {
 
   async checkLimits(request: NextRequest, types: string[]): Promise<RateLimitResult[]> {
     const results = await Promise.all(
-      types.map(type => this.getLimiter(type).checkLimit(request))
+      types.map((type) => this.getLimiter(type).checkLimit(request))
     );
     return results;
   }
 
   async handleRequest(request: NextRequest, types: string[]): Promise<RateLimitResult[]> {
     const results = await Promise.all(
-      types.map(type => this.getLimiter(type).handleRequest(request))
+      types.map((type) => this.getLimiter(type).handleRequest(request))
     );
     return results;
   }
@@ -349,13 +357,15 @@ export async function applyRateLimit(
   try {
     const url = new URL(request.url);
     const applicableLimiters = limiters || getRateLimiterForEndpoint(url.pathname, request.method);
-    
+
     const results = await rateLimiterManager.handleRequest(request, applicableLimiters);
-    
+
     // Combine headers from all rate limiters
     const headers: Record<string, string> = {};
     results.forEach((result, index) => {
-      const limiterHeaders = rateLimiterManager.getLimiter(applicableLimiters[index]).getRateLimitHeaders(result);
+      const limiterHeaders = rateLimiterManager
+        .getLimiter(applicableLimiters[index])
+        .getRateLimitHeaders(result);
       Object.assign(headers, limiterHeaders);
     });
 
@@ -377,7 +387,7 @@ export function withRateLimit(limiters?: string[]) {
     descriptor.value = async function (...args: T): Promise<R> {
       // Assume first argument is NextRequest
       const request = args[0] as NextRequest;
-      
+
       const rateLimitResult = await applyRateLimit(request, limiters);
       if (!rateLimitResult.success) {
         throw rateLimitResult.error;
@@ -396,6 +406,6 @@ export function extractRateLimitInfo(result: RateLimitResult) {
     limit: result.limit,
     remaining: result.remaining,
     reset: result.reset,
-    retryAfter: result.retryAfter
+    retryAfter: result.retryAfter,
   };
-} 
+}

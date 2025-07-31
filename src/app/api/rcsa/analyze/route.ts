@@ -16,10 +16,10 @@ export const POST = withApiMiddleware({
   rateLimiters: ['expensive'],
 })(async (context, validatedData) => {
   const { type, content, fileName } = validatedData;
-  
+
   try {
     let parsedData;
-    
+
     if (type === 'file' && content) {
       // Parse base64 encoded Excel file
       const buffer = Buffer.from(content, 'base64');
@@ -30,45 +30,44 @@ export const POST = withApiMiddleware({
     } else {
       return {
         success: false,
-        error: 'Invalid input data'
+        error: 'Invalid input data',
       };
     }
-    
+
     if (parsedData.errors.length > 0) {
       return {
         success: false,
         errors: parsedData.errors,
-        warnings: parsedData.warnings
+        warnings: parsedData.warnings,
       };
     }
-    
+
     if (parsedData.rows.length === 0) {
       return {
         success: false,
-        error: 'No valid data found to analyze'
+        error: 'No valid data found to analyze',
       };
     }
-    
+
     // Perform AI gap analysis
     const analysis = await analyzeRCSAData(parsedData.rows);
-    
+
     // Store analysis in session or temporary storage for review
     // This would be implemented based on your session management approach
-    
+
     return {
       success: true,
       data: {
         analysis,
         rowCount: parsedData.rows.length,
-        warnings: parsedData.warnings
-      }
+        warnings: parsedData.warnings,
+      },
     };
-    
   } catch (error) {
     console.error('RCSA analysis error:', error);
     return {
       success: false,
-      error: 'Failed to analyze RCSA data'
+      error: 'Failed to analyze RCSA data',
     };
   }
 });

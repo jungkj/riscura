@@ -54,75 +54,75 @@ providers.push(
       password: { label: 'Password', type: 'password' },
     },
     async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
+      if (!credentials?.email || !credentials?.password) {
+        return null;
+      }
 
-        try {
-          // Check for demo credentials first
-          if (credentials.email === 'admin@riscura.com' && credentials.password === 'admin123') {
-            return {
-              id: 'demo-admin-id',
-              email: 'admin@riscura.com',
-              name: 'Demo Admin',
-              firstName: 'Demo',
-              lastName: 'Admin',
-              role: 'ADMIN',
-              organizationId: 'demo-org-id',
-              permissions: ['*'],
-            };
-          }
-
-          // Database authentication with health check
-          const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }));
-          
-          if (!isHealthy.isHealthy) {
-            console.warn('[NextAuth] Database not available, falling back to demo mode only');
-            return null;
-          }
-
-          const user = await db.client.user.findUnique({
-            where: { email: credentials.email.toLowerCase() },
-            include: {
-              organization: true,
-            },
-          });
-
-          if (!user || !user.passwordHash) {
-            return null;
-          }
-
-          if (!user.isActive) {
-            throw new Error('Account is deactivated');
-          }
-
-          if (!user.emailVerified && env.NODE_ENV === 'production') {
-            throw new Error('Email not verified');
-          }
-
-          const isPasswordValid = await verifyPassword(credentials.password, user.passwordHash);
-          if (!isPasswordValid) {
-            return null;
-          }
-
-          // Update last login
-          await db.client.user.update({
-            where: { id: user.id },
-            data: { lastLogin: new Date() },
-          });
-
+      try {
+        // Check for demo credentials first
+        if (credentials.email === 'admin@riscura.com' && credentials.password === 'admin123') {
           return {
-            id: user.id,
-            email: user.email,
-            name: `${user.firstName} ${user.lastName}`,
-            image: user.avatar,
-          } as any;
-        } catch (error) {
-          console.error('Authentication error:', error);
+            id: 'demo-admin-id',
+            email: 'admin@riscura.com',
+            name: 'Demo Admin',
+            firstName: 'Demo',
+            lastName: 'Admin',
+            role: 'ADMIN',
+            organizationId: 'demo-org-id',
+            permissions: ['*'],
+          };
+        }
+
+        // Database authentication with health check
+        const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }));
+
+        if (!isHealthy.isHealthy) {
+          console.warn('[NextAuth] Database not available, falling back to demo mode only');
           return null;
         }
-      },
-    })
+
+        const user = await db.client.user.findUnique({
+          where: { email: credentials.email.toLowerCase() },
+          include: {
+            organization: true,
+          },
+        });
+
+        if (!user || !user.passwordHash) {
+          return null;
+        }
+
+        if (!user.isActive) {
+          throw new Error('Account is deactivated');
+        }
+
+        if (!user.emailVerified && env.NODE_ENV === 'production') {
+          throw new Error('Email not verified');
+        }
+
+        const isPasswordValid = await verifyPassword(credentials.password, user.passwordHash);
+        if (!isPasswordValid) {
+          return null;
+        }
+
+        // Update last login
+        await db.client.user.update({
+          where: { id: user.id },
+          data: { lastLogin: new Date() },
+        });
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: `${user.firstName} ${user.lastName}`,
+          image: user.avatar,
+        } as any;
+      } catch (error) {
+        console.error('Authentication error:', error);
+        return null;
+      }
+    },
+  })
 );
 
 // Initialize database adapter with proper error handling
@@ -132,7 +132,7 @@ async function getDatabaseAdapter() {
     console.log('[NextAuth] Skipping database adapter during build');
     return null;
   }
-  
+
   if (typeof window !== 'undefined') {
     return null; // Client side
   }
@@ -140,7 +140,7 @@ async function getDatabaseAdapter() {
   try {
     // Check database connection first
     const healthCheck = await db.healthCheck().catch(() => ({ isHealthy: false }));
-    
+
     if (healthCheck.isHealthy) {
       console.log('[NextAuth] Database adapter initialized successfully');
       return PrismaAdapter(db.client);
@@ -170,7 +170,7 @@ export const authOptions: NextAuthOptions = {
       const payload = {
         ...token,
         iat: Math.floor(Date.now() / 1000),
-        exp: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60),
+        exp: Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60,
       };
       return jwt.sign(payload, secret, { algorithm: 'HS256' });
     },
@@ -202,13 +202,13 @@ export const authOptions: NextAuthOptions = {
         email: user?.email,
         accountId: account?.providerAccountId,
       });
-      
+
       // Handle Google OAuth sign-in
       if (account?.provider === 'google') {
         try {
           // Check database connection
           const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }));
-          
+
           if (!isHealthy.isHealthy) {
             // Database not available, allow OAuth login without persistence
             console.warn('[NextAuth] Database not available, OAuth login without persistence');
@@ -217,7 +217,7 @@ export const authOptions: NextAuthOptions = {
 
           // Check if user exists
           const existingUser = await db.client.user.findUnique({
-            where: { email: user.email! }
+            where: { email: user.email! },
           });
 
           if (!existingUser) {
@@ -250,13 +250,13 @@ export const authOptions: NextAuthOptions = {
         try {
           // Get user data from database for JWT
           const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }));
-          
+
           if (isHealthy.isHealthy) {
             const dbUser = await db.client.user.findUnique({
               where: { id: user.id },
               include: { organization: true },
             });
-            
+
             if (dbUser) {
               token.id = dbUser.id;
               token.role = dbUser.role;
@@ -279,10 +279,13 @@ export const authOptions: NextAuthOptions = {
       }
 
       // Refresh user data periodically (but less frequently to avoid DB strain)
-      if (token.id && (!token.lastRefresh || Date.now() - (token.lastRefresh as number) > 15 * 60 * 1000)) {
+      if (
+        token.id &&
+        (!token.lastRefresh || Date.now() - (token.lastRefresh as number) > 15 * 60 * 1000)
+      ) {
         try {
           const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }));
-          
+
           if (isHealthy.isHealthy) {
             const dbUser = await db.client.user.findUnique({
               where: { id: token.id as string },
@@ -323,7 +326,11 @@ export const authOptions: NextAuthOptions = {
         (session.user as any).sessionId = token.sessionId as string;
 
         // Validate session is still active (but less frequently)
-        if (token.sessionId && (!token.lastSessionCheck || Date.now() - (token.lastSessionCheck as number) > 30 * 60 * 1000)) {
+        if (
+          token.sessionId &&
+          (!token.lastSessionCheck ||
+            Date.now() - (token.lastSessionCheck as number) > 30 * 60 * 1000)
+        ) {
           try {
             const isValid = await validateSession(token.sessionId as string);
             if (!isValid) {
@@ -340,11 +347,11 @@ export const authOptions: NextAuthOptions = {
     },
     async redirect({ url, baseUrl }) {
       // Allows relative callback URLs
-      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      if (url.startsWith('/')) return `${baseUrl}${url}`;
       // Allows callback URLs on the same origin
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl + '/dashboard';
-    }
+    },
   },
   pages: {
     signIn: '/auth/login',
@@ -356,12 +363,12 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user, account, isNewUser }) {
       // Log successful sign-in
       console.log(`User ${user.email} signed in with ${account?.provider || 'credentials'}`);
-      
+
       // Create activity log if database is available
       if (user.id && user.id !== 'demo-admin-id') {
         try {
           const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }));
-          
+
           if (isHealthy.isHealthy) {
             await db.client.activity.create({
               data: {
@@ -387,7 +394,7 @@ export const authOptions: NextAuthOptions = {
       if (token?.id && token.id !== 'demo-admin-id') {
         try {
           const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }));
-          
+
           if (isHealthy.isHealthy) {
             await db.client.activity.create({
               data: {
@@ -411,12 +418,14 @@ export const authOptions: NextAuthOptions = {
 };
 
 // Initialize adapter dynamically
-getDatabaseAdapter().then(adapter => {
-  if (adapter) {
-    authOptions.adapter = adapter;
-  }
-}).catch(error => {
-  console.error('[NextAuth] Failed to set database adapter:', error);
-});
+getDatabaseAdapter()
+  .then((adapter) => {
+    if (adapter) {
+      authOptions.adapter = adapter;
+    }
+  })
+  .catch((error) => {
+    console.error('[NextAuth] Failed to set database adapter:', error);
+  });
 
 export default authOptions;

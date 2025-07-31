@@ -114,7 +114,11 @@ class AlertingSystem {
           timeWindow: 5, // 5 minutes
           minSamples: 10,
         },
-        channels: [NotificationChannel.SLACK, NotificationChannel.EMAIL, NotificationChannel.PAGERDUTY],
+        channels: [
+          NotificationChannel.SLACK,
+          NotificationChannel.EMAIL,
+          NotificationChannel.PAGERDUTY,
+        ],
         escalation: {
           timeToEscalate: 15, // 15 minutes
           escalationChannels: [NotificationChannel.SMS, NotificationChannel.PAGERDUTY],
@@ -143,7 +147,7 @@ class AlertingSystem {
         enabled: true,
         cooldown: 45,
       },
-      
+
       // Warning Level Alerts
       {
         id: 'elevated-error-rate',
@@ -179,7 +183,7 @@ class AlertingSystem {
         enabled: true,
         cooldown: 30,
       },
-      
+
       // Security Alerts
       {
         id: 'failed-login-attempts',
@@ -202,7 +206,7 @@ class AlertingSystem {
         enabled: true,
         cooldown: 15,
       },
-      
+
       // Business Metric Alerts
       {
         id: 'low-document-processing-success',
@@ -240,7 +244,7 @@ class AlertingSystem {
       },
     ];
 
-    defaultRules.forEach(rule => this.rules.set(rule.id, rule));
+    defaultRules.forEach((rule) => this.rules.set(rule.id, rule));
   }
 
   /**
@@ -274,7 +278,7 @@ class AlertingSystem {
    */
   private evaluateRule(rule: AlertRule, value: number, context: Record<string, any>): void {
     const conditionMet = this.checkCondition(rule.condition, value);
-    
+
     if (conditionMet) {
       this.triggerAlert(rule, value, context);
     } else {
@@ -288,12 +292,18 @@ class AlertingSystem {
    */
   private checkCondition(condition: any, value: number): boolean {
     switch (condition.operator) {
-      case 'gt': return value > condition.threshold;
-      case 'gte': return value >= condition.threshold;
-      case 'lt': return value < condition.threshold;
-      case 'lte': return value <= condition.threshold;
-      case 'eq': return value === condition.threshold;
-      default: return false;
+      case 'gt':
+        return value > condition.threshold;
+      case 'gte':
+        return value >= condition.threshold;
+      case 'lt':
+        return value < condition.threshold;
+      case 'lte':
+        return value <= condition.threshold;
+      case 'eq':
+        return value === condition.threshold;
+      default:
+        return false;
     }
   }
 
@@ -302,14 +312,15 @@ class AlertingSystem {
    */
   private triggerAlert(rule: AlertRule, value: number, context: Record<string, any>): void {
     const alertId = `${rule.id}-${Date.now()}`;
-    const existingAlert = Array.from(this.activeAlerts.values())
-      .find(alert => alert.ruleId === rule.id && !alert.resolved);
+    const existingAlert = Array.from(this.activeAlerts.values()).find(
+      (alert) => alert.ruleId === rule.id && !alert.resolved
+    );
 
     // Check cooldown period
     const lastNotification = this.lastNotificationTime.get(rule.id);
     const cooldownPeriod = rule.cooldown * 60 * 1000; // Convert to milliseconds
-    
-    if (lastNotification && (Date.now() - lastNotification) < cooldownPeriod) {
+
+    if (lastNotification && Date.now() - lastNotification < cooldownPeriod) {
       return; // Still in cooldown period
     }
 
@@ -339,9 +350,12 @@ class AlertingSystem {
 
       // Set up escalation timer
       if (rule.escalation) {
-        setTimeout(() => {
-          this.escalateAlert(alert, rule);
-        }, rule.escalation.timeToEscalate * 60 * 1000);
+        setTimeout(
+          () => {
+            this.escalateAlert(alert, rule);
+          },
+          rule.escalation.timeToEscalate * 60 * 1000
+        );
       }
 
       // Log to Sentry
@@ -372,7 +386,7 @@ class AlertingSystem {
         await this.sendNotification(alert, channel);
       } catch (error) {
         console.error(`Failed to send notification via ${channel}:`, error);
-        
+
         // Log notification failure
         Sentry.captureException(error, {
           tags: {
@@ -389,7 +403,7 @@ class AlertingSystem {
    */
   private async sendNotification(alert: Alert, channel: NotificationChannel): Promise<void> {
     const message = this.formatAlertMessage(alert);
-    
+
     switch (channel) {
       case NotificationChannel.SLACK:
         await this.sendSlackNotification(alert, message);
@@ -429,7 +443,7 @@ class AlertingSystem {
   private formatAlertMessage(alert: Alert): string {
     const severity = alert.severity.toUpperCase();
     const timestamp = new Date(alert.timestamp).toISOString();
-    
+
     return `🚨 ${severity} ALERT: ${alert.name}
 
 Description: ${alert.description}
@@ -458,13 +472,15 @@ Alert ID: ${alert.id}`;
     const color = this.getSeverityColor(alert.severity);
     const payload = {
       text: `Alert: ${alert.name}`,
-      attachments: [{
-        color,
-        title: `${alert.severity.toUpperCase()}: ${alert.name}`,
-        text: message,
-        footer: 'RISCURA Monitoring',
-        ts: Math.floor(alert.timestamp / 1000),
-      }],
+      attachments: [
+        {
+          color,
+          title: `${alert.severity.toUpperCase()}: ${alert.name}`,
+          text: message,
+          footer: 'RISCURA Monitoring',
+          ts: Math.floor(alert.timestamp / 1000),
+        },
+      ],
     };
 
     const response = await fetch(webhookUrl, {
@@ -483,7 +499,7 @@ Alert ID: ${alert.id}`;
    */
   private async sendEmailNotification(alert: Alert, message: string): Promise<void> {
     const recipients = process.env.ALERT_EMAIL_RECIPIENTS?.split(',') || [];
-    
+
     const payload = {
       to: recipients,
       subject: `${alert.severity.toUpperCase()} Alert: ${alert.name}`,
@@ -507,9 +523,9 @@ Alert ID: ${alert.id}`;
    */
   private async sendSMSNotification(alert: Alert, message: string): Promise<void> {
     const phoneNumbers = process.env.ALERT_PHONE_NUMBERS?.split(',') || [];
-    
+
     const shortMessage = `${alert.severity.toUpperCase()}: ${alert.name} - Value: ${alert.value}, Threshold: ${alert.threshold}`;
-    
+
     const payload = {
       to: phoneNumbers,
       message: shortMessage,
@@ -601,17 +617,19 @@ Alert ID: ${alert.id}`;
     }
 
     const color = parseInt(this.getSeverityColor(alert.severity).replace('#', ''), 16);
-    
+
     const payload = {
-      embeds: [{
-        title: `${alert.severity.toUpperCase()}: ${alert.name}`,
-        description: message,
-        color,
-        timestamp: new Date(alert.timestamp).toISOString(),
-        footer: {
-          text: 'RISCURA Monitoring',
+      embeds: [
+        {
+          title: `${alert.severity.toUpperCase()}: ${alert.name}`,
+          description: message,
+          color,
+          timestamp: new Date(alert.timestamp).toISOString(),
+          footer: {
+            text: 'RISCURA Monitoring',
+          },
         },
-      }],
+      ],
     };
 
     const response = await fetch(webhookUrl, {
@@ -634,7 +652,7 @@ Alert ID: ${alert.id}`;
     }
 
     alert.escalated = true;
-    
+
     if (rule.escalation) {
       for (const channel of rule.escalation.escalationChannels) {
         try {
@@ -659,8 +677,9 @@ Alert ID: ${alert.id}`;
    * Check for alert resolution
    */
   private checkAlertResolution(ruleId: string, currentValue: number): void {
-    const activeAlert = Array.from(this.activeAlerts.values())
-      .find(alert => alert.ruleId === ruleId && !alert.resolved);
+    const activeAlert = Array.from(this.activeAlerts.values()).find(
+      (alert) => alert.ruleId === ruleId && !alert.resolved
+    );
 
     if (activeAlert) {
       const rule = this.rules.get(ruleId);
@@ -677,10 +696,10 @@ Alert ID: ${alert.id}`;
     const alert = this.activeAlerts.get(alertId);
     if (alert && !alert.resolved) {
       alert.resolved = true;
-      
+
       // Send resolution notification
       const message = `✅ RESOLVED: ${alert.name}\n\nAlert has been automatically resolved.\nAlert ID: ${alertId}`;
-      
+
       // Send to Slack only for resolution notifications
       this.sendSlackNotification(alert, message).catch(console.error);
 
@@ -704,7 +723,7 @@ Alert ID: ${alert.id}`;
     const alert = this.activeAlerts.get(alertId);
     if (alert && !alert.acknowledged) {
       alert.acknowledged = true;
-      
+
       // Log acknowledgment
       Sentry.addBreadcrumb({
         category: 'alert-acknowledgment',
@@ -730,8 +749,8 @@ Alert ID: ${alert.id}`;
    * Clean up old alerts
    */
   private cleanupOldAlerts(): void {
-    const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
-    
+    const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+
     // Remove old resolved alerts
     for (const [id, alert] of this.activeAlerts.entries()) {
       if (alert.resolved && alert.timestamp < sevenDaysAgo) {
@@ -740,11 +759,11 @@ Alert ID: ${alert.id}`;
     }
 
     // Trim alert history
-    this.alertHistory = this.alertHistory.filter(alert => alert.timestamp > sevenDaysAgo);
-    
+    this.alertHistory = this.alertHistory.filter((alert) => alert.timestamp > sevenDaysAgo);
+
     // Trim notification history
     this.notificationHistory = this.notificationHistory.filter(
-      notification => notification.timestamp > sevenDaysAgo
+      (notification) => notification.timestamp > sevenDaysAgo
     );
   }
 
@@ -753,21 +772,33 @@ Alert ID: ${alert.id}`;
    */
   private getSeverityColor(severity: AlertSeverity): string {
     switch (severity) {
-      case AlertSeverity.INFO: return '#36a64f';
-      case AlertSeverity.WARNING: return '#ffcc00';
-      case AlertSeverity.ERROR: return '#ff6600';
-      case AlertSeverity.CRITICAL: return '#ff0000';
-      default: return '#808080';
+      case AlertSeverity.INFO:
+        return '#36a64f';
+      case AlertSeverity.WARNING:
+        return '#ffcc00';
+      case AlertSeverity.ERROR:
+        return '#ff6600';
+      case AlertSeverity.CRITICAL:
+        return '#ff0000';
+      default:
+        return '#808080';
     }
   }
 
-  private mapSeverityToSentryLevel(severity: AlertSeverity): 'info' | 'warning' | 'error' | 'fatal' {
+  private mapSeverityToSentryLevel(
+    severity: AlertSeverity
+  ): 'info' | 'warning' | 'error' | 'fatal' {
     switch (severity) {
-      case AlertSeverity.INFO: return 'info';
-      case AlertSeverity.WARNING: return 'warning';
-      case AlertSeverity.ERROR: return 'error';
-      case AlertSeverity.CRITICAL: return 'fatal';
-      default: return 'info';
+      case AlertSeverity.INFO:
+        return 'info';
+      case AlertSeverity.WARNING:
+        return 'warning';
+      case AlertSeverity.ERROR:
+        return 'error';
+      case AlertSeverity.CRITICAL:
+        return 'fatal';
+      default:
+        return 'info';
     }
   }
 
@@ -780,13 +811,13 @@ Alert ID: ${alert.id}`;
       [NotificationChannel.PAGERDUTY]: 'PagerDuty Service',
       [NotificationChannel.DISCORD]: 'Discord Channel',
     };
-    
+
     return recipients[channel] || 'Unknown';
   }
 
   private formatEmailHTML(alert: Alert, message: string): string {
     const color = this.getSeverityColor(alert.severity);
-    
+
     return `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background-color: ${color}; color: white; padding: 20px; text-align: center;">
@@ -865,4 +896,4 @@ export const getActiveAlerts = () => {
   return getAlertingSystem().getActiveAlerts();
 };
 
-export { type AlertRule, type Alert, type Notification }; 
+export { type AlertRule, type Alert, type Notification };

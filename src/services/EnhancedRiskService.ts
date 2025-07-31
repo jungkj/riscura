@@ -1,24 +1,24 @@
 'use client';
 
-import { 
-  EnhancedRisk, 
-  AISuggestions, 
-  BulkOperation, 
-  BulkUpdateData, 
+import {
+  EnhancedRisk,
+  AISuggestions,
+  BulkOperation,
+  BulkUpdateData,
   AdvancedRiskFilters,
   RiskAnalytics,
   RiskIntelligence,
   RiskTemplate,
   MitigationStrategy,
   WorkflowTransition,
-  TrendDataPoint
+  TrendDataPoint,
 } from '@/types/enhanced-risk.types';
 import { Risk } from '@/types';
 import { RiskAnalysisAIService } from './RiskAnalysisAIService';
 
 export class EnhancedRiskService {
   private aiService: RiskAnalysisAIService;
-  
+
   constructor() {
     this.aiService = new RiskAnalysisAIService();
   }
@@ -36,13 +36,13 @@ export class EnhancedRiskService {
             includeCategorization: true,
             includeScoring: true,
             includeMitigations: true,
-            includeControls: true
-          }
-        })
+            includeControls: true,
+          },
+        }),
       });
 
       const result = await response.json();
-      
+
       return {
         suggestedCategory: result.suggestedCategory,
         suggestedLikelihood: result.suggestedLikelihood,
@@ -50,7 +50,7 @@ export class EnhancedRiskService {
         suggestedMitigations: result.suggestedMitigations || [],
         suggestedControls: result.suggestedControls || [],
         reasoningExplanation: result.reasoning || 'AI analysis completed',
-        confidenceScore: result.confidence || 0.8
+        confidenceScore: result.confidence || 0.8,
       };
     } catch (error) {
       console.error('AI risk analysis failed:', error);
@@ -61,7 +61,7 @@ export class EnhancedRiskService {
         suggestedMitigations: [],
         suggestedControls: [],
         reasoningExplanation: 'AI analysis unavailable',
-        confidenceScore: 0
+        confidenceScore: 0,
       };
     }
   }
@@ -74,8 +74,8 @@ export class EnhancedRiskService {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: 'categorization',
-          data: { description, title }
-        })
+          data: { description, title },
+        }),
       });
 
       const result = await response.json();
@@ -100,25 +100,27 @@ export class EnhancedRiskService {
             category: risk.category,
             riskScore: risk.riskScore,
             likelihood: risk.likelihood,
-            impact: risk.impact
-          }
-        })
+            impact: risk.impact,
+          },
+        }),
       });
 
       const result = await response.json();
-      
-      return result.strategies?.map((strategy: any, index: number) => ({
-        id: `strategy-${Date.now()}-${index}`,
-        title: strategy.title,
-        description: strategy.description,
-        type: strategy.type || 'preventive',
-        status: 'planned',
-        effectiveness: strategy.effectiveness || 70,
-        cost: strategy.estimatedCost || 0,
-        timeline: strategy.timeline || 30,
-        owner: risk.riskOwner,
-        controls: strategy.relatedControls || []
-      })) || [];
+
+      return (
+        result.strategies?.map((strategy: any, index: number) => ({
+          id: `strategy-${Date.now()}-${index}`,
+          title: strategy.title,
+          description: strategy.description,
+          type: strategy.type || 'preventive',
+          status: 'planned',
+          effectiveness: strategy.effectiveness || 70,
+          cost: strategy.estimatedCost || 0,
+          timeline: strategy.timeline || 30,
+          owner: risk.riskOwner,
+          controls: strategy.relatedControls || [],
+        })) || []
+      );
     } catch (error) {
       console.error('Mitigation strategy generation failed:', error);
       return [];
@@ -127,10 +129,10 @@ export class EnhancedRiskService {
 
   // Workflow state transitions
   async transitionWorkflowState(
-    riskId: string, 
-    fromState: string, 
-    toState: string, 
-    userId: string, 
+    riskId: string,
+    fromState: string,
+    toState: string,
+    userId: string,
     reason?: string
   ): Promise<WorkflowTransition> {
     const transition: WorkflowTransition = {
@@ -140,7 +142,7 @@ export class EnhancedRiskService {
       transitionDate: new Date(),
       userId,
       reason,
-      autoTransition: false
+      autoTransition: false,
     };
 
     // Here you would typically update the database
@@ -149,7 +151,9 @@ export class EnhancedRiskService {
   }
 
   // Bulk operations
-  async performBulkOperation(operation: BulkOperation): Promise<{ success: boolean; errors?: string[] }> {
+  async performBulkOperation(
+    operation: BulkOperation
+  ): Promise<{ success: boolean; errors?: string[] }> {
     try {
       switch (operation.type) {
         case 'update':
@@ -171,7 +175,10 @@ export class EnhancedRiskService {
     }
   }
 
-  private async bulkUpdate(riskIds: string[], updateData: BulkUpdateData): Promise<{ success: boolean }> {
+  private async bulkUpdate(
+    riskIds: string[],
+    updateData: BulkUpdateData
+  ): Promise<{ success: boolean }> {
     // Implementation for bulk update
     console.log('Bulk updating risks:', riskIds, updateData);
     return { success: true };
@@ -203,7 +210,7 @@ export class EnhancedRiskService {
 
   // Advanced filtering
   filterRisks(risks: EnhancedRisk[], filters: AdvancedRiskFilters): EnhancedRisk[] {
-    return risks.filter(risk => {
+    return risks.filter((risk) => {
       // Category filter
       if (filters.category && filters.category.length > 0) {
         if (!filters.category.includes(risk.category)) return false;
@@ -243,8 +250,10 @@ export class EnhancedRiskService {
 
       // AI confidence filter
       if (filters.aiConfidenceRange) {
-        if (risk.aiConfidence < filters.aiConfidenceRange.min || 
-            risk.aiConfidence > filters.aiConfidenceRange.max) {
+        if (
+          risk.aiConfidence < filters.aiConfidenceRange.min ||
+          risk.aiConfidence > filters.aiConfidenceRange.max
+        ) {
           return false;
         }
       }
@@ -252,19 +261,16 @@ export class EnhancedRiskService {
       // Search query filter
       if (filters.searchQuery) {
         const query = filters.searchQuery.toLowerCase();
-        const searchableText = [
-          risk.title,
-          risk.description,
-          risk.owner,
-          ...risk.tags
-        ].join(' ').toLowerCase();
-        
+        const searchableText = [risk.title, risk.description, risk.owner, ...risk.tags]
+          .join(' ')
+          .toLowerCase();
+
         if (!searchableText.includes(query)) return false;
       }
 
       // Tags filter
       if (filters.tags && filters.tags.length > 0) {
-        if (!filters.tags.some(tag => risk.tags.includes(tag))) return false;
+        if (!filters.tags.some((tag) => risk.tags.includes(tag))) return false;
       }
 
       // Owner filter
@@ -294,27 +300,34 @@ export class EnhancedRiskService {
   // Analytics and insights
   async generateRiskAnalytics(risks: EnhancedRisk[]): Promise<RiskAnalytics> {
     const totalRisks = risks.length;
-    
-    const risksByCategory = risks.reduce((acc, risk) => {
-      acc[risk.category] = (acc[risk.category] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
 
-    const risksByStatus = risks.reduce((acc, risk) => {
-      acc[risk.status] = (acc[risk.status] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const risksByCategory = risks.reduce(
+      (acc, risk) => {
+        acc[risk.category] = (acc[risk.category] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
-    const risksByPriority = risks.reduce((acc, risk) => {
-      acc[risk.priority] = (acc[risk.priority] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const risksByStatus = risks.reduce(
+      (acc, risk) => {
+        acc[risk.status] = (acc[risk.status] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+
+    const risksByPriority = risks.reduce(
+      (acc, risk) => {
+        acc[risk.priority] = (acc[risk.priority] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     const averageRiskScore = risks.reduce((sum, risk) => sum + risk.riskScore, 0) / totalRisks;
 
-    const topRisks = risks
-      .sort((a, b) => b.riskScore - a.riskScore)
-      .slice(0, 10);
+    const topRisks = risks.sort((a, b) => b.riskScore - a.riskScore).slice(0, 10);
 
     // Calculate trend data (mock implementation)
     const trendData = this.calculateTrendData(risks);
@@ -329,7 +342,7 @@ export class EnhancedRiskService {
       topRisks,
       riskVelocity: this.calculateRiskVelocity(risks),
       mitigationEffectiveness: this.calculateMitigationEffectiveness(risks),
-      complianceScore: this.calculateComplianceScore(risks)
+      complianceScore: this.calculateComplianceScore(risks),
     };
   }
 
@@ -337,57 +350,54 @@ export class EnhancedRiskService {
     // Mock trend data calculation
     const now = new Date();
     const trendData: TrendDataPoint[] = [];
-    
+
     for (let i = 11; i >= 0; i--) {
       const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const monthRisks = risks.filter(risk => {
+      const monthRisks = risks.filter((risk) => {
         const riskDate = new Date(risk.createdAt);
-        return riskDate.getMonth() === date.getMonth() && 
-               riskDate.getFullYear() === date.getFullYear();
+        return (
+          riskDate.getMonth() === date.getMonth() && riskDate.getFullYear() === date.getFullYear()
+        );
       });
-      
+
       trendData.push({
         date,
         totalRisks: monthRisks.length,
-        averageScore: monthRisks.reduce((sum, risk) => sum + risk.riskScore, 0) / monthRisks.length || 0,
-        newRisks: monthRisks.filter(risk => risk.status === 'identified').length,
-        mitigatedRisks: monthRisks.filter(risk => risk.status === 'mitigated').length,
-        criticalRisks: monthRisks.filter(risk => risk.priority === 'critical').length
+        averageScore:
+          monthRisks.reduce((sum, risk) => sum + risk.riskScore, 0) / monthRisks.length || 0,
+        newRisks: monthRisks.filter((risk) => risk.status === 'identified').length,
+        mitigatedRisks: monthRisks.filter((risk) => risk.status === 'mitigated').length,
+        criticalRisks: monthRisks.filter((risk) => risk.priority === 'critical').length,
       });
     }
-    
+
     return trendData;
   }
 
   private calculateRiskVelocity(risks: EnhancedRisk[]): number {
     const now = new Date();
     const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    const newRisksLastMonth = risks.filter(risk => 
-      new Date(risk.createdAt) >= lastMonth
-    );
+    const newRisksLastMonth = risks.filter((risk) => new Date(risk.createdAt) >= lastMonth);
     return newRisksLastMonth.length;
   }
 
   private calculateMitigationEffectiveness(risks: EnhancedRisk[]): number {
-    const mitigatedRisks = risks.filter(risk => risk.status === 'mitigated');
-    const totalMitigations = risks.reduce((sum, risk) => 
-      sum + risk.mitigationStrategies.length, 0
-    );
-    
+    const mitigatedRisks = risks.filter((risk) => risk.status === 'mitigated');
+    const totalMitigations = risks.reduce((sum, risk) => sum + risk.mitigationStrategies.length, 0);
+
     if (totalMitigations === 0) return 0;
     return (mitigatedRisks.length / totalMitigations) * 100;
   }
 
   private calculateComplianceScore(risks: EnhancedRisk[]): number {
-    const complianceRisks = risks.filter(risk => 
-      risk.category === 'COMPLIANCE' || 
-      risk.regulatoryFrameworks.length > 0
+    const complianceRisks = risks.filter(
+      (risk) => risk.category === 'COMPLIANCE' || risk.regulatoryFrameworks.length > 0
     );
-    
-    const mitigatedComplianceRisks = complianceRisks.filter(risk => 
-      risk.workflowState === 'mitigated' || risk.workflowState === 'monitored'
+
+    const mitigatedComplianceRisks = complianceRisks.filter(
+      (risk) => risk.workflowState === 'mitigated' || risk.workflowState === 'monitored'
     );
-    
+
     if (complianceRisks.length === 0) return 100;
     return (mitigatedComplianceRisks.length / complianceRisks.length) * 100;
   }
@@ -400,8 +410,8 @@ export class EnhancedRiskService {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: 'correlation_analysis',
-          data: { risks }
-        })
+          data: { risks },
+        }),
       });
 
       const result = await response.json();
@@ -420,8 +430,8 @@ export class EnhancedRiskService {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: 'predictive_analysis',
-          data: { risks }
-        })
+          data: { risks },
+        }),
       });
 
       const result = await response.json();
@@ -438,12 +448,12 @@ export class EnhancedRiskService {
         forecastedRisks: [],
         trendPredictions: [],
         seasonalPatterns: [],
-        confidence: 0.7
+        confidence: 0.7,
       },
       correlationInsights: [],
       emergingRisks: [],
       industryBenchmarks: [],
-      recommendations: []
+      recommendations: [],
     };
   }
 
@@ -460,7 +470,7 @@ export class EnhancedRiskService {
         defaultImpact: 4,
         suggestedControls: ['firewall', 'encryption', 'access-control'],
         commonMitigations: ['Security training', 'System updates', 'Backup procedures'],
-        industryStandards: ['ISO 27001', 'NIST Cybersecurity Framework']
+        industryStandards: ['ISO 27001', 'NIST Cybersecurity Framework'],
       },
       {
         id: 'operational-template',
@@ -471,8 +481,8 @@ export class EnhancedRiskService {
         defaultImpact: 3,
         suggestedControls: ['process-documentation', 'quality-control', 'monitoring'],
         commonMitigations: ['Process improvement', 'Staff training', 'Quality assurance'],
-        industryStandards: ['ISO 9001', 'Six Sigma']
-      }
+        industryStandards: ['ISO 9001', 'Six Sigma'],
+      },
     ];
   }
 
@@ -492,7 +502,7 @@ export class EnhancedRiskService {
       mitigationStrategies: [],
       tags: [],
       regulatoryFrameworks: [],
-      complianceRequirements: []
+      complianceRequirements: [],
     };
   }
 
@@ -502,4 +512,4 @@ export class EnhancedRiskService {
     if (riskScore >= 8) return 'medium';
     return 'low';
   }
-} 
+}

@@ -1,5 +1,10 @@
 // Repository index - centralized access to all repositories
-export { BaseRepository, type IBaseRepository, type RepositoryResult, createPaginatedResult } from './base.repository';
+export {
+  BaseRepository,
+  type IBaseRepository,
+  type RepositoryResult,
+  createPaginatedResult,
+} from './base.repository';
 export type { RiskFilters, RiskWithControls } from './risk.repository';
 
 // Lazy import functions to avoid circular dependencies
@@ -20,4 +25,4 @@ export class RepositoryFactory implements IRepositoryFactory {
 }
 
 // Default factory instance
-export const repositoryFactory = new RepositoryFactory(); 
+export const repositoryFactory = new RepositoryFactory();

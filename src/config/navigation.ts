@@ -16,7 +16,7 @@ import {
   BarChart,
   Folder,
   Calendar,
-  type LucideIcon
+  type LucideIcon,
 } from 'lucide-react';
 
 export interface NavItem {
@@ -82,8 +82,8 @@ export const navigationSections: NavSection[] = [
         href: '/dashboard/activity',
         icon: Clock,
         description: 'Latest updates and changes',
-      }
-    ]
+      },
+    ],
   },
   {
     id: 'risk-operations',
@@ -123,8 +123,8 @@ export const navigationSections: NavSection[] = [
         href: '/dashboard/risks/heatmap',
         icon: Activity,
         description: 'Visual risk analysis',
-      }
-    ]
+      },
+    ],
   },
   {
     id: 'compliance-hub',
@@ -167,8 +167,8 @@ export const navigationSections: NavSection[] = [
         badge: 5,
         badgeVariant: 'warning',
         description: 'Control library and testing',
-      }
-    ]
+      },
+    ],
   },
   {
     id: 'insights-reports',
@@ -206,9 +206,9 @@ export const navigationSections: NavSection[] = [
         href: '/dashboard/documents',
         icon: Folder,
         description: 'Document library and policies',
-      }
-    ]
-  }
+      },
+    ],
+  },
 ];
 
 // Default favorites for new users
@@ -218,32 +218,37 @@ export const defaultFavorites: QuickAccessItem[] = [
     title: 'Dashboard',
     href: '/dashboard',
     icon: LayoutDashboard,
-    type: 'favorite'
+    type: 'favorite',
   },
   {
     id: 'risk-register',
     title: 'Risk Register',
     href: '/dashboard/risks',
     icon: Shield,
-    type: 'favorite'
+    type: 'favorite',
   },
   {
     id: 'aria-assistant',
     title: 'AI Insights',
     href: '/dashboard/aria',
     icon: Brain,
-    type: 'favorite'
-  }
+    type: 'favorite',
+  },
 ];
 
 // Helper functions
 export const getBadgeVariant = (variant?: string) => {
   switch (variant) {
-    case 'critical': return 'destructive';
-    case 'warning': return 'secondary';
-    case 'success': return 'default';
-    case 'info': return 'secondary';
-    default: return 'secondary';
+    case 'critical':
+      return 'destructive';
+    case 'warning':
+      return 'secondary';
+    case 'success':
+      return 'default';
+    case 'info':
+      return 'secondary';
+    default:
+      return 'secondary';
   }
 };
 
@@ -257,7 +262,7 @@ export const isItemActive = (href: string, pathname: string) => {
 
 export const findNavItemById = (id: string): NavItem | undefined => {
   for (const section of navigationSections) {
-    const item = section.items.find(item => item.id === id);
+    const item = section.items.find((item) => item.id === id);
     if (item) return item;
   }
   return undefined;
@@ -265,20 +270,21 @@ export const findNavItemById = (id: string): NavItem | undefined => {
 
 export const findNavItemByHref = (href: string): NavItem | undefined => {
   for (const section of navigationSections) {
-    const item = section.items.find(item => item.href === href);
+    const item = section.items.find((item) => item.href === href);
     if (item) return item;
   }
   return undefined;
 };
 
 export const getAllNavItems = (): NavItem[] => {
-  return navigationSections.flatMap(section => section.items);
+  return navigationSections.flatMap((section) => section.items);
 };
 
 export const searchNavItems = (query: string): NavItem[] => {
   const lowercaseQuery = query.toLowerCase();
-  return getAllNavItems().filter(item => 
-    item.title.toLowerCase().includes(lowercaseQuery) ||
-    item.description?.toLowerCase().includes(lowercaseQuery)
+  return getAllNavItems().filter(
+    (item) =>
+      item.title.toLowerCase().includes(lowercaseQuery) ||
+      item.description?.toLowerCase().includes(lowercaseQuery)
   );
-}; 
+};

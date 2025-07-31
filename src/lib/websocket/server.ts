@@ -70,7 +70,11 @@ export class CollaborationServer {
     this.startHeartbeat();
   }
 
-  private async verifyClient(info: { origin: string; secure: boolean; req: IncomingMessage }): Promise<boolean> {
+  private async verifyClient(info: {
+    origin: string;
+    secure: boolean;
+    req: IncomingMessage;
+  }): Promise<boolean> {
     try {
       const url = parse(info.req.url || '', true);
       const token = url.query.token as string;
@@ -81,7 +85,7 @@ export class CollaborationServer {
 
       // Verify JWT token
       const decoded = jwt.verify(token, env.JWT_SECRET) as any;
-      
+
       // Get user from database
       const user = await db.client.user.findUnique({
         where: { id: decoded.userId, isActive: true },
@@ -113,9 +117,7 @@ export class CollaborationServer {
         avatar: user.avatar,
         isOnline: true,
         lastSeen: new Date(),
-        permissions: user.userRoles.flatMap(ur => 
-          ur.role.permissions.map(p => p.name)
-        ),
+        permissions: user.userRoles.flatMap((ur) => ur.role.permissions.map((p) => p.name)),
       };
 
       return true;
@@ -128,7 +130,7 @@ export class CollaborationServer {
   private setupEventHandlers(): void {
     this.wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
       const user = (req as any).user as CollaborationUser;
-      
+
       if (!user) {
         ws.close(1008, 'Authentication failed');
         return;
@@ -160,7 +162,7 @@ export class CollaborationServer {
           const message = JSON.parse(data.toString()) as WebSocketMessage;
           message.userId = user.id;
           message.timestamp = new Date();
-          
+
           this.handleMessage(ws, message);
         } catch (error) {
           console.error('Invalid WebSocket message:', error);
@@ -193,60 +195,63 @@ export class CollaborationServer {
       case 'room:join':
         this.handleJoinRoom(user, message.payload);
         break;
-      
+
       case 'room:leave':
         this.handleLeaveRoom(user, message.payload);
         break;
-      
+
       case 'presence:update':
         this.handlePresenceUpdate(user, message.payload);
         break;
-      
+
       case 'cursor:move':
         this.handleCursorMove(user, message.payload);
         break;
-      
+
       case 'selection:change':
         this.handleSelectionChange(user, message.payload);
         break;
-      
+
       case 'typing:start':
       case 'typing:stop':
         this.handleTypingStatus(user, message);
         break;
-      
+
       case 'comment:create':
         this.handleCreateComment(user, message.payload);
         break;
-      
+
       case 'comment:update':
         this.handleUpdateComment(user, message.payload);
         break;
-      
+
       case 'comment:delete':
         this.handleDeleteComment(user, message.payload);
         break;
-      
+
       case 'document:edit':
         this.handleDocumentEdit(user, message.payload);
         break;
-      
+
       case 'task:update':
         this.handleTaskUpdate(user, message.payload);
         break;
-      
+
       case 'notification:send':
         this.handleSendNotification(user, message.payload);
         break;
-      
+
       default:
         console.warn('Unknown message type:', message.type);
     }
   }
 
-  private handleJoinRoom(user: CollaborationUser, payload: { roomId: string; entityType: string; entityId: string }): void {
+  private handleJoinRoom(
+    user: CollaborationUser,
+    payload: { roomId: string; entityType: string; entityId: string }
+  ): void {
     const { roomId, entityType, entityId } = payload;
-    
+
     // Create room if it doesn't exist
     if (!this.rooms.has(roomId)) {
       this.rooms.set(roomId, {
@@ -260,7 +265,7 @@ export class CollaborationServer {
     }
 
     const room = this.rooms.get(roomId)!;
-    
+
     // Add user to room
     room.participants.set(user.id, {
       userId: user.id,
@@ -272,12 +277,16 @@ export class CollaborationServer {
     room.lastActivity = new Date();
 
     // Notify other participants
-    this.broadcastToRoom(roomId, {
-      type: 'room:user_joined',
-      payload: { user, roomId },
-      timestamp: new Date(),
-      userId: user.id,
-    }, user.id);
+    this.broadcastToRoom(
+      roomId,
+      {
+        type: 'room:user_joined',
+        payload: { user, roomId },
+        timestamp: new Date(),
+        userId: user.id,
+      },
+      user.id
+    );
 
     // Send current room state to user
     this.sendToUser(user.id, {
@@ -296,19 +305,23 @@ export class CollaborationServer {
   private handleLeaveRoom(user: CollaborationUser, payload: { roomId: string }): void {
     const { roomId } = payload;
     const room = this.rooms.get(roomId);
-    
+
     if (!room) return;
 
     // Remove user from room
     room.participants.delete(user.id);
 
     // Notify other participants
-    this.broadcastToRoom(roomId, {
-      type: 'room:user_left',
-      payload: { user, roomId },
-      timestamp: new Date(),
-      userId: user.id,
-    }, user.id);
+    this.broadcastToRoom(
+      roomId,
+      {
+        type: 'room:user_left',
+        payload: { user, roomId },
+        timestamp: new Date(),
+        userId: user.id,
+      },
+      user.id
+    );
 
     // Clean up empty rooms
     if (room.participants.size === 0) {
@@ -318,7 +331,10 @@ export class CollaborationServer {
     console.log(`User ${user.email} left room ${roomId}`);
   }
 
-  private handlePresenceUpdate(user: CollaborationUser, payload: { currentPage?: string; status?: string }): void {
+  private handlePresenceUpdate(
+    user: CollaborationUser,
+    payload: { currentPage?: string; status?: string }
+  ): void {
     this.updateUserPresence(user.id, {
       currentPage: payload.currentPage,
       lastSeen: new Date(),
@@ -327,20 +343,27 @@ export class CollaborationServer {
     // Broadcast presence update to all rooms user is in
     for (const [roomId, room] of this.rooms.entries()) {
       if (room.participants.has(user.id)) {
-        this.broadcastToRoom(roomId, {
-          type: 'presence:updated',
-          payload: { userId: user.id, ...payload },
-          timestamp: new Date(),
-          userId: user.id,
-        }, user.id);
+        this.broadcastToRoom(
+          roomId,
+          {
+            type: 'presence:updated',
+            payload: { userId: user.id, ...payload },
+            timestamp: new Date(),
+            userId: user.id,
+          },
+          user.id
+        );
       }
     }
   }
 
-  private handleCursorMove(user: CollaborationUser, payload: { roomId: string; cursor: { x: number; y: number; elementId?: string } }): void {
+  private handleCursorMove(
+    user: CollaborationUser,
+    payload: { roomId: string; cursor: { x: number; y: number; elementId?: string } }
+  ): void {
     const { roomId, cursor } = payload;
     const room = this.rooms.get(roomId);
-    
+
     if (!room || !room.participants.has(user.id)) return;
 
     // Update user's cursor position
@@ -349,18 +372,25 @@ export class CollaborationServer {
     participant.lastActivity = new Date();
 
     // Broadcast cursor position to other participants
-    this.broadcastToRoom(roomId, {
-      type: 'cursor:moved',
-      payload: { userId: user.id, cursor },
-      timestamp: new Date(),
-      userId: user.id,
-    }, user.id);
+    this.broadcastToRoom(
+      roomId,
+      {
+        type: 'cursor:moved',
+        payload: { userId: user.id, cursor },
+        timestamp: new Date(),
+        userId: user.id,
+      },
+      user.id
+    );
   }
 
-  private handleSelectionChange(user: CollaborationUser, payload: { roomId: string; selection: { start: number; end: number; elementId: string } }): void {
+  private handleSelectionChange(
+    user: CollaborationUser,
+    payload: { roomId: string; selection: { start: number; end: number; elementId: string } }
+  ): void {
     const { roomId, selection } = payload;
     const room = this.rooms.get(roomId);
-    
+
     if (!room || !room.participants.has(user.id)) return;
 
     // Update user's selection
@@ -369,18 +399,22 @@ export class CollaborationServer {
     participant.lastActivity = new Date();
 
     // Broadcast selection to other participants
-    this.broadcastToRoom(roomId, {
-      type: 'selection:changed',
-      payload: { userId: user.id, selection },
-      timestamp: new Date(),
-      userId: user.id,
-    }, user.id);
+    this.broadcastToRoom(
+      roomId,
+      {
+        type: 'selection:changed',
+        payload: { userId: user.id, selection },
+        timestamp: new Date(),
+        userId: user.id,
+      },
+      user.id
+    );
   }
 
   private handleTypingStatus(user: CollaborationUser, message: WebSocketMessage): void {
     const { roomId } = message.payload;
     const room = this.rooms.get(roomId);
-    
+
     if (!room || !room.participants.has(user.id)) return;
 
     const isTyping = message.type === 'typing:start';
@@ -389,12 +423,16 @@ export class CollaborationServer {
     participant.lastActivity = new Date();
 
     // Broadcast typing status
-    this.broadcastToRoom(roomId, {
-      type: 'typing:status',
-      payload: { userId: user.id, isTyping },
-      timestamp: new Date(),
-      userId: user.id,
-    }, user.id);
+    this.broadcastToRoom(
+      roomId,
+      {
+        type: 'typing:status',
+        payload: { userId: user.id, isTyping },
+        timestamp: new Date(),
+        userId: user.id,
+      },
+      user.id
+    );
   }
 
   private async handleCreateComment(user: CollaborationUser, payload: any): Promise<void> {
@@ -468,7 +506,6 @@ export class CollaborationServer {
           isPublic: true,
         },
       });
-
     } catch (error) {
       console.error('Failed to create comment:', error);
       this.sendToUser(user.id, {
@@ -513,7 +550,6 @@ export class CollaborationServer {
         timestamp: new Date(),
         userId: user.id,
       });
-
     } catch (error) {
       console.error('Failed to update comment:', error);
       this.sendToUser(user.id, {
@@ -547,7 +583,6 @@ export class CollaborationServer {
         timestamp: new Date(),
         userId: user.id,
       });
-
     } catch (error) {
       console.error('Failed to delete comment:', error);
       this.sendToUser(user.id, {
@@ -561,14 +596,18 @@ export class CollaborationServer {
 
   private handleDocumentEdit(user: CollaborationUser, payload: any): void {
     const { roomId, operation } = payload;
-    
+
     // Broadcast edit operation to other participants
-    this.broadcastToRoom(roomId, {
-      type: 'document:edited',
-      payload: { userId: user.id, operation },
-      timestamp: new Date(),
-      userId: user.id,
-    }, user.id);
+    this.broadcastToRoom(
+      roomId,
+      {
+        type: 'document:edited',
+        payload: { userId: user.id, operation },
+        timestamp: new Date(),
+        userId: user.id,
+      },
+      user.id
+    );
   }
 
   private async handleTaskUpdate(user: CollaborationUser, payload: any): Promise<void> {
@@ -619,7 +658,6 @@ export class CollaborationServer {
           message: `${user.firstName} ${user.lastName} assigned you a task: ${task.title}`,
         });
       }
-
     } catch (error) {
       console.error('Failed to update task:', error);
     }
@@ -637,7 +675,11 @@ export class CollaborationServer {
     });
   }
 
-  private async handleMentions(user: CollaborationUser, comment: any, mentions: string[]): Promise<void> {
+  private async handleMentions(
+    user: CollaborationUser,
+    comment: any,
+    mentions: string[]
+  ): Promise<void> {
     for (const mentionedUserId of mentions) {
       await this.createNotification({
         type: 'MENTION',
@@ -671,7 +713,7 @@ export class CollaborationServer {
       for (const [roomId, room] of this.rooms.entries()) {
         if (room.participants.has(user.id)) {
           room.participants.delete(user.id);
-          
+
           // Notify other participants
           this.broadcastToRoom(roomId, {
             type: 'room:user_left',
@@ -699,15 +741,17 @@ export class CollaborationServer {
     }
 
     // Update in database
-    db.client.user.update({
-      where: { id: userId },
-      data: {
-        isOnline: updates.isOnline,
-        lastSeenAt: updates.lastSeen,
-      },
-    }).catch(error => {
-      console.error('Failed to update user presence:', error);
-    });
+    db.client.user
+      .update({
+        where: { id: userId },
+        data: {
+          isOnline: updates.isOnline,
+          lastSeenAt: updates.lastSeen,
+        },
+      })
+      .catch((error) => {
+        console.error('Failed to update user presence:', error);
+      });
   }
 
   public sendToUser(userId: string, message: WebSocketMessage): void {
@@ -767,7 +811,6 @@ export class CollaborationServer {
         timestamp: new Date(),
         userId: notification.senderId,
       });
-
     } catch (error) {
       console.error('Failed to create notification:', error);
     }
@@ -789,7 +832,8 @@ export class CollaborationServer {
       const now = new Date();
       for (const [roomId, room] of this.rooms.entries()) {
         const timeSinceActivity = now.getTime() - room.lastActivity.getTime();
-        if (timeSinceActivity > 30 * 60 * 1000) { // 30 minutes
+        if (timeSinceActivity > 30 * 60 * 1000) {
+          // 30 minutes
           this.rooms.delete(roomId);
         }
       }
@@ -803,7 +847,7 @@ export class CollaborationServer {
   public getOnlineUsers(): CollaborationUser[] {
     const users: CollaborationUser[] = [];
     for (const user of this.socketUsers.values()) {
-      if (!users.find(u => u.id === user.id)) {
+      if (!users.find((u) => u.id === user.id)) {
         users.push(user);
       }
     }
@@ -825,4 +869,4 @@ export let collaborationServer: CollaborationServer;
 
 export function initializeCollaborationServer(server: any): void {
   collaborationServer = new CollaborationServer(server);
-} 
+}

@@ -114,7 +114,7 @@ export class FocusManager {
       'input:not([disabled])',
       'select:not([disabled])',
       '[tabindex]:not([tabindex="-1"])',
-      '[contenteditable="true"]'
+      '[contenteditable="true"]',
     ].join(',');
 
     return Array.from(container.querySelectorAll(selector)) as HTMLElement[];
@@ -166,16 +166,18 @@ export class ColorContrastUtils {
 
   private static hexToRgb(hex: string): { r: number; g: number; b: number } | null {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-      r: parseInt(result[1], 16) / 255,
-      g: parseInt(result[2], 16) / 255,
-      b: parseInt(result[3], 16) / 255
-    } : null;
+    return result
+      ? {
+          r: parseInt(result[1], 16) / 255,
+          g: parseInt(result[2], 16) / 255,
+          b: parseInt(result[3], 16) / 255,
+        }
+      : null;
   }
 
   private static getLuminance(rgb: { r: number; g: number; b: number }): number {
     const { r, g, b } = rgb;
-    
+
     const sR = r <= 0.03928 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4);
     const sG = g <= 0.03928 ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4);
     const sB = b <= 0.03928 ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4);
@@ -196,9 +198,9 @@ export class MotionUtils {
 
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     const handleChange = (e: MediaQueryListEvent) => callback(e.matches);
-    
+
     mediaQuery.addEventListener('change', handleChange);
-    
+
     return () => mediaQuery.removeEventListener('change', handleChange);
   }
 }
@@ -300,7 +302,7 @@ export class AriaUtils {
 export function useAccessibleAnnouncement() {
   return {
     announcePolite: (message: string) => ScreenReaderService.announce(message, 'polite'),
-    announceAssertive: (message: string) => ScreenReaderService.announce(message, 'assertive')
+    announceAssertive: (message: string) => ScreenReaderService.announce(message, 'assertive'),
   };
 }
 
@@ -327,8 +329,8 @@ export function useFocusTrap(isActive: boolean) {
 }
 
 export function useReducedMotion() {
-  const [prefersReducedMotion, setPrefersReducedMotion] = React.useState(
-    () => MotionUtils.prefersReducedMotion()
+  const [prefersReducedMotion, setPrefersReducedMotion] = React.useState(() =>
+    MotionUtils.prefersReducedMotion()
   );
 
   React.useEffect(() => {
@@ -383,7 +385,7 @@ export const AccessibleContainer: React.FC<AccessibleContainerProps> = ({
   ariaDescribedBy,
   announceOnMount,
   trapFocus = false,
-  className
+  className,
 }) => {
   const focusTrapRef = useFocusTrap(trapFocus);
   const { announcePolite } = useAccessibleAnnouncement();
@@ -394,16 +396,20 @@ export const AccessibleContainer: React.FC<AccessibleContainerProps> = ({
     }
   }, [announceOnMount, announcePolite]);
 
-  return React.createElement('div', {
-    ref: focusTrapRef,
-    role,
-    'aria-label': ariaLabel,
-    'aria-describedby': ariaDescribedBy,
-    className
-  }, children);
+  return React.createElement(
+    'div',
+    {
+      ref: focusTrapRef,
+      role,
+      'aria-label': ariaLabel,
+      'aria-describedby': ariaDescribedBy,
+      className,
+    },
+    children
+  );
 };
 
 // Initialize services
 if (typeof document !== 'undefined') {
   ScreenReaderService.initialize();
-} 
+}

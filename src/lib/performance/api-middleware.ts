@@ -24,7 +24,7 @@ export function withPerformance(
     try {
       // Execute the handler
       const response = await handler(req);
-      
+
       // Track performance
       const duration = performance.now() - startTime;
       apiMonitor.trackRequest(endpoint, duration);
@@ -52,11 +52,10 @@ export function withPerformance(
       }
 
       return enhancedResponse;
-
     } catch (error) {
       const duration = performance.now() - startTime;
       apiMonitor.trackRequest(`${endpoint} (ERROR)`, duration);
-      
+
       console.error(`API Error in ${endpoint} after ${duration.toFixed(2)}ms:`, error);
       throw error;
     }
@@ -67,16 +66,19 @@ export function withPerformance(
 // RESPONSE OPTIMIZATION
 // ============================================================================
 
-export function optimizeResponse(data: any, options: {
-  fields?: string[];
-  limit?: number;
-  compress?: boolean;
-} = {}) {
+export function optimizeResponse(
+  data: any,
+  options: {
+    fields?: string[];
+    limit?: number;
+    compress?: boolean;
+  } = {}
+) {
   let optimizedData = data;
 
   // Field selection (GraphQL-style)
   if (options.fields && Array.isArray(data)) {
-    optimizedData = data.map(item => selectFields(item, options.fields!));
+    optimizedData = data.map((item) => selectFields(item, options.fields!));
   } else if (options.fields && typeof data === 'object') {
     optimizedData = selectFields(data, options.fields);
   }
@@ -120,11 +122,8 @@ export interface PaginationOptions {
 
 export function optimizePagination(options: PaginationOptions) {
   const page = Math.max(1, options.page || 1);
-  const pageSize = Math.min(
-    options.maxPageSize || 100,
-    Math.max(1, options.pageSize || 20)
-  );
-  
+  const pageSize = Math.min(options.maxPageSize || 100, Math.max(1, options.pageSize || 20));
+
   return {
     page,
     pageSize,
@@ -140,7 +139,7 @@ export function createPaginatedResponse<T>(
 ) {
   const { page, pageSize } = pagination;
   const totalPages = Math.ceil(total / pageSize);
-  
+
   return {
     data,
     pagination: {
@@ -169,7 +168,7 @@ export function generateETag(content: any): string {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
+    hash = (hash << 5) - hash + char;
     hash = hash & hash; // Convert to 32-bit integer
   }
   return `"${Math.abs(hash).toString(36)}"`;
@@ -185,24 +184,24 @@ class RateLimiter {
   isAllowed(key: string, limit: number, windowMs: number): boolean {
     const now = Date.now();
     const windowStart = now - windowMs;
-    
+
     if (!this.requests.has(key)) {
       this.requests.set(key, []);
     }
-    
+
     const keyRequests = this.requests.get(key)!;
-    
+
     // Remove old requests outside the window
-    const validRequests = keyRequests.filter(req => req.timestamp > windowStart);
+    const validRequests = keyRequests.filter((req) => req.timestamp > windowStart);
     this.requests.set(key, validRequests);
-    
+
     // Count total requests in window
     const totalRequests = validRequests.reduce((sum, req) => sum + req.count, 0);
-    
+
     if (totalRequests >= limit) {
       return false;
     }
-    
+
     // Add current request
     validRequests.push({ timestamp: now, count: 1 });
     return true;
@@ -211,11 +210,11 @@ class RateLimiter {
   getRemainingRequests(key: string, limit: number, windowMs: number): number {
     const now = Date.now();
     const windowStart = now - windowMs;
-    
+
     const keyRequests = this.requests.get(key) || [];
-    const validRequests = keyRequests.filter(req => req.timestamp > windowStart);
+    const validRequests = keyRequests.filter((req) => req.timestamp > windowStart);
     const totalRequests = validRequests.reduce((sum, req) => sum + req.count, 0);
-    
+
     return Math.max(0, limit - totalRequests);
   }
 }
@@ -228,13 +227,14 @@ export const rateLimiter = new RateLimiter();
 
 export async function getPerformanceHealth() {
   const stats = apiMonitor.getMetrics();
-  
+
   return {
     timestamp: new Date().toISOString(),
     endpoints: Object.keys(stats).length,
-    averageResponseTime: Object.values(stats).reduce((sum: number, stat: any) => {
-      return sum + (stat?.avg || 0);
-    }, 0) / Object.keys(stats).length,
+    averageResponseTime:
+      Object.values(stats).reduce((sum: number, stat: any) => {
+        return sum + (stat?.avg || 0);
+      }, 0) / Object.keys(stats).length,
     slowEndpoints: Object.entries(stats)
       .filter(([, stat]: [string, any]) => stat?.avg > 1000)
       .map(([endpoint]) => endpoint),
@@ -265,7 +265,7 @@ export function createLazyLoader<T>(
 
     // Start loading
     loading = loadFn();
-    
+
     try {
       const data = await loading;
       cache = {
@@ -277,4 +277,4 @@ export function createLazyLoader<T>(
       loading = null;
     }
   };
-} 
+}

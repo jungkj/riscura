@@ -23,14 +23,14 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const category = categories.find(
     (cat) => cat.toLowerCase().replace(/\s+/g, '-') === categorySlug
   );
-  
+
   if (!category) {
     return {
       title: 'Category Not Found | Riscura Blog',
       description: 'The requested category could not be found.',
     };
   }
-  
+
   return generateBlogListingMetadata(category);
 }
 
@@ -39,11 +39,11 @@ export default function CategoryPage({ params }: CategoryPageProps) {
   const category = categories.find(
     (cat) => cat.toLowerCase().replace(/\s+/g, '-') === categorySlug
   );
-  
+
   if (!category) {
     notFound();
   }
-  
+
   const posts = getPostsByCategory(category);
 
   return (
@@ -56,14 +56,10 @@ export default function CategoryPage({ params }: CategoryPageProps) {
           <span className="text-gray-400">/</span>
           <span className="text-gray-900">{category}</span>
         </div>
-        
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          {category}
-        </h1>
-        
-        <p className="text-xl text-gray-600 max-w-3xl">
-          {getCategoryDescription(category)}
-        </p>
+
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{category}</h1>
+
+        <p className="text-xl text-gray-600 max-w-3xl">{getCategoryDescription(category)}</p>
       </header>
 
       {/* Category Filter */}
@@ -104,15 +100,23 @@ export default function CategoryPage({ params }: CategoryPageProps) {
 
 function getCategoryDescription(category: string): string {
   const descriptions: Record<string, string> = {
-    'Risk Management Basics': 'Fundamental concepts and strategies for effective risk management in small to medium businesses.',
-    'Excel to GRC Migration': 'Learn how to transition from spreadsheet-based risk management to automated GRC solutions.',
-    'Compliance Guides': 'Comprehensive guides for navigating various compliance frameworks and regulations.',
-    'Small Business Resources': 'Practical resources and tools designed specifically for small business risk management needs.',
-    'Product Updates': 'Latest features, improvements, and announcements about the Riscura platform.',
-    'Industry Insights': 'Expert analysis and trends in the risk management and compliance industry.',
-    'Best Practices': 'Proven strategies and methodologies for optimizing your risk management processes.',
-    'Case Studies': 'Real-world examples of successful risk management implementations and transformations.',
+    'Risk Management Basics':
+      'Fundamental concepts and strategies for effective risk management in small to medium businesses.',
+    'Excel to GRC Migration':
+      'Learn how to transition from spreadsheet-based risk management to automated GRC solutions.',
+    'Compliance Guides':
+      'Comprehensive guides for navigating various compliance frameworks and regulations.',
+    'Small Business Resources':
+      'Practical resources and tools designed specifically for small business risk management needs.',
+    'Product Updates':
+      'Latest features, improvements, and announcements about the Riscura platform.',
+    'Industry Insights':
+      'Expert analysis and trends in the risk management and compliance industry.',
+    'Best Practices':
+      'Proven strategies and methodologies for optimizing your risk management processes.',
+    'Case Studies':
+      'Real-world examples of successful risk management implementations and transformations.',
   };
-  
+
   return descriptions[category] || `Articles and insights about ${category.toLowerCase()}.`;
 }

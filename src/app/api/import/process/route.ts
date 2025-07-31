@@ -22,10 +22,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const optionsStr = formData.get('options') as string;
 
     if (!file || !mode || !organizationId || !userId) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     const options: ProcessingOptions = JSON.parse(optionsStr || '{}');
@@ -38,10 +35,24 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         result = await processExcelRCSA(buffer, file.name, organizationId, userId, options);
         break;
       case 'policy-document':
-        result = await processPolicyDocument(buffer, file.name, file.type, organizationId, userId, options);
+        result = await processPolicyDocument(
+          buffer,
+          file.name,
+          file.type,
+          organizationId,
+          userId,
+          options
+        );
         break;
       case 'bulk-upload':
-        result = await processBulkUpload(buffer, file.name, file.type, organizationId, userId, options);
+        result = await processBulkUpload(
+          buffer,
+          file.name,
+          file.type,
+          organizationId,
+          userId,
+          options
+        );
         break;
       default:
         return NextResponse.json(
@@ -52,13 +63,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({
       success: true,
-      data: result
+      data: result,
     });
-
   } catch (error) {
     console.error('Import processing error:', error);
     return NextResponse.json(
-      { error: 'Processing failed', details: error instanceof Error ? error.message : 'Unknown error' },
+      {
+        error: 'Processing failed',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
       { status: 500 }
     );
   }
@@ -66,14 +79,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
 // Excel RCSA Processing
 async function processExcelRCSA(
-  buffer: Buffer, 
-  filename: string, 
-  organizationId: string, 
-  userId: string, 
+  buffer: Buffer,
+  filename: string,
+  organizationId: string,
+  userId: string,
   options: ProcessingOptions
 ): Promise<any> {
   const workbook = XLSX.read(buffer, { type: 'buffer' });
-  
+
   const result = {
     risks: [] as any[],
     controls: [] as any[],
@@ -82,8 +95,8 @@ async function processExcelRCSA(
       filename,
       sheets: workbook.SheetNames,
       processedAt: new Date(),
-      totalRecords: 0
-    }
+      totalRecords: 0,
+    },
   };
 
   // Process each worksheet
@@ -94,7 +107,7 @@ async function processExcelRCSA(
     if (data.length === 0) continue;
 
     // Auto-detect sheet type based on headers
-    const headers = Object.keys(data[0] as any).map(h => h.toLowerCase());
+    const headers = Object.keys(data[0] as any).map((h) => h.toLowerCase());
     const sheetType = detectSheetType(headers);
 
     console.log(`Processing sheet "${sheetName}" as ${sheetType}`);
@@ -115,7 +128,8 @@ async function processExcelRCSA(
     }
   }
 
-  result.metadata.totalRecords = result.risks.length + result.controls.length + result.mappings.length;
+  result.metadata.totalRecords =
+    result.risks.length + result.controls.length + result.mappings.length;
 
   return {
     type: 'excel-rcsa',
@@ -125,19 +139,19 @@ async function processExcelRCSA(
       'Risks imported': result.risks.length,
       'Controls imported': result.controls.length,
       'Mappings created': result.mappings.length,
-      'Sheets processed': result.metadata.sheets.length
+      'Sheets processed': result.metadata.sheets.length,
     },
-    data: result
+    data: result,
   };
 }
 
 // Policy Document Processing with AI
 async function processPolicyDocument(
-  buffer: Buffer, 
-  filename: string, 
-  fileType: string, 
-  organizationId: string, 
-  userId: string, 
+  buffer: Buffer,
+  filename: string,
+  fileType: string,
+  organizationId: string,
+  userId: string,
   options: ProcessingOptions
 ): Promise<any> {
   let textContent = '';
@@ -159,7 +173,7 @@ async function processPolicyDocument(
     extractedRisks: [] as any[],
     extractedControls: [] as any[],
     aiConfidence: 0,
-    documentSummary: ''
+    documentSummary: '',
   };
 
   if (options.aiAnalysis) {
@@ -179,19 +193,19 @@ async function processPolicyDocument(
       'Risks extracted': result.extractedRisks.length,
       'Controls extracted': result.extractedControls.length,
       'AI confidence': `${(result.aiConfidence * 100).toFixed(1)}%`,
-      'Document length': `${Math.round(textContent.length / 1000)}k characters`
+      'Document length': `${Math.round(textContent.length / 1000)}k characters`,
     },
-    data: result
+    data: result,
   };
 }
 
 // Bulk Upload Processing
 async function processBulkUpload(
-  buffer: Buffer, 
-  filename: string, 
-  fileType: string, 
-  organizationId: string, 
-  userId: string, 
+  buffer: Buffer,
+  filename: string,
+  fileType: string,
+  organizationId: string,
+  userId: string,
   options: ProcessingOptions
 ): Promise<any> {
   return {
@@ -200,15 +214,15 @@ async function processBulkUpload(
     status: 'completed',
     summary: {
       'File size': `${(buffer.length / 1024 / 1024).toFixed(2)} MB`,
-      'Type': fileType,
-      'Organization': organizationId,
-      'Uploaded by': userId
+      Type: fileType,
+      Organization: organizationId,
+      'Uploaded by': userId,
     },
-    data: { 
+    data: {
       filename,
       size: buffer.length,
-      type: fileType
-    }
+      type: fileType,
+    },
   };
 }
 
@@ -219,15 +233,15 @@ function detectSheetType(headers: string[]): 'risk' | 'control' | 'mapping' | 'm
   const mappingKeywords = ['mapping', 'relationship', 'link'];
 
   const riskScore = headers.reduce((score, header) => {
-    return score + (riskKeywords.some(keyword => header.includes(keyword)) ? 1 : 0);
+    return score + (riskKeywords.some((keyword) => header.includes(keyword)) ? 1 : 0);
   }, 0);
 
   const controlScore = headers.reduce((score, header) => {
-    return score + (controlKeywords.some(keyword => header.includes(keyword)) ? 1 : 0);
+    return score + (controlKeywords.some((keyword) => header.includes(keyword)) ? 1 : 0);
   }, 0);
 
   const mappingScore = headers.reduce((score, header) => {
-    return score + (mappingKeywords.some(keyword => header.includes(keyword)) ? 1 : 0);
+    return score + (mappingKeywords.some((keyword) => header.includes(keyword)) ? 1 : 0);
   }, 0);
 
   if (mappingScore > 0) return 'mapping';
@@ -238,9 +252,9 @@ function detectSheetType(headers: string[]): 'risk' | 'control' | 'mapping' | 'm
 }
 
 async function processRiskData(
-  data: any[], 
-  organizationId: string, 
-  userId: string, 
+  data: any[],
+  organizationId: string,
+  userId: string,
   options: ProcessingOptions
 ): Promise<any[]> {
   const risks: any[] = [];
@@ -257,7 +271,7 @@ async function processRiskData(
       status: 'IDENTIFIED',
       organizationId,
       createdBy: userId,
-      aiConfidence: 0.8
+      aiConfidence: 0.8,
     };
 
     // Calculate risk score
@@ -281,9 +295,9 @@ async function processRiskData(
 }
 
 async function processControlData(
-  data: any[], 
-  organizationId: string, 
-  userId: string, 
+  data: any[],
+  organizationId: string,
+  userId: string,
   options: ProcessingOptions
 ): Promise<any[]> {
   const controls: any[] = [];
@@ -299,7 +313,7 @@ async function processControlData(
       frequency: row.frequency || 'Monthly',
       organizationId,
       createdBy: userId,
-      aiConfidence: 0.8
+      aiConfidence: 0.8,
     };
 
     // AI enhancement if enabled (temporarily disabled)
@@ -327,7 +341,7 @@ function processMappingData(data: any[], organizationId: string): any[] {
       riskId: row.riskId || row['risk id'] || '',
       controlId: row.controlId || row['control id'] || '',
       effectiveness: parseFloat(row.effectiveness || '0.7') || 0.7,
-      organizationId
+      organizationId,
     });
   }
 
@@ -376,13 +390,13 @@ async function extractRisksAndControls(textContent: string): Promise<{
   try {
     // TODO: Re-implement AI document analysis when AIService is available
     console.log('AI document analysis requested but not available');
-    
+
     // Return empty results for now
     return {
       risks: [],
       controls: [],
       confidence: 0.0,
-      summary: 'AI document analysis not available'
+      summary: 'AI document analysis not available',
     };
   } catch (error) {
     console.error('AI extraction failed:', error);
@@ -393,7 +407,7 @@ async function extractRisksAndControls(textContent: string): Promise<{
     risks: [],
     controls: [],
     confidence: 0.0,
-    summary: 'AI extraction failed, manual review required'
+    summary: 'AI extraction failed, manual review required',
   };
 }
 
@@ -427,7 +441,8 @@ function mapRiskCategory(category: string): string {
   if (cat.includes('financial') || cat.includes('market')) return 'financial';
   if (cat.includes('strategic') || cat.includes('business')) return 'strategic';
   if (cat.includes('compliance') || cat.includes('regulatory')) return 'compliance';
-  if (cat.includes('technology') || cat.includes('cyber') || cat.includes('it')) return 'technology';
+  if (cat.includes('technology') || cat.includes('cyber') || cat.includes('it'))
+    return 'technology';
   return 'operational';
 }
 
@@ -444,4 +459,4 @@ function mapControlCategory(category: string): string {
   if (cat.includes('technical') || cat.includes('system')) return 'technical';
   if (cat.includes('physical') || cat.includes('facility')) return 'physical';
   return 'administrative';
-} 
+}

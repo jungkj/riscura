@@ -84,7 +84,9 @@ async function seedChatChannels() {
       }),
     ]);
 
-    console.log(`Created ${channels.length} default channels for organization ${organization.name}`);
+    console.log(
+      `Created ${channels.length} default channels for organization ${organization.name}`
+    );
 
     // Add all other users to the general channel
     const otherUsers = await prisma.user.findMany({
@@ -95,10 +97,10 @@ async function seedChatChannels() {
     });
 
     if (otherUsers.length > 0) {
-      const generalChannel = channels.find(ch => ch.name === 'general');
+      const generalChannel = channels.find((ch) => ch.name === 'general');
       if (generalChannel) {
         await prisma.chatChannelMember.createMany({
-          data: otherUsers.map(u => ({
+          data: otherUsers.map((u) => ({
             channelId: generalChannel.id,
             userId: u.id,
             role: 'MEMBER',
@@ -109,19 +111,19 @@ async function seedChatChannels() {
     }
 
     // Create a welcome message
-    const generalChannel = channels.find(ch => ch.name === 'general');
+    const generalChannel = channels.find((ch) => ch.name === 'general');
     if (generalChannel) {
       await prisma.chatMessage.create({
         data: {
           channelId: generalChannel.id,
           userId: user.id,
-          content: 'Welcome to the team chat! This is the general channel for team discussions and announcements.',
+          content:
+            'Welcome to the team chat! This is the general channel for team discussions and announcements.',
           type: 'TEXT',
         },
       });
       console.log('Created welcome message in general channel');
     }
-
   } catch (error) {
     console.error('Error seeding chat channels:', error);
   } finally {

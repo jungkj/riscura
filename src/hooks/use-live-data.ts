@@ -31,18 +31,15 @@ interface CacheEntry<T> {
 // Simple in-memory cache
 const cache = new Map<string, CacheEntry<any>>();
 
-export function useApiData<T>(
-  endpoint: string,
-  options: UseApiDataOptions = {}
-) {
-  const { 
-    enabled = true, 
-    refetchInterval, 
+export function useApiData<T>(endpoint: string, options: UseApiDataOptions = {}) {
+  const {
+    enabled = true,
+    refetchInterval,
     cacheKey = endpoint,
     staleTime = 5 * 60 * 1000, // 5 minutes default
-    dependencies = []
+    dependencies = [],
   } = options;
-  
+
   const { isAuthenticated, token } = useAuth();
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
@@ -64,96 +61,106 @@ export function useApiData<T>(
   }, [cacheKey]);
 
   // Cache data
-  const setCachedData = useCallback((newData: T) => {
-    cache.set(cacheKey, {
-      data: newData,
-      timestamp: Date.now(),
-      staleTime
-    });
-  }, [cacheKey, staleTime]);
-
-  const fetchData = useCallback(async (showLoading = true) => {
-    // Don't fetch if component is unmounted
-    if (!isMountedRef.current) return;
-    
-    // Cancel any existing request
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-
-    // Check cache first
-    const cachedData = getCachedData();
-    if (cachedData && !showLoading) {
-      if (isMountedRef.current) {
-        setData(cachedData);
-        setError(null);
-      }
-      return;
-    }
-
-    abortControllerRef.current = new AbortController();
-
-    try {
-      if (showLoading && isMountedRef.current) setLoading(true);
-      if (isMountedRef.current) setError(null);
-
-      // Check if user is authenticated before making API calls to protected endpoints
-      if (endpoint.startsWith('/api/') && !endpoint.includes('/api/health') && !endpoint.includes('/api/auth/session')) {
-        if (!isAuthenticated || !token) {
-          console.log(`User not authenticated, skipping fetch for ${endpoint}`);
-          if (isMountedRef.current) {
-            setError('Please log in to access this data');
-            setLoading(false);
-          }
-          return;
-        }
-      }
-
-      const headers: Record<string, string> = {
-        'Content-Type': 'application/json',
-      };
-
-      // Add authentication header if we have a token
-      if (token && endpoint.startsWith('/api/') && !endpoint.includes('/api/auth/')) {
-        headers['Authorization'] = `Bearer ${token}`;
-      }
-
-      const response = await fetch(endpoint, {
-        headers,
-        signal: abortControllerRef.current.signal,
+  const setCachedData = useCallback(
+    (newData: T) => {
+      cache.set(cacheKey, {
+        data: newData,
+        timestamp: Date.now(),
+        staleTime,
       });
+    },
+    [cacheKey, staleTime]
+  );
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
+  const fetchData = useCallback(
+    async (showLoading = true) => {
+      // Don't fetch if component is unmounted
+      if (!isMountedRef.current) return;
+
+      // Cancel any existing request
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
       }
 
-      const result: ApiResponse<T> = await response.json();
-      const fetchedData = result.data;
-      
-      if (isMountedRef.current) {
-        setData(fetchedData);
-        setCachedData(fetchedData);
-        setLastFetchTime(Date.now());
-      }
-    } catch (err) {
-      if (err instanceof Error && err.name === 'AbortError') {
-        return; // Request was aborted, don't update state
-      }
-      
-      if (isMountedRef.current) {
-        console.error(`Error fetching ${endpoint}:`, err);
-        setError(err instanceof Error ? err.message : 'Failed to fetch data');
-        
-        // Fallback to cached data if available
-        const cachedData = getCachedData();
-        if (cachedData) {
+      // Check cache first
+      const cachedData = getCachedData();
+      if (cachedData && !showLoading) {
+        if (isMountedRef.current) {
           setData(cachedData);
+          setError(null);
         }
+        return;
       }
-    } finally {
-      if (showLoading && isMountedRef.current) setLoading(false);
-    }
-  }, [endpoint, getCachedData, setCachedData, isAuthenticated, token]);
+
+      abortControllerRef.current = new AbortController();
+
+      try {
+        if (showLoading && isMountedRef.current) setLoading(true);
+        if (isMountedRef.current) setError(null);
+
+        // Check if user is authenticated before making API calls to protected endpoints
+        if (
+          endpoint.startsWith('/api/') &&
+          !endpoint.includes('/api/health') &&
+          !endpoint.includes('/api/auth/session')
+        ) {
+          if (!isAuthenticated || !token) {
+            console.log(`User not authenticated, skipping fetch for ${endpoint}`);
+            if (isMountedRef.current) {
+              setError('Please log in to access this data');
+              setLoading(false);
+            }
+            return;
+          }
+        }
+
+        const headers: Record<string, string> = {
+          'Content-Type': 'application/json',
+        };
+
+        // Add authentication header if we have a token
+        if (token && endpoint.startsWith('/api/') && !endpoint.includes('/api/auth/')) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const response = await fetch(endpoint, {
+          headers,
+          signal: abortControllerRef.current.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
+        }
+
+        const result: ApiResponse<T> = await response.json();
+        const fetchedData = result.data;
+
+        if (isMountedRef.current) {
+          setData(fetchedData);
+          setCachedData(fetchedData);
+          setLastFetchTime(Date.now());
+        }
+      } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') {
+          return; // Request was aborted, don't update state
+        }
+
+        if (isMountedRef.current) {
+          console.error(`Error fetching ${endpoint}:`, err);
+          setError(err instanceof Error ? err.message : 'Failed to fetch data');
+
+          // Fallback to cached data if available
+          const cachedData = getCachedData();
+          if (cachedData) {
+            setData(cachedData);
+          }
+        }
+      } finally {
+        if (showLoading && isMountedRef.current) setLoading(false);
+      }
+    },
+    [endpoint, getCachedData, setCachedData, isAuthenticated, token]
+  );
 
   const refetch = useCallback(() => {
     if (enabled && isMountedRef.current) {
@@ -207,7 +214,7 @@ export function useDashboardData(timeRange: string = '30d') {
     cacheKey: `dashboard-${timeRange}`,
     staleTime: 2 * 60 * 1000, // 2 minutes for dashboard
     refetchInterval: 5 * 60 * 1000, // Auto-refresh every 5 minutes
-    dependencies: [timeRange]
+    dependencies: [timeRange],
   });
 }
 
@@ -218,13 +225,13 @@ export function useRisksData(filters: Record<string, any> = {}) {
       queryParams.append(key, String(value));
     }
   });
-  
+
   const endpoint = `/api/risks${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
-  
+
   return useApiData(endpoint, {
     cacheKey: `risks-${JSON.stringify(filters)}`,
     staleTime: 1 * 60 * 1000, // 1 minute for risks
-    dependencies: [filters]
+    dependencies: [filters],
   });
 }
 
@@ -235,13 +242,13 @@ export function useControlsData(filters: Record<string, any> = {}) {
       queryParams.append(key, String(value));
     }
   });
-  
+
   const endpoint = `/api/controls${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
-  
+
   return useApiData(endpoint, {
     cacheKey: `controls-${JSON.stringify(filters)}`,
     staleTime: 1 * 60 * 1000, // 1 minute for controls
-    dependencies: [filters]
+    dependencies: [filters],
   });
 }
 
@@ -252,13 +259,13 @@ export function useDocumentsData(filters: Record<string, any> = {}) {
       queryParams.append(key, String(value));
     }
   });
-  
+
   const endpoint = `/api/documents${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
-  
+
   return useApiData(endpoint, {
     cacheKey: `documents-${JSON.stringify(filters)}`,
     staleTime: 2 * 60 * 1000, // 2 minutes for documents
-    dependencies: [filters]
+    dependencies: [filters],
   });
 }
 
@@ -269,27 +276,24 @@ export function useQuestionnairesData(filters: Record<string, any> = {}) {
       queryParams.append(key, String(value));
     }
   });
-  
+
   const endpoint = `/api/questionnaires${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
-  
+
   return useApiData(endpoint, {
     cacheKey: `questionnaires-${JSON.stringify(filters)}`,
     staleTime: 3 * 60 * 1000, // 3 minutes for questionnaires
-    dependencies: [filters]
+    dependencies: [filters],
   });
 }
 
 // Hook for single item fetching
 export function useItemData<T>(endpoint: string, id: string | null) {
-  return useApiData<T>(
-    id ? `${endpoint}/${id}` : '',
-    {
-      enabled: !!id,
-      cacheKey: `${endpoint}-${id}`,
-      staleTime: 5 * 60 * 1000, // 5 minutes for single items
-      dependencies: [id]
-    }
-  );
+  return useApiData<T>(id ? `${endpoint}/${id}` : '', {
+    enabled: !!id,
+    cacheKey: `${endpoint}-${id}`,
+    staleTime: 5 * 60 * 1000, // 5 minutes for single items
+    dependencies: [id],
+  });
 }
 
 // Hook for analytics data
@@ -300,13 +304,13 @@ export function useAnalyticsData(type: string, filters: Record<string, any> = {}
       queryParams.append(key, String(value));
     }
   });
-  
+
   const endpoint = `/api/analytics/${type}${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
-  
+
   return useApiData(endpoint, {
     cacheKey: `analytics-${type}-${JSON.stringify(filters)}`,
     staleTime: 10 * 60 * 1000, // 10 minutes for analytics
-    dependencies: [type, filters]
+    dependencies: [type, filters],
   });
 }
 
@@ -321,4 +325,4 @@ export function clearCache(pattern?: string) {
   } else {
     cache.clear();
   }
-} 
+}

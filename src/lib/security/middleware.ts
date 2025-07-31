@@ -30,8 +30,8 @@ const SECURITY_HEADERS = {
     "worker-src 'self'",
     "frame-ancestors 'none'",
     "form-action 'self'",
-    "base-uri 'self'"
-  ].join('; ')
+    "base-uri 'self'",
+  ].join('; '),
 };
 
 // Rate limiting store (in production, use Redis or similar)
@@ -70,16 +70,12 @@ export class SecurityMiddleware {
       if (options.rateLimit) {
         const rateLimitResult = this.checkRateLimit(request, options.rateLimit);
         if (!rateLimitResult.allowed) {
-          return this.createErrorResponse(
-            'Too Many Requests',
-            429,
-            {
-              'Retry-After': Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000).toString(),
-              'X-RateLimit-Limit': options.rateLimit.maxRequests.toString(),
-              'X-RateLimit-Remaining': '0',
-              'X-RateLimit-Reset': rateLimitResult.resetTime.toString()
-            }
-          );
+          return this.createErrorResponse('Too Many Requests', 429, {
+            'Retry-After': Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000).toString(),
+            'X-RateLimit-Limit': options.rateLimit.maxRequests.toString(),
+            'X-RateLimit-Remaining': '0',
+            'X-RateLimit-Reset': rateLimitResult.resetTime.toString(),
+          });
         }
       }
 
@@ -106,7 +102,7 @@ export class SecurityMiddleware {
 
         // Check permissions if required
         if (options.requiredPermissions && options.requiredPermissions.length > 0) {
-          const hasPermission = options.requiredPermissions.some(perm =>
+          const hasPermission = options.requiredPermissions.some((perm) =>
             accessControl.hasPermission(authResult.permissions, perm)
           );
 
@@ -118,7 +114,6 @@ export class SecurityMiddleware {
 
       // If all checks pass, return null to continue processing
       return null;
-
     } catch (error) {
       console.error('Security middleware error:', error);
       return this.createErrorResponse('Internal Security Error', 500);
@@ -128,16 +123,19 @@ export class SecurityMiddleware {
   /**
    * Rate limiting implementation
    */
-  private checkRateLimit(request: NextRequest, config: RateLimitConfig): {
+  private checkRateLimit(
+    request: NextRequest,
+    config: RateLimitConfig
+  ): {
     allowed: boolean;
     resetTime: number;
   } {
     const key = config.keyGenerator ? config.keyGenerator(request) : this.getClientIP(request);
     const now = Date.now();
     const windowKey = `${key}:${Math.floor(now / config.windowMs)}`;
-    
+
     const current = rateLimitStore.get(windowKey) || { count: 0, resetTime: now + config.windowMs };
-    
+
     if (current.count >= config.maxRequests) {
       return { allowed: false, resetTime: current.resetTime };
     }
@@ -173,7 +171,7 @@ export class SecurityMiddleware {
       /union.*select/gi,
       /drop.*table/gi,
       /insert.*into/gi,
-      /delete.*from/gi
+      /delete.*from/gi,
     ];
 
     // Check URL for suspicious patterns
@@ -193,7 +191,7 @@ export class SecurityMiddleware {
       /zap/i,
       /burp/i,
       /acunetix/i,
-      /netsparker/i
+      /netsparker/i,
     ];
 
     for (const pattern of suspiciousUserAgents) {
@@ -208,10 +206,10 @@ export class SecurityMiddleware {
         'application/json',
         'application/x-www-form-urlencoded',
         'multipart/form-data',
-        'text/plain'
+        'text/plain',
       ];
 
-      if (!allowedContentTypes.some(type => contentType.startsWith(type))) {
+      if (!allowedContentTypes.some((type) => contentType.startsWith(type))) {
         return { passed: false, reason: 'Invalid content type' };
       }
     }
@@ -224,19 +222,22 @@ export class SecurityMiddleware {
    */
   private handleCors(request: NextRequest, allowedOrigins?: string[]): NextResponse | null {
     const origin = request.headers.get('origin');
-    
+
     // Handle preflight requests
     if (request.method === 'OPTIONS') {
       const response = new NextResponse(null, { status: 200 });
-      
+
       if (origin && this.isOriginAllowed(origin, allowedOrigins)) {
         response.headers.set('Access-Control-Allow-Origin', origin);
       }
-      
+
       response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-      response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+      response.headers.set(
+        'Access-Control-Allow-Headers',
+        'Content-Type, Authorization, X-Requested-With'
+      );
       response.headers.set('Access-Control-Max-Age', '86400');
-      
+
       return response;
     }
 
@@ -257,7 +258,7 @@ export class SecurityMiddleware {
     }
 
     // Check wildcard patterns
-    return allowedOrigins.some(allowed => {
+    return allowedOrigins.some((allowed) => {
       if (allowed === '*') return true;
       if (allowed.startsWith('*.')) {
         const domain = allowed.slice(2);
@@ -287,7 +288,7 @@ export class SecurityMiddleware {
           authenticated: true,
           userId: apiAuthResult.userId,
           role: apiAuthResult.role,
-          permissions: apiAuthResult.permissions
+          permissions: apiAuthResult.permissions,
         };
       }
     }
@@ -302,7 +303,7 @@ export class SecurityMiddleware {
           authenticated: true,
           userId: tokenResult.payload.userId,
           role: tokenResult.payload.role || 'USER',
-          permissions: tokenResult.payload.permissions || []
+          permissions: tokenResult.payload.permissions || [],
         };
       }
     }
@@ -318,7 +319,7 @@ export class SecurityMiddleware {
         authenticated: true,
         userId: 'demo-user-id',
         role: 'ADMIN',
-        permissions: permissions as Permission[]
+        permissions: permissions as Permission[],
       };
     }
 
@@ -337,20 +338,20 @@ export class SecurityMiddleware {
     try {
       // Import database connection
       const { db } = await import('@/lib/database/connection');
-      
+
       // Query database for valid API key
       const apiKeyRecord = await db.aPIKey.findFirst({
         where: {
           key: apiKey,
           isActive: true,
           expiresAt: {
-            gt: new Date()
-          }
+            gt: new Date(),
+          },
         },
         include: {
           organization: true,
-          user: true
-        }
+          user: true,
+        },
       });
 
       if (!apiKeyRecord) {
@@ -360,14 +361,14 @@ export class SecurityMiddleware {
       // Update last used timestamp
       await db.aPIKey.update({
         where: { id: apiKeyRecord.id },
-        data: { lastUsedAt: new Date() }
+        data: { lastUsedAt: new Date() },
       });
 
       return {
         valid: true,
         userId: apiKeyRecord.userId || undefined,
         role: apiKeyRecord.user?.role || 'USER',
-        permissions: apiKeyRecord.permissions as Permission[]
+        permissions: apiKeyRecord.permissions as Permission[],
       };
     } catch (error) {
       console.error('API key authentication error:', error);
@@ -384,10 +385,10 @@ export class SecurityMiddleware {
     additionalHeaders: Record<string, string> = {}
   ): NextResponse {
     const response = NextResponse.json(
-      { 
+      {
         error: message,
         timestamp: new Date().toISOString(),
-        requestId: crypto.randomUUID()
+        requestId: crypto.randomUUID(),
       },
       { status }
     );
@@ -464,9 +465,9 @@ export class SecurityMiddleware {
         'X-Download-Timestamp': new Date().toISOString(),
         'X-User-ID': userId,
         'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0'
-      }
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
     });
 
     // Apply security headers
@@ -506,34 +507,34 @@ export const RATE_LIMITS = {
   AUTH: {
     windowMs: 15 * 60 * 1000, // 15 minutes
     maxRequests: 5,
-    keyGenerator: createRateLimitKeyGenerator('ip')
+    keyGenerator: createRateLimitKeyGenerator('ip'),
   },
-  
+
   // API endpoints - moderate limits
   API: {
     windowMs: 15 * 60 * 1000, // 15 minutes
     maxRequests: 100,
-    keyGenerator: createRateLimitKeyGenerator('user')
+    keyGenerator: createRateLimitKeyGenerator('user'),
   },
-  
+
   // File uploads - strict limits
   UPLOAD: {
     windowMs: 60 * 60 * 1000, // 1 hour
     maxRequests: 10,
-    keyGenerator: createRateLimitKeyGenerator('user')
+    keyGenerator: createRateLimitKeyGenerator('user'),
   },
-  
+
   // Document access - moderate limits
   DOCUMENT: {
     windowMs: 5 * 60 * 1000, // 5 minutes
     maxRequests: 50,
-    keyGenerator: createRateLimitKeyGenerator('user')
-  }
+    keyGenerator: createRateLimitKeyGenerator('user'),
+  },
 };
 
 // CORS configurations for different environments
 export const CORS_CONFIGS = {
   DEVELOPMENT: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3004'],
   STAGING: ['https://staging.riscura.com'],
-  PRODUCTION: ['https://app.riscura.com', 'https://riscura.com']
-}; 
+  PRODUCTION: ['https://app.riscura.com', 'https://riscura.com'],
+};

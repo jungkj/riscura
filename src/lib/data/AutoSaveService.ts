@@ -40,7 +40,7 @@ export class AutoSaveService {
       debounceTime: 2000, // 2 seconds
       syncToServer: true,
       backupLocally: true,
-      ...config
+      ...config,
     };
 
     this.initializeEventListeners();
@@ -118,7 +118,7 @@ export class AutoSaveService {
       isDirty: true,
       isOnline: this.isOnline,
       syncStatus: 'pending',
-      retryCount: 0
+      retryCount: 0,
     };
 
     this.saveQueue.set(id, saveData);
@@ -153,15 +153,11 @@ export class AutoSaveService {
     try {
       // Always save to local storage first
       if (this.config.backupLocally) {
-        const success = localStorageService.saveDraft(
-          saveData.type,
-          saveData.id,
-          {
-            ...saveData.data,
-            autoSaveVersion: saveData.version,
-            lastAutoSave: saveData.lastModified
-          }
-        );
+        const success = localStorageService.saveDraft(saveData.type, saveData.id, {
+          ...saveData.data,
+          autoSaveVersion: saveData.version,
+          lastAutoSave: saveData.lastModified,
+        });
 
         if (!success) {
           throw new Error('Failed to save to local storage');
@@ -221,8 +217,8 @@ export class AutoSaveService {
           id: saveData.id,
           data: saveData.data,
           version: saveData.version,
-          lastModified: saveData.lastModified
-        })
+          lastModified: saveData.lastModified,
+        }),
       });
 
       if (!response.ok) {
@@ -230,7 +226,7 @@ export class AutoSaveService {
       }
 
       const result = await response.json();
-      
+
       // Handle version conflicts
       if (result.conflict) {
         saveData.syncStatus = 'conflict';
@@ -248,12 +244,18 @@ export class AutoSaveService {
   private getEndpointForType(type: AutoSaveData['type']): string {
     const baseUrl = '/api';
     switch (type) {
-      case 'questionnaire': return `${baseUrl}/questionnaires`;
-      case 'risk': return `${baseUrl}/risks`;
-      case 'control': return `${baseUrl}/controls`;
-      case 'document': return `${baseUrl}/documents`;
-      case 'form': return `${baseUrl}/forms`;
-      default: return `${baseUrl}/data`;
+      case 'questionnaire':
+        return `${baseUrl}/questionnaires`;
+      case 'risk':
+        return `${baseUrl}/risks`;
+      case 'control':
+        return `${baseUrl}/controls`;
+      case 'document':
+        return `${baseUrl}/documents`;
+      case 'form':
+        return `${baseUrl}/forms`;
+      default:
+        return `${baseUrl}/data`;
     }
   }
 
@@ -262,22 +264,20 @@ export class AutoSaveService {
     if (!this.isOnline || !this.config.syncToServer) return;
 
     const pendingItems = Array.from(this.saveQueue.values()).filter(
-      item => item.syncStatus === 'pending' || item.syncStatus === 'error'
+      (item) => item.syncStatus === 'pending' || item.syncStatus === 'error'
     );
 
-    const syncPromises = pendingItems.map(item => this.performSave(item.id));
+    const syncPromises = pendingItems.map((item) => this.performSave(item.id));
     await Promise.all(syncPromises);
   }
 
   // Force save all items immediately
   public forceSaveAll(): void {
     const allTimers = Array.from(this.timers.values());
-    allTimers.forEach(timer => clearTimeout(timer));
+    allTimers.forEach((timer) => clearTimeout(timer));
     this.timers.clear();
 
-    const savePromises = Array.from(this.saveQueue.keys()).map(id => 
-      this.performSave(id)
-    );
+    const savePromises = Array.from(this.saveQueue.keys()).map((id) => this.performSave(id));
 
     // Use Promise.allSettled to ensure all saves are attempted
     Promise.allSettled(savePromises);
@@ -296,14 +296,14 @@ export class AutoSaveService {
   // Check if there are any pending changes
   public hasPendingChanges(): boolean {
     return Array.from(this.saveQueue.values()).some(
-      item => item.isDirty || item.syncStatus === 'pending'
+      (item) => item.isDirty || item.syncStatus === 'pending'
     );
   }
 
   // Get pending changes count
   public getPendingChangesCount(): number {
     return Array.from(this.saveQueue.values()).filter(
-      item => item.isDirty || item.syncStatus === 'pending'
+      (item) => item.isDirty || item.syncStatus === 'pending'
     ).length;
   }
 
@@ -319,7 +319,7 @@ export class AutoSaveService {
 
   // Clear all save data
   public clearAllSaveData(): void {
-    Array.from(this.timers.values()).forEach(timer => clearTimeout(timer));
+    Array.from(this.timers.values()).forEach((timer) => clearTimeout(timer));
     this.timers.clear();
     this.saveQueue.clear();
   }
@@ -343,7 +343,7 @@ export class AutoSaveService {
   // Configuration management
   public updateConfig(newConfig: Partial<AutoSaveConfig>): void {
     this.config = { ...this.config, ...newConfig };
-    
+
     // Save config to local storage
     localStorageService.saveUserPreference('autoSaveConfig', this.config);
   }
@@ -362,7 +362,7 @@ export class AutoSaveService {
   }
 
   private notifyListeners(data: AutoSaveData): void {
-    this.listeners.forEach(callback => callback(data));
+    this.listeners.forEach((callback) => callback(data));
   }
 
   // Utility methods
@@ -398,12 +398,12 @@ export class AutoSaveService {
         delete saveData.errorMessage;
         this.performSave(id);
         break;
-        
+
       case 'keep_server':
         this.clearSaveData(id);
         localStorageService.deleteDraft(saveData.type, saveData.id);
         break;
-        
+
       case 'merge':
         if (mergedData) {
           saveData.data = mergedData;
@@ -427,15 +427,16 @@ export class AutoSaveService {
     lastSyncTime: Date | null;
   } {
     const items = Array.from(this.saveQueue.values());
-    
+
     return {
       totalItems: items.length,
-      pendingSync: items.filter(item => item.syncStatus === 'pending').length,
-      errors: items.filter(item => item.syncStatus === 'error').length,
-      conflicts: items.filter(item => item.syncStatus === 'conflict').length,
-      lastSyncTime: items.length > 0 
-        ? new Date(Math.max(...items.map(item => new Date(item.lastModified).getTime())))
-        : null
+      pendingSync: items.filter((item) => item.syncStatus === 'pending').length,
+      errors: items.filter((item) => item.syncStatus === 'error').length,
+      conflicts: items.filter((item) => item.syncStatus === 'conflict').length,
+      lastSyncTime:
+        items.length > 0
+          ? new Date(Math.max(...items.map((item) => new Date(item.lastModified).getTime())))
+          : null,
     };
   }
 }
@@ -446,13 +447,15 @@ export const autoSaveService = AutoSaveService.getInstance();
 // Export configuration helper
 export const getAutoSaveConfig = (): AutoSaveConfig => {
   const savedConfig = localStorageService.getUserPreference<AutoSaveConfig>('autoSaveConfig');
-  return savedConfig || {
-    interval: 30000,
-    enabled: true,
-    maxRetries: 3,
-    retryDelay: 5000,
-    debounceTime: 2000,
-    syncToServer: true,
-    backupLocally: true
-  };
-}; 
+  return (
+    savedConfig || {
+      interval: 30000,
+      enabled: true,
+      maxRetries: 3,
+      retryDelay: 5000,
+      debounceTime: 2000,
+      syncToServer: true,
+      backupLocally: true,
+    }
+  );
+};

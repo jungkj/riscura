@@ -3,11 +3,14 @@
 
 export function getProductionDatabaseUrl(): string | undefined {
   const rawUrl = process.env.DATABASE_URL || process.env.database_url;
-  
+
   // Only apply in production for the specific project
-  if (process.env.NODE_ENV === 'production' && rawUrl?.includes('db.zggstcxinvxsfksssdyr.supabase.co')) {
+  if (
+    process.env.NODE_ENV === 'production' &&
+    rawUrl?.includes('db.zggstcxinvxsfksssdyr.supabase.co')
+  ) {
     console.log('🚨 Applying production database URL override');
-    
+
     // Extract password from the direct URL
     const passwordMatch = rawUrl.match(/postgres:([^@]+)@/);
     if (passwordMatch) {
@@ -17,6 +20,6 @@ export function getProductionDatabaseUrl(): string | undefined {
       return pooledUrl;
     }
   }
-  
+
   return rawUrl;
 }

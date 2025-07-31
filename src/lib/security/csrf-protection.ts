@@ -87,7 +87,7 @@ class CSRFProtection {
 
     // Generate or retrieve secret key
     this.secretKey = process.env.CSRF_SECRET || this.generateSecretKey();
-    
+
     // Setup token rotation
     this.setupTokenRotation();
   }
@@ -102,25 +102,25 @@ class CSRFProtection {
     const timestamp = Date.now();
     const randomBytes = crypto.randomBytes(this.config.tokenLength);
     const payload = `${timestamp}:${sessionId || 'anonymous'}:${randomBytes.toString('hex')}`;
-    
+
     // Create HMAC signature
     const hmac = crypto.createHmac('sha256', this.secretKey);
     hmac.update(payload);
     const signature = hmac.digest('hex');
-    
+
     const token = `${Buffer.from(payload).toString('base64')}.${signature}`;
-    
+
     // Store token for validation
     this.tokenStore.set(token, {
       token,
       timestamp,
       used: false,
     });
-    
+
     if (this.config.enableMetrics) {
       this.metrics.tokensGenerated++;
     }
-    
+
     return token;
   }
 
@@ -133,20 +133,25 @@ class CSRFProtection {
       if (!payloadBase64 || !signature) return false;
 
       const payload = Buffer.from(payloadBase64, 'base64').toString();
-      
+
       // Verify HMAC signature
       const hmac = crypto.createHmac('sha256', this.secretKey);
       hmac.update(payload);
       const expectedSignature = hmac.digest('hex');
-      
-      if (!crypto.timingSafeEqual(Buffer.from(signature, 'hex'), Buffer.from(expectedSignature, 'hex'))) {
+
+      if (
+        !crypto.timingSafeEqual(
+          Buffer.from(signature, 'hex'),
+          Buffer.from(expectedSignature, 'hex')
+        )
+      ) {
         return false;
       }
 
       // Parse payload
       const [timestampStr, tokenSessionId, randomHex] = payload.split(':');
       const timestamp = parseInt(timestampStr, 10);
-      
+
       // Check token age
       const maxAge = this.config.cookieOptions.maxAge * 1000;
       if (Date.now() - timestamp > maxAge) {
@@ -198,7 +203,7 @@ class CSRFProtection {
     }
 
     // Skip exempt paths
-    if (this.config.exemptPaths.some(path => pathname.startsWith(path))) {
+    if (this.config.exemptPaths.some((path) => pathname.startsWith(path))) {
       return null;
     }
 
@@ -285,7 +290,7 @@ class CSRFProtection {
     // Try to get session ID from cookie or header
     const sessionCookie = request.cookies.get('session-id')?.value;
     const sessionHeader = request.headers.get('x-session-id');
-    
+
     return sessionCookie || sessionHeader || undefined;
   }
 
@@ -294,11 +299,11 @@ class CSRFProtection {
     // Always trust same origin
     const requestUrl = new URL(request.url);
     const requestOrigin = `${requestUrl.protocol}//${requestUrl.host}`;
-    
+
     if (origin === requestOrigin) return true;
 
     // Check configured trusted origins
-    return this.config.trustedOrigins.some(trustedOrigin => {
+    return this.config.trustedOrigins.some((trustedOrigin) => {
       if (trustedOrigin.includes('*')) {
         const pattern = trustedOrigin.replace(/\*/g, '.*');
         return new RegExp(`^${pattern}$`).test(origin);
@@ -312,27 +317,24 @@ class CSRFProtection {
     const forwarded = request.headers.get('x-forwarded-for');
     const realIP = request.headers.get('x-real-ip');
     const cfConnectingIP = request.headers.get('cf-connecting-ip');
-    
+
     if (cfConnectingIP) return cfConnectingIP;
     if (realIP) return realIP;
     if (forwarded) return forwarded.split(',')[0].trim();
-    
+
     // NextRequest doesn't have ip property, use a fallback
     return request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '127.0.0.1';
   }
 
   // Create error response
   private createErrorResponse(message: string, status: number): NextResponse {
-    return new NextResponse(
-      JSON.stringify({ error: message, code: 'CSRF_PROTECTION' }),
-      {
-        status,
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Content-Type-Options': 'nosniff',
-        },
-      }
-    );
+    return new NextResponse(JSON.stringify({ error: message, code: 'CSRF_PROTECTION' }), {
+      status,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Content-Type-Options': 'nosniff',
+      },
+    });
   }
 
   // Record valid request
@@ -340,7 +342,7 @@ class CSRFProtection {
     if (!this.config.enableMetrics) return;
 
     this.metrics.validRequests++;
-    
+
     // Update IP statistics
     if (!this.metrics.byIP[result.clientIP]) {
       this.metrics.byIP[result.clientIP] = { valid: 0, invalid: 0 };
@@ -353,19 +355,19 @@ class CSRFProtection {
     if (!this.config.enableMetrics) return;
 
     this.metrics.invalidRequests++;
-    
+
     // Update reason statistics
     if (result.reason) {
-      this.metrics.topInvalidReasons[result.reason] = 
+      this.metrics.topInvalidReasons[result.reason] =
         (this.metrics.topInvalidReasons[result.reason] || 0) + 1;
     }
-    
+
     // Update IP statistics
     if (!this.metrics.byIP[result.clientIP]) {
       this.metrics.byIP[result.clientIP] = { valid: 0, invalid: 0 };
     }
     this.metrics.byIP[result.clientIP].invalid++;
-    
+
     // Check for suspicious activity
     const ipStats = this.metrics.byIP[result.clientIP];
     if (ipStats.invalid > 10 && ipStats.invalid > ipStats.valid * 2) {
@@ -390,7 +392,7 @@ class CSRFProtection {
   private rotateTokens(): void {
     const now = Date.now();
     const maxAge = this.config.cookieOptions.maxAge * 1000;
-    
+
     for (const [token, data] of this.tokenStore.entries()) {
       if (now - data.timestamp > maxAge) {
         this.tokenStore.delete(token);
@@ -431,7 +433,7 @@ class CSRFProtection {
   }> {
     const token = this.generateToken(sessionId);
     const cookie = this.createTokenCookie(token);
-    const expires = Date.now() + (this.config.cookieOptions.maxAge * 1000);
+    const expires = Date.now() + this.config.cookieOptions.maxAge * 1000;
 
     return { token, cookie, expires };
   }
@@ -507,7 +509,7 @@ class CSRFProtection {
     }
 
     // Skip exempt paths
-    if (this.config.exemptPaths.some(path => pathname.startsWith(path))) {
+    if (this.config.exemptPaths.some((path) => pathname.startsWith(path))) {
       return false;
     }
 
@@ -522,37 +524,27 @@ export const csrfConfigs = {
       secure: false,
       sameSite: 'lax' as const,
     },
-    trustedOrigins: [
-      'http://localhost:3000',
-      'http://localhost:*',
-      'https://localhost:*',
-    ],
+    trustedOrigins: ['http://localhost:3000', 'http://localhost:*', 'https://localhost:*'],
     enableOriginCheck: false,
   },
-  
+
   staging: {
     cookieOptions: {
       secure: true,
       sameSite: 'strict' as const,
       domain: 'staging.riscura.com',
     },
-    trustedOrigins: [
-      'https://staging.riscura.com',
-      'https://*.staging.riscura.com',
-    ],
+    trustedOrigins: ['https://staging.riscura.com', 'https://*.staging.riscura.com'],
     enableOriginCheck: true,
   },
-  
+
   production: {
     cookieOptions: {
       secure: true,
       sameSite: 'strict' as const,
       domain: 'riscura.com',
     },
-    trustedOrigins: [
-      'https://riscura.com',
-      'https://*.riscura.com',
-    ],
+    trustedOrigins: ['https://riscura.com', 'https://*.riscura.com'],
     enableOriginCheck: true,
     rotationInterval: 30 * 60 * 1000, // 30 minutes in production
   },
@@ -589,11 +581,11 @@ export function useCSRFToken(): {
         method: 'GET',
         credentials: 'include',
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to generate CSRF token');
       }
-      
+
       const data = await response.json();
       setToken(data.token);
       return data.token;
@@ -619,4 +611,4 @@ export function useCSRFToken(): {
 }
 
 // Export class for custom instances
-export { CSRFProtection }; 
+export { CSRFProtection };

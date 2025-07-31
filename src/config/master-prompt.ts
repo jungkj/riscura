@@ -229,34 +229,34 @@ Recommend immediate escalation when:
 • Material weaknesses in risk management are identified
 • Requests exceed AI capabilities or require human expertise
 • Conflicting regulatory requirements are identified
-• Implementation recommendations involve significant business disruption`
+• Implementation recommendations involve significant business disruption`,
 };
 
 // Agent-Specific Prompt Modifiers
 export const AGENT_MODIFIERS = {
   risk_analyzer: {
-    focus: "Risk identification, assessment, and quantification",
-    specialization: "Advanced risk modeling and scenario analysis",
-    tone: "Analytical and thorough"
+    focus: 'Risk identification, assessment, and quantification',
+    specialization: 'Advanced risk modeling and scenario analysis',
+    tone: 'Analytical and thorough',
   },
-  
+
   control_advisor: {
-    focus: "Control design, implementation, and optimization",
-    specialization: "Control effectiveness and efficiency optimization",
-    tone: "Practical and implementation-focused"
+    focus: 'Control design, implementation, and optimization',
+    specialization: 'Control effectiveness and efficiency optimization',
+    tone: 'Practical and implementation-focused',
   },
-  
+
   compliance_expert: {
-    focus: "Regulatory compliance and audit preparation",
-    specialization: "Multi-jurisdictional compliance requirements",
-    tone: "Precise and regulation-focused"
+    focus: 'Regulatory compliance and audit preparation',
+    specialization: 'Multi-jurisdictional compliance requirements',
+    tone: 'Precise and regulation-focused',
   },
-  
+
   general_assistant: {
-    focus: "General risk management guidance and support",
-    specialization: "Broad risk management knowledge and best practices",
-    tone: "Helpful and comprehensive"
-  }
+    focus: 'General risk management guidance and support',
+    specialization: 'Broad risk management knowledge and best practices',
+    tone: 'Helpful and comprehensive',
+  },
 };
 
 // Contextual Prompt Enhancement
@@ -272,14 +272,16 @@ export function buildContextualPrompt(
   }
 ): string {
   const modifier = AGENT_MODIFIERS[baseAgent];
-  const context = organizationalContext ? `
+  const context = organizationalContext
+    ? `
 ORGANIZATIONAL CONTEXT:
 - Industry: ${organizationalContext.industry || 'Not specified'}
 - Organization Size: ${organizationalContext.size || 'Not specified'}
 - Geographic Presence: ${organizationalContext.geography || 'Not specified'}
 - Risk Appetite: ${organizationalContext.riskAppetite || 'Not specified'}
 - Applied Frameworks: ${organizationalContext.frameworks?.join(', ') || 'Not specified'}
-` : '';
+`
+    : '';
 
   return `${RISCURA_MASTER_PROMPT.systemIdentity}
 
@@ -300,4 +302,4 @@ USER QUERY: ${userQuery}
 Please provide a comprehensive response following the established response framework and quality standards.`;
 }
 
-export default RISCURA_MASTER_PROMPT; 
+export default RISCURA_MASTER_PROMPT;

@@ -60,14 +60,22 @@ export interface NISTProfile {
 export interface FunctionOutcome {
   functionId: string;
   maturityLevel: number;
-  implementationStatus: 'not_implemented' | 'partially_implemented' | 'largely_implemented' | 'fully_implemented';
+  implementationStatus:
+    | 'not_implemented'
+    | 'partially_implemented'
+    | 'largely_implemented'
+    | 'fully_implemented';
   priority: 'low' | 'medium' | 'high' | 'critical';
 }
 
 export interface CategoryOutcome {
   categoryId: string;
   maturityLevel: number;
-  implementationStatus: 'not_implemented' | 'partially_implemented' | 'largely_implemented' | 'fully_implemented';
+  implementationStatus:
+    | 'not_implemented'
+    | 'partially_implemented'
+    | 'largely_implemented'
+    | 'fully_implemented';
   controls: string[];
   gaps: string[];
 }
@@ -75,7 +83,11 @@ export interface CategoryOutcome {
 export interface SubcategoryOutcome {
   subcategoryId: string;
   maturityLevel: number;
-  implementationStatus: 'not_implemented' | 'partially_implemented' | 'largely_implemented' | 'fully_implemented';
+  implementationStatus:
+    | 'not_implemented'
+    | 'partially_implemented'
+    | 'largely_implemented'
+    | 'fully_implemented';
   evidence: string[];
   controls: string[];
 }
@@ -103,7 +115,11 @@ export interface SubcategoryAssessment {
   subcategoryId: string;
   tier: number;
   score: number;
-  implementationStatus: 'not_implemented' | 'partially_implemented' | 'largely_implemented' | 'fully_implemented';
+  implementationStatus:
+    | 'not_implemented'
+    | 'partially_implemented'
+    | 'largely_implemented'
+    | 'fully_implemented';
   evidence: Evidence[];
   controls: string[];
   deficiencies: string[];
@@ -182,7 +198,7 @@ export class NISTFrameworkService {
         characteristics: ['Ad hoc risk management', 'Limited awareness', 'Reactive approach'],
         riskManagement: 'Ad hoc and reactive',
         integratedRiskManagement: 'Limited integration',
-        externalParticipation: 'Minimal participation'
+        externalParticipation: 'Minimal participation',
       },
       {
         tier: 2,
@@ -191,7 +207,7 @@ export class NISTFrameworkService {
         characteristics: ['Risk-informed decisions', 'Management awareness', 'Some integration'],
         riskManagement: 'Risk-informed but not organization-wide',
         integratedRiskManagement: 'Some integration across organization',
-        externalParticipation: 'Limited external participation'
+        externalParticipation: 'Limited external participation',
       },
       {
         tier: 3,
@@ -200,7 +216,7 @@ export class NISTFrameworkService {
         characteristics: ['Formal policies', 'Regular updates', 'Organization-wide'],
         riskManagement: 'Organization-wide approach',
         integratedRiskManagement: 'Integrated across organization',
-        externalParticipation: 'Active external participation'
+        externalParticipation: 'Active external participation',
       },
       {
         tier: 4,
@@ -209,8 +225,8 @@ export class NISTFrameworkService {
         characteristics: ['Continuous improvement', 'Adaptive approach', 'Lessons learned'],
         riskManagement: 'Adaptive and continuously improving',
         integratedRiskManagement: 'Fully integrated enterprise approach',
-        externalParticipation: 'Proactive external participation'
-      }
+        externalParticipation: 'Proactive external participation',
+      },
     ];
 
     // Initialize NIST Functions
@@ -237,39 +253,42 @@ export class NISTFrameworkService {
               name: 'Physical devices and systems are inventoried',
               description: 'Physical devices and systems within the organization are inventoried',
               informativeReferences: ['CIS CSC 1', 'ISO 27001 A.8.1.1'],
-              implementationTiers: this.implementationTiers
+              implementationTiers: this.implementationTiers,
             },
             {
               id: 'id-am-2',
               name: 'Software platforms and applications are inventoried',
-              description: 'Software platforms and applications within the organization are inventoried',
+              description:
+                'Software platforms and applications within the organization are inventoried',
               informativeReferences: ['CIS CSC 2', 'ISO 27001 A.8.1.1'],
-              implementationTiers: this.implementationTiers
-            }
-          ]
+              implementationTiers: this.implementationTiers,
+            },
+          ],
         },
         {
           id: 'id-be',
           name: 'Business Environment (ID.BE)',
-          description: 'Organization\'s mission, objectives, stakeholders, and activities are understood',
+          description:
+            "Organization's mission, objectives, stakeholders, and activities are understood",
           subcategories: [
             {
               id: 'id-be-1',
               name: 'Organizational mission is identified and communicated',
-              description: 'The organization\'s role in the supply chain is identified and communicated',
+              description:
+                "The organization's role in the supply chain is identified and communicated",
               informativeReferences: ['ISO 27001 A.15.1.1'],
-              implementationTiers: this.implementationTiers
-            }
-          ]
-        }
+              implementationTiers: this.implementationTiers,
+            },
+          ],
+        },
       ],
       outcomes: [
         'Asset inventory is maintained',
         'Business environment is understood',
         'Governance structure is established',
         'Risk assessment is performed',
-        'Risk management strategy is established'
-      ]
+        'Risk management strategy is established',
+      ],
     };
 
     this.functions.set('identify', identifyFunction);
@@ -289,12 +308,13 @@ export class NISTFrameworkService {
             {
               id: 'pr-ac-1',
               name: 'Identities and credentials are issued and managed',
-              description: 'Identities and credentials are issued, managed, verified, revoked, and audited',
+              description:
+                'Identities and credentials are issued, managed, verified, revoked, and audited',
               informativeReferences: ['CIS CSC 16', 'ISO 27001 A.9.2.1'],
-              implementationTiers: this.implementationTiers
-            }
-          ]
-        }
+              implementationTiers: this.implementationTiers,
+            },
+          ],
+        },
       ],
       outcomes: [
         'Access controls are implemented',
@@ -302,8 +322,8 @@ export class NISTFrameworkService {
         'Data security measures are in place',
         'Information protection processes are implemented',
         'Maintenance activities are performed',
-        'Protective technology is deployed'
-      ]
+        'Protective technology is deployed',
+      ],
     };
 
     this.functions.set('protect', protectFunction);
@@ -323,18 +343,19 @@ export class NISTFrameworkService {
             {
               id: 'de-ae-1',
               name: 'Network baseline is established and managed',
-              description: 'A baseline of network operations and expected data flows is established',
+              description:
+                'A baseline of network operations and expected data flows is established',
               informativeReferences: ['CIS CSC 12', 'ISO 27001 A.12.4.1'],
-              implementationTiers: this.implementationTiers
-            }
-          ]
-        }
+              implementationTiers: this.implementationTiers,
+            },
+          ],
+        },
       ],
       outcomes: [
         'Anomalies and events are detected',
         'Security continuous monitoring is performed',
-        'Detection processes are maintained'
-      ]
+        'Detection processes are maintained',
+      ],
     };
 
     this.functions.set('detect', detectFunction);
@@ -344,7 +365,8 @@ export class NISTFrameworkService {
     const respondFunction: NISTFunction = {
       id: 'respond',
       name: 'Respond (RS)',
-      description: 'Develop and implement appropriate activities to take action regarding detected cybersecurity incidents',
+      description:
+        'Develop and implement appropriate activities to take action regarding detected cybersecurity incidents',
       categories: [
         {
           id: 'rs-rp',
@@ -356,18 +378,18 @@ export class NISTFrameworkService {
               name: 'Response plan is executed during or after an incident',
               description: 'Response plan is executed during or after an incident',
               informativeReferences: ['CIS CSC 19', 'ISO 27001 A.16.1.5'],
-              implementationTiers: this.implementationTiers
-            }
-          ]
-        }
+              implementationTiers: this.implementationTiers,
+            },
+          ],
+        },
       ],
       outcomes: [
         'Response planning is established',
         'Communications are coordinated',
         'Analysis is performed',
         'Mitigation activities are implemented',
-        'Improvements are incorporated'
-      ]
+        'Improvements are incorporated',
+      ],
     };
 
     this.functions.set('respond', respondFunction);
@@ -377,7 +399,8 @@ export class NISTFrameworkService {
     const recoverFunction: NISTFunction = {
       id: 'recover',
       name: 'Recover (RC)',
-      description: 'Develop and implement appropriate activities to maintain resilience and restore capabilities',
+      description:
+        'Develop and implement appropriate activities to maintain resilience and restore capabilities',
       categories: [
         {
           id: 'rc-rp',
@@ -389,16 +412,16 @@ export class NISTFrameworkService {
               name: 'Recovery plan is executed during or after a cybersecurity incident',
               description: 'Recovery plan is executed during or after a cybersecurity incident',
               informativeReferences: ['CIS CSC 10', 'ISO 27001 A.17.1.2'],
-              implementationTiers: this.implementationTiers
-            }
-          ]
-        }
+              implementationTiers: this.implementationTiers,
+            },
+          ],
+        },
       ],
       outcomes: [
         'Recovery planning is established',
         'Improvements are incorporated',
-        'Communications are coordinated'
-      ]
+        'Communications are coordinated',
+      ],
     };
 
     this.functions.set('recover', recoverFunction);
@@ -411,34 +434,33 @@ export class NISTFrameworkService {
     assessor: string,
     targetTier: number = 3
   ): Promise<NISTAssessment> {
-    
     // Create current profile
     const currentProfile = await this.createCurrentProfile(risks, controls);
-    
+
     // Create target profile
     const targetProfile = await this.createTargetProfile(targetTier);
-    
+
     // Assess each function
     const functionAssessments: FunctionAssessment[] = [];
     for (const [functionId, nistFunction] of this.functions) {
       const assessment = await this.assessFunction(nistFunction, risks, controls);
       functionAssessments.push(assessment);
     }
-    
+
     // Calculate overall tier
     const overallTier = Math.round(
       functionAssessments.reduce((sum, f) => sum + f.tier, 0) / functionAssessments.length
     );
-    
+
     // Identify gaps
     const gaps = this.identifyNISTGaps(currentProfile, targetProfile);
-    
+
     // Generate recommendations
     const recommendations = await this.generateNISTRecommendations(functionAssessments, gaps);
-    
+
     // Create implementation plan
     const implementationPlan = this.createNISTImplementationPlan(recommendations, gaps);
-    
+
     return {
       organizationId,
       assessmentDate: new Date(),
@@ -450,44 +472,41 @@ export class NISTFrameworkService {
       overallTier,
       gaps,
       recommendations,
-      implementationPlan
+      implementationPlan,
     };
   }
 
-  async performNISTGapAnalysis(
-    currentAssessment: NISTAssessment
-  ): Promise<{
+  async performNISTGapAnalysis(currentAssessment: NISTAssessment): Promise<{
     functionGaps: NISTGap[];
     priorityAreas: string[];
     quickWins: string[];
     roadmap: ImplementationPhase[];
     riskReduction: number;
   }> {
-    
     const functionGaps = currentAssessment.gaps;
-    
+
     // Identify priority areas (high impact, high gap)
     const priorityAreas = functionGaps
-      .filter(gap => gap.impact === 'high' && gap.gap >= 2)
-      .map(gap => this.functions.get(gap.functionId)?.name || gap.functionId);
-    
+      .filter((gap) => gap.impact === 'high' && gap.gap >= 2)
+      .map((gap) => this.functions.get(gap.functionId)?.name || gap.functionId);
+
     // Identify quick wins (low effort, medium+ gap)
     const quickWins = functionGaps
-      .filter(gap => gap.effort === 'low' && gap.gap >= 1)
-      .map(gap => this.functions.get(gap.functionId)?.name || gap.functionId);
-    
+      .filter((gap) => gap.effort === 'low' && gap.gap >= 1)
+      .map((gap) => this.functions.get(gap.functionId)?.name || gap.functionId);
+
     // Create implementation roadmap
     const roadmap = this.createNISTRoadmap(functionGaps);
-    
+
     // Calculate potential risk reduction
     const riskReduction = this.calculateRiskReduction(functionGaps);
-    
+
     return {
       functionGaps,
       priorityAreas,
       quickWins,
       roadmap,
-      riskReduction
+      riskReduction,
     };
   }
 
@@ -495,51 +514,51 @@ export class NISTFrameworkService {
     const functionOutcomes: FunctionOutcome[] = [];
     const categoryOutcomes: CategoryOutcome[] = [];
     const subcategoryOutcomes: SubcategoryOutcome[] = [];
-    
+
     // Assess each function
     for (const [functionId, nistFunction] of this.functions) {
       const functionMaturity = this.assessFunctionMaturity(nistFunction, controls);
-      
+
       functionOutcomes.push({
         functionId,
         maturityLevel: functionMaturity,
         implementationStatus: this.determineImplementationStatus(functionMaturity),
-        priority: this.determineFunctionPriority(functionId, risks)
+        priority: this.determineFunctionPriority(functionId, risks),
       });
-      
+
       // Assess categories
-      nistFunction.categories.forEach(category => {
+      nistFunction.categories.forEach((category) => {
         const categoryMaturity = this.assessCategoryMaturity(category, controls);
         const relevantControls = this.getRelevantControls(category, controls);
-        
+
         categoryOutcomes.push({
           categoryId: category.id,
           maturityLevel: categoryMaturity,
           implementationStatus: this.determineImplementationStatus(categoryMaturity),
-          controls: relevantControls.map(c => c.id),
-          gaps: categoryMaturity < 3 ? [`Improve ${category.name} implementation`] : []
+          controls: relevantControls.map((c) => c.id),
+          gaps: categoryMaturity < 3 ? [`Improve ${category.name} implementation`] : [],
         });
-        
+
         // Assess subcategories
-        category.subcategories.forEach(subcategory => {
+        category.subcategories.forEach((subcategory) => {
           const subcategoryMaturity = this.assessSubcategoryMaturity(subcategory, controls);
           const subcategoryControls = this.getRelevantControls(subcategory, controls);
-          
+
           subcategoryOutcomes.push({
             subcategoryId: subcategory.id,
             maturityLevel: subcategoryMaturity,
             implementationStatus: this.determineImplementationStatus(subcategoryMaturity),
             evidence: ['Control documentation', 'Implementation records'],
-            controls: subcategoryControls.map(c => c.id)
+            controls: subcategoryControls.map((c) => c.id),
           });
         });
       });
     }
-    
+
     const overallMaturity = Math.round(
       functionOutcomes.reduce((sum, f) => sum + f.maturityLevel, 0) / functionOutcomes.length
     );
-    
+
     return {
       profileId: 'current-profile',
       name: 'Current Cybersecurity Profile',
@@ -547,7 +566,7 @@ export class NISTFrameworkService {
       functionOutcomes,
       categoryOutcomes,
       subcategoryOutcomes,
-      overallMaturity
+      overallMaturity,
     };
   }
 
@@ -555,37 +574,37 @@ export class NISTFrameworkService {
     const functionOutcomes: FunctionOutcome[] = [];
     const categoryOutcomes: CategoryOutcome[] = [];
     const subcategoryOutcomes: SubcategoryOutcome[] = [];
-    
+
     // Set target maturity for all functions
     for (const [functionId, nistFunction] of this.functions) {
       functionOutcomes.push({
         functionId,
         maturityLevel: targetTier,
         implementationStatus: 'fully_implemented',
-        priority: 'high'
+        priority: 'high',
       });
-      
-      nistFunction.categories.forEach(category => {
+
+      nistFunction.categories.forEach((category) => {
         categoryOutcomes.push({
           categoryId: category.id,
           maturityLevel: targetTier,
           implementationStatus: 'fully_implemented',
           controls: [],
-          gaps: []
+          gaps: [],
         });
-        
-        category.subcategories.forEach(subcategory => {
+
+        category.subcategories.forEach((subcategory) => {
           subcategoryOutcomes.push({
             subcategoryId: subcategory.id,
             maturityLevel: targetTier,
             implementationStatus: 'fully_implemented',
             evidence: [],
-            controls: []
+            controls: [],
           });
         });
       });
     }
-    
+
     return {
       profileId: 'target-profile',
       name: `Target Cybersecurity Profile (Tier ${targetTier})`,
@@ -593,7 +612,7 @@ export class NISTFrameworkService {
       functionOutcomes,
       categoryOutcomes,
       subcategoryOutcomes,
-      overallMaturity: targetTier
+      overallMaturity: targetTier,
     };
   }
 
@@ -602,17 +621,16 @@ export class NISTFrameworkService {
     risks: Risk[],
     controls: Control[]
   ): Promise<FunctionAssessment> {
-    
     const categoryAssessments: CategoryAssessment[] = [];
-    
+
     // Assess each category
-    nistFunction.categories.forEach(category => {
+    nistFunction.categories.forEach((category) => {
       const subcategoryAssessments: SubcategoryAssessment[] = [];
-      
-      category.subcategories.forEach(subcategory => {
+
+      category.subcategories.forEach((subcategory) => {
         const tier = this.assessSubcategoryMaturity(subcategory, controls);
         const relevantControls = this.getRelevantControls(subcategory, controls);
-        
+
         subcategoryAssessments.push({
           subcategoryId: subcategory.id,
           tier,
@@ -624,34 +642,34 @@ export class NISTFrameworkService {
               description: 'Documented controls and procedures',
               quality: 'medium',
               date: new Date(),
-              source: 'Control Registry'
-            }
+              source: 'Control Registry',
+            },
           ],
-          controls: relevantControls.map(c => c.id),
-          deficiencies: tier < 3 ? ['Insufficient implementation'] : []
+          controls: relevantControls.map((c) => c.id),
+          deficiencies: tier < 3 ? ['Insufficient implementation'] : [],
         });
       });
-      
+
       const categoryTier = Math.round(
         subcategoryAssessments.reduce((sum, s) => sum + s.tier, 0) / subcategoryAssessments.length
       );
-      
+
       const controlCoverage = this.calculateControlCoverage(category, controls);
-      
+
       categoryAssessments.push({
         categoryId: category.id,
         tier: categoryTier,
         score: categoryTier * 25,
         subcategoryAssessments,
         controlCoverage,
-        gaps: categoryTier < 3 ? [`Improve ${category.name} maturity`] : []
+        gaps: categoryTier < 3 ? [`Improve ${category.name} maturity`] : [],
       });
     });
-    
+
     const functionTier = Math.round(
       categoryAssessments.reduce((sum, c) => sum + c.tier, 0) / categoryAssessments.length
     );
-    
+
     return {
       functionId: nistFunction.id,
       tier: functionTier,
@@ -659,17 +677,17 @@ export class NISTFrameworkService {
       categoryAssessments,
       strengths: functionTier >= 3 ? [`Strong ${nistFunction.name} implementation`] : [],
       weaknesses: functionTier < 3 ? [`Weak ${nistFunction.name} implementation`] : [],
-      recommendations: functionTier < 3 ? [`Enhance ${nistFunction.name} capabilities`] : []
+      recommendations: functionTier < 3 ? [`Enhance ${nistFunction.name} capabilities`] : [],
     };
   }
 
   // Helper methods
   private assessFunctionMaturity(nistFunction: NISTFunction, controls: Control[]): number {
     // Simplified maturity assessment based on control coverage
-    const relevantControls = controls.filter(control => 
+    const relevantControls = controls.filter((control) =>
       this.isControlRelevantToFunction(control, nistFunction)
     );
-    
+
     if (relevantControls.length === 0) return 1;
     if (relevantControls.length < 3) return 2;
     if (relevantControls.length < 6) return 3;
@@ -678,7 +696,7 @@ export class NISTFrameworkService {
 
   private assessCategoryMaturity(category: NISTCategory, controls: Control[]): number {
     const relevantControls = this.getRelevantControls(category, controls);
-    
+
     if (relevantControls.length === 0) return 1;
     if (relevantControls.length < 2) return 2;
     if (relevantControls.length < 4) return 3;
@@ -687,7 +705,7 @@ export class NISTFrameworkService {
 
   private assessSubcategoryMaturity(subcategory: NISTSubcategory, controls: Control[]): number {
     const relevantControls = this.getRelevantControls(subcategory, controls);
-    
+
     if (relevantControls.length === 0) return 1;
     if (relevantControls.length === 1) return 2;
     if (relevantControls.length < 3) return 3;
@@ -696,7 +714,7 @@ export class NISTFrameworkService {
 
   private getRelevantControls(item: any, controls: Control[]): Control[] {
     // Simplified relevance check based on keywords
-    return controls.filter(control => 
+    return controls.filter((control) =>
       this.isControlRelevant(control, item.name + ' ' + item.description)
     );
   }
@@ -704,51 +722,60 @@ export class NISTFrameworkService {
   private isControlRelevant(control: Control, context: string): boolean {
     const controlText = (control.title + ' ' + control.description).toLowerCase();
     const contextText = context.toLowerCase();
-    
+
     // Simple keyword matching
     const keywords = ['access', 'identity', 'asset', 'data', 'network', 'incident', 'recovery'];
-    return keywords.some(keyword => 
-      controlText.includes(keyword) && contextText.includes(keyword)
+    return keywords.some(
+      (keyword) => controlText.includes(keyword) && contextText.includes(keyword)
     );
   }
 
   private isControlRelevantToFunction(control: Control, nistFunction: NISTFunction): boolean {
     const controlText = (control.title + ' ' + control.description).toLowerCase();
     const functionText = (nistFunction.name + ' ' + nistFunction.description).toLowerCase();
-    
+
     return this.isControlRelevant(control, functionText);
   }
 
-  private determineImplementationStatus(maturityLevel: number): 'not_implemented' | 'partially_implemented' | 'largely_implemented' | 'fully_implemented' {
+  private determineImplementationStatus(
+    maturityLevel: number
+  ): 'not_implemented' | 'partially_implemented' | 'largely_implemented' | 'fully_implemented' {
     if (maturityLevel >= 4) return 'fully_implemented';
     if (maturityLevel >= 3) return 'largely_implemented';
     if (maturityLevel >= 2) return 'partially_implemented';
     return 'not_implemented';
   }
 
-  private determineFunctionPriority(functionId: string, risks: Risk[]): 'low' | 'medium' | 'high' | 'critical' {
+  private determineFunctionPriority(
+    functionId: string,
+    risks: Risk[]
+  ): 'low' | 'medium' | 'high' | 'critical' {
     // Determine priority based on risk exposure
-    const techRisks = risks.filter(r => r.category === 'TECHNOLOGY').length;
-    
+    const techRisks = risks.filter((r) => r.category === 'TECHNOLOGY').length;
+
     if (functionId === 'protect' && techRisks > 10) return 'critical';
     if (functionId === 'detect' && techRisks > 5) return 'high';
     if (functionId === 'respond' && techRisks > 3) return 'high';
-    
+
     return 'medium';
   }
 
   private calculateControlCoverage(category: NISTCategory, controls: Control[]): number {
     const relevantControls = this.getRelevantControls(category, controls);
     const totalSubcategories = category.subcategories.length;
-    
-    return totalSubcategories > 0 ? Math.round((relevantControls.length / totalSubcategories) * 100) : 0;
+
+    return totalSubcategories > 0
+      ? Math.round((relevantControls.length / totalSubcategories) * 100)
+      : 0;
   }
 
   private identifyNISTGaps(currentProfile: NISTProfile, targetProfile: NISTProfile): NISTGap[] {
     const gaps: NISTGap[] = [];
-    
-    currentProfile.functionOutcomes.forEach(current => {
-      const target = targetProfile.functionOutcomes.find(t => t.functionId === current.functionId);
+
+    currentProfile.functionOutcomes.forEach((current) => {
+      const target = targetProfile.functionOutcomes.find(
+        (t) => t.functionId === current.functionId
+      );
       if (target && current.maturityLevel < target.maturityLevel) {
         const gap = target.maturityLevel - current.maturityLevel;
         gaps.push({
@@ -759,11 +786,11 @@ export class NISTFrameworkService {
           impact: this.determineGapImpact(gap),
           effort: this.determineGapEffort(gap),
           priority: this.calculateGapPriority(gap, current.functionId),
-          description: `Improve ${current.functionId} from tier ${current.maturityLevel} to ${target.maturityLevel}`
+          description: `Improve ${current.functionId} from tier ${current.maturityLevel} to ${target.maturityLevel}`,
         });
       }
     });
-    
+
     return gaps;
   }
 
@@ -771,10 +798,9 @@ export class NISTFrameworkService {
     functionAssessments: FunctionAssessment[],
     gaps: NISTGap[]
   ): Promise<NISTRecommendation[]> {
-    
     const recommendations: NISTRecommendation[] = [];
-    
-    gaps.forEach(gap => {
+
+    gaps.forEach((gap) => {
       const nistFunction = this.functions.get(gap.functionId);
       if (nistFunction) {
         recommendations.push({
@@ -788,16 +814,16 @@ export class NISTFrameworkService {
             'Develop implementation plan',
             'Deploy required controls',
             'Train personnel',
-            'Establish monitoring'
+            'Establish monitoring',
           ],
           timeline: gap.effort === 'high' ? 180 : gap.effort === 'medium' ? 120 : 60,
           cost: gap.effort === 'high' ? 100000 : gap.effort === 'medium' ? 50000 : 25000,
           benefit: 'Improved cybersecurity posture and risk reduction',
-          dependencies: []
+          dependencies: [],
         });
       }
     });
-    
+
     return recommendations;
   }
 
@@ -805,7 +831,6 @@ export class NISTFrameworkService {
     recommendations: NISTRecommendation[],
     gaps: NISTGap[]
   ): NISTImplementationPlan {
-    
     const phases: ImplementationPhase[] = [
       {
         phase: 1,
@@ -815,7 +840,7 @@ export class NISTFrameworkService {
         activities: ['Asset inventory', 'Access controls', 'Data protection'],
         deliverables: ['Asset register', 'Access control matrix', 'Data classification'],
         cost: 75000,
-        riskReduction: 30
+        riskReduction: 30,
       },
       {
         phase: 2,
@@ -825,7 +850,7 @@ export class NISTFrameworkService {
         activities: ['Monitoring deployment', 'Incident response', 'Threat detection'],
         deliverables: ['Monitoring system', 'Response procedures', 'Detection rules'],
         cost: 60000,
-        riskReduction: 25
+        riskReduction: 25,
       },
       {
         phase: 3,
@@ -835,14 +860,14 @@ export class NISTFrameworkService {
         activities: ['Recovery planning', 'Business continuity', 'Continuous improvement'],
         deliverables: ['Recovery plans', 'Continuity procedures', 'Improvement process'],
         cost: 40000,
-        riskReduction: 20
-      }
+        riskReduction: 20,
+      },
     ];
-    
+
     const totalDuration = phases.reduce((sum, phase) => sum + phase.duration, 0);
     const totalCost = phases.reduce((sum, phase) => sum + phase.cost, 0);
     const riskReduction = phases.reduce((sum, phase) => sum + phase.riskReduction, 0);
-    
+
     return {
       phases,
       totalDuration,
@@ -853,24 +878,24 @@ export class NISTFrameworkService {
         'Risk reduction percentage',
         'Control implementation rate',
         'Incident response time',
-        'Recovery time objectives'
-      ]
+        'Recovery time objectives',
+      ],
     };
   }
 
   private createNISTRoadmap(gaps: NISTGap[]): ImplementationPhase[] {
     // Sort gaps by priority
     const sortedGaps = gaps.sort((a, b) => b.priority - a.priority);
-    
+
     const phases: ImplementationPhase[] = [];
     let currentPhase = 1;
-    
+
     // Group gaps into phases based on function dependencies
     const functionOrder = ['identify', 'protect', 'detect', 'respond', 'recover'];
-    
-    functionOrder.forEach(functionId => {
-      const functionGaps = sortedGaps.filter(gap => gap.functionId === functionId);
-      
+
+    functionOrder.forEach((functionId) => {
+      const functionGaps = sortedGaps.filter((gap) => gap.functionId === functionId);
+
       if (functionGaps.length > 0) {
         const nistFunction = this.functions.get(functionId);
         phases.push({
@@ -881,12 +906,12 @@ export class NISTFrameworkService {
           activities: [`Enhance ${functionId} capabilities`],
           deliverables: [`Improved ${functionId} implementation`],
           cost: 50000,
-          riskReduction: 15
+          riskReduction: 15,
         });
         currentPhase++;
       }
     });
-    
+
     return phases;
   }
 
@@ -894,9 +919,9 @@ export class NISTFrameworkService {
     // Calculate potential risk reduction based on gap closure
     const totalGapImpact = gaps.reduce((sum, gap) => {
       const impactScore = gap.impact === 'high' ? 3 : gap.impact === 'medium' ? 2 : 1;
-      return sum + (gap.gap * impactScore);
+      return sum + gap.gap * impactScore;
     }, 0);
-    
+
     // Convert to percentage (simplified calculation)
     return Math.min(75, totalGapImpact * 5);
   }
@@ -915,15 +940,15 @@ export class NISTFrameworkService {
 
   private calculateGapPriority(gap: number, functionId: string): number {
     let priority = gap * 25; // Base priority on gap size
-    
+
     // Adjust based on function criticality
     const criticalFunctions = ['protect', 'detect'];
     if (criticalFunctions.includes(functionId)) {
       priority += 25;
     }
-    
+
     return Math.min(100, priority);
   }
 }
 
-export const nistFrameworkService = new NISTFrameworkService(); 
+export const nistFrameworkService = new NISTFrameworkService();

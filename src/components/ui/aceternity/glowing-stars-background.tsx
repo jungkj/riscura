@@ -51,15 +51,8 @@ export const GlowingStarsBackground: React.FC<GlowingStarsBackgroundProps> = ({
     };
 
     const drawStar = (star: Star) => {
-      const gradient = ctx.createRadialGradient(
-        star.x,
-        star.y,
-        0,
-        star.x,
-        star.y,
-        star.size * 3
-      );
-      
+      const gradient = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.size * 3);
+
       gradient.addColorStop(0, `rgba(255, 255, 255, ${star.opacity})`);
       gradient.addColorStop(0.5, `rgba(147, 197, 253, ${star.opacity * 0.5})`);
       gradient.addColorStop(1, 'rgba(147, 197, 253, 0)');
@@ -123,4 +116,4 @@ export const GlowingStarsBackground: React.FC<GlowingStarsBackgroundProps> = ({
       <div className="relative z-10">{children}</div>
     </div>
   );
-}; 
+};

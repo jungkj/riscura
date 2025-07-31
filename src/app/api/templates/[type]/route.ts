@@ -4,12 +4,12 @@ import * as XLSX from 'xlsx';
 
 // Template types
 const TEMPLATE_TYPES = ['rcsa', 'controls', 'vendor-assessment'] as const;
-type TemplateType = typeof TEMPLATE_TYPES[number];
+type TemplateType = (typeof TEMPLATE_TYPES)[number];
 
 // Generate template based on type
 function generateTemplate(type: TemplateType) {
   const workbook = XLSX.utils.book_new();
-  
+
   switch (type) {
     case 'rcsa': {
       // RCSA Template
@@ -32,9 +32,9 @@ function generateTemplate(type: TemplateType) {
         'Status',
         'Last Review Date',
         'Next Review Date',
-        'Comments'
+        'Comments',
       ];
-      
+
       const sampleData = [
         [
           'RSK-001',
@@ -55,7 +55,7 @@ function generateTemplate(type: TemplateType) {
           'Active',
           '2024-01-15',
           '2024-07-15',
-          'Quarterly review scheduled'
+          'Quarterly review scheduled',
         ],
         [
           'RSK-002',
@@ -76,12 +76,12 @@ function generateTemplate(type: TemplateType) {
           'Active',
           '2024-01-20',
           '2024-04-20',
-          'DR test planned for Q2'
-        ]
+          'DR test planned for Q2',
+        ],
       ];
-      
+
       const ws = XLSX.utils.aoa_to_sheet([headers, ...sampleData]);
-      
+
       // Set column widths
       ws['!cols'] = [
         { wch: 10 }, // Risk ID
@@ -104,9 +104,9 @@ function generateTemplate(type: TemplateType) {
         { wch: 15 }, // Next Review
         { wch: 30 }, // Comments
       ];
-      
-      XLSX.utils.book_append_sheet(workbook, ws, "RCSA Template");
-      
+
+      XLSX.utils.book_append_sheet(workbook, ws, 'RCSA Template');
+
       // Add instructions sheet
       const instructionsData = [
         ['RCSA Template Instructions'],
@@ -132,16 +132,16 @@ function generateTemplate(type: TemplateType) {
         ['Status', 'Active, Closed, or Under Review'],
         ['Last Review Date', 'Date of last risk assessment (YYYY-MM-DD)'],
         ['Next Review Date', 'Scheduled next review date (YYYY-MM-DD)'],
-        ['Comments', 'Additional notes or action items']
+        ['Comments', 'Additional notes or action items'],
       ];
-      
+
       const instructionsWs = XLSX.utils.aoa_to_sheet(instructionsData);
       instructionsWs['!cols'] = [{ wch: 25 }, { wch: 60 }];
-      XLSX.utils.book_append_sheet(workbook, instructionsWs, "Instructions");
-      
+      XLSX.utils.book_append_sheet(workbook, instructionsWs, 'Instructions');
+
       break;
     }
-    
+
     case 'controls': {
       // Controls Template
       const headers = [
@@ -159,9 +159,9 @@ function generateTemplate(type: TemplateType) {
         'Next Test Date',
         'Test Results',
         'Evidence Location',
-        'Notes'
+        'Notes',
       ];
-      
+
       const sampleData = [
         [
           'CTL-001',
@@ -178,16 +178,16 @@ function generateTemplate(type: TemplateType) {
           '2024-04-10',
           'Pass',
           'SharePoint/Security/Evidence/Q1-2024',
-          'No issues identified'
-        ]
+          'No issues identified',
+        ],
       ];
-      
+
       const ws = XLSX.utils.aoa_to_sheet([headers, ...sampleData]);
       ws['!cols'] = headers.map(() => ({ wch: 20 }));
-      XLSX.utils.book_append_sheet(workbook, ws, "Controls Template");
+      XLSX.utils.book_append_sheet(workbook, ws, 'Controls Template');
       break;
     }
-    
+
     case 'vendor-assessment': {
       // Vendor Assessment Template
       const headers = [
@@ -205,9 +205,9 @@ function generateTemplate(type: TemplateType) {
         'Issues Identified',
         'Remediation Status',
         'Contact Person',
-        'Notes'
+        'Notes',
       ];
-      
+
       const sampleData = [
         [
           'VND-001',
@@ -224,57 +224,57 @@ function generateTemplate(type: TemplateType) {
           'None',
           'N/A',
           'vendor.contact@provider.com',
-          'Annual review scheduled'
-        ]
+          'Annual review scheduled',
+        ],
       ];
-      
+
       const ws = XLSX.utils.aoa_to_sheet([headers, ...sampleData]);
       ws['!cols'] = headers.map(() => ({ wch: 20 }));
-      XLSX.utils.book_append_sheet(workbook, ws, "Vendor Assessment");
+      XLSX.utils.book_append_sheet(workbook, ws, 'Vendor Assessment');
       break;
     }
   }
-  
+
   return workbook;
 }
 
 export const GET = withApiMiddleware({
   requireAuth: true,
-  rateLimiters: ['standard']
+  rateLimiters: ['standard'],
 })(async (context, params) => {
   const { type } = params as { type: string };
-  
+
   // Validate template type
   if (!TEMPLATE_TYPES.includes(type as TemplateType)) {
     return {
       success: false,
-      error: `Invalid template type. Valid types are: ${TEMPLATE_TYPES.join(', ')}`
+      error: `Invalid template type. Valid types are: ${TEMPLATE_TYPES.join(', ')}`,
     };
   }
-  
+
   try {
     // Generate the template
     const workbook = generateTemplate(type as TemplateType);
-    
+
     // Convert to buffer
     const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
-    
+
     // Create filename
     const filename = `riscura-${type}-template-${new Date().toISOString().split('T')[0]}.xlsx`;
-    
+
     // Return the file
     return new NextResponse(buffer, {
       headers: {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'Content-Disposition': `attachment; filename="${filename}"`,
-        'Cache-Control': 'no-cache'
-      }
+        'Cache-Control': 'no-cache',
+      },
     });
   } catch (error) {
     console.error('Template generation error:', error);
     return {
       success: false,
-      error: 'Failed to generate template'
+      error: 'Failed to generate template',
     };
   }
 });

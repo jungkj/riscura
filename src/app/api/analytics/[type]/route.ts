@@ -19,11 +19,11 @@ export async function GET(req: NextRequest, { params }: { params: Promise<Analyt
     const resolvedParams = await params;
     const { type } = resolvedParams;
     const { searchParams } = new URL(req.url);
-    
+
     // Forward the request to the main analytics endpoint with type parameter
     const url = new URL('/api/analytics', req.url);
     url.searchParams.set('type', type);
-    
+
     // Copy all other search params
     for (const [key, value] of searchParams.entries()) {
       url.searchParams.set(key, value);
@@ -34,9 +34,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<Analyt
     });
 
     const data = await response.json();
-    
-    return NextResponse.json(data, { status: response.status });
 
+    return NextResponse.json(data, { status: response.status });
   } catch (error) {
     const resolvedParams = await params;
     console.error(`Error fetching ${resolvedParams.type} analytics:`, error);
@@ -45,4 +44,4 @@ export async function GET(req: NextRequest, { params }: { params: Promise<Analyt
       { status: 500 }
     );
   }
-} 
+}

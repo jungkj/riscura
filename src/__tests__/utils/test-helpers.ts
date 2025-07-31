@@ -134,7 +134,9 @@ export const createTestDocument = (overrides: Partial<Document> = {}): Document 
 // BILLING TEST UTILITIES
 // ============================================================================
 
-export const createTestSubscriptionPlan = (overrides: Partial<SubscriptionPlan> = {}): SubscriptionPlan => ({
+export const createTestSubscriptionPlan = (
+  overrides: Partial<SubscriptionPlan> = {}
+): SubscriptionPlan => ({
   id: 'test-plan-123',
   name: 'Test Professional',
   description: 'Professional plan for testing',
@@ -143,8 +145,20 @@ export const createTestSubscriptionPlan = (overrides: Partial<SubscriptionPlan> 
   currency: 'USD',
   billingInterval: 'monthly',
   features: [
-    { id: 'feature-1', name: 'Advanced Analytics', description: 'Detailed insights', category: 'analytics', included: true },
-    { id: 'feature-2', name: 'API Access', description: 'RESTful API', category: 'integration', included: true },
+    {
+      id: 'feature-1',
+      name: 'Advanced Analytics',
+      description: 'Detailed insights',
+      category: 'analytics',
+      included: true,
+    },
+    {
+      id: 'feature-2',
+      name: 'API Access',
+      description: 'RESTful API',
+      category: 'integration',
+      included: true,
+    },
   ],
   limits: {
     users: 15,
@@ -166,7 +180,9 @@ export const createTestSubscriptionPlan = (overrides: Partial<SubscriptionPlan> 
   ...overrides,
 });
 
-export const createTestSubscription = (overrides: Partial<OrganizationSubscription> = {}): OrganizationSubscription => ({
+export const createTestSubscription = (
+  overrides: Partial<OrganizationSubscription> = {}
+): OrganizationSubscription => ({
   id: 'test-sub-123',
   organizationId: 'test-org-123',
   planId: 'test-plan-123',
@@ -203,7 +219,7 @@ export const createMockRequest = (
   } = {}
 ): NextRequest => {
   const urlObj = new URL(url);
-  
+
   if (options.searchParams) {
     Object.entries(options.searchParams).forEach(([key, value]) => {
       urlObj.searchParams.set(key, value);
@@ -373,14 +389,16 @@ export const createMockStripeSubscription = (overrides: any = {}) => ({
   current_period_end: Math.floor((Date.now() + 30 * 24 * 60 * 60 * 1000) / 1000),
   cancel_at_period_end: false,
   items: {
-    data: [{
-      price: {
-        id: 'price_test123',
-        unit_amount: 9900,
-        recurring: { interval: 'month' }
+    data: [
+      {
+        price: {
+          id: 'price_test123',
+          unit_amount: 9900,
+          recurring: { interval: 'month' },
+        },
+        quantity: 1,
       },
-      quantity: 1,
-    }]
+    ],
   },
   metadata: {
     organizationId: 'test-org-123',
@@ -401,14 +419,16 @@ export const createMockStripeInvoice = (overrides: any = {}) => ({
   currency: 'usd',
   created: Math.floor(Date.now() / 1000),
   lines: {
-    data: [{
-      id: 'il_test123',
-      amount: 9900,
-      currency: 'usd',
-      description: 'Professional Plan',
-      quantity: 1,
-      metadata: {},
-    }]
+    data: [
+      {
+        id: 'il_test123',
+        amount: 9900,
+        currency: 'usd',
+        description: 'Professional Plan',
+        quantity: 1,
+        metadata: {},
+      },
+    ],
   },
   metadata: {},
   ...overrides,
@@ -439,7 +459,10 @@ export const expectValidPaginationResponse = (response: any) => {
   expect(response.pagination).toHaveProperty('pages');
 };
 
-export const expectSubscriptionEnforcement = (response: any, expectedCode = 'SUBSCRIPTION_ERROR') => {
+export const expectSubscriptionEnforcement = (
+  response: any,
+  expectedCode = 'SUBSCRIPTION_ERROR'
+) => {
   expect(response.success).toBe(false);
   expect(response.error.code).toBe(expectedCode);
   expect(response.error.message).toContain('subscription');
@@ -453,7 +476,9 @@ export const cleanupTestData = async (prisma: any) => {
   // Clean up in reverse dependency order
   await prisma.usageRecord.deleteMany({ where: { organizationId: { startsWith: 'test-' } } });
   await prisma.invoice.deleteMany({ where: { organizationId: { startsWith: 'test-' } } });
-  await prisma.organizationSubscription.deleteMany({ where: { organizationId: { startsWith: 'test-' } } });
+  await prisma.organizationSubscription.deleteMany({
+    where: { organizationId: { startsWith: 'test-' } },
+  });
   await prisma.billingEvent.deleteMany({ where: { organizationId: { startsWith: 'test-' } } });
   await prisma.paymentMethod.deleteMany({ where: { organizationId: { startsWith: 'test-' } } });
   await prisma.document.deleteMany({ where: { organizationId: { startsWith: 'test-' } } });
@@ -476,9 +501,9 @@ export const measureExecutionTime = async <T>(
   const result = await fn();
   const endTime = performance.now();
   const duration = endTime - startTime;
-  
+
   console.log(`${name} executed in ${duration.toFixed(2)}ms`);
-  
+
   return { result, duration };
 };
 
@@ -500,29 +525,29 @@ export type MockPrismaClient = ReturnType<typeof createMockPrismaClient>;
  * Call an API route handler for testing purposes
  */
 export const callApiRoute = async (
-  routePath: string, 
-  req: any, 
+  routePath: string,
+  req: any,
   res: any
 ): Promise<{ status: number; data: any; headers: any }> => {
   try {
     // Dynamic import of the route handler
     const handler = await import(`@/app/api${routePath}/route`);
-    
+
     // Determine which HTTP method to call
     const method = req.method || 'GET';
     const routeHandler = handler[method];
-    
+
     if (!routeHandler) {
       return {
         status: 405,
         data: { error: 'Method not allowed' },
-        headers: {}
+        headers: {},
       };
     }
 
     // Call the route handler
     const response = await routeHandler(req);
-    
+
     // Extract response data
     const data = response.json ? await response.json() : response;
     const status = response.status || 200;
@@ -533,7 +558,7 @@ export const callApiRoute = async (
     return {
       status: 500,
       data: { error: error.message },
-      headers: {}
+      headers: {},
     };
   }
 };
@@ -551,11 +576,11 @@ export const createAuthenticatedRequest = (
   } = {}
 ): any => {
   const user = options.user || createTestUser();
-  
+
   const headers = {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer mock-jwt-token`,
-    ...options.headers
+    Authorization: `Bearer mock-jwt-token`,
+    ...options.headers,
   };
 
   const request = {
@@ -563,7 +588,7 @@ export const createAuthenticatedRequest = (
     url,
     headers,
     body: options.body ? JSON.stringify(options.body) : undefined,
-    user // Attach user for middleware
+    user, // Attach user for middleware
   };
 
   return request;
@@ -601,9 +626,11 @@ export const mockRateLimiter = (shouldLimit = false) => {
  * Create test database connection string
  */
 export const getTestDatabaseUrl = (): string => {
-  return process.env.TEST_DATABASE_URL || 
-         process.env.DATABASE_URL || 
-         'postgresql://test:test@localhost:5432/test_db';
+  return (
+    process.env.TEST_DATABASE_URL ||
+    process.env.DATABASE_URL ||
+    'postgresql://test:test@localhost:5432/test_db'
+  );
 };
 
 /**
@@ -612,15 +639,15 @@ export const getTestDatabaseUrl = (): string => {
 export const setupTestDatabase = async (prisma: any) => {
   // Create test organization
   const testOrg = await prisma.organization.create({
-    data: createTestOrganization()
+    data: createTestOrganization(),
   });
 
   // Create test user
   const testUser = await prisma.user.create({
     data: {
       ...createTestUser(),
-      organizationId: testOrg.id
-    }
+      organizationId: testOrg.id,
+    },
   });
 
   // Create test risks
@@ -628,8 +655,8 @@ export const setupTestDatabase = async (prisma: any) => {
     data: {
       ...createTestRisk(),
       organizationId: testOrg.id,
-      createdBy: testUser.id
-    }
+      createdBy: testUser.id,
+    },
   });
 
   // Create test controls
@@ -637,15 +664,15 @@ export const setupTestDatabase = async (prisma: any) => {
     data: {
       ...createTestControl(),
       organizationId: testOrg.id,
-      createdBy: testUser.id
-    }
+      createdBy: testUser.id,
+    },
   });
 
   return {
     organization: testOrg,
     user: testUser,
     risk: testRisk,
-    control: testControl
+    control: testControl,
   };
 };
 
@@ -702,32 +729,32 @@ export const clickElementSafely = async (page: any, selectors: string[]) => {
  * Login helper for E2E tests
  */
 export const loginUser = async (
-  page: any, 
-  email: string = 'testuser@riscura.com', 
+  page: any,
+  email: string = 'testuser@riscura.com',
   password: string = 'test123'
 ) => {
   await page.goto('/auth/login');
-  
+
   // Try multiple selector patterns for email input
   const emailSelectors = [
     '[data-testid="email-input"]',
     'input[type="email"]',
     'input[name="email"]',
-    'input[placeholder*="email" i]'
+    'input[placeholder*="email" i]',
   ];
-  
+
   const passwordSelectors = [
     '[data-testid="password-input"]',
     'input[type="password"]',
     'input[name="password"]',
-    'input[placeholder*="password" i]'
+    'input[placeholder*="password" i]',
   ];
-  
+
   const submitSelectors = [
     '[data-testid="login-button"]',
     'button[type="submit"]',
     'button:has-text("Sign In")',
-    'button:has-text("Login")'
+    'button:has-text("Login")',
   ];
 
   // Fill form
@@ -775,14 +802,14 @@ export const logoutUser = async (page: any) => {
     '[data-testid="user-menu"]',
     '.user-menu',
     '[aria-label*="user" i]',
-    '[aria-label*="profile" i]'
+    '[aria-label*="profile" i]',
   ];
 
   const logoutSelectors = [
     '[data-testid="logout-button"]',
     'button:has-text("Logout")',
     'button:has-text("Sign Out")',
-    'a:has-text("Logout")'
+    'a:has-text("Logout")',
   ];
 
   // Click user menu
@@ -824,7 +851,7 @@ export const checkUrlAccessibility = async (url: string, timeout = 10000): Promi
 
     const response = await fetch(url, {
       signal: controller.signal,
-      method: 'HEAD'
+      method: 'HEAD',
     });
 
     clearTimeout(timeoutId);
@@ -849,7 +876,7 @@ export const measurePageLoadTime = async (page: any, url: string): Promise<numbe
  */
 export const checkConsoleErrors = async (page: any): Promise<string[]> => {
   const errors: string[] = [];
-  
+
   page.on('console', (msg: any) => {
     if (msg.type() === 'error') {
       errors.push(msg.text());

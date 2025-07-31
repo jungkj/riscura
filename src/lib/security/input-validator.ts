@@ -132,7 +132,8 @@ class InputValidator {
     this.addValidationRule({
       id: 'sql-injection-keywords',
       name: 'SQL Keyword Injection',
-      pattern: /(\bdrop\b|\bdelete\b|\binsert\b|\bupdate\b|\bexec\b|\bexecute\b).*(\btable\b|\bfrom\b|\binto\b|\bvalues\b)/gi,
+      pattern:
+        /(\bdrop\b|\bdelete\b|\binsert\b|\bupdate\b|\bexec\b|\bexecute\b).*(\btable\b|\bfrom\b|\binto\b|\bvalues\b)/gi,
       message: 'SQL injection keywords detected',
       severity: 'critical',
       enabled: true,
@@ -182,7 +183,8 @@ class InputValidator {
     this.addValidationRule({
       id: 'url-format',
       name: 'URL Format Validation',
-      pattern: /^https?:\/\/(?:[-\w.])+(?:\:[0-9]+)?(?:\/(?:[\w\/_.])*(?:\?(?:[\w&=%.])*)?(?:\#(?:[\w.])*)?)?$/,
+      pattern:
+        /^https?:\/\/(?:[-\w.])+(?:\:[0-9]+)?(?:\/(?:[\w\/_.])*(?:\?(?:[\w&=%.])*)?(?:\#(?:[\w.])*)?)?$/,
       message: 'Invalid URL format',
       severity: 'medium',
       enabled: true,
@@ -259,7 +261,7 @@ class InputValidator {
         const schemaResult = schema.safeParse(input);
         if (!schemaResult.success) {
           result.isValid = false;
-          schemaResult.error.errors.forEach(error => {
+          schemaResult.error.errors.forEach((error) => {
             result.errors.push({
               field: error.path.join('.'),
               rule: 'schema-validation',
@@ -295,7 +297,6 @@ class InputValidator {
       if (result.threatLevel === 'dangerous' || result.threatLevel === 'critical') {
         this.sanitizationStats.threatsBlocked++;
       }
-
     } catch (error) {
       console.error('Validation error:', error);
       result.isValid = false;
@@ -312,10 +313,7 @@ class InputValidator {
   }
 
   // String validation and sanitization
-  private validateString(
-    input: string,
-    config?: Partial<SanitizationConfig>
-  ): ValidationResult {
+  private validateString(input: string, config?: Partial<SanitizationConfig>): ValidationResult {
     const result: ValidationResult = {
       isValid: true,
       sanitizedValue: input,
@@ -383,7 +381,7 @@ class InputValidator {
     if (this.containsHTML(sanitizedValue)) {
       const sanitizedHTML = this.sanitizeHTML(sanitizedValue, config);
       sanitizedValue = sanitizedHTML;
-      
+
       result.warnings.push({
         field: 'string',
         message: 'HTML content was sanitized',
@@ -440,7 +438,7 @@ class InputValidator {
       const keyResult = this.validateString(key, config);
       if (!keyResult.isValid) {
         result.isValid = false;
-        keyResult.errors.forEach(error => {
+        keyResult.errors.forEach((error) => {
           result.errors.push({
             ...error,
             field: `key:${key}`,
@@ -452,20 +450,20 @@ class InputValidator {
       // Validate value
       const valueResult = this.validate(value, undefined, config);
       result.sanitizedValue[keyResult.sanitizedValue] = valueResult.sanitizedValue;
-      
+
       if (!valueResult.isValid) {
         result.isValid = false;
       }
 
       // Merge errors and warnings with field prefixes
-      valueResult.errors.forEach(error => {
+      valueResult.errors.forEach((error) => {
         result.errors.push({
           ...error,
           field: `${key}.${error.field}`,
         });
       });
 
-      valueResult.warnings.forEach(warning => {
+      valueResult.warnings.forEach((warning) => {
         result.warnings.push({
           ...warning,
           field: `${key}.${warning.field}`,
@@ -479,10 +477,7 @@ class InputValidator {
   }
 
   // Array validation
-  private validateArray(
-    input: any[],
-    config?: Partial<SanitizationConfig>
-  ): ValidationResult {
+  private validateArray(input: any[], config?: Partial<SanitizationConfig>): ValidationResult {
     const result: ValidationResult = {
       isValid: true,
       sanitizedValue: [],
@@ -501,14 +496,14 @@ class InputValidator {
       }
 
       // Merge errors and warnings with array index
-      itemResult.errors.forEach(error => {
+      itemResult.errors.forEach((error) => {
         result.errors.push({
           ...error,
           field: `[${index}].${error.field}`,
         });
       });
 
-      itemResult.warnings.forEach(warning => {
+      itemResult.warnings.forEach((warning) => {
         result.warnings.push({
           ...warning,
           field: `[${index}].${warning.field}`,
@@ -526,7 +521,7 @@ class InputValidator {
     const defaultConfig: SanitizationConfig = {
       allowedTags: ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'ol', 'li', 'a'],
       allowedAttributes: {
-        'a': ['href', 'title'],
+        a: ['href', 'title'],
         '*': ['class'],
       },
       allowedSchemes: ['http', 'https', 'mailto'],
@@ -580,16 +575,18 @@ class InputValidator {
     target.errors.push(...source.errors);
     target.warnings.push(...source.warnings);
     target.bytesSanitized += source.bytesSanitized;
-    
+
     if (!source.isValid) {
       target.isValid = false;
     }
   }
 
-  private determineThreatLevel(errors: ValidationError[]): 'safe' | 'suspicious' | 'dangerous' | 'critical' {
-    const criticalErrors = errors.filter(e => e.severity === 'critical');
-    const highErrors = errors.filter(e => e.severity === 'high');
-    const mediumErrors = errors.filter(e => e.severity === 'medium');
+  private determineThreatLevel(
+    errors: ValidationError[]
+  ): 'safe' | 'suspicious' | 'dangerous' | 'critical' {
+    const criticalErrors = errors.filter((e) => e.severity === 'critical');
+    const highErrors = errors.filter((e) => e.severity === 'high');
+    const mediumErrors = errors.filter((e) => e.severity === 'medium');
 
     if (criticalErrors.length > 0) return 'critical';
     if (highErrors.length > 2) return 'dangerous';
@@ -641,9 +638,20 @@ export const commonSchemas = {
   email: z.string().email(),
   url: z.string().url(),
   phone: z.string().regex(/^[\+]?[1-9][\d]{0,15}$/),
-  password: z.string().min(8).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/),
-  username: z.string().min(3).max(30).regex(/^[a-zA-Z0-9_-]+$/),
-  name: z.string().min(1).max(100).regex(/^[a-zA-Z\s'-]+$/),
+  password: z
+    .string()
+    .min(8)
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/),
+  username: z
+    .string()
+    .min(3)
+    .max(30)
+    .regex(/^[a-zA-Z0-9_-]+$/),
+  name: z
+    .string()
+    .min(1)
+    .max(100)
+    .regex(/^[a-zA-Z\s'-]+$/),
   description: z.string().max(1000),
   id: z.string().uuid(),
   positiveInteger: z.number().int().positive(),
@@ -672,4 +680,4 @@ export function sanitizeHTML(html: string, config?: Partial<SanitizationConfig>)
 }
 
 // Export class for custom instances
-export { InputValidator }; 
+export { InputValidator };

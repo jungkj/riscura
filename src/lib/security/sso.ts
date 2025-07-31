@@ -30,27 +30,27 @@ export class SSOService {
     }
 
     const samlConfig = provider.configuration as SAMLConfig;
-    
+
     try {
       // Parse and validate SAML response
       const assertion = await this.parseSAMLAssertion(samlResponse, samlConfig);
-      
+
       // Validate signature if required
       if (samlConfig.wantAssertionsSigned || samlConfig.wantResponseSigned) {
-        if (!await this.validateSAMLSignature(samlResponse, samlConfig.certificate)) {
+        if (!(await this.validateSAMLSignature(samlResponse, samlConfig.certificate))) {
           throw new Error('Invalid SAML signature');
         }
       }
 
       // Extract user attributes
       const userAttributes = assertion.attributes;
-      
+
       // Map attributes to user profile
       const userProfile = this.mapAttributes(userAttributes, provider);
-      
+
       // Provision or update user
       const user = await this.provisionUser(userProfile, provider);
-      
+
       return {
         success: true,
         user,
@@ -79,7 +79,7 @@ export class SSOService {
     const samlConfig = provider.configuration as SAMLConfig;
     const requestId = `_${uuidv4()}`;
     const timestamp = new Date().toISOString();
-    
+
     const authnRequest = this.buildSAMLAuthnRequest({
       id: requestId,
       timestamp,
@@ -112,7 +112,7 @@ export class SSOService {
     }
 
     const oidcConfig = provider.configuration as OIDCConfig;
-    
+
     try {
       // Validate state
       const storedState = await this.getStoredState(state);
@@ -122,10 +122,10 @@ export class SSOService {
 
       // Exchange authorization code for tokens
       const tokenResponse = await this.exchangeOIDCCode(authorizationCode, oidcConfig);
-      
+
       // Validate ID token
       const userInfo = await this.validateOIDCToken(tokenResponse.id_token, oidcConfig);
-      
+
       // Get additional user info if needed
       if (tokenResponse.access_token && oidcConfig.scopes.includes('profile')) {
         const additionalInfo = await this.getOIDCUserInfo(tokenResponse.access_token, oidcConfig);
@@ -134,10 +134,10 @@ export class SSOService {
 
       // Map attributes to user profile
       const userProfile = this.mapAttributes(userInfo, provider);
-      
+
       // Provision or update user
       const user = await this.provisionUser(userProfile, provider);
-      
+
       return {
         success: true,
         user,
@@ -145,7 +145,7 @@ export class SSOService {
         sessionData: {
           accessToken: tokenResponse.access_token,
           refreshToken: tokenResponse.refresh_token,
-          expiresAt: new Date(Date.now() + (tokenResponse.expires_in * 1000)),
+          expiresAt: new Date(Date.now() + tokenResponse.expires_in * 1000),
         },
       };
     } catch (error) {
@@ -194,7 +194,7 @@ export class SSOService {
     }
 
     const oauth2Config = provider.configuration as OAuth2Config;
-    
+
     try {
       // Validate state
       const storedState = await this.getStoredState(state);
@@ -204,16 +204,16 @@ export class SSOService {
 
       // Exchange authorization code for access token
       const tokenResponse = await this.exchangeOAuth2Code(authorizationCode, oauth2Config);
-      
+
       // Get user info
       const userInfo = await this.getOAuth2UserInfo(tokenResponse.access_token, oauth2Config);
 
       // Map attributes to user profile
       const userProfile = this.mapAttributes(userInfo, provider);
-      
+
       // Provision or update user
       const user = await this.provisionUser(userProfile, provider);
-      
+
       return {
         success: true,
         user,
@@ -267,11 +267,11 @@ export class SSOService {
     }
 
     const ldapConfig = provider.configuration as LDAPConfig;
-    
+
     try {
       // Create LDAP client
       const ldapClient = await this.createLDAPClient(ldapConfig);
-      
+
       // Search for user
       const userDN = await this.findLDAPUser(ldapClient, username, ldapConfig);
       if (!userDN) {
@@ -280,19 +280,19 @@ export class SSOService {
 
       // Authenticate user
       await this.bindLDAPUser(ldapClient, userDN, password);
-      
+
       // Get user attributes
       const userAttributes = await this.getLDAPUserAttributes(ldapClient, userDN, ldapConfig);
-      
+
       // Close LDAP connection
       await ldapClient.unbind();
 
       // Map attributes to user profile
       const userProfile = this.mapAttributes(userAttributes, provider);
-      
+
       // Provision or update user
       const user = await this.provisionUser(userProfile, provider);
-      
+
       return {
         success: true,
         user,
@@ -369,50 +369,57 @@ export class SSOService {
   // Attribute Mapping
   private mapAttributes(attributes: Record<string, any>, provider: SSOProvider): UserProfile {
     const mapping = this.config.attributeMapping;
-    
+
     return {
       subject: attributes[mapping.subject || 'sub'] || attributes.nameId || attributes.username,
       email: attributes[mapping.email || 'email'] || attributes.mail,
-      firstName: attributes[mapping.firstName || 'given_name'] || attributes.givenName || attributes.firstName,
-      lastName: attributes[mapping.lastName || 'family_name'] || attributes.surname || attributes.lastName,
+      firstName:
+        attributes[mapping.firstName || 'given_name'] ||
+        attributes.givenName ||
+        attributes.firstName,
+      lastName:
+        attributes[mapping.lastName || 'family_name'] || attributes.surname || attributes.lastName,
       groups: this.extractGroups(attributes, mapping),
       attributes,
     };
   }
 
-  private extractGroups(attributes: Record<string, any>, mapping: Record<string, string>): string[] {
+  private extractGroups(
+    attributes: Record<string, any>,
+    mapping: Record<string, string>
+  ): string[] {
     const groupsField = mapping.groups || 'groups';
     const groups = attributes[groupsField];
-    
+
     if (Array.isArray(groups)) {
       return groups;
     } else if (typeof groups === 'string') {
-      return groups.split(',').map(g => g.trim());
+      return groups.split(',').map((g) => g.trim());
     }
-    
+
     return [];
   }
 
   private mapRole(groups: string[], provider: SSOProvider): string {
     const roleMapping = this.config.roleMapping;
-    
+
     for (const [role, mappedGroups] of Object.entries(roleMapping)) {
       const groupList = Array.isArray(mappedGroups) ? mappedGroups : [mappedGroups];
-      if (groups.some(group => groupList.includes(group))) {
+      if (groups.some((group) => groupList.includes(group))) {
         return role;
       }
     }
-    
+
     return 'user'; // Default role
   }
 
   // Provider Management
   private getProvider(providerId: string): SSOProvider | null {
-    return this.config.providers.find(p => p.id === providerId && p.enabled) || null;
+    return this.config.providers.find((p) => p.id === providerId && p.enabled) || null;
   }
 
   async updateProvider(providerId: string, updates: Partial<SSOProvider>): Promise<SSOProvider> {
-    const providerIndex = this.config.providers.findIndex(p => p.id === providerId);
+    const providerIndex = this.config.providers.findIndex((p) => p.id === providerId);
     if (providerIndex === -1) {
       throw new Error('Provider not found');
     }
@@ -456,10 +463,13 @@ export class SSOService {
   }
 
   // Helper Methods
-  private async parseSAMLAssertion(samlResponse: string, config: SAMLConfig): Promise<SAMLAssertion> {
+  private async parseSAMLAssertion(
+    samlResponse: string,
+    config: SAMLConfig
+  ): Promise<SAMLAssertion> {
     // Simplified SAML parsing - in production, use a proper SAML library
     const decoded = Buffer.from(samlResponse, 'base64').toString('utf8');
-    
+
     // Extract assertion data (this is a simplified implementation)
     return {
       nameId: this.extractXMLValue(decoded, 'NameID'),
@@ -484,13 +494,14 @@ export class SSOService {
   private extractSAMLAttributesFromXML(xml: string): Record<string, any> {
     // Simplified attribute extraction
     const attributes: Record<string, any> = {};
-    const attrRegex = /<saml:Attribute[^>]*Name="([^"]*)"[^>]*>[\s\S]*?<saml:AttributeValue[^>]*>([^<]*)<\/saml:AttributeValue>/gi;
-    
+    const attrRegex =
+      /<saml:Attribute[^>]*Name="([^"]*)"[^>]*>[\s\S]*?<saml:AttributeValue[^>]*>([^<]*)<\/saml:AttributeValue>/gi;
+
     let match;
     while ((match = attrRegex.exec(xml)) !== null) {
       attributes[match[1]] = match[2];
     }
-    
+
     return attributes;
   }
 
@@ -500,15 +511,15 @@ export class SSOService {
       // Extract signature from SAML response
       const decoded = Buffer.from(samlResponse, 'base64').toString('utf8');
       const signatureValue = this.extractXMLValue(decoded, 'SignatureValue');
-      
+
       if (!signatureValue) {
         return false;
       }
-      
+
       // Verify signature with certificate
       const verify = crypto.createVerify('RSA-SHA256');
       verify.update(decoded);
-      
+
       return verify.verify(certificate, signatureValue, 'base64');
     } catch {
       return false;
@@ -530,7 +541,7 @@ export class SSOService {
         <samlp:NameIDPolicy Format="${params.nameIdFormat}" AllowCreate="true"/>
       </samlp:AuthnRequest>
     `;
-    
+
     return Buffer.from(authnRequest).toString('base64');
   }
 
@@ -539,7 +550,7 @@ export class SSOService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Basic ${Buffer.from(`${config.clientId}:${config.clientSecret}`).toString('base64')}`,
+        Authorization: `Basic ${Buffer.from(`${config.clientId}:${config.clientSecret}`).toString('base64')}`,
       },
       body: new URLSearchParams({
         grant_type: 'authorization_code',
@@ -559,27 +570,27 @@ export class SSOService {
     // Simplified token validation - use proper JWT library in production
     const [header, payload, signature] = idToken.split('.');
     const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('utf8'));
-    
+
     // Basic validation
     if (decodedPayload.iss !== config.issuer) {
       throw new Error('Invalid token issuer');
     }
-    
+
     if (decodedPayload.aud !== config.clientId) {
       throw new Error('Invalid token audience');
     }
-    
+
     if (decodedPayload.exp < Date.now() / 1000) {
       throw new Error('Token expired');
     }
-    
+
     return decodedPayload;
   }
 
   private async getOIDCUserInfo(accessToken: string, config: OIDCConfig): Promise<any> {
     const response = await fetch(`${config.issuer}/userinfo`, {
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
 
@@ -607,7 +618,12 @@ export class SSOService {
   }
 
   // State Management
-  private async storeState(state: string, providerId: string, returnUrl: string, nonce?: string): Promise<void> {
+  private async storeState(
+    state: string,
+    providerId: string,
+    returnUrl: string,
+    nonce?: string
+  ): Promise<void> {
     await db.client.ssoState.create({
       data: {
         state,
@@ -637,7 +653,11 @@ export class SSOService {
     return stateRecord;
   }
 
-  private async storeSAMLRequest(requestId: string, providerId: string, returnUrl: string): Promise<void> {
+  private async storeSAMLRequest(
+    requestId: string,
+    providerId: string,
+    returnUrl: string
+  ): Promise<void> {
     await db.client.samlRequest.create({
       data: {
         requestId,
@@ -711,8 +731,8 @@ export class SSOService {
       const response = await fetch(`${config.issuer}/.well-known/openid_configuration`);
       if (response.ok) {
         const metadata = await response.json();
-        return { 
-          success: true, 
+        return {
+          success: true,
           message: 'OIDC provider accessible',
           metadata: {
             endpoints: {
@@ -734,13 +754,17 @@ export class SSOService {
     try {
       // Test OAuth2 authorization endpoint
       const response = await fetch(config.authorizationUrl, { method: 'HEAD' });
-      if (response.ok || response.status === 405) { // 405 is OK for HEAD request
+      if (response.ok || response.status === 405) {
+        // 405 is OK for HEAD request
         return { success: true, message: 'OAuth2 provider accessible' };
       } else {
         return { success: false, error: 'OAuth2 provider not accessible' };
       }
     } catch (error) {
-      return { success: false, error: error instanceof Error ? error.message : 'OAuth2 test failed' };
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'OAuth2 test failed',
+      };
     }
   }
 
@@ -750,17 +774,21 @@ export class SSOService {
       const client = await this.createLDAPClient(config);
       await client.bind(config.bindDN, config.bindPassword);
       await client.unbind();
-      
+
       return { success: true, message: 'LDAP provider accessible' };
     } catch (error) {
       return { success: false, error: error instanceof Error ? error.message : 'LDAP test failed' };
     }
   }
 
-  private async findLDAPUser(client: any, username: string, config: LDAPConfig): Promise<string | null> {
+  private async findLDAPUser(
+    client: any,
+    username: string,
+    config: LDAPConfig
+  ): Promise<string | null> {
     const filter = config.userFilter.replace('{username}', username);
     const results = await client.search(config.baseDN, filter, ['dn']);
-    
+
     return results.length > 0 ? results[0].dn : null;
   }
 
@@ -768,10 +796,14 @@ export class SSOService {
     await client.bind(userDN, password);
   }
 
-  private async getLDAPUserAttributes(client: any, userDN: string, config: LDAPConfig): Promise<Record<string, any>> {
+  private async getLDAPUserAttributes(
+    client: any,
+    userDN: string,
+    config: LDAPConfig
+  ): Promise<Record<string, any>> {
     const attributes = Object.values(config.attributes);
     const results = await client.search(userDN, '(objectClass=*)', attributes);
-    
+
     return results.length > 0 ? results[0] : {};
   }
 
@@ -780,7 +812,7 @@ export class SSOService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Basic ${Buffer.from(`${config.clientId}:${config.clientSecret}`).toString('base64')}`,
+        Authorization: `Basic ${Buffer.from(`${config.clientId}:${config.clientSecret}`).toString('base64')}`,
       },
       body: new URLSearchParams({
         grant_type: 'authorization_code',
@@ -799,7 +831,7 @@ export class SSOService {
   private async getOAuth2UserInfo(accessToken: string, config: OAuth2Config): Promise<any> {
     const response = await fetch(config.userInfoUrl, {
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
 
@@ -883,4 +915,4 @@ export const createDefaultSSOConfig = (): SSOConfiguration => ({
   sessionTimeout: 8 * 60 * 60, // 8 hours
   enforceSSO: false,
   fallbackToLocal: true,
-}); 
+});

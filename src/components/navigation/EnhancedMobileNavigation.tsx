@@ -25,7 +25,12 @@ import {
   Zap,
 } from 'lucide-react';
 
-import { useDeviceInfo, useSwipeGesture, TouchOptimizedButton, useA11yAnnouncement } from '@/lib/responsive/mobile-optimization-framework';
+import {
+  useDeviceInfo,
+  useSwipeGesture,
+  TouchOptimizedButton,
+  useA11yAnnouncement,
+} from '@/lib/responsive/mobile-optimization-framework';
 import { useAuth } from '@/lib/auth/auth-context';
 import { enhancedCache } from '@/lib/cache/enhanced-cache-layer';
 import { cn } from '@/lib/utils';
@@ -79,8 +84,19 @@ const NAVIGATION_GROUPS: NavigationGroup[] = [
         icon: Shield,
         children: [
           { id: 'risks-list', label: 'All Risks', href: '/risks', icon: Shield },
-          { id: 'risks-assessments', label: 'Assessments', href: '/risks/assessments', icon: Shield },
-          { id: 'risks-matrix', label: 'Risk Matrix', href: '/risks/matrix', icon: Shield, requiresPro: true },
+          {
+            id: 'risks-assessments',
+            label: 'Assessments',
+            href: '/risks/assessments',
+            icon: Shield,
+          },
+          {
+            id: 'risks-matrix',
+            label: 'Risk Matrix',
+            href: '/risks/matrix',
+            icon: Shield,
+            requiresPro: true,
+          },
         ],
       },
       {
@@ -90,8 +106,19 @@ const NAVIGATION_GROUPS: NavigationGroup[] = [
         icon: FileText,
         children: [
           { id: 'compliance-overview', label: 'Overview', href: '/compliance', icon: FileText },
-          { id: 'compliance-frameworks', label: 'Frameworks', href: '/compliance/frameworks', icon: FileText },
-          { id: 'compliance-audits', label: 'Audits', href: '/compliance/audits', icon: FileText, requiresPro: true },
+          {
+            id: 'compliance-frameworks',
+            label: 'Frameworks',
+            href: '/compliance/frameworks',
+            icon: FileText,
+          },
+          {
+            id: 'compliance-audits',
+            label: 'Audits',
+            href: '/compliance/audits',
+            icon: FileText,
+            requiresPro: true,
+          },
         ],
       },
     ],
@@ -186,16 +213,19 @@ export function EnhancedMobileNavigation({ className, onNavigate }: MobileNaviga
     threshold: 50,
   });
 
-  const handleDragEnd = useCallback((event: any, info: PanInfo) => {
-    const shouldClose = info.offset.x < -150 || info.velocity.x < -500;
-    
-    if (shouldClose) {
-      closeMenu();
-    } else {
-      // Snap back to open position
-      dragX.set(0);
-    }
-  }, [dragX]);
+  const handleDragEnd = useCallback(
+    (event: any, info: PanInfo) => {
+      const shouldClose = info.offset.x < -150 || info.velocity.x < -500;
+
+      if (shouldClose) {
+        closeMenu();
+      } else {
+        // Snap back to open position
+        dragX.set(0);
+      }
+    },
+    [dragX]
+  );
 
   // ============================================================================
   // MENU CONTROLS
@@ -204,7 +234,7 @@ export function EnhancedMobileNavigation({ className, onNavigate }: MobileNaviga
   const openMenu = useCallback(() => {
     setIsOpen(true);
     announce('Navigation menu opened', 'polite');
-    
+
     // Focus search input when menu opens
     setTimeout(() => {
       searchInputRef.current?.focus();
@@ -235,20 +265,23 @@ export function EnhancedMobileNavigation({ className, onNavigate }: MobileNaviga
   // NAVIGATION HANDLING
   // ============================================================================
 
-  const handleNavigate = useCallback((href: string, label: string) => {
-    closeMenu();
-    onNavigate?.(href);
-    router.push(href);
-    announce(`Navigating to ${label}`, 'polite');
-    
-    // Add haptic feedback
-    if (device.isTouch && 'vibrate' in navigator) {
-      navigator.vibrate(10);
-    }
-  }, [closeMenu, onNavigate, router, announce, device.isTouch]);
+  const handleNavigate = useCallback(
+    (href: string, label: string) => {
+      closeMenu();
+      onNavigate?.(href);
+      router.push(href);
+      announce(`Navigating to ${label}`, 'polite');
+
+      // Add haptic feedback
+      if (device.isTouch && 'vibrate' in navigator) {
+        navigator.vibrate(10);
+      }
+    },
+    [closeMenu, onNavigate, router, announce, device.isTouch]
+  );
 
   const handleGroupToggle = useCallback((groupId: string) => {
-    setExpandedGroups(prev => {
+    setExpandedGroups((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(groupId)) {
         newSet.delete(groupId);
@@ -263,38 +296,42 @@ export function EnhancedMobileNavigation({ className, onNavigate }: MobileNaviga
   // SEARCH FUNCTIONALITY
   // ============================================================================
 
-  const performSearch = useCallback(async (query: string) => {
-    if (!query.trim()) {
-      setSearchResults([]);
-      setIsSearching(false);
-      return;
-    }
-
-    setIsSearching(true);
-
-    // Simulate search with debouncing
-    const searchTimeout = setTimeout(() => {
-      const allItems = NAVIGATION_GROUPS.flatMap(group => 
-        group.items.flatMap(item => [item, ...(item.children || [])])
-      );
-
-      const results = allItems.filter(item =>
-        item.label.toLowerCase().includes(query.toLowerCase()) ||
-        item.description?.toLowerCase().includes(query.toLowerCase())
-      );
-
-      setSearchResults(results);
-      setIsSearching(false);
-      
-      if (results.length > 0) {
-        announce(`Found ${results.length} navigation items`, 'polite');
-      } else {
-        announce('No navigation items found', 'polite');
+  const performSearch = useCallback(
+    async (query: string) => {
+      if (!query.trim()) {
+        setSearchResults([]);
+        setIsSearching(false);
+        return;
       }
-    }, 300);
 
-    return () => clearTimeout(searchTimeout);
-  }, [announce]);
+      setIsSearching(true);
+
+      // Simulate search with debouncing
+      const searchTimeout = setTimeout(() => {
+        const allItems = NAVIGATION_GROUPS.flatMap((group) =>
+          group.items.flatMap((item) => [item, ...(item.children || [])])
+        );
+
+        const results = allItems.filter(
+          (item) =>
+            item.label.toLowerCase().includes(query.toLowerCase()) ||
+            item.description?.toLowerCase().includes(query.toLowerCase())
+        );
+
+        setSearchResults(results);
+        setIsSearching(false);
+
+        if (results.length > 0) {
+          announce(`Found ${results.length} navigation items`, 'polite');
+        } else {
+          announce('No navigation items found', 'polite');
+        }
+      }, 300);
+
+      return () => clearTimeout(searchTimeout);
+    },
+    [announce]
+  );
 
   useEffect(() => {
     performSearch(searchQuery);
@@ -310,7 +347,7 @@ export function EnhancedMobileNavigation({ className, onNavigate }: MobileNaviga
         event.preventDefault();
         toggleMenu();
       }
-      
+
       if (event.key === 'Escape' && isOpen) {
         closeMenu();
       }
@@ -324,89 +361,88 @@ export function EnhancedMobileNavigation({ className, onNavigate }: MobileNaviga
   // RENDER NAVIGATION ITEM
   // ============================================================================
 
-  const renderNavigationItem = useCallback((item: NavigationItem, level = 0) => {
-    const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
-    const hasChildren = item.children && item.children.length > 0;
-    const isExpanded = expandedGroups.has(item.id);
+  const renderNavigationItem = useCallback(
+    (item: NavigationItem, level = 0) => {
+      const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+      const hasChildren = item.children && item.children.length > 0;
+      const isExpanded = expandedGroups.has(item.id);
 
-  return (
-    <div key={item.id} className="space-y-1">
-        <motion.button
-          className={cn(
-            'w-full flex items-center justify-between p-3 rounded-lg text-left transition-colors duration-200',
-            'min-h-[48px] touch-manipulation',
-            level > 0 && 'ml-4 pl-6',
-            isActive
-              ? 'bg-blue-100 text-blue-900 border border-blue-200'
-              : 'text-gray-700 hover:bg-gray-100 active:bg-gray-200'
-          )}
-          onClick={() => {
-            if (hasChildren) {
-              handleGroupToggle(item.id);
-            } else {
-              handleNavigate(item.href, item.label);
-            }
-          }}
-          whileTap={{ scale: 0.98 }}
-          aria-expanded={hasChildren ? isExpanded : undefined}
-        >
-          <div className="flex items-center space-x-3">
-            <item.icon 
-              className={cn(
-                'w-5 h-5 flex-shrink-0',
-                isActive ? 'text-blue-600' : 'text-gray-500'
-              )} 
-            />
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center space-x-2">
-                <span className="font-medium text-base truncate">
-                  {item.label}
-                </span>
-                {item.requiresPro && (
-                  <span className="px-1.5 py-0.5 text-xs font-medium bg-amber-100 text-amber-800 rounded">
-                    PRO
-                  </span>
+      return (
+        <div key={item.id} className="space-y-1">
+          <motion.button
+            className={cn(
+              'w-full flex items-center justify-between p-3 rounded-lg text-left transition-colors duration-200',
+              'min-h-[48px] touch-manipulation',
+              level > 0 && 'ml-4 pl-6',
+              isActive
+                ? 'bg-blue-100 text-blue-900 border border-blue-200'
+                : 'text-gray-700 hover:bg-gray-100 active:bg-gray-200'
+            )}
+            onClick={() => {
+              if (hasChildren) {
+                handleGroupToggle(item.id);
+              } else {
+                handleNavigate(item.href, item.label);
+              }
+            }}
+            whileTap={{ scale: 0.98 }}
+            aria-expanded={hasChildren ? isExpanded : undefined}
+          >
+            <div className="flex items-center space-x-3">
+              <item.icon
+                className={cn(
+                  'w-5 h-5 flex-shrink-0',
+                  isActive ? 'text-blue-600' : 'text-gray-500'
                 )}
-                {item.badge && (
-                  <span className="px-2 py-0.5 text-xs font-medium bg-red-100 text-red-800 rounded-full">
-                    {item.badge}
-                  </span>
+              />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center space-x-2">
+                  <span className="font-medium text-base truncate">{item.label}</span>
+                  {item.requiresPro && (
+                    <span className="px-1.5 py-0.5 text-xs font-medium bg-amber-100 text-amber-800 rounded">
+                      PRO
+                    </span>
+                  )}
+                  {item.badge && (
+                    <span className="px-2 py-0.5 text-xs font-medium bg-red-100 text-red-800 rounded-full">
+                      {item.badge}
+                    </span>
+                  )}
+                </div>
+                {item.description && (
+                  <p className="text-sm text-gray-500 truncate mt-0.5">{item.description}</p>
                 )}
               </div>
-              {item.description && (
-                <p className="text-sm text-gray-500 truncate mt-0.5">
-                  {item.description}
-                </p>
-              )}
             </div>
-          </div>
-          {hasChildren && (
-            <ChevronDown
-              className={cn(
-                'w-4 h-4 transition-transform duration-200 flex-shrink-0',
-                isExpanded ? 'transform rotate-180' : ''
-              )}
-            />
-          )}
-        </motion.button>
+            {hasChildren && (
+              <ChevronDown
+                className={cn(
+                  'w-4 h-4 transition-transform duration-200 flex-shrink-0',
+                  isExpanded ? 'transform rotate-180' : ''
+                )}
+              />
+            )}
+          </motion.button>
 
-        {/* Render children */}
-        <AnimatePresence>
-          {hasChildren && isExpanded && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="overflow-hidden space-y-1"
-            >
-              {item.children!.map(child => renderNavigationItem(child, level + 1))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    );
-  }, [pathname, expandedGroups, handleGroupToggle, handleNavigate]);
+          {/* Render children */}
+          <AnimatePresence>
+            {hasChildren && isExpanded && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden space-y-1"
+              >
+                {item.children!.map((child) => renderNavigationItem(child, level + 1))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      );
+    },
+    [pathname, expandedGroups, handleGroupToggle, handleNavigate]
+  );
 
   // ============================================================================
   // RENDER COMPONENT
@@ -474,9 +510,7 @@ export function EnhancedMobileNavigation({ className, onNavigate }: MobileNaviga
             {/* Header */}
             <div className="p-6 border-b border-gray-200 bg-gray-50">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-gray-900">
-                  Navigation
-                </h2>
+                <h2 className="text-xl font-bold text-gray-900">Navigation</h2>
                 <TouchOptimizedButton
                   onClick={closeMenu}
                   variant="ghost"
@@ -515,7 +549,7 @@ export function EnhancedMobileNavigation({ className, onNavigate }: MobileNaviga
                     Search Results ({searchResults.length})
                   </h3>
                   {searchResults.length > 0 ? (
-                    searchResults.map(item => renderNavigationItem(item))
+                    searchResults.map((item) => renderNavigationItem(item))
                   ) : (
                     <div className="p-6 text-center text-gray-500">
                       <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
@@ -524,13 +558,13 @@ export function EnhancedMobileNavigation({ className, onNavigate }: MobileNaviga
                   )}
                 </div>
               ) : (
-                NAVIGATION_GROUPS.map(group => (
+                NAVIGATION_GROUPS.map((group) => (
                   <div key={group.id} className="space-y-3">
                     <h3 className="text-sm font-medium text-gray-500 px-3 uppercase tracking-wider">
                       {group.label}
                     </h3>
                     <div className="space-y-1">
-                      {group.items.map(item => renderNavigationItem(item))}
+                      {group.items.map((item) => renderNavigationItem(item))}
                     </div>
                   </div>
                 ))
@@ -551,9 +585,7 @@ export function EnhancedMobileNavigation({ className, onNavigate }: MobileNaviga
                       <p className="text-sm font-medium text-gray-900 truncate">
                         {user.name || 'User'}
                       </p>
-                      <p className="text-xs text-gray-500 truncate">
-                        {user.email}
-                      </p>
+                      <p className="text-xs text-gray-500 truncate">{user.email}</p>
                     </div>
                   </div>
                   <TouchOptimizedButton

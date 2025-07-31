@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { designTokens } from '@/lib/design-system/tokens';
-import { 
-  ActionIcons, 
-  StatusIcons, 
+import {
+  ActionIcons,
+  StatusIcons,
   NavigationIcons,
-  TimeIcons
+  TimeIcons,
 } from '@/components/icons/IconLibrary';
 import { LoadingStates } from '@/components/states/LoadingState';
 
@@ -83,7 +83,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   showProgress = true,
   title,
   description,
-  className = ''
+  className = '',
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [wizardData, setWizardData] = useState(initialData);
@@ -101,16 +101,16 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     setAutoSaveStatus({ status: 'saving' });
     try {
       await onSave(wizardData);
-      setAutoSaveStatus({ 
-        status: 'saved', 
-        lastSaved: new Date() 
+      setAutoSaveStatus({
+        status: 'saved',
+        lastSaved: new Date(),
       });
       setHasUnsavedChanges(false);
       lastSaveDataRef.current = wizardData;
     } catch (error) {
-      setAutoSaveStatus({ 
-        status: 'error', 
-        error: error instanceof Error ? error.message : 'Auto-save failed' 
+      setAutoSaveStatus({
+        status: 'error',
+        error: error instanceof Error ? error.message : 'Auto-save failed',
       });
     }
   }, [wizardData, hasUnsavedChanges, onSave]);
@@ -151,29 +151,29 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
   // Handle data changes from steps
   const handleDataChange = useCallback((stepData: any) => {
-    setWizardData(prev => ({
+    setWizardData((prev) => ({
       ...prev,
-      ...stepData
+      ...stepData,
     }));
   }, []);
 
   // Handle validation changes from steps
   const handleValidationChange = useCallback((stepIndex: number, validation: ValidationResult) => {
-    setStepValidations(prev => ({
+    setStepValidations((prev) => ({
       ...prev,
-      [stepIndex]: validation
+      [stepIndex]: validation,
     }));
   }, []);
 
   // Navigation functions
   const canGoNext = useCallback(() => {
     if (currentStep >= steps.length - 1) return false;
-    
+
     const currentValidation = stepValidations[currentStep];
     if (!allowStepSkipping && currentValidation && !currentValidation.isValid) {
       return false;
     }
-    
+
     return true;
   }, [currentStep, steps.length, stepValidations, allowStepSkipping]);
 
@@ -181,37 +181,40 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     return currentStep > 0;
   }, [currentStep]);
 
-  const goToStep = useCallback((stepIndex: number) => {
-    if (stepIndex < 0 || stepIndex >= steps.length) return;
-    
-    // If step skipping is not allowed, validate all previous steps
-    if (!allowStepSkipping) {
-      for (let i = 0; i < stepIndex; i++) {
-        const validation = stepValidations[i];
-        if (validation && !validation.isValid) {
-          return; // Cannot skip to this step
+  const goToStep = useCallback(
+    (stepIndex: number) => {
+      if (stepIndex < 0 || stepIndex >= steps.length) return;
+
+      // If step skipping is not allowed, validate all previous steps
+      if (!allowStepSkipping) {
+        for (let i = 0; i < stepIndex; i++) {
+          const validation = stepValidations[i];
+          if (validation && !validation.isValid) {
+            return; // Cannot skip to this step
+          }
         }
       }
-    }
-    
-    setCurrentStep(stepIndex);
-  }, [steps.length, stepValidations, allowStepSkipping]);
+
+      setCurrentStep(stepIndex);
+    },
+    [steps.length, stepValidations, allowStepSkipping]
+  );
 
   const nextStep = useCallback(() => {
     if (canGoNext()) {
-      setCurrentStep(prev => prev + 1);
+      setCurrentStep((prev) => prev + 1);
     }
   }, [canGoNext]);
 
   const previousStep = useCallback(() => {
     if (canGoPrevious()) {
-      setCurrentStep(prev => prev - 1);
+      setCurrentStep((prev) => prev - 1);
     }
   }, [canGoPrevious]);
 
   const submitWizard = useCallback(async () => {
     // Validate all steps before submission
-    const allValid = Object.values(stepValidations).every(validation => validation.isValid);
+    const allValid = Object.values(stepValidations).every((validation) => validation.isValid);
     if (!allValid) {
       // Find first invalid step and navigate to it
       const firstInvalidStep = Object.entries(stepValidations).find(
@@ -244,7 +247,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     goToStep,
     nextStep,
     previousStep,
-    submitWizard
+    submitWizard,
   };
 
   // Get step completion status
@@ -285,14 +288,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div>
-            {title && (
-              <h1 className="text-xl font-semibold text-gray-900 mb-1">{title}</h1>
-            )}
-            {description && (
-              <p className="text-sm text-gray-600">{description}</p>
-            )}
+            {title && <h1 className="text-xl font-semibold text-gray-900 mb-1">{title}</h1>}
+            {description && <p className="text-sm text-gray-600">{description}</p>}
           </div>
-          
+
           {/* Auto-save status */}
           {autoSave && onSave && (
             <div className="flex items-center space-x-2 text-sm">
@@ -338,7 +337,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
               {Math.round(((currentStep + 1) / steps.length) * 100)}% Complete
             </span>
           </div>
-          
+
           {/* Progress bar */}
           <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
             <div
@@ -346,13 +345,13 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
               style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
             />
           </div>
-          
+
           {/* Step indicators */}
           <div className="flex items-center justify-between">
             {steps.map((step, index) => {
               const status = getStepStatus(index);
               const validationStatus = getStepValidationStatus(index);
-              
+
               return (
                 <button
                   key={step.id}
@@ -364,15 +363,17 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                       : 'cursor-not-allowed opacity-50'
                   }`}
                 >
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium border-2 transition-colors ${
-                    status === 'completed'
-                      ? validationStatus === 'valid'
-                        ? 'bg-green-100 border-green-500 text-green-700'
-                        : 'bg-yellow-100 border-yellow-500 text-yellow-700'
-                      : status === 'current'
-                      ? 'bg-blue-100 border-blue-500 text-blue-700'
-                      : 'bg-gray-100 border-gray-300 text-gray-500'
-                  }`}>
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium border-2 transition-colors ${
+                      status === 'completed'
+                        ? validationStatus === 'valid'
+                          ? 'bg-green-100 border-green-500 text-green-700'
+                          : 'bg-yellow-100 border-yellow-500 text-yellow-700'
+                        : status === 'current'
+                          ? 'bg-blue-100 border-blue-500 text-blue-700'
+                          : 'bg-gray-100 border-gray-300 text-gray-500'
+                    }`}
+                  >
                     {status === 'completed' ? (
                       validationStatus === 'valid' ? (
                         <StatusIcons.Check size="xs" />
@@ -383,9 +384,11 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                       index + 1
                     )}
                   </div>
-                  <span className={`text-xs font-medium max-w-20 text-center leading-tight ${
-                    status === 'current' ? 'text-blue-700' : 'text-gray-600'
-                  }`}>
+                  <span
+                    className={`text-xs font-medium max-w-20 text-center leading-tight ${
+                      status === 'current' ? 'text-blue-700' : 'text-gray-600'
+                    }`}
+                  >
                     {step.title}
                   </span>
                 </button>
@@ -398,13 +401,9 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       {/* Step Content */}
       <div className="p-6">
         <div className="mb-6">
-          <h2 className="text-lg font-medium text-gray-900 mb-2">
-            {currentStepData.title}
-          </h2>
+          <h2 className="text-lg font-medium text-gray-900 mb-2">{currentStepData.title}</h2>
           {currentStepData.description && (
-            <p className="text-sm text-gray-600">
-              {currentStepData.description}
-            </p>
+            <p className="text-sm text-gray-600">{currentStepData.description}</p>
           )}
         </div>
 
@@ -421,18 +420,20 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         {/* Validation Messages */}
         {stepValidations[currentStep] && (
           <div className="mt-4 space-y-2">
-            {stepValidations[currentStep].errors && Object.entries(stepValidations[currentStep].errors!).map(([field, error]) => (
-              <div key={field} className="flex items-center space-x-2 text-sm text-red-600">
-                <StatusIcons.AlertCircle size="xs" />
-                <span>{error}</span>
-              </div>
-            ))}
-            {stepValidations[currentStep].warnings && Object.entries(stepValidations[currentStep].warnings!).map(([field, warning]) => (
-              <div key={field} className="flex items-center space-x-2 text-sm text-yellow-600">
-                <StatusIcons.AlertTriangle size="xs" />
-                <span>{warning}</span>
-              </div>
-            ))}
+            {stepValidations[currentStep].errors &&
+              Object.entries(stepValidations[currentStep].errors!).map(([field, error]) => (
+                <div key={field} className="flex items-center space-x-2 text-sm text-red-600">
+                  <StatusIcons.AlertCircle size="xs" />
+                  <span>{error}</span>
+                </div>
+              ))}
+            {stepValidations[currentStep].warnings &&
+              Object.entries(stepValidations[currentStep].warnings!).map(([field, warning]) => (
+                <div key={field} className="flex items-center space-x-2 text-sm text-yellow-600">
+                  <StatusIcons.AlertTriangle size="xs" />
+                  <span>{warning}</span>
+                </div>
+              ))}
           </div>
         )}
       </div>
@@ -473,7 +474,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
             ) : (
               <button
                 onClick={submitWizard}
-                disabled={isSubmitting || !Object.values(stepValidations).every(v => v.isValid)}
+                disabled={isSubmitting || !Object.values(stepValidations).every((v) => v.isValid)}
                 className="inline-flex items-center px-6 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isSubmitting ? (
@@ -496,4 +497,4 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   );
 };
 
-export default WizardContainer; 
+export default WizardContainer;

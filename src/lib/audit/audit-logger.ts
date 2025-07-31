@@ -54,47 +54,116 @@ export interface AuditChanges {
   changeType: 'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE' | 'RESTORE';
 }
 
-export type AuditAction = 
+export type AuditAction =
   // Authentication Actions
-  | 'LOGIN' | 'LOGOUT' | 'LOGIN_FAILED' | 'PASSWORD_CHANGE' | 'PASSWORD_RESET'
-  | 'MFA_ENABLE' | 'MFA_DISABLE' | 'SESSION_EXPIRE' | 'ACCOUNT_LOCK'
-  
-  // Data Actions
-  | 'CREATE' | 'READ' | 'UPDATE' | 'DELETE' | 'EXPORT' | 'IMPORT' | 'BULK_UPDATE'
-  | 'BULK_DELETE' | 'RESTORE' | 'ARCHIVE' | 'MERGE' | 'CLONE' | 'SHARE'
-  
-  // Permission Actions
-  | 'PERMISSION_GRANT' | 'PERMISSION_REVOKE' | 'ROLE_ASSIGN' | 'ROLE_REMOVE'
-  | 'ACCESS_DENIED' | 'ESCALATION_REQUEST' | 'ESCALATION_APPROVE'
-  
-  // System Actions
-  | 'SYSTEM_START' | 'SYSTEM_STOP' | 'BACKUP_CREATE' | 'BACKUP_RESTORE'
-  | 'CONFIG_CHANGE' | 'MAINTENANCE_START' | 'MAINTENANCE_END'
-  
-  // Compliance Actions
-  | 'AUDIT_START' | 'AUDIT_END' | 'POLICY_UPDATE' | 'VIOLATION_DETECTED'
-  | 'COMPLIANCE_CHECK' | 'RISK_ASSESSMENT' | 'CONTROL_TEST'
-  
-  // Document Actions
-  | 'DOCUMENT_UPLOAD' | 'DOCUMENT_DOWNLOAD' | 'DOCUMENT_VIEW' | 'DOCUMENT_EDIT'
-  | 'DOCUMENT_DELETE' | 'DOCUMENT_SHARE' | 'DOCUMENT_APPROVE'
-  
-  // Billing Actions
-  | 'SUBSCRIPTION_CREATE' | 'SUBSCRIPTION_UPDATE' | 'SUBSCRIPTION_CANCEL'
-  | 'PAYMENT_SUCCESS' | 'PAYMENT_FAILED' | 'INVOICE_GENERATE'
-  
-  // AI Actions
-  | 'AI_QUERY' | 'AI_RESPONSE' | 'AI_TRAINING' | 'AI_MODEL_UPDATE'
-  | 'PROBO_ANALYSIS' | 'RISK_PREDICTION' | 'CONTROL_GENERATION';
+  | 'LOGIN'
+  | 'LOGOUT'
+  | 'LOGIN_FAILED'
+  | 'PASSWORD_CHANGE'
+  | 'PASSWORD_RESET'
+  | 'MFA_ENABLE'
+  | 'MFA_DISABLE'
+  | 'SESSION_EXPIRE'
+  | 'ACCOUNT_LOCK'
 
-export type AuditEntity = 
-  | 'USER' | 'ORGANIZATION' | 'ROLE' | 'PERMISSION' | 'SESSION'
-  | 'RISK' | 'CONTROL' | 'ASSESSMENT' | 'COMPLIANCE_FRAMEWORK'
-  | 'DOCUMENT' | 'REPORT' | 'DASHBOARD' | 'NOTIFICATION'
-  | 'SUBSCRIPTION' | 'INVOICE' | 'PAYMENT' | 'WEBHOOK'
-  | 'API_KEY' | 'INTEGRATION' | 'BACKUP' | 'SYSTEM'
-  | 'POLICY' | 'PROCEDURE' | 'INCIDENT' | 'QUESTIONNAIRE'
-  | 'AI_MODEL' | 'ANALYTICS' | 'EXPORT' | 'IMPORT';
+  // Data Actions
+  | 'CREATE'
+  | 'READ'
+  | 'UPDATE'
+  | 'DELETE'
+  | 'EXPORT'
+  | 'IMPORT'
+  | 'BULK_UPDATE'
+  | 'BULK_DELETE'
+  | 'RESTORE'
+  | 'ARCHIVE'
+  | 'MERGE'
+  | 'CLONE'
+  | 'SHARE'
+
+  // Permission Actions
+  | 'PERMISSION_GRANT'
+  | 'PERMISSION_REVOKE'
+  | 'ROLE_ASSIGN'
+  | 'ROLE_REMOVE'
+  | 'ACCESS_DENIED'
+  | 'ESCALATION_REQUEST'
+  | 'ESCALATION_APPROVE'
+
+  // System Actions
+  | 'SYSTEM_START'
+  | 'SYSTEM_STOP'
+  | 'BACKUP_CREATE'
+  | 'BACKUP_RESTORE'
+  | 'CONFIG_CHANGE'
+  | 'MAINTENANCE_START'
+  | 'MAINTENANCE_END'
+
+  // Compliance Actions
+  | 'AUDIT_START'
+  | 'AUDIT_END'
+  | 'POLICY_UPDATE'
+  | 'VIOLATION_DETECTED'
+  | 'COMPLIANCE_CHECK'
+  | 'RISK_ASSESSMENT'
+  | 'CONTROL_TEST'
+
+  // Document Actions
+  | 'DOCUMENT_UPLOAD'
+  | 'DOCUMENT_DOWNLOAD'
+  | 'DOCUMENT_VIEW'
+  | 'DOCUMENT_EDIT'
+  | 'DOCUMENT_DELETE'
+  | 'DOCUMENT_SHARE'
+  | 'DOCUMENT_APPROVE'
+
+  // Billing Actions
+  | 'SUBSCRIPTION_CREATE'
+  | 'SUBSCRIPTION_UPDATE'
+  | 'SUBSCRIPTION_CANCEL'
+  | 'PAYMENT_SUCCESS'
+  | 'PAYMENT_FAILED'
+  | 'INVOICE_GENERATE'
+
+  // AI Actions
+  | 'AI_QUERY'
+  | 'AI_RESPONSE'
+  | 'AI_TRAINING'
+  | 'AI_MODEL_UPDATE'
+  | 'PROBO_ANALYSIS'
+  | 'RISK_PREDICTION'
+  | 'CONTROL_GENERATION';
+
+export type AuditEntity =
+  | 'USER'
+  | 'ORGANIZATION'
+  | 'ROLE'
+  | 'PERMISSION'
+  | 'SESSION'
+  | 'RISK'
+  | 'CONTROL'
+  | 'ASSESSMENT'
+  | 'COMPLIANCE_FRAMEWORK'
+  | 'DOCUMENT'
+  | 'REPORT'
+  | 'DASHBOARD'
+  | 'NOTIFICATION'
+  | 'SUBSCRIPTION'
+  | 'INVOICE'
+  | 'PAYMENT'
+  | 'WEBHOOK'
+  | 'API_KEY'
+  | 'INTEGRATION'
+  | 'BACKUP'
+  | 'SYSTEM'
+  | 'POLICY'
+  | 'PROCEDURE'
+  | 'INCIDENT'
+  | 'QUESTIONNAIRE'
+  | 'AI_MODEL'
+  | 'ANALYTICS'
+  | 'EXPORT'
+  | 'IMPORT';
 
 export type AuditSeverity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 export type AuditStatus = 'SUCCESS' | 'FAILURE' | 'WARNING' | 'INFO';
@@ -201,7 +270,10 @@ export class AuditLogger {
    * Log authentication events
    */
   async logAuth(
-    action: Extract<AuditAction, 'LOGIN' | 'LOGOUT' | 'LOGIN_FAILED' | 'PASSWORD_CHANGE' | 'PASSWORD_RESET'>,
+    action: Extract<
+      AuditAction,
+      'LOGIN' | 'LOGOUT' | 'LOGIN_FAILED' | 'PASSWORD_CHANGE' | 'PASSWORD_RESET'
+    >,
     userId: string | null,
     organizationId: string,
     request: NextRequest,
@@ -290,7 +362,10 @@ export class AuditLogger {
    * Log system events
    */
   async logSystem(
-    action: Extract<AuditAction, 'SYSTEM_START' | 'SYSTEM_STOP' | 'CONFIG_CHANGE' | 'BACKUP_CREATE'>,
+    action: Extract<
+      AuditAction,
+      'SYSTEM_START' | 'SYSTEM_STOP' | 'CONFIG_CHANGE' | 'BACKUP_CREATE'
+    >,
     organizationId: string,
     metadata?: Record<string, any>
   ): Promise<void> {
@@ -325,7 +400,7 @@ export class AuditLogger {
 
     try {
       // Prepare data for database insertion
-      const auditData = events.map(event => ({
+      const auditData = events.map((event) => ({
         id: event.id!,
         timestamp: event.timestamp,
         userId: event.userId,
@@ -362,13 +437,12 @@ export class AuditLogger {
 
       // Update audit statistics
       await this.updateAuditStatistics(events);
-
     } catch (error) {
       console.error('Failed to process audit batch:', error);
-      
+
       // Re-queue events if database fails
       this.batchQueue.unshift(...events);
-      
+
       // Implement exponential backoff for retries
       setTimeout(() => this.processBatch(), 10000);
     }
@@ -480,13 +554,15 @@ export class AuditLogger {
     const totalPages = Math.ceil(totalCount / limit);
 
     return {
-      events: events.map(event => ({
+      events: events.map((event) => ({
         ...event,
         timestamp: event.timestamp,
         changes: event.changes ? JSON.parse(event.changes as string) : undefined,
         metadata: event.metadata ? JSON.parse(event.metadata as string) : undefined,
         geolocation: event.geolocation ? JSON.parse(event.geolocation as string) : undefined,
-        complianceFlags: event.complianceFlags ? JSON.parse(event.complianceFlags as string) : undefined,
+        complianceFlags: event.complianceFlags
+          ? JSON.parse(event.complianceFlags as string)
+          : undefined,
       })),
       totalCount,
       page,
@@ -514,14 +590,17 @@ export class AuditLogger {
 
     const events = queryResult.events;
     const totalEvents = events.length;
-    const successCount = events.filter(e => e.status === 'SUCCESS').length;
-    const failureCount = events.filter(e => e.status === 'FAILURE').length;
+    const successCount = events.filter((e) => e.status === 'SUCCESS').length;
+    const failureCount = events.filter((e) => e.status === 'FAILURE').length;
 
     // Calculate top actions
-    const actionCounts = events.reduce((acc, event) => {
-      acc[event.action] = (acc[event.action] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const actionCounts = events.reduce(
+      (acc, event) => {
+        acc[event.action] = (acc[event.action] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     const topActions = Object.entries(actionCounts)
       .sort(([, a], [, b]) => b - a)
@@ -529,12 +608,15 @@ export class AuditLogger {
       .map(([action, count]) => ({ action: action as AuditAction, count }));
 
     // Calculate top users
-    const userCounts = events.reduce((acc, event) => {
-      if (event.userId) {
-        acc[event.userId] = (acc[event.userId] || 0) + 1;
-      }
-      return acc;
-    }, {} as Record<string, number>);
+    const userCounts = events.reduce(
+      (acc, event) => {
+        if (event.userId) {
+          acc[event.userId] = (acc[event.userId] || 0) + 1;
+        }
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     const topUsers = Object.entries(userCounts)
       .sort(([, a], [, b]) => b - a)
@@ -542,10 +624,16 @@ export class AuditLogger {
       .map(([userId, count]) => ({ userId, count }));
 
     // Calculate time range
-    const timestamps = events.map(e => e.timestamp);
+    const timestamps = events.map((e) => e.timestamp);
     const timeRange = {
-      start: timestamps.length > 0 ? new Date(Math.min(...timestamps.map(t => t.getTime()))) : new Date(),
-      end: timestamps.length > 0 ? new Date(Math.max(...timestamps.map(t => t.getTime()))) : new Date(),
+      start:
+        timestamps.length > 0
+          ? new Date(Math.min(...timestamps.map((t) => t.getTime())))
+          : new Date(),
+      end:
+        timestamps.length > 0
+          ? new Date(Math.max(...timestamps.map((t) => t.getTime())))
+          : new Date(),
     };
 
     const report: AuditReport = {
@@ -581,8 +669,6 @@ export class AuditLogger {
   // UTILITY METHODS
   // ============================================================================
 
-
-
   private actionToMethod(action: AuditAction): string {
     const methodMap: Record<string, string> = {
       CREATE: 'POST',
@@ -595,7 +681,11 @@ export class AuditLogger {
     return methodMap[action] || 'UNKNOWN';
   }
 
-  private calculateSeverity(action: AuditAction, entity: AuditEntity, changes?: AuditChanges): AuditSeverity {
+  private calculateSeverity(
+    action: AuditAction,
+    entity: AuditEntity,
+    changes?: AuditChanges
+  ): AuditSeverity {
     // Critical entities
     if (['USER', 'ROLE', 'PERMISSION', 'SYSTEM'].includes(entity)) {
       return action === 'DELETE' ? 'CRITICAL' : 'HIGH';
@@ -619,7 +709,6 @@ export class AuditLogger {
     return 'MEDIUM';
   }
 
-
   private getRetentionPeriod(action: AuditAction): number {
     // Compliance-related events need longer retention
     if (['COMPLIANCE_CHECK', 'AUDIT_START', 'AUDIT_END', 'VIOLATION_DETECTED'].includes(action)) {
@@ -627,12 +716,18 @@ export class AuditLogger {
     }
 
     // Financial events
-    if (action.includes('PAYMENT') || action.includes('SUBSCRIPTION') || action.includes('INVOICE')) {
+    if (
+      action.includes('PAYMENT') ||
+      action.includes('SUBSCRIPTION') ||
+      action.includes('INVOICE')
+    ) {
       return 2555; // 7 years
     }
 
     // Security events
-    if (['LOGIN_FAILED', 'ACCESS_DENIED', 'PERMISSION_GRANT', 'PERMISSION_REVOKE'].includes(action)) {
+    if (
+      ['LOGIN_FAILED', 'ACCESS_DENIED', 'PERMISSION_GRANT', 'PERMISSION_REVOKE'].includes(action)
+    ) {
       return 1095; // 3 years
     }
 
@@ -654,24 +749,24 @@ export class AuditLogger {
 
   private async cacheRecentEvent(event: AuditEvent): Promise<void> {
     const key = `recent-audit:${event.organizationId}`;
-    const recentEvents = await this.cache.get<AuditEvent[]>(key) || [];
-    
+    const recentEvents = (await this.cache.get<AuditEvent[]>(key)) || [];
+
     recentEvents.unshift(event);
     recentEvents.splice(100); // Keep only last 100 events
-    
+
     await this.cache.set(key, recentEvents, 60 * 60); // 1 hour
   }
 
   private async updateAuditStatistics(events: AuditEvent[]): Promise<void> {
     for (const event of events) {
       const statsKey = `audit-stats:${event.organizationId}:${new Date().toISOString().split('T')[0]}`;
-      const stats = await this.cache.get<Record<string, number>>(statsKey) || {};
-      
+      const stats = (await this.cache.get<Record<string, number>>(statsKey)) || {};
+
       stats.totalEvents = (stats.totalEvents || 0) + 1;
       stats[`${event.action}_count`] = (stats[`${event.action}_count`] || 0) + 1;
       stats[`${event.severity}_severity`] = (stats[`${event.severity}_severity`] || 0) + 1;
       stats[`${event.status}_status`] = (stats[`${event.status}_status`] || 0) + 1;
-      
+
       await this.cache.set(statsKey, stats, 24 * 60 * 60); // 24 hours
     }
   }
@@ -679,12 +774,13 @@ export class AuditLogger {
   private calculateComplianceScore(events: AuditEvent[]): number {
     if (events.length === 0) return 100;
 
-    const successCount = events.filter(e => e.status === 'SUCCESS').length;
-    const failureCount = events.filter(e => e.status === 'FAILURE').length;
-    const warningCount = events.filter(e => e.status === 'WARNING').length;
+    const successCount = events.filter((e) => e.status === 'SUCCESS').length;
+    const failureCount = events.filter((e) => e.status === 'FAILURE').length;
+    const warningCount = events.filter((e) => e.status === 'WARNING').length;
 
     // Weight different statuses
-    const score = ((successCount * 1.0) + (warningCount * 0.5) + (failureCount * 0.0)) / events.length * 100;
+    const score =
+      ((successCount * 1.0 + warningCount * 0.5 + failureCount * 0.0) / events.length) * 100;
     return Math.round(score);
   }
 
@@ -696,7 +792,7 @@ export class AuditLogger {
 
     for (const event of events) {
       riskScore += weights[event.severity];
-      
+
       // Extra weight for failures
       if (event.status === 'FAILURE') {
         riskScore += weights[event.severity];

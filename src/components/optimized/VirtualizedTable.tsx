@@ -141,7 +141,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
 }: VirtualizedTableProps<T>) => {
   const [columnWidths, setColumnWidths] = useState<Record<string, number>>(() => {
     const widths: Record<string, number> = {};
-    columns.forEach(col => {
+    columns.forEach((col) => {
       widths[col.key] = col.width;
     });
     return widths;
@@ -153,7 +153,11 @@ const VirtualizedTable = <T extends Record<string, any>>({
   });
 
   const [filterState, setFilterState] = useState(filters);
-  const [resizing, setResizing] = useState<{ key: string; startX: number; startWidth: number } | null>(null);
+  const [resizing, setResizing] = useState<{
+    key: string;
+    startX: number;
+    startWidth: number;
+  } | null>(null);
 
   const listRef = useRef<any>(null);
   const gridRef = useRef<any>(null);
@@ -167,7 +171,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
     // Apply filters
     Object.entries(filterState).forEach(([key, value]) => {
       if (value && value !== '') {
-        result = result.filter(item => {
+        result = result.filter((item) => {
           const itemValue = item[key];
           if (typeof itemValue === 'string') {
             return itemValue.toLowerCase().includes(value.toLowerCase());
@@ -182,7 +186,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
       result.sort((a, b) => {
         const aValue = a[sortState.key!];
         const bValue = b[sortState.key!];
-        
+
         if (aValue < bValue) return sortState.direction === 'asc' ? -1 : 1;
         if (aValue > bValue) return sortState.direction === 'asc' ? 1 : -1;
         return 0;
@@ -195,7 +199,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
   // Memoized columns with select column
   const finalColumns = useMemo(() => {
     const cols = [...columns];
-    
+
     if (showSelectColumn) {
       cols.unshift({
         key: '__select__',
@@ -222,13 +226,16 @@ const VirtualizedTable = <T extends Record<string, any>>({
   }, [finalColumns, columnWidths]);
 
   // Handle column sort
-  const handleSort = useCallback((key: string) => {
-    if (!onSort) return;
+  const handleSort = useCallback(
+    (key: string) => {
+      if (!onSort) return;
 
-    const newDirection = sortState.key === key && sortState.direction === 'asc' ? 'desc' : 'asc';
-    setSortState({ key, direction: newDirection });
-    onSort(key, newDirection);
-  }, [sortState, onSort]);
+      const newDirection = sortState.key === key && sortState.direction === 'asc' ? 'desc' : 'asc';
+      setSortState({ key, direction: newDirection });
+      onSort(key, newDirection);
+    },
+    [sortState, onSort]
+  );
 
   // Handle column filter
   const debouncedFilter = useCallback(
@@ -241,28 +248,34 @@ const VirtualizedTable = <T extends Record<string, any>>({
   );
 
   // Handle column resize
-  const handleMouseDown = useCallback((e: React.MouseEvent, key: string) => {
-    if (!enableColumnResize) return;
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent, key: string) => {
+      if (!enableColumnResize) return;
 
-    e.preventDefault();
-    setResizing({
-      key,
-      startX: e.clientX,
-      startWidth: columnWidths[key],
-    });
-  }, [columnWidths, enableColumnResize]);
+      e.preventDefault();
+      setResizing({
+        key,
+        startX: e.clientX,
+        startWidth: columnWidths[key],
+      });
+    },
+    [columnWidths, enableColumnResize]
+  );
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!resizing) return;
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!resizing) return;
 
-    const diff = e.clientX - resizing.startX;
-    const newWidth = Math.max(50, resizing.startWidth + diff);
-    
-    setColumnWidths(prev => ({
-      ...prev,
-      [resizing.key]: newWidth,
-    }));
-  }, [resizing]);
+      const diff = e.clientX - resizing.startX;
+      const newWidth = Math.max(50, resizing.startWidth + diff);
+
+      setColumnWidths((prev) => ({
+        ...prev,
+        [resizing.key]: newWidth,
+      }));
+    },
+    [resizing]
+  );
 
   const handleMouseUp = useCallback(() => {
     setResizing(null);
@@ -273,7 +286,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
     if (resizing) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
-      
+
       return () => {
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
@@ -282,12 +295,15 @@ const VirtualizedTable = <T extends Record<string, any>>({
   }, [resizing, handleMouseMove, handleMouseUp]);
 
   // Scroll synchronization
-  const handleScroll = useCallback(({ scrollLeft, scrollTop }: any) => {
-    if (headerRef.current) {
-      headerRef.current.scrollLeft = scrollLeft;
-    }
-    onScroll?.(scrollTop, scrollLeft);
-  }, [onScroll]);
+  const handleScroll = useCallback(
+    ({ scrollLeft, scrollTop }: any) => {
+      if (headerRef.current) {
+        headerRef.current.scrollLeft = scrollLeft;
+      }
+      onScroll?.(scrollTop, scrollLeft);
+    },
+    [onScroll]
+  );
 
   // Grid cell renderer
   const GridCell = ({ columnIndex, rowIndex, style, data: gridData }: CellProps) => {
@@ -352,12 +368,15 @@ const VirtualizedTable = <T extends Record<string, any>>({
   };
 
   // Variable row height calculator
-  const getRowHeight = useCallback((index: number) => {
-    if (typeof rowHeight === 'function') {
-      return rowHeight(index);
-    }
-    return rowHeight;
-  }, [rowHeight]);
+  const getRowHeight = useCallback(
+    (index: number) => {
+      if (typeof rowHeight === 'function') {
+        return rowHeight(index);
+      }
+      return rowHeight;
+    },
+    [rowHeight]
+  );
 
   // Header component
   const TableHeader = () => (
@@ -382,10 +401,10 @@ const VirtualizedTable = <T extends Record<string, any>>({
           />
         </div>
       )}
-      
+
       {finalColumns.map((column) => {
         if (column.key === '__select__') return null;
-        
+
         return (
           <div
             key={column.key}
@@ -398,13 +417,11 @@ const VirtualizedTable = <T extends Record<string, any>>({
             onClick={() => column.sortable && handleSort(column.key)}
           >
             <span className="truncate">{column.title}</span>
-            
+
             {column.sortable && sortState.key === column.key && (
-              <span className="ml-1">
-                {sortState.direction === 'asc' ? '↑' : '↓'}
-              </span>
+              <span className="ml-1">{sortState.direction === 'asc' ? '↑' : '↓'}</span>
             )}
-            
+
             {column.filterable && (
               <input
                 type="text"
@@ -414,7 +431,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
                 onClick={(e) => e.stopPropagation()}
               />
             )}
-            
+
             {enableColumnResize && (
               <div
                 className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-blue-500"
@@ -464,7 +481,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
   return (
     <div ref={containerRef} className={cn('border rounded-lg overflow-hidden', className)}>
       <DaisyTableHeader />
-      
+
       <div style={{ height: height - headerHeight }}>
         <AutoSizer>
           {({ height: autoHeight, width: autoWidth }) => {
@@ -473,7 +490,9 @@ const VirtualizedTable = <T extends Record<string, any>>({
                 <Grid
                   ref={gridRef}
                   columnCount={finalColumns.length}
-                  columnWidth={index => columnWidths[finalColumns[index].key] || finalColumns[index].width}
+                  columnWidth={(index) =>
+                    columnWidths[finalColumns[index].key] || finalColumns[index].width
+                  }
                   height={autoHeight}
                   rowCount={processedData.length}
                   rowHeight={typeof rowHeight === 'number' ? rowHeight : estimatedRowHeight}
@@ -507,9 +526,9 @@ const VirtualizedTable = <T extends Record<string, any>>({
                   {ListRow}
                 </VariableSizeList>
               );
-            };
+            }
 
-  return (
+            return (
               <List
                 ref={listRef}
                 height={autoHeight}
@@ -556,7 +575,7 @@ export const useVirtualizedTable = <T extends Record<string, any>>(
   }, []);
 
   const handleRowSelect = useCallback((index: number, selected: boolean) => {
-    setSelectedRows(prev => {
+    setSelectedRows((prev) => {
       const newSet = new Set(prev);
       if (selected) {
         newSet.add(index);
@@ -567,20 +586,23 @@ export const useVirtualizedTable = <T extends Record<string, any>>(
     });
   }, []);
 
-  const handleSelectAll = useCallback((selected: boolean) => {
-    if (selected) {
-      setSelectedRows(new Set(data.map((_, index) => index)));
-    } else {
-      setSelectedRows(new Set());
-    }
-  }, [data]);
+  const handleSelectAll = useCallback(
+    (selected: boolean) => {
+      if (selected) {
+        setSelectedRows(new Set(data.map((_, index) => index)));
+      } else {
+        setSelectedRows(new Set());
+      }
+    },
+    [data]
+  );
 
   const clearSelection = useCallback(() => {
     setSelectedRows(new Set());
   }, []);
 
   const getSelectedData = useCallback(() => {
-    return Array.from(selectedRows).map(index => data[index]);
+    return Array.from(selectedRows).map((index) => data[index]);
   }, [selectedRows, data]);
 
   return {
@@ -601,4 +623,4 @@ export const useVirtualizedTable = <T extends Record<string, any>>(
     clearSelection,
     getSelectedData,
   };
-}; 
+};

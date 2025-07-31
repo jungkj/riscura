@@ -8,12 +8,14 @@ export interface ValidatedUser {
   permissions: string[];
 }
 
-export async function validateRequest(request: NextRequest): Promise<{ user: ValidatedUser | null }> {
+export async function validateRequest(
+  request: NextRequest
+): Promise<{ user: ValidatedUser | null }> {
   try {
     // Simplified validation - in a real implementation, this would validate JWT tokens
     // from cookies or Authorization headers
     const authHeader = request.headers.get('authorization');
-    
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return { user: null };
     }
@@ -32,4 +34,4 @@ export async function validateRequest(request: NextRequest): Promise<{ user: Val
     console.error('Error validating request:', error);
     return { user: null };
   }
-} 
+}

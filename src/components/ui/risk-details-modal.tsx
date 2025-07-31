@@ -2,15 +2,15 @@
 
 import React from 'react';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
+  Dialog as DaisyDialog,
+  DialogContent as DaisyDialogContent,
+  DialogDescription as DaisyDialogDescription,
+  DialogHeader as DaisyDialogHeader,
+  DialogTitle as DaisyDialogTitle,
 } from '@/components/ui/dialog';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardHeader, DaisyCardContent, DaisyCardDescription } from '@/components/ui/DaisyCard';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { 
   AlertTriangle, 
@@ -99,47 +99,39 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
   };
 
   return (
-    <DaisyDialog open={isOpen} onOpenChange={onClose} />
-      <DaisyDialogContent className="max-w-4xl max-h-[80vh]" >
-  <DaisyDialogHeader />
-</DaisyDialog>
-          <DaisyDialogTitle className="flex items-center space-x-2" >
-  <DaisyAlertTriangle className="w-5 h-5 text-orange-600" >
-</DaisyDialogTitle>
-  <span>
-</DaisyAlert>
+    <DaisyDialog open={isOpen} onOpenChange={onClose}>
+      <DaisyDialogContent className="max-w-4xl max-h-[80vh]">
+        <DaisyDialogHeader>
+          <DaisyDialogTitle className="flex items-center space-x-2">
+            <AlertTriangle className="w-5 h-5 text-orange-600" />
+            <span>
               Risks: {impact} Impact × {likelihood} Likelihood
             </span>
           </DaisyDialogTitle>
-          <DaisyDialogDescription >
-  {risks.length} risk{risks.length !== 1 ? 's' : ''} found in this category
-</DaisyDialogDescription>
+          <DaisyDialogDescription>
+            {risks.length} risk{risks.length !== 1 ? 's' : ''} found in this category
           </DaisyDialogDescription>
         </DaisyDialogHeader>
 
-        <DaisyScrollArea className="max-h-[60vh] pr-4" />
+        <DaisyScrollArea className="max-h-[60vh] pr-4">
           <div className="space-y-4">
             {risks.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
-                <DaisyAlertTriangle className="w-12 h-12 mx-auto mb-4 opacity-50" >
-  <p>
-</DaisyScrollArea>No risks found in this category</p>
+                <AlertTriangle className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <p>No risks found in this category</p>
               </div>
             ) : (
               risks.map((risk) => (
-                <DaisyCard key={risk.id} className="border-l-4 border-l-blue-500" >
-  <DaisyCardHeader className="pb-3" />
-</DaisyCard>
+                <DaisyCard key={risk.id} className="border-l-4 border-l-blue-500">
+                  <DaisyCardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div className="space-y-1">
-                        <DaisyCardTitle className="text-lg font-semibold" >
-  {risk.title}
-</DaisyCardTitle>
+                        <DaisyCardTitle className="text-lg font-semibold">
+                          {risk.title}
                         </DaisyCardTitle>
-                        <DaisyCardDescription className="text-sm text-gray-600" >
-  ID: {risk.id}
-</DaisyCardDescription>
-                        </p>
+                        <DaisyCardDescription className="text-sm text-gray-600">
+                          ID: {risk.id}
+                        </DaisyCardDescription>
                       </div>
                       <div className="flex items-center space-x-2">
                         <DaisyBadge 
@@ -150,17 +142,16 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                         </DaisyBadge>
                         <DaisyBadge 
                           variant="outline" 
-                          className={getStatusColor(risk.status)} >
-  {risk.status.charAt(0).toUpperCase() + risk.status.slice(1)}
-</DaisyBadge>
+                          className={getStatusColor(risk.status)}
+                        >
+                          {risk.status.charAt(0).toUpperCase() + risk.status.slice(1)}
                         </DaisyBadge>
                       </div>
                     </div>
+                  </DaisyCardHeader>
                   
-                  
-                  <DaisyCardContent className="space-y-4" >
-  <p className="text-sm text-gray-700 dark:text-gray-300">
-</DaisyCardContent>
+                  <DaisyCardContent className="space-y-4">
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
                       {risk.description}
                     </p>
                     
@@ -190,7 +181,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                       </div>
                       
                       <div className="flex items-center space-x-2">
-                        <DaisyCalendar className="w-4 h-4 text-gray-500" />
+                        <Calendar className="w-4 h-4 text-gray-500" />
                         <div>
                           <p className="font-medium">Last Updated</p>
                           <p className="text-gray-600">
@@ -229,9 +220,8 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                     </div>
 
                     <div className="flex justify-end">
-                      <DaisyButton variant="outline" size="sm" className="flex items-center space-x-2" >
-  <ExternalLink className="w-4 h-4" />
-</DaisyCalendar>
+                      <DaisyButton variant="outline" size="sm" className="flex items-center space-x-2">
+                        <ExternalLink className="w-4 h-4" />
                         <span>View Details</span>
                       </DaisyButton>
                     </div>
@@ -243,14 +233,12 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
         </DaisyScrollArea>
 
         <div className="flex justify-end space-x-2 pt-4 border-t">
-          <DaisyButton variant="outline" onClick={onClose} >
-  Close
-</DaisyButton>
+          <DaisyButton variant="outline" onClick={onClose}>
+            Close
           </DaisyButton>
           {risks.length > 0 && (
-            <DaisyButton >
-  View All Risks
-</DaisyButton>
+            <DaisyButton>
+              View All Risks
             </DaisyButton>
           )}
         </div>

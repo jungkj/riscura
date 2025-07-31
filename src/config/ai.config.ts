@@ -56,10 +56,13 @@ export const aiConfig: AIConfig = {
   fallback: {
     enabled: true,
     responses: {
-      risk_analysis: "I'm currently analyzing this risk. Please check back in a moment for detailed insights.",
-      control_recommendation: "Based on best practices, I recommend implementing preventive controls for this risk.",
+      risk_analysis:
+        "I'm currently analyzing this risk. Please check back in a moment for detailed insights.",
+      control_recommendation:
+        'Based on best practices, I recommend implementing preventive controls for this risk.',
       content_generation: "I'm generating content for your request. This may take a moment.",
-      error_generic: "I'm experiencing technical difficulties. Please try again or contact support.",
+      error_generic:
+        "I'm experiencing technical difficulties. Please try again or contact support.",
     },
   },
   security: {
@@ -176,7 +179,7 @@ export const developmentAIConfig: AIConfig = {
     enabled: true,
     responses: {
       ...aiConfig.fallback.responses,
-      development_mode: "Running in development mode with mock AI responses.",
+      development_mode: 'Running in development mode with mock AI responses.',
     },
   },
 };
@@ -212,4 +215,4 @@ export const validateAIConfig = (config: AIConfig): { isValid: boolean; errors: 
   };
 };
 
-export default aiConfig; 
+export default aiConfig;

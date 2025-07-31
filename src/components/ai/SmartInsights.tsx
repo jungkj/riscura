@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { designTokens } from '@/lib/design-system/tokens';
-import { 
-  StatusIcons, 
+import {
+  StatusIcons,
   RiskManagementIcons,
   DataIcons,
   NavigationIcons,
-  ActionIcons
+  ActionIcons,
 } from '@/components/icons/IconLibrary';
 import { LoadingStates } from '@/components/states/LoadingState';
 import { EmptyStates } from '@/components/states/EmptyState';
@@ -53,7 +53,8 @@ const generateMockInsights = (context: string): Insight[] => {
       id: 'risk-trend-1',
       type: 'trend',
       title: 'Increasing Cybersecurity Risk Trend',
-      description: 'AI analysis shows a 35% increase in cybersecurity incidents across your risk categories over the past 3 months. This trend correlates with increased remote work and third-party integrations.',
+      description:
+        'AI analysis shows a 35% increase in cybersecurity incidents across your risk categories over the past 3 months. This trend correlates with increased remote work and third-party integrations.',
       severity: 'high',
       confidence: 0.92,
       impact: 'high',
@@ -62,19 +63,30 @@ const generateMockInsights = (context: string): Insight[] => {
       data: {
         trendPercentage: 35,
         timeframe: '3 months',
-        affectedCategories: ['Data Security', 'Access Control', 'Third-party Risk']
+        affectedCategories: ['Data Security', 'Access Control', 'Third-party Risk'],
       },
       actions: [
-        { id: 'review-controls', label: 'Review Security Controls', type: 'primary', action: () => {} },
-        { id: 'schedule-assessment', label: 'Schedule Risk Assessment', type: 'secondary', action: () => {} }
+        {
+          id: 'review-controls',
+          label: 'Review Security Controls',
+          type: 'primary',
+          action: () => {},
+        },
+        {
+          id: 'schedule-assessment',
+          label: 'Schedule Risk Assessment',
+          type: 'secondary',
+          action: () => {},
+        },
       ],
-      sources: ['Risk Register', 'Incident Reports', 'Industry Benchmarks']
+      sources: ['Risk Register', 'Incident Reports', 'Industry Benchmarks'],
     },
     {
       id: 'compliance-gap-1',
       type: 'compliance',
       title: 'GDPR Compliance Gap Detected',
-      description: 'AI review identified potential gaps in your GDPR compliance framework. Data retention policies for 3 systems lack proper documentation, and consent management needs updating.',
+      description:
+        'AI review identified potential gaps in your GDPR compliance framework. Data retention policies for 3 systems lack proper documentation, and consent management needs updating.',
       severity: 'medium',
       confidence: 0.87,
       impact: 'medium',
@@ -83,19 +95,25 @@ const generateMockInsights = (context: string): Insight[] => {
       data: {
         framework: 'GDPR',
         gapCount: 3,
-        affectedSystems: ['CRM', 'Analytics Platform', 'Marketing Automation']
+        affectedSystems: ['CRM', 'Analytics Platform', 'Marketing Automation'],
       },
       actions: [
         { id: 'update-policies', label: 'Update Data Policies', type: 'primary', action: () => {} },
-        { id: 'audit-systems', label: 'Audit Affected Systems', type: 'secondary', action: () => {} }
+        {
+          id: 'audit-systems',
+          label: 'Audit Affected Systems',
+          type: 'secondary',
+          action: () => {},
+        },
       ],
-      sources: ['Compliance Dashboard', 'System Audits', 'Legal Requirements']
+      sources: ['Compliance Dashboard', 'System Audits', 'Legal Requirements'],
     },
     {
       id: 'control-recommendation-1',
       type: 'recommendation',
       title: 'Automated Monitoring Recommendation',
-      description: 'Based on your current risk profile, implementing automated security monitoring could reduce incident response time by 60% and improve threat detection by 45%.',
+      description:
+        'Based on your current risk profile, implementing automated security monitoring could reduce incident response time by 60% and improve threat detection by 45%.',
       severity: 'medium',
       confidence: 0.84,
       impact: 'high',
@@ -104,22 +122,28 @@ const generateMockInsights = (context: string): Insight[] => {
       data: {
         expectedImprovement: {
           responseTime: '60%',
-          threatDetection: '45%'
+          threatDetection: '45%',
         },
         estimatedCost: '$25,000',
-        implementationTime: '6-8 weeks'
+        implementationTime: '6-8 weeks',
       },
       actions: [
-        { id: 'get-proposal', label: 'Get Implementation Proposal', type: 'primary', action: () => {} },
-        { id: 'cost-analysis', label: 'View Cost Analysis', type: 'secondary', action: () => {} }
+        {
+          id: 'get-proposal',
+          label: 'Get Implementation Proposal',
+          type: 'primary',
+          action: () => {},
+        },
+        { id: 'cost-analysis', label: 'View Cost Analysis', type: 'secondary', action: () => {} },
       ],
-      sources: ['Control Assessments', 'Industry Benchmarks', 'Vendor Analysis']
+      sources: ['Control Assessments', 'Industry Benchmarks', 'Vendor Analysis'],
     },
     {
       id: 'alert-1',
       type: 'alert',
       title: 'Critical Risk Threshold Exceeded',
-      description: 'The operational risk score for your supply chain has exceeded the critical threshold (85/100). This is primarily due to recent vendor security incidents and supply chain disruptions.',
+      description:
+        'The operational risk score for your supply chain has exceeded the critical threshold (85/100). This is primarily due to recent vendor security incidents and supply chain disruptions.',
       severity: 'critical',
       confidence: 0.96,
       impact: 'high',
@@ -128,19 +152,34 @@ const generateMockInsights = (context: string): Insight[] => {
       data: {
         currentScore: 85,
         threshold: 80,
-        primaryFactors: ['Vendor Security Incidents', 'Supply Chain Disruptions', 'Dependency Concentration']
+        primaryFactors: [
+          'Vendor Security Incidents',
+          'Supply Chain Disruptions',
+          'Dependency Concentration',
+        ],
       },
       actions: [
-        { id: 'immediate-review', label: 'Immediate Risk Review', type: 'primary', action: () => {} },
-        { id: 'vendor-assessment', label: 'Assess Key Vendors', type: 'secondary', action: () => {} }
+        {
+          id: 'immediate-review',
+          label: 'Immediate Risk Review',
+          type: 'primary',
+          action: () => {},
+        },
+        {
+          id: 'vendor-assessment',
+          label: 'Assess Key Vendors',
+          type: 'secondary',
+          action: () => {},
+        },
       ],
-      sources: ['Risk Monitoring', 'Vendor Assessments', 'External Intelligence']
+      sources: ['Risk Monitoring', 'Vendor Assessments', 'External Intelligence'],
     },
     {
       id: 'risk-correlation-1',
       type: 'risk',
       title: 'Risk Correlation Pattern Identified',
-      description: 'AI analysis discovered a strong correlation between IT system downtime and customer satisfaction scores. When system availability drops below 99.5%, customer satisfaction decreases by an average of 12%.',
+      description:
+        'AI analysis discovered a strong correlation between IT system downtime and customer satisfaction scores. When system availability drops below 99.5%, customer satisfaction decreases by an average of 12%.',
       severity: 'medium',
       confidence: 0.89,
       impact: 'medium',
@@ -149,18 +188,18 @@ const generateMockInsights = (context: string): Insight[] => {
       data: {
         correlation: 0.78,
         threshold: '99.5%',
-        impactPercentage: '12%'
+        impactPercentage: '12%',
       },
       actions: [
         { id: 'improve-sla', label: 'Review SLA Requirements', type: 'primary', action: () => {} },
-        { id: 'redundancy-plan', label: 'Enhance Redundancy', type: 'secondary', action: () => {} }
+        { id: 'redundancy-plan', label: 'Enhance Redundancy', type: 'secondary', action: () => {} },
       ],
-      sources: ['System Monitoring', 'Customer Surveys', 'Performance Analytics']
-    }
+      sources: ['System Monitoring', 'Customer Surveys', 'Performance Analytics'],
+    },
   ];
 
   // Filter insights based on context
-  return baseInsights.filter(insight => {
+  return baseInsights.filter((insight) => {
     switch (context) {
       case 'risk-assessment':
         return ['risk', 'trend', 'recommendation'].includes(insight.type);
@@ -181,7 +220,7 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
   filters,
   onInsightAction,
   onInsightDismiss,
-  className = ''
+  className = '',
 }) => {
   const [insights, setInsights] = useState<Insight[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -195,7 +234,7 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
       setIsLoading(true);
       try {
         // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         const mockInsights = generateMockInsights(context);
         setInsights(mockInsights);
       } catch (error) {
@@ -210,13 +249,13 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
 
   // Filter and sort insights
   const filteredInsights = insights
-    .filter(insight => {
+    .filter((insight) => {
       if (!filters) return true;
-      
+
       if (filters.types && !filters.types.includes(insight.type)) return false;
       if (filters.severity && !filters.severity.includes(insight.severity)) return false;
       if (filters.categories && !filters.categories.includes(insight.category)) return false;
-      
+
       return true;
     })
     .sort((a, b) => {
@@ -234,23 +273,35 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'text-red-700 bg-red-100 border-red-200';
-      case 'high': return 'text-orange-700 bg-orange-100 border-orange-200';
-      case 'medium': return 'text-yellow-700 bg-yellow-100 border-yellow-200';
-      case 'low': return 'text-green-700 bg-green-100 border-green-200';
-      default: return 'text-gray-700 bg-gray-100 border-gray-200';
+      case 'critical':
+        return 'text-red-700 bg-red-100 border-red-200';
+      case 'high':
+        return 'text-orange-700 bg-orange-100 border-orange-200';
+      case 'medium':
+        return 'text-yellow-700 bg-yellow-100 border-yellow-200';
+      case 'low':
+        return 'text-green-700 bg-green-100 border-green-200';
+      default:
+        return 'text-gray-700 bg-gray-100 border-gray-200';
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'risk': return RiskManagementIcons.Risk;
-      case 'compliance': return RiskManagementIcons.Compliance;
-      case 'control': return RiskManagementIcons.Control;
-      case 'trend': return DataIcons.TrendingUp;
-      case 'recommendation': return StatusIcons.Info;
-      case 'alert': return StatusIcons.AlertTriangle;
-      default: return DataIcons.BarChart3;
+      case 'risk':
+        return RiskManagementIcons.Risk;
+      case 'compliance':
+        return RiskManagementIcons.Compliance;
+      case 'control':
+        return RiskManagementIcons.Control;
+      case 'trend':
+        return DataIcons.TrendingUp;
+      case 'recommendation':
+        return StatusIcons.Info;
+      case 'alert':
+        return StatusIcons.AlertTriangle;
+      default:
+        return DataIcons.BarChart3;
     }
   };
 
@@ -261,7 +312,7 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
   };
 
   const handleInsightDismiss = (insightId: string) => {
-    setInsights(prev => prev.filter(insight => insight.id !== insightId));
+    setInsights((prev) => prev.filter((insight) => insight.id !== insightId));
     if (onInsightDismiss) {
       onInsightDismiss(insightId);
     }
@@ -284,7 +335,7 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
         />
       </div>
     );
-  };
+  }
 
   return (
     <div className={`bg-white rounded-lg border border-gray-200 shadow-sm ${className}`}>
@@ -293,16 +344,14 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                              <DataIcons.BarChart3 size="md" color="primary" />
+              <DataIcons.BarChart3 size="md" color="primary" />
             </div>
             <div>
               <h2 className="text-lg font-semibold text-gray-900">Smart Insights</h2>
-              <p className="text-sm text-gray-500">
-                AI-powered analysis and recommendations
-              </p>
+              <p className="text-sm text-gray-500">AI-powered analysis and recommendations</p>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-3">
             {/* Sort Options */}
             <select
@@ -314,7 +363,7 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
               <option value="severity">By Severity</option>
               <option value="confidence">By Confidence</option>
             </select>
-            
+
             {/* View Mode Toggle */}
             <div className="flex border border-gray-300 rounded-md">
               <button
@@ -340,14 +389,16 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
             </div>
           </div>
         </div>
-        
+
         {/* Summary Stats */}
         <div className="mt-4 grid grid-cols-4 gap-4">
-          {['critical', 'high', 'medium', 'low'].map(severity => {
-            const count = filteredInsights.filter(i => i.severity === severity).length;
+          {['critical', 'high', 'medium', 'low'].map((severity) => {
+            const count = filteredInsights.filter((i) => i.severity === severity).length;
             return (
               <div key={severity} className="text-center">
-                <div className={`text-lg font-semibold ${getSeverityColor(severity).split(' ')[0]}`}>
+                <div
+                  className={`text-lg font-semibold ${getSeverityColor(severity).split(' ')[0]}`}
+                >
                   {count}
                 </div>
                 <div className="text-xs text-gray-500 capitalize">{severity}</div>
@@ -379,7 +430,9 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
                           {insight.title}
                         </h3>
                         <div className="flex items-center space-x-2 mt-1">
-                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${getSeverityColor(insight.severity)}`}>
+                          <span
+                            className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${getSeverityColor(insight.severity)}`}
+                          >
                             {insight.severity}
                           </span>
                           <span className="text-xs text-gray-500">
@@ -470,26 +523,26 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
                   <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <IconComponent size="sm" color="secondary" />
                   </div>
-                  
+
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center space-x-2 mb-1">
                       <h3 className="font-medium text-gray-900 text-sm truncate">
                         {insight.title}
                       </h3>
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${getSeverityColor(insight.severity)}`}>
+                      <span
+                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${getSeverityColor(insight.severity)}`}
+                      >
                         {insight.severity}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 truncate">
-                      {insight.description}
-                    </p>
+                    <p className="text-sm text-gray-600 truncate">{insight.description}</p>
                   </div>
-                  
+
                   <div className="flex items-center space-x-3 text-xs text-gray-500">
                     <span>{Math.round(insight.confidence * 100)}%</span>
                     <span>{insight.timestamp.toLocaleTimeString()}</span>
                   </div>
-                  
+
                   <button
                     onClick={() => handleInsightDismiss(insight.id)}
                     className="text-gray-400 hover:text-gray-600 p-1"
@@ -507,4 +560,4 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
   );
 };
 
-export default SmartInsights; 
+export default SmartInsights;

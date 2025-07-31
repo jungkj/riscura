@@ -65,4 +65,4 @@ class QueryCache {
 }
 
 export const queryCache = new QueryCache();
-export default queryCache; 
+export default queryCache;

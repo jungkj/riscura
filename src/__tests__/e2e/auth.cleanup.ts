@@ -4,19 +4,16 @@ import path from 'path';
 
 /**
  * Authentication Cleanup for E2E Tests
- * 
+ *
  * This cleanup runs after tests to clean up authentication files and test data.
  */
 
 cleanup('cleanup auth files', async () => {
   console.log('Cleaning up authentication files...');
-  
-  const authFiles = [
-    'src/__tests__/e2e/.auth/user.json',
-    'src/__tests__/e2e/.auth/admin.json'
-  ];
 
-  authFiles.forEach(file => {
+  const authFiles = ['src/__tests__/e2e/.auth/user.json', 'src/__tests__/e2e/.auth/admin.json'];
+
+  authFiles.forEach((file) => {
     if (fs.existsSync(file)) {
       fs.unlinkSync(file);
       console.log(`Removed auth file: ${file}`);
@@ -26,14 +23,14 @@ cleanup('cleanup auth files', async () => {
 
 cleanup('cleanup test data', async ({ request }) => {
   console.log('Cleaning up test data...');
-  
+
   try {
     const response = await request.post('/api/test/cleanup-data', {
       data: {
         removeTestUsers: false, // Keep test users for reuse
         removeTestRisks: true,
-        removeTestAssessments: true
-      }
+        removeTestAssessments: true,
+      },
     });
 
     if (response.status() === 200) {

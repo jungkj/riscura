@@ -15,19 +15,24 @@ const registerSchema = z.object({
   password: z.string().min(8, 'Password must be at least 8 characters'),
   firstName: z.string().min(1, 'First name is required').max(50, 'First name too long'),
   lastName: z.string().min(1, 'Last name is required').max(50, 'Last name too long'),
-  organizationName: z.string().min(1, 'Organization name is required').max(100, 'Organization name too long').optional(),
+  organizationName: z
+    .string()
+    .min(1, 'Organization name is required')
+    .max(100, 'Organization name too long')
+    .optional(),
   organizationId: z.string().optional(), // For joining existing organization
   inviteToken: z.string().optional(), // For invite-based registration
-  acceptTerms: z.boolean().refine(val => val === true, 'You must accept the terms and conditions'),
+  acceptTerms: z
+    .boolean()
+    .refine((val) => val === true, 'You must accept the terms and conditions'),
 });
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     // Rate limiting by IP
-    const clientIP = request.headers.get('x-forwarded-for') || 
-                    request.headers.get('x-real-ip') || 
-                    'unknown';
-    
+    const clientIP =
+      request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+
     const rateLimitResult = rateLimit(
       `register:${clientIP}`,
       5, // 5 registration attempts
@@ -40,7 +45,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       });
 
       return NextResponse.json(
-        { 
+        {
           error: 'Too many registration attempts. Please try again later.',
           retryAfter: Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000),
         },
@@ -54,7 +59,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (!validationResult.success) {
       return NextResponse.json(
-        { 
+        {
           error: 'Invalid request data',
           details: validationResult.error.errors,
         },
@@ -62,21 +67,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const { 
-      email, 
-      password, 
-      firstName, 
-      lastName, 
-      organizationName, 
-      organizationId,
-      inviteToken,
-    } = validationResult.data;
+    const { email, password, firstName, lastName, organizationName, organizationId, inviteToken } =
+      validationResult.data;
 
     // Check password strength
     const passwordStrength = checkPasswordStrength(password);
     if (!passwordStrength.isValid) {
       return NextResponse.json(
-        { 
+        {
           error: 'Password does not meet requirements',
           details: passwordStrength.feedback,
         },
@@ -110,10 +108,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         });
 
         if (!organization || !organization.isActive) {
-          return NextResponse.json(
-            { error: 'Invalid or inactive organization' },
-            { status: 400 }
-          );
+          return NextResponse.json({ error: 'Invalid or inactive organization' }, { status: 400 });
         }
       } else {
         return NextResponse.json(
@@ -128,10 +123,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       });
 
       if (!organization || !organization.isActive) {
-        return NextResponse.json(
-          { error: 'Invalid or inactive organization' },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: 'Invalid or inactive organization' }, { status: 400 });
       }
     } else if (organizationName) {
       // Creating new organization - user becomes admin
@@ -149,10 +141,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       });
       userRole = UserRole.ADMIN; // First user becomes admin
     } else {
-      return NextResponse.json(
-        { error: 'Organization name or ID is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Organization name or ID is required' }, { status: 400 });
     }
 
     // Ensure organization is defined at this point
@@ -255,11 +244,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         },
       });
     }
-
   } catch (error) {
     console.error('Registration error:', error);
-    
-    await logAuthEvent('REGISTER_ERROR', 
+
+    await logAuthEvent(
+      'REGISTER_ERROR',
       request.headers.get('x-forwarded-for') || 'unknown',
       null,
       { error: error instanceof Error ? error.message : 'Unknown error' }
@@ -281,11 +270,18 @@ function getDefaultPermissions(role: UserRole): string[] {
       return ['*']; // All permissions
     case UserRole.RISK_MANAGER:
       return [
-        'risks:read', 'risks:write', 'risks:delete',
-        'controls:read', 'controls:write', 'controls:delete',
-        'documents:read', 'documents:write',
-        'tasks:read', 'tasks:write',
-        'workflows:read', 'workflows:write',
+        'risks:read',
+        'risks:write',
+        'risks:delete',
+        'controls:read',
+        'controls:write',
+        'controls:delete',
+        'documents:read',
+        'documents:write',
+        'tasks:read',
+        'tasks:write',
+        'workflows:read',
+        'workflows:write',
         'reports:read',
       ];
     case UserRole.AUDITOR:
@@ -295,18 +291,14 @@ function getDefaultPermissions(role: UserRole): string[] {
         'documents:read',
         'tasks:read',
         'workflows:read',
-        'reports:read', 'reports:write',
-        'questionnaires:read', 'questionnaires:write',
+        'reports:read',
+        'reports:write',
+        'questionnaires:read',
+        'questionnaires:write',
       ];
     case UserRole.USER:
     default:
-      return [
-        'risks:read',
-        'controls:read',
-        'documents:read',
-        'tasks:read',
-        'workflows:read',
-      ];
+      return ['risks:read', 'controls:read', 'documents:read', 'tasks:read', 'workflows:read'];
   }
 }
 
@@ -317,7 +309,7 @@ async function sendVerificationEmail(email: string, userId: string): Promise<voi
   try {
     // Generate verification token
     const verificationToken = generateVerificationToken(userId);
-    
+
     // Store token in database with expiration
     await db.client.user.update({
       where: { id: userId },
@@ -326,23 +318,22 @@ async function sendVerificationEmail(email: string, userId: string): Promise<voi
         emailVerificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
       },
     });
-    
+
     // Get user details for personalization
     const user = await db.client.user.findUnique({
       where: { id: userId },
       select: { firstName: true, lastName: true },
     });
-    
+
     // Send verification email
     const verificationUrl = `${env.APP_URL}/auth/verify?token=${verificationToken}`;
-    
+
     await emailService.sendTemplate('verification', email, {
       firstName: user?.firstName || 'User',
       verificationUrl,
     });
-    
+
     console.log(`Verification email sent to ${email} for user ${userId}`);
-    
   } catch (error) {
     console.error('Failed to send verification email:', error);
     // Don't throw error to prevent registration failure due to email issues
@@ -354,13 +345,13 @@ async function sendVerificationEmail(email: string, userId: string): Promise<voi
  */
 function generateVerificationToken(userId: string): string {
   return jwt.sign(
-    { 
-      userId, 
+    {
+      userId,
       type: 'email_verification',
       iat: Math.floor(Date.now() / 1000),
     },
     env.JWT_SECRET,
-    { 
+    {
       expiresIn: '24h',
       issuer: 'riscura',
       audience: 'riscura-users',
@@ -386,7 +377,7 @@ async function logAuthEvent(
         where: { email: email.toLowerCase() },
         select: { id: true, organizationId: true },
       });
-      
+
       if (user) {
         userId = user.id;
         organizationId = user.organizationId;
@@ -410,9 +401,9 @@ async function logAuthEvent(
 
 // Health check endpoint
 export async function GET(): Promise<NextResponse> {
-  return NextResponse.json({ 
-    status: 'ok', 
+  return NextResponse.json({
+    status: 'ok',
     endpoint: 'register',
     timestamp: new Date().toISOString(),
   });
-} 
+}

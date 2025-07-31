@@ -62,7 +62,7 @@ export class EnhancedJWTService {
   private readonly refreshTokenSecret: string;
   private readonly tokenBlacklist = new Set<string>();
   private readonly activeSessions = new Map<string, SessionInfo>();
-  
+
   private readonly defaultSettings: SecuritySettings = {
     accessTokenTTL: 15 * 60, // 15 minutes
     refreshTokenTTL: 7 * 24 * 60 * 60, // 7 days
@@ -72,13 +72,15 @@ export class EnhancedJWTService {
     enableRiskBasedAuth: true,
     allowedDevices: 3,
     sessionTimeout: 30 * 60, // 30 minutes of inactivity
-    enableDeviceTracking: true
+    enableDeviceTracking: true,
   };
 
   constructor(settings?: Partial<SecuritySettings>) {
-    this.accessTokenSecret = process.env.JWT_ACCESS_SECRET || crypto.randomBytes(64).toString('hex');
-    this.refreshTokenSecret = process.env.JWT_REFRESH_SECRET || crypto.randomBytes(64).toString('hex');
-    
+    this.accessTokenSecret =
+      process.env.JWT_ACCESS_SECRET || crypto.randomBytes(64).toString('hex');
+    this.refreshTokenSecret =
+      process.env.JWT_REFRESH_SECRET || crypto.randomBytes(64).toString('hex');
+
     if (!process.env.JWT_ACCESS_SECRET || !process.env.JWT_REFRESH_SECRET) {
       console.warn('JWT secrets not set in environment variables. Using generated secrets.');
     }
@@ -103,17 +105,17 @@ export class EnhancedJWTService {
     // Generate unique session ID
     const sessionId = crypto.randomUUID();
     const deviceId = deviceInfo.deviceId || this.generateDeviceId(deviceInfo);
-    
+
     // Calculate risk score
     const riskScore = await this.calculateRiskScore(userId, deviceInfo.ip, deviceId);
-    
+
     // Check session limits
     await this.enforceSessionLimits(userId);
-    
+
     const now = new Date();
     const accessExpiresAt = new Date(now.getTime() + this.defaultSettings.accessTokenTTL * 1000);
     const refreshExpiresAt = new Date(now.getTime() + this.defaultSettings.refreshTokenTTL * 1000);
-    
+
     // Create JWT payload
     const basePayload: Omit<JWTPayload, 'tokenType'> = {
       userId,
@@ -124,24 +126,20 @@ export class EnhancedJWTService {
       sessionId,
       deviceInfo: {
         ...deviceInfo,
-        deviceId
+        deviceId,
       },
       mfaVerified,
-      lastActivity: now
+      lastActivity: now,
     };
 
     // Generate tokens
-    const accessToken = jwt.sign(
-      { ...basePayload, tokenType: 'access' },
-      this.accessTokenSecret,
-      {
-        expiresIn: this.defaultSettings.accessTokenTTL,
-        issuer: 'riscura',
-        audience: organizationId,
-        subject: userId,
-        jwtid: crypto.randomUUID()
-      }
-    );
+    const accessToken = jwt.sign({ ...basePayload, tokenType: 'access' }, this.accessTokenSecret, {
+      expiresIn: this.defaultSettings.accessTokenTTL,
+      issuer: 'riscura',
+      audience: organizationId,
+      subject: userId,
+      jwtid: crypto.randomUUID(),
+    });
 
     const refreshToken = jwt.sign(
       { ...basePayload, tokenType: 'refresh' },
@@ -151,7 +149,7 @@ export class EnhancedJWTService {
         issuer: 'riscura',
         audience: organizationId,
         subject: userId,
-        jwtid: crypto.randomUUID()
+        jwtid: crypto.randomUUID(),
       }
     );
 
@@ -162,7 +160,7 @@ export class EnhancedJWTService {
       organizationId,
       deviceInfo: {
         ...deviceInfo,
-        deviceId
+        deviceId,
       },
       isActive: true,
       lastActivity: now,
@@ -170,7 +168,7 @@ export class EnhancedJWTService {
       expiresAt: refreshExpiresAt,
       refreshTokenHash: crypto.createHash('sha256').update(refreshToken).digest('hex'),
       mfaVerified,
-      riskScore
+      riskScore,
     };
 
     await this.storeSession(sessionInfo);
@@ -180,7 +178,7 @@ export class EnhancedJWTService {
       accessToken,
       refreshToken,
       expiresAt: accessExpiresAt,
-      refreshExpiresAt
+      refreshExpiresAt,
     };
   }
 
@@ -195,9 +193,9 @@ export class EnhancedJWTService {
       }
 
       const secret = tokenType === 'access' ? this.accessTokenSecret : this.refreshTokenSecret;
-      
+
       const decoded = jwt.verify(token, secret) as JWTPayload;
-      
+
       // Verify token type matches
       if (decoded.tokenType !== tokenType) {
         throw new Error('Invalid token type');
@@ -256,7 +254,7 @@ export class EnhancedJWTService {
   async revokeToken(token: string): Promise<void> {
     const tokenHash = this.getTokenHash(token);
     this.tokenBlacklist.add(tokenHash);
-    
+
     // Store in persistent storage
     await this.storeRevokedToken(tokenHash);
   }
@@ -278,7 +276,7 @@ export class EnhancedJWTService {
    */
   async terminateAllSessions(userId: string, exceptSessionId?: string): Promise<void> {
     const userSessions = await this.getUserSessions(userId);
-    
+
     for (const session of userSessions) {
       if (session.id !== exceptSessionId) {
         await this.terminateSession(session.id);
@@ -291,7 +289,7 @@ export class EnhancedJWTService {
    */
   async getUserSessions(userId: string): Promise<SessionInfo[]> {
     // TODO: Implement database query
-    return Array.from(this.activeSessions.values()).filter(s => s.userId === userId);
+    return Array.from(this.activeSessions.values()).filter((s) => s.userId === userId);
   }
 
   /**
@@ -299,7 +297,7 @@ export class EnhancedJWTService {
    */
   private async calculateRiskScore(userId: string, ip: string, deviceId: string): Promise<number> {
     let riskScore = 0;
-    
+
     // Check if device is known
     const knownDevice = await this.isKnownDevice(userId, deviceId);
     if (!knownDevice) {
@@ -338,13 +336,18 @@ export class EnhancedJWTService {
    */
   private async enforceSessionLimits(userId: string): Promise<void> {
     const userSessions = await this.getUserSessions(userId);
-    const activeSessions = userSessions.filter(s => s.isActive);
-    
+    const activeSessions = userSessions.filter((s) => s.isActive);
+
     if (activeSessions.length >= this.defaultSettings.maxActiveSessions) {
       // Terminate oldest sessions
-      const sortedSessions = activeSessions.sort((a, b) => a.lastActivity.getTime() - b.lastActivity.getTime());
-      const sessionsToTerminate = sortedSessions.slice(0, sortedSessions.length - this.defaultSettings.maxActiveSessions + 1);
-      
+      const sortedSessions = activeSessions.sort(
+        (a, b) => a.lastActivity.getTime() - b.lastActivity.getTime()
+      );
+      const sessionsToTerminate = sortedSessions.slice(
+        0,
+        sortedSessions.length - this.defaultSettings.maxActiveSessions + 1
+      );
+
       for (const session of sessionsToTerminate) {
         await this.terminateSession(session.id);
       }
@@ -410,7 +413,7 @@ export class EnhancedJWTService {
    */
   async cleanupExpired(): Promise<void> {
     const now = new Date();
-    
+
     // Remove expired sessions
     for (const [sessionId, session] of this.activeSessions.entries()) {
       if (session.expiresAt < now) {
@@ -431,15 +434,14 @@ export class EnhancedJWTService {
     suspiciousActivities: number;
   } {
     const sessions = Array.from(this.activeSessions.values());
-    const averageRiskScore = sessions.length > 0 
-      ? sessions.reduce((sum, s) => sum + s.riskScore, 0) / sessions.length 
-      : 0;
-    
+    const averageRiskScore =
+      sessions.length > 0 ? sessions.reduce((sum, s) => sum + s.riskScore, 0) / sessions.length : 0;
+
     return {
       activeSessions: sessions.length,
       blacklistedTokens: this.tokenBlacklist.size,
       averageRiskScore,
-      suspiciousActivities: sessions.filter(s => s.riskScore > 50).length
+      suspiciousActivities: sessions.filter((s) => s.riskScore > 50).length,
     };
   }
 }
@@ -463,7 +465,7 @@ export const validateJWTMiddleware = async (
   try {
     const jwtService = getJWTService();
     const payload = await jwtService.verifyToken(token, 'access');
-    
+
     if (!payload) {
       return { valid: false, error: 'Invalid or expired token' };
     }
@@ -475,10 +477,10 @@ export const validateJWTMiddleware = async (
 
     // Check permissions
     if (requiredPermissions && requiredPermissions.length > 0) {
-      const hasPermission = requiredPermissions.some(permission => 
+      const hasPermission = requiredPermissions.some((permission) =>
         payload.permissions.includes(permission)
       );
-      
+
       if (!hasPermission) {
         return { valid: false, error: 'Insufficient permissions' };
       }
@@ -486,9 +488,9 @@ export const validateJWTMiddleware = async (
 
     return { valid: true, payload };
   } catch (error) {
-    return { 
-      valid: false, 
-      error: error instanceof Error ? error.message : 'Token validation failed' 
+    return {
+      valid: false,
+      error: error instanceof Error ? error.message : 'Token validation failed',
     };
   }
-}; 
+};

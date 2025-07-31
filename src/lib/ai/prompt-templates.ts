@@ -92,7 +92,7 @@ RESPONSE STRUCTURE:
 - Integrated Analysis: Cross-domain insights
 - Recommendations: Holistic improvement strategies
 - Implementation: Change management guidance
-- Success Metrics: KPIs and measurement approaches`
+- Success Metrics: KPIs and measurement approaches`,
 };
 
 // Specialized prompt templates for specific tasks
@@ -110,14 +110,18 @@ Risk Details:
 - Status: ${risk.status}
 - Owner: ${risk.owner}
 
-${context ? `
+${
+  context
+    ? `
 Organizational Context:
 - Industry: ${context.industry || 'Not specified'}
 - Organization Size: ${context.size || 'Not specified'}
 - Geography: ${context.geography || 'Not specified'}
 - Risk Appetite: ${context.riskAppetite || 'Not specified'}
 - Frameworks: ${context.frameworks?.join(', ') || 'Not specified'}
-` : ''}
+`
+    : ''
+}
 
 ANALYSIS REQUIREMENTS:
 1. Validate and refine risk scoring with detailed justification
@@ -140,14 +144,18 @@ Risk Context:
 - Category: ${risk.category}
 - Risk Score: ${risk.riskScore} (Likelihood: ${risk.likelihood}, Impact: ${risk.impact})
 
-${context ? `
+${
+  context
+    ? `
 Organizational Context:
 - Industry: ${context.industry || 'Not specified'}
 - Organization Size: ${context.size || 'Not specified'}
 - Geography: ${context.geography || 'Not specified'}
 - Risk Appetite: ${context.riskAppetite || 'Not specified'}
 - Frameworks: ${context.frameworks?.join(', ') || 'Not specified'}
-` : ''}
+`
+    : ''
+}
 
 CONTROL REQUIREMENTS:
 1. Design preventive controls to reduce likelihood
@@ -168,16 +176,20 @@ Framework: ${framework}
 Current Controls: ${controls.length} controls analyzed
 
 Control Summary:
-${controls.map(c => `- ${c.title}: ${c.description.substring(0, 100)}...`).join('\n')}
+${controls.map((c) => `- ${c.title}: ${c.description.substring(0, 100)}...`).join('\n')}
 
-${context ? `
+${
+  context
+    ? `
 Organizational Context:
 - Industry: ${context.industry || 'Not specified'}
 - Organization Size: ${context.size || 'Not specified'}
 - Geography: ${context.geography || 'Not specified'}
 - Risk Appetite: ${context.riskAppetite || 'Not specified'}
 - Other Frameworks: ${context.frameworks?.join(', ') || 'Not specified'}
-` : ''}
+`
+    : ''
+}
 
 ANALYSIS REQUIREMENTS:
 1. Map each framework requirement to existing controls
@@ -196,21 +208,29 @@ NATURAL LANGUAGE QUERY PROCESSING
 
 User Query: "${query}"
 
-${context ? `
+${
+  context
+    ? `
 Available Data Context:
 - Risks: ${context.availableData?.risks?.length || 0} items
 - Controls: ${context.availableData?.controls?.length || 0} items
 - Frameworks: ${context.availableData?.frameworks?.join(', ') || 'None'}
 - User Role: ${context.userRole || 'Not specified'}
 
-${context.organizationContext ? `
+${
+  context.organizationContext
+    ? `
 Organization Context:
 - Industry: ${context.organizationContext.industry || 'Not specified'}
 - Size: ${context.organizationContext.size || 'Not specified'}
 - Geography: ${context.organizationContext.geography || 'Not specified'}
 - Risk Appetite: ${context.organizationContext.riskAppetite || 'Not specified'}
-` : ''}
-` : ''}
+`
+    : ''
+}
+`
+    : ''
+}
 
 PROCESSING REQUIREMENTS:
 1. Analyze query intent and extract key information needs
@@ -251,16 +271,20 @@ Report Type: ${reportType}
 Risks to Analyze: ${risks.length} risks
 
 Risk Summary:
-${risks.map(r => `- ${r.title} (${r.category}): Score ${r.riskScore}`).join('\n')}
+${risks.map((r) => `- ${r.title} (${r.category}): Score ${r.riskScore}`).join('\n')}
 
-${context ? `
+${
+  context
+    ? `
 Organizational Context:
 - Industry: ${context.industry || 'Not specified'}
 - Organization Size: ${context.size || 'Not specified'}
 - Geography: ${context.geography || 'Not specified'}
 - Risk Appetite: ${context.riskAppetite || 'Not specified'}
 - Frameworks: ${context.frameworks?.join(', ') || 'Not specified'}
-` : ''}
+`
+    : ''
+}
 
 REPORT REQUIREMENTS:
 1. Executive Summary with key findings and recommendations
@@ -272,7 +296,7 @@ REPORT REQUIREMENTS:
 7. Key risk indicators and monitoring suggestions
 8. Visual data representations and dashboard metrics
 
-Please generate a comprehensive ${reportType} risk report with actionable insights.`
+Please generate a comprehensive ${reportType} risk report with actionable insights.`,
 };
 
 // Context enhancement templates
@@ -286,7 +310,7 @@ FINANCIAL SERVICES CONTEXT:
 - Technology Considerations: Legacy systems, digital transformation, cybersecurity
 - Stakeholder Expectations: Regulators, investors, customers, board oversight`,
 
-    'Healthcare': `
+    Healthcare: `
 HEALTHCARE CONTEXT:
 - Regulatory Environment: HIPAA, FDA, state regulations, accreditation standards
 - Key Frameworks: HIPAA, HITECH, FDA 21 CFR Part 11, Joint Commission
@@ -294,7 +318,7 @@ HEALTHCARE CONTEXT:
 - Technology Considerations: EHR systems, medical devices, telemedicine, cybersecurity
 - Stakeholder Expectations: Patients, providers, regulators, payers`,
 
-    'Technology': `
+    Technology: `
 TECHNOLOGY CONTEXT:
 - Regulatory Environment: Data privacy laws, industry standards, export controls
 - Key Frameworks: ISO 27001, SOC 2, GDPR, CCPA, NIST Cybersecurity Framework
@@ -302,17 +326,17 @@ TECHNOLOGY CONTEXT:
 - Technology Considerations: Cloud services, AI/ML, DevOps, supply chain security
 - Stakeholder Expectations: Customers, investors, regulators, partners`,
 
-    'Manufacturing': `
+    Manufacturing: `
 MANUFACTURING CONTEXT:
 - Regulatory Environment: Safety regulations, environmental standards, quality requirements
 - Key Frameworks: ISO 9001, ISO 14001, OSHA, EPA regulations
 - Risk Focus: Operational safety, supply chain, quality control, environmental compliance
 - Technology Considerations: IoT, automation, predictive maintenance, cybersecurity
-- Stakeholder Expectations: Customers, regulators, employees, communities`
+- Stakeholder Expectations: Customers, regulators, employees, communities`,
   },
 
   organizationSize: {
-    'Large': `
+    Large: `
 LARGE ORGANIZATION CHARACTERISTICS:
 - Complex organizational structure with multiple business units
 - Established risk management frameworks and processes
@@ -321,7 +345,7 @@ LARGE ORGANIZATION CHARACTERISTICS:
 - Advanced technology infrastructure and capabilities
 - Focus on enterprise-wide risk integration and optimization`,
 
-    'Medium': `
+    Medium: `
 MEDIUM ORGANIZATION CHARACTERISTICS:
 - Growing organizational complexity with emerging specialization
 - Developing risk management capabilities and processes
@@ -330,15 +354,15 @@ MEDIUM ORGANIZATION CHARACTERISTICS:
 - Evolving technology infrastructure with modernization needs
 - Focus on scalable risk management solutions`,
 
-    'Small': `
+    Small: `
 SMALL ORGANIZATION CHARACTERISTICS:
 - Simple organizational structure with limited specialization
 - Basic risk management processes, often informal
 - Limited resources for dedicated risk management
 - Focused regulatory requirements and stakeholder base
 - Basic technology infrastructure with resource constraints
-- Focus on practical, cost-effective risk solutions`
-  }
+- Focus on practical, cost-effective risk solutions`,
+  },
 };
 
 // Response formatting templates
@@ -349,10 +373,10 @@ export const RESPONSE_FORMATS = {
       'Key Findings',
       'Strategic Recommendations',
       'Next Steps',
-      'Success Metrics'
+      'Success Metrics',
     ],
     tone: 'Strategic and high-level',
-    length: 'Concise with focus on business impact'
+    length: 'Concise with focus on business impact',
   },
 
   detailed: {
@@ -361,10 +385,10 @@ export const RESPONSE_FORMATS = {
       'Detailed Analysis',
       'Recommendations',
       'Implementation Plan',
-      'Monitoring and Metrics'
+      'Monitoring and Metrics',
     ],
     tone: 'Professional and comprehensive',
-    length: 'Thorough with supporting details'
+    length: 'Thorough with supporting details',
   },
 
   technical: {
@@ -373,11 +397,11 @@ export const RESPONSE_FORMATS = {
       'Detailed Analysis',
       'Technical Recommendations',
       'Implementation Details',
-      'Technical Metrics'
+      'Technical Metrics',
     ],
     tone: 'Technical and precise',
-    length: 'Comprehensive with technical depth'
-  }
+    length: 'Comprehensive with technical depth',
+  },
 };
 
 // Utility functions for prompt generation
@@ -458,7 +482,7 @@ Length: ${format.length}`;
     systemPrompt = this.enhanceWithContext(systemPrompt, context);
 
     return systemPrompt;
-  }
+  },
 };
 
 export const RISK_ANALYSIS_TEMPLATE = `
@@ -786,51 +810,71 @@ Always strive to turn risk information into strategic business intelligence.
 `;
 
 // Template builder functions
-export function buildRiskAnalysisPrompt(riskData: any, historicalRisks: any[], orgContext: any): string {
-  return RISK_ANALYSIS_TEMPLATE
-    .replace('{riskData}', JSON.stringify(riskData, null, 2))
+export function buildRiskAnalysisPrompt(
+  riskData: any,
+  historicalRisks: any[],
+  orgContext: any
+): string {
+  return RISK_ANALYSIS_TEMPLATE.replace('{riskData}', JSON.stringify(riskData, null, 2))
     .replace('{historicalRisks}', JSON.stringify(historicalRisks, null, 2))
     .replace('{organizationContext}', JSON.stringify(orgContext, null, 2));
 }
 
-export function buildControlRecommendationPrompt(risk: any, existingControls: any[], industryContext: any): string {
-  return CONTROL_RECOMMENDATION_TEMPLATE
-    .replace('{riskContext}', JSON.stringify(risk, null, 2))
+export function buildControlRecommendationPrompt(
+  risk: any,
+  existingControls: any[],
+  industryContext: any
+): string {
+  return CONTROL_RECOMMENDATION_TEMPLATE.replace('{riskContext}', JSON.stringify(risk, null, 2))
     .replace('{existingControls}', JSON.stringify(existingControls, null, 2))
     .replace('{industryContext}', JSON.stringify(industryContext, null, 2));
 }
 
-export function buildComplianceGapPrompt(complianceData: any, requirements: any[], framework: string): string {
-  return COMPLIANCE_GAP_TEMPLATE
-    .replace('{framework}', framework)
+export function buildComplianceGapPrompt(
+  complianceData: any,
+  requirements: any[],
+  framework: string
+): string {
+  return COMPLIANCE_GAP_TEMPLATE.replace('{framework}', framework)
     .replace('{complianceData}', JSON.stringify(complianceData, null, 2))
     .replace('{frameworkRequirements}', JSON.stringify(requirements, null, 2));
 }
 
-export function buildChatPrompt(query: string, history: any[], contextData: any, intent: any): string {
-  return NATURAL_LANGUAGE_QUERY_TEMPLATE
-    .replace('{query}', query)
+export function buildChatPrompt(
+  query: string,
+  history: any[],
+  contextData: any,
+  intent: any
+): string {
+  return NATURAL_LANGUAGE_QUERY_TEMPLATE.replace('{query}', query)
     .replace('{intent}', JSON.stringify(intent, null, 2))
     .replace('{contextData}', JSON.stringify(contextData, null, 2))
     .replace('{conversationHistory}', JSON.stringify(history.slice(-5), null, 2));
 }
 
 export function buildTrendPredictionPrompt(historicalData: any, timeframe: string): string {
-  return TREND_PREDICTION_TEMPLATE
-    .replace('{historicalData}', JSON.stringify(historicalData, null, 2))
-    .replace('{timeframe}', timeframe);
+  return TREND_PREDICTION_TEMPLATE.replace(
+    '{historicalData}',
+    JSON.stringify(historicalData, null, 2)
+  ).replace('{timeframe}', timeframe);
 }
 
-export function buildRiskReportPrompt(riskSummary: any, trendAnalysis: any, reportType: string): string {
-  return RISK_REPORT_TEMPLATE
-    .replace('{riskSummary}', JSON.stringify(riskSummary, null, 2))
+export function buildRiskReportPrompt(
+  riskSummary: any,
+  trendAnalysis: any,
+  reportType: string
+): string {
+  return RISK_REPORT_TEMPLATE.replace('{riskSummary}', JSON.stringify(riskSummary, null, 2))
     .replace('{trendAnalysis}', JSON.stringify(trendAnalysis, null, 2))
     .replace('{reportType}', reportType);
 }
 
-export function buildInsightGenerationPrompt(riskData: any, controlData: any, complianceData: any): string {
-  return INSIGHT_GENERATION_TEMPLATE
-    .replace('{riskData}', JSON.stringify(riskData, null, 2))
+export function buildInsightGenerationPrompt(
+  riskData: any,
+  controlData: any,
+  complianceData: any
+): string {
+  return INSIGHT_GENERATION_TEMPLATE.replace('{riskData}', JSON.stringify(riskData, null, 2))
     .replace('{controlData}', JSON.stringify(controlData, null, 2))
     .replace('{complianceData}', JSON.stringify(complianceData, null, 2));
 }

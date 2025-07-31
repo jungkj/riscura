@@ -39,7 +39,7 @@ export const useDevice = (): DeviceInfo => {
 
     const width = window.innerWidth;
     const height = window.innerHeight;
-    
+
     return {
       type: width < 768 ? 'mobile' : width < 1024 ? 'tablet' : 'desktop',
       breakpoint: getBreakpoint(width),
@@ -55,7 +55,7 @@ export const useDevice = (): DeviceInfo => {
     const handleResize = () => {
       const width = window.innerWidth;
       const height = window.innerHeight;
-      
+
       setDevice({
         type: width < 768 ? 'mobile' : width < 1024 ? 'tablet' : 'desktop',
         breakpoint: getBreakpoint(width),
@@ -98,17 +98,17 @@ const getBreakpoint = (width: number): Breakpoint => {
 export const useResponsiveValue = <T>(values: Partial<Record<Breakpoint, T>>): T | undefined => {
   const device = useDevice();
   const breakpointOrder: Breakpoint[] = ['2xl', 'xl', 'lg', 'md', 'sm', 'xs'];
-  
+
   // Find the first defined value at or below current breakpoint
   const currentBreakpointIndex = breakpointOrder.indexOf(device.breakpoint);
-  
+
   for (let i = currentBreakpointIndex; i < breakpointOrder.length; i++) {
     const bp = breakpointOrder[i];
     if (values[bp] !== undefined) {
       return values[bp];
     }
   }
-  
+
   // Fallback to first available value
   return Object.values(values)[0];
 };
@@ -122,10 +122,10 @@ export const useMediaQuery = (query: string): boolean => {
 
     const media = window.matchMedia(query);
     const updateMatches = () => setMatches(media.matches);
-    
+
     updateMatches();
     media.addEventListener('change', updateMatches);
-    
+
     return () => media.removeEventListener('change', updateMatches);
   }, [query]);
 
@@ -154,9 +154,9 @@ export const useSidebarState = () => {
 
   const toggle = useCallback(() => {
     if (device.type === 'mobile') {
-      setIsOpen(prev => !prev);
+      setIsOpen((prev) => !prev);
     } else {
-      setIsCollapsed(prev => !prev);
+      setIsCollapsed((prev) => !prev);
     }
   }, [device.type]);
 
@@ -311,4 +311,4 @@ export const useSafeAreaInsets = () => {
   }, []);
 
   return insets;
-}; 
+};

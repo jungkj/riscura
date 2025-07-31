@@ -29,7 +29,7 @@ export const measurePerformance = {
   getResourceTiming: (url?: string): PerformanceResourceTiming[] => {
     if (typeof performance === 'undefined') return [];
     const entries = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
-    return url ? entries.filter(entry => entry.name.includes(url)) : entries;
+    return url ? entries.filter((entry) => entry.name.includes(url)) : entries;
   },
 
   // Calculate page load metrics
@@ -40,9 +40,10 @@ export const measurePerformance = {
     return {
       dns: navigation.domainLookupEnd - navigation.domainLookupStart,
       tcp: navigation.connectEnd - navigation.connectStart,
-      ssl: navigation.secureConnectionStart > 0 
-        ? navigation.connectEnd - navigation.secureConnectionStart 
-        : 0,
+      ssl:
+        navigation.secureConnectionStart > 0
+          ? navigation.connectEnd - navigation.secureConnectionStart
+          : 0,
       ttfb: navigation.responseStart - navigation.navigationStart,
       download: navigation.responseEnd - navigation.responseStart,
       domInteractive: navigation.domInteractive - navigation.navigationStart,
@@ -94,7 +95,7 @@ export const bundleUtils = {
     fonts: number;
   }> => {
     const resources = measurePerformance.getResourceTiming();
-    
+
     const analysis = {
       total: 0,
       javascript: 0,
@@ -103,7 +104,7 @@ export const bundleUtils = {
       fonts: 0,
     };
 
-    resources.forEach(resource => {
+    resources.forEach((resource) => {
       const size = resource.transferSize || 0;
       analysis.total += size;
 
@@ -127,7 +128,7 @@ export const bundleUtils = {
     let compressed = 0;
     let uncompressed = 0;
 
-    resources.forEach(resource => {
+    resources.forEach((resource) => {
       if (resource.transferSize < resource.decodedBodySize) {
         compressed++;
       } else {
@@ -149,7 +150,8 @@ export const imageUtils = {
     return new Promise((resolve) => {
       const webP = new Image();
       webP.onload = webP.onerror = () => resolve(webP.height === 2);
-      webP.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
+      webP.src =
+        'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
     });
   },
 
@@ -158,7 +160,8 @@ export const imageUtils = {
     return new Promise((resolve) => {
       const avif = new Image();
       avif.onload = avif.onerror = () => resolve(avif.height === 2);
-      avif.src = 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgABogQEAwgMg8f8D///8WfhwB8+ErK42A=';
+      avif.src =
+        'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgABogQEAwgMg8f8D///8WfhwB8+ErK42A=';
     });
   },
 
@@ -185,11 +188,12 @@ export const networkUtils = {
   // Get connection information
   getConnectionInfo: (): any => {
     if (typeof navigator === 'undefined') return null;
-    
-    const connection = (navigator as any).connection || 
-                      (navigator as any).mozConnection || 
-                      (navigator as any).webkitConnection;
-    
+
+    const connection =
+      (navigator as any).connection ||
+      (navigator as any).mozConnection ||
+      (navigator as any).webkitConnection;
+
     if (!connection) return null;
 
     return {
@@ -203,20 +207,20 @@ export const networkUtils = {
   // Test network speed
   testNetworkSpeed: async (): Promise<{ downloadSpeed: number; latency: number }> => {
     const startTime = performance.now();
-    
+
     try {
       // Download a small test file
-      const response = await fetch('/api/ping', { 
+      const response = await fetch('/api/ping', {
         method: 'HEAD',
-        cache: 'no-cache' 
+        cache: 'no-cache',
       });
-      
+
       const endTime = performance.now();
       const latency = endTime - startTime;
-      
+
       // Estimate download speed (very rough)
-      const downloadSpeed = response.headers.get('content-length') 
-        ? parseInt(response.headers.get('content-length')!) / (latency / 1000) 
+      const downloadSpeed = response.headers.get('content-length')
+        ? parseInt(response.headers.get('content-length')!) / (latency / 1000)
         : 0;
 
       return { downloadSpeed, latency };
@@ -235,11 +239,7 @@ export const networkUtils = {
 // Virtualization utilities
 export const virtualizationUtils = {
   // Calculate optimal virtual list settings
-  calculateVirtualSettings: (
-    totalItems: number,
-    containerHeight: number,
-    itemHeight: number
-  ) => {
+  calculateVirtualSettings: (totalItems: number, containerHeight: number, itemHeight: number) => {
     const visibleItems = Math.ceil(containerHeight / itemHeight);
     const overscan = Math.min(10, Math.ceil(visibleItems * 0.5));
     const bufferSize = Math.min(50, Math.ceil(totalItems * 0.1));
@@ -259,15 +259,17 @@ export const virtualizationUtils = {
     if (strategy === 'random') {
       const sampled: T[] = [];
       const indices = new Set<number>();
-      
+
       while (indices.size < maxItems) {
         indices.add(Math.floor(Math.random() * data.length));
       }
-      
-      Array.from(indices).sort((a, b) => a - b).forEach(index => {
-        sampled.push(data[index]);
-      });
-      
+
+      Array.from(indices)
+        .sort((a, b) => a - b)
+        .forEach((index) => {
+          sampled.push(data[index]);
+        });
+
       return sampled;
     } else {
       // Uniform sampling
@@ -280,40 +282,33 @@ export const virtualizationUtils = {
 // Debouncing and throttling utilities
 export const optimizationUtils = {
   // Debounce function
-  debounce: <T extends (...args: any[]) => any>(
-    func: T,
-    wait: number,
-    immediate?: boolean
-  ): T => {
+  debounce: <T extends (...args: any[]) => any>(func: T, wait: number, immediate?: boolean): T => {
     let timeout: NodeJS.Timeout | null = null;
-    
+
     return ((...args: any[]) => {
       const later = () => {
         timeout = null;
         if (!immediate) func(...args);
       };
-      
+
       const callNow = immediate && !timeout;
-      
+
       if (timeout) clearTimeout(timeout);
       timeout = setTimeout(later, wait);
-      
+
       if (callNow) func(...args);
     }) as T;
   },
 
   // Throttle function
-  throttle: <T extends (...args: any[]) => any>(
-    func: T,
-    limit: number
-  ): T => {
+  throttle: <T extends (...args: any[]) => any>(func: T, limit: number): T => {
     let inThrottle: boolean;
-    
+
     return ((...args: any[]) => {
       if (!inThrottle) {
         func(...args);
         inThrottle = true;
-        setTimeout(() => inThrottle = false, limit);
+        setTimeout(() => (inThrottle = false), limit);
       }
     }) as T;
   },
@@ -330,7 +325,7 @@ export const optimizationUtils = {
   // Batch DOM updates
   batchDOMUpdates: (updates: (() => void)[]): void => {
     optimizationUtils.requestIdleCallback(() => {
-      updates.forEach(update => update());
+      updates.forEach((update) => update());
     });
   },
 };
@@ -355,19 +350,19 @@ export const scoringUtils = {
     // Weighted average (simplified Lighthouse weights)
     return Math.round(
       fcpScore * 0.15 +
-      lcpScore * 0.25 +
-      fidScore * 0.15 +
-      clsScore * 0.15 +
-      ttfbScore * 0.15 +
-      85 * 0.15 // Other metrics placeholder
+        lcpScore * 0.25 +
+        fidScore * 0.15 +
+        clsScore * 0.15 +
+        ttfbScore * 0.15 +
+        85 * 0.15 // Other metrics placeholder
     );
   },
 
   // Score individual metric
   scoreMetric: (
-    value: number, 
-    goodThreshold: number, 
-    poorThreshold: number, 
+    value: number,
+    goodThreshold: number,
+    poorThreshold: number,
     lowerIsBetter: boolean = false
   ): number => {
     if (lowerIsBetter) {
@@ -401,4 +396,4 @@ export default {
   virtualizationUtils,
   optimizationUtils,
   scoringUtils,
-}; 
+};

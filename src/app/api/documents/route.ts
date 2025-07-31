@@ -10,13 +10,13 @@ const CreateDocumentSchema = z.object({
   size: z.number(),
   content: z.string().optional(),
   extractedText: z.string().optional(),
-  aiAnalysis: z.any().optional()
+  aiAnalysis: z.any().optional(),
 });
 
 export const GET = withApiMiddleware(
   async (req: NextRequest) => {
     const { user } = req as AuthenticatedRequest;
-    
+
     if (!user || !user.organizationId) {
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
@@ -29,7 +29,7 @@ export const GET = withApiMiddleware(
       const { searchParams } = new URL(req.url);
       const pageParam = parseInt(searchParams.get('page') || '1');
       const limitParam = parseInt(searchParams.get('limit') || '50');
-      
+
       // Validate pagination parameters
       const page = Math.max(1, pageParam || 1);
       const MAX_LIMIT = 100;
@@ -38,7 +38,7 @@ export const GET = withApiMiddleware(
 
       // Get total count for pagination
       const totalCount = await db.client.document.count({
-        where: { organizationId: user.organizationId }
+        where: { organizationId: user.organizationId },
       });
 
       const documents = await db.client.document.findMany({
@@ -49,13 +49,13 @@ export const GET = withApiMiddleware(
               id: true,
               firstName: true,
               lastName: true,
-              email: true
-            }
-          }
+              email: true,
+            },
+          },
         },
         orderBy: { createdAt: 'desc' },
         skip: offset,
-        take: limit
+        take: limit,
       });
 
       return NextResponse.json({
@@ -65,8 +65,8 @@ export const GET = withApiMiddleware(
           page,
           limit,
           total: totalCount,
-          totalPages: Math.ceil(totalCount / limit)
-        }
+          totalPages: Math.ceil(totalCount / limit),
+        },
       });
     } catch (error) {
       console.error('Get documents error:', error);
@@ -82,7 +82,7 @@ export const GET = withApiMiddleware(
 export const POST = withApiMiddleware(
   async (req: NextRequest, validatedBody?: z.infer<typeof CreateDocumentSchema>) => {
     const { user } = req as AuthenticatedRequest;
-    
+
     if (!user || !user.organizationId) {
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
@@ -107,18 +107,21 @@ export const POST = withApiMiddleware(
           extractedText: validatedBody.extractedText,
           aiAnalysis: validatedBody.aiAnalysis,
           organization: {
-            connect: { id: user.organizationId }
+            connect: { id: user.organizationId },
           },
           uploader: {
-            connect: { id: user.id }
-          }
-        }
+            connect: { id: user.id },
+          },
+        },
       });
 
-      return NextResponse.json({
-        success: true,
-        data: document
-      }, { status: 201 });
+      return NextResponse.json(
+        {
+          success: true,
+          data: document,
+        },
+        { status: 201 }
+      );
     } catch (error) {
       console.error('Create document error:', error);
       return NextResponse.json(
@@ -127,8 +130,8 @@ export const POST = withApiMiddleware(
       );
     }
   },
-  { 
+  {
     requireAuth: true,
-    validateBody: CreateDocumentSchema 
+    validateBody: CreateDocumentSchema,
   }
 );

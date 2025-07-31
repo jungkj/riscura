@@ -7,7 +7,7 @@ const adminAuthFile = 'src/__tests__/e2e/.auth/admin.json';
 
 /**
  * Authentication Setup for E2E Tests
- * 
+ *
  * This setup runs before other tests to authenticate users and save their session state.
  * It creates authenticated sessions for regular users and admin users.
  */
@@ -20,7 +20,7 @@ setup('authenticate as regular user', async ({ page }) => {
 
   // Navigate to login page
   await page.goto('/auth/login');
-  
+
   // Wait for page to load
   await expect(page.locator('input[type="email"]')).toBeVisible();
 
@@ -33,9 +33,13 @@ setup('authenticate as regular user', async ({ page }) => {
 
   // Wait for successful login - should redirect to dashboard
   await page.waitForURL('**/dashboard/**', { timeout: 30000 });
-  
+
   // Verify we're logged in by checking for user menu or similar element
-  await expect(page.locator('[data-testid="user-menu"], .user-menu, [aria-label*="user"], [aria-label*="profile"]')).toBeVisible({ timeout: 10000 });
+  await expect(
+    page.locator(
+      '[data-testid="user-menu"], .user-menu, [aria-label*="user"], [aria-label*="profile"]'
+    )
+  ).toBeVisible({ timeout: 10000 });
 
   console.log('Regular user authentication successful');
 
@@ -51,7 +55,7 @@ setup('authenticate as admin user', async ({ page }) => {
 
   // Navigate to login page
   await page.goto('/auth/login');
-  
+
   // Wait for page to load
   await expect(page.locator('input[type="email"]')).toBeVisible();
 
@@ -64,9 +68,13 @@ setup('authenticate as admin user', async ({ page }) => {
 
   // Wait for successful login
   await page.waitForURL('**/dashboard/**', { timeout: 30000 });
-  
+
   // Verify admin access
-  await expect(page.locator('[data-testid="user-menu"], .user-menu, [aria-label*="user"], [aria-label*="profile"]')).toBeVisible({ timeout: 10000 });
+  await expect(
+    page.locator(
+      '[data-testid="user-menu"], .user-menu, [aria-label*="user"], [aria-label*="profile"]'
+    )
+  ).toBeVisible({ timeout: 10000 });
 
   console.log('Admin user authentication successful');
 
@@ -76,10 +84,10 @@ setup('authenticate as admin user', async ({ page }) => {
 
 setup('verify database connection', async ({ request }) => {
   console.log('Verifying database connection...');
-  
+
   // Test database connectivity through API
   const response = await request.get('/api/health/database');
-  
+
   if (response.status() !== 200) {
     console.error('Database health check failed');
     throw new Error(`Database health check failed with status: ${response.status()}`);
@@ -91,7 +99,7 @@ setup('verify database connection', async ({ request }) => {
 
 setup('prepare test data', async ({ request }) => {
   console.log('Preparing test data...');
-  
+
   // Create test organization and users if they don't exist
   // This would typically call a test data setup API endpoint
   try {
@@ -99,8 +107,8 @@ setup('prepare test data', async ({ request }) => {
       data: {
         createTestUsers: true,
         createTestOrganizations: true,
-        createSampleRisks: true
-      }
+        createSampleRisks: true,
+      },
     });
 
     if (response.status() === 200 || response.status() === 201) {

@@ -9,7 +9,7 @@ export const GET = withApiMiddleware(
     try {
       // Get user from request (added by middleware)
       const user = (req as any).user;
-      
+
       if (!user || !user.organizationId) {
         return NextResponse.json(
           { success: false, error: 'Organization context required' },
@@ -72,7 +72,7 @@ export const POST = withApiMiddleware(
     try {
       // Get user from request (added by middleware)
       const user = (req as any).user;
-      
+
       if (!user || !user.organizationId) {
         return NextResponse.json(
           { success: false, error: 'Organization context required' },
@@ -90,10 +90,10 @@ export const POST = withApiMiddleware(
             validatedData.apiKey,
             validatedData.webhookUrl
           );
-          
+
           // Initial sync
           await EnhancedProboService.syncMetrics(user.organizationId);
-          
+
           return NextResponse.json({
             success: true,
             message: 'Probo integration configured successfully',
@@ -102,7 +102,7 @@ export const POST = withApiMiddleware(
 
         case 'sync':
           await EnhancedProboService.syncMetrics(user.organizationId);
-          
+
           return NextResponse.json({
             success: true,
             message: 'Probo data synchronized successfully',
@@ -110,21 +110,18 @@ export const POST = withApiMiddleware(
 
         case 'disable':
           await EnhancedProboService.disableIntegration(user.organizationId);
-          
+
           return NextResponse.json({
             success: true,
             message: 'Probo integration disabled',
           });
 
         default:
-          return NextResponse.json(
-            { success: false, error: 'Invalid action' },
-            { status: 400 }
-          );
+          return NextResponse.json({ success: false, error: 'Invalid action' }, { status: 400 });
       }
     } catch (error) {
       console.error('Probo insights POST API error:', error);
-      
+
       if (error instanceof z.ZodError) {
         return NextResponse.json(
           {
@@ -146,8 +143,8 @@ export const POST = withApiMiddleware(
       );
     }
   },
-  { 
+  {
     requireAuth: true,
-    validateBody: ActionSchema 
+    validateBody: ActionSchema,
   }
-); 
+);

@@ -8,7 +8,6 @@ interface RelatedPostsProps {
 }
 
 export default function RelatedPosts({ posts }: RelatedPostsProps) {
-
   return (
     <section className="mb-12">
       <h3 className="text-2xl font-bold text-gray-900 mb-6">Related Articles</h3>
@@ -33,9 +32,10 @@ export default function RelatedPosts({ posts }: RelatedPostsProps) {
                   {post.title}
                 </h4>
                 <p className="text-sm text-gray-500">
-                  {post.readingTime?.text} • {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                  {post.readingTime?.text} •{' '}
+                  {new Date(post.publishedAt).toLocaleDateString('en-US', {
                     month: 'short',
-                    day: 'numeric'
+                    day: 'numeric',
                   })}
                 </p>
               </div>

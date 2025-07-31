@@ -15,7 +15,7 @@ import {
   BulkOperationResult,
   ProboEvent,
   EvidenceRequirement,
-  ComplianceMapping
+  ComplianceMapping,
 } from '@/types/probo-integration.types';
 
 export interface ProboIntegrationMetrics {
@@ -52,7 +52,7 @@ export interface ProboQuickAction {
  * Probo Integration Service
  * Integrates with Probo's open-source compliance platform
  * Based on https://github.com/getprobo/probo
- * 
+ *
  * Enhanced to use actual Probo repository data and logic
  */
 export class ProboIntegrationService {
@@ -63,7 +63,7 @@ export class ProboIntegrationService {
   private eventListeners: Map<string, Function[]> = new Map();
   private controlLibrary: ProboControlLibrary | null = null;
   private lastSync: Date = new Date();
-  
+
   // Direct integration with Probo's actual data structures
   private proboMitigations: any[] = [];
   private proboCategories: string[] = [];
@@ -85,7 +85,7 @@ export class ProboIntegrationService {
         autoApplyRecommendations: false,
         confidenceThreshold: 0.8,
         frameworks: [],
-        customCategories: []
+        customCategories: [],
       };
       ProboIntegrationService.instance = new ProboIntegrationService(defaultConfig);
     }
@@ -99,7 +99,10 @@ export class ProboIntegrationService {
       await this.syncWithProbo();
       this.startHealthMonitoring();
     } catch (error) {
-      console.error('Failed to initialize Probo integration:', error instanceof Error ? error.message : String(error));
+      console.error(
+        'Failed to initialize Probo integration:',
+        error instanceof Error ? error.message : String(error)
+      );
     }
   }
 
@@ -111,10 +114,15 @@ export class ProboIntegrationService {
       // Load actual Probo mitigations data
       this.proboMitigations = await this.proboService.getMitigations();
       this.proboCategories = await this.proboService.getMitigationCategories();
-      
-      console.log(`Loaded ${this.proboMitigations.length} Probo mitigations across ${this.proboCategories.length} categories`);
+
+      console.log(
+        `Loaded ${this.proboMitigations.length} Probo mitigations across ${this.proboCategories.length} categories`
+      );
     } catch (error) {
-      console.error('Failed to load Probo repository data:', error instanceof Error ? error.message : String(error));
+      console.error(
+        'Failed to load Probo repository data:',
+        error instanceof Error ? error.message : String(error)
+      );
       throw error;
     }
   }
@@ -124,14 +132,14 @@ export class ProboIntegrationService {
    */
   async getIntegrationMetrics(): Promise<ProboIntegrationMetrics> {
     const mitigations = await this.proboService.getMitigations();
-    
+
     return {
       totalControls: mitigations.length,
       implementedControls: Math.floor(mitigations.length * 0.65), // 65% implementation rate
       vendorAssessments: 23, // Mock data - would come from database
       complianceFrameworks: 4, // SOC2, ISO27001, NIST, etc.
       riskReduction: 78, // Percentage risk reduction through Probo controls
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
   }
 
@@ -140,9 +148,9 @@ export class ProboIntegrationService {
    */
   async getComplianceStatus(): Promise<ProboComplianceStatus[]> {
     const mitigations = await this.proboService.getMitigations();
-    const soc2Controls = mitigations.filter(m => m.standards.includes('SOC2'));
-    const iso27001Controls = mitigations.filter(m => m.standards.includes('ISO27001'));
-    const nistControls = mitigations.filter(m => m.standards.includes('NIST'));
+    const soc2Controls = mitigations.filter((m) => m.standards.includes('SOC2'));
+    const iso27001Controls = mitigations.filter((m) => m.standards.includes('ISO27001'));
+    const nistControls = mitigations.filter((m) => m.standards.includes('NIST'));
 
     return [
       {
@@ -153,7 +161,7 @@ export class ProboIntegrationService {
         totalControls: 67,
         proboControlsAvailable: soc2Controls.length,
         lastAssessed: new Date('2024-01-01'),
-        nextDue: new Date('2024-07-01')
+        nextDue: new Date('2024-07-01'),
       },
       {
         framework: 'ISO 27001',
@@ -163,7 +171,7 @@ export class ProboIntegrationService {
         totalControls: 93,
         proboControlsAvailable: iso27001Controls.length,
         lastAssessed: new Date('2023-12-15'),
-        nextDue: new Date('2024-06-15')
+        nextDue: new Date('2024-06-15'),
       },
       {
         framework: 'NIST CSF',
@@ -173,7 +181,7 @@ export class ProboIntegrationService {
         totalControls: 108,
         proboControlsAvailable: nistControls.length,
         lastAssessed: new Date('2023-12-01'),
-        nextDue: new Date('2024-03-01')
+        nextDue: new Date('2024-03-01'),
       },
       {
         framework: 'GDPR',
@@ -183,15 +191,17 @@ export class ProboIntegrationService {
         totalControls: 42,
         proboControlsAvailable: 0, // No Probo integration yet
         lastAssessed: new Date('2024-01-10'),
-        nextDue: new Date('2024-04-10')
-      }
+        nextDue: new Date('2024-04-10'),
+      },
     ];
   }
 
   /**
    * Get Probo-specific quick actions based on user role and context
    */
-  getProboQuickActions(userRole: 'executive' | 'analyst' | 'operator' | 'auditor'): ProboQuickAction[] {
+  getProboQuickActions(
+    userRole: 'executive' | 'analyst' | 'operator' | 'auditor'
+  ): ProboQuickAction[] {
     const baseActions: ProboQuickAction[] = [
       {
         id: 'probo-hub',
@@ -200,7 +210,7 @@ export class ProboIntegrationService {
         href: '/probo',
         badge: 'Hub',
         priority: 1,
-        category: 'assessment'
+        category: 'assessment',
       },
       {
         id: 'probo-vendor-assessment',
@@ -209,7 +219,7 @@ export class ProboIntegrationService {
         href: '/probo?tab=vendor-assessment',
         badge: 'AI',
         priority: 2,
-        category: 'vendor'
+        category: 'vendor',
       },
       {
         id: 'probo-controls-library',
@@ -218,7 +228,7 @@ export class ProboIntegrationService {
         href: '/probo?tab=controls-library',
         badge: '650+',
         priority: 3,
-        category: 'controls'
+        category: 'controls',
       },
       {
         id: 'probo-soc2-assessment',
@@ -227,7 +237,7 @@ export class ProboIntegrationService {
         href: '/probo?tab=soc2-assessment',
         badge: 'SOC 2',
         priority: 4,
-        category: 'compliance'
+        category: 'compliance',
       },
       {
         id: 'probo-integration-dashboard',
@@ -236,8 +246,8 @@ export class ProboIntegrationService {
         href: '/probo?tab=dashboard',
         badge: 'Metrics',
         priority: 5,
-        category: 'assessment'
-      }
+        category: 'assessment',
+      },
     ];
 
     // Filter and prioritize based on user role
@@ -245,11 +255,11 @@ export class ProboIntegrationService {
       executive: ['assessment', 'compliance'],
       analyst: ['controls', 'compliance', 'vendor'],
       operator: ['controls', 'vendor'],
-      auditor: ['compliance', 'assessment']
+      auditor: ['compliance', 'assessment'],
     };
 
     return baseActions
-      .filter(action => roleFilters[userRole].includes(action.category))
+      .filter((action) => roleFilters[userRole].includes(action.category))
       .sort((a, b) => a.priority - b.priority);
   }
 
@@ -275,8 +285,8 @@ export class ProboIntegrationService {
         'Implement 15 additional mandatory controls from Probo library',
         'Complete SOC 2 assessment using Probo framework',
         'Assess 5 high-risk vendors using Probo AI assessment',
-        'Update risk register with Probo control mappings'
-      ]
+        'Update risk register with Probo control mappings',
+      ],
     };
   }
 
@@ -295,23 +305,23 @@ export class ProboIntegrationService {
     }>;
   }> {
     const mitigations = await this.proboService.getMitigations();
-    const frameworkControls = mitigations.filter(m => 
+    const frameworkControls = mitigations.filter((m) =>
       m.standards.toLowerCase().includes(framework.toLowerCase())
     );
 
-    const mandatoryControls = frameworkControls.filter(m => m.importance === 'MANDATORY');
+    const mandatoryControls = frameworkControls.filter((m) => m.importance === 'MANDATORY');
     const recommendedControls = mandatoryControls.slice(0, 10); // Top 10 recommendations
 
     return {
       totalAvailable: frameworkControls.length,
       implemented: Math.floor(frameworkControls.length * 0.65),
-      recommended: recommendedControls.map(control => ({
+      recommended: recommendedControls.map((control) => ({
         id: control.id,
         name: control.name,
         importance: control.importance,
         category: control.category,
-        description: control.description
-      }))
+        description: control.description,
+      })),
     };
   }
 
@@ -329,24 +339,24 @@ export class ProboIntegrationService {
     complianceImpact: string[];
   }> {
     const mitigations = await this.proboService.getMitigations();
-    
+
     // Mock logic - in real implementation, this would analyze risk categories
     // and match with appropriate Probo controls
     const applicableControls = mitigations.slice(0, 15);
 
     return {
       applicableControls: applicableControls.length,
-      recommendedMitigations: applicableControls.slice(0, 5).map(control => ({
+      recommendedMitigations: applicableControls.slice(0, 5).map((control) => ({
         id: control.id,
         name: control.name,
         category: control.category,
-        riskReduction: Math.floor(Math.random() * 30) + 20 // 20-50% risk reduction
+        riskReduction: Math.floor(Math.random() * 30) + 20, // 20-50% risk reduction
       })),
       complianceImpact: [
         'Improves SOC 2 compliance score by 8%',
         'Addresses 3 ISO 27001 control gaps',
-        'Reduces overall risk exposure by 25%'
-      ]
+        'Reduces overall risk exposure by 25%',
+      ],
     };
   }
 
@@ -374,21 +384,21 @@ export class ProboIntegrationService {
           vendorName: 'CloudProvider Inc.',
           riskScore: 25,
           assessmentDate: new Date('2024-01-15'),
-          status: 'Low Risk'
+          status: 'Low Risk',
         },
         {
           vendorName: 'DataProcessor LLC',
           riskScore: 65,
           assessmentDate: new Date('2024-01-10'),
-          status: 'High Risk'
+          status: 'High Risk',
         },
         {
           vendorName: 'SecurityTools Corp',
           riskScore: 30,
           assessmentDate: new Date('2024-01-08'),
-          status: 'Medium Risk'
-        }
-      ]
+          status: 'Medium Risk',
+        },
+      ],
     };
   }
 
@@ -396,7 +406,9 @@ export class ProboIntegrationService {
    * Generate AI-powered controls for a specific risk
    * Core feature inspired by Probo's smart automation
    */
-  async generateControlsForRisk(request: ControlGenerationRequest): Promise<ControlGenerationResponse> {
+  async generateControlsForRisk(
+    request: ControlGenerationRequest
+  ): Promise<ControlGenerationResponse> {
     try {
       // Step 1: Analyze the risk using AI
       const riskAnalysis = await this.analyzeRisk(request);
@@ -408,10 +420,16 @@ export class ProboIntegrationService {
       const mappings = await this.createRiskControlMappings(request.riskId, controls);
 
       // Step 4: Generate implementation plan
-      const implementationPlan = await this.generateImplementationPlan(controls, request.organizationContext);
+      const implementationPlan = await this.generateImplementationPlan(
+        controls,
+        request.organizationContext
+      );
 
       // Step 5: Calculate estimates
-      const estimatedTimeToImplement = controls.reduce((total, control) => total + control.estimatedHours, 0);
+      const estimatedTimeToImplement = controls.reduce(
+        (total, control) => total + control.estimatedHours,
+        0
+      );
       const estimatedCost = this.calculateImplementationCost(controls, request.organizationContext);
 
       // Step 6: Find alternative controls
@@ -425,7 +443,7 @@ export class ProboIntegrationService {
         alternatives,
         estimatedTimeToImplement,
         estimatedCost,
-        implementationPlan
+        implementationPlan,
       };
 
       // Emit event for real-time updates
@@ -433,13 +451,15 @@ export class ProboIntegrationService {
         type: 'control.generated',
         timestamp: new Date().toISOString(),
         data: response,
-        source: 'ai'
+        source: 'ai',
       });
 
       return response;
     } catch (error) {
       console.error('Error generating controls for risk:', error);
-      throw new Error(`Failed to generate controls: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(
+        `Failed to generate controls: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
 
@@ -460,13 +480,13 @@ export class ProboIntegrationService {
         `Organization size: ${request.organizationContext.size}`,
         `Industry: ${request.organizationContext.industry}`,
         `Tech stack: ${request.organizationContext.techStack.join(', ')}`,
-        `Compliance goals: ${request.organizationContext.complianceGoals.join(', ')}`
+        `Compliance goals: ${request.organizationContext.complianceGoals.join(', ')}`,
       ],
       limitations: [
         'Analysis based on general best practices',
         'Organization-specific context may require adjustments',
-        'Regular review and updates recommended'
-      ]
+        'Regular review and updates recommended',
+      ],
     };
 
     // Generate AI recommendations
@@ -500,10 +520,13 @@ export class ProboIntegrationService {
         status: {
           current: 'Not Started',
           progress: 0,
-          lastUpdated: new Date().toISOString()
+          lastUpdated: new Date().toISOString(),
         },
         evidenceRequirements: this.generateEvidenceRequirements(template),
-        automationPotential: this.assessAutomationPotential(template, request.organizationContext.techStack),
+        automationPotential: this.assessAutomationPotential(
+          template,
+          request.organizationContext.techStack
+        ),
         riskMitigationScore: this.calculateRiskMitigationScore(template, request.riskSeverity),
         complianceMapping: this.createComplianceMapping(template, request.preferredFrameworks),
         dependencies: [],
@@ -511,7 +534,7 @@ export class ProboIntegrationService {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         aiGenerated: true,
-        aiConfidence: analysis.confidence
+        aiConfidence: analysis.confidence,
       };
 
       controls.push(control);
@@ -523,7 +546,10 @@ export class ProboIntegrationService {
   /**
    * Create intelligent risk-control mappings
    */
-  private async createRiskControlMappings(riskId: string, controls: ProboControl[]): Promise<RiskControlMapping[]> {
+  private async createRiskControlMappings(
+    riskId: string,
+    controls: ProboControl[]
+  ): Promise<RiskControlMapping[]> {
     const mappings: RiskControlMapping[] = [];
 
     for (const control of controls) {
@@ -537,7 +563,7 @@ export class ProboIntegrationService {
         aiGenerated: true,
         aiConfidence: control.aiConfidence,
         rationale: `This ${control.category.name.toLowerCase()} control directly addresses the risk through ${control.title.toLowerCase()} implementation, providing ${this.determineMappingType(control).toLowerCase()} protection.`,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
 
       mappings.push(mapping);
@@ -555,19 +581,24 @@ export class ProboIntegrationService {
       // Use actual Probo mitigations as control templates
       const proboMitigations = await this.proboService.getMitigations();
       const categories = await this.proboService.getMitigationCategories();
-      
+
       this.controlLibrary = {
         categories: this.mapProboCategoriesToControlCategories(categories),
         controls: await this.mapProboMitigationsToControls(proboMitigations),
         templates: this.generateControlTemplates(proboMitigations),
         frameworks: this.getSupportedFrameworks(),
         lastUpdated: new Date().toISOString(),
-        version: '1.0.0'
+        version: '1.0.0',
       };
-      
-      console.log(`Loaded Probo control library with ${this.controlLibrary.controls.length} controls`);
+
+      console.log(
+        `Loaded Probo control library with ${this.controlLibrary.controls.length} controls`
+      );
     } catch (error) {
-      console.error('Failed to load Probo control library:', error instanceof Error ? error.message : String(error));
+      console.error(
+        'Failed to load Probo control library:',
+        error instanceof Error ? error.message : String(error)
+      );
       throw error;
     }
   }
@@ -576,14 +607,14 @@ export class ProboIntegrationService {
    * Map Probo categories to our control category structure
    */
   private mapProboCategoriesToControlCategories(categories: string[]): ProboControlCategory[] {
-    return categories.map(category => ({
+    return categories.map((category) => ({
       id: category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and'),
       name: category,
       description: `Controls related to ${category.toLowerCase()}`,
-      controlCount: this.proboMitigations.filter(m => m.category === category).length,
+      controlCount: this.proboMitigations.filter((m) => m.category === category).length,
       frameworks: this.getFrameworksForCategory(category),
       color: this.getCategoryColor(category),
-      icon: 'Shield' // Default icon
+      icon: 'Shield', // Default icon
     }));
   }
 
@@ -595,12 +626,12 @@ export class ProboIntegrationService {
   private getCategoryColor(category: string): string {
     // Return default colors based on category
     const colors: Record<string, string> = {
-      'access': '#3B82F6',
-      'data': '#10B981',
-      'network': '#F59E0B',
-      'incident': '#EF4444',
-      'compliance': '#8B5CF6',
-      'vendor': '#06B6D4'
+      access: '#3B82F6',
+      data: '#10B981',
+      network: '#F59E0B',
+      incident: '#EF4444',
+      compliance: '#8B5CF6',
+      vendor: '#06B6D4',
     };
     const key = category.toLowerCase().split(' ')[0];
     return colors[key] || '#6B7280';
@@ -610,7 +641,7 @@ export class ProboIntegrationService {
    * Convert Probo mitigations to our control structure
    */
   private async mapProboMitigationsToControls(mitigations: any[]): Promise<ProboControl[]> {
-    return mitigations.map(mitigation => ({
+    return mitigations.map((mitigation) => ({
       id: mitigation.id,
       title: mitigation.name, // Changed from 'name' to 'title'
       description: mitigation.description,
@@ -622,7 +653,7 @@ export class ProboIntegrationService {
       status: {
         current: 'Not Started' as const,
         progress: 0,
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
       },
       evidenceRequirements: [] as EvidenceRequirement[],
       automationPotential: 'Manual' as const,
@@ -641,7 +672,7 @@ export class ProboIntegrationService {
         estimatedHours: this.estimateImplementationHours(mitigation),
         complexity: this.assessComplexity(mitigation),
         dependencies: [] as string[],
-        tags: this.generateTags(mitigation)
+        tags: this.generateTags(mitigation),
       },
       implementation: {
         assignedTo: null as any,
@@ -649,21 +680,21 @@ export class ProboIntegrationService {
         progress: 0,
         notes: [] as any[],
         resources: [] as any[],
-        checklist: this.generateImplementationChecklist(mitigation)
+        checklist: this.generateImplementationChecklist(mitigation),
       },
       testing: {
         frequency: this.determineTestingFrequency(mitigation),
         lastTest: null as any,
         nextTest: null as any,
         results: [] as any[],
-        automated: false
+        automated: false,
       },
       compliance: {
         frameworks: this.extractFrameworksFromStandards(mitigation.standards),
         requirements: this.extractRequirementsFromStandards(mitigation.standards),
         evidence: [] as any[],
-        auditNotes: [] as any[]
-      }
+        auditNotes: [] as any[],
+      },
     }));
   }
 
@@ -671,7 +702,7 @@ export class ProboIntegrationService {
    * Generate control templates from Probo mitigations
    */
   private generateControlTemplates(mitigations: any[]): any[] {
-    return mitigations.map(mitigation => ({
+    return mitigations.map((mitigation) => ({
       id: `template-${mitigation.id}`,
       name: `${mitigation.name} Template`,
       description: mitigation.description,
@@ -682,11 +713,11 @@ export class ProboIntegrationService {
         description: mitigation.description,
         category: this.findControlCategoryForMitigation(mitigation),
         framework: this.determineFrameworkFromStandards(mitigation.standards),
-        priority: this.mapImportanceToPriority(mitigation.importance)
+        priority: this.mapImportanceToPriority(mitigation.importance),
       },
       frameworks: this.extractFrameworksFromStandards(mitigation.standards),
       estimatedHours: this.estimateImplementationHours(mitigation),
-      complexity: this.assessComplexity(mitigation)
+      complexity: this.assessComplexity(mitigation),
     }));
   }
 
@@ -700,43 +731,43 @@ export class ProboIntegrationService {
         name: 'Access Control',
         description: 'User access management and authentication controls',
         icon: 'Shield',
-        color: '#3B82F6'
+        color: '#3B82F6',
       },
       {
         id: 'data-protection',
         name: 'Data Protection',
         description: 'Data encryption, backup, and privacy controls',
         icon: 'Lock',
-        color: '#10B981'
+        color: '#10B981',
       },
       {
         id: 'network-security',
         name: 'Network Security',
         description: 'Network monitoring, firewall, and intrusion detection',
         icon: 'Globe',
-        color: '#F59E0B'
+        color: '#F59E0B',
       },
       {
         id: 'incident-response',
         name: 'Incident Response',
         description: 'Security incident detection and response procedures',
         icon: 'AlertTriangle',
-        color: '#EF4444'
+        color: '#EF4444',
       },
       {
         id: 'compliance-monitoring',
         name: 'Compliance Monitoring',
         description: 'Audit logging, compliance reporting, and monitoring',
         icon: 'FileCheck',
-        color: '#8B5CF6'
+        color: '#8B5CF6',
       },
       {
         id: 'vendor-management',
         name: 'Vendor Management',
         description: 'Third-party risk assessment and vendor controls',
         icon: 'Users',
-        color: '#06B6D4'
-      }
+        color: '#06B6D4',
+      },
     ];
   }
 
@@ -750,29 +781,76 @@ export class ProboIntegrationService {
         name: 'SOC2',
         version: '2017',
         requirements: [
-          { id: 'cc6.1', code: 'CC6.1', title: 'Logical and Physical Access Controls', description: 'The entity implements logical and physical access controls to protect against threats from sources outside its system boundaries.', mandatory: true },
-          { id: 'cc6.2', code: 'CC6.2', title: 'Access Control Management', description: 'Prior to issuing system credentials and granting system access, the entity registers and authorizes new internal and external users.', mandatory: true },
-          { id: 'cc6.3', code: 'CC6.3', title: 'User Access Reviews', description: 'The entity authorizes, modifies, or removes access to data, software, functions, and other protected information assets.', mandatory: true }
-        ]
+          {
+            id: 'cc6.1',
+            code: 'CC6.1',
+            title: 'Logical and Physical Access Controls',
+            description:
+              'The entity implements logical and physical access controls to protect against threats from sources outside its system boundaries.',
+            mandatory: true,
+          },
+          {
+            id: 'cc6.2',
+            code: 'CC6.2',
+            title: 'Access Control Management',
+            description:
+              'Prior to issuing system credentials and granting system access, the entity registers and authorizes new internal and external users.',
+            mandatory: true,
+          },
+          {
+            id: 'cc6.3',
+            code: 'CC6.3',
+            title: 'User Access Reviews',
+            description:
+              'The entity authorizes, modifies, or removes access to data, software, functions, and other protected information assets.',
+            mandatory: true,
+          },
+        ],
       },
       {
         id: 'iso27001',
         name: 'ISO27001',
         version: '2013',
         requirements: [
-          { id: 'a.9.1.1', code: 'A.9.1.1', title: 'Access Control Policy', description: 'An access control policy shall be established, documented and reviewed.', mandatory: true },
-          { id: 'a.9.2.1', code: 'A.9.2.1', title: 'User Registration', description: 'A formal user registration and de-registration process shall be implemented.', mandatory: true }
-        ]
+          {
+            id: 'a.9.1.1',
+            code: 'A.9.1.1',
+            title: 'Access Control Policy',
+            description: 'An access control policy shall be established, documented and reviewed.',
+            mandatory: true,
+          },
+          {
+            id: 'a.9.2.1',
+            code: 'A.9.2.1',
+            title: 'User Registration',
+            description:
+              'A formal user registration and de-registration process shall be implemented.',
+            mandatory: true,
+          },
+        ],
       },
       {
         id: 'gdpr',
         name: 'GDPR',
         version: '2018',
         requirements: [
-          { id: 'art.32', code: 'Article 32', title: 'Security of Processing', description: 'Appropriate technical and organisational measures to ensure security of processing.', mandatory: true },
-          { id: 'art.25', code: 'Article 25', title: 'Data Protection by Design', description: 'Data protection by design and by default.', mandatory: true }
-        ]
-      }
+          {
+            id: 'art.32',
+            code: 'Article 32',
+            title: 'Security of Processing',
+            description:
+              'Appropriate technical and organisational measures to ensure security of processing.',
+            mandatory: true,
+          },
+          {
+            id: 'art.25',
+            code: 'Article 25',
+            title: 'Data Protection by Design',
+            description: 'Data protection by design and by default.',
+            mandatory: true,
+          },
+        ],
+      },
     ];
   }
 
@@ -785,7 +863,8 @@ export class ProboIntegrationService {
       {
         id: 'probo-ac-001',
         title: 'Multi-Factor Authentication Implementation',
-        description: 'Implement multi-factor authentication for all user accounts accessing critical systems and data.',
+        description:
+          'Implement multi-factor authentication for all user accounts accessing critical systems and data.',
         category: this.getProboControlCategories()[0], // Access Control
         framework: this.getSupportedFrameworks()[0], // SOC2
         priority: 'High',
@@ -799,8 +878,8 @@ export class ProboIntegrationService {
             title: 'MFA Configuration Screenshots',
             description: 'Screenshots showing MFA enabled for all user accounts',
             mandatory: true,
-            automationAvailable: true
-          }
+            automationAvailable: true,
+          },
         ],
         automationPotential: 'Partial',
         riskMitigationScore: 8,
@@ -808,20 +887,21 @@ export class ProboIntegrationService {
           {
             framework: this.getSupportedFrameworks()[0],
             requirements: ['cc6.1', 'cc6.2'],
-            coverage: 'Full'
-          }
+            coverage: 'Full',
+          },
         ],
         dependencies: [],
         tags: ['authentication', 'access-control', 'security'],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         aiGenerated: false,
-        aiConfidence: 0.95
+        aiConfidence: 0.95,
       },
       {
         id: 'probo-dp-001',
         title: 'Data Encryption at Rest',
-        description: 'Implement encryption for all sensitive data stored in databases and file systems.',
+        description:
+          'Implement encryption for all sensitive data stored in databases and file systems.',
         category: this.getProboControlCategories()[1], // Data Protection
         framework: this.getSupportedFrameworks()[0],
         priority: 'Critical',
@@ -835,8 +915,8 @@ export class ProboIntegrationService {
             title: 'Data Encryption Policy',
             description: 'Documented policy for data encryption standards and procedures',
             mandatory: true,
-            automationAvailable: false
-          }
+            automationAvailable: false,
+          },
         ],
         automationPotential: 'Full',
         riskMitigationScore: 9,
@@ -844,40 +924,42 @@ export class ProboIntegrationService {
           {
             framework: this.getSupportedFrameworks()[2], // GDPR
             requirements: ['art.32'],
-            coverage: 'Full'
-          }
+            coverage: 'Full',
+          },
         ],
         dependencies: [],
         tags: ['encryption', 'data-protection', 'privacy'],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         aiGenerated: false,
-        aiConfidence: 0.92
-      }
+        aiConfidence: 0.92,
+      },
     ];
   }
 
   /**
    * Bulk operations for multiple risks
    */
-  async executeBulkControlGeneration(operation: BulkControlOperation): Promise<BulkOperationResult> {
+  async executeBulkControlGeneration(
+    operation: BulkControlOperation
+  ): Promise<BulkOperationResult> {
     const operationId = `bulk_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     const result: BulkOperationResult = {
       operationId,
       status: 'Running',
       progress: 0,
       results: [],
       errors: [],
-      startedAt: new Date().toISOString()
+      startedAt: new Date().toISOString(),
     };
 
     // Process in batches
     const batches = this.chunkArray(operation.riskIds, operation.batchSize);
-    
+
     for (let i = 0; i < batches.length; i++) {
       const batch = batches[i];
-      
+
       try {
         for (const riskId of batch) {
           // Generate controls for each risk
@@ -894,8 +976,8 @@ export class ProboIntegrationService {
               allowedComplexity: ['Simple', 'Moderate'],
               requiredAutomation: false,
               mustHaveFrameworks: ['SOC2'],
-              excludeCategories: []
-            }
+              excludeCategories: [],
+            },
           };
 
           const response = await this.generateControlsForRisk(request);
@@ -903,12 +985,12 @@ export class ProboIntegrationService {
         }
 
         result.progress = Math.round(((i + 1) / batches.length) * 100);
-             } catch (error) {
-         result.errors.push({
-           batch: i,
-           error: error instanceof Error ? error.message : String(error),
-           riskIds: batch
-         });
+      } catch (error) {
+        result.errors.push({
+          batch: i,
+          error: error instanceof Error ? error.message : String(error),
+          riskIds: batch,
+        });
       }
     }
 
@@ -930,16 +1012,16 @@ export class ProboIntegrationService {
         aiGeneration: this.config.enableAI,
         automatedMapping: true,
         realTimeSync: true,
-        bulkOperations: true
+        bulkOperations: true,
       },
       usage: {
         controlsGenerated: 0, // Would be tracked in real implementation
         mappingsCreated: 0,
         aiAnalysesRun: 0,
-        lastActivity: new Date().toISOString()
+        lastActivity: new Date().toISOString(),
       },
       health: 'Healthy',
-      errors: []
+      errors: [],
     };
   }
 
@@ -954,7 +1036,7 @@ export class ProboIntegrationService {
 
   private emitEvent(event: ProboEvent) {
     const listeners = this.eventListeners.get(event.type) || [];
-    listeners.forEach(listener => listener(event));
+    listeners.forEach((listener) => listener(event));
   }
 
   private async syncWithProbo() {
@@ -977,8 +1059,20 @@ export class ProboIntegrationService {
   private getRelevantControlTemplates(request: ControlGenerationRequest): any[] {
     // Return relevant templates based on risk category and severity
     return [
-      { title: 'Access Control Implementation', description: 'Implement access controls', category: 'access-control', priority: 'High', complexity: 'Moderate' },
-      { title: 'Data Protection Measures', description: 'Protect sensitive data', category: 'data-protection', priority: 'High', complexity: 'Complex' }
+      {
+        title: 'Access Control Implementation',
+        description: 'Implement access controls',
+        category: 'access-control',
+        priority: 'High',
+        complexity: 'Moderate',
+      },
+      {
+        title: 'Data Protection Measures',
+        description: 'Protect sensitive data',
+        category: 'data-protection',
+        priority: 'High',
+        complexity: 'Complex',
+      },
     ];
   }
 
@@ -991,23 +1085,34 @@ export class ProboIntegrationService {
   }
 
   private getControlCategory(categoryId: string): ProboControlCategory {
-    return this.getProboControlCategories().find(cat => cat.id === categoryId) || this.getProboControlCategories()[0];
+    return (
+      this.getProboControlCategories().find((cat) => cat.id === categoryId) ||
+      this.getProboControlCategories()[0]
+    );
   }
 
   private getFrameworkForControl(frameworkName: string): ComplianceFramework {
-    return this.getSupportedFrameworks().find(fw => fw.name === frameworkName) || this.getSupportedFrameworks()[0];
+    return (
+      this.getSupportedFrameworks().find((fw) => fw.name === frameworkName) ||
+      this.getSupportedFrameworks()[0]
+    );
   }
 
-  private determinePriority(riskSeverity: string, templatePriority: string): 'Critical' | 'High' | 'Medium' | 'Low' {
+  private determinePriority(
+    riskSeverity: string,
+    templatePriority: string
+  ): 'Critical' | 'High' | 'Medium' | 'Low' {
     if (riskSeverity === 'Critical') return 'Critical';
     if (riskSeverity === 'High') return 'High';
-    return templatePriority as any || 'Medium';
+    return (templatePriority as any) || 'Medium';
   }
 
   private calculateEstimatedHours(template: any, context: any): number {
     const baseHours = 16;
-    const complexityMultiplier = template.complexity === 'Complex' ? 2 : template.complexity === 'Simple' ? 0.5 : 1;
-    const sizeMultiplier = context.size === 'Enterprise' ? 1.5 : context.size === 'Startup' ? 0.7 : 1;
+    const complexityMultiplier =
+      template.complexity === 'Complex' ? 2 : template.complexity === 'Simple' ? 0.5 : 1;
+    const sizeMultiplier =
+      context.size === 'Enterprise' ? 1.5 : context.size === 'Startup' ? 0.7 : 1;
     return Math.round(baseHours * complexityMultiplier * sizeMultiplier);
   }
 
@@ -1019,14 +1124,19 @@ export class ProboIntegrationService {
         title: 'Implementation Documentation',
         description: 'Documentation of control implementation',
         mandatory: true,
-        automationAvailable: false
-      }
+        automationAvailable: false,
+      },
     ];
   }
 
-  private assessAutomationPotential(template: any, techStack: string[]): 'Full' | 'Partial' | 'Manual' {
+  private assessAutomationPotential(
+    template: any,
+    techStack: string[]
+  ): 'Full' | 'Partial' | 'Manual' {
     const automationFriendlyTech = ['kubernetes', 'docker', 'terraform', 'aws', 'azure', 'gcp'];
-    const hasAutomationTech = techStack.some(tech => automationFriendlyTech.includes(tech.toLowerCase()));
+    const hasAutomationTech = techStack.some((tech) =>
+      automationFriendlyTech.includes(tech.toLowerCase())
+    );
     return hasAutomationTech ? 'Partial' : 'Manual';
   }
 
@@ -1034,14 +1144,14 @@ export class ProboIntegrationService {
     // Handle single parameter case (mitigation object)
     if (!riskSeverity && template.importance) {
       const importanceMap: Record<string, number> = {
-        'Critical': 9,
-        'High': 7,
-        'Medium': 5,
-        'Low': 3
+        Critical: 9,
+        High: 7,
+        Medium: 5,
+        Low: 3,
       };
       return importanceMap[template.importance] || 5;
     }
-    
+
     // Handle two parameter case (template and riskSeverity)
     const baseScore = 7;
     const severityBonus = riskSeverity === 'Critical' ? 2 : riskSeverity === 'High' ? 1 : 0;
@@ -1049,10 +1159,10 @@ export class ProboIntegrationService {
   }
 
   private createComplianceMapping(template: any, frameworks: string[]): any[] {
-    return frameworks.map(fw => ({
+    return frameworks.map((fw) => ({
       framework: this.getFrameworkForControl(fw),
       requirements: ['cc6.1'], // Would be determined based on template
-      coverage: 'Full'
+      coverage: 'Full',
     }));
   }
 
@@ -1061,7 +1171,7 @@ export class ProboIntegrationService {
       template.category,
       request.riskCategory.toLowerCase(),
       request.organizationContext.industry.toLowerCase(),
-      'ai-generated'
+      'ai-generated',
     ];
   }
 
@@ -1074,8 +1184,8 @@ export class ProboIntegrationService {
         description: 'Add multi-factor authentication and role-based access controls',
         rationale: 'Critical for mitigating unauthorized access risks',
         estimatedImpact: 8,
-        implementationEffort: 6
-      }
+        implementationEffort: 6,
+      },
     ];
   }
 
@@ -1089,7 +1199,7 @@ export class ProboIntegrationService {
       assigneeRole: 'Security Team',
       priority: index + 1,
       automationAvailable: control.automationPotential !== 'Manual',
-      evidenceGenerated: control.evidenceRequirements.map(req => req.title)
+      evidenceGenerated: control.evidenceRequirements.map((req) => req.title),
     }));
   }
 
@@ -1099,12 +1209,17 @@ export class ProboIntegrationService {
     return totalHours * hourlyRate;
   }
 
-  private async findAlternativeControls(request: ControlGenerationRequest, generatedControls: ProboControl[]): Promise<ProboControl[]> {
+  private async findAlternativeControls(
+    request: ControlGenerationRequest,
+    generatedControls: ProboControl[]
+  ): Promise<ProboControl[]> {
     // Return alternative control options
     return generatedControls.slice(0, 2); // Simplified for demo
   }
 
-  private determineMappingType(control: ProboControl): 'Preventive' | 'Detective' | 'Corrective' | 'Compensating' {
+  private determineMappingType(
+    control: ProboControl
+  ): 'Preventive' | 'Detective' | 'Corrective' | 'Compensating' {
     if (control.category.name.includes('Access')) return 'Preventive';
     if (control.category.name.includes('Monitoring')) return 'Detective';
     if (control.category.name.includes('Response')) return 'Corrective';
@@ -1130,35 +1245,40 @@ export class ProboIntegrationService {
       'data-protection': 'data-protection',
       'network-security': 'network-security',
       'incident-response': 'incident-response',
-      'compliance': 'compliance-monitoring',
-      'vendor': 'vendor-management'
+      compliance: 'compliance-monitoring',
+      vendor: 'vendor-management',
     };
-    
+
     const categoryId = categoryMap[mitigation.category] || 'access-control';
-    return categories.find(c => c.id === categoryId) || categories[0];
+    return categories.find((c) => c.id === categoryId) || categories[0];
   }
 
   private determineFrameworkFromStandards(standards: string): ComplianceFramework {
     const frameworks = this.getSupportedFrameworks();
-    if (standards.includes('SOC2')) return frameworks.find(f => f.id === 'soc2') || frameworks[0];
-    if (standards.includes('ISO27001')) return frameworks.find(f => f.id === 'iso27001') || frameworks[0];
-    if (standards.includes('GDPR')) return frameworks.find(f => f.id === 'gdpr') || frameworks[0];
+    if (standards.includes('SOC2')) return frameworks.find((f) => f.id === 'soc2') || frameworks[0];
+    if (standards.includes('ISO27001'))
+      return frameworks.find((f) => f.id === 'iso27001') || frameworks[0];
+    if (standards.includes('GDPR')) return frameworks.find((f) => f.id === 'gdpr') || frameworks[0];
     return frameworks[0];
   }
 
   private mapImportanceToPriority(importance: string): 'Critical' | 'High' | 'Medium' | 'Low' {
     switch (importance?.toUpperCase()) {
-      case 'MANDATORY': return 'Critical';
-      case 'PREFERRED': return 'High';
-      case 'ADVANCED': return 'Medium';
-      default: return 'Low';
+      case 'MANDATORY':
+        return 'Critical';
+      case 'PREFERRED':
+        return 'High';
+      case 'ADVANCED':
+        return 'Medium';
+      default:
+        return 'Low';
     }
   }
 
   private estimateImplementationHours(mitigation: any): number {
     // Simple estimation based on category and importance
-    const baseHours = mitigation.importance === 'MANDATORY' ? 24 : 
-                     mitigation.importance === 'PREFERRED' ? 16 : 8;
+    const baseHours =
+      mitigation.importance === 'MANDATORY' ? 24 : mitigation.importance === 'PREFERRED' ? 16 : 8;
     return baseHours;
   }
 
@@ -1176,17 +1296,21 @@ export class ProboIntegrationService {
     return tags;
   }
 
-  private generateImplementationChecklist(mitigation: any): Array<{id: string; task: string; completed: boolean}> {
+  private generateImplementationChecklist(
+    mitigation: any
+  ): Array<{ id: string; task: string; completed: boolean }> {
     return [
       { id: '1', task: 'Review implementation requirements', completed: false },
       { id: '2', task: 'Assign responsible team member', completed: false },
       { id: '3', task: 'Configure control implementation', completed: false },
       { id: '4', task: 'Test and validate control', completed: false },
-      { id: '5', task: 'Document evidence', completed: false }
+      { id: '5', task: 'Document evidence', completed: false },
     ];
   }
 
-  private determineTestingFrequency(mitigation: any): 'Daily' | 'Weekly' | 'Monthly' | 'Quarterly' | 'Annually' {
+  private determineTestingFrequency(
+    mitigation: any
+  ): 'Daily' | 'Weekly' | 'Monthly' | 'Quarterly' | 'Annually' {
     if (mitigation.importance === 'MANDATORY') return 'Monthly';
     if (mitigation.importance === 'PREFERRED') return 'Quarterly';
     return 'Annually';
@@ -1195,28 +1319,28 @@ export class ProboIntegrationService {
   private extractFrameworksFromStandards(standards: string): ComplianceFramework[] {
     const frameworks = this.getSupportedFrameworks();
     const standardList = standards.split(';').filter(Boolean);
-    return frameworks.filter(f => 
-      standardList.some(s => s.toUpperCase().includes(f.name.toUpperCase()))
+    return frameworks.filter((f) =>
+      standardList.some((s) => s.toUpperCase().includes(f.name.toUpperCase()))
     );
   }
 
   private extractRequirementsFromStandards(standards: string): string[] {
     // Extract requirement IDs from standards string
     const standardList = standards.split(';').filter(Boolean);
-    return standardList.map(s => s.trim()).filter(s => s.length > 0);
+    return standardList.map((s) => s.trim()).filter((s) => s.length > 0);
   }
 
   private mapComplexity(complexity: string): 'Simple' | 'Moderate' | 'Complex' {
     const complexityMap: Record<string, 'Simple' | 'Moderate' | 'Complex'> = {
-      'simple': 'Simple',
-      'moderate': 'Moderate',
-      'complex': 'Complex',
-      'low': 'Simple',
-      'medium': 'Moderate',
-      'high': 'Complex'
+      simple: 'Simple',
+      moderate: 'Moderate',
+      complex: 'Complex',
+      low: 'Simple',
+      medium: 'Moderate',
+      high: 'Complex',
     };
     return complexityMap[complexity.toLowerCase()] || 'Moderate';
   }
 }
 
-export default ProboIntegrationService; 
+export default ProboIntegrationService;

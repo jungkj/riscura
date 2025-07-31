@@ -27,7 +27,7 @@ export function useSubscription() {
   useEffect(() => {
     async function fetchSubscriptionStatus() {
       if (status === 'loading') return;
-      
+
       if (!session?.user) {
         setSubscription(null);
         setLoading(false);
@@ -37,7 +37,7 @@ export function useSubscription() {
       try {
         setLoading(true);
         const response = await fetch('/api/subscription/status');
-        
+
         if (!response.ok) {
           throw new Error('Failed to fetch subscription status');
         }
@@ -86,4 +86,4 @@ export function useSubscription() {
     isTrialing: subscription?.status === 'TRIALING',
     trialDaysLeft: subscription?.trialDaysLeft || 0,
   };
-} 
+}

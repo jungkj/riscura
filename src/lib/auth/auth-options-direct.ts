@@ -114,17 +114,17 @@ export const authOptionsDebug: NextAuthOptions = {
   debug: true, // Enable debug mode
   callbacks: {
     async signIn({ user, account, profile }) {
-      console.log('[NextAuth Direct] SignIn callback:', { 
+      console.log('[NextAuth Direct] SignIn callback:', {
         provider: account?.provider,
-        userEmail: user?.email 
+        userEmail: user?.email,
       });
-      
+
       // Handle Google OAuth sign-in
       if (account?.provider === 'google') {
         try {
           // Check if user exists
           const existingUser = await db.client.user.findUnique({
-            where: { email: user.email! }
+            where: { email: user.email! },
           });
 
           if (!existingUser) {

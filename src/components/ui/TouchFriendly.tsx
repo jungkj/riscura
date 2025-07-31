@@ -19,19 +19,20 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
   children,
   ...props
 }) => {
-  const baseClasses = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95';
-  
+  const baseClasses =
+    'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95';
+
   const variantClasses = {
     primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
     secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 focus:ring-gray-500',
     ghost: 'text-gray-700 hover:bg-gray-100 focus:ring-gray-500',
-    danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500'
+    danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
   };
 
   const sizeClasses = {
     sm: touchSize === 'large' ? 'px-4 py-3 text-sm min-h-[44px]' : 'px-3 py-2 text-sm',
     md: touchSize === 'large' ? 'px-6 py-4 text-base min-h-[48px]' : 'px-4 py-2 text-base',
-    lg: touchSize === 'large' ? 'px-8 py-5 text-lg min-h-[52px]' : 'px-6 py-3 text-lg'
+    lg: touchSize === 'large' ? 'px-8 py-5 text-lg min-h-[52px]' : 'px-6 py-3 text-lg',
   };
 
   return (
@@ -58,7 +59,7 @@ export const TouchCard: React.FC<TouchCardProps> = ({
   onClick,
   className = '',
   disabled = false,
-  hapticFeedback = true
+  hapticFeedback = true,
 }) => {
   const [isPressed, setIsPressed] = useState(false);
 
@@ -128,7 +129,7 @@ export const Swipeable: React.FC<SwipeableProps> = ({
   onSwipeUp,
   onSwipeDown,
   threshold = 50,
-  className = ''
+  className = '',
 }) => {
   const startPos = useRef<{ x: number; y: number } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -207,15 +208,9 @@ export const TouchInput: React.FC<TouchInputProps> = ({
 
   return (
     <div className="space-y-2">
-      {label && (
-        <label className="block text-sm font-medium text-gray-700">
-          {label}
-        </label>
-      )}
+      {label && <label className="block text-sm font-medium text-gray-700">{label}</label>}
       <input className={inputClasses} {...props} />
-      {error && (
-        <p className="text-sm text-red-600">{error}</p>
-      )}
+      {error && <p className="text-sm text-red-600">{error}</p>}
     </div>
   );
 };
@@ -247,11 +242,7 @@ export const TouchSelect: React.FC<TouchSelectProps> = ({
 
   return (
     <div className="space-y-2">
-      {label && (
-        <label className="block text-sm font-medium text-gray-700">
-          {label}
-        </label>
-      )}
+      {label && <label className="block text-sm font-medium text-gray-700">{label}</label>}
       <select className={selectClasses} {...props}>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
@@ -259,9 +250,7 @@ export const TouchSelect: React.FC<TouchSelectProps> = ({
           </option>
         ))}
       </select>
-      {error && (
-        <p className="text-sm text-red-600">{error}</p>
-      )}
+      {error && <p className="text-sm text-red-600">{error}</p>}
     </div>
   );
 };
@@ -282,12 +271,12 @@ export const TouchToggle: React.FC<TouchToggleProps> = ({
   label,
   description,
   disabled = false,
-  size = 'md'
+  size = 'md',
 }) => {
   const sizeClasses = {
     sm: { switch: 'w-8 h-5', thumb: 'w-4 h-4', translate: 'translate-x-3' },
     md: { switch: 'w-11 h-6', thumb: 'w-5 h-5', translate: 'translate-x-5' },
-    lg: { switch: 'w-14 h-8', thumb: 'w-6 h-6', translate: 'translate-x-6' }
+    lg: { switch: 'w-14 h-8', thumb: 'w-6 h-6', translate: 'translate-x-6' },
   };
 
   const { switch: switchClass, thumb: thumbClass, translate: translateClass } = sizeClasses[size];
@@ -314,15 +303,11 @@ export const TouchToggle: React.FC<TouchToggleProps> = ({
           `}
         />
       </button>
-      
+
       {(label || description) && (
         <div className="flex-1">
-          {label && (
-            <div className="text-sm font-medium text-gray-900">{label}</div>
-          )}
-          {description && (
-            <div className="text-sm text-gray-500">{description}</div>
-          )}
+          {label && <div className="text-sm font-medium text-gray-900">{label}</div>}
+          {description && <div className="text-sm text-gray-500">{description}</div>}
         </div>
       )}
     </div>
@@ -341,7 +326,7 @@ export const TouchTabs: React.FC<TouchTabsProps> = ({
   tabs,
   activeTab,
   onTabChange,
-  className = ''
+  className = '',
 }) => {
   return (
     <div className={className}>
@@ -355,9 +340,10 @@ export const TouchTabs: React.FC<TouchTabsProps> = ({
               className={`
                 whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm min-h-[48px]
                 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500
-                ${activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                ${
+                  activeTab === tab.id
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }
               `}
             >
@@ -368,9 +354,7 @@ export const TouchTabs: React.FC<TouchTabsProps> = ({
       </div>
 
       {/* Tab Content */}
-      <div className="mt-4">
-        {tabs.find(tab => tab.id === activeTab)?.content}
-      </div>
+      <div className="mt-4">{tabs.find((tab) => tab.id === activeTab)?.content}</div>
     </div>
   );
 };
@@ -389,7 +373,7 @@ export const ProgressiveLoader: React.FC<DaisyProgressiveLoaderProps> = ({
   hasMore,
   onLoadMore,
   children,
-  threshold = 100
+  threshold = 100,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -417,9 +401,7 @@ export const ProgressiveLoader: React.FC<DaisyProgressiveLoaderProps> = ({
         </div>
       )}
       {!hasMore && (
-        <div className="text-center py-4 text-gray-500 text-sm">
-          No more items to load
-        </div>
+        <div className="text-center py-4 text-gray-500 text-sm">No more items to load</div>
       )}
     </div>
   );
@@ -433,5 +415,5 @@ export default {
   TouchSelect,
   TouchToggle,
   TouchTabs,
-  ProgressiveLoader
-}; 
+  ProgressiveLoader,
+};

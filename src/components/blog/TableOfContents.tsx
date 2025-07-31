@@ -31,7 +31,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/(^-|-$)/g, '');
-      
+
       extractedHeadings.push({ id, text, level });
     }
 
@@ -83,17 +83,14 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
 
   if (headings.length === 0) {
     return null;
-  };
+  }
 
   return (
     <nav className="bg-gray-50 rounded-lg p-4">
       <h3 className="font-semibold text-gray-900 mb-3">Table of Contents</h3>
       <ul className="space-y-2">
         {headings.map(({ id, text, level }) => (
-          <li
-            key={id}
-            className={level === 3 ? 'ml-4' : ''}
-          >
+          <li key={id} className={level === 3 ? 'ml-4' : ''}>
             <button
               onClick={() => scrollToHeading(id)}
               className={`

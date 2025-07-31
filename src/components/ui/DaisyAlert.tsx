@@ -6,7 +6,13 @@ interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
   icon?: boolean;
 }
 
-export const DaisyAlert = ({ className, variant = 'info', icon = true, children, ...props }: AlertProps) => {
+export const DaisyAlert = ({
+  className,
+  variant = 'info',
+  icon = true,
+  children,
+  ...props
+}: AlertProps) => {
   const variantClasses = {
     info: 'alert-info',
     success: 'alert-success',

@@ -8,9 +8,7 @@ export default function DashboardProviders({ children }: { children: React.React
   return (
     <RCSAProvider>
       <RiskProvider>
-        <ControlProvider>
-          {children}
-        </ControlProvider>
+        <ControlProvider>{children}</ControlProvider>
       </RiskProvider>
     </RCSAProvider>
   );

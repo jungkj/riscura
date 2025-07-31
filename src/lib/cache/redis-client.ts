@@ -57,24 +57,24 @@ const getRedisConfig = (): RedisOptions => {
     port: parseInt(process.env.REDIS_PORT || '6379'),
     password: process.env.REDIS_PASSWORD,
     db: parseInt(process.env.REDIS_DB || '0'),
-    
+
     // Connection pool settings
     maxRetriesPerRequest: 3,
     retryDelayOnFailover: 100,
     enableReadyCheck: true,
     lazyConnect: true,
-    
+
     // Performance settings
     keepAlive: 30000,
     connectTimeout: 10000,
     commandTimeout: 5000,
-    
+
     // Retry strategy
     retryStrategy: (times: number) => {
       const delay = Math.min(times * 50, 2000);
       return delay;
     },
-    
+
     // Reconnect strategy
     reconnectOnError: (err: Error) => {
       const targetError = 'READONLY';
@@ -178,11 +178,7 @@ class RedisClient {
     }
   }
 
-  public async set(
-    key: string, 
-    value: string, 
-    ttlSeconds?: number
-  ): Promise<boolean> {
+  public async set(key: string, value: string, ttlSeconds?: number): Promise<boolean> {
     try {
       if (!this.isReady()) {
         logger.warn('Redis not ready, skipping cache set');
@@ -374,7 +370,7 @@ class RedisClient {
       if (!this.isReady()) return {};
       const info = await this.client.info();
       const dbsize = await this.client.dbsize();
-      
+
       return {
         connected: this.isConnected,
         status: this.client.status,
@@ -390,20 +386,20 @@ class RedisClient {
   private parseRedisInfo(info: string): Record<string, any> {
     const result: Record<string, any> = {};
     const sections = info.split('\r\n\r\n');
-    
-    sections.forEach(section => {
+
+    sections.forEach((section) => {
       const lines = section.split('\r\n');
       const sectionName = lines[0].replace('# ', '');
       result[sectionName] = {};
-      
-      lines.slice(1).forEach(line => {
+
+      lines.slice(1).forEach((line) => {
         if (line.includes(':')) {
           const [key, value] = line.split(':');
           result[sectionName][key] = isNaN(Number(value)) ? value : Number(value);
         }
       });
     });
-    
+
     return result;
   }
 }
@@ -425,8 +421,8 @@ export const hashKey = (key: string): string => {
   let hash = 0;
   for (let i = 0; i < key.length; i++) {
     const char = key.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
+    hash = (hash << 5) - hash + char;
     hash = hash & hash; // Convert to 32-bit integer
   }
   return Math.abs(hash).toString(36);
-}; 
+};

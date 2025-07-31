@@ -16,32 +16,36 @@ interface StepIndicatorProps {
 }
 
 export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
-  const currentIndex = steps.findIndex(s => s.id === currentStep);
+  const currentIndex = steps.findIndex((s) => s.id === currentStep);
 
   return (
     <div className="flex items-center justify-between" role="list" aria-label="Progress steps">
       {steps.map((step, index) => {
         const isActive = step.id === currentStep;
         const isCompleted = index < currentIndex;
-        
+
         return (
-          <div 
-            key={step.id} 
-            className="flex items-center flex-1" 
+          <div
+            key={step.id}
+            className="flex items-center flex-1"
             role="listitem"
-            aria-current={isActive ? "step" : undefined}
+            aria-current={isActive ? 'step' : undefined}
           >
             <div className="flex items-center">
               <motion.div
                 initial={false}
                 animate={{
                   scale: isActive ? 1.1 : 1,
-                  backgroundColor: isActive ? 'rgb(59 130 246)' : isCompleted ? 'rgb(34 197 94)' : 'rgb(229 231 235)',
+                  backgroundColor: isActive
+                    ? 'rgb(59 130 246)'
+                    : isCompleted
+                      ? 'rgb(34 197 94)'
+                      : 'rgb(229 231 235)',
                 }}
                 transition={{ duration: 0.2 }}
                 className={cn(
-                  "w-10 h-10 rounded-full flex items-center justify-center text-white relative",
-                  !isActive && !isCompleted && "text-gray-600"
+                  'w-10 h-10 rounded-full flex items-center justify-center text-white relative',
+                  !isActive && !isCompleted && 'text-gray-600'
                 )}
                 aria-label={`Step ${index + 1}: ${step.label} - ${isCompleted ? 'Completed' : isActive ? 'Current' : 'Upcoming'}`}
               >
@@ -50,7 +54,7 @@ export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
                 ) : (
                   <span className="text-lg">{step.icon}</span>
                 )}
-                
+
                 {isActive && (
                   <motion.div
                     layoutId="activeRing"
@@ -61,17 +65,19 @@ export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
                   />
                 )}
               </motion.div>
-              
+
               <div className="ml-3">
-                <p className={cn(
-                  "text-sm font-medium",
-                  isActive ? "text-foreground" : "text-muted-foreground"
-                )}>
+                <p
+                  className={cn(
+                    'text-sm font-medium',
+                    isActive ? 'text-foreground' : 'text-muted-foreground'
+                  )}
+                >
                   {step.label}
                 </p>
               </div>
             </div>
-            
+
             {index < steps.length - 1 && (
               <div className="flex-1 mx-4">
                 <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
@@ -80,7 +86,7 @@ export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
                     animate={{
                       width: isCompleted ? '100%' : '0%',
                     }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
                     className="h-full bg-green-500"
                   />
                 </div>

@@ -48,10 +48,7 @@ export class SecurityManager {
     this.dlpEngine = new DLPEngine(this.config.dlpConfig, this.auditService);
 
     // Initialize compliance manager
-    this.complianceManager = new ComplianceManager(
-      this.config.complianceConfig,
-      this.auditService
-    );
+    this.complianceManager = new ComplianceManager(this.config.complianceConfig, this.auditService);
 
     // Initialize access control
     this.accessControlManager = new AccessControlManager(
@@ -162,7 +159,7 @@ export class SecurityManager {
     context: AuthenticationContext
   ): Promise<AuthenticationResult> {
     const startTime = Date.now();
-    
+
     try {
       // Log authentication attempt
       await this.auditService.logAuthentication({
@@ -253,7 +250,7 @@ export class SecurityManager {
 
       // Check permissions
       const hasPermission = await this.checkPermissions(user, action, resource);
-      
+
       // Log authorization attempt
       await this.auditService.logAuthorization({
         action: hasPermission ? 'access_granted' : 'access_denied',
@@ -261,7 +258,7 @@ export class SecurityManager {
         resource,
         resourceId: context.resourceId,
         granted: hasPermission,
-        permissions: user.permissions.map(p => p.name),
+        permissions: user.permissions.map((p) => p.name),
         role: user.role,
         deniedReason: hasPermission ? undefined : 'Insufficient permissions',
         source: context.source,
@@ -270,7 +267,7 @@ export class SecurityManager {
       return {
         authorized: hasPermission,
         user,
-        permissions: user.permissions.map(p => p.name),
+        permissions: user.permissions.map((p) => p.name),
         restrictions: hasPermission ? [] : ['insufficient_permissions'],
       };
     } catch (error) {
@@ -290,10 +287,7 @@ export class SecurityManager {
   }
 
   // Data Protection
-  async protectData(
-    data: any,
-    context: DataProtectionContext
-  ): Promise<ProtectedData> {
+  async protectData(data: any, context: DataProtectionContext): Promise<ProtectedData> {
     // Apply encryption if configured
     let protectedData = data;
     if (this.config.encryptionConfig.fieldLevelEncryption.enabled) {
@@ -331,12 +325,7 @@ export class SecurityManager {
 
   // Security Monitoring
   async getSecurityMetrics(period: { start: Date; end: Date }): Promise<SecurityMetrics> {
-    const [
-      auditMetrics,
-      threatMetrics,
-      complianceMetrics,
-      incidentMetrics,
-    ] = await Promise.all([
+    const [auditMetrics, threatMetrics, complianceMetrics, incidentMetrics] = await Promise.all([
       this.auditService.getAuditMetrics(period),
       this.threatDetectionEngine.getMetrics(period),
       this.complianceManager.getMetrics(period),
@@ -361,7 +350,7 @@ export class SecurityManager {
   // Incident Response
   async reportSecurityIncident(incident: SecurityIncidentReport): Promise<string> {
     const incidentId = uuidv4();
-    
+
     // Create incident record
     await this.incidentResponseManager.createIncident({
       ...incident,
@@ -405,10 +394,10 @@ export class SecurityManager {
     updatedBy: string
   ): Promise<SecurityConfiguration> {
     const oldConfig = { ...this.config };
-    
+
     // Apply updates
     this.config = { ...this.config, ...updates };
-    
+
     // Save to database
     await db.client.securityConfiguration.upsert({
       where: { id: this.config.id },
@@ -453,11 +442,11 @@ export class SecurityManager {
       this.checkComplianceHealth(),
     ]);
 
-    const overallHealth = checks.every(check => check.status === 'healthy') 
-      ? 'healthy' 
-      : checks.some(check => check.status === 'critical')
-      ? 'critical'
-      : 'warning';
+    const overallHealth = checks.every((check) => check.status === 'healthy')
+      ? 'healthy'
+      : checks.some((check) => check.status === 'critical')
+        ? 'critical'
+        : 'warning';
 
     return {
       timestamp: new Date(),
@@ -544,32 +533,32 @@ export class SecurityManager {
   private calculateOverallRiskScore(metrics: any): number {
     // Simplified risk calculation
     let riskScore = 0;
-    
+
     // Factor in audit metrics
     riskScore += metrics.auditMetrics.averageRiskScore * 0.3;
-    
+
     // Factor in threat metrics
     riskScore += (metrics.threatMetrics.detectedThreats / 100) * 0.4;
-    
+
     // Factor in compliance metrics
     riskScore += (1 - metrics.complianceMetrics.overallScore / 100) * 10 * 0.2;
-    
+
     // Factor in incidents
-    riskScore += (metrics.incidentMetrics.openIncidents * 2) * 0.1;
-    
+    riskScore += metrics.incidentMetrics.openIncidents * 2 * 0.1;
+
     return Math.min(riskScore, 10);
   }
 
   private getConfigurationChanges(oldConfig: any, newConfig: any): string[] {
     const changes: string[] = [];
-    
+
     // Simplified change detection
-    Object.keys(newConfig).forEach(key => {
+    Object.keys(newConfig).forEach((key) => {
       if (JSON.stringify(oldConfig[key]) !== JSON.stringify(newConfig[key])) {
         changes.push(`${key} modified`);
       }
     });
-    
+
     return changes;
   }
 
@@ -595,13 +584,13 @@ export class SecurityManager {
   private async checkSSOHealth(): Promise<HealthCheckResult> {
     try {
       // Test SSO providers
-      const providers = this.config.ssoConfig.providers.filter(p => p.enabled);
+      const providers = this.config.ssoConfig.providers.filter((p) => p.enabled);
       const providerResults = await Promise.all(
-        providers.map(provider => this.ssoService.testProvider(provider.id))
+        providers.map((provider) => this.ssoService.testProvider(provider.id))
       );
-      
-      const failedProviders = providerResults.filter(r => !r.success);
-      
+
+      const failedProviders = providerResults.filter((r) => !r.success);
+
       return {
         component: 'sso',
         status: failedProviders.length === 0 ? 'healthy' : 'warning',
@@ -625,7 +614,7 @@ export class SecurityManager {
         startDate: new Date(Date.now() - 24 * 60 * 60 * 1000), // Last 24 hours
         limit: 1,
       });
-      
+
       return {
         component: 'audit',
         status: 'healthy',
@@ -648,7 +637,7 @@ export class SecurityManager {
         start: new Date(Date.now() - 24 * 60 * 60 * 1000),
         end: new Date(),
       });
-      
+
       return {
         component: 'threat_detection',
         status: 'healthy',
@@ -671,7 +660,7 @@ export class SecurityManager {
         start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
         end: new Date(),
       });
-      
+
       return {
         component: 'compliance',
         status: metrics.overallScore >= 80 ? 'healthy' : 'warning',
@@ -690,22 +679,25 @@ export class SecurityManager {
 
   private generateHealthRecommendations(checks: HealthCheckResult[]): string[] {
     const recommendations: string[] = [];
-    
-    checks.forEach(check => {
+
+    checks.forEach((check) => {
       if (check.status === 'critical') {
         recommendations.push(`Critical: Fix ${check.component} - ${check.message}`);
       } else if (check.status === 'warning') {
         recommendations.push(`Warning: Review ${check.component} - ${check.message}`);
       }
     });
-    
+
     return recommendations;
   }
 }
 
 // Placeholder implementations for complex services
 class ThreatDetectionEngine {
-  constructor(private config: ThreatDetectionConfiguration, private auditService: any) {}
+  constructor(
+    private config: ThreatDetectionConfiguration,
+    private auditService: any
+  ) {}
 
   async analyzeEvent(event: Partial<SecurityAuditEvent>): Promise<void> {
     // Threat analysis implementation
@@ -729,7 +721,10 @@ class ThreatDetectionEngine {
 }
 
 class DLPEngine {
-  constructor(private config: DLPConfiguration, private auditService: any) {}
+  constructor(
+    private config: DLPConfiguration,
+    private auditService: any
+  ) {}
 
   async checkPolicies(event: Partial<SecurityAuditEvent>): Promise<void> {
     // DLP policy checking
@@ -746,7 +741,10 @@ class DLPEngine {
 }
 
 class ComplianceManager {
-  constructor(private config: ComplianceConfiguration, private auditService: any) {}
+  constructor(
+    private config: ComplianceConfiguration,
+    private auditService: any
+  ) {}
 
   async assessCompliance(event: Partial<SecurityAuditEvent>): Promise<void> {
     // Compliance assessment
@@ -762,7 +760,10 @@ class ComplianceManager {
     };
   }
 
-  async generateReport(frameworkId: string, period: { start: Date; end: Date }): Promise<ComplianceReport> {
+  async generateReport(
+    frameworkId: string,
+    period: { start: Date; end: Date }
+  ): Promise<ComplianceReport> {
     return {
       frameworkId,
       period,
@@ -783,7 +784,10 @@ class ComplianceManager {
 }
 
 class AccessControlManager {
-  constructor(private config: AccessControlConfiguration, private auditService: any) {}
+  constructor(
+    private config: AccessControlConfiguration,
+    private auditService: any
+  ) {}
 
   async checkAccess(context: AuthenticationContext): Promise<AccessCheckResult> {
     return { allowed: true };
@@ -795,7 +799,10 @@ class AccessControlManager {
 }
 
 class IncidentResponseManager {
-  constructor(private config: IncidentResponseConfiguration, private auditService: any) {}
+  constructor(
+    private config: IncidentResponseConfiguration,
+    private auditService: any
+  ) {}
 
   async createIncident(incident: any): Promise<void> {
     // Create incident
@@ -1256,4 +1263,4 @@ export const createDefaultSecurityConfig = (): SecurityConfiguration => ({
   isActive: true,
   lastUpdated: new Date(),
   updatedBy: 'system',
-}); 
+});

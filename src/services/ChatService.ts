@@ -58,7 +58,7 @@ export class ChatService {
               userId: createdBy,
               role: ChannelMemberRole.OWNER,
             },
-            ...members.map(userId => ({
+            ...members.map((userId) => ({
               userId,
               role: ChannelMemberRole.MEMBER,
             })),
@@ -236,7 +236,11 @@ export class ChatService {
       },
     });
 
-    if (!adderMembership || (adderMembership.role !== ChannelMemberRole.OWNER && adderMembership.role !== ChannelMemberRole.ADMIN)) {
+    if (
+      !adderMembership ||
+      (adderMembership.role !== ChannelMemberRole.OWNER &&
+        adderMembership.role !== ChannelMemberRole.ADMIN)
+    ) {
       throw new Error('Insufficient permissions');
     }
 
@@ -277,7 +281,11 @@ export class ChatService {
         },
       });
 
-      if (!removerMembership || (removerMembership.role !== ChannelMemberRole.OWNER && removerMembership.role !== ChannelMemberRole.ADMIN)) {
+      if (
+        !removerMembership ||
+        (removerMembership.role !== ChannelMemberRole.OWNER &&
+          removerMembership.role !== ChannelMemberRole.ADMIN)
+      ) {
         throw new Error('Insufficient permissions');
       }
     }
@@ -297,7 +305,14 @@ export class ChatService {
 
   // Message Management
   async sendMessage(input: SendMessageInput) {
-    const { channelId, userId, content, type = ChatMessageType.TEXT, attachments, parentId } = input;
+    const {
+      channelId,
+      userId,
+      content,
+      type = ChatMessageType.TEXT,
+      attachments,
+      parentId,
+    } = input;
 
     // Verify user has access
     const membership = await prisma.chatChannelMember.findUnique({
@@ -350,17 +365,19 @@ export class ChatService {
             readAt: true,
           },
         },
-        parent: parentId ? {
-          include: {
-            user: {
-              select: {
-                id: true,
-                firstName: true,
-                lastName: true,
+        parent: parentId
+          ? {
+              include: {
+                user: {
+                  select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                  },
+                },
               },
-            },
-          },
-        } : undefined,
+            }
+          : undefined,
         _count: {
           select: {
             replies: true,
@@ -687,7 +704,7 @@ export class ChatService {
       select: { channelId: true },
     });
 
-    const channelIds = accessibleChannels.map(m => m.channelId);
+    const channelIds = accessibleChannels.map((m) => m.channelId);
 
     const messages = await prisma.chatMessage.findMany({
       where: {
@@ -765,7 +782,7 @@ export class ChatService {
       select: { firstName: true, lastName: true },
     });
 
-    const channelName = users.map(u => `${u.firstName} ${u.lastName}`).join(' - ');
+    const channelName = users.map((u) => `${u.firstName} ${u.lastName}`).join(' - ');
 
     const channel = await this.createChannel({
       name: channelName,
@@ -781,7 +798,7 @@ export class ChatService {
   // Typing Indicators
   async setTypingStatus(channelId: string, userId: string, isTyping: boolean) {
     const key = `typing:${channelId}:${userId}`;
-    
+
     if (isTyping) {
       // Set typing status with 5 second expiry
       await redis.setex(key, 5, '1');
@@ -796,13 +813,13 @@ export class ChatService {
     const pattern = `typing:${channelId}:*`;
     const typingUserIds: string[] = [];
     let cursor = '0';
-    
+
     // Use SCAN instead of KEYS for better performance
     do {
       const result = await redis.scan(cursor, 'MATCH', pattern, 'COUNT', 100);
       cursor = result[0];
       const keys = result[1];
-      
+
       // Extract user IDs from keys
       for (const key of keys) {
         const parts = key.split(':');

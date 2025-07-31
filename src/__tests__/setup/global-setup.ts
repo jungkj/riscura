@@ -7,16 +7,16 @@ import { chromium, FullConfig } from '@playwright/test';
 
 async function globalSetup(config: FullConfig) {
   console.log('🧪 Starting global test setup...');
-  
+
   // Create browser instance for setup operations
   const browser = await chromium.launch();
   const page = await browser.newPage();
-  
+
   try {
     // 1. Wait for application to be ready
     console.log('📡 Waiting for application to be ready...');
     const baseURL = config.projects[0].use?.baseURL || 'http://localhost:3000';
-    
+
     // Wait for health check endpoint
     let retries = 30;
     while (retries > 0) {
@@ -26,61 +26,61 @@ async function globalSetup(config: FullConfig) {
       } catch (error) {
         // Application not ready yet
       }
-      
+
       retries--;
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
     }
-    
+
     if (retries === 0) {
       throw new Error('Application did not become ready within timeout');
     }
-    
+
     console.log('✅ Application is ready');
-    
+
     // 2. Clean existing test data
     console.log('🧹 Cleaning existing test data...');
     await page.request.post(`${baseURL}/api/test/cleanup`, {
-      data: { confirm: true }
+      data: { confirm: true },
     });
-    
+
     // 3. Seed database with test data
     console.log('🌱 Seeding test database...');
-    
+
     // Create test organizations
     const organizations = [
       {
         name: 'TenantA Test Corp',
         domain: 'tenanta.test.com',
         industry: 'financial-services',
-        size: 'medium'
+        size: 'medium',
       },
       {
-        name: 'TenantB Test Corp', 
+        name: 'TenantB Test Corp',
         domain: 'tenantb.test.com',
         industry: 'technology',
-        size: 'large'
+        size: 'large',
       },
       {
         name: 'Load Test Organization',
         domain: 'loadtest.test.com',
         industry: 'healthcare',
-        size: 'enterprise'
-      }
+        size: 'enterprise',
+      },
     ];
-    
+
     const createdOrgs: any[] = [];
     for (const org of organizations) {
       const response = await page.request.post(`${baseURL}/api/test/organizations`, {
-        data: org
+        data: org,
       });
       const result = await response.json();
       createdOrgs.push(result.data);
       console.log(`  ✅ Created organization: ${org.name}`);
     }
-    
+
     // 4. Create test users
     console.log('👥 Creating test users...');
-    
+
     const testUsers = [
       // Admin users
       {
@@ -89,7 +89,7 @@ async function globalSetup(config: FullConfig) {
         firstName: 'Admin',
         lastName: 'UserA',
         role: 'admin',
-        organizationId: createdOrgs[0]?.id || 'default-org-id'
+        organizationId: createdOrgs[0]?.id || 'default-org-id',
       },
       {
         email: 'admin@tenantb.test.com',
@@ -97,9 +97,9 @@ async function globalSetup(config: FullConfig) {
         firstName: 'Admin',
         lastName: 'UserB',
         role: 'admin',
-        organizationId: createdOrgs[1]?.id || 'default-org-id'
+        organizationId: createdOrgs[1]?.id || 'default-org-id',
       },
-      
+
       // Regular users for each tenant
       {
         email: 'user@tenanta.test.com',
@@ -107,7 +107,7 @@ async function globalSetup(config: FullConfig) {
         firstName: 'Regular',
         lastName: 'UserA',
         role: 'risk_manager',
-        organizationId: createdOrgs[0]?.id || 'default-org-id'
+        organizationId: createdOrgs[0]?.id || 'default-org-id',
       },
       {
         email: 'user@tenantb.test.com',
@@ -115,9 +115,9 @@ async function globalSetup(config: FullConfig) {
         firstName: 'Regular',
         lastName: 'UserB',
         role: 'risk_manager',
-        organizationId: createdOrgs[1]?.id || 'default-org-id'
+        organizationId: createdOrgs[1]?.id || 'default-org-id',
       },
-      
+
       // Load testing users
       ...Array.from({ length: 100 }, (_, i) => ({
         email: `loadtest${i}@example.com`,
@@ -125,9 +125,9 @@ async function globalSetup(config: FullConfig) {
         firstName: `LoadTest`,
         lastName: `User${i}`,
         role: 'risk_manager',
-        organizationId: createdOrgs[2]?.id || 'default-org-id'
+        organizationId: createdOrgs[2]?.id || 'default-org-id',
       })),
-      
+
       // Specialized test users
       {
         email: 'api-test@test.com',
@@ -135,7 +135,7 @@ async function globalSetup(config: FullConfig) {
         firstName: 'API',
         lastName: 'Tester',
         role: 'admin',
-        organizationId: createdOrgs[2]?.id || 'default-org-id'
+        organizationId: createdOrgs[2]?.id || 'default-org-id',
       },
       {
         email: 'upload-test@test.com',
@@ -143,26 +143,26 @@ async function globalSetup(config: FullConfig) {
         firstName: 'Upload',
         lastName: 'Tester',
         role: 'risk_manager',
-        organizationId: createdOrgs[2]?.id || 'default-org-id'
-      }
+        organizationId: createdOrgs[2]?.id || 'default-org-id',
+      },
     ];
-    
+
     // Create users in batches to avoid overwhelming the system
     const batchSize = 10;
     for (let i = 0; i < testUsers.length; i += batchSize) {
       const batch = testUsers.slice(i, i + batchSize);
-      
-      const promises = batch.map(user => 
+
+      const promises = batch.map((user) =>
         page.request.post(`${baseURL}/api/test/users`, { data: user })
       );
-      
+
       await Promise.all(promises);
       console.log(`  ✅ Created ${batch.length} users (batch ${Math.floor(i / batchSize) + 1})`);
     }
-    
+
     // 5. Create sample data for testing
     console.log('📊 Creating sample test data...');
-    
+
     // Create sample risks for each organization
     for (const org of createdOrgs) {
       const sampleRisks = [
@@ -175,9 +175,9 @@ async function globalSetup(config: FullConfig) {
             financial: 4,
             operational: 3,
             reputational: 5,
-            regulatory: 5
+            regulatory: 5,
           },
-          organizationId: org.id
+          organizationId: org.id,
         },
         {
           title: `${org.name} Operational Risk`,
@@ -188,19 +188,19 @@ async function globalSetup(config: FullConfig) {
             financial: 3,
             operational: 5,
             reputational: 2,
-            regulatory: 1
+            regulatory: 1,
           },
-          organizationId: org.id
-        }
+          organizationId: org.id,
+        },
       ];
-      
+
       for (const risk of sampleRisks) {
         await page.request.post(`${baseURL}/api/test/risks`, { data: risk });
       }
-      
+
       console.log(`  ✅ Created sample risks for ${org.name}`);
     }
-    
+
     // Create sample controls
     for (const org of createdOrgs) {
       const sampleControls = [
@@ -210,7 +210,7 @@ async function globalSetup(config: FullConfig) {
           type: 'preventive',
           frequency: 'continuous',
           effectiveness: 4,
-          organizationId: org.id
+          organizationId: org.id,
         },
         {
           name: `${org.name} Data Monitoring`,
@@ -218,68 +218,67 @@ async function globalSetup(config: FullConfig) {
           type: 'detective',
           frequency: 'daily',
           effectiveness: 3,
-          organizationId: org.id
-        }
+          organizationId: org.id,
+        },
       ];
-      
+
       for (const control of sampleControls) {
         await page.request.post(`${baseURL}/api/test/controls`, { data: control });
       }
-      
+
       console.log(`  ✅ Created sample controls for ${org.name}`);
     }
-    
+
     // 6. Create test documents
     console.log('📄 Creating test documents...');
-    
+
     const testDocuments = [
       {
         title: 'Privacy Policy Template',
         content: 'Sample privacy policy content for testing',
         type: 'policy',
-        classification: 'internal'
+        classification: 'internal',
       },
       {
         title: 'Security Procedure',
         content: 'Sample security procedure content for testing',
         type: 'procedure',
-        classification: 'confidential'
-      }
+        classification: 'confidential',
+      },
     ];
-    
+
     for (const doc of testDocuments) {
       await page.request.post(`${baseURL}/api/test/documents`, { data: doc });
     }
-    
+
     console.log('  ✅ Created test documents');
-    
+
     // 7. Set up performance monitoring
     console.log('📈 Setting up performance monitoring...');
-    
+
     await page.request.post(`${baseURL}/api/test/performance/setup`, {
-      data: { enableMonitoring: true }
+      data: { enableMonitoring: true },
     });
-    
+
     console.log('  ✅ Performance monitoring enabled');
-    
+
     // 8. Create test fixtures
     console.log('🏗️ Creating test fixtures...');
-    
+
     // Store test data in global state for use in tests
     const testData = {
       organizations: createdOrgs,
       baseURL,
       setupComplete: true,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
-    
+
     // Save test data to file for access during tests
     await page.evaluate((data) => {
       (globalThis as any).testSetupData = data;
     }, testData);
-    
+
     console.log('✅ Global test setup completed successfully');
-    
   } catch (error) {
     console.error('❌ Global test setup failed:', error);
     throw error;
@@ -288,4 +287,4 @@ async function globalSetup(config: FullConfig) {
   }
 }
 
-export default globalSetup; 
+export default globalSetup;

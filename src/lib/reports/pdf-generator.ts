@@ -110,9 +110,8 @@ export class PDFGenerator {
 
       Object.entries(summary.keyMetrics).forEach(([key, value]) => {
         const formattedKey = key.replace(/([A-Z])/g, ' $1').trim();
-        const formattedValue = typeof value === 'number' && value % 1 !== 0 
-          ? value.toFixed(2) 
-          : String(value);
+        const formattedValue =
+          typeof value === 'number' && value % 1 !== 0 ? value.toFixed(2) : String(value);
 
         this.doc.text(`${formattedKey}: ${formattedValue}`, this.margin + 10, this.currentY);
         this.currentY += 6;
@@ -234,9 +233,8 @@ export class PDFGenerator {
       // Metric value
       this.doc.setFontSize(16);
       this.doc.setFont('helvetica', 'bold');
-      const formattedValue = typeof value === 'number' && value % 1 !== 0 
-        ? value.toFixed(2) 
-        : String(value);
+      const formattedValue =
+        typeof value === 'number' && value % 1 !== 0 ? value.toFixed(2) : String(value);
       this.doc.text(formattedValue, currentX + 5, this.currentY + 8);
 
       // Metric label
@@ -270,7 +268,7 @@ export class PDFGenerator {
 
     for (let i = 1; i <= pageCount; i++) {
       this.doc.setPage(i);
-      
+
       // Footer line
       this.doc.setDrawColor(200);
       this.doc.line(
@@ -291,11 +289,7 @@ export class PDFGenerator {
       );
 
       // Report ID
-      this.doc.text(
-        `Report ID: ${report.id}`,
-        this.margin,
-        this.pageHeight - 8
-      );
+      this.doc.text(`Report ID: ${report.id}`, this.margin, this.pageHeight - 8);
     }
 
     // Reset text color

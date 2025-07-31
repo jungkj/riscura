@@ -4,24 +4,24 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 
 // Accessibility Imports
-import { 
-  AccessibilityProvider, 
-  useAccessibility, 
-  useAnnouncements, 
+import {
+  AccessibilityProvider,
+  useAccessibility,
+  useAnnouncements,
   useFocusManagement,
   useKeyboardNavigation,
   VisuallyHidden,
   FocusTrap,
-  AriaLabel
+  AriaLabel,
 } from '@/lib/accessibility/AccessibilityProvider';
 
 // Performance Imports
-import { 
+import {
   PerformanceProvider,
   usePerformance,
   useVirtualScrolling,
   useOfflineData,
-  LazyImage
+  LazyImage,
 } from '@/lib/performance/PerformanceProvider';
 import Link from 'next/link';
 
@@ -41,7 +41,7 @@ import {
   Toast,
   useLoadingState,
   useToast,
-  useProgressiveEnhancement
+  useProgressiveEnhancement,
 } from '@/components/ui/UXEnhancements';
 
 // Types
@@ -91,7 +91,8 @@ const generateSampleRisks = (count: number): Risk[] => {
     progress: Math.floor(Math.random() * 100),
     department: departments[Math.floor(Math.random() * departments.length)],
     tags: ['Tag1', 'Tag2'].slice(0, Math.floor(Math.random() * 3) + 1),
-    imageUrl: Math.random() > 0.7 ? `https://via.placeholder.com/150x100?text=Risk${index + 1}` : undefined,
+    imageUrl:
+      Math.random() > 0.7 ? `https://via.placeholder.com/150x100?text=Risk${index + 1}` : undefined,
   }));
 };
 
@@ -144,8 +145,18 @@ const AccessibilityPanel: React.FC = () => {
         aria-expanded={isOpen}
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+          />
         </svg>
       </button>
 
@@ -155,7 +166,7 @@ const AccessibilityPanel: React.FC = () => {
           className="absolute right-0 top-full mt-2 w-80 bg-surface-primary border border-surface-tertiary rounded-lg shadow-lg p-4 z-50"
         >
           <h3 className="text-lg font-semibold mb-4">Accessibility Settings</h3>
-          
+
           <div className="space-y-4">
             <label className="flex items-center gap-3">
               <input
@@ -246,14 +257,19 @@ const PerformancePanel: React.FC = () => {
         aria-expanded={isOpen}
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M13 10V3L4 14h7v7l9-11h-7z"
+          />
         </svg>
       </button>
 
       {isOpen && (
         <div className="absolute right-0 top-full mt-2 w-96 bg-surface-primary border border-surface-tertiary rounded-lg shadow-lg p-4 z-50">
           <h3 className="text-lg font-semibold mb-4">Performance Metrics</h3>
-          
+
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="space-y-2">
               <div className="text-sm text-text-secondary">Page Load Time</div>
@@ -265,17 +281,21 @@ const PerformancePanel: React.FC = () => {
             </div>
             <div className="space-y-2">
               <div className="text-sm text-text-secondary">LCP</div>
-              <div className="font-mono text-sm">{formatMetric(metrics.largestContentfulPaint, 'ms')}</div>
+              <div className="font-mono text-sm">
+                {formatMetric(metrics.largestContentfulPaint, 'ms')}
+              </div>
             </div>
             <div className="space-y-2">
               <div className="text-sm text-text-secondary">CLS</div>
-              <div className="font-mono text-sm">{formatMetric(metrics.cumulativeLayoutShift, '')}</div>
+              <div className="font-mono text-sm">
+                {formatMetric(metrics.cumulativeLayoutShift, '')}
+              </div>
             </div>
           </div>
 
           <div className="space-y-3">
             <h4 className="font-medium">Settings</h4>
-            
+
             <label className="flex items-center gap-3">
               <input
                 type="checkbox"
@@ -341,12 +361,14 @@ const MetricCard: React.FC<{ metric: MetricData; index: number }> = ({ metric, i
       <div className="bg-surface-primary border border-surface-tertiary rounded-lg p-6 hover:shadow-notion-sm transition-shadow">
         <div className="flex justify-between items-start mb-4">
           <h3 className="text-sm font-medium text-text-secondary">{metric.label}</h3>
-          <div className={cn('text-xs px-2 py-1 rounded-full', {
-            'bg-primary/10 text-primary': metric.color === 'primary',
-            'bg-success/10 text-success': metric.color === 'success',
-            'bg-warning/10 text-warning': metric.color === 'warning',
-            'bg-error/10 text-error': metric.color === 'error',
-          })}>
+          <div
+            className={cn('text-xs px-2 py-1 rounded-full', {
+              'bg-primary/10 text-primary': metric.color === 'primary',
+              'bg-success/10 text-success': metric.color === 'success',
+              'bg-warning/10 text-warning': metric.color === 'warning',
+              'bg-error/10 text-error': metric.color === 'error',
+            })}
+          >
             Target: {formatValue(metric.target, metric.format)}
           </div>
         </div>
@@ -358,7 +380,8 @@ const MetricCard: React.FC<{ metric: MetricData; index: number }> = ({ metric, i
 
           <div className="flex items-center gap-2">
             <span className={cn('text-sm font-medium', getChangeColor(metric.change))}>
-              {metric.change > 0 ? '+' : ''}{formatValue(Math.abs(metric.change), metric.format)}
+              {metric.change > 0 ? '+' : ''}
+              {formatValue(Math.abs(metric.change), metric.format)}
             </span>
             <span className="text-xs text-text-secondary">vs last month</span>
           </div>
@@ -377,24 +400,34 @@ const MetricCard: React.FC<{ metric: MetricData; index: number }> = ({ metric, i
 // Risk Item Component for Virtual Scrolling
 const RiskItem: React.FC<{ risk: Risk; index: number }> = ({ risk, index }) => {
   const { settings } = usePerformance();
-  
+
   const getLevelColor = (level: string) => {
     switch (level) {
-      case 'critical': return 'bg-error text-white';
-      case 'high': return 'bg-warning text-black';
-      case 'medium': return 'bg-primary text-white';
-      case 'low': return 'bg-success text-white';
-      default: return 'bg-surface-secondary text-text-primary';
+      case 'critical':
+        return 'bg-error text-white';
+      case 'high':
+        return 'bg-warning text-black';
+      case 'medium':
+        return 'bg-primary text-white';
+      case 'low':
+        return 'bg-success text-white';
+      default:
+        return 'bg-surface-secondary text-text-primary';
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'text-error';
-      case 'mitigated': return 'text-success';
-      case 'monitoring': return 'text-warning';
-      case 'closed': return 'text-text-secondary';
-      default: return 'text-text-primary';
+      case 'active':
+        return 'text-error';
+      case 'mitigated':
+        return 'text-success';
+      case 'monitoring':
+        return 'text-warning';
+      case 'closed':
+        return 'text-text-secondary';
+      default:
+        return 'text-text-primary';
     }
   };
 
@@ -411,45 +444,40 @@ const RiskItem: React.FC<{ risk: Risk; index: number }> = ({ risk, index }) => {
             placeholder={<DaisySkeletonLoader variant="rectangular" width={60} height={40} />}
           />
         )}
-        
+
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between mb-2">
-            <h3 className="font-semibold text-text-primary truncate">
-              {risk.title}
-            </h3>
+            <h3 className="font-semibold text-text-primary truncate">{risk.title}</h3>
             <div className="flex items-center gap-2 flex-shrink-0 ml-2">
-              <span className={cn('px-2 py-1 rounded-full text-xs font-medium', getLevelColor(risk.level))}>
+              <span
+                className={cn(
+                  'px-2 py-1 rounded-full text-xs font-medium',
+                  getLevelColor(risk.level)
+                )}
+              >
                 {risk.level}
               </span>
-              <span className="text-sm font-mono">
-                {risk.score}
-              </span>
+              <span className="text-sm font-mono">{risk.score}</span>
             </div>
           </div>
 
-          <p className="text-sm text-text-secondary mb-3 line-clamp-2">
-            {risk.description}
-          </p>
+          <p className="text-sm text-text-secondary mb-3 line-clamp-2">{risk.description}</p>
 
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-4">
               <span className="text-text-secondary">
                 Owner: <span className="text-text-primary">{risk.owner}</span>
               </span>
-              <span className={cn('font-medium', getStatusColor(risk.status))}>
-                {risk.status}
-              </span>
+              <span className={cn('font-medium', getStatusColor(risk.status))}>{risk.status}</span>
             </div>
-            
+
             <div className="flex items-center gap-2">
               <DaisyProgressBar
                 progress={risk.progress}
                 className="w-16 h-1"
                 color={risk.progress > 75 ? 'success' : risk.progress > 50 ? 'warning' : 'error'}
               />
-              <span className="text-xs text-text-secondary">
-                {risk.progress}%
-              </span>
+              <span className="text-xs text-text-secondary">{risk.progress}%</span>
             </div>
           </div>
         </div>
@@ -478,7 +506,7 @@ const EnhancedRiskDashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [isLoading, setIsLoading] = useState(true);
-  
+
   const { startLoading, stopLoading, isLoading: loadingState } = useLoadingState();
   const { addToast, ToastContainer } = useToast();
   const { announceDataUpdate } = useAnnouncements();
@@ -488,9 +516,10 @@ const EnhancedRiskDashboard: React.FC = () => {
 
   // Filter risks
   const filteredRisks = useMemo(() => {
-    return risks.filter(risk => {
-      const matchesSearch = risk.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           risk.description.toLowerCase().includes(searchTerm.toLowerCase());
+    return risks.filter((risk) => {
+      const matchesSearch =
+        risk.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        risk.description.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesLevel = selectedLevel === 'all' || risk.level === selectedLevel;
       return matchesSearch && matchesLevel;
     });
@@ -502,17 +531,17 @@ const EnhancedRiskDashboard: React.FC = () => {
       setIsLoading(false);
       announceDataUpdate(filteredRisks.length, 'risks');
     }, 2000);
-    
+
     return () => clearTimeout(timer);
   }, [filteredRisks.length, announceDataUpdate]);
 
   // Simulate data refresh
   const handleRefresh = useCallback(async () => {
     startLoading('Refreshing data...');
-    
+
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       addToast('Data refreshed successfully', 'success');
     } catch (error) {
       addToast('Failed to refresh data', 'error');
@@ -522,14 +551,17 @@ const EnhancedRiskDashboard: React.FC = () => {
   }, [startLoading, stopLoading, addToast]);
 
   // Keyboard shortcuts
-  const handleKeydown = useCallback((event: React.KeyboardEvent) => {
-    handleKeyPress(event, {
-      onEscape: () => {
-        setSearchTerm('');
-        setSelectedLevel('all');
-      },
-    });
-  }, [handleKeyPress]);
+  const handleKeydown = useCallback(
+    (event: React.KeyboardEvent) => {
+      handleKeyPress(event, {
+        onEscape: () => {
+          setSearchTerm('');
+          setSelectedLevel('all');
+        },
+      });
+    },
+    [handleKeyPress]
+  );
 
   return (
     <div className="min-h-screen bg-surface-secondary" onKeyDown={handleKeydown}>
@@ -537,14 +569,12 @@ const EnhancedRiskDashboard: React.FC = () => {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-text-primary mb-2">
-              Enhanced Risk Dashboard
-            </h1>
+            <h1 className="text-3xl font-bold text-text-primary mb-2">Enhanced Risk Dashboard</h1>
             <p className="text-text-secondary">
               Comprehensive accessibility and performance optimization demo
             </p>
           </div>
-          
+
           <div className="flex items-center gap-4">
             <AccessibilityPanel />
             <PerformancePanel />
@@ -563,8 +593,18 @@ const EnhancedRiskDashboard: React.FC = () => {
         {!isOnline && (
           <div className="mb-6 p-4 bg-warning/10 border border-warning rounded-lg">
             <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.732 15.5c-.77.833.192 2.5 1.732 2.5z" />
+              <svg
+                className="w-5 h-5 text-warning"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.732 15.5c-.77.833.192 2.5 1.732 2.5z"
+                />
               </svg>
               <span className="text-warning font-medium">Offline Mode - Using cached data</span>
             </div>
@@ -600,7 +640,10 @@ const EnhancedRiskDashboard: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="level-filter" className="block text-sm font-medium text-text-primary mb-2">
+              <label
+                htmlFor="level-filter"
+                className="block text-sm font-medium text-text-primary mb-2"
+              >
                 Risk Level
               </label>
               <select
@@ -638,8 +681,18 @@ const EnhancedRiskDashboard: React.FC = () => {
               </div>
             ) : filteredRisks.length === 0 ? (
               <div className="p-12 text-center">
-                <svg className="w-16 h-16 mx-auto text-text-secondary mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                <svg
+                  className="w-16 h-16 mx-auto text-text-secondary mb-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
                 </svg>
                 <h3 className="text-lg font-medium text-text-primary mb-2">No risks found</h3>
                 <p className="text-text-secondary">Try adjusting your search criteria</p>
@@ -671,9 +724,9 @@ const EnhancedRiskDashboard: React.FC = () => {
         {/* Performance Information */}
         <div className="mt-8 text-xs text-text-secondary text-center">
           <p>
-            Virtual scrolling: {settings.enableVirtualScrolling ? 'Enabled' : 'Disabled'} • 
-            Image optimization: {settings.enableImageOptimization ? 'Enabled' : 'Disabled'} • 
-            Offline mode: {settings.enableOfflineMode ? 'Enabled' : 'Disabled'}
+            Virtual scrolling: {settings.enableVirtualScrolling ? 'Enabled' : 'Disabled'} • Image
+            optimization: {settings.enableImageOptimization ? 'Enabled' : 'Disabled'} • Offline
+            mode: {settings.enableOfflineMode ? 'Enabled' : 'Disabled'}
           </p>
         </div>
       </div>

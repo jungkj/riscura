@@ -82,7 +82,6 @@ export interface FrameworkMapping {
 }
 
 export class ComplianceFrameworkManager {
-
   // Get all available frameworks
   async getFrameworks(filters?: {
     type?: string;
@@ -116,10 +115,7 @@ export class ComplianceFrameworkManager {
         controlObjectives: true,
         mappings: true,
       },
-      orderBy: [
-        { mandatory: 'desc' },
-        { name: 'asc' },
-      ],
+      orderBy: [{ mandatory: 'desc' }, { name: 'asc' }],
     });
   }
 
@@ -166,10 +162,7 @@ export class ComplianceFrameworkManager {
 
     return await db.client.complianceRequirement.findMany({
       where,
-      orderBy: [
-        { priority: 'desc' },
-        { code: 'asc' },
-      ],
+      orderBy: [{ priority: 'desc' }, { code: 'asc' }],
     });
   }
 
@@ -238,7 +231,8 @@ export class ComplianceFrameworkManager {
     return {
       id: 'sox-2002',
       name: 'Sarbanes-Oxley Act',
-      description: 'U.S. federal law that establishes auditing and financial regulations for public companies',
+      description:
+        'U.S. federal law that establishes auditing and financial regulations for public companies',
       version: '2002',
       type: 'regulatory',
       industry: ['financial', 'public-companies'],
@@ -335,7 +329,8 @@ export class ComplianceFrameworkManager {
               evidenceTypes: ['automated-reports', 'continuous-monitoring'],
             },
           ],
-          implementationGuidance: 'Implement systematic controls over financial reporting processes',
+          implementationGuidance:
+            'Implement systematic controls over financial reporting processes',
           evidenceRequirements: ['Control documentation', 'Testing results', 'Management review'],
           testingProcedures: ['Walkthrough testing', 'Control testing', 'Substantive testing'],
           relatedControls: ['financial-close', 'journal-entries', 'account-reconciliation'],
@@ -523,7 +518,14 @@ export class ComplianceFrameworkManager {
           description: 'Asset management and risk assessment',
           category: 'identification',
           weight: 0.2,
-          requirements: ['nist-id-am', 'nist-id-be', 'nist-id-gv', 'nist-id-ra', 'nist-id-rm', 'nist-id-sc'],
+          requirements: [
+            'nist-id-am',
+            'nist-id-be',
+            'nist-id-gv',
+            'nist-id-ra',
+            'nist-id-rm',
+            'nist-id-sc',
+          ],
         },
         {
           id: 'nist-protect',
@@ -531,7 +533,14 @@ export class ComplianceFrameworkManager {
           description: 'Protective safeguards and controls',
           category: 'protection',
           weight: 0.2,
-          requirements: ['nist-pr-ac', 'nist-pr-at', 'nist-pr-ds', 'nist-pr-ip', 'nist-pr-ma', 'nist-pr-pt'],
+          requirements: [
+            'nist-pr-ac',
+            'nist-pr-at',
+            'nist-pr-ds',
+            'nist-pr-ip',
+            'nist-pr-ma',
+            'nist-pr-pt',
+          ],
         },
         {
           id: 'nist-detect',
@@ -615,7 +624,11 @@ export class ComplianceFrameworkManager {
             },
           ],
           implementationGuidance: 'Implement comprehensive cybersecurity risk management',
-          evidenceRequirements: ['Risk assessment', 'Controls implementation', 'Monitoring results'],
+          evidenceRequirements: [
+            'Risk assessment',
+            'Controls implementation',
+            'Monitoring results',
+          ],
           testingProcedures: ['Control testing', 'Process review', 'Maturity assessment'],
           relatedControls: ['vulnerability-management', 'incident-response', 'business-continuity'],
         },
@@ -756,7 +769,8 @@ export class ComplianceFrameworkManager {
     return {
       id: 'soc2-2017',
       name: 'SOC 2 Trust Services Criteria',
-      description: 'Trust Services Criteria for security, availability, processing integrity, confidentiality, and privacy',
+      description:
+        'Trust Services Criteria for security, availability, processing integrity, confidentiality, and privacy',
       version: '2017',
       type: 'standard',
       industry: ['technology', 'service-providers'],
@@ -848,11 +862,14 @@ export class ComplianceFrameworkManager {
   }
 
   // Search frameworks and requirements
-  async searchFrameworks(query: string, filters?: {
-    frameworks?: string[];
-    categories?: string[];
-    priorities?: string[];
-  }): Promise<{
+  async searchFrameworks(
+    query: string,
+    filters?: {
+      frameworks?: string[];
+      categories?: string[];
+      priorities?: string[];
+    }
+  ): Promise<{
     frameworks: ComplianceFramework[];
     requirements: ComplianceRequirement[];
   }> {
@@ -909,4 +926,4 @@ export class ComplianceFrameworkManager {
   }
 }
 
-export const complianceFrameworkManager = new ComplianceFrameworkManager(); 
+export const complianceFrameworkManager = new ComplianceFrameworkManager();

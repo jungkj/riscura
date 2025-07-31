@@ -57,14 +57,14 @@ export interface ImportStore {
   addRcsaEntries: (entries: RcsaEntry[]) => void;
   setPolicyExtraction: (extraction: PolicyExtraction) => void;
   clearImports: () => void;
-  
+
   // Upload state management
   setRcsaLoading: (loading: boolean) => void;
   setRcsaError: (error: string | null) => void;
   setRcsaSuccess: (success: boolean) => void;
-  
+
   setPolicyLoading: (loading: boolean) => void;
-  setPolicyError: (error: string | null) => void;  
+  setPolicyError: (error: string | null) => void;
   setPolicySuccess: (success: boolean) => void;
 
   // Async thunks
@@ -97,8 +97,7 @@ export const useImportStore = create<ImportStore>()(
           rcsaEntries: [...state.rcsaEntries, ...entries],
         })),
 
-      setPolicyExtraction: (extraction) =>
-        set({ policyExtraction: extraction }),
+      setPolicyExtraction: (extraction) => set({ policyExtraction: extraction }),
 
       clearImports: () =>
         set({
@@ -162,12 +161,7 @@ export const useImportStore = create<ImportStore>()(
 
       // Async thunk for RCSA file upload
       uploadRcsaFile: async (file: File) => {
-        const {
-          setRcsaLoading,
-          setRcsaError,
-          setRcsaSuccess,
-          addRcsaEntries,
-        } = get();
+        const { setRcsaLoading, setRcsaError, setRcsaSuccess, addRcsaEntries } = get();
 
         try {
           setRcsaLoading(true);
@@ -214,12 +208,7 @@ export const useImportStore = create<ImportStore>()(
 
       // Async thunk for policy file upload
       uploadPolicyFile: async (file: File) => {
-        const {
-          setPolicyLoading,
-          setPolicyError,
-          setPolicySuccess,
-          setPolicyExtraction,
-        } = get();
+        const { setPolicyLoading, setPolicyError, setPolicySuccess, setPolicyExtraction } = get();
 
         try {
           setPolicyLoading(true);
@@ -269,16 +258,18 @@ export const usePolicyExtraction = () => useImportStore((state) => state.policyE
 export const useUploadStates = () => useImportStore((state) => state.uploadStates);
 
 // Async action hooks
-export const useRcsaUpload = () => useImportStore((state) => ({
-  uploadFile: state.uploadRcsaFile,
-  loading: state.uploadStates.rcsa.loading,
-  error: state.uploadStates.rcsa.error,
-  success: state.uploadStates.rcsa.success,
-}));
+export const useRcsaUpload = () =>
+  useImportStore((state) => ({
+    uploadFile: state.uploadRcsaFile,
+    loading: state.uploadStates.rcsa.loading,
+    error: state.uploadStates.rcsa.error,
+    success: state.uploadStates.rcsa.success,
+  }));
 
-export const usePolicyUpload = () => useImportStore((state) => ({
-  uploadFile: state.uploadPolicyFile,
-  loading: state.uploadStates.policy.loading,
-  error: state.uploadStates.policy.error,
-  success: state.uploadStates.policy.success,
-})); 
+export const usePolicyUpload = () =>
+  useImportStore((state) => ({
+    uploadFile: state.uploadPolicyFile,
+    loading: state.uploadStates.policy.loading,
+    error: state.uploadStates.policy.error,
+    success: state.uploadStates.policy.success,
+  }));

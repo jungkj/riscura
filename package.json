@@ -310,7 +310,7 @@
     "lucide-react": "^0.446.0",
     "mammoth": "^1.9.1",
     "memory-cache": "^0.2.0",
-    "next": "^15.3.3",
+    "next": "^15.3.4",
     "next-auth": "^4.24.11",
     "next-mdx-remote": "^5.0.0",
     "next-sitemap": "^4.2.3",

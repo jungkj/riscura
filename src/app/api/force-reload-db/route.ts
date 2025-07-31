@@ -29,10 +29,10 @@ export async function GET() {
         },
         log: ['error'],
       });
-      
+
       const result = await prisma.$queryRaw`SELECT current_database() as db, version() as version`;
       await prisma.$disconnect();
-      
+
       connectionTest = {
         success: true,
         result,
@@ -45,36 +45,43 @@ export async function GET() {
     }
   }
 
-  return NextResponse.json({
-    timestamp: new Date().toISOString(),
-    environment: {
-      NODE_ENV: process.env.NODE_ENV,
-      VERCEL: process.env.VERCEL,
-      VERCEL_ENV: process.env.VERCEL_ENV,
+  return NextResponse.json(
+    {
+      timestamp: new Date().toISOString(),
+      environment: {
+        NODE_ENV: process.env.NODE_ENV,
+        VERCEL: process.env.VERCEL,
+        VERCEL_ENV: process.env.VERCEL_ENV,
+      },
+      databaseUrls: {
+        hasUppercase: !!process.env.DATABASE_URL,
+        hasLowercase: !!process.env.database_url,
+        uppercasePreview: process.env.DATABASE_URL
+          ? process.env.DATABASE_URL.substring(0, 60) + '...'
+          : null,
+        lowercasePreview: process.env.database_url
+          ? process.env.database_url.substring(0, 60) + '...'
+          : null,
+      },
+      urlAnalysis: {
+        isPooled,
+        isDirectUrl,
+        hostname: url ? new URL(url).hostname : null,
+        port: url ? new URL(url).port : null,
+      },
+      connectionTest,
+      recommendation: isDirectUrl
+        ? 'Your database_url is still using the direct connection. Please update it in Vercel to use the pooled URL.'
+        : isPooled
+          ? 'Your database_url is correctly using the pooled connection.'
+          : 'Unable to determine URL type.',
     },
-    databaseUrls: {
-      hasUppercase: !!process.env.DATABASE_URL,
-      hasLowercase: !!process.env.database_url,
-      uppercasePreview: process.env.DATABASE_URL ? process.env.DATABASE_URL.substring(0, 60) + '...' : null,
-      lowercasePreview: process.env.database_url ? process.env.database_url.substring(0, 60) + '...' : null,
-    },
-    urlAnalysis: {
-      isPooled,
-      isDirectUrl,
-      hostname: url ? new URL(url).hostname : null,
-      port: url ? new URL(url).port : null,
-    },
-    connectionTest,
-    recommendation: isDirectUrl ? 
-      'Your database_url is still using the direct connection. Please update it in Vercel to use the pooled URL.' : 
-      isPooled ? 
-        'Your database_url is correctly using the pooled connection.' : 
-        'Unable to determine URL type.',
-  }, {
-    headers: {
-      'Cache-Control': 'no-store, no-cache, must-revalidate',
-      'Pragma': 'no-cache',
-      'Expires': '0',
-    },
-  });
+    {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
+    }
+  );
 }

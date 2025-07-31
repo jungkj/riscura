@@ -2,12 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withPerformance } from '@/lib/performance/api-middleware';
 
 // Simple in-memory storage for demo (use Redis in production)
-const performanceMetrics = new Map<string, Array<{
-  timestamp: number;
-  value: number;
-  url: string;
-  userAgent?: string;
-}>>();
+const performanceMetrics = new Map<
+  string,
+  Array<{
+    timestamp: number;
+    value: number;
+    url: string;
+    userAgent?: string;
+  }>
+>();
 
 async function handler(req: NextRequest): Promise<NextResponse> {
   if (req.method === 'POST') {
@@ -15,7 +18,7 @@ async function handler(req: NextRequest): Promise<NextResponse> {
     try {
       const body = await req.json();
       const { metric, value, url } = body;
-      
+
       if (!metric || typeof value !== 'number' || !url) {
         return NextResponse.json(
           { error: 'Missing required fields: metric, value, url' },
@@ -45,10 +48,7 @@ async function handler(req: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ success: true });
     } catch (error) {
       console.error('Error storing performance metric:', error);
-      return NextResponse.json(
-        { error: 'Failed to store metric' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Failed to store metric' }, { status: 500 });
     }
   }
 
@@ -62,9 +62,9 @@ async function handler(req: NextRequest): Promise<NextResponse> {
       if (metric) {
         const metrics = performanceMetrics.get(metric) || [];
         const recentMetrics = metrics.slice(-limit);
-        
-        const stats = calculateStats(recentMetrics.map(m => m.value));
-        
+
+        const stats = calculateStats(recentMetrics.map((m) => m.value));
+
         return NextResponse.json({
           metric,
           count: recentMetrics.length,
@@ -75,11 +75,11 @@ async function handler(req: NextRequest): Promise<NextResponse> {
 
       // Return all metrics summary
       const summary: { [key: string]: any } = {};
-      
+
       for (const [metricName, metrics] of performanceMetrics.entries()) {
         const recentMetrics = metrics.slice(-limit);
-        const values = recentMetrics.map(m => m.value);
-        
+        const values = recentMetrics.map((m) => m.value);
+
         summary[metricName] = {
           count: recentMetrics.length,
           stats: calculateStats(values),
@@ -94,17 +94,11 @@ async function handler(req: NextRequest): Promise<NextResponse> {
       });
     } catch (error) {
       console.error('Error retrieving performance metrics:', error);
-      return NextResponse.json(
-        { error: 'Failed to retrieve metrics' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Failed to retrieve metrics' }, { status: 500 });
     }
   }
 
-  return NextResponse.json(
-    { error: 'Method not allowed' },
-    { status: 405 }
-  );
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
 }
 
 function calculateStats(values: number[]) {
@@ -134,4 +128,4 @@ export const GET = withPerformance(handler, {
   enableCaching: true,
   cacheTTL: 60, // 1 minute
   enableProfiling: true,
-}); 
+});

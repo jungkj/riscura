@@ -4,4 +4,4 @@ import VantaInspiredDashboard from '@/components/dashboard/VantaInspiredDashboar
 
 export default function VantaDashboardDemoPage() {
   return <VantaInspiredDashboard />;
-} 
+}

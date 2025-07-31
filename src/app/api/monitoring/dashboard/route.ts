@@ -109,14 +109,14 @@ export async function GET(request: NextRequest) {
         trends: await getBusinessTrends(timeRange),
       },
       alerts: {
-        active: activeAlerts.filter(a => !a.resolved).length,
-        critical: activeAlerts.filter(a => !a.resolved && a.severity === 'critical').length,
-        warning: activeAlerts.filter(a => !a.resolved && a.severity === 'warning').length,
+        active: activeAlerts.filter((a) => !a.resolved).length,
+        critical: activeAlerts.filter((a) => !a.resolved && a.severity === 'critical').length,
+        warning: activeAlerts.filter((a) => !a.resolved && a.severity === 'warning').length,
         recentAlerts: activeAlerts
-          .filter(a => !a.resolved)
+          .filter((a) => !a.resolved)
           .sort((a, b) => b.timestamp - a.timestamp)
           .slice(0, 5)
-          .map(alert => ({
+          .map((alert) => ({
             id: alert.id,
             name: alert.name,
             severity: alert.severity,
@@ -150,10 +150,9 @@ export async function GET(request: NextRequest) {
     headers.set('Expires', '0');
 
     return NextResponse.json(response, { headers });
-
   } catch (error) {
     console.error('Dashboard API error:', error);
-    
+
     Sentry.captureException(error, {
       tags: {
         endpoint: '/api/monitoring/dashboard',
@@ -164,7 +163,12 @@ export async function GET(request: NextRequest) {
       {
         success: false,
         error: 'Failed to retrieve dashboard metrics',
-        details: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.message : String(error)) : undefined,
+        details:
+          process.env.NODE_ENV === 'development'
+            ? error instanceof Error
+              ? error.message
+              : String(error)
+            : undefined,
       },
       { status: 500 }
     );
@@ -179,20 +183,22 @@ async function getApiMetrics(timeRange: string) {
     // This would typically query your metrics database/service
     // For now, return mock data based on performance monitoring
     const performanceData = getPerformanceMonitor().getPerformanceSnapshot();
-    
+
     const apiMetrics = Object.entries(performanceData.apiMetrics).map(([endpoint, metrics]) => ({
       endpoint,
       responseTime: metrics.responseTime,
       errorRate: metrics.errorRate,
     }));
 
-    const averageResponseTime = apiMetrics.length > 0
-      ? apiMetrics.reduce((sum, metric) => sum + metric.responseTime, 0) / apiMetrics.length
-      : 0;
+    const averageResponseTime =
+      apiMetrics.length > 0
+        ? apiMetrics.reduce((sum, metric) => sum + metric.responseTime, 0) / apiMetrics.length
+        : 0;
 
-    const averageErrorRate = apiMetrics.length > 0
-      ? apiMetrics.reduce((sum, metric) => sum + metric.errorRate, 0) / apiMetrics.length
-      : 0;
+    const averageErrorRate =
+      apiMetrics.length > 0
+        ? apiMetrics.reduce((sum, metric) => sum + metric.errorRate, 0) / apiMetrics.length
+        : 0;
 
     return {
       averageResponseTime: Math.round(averageResponseTime),
@@ -201,7 +207,7 @@ async function getApiMetrics(timeRange: string) {
       slowestEndpoints: apiMetrics
         .sort((a, b) => b.responseTime - a.responseTime)
         .slice(0, 5)
-        .map(metric => ({
+        .map((metric) => ({
           endpoint: metric.endpoint,
           responseTime: Math.round(metric.responseTime),
         })),
@@ -311,8 +317,8 @@ async function getSystemHealth() {
   }
 
   // Determine overall health
-  const unhealthyServices = Object.values(health).filter(status => status === 'unhealthy').length;
-  const degradedServices = Object.values(health).filter(status => status === 'degraded').length;
+  const unhealthyServices = Object.values(health).filter((status) => status === 'unhealthy').length;
+  const degradedServices = Object.values(health).filter((status) => status === 'degraded').length;
 
   if (unhealthyServices > 0) {
     health.overall = 'unhealthy';
@@ -343,7 +349,7 @@ async function getHistoricalMetrics(timeRange: string) {
   try {
     const now = Date.now();
     const intervals = getTimeIntervals(timeRange);
-    
+
     // Generate mock historical data
     const historical = {
       performance: {
@@ -389,10 +395,10 @@ async function getHistoricalMetrics(timeRange: string) {
 function getTimeIntervals(timeRange: string): number[] {
   const now = Date.now();
   const intervals: number[] = [];
-  
+
   let duration: number;
   let step: number;
-  
+
   switch (timeRange) {
     case '1h':
       duration = 60 * 60 * 1000; // 1 hour
@@ -414,10 +420,10 @@ function getTimeIntervals(timeRange: string): number[] {
       duration = 60 * 60 * 1000; // Default 1 hour
       step = 60 * 1000; // 1 minute
   }
-  
+
   for (let time = now - duration; time <= now; time += step) {
     intervals.push(time);
   }
-  
+
   return intervals;
-} 
+}

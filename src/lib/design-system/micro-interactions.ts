@@ -11,12 +11,12 @@ export const timings = {
   instant: 0.1,
   quick: 0.2,
   snappy: 0.3,
-  
+
   // Standard interactions
   normal: 0.4,
   moderate: 0.5,
   relaxed: 0.6,
-  
+
   // Complex animations
   slow: 0.8,
   deliberate: 1.0,
@@ -31,13 +31,13 @@ export const easings = {
   easeIn: [0.42, 0.0, 1.0, 1.0],
   easeOut: [0.0, 0.0, 0.58, 1.0],
   easeInOut: [0.42, 0.0, 0.58, 1.0],
-  
+
   // Premium easings (Apple/Google inspired)
   snappy: [0.25, 0.46, 0.45, 0.94],
   smooth: [0.23, 1, 0.32, 1],
   bounce: [0.68, -0.55, 0.265, 1.55],
   elastic: [0.175, 0.885, 0.32, 1.275],
-  
+
   // Context-specific easings
   slideIn: [0.25, 0.46, 0.45, 0.94],
   slideOut: [0.55, 0.055, 0.675, 0.19],
@@ -50,50 +50,50 @@ export const variants = {
   // Page Transitions
   page: {
     initial: { opacity: 0, y: 20 },
-    animate: { 
-      opacity: 1, 
+    animate: {
+      opacity: 1,
       y: 0,
       transition: {
         duration: timings.moderate,
-        ease: easings.smooth
-      }
+        ease: easings.smooth,
+      },
     },
-    exit: { 
-      opacity: 0, 
+    exit: {
+      opacity: 0,
       y: -20,
       transition: {
         duration: timings.quick,
-        ease: easings.slideOut
-      }
-    }
+        ease: easings.slideOut,
+      },
+    },
   } as Variants,
 
   // Card Animations
   card: {
     initial: { opacity: 0, scale: 0.95, y: 20 },
-    animate: { 
-      opacity: 1, 
-      scale: 1, 
+    animate: {
+      opacity: 1,
+      scale: 1,
       y: 0,
       transition: {
         duration: timings.normal,
-        ease: easings.smooth
-      }
+        ease: easings.smooth,
+      },
     },
     hover: {
       y: -4,
       scale: 1.02,
       transition: {
         duration: timings.quick,
-        ease: easings.snappy
-      }
+        ease: easings.snappy,
+      },
     },
     tap: {
       scale: 0.98,
       transition: {
         duration: timings.instant,
-        ease: easings.snappy
-      }
+        ease: easings.snappy,
+      },
     },
     exit: {
       opacity: 0,
@@ -101,9 +101,9 @@ export const variants = {
       y: 20,
       transition: {
         duration: timings.quick,
-        ease: easings.slideOut
-      }
-    }
+        ease: easings.slideOut,
+      },
+    },
   } as Variants,
 
   // List Item Animations
@@ -115,25 +115,25 @@ export const variants = {
       transition: {
         duration: timings.normal,
         ease: easings.smooth,
-        delay: i * 0.05 // Staggered animation
-      }
+        delay: i * 0.05, // Staggered animation
+      },
     }),
     hover: {
       x: 4,
       backgroundColor: 'rgba(59, 130, 246, 0.05)',
       transition: {
         duration: timings.quick,
-        ease: easings.snappy
-      }
+        ease: easings.snappy,
+      },
     },
     exit: {
       opacity: 0,
       x: -20,
       transition: {
         duration: timings.quick,
-        ease: easings.slideOut
-      }
-    }
+        ease: easings.slideOut,
+      },
+    },
   } as Variants,
 
   // Button Interactions
@@ -143,39 +143,39 @@ export const variants = {
       scale: 1.05,
       transition: {
         duration: timings.quick,
-        ease: easings.snappy
-      }
+        ease: easings.snappy,
+      },
     },
     tap: {
       scale: 0.95,
       transition: {
         duration: timings.instant,
-        ease: easings.snappy
-      }
+        ease: easings.snappy,
+      },
     },
     loading: {
       scale: [1, 1.05, 1],
       transition: {
         duration: timings.slow,
         ease: easings.smooth,
-        repeat: Infinity
-      }
+        repeat: Infinity,
+      },
     },
     success: {
       scale: [1, 1.1, 1],
       backgroundColor: ['#3b82f6', '#10b981', '#3b82f6'],
       transition: {
         duration: timings.moderate,
-        ease: easings.bounce
-      }
+        ease: easings.bounce,
+      },
     },
     error: {
       x: [-2, 2, -2, 2, 0],
       transition: {
         duration: timings.normal,
-        ease: easings.snappy
-      }
-    }
+        ease: easings.snappy,
+      },
+    },
   } as Variants,
 
   // Modal Animations
@@ -187,8 +187,8 @@ export const variants = {
       y: 0,
       transition: {
         duration: timings.normal,
-        ease: easings.modalIn
-      }
+        ease: easings.modalIn,
+      },
     },
     exit: {
       opacity: 0,
@@ -196,9 +196,9 @@ export const variants = {
       y: 20,
       transition: {
         duration: timings.quick,
-        ease: easings.modalOut
-      }
-    }
+        ease: easings.modalOut,
+      },
+    },
   } as Variants,
 
   // Backdrop Animations
@@ -208,16 +208,16 @@ export const variants = {
       opacity: 1,
       transition: {
         duration: timings.normal,
-        ease: easings.ease
-      }
+        ease: easings.ease,
+      },
     },
     exit: {
       opacity: 0,
       transition: {
         duration: timings.quick,
-        ease: easings.ease
-      }
-    }
+        ease: easings.ease,
+      },
+    },
   } as Variants,
 
   // Notification Animations
@@ -229,8 +229,8 @@ export const variants = {
       scale: 1,
       transition: {
         duration: timings.normal,
-        ease: easings.bounce
-      }
+        ease: easings.bounce,
+      },
     },
     exit: {
       opacity: 0,
@@ -238,9 +238,9 @@ export const variants = {
       scale: 0.9,
       transition: {
         duration: timings.quick,
-        ease: easings.slideOut
-      }
-    }
+        ease: easings.slideOut,
+      },
+    },
   } as Variants,
 
   // Loading Skeleton
@@ -250,9 +250,9 @@ export const variants = {
       transition: {
         duration: timings.deliberate,
         ease: easings.ease,
-        repeat: Infinity
-      }
-    }
+        repeat: Infinity,
+      },
+    },
   } as Variants,
 
   // Stagger Container
@@ -260,9 +260,9 @@ export const variants = {
     animate: {
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
+        delayChildren: 0.2,
+      },
+    },
   } as Variants,
 
   // Icon Animations
@@ -273,32 +273,32 @@ export const variants = {
       rotate: 5,
       transition: {
         duration: timings.quick,
-        ease: easings.snappy
-      }
+        ease: easings.snappy,
+      },
     },
     tap: {
       scale: 0.9,
       transition: {
         duration: timings.instant,
-        ease: easings.snappy
-      }
+        ease: easings.snappy,
+      },
     },
     spin: {
       rotate: 360,
       transition: {
         duration: timings.deliberate,
         ease: easings.linear,
-        repeat: Infinity
-      }
+        repeat: Infinity,
+      },
     },
     success: {
       scale: [1, 1.3, 1],
       rotate: [0, 10, -10, 0],
       transition: {
         duration: timings.moderate,
-        ease: easings.bounce
-      }
-    }
+        ease: easings.bounce,
+      },
+    },
   } as Variants,
 
   // Progress Animations
@@ -308,9 +308,9 @@ export const variants = {
       scaleX: progress / 100,
       transition: {
         duration: timings.moderate,
-        ease: easings.smooth
-      }
-    })
+        ease: easings.smooth,
+      },
+    }),
   } as Variants,
 
   // Drag and Drop
@@ -321,18 +321,18 @@ export const variants = {
       zIndex: 1000,
       transition: {
         duration: timings.quick,
-        ease: easings.snappy
-      }
+        ease: easings.snappy,
+      },
     },
     dragHover: {
       scale: 1.1,
       backgroundColor: 'rgba(59, 130, 246, 0.1)',
       transition: {
         duration: timings.quick,
-        ease: easings.snappy
-      }
-    }
-  } as Variants
+        ease: easings.snappy,
+      },
+    },
+  } as Variants,
 } as const;
 
 // Interaction Presets
@@ -342,29 +342,26 @@ export const interactions = {
     scale: 1.02,
     transition: {
       duration: timings.quick,
-      ease: easings.snappy
-    }
+      ease: easings.snappy,
+    },
   },
-  
+
   liftHover: {
     y: -2,
     scale: 1.02,
     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
     transition: {
       duration: timings.quick,
-      ease: easings.snappy
-    }
+      ease: easings.snappy,
+    },
   },
-  
+
   glowHover: {
-    boxShadow: [
-      '0 0 0 rgba(59, 130, 246, 0)',
-      '0 0 20px rgba(59, 130, 246, 0.3)'
-    ],
+    boxShadow: ['0 0 0 rgba(59, 130, 246, 0)', '0 0 20px rgba(59, 130, 246, 0.3)'],
     transition: {
       duration: timings.normal,
-      ease: easings.smooth
-    }
+      ease: easings.smooth,
+    },
   },
 
   // Focus Effects
@@ -372,8 +369,8 @@ export const interactions = {
     boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.3)',
     transition: {
       duration: timings.quick,
-      ease: easings.snappy
-    }
+      ease: easings.snappy,
+    },
   },
 
   // Touch Effects (for mobile)
@@ -382,8 +379,8 @@ export const interactions = {
     backgroundColor: 'rgba(0, 0, 0, 0.05)',
     transition: {
       duration: timings.instant,
-      ease: easings.snappy
-    }
+      ease: easings.snappy,
+    },
   },
 
   // Loading States
@@ -393,8 +390,8 @@ export const interactions = {
     transition: {
       duration: timings.slow,
       ease: easings.ease,
-      repeat: Infinity
-    }
+      repeat: Infinity,
+    },
   },
 
   shimmer: {
@@ -402,9 +399,9 @@ export const interactions = {
     transition: {
       duration: timings.deliberate,
       ease: easings.linear,
-      repeat: Infinity
-    }
-  }
+      repeat: Infinity,
+    },
+  },
 } as const;
 
 // Success/Error Feedback Animations
@@ -414,8 +411,8 @@ export const feedbackAnimations = {
     backgroundColor: ['#3b82f6', '#10b981', '#3b82f6'],
     transition: {
       duration: timings.moderate,
-      ease: easings.bounce
-    }
+      ease: easings.bounce,
+    },
   },
 
   error: {
@@ -423,8 +420,8 @@ export const feedbackAnimations = {
     backgroundColor: ['#3b82f6', '#ef4444', '#3b82f6'],
     transition: {
       duration: timings.normal,
-      ease: easings.snappy
-    }
+      ease: easings.snappy,
+    },
   },
 
   warning: {
@@ -432,8 +429,8 @@ export const feedbackAnimations = {
     backgroundColor: ['#3b82f6', '#f59e0b', '#3b82f6'],
     transition: {
       duration: timings.normal,
-      ease: easings.smooth
-    }
+      ease: easings.smooth,
+    },
   },
 
   info: {
@@ -441,9 +438,9 @@ export const feedbackAnimations = {
     backgroundColor: ['#3b82f6', '#06b6d4', '#3b82f6'],
     transition: {
       duration: timings.normal,
-      ease: easings.smooth
-    }
-  }
+      ease: easings.smooth,
+    },
+  },
 } as const;
 
 // Animation Utilities
@@ -452,15 +449,15 @@ export const animationUtils = {
   staggerChildren: (delay: number = 0.1) => ({
     transition: {
       staggerChildren: delay,
-      delayChildren: delay
-    }
+      delayChildren: delay,
+    },
   }),
 
   // Chain multiple animations
   sequence: (...animations: any[]) => ({
     transition: {
-      times: animations.map((_, i) => i / (animations.length - 1))
-    }
+      times: animations.map((_, i) => i / (animations.length - 1)),
+    },
   }),
 
   // Spring configurations
@@ -469,21 +466,21 @@ export const animationUtils = {
     wobbly: { type: 'spring', stiffness: 180, damping: 12 },
     stiff: { type: 'spring', stiffness: 210, damping: 20 },
     slow: { type: 'spring', stiffness: 80, damping: 14 },
-    bouncy: { type: 'spring', stiffness: 150, damping: 8 }
+    bouncy: { type: 'spring', stiffness: 150, damping: 8 },
   },
 
   // Reduced motion considerations
   respectsMotion: (animation: any, reducedMotion: any = {}) => ({
     ...animation,
-    '@media (prefers-reduced-motion: reduce)': reducedMotion
-  })
+    '@media (prefers-reduced-motion: reduce)': reducedMotion,
+  }),
 } as const;
 
 // Accessibility Helpers
 export const a11y = {
   // Respect user's motion preferences
   reduceMotion: {
-    transition: { duration: 0.01 }
+    transition: { duration: 0.01 },
   },
 
   // Focus management
@@ -493,7 +490,7 @@ export const a11y = {
     'select',
     'textarea',
     'a[href]',
-    '[tabindex]:not([tabindex="-1"])'
+    '[tabindex]:not([tabindex="-1"])',
   ].join(', '),
 
   // Screen reader announcements
@@ -501,8 +498,8 @@ export const a11y = {
     loading: 'Loading content, please wait',
     loaded: 'Content loaded successfully',
     error: 'An error occurred while loading content',
-    success: 'Action completed successfully'
-  }
+    success: 'Action completed successfully',
+  },
 } as const;
 
 // Performance Optimizations
@@ -511,26 +508,26 @@ export const performance = {
   gpuAccelerated: {
     willChange: 'transform, opacity',
     backfaceVisibility: 'hidden',
-    perspective: 1000
+    perspective: 1000,
   },
 
   // Optimize for mobile devices
   mobileOptimized: {
     transform: 'translateZ(0)', // Force hardware acceleration
     WebkitBackfaceVisibility: 'hidden',
-    WebkitPerspective: 1000
-  }
+    WebkitPerspective: 1000,
+  },
 } as const;
 
 // Theme-aware animations
 export const themeAnimations = {
   light: {
     background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
-    color: '#1e293b'
+    color: '#1e293b',
   },
-  
+
   dark: {
     background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-    color: '#f8fafc'
-  }
-} as const; 
+    color: '#f8fafc',
+  },
+} as const;

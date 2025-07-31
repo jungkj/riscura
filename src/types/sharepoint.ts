@@ -51,7 +51,7 @@ export enum ImportJobStatus {
   PROCESSING = 'PROCESSING',
   COMPLETED = 'COMPLETED',
   FAILED = 'FAILED',
-  CANCELLED = 'CANCELLED'
+  CANCELLED = 'CANCELLED',
 }
 
 export interface ImportJobMetadata {
@@ -90,7 +90,6 @@ export interface ExcelValidationResult {
     assessmentCount?: number;
   };
 }
-
 
 // API Request/Response Types
 
@@ -156,13 +155,15 @@ export interface GetImportJobResponse {
 }
 
 export interface ListImportJobsResponse {
-  jobs?: Array<ImportJob & {
-    importedBy?: {
-      id: string;
-      name?: string | null;
-      email?: string | null;
-    };
-  }>;
+  jobs?: Array<
+    ImportJob & {
+      importedBy?: {
+        id: string;
+        name?: string | null;
+        email?: string | null;
+      };
+    }
+  >;
   total?: number;
   limit?: number;
   offset?: number;
@@ -176,9 +177,9 @@ export interface UseSharePointIntegrationReturn {
   isLoading: boolean;
   isConnecting: boolean;
   error: string | null;
-  connect: (siteUrl: string) => Promise<{ 
-    success: boolean; 
-    integration?: SharePointIntegration; 
+  connect: (siteUrl: string) => Promise<{
+    success: boolean;
+    integration?: SharePointIntegration;
     error?: string;
   }>;
   disconnect: (integrationId: string) => Promise<boolean>;
@@ -208,9 +209,9 @@ export interface UseImportJobsReturn {
   isLoading: boolean;
   error: string | null;
   total: number;
-  createImportJob: (params: CreateImportJobRequest) => Promise<{ 
-    success: boolean; 
-    jobId?: string; 
+  createImportJob: (params: CreateImportJobRequest) => Promise<{
+    success: boolean;
+    jobId?: string;
     error?: string;
   }>;
   fetchJobs: (integrationId?: string, limit?: number, offset?: number) => Promise<void>;

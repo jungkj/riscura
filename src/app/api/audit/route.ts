@@ -5,7 +5,12 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { withAPI } from '@/lib/api/middleware';
-import { getAuditLogger, AuditQueryOptions, AuditAction, AuditEntity } from '@/lib/audit/audit-logger';
+import {
+  getAuditLogger,
+  AuditQueryOptions,
+  AuditAction,
+  AuditEntity,
+} from '@/lib/audit/audit-logger';
 import { z } from 'zod';
 import { db } from '@/lib/db';
 
@@ -37,7 +42,7 @@ const AuditQuerySchema = z.object({
 async function handleGet(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const user = (req as any).user;
-  
+
   if (!user || !user.organizationId) {
     return NextResponse.json(
       {
@@ -50,7 +55,7 @@ async function handleGet(req: NextRequest) {
       { status: 403 }
     );
   }
-  
+
   const organizationId = user.organizationId;
 
   try {
@@ -109,10 +114,9 @@ async function handleGet(req: NextRequest) {
         },
       },
     });
-
   } catch (error) {
     console.error('Audit query error:', error);
-    
+
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
@@ -145,15 +149,12 @@ async function handleGet(req: NextRequest) {
 // EXPORT HANDLERS
 // ============================================================================
 
-export const GET = withAPI(
-  handleGet,
-  {
-    requireAuth: true,
-    requiredPermissions: ['audit:read'],
-    rateLimit: {
-      windowMs: 15 * 60 * 1000, // 15 minutes
-      maxRequests: 100,
-    },
-    validateQuery: AuditQuerySchema,
-  }
-);
+export const GET = withAPI(handleGet, {
+  requireAuth: true,
+  requiredPermissions: ['audit:read'],
+  rateLimit: {
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    maxRequests: 100,
+  },
+  validateQuery: AuditQuerySchema,
+});

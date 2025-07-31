@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import DocumentUpload from '@/components/documents/DocumentUpload';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardContent } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -126,9 +126,7 @@ export default function DocumentAnalysisPage() {
       case 'processing':
         return <DaisyBadge variant="secondary"><Clock className="h-3 w-3 mr-1" />Processing</DaisyBadge>;
       case 'failed':
-        return <DaisyBadge variant="error"><DaisyAlertTriangle className="h-3 w-3 mr-1" >
-  Failed
-</DaisyBadge></DaisyBadge>;
+        return <DaisyBadge variant="error"><AlertTriangle className="h-3 w-3 mr-1" />Failed</DaisyBadge>;
       default:
         return <DaisyBadge variant="outline">Unknown</DaisyBadge>;
     }
@@ -156,9 +154,8 @@ export default function DocumentAnalysisPage() {
             Upload and analyze documents with AI-powered risk identification.
           </p>
         </div>
-        <DaisyButton onClick={handleRefreshStats} variant="outline" >
-  <RefreshCw className="mr-2 h-4 w-4" />
-</DaisyButton>
+        <DaisyButton onClick={handleRefreshStats} variant="outline">
+          <RefreshCw className="mr-2 h-4 w-4" />
           Refresh Stats
         </DaisyButton>
       </motion.div>
@@ -170,10 +167,8 @@ export default function DocumentAnalysisPage() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2 }}
       >
-        <DaisyCard >
-  <DaisyCardContent className="p-6" >
-  </DaisyCard>
-</DaisyCardContent>
+        <DaisyCard>
+          <DaisyCardContent className="p-6">
             <div className="flex items-center gap-2">
               <FileText className="h-5 w-5 text-blue-600" />
               <div>
@@ -184,10 +179,8 @@ export default function DocumentAnalysisPage() {
           </DaisyCardContent>
         </DaisyCard>
         
-        <DaisyCard >
-  <DaisyCardContent className="p-6" >
-  </DaisyCard>
-</DaisyCardContent>
+        <DaisyCard>
+          <DaisyCardContent className="p-6">
             <div className="flex items-center gap-2">
               <Brain className="h-5 w-5 text-[#191919]" />
               <div>
@@ -198,14 +191,11 @@ export default function DocumentAnalysisPage() {
           </DaisyCardContent>
         </DaisyCard>
         
-        <DaisyCard >
-  <DaisyCardContent className="p-6" >
-  </DaisyCard>
-</DaisyCardContent>
+        <DaisyCard>
+          <DaisyCardContent className="p-6">
             <div className="flex items-center gap-2">
-              <DaisyAlertTriangle className="h-5 w-5 text-orange-600" >
-  <div>
-</DaisyAlertTriangle>
+              <AlertTriangle className="h-5 w-5 text-orange-600" />
+              <div>
                 <p className="text-2xl font-bold">{analysisStats.risksIdentified}</p>
                 <p className="text-sm text-muted-foreground">Risks Found</p>
               </div>
@@ -213,10 +203,8 @@ export default function DocumentAnalysisPage() {
           </DaisyCardContent>
         </DaisyCard>
         
-        <DaisyCard >
-  <DaisyCardContent className="p-6" >
-  </DaisyCard>
-</DaisyCardContent>
+        <DaisyCard>
+          <DaisyCardContent className="p-6">
             <div className="flex items-center gap-2">
               <CheckCircle className="h-5 w-5 text-green-600" />
               <div>
@@ -228,21 +216,21 @@ export default function DocumentAnalysisPage() {
         </DaisyCard>
       </motion.div>
 
-      <DaisyTabs defaultValue="upload" className="space-y-6" />
+      <DaisyTabs defaultValue="upload" className="space-y-6">
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <DaisyTabsList className="grid w-full grid-cols-4" />
-            <DaisyTabsTrigger value="upload">Upload & Analyze</DaisyTabs>
+          <DaisyTabsList className="grid w-full grid-cols-4">
+            <DaisyTabsTrigger value="upload">Upload & Analyze</DaisyTabsTrigger>
             <DaisyTabsTrigger value="history">Analysis History</DaisyTabsTrigger>
             <DaisyTabsTrigger value="trends">Risk Trends</DaisyTabsTrigger>
             <DaisyTabsTrigger value="insights">AI Insights</DaisyTabsTrigger>
           </DaisyTabsList>
         </motion.div>
 
-        <DaisyTabsContent value="upload" className="space-y-6" />
+        <DaisyTabsContent value="upload" className="space-y-6">
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -433,4 +421,6 @@ export default function DocumentAnalysisPage() {
       </DaisyTabs>
     </motion.div>
   );
-} 
+}
+
+export default DocumentAnalysisPage; 

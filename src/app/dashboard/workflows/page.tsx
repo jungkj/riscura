@@ -12,4 +12,4 @@ export default function WorkflowsPageRoute() {
       </MainLayout>
     </ProtectedRoute>
   );
-} 
+}

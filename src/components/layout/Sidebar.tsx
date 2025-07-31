@@ -1,3 +1,6 @@
+'use client';
+
+import React from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -411,9 +414,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
 
   // Collapsed sidebar view
   if (!isOpen) {
-
-  return (
-    <div className="flex flex-col h-full w-16 bg-[#FAFAFA] border-r border-gray-200">
+    return (
+      <div className="flex flex-col h-full w-16 bg-[#FAFAFA] border-r border-gray-200">
         {/* Collapsed Header with Logo and Toggle */}
         <div className="flex flex-col items-center h-20 border-b border-gray-200 py-2">
           <div className="flex-1 flex items-center justify-center">
@@ -430,33 +432,35 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
             variant="ghost"
             shape="square" size="md"
             onClick={onToggle}
-            className="w-6 h-6 text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] transition-colors" >
-  <ChevronRight className="w-3 h-3" />
-</DaisyButton>
+            className="w-6 h-6 text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] transition-colors"
+          >
+            <ChevronRight className="w-3 h-3" />
           </DaisyButton>
         </div>
 
         {/* Collapsed Navigation */}
         <div className="flex-1 py-4 space-y-2">
           {navigationSections.map((section) => (
-            <DaisyTooltipProvider key={section.id} />
-              <DaisyTooltip />
-                <DaisyTooltipTrigger asChild />
+            <DaisyTooltipProvider key={section.id}>
+              <DaisyTooltip>
+                <DaisyTooltipTrigger asChild>
                   <DaisyButton
                     variant="ghost"
-                    shape="square" size="md"
+                    shape="square"
+                    size="md"
                     className={cn(
                       "w-10 h-10 mx-auto text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] transition-all duration-200",
                       section.items.some(item => isItemActive(item.href)) && "bg-[#199BEC] text-white shadow-md"
                     )}
-                    onClick={() => onToggle?.()} />
+                    onClick={() => onToggle?.()}
+                  >
                     {section.items[0] && (() => {
                       const IconComponent = section.items[0].icon;
                       return <IconComponent className="w-5 h-5" />;
                     })()}
-                  </DaisyTooltipProvider>
+                  </DaisyButton>
                 </DaisyTooltipTrigger>
-                <DaisyTooltipContent side="right" className="font-medium" />
+                <DaisyTooltipContent side="right" className="font-medium">
                   <div>
                     <p className="font-semibold">{section.title}</p>
                     <p className="text-xs text-gray-500">{section.description}</p>
@@ -469,17 +473,17 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
 
         {/* Collapsed User */}
         <div className="p-4 border-t border-gray-200">
-          <DaisyTooltipProvider />
-            <DaisyTooltip />
-              <DaisyTooltipTrigger asChild />
-                <DaisyAvatar className="w-8 h-8 mx-auto cursor-pointer" />
+          <DaisyTooltipProvider>
+            <DaisyTooltip>
+              <DaisyTooltipTrigger asChild>
+                <DaisyAvatar className="w-8 h-8 mx-auto cursor-pointer">
                   <DaisyAvatarImage src={user?.avatar} />
-                  <DaisyAvatarFallback className="text-xs bg-[#199BEC] text-white" />
+                  <DaisyAvatarFallback className="text-xs bg-[#199BEC] text-white">
                     {user?.firstName?.[0]}{user?.lastName?.[0]}
-                  </DaisyTooltipProvider>
+                  </DaisyAvatarFallback>
                 </DaisyAvatar>
               </DaisyTooltipTrigger>
-              <DaisyTooltipContent side="right" className="font-medium" />
+              <DaisyTooltipContent side="right" className="font-medium">
                 {user?.firstName} {user?.lastName}
               </DaisyTooltipContent>
             </DaisyTooltip>
@@ -487,7 +491,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
         </div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="flex flex-col h-full w-64 bg-[#FAFAFA] border-r border-gray-200" data-tour="sidebar">
@@ -508,9 +512,9 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           variant="ghost"
           shape="square" size="md"
           onClick={onToggle}
-          className="w-8 h-8 text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] transition-colors" >
-  <ChevronLeft className="w-4 h-4" />
-</DaisyButton>
+          className="w-8 h-8 text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] transition-colors"
+        >
+          <ChevronLeft className="w-4 h-4" />
         </DaisyButton>
       </div>
 
@@ -530,9 +534,10 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
               variant="ghost"
               size="sm"
               onClick={() => setSearchQuery('')}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-gray-400 hover:text-[#191919]" />
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-gray-400 hover:text-[#191919]"
+            >
               ×
-            </DaisyInput>
+            </DaisyButton>
           )}
         </div>
         <div className="mt-2 text-xs text-gray-500 flex items-center gap-1">
@@ -597,7 +602,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                     variant="ghost"
                     size="sm"
                     onClick={() => toggleSection(section.id)}
-                    className="w-5 h-5 p-0 text-gray-500 hover:text-[#191919] hover:bg-[#199BEC]/10 transition-colors" />
+                    className="w-5 h-5 p-0 text-gray-500 hover:text-[#191919] hover:bg-[#199BEC]/10 transition-colors"
+                  >
                     {isExpanded(section.id) ? (
                       <ChevronDown className="w-3 h-3" />
                     ) : (
@@ -633,9 +639,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                           {/* Badges and Actions */}
                           <div className="flex items-center gap-1">
                             {item.isNew && (
-                              <DaisyBadge variant="secondary" className="px-1.5 py-0.5 text-xs bg-[#199BEC] text-white border-0" >
-  New
-</DaisyBadge>
+                              <DaisyBadge variant="secondary" className="px-1.5 py-0.5 text-xs bg-[#199BEC] text-white border-0">
+                                New
                               </DaisyBadge>
                             )}
                           </div>
@@ -674,11 +679,11 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
       {/* User Profile */}
       <div className="p-4 border-t border-gray-200" data-tour="user-profile">
         <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#199BEC]/10 transition-colors cursor-pointer group">
-          <DaisyAvatar className="w-8 h-8" />
+          <DaisyAvatar className="w-8 h-8">
             <DaisyAvatarImage src={user?.avatar} />
-            <DaisyAvatarFallback className="bg-[#199BEC] text-white text-sm" />
+            <DaisyAvatarFallback className="bg-[#199BEC] text-white text-sm">
               {user?.firstName?.[0]}{user?.lastName?.[0]}
-            </DaisyAvatar>
+            </DaisyAvatarFallback>
           </DaisyAvatar>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-[#191919] font-inter truncate">
@@ -686,9 +691,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
             </p>
             <p className="text-xs text-gray-600 truncate">{user?.email}</p>
           </div>
-          <DaisyButton variant="ghost" shape="square" size="md" className="w-6 h-6 text-gray-500 hover:text-[#199BEC] opacity-0 group-hover:opacity-100 transition-all" data-tour="help-menu" >
-  <Settings className="w-4 h-4" />
-</DaisyButton>
+          <DaisyButton variant="ghost" shape="square" size="md" className="w-6 h-6 text-gray-500 hover:text-[#199BEC] opacity-0 group-hover:opacity-100 transition-all" data-tour="help-menu">
+            <Settings className="w-4 h-4" />
           </DaisyButton>
         </div>
       </div>

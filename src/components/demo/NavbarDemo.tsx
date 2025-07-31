@@ -1,26 +1,26 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
-import { 
-  Navbar, 
-  NavBody, 
-  NavItems, 
-  MobileNav, 
-  MobileNavHeader, 
+import {
+  Navbar,
+  NavBody,
+  NavItems,
+  MobileNav,
+  MobileNavHeader,
   MobileNavMenu,
   MobileNavToggle,
-  NavbarLogo, 
-  NavbarButton 
+  NavbarLogo,
+  NavbarButton,
 } from '@/components/ui/resizable-navbar';
 
 export default function NavbarDemo() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { name: "Features", link: "#features" },
-    { name: "Pricing", link: "#pricing" },
-    { name: "About", link: "#about" },
-    { name: "Contact", link: "#contact" },
+    { name: 'Features', link: '#features' },
+    { name: 'Pricing', link: '#pricing' },
+    { name: 'About', link: '#about' },
+    { name: 'Contact', link: '#contact' },
   ];
 
   return (
@@ -38,20 +38,17 @@ export default function NavbarDemo() {
             </NavbarButton>
           </div>
         </NavBody>
-        
+
         <MobileNav>
           <MobileNavHeader>
             <NavbarLogo />
-            <MobileNavToggle 
+            <MobileNavToggle
               isOpen={isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             />
           </MobileNavHeader>
-          
-          <MobileNavMenu 
-            isOpen={isMobileMenuOpen}
-            onClose={() => setIsMobileMenuOpen(false)}
-          >
+
+          <MobileNavMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)}>
             {navItems.map((item, idx) => (
               <a
                 key={idx}
@@ -79,9 +76,7 @@ export default function NavbarDemo() {
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
-              <h1 className="text-5xl font-bold text-gray-900 mb-6">
-                Resizable Navbar Demo
-              </h1>
+              <h1 className="text-5xl font-bold text-gray-900 mb-6">Resizable Navbar Demo</h1>
               <p className="text-xl text-gray-600 mb-8">
                 Scroll down to see the navbar shrink and transform with beautiful animations
               </p>
@@ -115,12 +110,10 @@ export default function NavbarDemo() {
           <div key={i} className="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 p-8">
             <div className="max-w-4xl mx-auto">
               <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                  Section {i + 2}
-                </h2>
+                <h2 className="text-3xl font-bold text-gray-900 mb-6">Section {i + 2}</h2>
                 <p className="text-gray-600 text-lg leading-relaxed">
-                  Keep scrolling to see how the navbar behaves at different scroll positions. 
-                  The navbar will smoothly transition between its full width and compact states,
+                  Keep scrolling to see how the navbar behaves at different scroll positions. The
+                  navbar will smoothly transition between its full width and compact states,
                   providing an elegant user experience that adapts to user interaction.
                 </p>
                 <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -140,4 +133,4 @@ export default function NavbarDemo() {
       </div>
     </>
   );
-} 
+}

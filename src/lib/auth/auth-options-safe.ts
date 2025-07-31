@@ -7,11 +7,21 @@ import jwt from 'jsonwebtoken';
 
 // Safe environment getter
 const safeEnv = {
-  get GOOGLE_CLIENT_ID() { return process.env.GOOGLE_CLIENT_ID; },
-  get GOOGLE_CLIENT_SECRET() { return process.env.GOOGLE_CLIENT_SECRET; },
-  get NEXTAUTH_SECRET() { return process.env.NEXTAUTH_SECRET || 'development-secret'; },
-  get JWT_ACCESS_SECRET() { return process.env.JWT_ACCESS_SECRET || process.env.NEXTAUTH_SECRET || 'development-secret'; },
-  get NODE_ENV() { return process.env.NODE_ENV; },
+  get GOOGLE_CLIENT_ID() {
+    return process.env.GOOGLE_CLIENT_ID;
+  },
+  get GOOGLE_CLIENT_SECRET() {
+    return process.env.GOOGLE_CLIENT_SECRET;
+  },
+  get NEXTAUTH_SECRET() {
+    return process.env.NEXTAUTH_SECRET || 'development-secret';
+  },
+  get JWT_ACCESS_SECRET() {
+    return process.env.JWT_ACCESS_SECRET || process.env.NEXTAUTH_SECRET || 'development-secret';
+  },
+  get NODE_ENV() {
+    return process.env.NODE_ENV;
+  },
 };
 
 // Build providers array
@@ -59,7 +69,7 @@ providers.push(
 // Create auth options factory
 export async function createAuthOptions(): Promise<NextAuthOptions> {
   let adapter;
-  
+
   // Try to get database adapter
   try {
     const { db } = await import('@/lib/db');
@@ -86,7 +96,7 @@ export async function createAuthOptions(): Promise<NextAuthOptions> {
         const payload = {
           ...token,
           iat: Math.floor(Date.now() / 1000),
-          exp: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60),
+          exp: Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60,
         };
         return jwt.sign(payload, secret, { algorithm: 'HS256' });
       },

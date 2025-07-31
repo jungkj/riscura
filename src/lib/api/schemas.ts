@@ -59,33 +59,35 @@ export const createControlSchema = z.object({
 
 export const updateControlSchema = createControlSchema.partial();
 
-export const controlQuerySchema = z.object({
-  ...paginationSchema.shape,
-  ...sortingSchema.shape,
-  ...searchSchema.shape,
-  controlType: z.string().optional(),
-  category: z.string().optional(),
-  status: z.string().optional(),
-  effectiveness: z.string().optional(),
-  frequency: z.string().optional(),
-  ownerId: z.string().optional(),
-  riskId: z.string().optional(),
-  testDue: z.enum(['overdue', 'due_soon', 'upcoming']).optional(),
-  // Enhanced filtering fields
-  type: z.string().optional(),
-  implementationStatus: z.string().optional(),
-  framework: z.string().optional(),
-  tags: z.array(z.string()).optional(),
-  createdAfter: z.string().datetime().optional(),
-  createdBefore: z.string().datetime().optional(),
-  reviewDue: z.boolean().optional(),
-  sortBy: z.string().optional(),
-  sortOrder: z.enum(['asc', 'desc']).optional(),
-}).transform((data) => ({
-  ...data,
-  skip: (parseInt(data.page) - 1) * parseInt(data.limit),
-  limit: parseInt(data.limit),
-}));
+export const controlQuerySchema = z
+  .object({
+    ...paginationSchema.shape,
+    ...sortingSchema.shape,
+    ...searchSchema.shape,
+    controlType: z.string().optional(),
+    category: z.string().optional(),
+    status: z.string().optional(),
+    effectiveness: z.string().optional(),
+    frequency: z.string().optional(),
+    ownerId: z.string().optional(),
+    riskId: z.string().optional(),
+    testDue: z.enum(['overdue', 'due_soon', 'upcoming']).optional(),
+    // Enhanced filtering fields
+    type: z.string().optional(),
+    implementationStatus: z.string().optional(),
+    framework: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    createdAfter: z.string().datetime().optional(),
+    createdBefore: z.string().datetime().optional(),
+    reviewDue: z.boolean().optional(),
+    sortBy: z.string().optional(),
+    sortOrder: z.enum(['asc', 'desc']).optional(),
+  })
+  .transform((data) => ({
+    ...data,
+    skip: (parseInt(data.page) - 1) * parseInt(data.limit),
+    limit: parseInt(data.limit),
+  }));
 
 export const controlCreateSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -93,10 +95,16 @@ export const controlCreateSchema = z.object({
   controlId: z.string().optional(),
   category: z.enum(['TECHNICAL', 'ADMINISTRATIVE', 'PHYSICAL', 'OPERATIONAL', 'MANAGEMENT']),
   type: z.enum(['PREVENTIVE', 'DETECTIVE', 'CORRECTIVE', 'DIRECTIVE', 'COMPENSATING']),
-  status: z.enum(['PLANNED', 'IMPLEMENTED', 'TESTING', 'OPERATIONAL', 'REMEDIATION', 'DISABLED']).default('PLANNED'),
-  implementationStatus: z.enum(['NOT_STARTED', 'IN_PROGRESS', 'COMPLETED', 'ON_HOLD']).default('NOT_STARTED'),
+  status: z
+    .enum(['PLANNED', 'IMPLEMENTED', 'TESTING', 'OPERATIONAL', 'REMEDIATION', 'DISABLED'])
+    .default('PLANNED'),
+  implementationStatus: z
+    .enum(['NOT_STARTED', 'IN_PROGRESS', 'COMPLETED', 'ON_HOLD'])
+    .default('NOT_STARTED'),
   effectiveness: z.number().min(0).max(100).optional(),
-  frequency: z.enum(['CONTINUOUS', 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'ANNUALLY']).optional(),
+  frequency: z
+    .enum(['CONTINUOUS', 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'ANNUALLY'])
+    .optional(),
   automationLevel: z.enum(['MANUAL', 'SEMI_AUTOMATED', 'FULLY_AUTOMATED']).default('MANUAL'),
   priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']).default('MEDIUM'),
   effort: z.enum(['LOW', 'MEDIUM', 'HIGH']).default('MEDIUM'),
@@ -115,9 +123,15 @@ export const controlUpdateSchema = controlCreateSchema.partial();
 
 export const controlBulkSchema = z.object({
   create: z.array(controlCreateSchema).optional(),
-  update: z.array(z.object({
-    id: z.string().uuid(),
-  }).merge(controlUpdateSchema)).optional(),
+  update: z
+    .array(
+      z
+        .object({
+          id: z.string().uuid(),
+        })
+        .merge(controlUpdateSchema)
+    )
+    .optional(),
   delete: z.array(z.string().uuid()).optional(),
 });
 
@@ -162,8 +176,21 @@ export const fileUploadSchema = z.object({
 export const createQuestionnaireSchema = z.object({
   title: z.string().min(1, 'Title is required').max(200, 'Title too long'),
   description: z.string().max(1000, 'Description too long').optional(),
-  category: z.enum(['risk_assessment', 'control_testing', 'compliance', 'audit', 'survey', 'other']),
-  type: z.enum(['risk_evaluation', 'control_effectiveness', 'compliance_check', 'vendor_assessment', 'self_assessment']),
+  category: z.enum([
+    'risk_assessment',
+    'control_testing',
+    'compliance',
+    'audit',
+    'survey',
+    'other',
+  ]),
+  type: z.enum([
+    'risk_evaluation',
+    'control_effectiveness',
+    'compliance_check',
+    'vendor_assessment',
+    'self_assessment',
+  ]),
   status: z.enum(['draft', 'active', 'paused', 'completed', 'archived']).default('draft'),
   ownerId: z.string().uuid('Invalid owner ID').optional(),
   assigneeIds: z.array(z.string().uuid()).optional().default([]),
@@ -306,17 +333,21 @@ export const activityQuerySchema = paginationSchema.extend({
 export const successResponseSchema = z.object({
   success: z.literal(true),
   data: z.any(),
-  pagination: z.object({
-    page: z.number(),
-    limit: z.number(),
-    total: z.number(),
-    pages: z.number(),
-  }).optional(),
-  meta: z.object({
-    requestId: z.string(),
-    timestamp: z.string(),
-    version: z.string(),
-  }).optional(),
+  pagination: z
+    .object({
+      page: z.number(),
+      limit: z.number(),
+      total: z.number(),
+      pages: z.number(),
+    })
+    .optional(),
+  meta: z
+    .object({
+      requestId: z.string(),
+      timestamp: z.string(),
+      version: z.string(),
+    })
+    .optional(),
 });
 
 export const errorResponseSchema = z.object({
@@ -326,11 +357,13 @@ export const errorResponseSchema = z.object({
     code: z.string().optional(),
     details: z.any().optional(),
   }),
-  meta: z.object({
-    requestId: z.string(),
-    timestamp: z.string(),
-    version: z.string(),
-  }).optional(),
+  meta: z
+    .object({
+      requestId: z.string(),
+      timestamp: z.string(),
+      version: z.string(),
+    })
+    .optional(),
 });
 
 // Health check schema
@@ -338,11 +371,15 @@ export const healthCheckSchema = z.object({
   status: z.enum(['ok', 'warning', 'error']),
   timestamp: z.string(),
   version: z.string(),
-  services: z.record(z.object({
-    status: z.enum(['ok', 'warning', 'error']),
-    message: z.string().optional(),
-    responseTime: z.number().optional(),
-  })).optional(),
+  services: z
+    .record(
+      z.object({
+        status: z.enum(['ok', 'warning', 'error']),
+        message: z.string().optional(),
+        responseTime: z.number().optional(),
+      })
+    )
+    .optional(),
 });
 
 // Validation helpers
@@ -356,15 +393,15 @@ export function validatePagination(params: URLSearchParams) {
 export function validateSorting(params: URLSearchParams, allowedFields: string[] = []) {
   const sort = params.get('sort') || 'createdAt';
   const order = params.get('order') === 'asc' ? 'asc' : 'desc';
-  
+
   // Validate sort field if allowed fields are specified
   if (allowedFields.length > 0 && !allowedFields.includes(sort)) {
     return { [allowedFields[0]]: order };
   }
-  
+
   return { [sort]: order };
 }
 
 export function validateSearch(params: URLSearchParams) {
   return params.get('search') || undefined;
-} 
+}

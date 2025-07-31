@@ -5,26 +5,20 @@ import { z } from 'zod';
 import { authOptions } from '@/lib/auth/auth-options';
 import { prisma } from '@/lib/database/prisma';
 import { ApiResponseFormatter } from '@/lib/api/response-formatter';
-import { 
-  globalErrorHandler, 
-  createAuthError, 
+import {
+  globalErrorHandler,
+  createAuthError,
   createForbiddenError,
-  createNotFoundError
+  createNotFoundError,
 } from '@/lib/api/error-handler';
-import { 
-  RiskCreateSchema, 
-  RiskQuerySchema, 
-  parseAndValidate, 
-  validateQueryParams 
+import {
+  RiskCreateSchema,
+  RiskQuerySchema,
+  parseAndValidate,
+  validateQueryParams,
 } from '@/lib/api/validation-schemas';
-import { 
-  applyRateLimit, 
-  getRateLimiterForEndpoint 
-} from '@/lib/api/rate-limiter';
-import { 
-  getApiVersionFromRequest, 
-  ApiVersionMiddleware 
-} from '@/lib/api/versioning';
+import { applyRateLimit, getRateLimiterForEndpoint } from '@/lib/api/rate-limiter';
+import { getApiVersionFromRequest, ApiVersionMiddleware } from '@/lib/api/versioning';
 
 /**
  * GET /api/v1/risks
@@ -46,7 +40,7 @@ export async function GET(request: NextRequest) {
     }
 
     // 3. Authentication
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
       throw createAuthError();
     }
@@ -60,7 +54,7 @@ export async function GET(request: NextRequest) {
         errors.map((error: any) => ({
           field: error.path.join('.'),
           message: error.message,
-          code: error.code
+          code: error.code,
         })),
         ApiResponseFormatter.createResponseOptions(request)
       );
@@ -79,19 +73,19 @@ export async function GET(request: NextRequest) {
       riskLevel,
       owner,
       tags,
-      dateRange
+      dateRange,
     } = queryValidation.data;
 
     // 5. Build database query
     const where: any = {
-      organizationId: (session.user as any).organizationId
+      organizationId: (session.user as any).organizationId,
     };
 
     // Apply filters
     if (search) {
       where.OR = [
         { title: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } }
+        { description: { contains: search, mode: 'insensitive' } },
       ];
     }
 
@@ -121,7 +115,7 @@ export async function GET(request: NextRequest) {
 
     if (tags && tags.length > 0) {
       where.tags = {
-        hasSome: tags
+        hasSome: tags,
       };
     }
 
@@ -149,7 +143,7 @@ export async function GET(request: NextRequest) {
           createdAt: true,
           updatedAt: true,
           assignedUser: {
-            select: { id: true, firstName: true, lastName: true, email: true }
+            select: { id: true, firstName: true, lastName: true, email: true },
           },
           controls: {
             include: {
@@ -158,26 +152,26 @@ export async function GET(request: NextRequest) {
                   id: true,
                   title: true,
                   type: true,
-                  effectiveness: true
-                }
-              }
-            }
+                  effectiveness: true,
+                },
+              },
+            },
           },
           _count: {
             select: {
               controls: true,
-            }
-          }
+            },
+          },
         },
         orderBy: sort ? { [sort]: order } : { updatedAt: 'desc' },
         skip: (page - 1) * limit,
-        take: limit
+        take: limit,
       }),
-      prisma.risk.count({ where })
+      prisma.risk.count({ where }),
     ]);
 
     // 7. Transform data for response
-    const transformedRisks = risks.map(risk => ({
+    const transformedRisks = risks.map((risk) => ({
       id: risk.id,
       title: risk.title,
       description: risk.description,
@@ -188,10 +182,10 @@ export async function GET(request: NextRequest) {
       riskLevel: calculateRiskLevel(risk.likelihood * risk.impact),
       status: risk.status,
       owner: risk.assignedUser,
-      controls: risk.controls.map(c => c.control),
+      controls: risk.controls.map((c) => c.control),
       controlCount: risk._count.controls,
       createdAt: risk.createdAt,
-      updatedAt: risk.updatedAt
+      updatedAt: risk.updatedAt,
     }));
 
     // 8. Return paginated response with rate limit headers
@@ -200,11 +194,11 @@ export async function GET(request: NextRequest) {
       {
         page,
         limit,
-        total
+        total,
       },
       {
         version,
-        ...ApiResponseFormatter.createResponseOptions(request)
+        ...ApiResponseFormatter.createResponseOptions(request),
       }
     );
 
@@ -214,11 +208,10 @@ export async function GET(request: NextRequest) {
     });
 
     return response;
-
   } catch (error) {
     return globalErrorHandler.handleError(error, request, {
       endpoint: 'GET /api/v1/risks',
-      action: 'list_risks'
+      action: 'list_risks',
     });
   }
 }
@@ -243,7 +236,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 3. Authentication
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
       throw createAuthError();
     }
@@ -262,21 +255,14 @@ export async function POST(request: NextRequest) {
         errors.map((error: any) => ({
           field: error.path.join('.'),
           message: error.message,
-          code: error.code
+          code: error.code,
         })),
         ApiResponseFormatter.createResponseOptions(request)
       );
     }
 
-    const {
-      title,
-      description,
-      category,
-      likelihood,
-      impact,
-      riskOwner,
-      linkedControls
-    } = validation.data;
+    const { title, description, category, likelihood, impact, riskOwner, linkedControls } =
+      validation.data;
 
     // 6. Business logic validation
     const riskScore = likelihood * impact;
@@ -287,21 +273,21 @@ export async function POST(request: NextRequest) {
       const ownerExists = await prisma.user.findFirst({
         where: {
           id: riskOwner,
-          organizationId: (session.user as any).organizationId
-        }
+          organizationId: (session.user as any).organizationId,
+        },
       });
       if (!ownerExists) {
         throw createNotFoundError('Risk owner');
       }
     }
 
-    // Validate linked controls if provided  
+    // Validate linked controls if provided
     if (linkedControls && linkedControls.length > 0) {
       const controlsCount = await prisma.control.count({
         where: {
           id: { in: linkedControls },
-          organizationId: (session.user as any).organizationId
-        }
+          organizationId: (session.user as any).organizationId,
+        },
       });
       if (controlsCount !== linkedControls.length) {
         return ApiResponseFormatter.error(
@@ -309,7 +295,7 @@ export async function POST(request: NextRequest) {
           'One or more linked controls do not exist',
           {
             status: 400,
-            ...ApiResponseFormatter.createResponseOptions(request)
+            ...ApiResponseFormatter.createResponseOptions(request),
           }
         );
       }
@@ -332,21 +318,21 @@ export async function POST(request: NextRequest) {
       },
       include: {
         assignedUser: {
-          select: { id: true, firstName: true, lastName: true, email: true }
+          select: { id: true, firstName: true, lastName: true, email: true },
         },
         creator: {
-          select: { id: true, firstName: true, lastName: true, email: true }
-        }
-      }
+          select: { id: true, firstName: true, lastName: true, email: true },
+        },
+      },
     });
 
     // 8. Link controls if provided
     if (linkedControls && linkedControls.length > 0) {
       await prisma.controlRiskMapping.createMany({
-        data: linkedControls.map(controlId => ({
+        data: linkedControls.map((controlId) => ({
           riskId: risk.id,
           controlId,
-        }))
+        })),
       });
     }
 
@@ -355,7 +341,7 @@ export async function POST(request: NextRequest) {
       where: { id: risk.id },
       include: {
         assignedUser: {
-          select: { id: true, firstName: true, lastName: true, email: true }
+          select: { id: true, firstName: true, lastName: true, email: true },
         },
         controls: {
           include: {
@@ -364,20 +350,20 @@ export async function POST(request: NextRequest) {
                 id: true,
                 title: true,
                 type: true,
-                effectiveness: true
-              }
-            }
-          }
+                effectiveness: true,
+              },
+            },
+          },
         },
         _count: {
           select: {
             controls: true,
-          }
+          },
         },
         creator: {
-          select: { id: true, firstName: true, lastName: true, email: true }
-        }
-      }
+          select: { id: true, firstName: true, lastName: true, email: true },
+        },
+      },
     });
 
     // 10. Transform and return response
@@ -396,18 +382,15 @@ export async function POST(request: NextRequest) {
       controlCount: completeRisk!._count.controls,
       createdBy: completeRisk!.creator,
       createdAt: completeRisk!.createdAt,
-      updatedAt: completeRisk!.updatedAt
+      updatedAt: completeRisk!.updatedAt,
     };
 
     // 11. Return success response
-    const response = ApiResponseFormatter.success(
-      transformedRisk,
-      {
-        version,
-        status: 201,
-        ...ApiResponseFormatter.createResponseOptions(request)
-      }
-    );
+    const response = ApiResponseFormatter.success(transformedRisk, {
+      version,
+      status: 201,
+      ...ApiResponseFormatter.createResponseOptions(request),
+    });
 
     // Add rate limit headers
     Object.entries(rateLimitResult.headers).forEach(([key, value]) => {
@@ -415,11 +398,10 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-
   } catch (error) {
     return globalErrorHandler.handleError(error, request, {
       endpoint: 'POST /api/v1/risks',
-      action: 'create_risk'
+      action: 'create_risk',
     });
   }
 }
@@ -432,4 +414,4 @@ function calculateRiskLevel(riskScore: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRI
   if (riskScore <= 15) return 'MEDIUM';
   if (riskScore <= 20) return 'HIGH';
   return 'CRITICAL';
-} 
+}

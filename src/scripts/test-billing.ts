@@ -5,7 +5,10 @@
 
 import { db } from '@/lib/db';
 import { billingManager } from '@/lib/billing/manager';
-import { seedSubscriptionPlans, createDefaultSubscriptionForOrganization } from '@/lib/billing/seed-plans';
+import {
+  seedSubscriptionPlans,
+  createDefaultSubscriptionForOrganization,
+} from '@/lib/billing/seed-plans';
 
 async function testBillingSystem() {
   console.log('🚀 Testing Billing System...\n');
@@ -14,21 +17,23 @@ async function testBillingSystem() {
     // 1. Seed subscription plans
     console.log('1. Seeding subscription plans...');
     await seedSubscriptionPlans();
-    
+
     // 2. Fetch and display plans
     console.log('\n2. Fetching subscription plans...');
     const plans = await billingManager.getSubscriptionPlans();
     console.log(`Found ${plans.length} plans:`);
-    plans.forEach(plan => {
+    plans.forEach((plan) => {
       console.log(`  - ${plan.name}: $${plan.price}/${plan.billingInterval}`);
-      console.log(`    Features: ${plan.features.filter(f => f.included).length}/${plan.features.length}`);
+      console.log(
+        `    Features: ${plan.features.filter((f) => f.included).length}/${plan.features.length}`
+      );
       console.log(`    Users: ${plan.limits.users === -1 ? 'Unlimited' : plan.limits.users}`);
       console.log(`    Risks: ${plan.limits.risks === -1 ? 'Unlimited' : plan.limits.risks}`);
     });
 
     // 3. Find or create a test organization
     let testOrg = await db.client.organization.findFirst({
-      where: { name: 'Test Organization' }
+      where: { name: 'Test Organization' },
     });
 
     if (!testOrg) {
@@ -39,7 +44,7 @@ async function testBillingSystem() {
           domain: 'test.example.com',
           plan: 'free',
           isActive: true,
-        }
+        },
       });
       console.log(`Created test organization: ${testOrg.id}`);
     } else {
@@ -57,7 +62,9 @@ async function testBillingSystem() {
       console.log(`✅ Active subscription found:`);
       console.log(`   Plan ID: ${subscription.planId}`);
       console.log(`   Status: ${subscription.status}`);
-      console.log(`   Period: ${subscription.currentPeriodStart} - ${subscription.currentPeriodEnd}`);
+      console.log(
+        `   Period: ${subscription.currentPeriodStart} - ${subscription.currentPeriodEnd}`
+      );
     } else {
       console.log('❌ No active subscription found');
     }
@@ -76,7 +83,6 @@ async function testBillingSystem() {
     console.log(`   Total customers: ${analytics.customers.total}`);
 
     console.log('\n🎉 Billing system test completed successfully!');
-
   } catch (error) {
     console.error('❌ Billing system test failed:', error);
     process.exit(1);
@@ -85,25 +91,25 @@ async function testBillingSystem() {
 
 async function cleanup() {
   console.log('\n🧹 Cleaning up test data...');
-  
+
   try {
     // Remove test organization and related data
     const testOrg = await db.client.organization.findFirst({
-      where: { name: 'Test Organization' }
+      where: { name: 'Test Organization' },
     });
 
     if (testOrg) {
       // Delete related records first (due to foreign key constraints)
       await db.client.organizationSubscription.deleteMany({
-        where: { organizationId: testOrg.id }
+        where: { organizationId: testOrg.id },
       });
-      
+
       await db.client.usageRecord.deleteMany({
-        where: { organizationId: testOrg.id }
+        where: { organizationId: testOrg.id },
       });
 
       await db.client.organization.delete({
-        where: { id: testOrg.id }
+        where: { id: testOrg.id },
       });
 
       console.log('✅ Test organization cleaned up');
@@ -112,7 +118,6 @@ async function cleanup() {
     // Optionally clean up test plans (uncomment if needed)
     // await db.client.subscriptionPlan.deleteMany();
     // console.log('✅ Test plans cleaned up');
-
   } catch (error) {
     console.error('❌ Cleanup failed:', error);
   }

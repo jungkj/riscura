@@ -1,14 +1,18 @@
-"use client";
+'use client';
 
-import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+  useCallback,
+} from 'react';
 import { Risk } from '@/types';
 import { AIService, AIServiceError, RateLimitError, ConnectionStatus } from '@/services/AIService';
 import { AgentType, ConversationMessage, MessageAttachment } from '@/types/ai.types';
 import { AI_AGENTS } from '@/config/ai-agents';
-import { 
-  tokenManagementService, 
-  type UsageAlert
-} from '@/services/TokenManagementService';
+import { tokenManagementService, type UsageAlert } from '@/services/TokenManagementService';
 
 // Enhanced interfaces for token management integration
 interface TokenUsageMetrics {
@@ -166,18 +170,20 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     totalRequests: 0,
     successRate: 1,
     totalCost: 0,
-    circuitBreakerState: 'CLOSED'
+    circuitBreakerState: 'CLOSED',
   });
   const [rateLimitStatus, setRateLimitStatus] = useState<RateLimitStatus>({
     requestsRemaining: 50,
     resetTime: new Date(),
     limit: 50,
-    isLimited: false
+    isLimited: false,
   });
   const [lastFailedRequest, setLastFailedRequest] = useState<(() => Promise<unknown>) | null>(null);
 
   // Enhanced error handling state
-  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(ConnectionStatus.CONNECTED);
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
+    ConnectionStatus.CONNECTED
+  );
   const [isReconnecting, setIsReconnecting] = useState(false);
   const [lastError, setLastError] = useState<EnhancedError | null>(null);
   const [errorHistory, setErrorHistory] = useState<EnhancedError[]>([]);
@@ -196,7 +202,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     monthlyLimit: 0,
     monthlyPercentage: 0,
     monthlyCost: 0,
-    currentTier: 'free'
+    currentTier: 'free',
   });
 
   const [realTimeUsageStats, setRealTimeUsageStats] = useState<RealTimeUsageStats>({
@@ -209,8 +215,8 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     costProjections: {
       daily: 0,
       weekly: 0,
-      monthly: 0
-    }
+      monthly: 0,
+    },
   });
 
   const [usageAlerts, setUsageAlerts] = useState<UsageAlert[]>([]);
@@ -227,7 +233,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
         code: error.code,
         retryable: error.retryable,
         severity: error.severity,
-        userMessage: error.userMessage
+        userMessage: error.userMessage,
       };
     }
 
@@ -239,7 +245,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
         retryable: error.retryable,
         severity: error.severity,
         userMessage: error.userMessage,
-        retryAfter: error.resetTime
+        retryAfter: error.resetTime,
       };
     }
 
@@ -247,7 +253,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
       type: 'unknown_error',
       message: error instanceof Error ? error.message : 'An unexpected error occurred',
       retryable: false,
-      userMessage: `${context} failed. Please try again or contact support.`
+      userMessage: `${context} failed. Please try again or contact support.`,
     };
   }, []);
 
@@ -255,39 +261,43 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
   useEffect(() => {
     // Check if AI features are enabled
     const aiEnabled = process.env.NEXT_PUBLIC_ENABLE_AI_FEATURES !== 'false';
-    const hasApiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY && 
-                     process.env.NEXT_PUBLIC_OPENAI_API_KEY !== 'sk-placeholder' &&
-                     process.env.NEXT_PUBLIC_OPENAI_API_KEY !== 'your-openai-api-key';
-    
+    const hasApiKey =
+      process.env.NEXT_PUBLIC_OPENAI_API_KEY &&
+      process.env.NEXT_PUBLIC_OPENAI_API_KEY !== 'sk-placeholder' &&
+      process.env.NEXT_PUBLIC_OPENAI_API_KEY !== 'your-openai-api-key';
+
     if (!aiEnabled || !hasApiKey) {
       // Only log once in development, suppress in production
       if (process.env.NODE_ENV === 'development' && !hasApiKey) {
-        console.warn('AI features disabled: Missing OpenAI API key. Set NEXT_PUBLIC_OPENAI_API_KEY in your environment.');
+        console.warn(
+          'AI features disabled: Missing OpenAI API key. Set NEXT_PUBLIC_OPENAI_API_KEY in your environment.'
+        );
       }
-      
+
       setConnectionStatus(ConnectionStatus.DISCONNECTED);
       setError({
         type: 'service_disabled',
         message: 'AI features are disabled in demo mode',
-        retryable: false
+        retryable: false,
       });
-      
+
       // Initialize mock conversations for UI compatibility
       setConversations([
         {
           id: 'conv-1',
           title: 'Risk Assessment Discussion',
           messages: [
-            { 
-              id: 'msg-1', 
-              content: 'Hello! I\'m ARIA, your AI Risk Intelligence Assistant. AI features are currently disabled. You can still explore the dashboard and other features!', 
-              timestamp: new Date(), 
-              role: 'assistant' 
-            }
+            {
+              id: 'msg-1',
+              content:
+                "Hello! I'm ARIA, your AI Risk Intelligence Assistant. AI features are currently disabled. You can still explore the dashboard and other features!",
+              timestamp: new Date(),
+              role: 'assistant',
+            },
           ],
           updatedAt: new Date(),
-          agentType: 'risk_analyzer'
-        }
+          agentType: 'risk_analyzer',
+        },
       ]);
       return;
     }
@@ -302,23 +312,24 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
       });
       setAIService(service);
       setConnectionStatus(ConnectionStatus.CONNECTED);
-      
+
       // Initialize mock conversations for UI compatibility
       setConversations([
         {
           id: 'conv-1',
           title: 'Risk Assessment Discussion',
           messages: [
-            { 
-              id: 'msg-1', 
-              content: 'Hello! I\'m ARIA, your AI Risk Intelligence Assistant. How can I help you today?', 
-              timestamp: new Date(), 
-              role: 'assistant' 
-            }
+            {
+              id: 'msg-1',
+              content:
+                "Hello! I'm ARIA, your AI Risk Intelligence Assistant. How can I help you today?",
+              timestamp: new Date(),
+              role: 'assistant',
+            },
           ],
           updatedAt: new Date(),
-          agentType: 'risk_analyzer'
-        }
+          agentType: 'risk_analyzer',
+        },
       ]);
     } catch (error) {
       console.error('Failed to initialize AI Service:', error);
@@ -348,9 +359,10 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           weeklyCost: userUsage.weeklyCost,
           monthlyTokens: userUsage.monthlyTokens,
           monthlyLimit: userUsage.tier.quotas.monthlyTokenLimit,
-          monthlyPercentage: (userUsage.monthlyTokens / userUsage.tier.quotas.monthlyTokenLimit) * 100,
+          monthlyPercentage:
+            (userUsage.monthlyTokens / userUsage.tier.quotas.monthlyTokenLimit) * 100,
           monthlyCost: userUsage.monthlyCost,
-          currentTier: userUsage.tier.name
+          currentTier: userUsage.tier.name,
         });
       }
 
@@ -364,8 +376,8 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
         costProjections: {
           daily: realTimeStats.costProjection.dailyProjected,
           weekly: realTimeStats.costProjection.weeklyProjected,
-          monthly: realTimeStats.costProjection.monthlyProjected
-        }
+          monthly: realTimeStats.costProjection.monthlyProjected,
+        },
       });
 
       setUsageAlerts(alerts);
@@ -374,7 +386,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     // Update immediately and then every 30 seconds
     updateTokenMetrics();
     const interval = setInterval(updateTokenMetrics, 30000);
-    
+
     return () => clearInterval(interval);
   }, [userId]);
 
@@ -386,21 +398,21 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
       try {
         const metrics = aiService.getUsageMetrics();
         const rateLimit = aiService.getRateLimitStatus();
-        
+
         setPerformanceMetrics({
           averageResponseTime: Math.round(metrics.averageResponseTime),
           cacheHitRate: 0.85, // Would be calculated by service
           totalRequests: metrics.totalRequests,
           successRate: metrics.successRate,
           totalCost: metrics.totalCost,
-          circuitBreakerState: aiService.getCircuitBreakerState()
+          circuitBreakerState: aiService.getCircuitBreakerState(),
         });
 
         setRateLimitStatus({
           requestsRemaining: rateLimit.requestsRemaining,
           resetTime: rateLimit.resetTime,
           limit: 50, // From config
-          isLimited: rateLimit.isLimited
+          isLimited: rateLimit.isLimited,
         });
       } catch (error) {
         console.error('Error updating metrics:', error);
@@ -411,14 +423,14 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           totalRequests: 0,
           successRate: 1,
           totalCost: 0,
-          circuitBreakerState: 'CLOSED'
+          circuitBreakerState: 'CLOSED',
         });
 
         setRateLimitStatus({
           requestsRemaining: 50,
           resetTime: new Date(),
           limit: 50,
-          isLimited: false
+          isLimited: false,
         });
       }
     };
@@ -426,95 +438,103 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     // Update immediately and then every 30 seconds
     updateMetrics();
     const interval = setInterval(updateMetrics, 30000);
-    
+
     return () => clearInterval(interval);
   }, [aiService]);
 
   const handleError = useCallback((error: unknown, requestFn?: () => Promise<unknown>) => {
     console.error('AI Service Error:', error);
-    
+
     if (error instanceof RateLimitError) {
       setError({
         type: 'rate_limit',
         message: `Rate limit exceeded. Please try again after ${error.resetTime.toLocaleTimeString()}`,
         retryAfter: error.resetTime,
-        retryable: true
+        retryable: true,
       });
     } else if (error instanceof AIServiceError) {
       setError({
         type: 'service_error',
         message: error.message,
         code: error.code,
-        retryable: error.retryable
+        retryable: error.retryable,
       });
     } else {
       setError({
         type: 'unknown_error',
         message: error instanceof Error ? error.message : 'An unexpected error occurred',
-        retryable: false
+        retryable: false,
       });
     }
 
     if (requestFn && error instanceof AIServiceError && error.retryable) {
       setLastFailedRequest(() => requestFn);
     }
-    
+
     setIsLoading(false);
   }, []);
 
   // Token management methods
   const acknowledgeAlert = useCallback((alertId: string) => {
     tokenManagementService.acknowledgeAlert(alertId);
-    setUsageAlerts(prev => prev.filter(alert => alert.id !== alertId));
+    setUsageAlerts((prev) => prev.filter((alert) => alert.id !== alertId));
   }, []);
 
-  const generateUsageReport = useCallback((
-    period: 'daily' | 'weekly' | 'monthly', 
-    format: 'json' | 'csv' = 'json'
-  ): string => {
-    const report = tokenManagementService.generateUsageReport(userId, period);
-    if (format === 'json') {
-      return JSON.stringify(report, null, 2);
-    } else {
-      return tokenManagementService.exportUsageData(userId, 'csv', period);
-    }
-  }, [userId]);
-
-  const exportUsageData = useCallback((format: 'json' | 'csv') => {
-    const data = tokenManagementService.exportUsageData(userId, format, 'monthly');
-    const blob = new Blob([data], { 
-      type: format === 'json' ? 'application/json' : 'text/csv' 
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `riscura-usage-${new Date().toISOString().split('T')[0]}.${format}`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }, [userId]);
-
-  const upgradeTier = useCallback((tierName: string): boolean => {
-    const success = tokenManagementService.upgradeUserTier(userId, tierName);
-    if (success) {
-      // Refresh token metrics
-      const userUsage = tokenManagementService.getUserUsage(userId);
-      if (userUsage) {
-        setTokenUsageMetrics(prev => ({
-          ...prev,
-          currentTier: userUsage.tier.name,
-          dailyLimit: userUsage.tier.quotas.dailyTokenLimit,
-          weeklyLimit: userUsage.tier.quotas.weeklyTokenLimit,
-          monthlyLimit: userUsage.tier.quotas.monthlyTokenLimit,
-          dailyPercentage: (userUsage.dailyTokens / userUsage.tier.quotas.dailyTokenLimit) * 100,
-          weeklyPercentage: (userUsage.weeklyTokens / userUsage.tier.quotas.weeklyTokenLimit) * 100,
-          monthlyPercentage: (userUsage.monthlyTokens / userUsage.tier.quotas.monthlyTokenLimit) * 100
-        }));
+  const generateUsageReport = useCallback(
+    (period: 'daily' | 'weekly' | 'monthly', format: 'json' | 'csv' = 'json'): string => {
+      const report = tokenManagementService.generateUsageReport(userId, period);
+      if (format === 'json') {
+        return JSON.stringify(report, null, 2);
+      } else {
+        return tokenManagementService.exportUsageData(userId, 'csv', period);
       }
-    }
-    return success;
-  }, [userId]);
+    },
+    [userId]
+  );
+
+  const exportUsageData = useCallback(
+    (format: 'json' | 'csv') => {
+      const data = tokenManagementService.exportUsageData(userId, format, 'monthly');
+      const blob = new Blob([data], {
+        type: format === 'json' ? 'application/json' : 'text/csv',
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `riscura-usage-${new Date().toISOString().split('T')[0]}.${format}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    },
+    [userId]
+  );
+
+  const upgradeTier = useCallback(
+    (tierName: string): boolean => {
+      const success = tokenManagementService.upgradeUserTier(userId, tierName);
+      if (success) {
+        // Refresh token metrics
+        const userUsage = tokenManagementService.getUserUsage(userId);
+        if (userUsage) {
+          setTokenUsageMetrics((prev) => ({
+            ...prev,
+            currentTier: userUsage.tier.name,
+            dailyLimit: userUsage.tier.quotas.dailyTokenLimit,
+            weeklyLimit: userUsage.tier.quotas.weeklyTokenLimit,
+            monthlyLimit: userUsage.tier.quotas.monthlyTokenLimit,
+            dailyPercentage: (userUsage.dailyTokens / userUsage.tier.quotas.dailyTokenLimit) * 100,
+            weeklyPercentage:
+              (userUsage.weeklyTokens / userUsage.tier.quotas.weeklyTokenLimit) * 100,
+            monthlyPercentage:
+              (userUsage.monthlyTokens / userUsage.tier.quotas.monthlyTokenLimit) * 100,
+          }));
+        }
+      }
+      return success;
+    },
+    [userId]
+  );
 
   const canMakeRequest = useCallback((): { allowed: boolean; reason?: string } => {
     const result = tokenManagementService.canMakeRequest(userId);
@@ -539,21 +559,22 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
         const analysis = await aiService.analyzeRisk(risk);
         return {
           riskId: risk.id,
-          riskLevel: analysis.score.overall > 15 ? 'high' : analysis.score.overall > 8 ? 'medium' : 'low',
+          riskLevel:
+            analysis.score.overall > 15 ? 'high' : analysis.score.overall > 8 ? 'medium' : 'low',
           category: risk.category,
           description: `AI Analysis of ${risk.title}`,
           keyFindings: [
             `Risk score: ${analysis.score.overall}`,
             `Confidence: ${(analysis.confidence * 100).toFixed(0)}%`,
-            `Category: ${risk.category}`
+            `Category: ${risk.category}`,
           ],
           confidence: analysis.confidence,
           lastUpdated: new Date(),
           metadata: {
             usage: analysis.timestamp,
-            model: 'gpt-4o-mini' // Default model name
+            model: 'gpt-4o-mini', // Default model name
           },
-          analysis
+          analysis,
         };
       } catch (error) {
         handleError(error, requestFn);
@@ -576,7 +597,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
       setError(null);
       try {
         const recommendations = await aiService.recommendControls(risk);
-        return recommendations.map(rec => ({
+        return recommendations.map((rec) => ({
           id: rec.id,
           riskId: risk.id,
           title: rec.title,
@@ -586,7 +607,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           effectiveness: rec.effectiveness,
           implementationCost: rec.implementationCost,
           type: rec.type,
-          category: rec.category
+          category: rec.category,
         }));
       } catch (error) {
         handleError(error, requestFn);
@@ -614,7 +635,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           content: result.content,
           timestamp: result.timestamp,
           usage: result.usage,
-          confidence: result.confidence
+          confidence: result.confidence,
         };
       } catch (error) {
         handleError(error, requestFn);
@@ -642,7 +663,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           complexity: explanation.complexity,
           confidence: explanation.confidence,
           timestamp: explanation.timestamp,
-          usage: explanation.usage
+          usage: explanation.usage,
         };
       } catch (error) {
         handleError(error, requestFn);
@@ -664,19 +685,14 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
       setIsLoading(true);
       setError(null);
       setStreamingResponse('');
-      
+
       try {
         // Handle streaming response
         const onStream = (chunk: string) => {
-          setStreamingResponse(prev => prev + chunk);
+          setStreamingResponse((prev) => prev + chunk);
         };
 
-        const response = await aiService.sendMessage(
-          content, 
-          selectedAgent, 
-          attachments, 
-          onStream
-        );
+        const response = await aiService.sendMessage(content, selectedAgent, attachments, onStream);
 
         // Add user message to conversation
         const userMessage: ConversationMessage = {
@@ -684,7 +700,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           role: 'user',
           content,
           timestamp: new Date(),
-          attachments
+          attachments,
         };
 
         // Add AI response to conversation
@@ -693,7 +709,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           role: 'assistant',
           content: response.content,
           timestamp: response.timestamp,
-          usage: response.usage
+          usage: response.usage,
         };
 
         // Update current conversation
@@ -701,15 +717,13 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           const updatedConversation = {
             ...currentConversation,
             messages: [...currentConversation.messages, userMessage, aiMessage],
-            updatedAt: new Date()
+            updatedAt: new Date(),
           };
           setCurrentConversation(updatedConversation);
-          
+
           // Update conversations list
-          setConversations(prev => 
-            prev.map(conv => 
-              conv.id === currentConversation.id ? updatedConversation : conv
-            )
+          setConversations((prev) =>
+            prev.map((conv) => (conv.id === currentConversation.id ? updatedConversation : conv))
           );
         }
 
@@ -729,13 +743,13 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
   const switchAgent = (agentType: string) => {
     setSelectedAgent(agentType as AgentType);
     setError(null);
-    
+
     // Update current conversation's agent type
     if (currentConversation) {
       const updatedConversation = {
         ...currentConversation,
         agentType,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
       setCurrentConversation(updatedConversation);
     }
@@ -745,20 +759,22 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     const newConversation = {
       id: `conv-${Date.now()}`,
       title: `New ${agentType.replace('_', ' ')} conversation`,
-      messages: [{
-        id: `msg-${Date.now()}`,
-        role: 'assistant' as const,
-        content: getWelcomeMessage(agentType as AgentType),
-        timestamp: new Date()
-      }],
+      messages: [
+        {
+          id: `msg-${Date.now()}`,
+          role: 'assistant' as const,
+          content: getWelcomeMessage(agentType as AgentType),
+          timestamp: new Date(),
+        },
+      ],
       agentType,
       context,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
-    
+
     setCurrentConversation(newConversation);
-    setConversations(prev => [newConversation, ...prev]);
+    setConversations((prev) => [newConversation, ...prev]);
     setSelectedAgent(agentType as AgentType);
     setError(null);
   };
@@ -821,12 +837,8 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     connectionStatus,
     isReconnecting,
     lastError,
-    errorHistory
+    errorHistory,
   };
 
-  return (
-    <AIContext.Provider value={value}>
-      {children}
-    </AIContext.Provider>
-  );
-}; 
+  return <AIContext.Provider value={value}>{children}</AIContext.Provider>;
+};

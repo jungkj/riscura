@@ -55,10 +55,13 @@ export const POST = withApiMiddleware(
       user.organizationId
     );
 
-    return NextResponse.json({
-      data: template,
-      message: 'Report template created successfully',
-    }, { status: 201 });
+    return NextResponse.json(
+      {
+        data: template,
+        message: 'Report template created successfully',
+      },
+      { status: 201 }
+    );
   },
   { requireAuth: true }
 );

@@ -92,7 +92,11 @@ export interface TableProps<T = any> {
   onExport?: () => void;
   getRowId?: (row: T) => string | number;
   className?: string;
-  mobileCardComponent?: React.ComponentType<{ row: T; columns: TableColumn<T>[]; actions?: TableAction<T>[] }>;
+  mobileCardComponent?: React.ComponentType<{
+    row: T;
+    columns: TableColumn<T>[];
+    actions?: TableAction<T>[];
+  }>;
 }
 
 type SortDirection = 'asc' | 'desc' | null;
@@ -110,32 +114,32 @@ interface FilterState {
 // DEFAULT MOBILE CARD COMPONENT
 // ============================================================================
 
-function DefaultMobileCard<T>({ 
-  row, 
-  columns, 
-  actions = [] 
-}: { 
-  row: T; 
-  columns: TableColumn<T>[]; 
-  actions?: TableAction<T>[] 
+function DefaultMobileCard<T>({
+  row,
+  columns,
+  actions = [],
+}: {
+  row: T;
+  columns: TableColumn<T>[];
+  actions?: TableAction<T>[];
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const device = useDeviceInfo();
 
-  const visibleColumns = columns.filter(col => !col.hiddenOnMobile);
-  const hiddenColumns = columns.filter(col => col.hiddenOnMobile);
-  const visibleActions = actions.filter(action => !action.hidden?.(row));
+  const visibleColumns = columns.filter((col) => !col.hiddenOnMobile);
+  const hiddenColumns = columns.filter((col) => col.hiddenOnMobile);
+  const visibleActions = actions.filter((action) => !action.hidden?.(row));
 
-  const primaryColumn = visibleColumns.find(col => col.priority === 'high') || visibleColumns[0];
-  const secondaryColumns = visibleColumns.filter(col => col !== primaryColumn).slice(0, 2);
+  const primaryColumn = visibleColumns.find((col) => col.priority === 'high') || visibleColumns[0];
+  const secondaryColumns = visibleColumns.filter((col) => col !== primaryColumn).slice(0, 2);
 
   const getValue = (column: TableColumn<T>, row: T) => {
     if (column.accessor) {
       return column.accessor(row);
-    };
+    }
 
-  return (row as any)[column.key];
+    return (row as any)[column.key];
   };
 
   return (
@@ -163,14 +167,13 @@ function DefaultMobileCard<T>({
 
           {/* Secondary Info */}
           <div className="space-y-1">
-            {secondaryColumns.map(column => (
+            {secondaryColumns.map((column) => (
               <div key={column.key} className="flex items-center justify-between">
                 <span className="text-sm text-gray-500">{column.label}:</span>
                 <span className="text-sm text-gray-900 font-medium">
-                  {column.renderCell 
+                  {column.renderCell
                     ? column.renderCell(getValue(column, row), row, column)
-                    : getValue(column, row)
-                  }
+                    : getValue(column, row)}
                 </span>
               </div>
             ))}
@@ -197,7 +200,7 @@ function DefaultMobileCard<T>({
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: -10 }}
                 >
-                  {visibleActions.map(action => (
+                  {visibleActions.map((action) => (
                     <button
                       key={action.id}
                       onClick={() => {
@@ -231,14 +234,8 @@ function DefaultMobileCard<T>({
             size="sm"
             className="w-full mt-3 justify-between"
           >
-            <span className="text-sm text-gray-600">
-              {isExpanded ? 'Show Less' : 'Show More'}
-            </span>
-            {isExpanded ? (
-              <ChevronUp className="w-4 h-4" />
-            ) : (
-              <ChevronDown className="w-4 h-4" />
-            )}
+            <span className="text-sm text-gray-600">{isExpanded ? 'Show Less' : 'Show More'}</span>
+            {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </TouchOptimizedButton>
 
           <AnimatePresence>
@@ -250,14 +247,13 @@ function DefaultMobileCard<T>({
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                {hiddenColumns.map(column => (
+                {hiddenColumns.map((column) => (
                   <div key={column.key} className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">{column.label}:</span>
                     <span className="text-sm text-gray-900">
-                      {column.renderCell 
+                      {column.renderCell
                         ? column.renderCell(getValue(column, row), row, column)
-                        : getValue(column, row)
-                      }
+                        : getValue(column, row)}
                     </span>
                   </div>
                 ))}
@@ -322,8 +318,8 @@ export function EnhancedResponsiveTable<T = any>({
 
     // Apply search filter
     if (searchQuery) {
-      result = result.filter(row => {
-        return columns.some(column => {
+      result = result.filter((row) => {
+        return columns.some((column) => {
           const value = column.accessor ? column.accessor(row) : (row as any)[column.key];
           return String(value).toLowerCase().includes(searchQuery.toLowerCase());
         });
@@ -333,10 +329,10 @@ export function EnhancedResponsiveTable<T = any>({
     // Apply column filters
     Object.entries(filters).forEach(([columnKey, filterValue]) => {
       if (filterValue !== undefined && filterValue !== '') {
-        result = result.filter(row => {
-          const column = columns.find(col => col.key === columnKey);
+        result = result.filter((row) => {
+          const column = columns.find((col) => col.key === columnKey);
           const value = column?.accessor ? column.accessor(row) : (row as any)[columnKey];
-          
+
           if (Array.isArray(filterValue)) {
             return filterValue.includes(value);
           }
@@ -347,15 +343,15 @@ export function EnhancedResponsiveTable<T = any>({
 
     // Apply sorting
     if (sortState.column && sortState.direction) {
-      const column = columns.find(col => col.key === sortState.column);
+      const column = columns.find((col) => col.key === sortState.column);
       result.sort((a, b) => {
         const aValue = column?.accessor ? column.accessor(a) : (a as any)[sortState.column!];
         const bValue = column?.accessor ? column.accessor(b) : (b as any)[sortState.column!];
-        
+
         let comparison = 0;
         if (aValue < bValue) comparison = -1;
         else if (aValue > bValue) comparison = 1;
-        
+
         return sortState.direction === 'desc' ? -comparison : comparison;
       });
     }
@@ -367,30 +363,33 @@ export function EnhancedResponsiveTable<T = any>({
   // EVENT HANDLERS
   // ============================================================================
 
-  const handleSort = useCallback((columnKey: string) => {
-    if (!sortable) return;
+  const handleSort = useCallback(
+    (columnKey: string) => {
+      if (!sortable) return;
 
-    setSortState(prev => {
-      if (prev.column === columnKey) {
-        if (prev.direction === 'asc') return { column: columnKey, direction: 'desc' };
-        if (prev.direction === 'desc') return { column: null, direction: null };
-      }
-      return { column: columnKey, direction: 'asc' };
-    });
+      setSortState((prev) => {
+        if (prev.column === columnKey) {
+          if (prev.direction === 'asc') return { column: columnKey, direction: 'desc' };
+          if (prev.direction === 'desc') return { column: null, direction: null };
+        }
+        return { column: columnKey, direction: 'asc' };
+      });
 
-    announce(
-      `Sorted by ${columns.find(col => col.key === columnKey)?.label} ${
-        sortState.direction === 'asc' ? 'descending' : 'ascending'
-      }`,
-      'polite'
-    );
-  }, [sortable, columns, announce, sortState.direction]);
+      announce(
+        `Sorted by ${columns.find((col) => col.key === columnKey)?.label} ${
+          sortState.direction === 'asc' ? 'descending' : 'ascending'
+        }`,
+        'polite'
+      );
+    },
+    [sortable, columns, announce, sortState.direction]
+  );
 
   const handleSelectAll = useCallback(() => {
     if (!selectable || !onSelectionChange) return;
 
     const allIds = processedData.map((row, index) => getRowId(row, index));
-    const isAllSelected = allIds.every(id => selectedRows.has(id));
+    const isAllSelected = allIds.every((id) => selectedRows.has(id));
 
     if (isAllSelected) {
       onSelectionChange(new Set());
@@ -401,20 +400,23 @@ export function EnhancedResponsiveTable<T = any>({
     }
   }, [selectable, onSelectionChange, processedData, getRowId, selectedRows, announce]);
 
-  const handleSelectRow = useCallback((rowId: string | number) => {
-    if (!selectable || !onSelectionChange) return;
+  const handleSelectRow = useCallback(
+    (rowId: string | number) => {
+      if (!selectable || !onSelectionChange) return;
 
-    const newSelection = new Set(selectedRows);
-    if (newSelection.has(rowId)) {
-      newSelection.delete(rowId);
-    } else {
-      newSelection.add(rowId);
-    }
-    onSelectionChange(newSelection);
-  }, [selectable, onSelectionChange, selectedRows]);
+      const newSelection = new Set(selectedRows);
+      if (newSelection.has(rowId)) {
+        newSelection.delete(rowId);
+      } else {
+        newSelection.add(rowId);
+      }
+      onSelectionChange(newSelection);
+    },
+    [selectable, onSelectionChange, selectedRows]
+  );
 
   const handleFilterChange = useCallback((columnKey: string, value: any) => {
-    setFilters(prev => ({ ...prev, [columnKey]: value }));
+    setFilters((prev) => ({ ...prev, [columnKey]: value }));
   }, []);
 
   // ============================================================================
@@ -423,10 +425,10 @@ export function EnhancedResponsiveTable<T = any>({
 
   const visibleColumns = useMemo(() => {
     if (device.type === 'mobile') {
-      return columns.filter(col => !col.hiddenOnMobile);
+      return columns.filter((col) => !col.hiddenOnMobile);
     }
     if (device.type === 'tablet') {
-      return columns.filter(col => col.priority !== 'low');
+      return columns.filter((col) => col.priority !== 'low');
     }
     return columns;
   }, [columns, device.type]);
@@ -442,14 +444,17 @@ export function EnhancedResponsiveTable<T = any>({
           <th className="w-12 px-4 py-3">
             <input
               type="checkbox"
-              checked={processedData.length > 0 && processedData.every((row, index) => selectedRows.has(getRowId(row, index)))}
+              checked={
+                processedData.length > 0 &&
+                processedData.every((row, index) => selectedRows.has(getRowId(row, index)))
+              }
               onChange={handleSelectAll}
               className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               aria-label="Select all rows"
             />
           </th>
         )}
-        {visibleColumns.map(column => (
+        {visibleColumns.map((column) => (
           <th
             key={column.key}
             className={cn(
@@ -479,9 +484,7 @@ export function EnhancedResponsiveTable<T = any>({
           </th>
         ))}
         {actions.length > 0 && (
-          <th className="w-20 px-4 py-3 text-center text-sm font-medium text-gray-700">
-            Actions
-          </th>
+          <th className="w-20 px-4 py-3 text-center text-sm font-medium text-gray-700">Actions</th>
         )}
       </tr>
     </thead>
@@ -491,8 +494,8 @@ export function EnhancedResponsiveTable<T = any>({
     const rowId = getRowId(row, index);
     const isSelected = selectedRows.has(rowId);
 
-  return (
-    <tr
+    return (
+      <tr
         key={rowId}
         className={cn(
           'hover:bg-gray-50 transition-colors',
@@ -510,11 +513,8 @@ export function EnhancedResponsiveTable<T = any>({
             />
           </td>
         )}
-        {visibleColumns.map(column => (
-          <td
-            key={column.key}
-            className={cn('px-4 py-3 text-sm text-gray-900', column.className)}
-          >
+        {visibleColumns.map((column) => (
+          <td key={column.key} className={cn('px-4 py-3 text-sm text-gray-900', column.className)}>
             {column.renderCell
               ? column.renderCell(
                   column.accessor ? column.accessor(row) : (row as any)[column.key],
@@ -522,17 +522,17 @@ export function EnhancedResponsiveTable<T = any>({
                   column
                 )
               : column.accessor
-              ? column.accessor(row)
-              : (row as any)[column.key]}
+                ? column.accessor(row)
+                : (row as any)[column.key]}
           </td>
         ))}
         {actions.length > 0 && (
           <td className="px-4 py-3">
             <div className="flex items-center justify-center space-x-1">
               {actions
-                .filter(action => !action.hidden?.(row))
+                .filter((action) => !action.hidden?.(row))
                 .slice(0, 3)
-                .map(action => (
+                .map((action) => (
                   <TouchOptimizedButton
                     key={action.id}
                     onClick={() => action.onClick(row)}
@@ -569,19 +569,14 @@ export function EnhancedResponsiveTable<T = any>({
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
         <p className="text-red-800">{error}</p>
         {onRefresh && (
-          <TouchOptimizedButton
-            onClick={onRefresh}
-            variant="secondary"
-            size="sm"
-            className="mt-2"
-          >
+          <TouchOptimizedButton onClick={onRefresh} variant="secondary" size="sm" className="mt-2">
             <RefreshCw className="w-4 h-4 mr-2" />
             Retry
           </TouchOptimizedButton>
         )}
       </div>
     );
-  };
+  }
 
   return (
     <MobileOptimized className={cn('space-y-4', className)}>
@@ -638,11 +633,7 @@ export function EnhancedResponsiveTable<T = any>({
 
           {/* Export */}
           {onExport && (
-            <TouchOptimizedButton
-              onClick={onExport}
-              variant="secondary"
-              size="md"
-            >
+            <TouchOptimizedButton onClick={onExport} variant="secondary" size="md">
               <Download className="w-4 h-4 mr-2" />
               Export
             </TouchOptimizedButton>
@@ -650,11 +641,7 @@ export function EnhancedResponsiveTable<T = any>({
 
           {/* Refresh */}
           {onRefresh && (
-            <TouchOptimizedButton
-              onClick={onRefresh}
-              variant="ghost"
-              size="md"
-            >
+            <TouchOptimizedButton onClick={onRefresh} variant="ghost" size="md">
               <RefreshCw className="w-4 h-4" />
             </TouchOptimizedButton>
           )}
@@ -672,8 +659,8 @@ export function EnhancedResponsiveTable<T = any>({
           >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {columns
-                .filter(col => col.filterable !== false)
-                .map(column => (
+                .filter((col) => col.filterable !== false)
+                .map((column) => (
                   <div key={column.key}>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       {column.label}
@@ -737,7 +724,7 @@ export function EnhancedResponsiveTable<T = any>({
       {pagination && processedData.length > 0 && (
         <div className="flex items-center justify-between">
           <div className="text-sm text-gray-700">
-            Showing {((pagination.page - 1) * pagination.pageSize) + 1} to{' '}
+            Showing {(pagination.page - 1) * pagination.pageSize + 1} to{' '}
             {Math.min(pagination.page * pagination.pageSize, pagination.total)} of{' '}
             {pagination.total} results
           </div>
@@ -750,9 +737,7 @@ export function EnhancedResponsiveTable<T = any>({
             >
               Previous
             </TouchOptimizedButton>
-            <span className="text-sm text-gray-700">
-              Page {pagination.page}
-            </span>
+            <span className="text-sm text-gray-700">Page {pagination.page}</span>
             <TouchOptimizedButton
               onClick={() => pagination.onPageChange(pagination.page + 1)}
               disabled={pagination.page * pagination.pageSize >= pagination.total}

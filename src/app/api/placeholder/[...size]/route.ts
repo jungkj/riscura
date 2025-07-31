@@ -5,19 +5,16 @@ interface RouteParams {
 }
 
 // Generate placeholder image
-export async function GET(
-  request: NextRequest,
-  { params }: RouteParams
-): Promise<NextResponse> {
+export async function GET(request: NextRequest, { params }: RouteParams): Promise<NextResponse> {
   try {
     // Await the params to get the actual values
     const resolvedParams = await params;
     const { size } = resolvedParams;
-    
+
     // Default dimensions
     let width = 400;
     let height = 300;
-    
+
     if (size && size.length > 0) {
       const dimensions = size[0].split('x');
       if (dimensions.length === 2) {
@@ -30,9 +27,9 @@ export async function GET(
         height = dim;
       }
     }
-    
+
     console.log(`Generating placeholder image: ${width}x${height}`);
-    
+
     // Create a simple SVG placeholder
     const svg = `
       <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
@@ -43,7 +40,7 @@ export async function GET(
         </text>
       </svg>
     `;
-    
+
     return new NextResponse(svg, {
       headers: {
         'Content-Type': 'image/svg+xml',
@@ -52,7 +49,7 @@ export async function GET(
     });
   } catch (error) {
     console.error('Error generating placeholder:', error);
-    
+
     // Fallback SVG
     const fallbackSvg = `
       <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
@@ -63,7 +60,7 @@ export async function GET(
         </text>
       </svg>
     `;
-    
+
     return new NextResponse(fallbackSvg, {
       headers: {
         'Content-Type': 'image/svg+xml',
@@ -71,4 +68,4 @@ export async function GET(
       },
     });
   }
-} 
+}

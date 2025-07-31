@@ -7,8 +7,8 @@ import Link from 'next/link';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
-import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisyCard, DaisyCardBody, DaisyCardContent } from '@/components/ui/DaisyCard';
+import { DaisyAlert, DaisyAlertDescription } from '@/components/ui/DaisyAlert';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { Eye, EyeOff, Mail, Lock, AlertCircle, User, CheckCircle } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
@@ -113,18 +113,13 @@ function RegisterForm() {
         </div>
 
         {/* Register Card */}
-        <DaisyCard className="backdrop-blur-sm bg-white/70 dark:bg-slate-800/70 border-slate-200/60 dark:border-slate-700/60 shadow-2xl shadow-slate-900/10" >
-  <DaisyCardContent className="p-8 space-y-6" >
-  </DaisyCard>
-</DaisyCardContent>
+        <DaisyCard className="backdrop-blur-sm bg-white/70 dark:bg-slate-800/70 border-slate-200/60 dark:border-slate-700/60 shadow-2xl shadow-slate-900/10">
+          <DaisyCardContent className="p-8 space-y-6">
             {(error || authError) && (
-              <DaisyAlert variant="error" className="border-red-200 bg-red-50 dark:bg-red-950/50" >
-  <DaisyAlertCircle className="h-4 w-4" />
-</DaisyAlert>
-                <DaisyAlertDescription className="text-red-700 dark:text-red-300" >
-  {error || authError}
-                </DaisyAlertDescription>
-</DaisyAlert>
+              <DaisyAlert variant="error" className="border-red-200 bg-red-50 dark:bg-red-950/50">
+                <AlertCircle className="h-4 w-4" />
+                <DaisyAlertDescription className="text-red-700 dark:text-red-300">
+                  {error || authError}
                 </DaisyAlertDescription>
               </DaisyAlert>
             )}
@@ -133,7 +128,7 @@ function RegisterForm() {
               {/* Name Fields */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <DaisyLabel htmlFor="firstName" className="text-slate-700 dark:text-slate-300 font-medium" />
+                  <DaisyLabel htmlFor="firstName" className="text-slate-700 dark:text-slate-300 font-medium">
                     First Name
                   </DaisyLabel>
                   <div className="relative">
@@ -152,9 +147,9 @@ function RegisterForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <DaisyLabel htmlFor="lastName" className="text-slate-700 dark:text-slate-300 font-medium" />
+                  <DaisyLabel htmlFor="lastName" className="text-slate-700 dark:text-slate-300 font-medium">
                     Last Name
-                  </DaisyInput>
+                  </DaisyLabel>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
                     <DaisyInput
@@ -173,9 +168,9 @@ function RegisterForm() {
 
               {/* Email Field */}
               <div className="space-y-2">
-                <DaisyLabel htmlFor="email" className="text-slate-700 dark:text-slate-300 font-medium" />
+                <DaisyLabel htmlFor="email" className="text-slate-700 dark:text-slate-300 font-medium">
                   Email Address
-                </DaisyInput>
+                </DaisyLabel>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
                   <DaisyInput
@@ -193,9 +188,9 @@ function RegisterForm() {
 
               {/* Password Field */}
               <div className="space-y-2">
-                <DaisyLabel htmlFor="password" className="text-slate-700 dark:text-slate-300 font-medium" />
+                <DaisyLabel htmlFor="password" className="text-slate-700 dark:text-slate-300 font-medium">
                   Password
-                </DaisyInput>
+                </DaisyLabel>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
                   <DaisyInput
@@ -213,19 +208,20 @@ function RegisterForm() {
                     variant="ghost"
                     size="sm"
                     className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                    onClick={() => setShowPassword(!showPassword)} />
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4 text-slate-400" />
                     ) : (
                       <Eye className="h-4 w-4 text-slate-400" />
                     )}
-                  </DaisyInput>
+                  </DaisyButton>
                 </div>
               </div>
 
               {/* Confirm Password Field */}
               <div className="space-y-2">
-                <DaisyLabel htmlFor="confirmPassword" className="text-slate-700 dark:text-slate-300 font-medium" />
+                <DaisyLabel htmlFor="confirmPassword" className="text-slate-700 dark:text-slate-300 font-medium">
                   Confirm Password
                 </DaisyLabel>
                 <div className="relative">
@@ -245,22 +241,23 @@ function RegisterForm() {
                     variant="ghost"
                     size="sm"
                     className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)} />
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
                     {showConfirmPassword ? (
                       <EyeOff className="h-4 w-4 text-slate-400" />
                     ) : (
                       <Eye className="h-4 w-4 text-slate-400" />
                     )}
-                  </DaisyInput>
+                  </DaisyButton>
                 </div>
               </div>
 
               <DaisyButton 
                 type="submit" 
                 className="w-full h-11 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium shadow-lg shadow-blue-500/25 transition-all duration-200" 
-                disabled={isLoading} >
-  {isLoading ? (
-</DaisyButton>
+                disabled={isLoading}
+              >
+                {isLoading ? (
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     <span>Creating account...</span>
@@ -287,9 +284,9 @@ function RegisterForm() {
               variant="secondary"
               className="w-full h-11 bg-white/50 dark:bg-slate-900/50 border-slate-300 dark:border-slate-600 hover:bg-white dark:hover:bg-slate-800 transition-colors"
               onClick={handleGoogleSignUp}
-              disabled={isLoading} >
-  <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
-</DaisySeparator>
+              disabled={isLoading}
+            >
+              <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                 <path
                   fill="currentColor"
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"

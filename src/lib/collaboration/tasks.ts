@@ -1,15 +1,15 @@
 import { db } from '@/lib/db';
-import { 
-  Task, 
-  TaskType, 
-  TaskStatus, 
+import {
+  Task,
+  TaskType,
+  TaskStatus,
   Priority,
   ActivityType,
   EntityType,
   NotificationType,
   User,
   Comment,
-  Activity
+  Activity,
 } from '@prisma/client';
 import { collaborationServer } from './websocket';
 
@@ -91,7 +91,6 @@ export interface ApprovalAction {
 }
 
 export class TaskManager {
-  
   // Create a new task
   async createTask(taskData: {
     title: string;
@@ -194,7 +193,11 @@ export class TaskManager {
   }
 
   // Update task status and fields
-  async updateTask(taskId: string, updates: Partial<Task>, updatedBy: string): Promise<TaskWithRelations> {
+  async updateTask(
+    taskId: string,
+    updates: Partial<Task>,
+    updatedBy: string
+  ): Promise<TaskWithRelations> {
     const existingTask = await db.client.task.findUnique({
       where: { id: taskId },
     });
@@ -223,7 +226,8 @@ export class TaskManager {
       where: { id: taskId },
       data: {
         ...updates,
-        completedAt: updates.status === TaskStatus.COMPLETED ? new Date() : existingTask.completedAt,
+        completedAt:
+          updates.status === TaskStatus.COMPLETED ? new Date() : existingTask.completedAt,
       },
       include: {
         assignee: {
@@ -258,7 +262,7 @@ export class TaskManager {
         organizationId: existingTask.organizationId,
         metadata: {
           taskId,
-          changes: changes.map(c => ({ field: c.field, from: c.oldValue, to: c.newValue })),
+          changes: changes.map((c) => ({ field: c.field, from: c.oldValue, to: c.newValue })),
         },
         isPublic: true,
       },
@@ -277,7 +281,12 @@ export class TaskManager {
 
     // Send notifications for status changes
     if (updates.status && updates.status !== existingTask.status) {
-      await this.handleStatusChangeNotifications(updatedTask, existingTask.status, updates.status, updatedBy);
+      await this.handleStatusChangeNotifications(
+        updatedTask,
+        existingTask.status,
+        updates.status,
+        updatedBy
+      );
     }
 
     // Send notifications for assignee changes
@@ -296,7 +305,12 @@ export class TaskManager {
   }
 
   // Add comment to task
-  async addTaskComment(taskId: string, content: string, authorId: string, mentions: string[] = []): Promise<TaskComment> {
+  async addTaskComment(
+    taskId: string,
+    content: string,
+    authorId: string,
+    mentions: string[] = []
+  ): Promise<TaskComment> {
     const comment = await db.client.taskComment.create({
       data: {
         taskId,
@@ -361,7 +375,7 @@ export class TaskManager {
     const participantIds = new Set([
       task.assigneeId,
       task.creatorId,
-      ...task.watchers.map(w => w.id),
+      ...task.watchers.map((w) => w.id),
     ]);
     participantIds.delete(authorId);
 
@@ -380,23 +394,26 @@ export class TaskManager {
   }
 
   // Get tasks for user with filtering
-  async getUserTasks(userId: string, organizationId: string, filters: {
-    status?: string[];
-    priority?: string[];
-    type?: string[];
-    assigned?: boolean;
-    created?: boolean;
-    watching?: boolean;
-    entityType?: string;
-    entityId?: string;
-    dueDateFrom?: Date;
-    dueDateTo?: Date;
-    completedFrom?: Date;
-    completedTo?: Date;
-    limit?: number;
-    offset?: number;
-  } = {}): Promise<{ tasks: TaskWithRelations[]; total: number }> {
-    
+  async getUserTasks(
+    userId: string,
+    organizationId: string,
+    filters: {
+      status?: string[];
+      priority?: string[];
+      type?: string[];
+      assigned?: boolean;
+      created?: boolean;
+      watching?: boolean;
+      entityType?: string;
+      entityId?: string;
+      dueDateFrom?: Date;
+      dueDateTo?: Date;
+      completedFrom?: Date;
+      completedTo?: Date;
+      limit?: number;
+      offset?: number;
+    } = {}
+  ): Promise<{ tasks: TaskWithRelations[]; total: number }> {
     const where: any = {
       organizationId,
       OR: [],
@@ -405,11 +422,11 @@ export class TaskManager {
     if (filters.assigned) {
       where.OR.push({ assigneeId: userId });
     }
-    
+
     if (filters.created) {
       where.OR.push({ creatorId: userId });
     }
-    
+
     if (filters.watching) {
       where.OR.push({ watchers: { some: { id: userId } } });
     }
@@ -505,11 +522,7 @@ export class TaskManager {
             },
           },
         },
-        orderBy: [
-          { priority: 'desc' },
-          { dueDate: 'asc' },
-          { createdAt: 'desc' },
-        ],
+        orderBy: [{ priority: 'desc' }, { dueDate: 'asc' }, { createdAt: 'desc' }],
         take: filters.limit || 50,
         skip: filters.offset || 0,
       }),
@@ -520,16 +533,22 @@ export class TaskManager {
   }
 
   // Handle status change notifications
-  private async handleStatusChangeNotifications(task: TaskWithRelations, oldStatus: string, newStatus: string, updatedBy: string): Promise<void> {
+  private async handleStatusChangeNotifications(
+    task: TaskWithRelations,
+    oldStatus: string,
+    newStatus: string,
+    updatedBy: string
+  ): Promise<void> {
     const statusMessages = {
-      'todo': 'Task is ready to start',
-      'in_progress': 'Task is now in progress',
-      'review': 'Task is ready for review',
-      'completed': 'Task has been completed',
-      'cancelled': 'Task has been cancelled',
+      todo: 'Task is ready to start',
+      in_progress: 'Task is now in progress',
+      review: 'Task is ready for review',
+      completed: 'Task has been completed',
+      cancelled: 'Task has been cancelled',
     };
 
-    const message = statusMessages[newStatus as keyof typeof statusMessages] || 'Task status updated';
+    const message =
+      statusMessages[newStatus as keyof typeof statusMessages] || 'Task status updated';
 
     // Notify assignee if different from updater
     if (task.assigneeId && task.assigneeId !== updatedBy) {
@@ -600,8 +619,8 @@ export class TaskManager {
     });
 
     const totalTasks = entityTasks.length;
-    const completedTasks = entityTasks.filter(t => t.status === 'completed').length;
-    const inProgressTasks = entityTasks.filter(t => t.status === 'in_progress').length;
+    const completedTasks = entityTasks.filter((t) => t.status === 'completed').length;
+    const inProgressTasks = entityTasks.filter((t) => t.status === 'in_progress').length;
 
     // Log workflow progress
     await db.client.activity.create({
@@ -625,7 +644,7 @@ export class TaskManager {
     // Check for milestone completion (e.g., 50%, 75%, 100%)
     const completionPercentage = (completedTasks / totalTasks) * 100;
     const milestones = [25, 50, 75, 100];
-    
+
     for (const milestone of milestones) {
       if (completionPercentage >= milestone) {
         // Check if this milestone was already reached
@@ -707,7 +726,6 @@ export class TaskManager {
           userId: notification.senderId,
         });
       }
-
     } catch (error) {
       console.error('Failed to create task notification:', error);
     }
@@ -746,8 +764,8 @@ export class TaskManager {
         },
       });
 
-      const hasDeletePermission = user?.userRoles.some(ur =>
-        ur.role.permissions.some(p => p.name === 'TASKS_DELETE')
+      const hasDeletePermission = user?.userRoles.some((ur) =>
+        ur.role.permissions.some((p) => p.name === 'TASKS_DELETE')
       );
 
       if (!hasDeletePermission) {
@@ -785,7 +803,7 @@ export class TaskManager {
     const participantIds = new Set([
       task.assigneeId,
       task.creatorId,
-      ...task.watchers.map(w => w.id),
+      ...task.watchers.map((w) => w.id),
     ]);
     participantIds.delete(deletedBy);
 
@@ -813,4 +831,4 @@ export class TaskManager {
   }
 }
 
-export const taskManager = new TaskManager(); 
+export const taskManager = new TaskManager();

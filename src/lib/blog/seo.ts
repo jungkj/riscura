@@ -7,8 +7,8 @@ export function generateBlogPostMetadata(post: BlogPostMeta): Metadata {
   const title = `${post.title} | Riscura Blog`;
   const description = post.seo.metaDescription || post.excerpt;
   const url = `${baseUrl}/blog/${post.slug}`;
-  const imageUrl = post.featuredImage.src.startsWith('http') 
-    ? post.featuredImage.src 
+  const imageUrl = post.featuredImage.src.startsWith('http')
+    ? post.featuredImage.src
     : `${baseUrl}${post.featuredImage.src}`;
 
   return {
@@ -64,10 +64,10 @@ export function generateBlogPostMetadata(post: BlogPostMeta): Metadata {
 }
 
 export function generateBlogListingMetadata(category?: string): Metadata {
-  const title = category 
-    ? `${category} Articles | Riscura Blog` 
+  const title = category
+    ? `${category} Articles | Riscura Blog`
     : 'Blog | Risk Management Insights for Small Teams | Riscura';
-  
+
   const description = category
     ? `Expert insights and guides on ${category.toLowerCase()} for small business risk management.`
     : 'Expert insights on risk management, compliance, and GRC for small teams. Learn how to migrate from Excel to automated risk management.';
@@ -75,7 +75,8 @@ export function generateBlogListingMetadata(category?: string): Metadata {
   return {
     title,
     description,
-    keywords: 'risk management blog, RCSA guide, GRC software, compliance automation, small business risk management',
+    keywords:
+      'risk management blog, RCSA guide, GRC software, compliance automation, small business risk management',
     openGraph: {
       title,
       description,

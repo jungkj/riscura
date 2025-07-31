@@ -13,7 +13,7 @@ const importSchema = z.object({
 export const POST = withApiMiddleware({
   requireAuth: true,
   bodySchema: importSchema,
-  rateLimiters: ['fileUpload']
+  rateLimiters: ['fileUpload'],
 })(async (context, { integrationId, fileId, fileName }) => {
   const { user, organizationId } = context;
 
@@ -23,20 +23,21 @@ export const POST = withApiMiddleware({
       where: {
         id: integrationId,
         organizationId,
-        isActive: true
-      }
+        isActive: true,
+      },
     });
 
     if (!integration) {
       return {
-        error: 'SharePoint integration not found or inactive'
+        error: 'SharePoint integration not found or inactive',
       };
     }
 
     // Validate driveId before transaction
     if (!integration.driveId || integration.driveId.trim() === '') {
       return {
-        error: 'SharePoint integration is missing driveId. Please reconnect to SharePoint and select a document library.'
+        error:
+          'SharePoint integration is missing driveId. Please reconnect to SharePoint and select a document library.',
       };
     }
 
@@ -47,20 +48,20 @@ export const POST = withApiMiddleware({
         where: {
           organizationId,
           status: {
-            in: ['QUEUED', 'PROCESSING']
+            in: ['QUEUED', 'PROCESSING'],
           },
           metadata: {
             path: ['fileId'],
-            equals: fileId
-          }
-        }
+            equals: fileId,
+          },
+        },
       });
 
       if (activeImport) {
         return {
           error: 'This file is already being imported',
           jobId: activeImport.id,
-          isError: true
+          isError: true,
         };
       }
 
@@ -78,14 +79,14 @@ export const POST = withApiMiddleware({
             integrationId,
             siteId: integration.siteId,
             driveId: integration.driveId,
-            importedBy: user.email || user.name || user.id
-          }
-        }
+            importedBy: user.email || user.name || user.id,
+          },
+        },
       });
 
       return {
         jobId: importJob.id,
-        isError: false
+        isError: false,
       };
     });
 
@@ -93,7 +94,7 @@ export const POST = withApiMiddleware({
     if (result.isError) {
       return {
         error: result.error,
-        jobId: result.jobId
+        jobId: result.jobId,
       };
     }
 
@@ -102,13 +103,13 @@ export const POST = withApiMiddleware({
     return {
       jobId,
       message: 'Import job created successfully',
-      status: 'QUEUED'
+      status: 'QUEUED',
     };
   } catch (error) {
     console.error('Error creating import job:', error);
-    
+
     return {
-      error: 'Failed to start import. Please try again.'
+      error: 'Failed to start import. Please try again.',
     };
   }
 });
@@ -116,7 +117,7 @@ export const POST = withApiMiddleware({
 // GET endpoint to check import history
 export const GET = withApiMiddleware({
   requireAuth: true,
-  rateLimiters: ['standard']
+  rateLimiters: ['standard'],
 })(async (context) => {
   const { organizationId } = context;
   const { searchParams } = new URL(context.req.url);
@@ -126,13 +127,13 @@ export const GET = withApiMiddleware({
 
   const where: Prisma.ImportJobWhereInput = {
     organizationId,
-    type: 'sharepoint'
+    type: 'sharepoint',
   };
 
   if (integrationId) {
     where.metadata = {
       path: ['integrationId'],
-      equals: integrationId
+      equals: integrationId,
     };
   }
 
@@ -147,16 +148,16 @@ export const GET = withApiMiddleware({
           select: {
             id: true,
             name: true,
-            email: true
-          }
-        }
-      }
+            email: true,
+          },
+        },
+      },
     }),
-    prisma.importJob.count({ where })
+    prisma.importJob.count({ where }),
   ]);
 
   return {
-    jobs: jobs.map(job => ({
+    jobs: jobs.map((job) => ({
       id: job.id,
       status: job.status,
       progress: job.progress,
@@ -168,12 +169,12 @@ export const GET = withApiMiddleware({
       importedBy: {
         id: job.user.id,
         name: job.user.name,
-        email: job.user.email
+        email: job.user.email,
       },
-      metadata: job.metadata
+      metadata: job.metadata,
     })),
     total,
     limit,
-    offset
+    offset,
   };
 });

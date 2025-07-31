@@ -35,7 +35,7 @@ export class ServiceWorkerManager {
       enablePushNotifications: false,
       enableOfflineAnalytics: true,
       updateCheckInterval: 60000, // 1 minute
-      ...config
+      ...config,
     };
 
     this.init();
@@ -60,7 +60,7 @@ export class ServiceWorkerManager {
   private async register(): Promise<void> {
     try {
       this.registration = await navigator.serviceWorker.register(this.config.swPath);
-      
+
       // Handle updates
       this.registration.addEventListener('updatefound', () => {
         const newWorker = this.registration!.installing;
@@ -186,7 +186,7 @@ export class ServiceWorkerManager {
 
     this.postMessage({
       type: 'CLEAR_CACHE',
-      payload: { cacheName }
+      payload: { cacheName },
     });
   }
 
@@ -200,9 +200,12 @@ export class ServiceWorkerManager {
         resolve(event.data.size || 0);
       };
 
-      this.postMessage({
-        type: 'GET_CACHE_SIZE'
-      }, [messageChannel.port2]);
+      this.postMessage(
+        {
+          type: 'GET_CACHE_SIZE',
+        },
+        [messageChannel.port2]
+      );
     });
   }
 
@@ -345,18 +348,24 @@ export function useServiceWorker(config: ServiceWorkerConfig = {}) {
     return hasUpdate;
   }, [swManager]);
 
-  const clearCache = useCallback(async (cacheName?: string) => {
-    await swManager.clearCache(cacheName);
-  }, [swManager]);
+  const clearCache = useCallback(
+    async (cacheName?: string) => {
+      await swManager.clearCache(cacheName);
+    },
+    [swManager]
+  );
 
   const getCacheSize = useCallback(async () => {
     return await swManager.getCacheSize();
   }, [swManager]);
 
-  const addToSyncQueue = useCallback(async (data: any, tag?: string) => {
-    await swManager.addToSyncQueue(data, tag);
-    setSyncQueueLength(swManager.getSyncQueueLength());
-  }, [swManager]);
+  const addToSyncQueue = useCallback(
+    async (data: any, tag?: string) => {
+      await swManager.addToSyncQueue(data, tag);
+      setSyncQueueLength(swManager.getSyncQueueLength());
+    },
+    [swManager]
+  );
 
   return {
     isRegistered,
@@ -369,7 +378,7 @@ export function useServiceWorker(config: ServiceWorkerConfig = {}) {
     getCacheSize,
     addToSyncQueue,
     postMessage: swManager.postMessage.bind(swManager),
-    getRegistration: swManager.getRegistration.bind(swManager)
+    getRegistration: swManager.getRegistration.bind(swManager),
   };
 }
 
@@ -378,25 +387,28 @@ export function useOfflineSync() {
   const { addToSyncQueue, isOnline } = useServiceWorker();
   const [pendingItems, setPendingItems] = useState<any[]>([]);
 
-  const addItem = useCallback(async (item: any, syncTag = 'data-sync') => {
-    if (isOnline) {
-      // Try to sync immediately
-      try {
-        await syncItem(item);
-        return true;
-      } catch (error) {
-        // Fall back to queue
+  const addItem = useCallback(
+    async (item: any, syncTag = 'data-sync') => {
+      if (isOnline) {
+        // Try to sync immediately
+        try {
+          await syncItem(item);
+          return true;
+        } catch (error) {
+          // Fall back to queue
+          await addToSyncQueue(item, syncTag);
+          setPendingItems((prev) => [...prev, item]);
+          return false;
+        }
+      } else {
+        // Add to sync queue
         await addToSyncQueue(item, syncTag);
-        setPendingItems(prev => [...prev, item]);
+        setPendingItems((prev) => [...prev, item]);
         return false;
       }
-    } else {
-      // Add to sync queue
-      await addToSyncQueue(item, syncTag);
-      setPendingItems(prev => [...prev, item]);
-      return false;
-    }
-  }, [isOnline, addToSyncQueue]);
+    },
+    [isOnline, addToSyncQueue]
+  );
 
   const syncItem = async (item: any): Promise<void> => {
     // Override this function with actual sync logic
@@ -407,7 +419,7 @@ export function useOfflineSync() {
   useEffect(() => {
     const handleSyncComplete = (event: CustomEvent) => {
       const { data } = event.detail;
-      setPendingItems(prev => prev.filter(item => item.id !== data.id));
+      setPendingItems((prev) => prev.filter((item) => item.id !== data.id));
     };
 
     document.addEventListener('background-sync-complete', handleSyncComplete as EventListener);
@@ -421,7 +433,7 @@ export function useOfflineSync() {
     addItem,
     pendingItems,
     pendingCount: pendingItems.length,
-    isOnline
+    isOnline,
   };
 }
 
@@ -469,7 +481,7 @@ export const serviceWorkerUtils = {
       }
     }
     return null;
-  }
+  },
 };
 
-export default ServiceWorkerManager; 
+export default ServiceWorkerManager;

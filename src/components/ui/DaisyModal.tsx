@@ -10,7 +10,13 @@ interface ModalProps {
   closeButton?: boolean;
 }
 
-export const DaisyModal = ({ open, onClose, children, className, closeButton = true }: ModalProps) => {
+export const DaisyModal = ({
+  open,
+  onClose,
+  children,
+  className,
+  closeButton = true,
+}: ModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -40,7 +46,11 @@ export const DaisyModal = ({ open, onClose, children, className, closeButton = t
   );
 };
 
-export const DaisyModalAction = ({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
+export const DaisyModalAction = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => {
   return (
     <div className={cn('modal-action', className)} {...props}>
       {children}
