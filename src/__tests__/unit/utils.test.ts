@@ -53,10 +53,7 @@ describe('Test Setup Verification', () => {
   });
 
   it('should mock API responses', () => {
-    const mockResponse = global.testUtils.mockApiResponse(
-      { success: true, data: { id: 1 } },
-      200
-    );
+    const mockResponse = global.testUtils.mockApiResponse({ success: true, data: { id: 1 } }, 200);
 
     expect(mockResponse.status).toBe(200);
     expect(mockResponse.ok).toBe(true);
@@ -65,4 +62,4 @@ describe('Test Setup Verification', () => {
       data: { id: 1 },
     });
   });
-}); 
+});

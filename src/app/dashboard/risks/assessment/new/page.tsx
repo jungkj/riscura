@@ -140,9 +140,9 @@ export default function NewAssessmentPage() {
           <DaisyButton
             variant="outline"
             onClick={handleCancel}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
+            className="flex items-center gap-2" >
+  <ArrowLeft className="w-4 h-4" />
+</DaisyButton>
             Back
           </DaisyButton>
           <div>
@@ -151,12 +151,14 @@ export default function NewAssessmentPage() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <DaisyButton variant="outline" onClick={handleCancel}>
-            <X className="w-4 h-4 mr-2" />
+          <DaisyButton variant="outline" onClick={handleCancel} >
+  <X className="w-4 h-4 mr-2" />
+</DaisyButton>
             Cancel
           </DaisyButton>
-          <DaisyButton onClick={handleSave} disabled={isLoading}>
-            <Save className="w-4 h-4 mr-2" />
+          <DaisyButton onClick={handleSave} disabled={isLoading} >
+  <Save className="w-4 h-4 mr-2" />
+</DaisyButton>
             {isLoading ? 'Creating...' : 'Create Assessment'}
           </DaisyButton>
         </div>
@@ -166,12 +168,14 @@ export default function NewAssessmentPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Form */}
         <div className="lg:col-span-2 space-y-6">
-          <DaisyCard>
-            <DaisyCardHeader>
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
               <DaisyCardTitle>Basic Information</DaisyCardTitle>
-            
-            <DaisyCardContent className="space-y-4">
-              <div className="space-y-2">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4" >
+  <div className="space-y-2">
+</DaisyCardContent>
                 <DaisyLabel htmlFor="title">Assessment Title *</DaisyLabel>
                 <DaisyInput
                   id="title"
@@ -182,8 +186,9 @@ export default function NewAssessmentPage() {
                 />
                 {errors.title && (
                   <p className="text-sm text-red-600 flex items-center gap-1">
-                    <DaisyAlertCircle className="h-4 w-4" />
-                    {errors.title}
+                    <DaisyAlertCircle className="h-4 w-4" >
+  {errors.title}
+</DaisyInput>
                   </p>
                 )}
               </div>
@@ -200,8 +205,9 @@ export default function NewAssessmentPage() {
                 />
                 {errors.description && (
                   <p className="text-sm text-red-600 flex items-center gap-1">
-                    <DaisyAlertCircle className="h-4 w-4" />
-                    {errors.description}
+                    <DaisyAlertCircle className="h-4 w-4" >
+  {errors.description}
+</DaisyTextarea>
                   </p>
                 )}
               </div>
@@ -211,24 +217,23 @@ export default function NewAssessmentPage() {
                   <DaisyLabel htmlFor="assessmentType">Assessment Type *</DaisyLabel>
                   <DaisySelect
                     value={formData.assessmentType}
-                    onValueChange={(value) => handleInputChange('assessmentType', value)}
-                  >
-                    <DaisySelectTrigger className={errors.assessmentType ? 'border-red-500' : ''}>
-                      <DaisySelectValue placeholder="Select assessment type" />
-                    </SelectTrigger>
-                    <DaisySelectContent>
-                      <DaisySelectItem value="security">Security Assessment</SelectItem>
-                      <DaisySelectItem value="operational">Operational Risk Assessment</SelectItem>
-                      <DaisySelectItem value="compliance">Compliance Assessment</SelectItem>
-                      <DaisySelectItem value="third-party">Third-Party Risk Assessment</SelectItem>
-                      <DaisySelectItem value="business-continuity">Business Continuity Assessment</SelectItem>
-                      <DaisySelectItem value="comprehensive">Comprehensive Risk Assessment</SelectItem>
-                    </SelectContent>
+                    onValueChange={(value) => handleInputChange('assessmentType', value)} />
+                    <DaisySelectTrigger className={errors.assessmentType ? 'border-red-500' : ''} />
+                      <DaisySelectValue placeholder="Select assessment type" /></DaisySelect>
+                    <DaisySelectContent />
+                      <DaisySelectItem value="security">Security Assessment</DaisySelectContent>
+                      <DaisySelectItem value="operational">Operational Risk Assessment</DaisySelectItem>
+                      <DaisySelectItem value="compliance">Compliance Assessment</DaisySelectItem>
+                      <DaisySelectItem value="third-party">Third-Party Risk Assessment</DaisySelectItem>
+                      <DaisySelectItem value="business-continuity">Business Continuity Assessment</DaisySelectItem>
+                      <DaisySelectItem value="comprehensive">Comprehensive Risk Assessment</DaisySelectItem>
+                    </DaisySelectContent>
                   </DaisySelect>
                   {errors.assessmentType && (
                     <p className="text-sm text-red-600 flex items-center gap-1">
-                      <DaisyAlertCircle className="h-4 w-4" />
-                      {errors.assessmentType}
+                      <DaisyAlertCircle className="h-4 w-4" >
+  {errors.assessmentType}
+</DaisyAlertCircle>
                     </p>
                   )}
                 </div>
@@ -237,20 +242,18 @@ export default function NewAssessmentPage() {
                   <DaisyLabel htmlFor="framework">Framework (Optional)</DaisyLabel>
                   <DaisySelect
                     value={formData.framework}
-                    onValueChange={(value) => handleInputChange('framework', value)}
-                  >
-                    <DaisySelectTrigger>
-                      <DaisySelectValue placeholder="Select framework" />
-                    </SelectTrigger>
-                    <DaisySelectContent>
-                      <DaisySelectItem value="iso27001">ISO 27001</SelectItem>
-                      <DaisySelectItem value="nist">NIST Cybersecurity Framework</SelectItem>
-                      <DaisySelectItem value="coso">COSO Framework</SelectItem>
-                      <DaisySelectItem value="sox">SOX Compliance</SelectItem>
-                      <DaisySelectItem value="gdpr">GDPR</SelectItem>
-                      <DaisySelectItem value="hipaa">HIPAA</SelectItem>
-                      <DaisySelectItem value="custom">Custom Framework</SelectItem>
-                    </SelectContent>
+                    onValueChange={(value) => handleInputChange('framework', value)} />
+                    <DaisySelectTrigger />
+                      <DaisySelectValue placeholder="Select framework" /></DaisySelect>
+                    <DaisySelectContent />
+                      <DaisySelectItem value="iso27001">ISO 27001</DaisySelectContent>
+                      <DaisySelectItem value="nist">NIST Cybersecurity Framework</DaisySelectItem>
+                      <DaisySelectItem value="coso">COSO Framework</DaisySelectItem>
+                      <DaisySelectItem value="sox">SOX Compliance</DaisySelectItem>
+                      <DaisySelectItem value="gdpr">GDPR</DaisySelectItem>
+                      <DaisySelectItem value="hipaa">HIPAA</DaisySelectItem>
+                      <DaisySelectItem value="custom">Custom Framework</DaisySelectItem>
+                    </DaisySelectContent>
                   </DaisySelect>
                 </div>
               </div>
@@ -260,17 +263,15 @@ export default function NewAssessmentPage() {
                   <DaisyLabel htmlFor="priority">Priority</DaisyLabel>
                   <DaisySelect
                     value={formData.priority}
-                    onValueChange={(value) => handleInputChange('priority', value)}
-                  >
-                    <DaisySelectTrigger>
-                      <DaisySelectValue placeholder="Select priority" />
-                    </SelectTrigger>
-                    <DaisySelectContent>
-                      <DaisySelectItem value="Low">Low</SelectItem>
-                      <DaisySelectItem value="Medium">Medium</SelectItem>
-                      <DaisySelectItem value="High">High</SelectItem>
-                      <DaisySelectItem value="Critical">Critical</SelectItem>
-                    </SelectContent>
+                    onValueChange={(value) => handleInputChange('priority', value)} />
+                    <DaisySelectTrigger />
+                      <DaisySelectValue placeholder="Select priority" /></DaisySelect>
+                    <DaisySelectContent />
+                      <DaisySelectItem value="Low">Low</DaisySelectContent>
+                      <DaisySelectItem value="Medium">Medium</DaisySelectItem>
+                      <DaisySelectItem value="High">High</DaisySelectItem>
+                      <DaisySelectItem value="Critical">Critical</DaisySelectItem>
+                    </DaisySelectContent>
                   </DaisySelect>
                 </div>
 
@@ -278,23 +279,22 @@ export default function NewAssessmentPage() {
                   <DaisyLabel htmlFor="assignee">Assignee *</DaisyLabel>
                   <DaisySelect
                     value={formData.assignee}
-                    onValueChange={(value) => handleInputChange('assignee', value)}
-                  >
-                    <DaisySelectTrigger className={errors.assignee ? 'border-red-500' : ''}>
-                      <DaisySelectValue placeholder="Select assignee" />
-                    </SelectTrigger>
-                    <DaisySelectContent>
-                      <DaisySelectItem value="Security Team">Security Team</SelectItem>
-                      <DaisySelectItem value="Risk Team">Risk Team</SelectItem>
-                      <DaisySelectItem value="Compliance Team">Compliance Team</SelectItem>
-                      <DaisySelectItem value="IT Team">IT Team</SelectItem>
-                      <DaisySelectItem value="Internal Audit">Internal Audit</SelectItem>
-                    </SelectContent>
+                    onValueChange={(value) => handleInputChange('assignee', value)} />
+                    <DaisySelectTrigger className={errors.assignee ? 'border-red-500' : ''} />
+                      <DaisySelectValue placeholder="Select assignee" /></DaisySelect>
+                    <DaisySelectContent />
+                      <DaisySelectItem value="Security Team">Security Team</DaisySelectContent>
+                      <DaisySelectItem value="Risk Team">Risk Team</DaisySelectItem>
+                      <DaisySelectItem value="Compliance Team">Compliance Team</DaisySelectItem>
+                      <DaisySelectItem value="IT Team">IT Team</DaisySelectItem>
+                      <DaisySelectItem value="Internal Audit">Internal Audit</DaisySelectItem>
+                    </DaisySelectContent>
                   </DaisySelect>
                   {errors.assignee && (
                     <p className="text-sm text-red-600 flex items-center gap-1">
-                      <DaisyAlertCircle className="h-4 w-4" />
-                      {errors.assignee}
+                      <DaisyAlertCircle className="h-4 w-4" >
+  {errors.assignee}
+</DaisyAlertCircle>
                     </p>
                   )}
                 </div>
@@ -310,8 +310,9 @@ export default function NewAssessmentPage() {
                   />
                   {errors.dueDate && (
                     <p className="text-sm text-red-600 flex items-center gap-1">
-                      <DaisyAlertCircle className="h-4 w-4" />
-                      {errors.dueDate}
+                      <DaisyAlertCircle className="h-4 w-4" >
+  {errors.dueDate}
+</DaisyInput>
                     </p>
                   )}
                 </div>
@@ -327,9 +328,9 @@ export default function NewAssessmentPage() {
                       checked={formData.includeThirdParty}
                       onCheckedChange={(checked) => handleInputChange('includeThirdParty', checked as boolean)}
                     />
-                    <DaisyLabel htmlFor="includeThirdParty" className="text-sm font-normal">
+                    <DaisyLabel htmlFor="includeThirdParty" className="text-sm font-normal" />
                       Include third-party vendor assessment
-                    </DaisyLabel>
+                    </DaisyCheckbox>
                   </div>
                   <div className="flex items-center space-x-2">
                     <DaisyCheckbox
@@ -337,28 +338,31 @@ export default function NewAssessmentPage() {
                       checked={formData.includeCompliance}
                       onCheckedChange={(checked) => handleInputChange('includeCompliance', checked as boolean)}
                     />
-                    <DaisyLabel htmlFor="includeCompliance" className="text-sm font-normal">
+                    <DaisyLabel htmlFor="includeCompliance" className="text-sm font-normal" />
                       Include compliance requirements evaluation
-                    </DaisyLabel>
+                    </DaisyCheckbox>
                   </div>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Objectives */}
-          <DaisyCard>
-            <DaisyCardHeader>
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
               <div className="flex items-center justify-between">
                 <DaisyCardTitle>Assessment Objectives *</DaisyCardTitle>
-                <DaisyButton onClick={addObjective} size="sm" variant="outline">
-                  <Plus className="h-4 w-4 mr-2" />
+                <DaisyButton onClick={addObjective} size="sm" variant="outline" >
+  <Plus className="h-4 w-4 mr-2" />
+</DaisyButton>
                   Add Objective
                 </DaisyButton>
               </div>
             
-            <DaisyCardContent className="space-y-3">
-              {formData.objectives.map((objective, index) => (
+            <DaisyCardContent className="space-y-3" >
+  {formData.objectives.map((objective, index) => (
+</DaisyCardContent>
                 <div key={index} className="flex items-center space-x-2">
                   <Target className="h-4 w-4 text-blue-600 flex-shrink-0" />
                   <DaisyInput
@@ -372,31 +376,33 @@ export default function NewAssessmentPage() {
                       onClick={() => removeObjective(index)}
                       size="sm"
                       variant="ghost"
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                    >
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50" />
                       <Trash2 className="h-4 w-4" />
-                    </DaisyButton>
+                    </DaisyInput>
                   )}
                 </div>
               ))}
               {errors.objectives && (
                 <p className="text-sm text-red-600 flex items-center gap-1">
-                  <DaisyAlertCircle className="h-4 w-4" />
-                  {errors.objectives}
+                  <DaisyAlertCircle className="h-4 w-4" >
+  {errors.objectives}
+</DaisyAlertCircle>
                 </p>
               )}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
-          <DaisyCard>
-            <DaisyCardHeader>
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
               <DaisyCardTitle>Assessment Preview</DaisyCardTitle>
-            
-            <DaisyCardContent className="space-y-4">
-              <div>
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4" >
+  <div>
+</DaisyCardContent>
                 <span className="text-sm font-medium text-gray-500">Title</span>
                 <p className="text-sm">{formData.title || 'Not specified'}</p>
               </div>
@@ -416,15 +422,17 @@ export default function NewAssessmentPage() {
                 <span className="text-sm font-medium text-gray-500">Due Date</span>
                 <p className="text-sm">{formData.dueDate || 'Not set'}</p>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
-          <DaisyCard>
-            <DaisyCardHeader>
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
               <DaisyCardTitle>Getting Started</DaisyCardTitle>
-            
-            <DaisyCardContent className="space-y-3 text-sm text-gray-600">
-              <div className="flex items-start space-x-2">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-3 text-sm text-gray-600" >
+  <div className="flex items-start space-x-2">
+</DaisyCardContent>
                 <FileCheck className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
                 <p>Define clear objectives for your assessment</p>
               </div>
@@ -440,7 +448,7 @@ export default function NewAssessmentPage() {
                 <Target className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
                 <p>Choose appropriate frameworks and standards</p>
               </div>
-            </DaisyCardBody>
+            </DaisyCalendar>
           </DaisyCard>
         </div>
       </div>

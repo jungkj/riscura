@@ -154,22 +154,23 @@ export const GET = withAPI(async (req: NextRequest) => {
     // Calculate additional metrics
     const controlsCount = risk.controls.length;
     const implementedControlsCount = risk.controls.filter(
-      c => c.control.status === 'IMPLEMENTED' || c.control.status === 'OPERATIONAL'
+      (c) => c.control.status === 'IMPLEMENTED' || c.control.status === 'OPERATIONAL'
     ).length;
-    const controlEffectiveness = controlsCount > 0 
-      ? risk.controls.reduce((sum, c) => sum + (c.effectiveness || 0), 0) / controlsCount 
-      : 0;
+    const controlEffectiveness =
+      controlsCount > 0
+        ? risk.controls.reduce((sum, c) => sum + (c.effectiveness || 0), 0) / controlsCount
+        : 0;
 
-    const openTasksCount = risk.tasks.filter(t => t.status !== 'COMPLETED').length;
-    const overdueTasks = risk.tasks.filter(t => 
-      t.status !== 'COMPLETED' && t.dueDate && new Date(t.dueDate) < new Date()
+    const openTasksCount = risk.tasks.filter((t) => t.status !== 'COMPLETED').length;
+    const overdueTasks = risk.tasks.filter(
+      (t) => t.status !== 'COMPLETED' && t.dueDate && new Date(t.dueDate) < new Date()
     ).length;
 
     // Calculate risk trend (simplified - would need historical data for accurate trend)
-    const recentActivities = activities.filter(a => 
-      a.createdAt > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // Last 30 days
+    const recentActivities = activities.filter(
+      (a) => a.createdAt > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // Last 30 days
     );
-    
+
     // Map activity types to trend indicators
     const trendIndicators = {
       CREATED: 1,
@@ -186,13 +187,12 @@ export const GET = withAPI(async (req: NextRequest) => {
       EXPORTED: 0,
       IMPORTED: 1,
     };
-    
+
     const trendScore = recentActivities.reduce((score, activity) => {
       return score + (trendIndicators[activity.type as keyof typeof trendIndicators] || 0);
     }, 0);
-    
-    const riskTrend = trendScore > 2 ? 'increasing' : 
-                     trendScore < -2 ? 'decreasing' : 'stable';
+
+    const riskTrend = trendScore > 2 ? 'increasing' : trendScore < -2 ? 'decreasing' : 'stable';
 
     const enrichedRisk = {
       ...risk,
@@ -201,7 +201,8 @@ export const GET = withAPI(async (req: NextRequest) => {
       metrics: {
         controlsCount,
         implementedControlsCount,
-        controlCoverage: controlsCount > 0 ? Math.round((implementedControlsCount / controlsCount) * 100) : 0,
+        controlCoverage:
+          controlsCount > 0 ? Math.round((implementedControlsCount / controlsCount) * 100) : 0,
         averageControlEffectiveness: Math.round(controlEffectiveness * 100) / 100,
         openTasksCount,
         overdueTasks,
@@ -210,7 +211,7 @@ export const GET = withAPI(async (req: NextRequest) => {
         activitiesCount: activities.length,
         riskTrend,
       },
-      timeline: activities.map(activity => ({
+      timeline: activities.map((activity) => ({
         id: activity.id,
         type: activity.type,
         description: activity.description,
@@ -313,7 +314,9 @@ export const PUT = withAPI(async (req: NextRequest) => {
         riskLevel,
         owner: validatedData.owner,
         status: validatedData.status as any,
-        dateIdentified: validatedData.dateIdentified ? new Date(validatedData.dateIdentified) : undefined,
+        dateIdentified: validatedData.dateIdentified
+          ? new Date(validatedData.dateIdentified)
+          : undefined,
         nextReview: validatedData.nextReview ? new Date(validatedData.nextReview) : undefined,
       },
       include: {
@@ -430,9 +433,10 @@ export const DELETE = withAPI(async (req: NextRequest) => {
     }
 
     // Check if user has permission to delete (only creator or admin)
-    const canDelete = existingRisk.createdBy === user.id || 
-                     user.permissions.includes('risks:delete') ||
-                     user.role === 'ADMIN';
+    const canDelete =
+      existingRisk.createdBy === user.id ||
+      user.permissions.includes('risks:delete') ||
+      user.role === 'ADMIN';
 
     if (!canDelete) {
       throw new ForbiddenError('Insufficient permissions to delete this risk');
@@ -444,7 +448,7 @@ export const DELETE = withAPI(async (req: NextRequest) => {
       throw new ValidationError(
         `Cannot delete risk with ${existingRisk.controls.length} linked control(s). Please remove control associations first.`
       );
-      
+
       // Option 2: Cascade delete (uncomment if preferred)
       // await db.client.controlRiskMapping.deleteMany({
       //   where: { riskId: validatedId },
@@ -493,4 +497,4 @@ export const DELETE = withAPI(async (req: NextRequest) => {
     }
     throw new Error(error instanceof Error ? error.message : 'Failed to delete risk');
   }
-}); 
+});

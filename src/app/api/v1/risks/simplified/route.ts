@@ -10,12 +10,9 @@ import { db } from '@/lib/db';
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     // Basic authentication check
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
 
     // Get user from database
@@ -24,10 +21,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!user || !user.isActive || !user.organizationId) {
-      return NextResponse.json(
-        { error: 'User not found or inactive' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'User not found or inactive' }, { status: 401 });
     }
 
     // Parse query parameters
@@ -38,13 +32,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     // Build database query
     const where: any = {
-      organizationId: user.organizationId
+      organizationId: user.organizationId,
     };
 
     if (search) {
       where.OR = [
         { title: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } }
+        { description: { contains: search, mode: 'insensitive' } },
       ];
     }
 
@@ -54,33 +48,33 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         where,
         include: {
           assignedUser: {
-            select: { id: true, firstName: true, lastName: true, email: true }
+            select: { id: true, firstName: true, lastName: true, email: true },
           },
           controls: {
             include: {
               control: {
-                select: { 
-                  id: true, 
-                  title: true, 
-                  type: true, 
-                  effectiveness: true 
-                }
-              }
-            }
+                select: {
+                  id: true,
+                  title: true,
+                  type: true,
+                  effectiveness: true,
+                },
+              },
+            },
           },
           _count: {
-            select: { controls: true }
-          }
+            select: { controls: true },
+          },
         },
         orderBy: { updatedAt: 'desc' },
         skip: (page - 1) * limit,
-        take: limit
+        take: limit,
       }),
-      db.client.risk.count({ where })
+      db.client.risk.count({ where }),
     ]);
 
     // Transform data
-    const transformedRisks = risks.map(risk => ({
+    const transformedRisks = risks.map((risk) => ({
       id: risk.id,
       title: risk.title,
       description: risk.description,
@@ -90,36 +84,34 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       riskScore: risk.likelihood * risk.impact,
       riskLevel: risk.riskLevel,
       status: risk.status,
-      owner: risk.assignedUser ? {
-        id: risk.assignedUser.id,
-        name: `${risk.assignedUser.firstName} ${risk.assignedUser.lastName}`,
-        email: risk.assignedUser.email
-      } : null,
-      controls: risk.controls.map(c => c.control),
+      owner: risk.assignedUser
+        ? {
+            id: risk.assignedUser.id,
+            name: `${risk.assignedUser.firstName} ${risk.assignedUser.lastName}`,
+            email: risk.assignedUser.email,
+          }
+        : null,
+      controls: risk.controls.map((c) => c.control),
       controlCount: risk._count.controls,
       createdAt: risk.createdAt,
-      updatedAt: risk.updatedAt
+      updatedAt: risk.updatedAt,
     }));
 
     return NextResponse.json({
       success: true,
       data: transformedRisks,
-      pagination: { 
-        page, 
-        limit, 
+      pagination: {
+        page,
+        limit,
         total,
         pages: Math.ceil(total / limit),
         hasNextPage: page * limit < total,
-        hasPreviousPage: page > 1
-      }
+        hasPreviousPage: page > 1,
+      },
     });
-
   } catch (error) {
     console.error('Error fetching risks:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch risks' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch risks' }, { status: 500 });
   }
 }
 
@@ -130,12 +122,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     // Basic authentication check
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
 
     // Get user from database
@@ -144,30 +133,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!user || !user.isActive || !user.organizationId) {
-      return NextResponse.json(
-        { error: 'User not found or inactive' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'User not found or inactive' }, { status: 401 });
     }
 
     const body = await request.json();
-    const {
-      title,
-      description,
-      category,
-      likelihood,
-      impact,
-      riskOwnerId,
-      tags,
-      dueDate
-    } = body;
+    const { title, description, category, likelihood, impact, riskOwnerId, tags, dueDate } = body;
 
     // Basic validation
     if (!title || !description || !category || !likelihood || !impact) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     // Calculate risk metrics
@@ -190,26 +164,25 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       },
       include: {
         assignedUser: {
-          select: { id: true, firstName: true, lastName: true, email: true }
+          select: { id: true, firstName: true, lastName: true, email: true },
         },
         creator: {
-          select: { id: true, firstName: true, lastName: true, email: true }
-        }
-      }
+          select: { id: true, firstName: true, lastName: true, email: true },
+        },
+      },
     });
 
-    return NextResponse.json({
-      success: true,
-      data: risk,
-      message: 'Risk created successfully'
-    }, { status: 201 });
-
+    return NextResponse.json(
+      {
+        success: true,
+        data: risk,
+        message: 'Risk created successfully',
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Error creating risk:', error);
-    return NextResponse.json(
-      { error: 'Failed to create risk' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to create risk' }, { status: 500 });
   }
 }
 
@@ -218,4 +191,4 @@ function calculateRiskLevel(riskScore: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRI
   if (riskScore <= 12) return 'MEDIUM';
   if (riskScore <= 20) return 'HIGH';
   return 'CRITICAL';
-} 
+}

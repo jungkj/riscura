@@ -106,8 +106,6 @@ const WidgetSkeleton: React.FC<DaisySkeletonProps> = ({ size, className }) => {
   );
 };
 
-
-
 const DefaultErrorComponent: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }) => (
   <div className="flex flex-col items-center justify-center h-32 bg-red-50 border border-red-200 rounded-lg">
     <div className="text-red-600 text-sm mb-2">Failed to load widget</div>
@@ -129,14 +127,14 @@ const LazyWidget: React.FC<{
   onStateChange: (state: Partial<WidgetState>) => void;
   inView?: boolean;
   enableIntersectionLoading?: boolean;
-}> = ({ 
-  widget, 
-  state, 
-  onLoad, 
-  onError, 
+}> = ({
+  widget,
+  state,
+  onLoad,
+  onError,
   onStateChange,
   inView = true,
-  enableIntersectionLoading = false
+  enableIntersectionLoading = false,
 }) => {
   const [shouldLoad, setShouldLoad] = useState(!enableIntersectionLoading);
   const refreshTimeoutRef = useRef<NodeJS.Timeout>();
@@ -153,14 +151,14 @@ const LazyWidget: React.FC<{
     const loadWidget = async () => {
       try {
         onStateChange({ loading: true, error: null });
-        
+
         // Simulate loading delay for demonstration
-        await new Promise(resolve => setTimeout(resolve, Math.random() * 1000 + 500));
-        
-        onStateChange({ 
-          loading: false, 
-          loaded: true, 
-          lastRefresh: Date.now() 
+        await new Promise((resolve) => setTimeout(resolve, Math.random() * 1000 + 500));
+
+        onStateChange({
+          loading: false,
+          loaded: true,
+          lastRefresh: Date.now(),
         });
         onLoad();
       } catch (error) {
@@ -225,13 +223,10 @@ const LazyWidget: React.FC<{
         animate={{ opacity: 1, scale: 1 }}
         className={cn('bg-white rounded-lg shadow-sm border', sizeClasses[widget.size])}
       >
-        <ErrorBoundary
-          fallback={ErrorComponent as unknown as ReactNode}
-          onError={onError}
-        >
-          <ErrorComponent 
-            error={state.error} 
-            retry={() => onStateChange({ loaded: false, error: null })} 
+        <ErrorBoundary fallback={ErrorComponent as unknown as ReactNode} onError={onError}>
+          <ErrorComponent
+            error={state.error}
+            retry={() => onStateChange({ loaded: false, error: null })}
           />
         </ErrorBoundary>
       </motion.div>
@@ -240,7 +235,7 @@ const LazyWidget: React.FC<{
 
   if (state.loaded) {
     const WidgetComponent = widget.component;
-    
+
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
@@ -248,10 +243,7 @@ const LazyWidget: React.FC<{
         transition={{ duration: 0.3, ease: 'easeOut' }}
         className={cn('bg-white rounded-lg shadow-sm border', sizeClasses[widget.size])}
       >
-        <ErrorBoundary
-          fallback={ErrorComponent as unknown as ReactNode}
-          onError={onError}
-        >
+        <ErrorBoundary fallback={ErrorComponent as unknown as ReactNode} onError={onError}>
           <WidgetComponent {...widget.props} />
         </ErrorBoundary>
       </motion.div>
@@ -288,7 +280,7 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
 }) => {
   const [widgetStates, setWidgetStates] = useState<Record<string, WidgetState>>(() => {
     const states: Record<string, WidgetState> = {};
-    widgets.forEach(widget => {
+    widgets.forEach((widget) => {
       states[widget.id] = {
         loading: false,
         loaded: false,
@@ -336,8 +328,8 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
 
     const loadChunks = async () => {
       for (let i = 0; i < widgetChunks.length; i++) {
-        await new Promise(resolve => setTimeout(resolve, loadingDelay));
-        setLoadedChunks(prev => new Set([...prev, i]));
+        await new Promise((resolve) => setTimeout(resolve, loadingDelay));
+        setLoadedChunks((prev) => new Set([...prev, i]));
       }
     };
 
@@ -345,30 +337,39 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
   }, [widgetChunks, enableProgressiveLoading, loadingDelay]);
 
   // Handle widget state changes
-  const handleWidgetStateChange = useCallback((widgetId: string, newState: Partial<WidgetState>) => {
-    setWidgetStates(prev => ({
-      ...prev,
-      [widgetId]: { ...prev[widgetId], ...newState },
-    }));
-  }, []);
+  const handleWidgetStateChange = useCallback(
+    (widgetId: string, newState: Partial<WidgetState>) => {
+      setWidgetStates((prev) => ({
+        ...prev,
+        [widgetId]: { ...prev[widgetId], ...newState },
+      }));
+    },
+    []
+  );
 
   // Handle widget load
-  const handleWidgetLoad = useCallback((widgetId: string) => {
-    setVisibleWidgets(prev => new Set([...prev, widgetId]));
-    onWidgetLoad?.(widgetId);
-  }, [onWidgetLoad]);
+  const handleWidgetLoad = useCallback(
+    (widgetId: string) => {
+      setVisibleWidgets((prev) => new Set([...prev, widgetId]));
+      onWidgetLoad?.(widgetId);
+    },
+    [onWidgetLoad]
+  );
 
   // Handle widget error
-  const handleWidgetError = useCallback((widgetId: string, error: Error) => {
-    onWidgetError?.(widgetId, error);
-  }, [onWidgetError]);
+  const handleWidgetError = useCallback(
+    (widgetId: string, error: Error) => {
+      onWidgetError?.(widgetId, error);
+    },
+    [onWidgetError]
+  );
 
   // Get widgets to render
   const widgetsToRender = useMemo(() => {
     if (!enableProgressiveLoading) return sortedWidgets;
 
     const widgetsToShow: DashboardWidget[] = [];
-    loadedChunks.forEach(chunkIndex => {
+    loadedChunks.forEach((chunkIndex) => {
       if (widgetChunks[chunkIndex]) {
         widgetsToShow.push(...widgetChunks[chunkIndex]);
       }
@@ -412,10 +413,7 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
   }
 
   return (
-    <div 
-      ref={containerRef}
-      className={cn('grid grid-cols-4 gap-4 p-4', className)}
-    >
+    <div ref={containerRef} className={cn('grid grid-cols-4 gap-4 p-4', className)}>
       <AnimatePresence mode="wait">
         {widgetsToRender.map((widget, index) => {
           const chunkIndex = Math.floor(sortedWidgets.indexOf(widget) / chunkSize);
@@ -449,7 +447,7 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ delay: index * 0.1 }}
-              ref={enableIntersectionLoading ? intersectionRef as any : undefined}
+              ref={enableIntersectionLoading ? (intersectionRef as any) : undefined}
             >
               <LazyWidget
                 widget={widget}
@@ -478,12 +476,12 @@ export const useLazyDashboard = (initialWidgets: DashboardWidget[]) => {
   const [loadedWidgets, setLoadedWidgets] = useState<Set<string>>(new Set());
 
   const addWidget = useCallback((widget: DashboardWidget) => {
-    setWidgets(prev => [...prev, widget]);
+    setWidgets((prev) => [...prev, widget]);
   }, []);
 
   const removeWidget = useCallback((widgetId: string) => {
-    setWidgets(prev => prev.filter(w => w.id !== widgetId));
-    setLoadedWidgets(prev => {
+    setWidgets((prev) => prev.filter((w) => w.id !== widgetId));
+    setLoadedWidgets((prev) => {
       const newSet = new Set(prev);
       newSet.delete(widgetId);
       return newSet;
@@ -491,11 +489,11 @@ export const useLazyDashboard = (initialWidgets: DashboardWidget[]) => {
   }, []);
 
   const updateWidget = useCallback((widgetId: string, updates: Partial<DashboardWidget>) => {
-    setWidgets(prev => prev.map(w => w.id === widgetId ? { ...w, ...updates } : w));
+    setWidgets((prev) => prev.map((w) => (w.id === widgetId ? { ...w, ...updates } : w)));
   }, []);
 
   const refreshWidget = useCallback((widgetId: string) => {
-    setLoadedWidgets(prev => {
+    setLoadedWidgets((prev) => {
       const newSet = new Set(prev);
       newSet.delete(widgetId);
       return newSet;
@@ -507,7 +505,7 @@ export const useLazyDashboard = (initialWidgets: DashboardWidget[]) => {
   }, []);
 
   const handleWidgetLoad = useCallback((widgetId: string) => {
-    setLoadedWidgets(prev => new Set([...prev, widgetId]));
+    setLoadedWidgets((prev) => new Set([...prev, widgetId]));
   }, []);
 
   const handleWidgetError = useCallback((widgetId: string, error: Error) => {
@@ -529,4 +527,4 @@ export const useLazyDashboard = (initialWidgets: DashboardWidget[]) => {
     handleWidgetLoad,
     handleWidgetError,
   };
-}; 
+};

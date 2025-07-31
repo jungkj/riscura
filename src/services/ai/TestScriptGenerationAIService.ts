@@ -10,13 +10,13 @@ import {
   Control,
   ControlType,
   ControlCategory,
-  AutomationLevel
+  AutomationLevel,
 } from '@/types/rcsa.types';
 import {
   ParsedTestScript,
   RawTestStep,
   ProboIntegrationResponse,
-  ProboEnhancedTestData
+  ProboEnhancedTestData,
 } from '@/types/test-script-generation.types';
 
 // Interface for AI generation context
@@ -61,36 +61,36 @@ export class TestScriptGenerationAIService {
       // Fetch control details if not provided
       let control: Control | null = null;
       let controlDescription = request.controlDescription;
-      
+
       if (request.controlId) {
         control = await db.control.findFirst({
           where: {
             id: request.controlId,
-            organizationId
+            organizationId,
           },
           include: {
             risks: {
               include: {
-                risk: true
-              }
-            }
-          }
+                risk: true,
+              },
+            },
+          },
         });
-        
+
         if (!control) {
           throw new Error('Control not found');
         }
-        
+
         controlDescription = controlDescription || control.description;
       }
-      
+
       // Prepare context for AI generation
       const context = this.prepareContext(control, request);
-      
+
       // Generate test script using AI
       const prompt = this.buildPrompt(context);
       const systemPrompt = this.getSystemPrompt();
-      
+
       const aiResponse = await this.aiService.generateContent({
         type: 'test_script_generation',
         context: {
@@ -98,13 +98,13 @@ export class TestScriptGenerationAIService {
           systemPrompt,
           temperature: 0.7,
           maxTokens: 2000,
-          controlContext: context
+          controlContext: context,
         },
         requirements: `Generate a comprehensive test script based on the provided control information. ${prompt}`,
         userId,
-        organizationId
+        organizationId,
       });
-      
+
       // Track token usage
       if (aiResponse.usage) {
         await this.trackTokenUsage(
@@ -114,10 +114,10 @@ export class TestScriptGenerationAIService {
           'test-script-generation'
         );
       }
-      
+
       // Parse AI response into structured test script
       const parsedScript = this.parseAIResponse(aiResponse.content);
-      
+
       // Enhance with Probo controls data if available
       if (control && this.proboService) {
         const enhancements = await this.enhanceWithProboData(control, parsedScript);
@@ -126,15 +126,15 @@ export class TestScriptGenerationAIService {
           parsedScript.suggestions = enhancements.suggestions;
         }
       }
-      
+
       // Calculate confidence score
       const confidence = this.calculateConfidence(parsedScript, control);
-      
+
       return {
         testScript: parsedScript,
         confidence,
         reasoning: `Generated test script based on ${control ? 'control details' : 'provided context'} with ${parsedScript.steps.length} test steps.`,
-        suggestions: parsedScript.suggestions || []
+        suggestions: parsedScript.suggestions || [],
       };
     } catch (error) {
       console.error('Test script generation error:', error);
@@ -142,7 +142,10 @@ export class TestScriptGenerationAIService {
     }
   }
 
-  private prepareContext(control: Control | null, request: GenerateTestScriptRequest): TestScriptGenerationContext {
+  private prepareContext(
+    control: Control | null,
+    request: GenerateTestScriptRequest
+  ): TestScriptGenerationContext {
     return {
       controlTitle: control?.title || 'Control',
       controlDescription: request.controlDescription || control?.description || '',
@@ -152,7 +155,7 @@ export class TestScriptGenerationAIService {
       automationLevel: control?.automationLevel || 'MANUAL',
       testObjective: request.testObjective || 'Verify control effectiveness',
       additionalContext: request.additionalContext || '',
-      relatedRisks: control?.risks?.map(r => r.risk.title).join(', ') || 'General risks'
+      relatedRisks: control?.risks?.map((r) => r.risk.title).join(', ') || 'General risks',
     };
   }
 
@@ -230,7 +233,7 @@ Always provide practical, implementable test scripts that auditors and control o
         const parsed = JSON.parse(jsonMatch[0]);
         return this.validateAndNormalizeTestScript(parsed);
       }
-      
+
       // Fallback: extract information from text
       return this.extractFromText(content);
     } catch (error) {
@@ -246,7 +249,7 @@ Always provide practical, implementable test scripts that auditors and control o
     }
 
     // Validate and normalize steps
-    const rawSteps: RawTestStep[] = Array.isArray(parsed.steps) 
+    const rawSteps: RawTestStep[] = Array.isArray(parsed.steps)
       ? parsed.steps.map((step: any) => ({
           order: step.order,
           description: step.description,
@@ -258,7 +261,7 @@ Always provide practical, implementable test scripts that auditors and control o
           validationCriteria: step.validationCriteria,
           riskLevel: step.riskLevel,
           isOptional: step.isOptional,
-          dependencies: step.dependencies
+          dependencies: step.dependencies,
         }))
       : [];
 
@@ -282,36 +285,36 @@ Always provide practical, implementable test scripts that auditors and control o
       dataRequirements: this.validateStringArray(parsed.dataRequirements),
       tools: this.validateStringArray(parsed.tools),
       timeline: parsed.timeline,
-      suggestions: this.validateStringArray(parsed.suggestions)
+      suggestions: this.validateStringArray(parsed.suggestions),
     };
   }
 
   private normalizeTestType(type: string): TestScriptType {
     const typeMap: Record<string, TestScriptType> = {
-      'MANUAL': TestScriptType.MANUAL,
-      'AUTOMATED': TestScriptType.AUTOMATED,
-      'HYBRID': TestScriptType.HYBRID,
-      'INQUIRY': TestScriptType.INQUIRY,
-      'OBSERVATION': TestScriptType.OBSERVATION,
-      'INSPECTION': TestScriptType.INSPECTION,
-      'REPERFORMANCE': TestScriptType.REPERFORMANCE
+      MANUAL: TestScriptType.MANUAL,
+      AUTOMATED: TestScriptType.AUTOMATED,
+      HYBRID: TestScriptType.HYBRID,
+      INQUIRY: TestScriptType.INQUIRY,
+      OBSERVATION: TestScriptType.OBSERVATION,
+      INSPECTION: TestScriptType.INSPECTION,
+      REPERFORMANCE: TestScriptType.REPERFORMANCE,
     };
-    
+
     return typeMap[type?.toUpperCase()] || TestScriptType.MANUAL;
   }
 
   private normalizeFrequency(frequency: string): TestFrequency {
     const freqMap: Record<string, TestFrequency> = {
-      'DAILY': TestFrequency.DAILY,
-      'WEEKLY': TestFrequency.WEEKLY,
-      'MONTHLY': TestFrequency.MONTHLY,
-      'QUARTERLY': TestFrequency.QUARTERLY,
-      'SEMI_ANNUAL': TestFrequency.SEMI_ANNUAL,
-      'ANNUAL': TestFrequency.ANNUAL,
-      'AD_HOC': TestFrequency.AD_HOC,
-      'CONTINUOUS': TestFrequency.CONTINUOUS
+      DAILY: TestFrequency.DAILY,
+      WEEKLY: TestFrequency.WEEKLY,
+      MONTHLY: TestFrequency.MONTHLY,
+      QUARTERLY: TestFrequency.QUARTERLY,
+      SEMI_ANNUAL: TestFrequency.SEMI_ANNUAL,
+      ANNUAL: TestFrequency.ANNUAL,
+      AD_HOC: TestFrequency.AD_HOC,
+      CONTINUOUS: TestFrequency.CONTINUOUS,
     };
-    
+
     return freqMap[frequency?.toUpperCase()] || TestFrequency.MONTHLY;
   }
 
@@ -324,22 +327,30 @@ Always provide practical, implementable test scripts that auditors and control o
     if (!Array.isArray(steps) || steps.length === 0) {
       return this.getDefaultSteps();
     }
-    
+
     return steps.map((step, index) => ({
       order: step.order || index + 1,
       description: step.description || `Step ${index + 1}`,
       expectedResult: step.expectedResult || 'Step completed successfully',
       dataRequired: step.dataRequired,
-      notes: step.notes
+      notes: step.notes,
     }));
   }
 
   private extractFromText(content: string): ParsedTestScript {
     // Basic text extraction logic
     const lines = content.split('\n');
-    const title = lines.find(l => l.includes('Title:'))?.replace(/Title:/i, '').trim() || 'Generated Test Script';
-    const description = lines.find(l => l.includes('Description:'))?.replace(/Description:/i, '').trim() || 'AI-generated test script';
-    
+    const title =
+      lines
+        .find((l) => l.includes('Title:'))
+        ?.replace(/Title:/i, '')
+        .trim() || 'Generated Test Script';
+    const description =
+      lines
+        .find((l) => l.includes('Description:'))
+        ?.replace(/Description:/i, '')
+        .trim() || 'AI-generated test script';
+
     return {
       title,
       description,
@@ -350,7 +361,7 @@ Always provide practical, implementable test scripts that auditors and control o
       expectedResults: 'Control operating effectively',
       automationCapable: false,
       tags: ['ai-generated'],
-      suggestions: []
+      suggestions: [],
     };
   }
 
@@ -365,7 +376,11 @@ Always provide practical, implementable test scripts that auditors and control o
       expectedResults: 'Control operating effectively',
       automationCapable: false,
       tags: ['ai-generated', 'needs-review'],
-      suggestions: ['Review and customize test steps', 'Add specific data requirements', 'Define clear pass/fail criteria']
+      suggestions: [
+        'Review and customize test steps',
+        'Add specific data requirements',
+        'Define clear pass/fail criteria',
+      ],
     };
   }
 
@@ -376,29 +391,29 @@ Always provide practical, implementable test scripts that auditors and control o
         description: 'Review control documentation and procedures',
         expectedResult: 'Documentation is current and complete',
         dataRequired: 'Control documentation, procedures',
-        notes: 'Verify version control and approval status'
+        notes: 'Verify version control and approval status',
       },
       {
         order: 2,
         description: 'Select sample for testing',
         expectedResult: 'Representative sample selected based on risk',
         dataRequired: 'Population data, sampling criteria',
-        notes: 'Document sampling methodology'
+        notes: 'Document sampling methodology',
       },
       {
         order: 3,
         description: 'Execute test procedures',
         expectedResult: 'Control operates as designed',
         dataRequired: 'Test data, system access',
-        notes: 'Document any deviations or exceptions'
+        notes: 'Document any deviations or exceptions',
       },
       {
         order: 4,
         description: 'Document results and findings',
         expectedResult: 'Complete test documentation',
         dataRequired: 'Test results, evidence',
-        notes: 'Include screenshots or supporting evidence'
-      }
+        notes: 'Include screenshots or supporting evidence',
+      },
     ];
   }
 
@@ -408,69 +423,74 @@ Always provide practical, implementable test scripts that auditors and control o
    * @param testScript - Base test script to enhance
    * @returns ProboEnhancedTestData with additional steps and recommendations
    */
-  private async enhanceWithProboData(control: Control, testScript: ParsedTestScript): Promise<ProboEnhancedTestData | null> {
+  private async enhanceWithProboData(
+    control: Control,
+    testScript: ParsedTestScript
+  ): Promise<ProboEnhancedTestData | null> {
     try {
       // Validate inputs
       if (!control || !control.type) {
         console.warn('Invalid control data for Probo enhancement');
         return null;
       }
-      
+
       // Fetch Probo control recommendations
       const proboData = await this.proboService.getControlTestingGuidance(control.type);
-      
+
       if (!proboData) return null;
-      
+
       return {
-        additionalSteps: proboData.testSteps?.map((step, index) => ({
-          id: `probo-step-${index}`,
-          order: testScript.steps.length + index + 1,
-          description: step.description,
-          expectedResult: step.expectedResult,
-          dataRequired: step.dataRequired,
-          notes: `Probo recommended: ${step.notes || ''}`
-        })) || [],
+        additionalSteps:
+          proboData.testSteps?.map((step, index) => ({
+            id: `probo-step-${index}`,
+            order: testScript.steps.length + index + 1,
+            description: step.description,
+            expectedResult: step.expectedResult,
+            dataRequired: step.dataRequired,
+            notes: `Probo recommended: ${step.notes || ''}`,
+          })) || [],
         suggestions: proboData.suggestions || [],
         complianceMappings: [`SOC2-${control.type}`, `ISO27001-${control.category}`],
-        automationRecommendations: control.automationLevel === 'MANUAL' 
-          ? 'Consider implementing automated testing for this control type'
-          : 'Control is suitable for automated testing',
+        automationRecommendations:
+          control.automationLevel === 'MANUAL'
+            ? 'Consider implementing automated testing for this control type'
+            : 'Control is suitable for automated testing',
         bestPractices: [
           'Document all test evidence',
           'Maintain test execution history',
-          'Review test effectiveness quarterly'
-        ]
+          'Review test effectiveness quarterly',
+        ],
       };
     } catch (error) {
       console.error('Failed to enhance with Probo data:', error);
-      
+
       // Return minimal enhancement data on error
       return {
         additionalSteps: [],
         suggestions: [
           'Probo integration temporarily unavailable',
-          'Manual review of control testing requirements recommended'
+          'Manual review of control testing requirements recommended',
         ],
         complianceMappings: [],
         automationRecommendations: 'Unable to determine automation suitability',
         bestPractices: [
           'Follow standard testing procedures for this control type',
-          'Document all test evidence thoroughly'
-        ]
+          'Document all test evidence thoroughly',
+        ],
       };
     }
   }
 
   private calculateConfidence(testScript: ParsedTestScript, control: Control | null): number {
     let confidence = 0.5; // Base confidence
-    
+
     // Increase confidence based on completeness
     if (testScript.steps.length >= 3) confidence += 0.1;
     if (testScript.steps.length >= 5) confidence += 0.1;
     if (testScript.description.length > 50) confidence += 0.1;
     if (testScript.expectedResults.length > 30) confidence += 0.1;
     if (control) confidence += 0.1; // Had control context
-    
+
     // Cap at 0.95
     return Math.min(confidence, 0.95);
   }
@@ -504,8 +524,8 @@ Always provide practical, implementable test scripts that auditors and control o
           totalTokens: usage.total_tokens || 0,
           context,
           timestamp: new Date(),
-          cost: this.calculateCost(usage)
-        }
+          cost: this.calculateCost(usage),
+        },
       });
     } catch (error) {
       console.error('Failed to track AI token usage:', error);
@@ -523,8 +543,8 @@ Always provide practical, implementable test scripts that auditors and control o
   }
 
   private validateTags(tags: any): string[] {
-    const validTags = Array.isArray(tags) 
-      ? tags.filter(tag => typeof tag === 'string' && tag.trim())
+    const validTags = Array.isArray(tags)
+      ? tags.filter((tag) => typeof tag === 'string' && tag.trim())
       : [];
     validTags.push('ai-generated');
     return [...new Set(validTags)]; // Remove duplicates
@@ -533,21 +553,18 @@ Always provide practical, implementable test scripts that auditors and control o
   private validateStringArray(value: any): string[] | undefined {
     if (!value) return undefined;
     if (!Array.isArray(value)) return undefined;
-    const filtered = value.filter(item => typeof item === 'string' && item.trim());
+    const filtered = value.filter((item) => typeof item === 'string' && item.trim());
     return filtered.length > 0 ? filtered : undefined;
   }
 
-  private calculateCost(usage: {
-    prompt_tokens?: number;
-    completion_tokens?: number;
-  }): number {
+  private calculateCost(usage: { prompt_tokens?: number; completion_tokens?: number }): number {
     // GPT-4 pricing (example rates - adjust to actual)
     const promptCostPer1k = 0.03;
     const completionCostPer1k = 0.06;
-    
+
     const promptCost = ((usage.prompt_tokens || 0) / 1000) * promptCostPer1k;
     const completionCost = ((usage.completion_tokens || 0) / 1000) * completionCostPer1k;
-    
+
     return promptCost + completionCost;
   }
 }

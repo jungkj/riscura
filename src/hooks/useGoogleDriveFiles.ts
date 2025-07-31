@@ -34,13 +34,13 @@ export const useGoogleDriveFiles = (): UseGoogleDriveFilesReturn => {
       setError(null);
       setAuthRequired(false);
       setLastFolderId(folderId);
-      
+
       const response = await api.post('/api/google-drive/files', {
-        folderId
+        folderId,
       });
-      
+
       const data = await response.json();
-      
+
       if (data.files) {
         setFiles(data.files);
       } else if (data.code === 'AUTH_REQUIRED') {
@@ -60,40 +60,43 @@ export const useGoogleDriveFiles = (): UseGoogleDriveFilesReturn => {
   }, []);
 
   // Search for files
-  const searchFiles = useCallback(async (query: string) => {
-    if (!query.trim()) {
-      listFiles(lastFolderId);
-      return;
-    }
-    
-    try {
-      setIsLoading(true);
-      setError(null);
-      setAuthRequired(false);
-      
-      const response = await api.put('/api/google-drive/files', {
-        query
-      });
-      
-      const data = await response.json();
-      
-      if (data.files) {
-        setFiles(data.files);
-      } else if (data.code === 'AUTH_REQUIRED') {
-        setAuthRequired(true);
-        setFiles([]);
-      } else if (data.error) {
-        setError(data.error);
-        setFiles([]);
+  const searchFiles = useCallback(
+    async (query: string) => {
+      if (!query.trim()) {
+        listFiles(lastFolderId);
+        return;
       }
-    } catch (err) {
-      console.error('Error searching Google Drive files:', err);
-      setError('Failed to search files in Google Drive');
-      setFiles([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [lastFolderId, listFiles]);
+
+      try {
+        setIsLoading(true);
+        setError(null);
+        setAuthRequired(false);
+
+        const response = await api.put('/api/google-drive/files', {
+          query,
+        });
+
+        const data = await response.json();
+
+        if (data.files) {
+          setFiles(data.files);
+        } else if (data.code === 'AUTH_REQUIRED') {
+          setAuthRequired(true);
+          setFiles([]);
+        } else if (data.error) {
+          setError(data.error);
+          setFiles([]);
+        }
+      } catch (err) {
+        console.error('Error searching Google Drive files:', err);
+        setError('Failed to search files in Google Drive');
+        setFiles([]);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [lastFolderId, listFiles]
+  );
 
   // Refresh current view
   const refresh = useCallback(async () => {
@@ -107,6 +110,6 @@ export const useGoogleDriveFiles = (): UseGoogleDriveFilesReturn => {
     authRequired,
     listFiles,
     searchFiles,
-    refresh
+    refresh,
   };
 };

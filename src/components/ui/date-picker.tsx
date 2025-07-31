@@ -30,8 +30,8 @@ export function DatePicker({
   const [open, setOpen] = React.useState(false)
 
   return (
-    <DaisyPopover open={open} onOpenChange={setOpen}>
-      <DaisyPopoverTrigger asChild>
+    <DaisyPopover open={open} onOpenChange={setOpen} />
+      <DaisyPopoverTrigger asChild />
         <DaisyButton
           variant={"outline"}
           className={cn(
@@ -39,13 +39,13 @@ export function DatePicker({
             !value && "text-muted-foreground",
             className
           )}
-          disabled={disabled}
-        >
-          <DaisyCalendarIcon className="mr-2 h-4 w-4" />
+          disabled={disabled} >
+  <DaisyCalendarIcon className="mr-2 h-4 w-4" />
+</DaisyPopover>
           {value ? format(value, "PPP") : <span>{placeholder}</span>}
         </DaisyButton>
       </DaisyPopoverTrigger>
-      <DaisyPopoverContent className="w-auto p-0">
+      <DaisyPopoverContent className="w-auto p-0" />
         <DaisyCalendar
           mode="single"
           selected={value || undefined}

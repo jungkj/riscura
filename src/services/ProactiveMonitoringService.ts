@@ -12,7 +12,7 @@ import {
   AnalysisSchedule,
   NotificationConfig,
   ActionRecommendation,
-  PerformanceMetrics
+  PerformanceMetrics,
 } from '@/types/proactive-monitoring.types';
 import { Risk, Control } from '@/types';
 import { OrganizationContext, RiskCategory } from '@/types/risk-intelligence.types';
@@ -29,7 +29,12 @@ import { SmartNotificationService } from './SmartNotificationService';
 // Enhanced AI processing queue for background tasks
 interface AIProcessingTask {
   id: string;
-  type: 'risk_analysis' | 'trend_analysis' | 'compliance_check' | 'insight_generation' | 'prediction';
+  type:
+    | 'risk_analysis'
+    | 'trend_analysis'
+    | 'compliance_check'
+    | 'insight_generation'
+    | 'prediction';
   priority: 'critical' | 'high' | 'medium' | 'low';
   targetEntity: {
     id: string;
@@ -125,7 +130,9 @@ class InMemoryMonitoringQueue implements MonitoringQueue {
   async enqueue(task: MonitoringTask): Promise<void> {
     this.queue.push(task);
     // Sort by priority (assuming higher priority first)
-    this.queue.sort((a, b) => this.getPriorityValue(b.priority) - this.getPriorityValue(a.priority));
+    this.queue.sort(
+      (a, b) => this.getPriorityValue(b.priority) - this.getPriorityValue(a.priority)
+    );
   }
 
   async dequeue(): Promise<MonitoringTask | null> {
@@ -146,10 +153,10 @@ class InMemoryMonitoringQueue implements MonitoringQueue {
 
   private getPriorityValue(priority: string): number {
     const priorityMap: Record<string, number> = {
-      'critical': 4,
-      'high': 3,
-      'medium': 2,
-      'low': 1
+      critical: 4,
+      high: 3,
+      medium: 2,
+      low: 1,
     };
     return priorityMap[priority] || 1;
   }
@@ -161,7 +168,9 @@ class InMemoryAIProcessingQueue implements AIProcessingQueue {
   async enqueue(task: AIProcessingTask): Promise<void> {
     this.queue.push(task);
     // Sort by priority
-    this.queue.sort((a, b) => this.getPriorityValue(b.priority) - this.getPriorityValue(a.priority));
+    this.queue.sort(
+      (a, b) => this.getPriorityValue(b.priority) - this.getPriorityValue(a.priority)
+    );
   }
 
   async dequeue(): Promise<AIProcessingTask | null> {
@@ -182,23 +191,23 @@ class InMemoryAIProcessingQueue implements AIProcessingQueue {
 
   async processBatch(batchSize: number): Promise<AIProcessingResult[]> {
     const batch = this.queue.splice(0, batchSize);
-    return batch.map(task => ({
+    return batch.map((task) => ({
       taskId: task.id,
       insights: [] as ProactiveInsight[],
       recommendations: [] as ActionRecommendation[],
       predictions: [] as PredictiveResult[],
       confidence: 0.8,
       processingTime: 1000,
-      tokenUsage: { prompt: 100, completion: 200, total: 300 }
+      tokenUsage: { prompt: 100, completion: 200, total: 300 },
     }));
   }
 
   private getPriorityValue(priority: string): number {
     const priorityMap: Record<string, number> = {
-      'critical': 4,
-      'high': 3,
-      'medium': 2,
-      'low': 1
+      critical: 4,
+      high: 3,
+      medium: 2,
+      low: 1,
     };
     return priorityMap[priority] || 1;
   }
@@ -219,7 +228,7 @@ class InMemoryScheduleManager implements ScheduleManager {
         frequency: task.frequency,
         timezone: 'UTC',
         startDate: new Date(),
-        blackoutPeriods: [] as any[]
+        blackoutPeriods: [] as any[],
       },
       nextRun: task.scheduledAt,
       enabled: true,
@@ -230,7 +239,7 @@ class InMemoryScheduleManager implements ScheduleManager {
           warning: 0.7,
           critical: 0.9,
           anomalyDetection: true,
-          customThresholds: []
+          customThresholds: [],
         },
         parameters: {},
         scope: {
@@ -238,11 +247,11 @@ class InMemoryScheduleManager implements ScheduleManager {
           timeWindow: { duration: 30, unit: 'days' },
           dependencies: true,
           relatedEntities: true,
-          externalFactors: false
+          externalFactors: false,
         },
         outputFormat: 'summary',
-        retentionDays: 90
-      }
+        retentionDays: 90,
+      },
     };
     this.schedules.set(task.id, schedule);
   }
@@ -254,12 +263,12 @@ class InMemoryScheduleManager implements ScheduleManager {
   async updateSchedule(taskId: string, schedule: unknown): Promise<void> {
     const existing = this.schedules.get(taskId);
     if (existing) {
-      this.schedules.set(taskId, { ...existing, ...schedule as Partial<ScheduledAnalysis> });
+      this.schedules.set(taskId, { ...existing, ...(schedule as Partial<ScheduledAnalysis>) });
     }
   }
 
   async getActiveSchedules(): Promise<ScheduledAnalysis[]> {
-    return Array.from(this.schedules.values()).filter(s => s.enabled);
+    return Array.from(this.schedules.values()).filter((s) => s.enabled);
   }
 
   private getDefaultNotificationConfig(): NotificationConfig {
@@ -267,8 +276,13 @@ class InMemoryScheduleManager implements ScheduleManager {
       enabled: true,
       channels: [],
       batching: { enabled: false, windowMinutes: 30, maxBatchSize: 5, priorities: [] },
-      filtering: { duplicateWindow: 60, relevanceThreshold: 50, categories: [], suppressionRules: [] },
-      escalation: { enabled: false, levels: [] }
+      filtering: {
+        duplicateWindow: 60,
+        relevanceThreshold: 50,
+        categories: [],
+        suppressionRules: [],
+      },
+      escalation: { enabled: false, levels: [] },
     };
   }
 }
@@ -329,7 +343,7 @@ export class ProactiveMonitoringService {
   private readonly eventService: EventService;
   private readonly performanceService: PerformanceService;
   private readonly aiProcessingQueue: AIProcessingQueue;
-  
+
   private isMonitoring: boolean = false;
   private monitoringInterval: NodeJS.Timeout | null = null;
   private activeMonitors: Map<string, MonitoringSession> = new Map();
@@ -347,12 +361,14 @@ export class ProactiveMonitoringService {
     this.aiService = aiService || new AIService();
     this.complianceAIService = complianceAIService || new ComplianceAIService();
     this.riskAnalysisAIService = riskAnalysisAIService || new RiskAnalysisAIService();
-    this.controlRecommendationAIService = controlRecommendationAIService || new ControlRecommendationAIService();
-    
+    this.controlRecommendationAIService =
+      controlRecommendationAIService || new ControlRecommendationAIService();
+
     // Create mock services for complex dependencies
     this.trendAnalysisService = trendAnalysisService || this.createMockTrendAnalysisService();
-    this.smartNotificationService = smartNotificationService || this.createMockSmartNotificationService();
-    
+    this.smartNotificationService =
+      smartNotificationService || this.createMockSmartNotificationService();
+
     // Initialize supporting services with in-memory implementations
     this.monitoringQueue = new InMemoryMonitoringQueue();
     this.scheduleManager = new InMemoryScheduleManager();
@@ -370,7 +386,7 @@ export class ProactiveMonitoringService {
       predictFutureTrends: async () => [] as any[],
       generateTrendReport: async () => ({ summary: 'No trends detected', details: [] as any[] }),
       configureTrendParameters: async () => {},
-      getTrendHistory: async () => [] as any[]
+      getTrendHistory: async () => [] as any[],
     } as any;
   }
 
@@ -382,7 +398,7 @@ export class ProactiveMonitoringService {
       updateNotificationPreferences: async () => {},
       getNotificationHistory: async () => [] as any[],
       configureNotificationRules: async () => {},
-      testNotificationChannel: async () => true
+      testNotificationChannel: async () => true,
     } as any;
   }
 
@@ -392,39 +408,38 @@ export class ProactiveMonitoringService {
   async startContinuousMonitoring(userId: string): Promise<void> {
     try {
       console.log(`Starting continuous monitoring for user: ${userId}`);
-      
+
       // Get user context and organization setup
       const userContext = await this.getUserContext(userId);
       const orgContext = await this.getOrganizationContext(userContext.organizationId);
-      
+
       // Initialize monitoring session
       const session = await this.createMonitoringSession(userId, userContext, orgContext);
       this.activeMonitors.set(userId, session);
-      
+
       // Schedule background risk register analysis
       await this.scheduleRiskRegisterAnalysis(userId, orgContext);
-      
+
       // Schedule emerging risk detection
       await this.scheduleEmergingRiskDetection(userId, orgContext);
-      
+
       // Schedule control effectiveness monitoring
       await this.scheduleControlEffectivenessMonitoring(userId, orgContext);
-      
+
       // Schedule compliance status tracking
       await this.scheduleComplianceStatusTracking(userId, orgContext);
-      
+
       // Start the monitoring loop if not already running
       if (!this.isMonitoring) {
         await this.startMonitoringLoop();
       }
-      
+
       // Emit monitoring started event
       await this.eventService.emit('monitoring:started', {
         userId,
         sessionId: session.id,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
-      
     } catch (error) {
       console.error(`Error starting continuous monitoring for user ${userId}:`, error);
       throw new Error('Failed to start continuous monitoring');
@@ -441,25 +456,24 @@ export class ProactiveMonitoringService {
         console.warn(`No active monitoring session found for user: ${userId}`);
         return;
       }
-      
+
       // Cancel all scheduled tasks for this user
       await this.cancelUserTasks(userId);
-      
+
       // Remove from active monitors
       this.activeMonitors.delete(userId);
-      
+
       // Stop monitoring loop if no active sessions
       if (this.activeMonitors.size === 0 && this.isMonitoring) {
         await this.stopMonitoringLoop();
       }
-      
+
       // Emit monitoring stopped event
       await this.eventService.emit('monitoring:stopped', {
         userId,
         sessionId: session.id,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
-      
     } catch (error) {
       console.error(`Error stopping continuous monitoring for user ${userId}:`, error);
       throw new Error('Failed to stop continuous monitoring');
@@ -488,20 +502,19 @@ export class ProactiveMonitoringService {
         nextRun: this.calculateNextRun(frequency),
         config: this.mergeAnalysisConfig(config),
         notifications: this.getDefaultNotificationConfig(),
-        history: []
+        history: [],
       };
-      
+
       // Create monitoring tasks for each target
       const tasks = await this.createMonitoringTasks(scheduledAnalysis);
-      
+
       // Register with schedule manager
       await this.scheduleManager.scheduleTask(tasks[0]);
-      
+
       // Store scheduled analysis
       await this.cacheService.set(`scheduled:${scheduledAnalysis.id}`, scheduledAnalysis, 86400);
-      
+
       return scheduledAnalysis;
-      
     } catch (error) {
       console.error('Error scheduling analysis:', error);
       throw new Error('Failed to schedule analysis');
@@ -514,33 +527,32 @@ export class ProactiveMonitoringService {
   async generateProactiveInsights(context: UserContext): Promise<ProactiveInsight[]> {
     try {
       const insights: ProactiveInsight[] = [];
-      
+
       // Identify risks requiring attention
       const risksRequiringAttention = await this.identifyRisksRequiringAttention(context);
       insights.push(...risksRequiringAttention);
-      
+
       // Identify outdated assessments
       const outdatedAssessments = await this.identifyOutdatedAssessments(context);
       insights.push(...outdatedAssessments);
-      
+
       // Identify control testing due dates
       const controlTestingDue = await this.identifyControlTestingDue(context);
       insights.push(...controlTestingDue);
-      
+
       // Identify emerging industry risks
       const emergingRisks = await this.identifyEmergingIndustryRisks(context);
       insights.push(...emergingRisks);
-      
+
       // Identify workflow inefficiencies
       const workflowIssues = await this.identifyWorkflowInefficiencies(context);
       insights.push(...workflowIssues);
-      
+
       // Sort by priority and confidence
       const prioritizedInsights = this.prioritizeInsights(insights);
-      
+
       // Limit to top 20 insights to avoid overwhelming users
       return prioritizedInsights.slice(0, 20);
-      
     } catch (error) {
       console.error('Error generating proactive insights:', error);
       throw new Error('Failed to generate proactive insights');
@@ -553,25 +565,25 @@ export class ProactiveMonitoringService {
   async executeMonitoringTask(task: MonitoringTask): Promise<MonitoringResult> {
     try {
       const startTime = Date.now();
-      
+
       // Update task status
       task.status = 'running';
       task.startedAt = new Date();
-      
+
       // Get target data based on task type
       const targetData = await this.getTargetData(task.targetId, task.targetType);
-      
+
       // Perform analysis based on task type
       const analysisResult = await this.performAnalysis(task, targetData);
-      
+
       // Generate findings and insights
       const findings = await this.generateFindings(task, analysisResult);
       const insights = await this.generateInsights(task, analysisResult, findings);
       const recommendations = await this.generateRecommendations(insights, findings);
-      
+
       // Get performance metrics
       const metrics = await this.performanceService.getCurrentMetrics();
-      
+
       // Create monitoring result
       const result: MonitoringResult = {
         taskId: task.id,
@@ -581,34 +593,33 @@ export class ProactiveMonitoringService {
         insights,
         recommendations,
         timestamp: new Date(),
-        confidence: this.calculateOverallConfidence(insights)
+        confidence: this.calculateOverallConfidence(insights),
       };
-      
+
       // Update task
       task.status = 'completed';
       task.completedAt = new Date();
       task.lastResult = result;
-      
+
       // Cache result
       await this.cacheService.set(`result:${task.id}`, result, 3600);
-      
+
       // Emit task completed event
       await this.eventService.emit('monitoring:task_completed', {
         taskId: task.id,
         status: result.status,
         insightCount: insights.length,
-        duration: Date.now() - startTime
+        duration: Date.now() - startTime,
       });
-      
+
       return result;
-      
     } catch (error) {
       console.error(`Error executing monitoring task ${task.id}:`, error);
-      
+
       // Update task status to failed
       task.status = 'failed';
       task.completedAt = new Date();
-      
+
       throw new Error('Failed to execute monitoring task');
     }
   }
@@ -619,7 +630,7 @@ export class ProactiveMonitoringService {
   async getMonitoringStatus(userId: string): Promise<MonitoringStatus> {
     try {
       const session = this.activeMonitors.get(userId);
-      
+
       if (!session) {
         return {
           active: false,
@@ -627,28 +638,27 @@ export class ProactiveMonitoringService {
           activeTasks: 0,
           lastUpdate: null,
           upcomingTasks: [],
-          recentResults: []
+          recentResults: [],
         };
       }
-      
+
       // Get active tasks count
       const activeTasks = await this.getActiveTasksCount();
-      
+
       // Get upcoming scheduled tasks
       const upcomingTasks = await this.getUpcomingTasks();
-      
+
       // Get recent results
       const recentResults = await this.getRecentResults();
-      
+
       return {
         active: true,
         session,
         activeTasks,
         lastUpdate: session.lastUpdate,
         upcomingTasks,
-        recentResults
+        recentResults,
       };
-      
     } catch (error) {
       console.error(`Error getting monitoring status for user ${userId}:`, error);
       throw new Error('Failed to get monitoring status');
@@ -658,10 +668,10 @@ export class ProactiveMonitoringService {
   // Private helper methods
   private async startMonitoringLoop(): Promise<void> {
     if (this.isMonitoring) return;
-    
+
     this.isMonitoring = true;
     console.log('Starting monitoring loop');
-    
+
     // Process monitoring queue every 30 seconds
     this.monitoringInterval = setInterval(async () => {
       try {
@@ -674,42 +684,42 @@ export class ProactiveMonitoringService {
 
   private async stopMonitoringLoop(): Promise<void> {
     if (!this.isMonitoring) return;
-    
+
     this.isMonitoring = false;
-    
+
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
       this.monitoringInterval = null;
     }
-    
+
     console.log('Stopped monitoring loop');
   }
 
   private async processMonitoringQueue(): Promise<void> {
     const queueSize = await this.monitoringQueue.size();
     if (queueSize === 0) return;
-    
+
     console.log(`Processing monitoring queue with ${queueSize} tasks`);
-    
+
     // Process tasks in batches to avoid overwhelming the system
     const batchSize = 5;
     const tasksToProcess: MonitoringTask[] = [];
-    
+
     for (let i = 0; i < batchSize && i < queueSize; i++) {
       const task = await this.monitoringQueue.dequeue();
       if (task) {
         tasksToProcess.push(task);
       }
     }
-    
+
     // Execute tasks in parallel
-    const taskPromises = tasksToProcess.map(task => 
+    const taskPromises = tasksToProcess.map((task) =>
       this.executeMonitoringTask(task).catch((error): MonitoringResult | null => {
         console.error(`Task ${task.id} failed:`, error);
         return null;
       })
     );
-    
+
     await Promise.all(taskPromises);
   }
 
@@ -717,26 +727,26 @@ export class ProactiveMonitoringService {
     // Get user context from cache or data service
     const cached = await this.cacheService.get(`user_context:${userId}`);
     if (cached) return cached as UserContext;
-    
+
     const userContext = await this.dataService.getUserContext(userId);
     await this.cacheService.set(`user_context:${userId}`, userContext, 1800);
-    
+
     return userContext;
   }
 
   private async getOrganizationContext(organizationId: string): Promise<OrganizationContext> {
     const cached = await this.cacheService.get(`org_context:${organizationId}`);
     if (cached) return cached as OrganizationContext;
-    
+
     const orgContext = await this.dataService.getOrganizationContext(organizationId);
     await this.cacheService.set(`org_context:${organizationId}`, orgContext, 3600);
-    
+
     return orgContext;
   }
 
   private async createMonitoringSession(
-    userId: string, 
-    userContext: UserContext, 
+    userId: string,
+    userContext: UserContext,
     orgContext: OrganizationContext
   ): Promise<MonitoringSession> {
     return {
@@ -750,13 +760,16 @@ export class ProactiveMonitoringService {
       completedTasks: 0,
       generatedInsights: 0,
       status: 'active',
-      metrics: await this.performanceService.getMetrics()
+      metrics: await this.performanceService.getMetrics(),
     };
   }
 
-  private async scheduleRiskRegisterAnalysis(userId: string, orgContext: OrganizationContext): Promise<void> {
-    const riskIds = orgContext.currentRiskLandscape.map(risk => risk.id);
-    
+  private async scheduleRiskRegisterAnalysis(
+    userId: string,
+    orgContext: OrganizationContext
+  ): Promise<void> {
+    const riskIds = orgContext.currentRiskLandscape.map((risk) => risk.id);
+
     const task: MonitoringTask = {
       id: generateId('monitoring-task'),
       type: 'risk_analysis',
@@ -769,14 +782,17 @@ export class ProactiveMonitoringService {
       metadata: {
         userId,
         riskIds,
-        analysisType: 'comprehensive'
-      }
+        analysisType: 'comprehensive',
+      },
     };
-    
+
     await this.monitoringQueue.enqueue(task);
   }
 
-  private async scheduleEmergingRiskDetection(userId: string, orgContext: OrganizationContext): Promise<void> {
+  private async scheduleEmergingRiskDetection(
+    userId: string,
+    orgContext: OrganizationContext
+  ): Promise<void> {
     const task: MonitoringTask = {
       id: generateId('monitoring-task'),
       type: 'external_intelligence',
@@ -789,18 +805,22 @@ export class ProactiveMonitoringService {
       metadata: {
         userId,
         industry: orgContext.industry,
-        analysisType: 'emerging_risks'
-      }
+        analysisType: 'emerging_risks',
+      },
     };
-    
+
     await this.monitoringQueue.enqueue(task);
   }
 
-  private async scheduleControlEffectivenessMonitoring(userId: string, orgContext: OrganizationContext): Promise<void> {
+  private async scheduleControlEffectivenessMonitoring(
+    userId: string,
+    orgContext: OrganizationContext
+  ): Promise<void> {
     // Get all controls from the organization
     const controls = await this.dataService.getOrganizationControls(orgContext.id);
-    
-    for (const control of controls.slice(0, 10)) { // Limit to top 10 controls
+
+    for (const control of controls.slice(0, 10)) {
+      // Limit to top 10 controls
       const task: MonitoringTask = {
         id: generateId('monitoring-task'),
         type: 'control_testing',
@@ -813,15 +833,18 @@ export class ProactiveMonitoringService {
         metadata: {
           userId,
           controlId: control.id,
-          analysisType: 'effectiveness'
-        }
+          analysisType: 'effectiveness',
+        },
       };
-      
+
       await this.monitoringQueue.enqueue(task);
     }
   }
 
-  private async scheduleComplianceStatusTracking(userId: string, orgContext: OrganizationContext): Promise<void> {
+  private async scheduleComplianceStatusTracking(
+    userId: string,
+    orgContext: OrganizationContext
+  ): Promise<void> {
     for (const framework of orgContext.regulatoryEnvironment) {
       const task: MonitoringTask = {
         id: generateId('monitoring-task'),
@@ -835,25 +858,25 @@ export class ProactiveMonitoringService {
         metadata: {
           userId,
           frameworkId: framework.id,
-          analysisType: 'compliance_status'
-        }
+          analysisType: 'compliance_status',
+        },
       };
-      
+
       await this.monitoringQueue.enqueue(task);
     }
   }
 
   private async identifyRisksRequiringAttention(context: UserContext): Promise<ProactiveInsight[]> {
     const insights: ProactiveInsight[] = [];
-    
+
     // Analyze active risks for urgent attention
     for (const riskId of context.workContext.active_risks.slice(0, 5)) {
       const risk = await this.dataService.getRisk(riskId);
       if (!risk) continue;
-      
+
       // Check if risk score has increased significantly
       const riskTrend = await this.analyzeRiskTrend(risk);
-      
+
       if (riskTrend.direction === 'increasing' && riskTrend.magnitude > 20) {
         insights.push({
           id: generateId('insight'),
@@ -864,59 +887,65 @@ export class ProactiveMonitoringService {
           description: `Risk score has increased by ${riskTrend.magnitude}% over the past month`,
           details: {
             context: `Risk ${risk.title} shows concerning upward trend`,
-            evidence: [{
-              type: 'trend',
-              description: 'Risk score trend analysis',
-              value: riskTrend.magnitude,
-              threshold: 20,
-              context: 'Monthly trend analysis'
-            }],
+            evidence: [
+              {
+                type: 'trend',
+                description: 'Risk score trend analysis',
+                value: riskTrend.magnitude,
+                threshold: 20,
+                context: 'Monthly trend analysis',
+              },
+            ],
             trend: {
               direction: 'increasing',
               magnitude: riskTrend.magnitude,
               duration: '30 days',
               acceleration: 5,
-              stability: 60
+              stability: 60,
             },
             comparison: {
               baseline: risk.riskScore - riskTrend.magnitude,
               current: risk.riskScore,
               change: riskTrend.magnitude,
-              percentChange: (riskTrend.magnitude / risk.riskScore) * 100
+              percentChange: (riskTrend.magnitude / risk.riskScore) * 100,
             },
             prediction: {
               forecast: [risk.riskScore + 5, risk.riskScore + 10],
               confidenceInterval: { lower: 80, upper: 95, confidence: 85 },
               timeframe: '3 months',
               assumptions: ['Current trend continues', 'No major mitigation implemented'],
-              scenarios: [{
-                name: 'Continued increase',
-                probability: 70,
-                outcome: risk.riskScore + 15,
-                description: 'Risk continues to increase without intervention'
-              }]
+              scenarios: [
+                {
+                  name: 'Continued increase',
+                  probability: 70,
+                  outcome: risk.riskScore + 15,
+                  description: 'Risk continues to increase without intervention',
+                },
+              ],
             },
-            relatedInsights: []
+            relatedInsights: [],
           },
-          actionItems: [{
-            id: generateId('action'),
-            type: 'investigation',
-            title: 'Investigate Risk Increase',
-            description: 'Analyze root causes of risk score increase',
-            priority: 'urgent',
-            estimatedEffort: '2-4 hours',
-            dependencies: [],
-            resources: ['Risk Analyst', 'SME'],
-            status: 'pending',
-            progress: 0
-          }],
+          actionItems: [
+            {
+              id: generateId('action'),
+              type: 'investigation',
+              title: 'Investigate Risk Increase',
+              description: 'Analyze root causes of risk score increase',
+              priority: 'urgent',
+              estimatedEffort: '2-4 hours',
+              dependencies: [],
+              resources: ['Risk Analyst', 'SME'],
+              status: 'pending',
+              progress: 0,
+            },
+          ],
           status: 'new',
           source: {
             system: 'ProactiveMonitoring',
             component: 'RiskTrendAnalysis',
             dataSource: 'RiskDatabase',
             algorithm: 'TrendDetection v2.1',
-            version: '2.1.0'
+            version: '2.1.0',
           },
           confidence: 85,
           impact: {
@@ -924,33 +953,33 @@ export class ProactiveMonitoringService {
             operational: 'Potential process disruption',
             compliance: 'May affect compliance posture',
             reputation: 'Could impact stakeholder confidence',
-            strategic: 'May require strategy adjustment'
+            strategic: 'May require strategy adjustment',
           },
           createdAt: new Date(),
           updatedAt: new Date(),
           metadata: {
             riskId: risk.id,
             trendMagnitude: riskTrend.magnitude,
-            analysisMethod: 'statistical_trend_analysis'
-          }
+            analysisMethod: 'statistical_trend_analysis',
+          },
         });
       }
     }
-    
+
     return insights;
   }
 
   private async identifyOutdatedAssessments(context: UserContext): Promise<ProactiveInsight[]> {
     const insights: ProactiveInsight[] = [];
-    
+
     // Check for assessments that haven't been updated in 6+ months
     const outdatedThreshold = new Date();
     outdatedThreshold.setMonth(outdatedThreshold.getMonth() - 6);
-    
+
     for (const riskId of context.workContext.active_risks) {
       const risk = await this.dataService.getRisk(riskId);
       if (!risk || !risk.lastAssessed) continue;
-      
+
       if (risk.lastAssessed < outdatedThreshold) {
         insights.push({
           id: generateId('insight'),
@@ -961,54 +990,64 @@ export class ProactiveMonitoringService {
           description: `Risk assessment is ${Math.floor((Date.now() - risk.lastAssessed.getTime()) / (1000 * 60 * 60 * 24))} days overdue`,
           details: {
             context: `Risk assessment requires updating to maintain accuracy`,
-            evidence: [{
-              type: 'comparison',
-              description: 'Days since last assessment',
-              value: Math.floor((Date.now() - risk.lastAssessed.getTime()) / (1000 * 60 * 60 * 24)),
-              threshold: 180,
-              context: 'Assessment staleness'
-            }],
+            evidence: [
+              {
+                type: 'comparison',
+                description: 'Days since last assessment',
+                value: Math.floor(
+                  (Date.now() - risk.lastAssessed.getTime()) / (1000 * 60 * 60 * 24)
+                ),
+                threshold: 180,
+                context: 'Assessment staleness',
+              },
+            ],
             trend: {
               direction: 'stable',
               magnitude: 0,
               duration: '6+ months',
               acceleration: 0,
-              stability: 100
+              stability: 100,
             },
             comparison: {
               baseline: 180,
-              current: Math.floor((Date.now() - risk.lastAssessed.getTime()) / (1000 * 60 * 60 * 24)),
-              change: Math.floor((Date.now() - risk.lastAssessed.getTime()) / (1000 * 60 * 60 * 24)) - 180,
-              percentChange: 50
+              current: Math.floor(
+                (Date.now() - risk.lastAssessed.getTime()) / (1000 * 60 * 60 * 24)
+              ),
+              change:
+                Math.floor((Date.now() - risk.lastAssessed.getTime()) / (1000 * 60 * 60 * 24)) -
+                180,
+              percentChange: 50,
             },
             prediction: {
               forecast: [] as number[],
               confidenceInterval: { lower: 90, upper: 100, confidence: 95 },
               timeframe: 'immediate',
               assumptions: ['Assessment remains current priority'],
-              scenarios: []
+              scenarios: [],
             },
-            relatedInsights: []
+            relatedInsights: [],
           },
-          actionItems: [{
-            id: generateId('action'),
-            type: 'process_change',
-            title: 'Schedule Risk Assessment',
-            description: 'Update risk assessment with current information',
-            priority: 'medium',
-            estimatedEffort: '1-2 hours',
-            dependencies: [],
-            resources: ['Risk Owner', 'SME'],
-            status: 'pending',
-            progress: 0
-          }],
+          actionItems: [
+            {
+              id: generateId('action'),
+              type: 'process_change',
+              title: 'Schedule Risk Assessment',
+              description: 'Update risk assessment with current information',
+              priority: 'medium',
+              estimatedEffort: '1-2 hours',
+              dependencies: [],
+              resources: ['Risk Owner', 'SME'],
+              status: 'pending',
+              progress: 0,
+            },
+          ],
           status: 'new',
           source: {
             system: 'ProactiveMonitoring',
             component: 'AssessmentTracking',
             dataSource: 'RiskDatabase',
             algorithm: 'StalenessDetection v1.0',
-            version: '1.0.0'
+            version: '1.0.0',
           },
           confidence: 95,
           impact: {
@@ -1016,33 +1055,35 @@ export class ProactiveMonitoringService {
             operational: 'Reduced assessment accuracy',
             compliance: 'May affect audit readiness',
             reputation: 'Minimal impact',
-            strategic: 'Outdated risk information'
+            strategic: 'Outdated risk information',
           },
           createdAt: new Date(),
           updatedAt: new Date(),
           metadata: {
             riskId: risk.id,
-            daysSinceAssessment: Math.floor((Date.now() - risk.lastAssessed.getTime()) / (1000 * 60 * 60 * 24))
-          }
+            daysSinceAssessment: Math.floor(
+              (Date.now() - risk.lastAssessed.getTime()) / (1000 * 60 * 60 * 24)
+            ),
+          },
         });
       }
     }
-    
+
     return insights;
   }
 
   private async identifyControlTestingDue(context: UserContext): Promise<ProactiveInsight[]> {
     const insights: ProactiveInsight[] = [];
-    
+
     // Check upcoming deadlines for control testing
     const upcomingDeadlines = context.workContext.upcoming_deadlines
-      .filter(deadline => deadline.type === 'control_testing' && deadline.urgency <= 30)
+      .filter((deadline) => deadline.type === 'control_testing' && deadline.urgency <= 30)
       .slice(0, 5);
-    
+
     for (const deadline of upcomingDeadlines) {
-      const urgencyLevel = deadline.urgency <= 7 ? 'critical' : 
-                          deadline.urgency <= 14 ? 'high' : 'medium';
-      
+      const urgencyLevel =
+        deadline.urgency <= 7 ? 'critical' : deadline.urgency <= 14 ? 'high' : 'medium';
+
       insights.push({
         id: generateId('insight'),
         type: 'compliance_gap',
@@ -1052,48 +1093,52 @@ export class ProactiveMonitoringService {
         description: `Control testing due in ${deadline.urgency} days`,
         details: {
           context: `Regular control testing maintains compliance and effectiveness`,
-          evidence: [{
-            type: 'metric',
-            description: 'Days until testing due',
-            value: deadline.urgency,
-            threshold: 30,
-            context: 'Testing schedule'
-          }],
+          evidence: [
+            {
+              type: 'metric',
+              description: 'Days until testing due',
+              value: deadline.urgency,
+              threshold: 30,
+              context: 'Testing schedule',
+            },
+          ],
           trend: {
             direction: 'decreasing',
             magnitude: 1,
             duration: `${deadline.urgency} days`,
             acceleration: 0,
-            stability: 100
+            stability: 100,
           },
           comparison: {
             baseline: 90,
             current: deadline.urgency,
             change: deadline.urgency - 90,
-            percentChange: ((deadline.urgency - 90) / 90) * 100
+            percentChange: ((deadline.urgency - 90) / 90) * 100,
           },
           prediction: {
             forecast: [] as number[],
             confidenceInterval: { lower: 100, upper: 100, confidence: 100 },
             timeframe: 'fixed',
             assumptions: ['Testing schedule is fixed'],
-            scenarios: []
+            scenarios: [],
           },
-          relatedInsights: []
+          relatedInsights: [],
         },
-        actionItems: [{
-          id: generateId('action'),
-          type: 'monitoring',
-          title: 'Execute Control Testing',
-          description: 'Perform scheduled control testing procedures',
-          priority: urgencyLevel === 'critical' ? 'immediate' : 'urgent',
-          dueDate: deadline.date,
-          estimatedEffort: '2-4 hours',
-          dependencies: [],
-          resources: ['Control Owner', 'Testing Team'],
-          status: 'pending',
-          progress: 0
-        }],
+        actionItems: [
+          {
+            id: generateId('action'),
+            type: 'monitoring',
+            title: 'Execute Control Testing',
+            description: 'Perform scheduled control testing procedures',
+            priority: urgencyLevel === 'critical' ? 'immediate' : 'urgent',
+            dueDate: deadline.date,
+            estimatedEffort: '2-4 hours',
+            dependencies: [],
+            resources: ['Control Owner', 'Testing Team'],
+            status: 'pending',
+            progress: 0,
+          },
+        ],
         deadline: deadline.date,
         status: 'new',
         source: {
@@ -1101,7 +1146,7 @@ export class ProactiveMonitoringService {
           component: 'ScheduleTracking',
           dataSource: 'ScheduleDatabase',
           algorithm: 'DeadlineMonitor v1.0',
-          version: '1.0.0'
+          version: '1.0.0',
         },
         confidence: 100,
         impact: {
@@ -1109,26 +1154,26 @@ export class ProactiveMonitoringService {
           operational: 'Maintains control effectiveness',
           compliance: 'Required for compliance',
           reputation: 'Demonstrates diligence',
-          strategic: 'Supports risk management'
+          strategic: 'Supports risk management',
         },
         createdAt: new Date(),
         updatedAt: new Date(),
         metadata: {
           deadlineId: deadline.id,
-          daysUntilDue: deadline.urgency
-        }
+          daysUntilDue: deadline.urgency,
+        },
       });
     }
-    
+
     return insights;
   }
 
   private async identifyEmergingIndustryRisks(context: UserContext): Promise<ProactiveInsight[]> {
     const insights: ProactiveInsight[] = [];
-    
+
     // Get external intelligence about emerging risks
     const emergingRisks = await this.getEmergingRisks(context.organizationId);
-    
+
     for (const emergingRisk of emergingRisks.slice(0, 3)) {
       if (emergingRisk.relevanceScore > 70) {
         insights.push({
@@ -1140,63 +1185,69 @@ export class ProactiveMonitoringService {
           description: emergingRisk.description,
           details: {
             context: `New risk identified in ${emergingRisk.category} category`,
-            evidence: [{
-              type: 'trend',
-              description: 'Industry risk emergence',
-              value: emergingRisk.relevanceScore,
-              threshold: 70,
-              context: 'External intelligence'
-            }],
+            evidence: [
+              {
+                type: 'trend',
+                description: 'Industry risk emergence',
+                value: emergingRisk.relevanceScore,
+                threshold: 70,
+                context: 'External intelligence',
+              },
+            ],
             trend: {
               direction: 'increasing',
               magnitude: emergingRisk.relevanceScore,
               duration: emergingRisk.timeHorizon,
               acceleration: 5,
-              stability: 60
+              stability: 60,
             },
             comparison: {
               baseline: 0,
               current: emergingRisk.relevanceScore,
               change: emergingRisk.relevanceScore,
-              percentChange: 100
+              percentChange: 100,
             },
             prediction: {
               forecast: [emergingRisk.probability * 100],
-              confidenceInterval: { 
-                lower: emergingRisk.confidence - 10, 
-                upper: emergingRisk.confidence + 10, 
-                confidence: emergingRisk.confidence 
+              confidenceInterval: {
+                lower: emergingRisk.confidence - 10,
+                upper: emergingRisk.confidence + 10,
+                confidence: emergingRisk.confidence,
               },
               timeframe: emergingRisk.timeHorizon,
               assumptions: ['Current trend continues', 'No major industry changes'],
-              scenarios: [{
-                name: 'Risk materializes',
-                probability: emergingRisk.probability * 100,
-                outcome: emergingRisk.relevanceScore,
-                description: 'Emerging risk becomes significant threat'
-              }]
+              scenarios: [
+                {
+                  name: 'Risk materializes',
+                  probability: emergingRisk.probability * 100,
+                  outcome: emergingRisk.relevanceScore,
+                  description: 'Emerging risk becomes significant threat',
+                },
+              ],
             },
-            relatedInsights: []
+            relatedInsights: [],
           },
-          actionItems: [{
-            id: generateId('action'),
-            type: 'investigation',
-            title: 'Assess Emerging Risk',
-            description: 'Evaluate potential impact and develop mitigation strategy',
-            priority: 'medium',
-            estimatedEffort: '4-6 hours',
-            dependencies: [],
-            resources: ['Risk Analyst', 'Industry Expert'],
-            status: 'pending',
-            progress: 0
-          }],
+          actionItems: [
+            {
+              id: generateId('action'),
+              type: 'investigation',
+              title: 'Assess Emerging Risk',
+              description: 'Evaluate potential impact and develop mitigation strategy',
+              priority: 'medium',
+              estimatedEffort: '4-6 hours',
+              dependencies: [],
+              resources: ['Risk Analyst', 'Industry Expert'],
+              status: 'pending',
+              progress: 0,
+            },
+          ],
           status: 'new',
           source: {
             system: 'ProactiveMonitoring',
             component: 'ExternalIntelligence',
             dataSource: 'IndustryFeeds',
             algorithm: 'EmergingRiskDetection v1.5',
-            version: '1.5.0'
+            version: '1.5.0',
           },
           confidence: emergingRisk.confidence,
           impact: {
@@ -1204,92 +1255,98 @@ export class ProactiveMonitoringService {
             operational: 'Potential new threat',
             compliance: 'May require new controls',
             reputation: 'Industry perception',
-            strategic: 'Strategic planning consideration'
+            strategic: 'Strategic planning consideration',
           },
           createdAt: new Date(),
           updatedAt: new Date(),
           metadata: {
             emergingRiskId: emergingRisk.id,
             relevanceScore: emergingRisk.relevanceScore,
-            source: emergingRisk.source.origin
-          }
+            source: emergingRisk.source.origin,
+          },
         });
       }
     }
-    
+
     return insights;
   }
 
   private async identifyWorkflowInefficiencies(context: UserContext): Promise<ProactiveInsight[]> {
     const insights: ProactiveInsight[] = [];
-    
+
     // Analyze recent activities for efficiency patterns
     const recentActivities = context.workContext.recent_activities
-      .filter(activity => activity.duration && activity.duration > 3600000) // > 1 hour
+      .filter((activity) => activity.duration && activity.duration > 3600000) // > 1 hour
       .slice(0, 5);
-    
+
     if (recentActivities.length > 2) {
-      const averageDuration = recentActivities.reduce((sum, activity) => 
-        sum + (activity.duration || 0), 0) / recentActivities.length;
-      
-      if (averageDuration > 7200000) { // > 2 hours average
+      const averageDuration =
+        recentActivities.reduce((sum, activity) => sum + (activity.duration || 0), 0) /
+        recentActivities.length;
+
+      if (averageDuration > 7200000) {
+        // > 2 hours average
         insights.push({
           id: generateId('insight'),
           type: 'workflow_bottleneck',
           category: 'operational',
           priority: 'medium',
           title: 'Workflow Efficiency Opportunity',
-          description: `Recent activities taking longer than expected (${Math.round(averageDuration / 3600000 * 10) / 10} hours average)`,
+          description: `Recent activities taking longer than expected (${Math.round((averageDuration / 3600000) * 10) / 10} hours average)`,
           details: {
             context: 'Workflow analysis suggests optimization opportunities',
-            evidence: [{
-              type: 'metric',
-              description: 'Average activity duration',
-              value: Math.round(averageDuration / 3600000 * 10) / 10,
-              threshold: 2,
-              context: 'Time efficiency analysis'
-            }],
+            evidence: [
+              {
+                type: 'metric',
+                description: 'Average activity duration',
+                value: Math.round((averageDuration / 3600000) * 10) / 10,
+                threshold: 2,
+                context: 'Time efficiency analysis',
+              },
+            ],
             trend: {
               direction: 'stable',
               magnitude: 0,
               duration: '7 days',
               acceleration: 0,
-              stability: 80
+              stability: 80,
             },
             comparison: {
               baseline: 2,
-              current: Math.round(averageDuration / 3600000 * 10) / 10,
-              change: Math.round(averageDuration / 3600000 * 10) / 10 - 2,
-              percentChange: ((Math.round(averageDuration / 3600000 * 10) / 10 - 2) / 2) * 100
+              current: Math.round((averageDuration / 3600000) * 10) / 10,
+              change: Math.round((averageDuration / 3600000) * 10) / 10 - 2,
+              percentChange: ((Math.round((averageDuration / 3600000) * 10) / 10 - 2) / 2) * 100,
             },
             prediction: {
               forecast: [] as number[],
               confidenceInterval: { lower: 70, upper: 90, confidence: 80 },
               timeframe: 'ongoing',
               assumptions: ['Current workflow patterns continue'],
-              scenarios: []
+              scenarios: [],
             },
-            relatedInsights: []
+            relatedInsights: [],
           },
-          actionItems: [{
-            id: generateId('action'),
-            type: 'optimization',
-            title: 'Analyze Workflow Efficiency',
-            description: 'Review current processes for optimization opportunities',
-            priority: 'medium',
-            estimatedEffort: '2-3 hours',
-            dependencies: [],
-            resources: ['Process Analyst', 'User'],
-            status: 'pending',
-            progress: 0
-          }],
+          actionItems: [
+            {
+              id: generateId('action'),
+              type: 'optimization',
+              title: 'Analyze Workflow Efficiency',
+              description: 'Review current processes for optimization opportunities',
+              priority: 'medium',
+              estimatedEffort: '2-3 hours',
+              dependencies: [],
+              resources: ['Process Analyst', 'User'],
+              status: 'pending',
+              progress: 0,
+            },
+          ],
           status: 'new',
           source: {
             system: 'ProactiveMonitoring',
             component: 'WorkflowAnalysis',
             dataSource: 'ActivityLogs',
             algorithm: 'EfficiencyAnalysis v1.0',
-            version: '1.0.0'
+            version: '1.0.0',
           },
           confidence: 75,
           impact: {
@@ -1297,18 +1354,18 @@ export class ProactiveMonitoringService {
             operational: 'Improved productivity',
             compliance: 'More efficient compliance',
             reputation: 'Enhanced performance',
-            strategic: 'Resource optimization'
+            strategic: 'Resource optimization',
           },
           createdAt: new Date(),
           updatedAt: new Date(),
           metadata: {
             averageDuration: averageDuration,
-            activityCount: recentActivities.length
-          }
+            activityCount: recentActivities.length,
+          },
         });
       }
     }
-    
+
     return insights;
   }
 
@@ -1318,7 +1375,7 @@ export class ProactiveMonitoringService {
       const priorityWeight = { critical: 4, high: 3, medium: 2, low: 1, info: 0 };
       const aPriorityScore = priorityWeight[a.priority] * a.confidence;
       const bPriorityScore = priorityWeight[b.priority] * b.confidence;
-      
+
       return bPriorityScore - aPriorityScore;
     });
   }
@@ -1329,9 +1386,9 @@ export class ProactiveMonitoringService {
       frequency,
       timezone: 'UTC',
       startDate: new Date(),
-      blackoutPeriods: [] as any[]
+      blackoutPeriods: [] as any[],
     };
-    
+
     switch (frequency) {
       case 'daily':
         return { ...schedule, specificTime: '02:00' };
@@ -1347,7 +1404,7 @@ export class ProactiveMonitoringService {
   private calculateNextRun(frequency: AnalysisFrequency): Date {
     const now = new Date();
     const nextRun = new Date(now);
-    
+
     switch (frequency) {
       case 'hourly':
         nextRun.setHours(now.getHours() + 1);
@@ -1368,7 +1425,7 @@ export class ProactiveMonitoringService {
       default:
         nextRun.setHours(now.getHours() + 1);
     }
-    
+
     return nextRun;
   }
 
@@ -1378,7 +1435,7 @@ export class ProactiveMonitoringService {
         warning: 0.7,
         critical: 0.9,
         anomalyDetection: true,
-        customThresholds: []
+        customThresholds: [],
       },
       parameters: {},
       scope: {
@@ -1386,12 +1443,12 @@ export class ProactiveMonitoringService {
         timeWindow: { duration: 30, unit: 'days' },
         dependencies: true,
         relatedEntities: true,
-        externalFactors: false
+        externalFactors: false,
       },
       outputFormat: 'summary',
-      retentionDays: 90
+      retentionDays: 90,
     };
-    
+
     return { ...defaultConfig, ...config };
   }
 
@@ -1400,14 +1457,21 @@ export class ProactiveMonitoringService {
       enabled: true,
       channels: [],
       batching: { enabled: false, windowMinutes: 30, maxBatchSize: 5, priorities: [] },
-      filtering: { duplicateWindow: 60, relevanceThreshold: 50, categories: [], suppressionRules: [] },
-      escalation: { enabled: false, levels: [] }
+      filtering: {
+        duplicateWindow: 60,
+        relevanceThreshold: 50,
+        categories: [],
+        suppressionRules: [],
+      },
+      escalation: { enabled: false, levels: [] },
     };
   }
 
-  private async createMonitoringTasks(scheduledAnalysis: ScheduledAnalysis): Promise<MonitoringTask[]> {
+  private async createMonitoringTasks(
+    scheduledAnalysis: ScheduledAnalysis
+  ): Promise<MonitoringTask[]> {
     const tasks: MonitoringTask[] = [];
-    
+
     for (const targetId of scheduledAnalysis.targetIds) {
       const task: MonitoringTask = {
         id: generateId('monitoring-task'),
@@ -1420,23 +1484,30 @@ export class ProactiveMonitoringService {
         scheduledAt: scheduledAnalysis.nextRun,
         metadata: {
           scheduledAnalysisId: scheduledAnalysis.id,
-          config: scheduledAnalysis.config
-        }
+          config: scheduledAnalysis.config,
+        },
       };
-      
+
       tasks.push(task);
     }
-    
+
     return tasks;
   }
 
-  private getTargetType(analysisType: AnalysisType): 'risk' | 'control' | 'process' | 'compliance' | 'system' {
+  private getTargetType(
+    analysisType: AnalysisType
+  ): 'risk' | 'control' | 'process' | 'compliance' | 'system' {
     switch (analysisType) {
-      case 'risk_analysis': return 'risk';
-      case 'control_testing': return 'control';
-      case 'compliance_check': return 'compliance';
-      case 'workflow_analysis': return 'process';
-      default: return 'system';
+      case 'risk_analysis':
+        return 'risk';
+      case 'control_testing':
+        return 'control';
+      case 'compliance_check':
+        return 'compliance';
+      case 'workflow_analysis':
+        return 'process';
+      default:
+        return 'system';
     }
   }
 
@@ -1447,20 +1518,34 @@ export class ProactiveMonitoringService {
 
   private async performAnalysis(task: MonitoringTask, targetData: unknown): Promise<unknown> {
     // Mock analysis implementation
-    return { status: 'completed', findings: [] as MonitoringFinding[], insights: [] as ProactiveInsight[] };
+    return {
+      status: 'completed',
+      findings: [] as MonitoringFinding[],
+      insights: [] as ProactiveInsight[],
+    };
   }
 
-  private async generateFindings(task: MonitoringTask, analysisResult: unknown): Promise<MonitoringFinding[]> {
+  private async generateFindings(
+    task: MonitoringTask,
+    analysisResult: unknown
+  ): Promise<MonitoringFinding[]> {
     // Mock findings generation
     return [];
   }
 
-  private async generateInsights(task: MonitoringTask, analysisResult: unknown, findings: MonitoringFinding[]): Promise<ProactiveInsight[]> {
+  private async generateInsights(
+    task: MonitoringTask,
+    analysisResult: unknown,
+    findings: MonitoringFinding[]
+  ): Promise<ProactiveInsight[]> {
     // Mock insights generation
     return [];
   }
 
-  private async generateRecommendations(insights: ProactiveInsight[], findings: MonitoringFinding[]): Promise<ActionRecommendation[]> {
+  private async generateRecommendations(
+    insights: ProactiveInsight[],
+    findings: MonitoringFinding[]
+  ): Promise<ActionRecommendation[]> {
     // Mock recommendations generation
     return [];
   }
@@ -1472,7 +1557,7 @@ export class ProactiveMonitoringService {
       magnitude: Math.random() * 50,
       duration: '30 days',
       acceleration: Math.random() * 10,
-      stability: Math.random() * 100
+      stability: Math.random() * 100,
     };
   }
 
@@ -1488,16 +1573,18 @@ export class ProactiveMonitoringService {
         confidence: 90,
         probability: 0.7,
         timeHorizon: '6 months',
-        source: { origin: 'industry-intelligence' }
-      }
+        source: { origin: 'industry-intelligence' },
+      },
     ];
   }
 
-  private determineResultStatus(findings: MonitoringFinding[]): 'success' | 'warning' | 'error' | 'anomaly' {
-    const hasError = findings.some(f => f.severity === 'critical');
-    const hasWarning = findings.some(f => f.severity === 'high' || f.severity === 'medium');
-    const hasAnomaly = findings.some(f => f.type === 'anomaly');
-    
+  private determineResultStatus(
+    findings: MonitoringFinding[]
+  ): 'success' | 'warning' | 'error' | 'anomaly' {
+    const hasError = findings.some((f) => f.severity === 'critical');
+    const hasWarning = findings.some((f) => f.severity === 'high' || f.severity === 'medium');
+    const hasAnomaly = findings.some((f) => f.type === 'anomaly');
+
     if (hasError) return 'error';
     if (hasAnomaly) return 'anomaly';
     if (hasWarning) return 'warning';
@@ -1506,8 +1593,9 @@ export class ProactiveMonitoringService {
 
   private calculateOverallConfidence(insights: ProactiveInsight[]): number {
     if (insights.length === 0) return 50;
-    
-    const avgInsightConfidence = insights.reduce((sum, insight) => sum + insight.confidence, 0) / insights.length;
+
+    const avgInsightConfidence =
+      insights.reduce((sum, insight) => sum + insight.confidence, 0) / insights.length;
     return Math.round(avgInsightConfidence);
   }
 
@@ -1565,8 +1653,15 @@ interface AIAnalysisService {
   getEmergingRisks(organizationId: string): Promise<EmergingRisk[]>;
   performAnalysis(type: AnalysisType, data: unknown, metadata: unknown): Promise<unknown>;
   generateFindings(task: MonitoringTask, result: unknown): Promise<MonitoringFinding[]>;
-  generateInsights(task: MonitoringTask, result: unknown, findings: MonitoringFinding[]): Promise<ProactiveInsight[]>;
-  generateRecommendations(insights: ProactiveInsight[], findings: MonitoringFinding[]): Promise<ActionRecommendation[]>;
+  generateInsights(
+    task: MonitoringTask,
+    result: unknown,
+    findings: MonitoringFinding[]
+  ): Promise<ProactiveInsight[]>;
+  generateRecommendations(
+    insights: ProactiveInsight[],
+    findings: MonitoringFinding[]
+  ): Promise<ActionRecommendation[]>;
 }
 
 interface DataRetrievalService {
@@ -1625,9 +1720,9 @@ class InMemoryDataService implements DataRetrievalService {
           startTime: '22:00',
           endTime: '06:00',
           timezone: 'UTC',
-          exceptions: []
+          exceptions: [],
         },
-        language: 'en'
+        language: 'en',
       },
       currentSession: {
         sessionId: 'session-1',
@@ -1639,24 +1734,24 @@ class InMemoryDataService implements DataRetrievalService {
           os: 'macOS',
           browser: 'Chrome',
           screen_resolution: '1920x1080',
-          network_type: 'wifi'
+          network_type: 'wifi',
         },
         locationInfo: {
           timezone: 'UTC',
           country: 'US',
           region: 'CA',
           city: 'San Francisco',
-          ip_address: '127.0.0.1'
-        }
+          ip_address: '127.0.0.1',
+        },
       },
       workContext: {
         active_risks: ['risk-1', 'risk-2'],
         recent_activities: [],
         pending_tasks: [],
         upcoming_deadlines: [],
-        collaboration_sessions: []
+        collaboration_sessions: [],
       },
-      historicalBehavior: []
+      historicalBehavior: [],
     };
   }
 
@@ -1664,8 +1759,8 @@ class InMemoryDataService implements DataRetrievalService {
     // Mock organization context with required properties
     return {
       id: organizationId,
-      industry: { 
-        code: 'financial', 
+      industry: {
+        code: 'financial',
         name: 'Financial Services',
         sector: 'Finance',
         regulatoryIntensity: 'high',
@@ -1674,11 +1769,11 @@ class InMemoryDataService implements DataRetrievalService {
           emergingRisks: ['AI/ML risks', 'Digital transformation', 'ESG compliance'],
           regulatoryTrends: ['Increasing scrutiny', 'Digital regulations', 'Climate risk'],
           benchmarkMetrics: {
-            'cyber_maturity': 75,
-            'compliance_score': 88,
-            'risk_coverage': 82
-          }
-        }
+            cyber_maturity: 75,
+            compliance_score: 88,
+            risk_coverage: 82,
+          },
+        },
       },
       organizationSize: 'large',
       riskAppetite: {} as any,
@@ -1691,10 +1786,10 @@ class InMemoryDataService implements DataRetrievalService {
         structure: 'centralized',
         governance: 'traditional',
         riskCulture: 'balanced',
-        decisionMaking: 'collaborative'
+        decisionMaking: 'collaborative',
       },
       maturityLevel: 'defined',
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
   }
 
@@ -1715,8 +1810,8 @@ class InMemoryDataService implements DataRetrievalService {
         evidence: [],
         linkedRisks: [],
         createdAt: '2024-01-01',
-        updatedAt: new Date().toISOString()
-      }
+        updatedAt: new Date().toISOString(),
+      },
     ];
   }
 
@@ -1744,7 +1839,7 @@ class InMemoryDataService implements DataRetrievalService {
         network_usage: 100,
         active_connections: 50,
         load_average: [1.0, 1.2, 1.1],
-        uptime: 86400
+        uptime: 86400,
       },
       application: {
         response_time: 100,
@@ -1753,7 +1848,7 @@ class InMemoryDataService implements DataRetrievalService {
         availability: 99.9,
         active_users: 25,
         active_sessions: 30,
-        cache_hit_rate: 85
+        cache_hit_rate: 85,
       },
       user_experience: {
         page_load_time: 1500,
@@ -1761,7 +1856,7 @@ class InMemoryDataService implements DataRetrievalService {
         bounce_rate: 5,
         satisfaction_score: 4.2,
         task_completion_rate: 95,
-        user_engagement: 80
+        user_engagement: 80,
       },
       resource_utilization: {
         workers: [],
@@ -1772,7 +1867,7 @@ class InMemoryDataService implements DataRetrievalService {
           eviction_rate: 1,
           memory_usage: 512,
           key_count: 1000,
-          expiration_rate: 0.5
+          expiration_rate: 0.5,
         },
         database: {
           connection_count: 10,
@@ -1780,7 +1875,7 @@ class InMemoryDataService implements DataRetrievalService {
           slow_query_count: 2,
           lock_wait_time: 5,
           buffer_hit_ratio: 95,
-          disk_reads: 50
+          disk_reads: 50,
         },
         storage: {
           read_iops: 100,
@@ -1788,11 +1883,11 @@ class InMemoryDataService implements DataRetrievalService {
           read_bandwidth: 10,
           write_bandwidth: 5,
           disk_usage: 75,
-          available_space: 500
-        }
+          available_space: 500,
+        },
       },
       thresholds: [],
-      alerts: []
+      alerts: [],
     };
   }
 
@@ -1812,19 +1907,19 @@ class InMemoryCacheService implements CacheService {
   async get(key: string): Promise<unknown> {
     const entry = this.cache.get(key);
     if (!entry) return null;
-    
+
     if (Date.now() > entry.expires) {
       this.cache.delete(key);
       return null;
     }
-    
+
     return entry.value;
   }
 
   async set(key: string, value: unknown, ttl: number = 3600000): Promise<void> {
     this.cache.set(key, {
       value,
-      expires: Date.now() + ttl
+      expires: Date.now() + ttl,
     });
   }
 
@@ -1842,7 +1937,7 @@ class InMemoryEventService implements EventService {
 
   async emit(event: string, data: unknown): Promise<void> {
     const handlers = this.listeners.get(event) || [];
-    handlers.forEach(handler => {
+    handlers.forEach((handler) => {
       try {
         handler(data);
       } catch (error) {
@@ -1874,7 +1969,7 @@ class InMemoryPerformanceService implements PerformanceService {
   startTimer(operation: string): () => void {
     const startTime = Date.now();
     this.timers.set(operation, startTime);
-    
+
     return () => {
       const endTime = Date.now();
       const duration = endTime - startTime;
@@ -1897,7 +1992,7 @@ class InMemoryPerformanceService implements PerformanceService {
         network_usage: this.metrics.get('network_usage') || 100,
         active_connections: this.metrics.get('active_connections') || 50,
         load_average: [1.0, 1.2, 1.1],
-        uptime: this.metrics.get('uptime') || 86400
+        uptime: this.metrics.get('uptime') || 86400,
       },
       application: {
         response_time: this.metrics.get('response_time') || 100,
@@ -1906,7 +2001,7 @@ class InMemoryPerformanceService implements PerformanceService {
         availability: this.metrics.get('availability') || 99.9,
         active_users: this.metrics.get('active_users') || 25,
         active_sessions: this.metrics.get('active_sessions') || 30,
-        cache_hit_rate: this.metrics.get('cache_hit_rate') || 85
+        cache_hit_rate: this.metrics.get('cache_hit_rate') || 85,
       },
       user_experience: {
         page_load_time: this.metrics.get('page_load_time') || 1500,
@@ -1914,7 +2009,7 @@ class InMemoryPerformanceService implements PerformanceService {
         bounce_rate: this.metrics.get('bounce_rate') || 5,
         satisfaction_score: this.metrics.get('satisfaction_score') || 4.2,
         task_completion_rate: this.metrics.get('task_completion_rate') || 95,
-        user_engagement: this.metrics.get('user_engagement') || 80
+        user_engagement: this.metrics.get('user_engagement') || 80,
       },
       resource_utilization: {
         workers: [],
@@ -1925,7 +2020,7 @@ class InMemoryPerformanceService implements PerformanceService {
           eviction_rate: this.metrics.get('cache_eviction_rate') || 1,
           memory_usage: this.metrics.get('cache_memory_usage') || 512,
           key_count: this.metrics.get('cache_key_count') || 1000,
-          expiration_rate: this.metrics.get('cache_expiration_rate') || 0.5
+          expiration_rate: this.metrics.get('cache_expiration_rate') || 0.5,
         },
         database: {
           connection_count: this.metrics.get('db_connection_count') || 10,
@@ -1933,7 +2028,7 @@ class InMemoryPerformanceService implements PerformanceService {
           slow_query_count: this.metrics.get('db_slow_query_count') || 2,
           lock_wait_time: this.metrics.get('db_lock_wait_time') || 5,
           buffer_hit_ratio: this.metrics.get('db_buffer_hit_ratio') || 95,
-          disk_reads: this.metrics.get('db_disk_reads') || 50
+          disk_reads: this.metrics.get('db_disk_reads') || 50,
         },
         storage: {
           read_iops: this.metrics.get('storage_read_iops') || 100,
@@ -1941,15 +2036,15 @@ class InMemoryPerformanceService implements PerformanceService {
           read_bandwidth: this.metrics.get('storage_read_bandwidth') || 10,
           write_bandwidth: this.metrics.get('storage_write_bandwidth') || 5,
           disk_usage: this.metrics.get('storage_disk_usage') || 75,
-          available_space: this.metrics.get('storage_available_space') || 500
-        }
+          available_space: this.metrics.get('storage_available_space') || 500,
+        },
       },
       thresholds: [],
-      alerts: []
+      alerts: [],
     };
   }
 
   async getCurrentMetrics(): Promise<PerformanceMetrics> {
     return this.getMetrics();
   }
-} 
+}

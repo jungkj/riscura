@@ -70,7 +70,7 @@ export const TextSkeleton: React.FC<TextSkeletonProps> = ({
         className={cn(heightClasses[lineHeight], 'w-full', className)}
       />
     );
-  }
+  };
 
   return (
     <div className={cn('space-y-2', className)}>
@@ -109,16 +109,18 @@ export const CardSkeleton: React.FC<DaisyCardSkeletonProps> = ({
   className
 }) => {
   return (
-    <DaisyCard className={cn(width, height, className)}>
-      {hasImage && (
+    <DaisyCard className={cn(width, height, className)} >
+  {hasImage && (
+</DaisyCardSkeletonProps>
         <BaseSkeleton 
           variant={variant}
           className="h-48 w-full rounded-t-lg rounded-b-none"
         />
       )}
       
-      <DaisyCardHeader className={cn(!hasImage && 'rounded-t-lg')}>
-        {hasHeader && (
+      <DaisyCardHeader className={cn(!hasImage && 'rounded-t-lg')} >
+  {hasHeader && (
+</DaisyCardHeader>
           <div className="space-y-2">
             <BaseSkeleton variant={variant} className="h-6 w-3/4" />
             <BaseSkeleton variant={variant} className="h-4 w-1/2" />
@@ -126,12 +128,13 @@ export const CardSkeleton: React.FC<DaisyCardSkeletonProps> = ({
         )}
       
       
-      <DaisyCardContent className="space-y-3">
-        <TextSkeleton 
+      <DaisyCardContent className="space-y-3" >
+  <TextSkeleton 
           lines={textLines} 
           variant={variant}
           lineHeight="md"
         />
+</DaisyCardContent>
         
         {hasActions && (
           <div className="flex gap-2 pt-4">
@@ -139,7 +142,7 @@ export const CardSkeleton: React.FC<DaisyCardSkeletonProps> = ({
             <BaseSkeleton variant={variant} className="h-9 w-16" />
           </div>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };
@@ -247,15 +250,17 @@ export const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {Array.from({ length: statsCards }).map((_, index) => (
-          <DaisyCard key={index}>
-            <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <DaisyCard key={index} >
+  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+</DaisyTableSkeletonProps>
               <BaseSkeleton variant={variant} className="h-4 w-24" />
               <BaseSkeleton variant={variant} className="h-4 w-4" />
             
-            <DaisyCardContent>
-              <BaseSkeleton variant={variant} className="h-8 w-20 mb-2" />
+            <DaisyCardContent >
+  <BaseSkeleton variant={variant} className="h-8 w-20 mb-2" />
+</DaisyCardContent>
               <BaseSkeleton variant={variant} className="h-3 w-32" />
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         ))}
       </div>
@@ -264,25 +269,29 @@ export const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
         {/* Chart Section */}
         {hasChart && (
-          <DaisyCard className="col-span-4">
-            <DaisyCardHeader>
+          <DaisyCard className="col-span-4" >
+  <DaisyCardHeader />
+</DaisyCard>
               <BaseSkeleton variant={variant} className="h-6 w-48" />
               <BaseSkeleton variant={variant} className="h-4 w-32" />
             
-            <DaisyCardContent>
-              <BaseSkeleton variant={variant} className="h-80 w-full" />
-            </DaisyCardBody>
+            <DaisyCardContent >
+  <BaseSkeleton variant={variant} className="h-80 w-full" />
+</DaisyCardContent>
+            </DaisyCardContent>
           </DaisyCard>
         )}
 
         {/* Activity Feed */}
         {hasActivity && (
-          <DaisyCard className="col-span-3">
-            <DaisyCardHeader>
+          <DaisyCard className="col-span-3" >
+  <DaisyCardHeader />
+</DaisyCard>
               <BaseSkeleton variant={variant} className="h-6 w-32" />
             
-            <DaisyCardContent>
-              <div className="space-y-4">
+            <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
                 {Array.from({ length: 5 }).map((_, index) => (
                   <div key={index} className="flex items-start space-x-3">
                     <BaseSkeleton variant={variant} className="h-8 w-8 rounded-full" />
@@ -293,29 +302,30 @@ export const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         )}
       </div>
 
       {/* Table Section */}
       {hasTable && (
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <div className="flex items-center justify-between">
               <BaseSkeleton variant={variant} className="h-6 w-40" />
               <BaseSkeleton variant={variant} className="h-9 w-24" />
             </div>
           
-          <DaisyCardContent>
-            <DaisyTableSkeleton 
+          <DaisyCardContent >
+  <DaisyTableSkeleton 
               variant={variant}
               rows={8}
               columns={5}
               hasActions={true}
               showCheckboxes={true}
             />
-          </DaisyCardBody>
+</DaisyCardContent></DaisyTableSkeleton>
         </DaisyCard>
       )}
     </div>
@@ -549,14 +559,16 @@ export const PageSkeletons = {
     <div className="container mx-auto p-6 max-w-2xl">
       <div className="space-y-6">
         <BaseSkeleton className="h-8 w-64" />
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <BaseSkeleton className="h-6 w-48" />
             <BaseSkeleton className="h-4 w-96" />
           
-          <DaisyCardContent>
-            <FormSkeleton fields={6} layout="two-column" />
-          </DaisyCardBody>
+          <DaisyCardContent >
+  <FormSkeleton fields={6} layout="two-column" />
+</DaisyCardContent>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
     </div>
@@ -582,10 +594,11 @@ export const PageSkeletons = {
         </div>
 
         {/* Content */}
-        <DaisyCard>
-          <DaisyCardContent>
-            <DaisyTableSkeleton rows={10} columns={6} hasActions showCheckboxes />
-          </DaisyCardBody>
+        <DaisyCard >
+  <DaisyCardContent >
+  </DaisyCard>
+</DaisyCardContent>
+            <DaisyTableSkeleton rows={10} columns={6} hasActions showCheckboxes /></DaisyTableSkeleton>
         </DaisyCard>
       </div>
     </div>
@@ -610,12 +623,12 @@ export const PageSkeletons = {
         {/* Main content */}
         <div className="grid gap-6 md:grid-cols-3">
           <div className="md:col-span-2 space-y-6">
-            <DaisyCardSkeleton hasHeader textLines={5} />
-            <DaisyCardSkeleton hasHeader textLines={3} />
+            <DaisyCardSkeleton hasHeader textLines={5} ></DaisyCardSkeleton>
+            <DaisyCardSkeleton hasHeader textLines={3} ></DaisyCardSkeleton>
           </div>
           <div className="space-y-6">
-            <DaisyCardSkeleton hasHeader textLines={4} />
-            <DaisyCardSkeleton hasHeader hasActions textLines={2} />
+            <DaisyCardSkeleton hasHeader textLines={4} ></DaisyCardSkeleton>
+            <DaisyCardSkeleton hasHeader hasActions textLines={2} ></DaisyCardSkeleton>
           </div>
         </div>
       </div>
@@ -637,7 +650,7 @@ export const AnimatedSkeleton: React.FC<AnimatedSkeletonProps> = ({
 }) => {
   if (!stagger) {
     return <>{children}</>;
-  }
+  };
 
   return (
     <div className="animate-in fade-in-0 duration-500">

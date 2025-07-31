@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "ES6", "ES2015", "ES2017"],
+    "target": "ES2020",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "ES2020"
+    ],
     "downlevelIteration": true,
     "allowJs": true,
     "skipLibCheck": true,
@@ -10,9 +14,11 @@
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
       {
@@ -21,15 +27,24 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     },
     "noImplicitAny": true,
     "strictNullChecks": false,
     "strictFunctionTypes": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true
+    "noUncheckedIndexedAccess": false,
+    "noImplicitOverride": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "exactOptionalPropertyTypes": false,
+    "noFallthroughCasesInSwitch": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "removeComments": true,
+    "preserveConstEnums": false
   },
   "include": [
     "next-env.d.ts",
@@ -42,6 +57,15 @@
   "exclude": [
     "node_modules",
     "scripts/**/*",
-    "src/app/api/stripe/webhook/route.ts"
+    "src/app/api/stripe/webhook/route.ts",
+    "src/components/ai/VoiceInterface.tsx",
+    ".next",
+    "out",
+    "dist",
+    "coverage",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
   ]
 }

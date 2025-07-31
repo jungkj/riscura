@@ -10,14 +10,62 @@ const DEFAULT_PLANS: Omit<SubscriptionPlan, 'id' | 'createdAt' | 'updatedAt'>[] 
     currency: 'USD',
     billingInterval: 'monthly',
     features: [
-      { id: 'basic_risks', name: 'Risk Management', description: 'Basic risk tracking and assessment', category: 'core', included: true },
-      { id: 'basic_controls', name: 'Control Management', description: 'Basic control framework', category: 'core', included: true },
-      { id: 'basic_reports', name: 'Basic Reports', description: 'Standard reporting templates', category: 'reporting', included: true },
-      { id: 'email_support', name: 'Email Support', description: 'Email support during business hours', category: 'support', included: true },
-      { id: 'advanced_analytics', name: 'Advanced Analytics', description: 'Detailed insights and trends', category: 'reporting', included: false },
-      { id: 'api_access', name: 'API Access', description: 'RESTful API for integrations', category: 'integration', included: false },
-      { id: 'custom_frameworks', name: 'Custom Frameworks', description: 'Custom compliance frameworks', category: 'compliance', included: false },
-      { id: 'priority_support', name: 'Priority Support', description: '24/7 priority support', category: 'support', included: false },
+      {
+        id: 'basic_risks',
+        name: 'Risk Management',
+        description: 'Basic risk tracking and assessment',
+        category: 'core',
+        included: true,
+      },
+      {
+        id: 'basic_controls',
+        name: 'Control Management',
+        description: 'Basic control framework',
+        category: 'core',
+        included: true,
+      },
+      {
+        id: 'basic_reports',
+        name: 'Basic Reports',
+        description: 'Standard reporting templates',
+        category: 'reporting',
+        included: true,
+      },
+      {
+        id: 'email_support',
+        name: 'Email Support',
+        description: 'Email support during business hours',
+        category: 'support',
+        included: true,
+      },
+      {
+        id: 'advanced_analytics',
+        name: 'Advanced Analytics',
+        description: 'Detailed insights and trends',
+        category: 'reporting',
+        included: false,
+      },
+      {
+        id: 'api_access',
+        name: 'API Access',
+        description: 'RESTful API for integrations',
+        category: 'integration',
+        included: false,
+      },
+      {
+        id: 'custom_frameworks',
+        name: 'Custom Frameworks',
+        description: 'Custom compliance frameworks',
+        category: 'compliance',
+        included: false,
+      },
+      {
+        id: 'priority_support',
+        name: 'Priority Support',
+        description: '24/7 priority support',
+        category: 'support',
+        included: false,
+      },
     ],
     limits: {
       users: 3,
@@ -43,14 +91,62 @@ const DEFAULT_PLANS: Omit<SubscriptionPlan, 'id' | 'createdAt' | 'updatedAt'>[] 
     currency: 'USD',
     billingInterval: 'monthly',
     features: [
-      { id: 'basic_risks', name: 'Risk Management', description: 'Basic risk tracking and assessment', category: 'core', included: true },
-      { id: 'basic_controls', name: 'Control Management', description: 'Basic control framework', category: 'core', included: true },
-      { id: 'basic_reports', name: 'Basic Reports', description: 'Standard reporting templates', category: 'reporting', included: true },
-      { id: 'advanced_analytics', name: 'Advanced Analytics', description: 'Detailed insights and trends', category: 'reporting', included: true },
-      { id: 'api_access', name: 'API Access', description: 'RESTful API for integrations', category: 'integration', included: true },
-      { id: 'email_support', name: 'Email Support', description: 'Email support during business hours', category: 'support', included: true },
-      { id: 'custom_frameworks', name: 'Custom Frameworks', description: 'Custom compliance frameworks', category: 'compliance', included: false },
-      { id: 'priority_support', name: 'Priority Support', description: '24/7 priority support', category: 'support', included: false },
+      {
+        id: 'basic_risks',
+        name: 'Risk Management',
+        description: 'Basic risk tracking and assessment',
+        category: 'core',
+        included: true,
+      },
+      {
+        id: 'basic_controls',
+        name: 'Control Management',
+        description: 'Basic control framework',
+        category: 'core',
+        included: true,
+      },
+      {
+        id: 'basic_reports',
+        name: 'Basic Reports',
+        description: 'Standard reporting templates',
+        category: 'reporting',
+        included: true,
+      },
+      {
+        id: 'advanced_analytics',
+        name: 'Advanced Analytics',
+        description: 'Detailed insights and trends',
+        category: 'reporting',
+        included: true,
+      },
+      {
+        id: 'api_access',
+        name: 'API Access',
+        description: 'RESTful API for integrations',
+        category: 'integration',
+        included: true,
+      },
+      {
+        id: 'email_support',
+        name: 'Email Support',
+        description: 'Email support during business hours',
+        category: 'support',
+        included: true,
+      },
+      {
+        id: 'custom_frameworks',
+        name: 'Custom Frameworks',
+        description: 'Custom compliance frameworks',
+        category: 'compliance',
+        included: false,
+      },
+      {
+        id: 'priority_support',
+        name: 'Priority Support',
+        description: '24/7 priority support',
+        category: 'support',
+        included: false,
+      },
     ],
     limits: {
       users: 15,
@@ -76,14 +172,62 @@ const DEFAULT_PLANS: Omit<SubscriptionPlan, 'id' | 'createdAt' | 'updatedAt'>[] 
     currency: 'USD',
     billingInterval: 'monthly',
     features: [
-      { id: 'basic_risks', name: 'Risk Management', description: 'Basic risk tracking and assessment', category: 'core', included: true },
-      { id: 'basic_controls', name: 'Control Management', description: 'Basic control framework', category: 'core', included: true },
-      { id: 'basic_reports', name: 'Basic Reports', description: 'Standard reporting templates', category: 'reporting', included: true },
-      { id: 'advanced_analytics', name: 'Advanced Analytics', description: 'Detailed insights and trends', category: 'reporting', included: true },
-      { id: 'api_access', name: 'API Access', description: 'RESTful API for integrations', category: 'integration', included: true },
-      { id: 'custom_frameworks', name: 'Custom Frameworks', description: 'Custom compliance frameworks', category: 'compliance', included: true },
-      { id: 'priority_support', name: 'Priority Support', description: '24/7 priority support', category: 'support', included: true },
-      { id: 'email_support', name: 'Email Support', description: 'Email support during business hours', category: 'support', included: true },
+      {
+        id: 'basic_risks',
+        name: 'Risk Management',
+        description: 'Basic risk tracking and assessment',
+        category: 'core',
+        included: true,
+      },
+      {
+        id: 'basic_controls',
+        name: 'Control Management',
+        description: 'Basic control framework',
+        category: 'core',
+        included: true,
+      },
+      {
+        id: 'basic_reports',
+        name: 'Basic Reports',
+        description: 'Standard reporting templates',
+        category: 'reporting',
+        included: true,
+      },
+      {
+        id: 'advanced_analytics',
+        name: 'Advanced Analytics',
+        description: 'Detailed insights and trends',
+        category: 'reporting',
+        included: true,
+      },
+      {
+        id: 'api_access',
+        name: 'API Access',
+        description: 'RESTful API for integrations',
+        category: 'integration',
+        included: true,
+      },
+      {
+        id: 'custom_frameworks',
+        name: 'Custom Frameworks',
+        description: 'Custom compliance frameworks',
+        category: 'compliance',
+        included: true,
+      },
+      {
+        id: 'priority_support',
+        name: 'Priority Support',
+        description: '24/7 priority support',
+        category: 'support',
+        included: true,
+      },
+      {
+        id: 'email_support',
+        name: 'Email Support',
+        description: 'Email support during business hours',
+        category: 'support',
+        included: true,
+      },
     ],
     limits: {
       users: -1, // Unlimited
@@ -109,7 +253,7 @@ export async function seedSubscriptionPlans(): Promise<void> {
   try {
     // Check if plans already exist
     const existingPlans = await db.client.subscriptionPlan.findMany();
-    
+
     if (existingPlans.length > 0) {
       console.log('📋 Subscription plans already exist, skipping seed...');
       return;
@@ -133,7 +277,7 @@ export async function seedSubscriptionPlans(): Promise<void> {
           stripePriceId: planData.stripePriceId,
         },
       });
-      
+
       console.log(`✅ Created plan: ${planData.name}`);
     }
 
@@ -144,7 +288,9 @@ export async function seedSubscriptionPlans(): Promise<void> {
   }
 }
 
-export async function createDefaultSubscriptionForOrganization(organizationId: string): Promise<void> {
+export async function createDefaultSubscriptionForOrganization(
+  organizationId: string
+): Promise<void> {
   try {
     // Check if organization already has a subscription
     const existingSubscription = await db.client.organizationSubscription.findFirst({
@@ -214,7 +360,7 @@ export async function upgradeOrganizationPlan(
   newPlanType: string
 ): Promise<void> {
   const newPlan = await getPlanByType(newPlanType);
-  
+
   if (!newPlan) {
     throw new Error(`Plan type '${newPlanType}' not found`);
   }

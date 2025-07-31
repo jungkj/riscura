@@ -63,7 +63,7 @@ export class ModelPerformanceTracker {
     }
   ): Promise<void> {
     const version = this.getCurrentModelVersion(modelName);
-    
+
     // Get or create metrics for this model/version
     let modelMetrics = this.getLatestMetrics(modelName, version);
     if (!modelMetrics) {
@@ -72,10 +72,10 @@ export class ModelPerformanceTracker {
 
     // Update metrics
     this.updateMetrics(modelMetrics, requestData);
-    
+
     // Store updated metrics
     this.storeMetrics(modelName, modelMetrics);
-    
+
     // Check for performance degradation
     await this.checkPerformanceThresholds(modelName, modelMetrics);
   }
@@ -84,8 +84,8 @@ export class ModelPerformanceTracker {
    * Compare two model versions
    */
   async compareModels(
-    modelName: string, 
-    currentVersion: string, 
+    modelName: string,
+    currentVersion: string,
     previousVersion: string
   ): Promise<ModelComparison> {
     const currentMetrics = this.getLatestMetrics(modelName, currentVersion);
@@ -100,7 +100,7 @@ export class ModelPerformanceTracker {
 
     // Compare key metrics
     const metricsToCompare = ['accuracy', 'responseTime', 'costPerRequest', 'errorRate'];
-    
+
     for (const metric of metricsToCompare) {
       const current = (currentMetrics as any)[metric];
       const previous = (previousMetrics as any)[metric];
@@ -130,7 +130,7 @@ export class ModelPerformanceTracker {
       previousModel: previousMetrics,
       improvement,
       degradation,
-      recommendation
+      recommendation,
     };
   }
 
@@ -159,50 +159,57 @@ export class ModelPerformanceTracker {
   }> {
     const metrics = this.getLatestMetrics(modelName);
     const benchmarks = this.getBenchmarks(modelName);
-    
+
     if (!metrics) {
       return {
         canDeploy: false,
         reason: 'Insufficient performance data',
         requiredActions: ['Collect baseline performance metrics', 'Run A/B testing'],
-        riskLevel: 'high'
+        riskLevel: 'high',
       };
     }
 
-    const failedBenchmarks = benchmarks.filter(b => b.status === 'below_target' || b.status === 'critical');
-    
+    const failedBenchmarks = benchmarks.filter(
+      (b) => b.status === 'below_target' || b.status === 'critical'
+    );
+
     if (failedBenchmarks.length === 0) {
       return {
         canDeploy: true,
         reason: 'All performance benchmarks met',
         requiredActions: [],
-        riskLevel: 'low'
+        riskLevel: 'low',
       };
     }
 
-    const criticalFailures = failedBenchmarks.filter(b => b.status === 'critical');
-    
+    const criticalFailures = failedBenchmarks.filter((b) => b.status === 'critical');
+
     if (criticalFailures.length > 0) {
       return {
         canDeploy: false,
         reason: 'Critical performance benchmarks not met',
-        requiredActions: criticalFailures.map(b => `Improve ${b.metric} to meet target of ${b.target}`),
-        riskLevel: 'high'
+        requiredActions: criticalFailures.map(
+          (b) => `Improve ${b.metric} to meet target of ${b.target}`
+        ),
+        riskLevel: 'high',
       };
     }
 
     return {
       canDeploy: true,
       reason: 'Minor performance issues detected',
-      requiredActions: failedBenchmarks.map(b => `Monitor ${b.metric} - currently below target`),
-      riskLevel: 'medium'
+      requiredActions: failedBenchmarks.map((b) => `Monitor ${b.metric} - currently below target`),
+      riskLevel: 'medium',
     };
   }
 
   /**
    * Generate performance report
    */
-  generatePerformanceReport(modelName: string, period: 'daily' | 'weekly' | 'monthly'): {
+  generatePerformanceReport(
+    modelName: string,
+    period: 'daily' | 'weekly' | 'monthly'
+  ): {
     summary: Record<string, any>;
     trends: Record<string, any>;
     recommendations: string[];
@@ -210,7 +217,7 @@ export class ModelPerformanceTracker {
   } {
     const metrics = this.getMetricsForPeriod(modelName, period);
     const benchmarks = this.getBenchmarks(modelName);
-    
+
     const summary = this.calculateSummaryMetrics(metrics);
     const trends = this.calculateTrends(metrics);
     const recommendations = this.generateRecommendations(summary, trends, benchmarks);
@@ -220,7 +227,7 @@ export class ModelPerformanceTracker {
       summary,
       trends,
       recommendations,
-      alerts: relevantAlerts
+      alerts: relevantAlerts,
     };
   }
 
@@ -234,12 +241,12 @@ export class ModelPerformanceTracker {
   }> {
     const metrics = this.getLatestMetrics(modelName);
     const config = this.configurations.get(modelName);
-    
+
     if (!metrics || !config) {
       return {
         status: 'critical',
         issues: ['Model metrics or configuration not found'],
-        suggestions: ['Check model deployment and monitoring setup']
+        suggestions: ['Check model deployment and monitoring setup'],
       };
     }
 
@@ -267,8 +274,8 @@ export class ModelPerformanceTracker {
     // Determine overall status
     let status: 'healthy' | 'warning' | 'critical' = 'healthy';
     if (issues.length > 0) {
-      const criticalIssues = issues.filter(issue => 
-        issue.includes('High error rate') || issue.includes('critical')
+      const criticalIssues = issues.filter(
+        (issue) => issue.includes('High error rate') || issue.includes('critical')
       );
       status = criticalIssues.length > 0 ? 'critical' : 'warning';
     }
@@ -283,29 +290,29 @@ export class ModelPerformanceTracker {
         target: 0.85,
         current: 0,
         status: 'below_target',
-        trend: 'stable'
+        trend: 'stable',
       },
       {
         metric: 'responseTime',
         target: 2000, // 2 seconds
         current: 0,
         status: 'below_target',
-        trend: 'stable'
+        trend: 'stable',
       },
       {
         metric: 'errorRate',
         target: 0.05, // 5%
         current: 0,
         status: 'below_target',
-        trend: 'stable'
+        trend: 'stable',
       },
       {
         metric: 'userSatisfaction',
         target: 4.0,
         current: 0,
         status: 'below_target',
-        trend: 'stable'
-      }
+        trend: 'stable',
+      },
     ];
 
     this.benchmarks.set('default', defaultBenchmarks);
@@ -321,12 +328,12 @@ export class ModelPerformanceTracker {
   private async performPerformanceCheck(): Promise<void> {
     for (const [modelName] of this.configurations) {
       const health = await this.monitorModelHealth(modelName);
-      
+
       if (health.status === 'critical') {
         this.alerts.push({
           timestamp: new Date(),
           message: `CRITICAL: Model ${modelName} health issues: ${health.issues.join(', ')}`,
-          severity: 'critical'
+          severity: 'critical',
         });
       }
     }
@@ -342,7 +349,7 @@ export class ModelPerformanceTracker {
     if (!modelMetrics || modelMetrics.length === 0) return null;
 
     if (version) {
-      return modelMetrics.find(m => m.version === version) || null;
+      return modelMetrics.find((m) => m.version === version) || null;
     }
 
     return modelMetrics[modelMetrics.length - 1];
@@ -359,12 +366,12 @@ export class ModelPerformanceTracker {
       errorRate: 0,
       uptime: 100,
       throughput: 0,
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
   }
 
   private updateMetrics(
-    metrics: ModelPerformanceMetrics, 
+    metrics: ModelPerformanceMetrics,
     requestData: {
       responseTime: number;
       tokensUsed: number;
@@ -376,39 +383,39 @@ export class ModelPerformanceTracker {
   ): void {
     // Update response time (moving average)
     metrics.responseTime = (metrics.responseTime + requestData.responseTime) / 2;
-    
+
     // Update cost per request
     metrics.costPerRequest = (metrics.costPerRequest + requestData.cost) / 2;
-    
+
     // Update error rate
     const currentErrorRate = metrics.errorRate || 0;
     const errorCount = requestData.success ? 0 : 1;
-    metrics.errorRate = (currentErrorRate * 0.9) + (errorCount * 0.1);
-    
+    metrics.errorRate = currentErrorRate * 0.9 + errorCount * 0.1;
+
     // Update user satisfaction if provided
     if (requestData.userFeedback) {
       metrics.userSatisfaction = (metrics.userSatisfaction + requestData.userFeedback) / 2;
     }
-    
+
     metrics.lastUpdated = new Date();
   }
 
   private storeMetrics(modelName: string, metrics: ModelPerformanceMetrics): void {
     const modelMetrics = this.metrics.get(modelName) || [];
-    
+
     // Update existing metrics or add new
-    const existingIndex = modelMetrics.findIndex(m => m.version === metrics.version);
+    const existingIndex = modelMetrics.findIndex((m) => m.version === metrics.version);
     if (existingIndex >= 0) {
       modelMetrics[existingIndex] = metrics;
     } else {
       modelMetrics.push(metrics);
     }
-    
+
     this.metrics.set(modelName, modelMetrics);
   }
 
   private async checkPerformanceThresholds(
-    modelName: string, 
+    modelName: string,
     metrics: ModelPerformanceMetrics
   ): Promise<void> {
     const config = this.configurations.get(modelName);
@@ -419,13 +426,13 @@ export class ModelPerformanceTracker {
       this.alerts.push({
         timestamp: new Date(),
         message: `ROLLBACK TRIGGERED: Model ${modelName} error rate (${metrics.errorRate}) exceeds threshold (${config.rollbackThreshold})`,
-        severity: 'critical'
+        severity: 'critical',
       });
     }
   }
 
   private generateRecommendation(
-    improvement: Record<string, number>, 
+    improvement: Record<string, number>,
     degradation: Record<string, number>
   ): 'upgrade' | 'maintain' | 'rollback' {
     const improvementScore = Object.values(improvement).reduce((a, b) => a + b, 0);
@@ -447,7 +454,10 @@ export class ModelPerformanceTracker {
     return 'maintain';
   }
 
-  private getMetricsForPeriod(modelName: string, period: 'daily' | 'weekly' | 'monthly'): ModelPerformanceMetrics[] {
+  private getMetricsForPeriod(
+    modelName: string,
+    period: 'daily' | 'weekly' | 'monthly'
+  ): ModelPerformanceMetrics[] {
     const allMetrics = this.metrics.get(modelName) || [];
     const now = new Date();
     let cutoffDate: Date;
@@ -464,7 +474,7 @@ export class ModelPerformanceTracker {
         break;
     }
 
-    return allMetrics.filter(m => m.lastUpdated >= cutoffDate);
+    return allMetrics.filter((m) => m.lastUpdated >= cutoffDate);
   }
 
   private calculateSummaryMetrics(metrics: ModelPerformanceMetrics[]): Record<string, any> {
@@ -474,7 +484,7 @@ export class ModelPerformanceTracker {
     const average = {
       responseTime: metrics.reduce((sum, m) => sum + m.responseTime, 0) / metrics.length,
       errorRate: metrics.reduce((sum, m) => sum + m.errorRate, 0) / metrics.length,
-      userSatisfaction: metrics.reduce((sum, m) => sum + m.userSatisfaction, 0) / metrics.length
+      userSatisfaction: metrics.reduce((sum, m) => sum + m.userSatisfaction, 0) / metrics.length,
     };
 
     return { latest, average, totalRequests: metrics.length };
@@ -489,12 +499,12 @@ export class ModelPerformanceTracker {
     return {
       responseTime: {
         change: last.responseTime - first.responseTime,
-        trend: last.responseTime > first.responseTime ? 'increasing' : 'decreasing'
+        trend: last.responseTime > first.responseTime ? 'increasing' : 'decreasing',
       },
       errorRate: {
         change: last.errorRate - first.errorRate,
-        trend: last.errorRate > first.errorRate ? 'increasing' : 'decreasing'
-      }
+        trend: last.errorRate > first.errorRate ? 'increasing' : 'decreasing',
+      },
     };
   }
 
@@ -516,15 +526,19 @@ export class ModelPerformanceTracker {
     }
 
     // Check benchmark compliance
-    const failingBenchmarks = benchmarks.filter(b => b.status === 'below_target');
+    const failingBenchmarks = benchmarks.filter((b) => b.status === 'below_target');
     if (failingBenchmarks.length > 0) {
-      recommendations.push(`Address performance issues with: ${failingBenchmarks.map(b => b.metric).join(', ')}`);
+      recommendations.push(
+        `Address performance issues with: ${failingBenchmarks.map((b) => b.metric).join(', ')}`
+      );
     }
 
     return recommendations;
   }
 
-  private getAlertsForPeriod(period: 'daily' | 'weekly' | 'monthly'): Array<{ timestamp: Date; message: string; severity: string }> {
+  private getAlertsForPeriod(
+    period: 'daily' | 'weekly' | 'monthly'
+  ): Array<{ timestamp: Date; message: string; severity: string }> {
     const now = new Date();
     let cutoffDate: Date;
 
@@ -540,6 +554,6 @@ export class ModelPerformanceTracker {
         break;
     }
 
-    return this.alerts.filter(alert => alert.timestamp >= cutoffDate);
+    return this.alerts.filter((alert) => alert.timestamp >= cutoffDate);
   }
-} 
+}

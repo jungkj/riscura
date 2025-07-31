@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef } from "react";
-import { AnimatePresence, motion, LayoutGroup } from "framer-motion";
+import React, { useCallback, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion, LayoutGroup } from 'framer-motion';
 
 export const TextFlipContainer = ({
   words,
@@ -54,27 +55,39 @@ export const TextFlipContainer = ({
       }}
     >
       <motion.div
-        initial={prefersReducedMotion ? { opacity: 1 } : {
-          opacity: 0,
-          y: 10,
-        }}
+        initial={
+          prefersReducedMotion
+            ? { opacity: 1 }
+            : {
+                opacity: 0,
+                y: 10,
+              }
+        }
         animate={{
           opacity: 1,
           y: 0,
         }}
-        transition={prefersReducedMotion ? { duration: 0 } : {
-          type: "spring",
-          stiffness: 100,
-          damping: 10,
-        }}
-        exit={prefersReducedMotion ? { opacity: 1 } : {
-          opacity: 0,
-          y: -40,
-          x: 40,
-          filter: "blur(8px)",
-          scale: 2,
-          position: "absolute",
-        }}
+        transition={
+          prefersReducedMotion
+            ? { duration: 0 }
+            : {
+                type: 'spring',
+                stiffness: 100,
+                damping: 10,
+              }
+        }
+        exit={
+          prefersReducedMotion
+            ? { opacity: 1 }
+            : {
+                opacity: 0,
+                y: -40,
+                x: 40,
+                filter: 'blur(8px)',
+                scale: 2,
+                position: 'absolute',
+              }
+        }
         className={`z-10 inline-block relative text-left ${className}`}
         key={currentWord}
       >
@@ -83,11 +96,11 @@ export const TextFlipContainer = ({
           <span>{currentWord}</span>
         ) : (
           // Animated letter-by-letter display
-          currentWord.split("").map((letter, index) => (
+          currentWord.split('').map((letter, index) => (
             <motion.span
               key={currentWord + index}
-              initial={{ opacity: 0, y: 10, filter: "blur(8px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              initial={{ opacity: 0, y: 10, filter: 'blur(8px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               transition={{
                 delay: index * 0.08,
                 duration: 0.4,
@@ -105,11 +118,15 @@ export const TextFlipContainer = ({
           animate={{
             opacity: prefersReducedMotion ? 1 : [0, 1],
           }}
-          transition={prefersReducedMotion ? {} : {
-            duration: 0.8,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
+          transition={
+            prefersReducedMotion
+              ? {}
+              : {
+                  duration: 0.8,
+                  repeat: Infinity,
+                  repeatType: 'reverse',
+                }
+          }
           className={`inline-block ml-1 h-4 w-[2px] bg-current ${cursorClassName}`}
         />
       </motion.div>

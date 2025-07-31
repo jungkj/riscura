@@ -38,12 +38,12 @@ class IndexedDBStorage {
 
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
-        
+
         // Create object stores
         if (!db.objectStoreNames.contains('data')) {
           db.createObjectStore('data', { keyPath: 'key' });
         }
-        
+
         if (!db.objectStoreNames.contains('sync_queue')) {
           db.createObjectStore('sync_queue', { keyPath: 'id', autoIncrement: true });
         }
@@ -53,7 +53,7 @@ class IndexedDBStorage {
 
   async get(key: string): Promise<any> {
     if (!this.db) await this.init();
-    
+
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction(['data'], 'readonly');
       const store = transaction.objectStore('data');
@@ -69,7 +69,7 @@ class IndexedDBStorage {
 
   async set(key: string, value: any): Promise<void> {
     if (!this.db) await this.init();
-    
+
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction(['data'], 'readwrite');
       const store = transaction.objectStore('data');
@@ -82,7 +82,7 @@ class IndexedDBStorage {
 
   async remove(key: string): Promise<void> {
     if (!this.db) await this.init();
-    
+
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction(['data'], 'readwrite');
       const store = transaction.objectStore('data');
@@ -95,14 +95,14 @@ class IndexedDBStorage {
 
   async addToSyncQueue(data: any): Promise<void> {
     if (!this.db) await this.init();
-    
+
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction(['sync_queue'], 'readwrite');
       const store = transaction.objectStore('sync_queue');
       const request = store.add({
         data,
         timestamp: Date.now(),
-        attempts: 0
+        attempts: 0,
       });
 
       request.onerror = () => reject(request.error);
@@ -112,7 +112,7 @@ class IndexedDBStorage {
 
   async getSyncQueue(): Promise<any[]> {
     if (!this.db) await this.init();
-    
+
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction(['sync_queue'], 'readonly');
       const store = transaction.objectStore('sync_queue');
@@ -125,7 +125,7 @@ class IndexedDBStorage {
 
   async clearSyncQueue(): Promise<void> {
     if (!this.db) await this.init();
-    
+
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction(['sync_queue'], 'readwrite');
       const store = transaction.objectStore('sync_queue');
@@ -148,7 +148,7 @@ export function useOfflineStorage<T>(options: StorageOptions) {
     syncEndpoint,
     syncInterval = 30000,
     compress = false,
-    encrypt = false
+    encrypt = false,
   } = options;
 
   const [data, setData] = useState<T>(defaultValue);
@@ -156,138 +156,150 @@ export function useOfflineStorage<T>(options: StorageOptions) {
     isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
     lastSyncTime: null,
     pendingSync: false,
-    syncError: null
+    syncError: null,
   });
 
   const syncTimer = useRef<NodeJS.Timeout | null>(null);
   const isInitialized = useRef(false);
 
   // Storage operations
-  const getFromStorage = useCallback(async (storageKey: string): Promise<T | null> => {
-    try {
-      switch (storage) {
-        case 'localStorage':
-          if (typeof window === 'undefined') return null;
-          const localItem = localStorage.getItem(storageKey);
-          return localItem ? JSON.parse(localItem) : null;
-          
-        case 'sessionStorage':
-          if (typeof window === 'undefined') return null;
-          const sessionItem = sessionStorage.getItem(storageKey);
-          return sessionItem ? JSON.parse(sessionItem) : null;
-          
-        case 'indexedDB':
-          return await indexedDBStorage.get(storageKey);
-          
-        default:
-          return null;
-      }
-    } catch (error) {
-      console.error('Error reading from storage:', error);
-      return null;
-    }
-  }, [storage]);
+  const getFromStorage = useCallback(
+    async (storageKey: string): Promise<T | null> => {
+      try {
+        switch (storage) {
+          case 'localStorage':
+            if (typeof window === 'undefined') return null;
+            const localItem = localStorage.getItem(storageKey);
+            return localItem ? JSON.parse(localItem) : null;
 
-  const saveToStorage = useCallback(async (storageKey: string, value: T): Promise<void> => {
-    try {
-      const serializedValue = JSON.stringify(value);
-      
-      switch (storage) {
-        case 'localStorage':
-          if (typeof window !== 'undefined') {
-            localStorage.setItem(storageKey, serializedValue);
-          }
-          break;
-          
-        case 'sessionStorage':
-          if (typeof window !== 'undefined') {
-            sessionStorage.setItem(storageKey, serializedValue);
-          }
-          break;
-          
-        case 'indexedDB':
-          await indexedDBStorage.set(storageKey, value);
-          break;
-      }
-    } catch (error) {
-      console.error('Error saving to storage:', error);
-    }
-  }, [storage]);
+          case 'sessionStorage':
+            if (typeof window === 'undefined') return null;
+            const sessionItem = sessionStorage.getItem(storageKey);
+            return sessionItem ? JSON.parse(sessionItem) : null;
 
-  const removeFromStorage = useCallback(async (storageKey: string): Promise<void> => {
-    try {
-      switch (storage) {
-        case 'localStorage':
-          if (typeof window !== 'undefined') {
-            localStorage.removeItem(storageKey);
-          }
-          break;
-          
-        case 'sessionStorage':
-          if (typeof window !== 'undefined') {
-            sessionStorage.removeItem(storageKey);
-          }
-          break;
-          
-        case 'indexedDB':
-          await indexedDBStorage.remove(storageKey);
-          break;
+          case 'indexedDB':
+            return await indexedDBStorage.get(storageKey);
+
+          default:
+            return null;
+        }
+      } catch (error) {
+        console.error('Error reading from storage:', error);
+        return null;
       }
-    } catch (error) {
-      console.error('Error removing from storage:', error);
-    }
-  }, [storage]);
+    },
+    [storage]
+  );
+
+  const saveToStorage = useCallback(
+    async (storageKey: string, value: T): Promise<void> => {
+      try {
+        const serializedValue = JSON.stringify(value);
+
+        switch (storage) {
+          case 'localStorage':
+            if (typeof window !== 'undefined') {
+              localStorage.setItem(storageKey, serializedValue);
+            }
+            break;
+
+          case 'sessionStorage':
+            if (typeof window !== 'undefined') {
+              sessionStorage.setItem(storageKey, serializedValue);
+            }
+            break;
+
+          case 'indexedDB':
+            await indexedDBStorage.set(storageKey, value);
+            break;
+        }
+      } catch (error) {
+        console.error('Error saving to storage:', error);
+      }
+    },
+    [storage]
+  );
+
+  const removeFromStorage = useCallback(
+    async (storageKey: string): Promise<void> => {
+      try {
+        switch (storage) {
+          case 'localStorage':
+            if (typeof window !== 'undefined') {
+              localStorage.removeItem(storageKey);
+            }
+            break;
+
+          case 'sessionStorage':
+            if (typeof window !== 'undefined') {
+              sessionStorage.removeItem(storageKey);
+            }
+            break;
+
+          case 'indexedDB':
+            await indexedDBStorage.remove(storageKey);
+            break;
+        }
+      } catch (error) {
+        console.error('Error removing from storage:', error);
+      }
+    },
+    [storage]
+  );
 
   // Sync operations
-  const syncToServerFunc = useCallback(async (value: T): Promise<boolean> => {
-    if (!syncToServer || !syncEndpoint || !syncStatus.isOnline) {
-      return false;
-    }
-
-    setSyncStatus(prev => ({ ...prev, pendingSync: true, syncError: null }));
-
-    try {
-      const response = await fetch(syncEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          key,
-          data: value,
-          timestamp: Date.now()
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`Sync failed: ${response.statusText}`);
+  const syncToServerFunc = useCallback(
+    async (value: T): Promise<boolean> => {
+      if (!syncToServer || !syncEndpoint || !syncStatus.isOnline) {
+        return false;
       }
 
-      setSyncStatus(prev => ({
-        ...prev,
-        pendingSync: false,
-        lastSyncTime: new Date(),
-        syncError: null
-      }));
+      setSyncStatus((prev) => ({ ...prev, pendingSync: true, syncError: null }));
 
-      return true;
-    } catch (error) {
-      console.error('Sync to server failed:', error);
-      
-      // Add to sync queue for later retry
-      if (storage === 'indexedDB') {
-        await indexedDBStorage.addToSyncQueue({ key, data: value });
+      try {
+        const response = await fetch(syncEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            key,
+            data: value,
+            timestamp: Date.now(),
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Sync failed: ${response.statusText}`);
+        }
+
+        setSyncStatus((prev) => ({
+          ...prev,
+          pendingSync: false,
+          lastSyncTime: new Date(),
+          syncError: null,
+        }));
+
+        return true;
+      } catch (error) {
+        console.error('Sync to server failed:', error);
+
+        // Add to sync queue for later retry
+        if (storage === 'indexedDB') {
+          await indexedDBStorage.addToSyncQueue({ key, data: value });
+        }
+
+        setSyncStatus((prev) => ({
+          ...prev,
+          pendingSync: false,
+          syncError: error instanceof Error ? error.message : 'Sync failed',
+        }));
+
+        return false;
       }
-
-      setSyncStatus(prev => ({
-        ...prev,
-        pendingSync: false,
-        syncError: error instanceof Error ? error.message : 'Sync failed'
-      }));
-
-      return false;
-    }
-  }, [syncToServer, syncEndpoint, syncStatus.isOnline, key, storage]);
+    },
+    [syncToServer, syncEndpoint, syncStatus.isOnline, key, storage]
+  );
 
   const syncFromServer = useCallback(async (): Promise<T | null> => {
     if (!syncToServer || !syncEndpoint || !syncStatus.isOnline) {
@@ -296,7 +308,7 @@ export function useOfflineStorage<T>(options: StorageOptions) {
 
     try {
       const response = await fetch(`${syncEndpoint}/${key}`);
-      
+
       if (!response.ok) {
         throw new Error(`Fetch failed: ${response.statusText}`);
       }
@@ -315,7 +327,7 @@ export function useOfflineStorage<T>(options: StorageOptions) {
 
     try {
       const queueItems = await indexedDBStorage.getSyncQueue();
-      
+
       for (const item of queueItems) {
         const success = await syncToServerFunc(item.data.data);
         if (success) {
@@ -333,19 +345,21 @@ export function useOfflineStorage<T>(options: StorageOptions) {
   }, [storage, syncStatus.isOnline, syncToServerFunc]);
 
   // Update data and sync
-  const updateData = useCallback(async (newData: T | ((prev: T) => T)) => {
-    const updatedData = typeof newData === 'function' 
-      ? (newData as (prev: T) => T)(data)
-      : newData;
+  const updateData = useCallback(
+    async (newData: T | ((prev: T) => T)) => {
+      const updatedData =
+        typeof newData === 'function' ? (newData as (prev: T) => T)(data) : newData;
 
-    setData(updatedData);
-    await saveToStorage(key, updatedData);
+      setData(updatedData);
+      await saveToStorage(key, updatedData);
 
-    // Sync to server if enabled
-    if (syncToServer && syncStatus.isOnline) {
-      await syncToServerFunc(updatedData);
-    }
-  }, [data, key, saveToStorage, syncToServer, syncStatus.isOnline, syncToServerFunc]);
+      // Sync to server if enabled
+      if (syncToServer && syncStatus.isOnline) {
+        await syncToServerFunc(updatedData);
+      }
+    },
+    [data, key, saveToStorage, syncToServer, syncStatus.isOnline, syncToServerFunc]
+  );
 
   // Clear data
   const clearData = useCallback(async () => {
@@ -359,7 +373,7 @@ export function useOfflineStorage<T>(options: StorageOptions) {
 
     // Sync current data to server
     const syncSuccess = await syncToServerFunc(data);
-    
+
     // Try to get updated data from server
     const serverData = await syncFromServer();
     if (serverData) {
@@ -376,7 +390,7 @@ export function useOfflineStorage<T>(options: StorageOptions) {
 
     const initializeData = async () => {
       const storedData = await getFromStorage(key);
-      
+
       if (storedData !== null) {
         setData(storedData);
       } else if (defaultValue !== undefined) {
@@ -397,19 +411,27 @@ export function useOfflineStorage<T>(options: StorageOptions) {
     };
 
     initializeData();
-  }, [key, defaultValue, getFromStorage, saveToStorage, syncToServer, syncStatus.isOnline, syncFromServer]);
+  }, [
+    key,
+    defaultValue,
+    getFromStorage,
+    saveToStorage,
+    syncToServer,
+    syncStatus.isOnline,
+    syncFromServer,
+  ]);
 
   // Handle online/offline status
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     const handleOnline = () => {
-      setSyncStatus(prev => ({ ...prev, isOnline: true }));
+      setSyncStatus((prev) => ({ ...prev, isOnline: true }));
       processSyncQueue();
     };
 
     const handleOffline = () => {
-      setSyncStatus(prev => ({ ...prev, isOnline: false }));
+      setSyncStatus((prev) => ({ ...prev, isOnline: false }));
     };
 
     window.addEventListener('online', handleOnline);
@@ -444,7 +466,7 @@ export function useOfflineStorage<T>(options: StorageOptions) {
     clearData,
     forceSync,
     syncStatus,
-    isLoading: !isInitialized.current
+    isLoading: !isInitialized.current,
   };
 }
 
@@ -459,19 +481,22 @@ export function useOfflineForm<T extends Record<string, any>>(
     updateData: updateFormData,
     clearData: clearFormData,
     syncStatus,
-    isLoading
+    isLoading,
   } = useOfflineStorage<T>({
     key: `form-${formId}`,
     defaultValue: initialData,
-    ...options
+    ...options,
   });
 
-  const updateField = useCallback((fieldName: keyof T, value: any) => {
-    updateFormData(prev => ({
-      ...prev,
-      [fieldName]: value
-    }));
-  }, [updateFormData]);
+  const updateField = useCallback(
+    (fieldName: keyof T, value: any) => {
+      updateFormData((prev) => ({
+        ...prev,
+        [fieldName]: value,
+      }));
+    },
+    [updateFormData]
+  );
 
   const resetForm = useCallback(() => {
     updateFormData(initialData);
@@ -489,7 +514,7 @@ export function useOfflineForm<T extends Record<string, any>>(
     clearFormData,
     isDirty: isDirty(),
     syncStatus,
-    isLoading
+    isLoading,
   };
 }
 
@@ -504,40 +529,43 @@ export function useOfflineSync() {
     setSyncQueue(queue);
   }, []);
 
-  const processQueue = useCallback(async (syncEndpoint: string) => {
-    if (isSyncing || !navigator.onLine) return;
+  const processQueue = useCallback(
+    async (syncEndpoint: string) => {
+      if (isSyncing || !navigator.onLine) return;
 
-    setIsSyncing(true);
-    
-    try {
-      const queue = await indexedDBStorage.getSyncQueue();
-      
-      for (const item of queue) {
-        try {
-          const response = await fetch(syncEndpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(item.data)
-          });
+      setIsSyncing(true);
 
-          if (!response.ok) {
-            throw new Error(`Sync failed: ${response.statusText}`);
+      try {
+        const queue = await indexedDBStorage.getSyncQueue();
+
+        for (const item of queue) {
+          try {
+            const response = await fetch(syncEndpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(item.data),
+            });
+
+            if (!response.ok) {
+              throw new Error(`Sync failed: ${response.statusText}`);
+            }
+          } catch (error) {
+            console.error('Failed to sync item:', error);
+            // In a real implementation, you might want to increment attempt count
+            // and remove items that have failed too many times
           }
-        } catch (error) {
-          console.error('Failed to sync item:', error);
-          // In a real implementation, you might want to increment attempt count
-          // and remove items that have failed too many times
         }
-      }
 
-      await indexedDBStorage.clearSyncQueue();
-      setSyncQueue([]);
-    } catch (error) {
-      console.error('Error processing sync queue:', error);
-    } finally {
-      setIsSyncing(false);
-    }
-  }, [isSyncing]);
+        await indexedDBStorage.clearSyncQueue();
+        setSyncQueue([]);
+      } catch (error) {
+        console.error('Error processing sync queue:', error);
+      } finally {
+        setIsSyncing(false);
+      }
+    },
+    [isSyncing]
+  );
 
   useEffect(() => {
     const loadQueue = async () => {
@@ -553,8 +581,8 @@ export function useOfflineSync() {
     queueCount: syncQueue.length,
     isSyncing,
     addToQueue,
-    processQueue
+    processQueue,
   };
 }
 
-export default useOfflineStorage; 
+export default useOfflineStorage;

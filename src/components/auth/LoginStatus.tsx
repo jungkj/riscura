@@ -24,9 +24,9 @@ export const LoginStatus: React.FC<LoginStatusProps> = ({ className = '' }) => {
     <div className={`flex items-center space-x-2 ${className}`}>
       <DaisyBadge 
         variant={hasRememberMe ? "default" : "secondary"}
-        className="flex items-center space-x-1"
-      >
-        {hasRememberMe ? (
+        className="flex items-center space-x-1" >
+  {hasRememberMe ? (
+</DaisyBadge>
           <>
             <Shield className="w-3 h-3" />
             <span>Persistent Login</span>
@@ -40,8 +40,9 @@ export const LoginStatus: React.FC<LoginStatusProps> = ({ className = '' }) => {
       </DaisyBadge>
       
       {process.env.NODE_ENV === 'development' && (
-        <DaisyBadge variant="outline" className="text-xs">
-          {storageType === 'localStorage' ? 'Local' : 'Session'}
+        <DaisyBadge variant="outline" className="text-xs" >
+  {storageType === 'localStorage' ? 'Local' : 'Session'}
+</DaisyBadge>
         </DaisyBadge>
       )}
     </div>

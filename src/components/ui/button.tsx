@@ -17,28 +17,28 @@ const buttonVariants = cva(
           border-transparent focus:ring-blue-500
           disabled:bg-blue-300 disabled:text-white
         `,
-        
+
         // Secondary variant - subtle background
         secondary: `
           bg-slate-100 text-slate-900 shadow-sm hover:bg-slate-200 active:bg-slate-300
           border border-slate-200 focus:ring-slate-500
           disabled:bg-slate-50 disabled:text-slate-400
         `,
-        
+
         // Success variant - green theme
         success: `
           bg-green-600 text-white shadow hover:bg-green-700 active:bg-green-800
           border-transparent focus:ring-green-500
           disabled:bg-green-300 disabled:text-white
         `,
-        
+
         // Danger variant - red theme
         danger: `
           bg-red-600 text-white shadow hover:bg-red-700 active:bg-red-800
           border-transparent focus:ring-red-500
           disabled:bg-red-300 disabled:text-white
         `,
-        
+
         // Outline variant - border only
         outline: `
           border border-slate-300 bg-transparent text-slate-700 shadow-sm 
@@ -46,35 +46,35 @@ const buttonVariants = cva(
           focus:ring-slate-500
           disabled:border-slate-200 disabled:text-slate-400
         `,
-        
+
         // Ghost variant - minimal styling
         ghost: `
           bg-transparent text-slate-700 hover:bg-slate-100 hover:text-slate-900
           active:bg-slate-200 focus:ring-slate-500
           disabled:text-slate-400
         `,
-        
+
         // Link variant - looks like a link
         link: `
           text-blue-600 underline-offset-4 hover:underline hover:text-blue-700
           active:text-blue-800 focus:ring-blue-500
           disabled:text-blue-300
         `,
-        
+
         // Default variant - alias for primary
         default: `
           bg-blue-600 text-white shadow hover:bg-blue-700 active:bg-blue-800
           border-transparent focus:ring-blue-500
           disabled:bg-blue-300 disabled:text-white
         `,
-        
+
         // Tertiary variant - subtle styling
         tertiary: `
           bg-slate-50 text-slate-600 shadow-sm hover:bg-slate-100 active:bg-slate-200
           border border-slate-200 focus:ring-slate-500
           disabled:bg-slate-25 disabled:text-slate-400
         `,
-        
+
         // Destructive variant - alias for danger
         destructive: `
           bg-red-600 text-white shadow hover:bg-red-700 active:bg-red-800
@@ -83,18 +83,18 @@ const buttonVariants = cva(
         `,
       },
       size: {
-        xs: "h-7 px-2 text-xs",
-        sm: "h-8 px-3 text-sm",
-        md: "h-9 px-4 text-sm",
-        lg: "h-10 px-6 text-base",
-        xl: "h-11 px-8 text-base",
-        icon: "h-9 w-9 p-0",
-        default: "h-9 px-4 text-sm", // alias for md
+        xs: 'h-7 px-2 text-xs',
+        sm: 'h-8 px-3 text-sm',
+        md: 'h-9 px-4 text-sm',
+        lg: 'h-10 px-6 text-base',
+        xl: 'h-11 px-8 text-base',
+        icon: 'h-9 w-9 p-0',
+        default: 'h-9 px-4 text-sm', // alias for md
       },
     },
     defaultVariants: {
-      variant: "primary",
-      size: "md",
+      variant: 'primary',
+      size: 'md',
     },
   }
 );
@@ -110,23 +110,26 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ 
-    className, 
-    variant, 
-    size, 
-    asChild = false, 
-    loading = false, 
-    loadingText = 'Loading...', 
-    leftIcon,
-    rightIcon,
-    children,
-    disabled,
-    ...props 
-  }, ref) => {
+  (
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      loading = false,
+      loadingText = 'Loading...',
+      leftIcon,
+      rightIcon,
+      children,
+      disabled,
+      ...props
+    },
+    ref
+  ) => {
     const Comp = asChild ? Slot : 'button';
-    
+
     const isDisabled = disabled || loading;
-    
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}

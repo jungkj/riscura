@@ -10,20 +10,23 @@ const TEST_USER = {
   email: 'workflow-test@riscura.com',
   password: 'WorkflowTest123!',
   name: 'Workflow Test User',
-  role: 'RISK_MANAGER'
+  role: 'RISK_MANAGER',
 };
 
 const TEST_ORGANIZATION = {
   name: 'Workflow Test Organization',
   industry: 'Technology',
-  size: 'Medium'
+  size: 'Medium',
 };
 
 class UserWorkflowHelper {
   constructor(public page: Page) {}
 
   // Authentication workflows
-  async performLogin(email: string = TEST_USER.email, password: string = TEST_USER.password): Promise<void> {
+  async performLogin(
+    email: string = TEST_USER.email,
+    password: string = TEST_USER.password
+  ): Promise<void> {
     await this.page.goto(`${BASE_URL}/auth/login`);
     await this.page.waitForLoadState('networkidle');
 
@@ -39,7 +42,7 @@ class UserWorkflowHelper {
 
     // Wait for successful login and redirect
     await this.page.waitForURL(`${BASE_URL}/dashboard`, { timeout: TEST_TIMEOUT });
-    
+
     // Verify dashboard is loaded
     await expect(this.page.locator('[data-testid="dashboard-container"]')).toBeVisible();
   }
@@ -71,7 +74,10 @@ class UserWorkflowHelper {
     await this.page.fill('[data-testid="risk-title-input"]', riskData.title);
     await this.page.fill('[data-testid="risk-description-input"]', riskData.description);
     await this.page.selectOption('[data-testid="risk-category-select"]', riskData.category);
-    await this.page.selectOption('[data-testid="risk-likelihood-select"]', riskData.likelihood.toString());
+    await this.page.selectOption(
+      '[data-testid="risk-likelihood-select"]',
+      riskData.likelihood.toString()
+    );
     await this.page.selectOption('[data-testid="risk-impact-select"]', riskData.impact.toString());
 
     // Submit form
@@ -79,12 +85,12 @@ class UserWorkflowHelper {
 
     // Wait for success notification
     await expect(this.page.locator('[data-testid="success-toast"]')).toBeVisible();
-    
+
     // Extract risk ID from URL or response
     await this.page.waitForURL(/\/risks\/[a-zA-Z0-9]+/);
     const url = this.page.url();
     const riskId = url.split('/').pop()!;
-    
+
     return riskId;
   }
 
@@ -113,7 +119,7 @@ class UserWorkflowHelper {
     await this.page.waitForURL(/\/controls\/[a-zA-Z0-9]+/);
     const url = this.page.url();
     const controlId = url.split('/').pop()!;
-    
+
     return controlId;
   }
 
@@ -160,10 +166,15 @@ class UserWorkflowHelper {
     await this.page.click('[data-testid="upload-submit-button"]');
 
     // Wait for upload completion
-    await expect(this.page.locator('[data-testid="upload-success"]')).toBeVisible({ timeout: 30000 });
+    await expect(this.page.locator('[data-testid="upload-success"]')).toBeVisible({
+      timeout: 30000,
+    });
 
     // Extract document ID
-    const documentId = await this.page.getAttribute('[data-testid="uploaded-document"]', 'data-document-id');
+    const documentId = await this.page.getAttribute(
+      '[data-testid="uploaded-document"]',
+      'data-document-id'
+    );
     return documentId!;
   }
 
@@ -198,7 +209,9 @@ class UserWorkflowHelper {
     await this.page.click('[data-testid="generate-report-button"]');
 
     // Wait for report generation
-    await expect(this.page.locator('[data-testid="report-generated"]')).toBeVisible({ timeout: 60000 });
+    await expect(this.page.locator('[data-testid="report-generated"]')).toBeVisible({
+      timeout: 60000,
+    });
   }
 
   async exportReportToPDF(): Promise<void> {
@@ -227,7 +240,9 @@ class UserWorkflowHelper {
     await this.page.click('[data-testid="start-analysis-button"]');
 
     // Wait for analysis completion
-    await expect(this.page.locator('[data-testid="analysis-complete"]')).toBeVisible({ timeout: 120000 });
+    await expect(this.page.locator('[data-testid="analysis-complete"]')).toBeVisible({
+      timeout: 120000,
+    });
 
     // Verify analysis results
     await expect(this.page.locator('[data-testid="identified-risks"]')).toBeVisible();
@@ -249,7 +264,9 @@ class UserWorkflowHelper {
     await this.page.context().setOffline(false);
 
     // Verify auto-retry works
-    await expect(this.page.locator('[data-testid="network-error-banner"]')).not.toBeVisible({ timeout: 10000 });
+    await expect(this.page.locator('[data-testid="network-error-banner"]')).not.toBeVisible({
+      timeout: 10000,
+    });
   }
 
   // Performance and loading state verification
@@ -279,7 +296,7 @@ class UserWorkflowHelper {
 
     // Verify mobile navigation
     await expect(this.page.locator('[data-testid="mobile-menu-trigger"]')).toBeVisible();
-    
+
     // Open mobile menu
     await this.page.click('[data-testid="mobile-menu-trigger"]');
     await expect(this.page.locator('[data-testid="mobile-menu"]')).toBeVisible();
@@ -324,7 +341,7 @@ test.describe('Complete User Workflow Integration Tests', () => {
       description: 'This is a comprehensive integration test risk for workflow validation',
       category: 'operational',
       likelihood: 3,
-      impact: 4
+      impact: 4,
     };
     riskId = await helper.createRisk(riskData);
     expect(riskId).toBeTruthy();
@@ -334,7 +351,7 @@ test.describe('Complete User Workflow Integration Tests', () => {
       name: 'Integration Test Control',
       description: 'This is a test control for integration testing',
       type: 'preventive',
-      frequency: 'monthly'
+      frequency: 'monthly',
     };
     controlId = await helper.createControl(controlData);
     expect(controlId).toBeTruthy();
@@ -346,7 +363,7 @@ test.describe('Complete User Workflow Integration Tests', () => {
     await helper.generateReport('risk_assessment', {
       dateRange: { from: '2024-01-01', to: '2024-12-31' },
       includeRisks: true,
-      includeControls: true
+      includeControls: true,
     });
     await helper.exportReportToPDF();
 
@@ -362,9 +379,9 @@ test.describe('Complete User Workflow Integration Tests', () => {
     const documentMetadata = {
       title: 'Test Policy Document',
       description: 'Integration test policy document',
-      category: 'policy'
+      category: 'policy',
     };
-    
+
     documentId = await helper.uploadDocument(testFilePath, documentMetadata);
     expect(documentId).toBeTruthy();
 
@@ -383,7 +400,7 @@ test.describe('Complete User Workflow Integration Tests', () => {
     // Test form validation errors
     await helper.page.goto(`${BASE_URL}/risks`);
     await helper.page.click('[data-testid="create-risk-button"]');
-    
+
     // Submit empty form to trigger validation
     await helper.page.click('[data-testid="risk-submit-button"]');
     await expect(helper.page.locator('[data-testid="validation-error"]')).toBeVisible();
@@ -391,7 +408,7 @@ test.describe('Complete User Workflow Integration Tests', () => {
     // Test file upload limits
     await helper.page.goto(`${BASE_URL}/documents`);
     await helper.page.click('[data-testid="upload-document-button"]');
-    
+
     // Try to upload oversized file (simulated)
     await helper.page.evaluate(() => {
       const input = document.querySelector('[data-testid="file-input"]') as HTMLInputElement;
@@ -399,12 +416,12 @@ test.describe('Complete User Workflow Integration Tests', () => {
         // Simulate file size validation error
         const event = new Event('change');
         Object.defineProperty(event, 'target', {
-          value: { files: [{ size: 200 * 1024 * 1024, name: 'large-file.pdf' }] }
+          value: { files: [{ size: 200 * 1024 * 1024, name: 'large-file.pdf' }] },
         });
         input.dispatchEvent(event);
       }
     });
-    
+
     await expect(helper.page.locator('[data-testid="file-size-error"]')).toBeVisible();
 
     await helper.performLogout();
@@ -431,7 +448,7 @@ test.describe('Complete User Workflow Integration Tests', () => {
       description: 'Testing data persistence across page reloads',
       category: 'operational',
       likelihood: 2,
-      impact: 3
+      impact: 3,
     };
     const persistenceRiskId = await helper.createRisk(riskData);
     await helper.verifyDataPersistence(persistenceRiskId);
@@ -449,7 +466,7 @@ test.describe('Complete User Workflow Integration Tests', () => {
       description: 'Testing cross-browser compatibility',
       category: 'technical',
       likelihood: 2,
-      impact: 2
+      impact: 2,
     };
     const crossBrowserRiskId = await helper.createRisk(quickRiskData);
     expect(crossBrowserRiskId).toBeTruthy();
@@ -460,24 +477,24 @@ test.describe('Complete User Workflow Integration Tests', () => {
   test('Concurrent user actions and race condition handling', async () => {
     await helper.performLogin();
 
-         // Simulate rapid successive actions
-     const promises: Promise<string>[] = [];
-     for (let i = 0; i < 3; i++) {
-       promises.push(
-         helper.createRisk({
-           title: `Concurrent Risk ${i + 1}`,
-           description: `Testing concurrent creation ${i + 1}`,
-           category: 'operational',
-           likelihood: 2,
-           impact: 2
-         })
-       );
-     }
+    // Simulate rapid successive actions
+    const promises: Promise<string>[] = [];
+    for (let i = 0; i < 3; i++) {
+      promises.push(
+        helper.createRisk({
+          title: `Concurrent Risk ${i + 1}`,
+          description: `Testing concurrent creation ${i + 1}`,
+          category: 'operational',
+          likelihood: 2,
+          impact: 2,
+        })
+      );
+    }
 
-     // Wait for all to complete
-     const riskIds = await Promise.all(promises);
-     expect(riskIds).toHaveLength(3);
-     riskIds.forEach(id => expect(id).toBeTruthy());
+    // Wait for all to complete
+    const riskIds = await Promise.all(promises);
+    expect(riskIds).toHaveLength(3);
+    riskIds.forEach((id) => expect(id).toBeTruthy());
 
     await helper.performLogout();
   });
@@ -491,7 +508,7 @@ test.describe('Complete User Workflow Integration Tests', () => {
       description: 'B'.repeat(2000), // Assuming 2000 is max description length
       category: 'operational',
       likelihood: 5, // Maximum likelihood
-      impact: 5 // Maximum impact
+      impact: 5, // Maximum impact
     };
 
     const edgeCaseRiskId = await helper.createRisk(maxLengthRiskData);
@@ -503,7 +520,7 @@ test.describe('Complete User Workflow Integration Tests', () => {
       description: 'Description with unicode: 测试 ñoël фыва',
       category: 'compliance',
       likelihood: 1,
-      impact: 1
+      impact: 1,
     };
 
     const specialCharRiskId = await helper.createRisk(specialCharRiskData);
@@ -559,4 +576,4 @@ test.describe('User Session Management', () => {
 
     await secondPage.close();
   });
-}); 
+});

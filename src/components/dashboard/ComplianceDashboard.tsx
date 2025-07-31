@@ -93,7 +93,9 @@ export default function ComplianceDashboard() {
       case 'in-progress':
         return <Clock className="h-5 w-5 text-orange-600" />;
       case 'needs-review':
-        return <DaisyAlertTriangle className="h-5 w-5 text-red-600" />;
+        return <DaisyAlertTriangle className="h-5 w-5 text-red-600" >
+  ;
+</DaisyAlertTriangle>
     }
   };
 
@@ -160,8 +162,9 @@ export default function ComplianceDashboard() {
       </div>
 
       {/* Probo Integration Banner */}
-      <DaisyCard className="bg-gradient-to-r from-[#199BEC]/5 to-[#199BEC]/10 border-[#199BEC]/20">
-        <DaisyCardHeader>
+      <DaisyCard className="bg-gradient-to-r from-[#199BEC]/5 to-[#199BEC]/10 border-[#199BEC]/20" >
+  <DaisyCardHeader />
+</DaisyCard>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-[#199BEC]/10 rounded-lg">
@@ -176,8 +179,7 @@ export default function ComplianceDashboard() {
             </div>
             <DaisyButton 
               onClick={() => router.push('/probo')}
-              className="bg-[#199BEC] hover:bg-[#199BEC]/90 text-white"
-            >
+              className="bg-[#199BEC] hover:bg-[#199BEC]/90 text-white" />
               Open Probo Hub
               <ExternalLink className="h-4 w-4 ml-2" />
             </DaisyButton>
@@ -201,15 +203,18 @@ export default function ComplianceDashboard() {
       </div>
 
       {/* Traffic Light System for Quick Status Overview */}
-      <DaisyCard className="bg-[#FAFAFA] border-gray-200">
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center gap-2">
-            <Activity className="h-5 w-5 text-[#199BEC]" />
+      <DaisyCard className="bg-[#FAFAFA] border-gray-200" >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <Activity className="h-5 w-5 text-[#199BEC]" />
+</DaisyCardTitle>
             Framework Status Overview
           </DaisyCardTitle>
-        
-        <DaisyCardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+</DaisyCardContent>
             {frameworks.map((framework, index) => (
               <div key={index} className="p-4 bg-white rounded-lg border border-gray-100 hover:shadow-md transition-shadow">
                 <div className="flex items-center gap-3 mb-3">
@@ -220,8 +225,9 @@ export default function ComplianceDashboard() {
                       <div className="text-lg font-bold text-[#191919]">{framework.score}%</div>
                       {getStatusBadge(framework.status)}
                       {framework.proboIntegrated && (
-                        <DaisyBadge variant="outline" className="text-xs bg-[#199BEC]/10 text-[#199BEC] border-[#199BEC]/30">
-                          Probo
+                        <DaisyBadge variant="outline" className="text-xs bg-[#199BEC]/10 text-[#199BEC] border-[#199BEC]/30" >
+  Probo
+</DaisyBadge>
                         </DaisyBadge>
                       )}
                     </div>
@@ -247,30 +253,32 @@ export default function ComplianceDashboard() {
                         size="sm" 
                         variant="ghost" 
                         className="h-6 text-xs text-[#199BEC] hover:text-[#199BEC]/80 hover:bg-[#199BEC]/5"
-                        onClick={() => handleProboIntegrationClick(framework.name)}
-                      >
+                        onClick={() => handleProboIntegrationClick(framework.name)} />
                         View in Probo
                         <ExternalLink className="h-3 w-3 ml-1" />
-                      </DaisyButton>
+                      </DaisyProgress>
                     </div>
                   )}
                 </div>
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Detailed Framework Progress */}
-      <DaisyCard className="bg-[#FAFAFA] border-gray-200">
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center gap-2">
-            <DaisyCalendar className="h-5 w-5 text-[#199BEC]" />
+      <DaisyCard className="bg-[#FAFAFA] border-gray-200" >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <DaisyCalendar className="h-5 w-5 text-[#199BEC]" />
+</DaisyCardTitle>
             Framework Progress Details
           </DaisyCardTitle>
-        
-        <DaisyCardContent>
-          <div className="space-y-6">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-6">
+</DaisyCardContent>
             {frameworks.map((framework, index) => (
               <div key={index} className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -290,12 +298,13 @@ export default function ComplianceDashboard() {
           </div>
           
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <DaisyButton className="w-full bg-[#199BEC] hover:bg-[#0f7dc7] text-white">
-              <ExternalLink className="h-4 w-4 mr-2" />
+            <DaisyButton className="w-full bg-[#199BEC] hover:bg-[#0f7dc7] text-white" >
+  <ExternalLink className="h-4 w-4 mr-2" />
+</DaisyProgress>
               Generate Detailed Compliance Report
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
       );

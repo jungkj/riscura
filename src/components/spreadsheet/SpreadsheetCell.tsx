@@ -113,8 +113,9 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
         
       case 'DROPDOWN':
         return (
-          <DaisyBadge variant="secondary" className="text-xs">
-            {value}
+          <DaisyBadge variant="secondary" className="text-xs" >
+  {value}
+</DaisyBadge>
           </DaisyBadge>
         );
         
@@ -155,16 +156,15 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
               onSave(value);
             }}
           >
-            <DaisySelectTrigger className="h-8 border-0 bg-blue-50 focus:ring-2 focus:ring-blue-500">
-              <DaisySelectValue />
-            </SelectTrigger>
-            <DaisySelectContent>
+            <DaisySelectTrigger className="h-8 border-0 bg-blue-50 focus:ring-2 focus:ring-blue-500" />
+              <DaisySelectValue /></DaisySelect>
+            <DaisySelectContent />
               {column.dropdownOptions?.map((option) => (
-                <DaisySelectItem key={option} value={option}>
+                <DaisySelectItem key={option} value={option} />
                   {option}
-                </SelectItem>
+                </DaisySelectContent>
               ))}
-            </SelectContent>
+            </DaisySelectContent>
           </DaisySelect>
         );
 
@@ -254,9 +254,9 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
               rows={1}
             />
           );
-        }
+        };
 
-        return (
+  return (
           <DaisyInput
             ref={inputRef}
             value={localValue}
@@ -275,7 +275,7 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
         {renderEditingInput()}
       </div>
     );
-  }
+  };
 
   return (
     <div

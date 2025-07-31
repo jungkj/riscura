@@ -1,0 +1,22 @@
+{
+  "errorPatterns": {
+    "unclosedTags": {},
+    "missingClosingBrackets": {},
+    "invalidExpressions": {},
+    "componentNaming": {},
+    "missingImports": {},
+    "jsxSyntaxError": {},
+    "unexpectedToken": {}
+  },
+  "alertThresholds": {
+    "errorRate": 0.1,
+    "buildFailures": 3,
+    "timeToFix": 1800
+  },
+  "tracking": {
+    "enabled": true,
+    "collectFileStats": true,
+    "trackDeveloperMetrics": true,
+    "retentionDays": 30
+  }
+}

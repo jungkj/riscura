@@ -28,22 +28,20 @@ export class DocumentEncryptionService {
    * Derive master key from environment configuration
    */
   private deriveMasterKey(): Buffer {
-    const masterSecret = process.env.MASTER_ENCRYPTION_KEY || 'riscura-default-master-key-please-change-in-production';
+    const masterSecret =
+      process.env.MASTER_ENCRYPTION_KEY || 'riscura-default-master-key-please-change-in-production';
     const salt = process.env.ENCRYPTION_SALT || 'riscura-default-salt-please-change-in-production';
 
-    return crypto.pbkdf2Sync(
-      masterSecret,
-      salt,
-      KEY_DERIVATION_ITERATIONS,
-      32,
-      'sha512'
-    );
+    return crypto.pbkdf2Sync(masterSecret, salt, KEY_DERIVATION_ITERATIONS, 32, 'sha512');
   }
 
   /**
    * Encrypt sensitive data with authenticated encryption
    */
-  public encryptData(plaintext: string | Buffer, additionalData?: string): {
+  public encryptData(
+    plaintext: string | Buffer,
+    additionalData?: string
+  ): {
     encrypted: string;
     iv: string;
     tag: string;
@@ -55,11 +53,11 @@ export class DocumentEncryptionService {
 
     // Derive encryption key
     const key = crypto.pbkdf2Sync(this.masterKey, salt, KEY_DERIVATION_ITERATIONS, 32, 'sha512');
-    
+
     try {
       // Try GCM mode first
       const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
-      
+
       // Add additional authenticated data if provided
       if (additionalData) {
         cipher.setAAD(Buffer.from(additionalData, 'utf8'));
@@ -76,7 +74,7 @@ export class DocumentEncryptionService {
         encrypted: encrypted.toString('base64'),
         iv: iv.toString('base64'),
         tag: tag.toString('base64'),
-        salt: salt.toString('base64')
+        salt: salt.toString('base64'),
       };
     } catch (error) {
       // Fallback to CBC mode if GCM not available
@@ -87,7 +85,13 @@ export class DocumentEncryptionService {
   /**
    * Fallback encryption using CBC mode
    */
-  private encryptDataBasic(data: Buffer, iv: Buffer, salt: Buffer, key: Buffer, additionalData?: string): {
+  private encryptDataBasic(
+    data: Buffer,
+    iv: Buffer,
+    salt: Buffer,
+    key: Buffer,
+    additionalData?: string
+  ): {
     encrypted: string;
     iv: string;
     tag: string;
@@ -95,7 +99,7 @@ export class DocumentEncryptionService {
   } {
     // Create cipher with CBC mode
     const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
-    
+
     // Encrypt data
     let encrypted = cipher.update(data);
     const final = cipher.final();
@@ -113,21 +117,24 @@ export class DocumentEncryptionService {
       encrypted: encrypted.toString('base64'),
       iv: iv.toString('base64'),
       tag: tag.toString('base64'),
-      salt: salt.toString('base64')
+      salt: salt.toString('base64'),
     };
   }
 
   /**
    * Decrypt data with authentication verification
    */
-  public decryptData(encryptedData: {
-    encrypted: string;
-    iv: string;
-    tag: string;
-    salt: string;
-  }, additionalData?: string): Buffer {
+  public decryptData(
+    encryptedData: {
+      encrypted: string;
+      iv: string;
+      tag: string;
+      salt: string;
+    },
+    additionalData?: string
+  ): Buffer {
     const { encrypted, iv, tag, salt } = encryptedData;
-    
+
     // Convert from base64
     const encryptedBuffer = Buffer.from(encrypted, 'base64');
     const ivBuffer = Buffer.from(iv, 'base64');
@@ -135,13 +142,19 @@ export class DocumentEncryptionService {
     const saltBuffer = Buffer.from(salt, 'base64');
 
     // Derive decryption key
-    const key = crypto.pbkdf2Sync(this.masterKey, saltBuffer, KEY_DERIVATION_ITERATIONS, 32, 'sha512');
-    
+    const key = crypto.pbkdf2Sync(
+      this.masterKey,
+      saltBuffer,
+      KEY_DERIVATION_ITERATIONS,
+      32,
+      'sha512'
+    );
+
     try {
       // Try GCM mode first
       const decipher = crypto.createDecipheriv('aes-256-gcm', key, ivBuffer);
       decipher.setAuthTag(tagBuffer);
-      
+
       // Add additional authenticated data if provided
       if (additionalData) {
         decipher.setAAD(Buffer.from(additionalData, 'utf8'));
@@ -162,7 +175,13 @@ export class DocumentEncryptionService {
   /**
    * Fallback decryption using CBC mode
    */
-  private decryptDataBasic(encryptedBuffer: Buffer, ivBuffer: Buffer, tagBuffer: Buffer, key: Buffer, additionalData?: string): Buffer {
+  private decryptDataBasic(
+    encryptedBuffer: Buffer,
+    ivBuffer: Buffer,
+    tagBuffer: Buffer,
+    key: Buffer,
+    additionalData?: string
+  ): Buffer {
     // Verify HMAC tag first
     const hmac = crypto.createHmac('sha256', key);
     hmac.update(encryptedBuffer);
@@ -170,7 +189,7 @@ export class DocumentEncryptionService {
       hmac.update(Buffer.from(additionalData, 'utf8'));
     }
     const expectedTag = hmac.digest();
-    
+
     if (!crypto.timingSafeEqual(tagBuffer, expectedTag)) {
       throw new Error('Authentication failed - data may have been tampered with');
     }
@@ -189,7 +208,11 @@ export class DocumentEncryptionService {
   /**
    * Encrypt file content for secure storage
    */
-  public encryptFile(fileBuffer: Buffer, fileName: string, userId: string): {
+  public encryptFile(
+    fileBuffer: Buffer,
+    fileName: string,
+    userId: string
+  ): {
     encryptedContent: string;
     iv: string;
     tag: string;
@@ -205,18 +228,18 @@ export class DocumentEncryptionService {
   } {
     // Calculate original file hash for integrity verification
     const originalHash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
-    
+
     // Create additional authenticated data
     const aad = JSON.stringify({
       fileName,
       userId,
       timestamp: new Date().toISOString(),
-      originalHash
+      originalHash,
     });
 
     // Encrypt file content
     const encryptionResult = this.encryptData(fileBuffer, aad);
-    
+
     return {
       encryptedContent: encryptionResult.encrypted,
       iv: encryptionResult.iv,
@@ -228,8 +251,8 @@ export class DocumentEncryptionService {
         encryptedSize: Buffer.from(encryptionResult.encrypted, 'base64').length,
         fileName,
         userId,
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     };
   }
 
@@ -249,22 +272,25 @@ export class DocumentEncryptionService {
     metadata: any;
   } {
     const { encryptedContent, iv, tag, salt, hash, metadata } = encryptedFile;
-    
+
     // Create AAD for verification
     const aad = JSON.stringify({
       fileName: metadata.fileName,
       userId: metadata.userId,
       timestamp: metadata.timestamp,
-      originalHash: hash
+      originalHash: hash,
     });
 
     // Decrypt content
-    const decryptedContent = this.decryptData({
-      encrypted: encryptedContent,
-      iv,
-      tag,
-      salt
-    }, aad);
+    const decryptedContent = this.decryptData(
+      {
+        encrypted: encryptedContent,
+        iv,
+        tag,
+        salt,
+      },
+      aad
+    );
 
     // Verify integrity
     const calculatedHash = crypto.createHash('sha256').update(decryptedContent).digest('hex');
@@ -273,25 +299,33 @@ export class DocumentEncryptionService {
     return {
       content: decryptedContent,
       verified,
-      metadata
+      metadata,
     };
   }
 
   /**
    * Generate secure token for document access
    */
-  public generateSecureToken(documentId: string, userId: string, permissions: string[], expiresIn: number = 3600): string {
+  public generateSecureToken(
+    documentId: string,
+    userId: string,
+    permissions: string[],
+    expiresIn: number = 3600
+  ): string {
     const payload = {
       documentId,
       userId,
       permissions,
       iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + expiresIn
+      exp: Math.floor(Date.now() / 1000) + expiresIn,
     };
 
     const payloadString = JSON.stringify(payload);
-    const signature = crypto.createHmac('sha256', this.masterKey).update(payloadString).digest('hex');
-    
+    const signature = crypto
+      .createHmac('sha256', this.masterKey)
+      .update(payloadString)
+      .digest('hex');
+
     return Buffer.from(JSON.stringify({ payload, signature })).toString('base64');
   }
 
@@ -306,13 +340,19 @@ export class DocumentEncryptionService {
     try {
       const decoded = JSON.parse(Buffer.from(token, 'base64').toString('utf8'));
       const { payload, signature } = decoded;
-      
+
       // Verify signature
-      const expectedSignature = crypto.createHmac('sha256', this.masterKey)
+      const expectedSignature = crypto
+        .createHmac('sha256', this.masterKey)
         .update(JSON.stringify(payload))
         .digest('hex');
-      
-      if (!crypto.timingSafeEqual(Buffer.from(signature, 'hex'), Buffer.from(expectedSignature, 'hex'))) {
+
+      if (
+        !crypto.timingSafeEqual(
+          Buffer.from(signature, 'hex'),
+          Buffer.from(expectedSignature, 'hex')
+        )
+      ) {
         return { valid: false };
       }
 
@@ -337,12 +377,15 @@ export class DocumentEncryptionService {
       userId,
       userEmail,
       timestamp: new Date().toISOString(),
-      nonce: crypto.randomBytes(16).toString('hex')
+      nonce: crypto.randomBytes(16).toString('hex'),
     };
 
     const watermarkString = JSON.stringify(watermarkData);
-    const signature = crypto.createHmac('sha256', this.masterKey).update(watermarkString).digest('hex');
-    
+    const signature = crypto
+      .createHmac('sha256', this.masterKey)
+      .update(watermarkString)
+      .digest('hex');
+
     return Buffer.from(JSON.stringify({ data: watermarkData, signature })).toString('base64');
   }
 
@@ -356,14 +399,23 @@ export class DocumentEncryptionService {
     try {
       const decoded = JSON.parse(Buffer.from(watermark, 'base64').toString('utf8'));
       const { data, signature } = decoded;
-      
-      const expectedSignature = crypto.createHmac('sha256', this.masterKey)
+
+      const expectedSignature = crypto
+        .createHmac('sha256', this.masterKey)
         .update(JSON.stringify(data))
         .digest('hex');
-      
+
       return {
-        valid: crypto.timingSafeEqual(Buffer.from(signature, 'hex'), Buffer.from(expectedSignature, 'hex')),
-        data: crypto.timingSafeEqual(Buffer.from(signature, 'hex'), Buffer.from(expectedSignature, 'hex')) ? data : undefined
+        valid: crypto.timingSafeEqual(
+          Buffer.from(signature, 'hex'),
+          Buffer.from(expectedSignature, 'hex')
+        ),
+        data: crypto.timingSafeEqual(
+          Buffer.from(signature, 'hex'),
+          Buffer.from(expectedSignature, 'hex')
+        )
+          ? data
+          : undefined,
       };
     } catch (error) {
       return { valid: false };
@@ -408,7 +460,9 @@ export class FieldEncryption {
       const decrypted = this.encryptionService.decryptData(encryptedData, aad);
       return decrypted.toString('utf8');
     } catch (error) {
-      throw new Error(`Failed to decrypt field ${fieldName}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to decrypt field ${fieldName}: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 }
@@ -425,13 +479,14 @@ export function generateSecureId(): string {
 export function generateSecurePassword(): string {
   // Generate secure password with mixed case, numbers, and symbols
   const length = 16;
-  const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
+  const charset =
+    'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
   let password = '';
-  
+
   for (let i = 0; i < length; i++) {
     password += charset.charAt(crypto.randomInt(0, charset.length));
   }
-  
+
   return password;
 }
 
@@ -452,10 +507,10 @@ export async function secureVerifyPassword(password: string, hash: string): Prom
       resolve(false);
       return;
     }
-    
+
     crypto.pbkdf2(password, Buffer.from(salt, 'hex'), 100000, 64, 'sha512', (err, derivedKey) => {
       if (err) reject(err);
       else resolve(crypto.timingSafeEqual(Buffer.from(key, 'hex'), derivedKey));
     });
   });
-} 
+}

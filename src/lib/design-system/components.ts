@@ -16,18 +16,18 @@ export const componentVariants = {
         border: `1px solid ${designTokens.colors.interactive.primary}`,
         '&:hover': {
           backgroundColor: designTokens.colors.interactive.primaryHover,
-          borderColor: designTokens.colors.interactive.primaryHover
+          borderColor: designTokens.colors.interactive.primaryHover,
         },
         '&:active': {
           backgroundColor: designTokens.colors.interactive.primaryActive,
-          borderColor: designTokens.colors.interactive.primaryActive
+          borderColor: designTokens.colors.interactive.primaryActive,
         },
         '&:disabled': {
           backgroundColor: designTokens.colors.interactive.primaryDisabled,
           borderColor: designTokens.colors.interactive.primaryDisabled,
           color: designTokens.colors.text.disabled,
-          cursor: 'not-allowed'
-        }
+          cursor: 'not-allowed',
+        },
       },
       secondary: {
         backgroundColor: designTokens.colors.interactive.secondary,
@@ -35,18 +35,18 @@ export const componentVariants = {
         border: `1px solid ${designTokens.colors.border.primary}`,
         '&:hover': {
           backgroundColor: designTokens.colors.interactive.secondaryHover,
-          borderColor: designTokens.colors.border.primary
+          borderColor: designTokens.colors.border.primary,
         },
         '&:active': {
           backgroundColor: designTokens.colors.interactive.secondaryActive,
-          borderColor: designTokens.colors.border.primary
+          borderColor: designTokens.colors.border.primary,
         },
         '&:disabled': {
           backgroundColor: designTokens.colors.background.disabled,
           borderColor: designTokens.colors.border.secondary,
           color: designTokens.colors.text.disabled,
-          cursor: 'not-allowed'
-        }
+          cursor: 'not-allowed',
+        },
       },
       outline: {
         backgroundColor: 'transparent',
@@ -55,19 +55,19 @@ export const componentVariants = {
         '&:hover': {
           backgroundColor: designTokens.colors.primary[50],
           borderColor: designTokens.colors.interactive.primaryHover,
-          color: designTokens.colors.interactive.primaryHover
+          color: designTokens.colors.interactive.primaryHover,
         },
         '&:active': {
           backgroundColor: designTokens.colors.primary[100],
           borderColor: designTokens.colors.interactive.primaryActive,
-          color: designTokens.colors.interactive.primaryActive
+          color: designTokens.colors.interactive.primaryActive,
         },
         '&:disabled': {
           backgroundColor: 'transparent',
           borderColor: designTokens.colors.interactive.primaryDisabled,
           color: designTokens.colors.text.disabled,
-          cursor: 'not-allowed'
-        }
+          cursor: 'not-allowed',
+        },
       },
       ghost: {
         backgroundColor: 'transparent',
@@ -75,17 +75,17 @@ export const componentVariants = {
         border: '1px solid transparent',
         '&:hover': {
           backgroundColor: designTokens.colors.neutral[100],
-          color: designTokens.colors.text.primary
+          color: designTokens.colors.text.primary,
         },
         '&:active': {
           backgroundColor: designTokens.colors.neutral[200],
-          color: designTokens.colors.text.primary
+          color: designTokens.colors.text.primary,
         },
         '&:disabled': {
           backgroundColor: 'transparent',
           color: designTokens.colors.text.disabled,
-          cursor: 'not-allowed'
-        }
+          cursor: 'not-allowed',
+        },
       },
       danger: {
         backgroundColor: designTokens.colors.interactive.danger,
@@ -93,18 +93,18 @@ export const componentVariants = {
         border: `1px solid ${designTokens.colors.interactive.danger}`,
         '&:hover': {
           backgroundColor: designTokens.colors.interactive.dangerHover,
-          borderColor: designTokens.colors.interactive.dangerHover
+          borderColor: designTokens.colors.interactive.dangerHover,
         },
         '&:active': {
           backgroundColor: designTokens.colors.interactive.dangerActive,
-          borderColor: designTokens.colors.interactive.dangerActive
+          borderColor: designTokens.colors.interactive.dangerActive,
         },
         '&:disabled': {
           backgroundColor: designTokens.colors.interactive.primaryDisabled,
           borderColor: designTokens.colors.interactive.primaryDisabled,
           color: designTokens.colors.text.disabled,
-          cursor: 'not-allowed'
-        }
+          cursor: 'not-allowed',
+        },
       },
       success: {
         backgroundColor: designTokens.colors.interactive.success,
@@ -112,51 +112,51 @@ export const componentVariants = {
         border: `1px solid ${designTokens.colors.interactive.success}`,
         '&:hover': {
           backgroundColor: designTokens.colors.interactive.successHover,
-          borderColor: designTokens.colors.interactive.successHover
+          borderColor: designTokens.colors.interactive.successHover,
         },
         '&:active': {
           backgroundColor: designTokens.colors.interactive.successActive,
-          borderColor: designTokens.colors.interactive.successActive
+          borderColor: designTokens.colors.interactive.successActive,
         },
         '&:disabled': {
           backgroundColor: designTokens.colors.interactive.primaryDisabled,
           borderColor: designTokens.colors.interactive.primaryDisabled,
           color: designTokens.colors.text.disabled,
-          cursor: 'not-allowed'
-        }
-      }
+          cursor: 'not-allowed',
+        },
+      },
     },
     sizes: {
       xs: {
         height: designTokens.sizing.button.xs,
         padding: `0 ${designTokens.spacing.sm}`,
         fontSize: designTokens.typography.fontSize.xs,
-        borderRadius: designTokens.borderRadius.component.button
+        borderRadius: designTokens.borderRadius.component.button,
       },
       sm: {
         height: designTokens.sizing.button.sm,
         padding: `0 ${designTokens.spacing.md}`,
         fontSize: designTokens.typography.fontSize.sm,
-        borderRadius: designTokens.borderRadius.component.button
+        borderRadius: designTokens.borderRadius.component.button,
       },
       md: {
         height: designTokens.sizing.button.md,
         padding: `0 ${designTokens.spacing.lg}`,
         fontSize: designTokens.typography.fontSize.base,
-        borderRadius: designTokens.borderRadius.component.button
+        borderRadius: designTokens.borderRadius.component.button,
       },
       lg: {
         height: designTokens.sizing.button.lg,
         padding: `0 ${designTokens.spacing.xl}`,
         fontSize: designTokens.typography.fontSize.lg,
-        borderRadius: designTokens.borderRadius.component.button
+        borderRadius: designTokens.borderRadius.component.button,
       },
       xl: {
         height: designTokens.sizing.button.xl,
         padding: `0 ${designTokens.spacing['2xl']}`,
         fontSize: designTokens.typography.fontSize.xl,
-        borderRadius: designTokens.borderRadius.component.button
-      }
+        borderRadius: designTokens.borderRadius.component.button,
+      },
     },
     base: {
       display: 'inline-flex',
@@ -170,9 +170,9 @@ export const componentVariants = {
       userSelect: 'none',
       '&:focus-visible': {
         outline: `2px solid ${designTokens.colors.border.focus}`,
-        outlineOffset: '2px'
-      }
-    }
+        outlineOffset: '2px',
+      },
+    },
   },
 
   // Card variants
@@ -181,22 +181,22 @@ export const componentVariants = {
       default: {
         backgroundColor: designTokens.colors.background.primary,
         border: `1px solid ${designTokens.colors.border.secondary}`,
-        boxShadow: designTokens.elevation.component.card
+        boxShadow: designTokens.elevation.component.card,
       },
       elevated: {
         backgroundColor: designTokens.colors.background.primary,
         border: `1px solid ${designTokens.colors.border.tertiary}`,
-        boxShadow: designTokens.elevation.component.cardHover
+        boxShadow: designTokens.elevation.component.cardHover,
       },
       outlined: {
         backgroundColor: designTokens.colors.background.primary,
         border: `1px solid ${designTokens.colors.border.primary}`,
-        boxShadow: 'none'
+        boxShadow: 'none',
       },
       filled: {
         backgroundColor: designTokens.colors.background.secondary,
         border: `1px solid ${designTokens.colors.border.tertiary}`,
-        boxShadow: 'none'
+        boxShadow: 'none',
       },
       interactive: {
         backgroundColor: designTokens.colors.background.primary,
@@ -206,14 +206,14 @@ export const componentVariants = {
         transition: designTokens.animation.transition.default,
         '&:hover': {
           boxShadow: designTokens.elevation.component.cardHover,
-          borderColor: designTokens.colors.border.primary
-        }
-      }
+          borderColor: designTokens.colors.border.primary,
+        },
+      },
     },
     base: {
       borderRadius: designTokens.borderRadius.component.card,
-      overflow: 'hidden'
-    }
+      overflow: 'hidden',
+    },
   },
 
   // Input variants
@@ -226,17 +226,17 @@ export const componentVariants = {
         '&:focus': {
           borderColor: designTokens.colors.border.focus,
           outline: 'none',
-          boxShadow: `0 0 0 1px ${designTokens.colors.border.focus}`
+          boxShadow: `0 0 0 1px ${designTokens.colors.border.focus}`,
         },
         '&:disabled': {
           backgroundColor: designTokens.colors.background.disabled,
           borderColor: designTokens.colors.border.secondary,
           color: designTokens.colors.text.disabled,
-          cursor: 'not-allowed'
+          cursor: 'not-allowed',
         },
         '&::placeholder': {
-          color: designTokens.colors.text.tertiary
-        }
+          color: designTokens.colors.text.tertiary,
+        },
       },
       error: {
         backgroundColor: designTokens.colors.background.primary,
@@ -245,8 +245,8 @@ export const componentVariants = {
         '&:focus': {
           borderColor: designTokens.colors.border.error,
           outline: 'none',
-          boxShadow: `0 0 0 1px ${designTokens.colors.border.error}`
-        }
+          boxShadow: `0 0 0 1px ${designTokens.colors.border.error}`,
+        },
       },
       success: {
         backgroundColor: designTokens.colors.background.primary,
@@ -255,35 +255,35 @@ export const componentVariants = {
         '&:focus': {
           borderColor: designTokens.colors.border.success,
           outline: 'none',
-          boxShadow: `0 0 0 1px ${designTokens.colors.border.success}`
-        }
-      }
+          boxShadow: `0 0 0 1px ${designTokens.colors.border.success}`,
+        },
+      },
     },
     sizes: {
       sm: {
         height: designTokens.sizing.input.sm,
         padding: `0 ${designTokens.spacing.sm}`,
         fontSize: designTokens.typography.fontSize.sm,
-        borderRadius: designTokens.borderRadius.component.input
+        borderRadius: designTokens.borderRadius.component.input,
       },
       md: {
         height: designTokens.sizing.input.md,
         padding: `0 ${designTokens.spacing.md}`,
         fontSize: designTokens.typography.fontSize.base,
-        borderRadius: designTokens.borderRadius.component.input
+        borderRadius: designTokens.borderRadius.component.input,
       },
       lg: {
         height: designTokens.sizing.input.lg,
         padding: `0 ${designTokens.spacing.lg}`,
         fontSize: designTokens.typography.fontSize.lg,
-        borderRadius: designTokens.borderRadius.component.input
-      }
+        borderRadius: designTokens.borderRadius.component.input,
+      },
     },
     base: {
       width: '100%',
       transition: designTokens.animation.transition.colors,
-      fontFamily: designTokens.typography.fontFamily.sans.join(', ')
-    }
+      fontFamily: designTokens.typography.fontFamily.sans.join(', '),
+    },
   },
 
   // Badge variants
@@ -292,62 +292,62 @@ export const componentVariants = {
       default: {
         backgroundColor: designTokens.colors.neutral[100],
         color: designTokens.colors.text.primary,
-        border: `1px solid ${designTokens.colors.border.secondary}`
+        border: `1px solid ${designTokens.colors.border.secondary}`,
       },
       primary: {
         backgroundColor: designTokens.colors.primary[100],
         color: designTokens.colors.primary[700],
-        border: `1px solid ${designTokens.colors.primary[200]}`
+        border: `1px solid ${designTokens.colors.primary[200]}`,
       },
       secondary: {
         backgroundColor: designTokens.colors.neutral[100],
         color: designTokens.colors.neutral[700],
-        border: `1px solid ${designTokens.colors.neutral[200]}`
+        border: `1px solid ${designTokens.colors.neutral[200]}`,
       },
       success: {
         backgroundColor: designTokens.colors.semantic.success[100],
         color: designTokens.colors.semantic.success[700],
-        border: `1px solid ${designTokens.colors.semantic.success[200]}`
+        border: `1px solid ${designTokens.colors.semantic.success[200]}`,
       },
       warning: {
         backgroundColor: designTokens.colors.semantic.warning[100],
         color: designTokens.colors.semantic.warning[700],
-        border: `1px solid ${designTokens.colors.semantic.warning[200]}`
+        border: `1px solid ${designTokens.colors.semantic.warning[200]}`,
       },
       error: {
         backgroundColor: designTokens.colors.semantic.error[100],
         color: designTokens.colors.semantic.error[700],
-        border: `1px solid ${designTokens.colors.semantic.error[200]}`
+        border: `1px solid ${designTokens.colors.semantic.error[200]}`,
       },
       info: {
         backgroundColor: designTokens.colors.semantic.info[100],
         color: designTokens.colors.semantic.info[700],
-        border: `1px solid ${designTokens.colors.semantic.info[200]}`
-      }
+        border: `1px solid ${designTokens.colors.semantic.info[200]}`,
+      },
     },
     sizes: {
       sm: {
         padding: `${designTokens.spacing.xs} ${designTokens.spacing.sm}`,
         fontSize: designTokens.typography.fontSize.xs,
-        borderRadius: designTokens.borderRadius.component.badge
+        borderRadius: designTokens.borderRadius.component.badge,
       },
       md: {
         padding: `${designTokens.spacing.xs} ${designTokens.spacing.md}`,
         fontSize: designTokens.typography.fontSize.sm,
-        borderRadius: designTokens.borderRadius.component.badge
+        borderRadius: designTokens.borderRadius.component.badge,
       },
       lg: {
         padding: `${designTokens.spacing.sm} ${designTokens.spacing.lg}`,
         fontSize: designTokens.typography.fontSize.base,
-        borderRadius: designTokens.borderRadius.component.badge
-      }
+        borderRadius: designTokens.borderRadius.component.badge,
+      },
     },
     base: {
       display: 'inline-flex',
       alignItems: 'center',
       fontWeight: designTokens.typography.fontWeight.medium,
-      whiteSpace: 'nowrap'
-    }
+      whiteSpace: 'nowrap',
+    },
   },
 
   // Alert variants
@@ -356,30 +356,30 @@ export const componentVariants = {
       info: {
         backgroundColor: designTokens.colors.semantic.info[50],
         color: designTokens.colors.semantic.info[700],
-        border: `1px solid ${designTokens.colors.semantic.info[200]}`
+        border: `1px solid ${designTokens.colors.semantic.info[200]}`,
       },
       success: {
         backgroundColor: designTokens.colors.semantic.success[50],
         color: designTokens.colors.semantic.success[700],
-        border: `1px solid ${designTokens.colors.semantic.success[200]}`
+        border: `1px solid ${designTokens.colors.semantic.success[200]}`,
       },
       warning: {
         backgroundColor: designTokens.colors.semantic.warning[50],
         color: designTokens.colors.semantic.warning[700],
-        border: `1px solid ${designTokens.colors.semantic.warning[200]}`
+        border: `1px solid ${designTokens.colors.semantic.warning[200]}`,
       },
       error: {
         backgroundColor: designTokens.colors.semantic.error[50],
         color: designTokens.colors.semantic.error[700],
-        border: `1px solid ${designTokens.colors.semantic.error[200]}`
-      }
+        border: `1px solid ${designTokens.colors.semantic.error[200]}`,
+      },
     },
     base: {
       padding: designTokens.spacing.md,
       borderRadius: designTokens.borderRadius.lg,
       fontSize: designTokens.typography.fontSize.sm,
-      lineHeight: designTokens.typography.lineHeight.normal
-    }
+      lineHeight: designTokens.typography.lineHeight.normal,
+    },
   },
 
   // Avatar variants
@@ -388,33 +388,33 @@ export const componentVariants = {
       xs: {
         width: designTokens.sizing.avatar.xs,
         height: designTokens.sizing.avatar.xs,
-        fontSize: designTokens.typography.fontSize.xs
+        fontSize: designTokens.typography.fontSize.xs,
       },
       sm: {
         width: designTokens.sizing.avatar.sm,
         height: designTokens.sizing.avatar.sm,
-        fontSize: designTokens.typography.fontSize.sm
+        fontSize: designTokens.typography.fontSize.sm,
       },
       md: {
         width: designTokens.sizing.avatar.md,
         height: designTokens.sizing.avatar.md,
-        fontSize: designTokens.typography.fontSize.base
+        fontSize: designTokens.typography.fontSize.base,
       },
       lg: {
         width: designTokens.sizing.avatar.lg,
         height: designTokens.sizing.avatar.lg,
-        fontSize: designTokens.typography.fontSize.lg
+        fontSize: designTokens.typography.fontSize.lg,
       },
       xl: {
         width: designTokens.sizing.avatar.xl,
         height: designTokens.sizing.avatar.xl,
-        fontSize: designTokens.typography.fontSize.xl
+        fontSize: designTokens.typography.fontSize.xl,
       },
       '2xl': {
         width: designTokens.sizing.avatar['2xl'],
         height: designTokens.sizing.avatar['2xl'],
-        fontSize: designTokens.typography.fontSize['2xl']
-      }
+        fontSize: designTokens.typography.fontSize['2xl'],
+      },
     },
     base: {
       display: 'inline-flex',
@@ -424,46 +424,46 @@ export const componentVariants = {
       backgroundColor: designTokens.colors.neutral[200],
       color: designTokens.colors.text.primary,
       fontWeight: designTokens.typography.fontWeight.medium,
-      overflow: 'hidden'
-    }
+      overflow: 'hidden',
+    },
   },
 
   // Progress variants
   progress: {
     variants: {
       default: {
-        backgroundColor: designTokens.colors.neutral[200]
+        backgroundColor: designTokens.colors.neutral[200],
       },
       primary: {
-        backgroundColor: designTokens.colors.primary[200]
+        backgroundColor: designTokens.colors.primary[200],
       },
       success: {
-        backgroundColor: designTokens.colors.semantic.success[200]
+        backgroundColor: designTokens.colors.semantic.success[200],
       },
       warning: {
-        backgroundColor: designTokens.colors.semantic.warning[200]
+        backgroundColor: designTokens.colors.semantic.warning[200],
       },
       error: {
-        backgroundColor: designTokens.colors.semantic.error[200]
-      }
+        backgroundColor: designTokens.colors.semantic.error[200],
+      },
     },
     sizes: {
       sm: {
-        height: '4px'
+        height: '4px',
       },
       md: {
-        height: '8px'
+        height: '8px',
       },
       lg: {
-        height: '12px'
-      }
+        height: '12px',
+      },
     },
     base: {
       width: '100%',
       borderRadius: designTokens.borderRadius.full,
-      overflow: 'hidden'
-    }
-  }
+      overflow: 'hidden',
+    },
+  },
 } as const;
 
 // Component composition patterns
@@ -473,40 +473,40 @@ export const componentPatterns = {
     container: {
       display: 'flex',
       flexDirection: 'column' as const,
-      gap: designTokens.spacing.xs
+      gap: designTokens.spacing.xs,
     },
     label: {
       fontSize: designTokens.typography.fontSize.sm,
       fontWeight: designTokens.typography.fontWeight.medium,
       color: designTokens.colors.text.primary,
-      marginBottom: designTokens.spacing.xs
+      marginBottom: designTokens.spacing.xs,
     },
     helpText: {
       fontSize: designTokens.typography.fontSize.xs,
       color: designTokens.colors.text.tertiary,
-      marginTop: designTokens.spacing.xs
+      marginTop: designTokens.spacing.xs,
     },
     errorText: {
       fontSize: designTokens.typography.fontSize.xs,
       color: designTokens.colors.semantic.error[600],
-      marginTop: designTokens.spacing.xs
-    }
+      marginTop: designTokens.spacing.xs,
+    },
   },
 
   // Card content pattern
   cardContent: {
     header: {
       padding: designTokens.spacing.lg,
-      borderBottom: `1px solid ${designTokens.colors.border.secondary}`
+      borderBottom: `1px solid ${designTokens.colors.border.secondary}`,
     },
     body: {
-      padding: designTokens.spacing.lg
+      padding: designTokens.spacing.lg,
     },
     footer: {
       padding: designTokens.spacing.lg,
       borderTop: `1px solid ${designTokens.colors.border.secondary}`,
-      backgroundColor: designTokens.colors.background.secondary
-    }
+      backgroundColor: designTokens.colors.background.secondary,
+    },
   },
 
   // List item pattern
@@ -518,18 +518,18 @@ export const componentPatterns = {
       borderBottom: `1px solid ${designTokens.colors.border.tertiary}`,
       transition: designTokens.animation.transition.colors,
       '&:hover': {
-        backgroundColor: designTokens.colors.background.secondary
-      }
+        backgroundColor: designTokens.colors.background.secondary,
+      },
     },
     content: {
       flex: 1,
-      minWidth: 0
+      minWidth: 0,
     },
     actions: {
       display: 'flex',
       alignItems: 'center',
-      gap: designTokens.spacing.sm
-    }
+      gap: designTokens.spacing.sm,
+    },
   },
 
   // Modal pattern
@@ -538,7 +538,7 @@ export const componentPatterns = {
       position: 'fixed' as const,
       inset: 0,
       backgroundColor: designTokens.colors.background.overlay,
-      zIndex: designTokens.elevation.zIndex.overlay
+      zIndex: designTokens.elevation.zIndex.overlay,
     },
     content: {
       position: 'fixed' as const,
@@ -550,14 +550,14 @@ export const componentPatterns = {
       boxShadow: designTokens.elevation.component.modal,
       zIndex: designTokens.elevation.zIndex.modal,
       maxHeight: '90vh',
-      overflow: 'auto'
-    }
+      overflow: 'auto',
+    },
   },
 
   // Dropdown pattern
   dropdown: {
     trigger: {
-      cursor: 'pointer'
+      cursor: 'pointer',
     },
     content: {
       backgroundColor: designTokens.colors.background.primary,
@@ -565,7 +565,7 @@ export const componentPatterns = {
       borderRadius: designTokens.borderRadius.lg,
       boxShadow: designTokens.elevation.component.dropdown,
       padding: designTokens.spacing.xs,
-      zIndex: designTokens.elevation.zIndex.dropdown
+      zIndex: designTokens.elevation.zIndex.dropdown,
     },
     item: {
       padding: `${designTokens.spacing.sm} ${designTokens.spacing.md}`,
@@ -573,14 +573,14 @@ export const componentPatterns = {
       cursor: 'pointer',
       transition: designTokens.animation.transition.colors,
       '&:hover': {
-        backgroundColor: designTokens.colors.background.secondary
+        backgroundColor: designTokens.colors.background.secondary,
       },
       '&:focus': {
         backgroundColor: designTokens.colors.background.secondary,
-        outline: 'none'
-      }
-    }
-  }
+        outline: 'none',
+      },
+    },
+  },
 } as const;
 
 // Utility classes for common styling patterns
@@ -590,25 +590,25 @@ export const utilityClasses = {
     container: {
       maxWidth: designTokens.sizing.container.xl,
       margin: '0 auto',
-      padding: `0 ${designTokens.spacing.layout.containerPadding}`
+      padding: `0 ${designTokens.spacing.layout.containerPadding}`,
     },
     section: {
-      marginBottom: designTokens.spacing.layout.sectionGap
+      marginBottom: designTokens.spacing.layout.sectionGap,
     },
     grid: {
       display: 'grid',
-      gap: designTokens.spacing.layout.cardGap
+      gap: designTokens.spacing.layout.cardGap,
     },
     flex: {
       display: 'flex',
       alignItems: 'center',
-      gap: designTokens.spacing.md
+      gap: designTokens.spacing.md,
     },
     stack: {
       display: 'flex',
       flexDirection: 'column' as const,
-      gap: designTokens.spacing.md
-    }
+      gap: designTokens.spacing.md,
+    },
   },
 
   // Typography utilities
@@ -623,7 +623,7 @@ export const utilityClasses = {
     body: designTokens.typography.body.base,
     bodySmall: designTokens.typography.body.small,
     caption: designTokens.typography.caption,
-    code: designTokens.typography.code
+    code: designTokens.typography.code,
   },
 
   // Spacing utilities
@@ -633,22 +633,22 @@ export const utilityClasses = {
       sm: { padding: designTokens.spacing.sm },
       md: { padding: designTokens.spacing.md },
       lg: { padding: designTokens.spacing.lg },
-      xl: { padding: designTokens.spacing.xl }
+      xl: { padding: designTokens.spacing.xl },
     },
     m: {
       xs: { margin: designTokens.spacing.xs },
       sm: { margin: designTokens.spacing.sm },
       md: { margin: designTokens.spacing.md },
       lg: { margin: designTokens.spacing.lg },
-      xl: { margin: designTokens.spacing.xl }
+      xl: { margin: designTokens.spacing.xl },
     },
     gap: {
       xs: { gap: designTokens.spacing.xs },
       sm: { gap: designTokens.spacing.sm },
       md: { gap: designTokens.spacing.md },
       lg: { gap: designTokens.spacing.lg },
-      xl: { gap: designTokens.spacing.xl }
-    }
+      xl: { gap: designTokens.spacing.xl },
+    },
   },
 
   // Color utilities
@@ -658,13 +658,13 @@ export const utilityClasses = {
       secondary: { color: designTokens.colors.text.secondary },
       tertiary: { color: designTokens.colors.text.tertiary },
       disabled: { color: designTokens.colors.text.disabled },
-      inverse: { color: designTokens.colors.text.inverse }
+      inverse: { color: designTokens.colors.text.inverse },
     },
     background: {
       primary: { backgroundColor: designTokens.colors.background.primary },
       secondary: { backgroundColor: designTokens.colors.background.secondary },
-      tertiary: { backgroundColor: designTokens.colors.background.tertiary }
-    }
+      tertiary: { backgroundColor: designTokens.colors.background.tertiary },
+    },
   },
 
   // Border utilities
@@ -673,7 +673,7 @@ export const utilityClasses = {
     secondary: { border: `1px solid ${designTokens.colors.border.secondary}` },
     tertiary: { border: `1px solid ${designTokens.colors.border.tertiary}` },
     focus: { border: `1px solid ${designTokens.colors.border.focus}` },
-    none: { border: 'none' }
+    none: { border: 'none' },
   },
 
   // Shadow utilities
@@ -682,7 +682,7 @@ export const utilityClasses = {
     sm: { boxShadow: designTokens.elevation.shadow.sm },
     md: { boxShadow: designTokens.elevation.shadow.md },
     lg: { boxShadow: designTokens.elevation.shadow.lg },
-    xl: { boxShadow: designTokens.elevation.shadow.xl }
+    xl: { boxShadow: designTokens.elevation.shadow.xl },
   },
 
   // Border radius utilities
@@ -692,12 +692,12 @@ export const utilityClasses = {
     md: { borderRadius: designTokens.borderRadius.md },
     lg: { borderRadius: designTokens.borderRadius.lg },
     xl: { borderRadius: designTokens.borderRadius.xl },
-    full: { borderRadius: designTokens.borderRadius.full }
-  }
+    full: { borderRadius: designTokens.borderRadius.full },
+  },
 } as const;
 
 export default {
   componentVariants,
   componentPatterns,
-  utilityClasses
-}; 
+  utilityClasses,
+};

@@ -284,19 +284,18 @@ const FilterBar: React.FC<{
         {/* Date Range Preset */}
         <div className="flex items-center space-x-enterprise-2">
           <DaisyCalendar className="h-4 w-4 text-text-tertiary" />
-          <DaisySelect defaultValue="last-30-days">
-            <DaisySelectTrigger className="w-40">
-              <DaisySelectValue />
-            </SelectTrigger>
-            <DaisySelectContent>
-              <DaisySelectItem value="today">Today</SelectItem>
-              <DaisySelectItem value="yesterday">Yesterday</SelectItem>
-              <DaisySelectItem value="last-7-days">Last 7 days</SelectItem>
-              <DaisySelectItem value="last-30-days">Last 30 days</SelectItem>
-              <DaisySelectItem value="last-90-days">Last 90 days</SelectItem>
-              <DaisySelectItem value="last-year">Last year</SelectItem>
-              <DaisySelectItem value="custom">Custom range</SelectItem>
-            </SelectContent>
+          <DaisySelect defaultValue="last-30-days" />
+            <DaisySelectTrigger className="w-40" />
+              <DaisySelectValue /></DaisyCalendar>
+            <DaisySelectContent />
+              <DaisySelectItem value="today">Today</DaisySelectContent>
+              <DaisySelectItem value="yesterday">Yesterday</DaisySelectItem>
+              <DaisySelectItem value="last-7-days">Last 7 days</DaisySelectItem>
+              <DaisySelectItem value="last-30-days">Last 30 days</DaisySelectItem>
+              <DaisySelectItem value="last-90-days">Last 90 days</DaisySelectItem>
+              <DaisySelectItem value="last-year">Last year</DaisySelectItem>
+              <DaisySelectItem value="custom">Custom range</DaisySelectItem>
+            </DaisySelectContent>
           </DaisySelect>
         </div>
 
@@ -309,24 +308,24 @@ const FilterBar: React.FC<{
               {filter.label}:
             </span>
             {filter.type === 'select' && (
-              <DaisySelect onValueChange={(value) => onFilterChange(filter.id, value)}>
-                <DaisySelectTrigger className="w-40">
-                  <DaisySelectValue placeholder={filter.placeholder} />
-                </SelectTrigger>
-                <DaisySelectContent>
+              <DaisySelect onValueChange={(value) => onFilterChange(filter.id, value)} />
+                <DaisySelectTrigger className="w-40" />
+                  <DaisySelectValue placeholder={filter.placeholder} /></DaisySeparator>
+                <DaisySelectContent />
                   {filter.options?.map((option) => (
-                    <DaisySelectItem key={option.value} value={option.value}>
+                    <DaisySelectItem key={option.value} value={option.value} />
                       <div className="flex items-center justify-between w-full">
                         <span>{option.label}</span>
                         {option.count && (
-                          <DaisyBadge variant="secondary" className="ml-enterprise-2 text-caption">
-                            {option.count}
+                          <DaisyBadge variant="secondary" className="ml-enterprise-2 text-caption" >
+  {option.count}
+</DaisySelectContent>
                           </DaisyBadge>
                         )}
                       </div>
-                    </SelectItem>
+                    </DaisySelectItem>
                   ))}
-                </SelectContent>
+                </DaisySelectContent>
               </DaisySelect>
             )}
             {filter.type === 'search' && (
@@ -344,20 +343,24 @@ const FilterBar: React.FC<{
         ))}
 
         <div className="ml-auto flex items-center space-x-enterprise-2">
-          <DaisyButton variant="outline" size="sm" onClick={onRefresh}>
-            <RefreshCw className="h-4 w-4 mr-enterprise-1" />
+          <DaisyButton variant="outline" size="sm" onClick={onRefresh} >
+  <RefreshCw className="h-4 w-4 mr-enterprise-1" />
+</DaisyButton>
             Refresh
           </DaisyButton>
-          <DaisyButton variant="outline" size="sm">
-            <Filter className="h-4 w-4 mr-enterprise-1" />
+          <DaisyButton variant="outline" size="sm" >
+  <Filter className="h-4 w-4 mr-enterprise-1" />
+</DaisyButton>
             More Filters
           </DaisyButton>
-          <DaisyButton variant="outline" size="sm" onClick={onExport}>
-            <Download className="h-4 w-4 mr-enterprise-1" />
+          <DaisyButton variant="outline" size="sm" onClick={onExport} >
+  <Download className="h-4 w-4 mr-enterprise-1" />
+</DaisyButton>
             Export
           </DaisyButton>
-          <DaisyButton variant="outline" size="sm">
-            <Share className="h-4 w-4 mr-enterprise-1" />
+          <DaisyButton variant="outline" size="sm" >
+  <Share className="h-4 w-4 mr-enterprise-1" />
+</DaisyButton>
             Share
           </DaisyButton>
         </div>
@@ -473,8 +476,9 @@ const DataTable: React.FC<{
     };
 
     return (
-      <DaisyBadge variant={variants[value] || 'outline'} className={cn("text-caption", colors[value])}>
-        {value.replace('-', ' ')}
+      <DaisyBadge variant={variants[value] || 'outline'} className={cn("text-caption", colors[value])} >
+  {value.replace('-', ' ')}
+</DaisyBadge>
       </DaisyBadge>
     );
   };
@@ -494,24 +498,21 @@ const DataTable: React.FC<{
               variant="ghost"
               size="sm"
               onClick={() => onRowAction(row.id, 'view')}
-              className="h-6 w-6 p-0"
-            >
+              className="h-6 w-6 p-0" />
               <Eye className="h-3 w-3" />
             </DaisyButton>
             <DaisyButton
               variant="ghost"
               size="sm"
               onClick={() => onRowAction(row.id, 'edit')}
-              className="h-6 w-6 p-0"
-            >
+              className="h-6 w-6 p-0" />
               <Edit className="h-3 w-3" />
             </DaisyButton>
             <DaisyButton
               variant="ghost"
               size="sm"
               onClick={() => onRowAction(row.id, 'more')}
-              className="h-6 w-6 p-0"
-            >
+              className="h-6 w-6 p-0" />
               <MoreHorizontal className="h-3 w-3" />
             </DaisyButton>
           </div>
@@ -530,8 +531,9 @@ const DataTable: React.FC<{
             <h3 className="text-body-base font-semibold text-text-primary">
               Compliance Controls
             </h3>
-            <DaisyBadge variant="outline" className="text-caption">
-              {config.pagination?.total || config.data.length} items
+            <DaisyBadge variant="outline" className="text-caption" >
+  {config.pagination?.total || config.data.length} items
+</DaisyBadge>
             </DaisyBadge>
           </div>
           
@@ -541,13 +543,15 @@ const DataTable: React.FC<{
                 <span className="text-body-sm text-text-secondary">
                   {config.selection.selectedRows.length} selected
                 </span>
-                <DaisyButton variant="outline" size="sm">
-                  Bulk Actions
+                <DaisyButton variant="outline" size="sm" >
+  Bulk Actions
+</DaisyButton>
                 </DaisyButton>
               </div>
             )}
-            <DaisyButton variant="outline" size="sm">
-              <Filter className="h-4 w-4 mr-enterprise-1" />
+            <DaisyButton variant="outline" size="sm" >
+  <Filter className="h-4 w-4 mr-enterprise-1" />
+</DaisyButton>
               Filter
             </DaisyButton>
           </div>
@@ -638,8 +642,7 @@ const DataTable: React.FC<{
                 variant="outline"
                 size="sm"
                 disabled={config.pagination.page === 1}
-                onClick={() => onPageChange(config.pagination!.page - 1)}
-              >
+                onClick={() => onPageChange(config.pagination!.page - 1)} />
                 Previous
               </DaisyButton>
               
@@ -650,8 +653,7 @@ const DataTable: React.FC<{
                     variant={config.pagination!.page === page ? 'default' : 'outline'}
                     size="sm"
                     className="w-8 h-8 p-0"
-                    onClick={() => onPageChange(page)}
-                  >
+                    onClick={() => onPageChange(page)} />
                     {page}
                   </DaisyButton>
                 ))}
@@ -661,8 +663,7 @@ const DataTable: React.FC<{
                 variant="outline"
                 size="sm"
                 disabled={config.pagination.page * config.pagination.pageSize >= config.pagination.total}
-                onClick={() => onPageChange(config.pagination!.page + 1)}
-              >
+                onClick={() => onPageChange(config.pagination!.page + 1)} />
                 Next
               </DaisyButton>
             </div>
@@ -767,16 +768,16 @@ export const AdvancedReportsInterface: React.FC = () => {
       />
 
       {/* Content Tabs */}
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
-        <DaisyTabsList className="mb-enterprise-6">
-          <DaisyTabsTrigger value="dashboard">Dashboard</DaisyTabsTrigger>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
+        <DaisyTabsList className="mb-enterprise-6" />
+          <DaisyTabsTrigger value="dashboard">Dashboard</DaisyTabs>
           <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
           <DaisyTabsTrigger value="risk">Risk Analysis</DaisyTabsTrigger>
           <DaisyTabsTrigger value="audit">Audit Reports</DaisyTabsTrigger>
           <DaisyTabsTrigger value="custom">Custom Reports</DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="dashboard" className="space-y-enterprise-6">
+        <DaisyTabsContent value="dashboard" className="space-y-enterprise-6" />
           {/* Charts Grid */}
           <ContentSection 
             title="Key Metrics Overview"
@@ -804,7 +805,7 @@ export const AdvancedReportsInterface: React.FC = () => {
           </ContentSection>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="compliance" className="space-y-enterprise-6">
+        <DaisyTabsContent value="compliance" className="space-y-enterprise-6" />
           <div className="text-center py-enterprise-12">
             <CheckCircle className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
             <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -816,10 +817,11 @@ export const AdvancedReportsInterface: React.FC = () => {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="risk" className="space-y-enterprise-6">
+        <DaisyTabsContent value="risk" className="space-y-enterprise-6" />
           <div className="text-center py-enterprise-12">
-            <DaisyAlertTriangle className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
-            <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
+            <DaisyAlertTriangle className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" >
+  <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
+</DaisyTabsContent>
               Risk Analysis
             </h3>
             <p className="text-body-base text-text-secondary">
@@ -828,7 +830,7 @@ export const AdvancedReportsInterface: React.FC = () => {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="audit" className="space-y-enterprise-6">
+        <DaisyTabsContent value="audit" className="space-y-enterprise-6" />
           <div className="text-center py-enterprise-12">
             <Activity className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
             <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -840,7 +842,7 @@ export const AdvancedReportsInterface: React.FC = () => {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="custom" className="space-y-enterprise-6">
+        <DaisyTabsContent value="custom" className="space-y-enterprise-6" />
           <div className="text-center py-enterprise-12">
             <FileText className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
             <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">

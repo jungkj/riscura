@@ -6,24 +6,43 @@ import { z } from 'zod';
 const CreateTestScriptSchema = z.object({
   title: z.string().min(1),
   description: z.string(),
-  steps: z.array(z.object({
-    stepNumber: z.number(),
-    description: z.string(),
-    expectedResult: z.string()
-  })),
+  steps: z.array(
+    z.object({
+      stepNumber: z.number(),
+      description: z.string(),
+      expectedResult: z.string(),
+    })
+  ),
   expectedResults: z.string(),
-  testType: z.enum(['MANUAL', 'AUTOMATED', 'HYBRID', 'INQUIRY', 'OBSERVATION', 'INSPECTION', 'REPERFORMANCE']),
-  frequency: z.enum(['ANNUAL', 'SEMI_ANNUAL', 'QUARTERLY', 'MONTHLY', 'WEEKLY', 'DAILY', 'AD_HOC', 'CONTINUOUS']),
+  testType: z.enum([
+    'MANUAL',
+    'AUTOMATED',
+    'HYBRID',
+    'INQUIRY',
+    'OBSERVATION',
+    'INSPECTION',
+    'REPERFORMANCE',
+  ]),
+  frequency: z.enum([
+    'ANNUAL',
+    'SEMI_ANNUAL',
+    'QUARTERLY',
+    'MONTHLY',
+    'WEEKLY',
+    'DAILY',
+    'AD_HOC',
+    'CONTINUOUS',
+  ]),
   estimatedDuration: z.number().optional(),
   automationCapable: z.boolean().optional(),
   automationScript: z.string().optional(),
-  tags: z.array(z.string()).optional()
+  tags: z.array(z.string()).optional(),
 });
 
 export const GET = withApiMiddleware(
   async (req: NextRequest) => {
     const user = (req as any).user;
-    
+
     if (!user || !user.organizationId) {
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
@@ -40,22 +59,22 @@ export const GET = withApiMiddleware(
               id: true,
               firstName: true,
               lastName: true,
-              email: true
-            }
+              email: true,
+            },
           },
           _count: {
             select: {
               testExecutions: true,
-              controls: true
-            }
-          }
+              controls: true,
+            },
+          },
         },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
       });
 
       return NextResponse.json({
         success: true,
-        data: testScripts
+        data: testScripts,
       });
     } catch (error) {
       console.error('Get test scripts error:', error);
@@ -71,7 +90,7 @@ export const GET = withApiMiddleware(
 export const POST = withApiMiddleware(
   async (req: NextRequest) => {
     const user = (req as any).user;
-    
+
     if (!user || !user.organizationId) {
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
@@ -96,14 +115,17 @@ export const POST = withApiMiddleware(
           automationScript: validatedData.automationScript,
           tags: validatedData.tags || [],
           organizationId: user.organizationId,
-          createdBy: user.id
-        }
+          createdBy: user.id,
+        },
       });
 
-      return NextResponse.json({
-        success: true,
-        data: testScript
-      }, { status: 201 });
+      return NextResponse.json(
+        {
+          success: true,
+          data: testScript,
+        },
+        { status: 201 }
+      );
     } catch (error) {
       if (error instanceof z.ZodError) {
         return NextResponse.json(
@@ -118,8 +140,8 @@ export const POST = withApiMiddleware(
       );
     }
   },
-  { 
+  {
     requireAuth: true,
-    validateBody: CreateTestScriptSchema 
+    validateBody: CreateTestScriptSchema,
   }
 );

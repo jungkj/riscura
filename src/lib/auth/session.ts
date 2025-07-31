@@ -21,7 +21,10 @@ export interface CreateSessionOptions {
 }
 
 export interface SessionWithUser extends Session {
-  user: Pick<User, 'id' | 'email' | 'firstName' | 'lastName' | 'role' | 'permissions' | 'organizationId'>;
+  user: Pick<
+    User,
+    'id' | 'email' | 'firstName' | 'lastName' | 'role' | 'permissions' | 'organizationId'
+  >;
 }
 
 export interface SessionOptions {
@@ -235,7 +238,7 @@ export async function cleanupOldSessions(userId: string, keepCount: number = 10)
     // Delete sessions beyond the keep count
     if (sessions.length > keepCount) {
       const sessionsToDelete = sessions.slice(keepCount);
-      const sessionIdsToDelete = sessionsToDelete.map(s => s.id);
+      const sessionIdsToDelete = sessionsToDelete.map((s) => s.id);
 
       await db.client.session.deleteMany({
         where: {
@@ -321,7 +324,7 @@ export async function getSessionStatistics(): Promise<{
   averageSessionDuration: number;
 }> {
   const now = new Date();
-  
+
   const [activeSessions, totalSessions, expiredSessions] = await Promise.all([
     db.client.session.count({
       where: {
@@ -348,11 +351,16 @@ export async function getSessionStatistics(): Promise<{
     },
   });
 
-  const averageSessionDuration = sessions.length > 0
-    ? sessions.reduce((sum, session) => {
-        return sum + (session.expiresAt.getTime() - session.createdAt.getTime());
-      }, 0) / sessions.length / 1000 / 60 / 60 // Convert to hours
-    : 0;
+  const averageSessionDuration =
+    sessions.length > 0
+      ? sessions.reduce((sum, session) => {
+          return sum + (session.expiresAt.getTime() - session.createdAt.getTime());
+        }, 0) /
+        sessions.length /
+        1000 /
+        60 /
+        60 // Convert to hours
+      : 0;
 
   return {
     activeSessions,
@@ -432,4 +440,4 @@ export function parseUserAgent(userAgent?: string): {
   else result.device = 'Desktop';
 
   return result;
-} 
+}

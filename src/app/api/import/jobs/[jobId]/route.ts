@@ -11,7 +11,7 @@ interface RouteParams {
 // GET job status
 export const GET = withApiMiddleware({
   requireAuth: true,
-  rateLimiters: ['standard']
+  rateLimiters: ['standard'],
 })(async (context, _, { params }: RouteParams) => {
   const { organizationId } = context;
   const { jobId } = params;
@@ -22,14 +22,14 @@ export const GET = withApiMiddleware({
 
     if (!job) {
       return {
-        error: 'Import job not found'
+        error: 'Import job not found',
       };
     }
 
     // Verify organization access
     if (job.organizationId !== organizationId) {
       return {
-        error: 'Access denied'
+        error: 'Access denied',
       };
     }
 
@@ -41,10 +41,10 @@ export const GET = withApiMiddleware({
           select: {
             id: true,
             name: true,
-            email: true
-          }
-        }
-      }
+            email: true,
+          },
+        },
+      },
     });
 
     return {
@@ -57,18 +57,20 @@ export const GET = withApiMiddleware({
         completedAt: job.completedAt,
         errorMessage: job.errorMessage,
         metadata: job.metadata,
-        importedBy: jobWithDetails?.user ? {
-          id: jobWithDetails.user.id,
-          name: jobWithDetails.user.name,
-          email: jobWithDetails.user.email
-        } : null
-      }
+        importedBy: jobWithDetails?.user
+          ? {
+              id: jobWithDetails.user.id,
+              name: jobWithDetails.user.name,
+              email: jobWithDetails.user.email,
+            }
+          : null,
+      },
     };
   } catch (error) {
     console.error('Error fetching job status:', error);
-    
+
     return {
-      error: 'Failed to fetch job status'
+      error: 'Failed to fetch job status',
     };
   }
 });
@@ -76,7 +78,7 @@ export const GET = withApiMiddleware({
 // DELETE to cancel job
 export const DELETE = withApiMiddleware({
   requireAuth: true,
-  rateLimiters: ['standard']
+  rateLimiters: ['standard'],
 })(async (context, _, { params }: RouteParams) => {
   const { user, organizationId } = context;
   const { jobId } = params;
@@ -86,20 +88,20 @@ export const DELETE = withApiMiddleware({
     const job = await prisma.importJob.findFirst({
       where: {
         id: jobId,
-        organizationId
-      }
+        organizationId,
+      },
     });
 
     if (!job) {
       return {
-        error: 'Import job not found'
+        error: 'Import job not found',
       };
     }
 
     // Check if job can be cancelled
     if (job.status === 'COMPLETED' || job.status === 'FAILED') {
       return {
-        error: 'Cannot cancel a completed or failed job'
+        error: 'Cannot cancel a completed or failed job',
       };
     }
 
@@ -109,19 +111,19 @@ export const DELETE = withApiMiddleware({
 
     if (!cancelled) {
       return {
-        error: 'Failed to cancel job'
+        error: 'Failed to cancel job',
       };
     }
 
     return {
       message: 'Import job cancelled successfully',
-      jobId
+      jobId,
     };
   } catch (error) {
     console.error('Error cancelling job:', error);
-    
+
     return {
-      error: 'Failed to cancel job'
+      error: 'Failed to cancel job',
     };
   }
 });

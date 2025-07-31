@@ -4,7 +4,13 @@
  */
 
 import { redisClient } from './redis-client';
-import { CacheManager, organizationCache, userCache, queryCache, staticCache } from '../performance/cache-manager';
+import {
+  CacheManager,
+  organizationCache,
+  userCache,
+  queryCache,
+  staticCache,
+} from '../performance/cache-manager';
 import { apiCache } from './api-cache';
 import { invalidationService } from './invalidation-service';
 import { logger } from '../monitoring/logger';
@@ -105,12 +111,12 @@ export class EnhancedCacheLayer {
       const redisResult = await this.getFromRedis<T>(key);
       if (redisResult !== null) {
         this.metrics.l2Hits++;
-        
+
         // Populate memory cache for next request
         if (this.config.enableMultiLayerCaching) {
           await this.setInMemory(key, redisResult, options.ttl);
         }
-        
+
         this.updateResponseTime(Date.now() - startTime);
         return redisResult;
       }
@@ -119,15 +125,15 @@ export class EnhancedCacheLayer {
       if (fetcher) {
         const sourceResult = await fetcher();
         this.metrics.misses++;
-        
+
         // Cache in both layers
         await this.setMultiLayer(key, sourceResult, options);
-        
+
         // Schedule prefetch of related data
         if (this.config.enableIntelligentPrefetching) {
           this.schedulePrefetch(key, options);
         }
-        
+
         this.updateResponseTime(Date.now() - startTime);
         return sourceResult;
       }
@@ -144,11 +150,7 @@ export class EnhancedCacheLayer {
   /**
    * Set data in multi-layer cache
    */
-  async set<T>(
-    key: string,
-    value: T,
-    options: CacheOptions = {}
-  ): Promise<void> {
+  async set<T>(key: string, value: T, options: CacheOptions = {}): Promise<void> {
     await this.setMultiLayer(key, value, options);
   }
 
@@ -156,10 +158,7 @@ export class EnhancedCacheLayer {
    * Delete from all cache layers
    */
   async delete(key: string): Promise<void> {
-    await Promise.all([
-      this.deleteFromMemory(key),
-      this.deleteFromRedis(key),
-    ]);
+    await Promise.all([this.deleteFromMemory(key), this.deleteFromRedis(key)]);
     this.metrics.invalidations++;
   }
 
@@ -170,10 +169,7 @@ export class EnhancedCacheLayer {
   /**
    * Prefetch related data based on access patterns
    */
-  private async schedulePrefetch(
-    key: string,
-    options: CacheOptions
-  ): Promise<void> {
+  private async schedulePrefetch(key: string, options: CacheOptions): Promise<void> {
     if (!this.config.enableIntelligentPrefetching || this.prefetchQueue.has(key)) {
       return;
     }
@@ -190,12 +186,9 @@ export class EnhancedCacheLayer {
     }, 100);
   }
 
-  private async executePrefetch(
-    key: string,
-    options: CacheOptions
-  ): Promise<void> {
+  private async executePrefetch(key: string, options: CacheOptions): Promise<void> {
     const relatedKeys = this.generateRelatedKeys(key);
-    
+
     for (const relatedKey of relatedKeys) {
       const exists = await redisClient.exists(relatedKey);
       if (!exists) {
@@ -305,18 +298,20 @@ export class EnhancedCacheLayer {
       // Organization settings
       this.warmSingleEntry(
         `org:${organizationId}:settings`,
-        () => db.organization.findUnique({ 
-          where: { id: organizationId },
-          select: { settings: true, plan: true, isActive: true }
-        }),
+        () =>
+          db.organization.findUnique({
+            where: { id: organizationId },
+            select: { settings: true, plan: true, isActive: true },
+          }),
         { ttl: 1800 }
       ),
       // Active users count
       this.warmSingleEntry(
         `org:${organizationId}:users:count`,
-        () => db.user.count({ 
-          where: { organizationId, isActive: true } 
-        }),
+        () =>
+          db.user.count({
+            where: { organizationId, isActive: true },
+          }),
         { ttl: 600 }
       ),
     ];
@@ -346,12 +341,13 @@ export class EnhancedCacheLayer {
       // Recent activities
       this.warmSingleEntry(
         `org:${organizationId}:activities:recent`,
-        () => db.activity.findMany({
-          where: { organizationId },
-          orderBy: { createdAt: 'desc' },
-          take: 20,
-          include: { user: { select: { name: true, email: true } } }
-        }),
+        () =>
+          db.activity.findMany({
+            where: { organizationId },
+            orderBy: { createdAt: 'desc' },
+            take: 20,
+            include: { user: { select: { name: true, email: true } } },
+          }),
         { ttl: 180 }
       ),
     ];
@@ -364,10 +360,11 @@ export class EnhancedCacheLayer {
 
     await this.warmSingleEntry(
       `org:${organizationId}:users:active`,
-      () => db.user.findMany({
-        where: { organizationId, isActive: true },
-        select: { id: true, name: true, email: true, role: true, lastLoginAt: true }
-      }),
+      () =>
+        db.user.findMany({
+          where: { organizationId, isActive: true },
+          select: { id: true, name: true, email: true, role: true, lastLoginAt: true },
+        }),
       { ttl: 900 }
     );
   }
@@ -377,10 +374,11 @@ export class EnhancedCacheLayer {
       // Subscription plans
       this.warmSingleEntry(
         'static:subscription:plans',
-        () => db.subscriptionPlan.findMany({
-          where: { isActive: true },
-          orderBy: { sortOrder: 'asc' }
-        }),
+        () =>
+          db.subscriptionPlan.findMany({
+            where: { isActive: true },
+            orderBy: { sortOrder: 'asc' },
+          }),
         { ttl: 86400 }
       ),
       // Risk categories
@@ -402,13 +400,15 @@ export class EnhancedCacheLayer {
       async () => {
         const subscription = await db.organizationSubscription.findFirst({
           where: { organizationId },
-          include: { plan: true }
+          include: { plan: true },
         });
-        return subscription ? {
-          status: subscription.status,
-          planName: subscription.plan.name,
-          currentPeriodEnd: subscription.currentPeriodEnd,
-        } : null;
+        return subscription
+          ? {
+              status: subscription.status,
+              planName: subscription.plan.name,
+              currentPeriodEnd: subscription.currentPeriodEnd,
+            }
+          : null;
       },
       { ttl: 600 }
     );
@@ -472,7 +472,7 @@ export class EnhancedCacheLayer {
     if (organizationId) {
       // Organization-specific patterns
       patterns.push(`org:${organizationId}:${resource}:*`);
-      
+
       if (resourceId) {
         patterns.push(`org:${organizationId}:${resource}:${resourceId}:*`);
       }
@@ -487,7 +487,7 @@ export class EnhancedCacheLayer {
             `org:${organizationId}:activities:*`
           );
           break;
-        
+
         case 'user':
           patterns.push(
             `org:${organizationId}:users:*`,
@@ -495,11 +495,11 @@ export class EnhancedCacheLayer {
             `org:${organizationId}:permissions:*`
           );
           break;
-        
+
         case 'organization':
           patterns.push(`org:${organizationId}:*`);
           break;
-        
+
         case 'subscription':
           patterns.push(
             `org:${organizationId}:billing:*`,
@@ -528,8 +528,9 @@ export class EnhancedCacheLayer {
     if (size > this.config.compressionThreshold) {
       const compressed = Buffer.from(serialized).toString('base64');
       const compressionRatio = compressed.length / size;
-      
-      if (compressionRatio < 0.8) { // Only compress if >20% savings
+
+      if (compressionRatio < 0.8) {
+        // Only compress if >20% savings
         this.metrics.compressionSaved += size - compressed.length;
         return { data: compressed, compressed: true };
       }
@@ -582,30 +583,18 @@ export class EnhancedCacheLayer {
     }
   }
 
-  private async setInRedis<T>(
-    key: string,
-    value: T,
-    options: CacheOptions
-  ): Promise<void> {
+  private async setInRedis<T>(key: string, value: T, options: CacheOptions): Promise<void> {
     const { data, compressed } = await this.compressIfNeeded(value);
     const cacheEntry = { data, compressed, timestamp: Date.now() };
-    
-    await redisClient.set(
-      key,
-      JSON.stringify(cacheEntry),
-      options.ttl || this.config.defaultTTL
-    );
+
+    await redisClient.set(key, JSON.stringify(cacheEntry), options.ttl || this.config.defaultTTL);
   }
 
   private async deleteFromRedis(key: string): Promise<void> {
     await redisClient.del(key);
   }
 
-  private async setMultiLayer<T>(
-    key: string,
-    value: T,
-    options: CacheOptions = {}
-  ): Promise<void> {
+  private async setMultiLayer<T>(key: string, value: T, options: CacheOptions = {}): Promise<void> {
     const tasks = [];
 
     // Set in Redis
@@ -624,8 +613,7 @@ export class EnhancedCacheLayer {
   }
 
   private updateResponseTime(responseTime: number): void {
-    this.metrics.avgResponseTime = 
-      (this.metrics.avgResponseTime + responseTime) / 2;
+    this.metrics.avgResponseTime = (this.metrics.avgResponseTime + responseTime) / 2;
   }
 
   // ============================================================================
@@ -633,19 +621,22 @@ export class EnhancedCacheLayer {
   // ============================================================================
 
   getMetrics(): CacheLayerMetrics {
-    const hitRate = this.metrics.totalRequests > 0 
-      ? ((this.metrics.l1Hits + this.metrics.l2Hits) / this.metrics.totalRequests) * 100 
-      : 0;
+    const hitRate =
+      this.metrics.totalRequests > 0
+        ? ((this.metrics.l1Hits + this.metrics.l2Hits) / this.metrics.totalRequests) * 100
+        : 0;
 
     return {
       ...this.metrics,
       hitRate,
-      memoryHitRate: this.metrics.totalRequests > 0 
-        ? (this.metrics.l1Hits / this.metrics.totalRequests) * 100 
-        : 0,
-      redisHitRate: this.metrics.totalRequests > 0 
-        ? (this.metrics.l2Hits / this.metrics.totalRequests) * 100 
-        : 0,
+      memoryHitRate:
+        this.metrics.totalRequests > 0
+          ? (this.metrics.l1Hits / this.metrics.totalRequests) * 100
+          : 0,
+      redisHitRate:
+        this.metrics.totalRequests > 0
+          ? (this.metrics.l2Hits / this.metrics.totalRequests) * 100
+          : 0,
     };
   }
 
@@ -671,14 +662,14 @@ export class EnhancedCacheLayer {
 
   async bulkGet<T>(keys: string[]): Promise<Map<string, T | null>> {
     const results = new Map<string, T | null>();
-    
+
     // Try to get all from Redis in one operation
     const redisResults = await redisClient.mget(keys);
-    
+
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
       const value = redisResults[i];
-      
+
       if (value) {
         try {
           const parsed = JSON.parse(value);
@@ -695,7 +686,9 @@ export class EnhancedCacheLayer {
     return results;
   }
 
-  async bulkSet<T>(entries: Array<{ key: string; value: T; options?: CacheOptions }>): Promise<void> {
+  async bulkSet<T>(
+    entries: Array<{ key: string; value: T; options?: CacheOptions }>
+  ): Promise<void> {
     const redisEntries: Record<string, string> = {};
 
     for (const entry of entries) {
@@ -766,7 +759,7 @@ export const enhancedCache = new EnhancedCacheLayer();
  */
 export async function initializeEnhancedCache(organizationId?: string): Promise<void> {
   logger.info('🚀 Initializing Enhanced Cache Layer...');
-  
+
   try {
     // Ensure Redis is connected
     if (!redisClient.isReady()) {
@@ -788,7 +781,7 @@ export async function initializeEnhancedCache(organizationId?: string): Promise<
  */
 export async function shutdownEnhancedCache(): Promise<void> {
   logger.info('🛑 Shutting down Enhanced Cache Layer...');
-  
+
   try {
     await redisClient.disconnect();
     logger.info('✅ Enhanced Cache Layer shutdown complete');
@@ -804,7 +797,7 @@ export function withCacheWarming(organizationId?: string) {
   return async function middleware() {
     if (organizationId) {
       // Warm cache in background
-      enhancedCache.warmCache(organizationId).catch(error => {
+      enhancedCache.warmCache(organizationId).catch((error) => {
         logger.error('Background cache warming failed:', error);
       });
     }

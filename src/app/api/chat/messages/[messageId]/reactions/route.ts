@@ -36,10 +36,12 @@ export async function POST(
         if (error instanceof z.ZodError) {
           return ApiResponseFormatter.validationError(error.errors);
         }
-        
+
         console.error('Failed to add reaction:', error);
         return ApiResponseFormatter.error(
-          error instanceof Error && error.message === 'Access denied' ? 'ACCESS_DENIED' : 'INTERNAL_ERROR',
+          error instanceof Error && error.message === 'Access denied'
+            ? 'ACCESS_DENIED'
+            : 'INTERNAL_ERROR',
           error instanceof Error ? error.message : 'Failed to add reaction',
           { status: error instanceof Error && error.message === 'Access denied' ? 403 : 500 }
         );
@@ -67,10 +69,10 @@ export async function DELETE(
         // Get emoji from query params since it's not in the route path
         const { searchParams } = new URL(request.url);
         const emoji = searchParams.get('emoji');
-        
+
         if (!emoji) {
           return ApiResponseFormatter.validationError([
-            { field: 'emoji', message: 'Emoji parameter is required' }
+            { field: 'emoji', message: 'Emoji parameter is required' },
           ]);
         }
 
@@ -79,11 +81,9 @@ export async function DELETE(
         return ApiResponseFormatter.success({ message: 'Reaction removed successfully' });
       } catch (error) {
         console.error('Failed to remove reaction:', error);
-        return ApiResponseFormatter.error(
-          'INTERNAL_ERROR',
-          'Failed to remove reaction',
-          { status: 500 }
-        );
+        return ApiResponseFormatter.error('INTERNAL_ERROR', 'Failed to remove reaction', {
+          status: 500,
+        });
       }
     },
     { requireAuth: true }

@@ -14,7 +14,7 @@ export async function GET() {
 
   // Check what we're actually using
   const actualUrl = process.env.DATABASE_URL || process.env.database_url;
-  
+
   // Analyze the URL
   let urlInfo = null;
   if (actualUrl) {
@@ -28,7 +28,10 @@ export async function GET() {
         isPooled: url.hostname.includes('pooler.supabase.com'),
         isDirectUrl: url.hostname.includes('db.') && url.hostname.includes('.supabase.co'),
         region: url.hostname.match(/aws-0-([^.]+)\.pooler/)?.[1] || null,
-        projectRef: url.hostname.match(/postgres\.([^:]+):|db\.([^.]+)\./)?.[1] || url.hostname.match(/postgres\.([^:]+):|db\.([^.]+)\./)?.[2] || null,
+        projectRef:
+          url.hostname.match(/postgres\.([^:]+):|db\.([^.]+)\./)?.[1] ||
+          url.hostname.match(/postgres\.([^:]+):|db\.([^.]+)\./)?.[2] ||
+          null,
       };
     } catch (e) {
       urlInfo = { error: 'Invalid URL format' };
@@ -48,45 +51,48 @@ export async function GET() {
         },
         log: ['error'],
       });
-      
+
       const result = await testClient.$queryRaw`SELECT 1 as test`;
       await testClient.$disconnect();
       connectionTest = { success: true, result };
     } catch (error) {
-      connectionTest = { 
-        success: false, 
+      connectionTest = {
+        success: false,
         error: error instanceof Error ? error.message : String(error),
         errorName: error instanceof Error ? error.name : 'Unknown',
       };
     }
   }
 
-  return NextResponse.json({
-    timestamp: new Date().toISOString(),
-    environment: {
-      NODE_ENV: process.env.NODE_ENV,
-      VERCEL: process.env.VERCEL,
-      VERCEL_ENV: process.env.VERCEL_ENV,
-      SUPABASE_REGION: process.env.SUPABASE_REGION,
+  return NextResponse.json(
+    {
+      timestamp: new Date().toISOString(),
+      environment: {
+        NODE_ENV: process.env.NODE_ENV,
+        VERCEL: process.env.VERCEL,
+        VERCEL_ENV: process.env.VERCEL_ENV,
+        SUPABASE_REGION: process.env.SUPABASE_REGION,
+      },
+      urlSources: {
+        hasDATABASE_URL: !!urls.DATABASE_URL,
+        hasdatabase_url: !!urls.database_url,
+        hasDIRECT_URL: !!urls.DIRECT_URL,
+        hasdirect_url: !!urls.direct_url,
+      },
+      urlAnalysis: urlInfo,
+      connectionTest,
+      recommendation: urlInfo?.isDirectUrl
+        ? 'Your app is using a direct database URL. This needs to be updated to use the pooled URL.'
+        : urlInfo?.isPooled
+          ? 'Your app is correctly configured with a pooled URL.'
+          : 'Unable to determine database URL type.',
     },
-    urlSources: {
-      hasDATABASE_URL: !!urls.DATABASE_URL,
-      hasdatabase_url: !!urls.database_url,
-      hasDIRECT_URL: !!urls.DIRECT_URL,
-      hasdirect_url: !!urls.direct_url,
-    },
-    urlAnalysis: urlInfo,
-    connectionTest,
-    recommendation: urlInfo?.isDirectUrl 
-      ? 'Your app is using a direct database URL. This needs to be updated to use the pooled URL.'
-      : urlInfo?.isPooled
-        ? 'Your app is correctly configured with a pooled URL.'
-        : 'Unable to determine database URL type.',
-  }, {
-    headers: {
-      'Cache-Control': 'no-store, no-cache, must-revalidate',
-      'Pragma': 'no-cache',
-      'Expires': '0',
-    },
-  });
+    {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
+    }
+  );
 }

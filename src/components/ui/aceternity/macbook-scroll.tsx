@@ -1,7 +1,8 @@
-"use client";
-import React, { useEffect, useRef, useState } from "react";
-import { MotionValue, motion, useScroll, useTransform } from "framer-motion";
-import { cn } from "@/lib/utils";
+'use client';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MotionValue, motion, useScroll, useTransform } from 'framer-motion';
+import { cn } from '@/lib/utils';
 import {
   IconBrightnessDown,
   IconBrightnessUp,
@@ -17,12 +18,12 @@ import {
   IconVolume,
   IconVolume2,
   IconVolume3,
-} from "@tabler/icons-react";
-import { IconSearch } from "@tabler/icons-react";
-import { IconWorld } from "@tabler/icons-react";
-import { IconCommand } from "@tabler/icons-react";
-import { IconCaretLeftFilled } from "@tabler/icons-react";
-import { IconCaretDownFilled } from "@tabler/icons-react";
+} from '@tabler/icons-react';
+import { IconSearch } from '@tabler/icons-react';
+import { IconWorld } from '@tabler/icons-react';
+import { IconCommand } from '@tabler/icons-react';
+import { IconCaretLeftFilled } from '@tabler/icons-react';
+import { IconCaretDownFilled } from '@tabler/icons-react';
 
 export const MacbookScroll = ({
   src,
@@ -38,7 +39,7 @@ export const MacbookScroll = ({
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start start", "end start"],
+    offset: ['start start', 'end start'],
   });
 
   const [isMobile, setIsMobile] = useState(false);
@@ -49,16 +50,8 @@ export const MacbookScroll = ({
     }
   }, []);
 
-  const scaleX = useTransform(
-    scrollYProgress,
-    [0, 0.3],
-    [1.2, isMobile ? 1 : 1.5],
-  );
-  const scaleY = useTransform(
-    scrollYProgress,
-    [0, 0.3],
-    [0.6, isMobile ? 1 : 1.5],
-  );
+  const scaleX = useTransform(scrollYProgress, [0, 0.3], [1.2, isMobile ? 1 : 1.5]);
+  const scaleY = useTransform(scrollYProgress, [0, 0.3], [0.6, isMobile ? 1 : 1.5]);
   const translate = useTransform(scrollYProgress, [0, 0.8], [0, 800]);
   const rotate = useTransform(scrollYProgress, [0.1, 0.12, 0.3], [-28, -28, 0]);
   const textTransform = useTransform(scrollYProgress, [0, 0.3], [0, 100]);
@@ -83,13 +76,7 @@ export const MacbookScroll = ({
         )}
       </motion.h2>
       {/* Lid */}
-      <Lid
-        src={src}
-        scaleX={scaleX}
-        scaleY={scaleY}
-        rotate={rotate}
-        translate={translate}
-      />
+      <Lid src={src} scaleX={scaleX} scaleY={scaleY} rotate={rotate} translate={translate} />
       {/* Base area */}
       <div className="relative -z-10 h-[22rem] w-[32rem] overflow-hidden rounded-2xl bg-gray-200 dark:bg-[#272729]">
         {/* above keyboard bar */}
@@ -166,15 +153,15 @@ export const Lid = ({
     <div className="relative [perspective:800px]">
       <div
         style={{
-          transform: "perspective(800px) rotateX(-25deg) translateZ(0px)",
-          transformOrigin: "bottom",
-          transformStyle: "preserve-3d",
+          transform: 'perspective(800px) rotateX(-25deg) translateZ(0px)',
+          transformOrigin: 'bottom',
+          transformStyle: 'preserve-3d',
         }}
         className="relative h-[12rem] w-[32rem] rounded-2xl bg-[#010101] p-2"
       >
         <div
           style={{
-            boxShadow: "0px 2px 0px 2px #171717 inset",
+            boxShadow: '0px 2px 0px 2px #171717 inset',
           }}
           className="absolute inset-0 flex items-center justify-center rounded-lg bg-[#010101]"
         >
@@ -190,8 +177,8 @@ export const Lid = ({
           scaleY: scaleY,
           rotateX: rotate,
           translateY: translate,
-          transformStyle: "preserve-3d",
-          transformOrigin: "top",
+          transformStyle: 'preserve-3d',
+          transformOrigin: 'top',
         }}
         className="absolute inset-0 h-96 w-[32rem] rounded-2xl bg-[#010101] p-2"
       >
@@ -201,7 +188,7 @@ export const Lid = ({
 
         <div
           style={{
-            boxShadow: "0px 2px 0px 2px #171717 inset",
+            boxShadow: '0px 2px 0px 2px #171717 inset',
           }}
           className="absolute inset-0 flex items-center justify-center rounded-lg bg-[#010101]"
         >
@@ -227,7 +214,11 @@ export const Lid = ({
               <div className="text-center">
                 <div className="w-16 h-16 mx-auto mb-4 bg-gray-700 rounded-lg flex items-center justify-center">
                   <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                 </div>
                 <span className="text-white text-lg font-medium">Demo Video</span>
@@ -246,7 +237,7 @@ export const Trackpad = () => {
     <div
       className="mx-auto mt-4 h-32 w-40 rounded-xl"
       style={{
-        boxShadow: "0px 0px 1px 1px #00000020 inset",
+        boxShadow: '0px 0px 1px 1px #00000020 inset',
       }}
     ></div>
   );
@@ -565,10 +556,7 @@ export const Keypad = () => {
             <span className="block">option</span>
           </div>
         </KBtn>
-        <KBtn
-          className="w-8"
-          childrenClassName="h-full justify-between py-[4px]"
-        >
+        <KBtn className="w-8" childrenClassName="h-full justify-between py-[4px]">
           <div className="flex w-full justify-end pr-1">
             <IconCommand className="h-[6px] w-[6px]" />
           </div>
@@ -577,10 +565,7 @@ export const Keypad = () => {
           </div>
         </KBtn>
         <KBtn className="w-[8.2rem]"></KBtn>
-        <KBtn
-          className="w-8"
-          childrenClassName="h-full justify-between py-[4px]"
-        >
+        <KBtn className="w-8" childrenClassName="h-full justify-between py-[4px]">
           <div className="flex w-full justify-start pl-1">
             <IconCommand className="h-[6px] w-[6px]" />
           </div>
@@ -631,25 +616,24 @@ export const KBtn = ({
   return (
     <div
       className={cn(
-        "[transform:translateZ(0)] rounded-[4px] p-[0.5px] [will-change:transform]",
-        backlit && "bg-white/[0.2] shadow-xl shadow-white",
+        '[transform:translateZ(0)] rounded-[4px] p-[0.5px] [will-change:transform]',
+        backlit && 'bg-white/[0.2] shadow-xl shadow-white'
       )}
     >
       <div
         className={cn(
-          "flex h-6 w-6 items-center justify-center rounded-[3.5px] bg-[#0A090D]",
-          className,
+          'flex h-6 w-6 items-center justify-center rounded-[3.5px] bg-[#0A090D]',
+          className
         )}
         style={{
-          boxShadow:
-            "0px -0.5px 2px 0 #0D0D0F inset, -0.5px 0px 2px 0 #0D0D0F inset",
+          boxShadow: '0px -0.5px 2px 0 #0D0D0F inset, -0.5px 0px 2px 0 #0D0D0F inset',
         }}
       >
         <div
           className={cn(
-            "flex w-full flex-col items-center justify-center text-[5px] text-neutral-200",
+            'flex w-full flex-col items-center justify-center text-[5px] text-neutral-200',
             childrenClassName,
-            backlit && "text-white",
+            backlit && 'text-white'
           )}
         >
           {children}
@@ -664,9 +648,8 @@ export const SpeakerGrid = () => {
     <div
       className="mt-2 flex h-40 gap-[2px] px-[0.5px]"
       style={{
-        backgroundImage:
-          "radial-gradient(circle, #08080A 0.5px, transparent 0.5px)",
-        backgroundSize: "3px 3px",
+        backgroundImage: 'radial-gradient(circle, #08080A 0.5px, transparent 0.5px)',
+        backgroundSize: '3px 3px',
       }}
     ></div>
   );
@@ -682,26 +665,13 @@ export const OptionKey = ({ className }: { className: string }) => {
       viewBox="0 0 32 32"
       className={className}
     >
-      <rect
-        stroke="currentColor"
-        strokeWidth={2}
-        x="18"
-        y="5"
-        width="10"
-        height="2"
-      />
+      <rect stroke="currentColor" strokeWidth={2} x="18" y="5" width="10" height="2" />
       <polygon
         stroke="currentColor"
         strokeWidth={2}
         points="10.6,5 4,5 4,7 9.4,7 18.4,27 28,27 28,25 19.6,25 "
       />
-      <rect
-        id="_Transparent_Rectangle_"
-        className="st0"
-        width="32"
-        height="32"
-        stroke="none"
-      />
+      <rect id="_Transparent_Rectangle_" className="st0" width="32" height="32" stroke="none" />
     </svg>
   );
 };
@@ -725,4 +695,4 @@ const AceternityLogo = () => {
       />
     </svg>
   );
-}; 
+};

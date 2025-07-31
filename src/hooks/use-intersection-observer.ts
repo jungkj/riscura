@@ -4,9 +4,7 @@ interface UseIntersectionObserverOptions extends IntersectionObserverInit {
   freezeOnceVisible?: boolean;
 }
 
-export function useIntersectionObserver(
-  options: UseIntersectionObserverOptions = {}
-) {
+export function useIntersectionObserver(options: UseIntersectionObserverOptions = {}) {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasIntersected, setHasIntersected] = useState(false);
   const elementRef = useRef<HTMLElement>(null);
@@ -23,7 +21,7 @@ export function useIntersectionObserver(
       ([entry]) => {
         const isElementIntersecting = entry.isIntersecting;
         setIsIntersecting(isElementIntersecting);
-        
+
         if (isElementIntersecting && !hasIntersected) {
           setHasIntersected(true);
         }
@@ -49,4 +47,4 @@ export function useIntersectionObserver(
   };
 }
 
-export default useIntersectionObserver; 
+export default useIntersectionObserver;

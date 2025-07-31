@@ -38,7 +38,7 @@ export function generateAccessToken(payload: any): string {
   const signature = createHash('sha256')
     .update(data + env.JWT_SECRET)
     .digest('hex');
-  
+
   return Buffer.from(`${data}.${signature}`).toString('base64url');
 }
 
@@ -49,26 +49,26 @@ export function verifyAccessToken(token: string): any {
   try {
     const decoded = Buffer.from(token, 'base64url').toString();
     const [data, signature] = decoded.split('.');
-    
+
     // Verify signature
     const expectedSignature = createHash('sha256')
       .update(data + env.JWT_SECRET)
       .digest('hex');
-    
+
     if (signature !== expectedSignature) {
       throw new Error('Invalid token signature');
     }
-    
+
     const payload = JSON.parse(data);
-    
+
     // Check expiration (1 hour default)
     const now = Date.now();
     const maxAge = 3600000; // 1 hour
-    
+
     if (now - payload.iat > maxAge) {
       throw new Error('Token expired');
     }
-    
+
     return payload;
   } catch (error) {
     throw new Error('Invalid token');
@@ -158,7 +158,7 @@ export function verifyToken(token: string): JWTPayload {
  */
 export function verifyAccessTokenJWT(token: string): JWTPayload {
   const payload = verifyToken(token);
-  
+
   if (payload.tokenType !== 'access') {
     throw new Error('Invalid token type');
   }
@@ -171,7 +171,7 @@ export function verifyAccessTokenJWT(token: string): JWTPayload {
  */
 export function verifyRefreshToken(token: string): JWTPayload {
   const payload = verifyToken(token);
-  
+
   if (payload.tokenType !== 'refresh') {
     throw new Error('Invalid token type');
   }
@@ -239,4 +239,4 @@ export function generateCSRFToken(): string {
  */
 export function verifyCSRFToken(token: string, expected: string): boolean {
   return token === expected;
-} 
+}

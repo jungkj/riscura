@@ -41,19 +41,21 @@ export const SharePointIntegration: React.FC = () => {
 
   if (isLoading) {
     return (
-      <DaisyCard className="p-6">
-        <div className="flex items-center justify-center">
+      <DaisyCard className="p-6" >
+  <div className="flex items-center justify-center">
+</DaisyCard>
           <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
           <span className="ml-2">Loading SharePoint connections...</span>
         </div>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">
-      <DaisyCard className="p-6">
-        <div className="flex items-center justify-between mb-4">
+      <DaisyCard className="p-6" >
+  <div className="flex items-center justify-between mb-4">
+</DaisyCard>
           <div>
             <h3 className="text-lg font-semibold">SharePoint Integration</h3>
             <p className="text-sm text-gray-600 mt-1">
@@ -65,15 +67,14 @@ export const SharePointIntegration: React.FC = () => {
               onClick={refresh}
               variant="outline"
               size="sm"
-              disabled={isLoading}
-            >
-              <RefreshCw className="h-4 w-4" />
+              disabled={isLoading} >
+  <RefreshCw className="h-4 w-4" />
+</DaisyButton>
             </DaisyButton>
             {!showConnectForm && (
               <DaisyButton
                 onClick={() => setShowConnectForm(true)}
-                size="sm"
-              >
+                size="sm" />
                 <Link className="h-4 w-4 mr-2" />
                 Connect Site
               </DaisyButton>
@@ -82,8 +83,9 @@ export const SharePointIntegration: React.FC = () => {
         </div>
 
         {error && (
-          <DaisyAlert variant="error" className="mb-4">
-            {error}
+          <DaisyAlert variant="error" className="mb-4" >
+  {error}
+</DaisyAlert>
           </DaisyAlert>
         )}
 
@@ -112,9 +114,9 @@ export const SharePointIntegration: React.FC = () => {
                 <DaisyButton
                   onClick={handleConnect}
                   disabled={!siteUrl.trim() || isConnecting}
-                  size="sm"
-                >
-                  {isConnecting ? (
+                  size="sm" >
+  {isConnecting ? (
+</DaisyButton>
                     <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                       Connecting...
@@ -177,8 +179,7 @@ export const SharePointIntegration: React.FC = () => {
                     onClick={() => handleDisconnect(integration.id)}
                     variant="outline"
                     size="sm"
-                    className="text-red-600 hover:text-red-700"
-                  >
+                    className="text-red-600 hover:text-red-700" />
                     <Unlink className="h-4 w-4" />
                   </DaisyButton>
                 </div>
@@ -188,8 +189,9 @@ export const SharePointIntegration: React.FC = () => {
         )}
       </DaisyCard>
 
-      <DaisyCard className="p-4 bg-blue-50 border-blue-200">
-        <div className="flex items-start">
+      <DaisyCard className="p-4 bg-blue-50 border-blue-200" >
+  <div className="flex items-start">
+</DaisyCard>
           <div className="flex-shrink-0">
             <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />

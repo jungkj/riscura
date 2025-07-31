@@ -45,13 +45,13 @@ class EncryptionService {
   encrypt(text: string): string {
     const iv = crypto.randomBytes(EncryptionService.IV_LENGTH);
     const cipher = crypto.createCipheriv(EncryptionService.ALGORITHM, this.encryptionKey, iv);
-    
+
     let encrypted = cipher.update(text, 'utf8');
     encrypted = Buffer.concat([encrypted, cipher.final()]);
-    
+
     const tag = cipher.getAuthTag();
     const combined = Buffer.concat([iv, tag, encrypted]);
-    
+
     return combined.toString('base64');
   }
 }
@@ -85,14 +85,14 @@ async function migrateEncryption() {
 
     for (const integration of integrations) {
       console.log(`Processing integration for organization: ${integration.organizationId}`);
-      
+
       try {
         // Try to decrypt with old method
         const decryptedKey = decryptOldMethod(integration.apiKeyEncrypted!, keySource);
-        
+
         if (!decryptedKey) {
           console.log('  ⚠️  Could not decrypt - may already be using new encryption');
-          
+
           // Try to verify it's already in new format
           try {
             // If it's base64 and has proper length, it might be new format
@@ -105,14 +105,14 @@ async function migrateEncryption() {
           } catch {
             // Not base64, definitely old format but couldn't decrypt
           }
-          
+
           failureCount++;
           continue;
         }
 
         // Re-encrypt with new method
         const newEncrypted = encryptionService.encrypt(decryptedKey);
-        
+
         // Update in database
         await prisma.proboIntegration.update({
           where: { id: integration.id },
@@ -121,7 +121,6 @@ async function migrateEncryption() {
 
         console.log('  ✅ Successfully migrated to new encryption');
         successCount++;
-
       } catch (error) {
         console.error(`  ❌ Error migrating integration: ${error}`);
         failureCount++;
@@ -139,7 +138,6 @@ async function migrateEncryption() {
     } else {
       console.log('\n🎉 Migration completed successfully!');
     }
-
   } catch (error) {
     console.error('❌ Migration failed:', error);
     process.exit(1);

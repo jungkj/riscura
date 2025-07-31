@@ -23,13 +23,13 @@ export const EnhancedDraggable: React.FC<EnhancedDraggableProps> = ({
   onDragEnd,
   disabled = false,
   className = '',
-  dragHandle = false
+  dragHandle = false,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const dragControls = useDragControls();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  
+
   // 3D tilt effects based on drag position
   const rotateX = useTransform(y, [-100, 100], [5, -5]);
   const rotateY = useTransform(x, [-100, 100], [-5, 5]);
@@ -56,20 +56,20 @@ export const EnhancedDraggable: React.FC<EnhancedDraggableProps> = ({
       dragControls={dragHandle ? dragControls : undefined}
       dragElastic={0.1}
       dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
-      style={{ 
-        x, 
-        y, 
-        rotateX: isDragging ? rotateX : 0, 
+      style={{
+        x,
+        y,
+        rotateX: isDragging ? rotateX : 0,
         rotateY: isDragging ? rotateY : 0,
-        scale: isDragging ? 1.05 : 1
+        scale: isDragging ? 1.05 : 1,
       }}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       whileHover={!disabled && !isDragging ? { scale: 1.02 } : undefined}
       transition={{
-        type: "spring",
+        type: 'spring',
         stiffness: 300,
-        damping: 20
+        damping: 20,
       }}
       role="button"
       tabIndex={disabled ? -1 : 0}
@@ -127,7 +127,7 @@ export const EnhancedDropZone: React.FC<EnhancedDropZoneProps> = ({
   className = '',
   activeClassName = '',
   placeholder,
-  disabled = false
+  disabled = false,
 }) => {
   const [isOver, setIsOver] = useState(false);
 
@@ -146,7 +146,7 @@ export const EnhancedDropZone: React.FC<EnhancedDropZoneProps> = ({
   const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault();
     if (disabled) return;
-    
+
     if (!e.currentTarget.contains(e.relatedTarget as Node)) {
       setIsOver(false);
       onDragLeave?.();
@@ -156,11 +156,11 @@ export const EnhancedDropZone: React.FC<EnhancedDropZoneProps> = ({
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     if (disabled) return;
-    
+
     setIsOver(false);
     const draggedId = e.dataTransfer.getData('text/plain');
     const draggedData = e.dataTransfer.getData('application/json');
-    
+
     onDrop?.(draggedId, draggedData ? JSON.parse(draggedData) : undefined);
   };
 
@@ -179,15 +179,15 @@ export const EnhancedDropZone: React.FC<EnhancedDropZoneProps> = ({
       onDrop={handleDrop}
       animate={{
         scale: isOver && !disabled ? 1.02 : 1,
-        borderColor: isOver && !disabled ? '#3b82f6' : '#d1d5db'
+        borderColor: isOver && !disabled ? '#3b82f6' : '#d1d5db',
       }}
       transition={{
         duration: timings.quick,
-        ease: easings.snappy
+        ease: easings.snappy,
       }}
       role="region"
       aria-label="Drop zone"
-      aria-dropeffect={disabled ? "none" : "move"}
+      aria-dropeffect={disabled ? 'none' : 'move'}
     >
       {/* Animated Background */}
       <motion.div
@@ -207,14 +207,14 @@ export const EnhancedDropZone: React.FC<EnhancedDropZoneProps> = ({
                   className="w-12 h-12 border-2 border-slate-300 border-dashed rounded-full flex items-center justify-center mb-4"
                   animate={{
                     scale: isOver && !disabled ? 1.2 : 1,
-                    borderColor: isOver && !disabled ? '#3b82f6' : '#d1d5db'
+                    borderColor: isOver && !disabled ? '#3b82f6' : '#d1d5db',
                   }}
                   transition={{ duration: timings.quick }}
                 >
                   <motion.div
                     className="w-4 h-4 bg-slate-400 rounded-full"
                     animate={{
-                      backgroundColor: isOver && !disabled ? '#3b82f6' : '#94a3b8'
+                      backgroundColor: isOver && !disabled ? '#3b82f6' : '#94a3b8',
                     }}
                     transition={{ duration: timings.quick }}
                   />
@@ -239,12 +239,12 @@ export const EnhancedDropZone: React.FC<EnhancedDropZoneProps> = ({
           <motion.div
             className="absolute inset-0 bg-blue-500/20 rounded-lg"
             animate={{
-              opacity: [0.2, 0.4, 0.2]
+              opacity: [0.2, 0.4, 0.2],
             }}
             transition={{
               duration: 1,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: 'easeInOut',
             }}
           />
         </motion.div>
@@ -267,7 +267,7 @@ export const SortableList: React.FC<SortableListProps> = ({
   onReorder,
   className = '',
   itemClassName = '',
-  gap = 8
+  gap = 8,
 }) => {
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
 
@@ -281,15 +281,15 @@ export const SortableList: React.FC<SortableListProps> = ({
 
   const handleDrop = (targetId: string) => {
     if (!draggedItem || draggedItem === targetId) return;
-    
-    const currentOrder = items.map(item => item.id);
+
+    const currentOrder = items.map((item) => item.id);
     const draggedIndex = currentOrder.indexOf(draggedItem);
     const targetIndex = currentOrder.indexOf(targetId);
-    
+
     const newOrder = [...currentOrder];
     newOrder.splice(draggedIndex, 1);
     newOrder.splice(targetIndex, 0, draggedItem);
-    
+
     onReorder(newOrder);
   };
 
@@ -299,7 +299,7 @@ export const SortableList: React.FC<SortableListProps> = ({
         <motion.div
           key={item.id}
           layout
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         >
           <EnhancedDraggable
             id={item.id}
@@ -326,4 +326,4 @@ export const SortableList: React.FC<SortableListProps> = ({
       ))}
     </div>
   );
-}; 
+};

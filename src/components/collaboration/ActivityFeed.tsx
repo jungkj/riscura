@@ -385,7 +385,9 @@ const ActivityItem: React.FC<{
       case 'uploaded': return <Upload className="h-4 w-4" />;
       case 'downloaded': return <Download className="h-4 w-4" />;
       case 'shared': return <Share2 className="h-4 w-4" />;
-      case 'deadline_approaching': return <DaisyAlertTriangle className="h-4 w-4" />;
+      case 'deadline_approaching': return <DaisyAlertTriangle className="h-4 w-4" >
+  ;
+</DaisyAlertTriangle>
       case 'deadline_missed': return <Clock className="h-4 w-4" />;
       case 'workflow_started': return <Workflow className="h-4 w-4" />;
       case 'workflow_completed': return <GitCommit className="h-4 w-4" />;
@@ -410,8 +412,9 @@ const ActivityItem: React.FC<{
     };
 
     return (
-      <DaisyBadge className={cn('text-caption px-enterprise-1 py-0', colors[severity])}>
-        {severity}
+      <DaisyBadge className={cn('text-caption px-enterprise-1 py-0', colors[severity])} >
+  {severity}
+</DaisyBadge>
       </DaisyBadge>
     );
   };
@@ -438,8 +441,9 @@ const ActivityItem: React.FC<{
         <div className="text-caption text-text-secondary font-medium">Changes:</div>
         {changes.map((change, index) => (
           <div key={index} className="flex items-center space-x-enterprise-2 text-caption">
-            <DaisyBadge variant="outline" className="text-caption px-enterprise-1 py-0">
-              {change.field}
+            <DaisyBadge variant="outline" className="text-caption px-enterprise-1 py-0" >
+  {change.field}
+</DaisyBadge>
             </DaisyBadge>
             <span className="text-text-secondary">from</span>
             <span className="font-mono bg-surface-secondary px-enterprise-1 rounded">
@@ -502,30 +506,31 @@ const ActivityItem: React.FC<{
             variant="ghost"
             size="sm"
             className="h-6 w-6 p-0"
-            onClick={() => onMarkAsRead?.(activity.id)}
-          >
+            onClick={() => onMarkAsRead?.(activity.id)} />
             <Dot className="h-4 w-4 text-blue-600" />
           </DaisyButton>
         )}
       </div>
     );
-  }
+  };
 
   return (
     <DaisyCard className={cn(
       "transition-all duration-200 hover:shadow-notion-sm",
       !activity.isRead && "border-l-4 border-l-blue-500 bg-blue-50/30"
-    )}>
-      <DaisyCardContent className="p-enterprise-4">
+    )} >
+  <DaisyCardContent className="p-enterprise-4" >
+  </DaisyCard>
+</DaisyCardContent>
         <div className="flex items-start space-x-enterprise-3">
           {/* Avatar & Icon */}
           <div className="relative">
-            <DaisyAvatar className="h-8 w-8">
+            <DaisyAvatar className="h-8 w-8" />
               <DaisyAvatarImage src={activity.actor.avatar} />
-              <DaisyAvatarFallback className="text-caption">
+              <DaisyAvatarFallback className="text-caption" />
                 {activity.actor.name === 'System' ? 'SYS' : 
                  activity.actor.name.split(' ').map(n => n[0]).join('')}
-              </DaisyAvatarFallback>
+              </DaisyAvatar>
             </DaisyAvatar>
             <div className={cn(
               "absolute -bottom-1 -right-1 p-0.5 rounded-full bg-white border",
@@ -547,8 +552,7 @@ const ActivityItem: React.FC<{
                     <DaisyButton
                       variant="link"
                       className="h-auto p-0 font-medium text-body-sm"
-                      onClick={() => activity.target?.url && window.open(activity.target.url, '_blank')}
-                    >
+                      onClick={() => activity.target?.url && window.open(activity.target.url, '_blank')} />
                       {activity.target.name}
                       <ExternalLink className="h-3 w-3 ml-enterprise-1" />
                     </DaisyButton>
@@ -562,8 +566,9 @@ const ActivityItem: React.FC<{
                   </div>
                   
                   {activity.context?.department && (
-                    <DaisyBadge variant="outline" className="text-caption px-enterprise-1 py-0">
-                      {activity.context.department}
+                    <DaisyBadge variant="outline" className="text-caption px-enterprise-1 py-0" >
+  {activity.context.department}
+</DaisyBadge>
                     </DaisyBadge>
                   )}
                   
@@ -577,23 +582,23 @@ const ActivityItem: React.FC<{
                     variant="ghost"
                     size="sm"
                     className="h-6 w-6 p-0"
-                    onClick={() => onMarkAsRead?.(activity.id)}
-                  >
+                    onClick={() => onMarkAsRead?.(activity.id)} />
                     <Dot className="h-4 w-4 text-blue-600" />
                   </DaisyButton>
                 )}
                 
-                <DaisyDropdownMenu>
-                  <DaisyDropdownMenuTrigger asChild>
-                    <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
-                      <MoreHorizontal className="h-3 w-3" />
+                <DaisyDropdownMenu />
+                  <DaisyDropdownMenuTrigger asChild />
+                    <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
+  <MoreHorizontal className="h-3 w-3" />
+</DaisyDropdownMenu>
                     </DaisyButton>
                   </DaisyDropdownMenuTrigger>
-                  <DaisyDropdownMenuContent align="end">
-                    <DaisyDropdownMenuItem onClick={() => onViewDetails?.(activity)}>
+                  <DaisyDropdownMenuContent align="end" />
+                    <DaisyDropdownMenuItem onClick={() => onViewDetails?.(activity)} />
                       <Eye className="h-3 w-3 mr-enterprise-2" />
                       View Details
-                    </DaisyDropdownMenuItem>
+                    </DaisyDropdownMenuContent>
                     <DaisyDropdownMenuItem onClick={() => {}}>
                       <Copy className="h-3 w-3 mr-enterprise-2" />
                       Copy Link
@@ -654,8 +659,7 @@ const ActivityItem: React.FC<{
                 variant="ghost"
                 size="sm"
                 className="mt-enterprise-2 h-auto p-0 text-caption text-text-secondary"
-                onClick={() => setIsExpanded(!isExpanded)}
-              >
+                onClick={() => setIsExpanded(!isExpanded)} />
                 {isExpanded ? (
                   <>
                     <ChevronDown className="h-3 w-3 mr-enterprise-1" />
@@ -671,7 +675,7 @@ const ActivityItem: React.FC<{
             )}
           </div>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };
@@ -810,8 +814,9 @@ export const ActivityFeed: React.FC<{
                 <Activity className="h-5 w-5 mr-enterprise-2" />
                 Activity Feed
                 {unreadCount > 0 && (
-                  <DaisyBadge className="ml-enterprise-2 text-caption px-enterprise-1 py-0 bg-blue-600">
-                    {unreadCount}
+                  <DaisyBadge className="ml-enterprise-2 text-caption px-enterprise-1 py-0 bg-blue-600" >
+  {unreadCount}
+</DaisyBadge>
                   </DaisyBadge>
                 )}
               </h3>
@@ -831,22 +836,24 @@ export const ActivityFeed: React.FC<{
             />
 
             {/* Filters */}
-            <DaisyDropdownMenu>
-              <DaisyDropdownMenuTrigger asChild>
-                <DaisyButton variant="outline" size="sm">
-                  <Filter className="h-3 w-3 mr-enterprise-2" />
+            <DaisyDropdownMenu />
+              <DaisyDropdownMenuTrigger asChild />
+                <DaisyButton variant="outline" size="sm" >
+  <Filter className="h-3 w-3 mr-enterprise-2" />
+</DaisyInput>
                   Filter
                   <ChevronDown className="h-3 w-3 ml-enterprise-1" />
                 </DaisyButton>
               </DaisyDropdownMenuTrigger>
-              <DaisyDropdownMenuContent>
+              <DaisyDropdownMenuContent />
                 <DaisyDropdownMenuItem onClick={() => setFilters(prev => ({ ...prev, unreadOnly: !prev.unreadOnly }))}>
                   <Bell className="h-3 w-3 mr-enterprise-2" />
                   {filters.unreadOnly ? 'Show All' : 'Unread Only'}
-                </DaisyDropdownMenuItem>
+                </DaisyDropdownMenuContent>
                 <DaisyDropdownMenuItem onClick={() => setFilters(prev => ({ ...prev, severity: 'critical' }))}>
-                  <DaisyAlertTriangle className="h-3 w-3 mr-enterprise-2" />
-                  Critical Only
+                  <DaisyAlertTriangle className="h-3 w-3 mr-enterprise-2" >
+  Critical Only
+</DaisyDropdownMenuItem>
                 </DaisyDropdownMenuItem>
                 <DaisyDropdownMenuItem onClick={() => setFilters(prev => ({ ...prev, category: 'risk_management' }))}>
                   <Target className="h-3 w-3 mr-enterprise-2" />
@@ -863,30 +870,30 @@ export const ActivityFeed: React.FC<{
               variant="outline"
               size="sm"
               onClick={() => setIsAutoRefresh(!isAutoRefresh)}
-              className={cn(isAutoRefresh && "bg-green-50 border-green-200")}
-            >
+              className={cn(isAutoRefresh && "bg-green-50 border-green-200")} />
               <RefreshCw className={cn("h-3 w-3 mr-enterprise-2", isAutoRefresh && "animate-spin")} />
               Auto-refresh
             </DaisyButton>
 
             {/* Export */}
             {showExport && (
-              <DaisyDropdownMenu>
-                <DaisyDropdownMenuTrigger asChild>
-                  <DaisyButton variant="outline" size="sm">
-                    <Download className="h-3 w-3 mr-enterprise-2" />
+              <DaisyDropdownMenu />
+                <DaisyDropdownMenuTrigger asChild />
+                  <DaisyButton variant="outline" size="sm" >
+  <Download className="h-3 w-3 mr-enterprise-2" />
+</DaisyDropdownMenu>
                     Export
                     <ChevronDown className="h-3 w-3 ml-enterprise-1" />
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent>
-                  <DaisyDropdownMenuItem onClick={() => handleExport('csv')}>
+                <DaisyDropdownMenuContent />
+                  <DaisyDropdownMenuItem onClick={() => handleExport('csv')} />
                     Export as CSV
-                  </DaisyDropdownMenuItem>
-                  <DaisyDropdownMenuItem onClick={() => handleExport('json')}>
+                  </DaisyDropdownMenuContent>
+                  <DaisyDropdownMenuItem onClick={() => handleExport('json')} />
                     Export as JSON
                   </DaisyDropdownMenuItem>
-                  <DaisyDropdownMenuItem onClick={() => handleExport('pdf')}>
+                  <DaisyDropdownMenuItem onClick={() => handleExport('pdf')} />
                     Export as PDF
                   </DaisyDropdownMenuItem>
                 </DaisyDropdownMenuContent>
@@ -898,9 +905,9 @@ export const ActivityFeed: React.FC<{
               <DaisyButton
                 variant="outline"
                 size="sm"
-                onClick={handleMarkAllAsRead}
-              >
-                Mark All Read
+                onClick={handleMarkAllAsRead} >
+  Mark All Read
+</DaisyButton>
               </DaisyButton>
             )}
           </div>
@@ -934,16 +941,18 @@ export const ActivityFeed: React.FC<{
       {/* Load More */}
       {!isCompact && filteredActivities.length > (maxItems || 20) && (
         <div className="text-center">
-          <DaisyButton variant="outline">
-            Load More Activities
+          <DaisyButton variant="outline" >
+  Load More Activities
+</DaisyButton>
           </DaisyButton>
         </div>
       )}
 
       {/* Activity Details Dialog */}
-      <DaisyDialog open={showActivityDialog} onOpenChange={setShowActivityDialog}>
-        <DaisyDialogContent className="max-w-2xl">
-          <DaisyDialogHeader>
+      <DaisyDialog open={showActivityDialog} onOpenChange={setShowActivityDialog} />
+        <DaisyDialogContent className="max-w-2xl" >
+  <DaisyDialogHeader />
+</DaisyDialog>
             <DaisyDialogTitle>Activity Details</DaisyDialogTitle>
           </DaisyDialogHeader>
           
@@ -983,7 +992,7 @@ export const ActivityFeed: React.FC<{
               </div>
             </div>
           )}
-        </DaisyDialogContent>
+        </DaisySeparator>
       </DaisyDialog>
     </div>
   );

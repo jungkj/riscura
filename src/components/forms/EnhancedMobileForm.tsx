@@ -264,8 +264,9 @@ function SelectField({ field, value, onChange, onBlur, error, touched }: {
   const device = useDeviceInfo();
 
   if (field.type === 'multiselect') {
-    return (
-      <div className="space-y-2">
+
+  return (
+    <div className="space-y-2">
         {field.options?.map(option => (
           <label key={option.value} className="flex items-center space-x-3">
             <input
@@ -287,7 +288,7 @@ function SelectField({ field, value, onChange, onBlur, error, touched }: {
         ))}
       </div>
     );
-  }
+  };
 
   return (
     <select
@@ -327,6 +328,7 @@ function CheckboxField({ field, value, onChange, onBlur }: {
   onChange: (value: any) => void;
   onBlur: () => void;
 }) {
+
   return (
     <label className="flex items-start space-x-3 cursor-pointer">
       <input
@@ -937,10 +939,10 @@ export function EnhancedMobileForm({
 
     if (field.type === 'checkbox' || field.type === 'toggle') {
       return fieldComponent;
-    }
+    };
 
-    return (
-      <MobileFormField
+  return (
+    <MobileFormField
         label={field.label}
         error={fieldTouched ? fieldError : undefined}
         required={field.required}
@@ -1007,7 +1009,9 @@ export function EnhancedMobileForm({
           >
             {autoSaveStatus === 'saving' && <Save className="w-4 h-4 animate-spin" />}
             {autoSaveStatus === 'saved' && <Check className="w-4 h-4" />}
-            {autoSaveStatus === 'error' && <DaisyAlertCircle className="w-4 h-4" />}
+            {autoSaveStatus === 'error' && <DaisyAlertCircle className="w-4 h-4" >
+  }
+</DaisyTextareaField>
             <span>
               {autoSaveStatus === 'saving' && 'Saving...'}
               {autoSaveStatus === 'saved' && 'Saved automatically'}
@@ -1025,8 +1029,9 @@ export function EnhancedMobileForm({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
             >
-              <DaisyAlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-              <p className="text-red-800">{error}</p>
+              <DaisyAlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" >
+  <p className="text-red-800">
+</DaisyAlertCircle>{error}</p>
             </motion.div>
           )}
 

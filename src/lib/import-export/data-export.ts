@@ -32,16 +32,30 @@ export interface ExportJob {
   fileSize?: number; // bytes
 }
 
-export type ExportType = 
-  | 'RISKS' | 'CONTROLS' | 'ASSESSMENTS' | 'COMPLIANCE_FRAMEWORKS'
-  | 'DOCUMENTS' | 'REPORTS' | 'AUDIT_LOGS' | 'USERS' | 'ORGANIZATIONS'
-  | 'ALL_DATA' | 'BACKUP' | 'GDPR_DATA' | 'CUSTOM_QUERY';
+export type ExportType =
+  | 'RISKS'
+  | 'CONTROLS'
+  | 'ASSESSMENTS'
+  | 'COMPLIANCE_FRAMEWORKS'
+  | 'DOCUMENTS'
+  | 'REPORTS'
+  | 'AUDIT_LOGS'
+  | 'USERS'
+  | 'ORGANIZATIONS'
+  | 'ALL_DATA'
+  | 'BACKUP'
+  | 'GDPR_DATA'
+  | 'CUSTOM_QUERY';
 
-export type ExportFormat = 
-  | 'CSV' | 'XLSX' | 'JSON' | 'PDF' | 'XML' | 'ZIP';
+export type ExportFormat = 'CSV' | 'XLSX' | 'JSON' | 'PDF' | 'XML' | 'ZIP';
 
-export type ExportStatus = 
-  | 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED' | 'CANCELLED' | 'EXPIRED';
+export type ExportStatus =
+  | 'PENDING'
+  | 'PROCESSING'
+  | 'COMPLETED'
+  | 'FAILED'
+  | 'CANCELLED'
+  | 'EXPIRED';
 
 export interface ExportParameters {
   // Data filters
@@ -50,24 +64,24 @@ export interface ExportParameters {
   entityIds?: string[];
   includeArchived?: boolean;
   includeDeleted?: boolean;
-  
+
   // Relationship includes
   includeRelatedData?: boolean;
   includeDocuments?: boolean;
   includeComments?: boolean;
   includeHistory?: boolean;
-  
+
   // Privacy and compliance
   anonymize?: boolean;
   excludePII?: boolean;
   complianceMode?: 'GDPR' | 'CCPA' | 'HIPAA' | 'SOX';
-  
+
   // Format-specific options
   csvDelimiter?: string;
   csvEncoding?: string;
   includeHeaders?: boolean;
   password?: string; // For encrypted exports
-  
+
   // Custom query (for CUSTOM_QUERY type)
   customQuery?: string;
   customFields?: string[];
@@ -149,7 +163,21 @@ const ExportParametersSchema = z.object({
 });
 
 const ExportRequestSchema = z.object({
-  type: z.enum(['RISKS', 'CONTROLS', 'ASSESSMENTS', 'COMPLIANCE_FRAMEWORKS', 'DOCUMENTS', 'REPORTS', 'AUDIT_LOGS', 'USERS', 'ORGANIZATIONS', 'ALL_DATA', 'BACKUP', 'GDPR_DATA', 'CUSTOM_QUERY']),
+  type: z.enum([
+    'RISKS',
+    'CONTROLS',
+    'ASSESSMENTS',
+    'COMPLIANCE_FRAMEWORKS',
+    'DOCUMENTS',
+    'REPORTS',
+    'AUDIT_LOGS',
+    'USERS',
+    'ORGANIZATIONS',
+    'ALL_DATA',
+    'BACKUP',
+    'GDPR_DATA',
+    'CUSTOM_QUERY',
+  ]),
   format: z.enum(['CSV', 'XLSX', 'JSON', 'PDF', 'XML', 'ZIP']),
   parameters: ExportParametersSchema.optional(),
   templateId: z.string().optional(),
@@ -184,7 +212,7 @@ export class DataExportService {
     request: z.infer<typeof ExportRequestSchema>
   ): Promise<ExportJob> {
     const validatedRequest = ExportRequestSchema.parse(request);
-    
+
     // Apply template if specified
     let parameters = validatedRequest.parameters || {};
     if (validatedRequest.templateId) {
@@ -293,9 +321,9 @@ export class DataExportService {
     // Update job status
     job.status = 'CANCELLED';
     job.completedAt = new Date();
-    
+
     await this.updateExportJob(job);
-    
+
     return true;
   }
 
@@ -308,14 +336,16 @@ export class DataExportService {
     downloadToken: string
   ): Promise<{ url: string; filename: string } | null> {
     const job = await this.getExportJob(jobId, organizationId);
-    
+
     if (!job || job.status !== 'COMPLETED' || !job.downloadUrl) {
       return null;
     }
 
     // Validate download token and expiry
-    if (!this.validateDownloadToken(jobId, downloadToken) || 
-        (job.downloadExpiry && job.downloadExpiry < new Date())) {
+    if (
+      !this.validateDownloadToken(jobId, downloadToken) ||
+      (job.downloadExpiry && job.downloadExpiry < new Date())
+    ) {
       return null;
     }
 
@@ -349,18 +379,17 @@ export class DataExportService {
       job.downloadExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
       job.fileSize = result.fileSize;
       job.progress = 100;
-      
-      await this.updateExportJob(job);
 
+      await this.updateExportJob(job);
     } catch (error) {
       // Handle export failure
       job.status = 'FAILED';
       job.completedAt = new Date();
       job.errorMessage = error instanceof Error ? error.message : 'Unknown error';
       job.progress = 0;
-      
+
       await this.updateExportJob(job);
-      
+
       console.error(`Export job ${job.id} failed:`, error);
     } finally {
       this.processingJobs.delete(job.id);
@@ -401,12 +430,15 @@ export class DataExportService {
   // SPECIFIC EXPORT HANDLERS
   // ============================================================================
 
-  private async exportRisks(job: ExportJob, signal: AbortSignal): Promise<{ downloadUrl: string; fileSize: number }> {
+  private async exportRisks(
+    job: ExportJob,
+    signal: AbortSignal
+  ): Promise<{ downloadUrl: string; fileSize: number }> {
     const { organizationId, parameters } = job;
-    
+
     // Build query conditions
     const where: any = { organizationId };
-    
+
     if (parameters.startDate) {
       where.createdAt = { gte: new Date(parameters.startDate) };
     }
@@ -424,12 +456,16 @@ export class DataExportService {
     const risks = await this.prisma.risk.findMany({
       where,
       include: {
-        createdBy: parameters.includeRelatedData ? {
-          select: { id: true, firstName: true, lastName: true, email: true },
-        } : false,
-        assignedTo: parameters.includeRelatedData ? {
-          select: { id: true, firstName: true, lastName: true, email: true },
-        } : false,
+        createdBy: parameters.includeRelatedData
+          ? {
+              select: { id: true, firstName: true, lastName: true, email: true },
+            }
+          : false,
+        assignedTo: parameters.includeRelatedData
+          ? {
+              select: { id: true, firstName: true, lastName: true, email: true },
+            }
+          : false,
         documents: parameters.includeDocuments ? true : false,
         comments: parameters.includeComments ? true : false,
       },
@@ -445,21 +481,24 @@ export class DataExportService {
 
     // Generate file
     const fileBuffer = await this.generateExportFile(transformedData, job.format, parameters);
-    
+
     // Upload to storage and get URL
     const downloadUrl = await this.uploadExportFile(job.id, fileBuffer, job.format);
-    
+
     return {
       downloadUrl,
       fileSize: fileBuffer.length,
     };
   }
 
-  private async exportControls(job: ExportJob, signal: AbortSignal): Promise<{ downloadUrl: string; fileSize: number }> {
+  private async exportControls(
+    job: ExportJob,
+    signal: AbortSignal
+  ): Promise<{ downloadUrl: string; fileSize: number }> {
     const { organizationId, parameters } = job;
-    
+
     const where: any = { organizationId };
-    
+
     // Apply filters similar to risks export
     if (parameters.entityIds?.length) {
       where.id = { in: parameters.entityIds };
@@ -468,15 +507,21 @@ export class DataExportService {
     const controls = await this.prisma.control.findMany({
       where,
       include: {
-        createdBy: parameters.includeRelatedData ? {
-          select: { id: true, firstName: true, lastName: true, email: true },
-        } : false,
-        assignedTo: parameters.includeRelatedData ? {
-          select: { id: true, firstName: true, lastName: true, email: true },
-        } : false,
-        riskControls: parameters.includeRelatedData ? {
-          include: { risk: true },
-        } : false,
+        createdBy: parameters.includeRelatedData
+          ? {
+              select: { id: true, firstName: true, lastName: true, email: true },
+            }
+          : false,
+        assignedTo: parameters.includeRelatedData
+          ? {
+              select: { id: true, firstName: true, lastName: true, email: true },
+            }
+          : false,
+        riskControls: parameters.includeRelatedData
+          ? {
+              include: { risk: true },
+            }
+          : false,
       },
     });
 
@@ -486,13 +531,16 @@ export class DataExportService {
     const transformedData = this.transformControlsForExport(controls, parameters);
     const fileBuffer = await this.generateExportFile(transformedData, job.format, parameters);
     const downloadUrl = await this.uploadExportFile(job.id, fileBuffer, job.format);
-    
+
     return { downloadUrl, fileSize: fileBuffer.length };
   }
 
-  private async exportAllData(job: ExportJob, signal: AbortSignal): Promise<{ downloadUrl: string; fileSize: number }> {
+  private async exportAllData(
+    job: ExportJob,
+    signal: AbortSignal
+  ): Promise<{ downloadUrl: string; fileSize: number }> {
     const { organizationId } = job;
-    
+
     // Export all entity types
     const [risks, controls, assessments, documents, users] = await Promise.all([
       this.prisma.risk.findMany({ where: { organizationId } }),
@@ -513,7 +561,7 @@ export class DataExportService {
       controls,
       assessments,
       documents,
-      users: users.map(user => ({
+      users: users.map((user) => ({
         ...user,
         passwordHash: undefined, // Never export passwords
       })),
@@ -525,17 +573,20 @@ export class DataExportService {
     };
 
     const fileBuffer = await this.generateExportFile(exportData, 'JSON', job.parameters);
-    
+
     // For large exports, create ZIP file
     const compressedBuffer = await this.compressExportData(fileBuffer, job.id);
     const downloadUrl = await this.uploadExportFile(job.id, compressedBuffer, 'ZIP');
-    
+
     return { downloadUrl, fileSize: compressedBuffer.length };
   }
 
-  private async exportGDPRData(job: ExportJob, signal: AbortSignal): Promise<{ downloadUrl: string; fileSize: number }> {
+  private async exportGDPRData(
+    job: ExportJob,
+    signal: AbortSignal
+  ): Promise<{ downloadUrl: string; fileSize: number }> {
     const { organizationId, userId } = job;
-    
+
     // Export all personal data for GDPR compliance
     const userData = await this.prisma.user.findUnique({
       where: { id: userId },
@@ -593,7 +644,7 @@ export class DataExportService {
 
     const fileBuffer = await this.generateExportFile(gdprData, job.format, job.parameters);
     const downloadUrl = await this.uploadExportFile(job.id, fileBuffer, job.format);
-    
+
     return { downloadUrl, fileSize: fileBuffer.length };
   }
 
@@ -609,19 +660,19 @@ export class DataExportService {
     switch (format) {
       case 'JSON':
         return Buffer.from(JSON.stringify(data, null, 2), 'utf-8');
-      
+
       case 'CSV':
         return this.generateCSV(data, parameters);
-      
+
       case 'XLSX':
         return await this.generateExcel(data, parameters);
-      
+
       case 'PDF':
         return await this.generatePDF(data, parameters);
-      
+
       case 'XML':
         return this.generateXML(data, parameters);
-      
+
       default:
         throw new Error(`Unsupported export format: ${format}`);
     }
@@ -634,33 +685,33 @@ export class DataExportService {
 
     const delimiter = parameters.csvDelimiter || ',';
     const includeHeaders = parameters.includeHeaders !== false;
-    
+
     // Extract headers from first object
     const headers = Object.keys(data[0]);
     const lines: string[] = [];
-    
+
     if (includeHeaders) {
-      lines.push(headers.map(h => `"${h}"`).join(delimiter));
+      lines.push(headers.map((h) => `"${h}"`).join(delimiter));
     }
-    
+
     // Add data rows
     for (const row of data) {
-      const values = headers.map(header => {
+      const values = headers.map((header) => {
         const value = row[header];
         if (value === null || value === undefined) return '';
-        
+
         // Handle objects and arrays
         if (typeof value === 'object') {
           return `"${JSON.stringify(value).replace(/"/g, '""')}"`;
         }
-        
+
         // Escape quotes in strings
         return `"${String(value).replace(/"/g, '""')}"`;
       });
-      
+
       lines.push(values.join(delimiter));
     }
-    
+
     return Buffer.from(lines.join('\n'), parameters.csvEncoding || 'utf-8');
   }
 
@@ -685,12 +736,12 @@ export class DataExportService {
 
   private objectToXML(obj: any, rootName: string): string {
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<${rootName}>\n`;
-    
+
     const processValue = (value: any, key: string, indent: string): string => {
       if (value === null || value === undefined) {
         return `${indent}<${key}/>\n`;
       }
-      
+
       if (Array.isArray(value)) {
         let result = `${indent}<${key}>\n`;
         value.forEach((item, index) => {
@@ -699,7 +750,7 @@ export class DataExportService {
         result += `${indent}</${key}>\n`;
         return result;
       }
-      
+
       if (typeof value === 'object') {
         let result = `${indent}<${key}>\n`;
         Object.entries(value).forEach(([k, v]) => {
@@ -708,16 +759,16 @@ export class DataExportService {
         result += `${indent}</${key}>\n`;
         return result;
       }
-      
+
       return `${indent}<${key}>${String(value)}</${key}>\n`;
     };
-    
+
     if (typeof obj === 'object' && obj !== null) {
       Object.entries(obj).forEach(([key, value]) => {
         xml += processValue(value, key, '  ');
       });
     }
-    
+
     xml += `</${rootName}>`;
     return xml;
   }
@@ -727,7 +778,7 @@ export class DataExportService {
   // ============================================================================
 
   private transformRisksForExport(risks: any[], parameters: ExportParameters): any[] {
-    return risks.map(risk => {
+    return risks.map((risk) => {
       const transformed: any = {
         id: risk.id,
         title: risk.title,
@@ -771,7 +822,7 @@ export class DataExportService {
   }
 
   private transformControlsForExport(controls: any[], parameters: ExportParameters): any[] {
-    return controls.map(control => {
+    return controls.map((control) => {
       const transformed: any = {
         id: control.id,
         name: control.name,
@@ -837,8 +888,8 @@ export class DataExportService {
     const required = requiredPermissions[exportType] || [];
     const userPermissions = user.permissions || [];
 
-    const hasPermission = required.some(perm => 
-      userPermissions.includes(perm) || userPermissions.includes('admin:all')
+    const hasPermission = required.some(
+      (perm) => userPermissions.includes(perm) || userPermissions.includes('admin:all')
     );
 
     if (!hasPermission) {
@@ -853,7 +904,7 @@ export class DataExportService {
   ): Promise<ExportMetadata> {
     // Count records for different export types
     let totalRecords = 0;
-    
+
     switch (type) {
       case 'RISKS':
         totalRecords = await this.prisma.risk.count({ where: { organizationId } });
@@ -969,7 +1020,7 @@ export class DataExportService {
 
     // Store template
     await this.cache.set(`export-template:${newTemplate.id}`, newTemplate, 30 * 24 * 60 * 60);
-    
+
     return newTemplate;
   }
 

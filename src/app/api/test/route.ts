@@ -8,7 +8,7 @@ import { withCSRFProtection } from '@/lib/security/csrf';
 
 async function handler(request: NextRequest) {
   const method = request.method;
-  
+
   try {
     // Handle different HTTP methods
     switch (method) {
@@ -20,13 +20,13 @@ async function handler(request: NextRequest) {
           security: {
             rateLimitingActive: true,
             securityHeadersActive: true,
-            csrfProtectionActive: false // Not required for GET
-          }
+            csrfProtectionActive: false, // Not required for GET
+          },
         });
-        
+
       case 'POST':
         const body = await request.json().catch(() => ({}));
-        
+
         return NextResponse.json({
           message: 'POST request successful - CSRF protection passed',
           timestamp: new Date().toISOString(),
@@ -35,10 +35,10 @@ async function handler(request: NextRequest) {
           security: {
             rateLimitingActive: true,
             securityHeadersActive: true,
-            csrfProtectionActive: true
-          }
+            csrfProtectionActive: true,
+          },
         });
-        
+
       case 'PUT':
       case 'DELETE':
       case 'PATCH':
@@ -49,23 +49,20 @@ async function handler(request: NextRequest) {
           security: {
             rateLimitingActive: true,
             securityHeadersActive: true,
-            csrfProtectionActive: true
-          }
+            csrfProtectionActive: true,
+          },
         });
-        
+
       default:
-        return NextResponse.json(
-          { error: 'Method not allowed' },
-          { status: 405 }
-        );
+        return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
     }
   } catch (error) {
     console.error('Test endpoint error:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Internal server error',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
       { status: 500 }
     );
@@ -77,4 +74,4 @@ export const GET = handler;
 export const POST = withCSRFProtection(handler);
 export const PUT = withCSRFProtection(handler);
 export const DELETE = withCSRFProtection(handler);
-export const PATCH = withCSRFProtection(handler); 
+export const PATCH = withCSRFProtection(handler);

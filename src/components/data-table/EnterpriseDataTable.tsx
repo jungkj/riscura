@@ -180,10 +180,11 @@ export default function EnterpriseDataTable<T extends TableData>({
   
   const isAllSelected = paginatedData.length > 0 && paginatedData.every(row => selectedRows.has(row.id));
   const isIndeterminate = selectedRows.size > 0 && !isAllSelected;
-  
+
   return (
-    <DaisyCard className={className}>
-      <DaisyCardHeader className="pb-3">
+    <DaisyCard className={className} >
+  <DaisyCardHeader className="pb-3" />
+</DaisyCard>
         <div className="flex items-center justify-between">
           <div>
             <DaisyCardTitle className="text-lg">{title}</DaisyCardTitle>
@@ -194,27 +195,29 @@ export default function EnterpriseDataTable<T extends TableData>({
           
           <div className="flex items-center space-x-2">
             {enableExport && (
-              <DaisyDropdownMenu>
-                <DaisyDropdownMenuTrigger asChild>
-                  <DaisyButton variant="outline" size="sm">
-                    <Download className="h-4 w-4 mr-2" />
+              <DaisyDropdownMenu />
+                <DaisyDropdownMenuTrigger asChild />
+                  <DaisyButton variant="outline" size="sm" >
+  <Download className="h-4 w-4 mr-2" />
+</DaisyDropdownMenu>
                     Export
                     <ChevronDown className="h-4 w-4 ml-2" />
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent>
-                  <DaisyDropdownMenuItem onClick={() => handleExport('csv')}>
+                <DaisyDropdownMenuContent />
+                  <DaisyDropdownMenuItem onClick={() => handleExport('csv')} />
                     Export as CSV
-                  </DaisyDropdownMenuItem>
-                  <DaisyDropdownMenuItem onClick={() => handleExport('json')}>
+                  </DaisyDropdownMenuContent>
+                  <DaisyDropdownMenuItem onClick={() => handleExport('json')} />
                     Export as JSON
                   </DaisyDropdownMenuItem>
                 </DaisyDropdownMenuContent>
               </DaisyDropdownMenu>
             )}
             
-            <DaisyButton variant="outline" size="sm" onClick={handleReset}>
-              <RefreshCw className="h-4 w-4 mr-2" />
+            <DaisyButton variant="outline" size="sm" onClick={handleReset} >
+  <RefreshCw className="h-4 w-4 mr-2" />
+</DaisyButton>
               Reset
             </DaisyButton>
           </div>
@@ -235,14 +238,13 @@ export default function EnterpriseDataTable<T extends TableData>({
           
           {enableSelection && selectedRows.size > 0 && bulkActions.length > 0 && (
             <div className="flex items-center space-x-2 p-3 bg-blue-50 rounded-lg">
-              <DaisyBadge variant="secondary">{selectedRows.size} selected</DaisyBadge>
+              <DaisyBadge variant="secondary">{selectedRows.size} selected</DaisyInput>
               {bulkActions.map((action) => (
                 <DaisyButton
                   key={action.id}
                   variant={action.variant || 'outline'}
                   size="sm"
-                  onClick={() => handleBulkAction(action)}
-                >
+                  onClick={() => handleBulkAction(action)} />
                   {action.icon}
                   {action.label}
                 </DaisyButton>
@@ -252,13 +254,14 @@ export default function EnterpriseDataTable<T extends TableData>({
         </div>
       
 
-      <DaisyCardContent className="p-0">
-        <div className="border rounded-lg">
-          <DaisyTable>
-            <DaisyTableHeader>
-              <DaisyTableRow>
+      <DaisyCardContent className="p-0" >
+  <div className="border rounded-lg">
+</DaisyCardContent>
+          <DaisyTable />
+            <DaisyTableHeader />
+              <DaisyTableRow />
                 {enableSelection && (
-                  <DaisyTableHead className="w-12">
+                  <DaisyTableHead className="w-12" />
                     <DaisyCheckbox
                       checked={isAllSelected}
                       ref={(el) => {
@@ -269,16 +272,15 @@ export default function EnterpriseDataTable<T extends TableData>({
                       onCheckedChange={handleSelectAll}
                       aria-label="Select all"
                     />
-                  </DaisyTableHead>
+                  </DaisyTable>
                 )}
                 {columns.map((column) => (
-                  <DaisyTableHead key={column.key as string}>
+                  <DaisyTableHead key={column.key as string} />
                     {column.sortable !== false ? (
                       <DaisyButton
                         variant="ghost"
                         onClick={() => handleSort(column.key)}
-                        className="h-8 p-0 hover:bg-transparent"
-                      >
+                        className="h-8 p-0 hover:bg-transparent" />
                         {column.header}
                         {sortConfig?.key === column.key && (
                           sortConfig.direction === 'asc' 
@@ -288,7 +290,7 @@ export default function EnterpriseDataTable<T extends TableData>({
                         {sortConfig?.key !== column.key && (
                           <ArrowUpDown className="ml-2 h-4 w-4 opacity-50" />
                         )}
-                      </DaisyButton>
+                      </DaisyTableHead>
                     ) : (
                       column.header
                     )}
@@ -297,7 +299,7 @@ export default function EnterpriseDataTable<T extends TableData>({
                 <DaisyTableHead className="w-20">Actions</DaisyTableHead>
               </DaisyTableRow>
             </DaisyTableHeader>
-            <DaisyTableBody>
+            <DaisyTableBody />
               {paginatedData.length > 0 ? (
                 paginatedData.map((row) => (
                   <DaisyTableRow
@@ -305,44 +307,44 @@ export default function EnterpriseDataTable<T extends TableData>({
                     className={`hover:bg-gray-50 ${selectedRows.has(row.id) ? 'bg-blue-50' : ''}`}
                   >
                     {enableSelection && (
-                      <DaisyTableCell>
+                      <DaisyTableCell />
                         <DaisyCheckbox
                           checked={selectedRows.has(row.id)}
                           onCheckedChange={(checked) => handleRowSelection(row.id, checked as boolean)}
                           aria-label="Select row"
                         />
-                      </DaisyTableCell>
+                      </DaisyTableBody>
                     )}
                     {columns.map((column) => (
                       <DaisyTableCell
                         key={column.key as string}
                         onClick={() => onRowClick?.(row)}
-                        className="cursor-pointer"
-                      >
+                        className="cursor-pointer" />
                         {column.render
                           ? column.render(row[column.key], row)
                           : String(row[column.key] || '')
                         }
                       </DaisyTableCell>
                     ))}
-                    <DaisyTableCell>
-                      <DaisyDropdownMenu>
-                        <DaisyDropdownMenuTrigger asChild>
-                          <DaisyButton variant="ghost" className="h-8 w-8 p-0">
-                            <MoreHorizontal className="h-4 w-4" />
+                    <DaisyTableCell />
+                      <DaisyDropdownMenu />
+                        <DaisyDropdownMenuTrigger asChild />
+                          <DaisyButton variant="ghost" className="h-8 w-8 p-0" >
+  <MoreHorizontal className="h-4 w-4" />
+</DaisyTableCell>
                           </DaisyButton>
                         </DaisyDropdownMenuTrigger>
-                        <DaisyDropdownMenuContent align="end">
-                          <DaisyDropdownMenuItem onClick={() => onRowClick?.(row)}>
+                        <DaisyDropdownMenuContent align="end" />
+                          <DaisyDropdownMenuItem onClick={() => onRowClick?.(row)} />
                             <Eye className="mr-2 h-4 w-4" />
                             View
-                          </DaisyDropdownMenuItem>
-                          <DaisyDropdownMenuItem onClick={() => navigator.clipboard.writeText(row.id)}>
+                          </DaisyDropdownMenuContent>
+                          <DaisyDropdownMenuItem onClick={() => navigator.clipboard.writeText(row.id)} />
                             <Copy className="mr-2 h-4 w-4" />
                             Copy ID
                           </DaisyDropdownMenuItem>
                           {onRowEdit && (
-                            <DaisyDropdownMenuItem onClick={() => onRowEdit(row)}>
+                            <DaisyDropdownMenuItem onClick={() => onRowEdit(row)} />
                               <Edit className="mr-2 h-4 w-4" />
                               Edit
                             </DaisyDropdownMenuItem>
@@ -350,8 +352,7 @@ export default function EnterpriseDataTable<T extends TableData>({
                           {onRowDelete && (
                             <DaisyDropdownMenuItem 
                               onClick={() => onRowDelete(row)}
-                              className="text-red-600"
-                            >
+                              className="text-red-600" />
                               <Trash2 className="mr-2 h-4 w-4" />
                               Delete
                             </DaisyDropdownMenuItem>
@@ -362,10 +363,10 @@ export default function EnterpriseDataTable<T extends TableData>({
                   </DaisyTableRow>
                 ))
               ) : (
-                <DaisyTableRow>
-                  <DaisyTableCell colSpan={columns.length + (enableSelection ? 2 : 1)} className="h-24 text-center">
+                <DaisyTableRow />
+                  <DaisyTableCell colSpan={columns.length + (enableSelection ? 2 : 1)} className="h-24 text-center" />
                     No results found.
-                  </DaisyTableCell>
+                  </DaisyTableRow>
                 </DaisyTableRow>
               )}
             </DaisyTableBody>
@@ -385,8 +386,7 @@ export default function EnterpriseDataTable<T extends TableData>({
                 variant="outline"
                 size="sm"
                 onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                disabled={currentPage === 1}
-              >
+                disabled={currentPage === 1} />
                 Previous
               </DaisyButton>
               
@@ -401,16 +401,15 @@ export default function EnterpriseDataTable<T extends TableData>({
                     page = totalPages - 4 + i;
                   } else {
                     page = currentPage - 2 + i;
-                  }
-                  
-                  return (
+                  };
+
+  return (
                     <DaisyButton
                       key={page}
                       variant={currentPage === page ? 'primary' : 'outline'}
                       size="sm"
                       onClick={() => setCurrentPage(page)}
-                      className="w-8 h-8 p-0"
-                    >
+                      className="w-8 h-8 p-0" />
                       {page}
                     </DaisyButton>
                   );
@@ -421,14 +420,13 @@ export default function EnterpriseDataTable<T extends TableData>({
                 variant="outline"
                 size="sm"
                 onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                disabled={currentPage === totalPages}
-              >
+                disabled={currentPage === totalPages} />
                 Next
               </DaisyButton>
             </div>
           </div>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 }
@@ -529,7 +527,7 @@ export function RiskDataTableExample() {
       variant: 'danger'
     }
   ];
-  
+
   return (
     <EnterpriseDataTable
       data={sampleData}

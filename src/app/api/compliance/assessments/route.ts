@@ -51,7 +51,7 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
     description: validatedData.description,
     dueDate: validatedData.dueDate ? new Date(validatedData.dueDate) : undefined,
     organizationId: user.organizationId,
-    assessorId: validatedData.assessorId
+    assessorId: validatedData.assessorId,
   });
 
   return ApiResponseFormatter.success(assessment, { status: 201 });

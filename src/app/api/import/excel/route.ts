@@ -7,58 +7,60 @@ import { getAuthenticatedUser } from '@/lib/auth/session';
 
 // Excel import schema
 const ExcelImportSchema = z.object({
-  risks: z.array(z.object({
-    name: z.string().optional(),
-    description: z.string().optional(),
-    category: z.string().optional(),
-    likelihood: z.number().min(1).max(5).optional(),
-    impact: z.number().min(1).max(5).optional(),
-    status: z.string().optional(),
-    owner: z.string().optional(),
-    department: z.string().optional(),
-  }))
+  risks: z.array(
+    z.object({
+      name: z.string().optional(),
+      description: z.string().optional(),
+      category: z.string().optional(),
+      likelihood: z.number().min(1).max(5).optional(),
+      impact: z.number().min(1).max(5).optional(),
+      status: z.string().optional(),
+      owner: z.string().optional(),
+      department: z.string().optional(),
+    })
+  ),
 });
 
 export const POST = withApiMiddleware({
   requireAuth: true,
-  rateLimiters: ['fileUpload']
+  rateLimiters: ['fileUpload'],
 })(async (context) => {
   const { user, organizationId } = context;
   const req = context.req as NextRequest;
-  
+
   try {
     // Get the uploaded file from the form data
     const formData = await req.formData();
     const file = formData.get('file') as File;
-    
+
     if (!file) {
-      return { 
-        success: false, 
-        error: 'No file uploaded' 
+      return {
+        success: false,
+        error: 'No file uploaded',
       };
     }
 
     // Check file size (10MB limit)
     if (file.size > 10 * 1024 * 1024) {
-      return { 
-        success: false, 
-        error: 'File size exceeds 10MB limit' 
+      return {
+        success: false,
+        error: 'File size exceeds 10MB limit',
       };
     }
 
     // Check file type
     const fileType = file.name.split('.').pop()?.toLowerCase();
     if (!['xlsx', 'xls', 'csv'].includes(fileType || '')) {
-      return { 
-        success: false, 
-        error: 'Invalid file type. Please upload an Excel (.xlsx, .xls) or CSV file' 
+      return {
+        success: false,
+        error: 'Invalid file type. Please upload an Excel (.xlsx, .xls) or CSV file',
       };
     }
 
     // Read the file
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-    
+
     // Parse Excel file
     const workbook = XLSX.read(buffer, { type: 'buffer' });
     const sheetName = workbook.SheetNames[0];
@@ -83,12 +85,12 @@ export const POST = withApiMiddleware({
     });
 
     // Filter out empty rows
-    const validRisks = risks.filter(risk => risk.name || risk.description);
+    const validRisks = risks.filter((risk) => risk.name || risk.description);
 
     if (validRisks.length === 0) {
-      return { 
-        success: false, 
-        error: 'No valid risks found in the file. Please check the column headers.' 
+      return {
+        success: false,
+        error: 'No valid risks found in the file. Please check the column headers.',
       };
     }
 
@@ -110,8 +112,8 @@ export const POST = withApiMiddleware({
               importedAt: new Date().toISOString(),
               owner: risk.owner,
               department: risk.department,
-            }
-          }
+            },
+          },
         });
       })
     );
@@ -121,20 +123,19 @@ export const POST = withApiMiddleware({
       message: `Successfully imported ${createdRisks.length} risks`,
       risksImported: createdRisks.length,
       data: {
-        risks: createdRisks.map(r => ({
+        risks: createdRisks.map((r) => ({
           id: r.id,
           name: r.name,
           category: r.category,
-          status: r.status
-        }))
-      }
+          status: r.status,
+        })),
+      },
     };
-
   } catch (error) {
     console.error('Excel import error:', error);
-    return { 
-      success: false, 
-      error: 'Failed to import Excel file. Please check the file format and try again.' 
+    return {
+      success: false,
+      error: 'Failed to import Excel file. Please check the file format and try again.',
     };
   }
 });
@@ -144,28 +145,40 @@ function parseRiskScore(value: any): number {
   if (typeof value === 'number') {
     return Math.min(Math.max(Math.round(value), 1), 5);
   }
-  
+
   const strValue = String(value).toLowerCase().trim();
-  
+
   // Handle text values
   const textToScore: Record<string, number> = {
-    'very low': 1, 'vl': 1, 'negligible': 1,
-    'low': 2, 'l': 2, 'minor': 2,
-    'medium': 3, 'm': 3, 'moderate': 3, 'mod': 3,
-    'high': 4, 'h': 4, 'major': 4,
-    'very high': 5, 'vh': 5, 'critical': 5, 'severe': 5
+    'very low': 1,
+    vl: 1,
+    negligible: 1,
+    low: 2,
+    l: 2,
+    minor: 2,
+    medium: 3,
+    m: 3,
+    moderate: 3,
+    mod: 3,
+    high: 4,
+    h: 4,
+    major: 4,
+    'very high': 5,
+    vh: 5,
+    critical: 5,
+    severe: 5,
   };
-  
+
   if (textToScore[strValue]) {
     return textToScore[strValue];
   }
-  
+
   // Try to parse as number
   const num = parseInt(strValue);
   if (!isNaN(num)) {
     return Math.min(Math.max(num, 1), 5);
   }
-  
+
   // Default to medium
   return 3;
 }

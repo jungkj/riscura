@@ -13,30 +13,27 @@ interface RouteParams {
 }
 
 // GET /api/compliance/assessments/[id]/gaps - Get assessment gaps
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
-    if (!user) {
-      return ApiResponseFormatter.authError('User not authenticated');
-    }
+      if (!user) {
+        return ApiResponseFormatter.authError('User not authenticated');
+      }
 
-    const searchParams = request.nextUrl.searchParams;
-    const status = searchParams.get('status') as GapStatus | null;
-    const severity = searchParams.get('severity') as GapSeverity | null;
+      const searchParams = request.nextUrl.searchParams;
+      const status = searchParams.get('status') as GapStatus | null;
+      const severity = searchParams.get('severity') as GapSeverity | null;
 
-    const filters = {
-      ...(status && { status }),
-      ...(severity && { severity })
-    };
+      const filters = {
+        ...(status && { status }),
+        ...(severity && { severity }),
+      };
 
-    const gaps = await complianceService.getGaps(id, filters);
+      const gaps = await complianceService.getGaps(id, filters);
 
-    return ApiResponseFormatter.success(gaps);
+      return ApiResponseFormatter.success(gaps);
     },
     { requireAuth: true }
   )(req);
@@ -55,35 +52,32 @@ const createGapSchema = z.object({
   assignedTo: z.string().optional(),
 });
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
-    if (!user) {
-      return ApiResponseFormatter.authError('User not authenticated');
-    }
+      if (!user) {
+        return ApiResponseFormatter.authError('User not authenticated');
+      }
 
-    const body = await request.json();
-    const validatedData = createGapSchema.parse(body);
+      const body = await request.json();
+      const validatedData = createGapSchema.parse(body);
 
-    const gap = await complianceService.createGap({
-      assessmentId: id,
-      requirementId: validatedData.requirementId,
-      gapType: validatedData.gapType,
-      severity: validatedData.severity,
-      description: validatedData.description,
-      impact: validatedData.impact,
-      remediationPlan: validatedData.remediationPlan,
-      estimatedEffort: validatedData.estimatedEffort,
-      targetDate: validatedData.targetDate ? new Date(validatedData.targetDate) : undefined,
-      assignedTo: validatedData.assignedTo
-    });
+      const gap = await complianceService.createGap({
+        assessmentId: id,
+        requirementId: validatedData.requirementId,
+        gapType: validatedData.gapType,
+        severity: validatedData.severity,
+        description: validatedData.description,
+        impact: validatedData.impact,
+        remediationPlan: validatedData.remediationPlan,
+        estimatedEffort: validatedData.estimatedEffort,
+        targetDate: validatedData.targetDate ? new Date(validatedData.targetDate) : undefined,
+        assignedTo: validatedData.assignedTo,
+      });
 
-    return ApiResponseFormatter.success(gap);
+      return ApiResponseFormatter.success(gap);
     },
     { requireAuth: true }
   )(req);

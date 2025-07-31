@@ -4,11 +4,11 @@ interface SeparatorProps extends React.HTMLAttributes<HTMLDivElement> {
   orientation?: 'horizontal' | 'vertical';
 }
 
-export const DaisySeparator = ({ 
-  className, 
+export const DaisySeparator = ({
+  className,
   orientation = 'horizontal',
   children,
-  ...props 
+  ...props
 }: SeparatorProps) => {
   if (children) {
     return (

@@ -3,7 +3,17 @@ import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'accent' | 'ghost' | 'link' | 'outline' | 'error' | 'success' | 'warning' | 'info';
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'accent'
+    | 'ghost'
+    | 'link'
+    | 'outline'
+    | 'error'
+    | 'success'
+    | 'warning'
+    | 'info';
   size?: 'xs' | 'sm' | 'md' | 'lg';
   loading?: boolean;
   block?: boolean;
@@ -11,7 +21,20 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const DaisyButton = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'primary', size = 'md', loading, block, shape = 'default', children, disabled, ...props }, ref) => {
+  (
+    {
+      className,
+      variant = 'primary',
+      size = 'md',
+      loading,
+      block,
+      shape = 'default',
+      children,
+      disabled,
+      ...props
+    },
+    ref
+  ) => {
     const variantClasses = {
       primary: 'btn-primary',
       secondary: 'btn-secondary',

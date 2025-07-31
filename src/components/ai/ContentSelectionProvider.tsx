@@ -267,8 +267,7 @@ export const EnhancedSelectableContent: React.FC<EnhancedSelectableContentProps>
       metadata={metadata}
       disabled={disabled}
       showQualityScore={showQualityScore}
-      highlightColor={highlightColor}
-    >
+      highlightColor={highlightColor} />
       {children}
     </SelectableContent>
   );
@@ -285,7 +284,7 @@ export const ContentSelectionControls: React.FC<{ className?: string }> = ({ cla
 
   if (!stats.totalResults && !stats.batchItems) {
     return null;
-  }
+  };
 
   return (
     <div className={`fixed bottom-4 right-4 flex gap-2 z-40 ${className}`}>

@@ -318,9 +318,9 @@ export function AIAssistantPanel({
             variant="ghost"
             size="sm"
             onClick={handleGenerateQuestions}
-            disabled={isGenerating}
-          >
-            {isGenerating ? (
+            disabled={isGenerating} >
+  {isGenerating ? (
+</DaisyButton>
               <RefreshCw className="w-3 h-3 animate-spin" />
             ) : (
               <Sparkles className="w-3 h-3" />
@@ -333,10 +333,10 @@ export function AIAssistantPanel({
       </div>
 
       {/* AI Tabs */}
-      <DaisyTabs value={activeAITab} onValueChange={setActiveAITab} className="flex-1 flex flex-col">
+      <DaisyTabs value={activeAITab} onValueChange={setActiveAITab} className="flex-1 flex flex-col" />
         <div className="border-b border-notion-border">
-          <DaisyTabsList className="grid w-full grid-cols-4 h-8">
-            <DaisyTabsTrigger value="suggestions" className="text-xs">Suggest</DaisyTabsTrigger>
+          <DaisyTabsList className="grid w-full grid-cols-4 h-8" />
+            <DaisyTabsTrigger value="suggestions" className="text-xs">Suggest</DaisyTabs>
             <DaisyTabsTrigger value="insights" className="text-xs">Insights</DaisyTabsTrigger>
             <DaisyTabsTrigger value="optimize" className="text-xs">Optimize</DaisyTabsTrigger>
             <DaisyTabsTrigger value="help" className="text-xs">Help</DaisyTabsTrigger>
@@ -345,7 +345,7 @@ export function AIAssistantPanel({
 
         <div className="flex-1 overflow-hidden">
           {/* Question Suggestions Tab */}
-          <DaisyTabsContent value="suggestions" className="h-full m-0">
+          <DaisyTabsContent value="suggestions" className="h-full m-0" />
             <div className="p-3 space-y-3">
               {/* Search and Filters */}
               <div className="space-y-2">
@@ -371,7 +371,7 @@ export function AIAssistantPanel({
               <DaisySeparator />
 
               {/* Question Suggestions */}
-              <DaisyScrollArea className="h-[400px]">
+              <DaisyScrollArea className="h-[400px]" />
                 <div className="space-y-3">
                   {isGenerating && (
                     <motion.div
@@ -399,11 +399,13 @@ export function AIAssistantPanel({
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-1">
-                            <DaisyBadge className={getRiskLevelColor(suggestion.riskLevel || 'medium')}>
-                              {suggestion.riskLevel}
+                            <DaisyBadge className={getRiskLevelColor(suggestion.riskLevel || 'medium')} >
+  {suggestion.riskLevel}
+</DaisyTabsContent>
                             </DaisyBadge>
-                            <DaisyBadge variant="outline" className="text-xs">
-                              {suggestion.category}
+                            <DaisyBadge variant="outline" className="text-xs" >
+  {suggestion.category}
+</DaisyBadge>
                             </DaisyBadge>
                           </div>
                           <p className="text-xs font-medium text-notion-text-primary mb-1">
@@ -426,13 +428,15 @@ export function AIAssistantPanel({
                           <p className="text-xs font-medium text-notion-text-secondary">Suggested answers:</p>
                           <div className="flex flex-wrap gap-1">
                             {suggestion.suggestedAnswers.slice(0, 3).map((answer, i) => (
-                              <DaisyBadge key={i} variant="secondary" className="text-xs">
-                                {answer}
+                              <DaisyBadge key={i} variant="secondary" className="text-xs" >
+  {answer}
+</DaisyBadge>
                               </DaisyBadge>
                             ))}
                             {suggestion.suggestedAnswers.length > 3 && (
-                              <DaisyBadge variant="secondary" className="text-xs">
-                                +{suggestion.suggestedAnswers.length - 3} more
+                              <DaisyBadge variant="secondary" className="text-xs" >
+  +{suggestion.suggestedAnswers.length - 3} more
+</DaisyBadge>
                               </DaisyBadge>
                             )}
                           </div>
@@ -445,21 +449,23 @@ export function AIAssistantPanel({
                             variant="ghost"
                             size="sm"
                             className="h-6 px-2 text-xs"
-                            onClick={() => handleApplySuggestion(suggestion)}
-                          >
+                            onClick={() => handleApplySuggestion(suggestion)} />
                             <Plus className="w-3 h-3 mr-1" />
                             Add
                           </DaisyButton>
-                          <DaisyButton variant="ghost" size="sm" className="h-6 px-2 text-xs">
-                            <Copy className="w-3 h-3" />
+                          <DaisyButton variant="ghost" size="sm" className="h-6 px-2 text-xs" >
+  <Copy className="w-3 h-3" />
+</DaisyButton>
                           </DaisyButton>
                         </div>
                         <div className="flex items-center space-x-1">
-                          <DaisyButton variant="ghost" size="sm" className="h-6 px-1">
-                            <ThumbsUp className="w-3 h-3" />
+                          <DaisyButton variant="ghost" size="sm" className="h-6 px-1" >
+  <ThumbsUp className="w-3 h-3" />
+</DaisyButton>
                           </DaisyButton>
-                          <DaisyButton variant="ghost" size="sm" className="h-6 px-1">
-                            <ThumbsDown className="w-3 h-3" />
+                          <DaisyButton variant="ghost" size="sm" className="h-6 px-1" >
+  <ThumbsDown className="w-3 h-3" />
+</DaisyButton>
                           </DaisyButton>
                         </div>
                       </div>
@@ -471,17 +477,19 @@ export function AIAssistantPanel({
           </DaisyTabsContent>
 
           {/* Insights Tab */}
-          <DaisyTabsContent value="insights" className="h-full m-0">
+          <DaisyTabsContent value="insights" className="h-full m-0" />
             <div className="p-3 space-y-3">
               <div className="grid grid-cols-2 gap-2">
-                <DaisyCard className="p-3">
-                  <div className="text-center">
+                <DaisyCard className="p-3" >
+  <div className="text-center">
+</DaisyTabsContent>
                     <div className="text-lg font-bold text-notion-text-primary">87%</div>
                     <div className="text-xs text-notion-text-secondary">Response Rate</div>
                   </div>
                 </DaisyCard>
-                <DaisyCard className="p-3">
-                  <div className="text-center">
+                <DaisyCard className="p-3" >
+  <div className="text-center">
+</DaisyCard>
                     <div className="text-lg font-bold text-notion-text-primary">4.2</div>
                     <div className="text-xs text-notion-text-secondary">Avg Risk Score</div>
                   </div>
@@ -493,7 +501,7 @@ export function AIAssistantPanel({
               {/* Risk Recommendations */}
               <div>
                 <h4 className="text-sm font-semibold text-notion-text-primary mb-2">Risk Recommendations</h4>
-                <DaisyScrollArea className="h-[200px]">
+                <DaisyScrollArea className="h-[200px]" />
                   <div className="space-y-2">
                     {mockRiskRecommendations.map((rec, index) => (
                       <motion.div
@@ -506,11 +514,13 @@ export function AIAssistantPanel({
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex-1">
                             <div className="flex items-center space-x-2 mb-1">
-                              <DaisyBadge className={getRiskLevelColor(rec.riskLevel)}>
-                                {rec.riskLevel}
+                              <DaisyBadge className={getRiskLevelColor(rec.riskLevel)} >
+  {rec.riskLevel}
+</DaisySeparator>
                               </DaisyBadge>
-                              <DaisyBadge variant="outline" className="text-xs">
-                                {rec.category}
+                              <DaisyBadge variant="outline" className="text-xs" >
+  {rec.category}
+</DaisyBadge>
                               </DaisyBadge>
                             </div>
                             <h5 className="text-xs font-medium text-notion-text-primary">
@@ -541,7 +551,7 @@ export function AIAssistantPanel({
               {/* Response Insights */}
               <div>
                 <h4 className="text-sm font-semibold text-notion-text-primary mb-2">Response Insights</h4>
-                <DaisyScrollArea className="h-[150px]">
+                <DaisyScrollArea className="h-[150px]" />
                   <div className="space-y-2">
                     {mockResponseInsights.map((insight, index) => {
                       const IconComponent = getInsightTypeIcon(insight.type);
@@ -570,8 +580,9 @@ export function AIAssistantPanel({
                                   </span>
                                 </div>
                                 {insight.actionable && (
-                                  <DaisyButton variant="ghost" size="sm" className="h-5 px-1 text-xs">
-                                    <ArrowRight className="w-3 h-3" />
+                                  <DaisyButton variant="ghost" size="sm" className="h-5 px-1 text-xs" >
+  <ArrowRight className="w-3 h-3" />
+</DaisySeparator>
                                   </DaisyButton>
                                 )}
                               </div>
@@ -587,10 +598,10 @@ export function AIAssistantPanel({
           </DaisyTabsContent>
 
           {/* Optimization Tab */}
-          <DaisyTabsContent value="optimize" className="h-full m-0">
+          <DaisyTabsContent value="optimize" className="h-full m-0" />
             <div className="p-3 space-y-3">
               <h4 className="text-sm font-semibold text-notion-text-primary">Optimization Suggestions</h4>
-              <DaisyScrollArea className="h-[500px]">
+              <DaisyScrollArea className="h-[500px]" />
                 <div className="space-y-3">
                   {mockOptimizationSuggestions.map((suggestion, index) => (
                     <motion.div
@@ -603,8 +614,9 @@ export function AIAssistantPanel({
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-1">
-                            <DaisyBadge variant="outline" className="text-xs">
-                              {suggestion.type}
+                            <DaisyBadge variant="outline" className="text-xs" >
+  {suggestion.type}
+</DaisyTabsContent>
                             </DaisyBadge>
                             <DaisyBadge className={`text-xs ${
                               suggestion.impact === 'high' ? 'bg-green-100 text-green-800' :
@@ -636,12 +648,14 @@ export function AIAssistantPanel({
 
                       <div className="flex items-center justify-between mt-3">
                         <div className="flex items-center space-x-2">
-                          <DaisyBadge variant="secondary" className="text-xs">
-                            {suggestion.effort} effort
+                          <DaisyBadge variant="secondary" className="text-xs" >
+  {suggestion.effort} effort
+</DaisyBadge>
                           </DaisyBadge>
                         </div>
-                        <DaisyButton variant="ghost" size="sm" className="h-6 px-2 text-xs">
-                          <CheckCircle className="w-3 h-3 mr-1" />
+                        <DaisyButton variant="ghost" size="sm" className="h-6 px-2 text-xs" >
+  <CheckCircle className="w-3 h-3 mr-1" />
+</DaisyButton>
                           Apply
                         </DaisyButton>
                       </div>
@@ -653,10 +667,10 @@ export function AIAssistantPanel({
           </DaisyTabsContent>
 
           {/* Help Tab */}
-          <DaisyTabsContent value="help" className="h-full m-0">
+          <DaisyTabsContent value="help" className="h-full m-0" />
             <div className="p-3 space-y-3">
               <h4 className="text-sm font-semibold text-notion-text-primary">Contextual Help</h4>
-              <DaisyScrollArea className="h-[500px]">
+              <DaisyScrollArea className="h-[500px]" />
                 <div className="space-y-3">
                   {getContextualHelp(activeTab).map((help, index) => (
                     <motion.div
@@ -674,7 +688,9 @@ export function AIAssistantPanel({
                           'bg-gray-100 dark:bg-gray-900/20'
                         }`}>
                           {help.type === 'tip' && <Lightbulb className="w-3 h-3 text-blue-600" />}
-                          {help.type === 'warning' && <DaisyAlertTriangle className="w-3 h-3 text-orange-600" />}
+                          {help.type === 'warning' && <DaisyAlertTriangle className="w-3 h-3 text-orange-600" >
+  }
+</DaisyTabsContent>
                           {help.type === 'best_practice' && <Star className="w-3 h-3 text-green-600" />}
                           {help.type === 'info' && <Info className="w-3 h-3 text-gray-600" />}
                         </div>
@@ -685,8 +701,9 @@ export function AIAssistantPanel({
                           <p className="text-xs text-notion-text-secondary">
                             {help.content}
                           </p>
-                          <DaisyBadge variant="outline" className="text-xs mt-2">
-                            {help.type}
+                          <DaisyBadge variant="outline" className="text-xs mt-2" >
+  {help.type}
+</DaisyBadge>
                           </DaisyBadge>
                         </div>
                       </div>
@@ -697,16 +714,19 @@ export function AIAssistantPanel({
                   <div className="mt-4 p-3 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
                     <h5 className="text-xs font-medium text-notion-text-primary mb-2">Quick Actions</h5>
                     <div className="space-y-2">
-                      <DaisyButton variant="ghost" size="sm" className="w-full justify-start h-7 text-xs">
-                        <MessageSquare className="w-3 h-3 mr-2" />
+                      <DaisyButton variant="ghost" size="sm" className="w-full justify-start h-7 text-xs" >
+  <MessageSquare className="w-3 h-3 mr-2" />
+</DaisyButton>
                         Ask AI Assistant
                       </DaisyButton>
-                      <DaisyButton variant="ghost" size="sm" className="w-full justify-start h-7 text-xs">
-                        <FileText className="w-3 h-3 mr-2" />
+                      <DaisyButton variant="ghost" size="sm" className="w-full justify-start h-7 text-xs" >
+  <FileText className="w-3 h-3 mr-2" />
+</DaisyButton>
                         View Documentation
                       </DaisyButton>
-                      <DaisyButton variant="ghost" size="sm" className="w-full justify-start h-7 text-xs">
-                        <Settings className="w-3 h-3 mr-2" />
+                      <DaisyButton variant="ghost" size="sm" className="w-full justify-start h-7 text-xs" >
+  <Settings className="w-3 h-3 mr-2" />
+</DaisyButton>
                         AI Settings
                       </DaisyButton>
                     </div>

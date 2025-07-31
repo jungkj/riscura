@@ -519,14 +519,14 @@ export interface GapRecommendation {
 }
 
 // Common Types
-export type RiskCategory = 
-  | 'operational' 
-  | 'financial' 
-  | 'strategic' 
-  | 'compliance' 
-  | 'technology' 
-  | 'reputational' 
-  | 'environmental' 
+export type RiskCategory =
+  | 'operational'
+  | 'financial'
+  | 'strategic'
+  | 'compliance'
+  | 'technology'
+  | 'reputational'
+  | 'environmental'
   | 'human_resources';
 
 export type RiskImpact = 'negligible' | 'minor' | 'moderate' | 'major' | 'severe';
@@ -608,7 +608,12 @@ export interface BusinessObjective {
   relatedRisks: string[];
 }
 
-export type GeographicRegion = 'north_america' | 'europe' | 'asia_pacific' | 'latin_america' | 'middle_east_africa';
+export type GeographicRegion =
+  | 'north_america'
+  | 'europe'
+  | 'asia_pacific'
+  | 'latin_america'
+  | 'middle_east_africa';
 
 export interface OperatingModel {
   structure: 'centralized' | 'decentralized' | 'hybrid';
@@ -659,13 +664,13 @@ export interface QualityBenchmarks {
   complianceMinimum: number;
 }
 
-export type ContentType = 
-  | 'risk_description' 
-  | 'control_procedure' 
-  | 'policy_document' 
-  | 'assessment_questionnaire' 
-  | 'incident_report' 
-  | 'risk_scenario' 
+export type ContentType =
+  | 'risk_description'
+  | 'control_procedure'
+  | 'policy_document'
+  | 'assessment_questionnaire'
+  | 'incident_report'
+  | 'risk_scenario'
   | 'training_material';
 
 // Style Guide and Compliance
@@ -956,4 +961,4 @@ export interface ContextImpact {
   magnitude: 'low' | 'medium' | 'high' | 'critical';
   duration: 'temporary' | 'permanent';
   cascadingEffects: string[];
-} 
+}

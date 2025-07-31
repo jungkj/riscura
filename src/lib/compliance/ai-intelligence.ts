@@ -5,7 +5,13 @@ import { complianceMappingEngine } from './mapping';
 export interface ComplianceQuery {
   id: string;
   query: string;
-  intent: 'framework-search' | 'requirement-lookup' | 'control-mapping' | 'gap-analysis' | 'interpretation' | 'recommendation';
+  intent:
+    | 'framework-search'
+    | 'requirement-lookup'
+    | 'control-mapping'
+    | 'gap-analysis'
+    | 'interpretation'
+    | 'recommendation';
   context: {
     organizationId: string;
     frameworks: string[];
@@ -20,7 +26,13 @@ export interface ComplianceQuery {
 }
 
 export interface ComplianceQueryResponse {
-  type: 'answer' | 'framework-list' | 'requirement-list' | 'control-mapping' | 'gap-analysis' | 'recommendations';
+  type:
+    | 'answer'
+    | 'framework-list'
+    | 'requirement-list'
+    | 'control-mapping'
+    | 'gap-analysis'
+    | 'recommendations';
   content: string;
   data?: any;
   sources: string[];
@@ -30,7 +42,12 @@ export interface ComplianceQueryResponse {
 }
 
 export interface ComplianceAction {
-  type: 'create-control' | 'request-evidence' | 'schedule-assessment' | 'assign-task' | 'generate-report';
+  type:
+    | 'create-control'
+    | 'request-evidence'
+    | 'schedule-assessment'
+    | 'assign-task'
+    | 'generate-report';
   title: string;
   description: string;
   parameters: Record<string, any>;
@@ -40,7 +57,12 @@ export interface ComplianceAction {
 export interface RegulatoryUpdate {
   id: string;
   frameworkId: string;
-  updateType: 'requirement-added' | 'requirement-modified' | 'requirement-removed' | 'guidance-updated' | 'deadline-changed';
+  updateType:
+    | 'requirement-added'
+    | 'requirement-modified'
+    | 'requirement-removed'
+    | 'guidance-updated'
+    | 'deadline-changed';
   title: string;
   description: string;
   effectiveDate: Date;
@@ -75,7 +97,12 @@ export interface OrganizationImpact {
 
 export interface ComplianceInsight {
   id: string;
-  type: 'risk-based-prioritization' | 'control-optimization' | 'regulatory-interpretation' | 'trend-analysis' | 'benchmark-comparison';
+  type:
+    | 'risk-based-prioritization'
+    | 'control-optimization'
+    | 'regulatory-interpretation'
+    | 'trend-analysis'
+    | 'benchmark-comparison';
   title: string;
   description: string;
   organizationId: string;
@@ -102,20 +129,18 @@ export interface ControlPrioritization {
 }
 
 export class ComplianceAIIntelligence {
-
   // Process natural language compliance query
   async processComplianceQuery(
     query: string,
     context: ComplianceQuery['context'],
     userId: string
   ): Promise<ComplianceQueryResponse> {
-    
     // Determine query intent
     const intent = this.classifyQueryIntent(query);
-    
+
     // Generate response based on intent
     const response = await this.generateQueryResponse(query, intent, context);
-    
+
     // Store query for learning
     await this.storeQuery({
       id: `query_${Date.now()}`,
@@ -136,28 +161,52 @@ export class ComplianceAIIntelligence {
     const lowerQuery = query.toLowerCase();
 
     // Framework search patterns
-    if (lowerQuery.includes('framework') || lowerQuery.includes('standard') || lowerQuery.includes('regulation')) {
-      if (lowerQuery.includes('what is') || lowerQuery.includes('tell me about') || lowerQuery.includes('explain')) {
+    if (
+      lowerQuery.includes('framework') ||
+      lowerQuery.includes('standard') ||
+      lowerQuery.includes('regulation')
+    ) {
+      if (
+        lowerQuery.includes('what is') ||
+        lowerQuery.includes('tell me about') ||
+        lowerQuery.includes('explain')
+      ) {
         return 'interpretation';
       }
       return 'framework-search';
     }
 
     // Requirement lookup patterns
-    if (lowerQuery.includes('requirement') || lowerQuery.includes('control') || lowerQuery.includes('article')) {
-      if (lowerQuery.includes('map') || lowerQuery.includes('mapping') || lowerQuery.includes('implement')) {
+    if (
+      lowerQuery.includes('requirement') ||
+      lowerQuery.includes('control') ||
+      lowerQuery.includes('article')
+    ) {
+      if (
+        lowerQuery.includes('map') ||
+        lowerQuery.includes('mapping') ||
+        lowerQuery.includes('implement')
+      ) {
         return 'control-mapping';
       }
       return 'requirement-lookup';
     }
 
     // Gap analysis patterns
-    if (lowerQuery.includes('gap') || lowerQuery.includes('missing') || lowerQuery.includes('coverage')) {
+    if (
+      lowerQuery.includes('gap') ||
+      lowerQuery.includes('missing') ||
+      lowerQuery.includes('coverage')
+    ) {
       return 'gap-analysis';
     }
 
     // Recommendation patterns
-    if (lowerQuery.includes('recommend') || lowerQuery.includes('suggest') || lowerQuery.includes('should')) {
+    if (
+      lowerQuery.includes('recommend') ||
+      lowerQuery.includes('suggest') ||
+      lowerQuery.includes('should')
+    ) {
       return 'recommendation';
     }
 
@@ -171,7 +220,6 @@ export class ComplianceAIIntelligence {
     intent: ComplianceQuery['intent'],
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
-    
     switch (intent) {
       case 'framework-search':
         return await this.handleFrameworkSearch(query, context);
@@ -195,7 +243,6 @@ export class ComplianceAIIntelligence {
     query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
-    
     const searchResults = await complianceFrameworkManager.searchFrameworks(query, {
       frameworks: context.frameworks,
     });
@@ -215,21 +262,21 @@ export class ComplianceAIIntelligence {
       };
     }
 
-    const frameworkList = frameworks.map(f => 
-      `**${f.name}** (${f.version}): ${f.description}`
-    ).join('\n\n');
+    const frameworkList = frameworks
+      .map((f) => `**${f.name}** (${f.version}): ${f.description}`)
+      .join('\n\n');
 
     return {
       type: 'framework-list',
       content: `I found ${frameworks.length} compliance framework(s) matching your query:\n\n${frameworkList}`,
       data: { frameworks },
-      sources: frameworks.map(f => f.source),
+      sources: frameworks.map((f) => f.source),
       relatedQueries: [
         'Tell me more about these frameworks',
         'What are the requirements for these frameworks?',
         'How do I implement these frameworks?',
       ],
-      followUpActions: frameworks.map(f => ({
+      followUpActions: frameworks.map((f) => ({
         type: 'schedule-assessment' as const,
         title: `Assess ${f.name} Compliance`,
         description: `Perform gap analysis for ${f.name}`,
@@ -244,7 +291,6 @@ export class ComplianceAIIntelligence {
     query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
-    
     const searchResults = await complianceFrameworkManager.searchFrameworks(query, {
       frameworks: context.frameworks,
     });
@@ -264,21 +310,25 @@ export class ComplianceAIIntelligence {
       };
     }
 
-    const requirementList = requirements.slice(0, 5).map(r => 
-      `**${r.code}: ${r.title}**\n${r.description}\n*Framework: ${(r as any).framework?.name || 'Unknown'}*\n*Priority: ${r.priority}*`
-    ).join('\n\n');
+    const requirementList = requirements
+      .slice(0, 5)
+      .map(
+        (r) =>
+          `**${r.code}: ${r.title}**\n${r.description}\n*Framework: ${(r as any).framework?.name || 'Unknown'}*\n*Priority: ${r.priority}*`
+      )
+      .join('\n\n');
 
     return {
       type: 'requirement-list',
       content: `I found ${requirements.length} requirement(s) matching your query:\n\n${requirementList}`,
       data: { requirements },
-      sources: requirements.map(r => (r as any).framework?.source || 'Unknown').filter(Boolean),
+      sources: requirements.map((r) => (r as any).framework?.source || 'Unknown').filter(Boolean),
       relatedQueries: [
         'How do I implement these requirements?',
         'What controls satisfy these requirements?',
         'What evidence is needed for these requirements?',
       ],
-      followUpActions: requirements.map(r => ({
+      followUpActions: requirements.map((r) => ({
         type: 'create-control' as const,
         title: `Create Control for ${r.code}`,
         description: `Implement control to satisfy ${r.title}`,
@@ -293,10 +343,9 @@ export class ComplianceAIIntelligence {
     query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
-    
     // Extract requirement/control information from query
     const keywords = this.extractKeywords(query);
-    
+
     // For demonstration, provide intelligent mapping guidance
     const mappingGuidance = this.generateMappingGuidance(keywords, context);
 
@@ -319,23 +368,25 @@ export class ComplianceAIIntelligence {
     query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
-    
     // Perform gap analysis for specified frameworks
     const gapAnalyses = await Promise.all(
-      context.frameworks.map(frameworkId => 
+      context.frameworks.map((frameworkId) =>
         complianceMappingEngine.performGapAnalysis(context.organizationId, frameworkId)
       )
     );
 
     const totalGaps = gapAnalyses.reduce((sum, analysis) => sum + analysis.gaps.length, 0);
-    const criticalGaps = gapAnalyses.reduce((sum, analysis) => 
-      sum + analysis.gaps.filter(g => g.priority === 'critical').length, 0
+    const criticalGaps = gapAnalyses.reduce(
+      (sum, analysis) => sum + analysis.gaps.filter((g) => g.priority === 'critical').length,
+      0
     );
 
-    const gapSummary = gapAnalyses.map(analysis => {
-      const framework = context.frameworks.find(f => f === analysis.frameworkId);
-      return `**${framework}**: ${analysis.gaps.length} gaps (${analysis.gaps.filter(g => g.priority === 'critical').length} critical), ${analysis.coveragePercentage.toFixed(1)}% coverage`;
-    }).join('\n');
+    const gapSummary = gapAnalyses
+      .map((analysis) => {
+        const framework = context.frameworks.find((f) => f === analysis.frameworkId);
+        return `**${framework}**: ${analysis.gaps.length} gaps (${analysis.gaps.filter((g) => g.priority === 'critical').length} critical), ${analysis.coveragePercentage.toFixed(1)}% coverage`;
+      })
+      .join('\n');
 
     return {
       type: 'gap-analysis',
@@ -364,10 +415,9 @@ export class ComplianceAIIntelligence {
     query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
-    
     // Extract key concepts from query
     const concepts = this.extractComplianceConcepts(query);
-    
+
     // Generate interpretation based on concepts
     const interpretation = this.generateInterpretation(concepts, context);
 
@@ -386,7 +436,6 @@ export class ComplianceAIIntelligence {
     query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
-    
     // Generate recommendations based on query and context
     const recommendations = await this.generateRecommendations(query, context);
 
@@ -420,22 +469,51 @@ export class ComplianceAIIntelligence {
 
   // Extract keywords from query
   private extractKeywords(query: string): string[] {
-    const stopWords = ['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by'];
-    return query.toLowerCase()
+    const stopWords = [
+      'the',
+      'a',
+      'an',
+      'and',
+      'or',
+      'but',
+      'in',
+      'on',
+      'at',
+      'to',
+      'for',
+      'of',
+      'with',
+      'by',
+    ];
+    return query
+      .toLowerCase()
       .split(/\s+/)
-      .filter(word => word.length > 2 && !stopWords.includes(word));
+      .filter((word) => word.length > 2 && !stopWords.includes(word));
   }
 
   // Extract compliance concepts
   private extractComplianceConcepts(query: string): string[] {
     const complianceConcepts = [
-      'control', 'requirement', 'framework', 'standard', 'regulation',
-      'audit', 'evidence', 'testing', 'assessment', 'gap', 'risk',
-      'governance', 'compliance', 'maturity', 'effectiveness', 'monitoring'
+      'control',
+      'requirement',
+      'framework',
+      'standard',
+      'regulation',
+      'audit',
+      'evidence',
+      'testing',
+      'assessment',
+      'gap',
+      'risk',
+      'governance',
+      'compliance',
+      'maturity',
+      'effectiveness',
+      'monitoring',
     ];
 
     const queryLower = query.toLowerCase();
-    return complianceConcepts.filter(concept => queryLower.includes(concept));
+    return complianceConcepts.filter((concept) => queryLower.includes(concept));
   }
 
   // Generate mapping guidance
@@ -471,7 +549,10 @@ export class ComplianceAIIntelligence {
   }
 
   // Generate recommendations
-  private async generateRecommendations(query: string, context: ComplianceQuery['context']): Promise<any> {
+  private async generateRecommendations(
+    query: string,
+    context: ComplianceQuery['context']
+  ): Promise<any> {
     // Analyze current state and generate recommendations
     const recommendations = [
       '**Prioritize Critical Requirements**: Focus on mandatory and high-risk requirements first',
@@ -549,7 +630,6 @@ export class ComplianceAIIntelligence {
     organizationId: string,
     assessorId: string
   ): Promise<OrganizationImpact> {
-    
     const update = await db.client.regulatoryUpdate.findUnique({
       where: { id: updateId },
     });
@@ -606,7 +686,7 @@ export class ComplianceAIIntelligence {
         confidence: 0.85,
         severity: 'warning',
         data: { prioritization },
-        recommendations: prioritization.slice(0, 3).map(p => ({
+        recommendations: prioritization.slice(0, 3).map((p) => ({
           type: 'create-control',
           title: `Prioritize Control ${p.controlId}`,
           description: p.reasons.join(', '),
@@ -630,7 +710,7 @@ export class ComplianceAIIntelligence {
         confidence: 0.78,
         severity: 'info',
         data: { optimizations },
-        recommendations: optimizations.slice(0, 2).map(opt => ({
+        recommendations: optimizations.slice(0, 2).map((opt) => ({
           type: 'assign-task',
           title: `Optimize ${opt.name}`,
           description: opt.recommendation,
@@ -653,7 +733,9 @@ export class ComplianceAIIntelligence {
   }
 
   // Analyze risk-based prioritization
-  private async analyzeRiskBasedPrioritization(organizationId: string): Promise<ControlPrioritization[]> {
+  private async analyzeRiskBasedPrioritization(
+    organizationId: string
+  ): Promise<ControlPrioritization[]> {
     const controls = await db.client.control.findMany({
       where: { organizationId },
       include: {
@@ -662,87 +744,94 @@ export class ComplianceAIIntelligence {
       },
     });
 
-    return controls.map(control => {
-      // Calculate prioritization score
-      const riskReduction = this.calculateRiskReduction(control);
-      const complianceImpact = this.calculateComplianceImpact(control);
-      const implementationEffort = this.calculateImplementationEffort(control);
-      const costBenefit = (riskReduction + complianceImpact) / implementationEffort;
-      const businessValue = this.calculateBusinessValue(control);
+    return controls
+      .map((control) => {
+        // Calculate prioritization score
+        const riskReduction = this.calculateRiskReduction(control);
+        const complianceImpact = this.calculateComplianceImpact(control);
+        const implementationEffort = this.calculateImplementationEffort(control);
+        const costBenefit = (riskReduction + complianceImpact) / implementationEffort;
+        const businessValue = this.calculateBusinessValue(control);
 
-      const priority = Math.round((riskReduction + complianceImpact + costBenefit + businessValue) / 4);
+        const priority = Math.round(
+          (riskReduction + complianceImpact + costBenefit + businessValue) / 4
+        );
 
-      return {
-        controlId: control.id,
-        priority,
-        riskReduction,
-        complianceImpact,
-        implementationEffort,
-        costBenefit,
-        businessValue,
-        reasons: this.generatePrioritizationReasons(control, priority),
-        recommendations: this.generatePrioritizationRecommendations(control, priority),
-      };
-    }).sort((a, b) => b.priority - a.priority);
+        return {
+          controlId: control.id,
+          priority,
+          riskReduction,
+          complianceImpact,
+          implementationEffort,
+          costBenefit,
+          businessValue,
+          reasons: this.generatePrioritizationReasons(control, priority),
+          recommendations: this.generatePrioritizationRecommendations(control, priority),
+        };
+      })
+      .sort((a, b) => b.priority - a.priority);
   }
 
   // Calculate various scores for prioritization
   private calculateRiskReduction(control: any): number {
     const riskCount = control.risks?.length || 0;
-    const avgRiskScore = control.risks?.reduce((sum: number, r: any) => sum + (r.likelihood * r.impact), 0) / Math.max(riskCount, 1) || 0;
+    const avgRiskScore =
+      control.risks?.reduce((sum: number, r: any) => sum + r.likelihood * r.impact, 0) /
+        Math.max(riskCount, 1) || 0;
     return Math.min(avgRiskScore / 2, 10);
   }
 
   private calculateComplianceImpact(control: any): number {
     const requirementCount = control.requirements?.length || 0;
-    const criticalRequirements = control.requirements?.filter((r: any) => r.priority === 'critical').length || 0;
-    return Math.min((requirementCount * 2) + (criticalRequirements * 3), 10);
+    const criticalRequirements =
+      control.requirements?.filter((r: any) => r.priority === 'critical').length || 0;
+    return Math.min(requirementCount * 2 + criticalRequirements * 3, 10);
   }
 
   private calculateImplementationEffort(control: any): number {
     // Based on control complexity, automation level, etc.
     let effort = 5; // Base effort
-    
+
     if (control.automated) effort -= 2;
     if (control.effectivenessScore > 80) effort -= 1;
     if (!control.owner) effort += 2;
-    
+
     return Math.max(Math.min(effort, 10), 1);
   }
 
   private calculateBusinessValue(control: any): number {
     // Based on business criticality, regulatory importance, etc.
     let value = 5; // Base value
-    
+
     if (control.category === 'financial') value += 2;
     if (control.category === 'security') value += 1;
     if (control.requirements?.some((r: any) => r.mandatory)) value += 2;
-    
+
     return Math.min(value, 10);
   }
 
   private generatePrioritizationReasons(control: any, priority: number): string[] {
     const reasons: string[] = [];
-    
+
     if (priority >= 8) {
       reasons.push('High impact on risk reduction');
       reasons.push('Critical compliance requirements');
     }
-    
+
     if (control.risks?.length > 0) {
       reasons.push(`Addresses ${control.risks.length} risk(s)`);
     }
-    
+
     if (control.requirements?.some((r: any) => r.mandatory)) {
       reasons.push('Mandatory regulatory requirement');
     }
-    
+
     return reasons;
   }
 
   private generatePrioritizationRecommendations(control: any, priority: number): string[] {
     const recommendations: string[] = [];
-    
+
     if (priority >= 8) {
       recommendations.push('Implement immediately');
       recommendations.push('Assign dedicated resources');
@@ -753,19 +842,21 @@ export class ComplianceAIIntelligence {
       recommendations.push('Consider for future implementation');
       recommendations.push('Monitor for requirement changes');
     }
-    
+
     return recommendations;
   }
 
   // Analyze control optimization opportunities
-  private async analyzeControlOptimization(organizationId: string): Promise<{
-    id: any;
-    name: any;
-    opportunity: string;
-    recommendation: string;
-    effort: 'low' | 'medium' | 'high';
-    benefit: 'low' | 'medium' | 'high';
-  }[]> {
+  private async analyzeControlOptimization(organizationId: string): Promise<
+    {
+      id: any;
+      name: any;
+      opportunity: string;
+      recommendation: string;
+      effort: 'low' | 'medium' | 'high';
+      benefit: 'low' | 'medium' | 'high';
+    }[]
+  > {
     const controls = await db.client.control.findMany({
       where: { organizationId },
     });
@@ -793,7 +884,10 @@ export class ComplianceAIIntelligence {
       }
 
       // Check for testing optimization
-      if (!control.lastTested || new Date(control.lastTested) < new Date(Date.now() - 365 * 24 * 60 * 60 * 1000)) {
+      if (
+        !control.lastTested ||
+        new Date(control.lastTested) < new Date(Date.now() - 365 * 24 * 60 * 60 * 1000)
+      ) {
         opportunities.push('Testing program needs enhancement');
       }
 
@@ -838,4 +932,4 @@ export class ComplianceAIIntelligence {
   }
 }
 
-export const complianceAIIntelligence = new ComplianceAIIntelligence(); 
+export const complianceAIIntelligence = new ComplianceAIIntelligence();

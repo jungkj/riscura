@@ -9,7 +9,7 @@ export class LocalStorageService {
     SESSION_DATA: 'riscura_session_data',
     FORM_BACKUP: 'riscura_form_backup',
     SEARCH_HISTORY: 'riscura_search_history',
-    COLLABORATION_STATE: 'riscura_collaboration_state'
+    COLLABORATION_STATE: 'riscura_collaboration_state',
   } as const;
 
   private constructor() {
@@ -25,7 +25,7 @@ export class LocalStorageService {
 
   private initializeStorage(): void {
     // Initialize storage with default values if not present
-    Object.values(this.storageKeys).forEach(key => {
+    Object.values(this.storageKeys).forEach((key) => {
       if (!this.getItem(key)) {
         this.setItem(key, {});
       }
@@ -64,16 +64,20 @@ export class LocalStorageService {
   }
 
   // Draft Management
-  public saveDraft(type: 'questionnaire' | 'risk' | 'control' | 'document' | 'form', id: string, data: any): boolean {
+  public saveDraft(
+    type: 'questionnaire' | 'risk' | 'control' | 'document' | 'form',
+    id: string,
+    data: any
+  ): boolean {
     const drafts = this.getItem<Record<string, any>>(this.storageKeys.DRAFTS) || {};
     const draftKey = `${type}_${id}`;
-    
+
     drafts[draftKey] = {
       ...data,
       lastModified: new Date().toISOString(),
       type,
       id,
-      autoSaved: true
+      autoSaved: true,
     };
 
     return this.setItem(this.storageKeys.DRAFTS, drafts);
@@ -92,7 +96,7 @@ export class LocalStorageService {
   public deleteDraft(type: string, id: string): boolean {
     const drafts = this.getItem<Record<string, any>>(this.storageKeys.DRAFTS) || {};
     const draftKey = `${type}_${id}`;
-    
+
     if (drafts[draftKey]) {
       delete drafts[draftKey];
       return this.setItem(this.storageKeys.DRAFTS, drafts);
@@ -104,8 +108,8 @@ export class LocalStorageService {
     // Clear drafts older than maxAge (default 7 days)
     const drafts = this.getItem<Record<string, any>>(this.storageKeys.DRAFTS) || {};
     const now = new Date().getTime();
-    
-    Object.keys(drafts).forEach(key => {
+
+    Object.keys(drafts).forEach((key) => {
       const draft = drafts[key];
       if (draft.lastModified) {
         const draftTime = new Date(draft.lastModified).getTime();
@@ -154,7 +158,7 @@ export class LocalStorageService {
 
   public removeFromOfflineQueue(operationId: string): boolean {
     const queue = this.getItem<any[]>(this.storageKeys.OFFLINE_QUEUE) || [];
-    const updatedQueue = queue.filter(op => op.id !== operationId);
+    const updatedQueue = queue.filter((op) => op.id !== operationId);
     return this.setItem(this.storageKeys.OFFLINE_QUEUE, updatedQueue);
   }
 
@@ -168,7 +172,7 @@ export class LocalStorageService {
     cache[key] = {
       data,
       timestamp: new Date().toISOString(),
-      ttl: ttl || 3600000 // Default 1 hour
+      ttl: ttl || 3600000, // Default 1 hour
     };
     return this.setItem(this.storageKeys.CACHED_DATA, cache);
   }
@@ -176,27 +180,27 @@ export class LocalStorageService {
   public getCachedData<T>(key: string): T | null {
     const cache = this.getItem<Record<string, any>>(this.storageKeys.CACHED_DATA) || {};
     const cached = cache[key];
-    
+
     if (!cached) return null;
-    
+
     const now = new Date().getTime();
     const cachedTime = new Date(cached.timestamp).getTime();
-    
+
     if (now - cachedTime > cached.ttl) {
       // Cache expired
       delete cache[key];
       this.setItem(this.storageKeys.CACHED_DATA, cache);
       return null;
     }
-    
+
     return cached.data;
   }
 
   public clearExpiredCache(): void {
     const cache = this.getItem<Record<string, any>>(this.storageKeys.CACHED_DATA) || {};
     const now = new Date().getTime();
-    
-    Object.keys(cache).forEach(key => {
+
+    Object.keys(cache).forEach((key) => {
       const cached = cache[key];
       if (cached.timestamp) {
         const cachedTime = new Date(cached.timestamp).getTime();
@@ -214,7 +218,7 @@ export class LocalStorageService {
     const backups = this.getItem<Record<string, any>>(this.storageKeys.FORM_BACKUP) || {};
     backups[formId] = {
       data,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
     return this.setItem(this.storageKeys.FORM_BACKUP, backups);
   }
@@ -239,16 +243,16 @@ export class LocalStorageService {
     const searchEntry = {
       query,
       filters,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
-    
+
     // Remove duplicate queries
-    const filtered = history.filter(h => h.query !== query);
+    const filtered = history.filter((h) => h.query !== query);
     filtered.unshift(searchEntry);
-    
+
     // Keep only last 20 searches
     const limited = filtered.slice(0, 20);
-    
+
     return this.setItem(this.storageKeys.SEARCH_HISTORY, limited);
   }
 
@@ -262,16 +266,18 @@ export class LocalStorageService {
 
   // Collaboration State
   public saveCollaborationState(documentId: string, state: any): boolean {
-    const collabState = this.getItem<Record<string, any>>(this.storageKeys.COLLABORATION_STATE) || {};
+    const collabState =
+      this.getItem<Record<string, any>>(this.storageKeys.COLLABORATION_STATE) || {};
     collabState[documentId] = {
       ...state,
-      lastUpdated: new Date().toISOString()
+      lastUpdated: new Date().toISOString(),
     };
     return this.setItem(this.storageKeys.COLLABORATION_STATE, collabState);
   }
 
   public getCollaborationState(documentId: string): any | null {
-    const collabState = this.getItem<Record<string, any>>(this.storageKeys.COLLABORATION_STATE) || {};
+    const collabState =
+      this.getItem<Record<string, any>>(this.storageKeys.COLLABORATION_STATE) || {};
     return collabState[documentId] || null;
   }
 
@@ -296,13 +302,13 @@ export class LocalStorageService {
     return {
       used,
       available: quota - used,
-      quota
+      quota,
     };
   }
 
   public clearAllStorage(): boolean {
     try {
-      Object.values(this.storageKeys).forEach(key => {
+      Object.values(this.storageKeys).forEach((key) => {
         localStorage.removeItem(key);
       });
       this.initializeStorage();
@@ -316,7 +322,7 @@ export class LocalStorageService {
   // Export/Import
   public exportData(): string {
     const data: Record<string, any> = {};
-    Object.values(this.storageKeys).forEach(key => {
+    Object.values(this.storageKeys).forEach((key) => {
       data[key] = this.getItem(key);
     });
     return JSON.stringify(data, null, 2);
@@ -339,4 +345,4 @@ export class LocalStorageService {
 }
 
 // Export singleton instance
-export const localStorageService = LocalStorageService.getInstance(); 
+export const localStorageService = LocalStorageService.getInstance();

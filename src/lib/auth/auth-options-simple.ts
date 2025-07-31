@@ -68,4 +68,4 @@ export const authOptionsSimple: NextAuthOptions = {
     error: '/auth/error',
   },
   debug: process.env.NODE_ENV === 'development',
-}; 
+};

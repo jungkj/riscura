@@ -47,43 +47,50 @@ function getDatabaseConfig(): DatabaseConfig {
   // Check for both uppercase and lowercase versions (Vercel might use lowercase)
   // Also check for other common Vercel database env var names
   // Use the production override if applicable
-  let databaseUrl = getProductionDatabaseUrl() || 
-                   process.env.DATABASE_URL || 
-                   process.env.database_url || 
-                   process.env.POSTGRES_URL ||
-                   process.env.POSTGRES_PRISMA_URL ||
-                   process.env.POSTGRES_URL_NON_POOLING;
-  
+  let databaseUrl =
+    getProductionDatabaseUrl() ||
+    process.env.DATABASE_URL ||
+    process.env.database_url ||
+    process.env.POSTGRES_URL ||
+    process.env.POSTGRES_PRISMA_URL ||
+    process.env.POSTGRES_URL_NON_POOLING;
+
   // The production override is now handled by getProductionDatabaseUrl()
-  
+
   // Check if URL is already a pooled URL (contains pooler.supabase.com)
   const isAlreadyPooled = databaseUrl?.includes('pooler.supabase.com');
-  
+
   // For production, if we have a DIRECT_URL set, prefer the main DATABASE_URL
   // This handles cases where Vercel sets both
-  if (process.env.NODE_ENV === 'production' && process.env.DIRECT_URL && databaseUrl === process.env.DIRECT_URL) {
+  if (
+    process.env.NODE_ENV === 'production' &&
+    process.env.DIRECT_URL &&
+    databaseUrl === process.env.DIRECT_URL
+  ) {
     console.log('⚠️  Using DIRECT_URL in production, checking for pooled alternative...');
-    const pooledAlternative = process.env.DATABASE_URL || process.env.database_url || process.env.POSTGRES_URL;
+    const pooledAlternative =
+      process.env.DATABASE_URL || process.env.database_url || process.env.POSTGRES_URL;
     if (pooledAlternative && pooledAlternative !== process.env.DIRECT_URL) {
       console.log('✅ Found pooled URL alternative, switching to it');
       databaseUrl = pooledAlternative;
     }
   }
-  
+
   if (databaseUrl && !isAlreadyPooled) {
     console.log('🔍 Checking database URL format:', {
       urlPreview: databaseUrl.substring(0, 60) + '...',
       isProduction: process.env.NODE_ENV === 'production',
-      isPooled: isAlreadyPooled
+      isPooled: isAlreadyPooled,
     });
   }
-  
+
   // Auto-convert Supabase direct URL to pooled URL
   // Always convert in production environment, not just on Vercel
   if (databaseUrl && process.env.NODE_ENV === 'production' && !isAlreadyPooled) {
-    const supabaseDirectPattern = /postgresql:\/\/postgres:([^@]+)@db\.([^.]+)\.supabase\.co:5432\/postgres/;
+    const supabaseDirectPattern =
+      /postgresql:\/\/postgres:([^@]+)@db\.([^.]+)\.supabase\.co:5432\/postgres/;
     const match = databaseUrl.match(supabaseDirectPattern);
-    
+
     if (match) {
       const [, password, projectRef] = match;
       // Get the region from environment or default to us-east-1
@@ -91,36 +98,41 @@ function getDatabaseConfig(): DatabaseConfig {
       // Convert to pooled connection URL with the correct region
       const pooledUrl = `postgresql://postgres.${projectRef}:${password}@aws-0-${region}.pooler.supabase.com:6543/postgres`;
       console.log('🔄 Converting Supabase direct URL to pooled URL');
-      console.log('Environment:', { 
+      console.log('Environment:', {
         NODE_ENV: process.env.NODE_ENV,
-        VERCEL: process.env.VERCEL, 
+        VERCEL: process.env.VERCEL,
         VERCEL_ENV: process.env.VERCEL_ENV,
         originalHost: `db.${projectRef}.supabase.co`,
         newHost: `aws-0-${region}.pooler.supabase.com`,
-        region: region
+        region: region,
       });
       databaseUrl = pooledUrl;
     } else {
       console.log('🔍 Database URL format:', {
         isDirectUrl: databaseUrl?.includes('db.') && databaseUrl?.includes('.supabase.co'),
         isPooledUrl: isAlreadyPooled,
-        urlPattern: databaseUrl?.substring(0, 50) + '...'
+        urlPattern: databaseUrl?.substring(0, 50) + '...',
       });
     }
   }
-  
+
   // Validate required environment variables
   if (!databaseUrl) {
     console.error('❌ DATABASE_URL environment variable is missing');
-    console.error('Checked: DATABASE_URL =', process.env.DATABASE_URL, 'database_url =', process.env.database_url);
+    console.error(
+      'Checked: DATABASE_URL =',
+      process.env.DATABASE_URL,
+      'database_url =',
+      process.env.database_url
+    );
     throw new Error(
       'DATABASE_URL environment variable is required. Please set it in your .env file.\n' +
-      'Example: DATABASE_URL="postgresql://username:password@localhost:5432/riscura"\n' +
-      '\nTo fix this:\n' +
-      '1. Copy .env.example to .env\n' +
-      '2. Set your DATABASE_URL in the .env file\n' +
-      '3. Ensure PostgreSQL is running\n' +
-      '4. Run: tsx scripts/init-database.ts'
+        'Example: DATABASE_URL="postgresql://username:password@localhost:5432/riscura"\n' +
+        '\nTo fix this:\n' +
+        '1. Copy .env.example to .env\n' +
+        '2. Set your DATABASE_URL in the .env file\n' +
+        '3. Ensure PostgreSQL is running\n' +
+        '4. Run: tsx scripts/init-database.ts'
     );
   }
 
@@ -130,7 +142,7 @@ function getDatabaseConfig(): DatabaseConfig {
   } catch (error) {
     throw new Error(
       `Invalid DATABASE_URL format. Please provide a valid PostgreSQL connection string.\n` +
-      `Example: DATABASE_URL="postgresql://username:password@localhost:5432/riscura"`
+        `Example: DATABASE_URL="postgresql://username:password@localhost:5432/riscura"`
     );
   }
 
@@ -142,7 +154,8 @@ function getDatabaseConfig(): DatabaseConfig {
     acquireTimeout: parseInt(process.env.DB_CONNECTION_POOL_ACQUIRE_TIMEOUT || '60000', 10),
     idleTimeout: parseInt(process.env.DB_CONNECTION_POOL_IDLE_TIMEOUT || '10000', 10),
     queryTimeout: parseInt(process.env.DB_QUERY_TIMEOUT || '30000', 10),
-    enableLogging: process.env.DB_QUERY_LOGGING === 'true' || process.env.NODE_ENV === 'development',
+    enableLogging:
+      process.env.DB_QUERY_LOGGING === 'true' || process.env.NODE_ENV === 'development',
     retryAttempts: parseInt(process.env.DB_RETRY_ATTEMPTS || '3', 10),
     retryDelay: parseInt(process.env.DB_RETRY_DELAY || '1000', 10),
   };
@@ -152,28 +165,28 @@ function getDatabaseConfig(): DatabaseConfig {
 function getLogConfig(): ('query' | 'info' | 'warn' | 'error')[] {
   const isDevelopment = process.env.NODE_ENV === 'development';
   const enableLogging = process.env.DB_QUERY_LOGGING === 'true';
-  
+
   if (isDevelopment || enableLogging) {
     return ['query', 'info', 'warn', 'error'];
   }
-  
+
   return ['error', 'warn'];
 }
 
 // Create Prisma client with proper configuration
 function createPrismaClient(): PrismaClient {
   const config = getDatabaseConfig();
-  
+
   console.log('🔗 Initializing database connection...');
   console.log(`📊 Connection pool: ${config.minConnections}-${config.maxConnections}`);
   console.log(`⏱️  Query timeout: ${config.queryTimeout}ms`);
-  
+
   // Log the URL we're about to use (first 60 chars only for security)
   console.log('🔍 Using database URL:', config.url.substring(0, 60) + '...');
-  
+
   const datasourceUrl = new URL(config.url);
   const isSupabasePooled = datasourceUrl.hostname.includes('pooler.supabase.com');
-  
+
   // Add connection pool parameters for Supabase
   if (isSupabasePooled) {
     datasourceUrl.searchParams.set('pgbouncer', 'true');
@@ -182,7 +195,7 @@ function createPrismaClient(): PrismaClient {
   } else if (datasourceUrl.hostname.includes('supabase.co')) {
     console.warn('⚠️  Using direct Supabase connection - this may cause issues in production!');
   }
-  
+
   return new PrismaClient({
     log: getLogConfig(),
     errorFormat: 'pretty',
@@ -202,26 +215,28 @@ async function withRetry<T>(
   operationName: string = 'database operation'
 ): Promise<T> {
   let lastError: Error;
-  
+
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       return await operation();
     } catch (error) {
       lastError = error as Error;
-      
+
       if (attempt === maxAttempts) {
         console.error(`❌ ${operationName} failed after ${maxAttempts} attempts:`, error);
         throw error;
       }
-      
+
       const delay = baseDelay * Math.pow(2, attempt - 1);
-      console.warn(`⚠️  ${operationName} failed (attempt ${attempt}/${maxAttempts}), retrying in ${delay}ms...`);
+      console.warn(
+        `⚠️  ${operationName} failed (attempt ${attempt}/${maxAttempts}), retrying in ${delay}ms...`
+      );
       console.warn('Error:', error);
-      
-      await new Promise(resolve => setTimeout(resolve, delay));
+
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
-  
+
   throw lastError!;
 }
 
@@ -236,14 +251,14 @@ function getPrismaClient(): PrismaClient {
 
   if (!prisma) {
     prisma = createPrismaClient();
-    
+
     // Log slow queries in development
     if (process.env.NODE_ENV === 'development') {
       // Set up basic logging without event handlers for now
       console.log('🔧 Database client initialized in development mode');
     }
   }
-  
+
   return prisma;
 }
 
@@ -252,17 +267,21 @@ function getSafePrismaClient(): PrismaClient {
   if (typeof window !== 'undefined') {
     throw new Error('Database operations are not available on the client side');
   }
-  
+
   if (!prisma) {
     prisma = getPrismaClient();
   }
-  
+
   return prisma;
 }
 
 // Development hot reloading support (server-side only)
 // Skip initialization during build time
-if (typeof window === 'undefined' && process.env.BUILDING !== 'true' && process.env.NEXT_PHASE !== 'phase-production-build') {
+if (
+  typeof window === 'undefined' &&
+  process.env.BUILDING !== 'true' &&
+  process.env.NEXT_PHASE !== 'phase-production-build'
+) {
   if (process.env.NODE_ENV !== 'production') {
     if (!globalThis.prisma) {
       globalThis.prisma = getPrismaClient();
@@ -280,16 +299,21 @@ export async function checkDatabaseConnection(): Promise<{
   error?: string;
 }> {
   const startTime = Date.now();
-  
+
   try {
     const client = getSafePrismaClient();
-    await withRetry(async () => {
-      await client.$queryRaw`SELECT 1 as health_check`;
-    }, 2, 500, 'database health check');
-    
+    await withRetry(
+      async () => {
+        await client.$queryRaw`SELECT 1 as health_check`;
+      },
+      2,
+      500,
+      'database health check'
+    );
+
     const responseTime = Date.now() - startTime;
     console.log(`✅ Database health check passed (${responseTime}ms)`);
-    
+
     return {
       isHealthy: true,
       responseTime,
@@ -297,9 +321,9 @@ export async function checkDatabaseConnection(): Promise<{
   } catch (error) {
     const responseTime = Date.now() - startTime;
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    
+
     console.error(`❌ Database health check failed (${responseTime}ms):`, errorMessage);
-    
+
     return {
       isHealthy: false,
       responseTime,
@@ -320,24 +344,34 @@ export async function checkDatabaseConnectionDetailed(): Promise<{
   error?: string;
 }> {
   const startTime = Date.now();
-  
+
   try {
     const client = getSafePrismaClient();
     const [versionResult, connectionResult] = await Promise.all([
-      withRetry(async () => {
-        return await client.$queryRaw<{ version: string }[]>`SELECT version() as version`;
-      }, 2, 500, 'version check'),
-      withRetry(async () => {
-        return await client.$queryRaw<{ max_connections: number; active_connections: number }[]>`
+      withRetry(
+        async () => {
+          return await client.$queryRaw<{ version: string }[]>`SELECT version() as version`;
+        },
+        2,
+        500,
+        'version check'
+      ),
+      withRetry(
+        async () => {
+          return await client.$queryRaw<{ max_connections: number; active_connections: number }[]>`
           SELECT 
             current_setting('max_connections')::int as max_connections,
             (SELECT count(*) FROM pg_stat_activity WHERE state = 'active') as active_connections
         `;
-      }, 2, 500, 'connection check'),
+        },
+        2,
+        500,
+        'connection check'
+      ),
     ]);
-    
+
     const responseTime = Date.now() - startTime;
-    
+
     return {
       isHealthy: true,
       responseTime,
@@ -350,7 +384,7 @@ export async function checkDatabaseConnectionDetailed(): Promise<{
   } catch (error) {
     const responseTime = Date.now() - startTime;
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    
+
     return {
       isHealthy: false,
       responseTime,
@@ -365,7 +399,7 @@ export async function disconnectDatabase(): Promise<void> {
   if (!prisma) {
     return;
   }
-  
+
   try {
     console.log('🔌 Disconnecting from database...');
     if (prisma) {
@@ -382,13 +416,18 @@ export async function disconnectDatabase(): Promise<void> {
 export async function connectDatabase(): Promise<void> {
   try {
     console.log('🔗 Connecting to database...');
-    
-    await withRetry(async () => {
-      await prisma.$connect();
-    }, 3, 1000, 'database connection');
-    
+
+    await withRetry(
+      async () => {
+        await prisma.$connect();
+      },
+      3,
+      1000,
+      'database connection'
+    );
+
     console.log('✅ Database connected successfully');
-    
+
     // Verify connection with health check
     const healthCheck = await checkDatabaseConnection();
     if (!healthCheck.isHealthy) {
@@ -409,12 +448,17 @@ export async function withTransaction<T>(
   } = {}
 ): Promise<T> {
   const { maxAttempts = 3, timeout = 30000 } = options;
-  
-  return withRetry(async () => {
-    return await prisma.$transaction(fn, {
-      timeout,
-    });
-  }, maxAttempts, 1000, 'database transaction');
+
+  return withRetry(
+    async () => {
+      return await prisma.$transaction(fn, {
+        timeout,
+      });
+    },
+    maxAttempts,
+    1000,
+    'database transaction'
+  );
 }
 
 // Multi-tenant query helper
@@ -422,7 +466,7 @@ export function withOrganization(organizationId: string) {
   if (!organizationId) {
     throw new Error('Organization ID is required for multi-tenant operations');
   }
-  
+
   return {
     where: {
       organizationId,
@@ -448,16 +492,16 @@ export interface PaginationOptions {
 
 export function buildPaginationQuery(options: PaginationOptions = {}) {
   const { page = 1, limit = 20, sortBy = 'createdAt', sortOrder = 'desc' } = options;
-  
+
   // Validate pagination parameters
   if (page < 1) {
     throw new Error('Page number must be greater than 0');
   }
-  
+
   if (limit < 1 || limit > 100) {
     throw new Error('Limit must be between 1 and 100');
   }
-  
+
   return {
     skip: (page - 1) * limit,
     take: limit,
@@ -479,12 +523,12 @@ export function buildSearchQuery(
   if (!searchTerm?.trim()) {
     return {};
   }
-  
+
   const { caseSensitive = false, exactMatch = false } = options;
-  
+
   if (exactMatch) {
     return {
-      OR: fields.map(field => ({
+      OR: fields.map((field) => ({
         [field]: {
           equals: searchTerm,
           mode: caseSensitive ? 'default' : 'insensitive',
@@ -492,9 +536,9 @@ export function buildSearchQuery(
       })),
     };
   }
-  
+
   return {
-    OR: fields.map(field => ({
+    OR: fields.map((field) => ({
       [field]: {
         contains: searchTerm,
         mode: caseSensitive ? 'default' : 'insensitive',
@@ -509,37 +553,47 @@ export const db = {
   get client() {
     return getSafePrismaClient();
   },
-  
+
   // Connection management
   connect: connectDatabase,
   disconnect: disconnectDatabase,
   healthCheck: checkDatabaseConnection,
   healthCheckDetailed: checkDatabaseConnectionDetailed,
-  
+
   // Transaction management
   transaction: withTransaction,
-  
+
   // Multi-tenancy helpers
   forOrganization: withOrganization,
-  
+
   // Audit helpers
   withAudit: withAuditFields,
-  
+
   // Query builders
   paginate: buildPaginationQuery,
   search: buildSearchQuery,
-  
+
   // Raw query execution with retry
   raw: async (query: TemplateStringsArray, ...values: any[]) => {
-    return withRetry(async () => {
-      return await prisma.$queryRaw(query, ...values);
-    }, 2, 500, 'raw query');
+    return withRetry(
+      async () => {
+        return await prisma.$queryRaw(query, ...values);
+      },
+      2,
+      500,
+      'raw query'
+    );
   },
-  
+
   rawUnsafe: async (query: string, ...values: any[]) => {
-    return withRetry(async () => {
-      return await prisma.$queryRawUnsafe(query, ...values);
-    }, 2, 500, 'raw unsafe query');
+    return withRetry(
+      async () => {
+        return await prisma.$queryRawUnsafe(query, ...values);
+      },
+      2,
+      500,
+      'raw unsafe query'
+    );
   },
 };
 
@@ -552,7 +606,7 @@ const prismaProxy = new Proxy({} as PrismaClient, {
   get(target, prop) {
     const client = getPrismaClientLazy();
     return client[prop as keyof PrismaClient];
-  }
+  },
 });
 
 export default prismaProxy;
@@ -563,49 +617,49 @@ export const user = new Proxy({} as any, {
   get(target, prop) {
     const client = getPrismaClientLazy();
     return client.user[prop as keyof typeof client.user];
-  }
+  },
 });
 
 export const organization = new Proxy({} as any, {
   get(target, prop) {
     const client = getPrismaClientLazy();
     return client.organization[prop as keyof typeof client.organization];
-  }
+  },
 });
 
 export const risk = new Proxy({} as any, {
   get(target, prop) {
     const client = getPrismaClientLazy();
     return client.risk[prop as keyof typeof client.risk];
-  }
+  },
 });
 
 export const control = new Proxy({} as any, {
   get(target, prop) {
     const client = getPrismaClientLazy();
     return client.control[prop as keyof typeof client.control];
-  }
+  },
 });
 
 export const document = new Proxy({} as any, {
   get(target, prop) {
     const client = getPrismaClientLazy();
     return client.document[prop as keyof typeof client.document];
-  }
+  },
 });
 
 export const questionnaire = new Proxy({} as any, {
   get(target, prop) {
     const client = getPrismaClientLazy();
     return client.questionnaire[prop as keyof typeof client.questionnaire];
-  }
+  },
 });
 
 export const controlRiskMapping = new Proxy({} as any, {
   get(target, prop) {
     const client = getPrismaClientLazy();
     return client.controlRiskMapping[prop as keyof typeof client.controlRiskMapping];
-  }
+  },
 });
 
 // Export types for use in other files
@@ -628,10 +682,10 @@ export async function getDatabaseStatus(): Promise<{
   lastHealthCheck: Date;
 }> {
   const startTime = Date.now();
-  
+
   try {
     const healthCheck = await checkDatabaseConnectionDetailed();
-    
+
     if (!healthCheck.isHealthy) {
       return {
         status: 'unhealthy',
@@ -641,14 +695,14 @@ export async function getDatabaseStatus(): Promise<{
         lastHealthCheck: new Date(),
       };
     }
-    
+
     const { connectionInfo } = healthCheck;
-    const utilization = connectionInfo.maxConnections 
-      ? (connectionInfo.activeConnections || 0) / connectionInfo.maxConnections * 100
+    const utilization = connectionInfo.maxConnections
+      ? ((connectionInfo.activeConnections || 0) / connectionInfo.maxConnections) * 100
       : 0;
-    
+
     const status = utilization > 80 ? 'degraded' : 'healthy';
-    
+
     return {
       status,
       uptime: Date.now() - startTime,
@@ -699,4 +753,4 @@ process.on('unhandledRejection', async (reason, promise) => {
   console.error('❌ Unhandled rejection at:', promise, 'reason:', reason);
   await disconnectDatabase();
   process.exit(1);
-}); 
+});

@@ -24,19 +24,19 @@ interface BusinessKPIs {
   monthlyActiveUsers: number;
   newUserRegistrations: number;
   userRetentionRate: number;
-  
+
   // Feature usage
   rcsaAssessmentsCreated: number;
   documentsProcessed: number;
   reportsGenerated: number;
   controlsCreated: number;
   risksIdentified: number;
-  
+
   // Business metrics
   averageTimeToFirstRCSA: number;
   averageAssessmentCompletionTime: number;
   documentProcessingSuccessRate: number;
-  
+
   // Support metrics
   supportTicketsCreated: number;
   averageResolutionTime: number;
@@ -71,7 +71,7 @@ class BusinessAnalytics {
    */
   private initializeSession(): void {
     const sessionId = this.getSessionId();
-    
+
     this.track('session_start', {
       session_id: sessionId,
       timestamp: this.sessionStartTime,
@@ -88,16 +88,16 @@ class BusinessAnalytics {
   private setupEventListeners(): void {
     // Track page views
     this.trackPageView();
-    
+
     // Track form interactions
     this.setupFormTracking();
-    
+
     // Track button clicks
     this.setupButtonTracking();
-    
+
     // Track errors
     this.setupErrorTracking();
-    
+
     // Track session end
     window.addEventListener('beforeunload', () => {
       this.track('session_end', {
@@ -113,7 +113,7 @@ class BusinessAnalytics {
    */
   trackPageView(page?: string): void {
     const currentPage = page || (typeof window !== 'undefined' ? window.location.pathname : '');
-    
+
     this.track('page_view', {
       page: currentPage,
       referrer: typeof document !== 'undefined' ? document.referrer : '',
@@ -157,7 +157,12 @@ class BusinessAnalytics {
   /**
    * Track feature usage
    */
-  trackFeatureUsage(feature: string, startTime: number, success: boolean, errorMessage?: string): void {
+  trackFeatureUsage(
+    feature: string,
+    startTime: number,
+    success: boolean,
+    errorMessage?: string
+  ): void {
     const duration = Date.now() - startTime;
     const userId = this.getCurrentUserId();
     const organizationId = this.getCurrentOrganizationId();
@@ -176,7 +181,8 @@ class BusinessAnalytics {
     this.track('feature_usage', usage);
 
     // Track performance metrics
-    if (duration > 10000) { // > 10 seconds
+    if (duration > 10000) {
+      // > 10 seconds
       Sentry.addBreadcrumb({
         category: 'feature-performance',
         message: `Slow feature usage: ${feature}`,
@@ -203,13 +209,15 @@ class BusinessAnalytics {
         transaction_id: Math.random().toString(36).substring(2, 15),
         value,
         currency,
-        items: [{
-          item_id: event,
-          item_name: event,
-          category: 'subscription',
-          quantity: 1,
-          price: value,
-        }],
+        items: [
+          {
+            item_id: event,
+            item_name: event,
+            category: 'subscription',
+            quantity: 1,
+            price: value,
+          },
+        ],
       });
     }
   }
@@ -235,19 +243,19 @@ class BusinessAnalytics {
    */
   trackBusinessEvent(event: string, data: Record<string, any>): void {
     const businessEvents = {
-      'rcsa_created': () => {
+      rcsa_created: () => {
         this.kpis.rcsaAssessmentsCreated = (this.kpis.rcsaAssessmentsCreated || 0) + 1;
       },
-      'document_processed': () => {
+      document_processed: () => {
         this.kpis.documentsProcessed = (this.kpis.documentsProcessed || 0) + 1;
       },
-      'report_generated': () => {
+      report_generated: () => {
         this.kpis.reportsGenerated = (this.kpis.reportsGenerated || 0) + 1;
       },
-      'control_created': () => {
+      control_created: () => {
         this.kpis.controlsCreated = (this.kpis.controlsCreated || 0) + 1;
       },
-      'risk_identified': () => {
+      risk_identified: () => {
         this.kpis.risksIdentified = (this.kpis.risksIdentified || 0) + 1;
       },
     };
@@ -274,7 +282,7 @@ class BusinessAnalytics {
     document.addEventListener('submit', (event) => {
       const form = event.target as HTMLFormElement;
       const formName = form.getAttribute('data-form-name') || form.id || 'unknown';
-      
+
       this.track('form_submit', {
         form_name: formName,
         form_action: form.action,
@@ -285,9 +293,13 @@ class BusinessAnalytics {
     // Track form field interactions
     document.addEventListener('focusin', (event) => {
       const target = event.target as HTMLElement;
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT') {
+      if (
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.tagName === 'SELECT'
+      ) {
         const fieldName = target.getAttribute('name') || target.getAttribute('id') || 'unknown';
-        
+
         this.track('form_field_focus', {
           field_name: fieldName,
           field_type: target.getAttribute('type') || target.tagName.toLowerCase(),
@@ -304,11 +316,11 @@ class BusinessAnalytics {
 
     document.addEventListener('click', (event) => {
       const target = event.target as HTMLElement;
-      
+
       if (target.tagName === 'BUTTON' || target.getAttribute('role') === 'button') {
         const buttonText = target.textContent?.trim() || 'unknown';
         const buttonId = target.id || target.getAttribute('data-testid') || 'unknown';
-        
+
         this.track('button_click', {
           button_text: buttonText,
           button_id: buttonId,
@@ -376,7 +388,7 @@ class BusinessAnalytics {
   private updateDocumentProcessingSuccessRate(success: boolean): void {
     const currentRate = this.kpis.documentProcessingSuccessRate || 100;
     const currentCount = this.kpis.documentsProcessed || 1;
-    
+
     // Calculate new success rate
     const successCount = Math.round((currentRate / 100) * (currentCount - 1));
     const newSuccessCount = successCount + (success ? 1 : 0);
@@ -499,7 +511,7 @@ class BusinessAnalytics {
    */
   private getCurrentUserId(): string | undefined {
     if (typeof window === 'undefined') return undefined;
-    
+
     // Try to get from various sources
     const sources = [
       () => (window as any).currentUser?.id,
@@ -525,7 +537,7 @@ class BusinessAnalytics {
    */
   private getCurrentOrganizationId(): string | undefined {
     if (typeof window === 'undefined') return undefined;
-    
+
     const sources = [
       () => (window as any).currentUser?.organizationId,
       () => localStorage.getItem('organizationId'),
@@ -549,11 +561,11 @@ class BusinessAnalytics {
    */
   private getSessionId(): string {
     if (typeof window === 'undefined') return 'server';
-    
+
     let sessionId = sessionStorage.getItem('analytics_session_id');
     if (!sessionId) {
-      sessionId = Math.random().toString(36).substring(2, 15) + 
-                  Math.random().toString(36).substring(2, 15);
+      sessionId =
+        Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
       sessionStorage.setItem('analytics_session_id', sessionId);
     }
     return sessionId;
@@ -589,7 +601,12 @@ export const track = (event: string, properties?: Record<string, any>) => {
   getAnalytics().track(event, properties);
 };
 
-export const trackFeatureUsage = (feature: string, startTime: number, success: boolean, errorMessage?: string) => {
+export const trackFeatureUsage = (
+  feature: string,
+  startTime: number,
+  success: boolean,
+  errorMessage?: string
+) => {
   getAnalytics().trackFeatureUsage(feature, startTime, success, errorMessage);
 };
 
@@ -605,4 +622,4 @@ export const getKPIs = () => {
   return getAnalytics().getKPIs();
 };
 
-export { type BusinessKPIs, type FeatureUsage, type UserEvent }; 
+export { type BusinessKPIs, type FeatureUsage, type UserEvent };

@@ -1,0 +1,31 @@
+# Development and CI files
+.jsx-metrics/
+.build-metrics/
+test-results/
+coverage/
+*.log
+
+# GitHub Actions
+.github/
+
+# Testing
+__tests__/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Scripts
+scripts/jsx-error-monitor.js
+scripts/build-metrics-dashboard.js
+scripts/type-check.js
+
+# Documentation
+*.md
+CLAUDE.md
+PROMPTOPTIMIZER.MD
+CLAUDE_TROUBLESHOOTING.md
+
+# Development tools
+.husky/
+lint-staged

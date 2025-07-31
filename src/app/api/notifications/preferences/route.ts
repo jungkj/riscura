@@ -25,11 +25,13 @@ const updatePreferencesSchema = z.object({
   inApp: z.boolean().optional(),
   digest: z.nativeEnum(DigestFrequency).optional(),
   categories: z.record(z.boolean()).optional(),
-  quietHours: z.object({
-    start: z.string().regex(/^\d{2}:\d{2}$/),
-    end: z.string().regex(/^\d{2}:\d{2}$/),
-    timezone: z.string().optional(),
-  }).optional(),
+  quietHours: z
+    .object({
+      start: z.string().regex(/^\d{2}:\d{2}$/),
+      end: z.string().regex(/^\d{2}:\d{2}$/),
+      timezone: z.string().optional(),
+    })
+    .optional(),
 });
 
 export const PUT = withApiMiddleware(async (req: NextRequest) => {

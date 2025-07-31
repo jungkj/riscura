@@ -16,16 +16,18 @@ export class SharePointAuthService {
     if (!process.env.AZURE_KEY_VAULT_NAME) {
       throw new Error('AZURE_KEY_VAULT_NAME environment variable is required');
     }
-    
+
     this.keyVaultUrl = `https://${process.env.AZURE_KEY_VAULT_NAME}.vault.azure.net`;
-    
+
     // Initialize credential based on environment
     if (process.env.AZURE_AD_CLIENT_SECRET) {
       // Development: Use client secret
       if (!process.env.AZURE_AD_TENANT_ID || !process.env.AZURE_AD_CLIENT_ID) {
-        throw new Error('AZURE_AD_TENANT_ID and AZURE_AD_CLIENT_ID are required when using client secret authentication');
+        throw new Error(
+          'AZURE_AD_TENANT_ID and AZURE_AD_CLIENT_ID are required when using client secret authentication'
+        );
       }
-      
+
       this.credential = new ClientSecretCredential(
         process.env.AZURE_AD_TENANT_ID,
         process.env.AZURE_AD_CLIENT_ID,
@@ -46,12 +48,12 @@ export class SharePointAuthService {
       getAccessToken: async () => {
         const token = await this.getAccessToken();
         return token;
-      }
+      },
     };
 
     return Client.initWithMiddleware({
       authProvider: authProvider,
-      defaultVersion: 'v1.0'
+      defaultVersion: 'v1.0',
     });
   }
 
@@ -76,9 +78,7 @@ export class SharePointAuthService {
       }
 
       // Cache the token
-      const expiresInSeconds = Math.floor(
-        (tokenResponse.expiresOnTimestamp - Date.now()) / 1000
-      );
+      const expiresInSeconds = Math.floor((tokenResponse.expiresOnTimestamp - Date.now()) / 1000);
       await this.cacheToken(tokenResponse.token, expiresInSeconds);
 
       return tokenResponse.token;
@@ -95,19 +95,18 @@ export class SharePointAuthService {
     try {
       // Validate required environment variable
       if (!process.env.AZURE_KEY_VAULT_CERTIFICATE_NAME) {
-        throw new Error('AZURE_KEY_VAULT_CERTIFICATE_NAME environment variable is required for certificate authentication');
+        throw new Error(
+          'AZURE_KEY_VAULT_CERTIFICATE_NAME environment variable is required for certificate authentication'
+        );
       }
-      
+
       // Ensure credential is properly typed
       if (!(this.credential instanceof DefaultAzureCredential)) {
         throw new Error('DefaultAzureCredential is required for Key Vault access');
       }
-      
-      const certificateClient = new CertificateClient(
-        this.keyVaultUrl,
-        this.credential
-      );
-      
+
+      const certificateClient = new CertificateClient(this.keyVaultUrl, this.credential);
+
       const certificate = await certificateClient.getCertificate(
         process.env.AZURE_KEY_VAULT_CERTIFICATE_NAME
       );
@@ -166,7 +165,7 @@ export class SharePointAuthService {
       // Set a buffer of 5 minutes before actual expiry
       const bufferSeconds = 300;
       const effectiveExpiry = Math.max(expiresInSeconds - bufferSeconds, 60);
-      
+
       await redis.setex(this.tokenCacheKey, effectiveExpiry, token);
       await redis.setex(
         this.tokenExpiryKey,
@@ -184,11 +183,8 @@ export class SharePointAuthService {
   async validateSiteAccess(siteId: string): Promise<boolean> {
     try {
       const client = await this.getGraphClient();
-      const site = await client
-        .api(`/sites/${siteId}`)
-        .select('id,displayName,webUrl')
-        .get();
-      
+      const site = await client.api(`/sites/${siteId}`).select('id,displayName,webUrl').get();
+
       return !!site;
     } catch (error) {
       console.error('Site validation error:', error);

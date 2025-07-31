@@ -47,22 +47,22 @@ export interface BlogPost extends BlogPostMeta {
 }
 
 export function getPostSlugs() {
-  return fs.readdirSync(postsDirectory).filter(file => file.endsWith('.mdx'));
+  return fs.readdirSync(postsDirectory).filter((file) => file.endsWith('.mdx'));
 }
 
 export function getPostBySlug(slug: string): BlogPost | null {
   const realSlug = slug.replace(/\.mdx$/, '');
   const fullPath = path.join(postsDirectory, `${realSlug}.mdx`);
-  
+
   if (!fs.existsSync(fullPath)) {
     return null;
   }
 
   const fileContents = fs.readFileSync(fullPath, 'utf8');
   const { data, content } = matter(fileContents);
-  
+
   const timeToRead = readingTime(content);
-  
+
   return {
     ...data,
     slug: realSlug,
@@ -94,40 +94,38 @@ export function getAllPosts(): BlogPost[] {
     .map((slug) => getPostBySlug(slug.replace(/\.mdx$/, '')))
     .filter((post): post is BlogPost => post !== null)
     .sort((post1, post2) => (post1.publishedAt > post2.publishedAt ? -1 : 1));
-  
+
   return posts;
 }
 
 export function getPostsByCategory(category: string): BlogPost[] {
-  return getAllPosts().filter(post => 
-    post.category.toLowerCase() === category.toLowerCase()
-  );
+  return getAllPosts().filter((post) => post.category.toLowerCase() === category.toLowerCase());
 }
 
 export function getRelatedPosts(currentSlug: string, limit: number = 3): BlogPost[] {
   const currentPost = getPostBySlug(currentSlug);
   if (!currentPost) return [];
 
-  const allPosts = getAllPosts().filter(post => post.slug !== currentSlug);
-  
+  const allPosts = getAllPosts().filter((post) => post.slug !== currentSlug);
+
   // Score posts based on shared tags and category
-  const scoredPosts = allPosts.map(post => {
+  const scoredPosts = allPosts.map((post) => {
     let score = 0;
-    
+
     // Same category gets higher score
     if (post.category === currentPost.category) score += 3;
-    
+
     // Shared tags
-    const sharedTags = post.tags.filter(tag => currentPost.tags.includes(tag));
+    const sharedTags = post.tags.filter((tag) => currentPost.tags.includes(tag));
     score += sharedTags.length * 2;
-    
+
     return { post, score };
   });
-  
+
   return scoredPosts
     .sort((a, b) => b.score - a.score)
     .slice(0, limit)
-    .map(item => item.post);
+    .map((item) => item.post);
 }
 
 export const categories = [
@@ -141,4 +139,4 @@ export const categories = [
   'Case Studies',
 ] as const;
 
-export type Category = typeof categories[number];
+export type Category = (typeof categories)[number];

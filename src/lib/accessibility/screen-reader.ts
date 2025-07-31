@@ -40,11 +40,7 @@ export class ScreenReaderUtils {
   }
 
   // Announce message to screen readers
-  static announce(
-    message: string, 
-    priority: 'polite' | 'assertive' = 'polite',
-    delay = 100
-  ): void {
+  static announce(message: string, priority: 'polite' | 'assertive' = 'polite', delay = 100): void {
     if (typeof window === 'undefined') return;
 
     this.init();
@@ -87,9 +83,7 @@ export class ScreenReaderUtils {
 
   // Announce action completion
   static announceAction(action: string, success = true): void {
-    const message = success 
-      ? `${action} completed successfully`
-      : `${action} failed`;
+    const message = success ? `${action} completed successfully` : `${action} failed`;
     this.announce(message, success ? 'polite' : 'assertive');
   }
 
@@ -101,15 +95,15 @@ export class ScreenReaderUtils {
   // Create accessible description for complex UI elements
   static createDescription(element: HTMLElement, description: string): string {
     const descId = `desc-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    
+
     const descElement = document.createElement('div');
     descElement.id = descId;
     descElement.className = 'sr-only';
     descElement.textContent = description;
-    
+
     element.parentNode?.insertBefore(descElement, element.nextSibling);
     element.setAttribute('aria-describedby', descId);
-    
+
     return descId;
   }
 
@@ -137,10 +131,7 @@ export function useScreenReader() {
     return () => ScreenReaderUtils.cleanup();
   }, []);
 
-  const announce = useCallback((
-    message: string, 
-    priority: 'polite' | 'assertive' = 'polite'
-  ) => {
+  const announce = useCallback((message: string, priority: 'polite' | 'assertive' = 'polite') => {
     ScreenReaderUtils.announce(message, priority);
   }, []);
 
@@ -170,7 +161,7 @@ export function useScreenReader() {
     announceNavigation,
     announceLoading,
     announceAction,
-    announceContentChange
+    announceContentChange,
   };
 }
 
@@ -223,12 +214,10 @@ export const ariaUtils = {
     if (!relatedElement.id) {
       relatedElement.id = ariaUtils.generateId();
     }
-    
+
     const existingIds = element.getAttribute(`aria-${relationship}`) || '';
-    const newIds = existingIds 
-      ? `${existingIds} ${relatedElement.id}`
-      : relatedElement.id;
-    
+    const newIds = existingIds ? `${existingIds} ${relatedElement.id}` : relatedElement.id;
+
     element.setAttribute(`aria-${relationship}`, newIds);
   },
 
@@ -241,15 +230,15 @@ export const ariaUtils = {
     const existingIds = element.getAttribute(`aria-${relationship}`) || '';
     const newIds = existingIds
       .split(' ')
-      .filter(id => id !== relatedElementId)
+      .filter((id) => id !== relatedElementId)
       .join(' ');
-    
+
     if (newIds) {
       element.setAttribute(`aria-${relationship}`, newIds);
     } else {
       element.removeAttribute(`aria-${relationship}`);
     }
-  }
+  },
 };
 
 // Screen reader detection
@@ -262,7 +251,7 @@ export function detectScreenReader(): {
   }
 
   const userAgent = navigator.userAgent.toLowerCase();
-  
+
   // Common screen reader indicators
   const screenReaders = [
     { name: 'JAWS', indicators: ['jaws', 'freedom scientific'] },
@@ -270,26 +259,25 @@ export function detectScreenReader(): {
     { name: 'VoiceOver', indicators: ['voiceover'] },
     { name: 'TalkBack', indicators: ['talkback'] },
     { name: 'Orca', indicators: ['orca'] },
-    { name: 'Dragon', indicators: ['dragon'] }
+    { name: 'Dragon', indicators: ['dragon'] },
   ];
 
   for (const sr of screenReaders) {
-    if (sr.indicators.some(indicator => userAgent.includes(indicator))) {
+    if (sr.indicators.some((indicator) => userAgent.includes(indicator))) {
       return { hasScreenReader: true, type: sr.name };
     }
   }
 
   // Check for other indicators
-  const hasAccessibilityFeatures = (
+  const hasAccessibilityFeatures =
     window.speechSynthesis ||
     'speechSynthesis' in window ||
     navigator.userAgent.includes('accessibility') ||
-    document.documentElement.hasAttribute('data-screen-reader')
-  );
+    document.documentElement.hasAttribute('data-screen-reader');
 
-  return { 
-    hasScreenReader: hasAccessibilityFeatures, 
-    type: hasAccessibilityFeatures ? 'Unknown' : null 
+  return {
+    hasScreenReader: hasAccessibilityFeatures,
+    type: hasAccessibilityFeatures ? 'Unknown' : null,
   };
 }
 
@@ -337,7 +325,10 @@ export const focusUtils = {
   },
 
   // Get next focusable element
-  getNextFocusable: (current: HTMLElement, direction: 'next' | 'previous' = 'next'): HTMLElement | null => {
+  getNextFocusable: (
+    current: HTMLElement,
+    direction: 'next' | 'previous' = 'next'
+  ): HTMLElement | null => {
     const focusableElements = Array.from(
       document.querySelectorAll(
         'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select, [tabindex]:not([tabindex="-1"])'
@@ -347,9 +338,10 @@ export const focusUtils = {
     const currentIndex = focusableElements.indexOf(current);
     if (currentIndex === -1) return null;
 
-    const nextIndex = direction === 'next' 
-      ? (currentIndex + 1) % focusableElements.length
-      : (currentIndex - 1 + focusableElements.length) % focusableElements.length;
+    const nextIndex =
+      direction === 'next'
+        ? (currentIndex + 1) % focusableElements.length
+        : (currentIndex - 1 + focusableElements.length) % focusableElements.length;
 
     return focusableElements[nextIndex];
   },
@@ -364,13 +356,15 @@ export const focusUtils = {
       'input[type="radio"]',
       'input[type="checkbox"]',
       'select',
-      '[tabindex]:not([tabindex="-1"])'
+      '[tabindex]:not([tabindex="-1"])',
     ];
 
-    return focusableSelectors.some(selector => element.matches(selector)) &&
-           !element.hasAttribute('disabled') &&
-           element.offsetParent !== null;
-  }
+    return (
+      focusableSelectors.some((selector) => element.matches(selector)) &&
+      !element.hasAttribute('disabled') &&
+      element.offsetParent !== null
+    );
+  },
 };
 
-export default ScreenReaderUtils; 
+export default ScreenReaderUtils;

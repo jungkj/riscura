@@ -32,7 +32,7 @@ export const HoverEffect: React.FC<HoverEffectProps> = ({
     const y = e.clientY - rect.top;
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-    
+
     setMousePosition({
       x: (x - centerX) / centerX,
       y: (y - centerY) / centerY,
@@ -71,7 +71,7 @@ export const HoverEffect: React.FC<HoverEffectProps> = ({
         }}
       >
         {children}
-        
+
         {/* Glow effect */}
         <motion.div
           className="absolute inset-0 rounded-lg opacity-0 pointer-events-none"
@@ -86,7 +86,7 @@ export const HoverEffect: React.FC<HoverEffectProps> = ({
             duration: 0.3,
           }}
         />
-        
+
         {/* Shine effect */}
         <motion.div
           className="absolute inset-0 rounded-lg opacity-0 pointer-events-none overflow-hidden"
@@ -129,11 +129,7 @@ interface HoverCardProps {
   hoverClassName?: string;
 }
 
-export const HoverCard: React.FC<HoverCardProps> = ({
-  children,
-  className,
-  hoverClassName,
-}) => {
+export const HoverCard: React.FC<HoverCardProps> = ({ children, className, hoverClassName }) => {
   return (
     <HoverEffect
       className={cn(
@@ -146,4 +142,4 @@ export const HoverCard: React.FC<HoverCardProps> = ({
       {children}
     </HoverEffect>
   );
-}; 
+};

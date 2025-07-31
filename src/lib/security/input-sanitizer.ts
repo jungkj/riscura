@@ -45,52 +45,74 @@ const SANITIZATION_CONFIGS: Record<string, SanitizationConfig> = {
   strict: {
     allowedTags: ['p', 'br', 'strong', 'em', 'u', 'ol', 'ul', 'li'],
     allowedAttributes: {
-      '*': ['class']
+      '*': ['class'],
     },
     allowedSchemes: [],
     maxLength: 10000,
     stripHtml: false,
     encodeEntities: true,
     allowDataAttributes: false,
-    allowCustomElements: false
+    allowCustomElements: false,
   },
 
   // Basic sanitization for comments and descriptions
   basic: {
     allowedTags: ['p', 'br', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'a', 'blockquote'],
     allowedAttributes: {
-      'a': ['href', 'title'],
-      '*': ['class']
+      a: ['href', 'title'],
+      '*': ['class'],
     },
     allowedSchemes: ['http', 'https', 'mailto'],
     maxLength: 50000,
     stripHtml: false,
     encodeEntities: true,
     allowDataAttributes: false,
-    allowCustomElements: false
+    allowCustomElements: false,
   },
 
   // Rich text for documents and reports
   rich: {
     allowedTags: [
-      'p', 'br', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'a', 'blockquote',
-      'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'table', 'thead', 'tbody', 'tr', 'td', 'th',
-      'img', 'span', 'div'
+      'p',
+      'br',
+      'strong',
+      'em',
+      'u',
+      'ol',
+      'ul',
+      'li',
+      'a',
+      'blockquote',
+      'h1',
+      'h2',
+      'h3',
+      'h4',
+      'h5',
+      'h6',
+      'table',
+      'thead',
+      'tbody',
+      'tr',
+      'td',
+      'th',
+      'img',
+      'span',
+      'div',
     ],
     allowedAttributes: {
-      'a': ['href', 'title', 'target'],
-      'img': ['src', 'alt', 'width', 'height'],
-      'table': ['class'],
-      'td': ['colspan', 'rowspan'],
-      'th': ['colspan', 'rowspan'],
-      '*': ['class', 'id']
+      a: ['href', 'title', 'target'],
+      img: ['src', 'alt', 'width', 'height'],
+      table: ['class'],
+      td: ['colspan', 'rowspan'],
+      th: ['colspan', 'rowspan'],
+      '*': ['class', 'id'],
     },
     allowedSchemes: ['http', 'https', 'mailto', 'data'],
     maxLength: 100000,
     stripHtml: false,
     encodeEntities: true,
     allowDataAttributes: true,
-    allowCustomElements: false
+    allowCustomElements: false,
   },
 
   // Plain text only
@@ -102,8 +124,8 @@ const SANITIZATION_CONFIGS: Record<string, SanitizationConfig> = {
     stripHtml: true,
     encodeEntities: true,
     allowDataAttributes: false,
-    allowCustomElements: false
-  }
+    allowCustomElements: false,
+  },
 };
 
 /**
@@ -135,7 +157,7 @@ export class InputSanitizer {
         productionGuard.logSecurityEvent('input_length_exceeded', {
           inputLength: input.length,
           maxLength: config.maxLength,
-          truncated: true
+          truncated: true,
         });
         input = input.substring(0, config.maxLength);
       }
@@ -152,20 +174,21 @@ export class InputSanitizer {
           if (tag === '*') {
             acc.push(...config.allowedAttributes[tag]);
           } else {
-            acc.push(...config.allowedAttributes[tag].map(attr => `${tag}:${attr}`));
+            acc.push(...config.allowedAttributes[tag].map((attr) => `${tag}:${attr}`));
           }
           return acc;
         }, [] as string[]),
-        ALLOWED_URI_REGEXP: config.allowedSchemes.length > 0 
-          ? new RegExp(`^(${config.allowedSchemes.join('|')}):|^(?!javascript:)`, 'i')
-          : /^(?!javascript:)/i,
+        ALLOWED_URI_REGEXP:
+          config.allowedSchemes.length > 0
+            ? new RegExp(`^(${config.allowedSchemes.join('|')}):|^(?!javascript:)`, 'i')
+            : /^(?!javascript:)/i,
         ALLOW_DATA_ATTR: config.allowDataAttributes,
         ALLOW_UNKNOWN_PROTOCOLS: false,
         SANITIZE_DOM: true,
         KEEP_CONTENT: false,
         FORBID_TAGS: ['script', 'object', 'embed', 'form', 'input', 'textarea', 'select'],
         FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'style'],
-        USE_PROFILES: { html: true }
+        USE_PROFILES: { html: true },
       };
 
       // Custom hook to log blocked content
@@ -173,7 +196,7 @@ export class InputSanitizer {
         if (data.tagName && !config.allowedTags.includes(data.tagName.toLowerCase())) {
           productionGuard.logSecurityEvent('html_tag_blocked', {
             tagName: data.tagName,
-            context: 'sanitization'
+            context: 'sanitization',
           });
         }
       });
@@ -183,7 +206,7 @@ export class InputSanitizer {
           productionGuard.logSecurityEvent('event_handler_blocked', {
             attribute: data.attrName,
             value: data.attrValue,
-            context: 'sanitization'
+            context: 'sanitization',
           });
         }
       });
@@ -199,11 +222,10 @@ export class InputSanitizer {
       }
 
       return sanitizedString;
-
     } catch (error) {
       productionGuard.logSecurityEvent('sanitization_error', {
         error: error instanceof Error ? error.message : 'Unknown error',
-        inputLength: input?.length || 0
+        inputLength: input?.length || 0,
       });
 
       // Fallback to basic escaping
@@ -238,7 +260,7 @@ export class InputSanitizer {
       if (options.maxLength && sanitized.length > options.maxLength) {
         productionGuard.logSecurityEvent('text_length_exceeded', {
           inputLength: sanitized.length,
-          maxLength: options.maxLength
+          maxLength: options.maxLength,
         });
         sanitized = sanitized.substring(0, options.maxLength);
       }
@@ -263,11 +285,10 @@ export class InputSanitizer {
       sanitized = this.removeDangerousPatterns(sanitized);
 
       return sanitized;
-
     } catch (error) {
       productionGuard.logSecurityEvent('text_sanitization_error', {
         error: error instanceof Error ? error.message : 'Unknown error',
-        inputLength: input?.length || 0
+        inputLength: input?.length || 0,
       });
       throw error;
     }
@@ -290,7 +311,7 @@ export class InputSanitizer {
     // Additional security checks
     if (sanitized.includes('<script') || sanitized.includes('javascript:')) {
       productionGuard.logSecurityEvent('malicious_email_blocked', {
-        email: sanitized.substring(0, 20) + '...'
+        email: sanitized.substring(0, 20) + '...',
       });
       throw new Error('Invalid email address');
     }
@@ -309,23 +330,25 @@ export class InputSanitizer {
     const trimmed = url.trim();
 
     // Basic URL validation
-    if (!validator.isURL(trimmed, {
-      protocols: allowedSchemes,
-      require_protocol: true,
-      allow_underscores: false
-    })) {
+    if (
+      !validator.isURL(trimmed, {
+        protocols: allowedSchemes,
+        require_protocol: true,
+        allow_underscores: false,
+      })
+    ) {
       throw new Error('Invalid URL format');
     }
 
     // Check for dangerous protocols
     const dangerousProtocols = ['javascript:', 'data:', 'vbscript:', 'file:', 'ftp:'];
     const lowerUrl = trimmed.toLowerCase();
-    
+
     for (const protocol of dangerousProtocols) {
       if (lowerUrl.startsWith(protocol)) {
         productionGuard.logSecurityEvent('dangerous_url_blocked', {
           url: trimmed.substring(0, 50) + '...',
-          protocol
+          protocol,
         });
         throw new Error('URL protocol not allowed');
       }
@@ -352,13 +375,17 @@ export class InputSanitizer {
         productionGuard.logSecurityEvent('file_type_blocked', {
           fileName: file.name,
           fileType: file.type,
-          fileSize: file.size
+          fileSize: file.size,
         });
       }
 
       // Check file extension
       const extension = file.name.split('.').pop()?.toLowerCase();
-      if (extension && options.allowedExtensions.length > 0 && !options.allowedExtensions.includes(extension)) {
+      if (
+        extension &&
+        options.allowedExtensions.length > 0 &&
+        !options.allowedExtensions.includes(extension)
+      ) {
         errors.push(`File extension .${extension} is not allowed`);
       }
 
@@ -366,7 +393,7 @@ export class InputSanitizer {
       if (this.isDangerousFileName(file.name)) {
         errors.push('File name contains dangerous characters');
         productionGuard.logSecurityEvent('dangerous_filename_blocked', {
-          fileName: file.name
+          fileName: file.name,
         });
       }
 
@@ -384,7 +411,7 @@ export class InputSanitizer {
           /\.pif$/i,
           /\.vbs$/i,
           /\.js$/i,
-          /\.jar$/i
+          /\.jar$/i,
         ];
 
         for (const pattern of suspiciousPatterns) {
@@ -392,7 +419,7 @@ export class InputSanitizer {
             errors.push('File appears to contain suspicious content');
             productionGuard.logSecurityEvent('suspicious_file_blocked', {
               fileName: file.name,
-              pattern: pattern.toString()
+              pattern: pattern.toString(),
             });
             break;
           }
@@ -401,18 +428,17 @@ export class InputSanitizer {
 
       return {
         isValid: errors.length === 0,
-        errors
+        errors,
       };
-
     } catch (error) {
       productionGuard.logSecurityEvent('file_validation_error', {
         error: error instanceof Error ? error.message : 'Unknown error',
-        fileName: file.name
+        fileName: file.name,
       });
 
       return {
         isValid: false,
-        errors: ['File validation failed']
+        errors: ['File validation failed'],
       };
     }
   }
@@ -438,16 +464,16 @@ export class InputSanitizer {
       // Null byte injection
       /\0/g,
       // LDAP injection patterns
-      /[()&|!]/g
+      /[()&|!]/g,
     ];
 
     let sanitized = input;
-    
+
     for (const pattern of dangerousPatterns) {
       if (pattern.test(sanitized)) {
         productionGuard.logSecurityEvent('dangerous_pattern_removed', {
           pattern: pattern.toString(),
-          originalLength: sanitized.length
+          originalLength: sanitized.length,
         });
         sanitized = sanitized.replace(pattern, '');
       }
@@ -461,16 +487,16 @@ export class InputSanitizer {
    */
   private isDangerousFileName(filename: string): boolean {
     const dangerousPatterns = [
-      /\.\./,  // Path traversal
-      /[<>:"|?*]/,  // Invalid filename characters
-      /^(con|prn|aux|nul|com[1-9]|lpt[1-9])$/i,  // Windows reserved names
-      /^\./,  // Hidden files starting with dot
-      /\s+$/,  // Trailing whitespace
-      /\0/,  // Null bytes
-      /[\x00-\x1f\x7f]/  // Control characters
+      /\.\./, // Path traversal
+      /[<>:"|?*]/, // Invalid filename characters
+      /^(con|prn|aux|nul|com[1-9]|lpt[1-9])$/i, // Windows reserved names
+      /^\./, // Hidden files starting with dot
+      /\s+$/, // Trailing whitespace
+      /\0/, // Null bytes
+      /[\x00-\x1f\x7f]/, // Control characters
     ];
 
-    return dangerousPatterns.some(pattern => pattern.test(filename));
+    return dangerousPatterns.some((pattern) => pattern.test(filename));
   }
 
   /**
@@ -482,7 +508,7 @@ export class InputSanitizer {
     }
 
     if (Array.isArray(obj)) {
-      return obj.map(item => this.sanitizeObject(item, config));
+      return obj.map((item) => this.sanitizeObject(item, config));
     }
 
     const sanitized: any = {};
@@ -527,7 +553,7 @@ export class InputSanitizer {
     productionGuard.logSecurityEvent('search_query_sanitized', {
       originalLength: query.length,
       sanitizedLength: sanitized.length,
-      containedSpecialChars: query !== sanitized
+      containedSpecialChars: query !== sanitized,
     });
 
     return sanitized;
@@ -536,7 +562,10 @@ export class InputSanitizer {
   /**
    * Batch sanitize multiple inputs
    */
-  sanitizeBatch(inputs: Record<string, any>, config: SanitizationConfig = SANITIZATION_CONFIGS.basic): Record<string, any> {
+  sanitizeBatch(
+    inputs: Record<string, any>,
+    config: SanitizationConfig = SANITIZATION_CONFIGS.basic
+  ): Record<string, any> {
     const sanitized: Record<string, any> = {};
 
     for (const [key, value] of Object.entries(inputs)) {
@@ -551,7 +580,7 @@ export class InputSanitizer {
       } catch (error) {
         productionGuard.logSecurityEvent('batch_sanitization_error', {
           key,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         });
         // Skip invalid inputs
         continue;
@@ -573,7 +602,7 @@ export class InputSanitizer {
     return {
       totalSanitized: 0,
       blockedPatterns: 0,
-      errorCount: 0
+      errorCount: 0,
     };
   }
 }
@@ -582,7 +611,10 @@ export class InputSanitizer {
 export const inputSanitizer = InputSanitizer.getInstance();
 
 // Utility functions
-export function sanitizeHtml(input: string, configName: keyof typeof SANITIZATION_CONFIGS = 'basic'): string {
+export function sanitizeHtml(
+  input: string,
+  configName: keyof typeof SANITIZATION_CONFIGS = 'basic'
+): string {
   return inputSanitizer.sanitizeHtml(input, SANITIZATION_CONFIGS[configName]);
 }
 
@@ -598,11 +630,17 @@ export function sanitizeUrl(url: string, allowedSchemes?: string[]): string {
   return inputSanitizer.sanitizeUrl(url, allowedSchemes);
 }
 
-export function validateFile(file: File, options: FileValidationOptions): { isValid: boolean; errors: string[] } {
+export function validateFile(
+  file: File,
+  options: FileValidationOptions
+): { isValid: boolean; errors: string[] } {
   return inputSanitizer.validateFile(file, options);
 }
 
-export function sanitizeObject(obj: any, configName: keyof typeof SANITIZATION_CONFIGS = 'basic'): any {
+export function sanitizeObject(
+  obj: any,
+  configName: keyof typeof SANITIZATION_CONFIGS = 'basic'
+): any {
   return inputSanitizer.sanitizeObject(obj, SANITIZATION_CONFIGS[configName]);
 }
 
@@ -611,4 +649,4 @@ export function sanitizeSearchQuery(query: string): string {
 }
 
 // Export configurations for customization
-export { SANITIZATION_CONFIGS }; 
+export { SANITIZATION_CONFIGS };

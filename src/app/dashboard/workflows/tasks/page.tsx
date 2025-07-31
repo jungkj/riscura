@@ -10,11 +10,11 @@ export default function TasksPage() {
           <h1 className="text-2xl font-bold text-gray-900">Tasks</h1>
           <p className="text-gray-600">Workflow tasks and assignments</p>
         </div>
-        
+
         <div className="bg-white rounded-lg border p-6">
           <p className="text-gray-600">Task management coming soon...</p>
         </div>
       </div>
     </ProtectedRoute>
   );
-} 
+}

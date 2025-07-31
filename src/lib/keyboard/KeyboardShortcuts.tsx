@@ -27,22 +27,22 @@ export const defaultShortcuts: ShortcutGroup[] = [
       {
         key: 'g h',
         description: 'Go to Dashboard',
-        action: () => window.location.href = '/dashboard',
-        category: 'navigation'
+        action: () => (window.location.href = '/dashboard'),
+        category: 'navigation',
       },
       {
         key: 'g r',
         description: 'Go to Risks',
-        action: () => window.location.href = '/dashboard/risks',
-        category: 'navigation'
+        action: () => (window.location.href = '/dashboard/risks'),
+        category: 'navigation',
       },
       {
         key: 'g c',
         description: 'Go to Controls',
-        action: () => window.location.href = '/dashboard/controls',
-        category: 'navigation'
-      }
-    ]
+        action: () => (window.location.href = '/dashboard/controls'),
+        category: 'navigation',
+      },
+    ],
   },
   {
     name: 'Actions',
@@ -51,39 +51,39 @@ export const defaultShortcuts: ShortcutGroup[] = [
         key: 'n',
         description: 'New Item',
         action: () => console.log('New item'),
-        category: 'actions'
+        category: 'actions',
       },
       {
         key: 'e',
         description: 'Edit',
         action: () => console.log('Edit'),
-        category: 'actions'
+        category: 'actions',
       },
       {
         key: 'Escape',
         description: 'Close Modal/Cancel',
         action: () => console.log('Cancel'),
-        category: 'actions'
-      }
-    ]
-  }
+        category: 'actions',
+      },
+    ],
+  },
 ];
 
 // Keyboard combination utility
 export class KeyCombination {
   static format(shortcut: KeyboardShortcut): string {
     const parts: string[] = [];
-    
+
     if (shortcut.ctrl) parts.push('Ctrl');
     if (shortcut.alt) parts.push('Alt');
     if (shortcut.shift) parts.push('Shift');
     if (shortcut.meta) parts.push('⌘');
-    
+
     parts.push(shortcut.key);
-    
+
     return parts.join(' + ');
   }
-  
+
   static matches(event: KeyboardEvent, shortcut: KeyboardShortcut): boolean {
     return (
       event.key.toLowerCase() === shortcut.key.toLowerCase() &&
@@ -131,8 +131,8 @@ export class KeyboardShortcutsManager {
   }
 
   private loadDefaultShortcuts(): void {
-    defaultShortcuts.forEach(group => {
-      group.shortcuts.forEach(shortcut => {
+    defaultShortcuts.forEach((group) => {
+      group.shortcuts.forEach((shortcut) => {
         this.addShortcut(shortcut);
       });
     });
@@ -180,7 +180,7 @@ export const KeyboardShortcutDisplay: React.FC<{
     borderRadius: '4px',
     fontSize: '12px',
     fontFamily: 'monospace',
-    color: '#374151'
+    color: '#374151',
   };
 
   return (
@@ -227,7 +227,7 @@ export const KeyboardShortcutsOverlay: React.FC = () => {
           cursor: 'pointer',
           fontSize: '14px',
           color: '#6b7280',
-          zIndex: 1000
+          zIndex: 1000,
         }}
         aria-label="Show keyboard shortcuts"
       >
@@ -248,7 +248,7 @@ export const KeyboardShortcutsOverlay: React.FC = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: 1000
+        zIndex: 1000,
       }}
       onClick={() => setIsOpen(false)}
     >
@@ -261,10 +261,17 @@ export const KeyboardShortcutsOverlay: React.FC = () => {
           maxWidth: '600px',
           maxHeight: '80vh',
           overflowY: 'auto',
-          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
+          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '20px',
+          }}
+        >
           <h2 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>Keyboard Shortcuts</h2>
           <button
             onClick={() => setIsOpen(false)}
@@ -273,10 +280,17 @@ export const KeyboardShortcutsOverlay: React.FC = () => {
             ×
           </button>
         </div>
-        
+
         {defaultShortcuts.map((group, index) => (
           <div key={index} style={{ marginBottom: '24px' }}>
-            <h3 style={{ margin: '0 0 12px 0', fontSize: '18px', fontWeight: '500', color: '#374151' }}>
+            <h3
+              style={{
+                margin: '0 0 12px 0',
+                fontSize: '18px',
+                fontWeight: '500',
+                color: '#374151',
+              }}
+            >
               {group.name}
             </h3>
             <div style={{ display: 'grid', gap: '8px' }}>
@@ -287,7 +301,7 @@ export const KeyboardShortcutsOverlay: React.FC = () => {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    padding: '8px 0'
+                    padding: '8px 0',
                   }}
                 >
                   <span style={{ color: '#6b7280' }}>{shortcut.description}</span>
@@ -306,13 +320,19 @@ export const KeyboardShortcutsOverlay: React.FC = () => {
 export const useKeyboardShortcuts = () => {
   const [manager] = useState(() => new KeyboardShortcutsManager());
 
-  const addShortcut = useCallback((shortcut: KeyboardShortcut) => {
-    manager.addShortcut(shortcut);
-  }, [manager]);
+  const addShortcut = useCallback(
+    (shortcut: KeyboardShortcut) => {
+      manager.addShortcut(shortcut);
+    },
+    [manager]
+  );
 
-  const removeShortcut = useCallback((shortcut: KeyboardShortcut) => {
-    manager.removeShortcut(shortcut);
-  }, [manager]);
+  const removeShortcut = useCallback(
+    (shortcut: KeyboardShortcut) => {
+      manager.removeShortcut(shortcut);
+    },
+    [manager]
+  );
 
   const enable = useCallback(() => {
     manager.enable();
@@ -331,4 +351,4 @@ export const useKeyboardShortcuts = () => {
   };
 };
 
-export default KeyboardShortcutsManager; 
+export default KeyboardShortcutsManager;

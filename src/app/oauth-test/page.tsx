@@ -41,15 +41,16 @@ export default function OAuthTestPage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen p-8 bg-gray-50">
+
+  return (
+    <div className="min-h-screen p-8 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold mb-8">OAuth Debug Page</h1>
           <p>Loading...</p>
         </div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="min-h-screen p-8 bg-gray-50">
@@ -57,43 +58,53 @@ export default function OAuthTestPage() {
         <h1 className="text-3xl font-bold">OAuth Debug Page</h1>
         
         {error && (
-          <DaisyAlert variant="error">
-            <DaisyAlertDescription>{error}
-          </DaisyAlert>
+          <DaisyAlert variant="error" >
+  <DaisyAlertDescription>
+                </DaisyAlert>
+</DaisyAlert>{error}
+                </DaisyAlertDescription>
+              </DaisyAlert>
         )}
 
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Environment Variables</DaisyCardTitle>
             <DaisyCardDescription>Current environment configuration</p>
           
-          <DaisyCardContent>
-            <pre className="bg-gray-100 p-4 rounded overflow-auto text-sm">
+          <DaisyCardContent >
+  <pre className="bg-gray-100 p-4 rounded overflow-auto text-sm">
+</DaisyCardDescription>
               {JSON.stringify(envData, null, 2)}
             </pre>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Database Connection Test</DaisyCardTitle>
             <DaisyCardDescription>Results of database connection attempts</p>
           
-          <DaisyCardContent>
-            <pre className="bg-gray-100 p-4 rounded overflow-auto text-sm">
+          <DaisyCardContent >
+  <pre className="bg-gray-100 p-4 rounded overflow-auto text-sm">
+</DaisyCardDescription>
               {JSON.stringify(dbTestData, null, 2)}
             </pre>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>OAuth Test</DaisyCardTitle>
             <DaisyCardDescription>Test the Google OAuth flow</p>
           
-          <DaisyCardContent className="space-y-4">
-            <DaisyButton onClick={testGoogleLogin} className="w-full">
-              Test Google Login
+          <DaisyCardContent className="space-y-4" >
+  <DaisyButton onClick={testGoogleLogin} className="w-full" >
+</DaisyCardDescription>
+  Test Google Login
+</DaisyButton>
             </DaisyButton>
             
             <div className="text-sm text-gray-600">
@@ -104,15 +115,17 @@ export default function OAuthTestPage() {
                 <li>Check the browser console and Vercel logs for error details</li>
               </ol>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Quick Links</DaisyCardTitle>
-          
-          <DaisyCardContent className="space-y-2">
-            <a href="/api/check-env" className="text-blue-600 hover:underline block">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-2" >
+  <a href="/api/check-env" className="text-blue-600 hover:underline block">
+</DaisyCardContent>
               /api/check-env - Environment check endpoint
             </a>
             <a href="/api/test-db" className="text-blue-600 hover:underline block">
@@ -121,7 +134,7 @@ export default function OAuthTestPage() {
             <a href="/api/google-oauth/debug" className="text-blue-600 hover:underline block">
               /api/google-oauth/debug - OAuth configuration debug
             </a>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
     </div>

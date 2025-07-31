@@ -5,11 +5,11 @@ import MainContentArea from '@/components/layout/MainContentArea';
 import { ContentSection, ContentCard } from '@/components/layout/MainContentArea';
 import AnalyticsDashboard from '@/components/analytics/AnalyticsDashboard';
 import { RiskRegisterTable } from '@/components/risk-register-table';
-import { 
-  Shield, 
-  AlertTriangle, 
-  CheckCircle, 
-  Clock, 
+import {
+  Shield,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
   TrendingUp,
   Users,
   Target,
@@ -18,7 +18,7 @@ import {
   Download,
   Plus,
   Share,
-  BookmarkPlus
+  BookmarkPlus,
 } from 'lucide-react';
 
 // ========== SAMPLE DATA ==========
@@ -166,9 +166,21 @@ const dashboardWidgets = [
     size: 'lg' as const,
     data: {
       matrix: [
-        [{ value: 2, label: 'Low/Low' }, { value: 4, label: 'Low/Med' }, { value: 6, label: 'Low/High' }],
-        [{ value: 4, label: 'Med/Low' }, { value: 8, label: 'Med/Med' }, { value: 12, label: 'Med/High' }],
-        [{ value: 6, label: 'High/Low' }, { value: 12, label: 'High/Med' }, { value: 18, label: 'High/High' }],
+        [
+          { value: 2, label: 'Low/Low' },
+          { value: 4, label: 'Low/Med' },
+          { value: 6, label: 'Low/High' },
+        ],
+        [
+          { value: 4, label: 'Med/Low' },
+          { value: 8, label: 'Med/Med' },
+          { value: 12, label: 'Med/High' },
+        ],
+        [
+          { value: 6, label: 'High/Low' },
+          { value: 12, label: 'High/Med' },
+          { value: 18, label: 'High/High' },
+        ],
       ],
     },
     realTime: false,
@@ -271,7 +283,7 @@ export const ExecutiveDashboard: React.FC = () => {
       maxWidth="2xl"
     >
       {/* Analytics Dashboard */}
-      <ContentSection 
+      <ContentSection
         title="Performance Overview"
         subtitle="Real-time analytics and key performance indicators"
         spacing="normal"
@@ -287,12 +299,12 @@ export const ExecutiveDashboard: React.FC = () => {
       </ContentSection>
 
       {/* Recent Risk Activity */}
-      <ContentSection 
+      <ContentSection
         title="Recent Risk Activity"
         subtitle="Latest updates and changes to the risk register"
         action={{
           label: 'View All Risks',
-          onClick: () => window.location.href = '/dashboard/risks',
+          onClick: () => (window.location.href = '/dashboard/risks'),
           icon: BarChart3,
           variant: 'outline',
         }}
@@ -304,7 +316,7 @@ export const ExecutiveDashboard: React.FC = () => {
       </ContentSection>
 
       {/* Compliance Status Cards */}
-      <ContentSection 
+      <ContentSection
         title="Compliance Frameworks"
         subtitle="Current compliance status across key frameworks"
         spacing="normal"
@@ -320,7 +332,9 @@ export const ExecutiveDashboard: React.FC = () => {
                 <span className="text-caption text-text-tertiary">Last audit: Dec 2023</span>
                 <div className="flex items-center space-x-enterprise-1">
                   <CheckCircle className="h-4 w-4 text-semantic-success" />
-                  <span className="text-body-sm font-medium text-semantic-success">95% Complete</span>
+                  <span className="text-body-sm font-medium text-semantic-success">
+                    95% Complete
+                  </span>
                 </div>
               </div>
             }
@@ -330,11 +344,11 @@ export const ExecutiveDashboard: React.FC = () => {
                 <span className="text-body-sm text-text-secondary">Controls Tested</span>
                 <span className="text-body-sm font-semibold text-text-primary">47/50</span>
               </div>
-              
+
               <div className="w-full bg-surface-secondary rounded-full h-2">
                 <div className="bg-semantic-success h-2 rounded-full w-[94%]" />
               </div>
-              
+
               <div className="flex items-center space-x-enterprise-2">
                 <TrendingUp className="h-4 w-4 text-semantic-success" />
                 <span className="text-caption text-semantic-success">+3% from last quarter</span>
@@ -352,7 +366,9 @@ export const ExecutiveDashboard: React.FC = () => {
                 <span className="text-caption text-text-tertiary">Certification: Valid</span>
                 <div className="flex items-center space-x-enterprise-1">
                   <CheckCircle className="h-4 w-4 text-semantic-success" />
-                  <span className="text-body-sm font-medium text-semantic-success">92% Complete</span>
+                  <span className="text-body-sm font-medium text-semantic-success">
+                    92% Complete
+                  </span>
                 </div>
               </div>
             }
@@ -362,11 +378,11 @@ export const ExecutiveDashboard: React.FC = () => {
                 <span className="text-body-sm text-text-secondary">Controls Implemented</span>
                 <span className="text-body-sm font-semibold text-text-primary">115/125</span>
               </div>
-              
+
               <div className="w-full bg-surface-secondary rounded-full h-2">
                 <div className="bg-semantic-success h-2 rounded-full w-[92%]" />
               </div>
-              
+
               <div className="flex items-center space-x-enterprise-2">
                 <TrendingUp className="h-4 w-4 text-semantic-success" />
                 <span className="text-caption text-semantic-success">+1.5% from last month</span>
@@ -384,7 +400,9 @@ export const ExecutiveDashboard: React.FC = () => {
                 <span className="text-caption text-text-tertiary">Last review: Jan 2024</span>
                 <div className="flex items-center space-x-enterprise-1">
                   <CheckCircle className="h-4 w-4 text-semantic-success" />
-                  <span className="text-body-sm font-medium text-semantic-success">98% Complete</span>
+                  <span className="text-body-sm font-medium text-semantic-success">
+                    98% Complete
+                  </span>
                 </div>
               </div>
             }
@@ -394,11 +412,11 @@ export const ExecutiveDashboard: React.FC = () => {
                 <span className="text-body-sm text-text-secondary">Requirements Met</span>
                 <span className="text-body-sm font-semibold text-text-primary">49/50</span>
               </div>
-              
+
               <div className="w-full bg-surface-secondary rounded-full h-2">
                 <div className="bg-semantic-success h-2 rounded-full w-[98%]" />
               </div>
-              
+
               <div className="flex items-center space-x-enterprise-2">
                 <TrendingUp className="h-4 w-4 text-semantic-success" />
                 <span className="text-caption text-semantic-success">Maintained 98%</span>
@@ -409,14 +427,14 @@ export const ExecutiveDashboard: React.FC = () => {
       </ContentSection>
 
       {/* Quick Actions */}
-      <ContentSection 
+      <ContentSection
         title="Quick Actions"
         subtitle="Frequently used tools and shortcuts"
         spacing="tight"
       >
         <div className="grid grid-cols-2 md:grid-cols-4 gap-enterprise-4">
-          <ContentCard 
-            hover 
+          <ContentCard
+            hover
             padding="sm"
             className="text-center cursor-pointer shadow-notion-sm hover:shadow-notion-md transition-shadow"
           >
@@ -431,8 +449,8 @@ export const ExecutiveDashboard: React.FC = () => {
             </div>
           </ContentCard>
 
-          <ContentCard 
-            hover 
+          <ContentCard
+            hover
             padding="sm"
             className="text-center cursor-pointer shadow-notion-sm hover:shadow-notion-md transition-shadow"
           >
@@ -447,8 +465,8 @@ export const ExecutiveDashboard: React.FC = () => {
             </div>
           </ContentCard>
 
-          <ContentCard 
-            hover 
+          <ContentCard
+            hover
             padding="sm"
             className="text-center cursor-pointer shadow-notion-sm hover:shadow-notion-md transition-shadow"
           >
@@ -463,8 +481,8 @@ export const ExecutiveDashboard: React.FC = () => {
             </div>
           </ContentCard>
 
-          <ContentCard 
-            hover 
+          <ContentCard
+            hover
             padding="sm"
             className="text-center cursor-pointer shadow-notion-sm hover:shadow-notion-md transition-shadow"
           >
@@ -484,4 +502,4 @@ export const ExecutiveDashboard: React.FC = () => {
   );
 };
 
-export default ExecutiveDashboard; 
+export default ExecutiveDashboard;

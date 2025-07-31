@@ -19,7 +19,7 @@ export interface SelectableContentProps {
   showQualityScore?: boolean;
 }
 
-export type AIAction = 
+export type AIAction =
   | 'explain'
   | 'regenerate'
   | 'improve'
@@ -64,16 +64,15 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
     metadata,
   };
 
-  const {
-    currentSelection,
-    isSelecting,
-    hasSelection,
-    clearSelection,
-  } = useTextSelection(containerRef, selectionContext, {
-    enabled: !disabled,
-    persistSelection: true,
-    debounceMs: 200,
-  });
+  const { currentSelection, isSelecting, hasSelection, clearSelection } = useTextSelection(
+    containerRef,
+    selectionContext,
+    {
+      enabled: !disabled,
+      persistSelection: true,
+      debounceMs: 200,
+    }
+  );
 
   // Calculate quality score (mock implementation)
   const calculateQualityScore = useCallback(() => {
@@ -86,27 +85,27 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
 
     // Simple scoring algorithm (in production, this would use AI)
     let score = 0.5;
-    
+
     // Prefer moderate sentence length
     if (avgWordsPerSentence >= 8 && avgWordsPerSentence <= 20) score += 0.2;
-    
+
     // Prefer adequate length
     if (wordCount >= 20 && wordCount <= 200) score += 0.2;
-    
+
     // Check for specific keywords based on content type
     const keywords = {
       risk: ['risk', 'likelihood', 'impact', 'mitigation', 'control'],
       control: ['control', 'procedure', 'monitor', 'test', 'evidence'],
       'test-script': ['test', 'verify', 'validate', 'document', 'result'],
     };
-    
+
     const contentKeywords = keywords[contentType as keyof typeof keywords] || [];
-    const keywordCount = contentKeywords.filter(keyword => 
+    const keywordCount = contentKeywords.filter((keyword) =>
       text.toLowerCase().includes(keyword)
     ).length;
-    
+
     score += Math.min(keywordCount * 0.05, 0.1);
-    
+
     setQualityScore(Math.min(score, 1));
   }, [contentType, showQualityScore]);
 
@@ -114,19 +113,19 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
   useEffect(() => {
     if (currentSelection) {
       onSelection?.(currentSelection);
-      
+
       if (aiActionsEnabled) {
         // Position toolbar near the selection
         const rect = currentSelection.boundingRect;
         const containerRect = containerRef.current?.getBoundingClientRect();
-        
+
         if (containerRect) {
-          const x = Math.max(10, Math.min(
-            rect.left - containerRect.left + rect.width / 2,
-            containerRect.width - 200
-          ));
+          const x = Math.max(
+            10,
+            Math.min(rect.left - containerRect.left + rect.width / 2, containerRect.width - 200)
+          );
           const y = rect.top - containerRect.top - 60;
-          
+
           setToolbarPosition({ x, y });
           setShowToolbar(true);
         }
@@ -142,35 +141,37 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
   }, [calculateQualityScore, children]);
 
   // Handle AI actions
-  const handleAIAction = useCallback(async (action: AIAction) => {
-    if (!currentSelection || !onAIAction) return;
+  const handleAIAction = useCallback(
+    async (action: AIAction) => {
+      if (!currentSelection || !onAIAction) return;
 
-    setIsProcessing(true);
-    setShowToolbar(false);
+      setIsProcessing(true);
+      setShowToolbar(false);
 
-    try {
-      await onAIAction(action, currentSelection);
-      
-      // Add temporary highlight for processed selection
-      const highlight: SelectionHighlight = {
-        id: `highlight-${Date.now()}`,
-        selection: currentSelection,
-        color: getActionColor(action),
-        temporary: true,
-      };
-      
-      setHighlights(prev => [...prev, highlight]);
-      
-      // Remove temporary highlight after animation
-      setTimeout(() => {
-        setHighlights(prev => prev.filter(h => h.id !== highlight.id));
-      }, 2000);
-      
-    } finally {
-      setIsProcessing(false);
-      clearSelection();
-    }
-  }, [currentSelection, onAIAction, clearSelection]);
+      try {
+        await onAIAction(action, currentSelection);
+
+        // Add temporary highlight for processed selection
+        const highlight: SelectionHighlight = {
+          id: `highlight-${Date.now()}`,
+          selection: currentSelection,
+          color: getActionColor(action),
+          temporary: true,
+        };
+
+        setHighlights((prev) => [...prev, highlight]);
+
+        // Remove temporary highlight after animation
+        setTimeout(() => {
+          setHighlights((prev) => prev.filter((h) => h.id !== highlight.id));
+        }, 2000);
+      } finally {
+        setIsProcessing(false);
+        clearSelection();
+      }
+    },
+    [currentSelection, onAIAction, clearSelection]
+  );
 
   // Get color based on action type
   const getActionColor = (action: AIAction): string => {
@@ -190,7 +191,7 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
   // Get available actions based on content type
   const getAvailableActions = (): AIAction[] => {
     const baseActions: AIAction[] = ['explain', 'improve', 'alternatives'];
-    
+
     switch (contentType) {
       case 'risk':
         return [...baseActions, 'analyze-risk', 'suggest-controls', 'compliance-check'];
@@ -212,7 +213,7 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
   }, []);
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className={cn(
         'relative',
@@ -232,27 +233,33 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
           animate={{ opacity: 1, scale: 1 }}
           className="absolute top-2 right-2 z-10"
         >
-          <div className={cn(
-            'px-2 py-1 rounded-full text-xs font-medium',
-            qualityScore >= 0.8 ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' :
-            qualityScore >= 0.6 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300' :
-            'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
-          )}>
+          <div
+            className={cn(
+              'px-2 py-1 rounded-full text-xs font-medium',
+              qualityScore >= 0.8
+                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+                : qualityScore >= 0.6
+                  ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300'
+                  : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
+            )}
+          >
             Quality: {Math.round(qualityScore * 100)}%
           </div>
         </motion.div>
       )}
 
       {/* Content with Selection Highlighting */}
-      <div 
+      <div
         className={cn(
           'relative',
           hasSelection && 'selection:bg-blue-200 dark:selection:bg-blue-800',
           isProcessing && 'pointer-events-none'
         )}
-        style={{
-          '--selection-color': highlightColor,
-        } as React.CSSProperties}
+        style={
+          {
+            '--selection-color': highlightColor,
+          } as React.CSSProperties
+        }
       >
         {children}
       </div>
@@ -265,10 +272,7 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.3 }}
             exit={{ opacity: 0 }}
-            className={cn(
-              'absolute pointer-events-none rounded',
-              highlight.color
-            )}
+            className={cn('absolute pointer-events-none rounded', highlight.color)}
             style={{
               left: highlight.selection.boundingRect.left,
               top: highlight.selection.boundingRect.top,
@@ -287,7 +291,7 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
               selection: currentSelection,
               position: toolbarPosition,
               availableActions: getAvailableActions(),
-              isProcessing
+              isProcessing,
             }}
             selectedData={currentSelection ? [currentSelection] : []}
             onActionComplete={async (result) => {
@@ -314,4 +318,4 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
       )}
     </div>
   );
-}; 
+};

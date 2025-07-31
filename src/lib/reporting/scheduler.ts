@@ -67,7 +67,9 @@ export class ReportScheduler {
   }
 
   // Create a new scheduled report
-  async createSchedule(config: Omit<ScheduleConfig, 'id' | 'createdAt' | 'nextRun' | 'failureCount'>): Promise<ScheduleConfig> {
+  async createSchedule(
+    config: Omit<ScheduleConfig, 'id' | 'createdAt' | 'nextRun' | 'failureCount'>
+  ): Promise<ScheduleConfig> {
     const nextRun = this.calculateNextRun(config);
     const cronExpression = config.cronExpression || this.generateCronExpression(config);
 
@@ -107,13 +109,18 @@ export class ReportScheduler {
   }
 
   // Update an existing schedule
-  async updateSchedule(scheduleId: string, updates: Partial<ScheduleConfig>): Promise<ScheduleConfig> {
+  async updateSchedule(
+    scheduleId: string,
+    updates: Partial<ScheduleConfig>
+  ): Promise<ScheduleConfig> {
     const schedule = await db.client.reportSchedule.update({
       where: { id: scheduleId },
       data: {
         ...updates,
-        nextRun: updates.frequency || updates.cronExpression ? 
-          this.calculateNextRun({ ...updates } as any) : undefined,
+        nextRun:
+          updates.frequency || updates.cronExpression
+            ? this.calculateNextRun({ ...updates } as any)
+            : undefined,
       },
     });
 
@@ -184,7 +191,9 @@ export class ReportScheduler {
   }
 
   // Calculate next run time
-  private calculateNextRun(config: Pick<ScheduleConfig, 'frequency' | 'cronExpression' | 'timezone'>): Date {
+  private calculateNextRun(
+    config: Pick<ScheduleConfig, 'frequency' | 'cronExpression' | 'timezone'>
+  ): Date {
     const now = new Date();
     const nextRun = new Date(now);
 
@@ -224,7 +233,7 @@ export class ReportScheduler {
   // Execute a scheduled report
   async executeScheduledReport(scheduleId: string): Promise<void> {
     const startTime = Date.now();
-    
+
     try {
       const schedule = await db.client.reportSchedule.findUnique({
         where: { id: scheduleId },
@@ -251,14 +260,14 @@ export class ReportScheduler {
         title: schedule.name,
         type: 'scheduled_report',
         organizationName: 'Organization', // Could be fetched from organization data
-        widgets: rawReportData.widgets.map(widget => ({
+        widgets: rawReportData.widgets.map((widget) => ({
           id: widget.id,
           title: `Widget ${widget.id}`,
           type: 'table' as const,
           data: widget.data,
           config: {
             columns: widget.data.length > 0 ? Object.keys(widget.data[0]) : [],
-          }
+          },
         })),
         summary: {
           totalWidgets: rawReportData.summary.totalWidgets,
@@ -323,22 +332,23 @@ export class ReportScheduler {
         })
       );
 
-      const successCount = deliveryResults.filter(r => r.status === 'fulfilled').length;
+      const successCount = deliveryResults.filter((r) => r.status === 'fulfilled').length;
       const totalDeliveries = schedule.recipients.length * schedule.formats.length;
 
       // Log delivery
       await this.logDelivery({
         scheduleId: schedule.id,
-        status: successCount === totalDeliveries ? 'success' : 
-                successCount > 0 ? 'partial' : 'failed',
+        status:
+          successCount === totalDeliveries ? 'success' : successCount > 0 ? 'partial' : 'failed',
         generatedAt: new Date(startTime),
         deliveredAt: new Date(),
         recipients: schedule.recipients,
         formats: schedule.formats,
         fileSize: exports.reduce((sum, exp) => sum + exp.buffer.length, 0),
         executionTime: Date.now() - startTime,
-        errorMessage: deliveryResults.some(r => r.status === 'rejected') ?
-          'Some deliveries failed' : undefined,
+        errorMessage: deliveryResults.some((r) => r.status === 'rejected')
+          ? 'Some deliveries failed'
+          : undefined,
       });
 
       // Update schedule
@@ -354,8 +364,9 @@ export class ReportScheduler {
       // Send notifications
       await this.sendDeliveryNotifications(schedule, successCount, totalDeliveries);
 
-      console.log(`Completed scheduled report: ${schedule.name} (${successCount}/${totalDeliveries} deliveries)`);
-
+      console.log(
+        `Completed scheduled report: ${schedule.name} (${successCount}/${totalDeliveries} deliveries)`
+      );
     } catch (error) {
       console.error(`Failed to execute scheduled report ${scheduleId}:`, error);
 
@@ -377,7 +388,7 @@ export class ReportScheduler {
 
       if (schedule) {
         const newFailureCount = schedule.failureCount + 1;
-        
+
         // Disable schedule if max retries exceeded
         if (newFailureCount >= schedule.maxRetries) {
           await db.client.reportSchedule.update({
@@ -536,10 +547,13 @@ export class ReportScheduler {
   }
 
   // Get delivery statistics
-  async getDeliveryStats(organizationId: string, dateRange?: {
-    from: Date;
-    to: Date;
-  }): Promise<{
+  async getDeliveryStats(
+    organizationId: string,
+    dateRange?: {
+      from: Date;
+      to: Date;
+    }
+  ): Promise<{
     totalDeliveries: number;
     successfulDeliveries: number;
     failedDeliveries: number;
@@ -567,15 +581,17 @@ export class ReportScheduler {
     });
 
     const totalDeliveries = deliveries.length;
-    const successfulDeliveries = deliveries.filter(d => d.status === 'success').length;
-    const failedDeliveries = deliveries.filter(d => d.status === 'failed').length;
-    const averageExecutionTime = deliveries.length > 0 ?
-      deliveries.reduce((sum, d) => sum + d.executionTime, 0) / deliveries.length : 0;
+    const successfulDeliveries = deliveries.filter((d) => d.status === 'success').length;
+    const failedDeliveries = deliveries.filter((d) => d.status === 'failed').length;
+    const averageExecutionTime =
+      deliveries.length > 0
+        ? deliveries.reduce((sum, d) => sum + d.executionTime, 0) / deliveries.length
+        : 0;
 
     // Count format usage
     const formatCounts: Record<string, number> = {};
-    deliveries.forEach(delivery => {
-      delivery.formats.forEach(format => {
+    deliveries.forEach((delivery) => {
+      delivery.formats.forEach((format) => {
         formatCounts[format] = (formatCounts[format] || 0) + 1;
       });
     });
@@ -595,4 +611,4 @@ export class ReportScheduler {
   }
 }
 
-export const reportScheduler = new ReportScheduler(); 
+export const reportScheduler = new ReportScheduler();

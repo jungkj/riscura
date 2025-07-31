@@ -16,9 +16,9 @@ export class ApiClient {
     if (typeof document !== 'undefined') {
       const csrfToken = document.cookie
         .split('; ')
-        .find(row => row.startsWith('csrf-token='))
+        .find((row) => row.startsWith('csrf-token='))
         ?.split('=')[1];
-      
+
       if (csrfToken) {
         headers['X-CSRF-Token'] = csrfToken;
       }
@@ -27,10 +27,7 @@ export class ApiClient {
     return headers;
   }
 
-  private async request<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<T> {
+  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
     const headers = await this.getHeaders();
 
@@ -76,4 +73,4 @@ export class ApiClient {
   }
 }
 
-export const apiClient = new ApiClient(); 
+export const apiClient = new ApiClient();

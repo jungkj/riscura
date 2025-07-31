@@ -300,9 +300,9 @@ export const AccessibilityPanel: React.FC<{
             variant="ghost"
             size="sm"
             onClick={onClose}
-            aria-label="Close accessibility settings"
-          >
-            ×
+            aria-label="Close accessibility settings" >
+  ×
+</DaisyButton>
           </DaisyButton>
         )}
       </div>
@@ -372,8 +372,7 @@ export const AccessibilityPanel: React.FC<{
                  variant={fontSize === option.value ? "default" : "secondary"}
                  size="sm"
                  onClick={() => changeFontSize(option.value)}
-                 aria-pressed={fontSize === option.value}
-               >
+                 aria-pressed={fontSize === option.value} />
                  {option.label}
                </DaisyButton>
              ))}

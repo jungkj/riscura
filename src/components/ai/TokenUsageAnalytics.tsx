@@ -58,15 +58,17 @@ const UsageCard: React.FC<UsageCardProps> = ({
   };
 
   return (
-    <DaisyCard>
-      <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+    <DaisyCard >
+  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+</DaisyCard>
         <DaisyCardTitle className="text-sm font-medium">{title}</DaisyCardTitle>
         <div className={`rounded-full p-2 ${colorClasses[color]}`}>
           {icon}
         </div>
       
-      <DaisyCardContent>
-        <div className="text-2xl font-bold">{value}</div>
+      <DaisyCardContent >
+  <div className="text-2xl font-bold">
+</DaisyCardContent>{value}</div>
         <div className="flex items-center text-xs text-muted-foreground">
           <span>{subtitle}</span>
           {trend && trendValue && (
@@ -76,7 +78,7 @@ const UsageCard: React.FC<UsageCardProps> = ({
             </div>
           )}
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };
@@ -105,8 +107,9 @@ const QuotaBar: React.FC<QuotaBarProps> = ({ label, used, limit, period, cost })
       <div className="flex justify-between items-center">
         <span className="text-sm font-medium">{label}</span>
         <div className="flex items-center space-x-2">
-          <DaisyBadge variant={isCritical ? 'destructive' : isWarning ? 'secondary' : 'default'}>
-            {used.toLocaleString()} / {limit.toLocaleString()}
+          <DaisyBadge variant={isCritical ? 'destructive' : isWarning ? 'secondary' : 'default'} >
+  {used.toLocaleString()} / {limit.toLocaleString()}
+</DaisyBadge>
           </DaisyBadge>
           <span className="text-xs text-muted-foreground">
             ${cost.toFixed(4)}
@@ -183,11 +186,11 @@ export const TokenUsageAnalytics: React.FC = () => {
           </p>
         </div>
         <div className="flex space-x-2">
-          <DaisyButton variant="outline" onClick={() => handleExportData('csv')}>
+          <DaisyButton variant="outline" onClick={() => handleExportData('csv')} />
             <Download className="h-4 w-4 mr-2" />
             Export CSV
-          </DaisyButton>
-          <DaisyButton variant="outline" onClick={() => handleExportData('json')}>
+          </DaisyProgress>
+          <DaisyButton variant="outline" onClick={() => handleExportData('json')} />
             <Download className="h-4 w-4 mr-2" />
             Export JSON
           </DaisyButton>
@@ -200,38 +203,43 @@ export const TokenUsageAnalytics: React.FC = () => {
           {usageAlerts.map((alert) => (
             <DaisyAlert 
               key={alert.id} 
-              variant={alert.severity === 'critical' ? 'destructive' : 'default'}
-            >
-              <DaisyAlertTriangle className="h-4 w-4" />
-              <DaisyAlertTitle>{alert.type.replace('_', ' ').toUpperCase()}</DaisyCardTitle>
-              <DaisyAlertDescription className="flex justify-between items-center">
-                <span>{alert.message}</span>
+              variant={alert.severity === 'critical' ? 'destructive' : 'default'} >
+  <DaisyAlertTriangle className="h-4 w-4" />
+</DaisyAlert>
+              <DaisyAlertTitle>{alert.type.replace('_', ' ').toUpperCase()}</DaisyAlertTitle>
+              <DaisyAlertDescription className="flex justify-between items-center" >
+  <span>
+                </DaisyAlertDescription>
+</DaisyAlert>{alert.message}</span>
                 <DaisyButton 
                   size="sm" 
                   variant="ghost" 
-                  onClick={() => acknowledgeAlert(alert.id)}
-                >
+                  onClick={() => acknowledgeAlert(alert.id)} />
                   Dismiss
                 </DaisyButton>
-              
-            </DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
           ))}
         </div>
       )}
 
       {/* Current Tier and Upgrade Options */}
-      <DaisyCard>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center space-x-2">
-            <Settings className="h-5 w-5" />
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center space-x-2" >
+  <Settings className="h-5 w-5" />
+</DaisyCardTitle>
             <span>Current Plan: {tokenUsageMetrics.currentTier}</span>
           </DaisyCardTitle>
-          <DaisyCardDescription>
-            Manage your subscription and view available upgrades
+          <DaisyCardDescription >
+  Manage your subscription and view available upgrades
+</DaisyCardDescription>
           </p>
         
-        <DaisyCardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+</DaisyCardContent>
             {Object.entries(PRICING_TIERS).map(([tierKey, tier]) => (
               <div 
                 key={tierKey}
@@ -243,8 +251,9 @@ export const TokenUsageAnalytics: React.FC = () => {
               >
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="font-semibold">{tier.name}</h3>
-                  <DaisyBadge variant={tier.name === tokenUsageMetrics.currentTier ? 'default' : 'outline'}>
-                    ${tier.monthlyPrice}/mo
+                  <DaisyBadge variant={tier.name === tokenUsageMetrics.currentTier ? 'default' : 'outline'} >
+  ${tier.monthlyPrice}/mo
+</DaisyBadge>
                   </DaisyBadge>
                 </div>
                 <p className="text-sm text-muted-foreground mb-3">{tier.description}</p>
@@ -257,25 +266,24 @@ export const TokenUsageAnalytics: React.FC = () => {
                   <DaisyButton 
                     size="sm" 
                     className="w-full mt-3"
-                    onClick={() => handleUpgradeTier(tierKey)}
-                  >
+                    onClick={() => handleUpgradeTier(tierKey)} />
                     Upgrade
                   </DaisyButton>
                 )}
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
-      <DaisyTabs value={selectedPeriod} onValueChange={(value) => setSelectedPeriod(value as typeof selectedPeriod)}>
-        <DaisyTabsList>
-          <DaisyTabsTrigger value="daily">Today</DaisyTabsTrigger>
+      <DaisyTabs value={selectedPeriod} onValueChange={(value) => setSelectedPeriod(value as typeof selectedPeriod)} />
+        <DaisyTabsList />
+          <DaisyTabsTrigger value="daily">Today</DaisyTabs>
           <DaisyTabsTrigger value="weekly">This Week</DaisyTabsTrigger>
           <DaisyTabsTrigger value="monthly">This Month</DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value={selectedPeriod} className="space-y-6">
+        <DaisyTabsContent value={selectedPeriod} className="space-y-6" />
           {/* Key Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <UsageCard
@@ -315,24 +323,28 @@ export const TokenUsageAnalytics: React.FC = () => {
           </div>
 
           {/* Quota Status */}
-          <DaisyCard>
-            <DaisyCardHeader>
-              <DaisyCardTitle className="flex items-center space-x-2">
-                <Eye className="h-5 w-5" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
+              <DaisyCardTitle className="flex items-center space-x-2" >
+  <Eye className="h-5 w-5" />
+</DaisyCardTitle>
                 <span>Quota Status</span>
               </DaisyCardTitle>
-              <DaisyCardDescription>
-                Track your usage against plan limits
+              <DaisyCardDescription >
+  Track your usage against plan limits
+</DaisyCardDescription>
               </p>
             
-            <DaisyCardContent className="space-y-4">
-              <QuotaBar
+            <DaisyCardContent className="space-y-4" >
+  <QuotaBar
                 label="Daily Quota"
                 used={tokenUsageMetrics.dailyTokens}
                 limit={tokenUsageMetrics.dailyLimit}
                 period="Resets daily"
                 cost={tokenUsageMetrics.dailyCost}
               />
+</DaisyCardContent>
               <QuotaBar
                 label="Weekly Quota"
                 used={tokenUsageMetrics.weeklyTokens}
@@ -347,22 +359,26 @@ export const TokenUsageAnalytics: React.FC = () => {
                 period="Resets monthly"
                 cost={tokenUsageMetrics.monthlyCost}
               />
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Agent Usage Breakdown */}
-          <DaisyCard>
-            <DaisyCardHeader>
-              <DaisyCardTitle className="flex items-center space-x-2">
-                <Users className="h-5 w-5" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+              <DaisyCardTitle className="flex items-center space-x-2" >
+  <Users className="h-5 w-5" />
+</DaisyCardTitle>
                 <span>Agent Usage Breakdown</span>
               </DaisyCardTitle>
-              <DaisyCardDescription>
-                See which AI agents you use most
+              <DaisyCardDescription >
+  See which AI agents you use most
+</DaisyCardDescription>
               </p>
             
-            <DaisyCardContent>
-              <div className="space-y-4">
+            <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
                 {agentUsageStats.map((agent) => (
                   <div key={agent.agentType} className="flex items-center space-x-4">
                     <div className="w-24 text-sm font-medium">{agent.name}</div>
@@ -378,22 +394,26 @@ export const TokenUsageAnalytics: React.FC = () => {
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyProgress>
           </DaisyCard>
 
           {/* Cost Projections */}
-          <DaisyCard>
-            <DaisyCardHeader>
-              <DaisyCardTitle className="flex items-center space-x-2">
-                <DaisyCalendar className="h-5 w-5" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+              <DaisyCardTitle className="flex items-center space-x-2" >
+  <DaisyCalendar className="h-5 w-5" />
+</DaisyCardTitle>
                 <span>Cost Projections</span>
               </DaisyCardTitle>
-              <DaisyCardDescription>
-                Projected costs based on current usage patterns
+              <DaisyCardDescription >
+  Projected costs based on current usage patterns
+</DaisyCardDescription>
               </p>
             
-            <DaisyCardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+</DaisyCardContent>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-blue-600">
                     ${realTimeUsageStats.costProjections.daily.toFixed(2)}
@@ -413,19 +433,22 @@ export const TokenUsageAnalytics: React.FC = () => {
                   <div className="text-sm text-muted-foreground">Monthly</div>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Recent Conversations */}
-          <DaisyCard>
-            <DaisyCardHeader>
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
               <DaisyCardTitle>Recent High-Usage Conversations</DaisyCardTitle>
-              <DaisyCardDescription>
-                Conversations with the highest token usage
+              <DaisyCardDescription >
+  Conversations with the highest token usage
+</DaisyCardDescription>
               </p>
             
-            <DaisyCardContent>
-              <div className="space-y-3">
+            <DaisyCardContent >
+  <div className="space-y-3">
+</DaisyCardContent>
                 {conversationUsages.slice(0, 5).map((conversation) => (
                   <div key={conversation.id} className="flex justify-between items-center p-3 border rounded-lg">
                     <div>
@@ -441,7 +464,7 @@ export const TokenUsageAnalytics: React.FC = () => {
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

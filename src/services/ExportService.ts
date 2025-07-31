@@ -36,7 +36,7 @@ export class ExportService {
   public async exportToCSV(exportData: ExportData): Promise<void> {
     try {
       const { data, filename, headers } = exportData;
-      
+
       // Validate data
       if (!data || data.length === 0) {
         toast.error('No data available to export');
@@ -44,9 +44,9 @@ export class ExportService {
       }
 
       // Transform data for CSV export
-      const csvData = data.map(item => {
+      const csvData = data.map((item) => {
         const row: any = {};
-        headers.forEach(header => {
+        headers.forEach((header) => {
           const value = this.getNestedValue(item, header.key);
           row[header.key] = this.formatValueForCSV(value);
         });
@@ -58,10 +58,10 @@ export class ExportService {
 
       // Create CSV content
       const csvContent = this.generateCSVContent(finalData, headers);
-      
+
       // Download file
       this.downloadFile(csvContent, `${filename}.csv`, 'text/csv');
-      
+
       toast.success(`Successfully exported ${data.length} records to CSV`);
     } catch (error) {
       console.error('CSV export failed:', error);
@@ -73,7 +73,7 @@ export class ExportService {
   public async exportToPDF(exportData: ExportData, elementId?: string): Promise<void> {
     try {
       const { data, filename, title, subtitle } = exportData;
-      
+
       if (!data || data.length === 0) {
         toast.error('No data available to export');
         return;
@@ -128,7 +128,7 @@ export class ExportService {
   public async exportToJSON(exportData: ExportData): Promise<void> {
     try {
       const { data, filename } = exportData;
-      
+
       if (!data || data.length === 0) {
         toast.error('No data available to export');
         return;
@@ -145,7 +145,7 @@ export class ExportService {
 
       const jsonContent = JSON.stringify(exportObject, null, 2);
       this.downloadFile(jsonContent, `${filename}.json`, 'application/json');
-      
+
       toast.success(`Successfully exported ${data.length} records to JSON`);
     } catch (error) {
       console.error('JSON export failed:', error);
@@ -154,7 +154,10 @@ export class ExportService {
   }
 
   // Export risks data
-  public async exportRisks(risks: any[], options: ExportOptions = { format: 'csv' }): Promise<void> {
+  public async exportRisks(
+    risks: any[],
+    options: ExportOptions = { format: 'csv' }
+  ): Promise<void> {
     try {
       const exportData: ExportData = {
         data: risks,
@@ -181,7 +184,9 @@ export class ExportService {
       };
 
       await this.performExport(exportData, options);
-      toast.success(`Successfully exported ${risks.length} risks as ${options.format.toUpperCase()}`);
+      toast.success(
+        `Successfully exported ${risks.length} risks as ${options.format.toUpperCase()}`
+      );
     } catch (error) {
       console.error('Error exporting risks:', error);
       toast.error('Failed to export risks. Please try again.');
@@ -190,7 +195,10 @@ export class ExportService {
   }
 
   // Export controls data
-  public async exportControls(controls: any[], options: ExportOptions = { format: 'csv' }): Promise<void> {
+  public async exportControls(
+    controls: any[],
+    options: ExportOptions = { format: 'csv' }
+  ): Promise<void> {
     try {
       const exportData: ExportData = {
         data: controls,
@@ -217,7 +225,9 @@ export class ExportService {
       };
 
       await this.performExport(exportData, options);
-      toast.success(`Successfully exported ${controls.length} controls as ${options.format.toUpperCase()}`);
+      toast.success(
+        `Successfully exported ${controls.length} controls as ${options.format.toUpperCase()}`
+      );
     } catch (error) {
       console.error('Error exporting controls:', error);
       toast.error('Failed to export controls. Please try again.');
@@ -321,19 +331,25 @@ export class ExportService {
   }
 
   private generateCSVContent(data: any[], headers: any[]): string {
-    const headerRow = headers.map(h => h.label).join(',');
-    const dataRows = data.map(row => 
-      headers.map(h => {
-        const value = row[h.key] || '';
-        // Escape commas and quotes in CSV
-        return `"${String(value).replace(/"/g, '""')}"`;
-      }).join(',')
+    const headerRow = headers.map((h) => h.label).join(',');
+    const dataRows = data.map((row) =>
+      headers
+        .map((h) => {
+          const value = row[h.key] || '';
+          // Escape commas and quotes in CSV
+          return `"${String(value).replace(/"/g, '""')}"`;
+        })
+        .join(',')
     );
 
     return [headerRow, ...dataRows].join('\n');
   }
 
-  private async generatePDFTable(pdf: jsPDF, exportData: ExportData, startY: number): Promise<void> {
+  private async generatePDFTable(
+    pdf: jsPDF,
+    exportData: ExportData,
+    startY: number
+  ): Promise<void> {
     const { data, headers } = exportData;
     const pageWidth = pdf.internal.pageSize.getWidth();
     const startX = 20;
@@ -343,18 +359,19 @@ export class ExportService {
     // Table headers
     pdf.setFontSize(8);
     pdf.setFont('helvetica', 'bold');
-    
+
     const visibleHeaders = headers.slice(0, 4); // Show first 4 columns
     visibleHeaders.forEach((header, index) => {
-      pdf.text(header.label, startX + (index * cellWidth), currentY);
+      pdf.text(header.label, startX + index * cellWidth, currentY);
     });
-    
+
     currentY += 10;
 
     // Table data
     pdf.setFont('helvetica', 'normal');
     data.forEach((row, rowIndex) => {
-      if (currentY > 250) { // New page if needed
+      if (currentY > 250) {
+        // New page if needed
         pdf.addPage();
         currentY = 20;
       }
@@ -363,10 +380,10 @@ export class ExportService {
         const value = this.getNestedValue(row, header.key);
         const text = this.formatValueForCSV(value);
         const truncatedText = text.length > 30 ? text.substring(0, 27) + '...' : text;
-        
-        pdf.text(truncatedText, startX + (colIndex * cellWidth), currentY);
+
+        pdf.text(truncatedText, startX + colIndex * cellWidth, currentY);
       });
-      
+
       currentY += 8;
     });
   }
@@ -378,7 +395,7 @@ export class ExportService {
       const imgData = canvas.toDataURL('image/png');
       const imgWidth = pdf.internal.pageSize.getWidth() - 40;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
+
       pdf.addImage(imgData, 'PNG', 20, startY, imgWidth, imgHeight);
     }
   }
@@ -387,7 +404,7 @@ export class ExportService {
     const blob = new Blob([content], { type: mimeType });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    
+
     link.href = url;
     link.download = filename;
     document.body.appendChild(link);
@@ -418,14 +435,16 @@ export class ExportService {
   private async exportAsXLSX(data: ExportData, options: ExportOptions): Promise<void> {
     // For a real implementation, you would use a library like SheetJS
     // This is a simplified version that creates a CSV-like format
-    
+
     const xlsxContent = [
-      data.headers.map(h => h.label).join('\t'),
-      ...data.data.map(row => 
-        data.headers.map(h => {
-          const value = this.getNestedValue(row, h.key);
-          return this.formatValueForCSV(value);
-        }).join('\t')
+      data.headers.map((h) => h.label).join('\t'),
+      ...data.data.map((row) =>
+        data.headers
+          .map((h) => {
+            const value = this.getNestedValue(row, h.key);
+            return this.formatValueForCSV(value);
+          })
+          .join('\t')
       ),
     ].join('\n');
 
@@ -434,4 +453,4 @@ export class ExportService {
   }
 }
 
-export default ExportService.getInstance(); 
+export default ExportService.getInstance();

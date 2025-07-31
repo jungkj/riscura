@@ -15,7 +15,9 @@ export function AlertsNotificationCenter() {
 
   const getIcon = (type: string) => {
     switch (type) {
-      case 'critical': return <DaisyAlertTriangle className="w-4 h-4 text-red-600" />;
+      case 'critical': return <DaisyAlertTriangle className="w-4 h-4 text-red-600" >
+  ;
+</DaisyAlertTriangle>
       case 'warning': return <Bell className="w-4 h-4 text-orange-600" />;
       case 'info': return <Info className="w-4 h-4 text-blue-600" />;
       default: return <CheckCircle className="w-4 h-4 text-green-600" />;
@@ -23,14 +25,17 @@ export function AlertsNotificationCenter() {
   };
 
   return (
-    <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-      <DaisyCardHeader className="pb-3">
-        <DaisyCardTitle className="text-lg font-semibold text-[#191919] font-inter">
-          Alerts & Notifications
+    <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardHeader className="pb-3" />
+</DaisyCard>
+        <DaisyCardTitle className="text-lg font-semibold text-[#191919] font-inter" >
+  Alerts & Notifications
+</DaisyCardTitle>
         </DaisyCardTitle>
-      
-      <DaisyCardContent className="space-y-3">
-        {alerts.map((alert, index) => (
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-3" >
+  {alerts.map((alert, index) => (
+</DaisyCardContent>
           <motion.div
             key={alert.id}
             initial={{ opacity: 0, x: 20 }}
@@ -49,7 +54,7 @@ export function AlertsNotificationCenter() {
             </div>
           </motion.div>
         ))}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 } 

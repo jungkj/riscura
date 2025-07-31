@@ -44,7 +44,6 @@ export interface ResponseOptions {
 }
 
 export class ApiResponseFormatter {
-  
   /**
    * Create standardized success response
    */
@@ -54,10 +53,9 @@ export class ApiResponseFormatter {
       pagination?: Partial<PaginationMeta>;
     } = {}
   ): NextResponse<ApiSuccessResponse<T>> {
-    
     const requestId = options.requestId || uuidv4();
     const timestamp = new Date().toISOString();
-    
+
     const response: ApiSuccessResponse<T> = {
       success: true,
       data,
@@ -71,13 +69,13 @@ export class ApiResponseFormatter {
           limit: options.pagination.limit,
           pages: options.pagination.pages,
           hasNext: options.pagination.hasNext,
-          hasPrevious: options.pagination.hasPrevious
-        })
-      }
+          hasPrevious: options.pagination.hasPrevious,
+        }),
+      },
     };
 
-    const nextResponse = NextResponse.json(response, { 
-      status: options.status || 200 
+    const nextResponse = NextResponse.json(response, {
+      status: options.status || 200,
     });
 
     // Add standard headers
@@ -107,10 +105,9 @@ export class ApiResponseFormatter {
       status?: number;
     } = {}
   ): NextResponse<ApiErrorResponse> {
-    
     const requestId = options.requestId || uuidv4();
     const timestamp = new Date().toISOString();
-    
+
     const response: ApiErrorResponse = {
       success: false,
       error: {
@@ -120,12 +117,12 @@ export class ApiResponseFormatter {
         requestId,
         version: options.version || 'v1',
         ...(options.details && { details: options.details }),
-        ...(options.path && { path: options.path })
-      }
+        ...(options.path && { path: options.path }),
+      },
     };
 
     const status = options.status || this.getStatusFromErrorCode(code);
-    
+
     const nextResponse = NextResponse.json(response, { status });
 
     // Add standard headers
@@ -155,7 +152,6 @@ export class ApiResponseFormatter {
     },
     options: ResponseOptions = {}
   ): NextResponse<ApiSuccessResponse<T[]>> {
-    
     const pages = Math.ceil(pagination.total / pagination.limit);
     const hasNext = pagination.page < pages;
     const hasPrevious = pagination.page > 1;
@@ -166,8 +162,8 @@ export class ApiResponseFormatter {
         ...pagination,
         pages,
         hasNext,
-        hasPrevious
-      }
+        hasPrevious,
+      },
     });
   }
 
@@ -178,16 +174,11 @@ export class ApiResponseFormatter {
     errors: any[],
     options: ResponseOptions = {}
   ): NextResponse<ApiErrorResponse> {
-    
-    return this.error(
-      'VALIDATION_ERROR',
-      'Request validation failed',
-      {
-        ...options,
-        details: { errors },
-        status: 400
-      }
-    );
+    return this.error('VALIDATION_ERROR', 'Request validation failed', {
+      ...options,
+      details: { errors },
+      status: 400,
+    });
   }
 
   /**
@@ -197,15 +188,10 @@ export class ApiResponseFormatter {
     message: string = 'Authentication required',
     options: ResponseOptions = {}
   ): NextResponse<ApiErrorResponse> {
-    
-    return this.error(
-      'AUTH_ERROR',
-      message,
-      {
-        ...options,
-        status: 401
-      }
-    );
+    return this.error('AUTH_ERROR', message, {
+      ...options,
+      status: 401,
+    });
   }
 
   /**
@@ -215,15 +201,10 @@ export class ApiResponseFormatter {
     message: string = 'Access denied',
     options: ResponseOptions = {}
   ): NextResponse<ApiErrorResponse> {
-    
-    return this.error(
-      'FORBIDDEN',
-      message,
-      {
-        ...options,
-        status: 403
-      }
-    );
+    return this.error('FORBIDDEN', message, {
+      ...options,
+      status: 403,
+    });
   }
 
   /**
@@ -233,15 +214,10 @@ export class ApiResponseFormatter {
     resource: string = 'Resource',
     options: ResponseOptions = {}
   ): NextResponse<ApiErrorResponse> {
-    
-    return this.error(
-      'NOT_FOUND',
-      `${resource} not found`,
-      {
-        ...options,
-        status: 404
-      }
-    );
+    return this.error('NOT_FOUND', `${resource} not found`, {
+      ...options,
+      status: 404,
+    });
   }
 
   /**
@@ -251,19 +227,14 @@ export class ApiResponseFormatter {
     retryAfter: number,
     options: ResponseOptions = {}
   ): NextResponse<ApiErrorResponse> {
-    
-    return this.error(
-      'RATE_LIMIT_EXCEEDED',
-      'Rate limit exceeded',
-      {
-        ...options,
-        status: 429,
-        headers: {
-          'Retry-After': retryAfter.toString(),
-          'X-RateLimit-Reset': new Date(Date.now() + retryAfter * 1000).toISOString()
-        }
-      }
-    );
+    return this.error('RATE_LIMIT_EXCEEDED', 'Rate limit exceeded', {
+      ...options,
+      status: 429,
+      headers: {
+        'Retry-After': retryAfter.toString(),
+        'X-RateLimit-Reset': new Date(Date.now() + retryAfter * 1000).toISOString(),
+      },
+    });
   }
 
   /**
@@ -273,19 +244,14 @@ export class ApiResponseFormatter {
     message: string = 'Internal server error',
     options: ResponseOptions & { details?: any } = {}
   ): NextResponse<ApiErrorResponse> {
-    
     // Don't expose internal details in production
     const details = process.env.NODE_ENV === 'development' ? options.details : undefined;
-    
-    return this.error(
-      'SERVER_ERROR',
-      message,
-      {
-        ...options,
-        details,
-        status: 500
-      }
-    );
+
+    return this.error('SERVER_ERROR', message, {
+      ...options,
+      details,
+      status: 500,
+    });
   }
 
   /**
@@ -295,15 +261,10 @@ export class ApiResponseFormatter {
     message: string,
     options: ResponseOptions = {}
   ): NextResponse<ApiErrorResponse> {
-    
-    return this.error(
-      'CONFLICT',
-      message,
-      {
-        ...options,
-        status: 409
-      }
-    );
+    return this.error('CONFLICT', message, {
+      ...options,
+      status: 409,
+    });
   }
 
   /**
@@ -313,15 +274,10 @@ export class ApiResponseFormatter {
     message: string = 'Request payload too large',
     options: ResponseOptions = {}
   ): NextResponse<ApiErrorResponse> {
-    
-    return this.error(
-      'PAYLOAD_TOO_LARGE',
-      message,
-      {
-        ...options,
-        status: 413
-      }
-    );
+    return this.error('PAYLOAD_TOO_LARGE', message, {
+      ...options,
+      status: 413,
+    });
   }
 
   /**
@@ -331,15 +287,10 @@ export class ApiResponseFormatter {
     message: string,
     options: ResponseOptions & { details?: any } = {}
   ): NextResponse<ApiErrorResponse> {
-    
-    return this.error(
-      'UNPROCESSABLE_ENTITY',
-      message,
-      {
-        ...options,
-        status: 422
-      }
-    );
+    return this.error('UNPROCESSABLE_ENTITY', message, {
+      ...options,
+      status: 422,
+    });
   }
 
   /**
@@ -347,19 +298,19 @@ export class ApiResponseFormatter {
    */
   private static getStatusFromErrorCode(code: string): number {
     const statusMap: Record<string, number> = {
-      'VALIDATION_ERROR': 400,
-      'BAD_REQUEST': 400,
-      'AUTH_ERROR': 401,
-      'UNAUTHORIZED': 401,
-      'FORBIDDEN': 403,
-      'NOT_FOUND': 404,
-      'METHOD_NOT_ALLOWED': 405,
-      'CONFLICT': 409,
-      'PAYLOAD_TOO_LARGE': 413,
-      'UNPROCESSABLE_ENTITY': 422,
-      'RATE_LIMIT_EXCEEDED': 429,
-      'SERVER_ERROR': 500,
-      'SERVICE_UNAVAILABLE': 503
+      VALIDATION_ERROR: 400,
+      BAD_REQUEST: 400,
+      AUTH_ERROR: 401,
+      UNAUTHORIZED: 401,
+      FORBIDDEN: 403,
+      NOT_FOUND: 404,
+      METHOD_NOT_ALLOWED: 405,
+      CONFLICT: 409,
+      PAYLOAD_TOO_LARGE: 413,
+      UNPROCESSABLE_ENTITY: 422,
+      RATE_LIMIT_EXCEEDED: 429,
+      SERVER_ERROR: 500,
+      SERVICE_UNAVAILABLE: 503,
     };
 
     return statusMap[code] || 500;
@@ -376,9 +327,7 @@ export class ApiResponseFormatter {
    * Extract API version from headers
    */
   static getApiVersion(request: Request): string {
-    return request.headers.get('X-API-Version') || 
-           request.headers.get('Accept-Version') || 
-           'v1';
+    return request.headers.get('X-API-Version') || request.headers.get('Accept-Version') || 'v1';
   }
 
   /**
@@ -387,7 +336,7 @@ export class ApiResponseFormatter {
   static createResponseOptions(request: Request): ResponseOptions {
     return {
       requestId: this.getOrCreateRequestId(request),
-      version: this.getApiVersion(request)
+      version: this.getApiVersion(request),
     };
   }
 }
@@ -450,10 +399,12 @@ export function VersionedResponseFormatter(data: any) {
 /**
  * Format validation errors for consistent API response
  */
-export function formatValidationErrors(errors: any[]): Array<{ field: string; message: string; code: string }> {
-  return errors.map(error => ({
+export function formatValidationErrors(
+  errors: any[]
+): Array<{ field: string; message: string; code: string }> {
+  return errors.map((error) => ({
     field: error.path?.join('.') || 'unknown',
     message: error.message || 'Validation error',
-    code: error.code || 'VALIDATION_ERROR'
+    code: error.code || 'VALIDATION_ERROR',
   }));
-} 
+}

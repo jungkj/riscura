@@ -21,12 +21,12 @@ export interface Tenant {
   metadata: TenantMetadata;
 }
 
-export type TenantStatus = 
-  | 'active' 
-  | 'suspended' 
-  | 'trial' 
-  | 'inactive' 
-  | 'pending_activation' 
+export type TenantStatus =
+  | 'active'
+  | 'suspended'
+  | 'trial'
+  | 'inactive'
+  | 'pending_activation'
   | 'deactivated';
 
 export interface TenantSubscription {
@@ -152,12 +152,12 @@ export interface AIPersonality {
 }
 
 export interface PersonalityTone {
-  formal: number;        // 0-100
-  friendly: number;      // 0-100
-  professional: number;  // 0-100
-  empathetic: number;    // 0-100
-  assertive: number;     // 0-100
-  humorous: number;      // 0-100
+  formal: number; // 0-100
+  friendly: number; // 0-100
+  professional: number; // 0-100
+  empathetic: number; // 0-100
+  assertive: number; // 0-100
+  humorous: number; // 0-100
 }
 
 export interface CommunicationStyle {
@@ -1470,28 +1470,34 @@ export interface TimeRange {
 
 // Type guards for runtime validation
 export const isTenant = (obj: unknown): obj is Tenant => {
-  return typeof obj === 'object' && 
-         obj !== null && 
-         'id' in obj && 
-         'name' in obj && 
-         'status' in obj &&
-         'subscription' in obj;
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'id' in obj &&
+    'name' in obj &&
+    'status' in obj &&
+    'subscription' in obj
+  );
 };
 
 export const isTenantConversationContext = (obj: unknown): obj is TenantConversationContext => {
-  return typeof obj === 'object' && 
-         obj !== null && 
-         'tenantId' in obj && 
-         'userId' in obj && 
-         'sessionId' in obj;
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'tenantId' in obj &&
+    'userId' in obj &&
+    'sessionId' in obj
+  );
 };
 
 export const isAIResponse = (obj: unknown): obj is AIResponse => {
-  return typeof obj === 'object' && 
-         obj !== null && 
-         'content' in obj && 
-         'metadata' in obj &&
-         'tenantContext' in obj;
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'content' in obj &&
+    'metadata' in obj &&
+    'tenantContext' in obj
+  );
 };
 
 // Missing interfaces for security and compliance
@@ -1703,7 +1709,7 @@ export interface ComplianceMonitoring {
   alerts: boolean;
 }
 
-export type SecurityIncidentType = 
+export type SecurityIncidentType =
   | 'data_breach'
   | 'unauthorized_access'
   | 'malware'
@@ -1908,4 +1914,4 @@ export interface DataComparison {
   change: number;
   changePercentage: number;
   significance: 'low' | 'medium' | 'high';
-} 
+}

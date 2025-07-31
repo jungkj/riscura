@@ -382,7 +382,7 @@ const ComponentVariations: React.FC = () => {
                 />
               </div>
               <div>
-                <DaisyLabel htmlFor="disabled-input">Disabled Input</DaisyLabel>
+                <DaisyLabel htmlFor="disabled-input">Disabled Input</DaisyInput>
                 <DaisyInput 
                   id="disabled-input" 
                   disabled 
@@ -400,7 +400,7 @@ const ComponentVariations: React.FC = () => {
           Badge Variations
         </h3>
         <div className="flex flex-wrap gap-2">
-          <DaisyBadge>Default</DaisyBadge>
+          <DaisyBadge>Default</DaisyInput>
           <DaisyBadge variant="secondary">Secondary</DaisyBadge>
           <DaisyBadge variant="error">Destructive</DaisyBadge>
           <DaisyBadge variant="outline">Outline</DaisyBadge>
@@ -417,12 +417,14 @@ const ComponentVariations: React.FC = () => {
             <span className="text-green-800 font-inter">Success State</span>
           </div>
           <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-            <DaisyAlertTriangle className="h-5 w-5 text-red-600" />
-            <span className="text-red-800 font-inter">Error State</span>
+            <DaisyAlertTriangle className="h-5 w-5 text-red-600" >
+  <span className="text-red-800 font-inter">
+</DaisyAlertTriangle>Error State</span>
           </div>
           <div className="flex items-center gap-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-            <DaisyAlertTriangle className="h-5 w-5 text-yellow-600" />
-            <span className="text-yellow-800 font-inter">Warning State</span>
+            <DaisyAlertTriangle className="h-5 w-5 text-yellow-600" >
+  <span className="text-yellow-800 font-inter">
+</DaisyAlertTriangle>Warning State</span>
           </div>
           <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
             <CheckCircle className="h-5 w-5 text-blue-600" />
@@ -555,10 +557,9 @@ const ResponsivePreview: React.FC = () => {
               variant={selectedDevice === device ? 'default' : 'secondary'}
               size="sm"
               onClick={() => setSelectedDevice(device)}
-              className="capitalize"
-            >
+              className="capitalize" />
               {device}
-            </DaisyButton>
+            </DaisyTablet>
           ))}
         </div>
         
@@ -611,140 +612,166 @@ export const StyleGuide: React.FC = () => {
           Built with a Notion-like aesthetic featuring cream backgrounds, clean typography, and subtle interactions.
         </p>
         <div className="flex items-center justify-center gap-4 mt-4">
-          <DaisyBadge className="flex items-center gap-1">
-            <Palette className="h-3 w-3" />
+          <DaisyBadge className="flex items-center gap-1" >
+  <Palette className="h-3 w-3" />
+</DaisyBadge>
             Design System
           </DaisyBadge>
-          <DaisyBadge variant="secondary" className="flex items-center gap-1">
-            <CheckCircle className="h-3 w-3" />
+          <DaisyBadge variant="secondary" className="flex items-center gap-1" >
+  <CheckCircle className="h-3 w-3" />
+</DaisyBadge>
             Validated
           </DaisyBadge>
         </div>
       </div>
 
-      <DaisyTabs defaultValue="colors" className="w-full">
-        <DaisyTabsList className="grid w-full grid-cols-5">
-          <DaisyTabsTrigger value="colors" className="flex items-center gap-2">
+      <DaisyTabs defaultValue="colors" className="w-full" />
+        <DaisyTabsList className="grid w-full grid-cols-5" />
+          <DaisyTabsTrigger value="colors" className="flex items-center gap-2" />
             <Palette className="h-4 w-4" />
             Colors
-          </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="typography" className="flex items-center gap-2">
+          </DaisyTabs>
+          <DaisyTabsTrigger value="typography" className="flex items-center gap-2" />
             <Type className="h-4 w-4" />
             Typography
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="spacing" className="flex items-center gap-2">
+          <DaisyTabsTrigger value="spacing" className="flex items-center gap-2" />
             <Grid3X3 className="h-4 w-4" />
             Spacing
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="components" className="flex items-center gap-2">
+          <DaisyTabsTrigger value="components" className="flex items-center gap-2" />
             <MousePointer className="h-4 w-4" />
             Components
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="icons" className="flex items-center gap-2">
+          <DaisyTabsTrigger value="icons" className="flex items-center gap-2" />
             <Star className="h-4 w-4" />
             Icons
           </DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="colors" className="mt-6">
-          <DaisyCard>
-            <DaisyCardHeader>
-              <DaisyCardTitle className="flex items-center gap-2">
-                <Palette className="h-5 w-5" />
+        <DaisyTabsContent value="colors" className="mt-6" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
+              <DaisyCardTitle className="flex items-center gap-2" >
+  <Palette className="h-5 w-5" />
+</DaisyCardTitle>
                 Color Palette
               </DaisyCardTitle>
-              <DaisyCardDescription>
-                Consistent color scheme based on Notion's aesthetic with cream backgrounds and blue accents
+              <DaisyCardDescription >
+  Consistent color scheme based on Notion's aesthetic with cream backgrounds and blue accents
+</DaisyCardDescription>
               </p>
             
-            <DaisyCardContent>
-              <ColorPalette />
-            </DaisyCardBody>
+            <DaisyCardContent >
+  <ColorPalette />
+</DaisyCardContent>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="typography" className="mt-6">
-          <DaisyCard>
-            <DaisyCardHeader>
-              <DaisyCardTitle className="flex items-center gap-2">
-                <Type className="h-5 w-5" />
+        <DaisyTabsContent value="typography" className="mt-6" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
+              <DaisyCardTitle className="flex items-center gap-2" >
+  <Type className="h-5 w-5" />
+</DaisyCardTitle>
                 Typography System
               </DaisyCardTitle>
-              <DaisyCardDescription>
-                Inter font family with consistent sizing and weight hierarchy
+              <DaisyCardDescription >
+  Inter font family with consistent sizing and weight hierarchy
+</DaisyCardDescription>
               </p>
             
-            <DaisyCardContent>
-              <Typography />
-            </DaisyCardBody>
+            <DaisyCardContent >
+  <Typography />
+</DaisyCardContent>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="spacing" className="mt-6">
-          <DaisyCard>
-            <DaisyCardHeader>
-              <DaisyCardTitle className="flex items-center gap-2">
-                <Grid3X3 className="h-5 w-5" />
+        <DaisyTabsContent value="spacing" className="mt-6" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
+              <DaisyCardTitle className="flex items-center gap-2" >
+  <Grid3X3 className="h-5 w-5" />
+</DaisyCardTitle>
                 Spacing System
               </DaisyCardTitle>
-              <DaisyCardDescription>
-                8px grid system for consistent spacing and layout rhythm
+              <DaisyCardDescription >
+  8px grid system for consistent spacing and layout rhythm
+</DaisyCardDescription>
               </p>
             
-            <DaisyCardContent>
-              <SpacingGrid />
-            </DaisyCardBody>
+            <DaisyCardContent >
+  <SpacingGrid />
+</DaisyCardContent>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="components" className="mt-6">
-          <DaisyCard>
-            <DaisyCardHeader>
-              <DaisyCardTitle className="flex items-center gap-2">
-                <MousePointer className="h-5 w-5" />
+        <DaisyTabsContent value="components" className="mt-6" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
+              <DaisyCardTitle className="flex items-center gap-2" >
+  <MousePointer className="h-5 w-5" />
+</DaisyCardTitle>
                 Component Library
               </DaisyCardTitle>
-              <DaisyCardDescription>
-                Consistent component variations with proper states and interactions
+              <DaisyCardDescription >
+  Consistent component variations with proper states and interactions
+</DaisyCardDescription>
               </p>
             
-            <DaisyCardContent>
-              <ComponentVariations />
-            </DaisyCardBody>
+            <DaisyCardContent >
+  <ComponentVariations />
+</DaisyCardContent>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="icons" className="mt-6">
-          <DaisyCard>
-            <DaisyCardHeader>
-              <DaisyCardTitle className="flex items-center gap-2">
-                <Star className="h-5 w-5" />
+        <DaisyTabsContent value="icons" className="mt-6" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
+              <DaisyCardTitle className="flex items-center gap-2" >
+  <Star className="h-5 w-5" />
+</DaisyCardTitle>
                 Icon System
               </DaisyCardTitle>
-              <DaisyCardDescription>
-                Lucide icons with consistent sizing and usage patterns
+              <DaisyCardDescription >
+  Lucide icons with consistent sizing and usage patterns
+</DaisyCardDescription>
               </p>
             
-            <DaisyCardContent>
-              <IconPatterns />
-            </DaisyCardBody>
+            <DaisyCardContent >
+  <IconPatterns />
+</DaisyCardContent>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>
 
-      <DaisyCard>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center gap-2">
-            <Eye className="h-5 w-5" />
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <Eye className="h-5 w-5" />
+</DaisyCardTitle>
             Responsive Design
           </DaisyCardTitle>
-          <DaisyCardDescription>
-            Mobile-first responsive design with consistent breakpoints
+          <DaisyCardDescription >
+  Mobile-first responsive design with consistent breakpoints
+</DaisyCardDescription>
           </p>
         
-        <DaisyCardContent>
-          <ResponsivePreview />
-        </DaisyCardBody>
+        <DaisyCardContent >
+  <ResponsivePreview />
+</DaisyCardContent>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

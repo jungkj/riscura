@@ -67,18 +67,18 @@ export const DaisyCalendar = ({
           variant="ghost"
           size="sm"
           onClick={handlePreviousMonth}
-          className="h-7 w-7 p-0"
-        >
-          <ChevronLeft className="h-4 w-4" />
+          className="h-7 w-7 p-0" >
+  <ChevronLeft className="h-4 w-4" />
+</DaisyButton>
         </DaisyButton>
         <div className="text-sm font-medium">{monthName}</div>
         <DaisyButton
           variant="ghost"
           size="sm"
           onClick={handleNextMonth}
-          className="h-7 w-7 p-0"
-        >
-          <ChevronRight className="h-4 w-4" />
+          className="h-7 w-7 p-0" >
+  <ChevronRight className="h-4 w-4" />
+</DaisyButton>
         </DaisyButton>
       </div>
       

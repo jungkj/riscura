@@ -1,6 +1,6 @@
 'use client';
 
-import { EnhancedControlRegistry } from '@/pages/controls/EnhancedControlRegistry';
+import EnhancedControlRegistry from '@/pages/controls/EnhancedControlRegistry';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 
 export default function ControlsPage() {
@@ -9,4 +9,4 @@ export default function ControlsPage() {
       <EnhancedControlRegistry />
     </ProtectedRoute>
   );
-} 
+}

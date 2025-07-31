@@ -33,24 +33,24 @@ export const DaisyDropdownMenuTrigger = ({ children, asChild }: DropdownMenuTrig
   );
 };
 
-export const DaisyDropdownMenuContent = ({ 
-  children, 
-  className, 
+export const DaisyDropdownMenuContent = ({
+  children,
+  className,
   align = 'start',
   side = 'bottom',
-  ...props 
+  ...props
 }: DropdownMenuContentProps) => {
   const alignClasses = {
     start: 'dropdown-start',
     center: '',
-    end: 'dropdown-end'
+    end: 'dropdown-end',
   };
 
   const sideClasses = {
     top: 'dropdown-top',
     right: 'dropdown-right',
     bottom: '',
-    left: 'dropdown-left'
+    left: 'dropdown-left',
   };
 
   return (
@@ -69,12 +69,12 @@ export const DaisyDropdownMenuContent = ({
   );
 };
 
-export const DaisyDropdownMenuItem = ({ 
-  children, 
-  className, 
+export const DaisyDropdownMenuItem = ({
+  children,
+  className,
   disabled,
   onClick,
-  ...props 
+  ...props
 }: DropdownMenuItemProps) => {
   return (
     <li className={cn(disabled && 'disabled')} {...props}>
@@ -90,10 +90,10 @@ export const DaisyDropdownMenuSeparator = ({ className, ...props }: DropdownMenu
 };
 
 // Label component
-export const DaisyDropdownMenuLabel: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ 
-  className, 
+export const DaisyDropdownMenuLabel: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
+  className,
   children,
-  ...props 
+  ...props
 }) => {
   return (
     <li className="menu-title">
@@ -105,9 +105,9 @@ export const DaisyDropdownMenuLabel: React.FC<React.HTMLAttributes<HTMLDivElemen
 };
 
 // Group component
-export const DaisyDropdownMenuGroup: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ 
+export const DaisyDropdownMenuGroup: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   children,
-  ...props 
+  ...props
 }) => {
   return <>{children}</>;
 };

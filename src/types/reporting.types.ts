@@ -7,33 +7,33 @@ export interface ReportTemplate {
   category: ReportCategory;
   type: ReportType;
   version: string;
-  
+
   // Configuration
   config: ReportConfig;
   layout: ReportLayout;
-  
+
   // Content Structure
   sections: ReportSection[];
   dataSources: DataSourceConfig[];
   filters: ReportFilter[];
   parameters: ReportParameter[];
-  
+
   // Styling & Branding
   styling: ReportStyling;
-  
+
   // Access & Permissions
   permissions: ReportPermissions;
-  
+
   // AI Features
   aiFeatures: AIReportFeatures;
-  
+
   // Metadata
   createdBy: string;
   createdAt: Date;
   updatedAt: Date;
   lastUsed?: Date;
   usageCount: number;
-  
+
   // Template Management
   isPublic: boolean;
   isSystem: boolean;
@@ -41,7 +41,7 @@ export interface ReportTemplate {
   organizationId: string;
 }
 
-export type ReportCategory = 
+export type ReportCategory =
   | 'executive'
   | 'operational'
   | 'compliance'
@@ -51,7 +51,7 @@ export type ReportCategory =
   | 'financial'
   | 'custom';
 
-export type ReportType = 
+export type ReportType =
   | 'dashboard'
   | 'detailed_report'
   | 'summary_report'
@@ -124,29 +124,29 @@ export interface ReportSection {
   title: string;
   type: SectionType;
   order: number;
-  
+
   // Layout
   position: SectionPosition;
   size: SectionSize;
-  
+
   // Configuration
   config: SectionConfig;
-  
+
   // Data Binding
   dataSource: string; // reference to data source
   query: DataQuery;
-  
+
   // Visualization
   visualization: VisualizationConfig;
-  
+
   // Conditional Display
   conditions?: DisplayCondition[];
-  
+
   // AI Features
   aiEnhancements?: AISectionEnhancements;
 }
 
-export type SectionType = 
+export type SectionType =
   | 'chart'
   | 'table'
   | 'metric'
@@ -209,7 +209,7 @@ export interface VisualizationConfig {
   interactions: InteractionConfig;
 }
 
-export type ChartType = 
+export type ChartType =
   | 'line'
   | 'bar'
   | 'column'
@@ -395,13 +395,7 @@ export interface DataSourceConfig {
   cache: CacheConfig;
 }
 
-export type DataSourceType = 
-  | 'database'
-  | 'api'
-  | 'file'
-  | 'stream'
-  | 'calculated'
-  | 'external';
+export type DataSourceType = 'database' | 'api' | 'file' | 'stream' | 'calculated' | 'external';
 
 export interface ConnectionConfig {
   endpoint?: string;
@@ -435,7 +429,7 @@ export interface FieldDefinition {
   validation?: ValidationRule[];
 }
 
-export type FieldType = 
+export type FieldType =
   | 'string'
   | 'number'
   | 'integer'
@@ -530,10 +524,20 @@ export interface WhereClause {
   logic?: 'AND' | 'OR';
 }
 
-export type ComparisonOperator = 
-  | 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte'
-  | 'in' | 'not_in' | 'like' | 'not_like'
-  | 'is_null' | 'is_not_null' | 'between';
+export type ComparisonOperator =
+  | 'eq'
+  | 'ne'
+  | 'gt'
+  | 'gte'
+  | 'lt'
+  | 'lte'
+  | 'in'
+  | 'not_in'
+  | 'like'
+  | 'not_like'
+  | 'is_null'
+  | 'is_not_null'
+  | 'between';
 
 export interface OrderClause {
   field: string;
@@ -547,23 +551,23 @@ export interface ReportFilter {
   field: string;
   label: string;
   description?: string;
-  
+
   // Configuration
   config: FilterConfig;
-  
+
   // Default Values
   defaultValue?: unknown;
   required: boolean;
-  
+
   // UI Configuration
   ui: FilterUIConfig;
-  
+
   // Conditional Logic
   dependencies?: FilterDependency[];
   conditions?: FilterCondition[];
 }
 
-export type FilterType = 
+export type FilterType =
   | 'text'
   | 'number'
   | 'date'
@@ -634,13 +638,7 @@ export interface ReportParameter {
   validation?: ValidationRule[];
 }
 
-export type ParameterType = 
-  | 'string'
-  | 'number'
-  | 'boolean'
-  | 'date'
-  | 'array'
-  | 'object';
+export type ParameterType = 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object';
 
 // Styling and Theming
 export interface ReportStyling {
@@ -844,7 +842,11 @@ export interface NarrativeGenerationConfig {
   includeRecommendations: boolean;
 }
 
-export type NarrativeStyle = 'bullet_points' | 'paragraph' | 'executive_summary' | 'detailed_analysis';
+export type NarrativeStyle =
+  | 'bullet_points'
+  | 'paragraph'
+  | 'executive_summary'
+  | 'detailed_analysis';
 
 export interface InsightGenerationConfig {
   enabled: boolean;
@@ -855,7 +857,7 @@ export interface InsightGenerationConfig {
   maxInsights: number;
 }
 
-export type InsightType = 
+export type InsightType =
   | 'trend'
   | 'anomaly'
   | 'correlation'
@@ -874,7 +876,7 @@ export interface RecommendationEngineConfig {
   maxRecommendations: number;
 }
 
-export type RecommendationType = 
+export type RecommendationType =
   | 'process_improvement'
   | 'risk_mitigation'
   | 'cost_optimization'
@@ -915,7 +917,7 @@ export interface AnomalyDetectionConfig {
   minDataPoints: number;
 }
 
-export type AnomalyAlgorithm = 
+export type AnomalyAlgorithm =
   | 'statistical'
   | 'isolation_forest'
   | 'local_outlier_factor'
@@ -940,7 +942,7 @@ export interface PredictiveModel {
   lastTrained: Date;
 }
 
-export type ModelType = 
+export type ModelType =
   | 'linear_regression'
   | 'random_forest'
   | 'xgboost'
@@ -983,35 +985,30 @@ export interface ReportGeneration {
   templateId: string;
   status: GenerationStatus;
   progress: number; // 0-100
-  
+
   // Configuration
   parameters: Record<string, unknown>;
   filters: Record<string, unknown>;
   dateRange: { start: Date; end: Date };
-  
+
   // Output
   format: ExportFormat[];
   outputs: GeneratedOutput[];
-  
+
   // Metadata
   requestedBy: string;
   requestedAt: Date;
   startedAt?: Date;
   completedAt?: Date;
   error?: string;
-  
+
   // AI Generated Content
   aiContent?: AIGeneratedContent;
 }
 
-export type GenerationStatus = 
-  | 'queued'
-  | 'processing'
-  | 'completed'
-  | 'failed'
-  | 'cancelled';
+export type GenerationStatus = 'queued' | 'processing' | 'completed' | 'failed' | 'cancelled';
 
-export type ExportFormat = 
+export type ExportFormat =
   | 'pdf'
   | 'excel'
   | 'csv'
@@ -1107,33 +1104,33 @@ export interface ReportSchedule {
   templateId: string;
   name: string;
   description?: string;
-  
+
   // Schedule Configuration
   frequency: ScheduleFrequency;
   schedule: CronSchedule;
   timezone: string;
-  
+
   // Generation Options
   parameters: Record<string, unknown>;
   filters: Record<string, unknown>;
   formats: ExportFormat[];
-  
+
   // Distribution
   distribution: DistributionConfig;
-  
+
   // Status
   enabled: boolean;
   lastRun?: Date;
   nextRun: Date;
   runCount: number;
-  
+
   // Metadata
   createdBy: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export type ScheduleFrequency = 
+export type ScheduleFrequency =
   | 'hourly'
   | 'daily'
   | 'weekly'
@@ -1163,7 +1160,7 @@ export interface DistributionChannel {
   enabled: boolean;
 }
 
-export type ChannelType = 
+export type ChannelType =
   | 'email'
   | 'slack'
   | 'teams'
@@ -1238,23 +1235,23 @@ export interface PermissionCondition {
 export interface ReportAnalytics {
   reportId: string;
   period: { start: Date; end: Date };
-  
+
   // Usage Metrics
   views: number;
   downloads: number;
   shares: number;
   generationTime: AnalyticsMetric;
-  
+
   // User Engagement
   userMetrics: UserMetrics;
   sectionMetrics: SectionMetrics[];
-  
+
   // Performance
   performance: PerformanceMetrics;
-  
+
   // Errors and Issues
   errors: ErrorMetric[];
-  
+
   // AI Insights
   aiUsage: AIUsageMetrics;
 }
@@ -1445,4 +1442,4 @@ export interface LegacyScheduleConfig {
   time: string;
   recipients: string[];
   enabled: boolean;
-} 
+}

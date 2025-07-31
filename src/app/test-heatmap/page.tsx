@@ -27,9 +27,15 @@ export default function TestHeatmapPage() {
           <ul className="space-y-2 text-blue-800 dark:text-blue-200">
             <li>• Click on any cell with a number greater than 0</li>
             <li>• A modal will open showing the risks in that impact/likelihood category</li>
-            <li>• Try clicking on the "2" in "Very High Impact × Very likely" to see 2 critical risks</li>
-            <li>• Try clicking on the "3" in "Very High Impact × Likely" to see 3 critical risks</li>
-            <li>• Try clicking on the "4" in "High Impact × Likely" to see 4 high-priority risks</li>
+            <li>
+              • Try clicking on the "2" in "Very High Impact × Very likely" to see 2 critical risks
+            </li>
+            <li>
+              • Try clicking on the "3" in "Very High Impact × Likely" to see 3 critical risks
+            </li>
+            <li>
+              • Try clicking on the "4" in "High Impact × Likely" to see 4 high-priority risks
+            </li>
             <li>• Notice the reduced spacing between the "Impact" label and the heatmap</li>
           </ul>
         </div>
@@ -50,4 +56,4 @@ export default function TestHeatmapPage() {
       </div>
     </div>
   );
-} 
+}

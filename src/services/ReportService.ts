@@ -1,7 +1,15 @@
 import { ReportType, ReportStatus, Report, ReportTemplate, ReportSchedule } from '@prisma/client';
 import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
-import { subDays, startOfMonth, endOfMonth, startOfQuarter, endOfQuarter, startOfYear, endOfYear } from 'date-fns';
+import {
+  subDays,
+  startOfMonth,
+  endOfMonth,
+  startOfQuarter,
+  endOfQuarter,
+  startOfYear,
+  endOfYear,
+} from 'date-fns';
 import { PDFGenerator } from '@/lib/reports/pdf-generator';
 import { ExcelGenerator } from '@/lib/reports/excel-generator';
 import { ReportDataCollector } from '@/lib/reports/data-collector';
@@ -112,12 +120,13 @@ export class ReportService {
       ...(filters.type && { type: filters.type }),
       ...(filters.status && { status: filters.status }),
       ...(filters.createdBy && { createdBy: filters.createdBy }),
-      ...(filters.dateFrom && filters.dateTo && {
-        createdAt: {
-          gte: filters.dateFrom,
-          lte: filters.dateTo,
-        },
-      }),
+      ...(filters.dateFrom &&
+        filters.dateTo && {
+          createdAt: {
+            gte: filters.dateFrom,
+            lte: filters.dateTo,
+          },
+        }),
       ...(filters.search && {
         OR: [
           { title: { contains: filters.search, mode: 'insensitive' } },
@@ -167,7 +176,7 @@ export class ReportService {
     const report = await prisma.report.findFirst({
       where: { id, organizationId },
     });
-    
+
     if (!report) {
       throw new Error('Report not found');
     }
@@ -193,7 +202,7 @@ export class ReportService {
     const reportToDelete = await prisma.report.findFirst({
       where: { id, organizationId },
     });
-    
+
     if (!reportToDelete) {
       throw new Error('Report not found');
     }
@@ -286,10 +295,7 @@ export class ReportService {
     });
   }
 
-  async getReportTemplates(
-    organizationId: string,
-    type?: ReportType
-  ): Promise<ReportTemplate[]> {
+  async getReportTemplates(organizationId: string, type?: ReportType): Promise<ReportTemplate[]> {
     return await prisma.reportTemplate.findMany({
       where: {
         organizationId,
@@ -303,10 +309,7 @@ export class ReportService {
     });
   }
 
-  async getReportTemplateById(
-    id: string,
-    organizationId: string
-  ): Promise<ReportTemplate | null> {
+  async getReportTemplateById(id: string, organizationId: string): Promise<ReportTemplate | null> {
     return await prisma.reportTemplate.findFirst({
       where: { id, organizationId },
       include: {
@@ -325,7 +328,7 @@ export class ReportService {
     const template = await prisma.reportTemplate.findFirst({
       where: { id, organizationId },
     });
-    
+
     if (!template) {
       throw new Error('Report template not found');
     }
@@ -344,7 +347,7 @@ export class ReportService {
     const template = await prisma.reportTemplate.findFirst({
       where: { id, organizationId },
     });
-    
+
     if (!template) {
       throw new Error('Report template not found');
     }
@@ -364,10 +367,7 @@ export class ReportService {
     const validated = CreateReportScheduleSchema.parse(data);
 
     // Calculate next run time based on frequency
-    const nextRunAt = this.calculateNextRunTime(
-      validated.frequency,
-      validated.scheduleConfig
-    );
+    const nextRunAt = this.calculateNextRunTime(validated.frequency, validated.scheduleConfig);
 
     return await prisma.reportSchedule.create({
       data: {
@@ -423,7 +423,7 @@ export class ReportService {
     const schedule = await prisma.reportSchedule.findFirst({
       where: { id, organizationId },
     });
-    
+
     if (!schedule) {
       throw new Error('Report schedule not found');
     }
@@ -446,7 +446,7 @@ export class ReportService {
     const schedule = await prisma.reportSchedule.findFirst({
       where: { id, organizationId },
     });
-    
+
     if (!schedule) {
       throw new Error('Report schedule not found');
     }
@@ -458,10 +458,7 @@ export class ReportService {
   }
 
   // Helper methods
-  private calculateNextRunTime(
-    frequency: string,
-    config: Record<string, any>
-  ): Date {
+  private calculateNextRunTime(frequency: string, config: Record<string, any>): Date {
     const now = new Date();
 
     switch (frequency) {

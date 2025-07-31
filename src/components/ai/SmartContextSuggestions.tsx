@@ -109,9 +109,9 @@ const SuggestionCard: React.FC<{
               variant="ghost"
               onClick={handleApply}
               disabled={isApplying}
-              className="text-xs px-2"
-            >
-              {isApplying ? 'Applying...' : suggestion.quickAction.label}
+              className="text-xs px-2" >
+  {isApplying ? 'Applying...' : suggestion.quickAction.label}
+</DaisyButton>
             </DaisyButton>
           )}
 
@@ -120,15 +120,15 @@ const SuggestionCard: React.FC<{
               size="sm"
               variant="ghost"
               onClick={onDismiss}
-              className="h-6 w-6 p-0"
-            >
-              <X className="h-3 w-3" />
+              className="h-6 w-6 p-0" >
+  <X className="h-3 w-3" />
+</DaisyButton>
             </DaisyButton>
           )}
         </div>
       </motion.div>
     );
-  }
+  };
 
   return (
     <motion.div
@@ -137,8 +137,9 @@ const SuggestionCard: React.FC<{
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.2 }}
     >
-      <DaisyCard className="group hover:shadow-md transition-all">
-        <DaisyCardHeader className="pb-3">
+      <DaisyCard className="group hover:shadow-md transition-all" >
+  <DaisyCardHeader className="pb-3" />
+</DaisyCard>
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
               <div className={`p-2 rounded-lg ${colorClasses}`}>
@@ -147,12 +148,14 @@ const SuggestionCard: React.FC<{
               <div>
                 <DaisyCardTitle className="text-base">{suggestion.title}</DaisyCardTitle>
                 <div className="flex items-center gap-2 mt-1">
-                  <DaisyBadge variant="secondary" className="text-xs">
-                    {getTypeLabel(suggestion.type)}
+                  <DaisyBadge variant="secondary" className="text-xs" >
+  {getTypeLabel(suggestion.type)}
+</DaisyBadge>
                   </DaisyBadge>
                   {suggestion.actionRequired && (
-                    <DaisyBadge variant="error" className="text-xs">
-                      Action Required
+                    <DaisyBadge variant="error" className="text-xs" >
+  Action Required
+</DaisyBadge>
                     </DaisyBadge>
                   )}
                 </div>
@@ -178,17 +181,18 @@ const SuggestionCard: React.FC<{
                   size="sm"
                   variant="ghost"
                   onClick={onDismiss}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <X className="h-4 w-4" />
+                  className="opacity-0 group-hover:opacity-100 transition-opacity" >
+  <X className="h-4 w-4" />
+</DaisyProgress>
                 </DaisyButton>
               )}
             </div>
           </div>
         
 
-        <DaisyCardContent>
-          <DaisyCardDescription className="mb-4">
+        <DaisyCardContent >
+  <DaisyCardDescription className="mb-4" />
+</DaisyCardContent>
             {suggestion.description}
           </p>
 
@@ -203,9 +207,9 @@ const SuggestionCard: React.FC<{
                 onClick={handleApply}
                 disabled={isApplying}
                 size="sm"
-                className="group"
-              >
-                {isApplying ? (
+                className="group" >
+  {isApplying ? (
+</DaisyButton>
                   'Applying...'
                 ) : (
                   <>
@@ -216,7 +220,7 @@ const SuggestionCard: React.FC<{
               </DaisyButton>
             </div>
           )}
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </motion.div>
   );
@@ -270,22 +274,24 @@ export const SmartContextSuggestions: React.FC<SmartContextSuggestionsProps> = (
         
         {visibleSuggestions.length > 5 && (
           <div className="text-center">
-            <DaisyButton variant="ghost" size="sm" className="text-xs">
-              +{visibleSuggestions.length - 5} more suggestions
+            <DaisyButton variant="ghost" size="sm" className="text-xs" >
+  +{visibleSuggestions.length - 5} more suggestions
+</DaisyButton>
             </DaisyButton>
           </div>
         )}
       </div>
     );
-  }
+  };
 
   return (
     <div className={`space-y-6 ${className}`}>
       {urgentSuggestions.length > 0 && (
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <DaisyAlertCircle className="h-4 w-4 text-red-500" />
-            <h3 className="text-sm font-semibold text-red-700 dark:text-red-400">
+            <DaisyAlertCircle className="h-4 w-4 text-red-500" >
+  <h3 className="text-sm font-semibold text-red-700 dark:text-red-400">
+</DaisyAlertCircle>
               Action Required ({urgentSuggestions.length})
             </h3>
           </div>

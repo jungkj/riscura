@@ -303,9 +303,9 @@ export const ProductTour: React.FC<ProductTourProps> = ({
       autoPlayRef.current = setTimeout(() => {
         nextStep();
       }, duration);
-    }
+    };
 
-    return () => {
+  return () => {
       if (autoPlayRef.current) {
         clearTimeout(autoPlayRef.current);
       }
@@ -458,8 +458,10 @@ export const ProductTour: React.FC<ProductTourProps> = ({
           zIndex: 1002
         }}
       >
-        <DaisyCard className="bg-white shadow-xl border-0">
-          <DaisyCardContent className="p-6">
+        <DaisyCard className="bg-white shadow-xl border-0" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center space-x-3">
@@ -468,8 +470,9 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">{currentStepData.title}</h3>
-                  <DaisyBadge variant="secondary" className="text-xs">
-                    Step {currentStep + 1} of {filteredSteps.length}
+                  <DaisyBadge variant="secondary" className="text-xs" >
+  Step {currentStep + 1} of {filteredSteps.length}
+</DaisyBadge>
                   </DaisyBadge>
                 </div>
               </div>
@@ -477,9 +480,9 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                 variant="ghost"
                 shape="square" size="md"
                 onClick={skipTour}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X className="w-4 h-4" />
+                className="text-gray-400 hover:text-gray-600" >
+  <X className="w-4 h-4" />
+</DaisyButton>
               </DaisyButton>
             </div>
 
@@ -506,17 +509,16 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                   variant="ghost"
                   size="sm"
                   onClick={previousStep}
-                  disabled={currentStep === 0}
-                >
-                  <ChevronLeft className="w-4 h-4" />
+                  disabled={currentStep === 0} >
+  <ChevronLeft className="w-4 h-4" />
+</DaisyProgress>
                 </DaisyButton>
                 
                 <DaisyButton
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsPlaying(!isPlaying)}
-                  className="text-gray-600"
-                >
+                  className="text-gray-600" />
                   {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                 </DaisyButton>
 
@@ -524,21 +526,22 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                   variant="ghost"
                   size="sm"
                   onClick={() => goToStep(0)}
-                  className="text-gray-600"
-                >
+                  className="text-gray-600" />
                   <RotateCcw className="w-4 h-4" />
                 </DaisyButton>
               </div>
 
               <div className="flex items-center space-x-2">
                 {tourConfig.allowSkip && (
-                  <DaisyButton variant="ghost" size="sm" onClick={skipTour}>
-                    Skip Tour
+                  <DaisyButton variant="ghost" size="sm" onClick={skipTour} >
+  Skip Tour
+</DaisyButton>
                   </DaisyButton>
                 )}
                 
-                <DaisyButton onClick={nextStep} size="sm">
-                  {currentStep === filteredSteps.length - 1 ? (
+                <DaisyButton onClick={nextStep} size="sm" >
+  {currentStep === filteredSteps.length - 1 ? (
+</DaisyButton>
                     <>
                       <CheckCircle className="w-4 h-4 mr-2" />
                       Complete
@@ -564,7 +567,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                 </p>
               </div>
             )}
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
     </>

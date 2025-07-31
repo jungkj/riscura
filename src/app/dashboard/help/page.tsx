@@ -161,8 +161,7 @@ export default function HelpPage() {
             <DaisyButton
               variant="ghost"
               onClick={() => router.push('/dashboard')}
-              className="mb-4"
-            >
+              className="mb-4" />
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard
             </DaisyButton>
@@ -176,8 +175,10 @@ export default function HelpPage() {
           </div>
 
           {/* Search Bar */}
-          <DaisyCard className="mb-6">
-            <DaisyCardContent className="p-4">
+          <DaisyCard className="mb-6" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <DaisyInput
@@ -187,36 +188,34 @@ export default function HelpPage() {
                   className="pl-10"
                 />
               </div>
-            </DaisyCardBody>
+            </DaisyInput>
           </DaisyCard>
 
           {/* Main Content */}
-          <DaisyTabs defaultValue="articles" className="space-y-6">
-            <DaisyTabsList>
-              <DaisyTabsTrigger value="articles">Help Articles</DaisyTabsTrigger>
+          <DaisyTabs defaultValue="articles" className="space-y-6" />
+            <DaisyTabsList />
+              <DaisyTabsTrigger value="articles">Help Articles</DaisyTabs>
               <DaisyTabsTrigger value="faqs">FAQs</DaisyTabsTrigger>
               <DaisyTabsTrigger value="videos">Video Tutorials</DaisyTabsTrigger>
               <DaisyTabsTrigger value="contact">Contact Support</DaisyTabsTrigger>
             </DaisyTabsList>
 
             {/* Help Articles */}
-            <DaisyTabsContent value="articles">
+            <DaisyTabsContent value="articles" />
               {/* Category Filter */}
               <div className="flex gap-2 mb-6">
                 <DaisyButton
                   variant={selectedCategory === 'all' ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => setSelectedCategory('all')}
-                >
+                  onClick={() => setSelectedCategory('all')} />
                   All Categories
-                </DaisyButton>
+                </DaisyTabsContent>
                 {categories.map(category => (
                   <DaisyButton
                     key={category}
                     variant={selectedCategory === category ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setSelectedCategory(category)}
-                  >
+                    onClick={() => setSelectedCategory(category)} />
                     {category}
                   </DaisyButton>
                 ))}
@@ -230,13 +229,15 @@ export default function HelpPage() {
                     className="hover:shadow-md transition-shadow cursor-pointer"
                     onClick={() => router.push(`/dashboard/help/article/${article.id}`)}
                   >
-                    <DaisyCardContent className="p-6">
-                      <div className="flex items-start justify-between mb-4">
+                    <DaisyCardContent className="p-6" >
+  <div className="flex items-start justify-between mb-4">
+</DaisyCard>
                         <div className="p-2 bg-blue-100 rounded-lg">
                           <article.icon className="h-6 w-6 text-blue-600" />
                         </div>
-                        <DaisyBadge variant="outline" className="text-xs">
-                          {article.category}
+                        <DaisyBadge variant="outline" className="text-xs" >
+  {article.category}
+</DaisyBadge>
                         </DaisyBadge>
                       </div>
                       
@@ -257,28 +258,32 @@ export default function HelpPage() {
                           {article.helpful} found helpful
                         </div>
                       </div>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                 ))}
               </div>
 
               {filteredArticles.length === 0 && (
-                <DaisyCard>
-                  <DaisyCardContent className="p-12 text-center">
+                <DaisyCard >
+  <DaisyCardContent className="p-12 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
                     <HelpCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No articles found</h3>
                     <p className="text-gray-600">Try adjusting your search or category filter</p>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               )}
             </DaisyTabsContent>
 
             {/* FAQs */}
-            <DaisyTabsContent value="faqs">
+            <DaisyTabsContent value="faqs" />
               <div className="space-y-4">
                 {filteredFAQs.map((faq, index) => (
-                  <DaisyCard key={index}>
-                    <DaisyCardContent className="p-6">
+                  <DaisyCard key={index} >
+  <DaisyCardContent className="p-6" >
+  </DaisyTabsContent>
+</DaisyCardContent>
                       <div className="flex items-start gap-3">
                         <HelpCircle className="h-5 w-5 text-blue-600 mt-0.5" />
                         <div className="flex-1">
@@ -288,32 +293,37 @@ export default function HelpPage() {
                           <p className="text-gray-600">
                             {faq.answer}
                           </p>
-                          <DaisyBadge variant="outline" className="mt-3 text-xs">
-                            {faq.category}
+                          <DaisyBadge variant="outline" className="mt-3 text-xs" >
+  {faq.category}
+</DaisyBadge>
                           </DaisyBadge>
                         </div>
                       </div>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                 ))}
               </div>
 
               {filteredFAQs.length === 0 && (
-                <DaisyCard>
-                  <DaisyCardContent className="p-12 text-center">
+                <DaisyCard >
+  <DaisyCardContent className="p-12 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
                     <HelpCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No FAQs found</h3>
                     <p className="text-gray-600">Try a different search term</p>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               )}
             </DaisyTabsContent>
 
             {/* Video Tutorials */}
-            <DaisyTabsContent value="videos">
+            <DaisyTabsContent value="videos" />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <DaisyCard className="hover:shadow-md transition-shadow cursor-pointer">
-                  <DaisyCardContent className="p-6">
+                <DaisyCard className="hover:shadow-md transition-shadow cursor-pointer" >
+  <DaisyCardContent className="p-6" >
+  </DaisyTabsContent>
+</DaisyCardContent>
                     <div className="aspect-video bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
                       <Video className="h-12 w-12 text-gray-400" />
                     </div>
@@ -325,16 +335,19 @@ export default function HelpPage() {
                     </p>
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-500">5:23</span>
-                      <DaisyButton size="sm" variant="outline">
-                        Watch
+                      <DaisyButton size="sm" variant="outline" >
+  Watch
+</DaisyButton>
                         <ExternalLink className="h-3 w-3 ml-1" />
                       </DaisyButton>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
 
-                <DaisyCard className="hover:shadow-md transition-shadow cursor-pointer">
-                  <DaisyCardContent className="p-6">
+                <DaisyCard className="hover:shadow-md transition-shadow cursor-pointer" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
                     <div className="aspect-video bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
                       <Video className="h-12 w-12 text-gray-400" />
                     </div>
@@ -346,16 +359,19 @@ export default function HelpPage() {
                     </p>
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-500">12:45</span>
-                      <DaisyButton size="sm" variant="outline">
-                        Watch
+                      <DaisyButton size="sm" variant="outline" >
+  Watch
+</DaisyButton>
                         <ExternalLink className="h-3 w-3 ml-1" />
                       </DaisyButton>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
 
-                <DaisyCard className="hover:shadow-md transition-shadow cursor-pointer">
-                  <DaisyCardContent className="p-6">
+                <DaisyCard className="hover:shadow-md transition-shadow cursor-pointer" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
                     <div className="aspect-video bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
                       <Video className="h-12 w-12 text-gray-400" />
                     </div>
@@ -367,25 +383,28 @@ export default function HelpPage() {
                     </p>
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-500">8:17</span>
-                      <DaisyButton size="sm" variant="outline">
-                        Watch
+                      <DaisyButton size="sm" variant="outline" >
+  Watch
+</DaisyButton>
                         <ExternalLink className="h-3 w-3 ml-1" />
                       </DaisyButton>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               </div>
             </DaisyTabsContent>
 
             {/* Contact Support */}
-            <DaisyTabsContent value="contact">
+            <DaisyTabsContent value="contact" />
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <DaisyCard>
-                  <DaisyCardHeader>
+                <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                     <DaisyCardTitle className="text-lg">Get in Touch</DaisyCardTitle>
-                  
-                  <DaisyCardContent className="space-y-4">
-                    <div className="flex items-center gap-3">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4" >
+  <div className="flex items-center gap-3">
+</DaisyCardContent>
                       <div className="p-2 bg-blue-100 rounded-lg">
                         <Mail className="h-5 w-5 text-blue-600" />
                       </div>
@@ -416,15 +435,17 @@ export default function HelpPage() {
                         <p className="text-sm text-gray-600">Available during business hours</p>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
 
-                <DaisyCard>
-                  <DaisyCardHeader>
+                <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                     <DaisyCardTitle className="text-lg">Support Hours</DaisyCardTitle>
-                  
-                  <DaisyCardContent>
-                    <div className="space-y-3">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-3">
+</DaisyCardContent>
                       <div className="flex justify-between py-2 border-b">
                         <span className="text-gray-600">Monday - Friday</span>
                         <span className="font-medium">9:00 AM - 5:00 PM EST</span>
@@ -447,7 +468,7 @@ export default function HelpPage() {
                         Enterprise customers have 24/7 priority support
                       </p>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               </div>
             </DaisyTabsContent>

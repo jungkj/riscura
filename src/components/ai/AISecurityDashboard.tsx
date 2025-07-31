@@ -217,8 +217,12 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
 
   const getThreatLevelIcon = (level: string) => {
     switch (level) {
-      case 'critical': return <DaisyAlertTriangle className="h-4 w-4 text-red-600" />;
-      case 'high': return <DaisyAlertTriangle className="h-4 w-4 text-orange-600" />;
+      case 'critical': return <DaisyAlertTriangle className="h-4 w-4 text-red-600" >
+  ;
+</DaisyAlertTriangle>
+      case 'high': return <DaisyAlertTriangle className="h-4 w-4 text-orange-600" >
+  ;
+</DaisyAlertTriangle>
       case 'medium': return <Activity className="h-4 w-4 text-yellow-600" />;
       case 'low': return <CheckCircle className="h-4 w-4 text-green-600" />;
       default: return <Activity className="h-4 w-4 text-gray-600" />;
@@ -229,15 +233,18 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
 
   if (loading && !metrics) {
     return (
-      <DaisyCard className={cn("w-full", className)}>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center gap-2">
-            <Shield className="h-5 w-5 text-blue-600 animate-pulse" />
+      <DaisyCard className={cn("w-full", className)} >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <Shield className="h-5 w-5 text-blue-600 animate-pulse" />
+</DaisyCardTitle>
             Loading Security Dashboard...
           </DaisyCardTitle>
-        
-        <DaisyCardContent>
-          <div className="space-y-3">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-3">
+</DaisyCardContent>
             {[...Array(3)].map((_, i) => (
               <div key={i} className="animate-pulse">
                 <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
@@ -245,10 +252,10 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <div className={cn("space-y-6", className)}>
@@ -262,12 +269,14 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
           <p className="text-gray-600">Enterprise AI security monitoring and compliance</p>
         </div>
         <div className="flex items-center gap-2">
-          <DaisyButton variant="outline" size="sm" onClick={handleExportAuditLogs}>
-            <Download className="h-4 w-4 mr-1" />
+          <DaisyButton variant="outline" size="sm" onClick={handleExportAuditLogs} >
+  <Download className="h-4 w-4 mr-1" />
+</DaisyButton>
             Export Logs
           </DaisyButton>
-          <DaisyButton variant="outline" size="sm" onClick={fetchSecurityData} disabled={loading}>
-            <RefreshCw className={cn("h-4 w-4 mr-1", loading && "animate-spin")} />
+          <DaisyButton variant="outline" size="sm" onClick={fetchSecurityData} disabled={loading} >
+  <RefreshCw className={cn("h-4 w-4 mr-1", loading && "animate-spin")} />
+</DaisyButton>
             Refresh
           </DaisyButton>
         </div>
@@ -276,8 +285,10 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
       {/* Security Metrics Overview */}
       {metrics && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <DaisyCard>
-            <DaisyCardContent className="p-4">
+          <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Compliance Score</p>
@@ -285,12 +296,13 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                 </div>
                 <CheckCircle className="h-8 w-8 text-green-600" />
               </div>
-              <DaisyProgress value={metrics.complianceScore} className="mt-2" />
-            </DaisyCardBody>
+              <DaisyProgress value={metrics.complianceScore} className="mt-2" /></DaisyProgress>
           </DaisyCard>
 
-          <DaisyCard>
-            <DaisyCardContent className="p-4">
+          <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Avg Risk Score</p>
@@ -298,12 +310,13 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                 </div>
                 <BarChart3 className="h-8 w-8 text-orange-600" />
               </div>
-              <DaisyProgress value={metrics.avgRiskScore} className="mt-2" />
-            </DaisyCardBody>
+              <DaisyProgress value={metrics.avgRiskScore} className="mt-2" /></DaisyProgress>
           </DaisyCard>
 
-          <DaisyCard>
-            <DaisyCardContent className="p-4">
+          <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">PII Detection Rate</p>
@@ -311,12 +324,13 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                 </div>
                 <Eye className="h-8 w-8 text-blue-600" />
               </div>
-              <DaisyProgress value={metrics.piiDetectionRate} className="mt-2" />
-            </DaisyCardBody>
+              <DaisyProgress value={metrics.piiDetectionRate} className="mt-2" /></DaisyProgress>
           </DaisyCard>
 
-          <DaisyCard>
-            <DaisyCardContent className="p-4">
+          <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Total Audit Logs</p>
@@ -327,14 +341,14 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
               <div className="text-xs text-gray-500 mt-1">
                 Last 7 days
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
       )}
 
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
-        <DaisyTabsList className="grid w-full grid-cols-5">
-          <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
+        <DaisyTabsList className="grid w-full grid-cols-5" />
+          <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
           <DaisyTabsTrigger value="audit-logs">Audit Logs</DaisyTabsTrigger>
           <DaisyTabsTrigger value="security-events">Security Events</DaisyTabsTrigger>
           <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
@@ -342,18 +356,22 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
         </DaisyTabsList>
 
         {/* Overview Tab */}
-        <DaisyTabsContent value="overview" className="space-y-6">
+        <DaisyTabsContent value="overview" className="space-y-6" />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Threat Level Distribution */}
-            <DaisyCard>
-              <DaisyCardHeader>
-                <DaisyCardTitle className="flex items-center gap-2">
-                  <DaisyAlertTriangle className="h-5 w-5 text-orange-600" />
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
+                <DaisyCardTitle className="flex items-center gap-2" >
+  <DaisyAlertTriangle className="h-5 w-5 text-orange-600" >
+  </DaisyCardTitle>
+</DaisyAlert>
                   Threat Level Distribution
                 </DaisyCardTitle>
-              
-              <DaisyCardContent>
-                {metrics && (
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  {metrics && (
+</DaisyCardContent>
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
@@ -377,19 +395,20 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                           ))}
                         </Pie>
-                        <DaisyTooltip />
-                      </PieChart>
+                        <DaisyTooltip /></DaisyTooltip>
                     </ResponsiveContainer>
                   </div>
                 )}
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* Security Trends */}
-            <DaisyCard>
-              <DaisyCardHeader>
-                <DaisyCardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-green-600" />
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+                <DaisyCardTitle className="flex items-center gap-2" >
+  <TrendingUp className="h-5 w-5 text-green-600" />
+</DaisyCardTitle>
                   Security Trends
                 </DaisyCardTitle>
                 <div className="flex items-center gap-2">
@@ -404,8 +423,9 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                   </select>
                 </div>
               
-              <DaisyCardContent>
-                <div className="h-64">
+              <DaisyCardContent >
+  <div className="h-64">
+</DaisyCardContent>
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={securityTrends}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -430,20 +450,23 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
-              </DaisyCardBody>
+              </DaisyTooltip>
             </DaisyCard>
           </div>
 
           {/* Recent Security Events */}
-          <DaisyCard>
-            <DaisyCardHeader>
-              <DaisyCardTitle className="flex items-center gap-2">
-                <Activity className="h-5 w-5 text-blue-600" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+              <DaisyCardTitle className="flex items-center gap-2" >
+  <Activity className="h-5 w-5 text-blue-600" />
+</DaisyCardTitle>
                 Recent Security Events
               </DaisyCardTitle>
-            
-            <DaisyCardContent>
-              <div className="space-y-2 max-h-64 overflow-y-auto">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-2 max-h-64 overflow-y-auto">
+</DaisyCardContent>
                 {securityEvents.slice(0, 5).map((event) => (
                   <div key={event.id} className="flex items-center justify-between p-2 border rounded">
                     <div className="flex items-center gap-3">
@@ -460,8 +483,9 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <DaisyBadge className={getSeverityColor(event.severity)}>
-                        {event.severity}
+                      <DaisyBadge className={getSeverityColor(event.severity)} >
+  {event.severity}
+</DaisyBadge>
                       </DaisyBadge>
                       {event.resolved ? (
                         <CheckCircle className="h-4 w-4 text-green-600" />
@@ -472,15 +496,17 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
         {/* Audit Logs Tab */}
-        <DaisyTabsContent value="audit-logs" className="space-y-4">
+        <DaisyTabsContent value="audit-logs" className="space-y-4" />
           {/* Filters */}
-          <DaisyCard>
-            <DaisyCardContent className="p-4">
+          <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyTabsContent>
+</DaisyCardContent>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <Filter className="h-4 w-4" />
@@ -515,19 +541,22 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                   Clear
                 </DaisyButton>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Audit Logs Table */}
-          <DaisyCard>
-            <DaisyCardHeader>
-              <DaisyCardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-gray-600" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+              <DaisyCardTitle className="flex items-center gap-2" >
+  <FileText className="h-5 w-5 text-gray-600" />
+</DaisyCardTitle>
                 Audit Logs ({auditLogs.length})
               </DaisyCardTitle>
-            
-            <DaisyCardContent>
-              <div className="space-y-2 max-h-96 overflow-y-auto">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-2 max-h-96 overflow-y-auto">
+</DaisyCardContent>
                 {auditLogs.map((log) => (
                   <div key={log.id} className="border rounded p-3">
                     <div className="flex items-center justify-between mb-2">
@@ -540,8 +569,9 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                         <span className="text-xs text-gray-500">
                           {log.timestamp.toLocaleString()}
                         </span>
-                        <DaisyBadge className={getSeverityColor(log.securityAnalysis.threatLevel)}>
-                          Risk: {log.riskScore}
+                        <DaisyBadge className={getSeverityColor(log.securityAnalysis.threatLevel)} >
+  Risk: {log.riskScore}
+</DaisyBadge>
                         </DaisyBadge>
                       </div>
                     </div>
@@ -562,31 +592,37 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                     </div>
                     
                     {log.securityAnalysis.anomalies.length > 0 && (
-                      <DaisyAlert className="mt-2">
-                        <DaisyAlertTriangle className="h-4 w-4" />
-                        <DaisyAlertDescription>
-                          {log.securityAnalysis.anomalies.length} security anomal{log.securityAnalysis.anomalies.length > 1 ? 'ies' : 'y'} detected
-                        
-                      </DaisyAlert>
+                      <DaisyAlert className="mt-2" >
+  <DaisyAlertTriangle className="h-4 w-4" />
+</DaisyAlert>
+                        <DaisyAlertDescription >
+  {log.securityAnalysis.anomalies.length} security anomal{log.securityAnalysis.anomalies.length > 1 ? 'ies' : 'y'} detected
+                </DaisyAlertDescription>
+</DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
                     )}
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
         {/* Security Events Tab */}
-        <DaisyTabsContent value="security-events" className="space-y-4">
-          <DaisyCard>
-            <DaisyCardHeader>
-              <DaisyCardTitle className="flex items-center gap-2">
-                <Zap className="h-5 w-5 text-yellow-600" />
+        <DaisyTabsContent value="security-events" className="space-y-4" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
+              <DaisyCardTitle className="flex items-center gap-2" >
+  <Zap className="h-5 w-5 text-yellow-600" />
+</DaisyCardTitle>
                 Security Events
               </DaisyCardTitle>
-            
-            <DaisyCardContent>
-              <div className="space-y-3 max-h-96 overflow-y-auto">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-3 max-h-96 overflow-y-auto">
+</DaisyCardContent>
                 {securityEvents.map((event) => (
                   <div key={event.id} className="border rounded p-3">
                     <div className="flex items-center justify-between mb-2">
@@ -600,8 +636,9 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                         <DaisyBadge variant="outline">{event.userId}</DaisyBadge>
                       </div>
                       <div className="flex items-center gap-2">
-                        <DaisyBadge className={getSeverityColor(event.severity)}>
-                          {event.severity}
+                        <DaisyBadge className={getSeverityColor(event.severity)} >
+  {event.severity}
+</DaisyBadge>
                         </DaisyBadge>
                         {event.resolved ? (
                           <DaisyBadge className="bg-green-100 text-green-800">Resolved</DaisyBadge>
@@ -626,23 +663,26 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
         {/* Compliance Tab */}
-        <DaisyTabsContent value="compliance" className="space-y-4">
+        <DaisyTabsContent value="compliance" className="space-y-4" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {['SOC2', 'ISO27001', 'GDPR'].map((standard) => (
-              <DaisyCard key={standard}>
-                <DaisyCardHeader>
-                  <DaisyCardTitle className="flex items-center gap-2">
-                    <Shield className="h-5 w-5 text-green-600" />
+              <DaisyCard key={standard} >
+  <DaisyCardHeader />
+</DaisyTabsContent>
+                  <DaisyCardTitle className="flex items-center gap-2" >
+  <Shield className="h-5 w-5 text-green-600" />
+</DaisyCardTitle>
                     {standard}
                   </DaisyCardTitle>
-                
-                <DaisyCardContent>
-                  <div className="space-y-3">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-3">
+</DaisyCardContent>
                     <div className="flex items-center justify-between">
                       <span className="text-sm">Compliance Score</span>
                       <span className="font-bold text-green-600">95%</span>
@@ -659,26 +699,29 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                         <span>Data Protection: Compliant</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <DaisyAlertTriangle className="h-4 w-4 text-yellow-600" />
-                        <span>Audit Trails: Review Needed</span>
+                        <DaisyAlertTriangle className="h-4 w-4 text-yellow-600" >
+  <span>
+</DaisyProgress>Audit Trails: Review Needed</span>
                       </div>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             ))}
           </div>
         </DaisyTabsContent>
 
         {/* Analytics Tab */}
-        <DaisyTabsContent value="analytics" className="space-y-4">
+        <DaisyTabsContent value="analytics" className="space-y-4" />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <DaisyCard>
-              <DaisyCardHeader>
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                 <DaisyCardTitle>PII Detection Over Time</DaisyCardTitle>
-              
-              <DaisyCardContent>
-                <div className="h-64">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="h-64">
+</DaisyCardContent>
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={securityTrends}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -696,15 +739,17 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
-              </DaisyCardBody>
+              </DaisyTooltip>
             </DaisyCard>
 
-            <DaisyCard>
-              <DaisyCardHeader>
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                 <DaisyCardTitle>Security Incidents</DaisyCardTitle>
-              
-              <DaisyCardContent>
-                <div className="h-64">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="h-64">
+</DaisyCardContent>
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={securityTrends}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -719,7 +764,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
-              </DaisyCardBody>
+              </DaisyTooltip>
             </DaisyCard>
           </div>
         </DaisyTabsContent>

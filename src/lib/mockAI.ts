@@ -5,25 +5,89 @@ import { toast } from 'sonner';
 // Mock keywords for different risk categories
 const riskKeywords = {
   operational: [
-    'process', 'procedure', 'workflow', 'operation', 'staff', 'employee', 'training',
-    'quality', 'production', 'service', 'delivery', 'customer', 'supplier', 'vendor'
+    'process',
+    'procedure',
+    'workflow',
+    'operation',
+    'staff',
+    'employee',
+    'training',
+    'quality',
+    'production',
+    'service',
+    'delivery',
+    'customer',
+    'supplier',
+    'vendor',
   ],
   financial: [
-    'budget', 'cost', 'revenue', 'profit', 'loss', 'cash', 'credit', 'debt', 'investment',
-    'financial', 'accounting', 'audit', 'payment', 'invoice', 'expense', 'income'
+    'budget',
+    'cost',
+    'revenue',
+    'profit',
+    'loss',
+    'cash',
+    'credit',
+    'debt',
+    'investment',
+    'financial',
+    'accounting',
+    'audit',
+    'payment',
+    'invoice',
+    'expense',
+    'income',
   ],
   strategic: [
-    'strategy', 'strategic', 'market', 'competition', 'competitive', 'growth', 'expansion',
-    'merger', 'acquisition', 'partnership', 'innovation', 'technology', 'digital', 'transformation'
+    'strategy',
+    'strategic',
+    'market',
+    'competition',
+    'competitive',
+    'growth',
+    'expansion',
+    'merger',
+    'acquisition',
+    'partnership',
+    'innovation',
+    'technology',
+    'digital',
+    'transformation',
   ],
   compliance: [
-    'regulation', 'regulatory', 'compliance', 'legal', 'law', 'policy', 'standard',
-    'requirement', 'audit', 'inspection', 'certification', 'license', 'permit', 'gdpr', 'sox'
+    'regulation',
+    'regulatory',
+    'compliance',
+    'legal',
+    'law',
+    'policy',
+    'standard',
+    'requirement',
+    'audit',
+    'inspection',
+    'certification',
+    'license',
+    'permit',
+    'gdpr',
+    'sox',
   ],
   technology: [
-    'system', 'software', 'hardware', 'network', 'security', 'cyber', 'data', 'database',
-    'server', 'cloud', 'infrastructure', 'application', 'platform', 'digital', 'it'
-  ]
+    'system',
+    'software',
+    'hardware',
+    'network',
+    'security',
+    'cyber',
+    'data',
+    'database',
+    'server',
+    'cloud',
+    'infrastructure',
+    'application',
+    'platform',
+    'digital',
+    'it',
+  ],
 };
 
 // Mock risk templates based on categories
@@ -33,101 +97,101 @@ const riskTemplates = {
       title: 'Process Inefficiency Risk',
       description: 'Risk of operational inefficiencies due to outdated or poorly defined processes',
       likelihood: 3,
-      impact: 3
+      impact: 3,
     },
     {
       title: 'Staff Training Gap Risk',
       description: 'Risk of inadequate staff training leading to operational errors',
       likelihood: 2,
-      impact: 3
+      impact: 3,
     },
     {
       title: 'Supplier Dependency Risk',
       description: 'Risk of over-reliance on key suppliers affecting service delivery',
       likelihood: 3,
-      impact: 4
-    }
+      impact: 4,
+    },
   ],
   financial: [
     {
       title: 'Budget Overrun Risk',
       description: 'Risk of exceeding allocated budgets due to poor cost control',
       likelihood: 3,
-      impact: 4
+      impact: 4,
     },
     {
       title: 'Credit Risk Exposure',
       description: 'Risk of customer defaults affecting cash flow and profitability',
       likelihood: 2,
-      impact: 4
+      impact: 4,
     },
     {
       title: 'Investment Loss Risk',
       description: 'Risk of financial losses from poor investment decisions',
       likelihood: 2,
-      impact: 5
-    }
+      impact: 5,
+    },
   ],
   strategic: [
     {
       title: 'Market Competition Risk',
       description: 'Risk of losing market share to competitors with superior offerings',
       likelihood: 4,
-      impact: 3
+      impact: 3,
     },
     {
       title: 'Strategic Misalignment Risk',
       description: 'Risk of strategic initiatives not aligning with market demands',
       likelihood: 2,
-      impact: 4
+      impact: 4,
     },
     {
       title: 'Innovation Gap Risk',
       description: 'Risk of falling behind in technological innovation and digital transformation',
       likelihood: 3,
-      impact: 4
-    }
+      impact: 4,
+    },
   ],
   compliance: [
     {
       title: 'Regulatory Violation Risk',
       description: 'Risk of non-compliance with industry regulations leading to penalties',
       likelihood: 2,
-      impact: 5
+      impact: 5,
     },
     {
       title: 'Policy Adherence Risk',
       description: 'Risk of employees not following established policies and procedures',
       likelihood: 3,
-      impact: 3
+      impact: 3,
     },
     {
       title: 'Audit Finding Risk',
       description: 'Risk of significant findings during regulatory or internal audits',
       likelihood: 2,
-      impact: 4
-    }
+      impact: 4,
+    },
   ],
   technology: [
     {
       title: 'Cybersecurity Breach Risk',
       description: 'Risk of unauthorized access to systems and data through cyber attacks',
       likelihood: 3,
-      impact: 5
+      impact: 5,
     },
     {
       title: 'System Failure Risk',
       description: 'Risk of critical system failures disrupting business operations',
       likelihood: 2,
-      impact: 4
+      impact: 4,
     },
     {
       title: 'Data Loss Risk',
       description: 'Risk of losing critical business data due to system failures or attacks',
       likelihood: 2,
-      impact: 5
-    }
-  ]
+      impact: 5,
+    },
+  ],
 };
 
 // Mock control templates
@@ -136,68 +200,68 @@ const controlTemplates = [
     title: 'Regular Process Review',
     description: 'Implement regular reviews of operational processes to identify inefficiencies',
     type: 'detective' as const,
-    effectiveness: 'medium' as const
+    effectiveness: 'medium' as const,
   },
   {
     title: 'Staff Training Program',
     description: 'Establish comprehensive training programs for all staff members',
     type: 'preventive' as const,
-    effectiveness: 'high' as const
+    effectiveness: 'high' as const,
   },
   {
     title: 'Supplier Diversification',
     description: 'Maintain multiple suppliers to reduce dependency risks',
     type: 'preventive' as const,
-    effectiveness: 'high' as const
+    effectiveness: 'high' as const,
   },
   {
     title: 'Budget Monitoring System',
     description: 'Implement real-time budget monitoring and reporting systems',
     type: 'detective' as const,
-    effectiveness: 'high' as const
+    effectiveness: 'high' as const,
   },
   {
     title: 'Credit Assessment Procedures',
     description: 'Establish robust credit assessment and monitoring procedures',
     type: 'preventive' as const,
-    effectiveness: 'high' as const
+    effectiveness: 'high' as const,
   },
   {
     title: 'Investment Committee Review',
     description: 'Require investment committee approval for significant investments',
     type: 'preventive' as const,
-    effectiveness: 'medium' as const
+    effectiveness: 'medium' as const,
   },
   {
     title: 'Market Intelligence System',
     description: 'Implement market monitoring and competitive intelligence systems',
     type: 'detective' as const,
-    effectiveness: 'medium' as const
+    effectiveness: 'medium' as const,
   },
   {
     title: 'Compliance Monitoring Program',
     description: 'Establish ongoing compliance monitoring and reporting programs',
     type: 'detective' as const,
-    effectiveness: 'high' as const
+    effectiveness: 'high' as const,
   },
   {
     title: 'Security Awareness Training',
     description: 'Provide regular cybersecurity awareness training for all employees',
     type: 'preventive' as const,
-    effectiveness: 'medium' as const
+    effectiveness: 'medium' as const,
   },
   {
     title: 'Data Backup Procedures',
     description: 'Implement automated data backup and recovery procedures',
     type: 'corrective' as const,
-    effectiveness: 'high' as const
-  }
+    effectiveness: 'high' as const,
+  },
 ];
 
 // Simulate text extraction from different file types
 const simulateTextExtraction = (document: Document): string => {
   const fileType = document.type;
-  
+
   // Mock extracted text based on file type
   if (fileType.includes('pdf')) {
     return `
@@ -215,7 +279,7 @@ const simulateTextExtraction = (document: Document): string => {
       a strong risk management culture throughout the organization.
     `;
   }
-  
+
   if (fileType.includes('word') || fileType.includes('document')) {
     return `
       Operational Procedures Manual
@@ -229,7 +293,7 @@ const simulateTextExtraction = (document: Document): string => {
       to maintain effectiveness and compliance with industry standards.
     `;
   }
-  
+
   if (fileType.includes('excel') || fileType.includes('spreadsheet')) {
     return `
       Financial Risk Assessment Spreadsheet
@@ -245,7 +309,7 @@ const simulateTextExtraction = (document: Document): string => {
       maintaining financial stability and regulatory compliance.
     `;
   }
-  
+
   // Default text for other file types
   return `
     Business Document Analysis
@@ -258,7 +322,9 @@ const simulateTextExtraction = (document: Document): string => {
 };
 
 // Analyze text content and identify relevant risks
-const analyzeTextContent = (text: string): {
+const analyzeTextContent = (
+  text: string
+): {
   identifiedRisks: Array<{
     text: string;
     confidence: number;
@@ -282,52 +348,56 @@ const analyzeTextContent = (text: string): {
     description: string;
     confidence: number;
   }> = [];
-  
+
   // Analyze text for risk keywords and generate relevant risks
   Object.entries(riskKeywords).forEach(([category, keywords]) => {
-    const matchedKeywords = keywords.filter(keyword => lowerText.includes(keyword));
-    
+    const matchedKeywords = keywords.filter((keyword) => lowerText.includes(keyword));
+
     if (matchedKeywords.length > 0) {
       const categoryTemplates = riskTemplates[category as RiskCategory];
-      const selectedTemplate = categoryTemplates[Math.floor(Math.random() * categoryTemplates.length)];
-      
+      const selectedTemplate =
+        categoryTemplates[Math.floor(Math.random() * categoryTemplates.length)];
+
       // Calculate confidence based on keyword matches
-      const confidence = Math.min(0.95, 0.6 + (matchedKeywords.length * 0.1));
-      
+      const confidence = Math.min(0.95, 0.6 + matchedKeywords.length * 0.1);
+
       identifiedRisks.push({
         text: selectedTemplate.description,
         confidence,
-        category: category as RiskCategory
+        category: category as RiskCategory,
       });
     }
   });
-  
+
   // Generate suggested controls based on identified risks
   const numControls = Math.min(identifiedRisks.length + 1, 3);
   for (let i = 0; i < numControls; i++) {
     const template = controlTemplates[Math.floor(Math.random() * controlTemplates.length)];
     const confidence = 0.7 + Math.random() * 0.2; // 70-90% confidence
-    
+
     suggestedControls.push({
       title: template.title,
       description: template.description,
-      confidence
+      confidence,
     });
   }
-  
+
   // Generate document summary
   const documentSummary = `
     This document contains ${identifiedRisks.length} potential risk areas across 
     ${new Set(identifiedRisks.map((r: { category: RiskCategory }) => r.category)).size} categories. 
-    Key themes include ${identifiedRisks.slice(0, 3).map((r: { category: RiskCategory }) => r.category).join(', ')}.
+    Key themes include ${identifiedRisks
+      .slice(0, 3)
+      .map((r: { category: RiskCategory }) => r.category)
+      .join(', ')}.
     The analysis suggests implementing ${suggestedControls.length} control measures
     to mitigate the identified risks.
   `.trim();
-  
+
   return {
     identifiedRisks,
     suggestedControls,
-    documentSummary
+    documentSummary,
   };
 };
 
@@ -335,31 +405,31 @@ const analyzeTextContent = (text: string): {
 export const mockAIAnalysis = async (document: Document): Promise<AIAnalysisResponse> => {
   const jobId = generateId('ai-job');
   const startTime = Date.now();
-  
+
   // Simulate realistic processing delay (2-5 seconds)
   const processingDelay = 2000 + Math.random() * 3000;
-  await new Promise(resolve => setTimeout(resolve, processingDelay));
-  
+  await new Promise((resolve) => setTimeout(resolve, processingDelay));
+
   try {
     // Simulate text extraction
     const extractedText = simulateTextExtraction(document);
-    
+
     // Analyze content
     const analysis = analyzeTextContent(extractedText);
-    
+
     const processingTime = Date.now() - startTime;
-    
+
     return {
       jobId,
       status: 'completed',
       results: analysis,
-      processingTime
+      processingTime,
     };
   } catch {
     return {
       jobId,
       status: 'failed',
-      processingTime: Date.now() - startTime
+      processingTime: Date.now() - startTime,
     };
   }
 };
@@ -374,22 +444,27 @@ export const convertAIRisksToRiskObjects = (
   _documentId: string,
   owner: string = 'AI Analysis'
 ): Omit<Risk, 'id' | 'createdAt' | 'updatedAt' | 'riskScore'>[] => {
-  return aiRisks.map((aiRisk: {
-    text: string;
-    confidence: number;
-    category: RiskCategory;
-  }, index: number) => ({
-    title: `AI Identified Risk ${index + 1}`,
-    description: aiRisk.text,
-    category: aiRisk.category,
-    likelihood: Math.ceil(aiRisk.confidence * 5), // Convert confidence to 1-5 scale
-    impact: 3, // Default impact, can be adjusted by user
-    owner,
-    status: 'identified' as const,
-    controls: [],
-    evidence: [], // Empty array, document reference can be added separately
-    aiConfidence: aiRisk.confidence
-  }));
+  return aiRisks.map(
+    (
+      aiRisk: {
+        text: string;
+        confidence: number;
+        category: RiskCategory;
+      },
+      index: number
+    ) => ({
+      title: `AI Identified Risk ${index + 1}`,
+      description: aiRisk.text,
+      category: aiRisk.category,
+      likelihood: Math.ceil(aiRisk.confidence * 5), // Convert confidence to 1-5 scale
+      impact: 3, // Default impact, can be adjusted by user
+      owner,
+      status: 'identified' as const,
+      controls: [],
+      evidence: [], // Empty array, document reference can be added separately
+      aiConfidence: aiRisk.confidence,
+    })
+  );
 };
 
 // Function to convert AI controls to Control objects
@@ -401,34 +476,36 @@ export const convertAIControlsToControlObjects = (
   }>,
   owner: string = 'AI Analysis'
 ): Omit<Control, 'id' | 'createdAt' | 'updatedAt'>[] => {
-  return aiControls.map((aiControl: {
-    title: string;
-    description: string;
-    confidence: number;
-  }) => ({
-    title: aiControl.title,
-    description: aiControl.description,
-    type: 'PREVENTIVE' as const, // Default type, can be adjusted
-    effectiveness: aiControl.confidence > 0.8 ? 'HIGH' as const : 
-                  aiControl.confidence > 0.6 ? 'MEDIUM' as const : 'LOW' as const, // Convert confidence to effectiveness rating
-    owner,
-    frequency: 'Monthly', // Default frequency
-    evidence: [],
-    linkedRisks: [],
-    status: 'PLANNED' as const
-  }));
+  return aiControls.map(
+    (aiControl: { title: string; description: string; confidence: number }) => ({
+      title: aiControl.title,
+      description: aiControl.description,
+      type: 'PREVENTIVE' as const, // Default type, can be adjusted
+      effectiveness:
+        aiControl.confidence > 0.8
+          ? ('HIGH' as const)
+          : aiControl.confidence > 0.6
+            ? ('MEDIUM' as const)
+            : ('LOW' as const), // Convert confidence to effectiveness rating
+      owner,
+      frequency: 'Monthly', // Default frequency
+      evidence: [],
+      linkedRisks: [],
+      status: 'PLANNED' as const,
+    })
+  );
 };
 
 // Batch analysis for multiple documents
 export const batchAIAnalysis = async (documents: Document[]): Promise<AIAnalysisResponse[]> => {
   const results: AIAnalysisResponse[] = [];
-  
+
   // Process documents sequentially to simulate realistic processing
   for (const document of documents) {
     const result = await mockAIAnalysis(document);
     results.push(result);
   }
-  
+
   return results;
 };
 
@@ -438,12 +515,9 @@ export const batchAIAnalysis = async (documents: Document[]): Promise<AIAnalysis
 const AI_API_BASE = '/api/ai';
 
 // Generic AI API request function
-async function aiRequest<T>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<T> {
+async function aiRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const url = `${AI_API_BASE}${endpoint}`;
-  
+
   const defaultOptions: RequestInit = {
     headers: {
       'Content-Type': 'application/json',
@@ -454,7 +528,7 @@ async function aiRequest<T>(
 
   try {
     const response = await fetch(url, defaultOptions);
-    
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ error: 'AI service unavailable' }));
       throw new Error(errorData.error || `AI API Error ${response.status}: ${response.statusText}`);
@@ -477,7 +551,12 @@ export interface AIAgent {
   id: string;
   name: string;
   description: string;
-  type: 'RISK_ANALYST' | 'COMPLIANCE_EXPERT' | 'CONTROL_AUDITOR' | 'POLICY_REVIEWER' | 'GENERAL_ASSISTANT';
+  type:
+    | 'RISK_ANALYST'
+    | 'COMPLIANCE_EXPERT'
+    | 'CONTROL_AUDITOR'
+    | 'POLICY_REVIEWER'
+    | 'GENERAL_ASSISTANT';
   capabilities: string[];
   model: string;
   temperature: number;
@@ -487,7 +566,12 @@ export interface AIAgent {
 }
 
 export interface AIAnalysisRequest {
-  type: 'RISK_ANALYSIS' | 'CONTROL_GAP' | 'COMPLIANCE_CHECK' | 'POLICY_REVIEW' | 'THREAT_ASSESSMENT';
+  type:
+    | 'RISK_ANALYSIS'
+    | 'CONTROL_GAP'
+    | 'COMPLIANCE_CHECK'
+    | 'POLICY_REVIEW'
+    | 'THREAT_ASSESSMENT';
   context: any;
   data?: any;
   options?: {
@@ -571,7 +655,10 @@ export const aiRiskAnalysis = {
   },
 
   // Generate risk assessment questions
-  async generateRiskQuestions(riskCategory: string, context?: any): Promise<{
+  async generateRiskQuestions(
+    riskCategory: string,
+    context?: any
+  ): Promise<{
     questions: Array<{
       id: string;
       question: string;
@@ -609,7 +696,10 @@ export const aiRiskAnalysis = {
   },
 
   // Identify risk dependencies
-  async identifyRiskDependencies(riskId: string, organizationRisks: any[]): Promise<{
+  async identifyRiskDependencies(
+    riskId: string,
+    organizationRisks: any[]
+  ): Promise<{
     dependencies: Array<{
       riskId: string;
       relationship: 'CAUSES' | 'AMPLIFIES' | 'MITIGATES' | 'CORRELATES';
@@ -661,7 +751,10 @@ export const aiControlAnalysis = {
   },
 
   // Suggest control improvements
-  async suggestControlImprovements(controlId: string, performanceData: any): Promise<{
+  async suggestControlImprovements(
+    controlId: string,
+    performanceData: any
+  ): Promise<{
     improvements: Array<{
       area: string;
       current: string;
@@ -732,7 +825,10 @@ export const aiComplianceAnalysis = {
   },
 
   // Map controls to compliance requirements
-  async mapControlsToRequirements(framework: string, controls: any[]): Promise<{
+  async mapControlsToRequirements(
+    framework: string,
+    controls: any[]
+  ): Promise<{
     mappings: Array<{
       requirementId: string;
       requirementText: string;
@@ -769,7 +865,10 @@ export const aiComplianceAnalysis = {
 
 export const aiDocumentAnalysis = {
   // Analyze policy document
-  async analyzePolicyDocument(documentContent: string, documentType: string): Promise<AIAnalysisResponse> {
+  async analyzePolicyDocument(
+    documentContent: string,
+    documentType: string
+  ): Promise<AIAnalysisResponse> {
     return aiRequest<AIAnalysisResponse>('/analysis/document', {
       method: 'POST',
       body: JSON.stringify({
@@ -835,7 +934,11 @@ export const aiChatService = {
   },
 
   // Send message to chat session
-  async sendMessage(sessionId: string, message: string, context?: any): Promise<{
+  async sendMessage(
+    sessionId: string,
+    message: string,
+    context?: any
+  ): Promise<{
     response: ChatMessage;
     session: ChatSession;
   }> {
@@ -893,7 +996,10 @@ export const aiInsightService = {
   },
 
   // Generate predictive insights
-  async generatePredictiveInsights(historicalData: any, predictionPeriod: string): Promise<{
+  async generatePredictiveInsights(
+    historicalData: any,
+    predictionPeriod: string
+  ): Promise<{
     predictions: Array<{
       metric: string;
       currentValue: number;
@@ -996,11 +1102,14 @@ export function isAIEnabled(): boolean {
 }
 
 // Handle AI API errors gracefully
-export function handleAIError(error: unknown, fallbackMessage: string = 'AI service temporarily unavailable'): string {
+export function handleAIError(
+  error: unknown,
+  fallbackMessage: string = 'AI service temporarily unavailable'
+): string {
   if (!isAIEnabled()) {
     return 'AI features are currently disabled';
   }
-  
+
   if (error instanceof Error) {
     // Don't expose internal AI errors to users
     if (error.message.includes('API key') || error.message.includes('quota')) {
@@ -1008,7 +1117,7 @@ export function handleAIError(error: unknown, fallbackMessage: string = 'AI serv
     }
     return error.message;
   }
-  
+
   return fallbackMessage;
 }
 
@@ -1017,15 +1126,15 @@ export function formatAIResponse(response: any): string {
   if (typeof response === 'string') {
     return response;
   }
-  
+
   if (response?.analysis) {
     return response.analysis;
   }
-  
+
   if (response?.content) {
     return response.content;
   }
-  
+
   return JSON.stringify(response, null, 2);
 }
 
@@ -1048,15 +1157,15 @@ export const aiService = {
   control: aiControlAnalysis,
   compliance: aiComplianceAnalysis,
   document: aiDocumentAnalysis,
-  
+
   // Interactive services
   chat: aiChatService,
   insights: aiInsightService,
-  
+
   // Management services
   agents: aiAgentService,
   usage: aiUsageService,
-  
+
   // Utility functions
   isEnabled: isAIEnabled,
   handleError: handleAIError,
@@ -1065,4 +1174,4 @@ export const aiService = {
 };
 
 // Default export
-export default aiService; 
+export default aiService;

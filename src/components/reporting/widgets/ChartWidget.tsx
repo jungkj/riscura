@@ -109,8 +109,9 @@ export function ChartWidget({
 
     switch (chartType) {
       case 'bar':
-        return (
-          <BarChart {...commonProps}>
+
+  return (
+    <BarChart {...commonProps}>
             {showGrid && <CartesianGrid strokeDasharray="3 3" />}
             <XAxis dataKey="name" />
             <YAxis />
@@ -190,8 +191,9 @@ export function ChartWidget({
       className={`h-full ${isSelected ? 'ring-2 ring-blue-500' : ''} cursor-pointer`}
       onClick={onSelect}
     >
-      <DaisyCardHeader className="pb-2 flex flex-row items-center justify-between">
-        <DaisyCardTitle className="text-sm font-medium">{widget.title}</DaisyCardTitle>
+      <DaisyCardHeader className="pb-2 flex flex-row items-center justify-between" >
+  <DaisyCardTitle className="text-sm font-medium">
+</DaisyTooltip>{widget.title}</DaisyCardTitle>
         <div className="flex items-center space-x-1">
           <DaisyButton
             variant="ghost"
@@ -215,8 +217,9 @@ export function ChartWidget({
           </DaisyButton>
         </div>
       
-      <DaisyCardContent className="pt-0">
-        {loading ? (
+      <DaisyCardContent className="pt-0" >
+  {loading ? (
+</DaisyCardContent>
           <div className="flex items-center justify-center h-32">
             <div className="text-sm text-gray-500">Loading...</div>
           </div>
@@ -231,7 +234,7 @@ export function ChartWidget({
             </ResponsiveContainer>
           </div>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 } 

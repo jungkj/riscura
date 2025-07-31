@@ -23,7 +23,7 @@ export type {
   ComplianceReport,
   ComplianceSummary,
   ComplianceFinding,
-  ComplianceRecommendation
+  ComplianceRecommendation,
 } from '@/services/AISecurityService';
 
 // Import types for type guards
@@ -200,7 +200,12 @@ export interface PrivacyRiskAssessment {
 export interface PrivacyRisk {
   id: string;
   description: string;
-  category: 'unlawful_processing' | 'excessive_collection' | 'unauthorized_access' | 'data_quality' | 'transparency';
+  category:
+    | 'unlawful_processing'
+    | 'excessive_collection'
+    | 'unauthorized_access'
+    | 'data_quality'
+    | 'transparency';
   likelihood: 'very_low' | 'low' | 'medium' | 'high' | 'very_high';
   impact: 'very_low' | 'low' | 'medium' | 'high' | 'very_high';
   riskLevel: 'low' | 'medium' | 'high' | 'very_high';
@@ -232,7 +237,7 @@ export interface SecurityEvent {
   notes?: string;
 }
 
-export type SecurityEventType = 
+export type SecurityEventType =
   | 'authentication_failure'
   | 'authorization_violation'
   | 'data_access_anomaly'
@@ -320,26 +325,32 @@ export interface SecurityValidationRule {
 
 // Type guards for runtime validation
 export const isSecurityEvent = (obj: unknown): obj is SecurityEvent => {
-  return typeof obj === 'object' && 
-         obj !== null && 
-         'id' in obj && 
-         'timestamp' in obj && 
-         'type' in obj && 
-         'severity' in obj;
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'id' in obj &&
+    'timestamp' in obj &&
+    'type' in obj &&
+    'severity' in obj
+  );
 };
 
 export const isPIIEntity = (obj: unknown): obj is PIIEntity => {
-  return typeof obj === 'object' && 
-         obj !== null && 
-         'type' in obj && 
-         'value' in obj && 
-         'confidence' in obj;
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'type' in obj &&
+    'value' in obj &&
+    'confidence' in obj
+  );
 };
 
 export const isComplianceFlag = (obj: unknown): obj is ComplianceFlag => {
-  return typeof obj === 'object' && 
-         obj !== null && 
-         'standard' in obj && 
-         'requirement' in obj && 
-         'status' in obj;
-}; 
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'standard' in obj &&
+    'requirement' in obj &&
+    'status' in obj
+  );
+};

@@ -68,8 +68,9 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
           setExpandedAgent(isExpanded ? null : agentType);
         }}
       >
-        <DaisyCardHeader className="pb-3">
-          <div className="flex items-center space-x-3">
+        <DaisyCardHeader className="pb-3" >
+  <div className="flex items-center space-x-3">
+</DaisyCard>
             <div className={`p-2 rounded-lg ${getAgentColor(agentType)} bg-opacity-10`}>
               <Icon className={`h-6 w-6 ${getAgentColor(agentType).replace('bg-', 'text-')}`} />
             </div>
@@ -84,16 +85,17 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
         
 
         {isExpanded && (
-          <DaisyCardContent className="pt-0">
-            <DaisyTabs defaultValue="overview" className="w-full">
-              <DaisyTabsList className="grid w-full grid-cols-4">
-                <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+          <DaisyCardContent className="pt-0" >
+  <DaisyTabs defaultValue="overview" className="w-full" />
+</DaisyCardDescription>
+              <DaisyTabsList className="grid w-full grid-cols-4" />
+                <DaisyTabsTrigger value="overview">Overview</DaisyTabsList>
                 <DaisyTabsTrigger value="capabilities">Capabilities</DaisyTabsTrigger>
                 <DaisyTabsTrigger value="templates">Templates</DaisyTabsTrigger>
                 <DaisyTabsTrigger value="examples">Examples</DaisyTabsTrigger>
               </DaisyTabsList>
 
-              <DaisyTabsContent value="overview" className="space-y-4">
+              <DaisyTabsContent value="overview" className="space-y-4" />
                 <div>
                   <h4 className="font-semibold mb-2 flex items-center gap-2">
                     <Target className="h-4 w-4" />
@@ -109,13 +111,15 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
                   </h4>
                   <div className="flex flex-wrap gap-1">
                     {config.expertise.slice(0, 6).map((area, index) => (
-                      <DaisyBadge key={index} variant="secondary" className="text-xs">
-                        {area}
+                      <DaisyBadge key={index} variant="secondary" className="text-xs" >
+  {area}
+</DaisyTabsContent>
                       </DaisyBadge>
                     ))}
                     {config.expertise.length > 6 && (
-                      <DaisyBadge variant="outline" className="text-xs">
-                        +{config.expertise.length - 6} more
+                      <DaisyBadge variant="outline" className="text-xs" >
+  +{config.expertise.length - 6} more
+</DaisyBadge>
                       </DaisyBadge>
                     )}
                   </div>
@@ -135,7 +139,7 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
                 </div>
               </DaisyTabsContent>
 
-              <DaisyTabsContent value="capabilities" className="space-y-4">
+              <DaisyTabsContent value="capabilities" className="space-y-4" />
                 <div>
                   <h4 className="font-semibold mb-2 flex items-center gap-2 text-green-600">
                     <CheckCircle className="h-4 w-4" />
@@ -153,21 +157,23 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
 
                 <div>
                   <h4 className="font-semibold mb-2 flex items-center gap-2 text-orange-600">
-                    <DaisyAlertTriangle className="h-4 w-4" />
-                    Limitations
+                    <DaisyAlertTriangle className="h-4 w-4" >
+  Limitations
+</DaisyTabsContent>
                   </h4>
                   <ul className="space-y-1">
                     {config.limitations.map((limitation, index) => (
                       <li key={index} className="text-sm flex items-start gap-2">
-                        <DaisyAlertTriangle className="h-3 w-3 text-orange-500 mt-0.5 flex-shrink-0" />
-                        {limitation}
+                        <DaisyAlertTriangle className="h-3 w-3 text-orange-500 mt-0.5 flex-shrink-0" >
+  {limitation}
+</DaisyAlertTriangle>
                       </li>
                     ))}
                   </ul>
                 </div>
               </DaisyTabsContent>
 
-              <DaisyTabsContent value="templates" className="space-y-4">
+              <DaisyTabsContent value="templates" className="space-y-4" />
                 <div>
                   <h4 className="font-semibold mb-2 flex items-center gap-2">
                     <Lightbulb className="h-4 w-4" />
@@ -179,11 +185,13 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
                         <h5 className="font-medium text-sm">{template.name}</h5>
                         <p className="text-xs text-gray-600 mt-1">{template.description}</p>
                         <div className="mt-2 flex flex-wrap gap-1">
-                          <DaisyBadge variant="outline" className="text-xs">
-                            {template.requiredContext.length} required fields
+                          <DaisyBadge variant="outline" className="text-xs" >
+  {template.requiredContext.length} required fields
+</DaisyTabsContent>
                           </DaisyBadge>
-                          <DaisyBadge variant="outline" className="text-xs">
-                            {template.optionalContext.length} optional fields
+                          <DaisyBadge variant="outline" className="text-xs" >
+  {template.optionalContext.length} optional fields
+</DaisyBadge>
                           </DaisyBadge>
                         </div>
                       </div>
@@ -192,7 +200,7 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
                 </div>
               </DaisyTabsContent>
 
-              <DaisyTabsContent value="examples" className="space-y-4">
+              <DaisyTabsContent value="examples" className="space-y-4" />
                 <div>
                   <h4 className="font-semibold mb-2">Example Use Cases</h4>
                   <div className="space-y-3">
@@ -267,7 +275,7 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
                 </div>
               </DaisyTabsContent>
             </DaisyTabs>
-          </DaisyCardBody>
+          </DaisyCardContent>
         )}
       </DaisyCard>
     );

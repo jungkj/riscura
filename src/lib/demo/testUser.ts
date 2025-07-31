@@ -99,7 +99,8 @@ export const TEST_USERS: TestUser[] = [
       department: 'Risk Management',
       phone: '+1 (555) 123-4567',
       timezone: 'America/New_York',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+      avatar:
+        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
     },
   },
   {
@@ -109,12 +110,18 @@ export const TEST_USERS: TestUser[] = [
     lastName: 'Manager',
     role: 'MANAGER',
     permissions: [
-      'risks:read', 'risks:write', 'risks:delete',
-      'controls:read', 'controls:write',
-      'documents:read', 'documents:write',
-      'reports:read', 'reports:write',
+      'risks:read',
+      'risks:write',
+      'risks:delete',
+      'controls:read',
+      'controls:write',
+      'documents:read',
+      'documents:write',
+      'reports:read',
+      'reports:write',
       'dashboard:read',
-      'ai:read', 'ai:write',
+      'ai:read',
+      'ai:write',
     ],
     organizationId: TEST_ORGANIZATION.id,
     organization: {
@@ -131,7 +138,8 @@ export const TEST_USERS: TestUser[] = [
       department: 'Compliance',
       phone: '+1 (555) 234-5678',
       timezone: 'America/Los_Angeles',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      avatar:
+        'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
     },
   },
   {
@@ -141,7 +149,8 @@ export const TEST_USERS: TestUser[] = [
     lastName: 'Analyst',
     role: 'USER',
     permissions: [
-      'risks:read', 'risks:write',
+      'risks:read',
+      'risks:write',
       'controls:read',
       'documents:read',
       'reports:read',
@@ -163,7 +172,8 @@ export const TEST_USERS: TestUser[] = [
       department: 'Risk Management',
       phone: '+1 (555) 345-6789',
       timezone: 'Europe/London',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+      avatar:
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
     },
   },
 ];
@@ -319,8 +329,8 @@ export const DEMO_DASHBOARD_METRICS = {
     overall: 92,
     frameworks: {
       'ISO 27001': 95,
-      'GDPR': 88,
-      'SOX': 94,
+      GDPR: 88,
+      SOX: 94,
     },
   },
   recentActivity: [
@@ -359,24 +369,24 @@ export function getDemoData(): DemoData {
 
 // Helper function to get user by email
 export function getTestUserByEmail(email: string): TestUser | null {
-  return TEST_USERS.find(user => user.email === email) || null;
+  return TEST_USERS.find((user) => user.email === email) || null;
 }
 
 // Helper function to validate test credentials
 export function validateTestCredentials(email: string, password: string): TestUser | null {
   const user = getTestUserByEmail(email);
-  
+
   // Test password is 'demo123' for all test users
   if (user && password === 'demo123') {
     return user;
   }
-  
+
   return null;
 }
 
 // Get user permissions
 export function getUserPermissions(userId: string): string[] {
-  const user = TEST_USERS.find(u => u.id === userId);
+  const user = TEST_USERS.find((u) => u.id === userId);
   return user?.permissions || [];
 }
 
@@ -384,4 +394,4 @@ export function getUserPermissions(userId: string): string[] {
 export function hasPermission(userId: string, permission: string): boolean {
   const permissions = getUserPermissions(userId);
   return permissions.includes('*') || permissions.includes(permission);
-} 
+}

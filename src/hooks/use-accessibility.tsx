@@ -47,57 +47,61 @@ export const useAccessibility = (options: UseAccessibilityOptions = {}) => {
   }, []);
 
   // Keyboard navigation handler
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    if (!enableKeyboardNavigation || !containerRef.current) return;
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (!enableKeyboardNavigation || !containerRef.current) return;
 
-    const focusableElements = containerRef.current.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    const focusableArray = Array.from(focusableElements) as HTMLElement[];
-    const currentIndex = focusableArray.indexOf(document.activeElement as HTMLElement);
+      const focusableElements = containerRef.current.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const focusableArray = Array.from(focusableElements) as HTMLElement[];
+      const currentIndex = focusableArray.indexOf(document.activeElement as HTMLElement);
 
-    switch (event.key) {
-      case 'Tab':
-        if (trapFocus) {
+      switch (event.key) {
+        case 'Tab':
+          if (trapFocus) {
+            event.preventDefault();
+            const nextIndex = event.shiftKey
+              ? (currentIndex - 1 + focusableArray.length) % focusableArray.length
+              : (currentIndex + 1) % focusableArray.length;
+            focusableArray[nextIndex]?.focus();
+          }
+          break;
+
+        case 'ArrowDown':
+        case 'ArrowRight': {
           event.preventDefault();
-          const nextIndex = event.shiftKey
-            ? (currentIndex - 1 + focusableArray.length) % focusableArray.length
-            : (currentIndex + 1) % focusableArray.length;
-          focusableArray[nextIndex]?.focus();
+          const nextElement = focusableArray[currentIndex + 1] || focusableArray[0];
+          nextElement?.focus();
+          break;
         }
-        break;
 
-      case 'ArrowDown':
-      case 'ArrowRight': {
-        event.preventDefault();
-        const nextElement = focusableArray[currentIndex + 1] || focusableArray[0];
-        nextElement?.focus();
-        break;
+        case 'ArrowUp':
+        case 'ArrowLeft': {
+          event.preventDefault();
+          const prevElement =
+            focusableArray[currentIndex - 1] || focusableArray[focusableArray.length - 1];
+          prevElement?.focus();
+          break;
+        }
+
+        case 'Home':
+          event.preventDefault();
+          focusableArray[0]?.focus();
+          break;
+
+        case 'End':
+          event.preventDefault();
+          focusableArray[focusableArray.length - 1]?.focus();
+          break;
+
+        case 'Escape':
+          // Allow parent components to handle escape
+          break;
       }
-
-      case 'ArrowUp':
-      case 'ArrowLeft': {
-        event.preventDefault();
-        const prevElement = focusableArray[currentIndex - 1] || focusableArray[focusableArray.length - 1];
-        prevElement?.focus();
-        break;
-      }
-
-      case 'Home':
-        event.preventDefault();
-        focusableArray[0]?.focus();
-        break;
-
-      case 'End':
-        event.preventDefault();
-        focusableArray[focusableArray.length - 1]?.focus();
-        break;
-
-      case 'Escape':
-        // Allow parent components to handle escape
-        break;
-    }
-  }, [enableKeyboardNavigation, trapFocus]);
+    },
+    [enableKeyboardNavigation, trapFocus]
+  );
 
   // Focus management
   const focusFirst = useCallback(() => {
@@ -120,22 +124,25 @@ export const useAccessibility = (options: UseAccessibilityOptions = {}) => {
   }, [enableFocusManagement]);
 
   // Screen reader announcements
-  const announce = useCallback((message: string, priority: 'polite' | 'assertive' = 'polite') => {
-    if (!enableScreenReaderSupport) return;
+  const announce = useCallback(
+    (message: string, priority: 'polite' | 'assertive' = 'polite') => {
+      if (!enableScreenReaderSupport) return;
 
-    const announcement = document.createElement('div');
-    announcement.setAttribute('aria-live', priority);
-    announcement.setAttribute('aria-atomic', 'true');
-    announcement.className = 'sr-only';
-    announcement.textContent = message;
+      const announcement = document.createElement('div');
+      announcement.setAttribute('aria-live', priority);
+      announcement.setAttribute('aria-atomic', 'true');
+      announcement.className = 'sr-only';
+      announcement.textContent = message;
 
-    document.body.appendChild(announcement);
+      document.body.appendChild(announcement);
 
-    // Remove after announcement
-    setTimeout(() => {
-      document.body.removeChild(announcement);
-    }, 1000);
-  }, [enableScreenReaderSupport]);
+      // Remove after announcement
+      setTimeout(() => {
+        document.body.removeChild(announcement);
+      }, 1000);
+    },
+    [enableScreenReaderSupport]
+  );
 
   // Set up event listeners
   useEffect(() => {
@@ -150,43 +157,52 @@ export const useAccessibility = (options: UseAccessibilityOptions = {}) => {
   }, [handleKeyDown, containerRef]);
 
   // ARIA helpers
-  const getAriaProps = useCallback((options: {
-    label?: string;
-    labelledBy?: string;
-    describedBy?: string;
-    expanded?: boolean;
-    selected?: boolean;
-    disabled?: boolean;
-    required?: boolean;
-    invalid?: boolean;
-    live?: 'polite' | 'assertive' | 'off';
-    atomic?: boolean;
-  } = {}) => {
-    const props: Record<string, unknown> = {};
+  const getAriaProps = useCallback(
+    (
+      options: {
+        label?: string;
+        labelledBy?: string;
+        describedBy?: string;
+        expanded?: boolean;
+        selected?: boolean;
+        disabled?: boolean;
+        required?: boolean;
+        invalid?: boolean;
+        live?: 'polite' | 'assertive' | 'off';
+        atomic?: boolean;
+      } = {}
+    ) => {
+      const props: Record<string, unknown> = {};
 
-    if (options.label) props['aria-label'] = options.label;
-    if (options.labelledBy) props['aria-labelledby'] = options.labelledBy;
-    if (options.describedBy) props['aria-describedby'] = options.describedBy;
-    if (options.expanded !== undefined) props['aria-expanded'] = options.expanded;
-    if (options.selected !== undefined) props['aria-selected'] = options.selected;
-    if (options.disabled !== undefined) props['aria-disabled'] = options.disabled;
-    if (options.required !== undefined) props['aria-required'] = options.required;
-    if (options.invalid !== undefined) props['aria-invalid'] = options.invalid;
-    if (options.live) props['aria-live'] = options.live;
-    if (options.atomic !== undefined) props['aria-atomic'] = options.atomic;
+      if (options.label) props['aria-label'] = options.label;
+      if (options.labelledBy) props['aria-labelledby'] = options.labelledBy;
+      if (options.describedBy) props['aria-describedby'] = options.describedBy;
+      if (options.expanded !== undefined) props['aria-expanded'] = options.expanded;
+      if (options.selected !== undefined) props['aria-selected'] = options.selected;
+      if (options.disabled !== undefined) props['aria-disabled'] = options.disabled;
+      if (options.required !== undefined) props['aria-required'] = options.required;
+      if (options.invalid !== undefined) props['aria-invalid'] = options.invalid;
+      if (options.live) props['aria-live'] = options.live;
+      if (options.atomic !== undefined) props['aria-atomic'] = options.atomic;
 
-    return props;
-  }, []);
+      return props;
+    },
+    []
+  );
 
   // Skip link functionality
-  const createSkipLink = useCallback((targetId: string, text: string = 'Skip to main content') => {
-    return {
-      href: `#${targetId}`,
-      className: 'sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded',
-      children: text,
-      onFocus: () => announce(`Skip link: ${text}`),
-    };
-  }, [announce]);
+  const createSkipLink = useCallback(
+    (targetId: string, text: string = 'Skip to main content') => {
+      return {
+        href: `#${targetId}`,
+        className:
+          'sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded',
+        children: text,
+        onFocus: () => announce(`Skip link: ${text}`),
+      };
+    },
+    [announce]
+  );
 
   return {
     containerRef,
@@ -263,14 +279,12 @@ export const useLiveRegion = () => {
     }
   }, []);
 
-  const LiveRegion = useCallback((): JSX.Element => (
-    <div
-      ref={regionRef}
-      aria-live="polite"
-      aria-atomic="true"
-      className="sr-only"
-    />
-  ), []);
+  const LiveRegion = useCallback(
+    (): JSX.Element => (
+      <div ref={regionRef} aria-live="polite" aria-atomic="true" className="sr-only" />
+    ),
+    []
+  );
 
   return { announce, LiveRegion };
-}; 
+};

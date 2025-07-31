@@ -14,19 +14,24 @@ const mockSpreadsheets = [
       id: 'user_1',
       firstName: 'John',
       lastName: 'Smith',
-      email: 'john.smith@company.com'
+      email: 'john.smith@company.com',
     },
     sheets: [
       { id: 'sheet_1', name: 'Risk Assessment', position: 0 },
-      { id: 'sheet_2', name: 'Controls Matrix', position: 1 }
+      { id: 'sheet_2', name: 'Controls Matrix', position: 1 },
     ],
     permissions: [
       {
         permission: 'OWNER',
-        user: { id: 'user_1', firstName: 'John', lastName: 'Smith', email: 'john.smith@company.com' }
-      }
+        user: {
+          id: 'user_1',
+          firstName: 'John',
+          lastName: 'Smith',
+          email: 'john.smith@company.com',
+        },
+      },
     ],
-    _count: { sheets: 2, versions: 5 }
+    _count: { sheets: 2, versions: 5 },
   },
   {
     id: 'spreadsheet_2',
@@ -40,20 +45,25 @@ const mockSpreadsheets = [
       id: 'user_2',
       firstName: 'Sarah',
       lastName: 'Johnson',
-      email: 'sarah.johnson@company.com'
+      email: 'sarah.johnson@company.com',
     },
     sheets: [
       { id: 'sheet_3', name: 'Technical Controls', position: 0 },
-      { id: 'sheet_4', name: 'Administrative Controls', position: 1 }
+      { id: 'sheet_4', name: 'Administrative Controls', position: 1 },
     ],
     permissions: [
       {
         permission: 'OWNER',
-        user: { id: 'user_2', firstName: 'Sarah', lastName: 'Johnson', email: 'sarah.johnson@company.com' }
-      }
+        user: {
+          id: 'user_2',
+          firstName: 'Sarah',
+          lastName: 'Johnson',
+          email: 'sarah.johnson@company.com',
+        },
+      },
     ],
-    _count: { sheets: 2, versions: 3 }
-  }
+    _count: { sheets: 2, versions: 3 },
+  },
 ];
 
 // GET /api/spreadsheets - List spreadsheets
@@ -69,14 +79,15 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     let filteredSpreadsheets = mockSpreadsheets;
 
     if (templateType) {
-      filteredSpreadsheets = filteredSpreadsheets.filter(s => s.templateType === templateType);
+      filteredSpreadsheets = filteredSpreadsheets.filter((s) => s.templateType === templateType);
     }
 
     if (search) {
       const searchLower = search.toLowerCase();
-      filteredSpreadsheets = filteredSpreadsheets.filter(s => 
-        s.name.toLowerCase().includes(searchLower) || 
-        s.description.toLowerCase().includes(searchLower)
+      filteredSpreadsheets = filteredSpreadsheets.filter(
+        (s) =>
+          s.name.toLowerCase().includes(searchLower) ||
+          s.description.toLowerCase().includes(searchLower)
       );
     }
 
@@ -93,16 +104,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         page,
         limit,
         pages: Math.ceil(total / limit),
-        demoMode: true
-      }
+        demoMode: true,
+      },
     });
-
   } catch (error) {
     console.error('Spreadsheets API error:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve spreadsheets' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to retrieve spreadsheets' }, { status: 500 });
   }
 }
 
@@ -113,10 +120,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const { name, description, templateType, templateId, isTemplate = false } = body;
 
     if (!name || !templateType) {
-      return NextResponse.json(
-        { error: 'Name and template type are required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Name and template type are required' }, { status: 400 });
     }
 
     // Mock spreadsheet creation
@@ -132,37 +136,33 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         id: 'user_demo',
         firstName: 'Demo',
         lastName: 'User',
-        email: 'demo@riscura.com'
+        email: 'demo@riscura.com',
       },
       sheets: [
         {
           id: `sheet_${Date.now()}`,
           name: templateType === 'RCSA_ASSESSMENT' ? 'Risk Assessment' : 'Sheet 1',
           position: 0,
-          columns: getDefaultColumns(templateType)
-        }
+          columns: getDefaultColumns(templateType),
+        },
       ],
       permissions: [
         {
           permission: 'OWNER',
-          user: { id: 'user_demo', firstName: 'Demo', lastName: 'User', email: 'demo@riscura.com' }
-        }
+          user: { id: 'user_demo', firstName: 'Demo', lastName: 'User', email: 'demo@riscura.com' },
+        },
       ],
-      _count: { sheets: 1, versions: 1 }
+      _count: { sheets: 1, versions: 1 },
     };
 
     return NextResponse.json({
       success: true,
       message: 'Spreadsheet created successfully (demo mode)',
-      data: newSpreadsheet
+      data: newSpreadsheet,
     });
-
   } catch (error) {
     console.error('Spreadsheet creation error:', error);
-    return NextResponse.json(
-      { error: 'Failed to create spreadsheet' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to create spreadsheet' }, { status: 500 });
   }
 }
 
@@ -181,63 +181,138 @@ function getDefaultColumns(templateType: string) {
         { name: 'Risk Statement', dataType: 'TEXT' },
         { name: 'Function', dataType: 'TEXT' },
         { name: 'Risk Owner', dataType: 'USER_REFERENCE' },
-        { name: 'Level 1 Risk Category', dataType: 'DROPDOWN', dropdownOptions: ['Operational', 'Financial', 'Strategic', 'Compliance', 'Technology'] },
-        { name: 'Level 2 Risk Category', dataType: 'DROPDOWN', dropdownOptions: ['Asset Quality Risk', 'Credit Risk', 'Market Risk', 'Operational Risk'] },
+        {
+          name: 'Level 1 Risk Category',
+          dataType: 'DROPDOWN',
+          dropdownOptions: ['Operational', 'Financial', 'Strategic', 'Compliance', 'Technology'],
+        },
+        {
+          name: 'Level 2 Risk Category',
+          dataType: 'DROPDOWN',
+          dropdownOptions: ['Asset Quality Risk', 'Credit Risk', 'Market Risk', 'Operational Risk'],
+        },
         { name: 'Likelihood Rating', dataType: 'RATING', validationRules: { min: 1, max: 5 } },
         { name: 'Likelihood Rationale', dataType: 'TEXT' },
         { name: 'Impact Rating', dataType: 'RATING', validationRules: { min: 1, max: 5 } },
         { name: 'Impact Rationale', dataType: 'TEXT' },
-        { name: 'Inherent Risk Rating', dataType: 'CALCULATED', formula: 'likelihood * impact', isCalculated: true },
-        { name: 'Risk Materiality', dataType: 'DROPDOWN', dropdownOptions: ['Material', 'Non-Material'] },
+        {
+          name: 'Inherent Risk Rating',
+          dataType: 'CALCULATED',
+          formula: 'likelihood * impact',
+          isCalculated: true,
+        },
+        {
+          name: 'Risk Materiality',
+          dataType: 'DROPDOWN',
+          dropdownOptions: ['Material', 'Non-Material'],
+        },
         { name: 'Control ID', dataType: 'CONTROL_REFERENCE' },
         { name: 'Control Owner', dataType: 'USER_REFERENCE' },
         { name: 'Control Description', dataType: 'TEXT' },
-        { name: 'Control Frequency', dataType: 'DROPDOWN', dropdownOptions: ['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Annually'] },
+        {
+          name: 'Control Frequency',
+          dataType: 'DROPDOWN',
+          dropdownOptions: ['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Annually'],
+        },
         { name: 'Control Evidence', dataType: 'TEXT' },
-        { name: 'Control Automation', dataType: 'DROPDOWN', dropdownOptions: ['Manual', 'Semi-Automated', 'Automated'] },
-        { name: 'Control Design Effectiveness', dataType: 'DROPDOWN', dropdownOptions: ['Effective', 'Partially Effective', 'Non-Effective'] },
-        { name: 'Control Operating Effectiveness', dataType: 'DROPDOWN', dropdownOptions: ['Effective', 'Partially Effective', 'Non-Effective'] },
-        { name: 'Residual Risk Rating', dataType: 'CALCULATED', formula: 'inherentRisk - controlEffectiveness', isCalculated: true },
-        { name: 'Comments', dataType: 'TEXT' }
+        {
+          name: 'Control Automation',
+          dataType: 'DROPDOWN',
+          dropdownOptions: ['Manual', 'Semi-Automated', 'Automated'],
+        },
+        {
+          name: 'Control Design Effectiveness',
+          dataType: 'DROPDOWN',
+          dropdownOptions: ['Effective', 'Partially Effective', 'Non-Effective'],
+        },
+        {
+          name: 'Control Operating Effectiveness',
+          dataType: 'DROPDOWN',
+          dropdownOptions: ['Effective', 'Partially Effective', 'Non-Effective'],
+        },
+        {
+          name: 'Residual Risk Rating',
+          dataType: 'CALCULATED',
+          formula: 'inherentRisk - controlEffectiveness',
+          isCalculated: true,
+        },
+        { name: 'Comments', dataType: 'TEXT' },
       ];
-      
+
     case 'RISK_REGISTER':
       return [
         { name: 'Risk ID', dataType: 'TEXT', isRequired: true },
         { name: 'Risk Title', dataType: 'TEXT', isRequired: true },
         { name: 'Description', dataType: 'TEXT' },
-        { name: 'Category', dataType: 'DROPDOWN', dropdownOptions: ['Operational', 'Financial', 'Strategic', 'Compliance', 'Technology'] },
+        {
+          name: 'Category',
+          dataType: 'DROPDOWN',
+          dropdownOptions: ['Operational', 'Financial', 'Strategic', 'Compliance', 'Technology'],
+        },
         { name: 'Likelihood', dataType: 'RATING', validationRules: { min: 1, max: 5 } },
         { name: 'Impact', dataType: 'RATING', validationRules: { min: 1, max: 5 } },
-        { name: 'Risk Score', dataType: 'CALCULATED', formula: 'likelihood * impact', isCalculated: true },
-        { name: 'Risk Level', dataType: 'DROPDOWN', dropdownOptions: ['Low', 'Medium', 'High', 'Critical'] },
+        {
+          name: 'Risk Score',
+          dataType: 'CALCULATED',
+          formula: 'likelihood * impact',
+          isCalculated: true,
+        },
+        {
+          name: 'Risk Level',
+          dataType: 'DROPDOWN',
+          dropdownOptions: ['Low', 'Medium', 'High', 'Critical'],
+        },
         { name: 'Owner', dataType: 'USER_REFERENCE' },
-        { name: 'Status', dataType: 'DROPDOWN', dropdownOptions: ['Identified', 'Assessed', 'Mitigated', 'Closed'] },
+        {
+          name: 'Status',
+          dataType: 'DROPDOWN',
+          dropdownOptions: ['Identified', 'Assessed', 'Mitigated', 'Closed'],
+        },
         { name: 'Date Identified', dataType: 'DATE' },
         { name: 'Last Review', dataType: 'DATE' },
-        { name: 'Next Review', dataType: 'DATE' }
+        { name: 'Next Review', dataType: 'DATE' },
       ];
-      
+
     case 'CONTROL_MATRIX':
       return [
         { name: 'Control ID', dataType: 'TEXT', isRequired: true },
         { name: 'Control Title', dataType: 'TEXT', isRequired: true },
         { name: 'Description', dataType: 'TEXT' },
-        { name: 'Control Type', dataType: 'DROPDOWN', dropdownOptions: ['Preventive', 'Detective', 'Corrective'] },
-        { name: 'Frequency', dataType: 'DROPDOWN', dropdownOptions: ['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Annually'] },
-        { name: 'Automation Level', dataType: 'DROPDOWN', dropdownOptions: ['Manual', 'Semi-Automated', 'Fully Automated'] },
+        {
+          name: 'Control Type',
+          dataType: 'DROPDOWN',
+          dropdownOptions: ['Preventive', 'Detective', 'Corrective'],
+        },
+        {
+          name: 'Frequency',
+          dataType: 'DROPDOWN',
+          dropdownOptions: ['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Annually'],
+        },
+        {
+          name: 'Automation Level',
+          dataType: 'DROPDOWN',
+          dropdownOptions: ['Manual', 'Semi-Automated', 'Fully Automated'],
+        },
         { name: 'Owner', dataType: 'USER_REFERENCE' },
-        { name: 'Effectiveness', dataType: 'DROPDOWN', dropdownOptions: ['Effective', 'Partially Effective', 'Non-Effective'] },
+        {
+          name: 'Effectiveness',
+          dataType: 'DROPDOWN',
+          dropdownOptions: ['Effective', 'Partially Effective', 'Non-Effective'],
+        },
         { name: 'Last Test Date', dataType: 'DATE' },
         { name: 'Next Test Date', dataType: 'DATE' },
-        { name: 'Status', dataType: 'DROPDOWN', dropdownOptions: ['Active', 'Inactive', 'Under Review'] }
+        {
+          name: 'Status',
+          dataType: 'DROPDOWN',
+          dropdownOptions: ['Active', 'Inactive', 'Under Review'],
+        },
       ];
-      
+
     default:
       return [
         { name: 'Column A', dataType: 'TEXT' },
         { name: 'Column B', dataType: 'TEXT' },
-        { name: 'Column C', dataType: 'TEXT' }
+        { name: 'Column C', dataType: 'TEXT' },
       ];
   }
-} 
+}

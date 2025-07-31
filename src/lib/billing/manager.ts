@@ -14,9 +14,10 @@ import type {
 } from './types';
 
 export class BillingManager {
-
   // Organization Subscription Queries
-  async getOrganizationSubscription(organizationId: string): Promise<OrganizationSubscription | null> {
+  async getOrganizationSubscription(
+    organizationId: string
+  ): Promise<OrganizationSubscription | null> {
     const subscription = await db.client.organizationSubscription.findFirst({
       where: { organizationId },
       orderBy: { createdAt: 'desc' },
@@ -48,7 +49,9 @@ export class BillingManager {
   }
 
   // Subscription Plan Management
-  async createSubscriptionPlan(plan: Omit<SubscriptionPlan, 'id' | 'createdAt' | 'updatedAt'>): Promise<SubscriptionPlan> {
+  async createSubscriptionPlan(
+    plan: Omit<SubscriptionPlan, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<SubscriptionPlan> {
     const newPlan = await db.client.subscriptionPlan.create({
       data: {
         name: plan.name,
@@ -79,15 +82,15 @@ export class BillingManager {
     currency?: string;
   }): Promise<SubscriptionPlan[]> {
     const where: any = {};
-    
+
     if (filters?.type?.length) {
       where.type = { in: filters.type };
     }
-    
+
     if (filters?.active !== undefined) {
       where.isActive = filters.active;
     }
-    
+
     if (filters?.currency) {
       where.currency = filters.currency;
     }
@@ -97,7 +100,7 @@ export class BillingManager {
       orderBy: { createdAt: 'desc' },
     });
 
-    return plans.map(plan => ({
+    return plans.map((plan) => ({
       ...plan,
       features: plan.features as any,
       limits: plan.limits as any,
@@ -142,9 +145,7 @@ export class BillingManager {
         currentPeriodStart: now,
         currentPeriodEnd: periodEnd,
         trialStart: options?.trialDays ? now : undefined,
-        trialEnd: options?.trialDays 
-          ? addDays(now, options.trialDays) 
-          : undefined,
+        trialEnd: options?.trialDays ? addDays(now, options.trialDays) : undefined,
         cancelAtPeriodEnd: false,
         billingCycle: 'monthly',
         quantity: 1,
@@ -222,9 +223,7 @@ export class BillingManager {
     };
   }
 
-  async reactivateSubscription(
-    subscriptionId: string
-  ): Promise<OrganizationSubscription> {
+  async reactivateSubscription(subscriptionId: string): Promise<OrganizationSubscription> {
     const existingSubscription = await db.client.organizationSubscription.findUnique({
       where: { id: subscriptionId },
     });
@@ -314,25 +313,29 @@ export class BillingManager {
 
     // Get payment method details from Stripe
     const stripePaymentMethod = await stripeService.getPaymentMethod(stripePaymentMethodId);
-    
+
     const paymentMethod = await db.client.paymentMethod.create({
       data: {
         organizationId,
         stripePaymentMethodId,
         type: stripePaymentMethod.type,
-        card: stripePaymentMethod.card ? {
-          brand: stripePaymentMethod.card.brand,
-          last4: stripePaymentMethod.card.last4,
-          expMonth: stripePaymentMethod.card.exp_month,
-          expYear: stripePaymentMethod.card.exp_year,
-          fingerprint: stripePaymentMethod.card.fingerprint,
-        } : undefined,
-        bankAccount: stripePaymentMethod.us_bank_account ? {
-          routingNumber: stripePaymentMethod.us_bank_account.routing_number,
-          last4: stripePaymentMethod.us_bank_account.last4,
-          accountType: stripePaymentMethod.us_bank_account.account_type,
-          bankName: stripePaymentMethod.us_bank_account.bank_name,
-        } : undefined,
+        card: stripePaymentMethod.card
+          ? {
+              brand: stripePaymentMethod.card.brand,
+              last4: stripePaymentMethod.card.last4,
+              expMonth: stripePaymentMethod.card.exp_month,
+              expYear: stripePaymentMethod.card.exp_year,
+              fingerprint: stripePaymentMethod.card.fingerprint,
+            }
+          : undefined,
+        bankAccount: stripePaymentMethod.us_bank_account
+          ? {
+              routingNumber: stripePaymentMethod.us_bank_account.routing_number,
+              last4: stripePaymentMethod.us_bank_account.last4,
+              accountType: stripePaymentMethod.us_bank_account.account_type,
+              bankName: stripePaymentMethod.us_bank_account.bank_name,
+            }
+          : undefined,
         isDefault: setAsDefault,
         isActive: true,
         metadata: {},
@@ -389,14 +392,18 @@ export class BillingManager {
     ]);
 
     const totalRevenue = invoices.reduce((sum, invoice) => sum + invoice.total, 0);
-    const recurringRevenue = invoices.filter(i => i.type === 'subscription').reduce((sum, invoice) => sum + invoice.total, 0);
-    const oneTimeRevenue = invoices.filter(i => i.type === 'one_time').reduce((sum, invoice) => sum + invoice.total, 0);
+    const recurringRevenue = invoices
+      .filter((i) => i.type === 'subscription')
+      .reduce((sum, invoice) => sum + invoice.total, 0);
+    const oneTimeRevenue = invoices
+      .filter((i) => i.type === 'one_time')
+      .reduce((sum, invoice) => sum + invoice.total, 0);
 
-    const activeSubscriptions = subscriptions.filter(s => s.status === 'active');
-    const trialSubscriptions = subscriptions.filter(s => s.trialEnd && s.trialEnd > new Date());
-    const canceledSubscriptions = subscriptions.filter(s => s.status === 'canceled');
+    const activeSubscriptions = subscriptions.filter((s) => s.status === 'active');
+    const trialSubscriptions = subscriptions.filter((s) => s.trialEnd && s.trialEnd > new Date());
+    const canceledSubscriptions = subscriptions.filter((s) => s.status === 'canceled');
 
-    const planDistribution = plans.map(plan => ({
+    const planDistribution = plans.map((plan) => ({
       planId: plan.id,
       planName: plan.name,
       count: plan.subscriptions.length,
@@ -420,7 +427,7 @@ export class BillingManager {
         churnRate: canceledSubscriptions.length / Math.max(subscriptions.length, 1),
       },
       customers: {
-        total: new Set(subscriptions.map(s => s.organizationId)).size,
+        total: new Set(subscriptions.map((s) => s.organizationId)).size,
         new: subscriptions.length,
         churned: canceledSubscriptions.length,
       },
@@ -437,4 +444,4 @@ export class BillingManager {
   }
 }
 
-export const billingManager = new BillingManager(); 
+export const billingManager = new BillingManager();

@@ -14,7 +14,7 @@ export class ExcelGenerator {
   async generate(report: Report, data: ReportData): Promise<Buffer> {
     // Initialize new workbook
     this.workbook = new ExcelJS.Workbook();
-    
+
     // Set workbook properties
     this.workbook.creator = 'Riscura Platform';
     this.workbook.created = new Date();
@@ -76,7 +76,8 @@ export class ExcelGenerator {
     currentRow++;
 
     this.worksheet.getCell(`A${currentRow}`).value = 'Period:';
-    this.worksheet.getCell(`B${currentRow}`).value = `${data.period.from.toLocaleDateString()} - ${data.period.to.toLocaleDateString()}`;
+    this.worksheet.getCell(`B${currentRow}`).value =
+      `${data.period.from.toLocaleDateString()} - ${data.period.to.toLocaleDateString()}`;
     currentRow += 2;
 
     // Style header cells
@@ -111,14 +112,14 @@ export class ExcelGenerator {
         const formattedKey = key.replace(/([A-Z])/g, ' $1').trim();
         this.worksheet.getCell(`A${row}`).value = formattedKey;
         this.worksheet.getCell(`B${row}`).value = value as number;
-        
+
         // Format percentage values
         if (key.toLowerCase().includes('rate') || key.toLowerCase().includes('percentage')) {
           this.worksheet.getCell(`B${row}`).numFmt = '0.00%';
         } else if (typeof value === 'number' && value % 1 !== 0) {
           this.worksheet.getCell(`B${row}`).numFmt = '0.00';
         }
-        
+
         row++;
       });
       row++;
@@ -201,7 +202,7 @@ export class ExcelGenerator {
       row.forEach((value, colIndex) => {
         const cell = this.worksheet.getCell(startRow + rowIndex + 1, colIndex + 1);
         cell.value = value;
-        
+
         // Alternate row colors
         if (rowIndex % 2 === 0) {
           cell.fill = {
@@ -216,7 +217,7 @@ export class ExcelGenerator {
     // Add borders to table
     const lastRow = startRow + data.rows.length;
     const lastCol = data.headers.length;
-    
+
     for (let r = startRow; r <= lastRow; r++) {
       for (let c = 1; c <= lastCol; c++) {
         const cell = this.worksheet.getCell(r, c);
@@ -241,18 +242,18 @@ export class ExcelGenerator {
         colOffset = 0;
       }
 
-      const col = 1 + (colOffset * 2);
-      
+      const col = 1 + colOffset * 2;
+
       // Metric label
       const labelCell = this.worksheet.getCell(row, col);
       labelCell.value = key.replace(/([A-Z])/g, ' $1').trim();
       labelCell.font = { size: 10 };
-      
+
       // Metric value
       const valueCell = this.worksheet.getCell(row + 1, col);
       valueCell.value = value;
       valueCell.font = { size: 14, bold: true };
-      
+
       // Format based on type
       if (key.toLowerCase().includes('rate') || key.toLowerCase().includes('percentage')) {
         valueCell.numFmt = '0.00%';

@@ -260,9 +260,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           key="retry"
           onClick={this.handleRetry}
           variant="primary"
-          className="min-w-[120px]"
-        >
-          <RefreshCw className="w-4 h-4 mr-2" />
+          className="min-w-[120px]" >
+  <RefreshCw className="w-4 h-4 mr-2" />
+</DaisyButton>
           Try Again {retryCount > 0 && `(${retryCount}/${maxRetries})`}
         </DaisyButton>
       );
@@ -275,9 +275,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           key="reload"
           onClick={this.handleReload}
           variant="outline"
-          className="min-w-[120px]"
-        >
-          <RefreshCw className="w-4 h-4 mr-2" />
+          className="min-w-[120px]" >
+  <RefreshCw className="w-4 h-4 mr-2" />
+</DaisyButton>
           Reload Page
         </DaisyButton>
       );
@@ -290,9 +290,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           key="home"
           onClick={this.handleGoHome}
           variant="outline"
-          className="min-w-[120px]"
-        >
-          <Home className="w-4 h-4 mr-2" />
+          className="min-w-[120px]" >
+  <Home className="w-4 h-4 mr-2" />
+</DaisyButton>
           Go to Dashboard
         </DaisyButton>
       );
@@ -317,28 +317,33 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <DaisyCard className="w-full max-w-2xl">
-          <DaisyCardHeader className="text-center">
+        <DaisyCard className="w-full max-w-2xl" >
+  <DaisyCardHeader className="text-center" />
+</DaisyCard>
             <div className="flex justify-center mb-4">
               <div className="p-3 rounded-full bg-destructive/10">
-                <DaisyAlertTriangle className="w-8 h-8 text-destructive" />
-              </div>
+                <DaisyAlertTriangle className="w-8 h-8 text-destructive" >
+  </div>
+</DaisyAlertTriangle>
             </div>
             
             <div className="flex items-center justify-center gap-2 mb-2">
               <DaisyCardTitle className="text-xl">Something went wrong</DaisyCardTitle>
-              <DaisyBadge variant={this.getSeverityColor(severity) as any}>
-                {severity}
+              <DaisyBadge variant={this.getSeverityColor(severity) as any} >
+  {severity}
+</DaisyBadge>
               </DaisyBadge>
             </div>
             
-            <DaisyCardDescription className="text-base">
-              {errorMessage}
+            <DaisyCardDescription className="text-base" >
+  {errorMessage}
+</DaisyCardDescription>
             </p>
           
 
-          <DaisyCardContent className="space-y-6">
-            {/* Error ID for support */}
+          <DaisyCardContent className="space-y-6" >
+  {/* Error ID for support */}
+</DaisyCardContent>
             <div className="text-center">
               <p className="text-sm text-muted-foreground">
                 Error ID: <code className="text-xs bg-muted px-2 py-1 rounded">{this.state.errorId}</code>
@@ -360,9 +365,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                     onClick={this.reportError}
                     disabled={this.state.isReporting}
                     variant="outline"
-                    size="sm"
-                  >
-                    <Bug className="w-4 h-4 mr-2" />
+                    size="sm" >
+  <Bug className="w-4 h-4 mr-2" />
+</DaisyButton>
                     {this.state.isReporting ? 'Sending Report...' : 'Report This Error'}
                   </DaisyButton>
                 ) : (
@@ -427,7 +432,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                 If this problem persists, please contact support with the error ID above.
               </p>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
     );
@@ -467,8 +472,9 @@ export const ComponentErrorBoundary: React.FC<{
     fallback={fallback || (
       <div className="p-4 border border-destructive/20 bg-destructive/5 rounded-lg">
         <div className="flex items-center gap-2 text-destructive">
-          <DaisyAlertTriangle className="w-4 h-4" />
-          <span className="text-sm font-medium">Component Error</span>
+          <DaisyAlertTriangle className="w-4 h-4" >
+  <span className="text-sm font-medium">
+</DaisyAlertTriangle>Component Error</span>
         </div>
         <p className="text-sm text-muted-foreground mt-1">
           This component failed to load. Please refresh the page.

@@ -39,7 +39,7 @@ export class BundleOptimizer {
       enableSplitting: true,
       chunkSizeLimit: 244000, // 244KB
       maxConcurrentChunks: 3,
-      ...config
+      ...config,
     };
 
     this.initializeOptimizer();
@@ -75,7 +75,7 @@ export class BundleOptimizer {
       if (entry.name.includes('.js') && entry.transferSize) {
         totalSize += entry.transferSize;
         jsChunkCount++;
-        
+
         const chunkName = this.extractChunkName(entry.name);
         this.updateChunkManifest(chunkName, {
           size: entry.transferSize,
@@ -101,7 +101,7 @@ export class BundleOptimizer {
 
     // Monitor route changes for chunk preloading
     let currentPath = window.location.pathname;
-    
+
     const observer = new MutationObserver(() => {
       if (window.location.pathname !== currentPath) {
         currentPath = window.location.pathname;
@@ -111,13 +111,13 @@ export class BundleOptimizer {
 
     observer.observe(document.body, {
       childList: true,
-      subtree: true
+      subtree: true,
     });
 
     // Preload on intersection observer for likely navigation
     const links = document.querySelectorAll('a[href]');
     const linkObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const href = (entry.target as HTMLAnchorElement).href;
           this.preloadForRoute(href);
@@ -125,17 +125,17 @@ export class BundleOptimizer {
       });
     });
 
-    links.forEach(link => linkObserver.observe(link));
+    links.forEach((link) => linkObserver.observe(link));
   }
 
   private addResourceHints(): void {
     if (typeof document === 'undefined') return;
 
     const head = document.head;
-    
+
     // Add DNS prefetch for common domains
     const domains = ['fonts.googleapis.com', 'fonts.gstatic.com'];
-    domains.forEach(domain => {
+    domains.forEach((domain) => {
       const link = document.createElement('link');
       link.rel = 'dns-prefetch';
       link.href = `//${domain}`;
@@ -144,7 +144,7 @@ export class BundleOptimizer {
 
     // Add preconnect for critical resources
     const preconnectDomains = ['fonts.googleapis.com'];
-    preconnectDomains.forEach(domain => {
+    preconnectDomains.forEach((domain) => {
       const link = document.createElement('link');
       link.rel = 'preconnect';
       link.href = `https://${domain}`;
@@ -157,12 +157,13 @@ export class BundleOptimizer {
     if (typeof navigator === 'undefined') return;
 
     // @ts-ignore - Connection API is experimental
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    
+    const connection =
+      navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+
     if (connection) {
       const updateStrategy = () => {
         const effectiveType = connection.effectiveType;
-        
+
         // Adjust strategy based on connection
         if (effectiveType === 'slow-2g' || effectiveType === '2g') {
           this.config.maxConcurrentChunks = 1;
@@ -253,11 +254,11 @@ export class BundleOptimizer {
   private async preloadLikelyChunks(): Promise<void> {
     // Implementation for preloading likely chunks based on user behavior
     const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
-    
+
     const likelyNextChunks: Record<string, string> = {
       '/dashboard': 'reports',
       '/reports': 'dashboard',
-      '/': 'dashboard'
+      '/': 'dashboard',
     };
 
     const nextChunk = likelyNextChunks[currentPath];
@@ -273,12 +274,13 @@ export class BundleOptimizer {
 
   private updateLoadingPriorities(): void {
     // Update chunk priorities based on usage patterns
-    Object.keys(this.chunkManifest).forEach(chunkName => {
+    Object.keys(this.chunkManifest).forEach((chunkName) => {
       const chunk = this.chunkManifest[chunkName];
       const timeSinceAccess = Date.now() - chunk.lastAccessed;
-      
+
       // Demote priority for old chunks
-      if (timeSinceAccess > 7 * 24 * 60 * 60 * 1000) { // 7 days
+      if (timeSinceAccess > 7 * 24 * 60 * 60 * 1000) {
+        // 7 days
         chunk.priority = 'low';
       }
     });
@@ -298,4 +300,4 @@ export class BundleOptimizer {
   }
 }
 
-export default BundleOptimizer; 
+export default BundleOptimizer;

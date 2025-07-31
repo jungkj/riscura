@@ -102,7 +102,7 @@ export class ReportGenerationService {
           type: 'summary',
           content: '',
           order: 1,
-          required: true
+          required: true,
         },
         {
           id: 'key-findings',
@@ -110,7 +110,7 @@ export class ReportGenerationService {
           type: 'findings',
           content: '',
           order: 2,
-          required: true
+          required: true,
         },
         {
           id: 'risk-overview',
@@ -123,11 +123,11 @@ export class ReportGenerationService {
               type: 'pie',
               title: 'Risks by Level',
               data: [],
-              colors: ['#ef4444', '#f97316', '#eab308', '#22c55e']
-            }
+              colors: ['#ef4444', '#f97316', '#eab308', '#22c55e'],
+            },
           ],
           order: 3,
-          required: true
+          required: true,
         },
         {
           id: 'recommendations',
@@ -135,9 +135,9 @@ export class ReportGenerationService {
           type: 'recommendations',
           content: '',
           order: 4,
-          required: true
-        }
-      ]
+          required: true,
+        },
+      ],
     };
 
     // Detailed Technical Template
@@ -154,7 +154,7 @@ export class ReportGenerationService {
           type: 'analysis',
           content: '',
           order: 1,
-          required: true
+          required: true,
         },
         {
           id: 'risk-analysis',
@@ -166,14 +166,14 @@ export class ReportGenerationService {
               id: 'risk-heatmap',
               type: 'heatmap',
               title: 'Risk Heat Map',
-              data: []
+              data: [],
             },
             {
               id: 'risk-trends',
               type: 'line',
               title: 'Risk Trends',
-              data: []
-            }
+              data: [],
+            },
           ],
           tables: [
             {
@@ -182,11 +182,11 @@ export class ReportGenerationService {
               headers: ['Risk ID', 'Title', 'Category', 'Likelihood', 'Impact', 'Score', 'Level'],
               rows: [],
               sortable: true,
-              filterable: true
-            }
+              filterable: true,
+            },
           ],
           order: 2,
-          required: true
+          required: true,
         },
         {
           id: 'control-effectiveness',
@@ -198,8 +198,8 @@ export class ReportGenerationService {
               id: 'control-effectiveness',
               type: 'bar',
               title: 'Control Effectiveness Distribution',
-              data: []
-            }
+              data: [],
+            },
           ],
           tables: [
             {
@@ -208,11 +208,11 @@ export class ReportGenerationService {
               headers: ['Control ID', 'Title', 'Type', 'Effectiveness', 'Coverage', 'Gaps'],
               rows: [],
               sortable: true,
-              filterable: true
-            }
+              filterable: true,
+            },
           ],
           order: 3,
-          required: true
+          required: true,
         },
         {
           id: 'compliance-assessment',
@@ -224,11 +224,11 @@ export class ReportGenerationService {
               id: 'compliance-scores',
               type: 'bar',
               title: 'Compliance Component Scores',
-              data: []
-            }
+              data: [],
+            },
           ],
           order: 4,
-          required: true
+          required: true,
         },
         {
           id: 'detailed-findings',
@@ -236,7 +236,7 @@ export class ReportGenerationService {
           type: 'findings',
           content: '',
           order: 5,
-          required: true
+          required: true,
         },
         {
           id: 'recommendations-detailed',
@@ -249,11 +249,11 @@ export class ReportGenerationService {
               title: 'Recommendations',
               headers: ['ID', 'Title', 'Priority', 'Type', 'Timeline', 'Cost', 'Benefit'],
               rows: [],
-              sortable: true
-            }
+              sortable: true,
+            },
           ],
           order: 6,
-          required: true
+          required: true,
         },
         {
           id: 'action-plan',
@@ -266,11 +266,11 @@ export class ReportGenerationService {
               title: 'Action Items',
               headers: ['ID', 'Title', 'Owner', 'Due Date', 'Priority', 'Status', 'Progress'],
               rows: [],
-              sortable: true
-            }
+              sortable: true,
+            },
           ],
           order: 7,
-          required: true
+          required: true,
         },
         {
           id: 'appendices',
@@ -278,9 +278,9 @@ export class ReportGenerationService {
           type: 'appendix',
           content: '',
           order: 8,
-          required: false
-        }
-      ]
+          required: false,
+        },
+      ],
     };
 
     // Regulatory Compliance Template
@@ -297,7 +297,7 @@ export class ReportGenerationService {
           type: 'summary',
           content: '',
           order: 1,
-          required: true
+          required: true,
         },
         {
           id: 'framework-assessment',
@@ -305,7 +305,7 @@ export class ReportGenerationService {
           type: 'analysis',
           content: '',
           order: 2,
-          required: true
+          required: true,
         },
         {
           id: 'material-weaknesses',
@@ -313,7 +313,7 @@ export class ReportGenerationService {
           type: 'findings',
           content: '',
           order: 3,
-          required: true
+          required: true,
         },
         {
           id: 'remediation-plan',
@@ -321,7 +321,7 @@ export class ReportGenerationService {
           type: 'recommendations',
           content: '',
           order: 4,
-          required: true
+          required: true,
         },
         {
           id: 'management-assertion',
@@ -329,9 +329,9 @@ export class ReportGenerationService {
           type: 'summary',
           content: '',
           order: 5,
-          required: true
-        }
-      ]
+          required: true,
+        },
+      ],
     };
 
     this.templates.set('executive-summary', executiveTemplate);
@@ -345,21 +345,16 @@ export class ReportGenerationService {
     options: ReportGenerationOptions = {},
     generatedBy: string
   ): Promise<GeneratedReport> {
-    
     // Select template
     const templateId = options.templateId || this.selectDefaultTemplate(options.audience);
     const template = this.templates.get(templateId);
-    
+
     if (!template) {
       throw new Error(`Template not found: ${templateId}`);
     }
 
     // Generate report content
-    const reportContent = await this.generateReportContent(
-      template,
-      results,
-      options
-    );
+    const reportContent = await this.generateReportContent(template, results, options);
 
     // Create report metadata
     const metadata = {
@@ -367,7 +362,7 @@ export class ReportGenerationService {
       sections: template.sections.length,
       charts: this.countCharts(template),
       tables: this.countTables(template),
-      fileSize: this.estimateFileSize(reportContent)
+      fileSize: this.estimateFileSize(reportContent),
     };
 
     const report: GeneratedReport = {
@@ -379,7 +374,7 @@ export class ReportGenerationService {
       generatedBy,
       format: options.format || template.format,
       content: reportContent,
-      metadata
+      metadata,
     };
 
     return report;
@@ -390,11 +385,10 @@ export class ReportGenerationService {
     results: AssessmentResults,
     options: ReportGenerationOptions
   ): Promise<string> {
-    
     let content = this.generateReportHeader(template, options);
-    
+
     // Filter sections based on options
-    const sectionsToInclude = template.sections.filter(section => {
+    const sectionsToInclude = template.sections.filter((section) => {
       if (options.includeSections && !options.includeSections.includes(section.id)) {
         return false;
       }
@@ -410,7 +404,7 @@ export class ReportGenerationService {
     }
 
     content += this.generateReportFooter(template, options);
-    
+
     return content;
   }
 
@@ -419,12 +413,11 @@ export class ReportGenerationService {
     results: AssessmentResults,
     format: string
   ): Promise<string> {
-    
     let sectionContent = '';
-    
+
     // Add section header
     sectionContent += this.formatSectionHeader(section.title, format);
-    
+
     // Generate section content based on type
     switch (section.type) {
       case 'summary':
@@ -466,23 +459,22 @@ export class ReportGenerationService {
     results: AssessmentResults,
     format: string
   ): string {
-    
     switch (section.id) {
       case 'exec-summary':
-        return this.formatContent(results.executiveSummary || this.generateExecutiveSummaryContent(results), format);
-      
+        return this.formatContent(
+          results.executiveSummary || this.generateExecutiveSummaryContent(results),
+          format
+        );
+
       case 'compliance-statement':
         return this.formatContent(
           this.generateComplianceStatement(results.complianceAssessment),
           format
         );
-      
+
       case 'management-assertion':
-        return this.formatContent(
-          this.generateManagementAssertion(results),
-          format
-        );
-      
+        return this.formatContent(this.generateManagementAssertion(results), format);
+
       default:
         return this.formatContent('Summary content not available.', format);
     }
@@ -494,12 +486,21 @@ export class ReportGenerationService {
     format: string
   ): string {
     let content = section.content;
-    
+
     // Replace placeholders with actual data
-    content = content.replace('{{riskAnalysis}}', this.generateRiskAnalysisContent(results.riskAssessment));
-    content = content.replace('{{controlAnalysis}}', this.generateControlAnalysisContent(results.controlEffectiveness));
-    content = content.replace('{{complianceAnalysis}}', this.generateComplianceAnalysisContent(results.complianceAssessment));
-    
+    content = content.replace(
+      '{{riskAnalysis}}',
+      this.generateRiskAnalysisContent(results.riskAssessment)
+    );
+    content = content.replace(
+      '{{controlAnalysis}}',
+      this.generateControlAnalysisContent(results.controlEffectiveness)
+    );
+    content = content.replace(
+      '{{complianceAnalysis}}',
+      this.generateComplianceAnalysisContent(results.complianceAssessment)
+    );
+
     return this.formatContent(content, format);
   }
 
@@ -510,11 +511,11 @@ export class ReportGenerationService {
   ): string {
     const keyFindings = this.generateKeyFindings(results);
     const detailedFindings = this.generateDetailedFindings(results);
-    
+
     let content = section.content;
     content = content.replace('{{keyFindings}}', keyFindings);
     content = content.replace('{{detailedFindings}}', detailedFindings);
-    
+
     return this.formatContent(content, format);
   }
 
@@ -525,11 +526,11 @@ export class ReportGenerationService {
   ): string {
     const recommendations = this.generateRecommendationsText(results.recommendations);
     const actionPlan = this.generateActionPlanContent(results.actionPlan);
-    
+
     let content = section.content;
     content = content.replace('{{recommendations}}', recommendations);
     content = content.replace('{{actionPlan}}', actionPlan);
-    
+
     return this.formatContent(content, format);
   }
 
@@ -540,11 +541,11 @@ export class ReportGenerationService {
   ): string {
     const materialWeaknesses = this.generateMaterialWeaknessesContent(results.complianceAssessment);
     const remediationPlan = this.generateRemediationPlanContent(results);
-    
+
     let content = section.content;
     content = content.replace('{{materialWeaknesses}}', materialWeaknesses);
     content = content.replace('{{remediationPlan}}', remediationPlan);
-    
+
     return this.formatContent(content, format);
   }
 
@@ -552,7 +553,7 @@ export class ReportGenerationService {
     if (format === 'html') {
       return this.generateHTMLChart(chart);
     }
-    
+
     return this.generateChartPlaceholder(chart);
   }
 
@@ -560,7 +561,7 @@ export class ReportGenerationService {
     if (format === 'html') {
       return this.generateHTMLTable(table);
     }
-    
+
     return this.generateTablePlaceholder(table);
   }
 
@@ -571,9 +572,10 @@ Based on our assessment of the ${complianceAssessment.framework} framework,
 the organization has achieved an overall compliance score of ${complianceAssessment.overallScore}% 
 with a rating of ${complianceAssessment.overallRating.toUpperCase()}.
 
-${complianceAssessment.materialWeaknesses.length > 0 
-  ? `${complianceAssessment.materialWeaknesses.length} material weakness(es) have been identified that require immediate attention.`
-  : 'No material weaknesses were identified during this assessment.'
+${
+  complianceAssessment.materialWeaknesses.length > 0
+    ? `${complianceAssessment.materialWeaknesses.length} material weakness(es) have been identified that require immediate attention.`
+    : 'No material weaknesses were identified during this assessment.'
 }
 
 This assessment was conducted in accordance with applicable standards and provides 
@@ -668,7 +670,10 @@ overall control performance. ${controlEffectiveness.gaps.length} significant gap
 that require remediation to improve the overall control environment.
 
 Key areas for improvement include:
-${controlEffectiveness.gaps.slice(0, 5).map((gap: any) => `- ${gap.description}`).join('\n')}
+${controlEffectiveness.gaps
+  .slice(0, 5)
+  .map((gap: any) => `- ${gap.description}`)
+  .join('\n')}
     `.trim();
   }
 
@@ -680,48 +685,57 @@ Overall Score: ${complianceAssessment.overallScore}%
 Overall Rating: ${complianceAssessment.overallRating.toUpperCase()}
 
 Component Scores:
-${complianceAssessment.componentScores.map((comp: any) => 
-  `- ${comp.componentName}: ${comp.score}% (${comp.rating})`
-).join('\n')}
+${complianceAssessment.componentScores
+  .map((comp: any) => `- ${comp.componentName}: ${comp.score}% (${comp.rating})`)
+  .join('\n')}
 
 Compliance Gaps: ${complianceAssessment.gaps.length}
 Material Weaknesses: ${complianceAssessment.materialWeaknesses.length}
 
 The compliance assessment indicates ${complianceAssessment.overallScore >= 70 ? 'adequate' : 'insufficient'} 
 adherence to ${complianceAssessment.framework} requirements. 
-${complianceAssessment.materialWeaknesses.length > 0 
-  ? `${complianceAssessment.materialWeaknesses.length} material weakness(es) require immediate remediation.`
-  : 'No material weaknesses were identified.'
+${
+  complianceAssessment.materialWeaknesses.length > 0
+    ? `${complianceAssessment.materialWeaknesses.length} material weakness(es) require immediate remediation.`
+    : 'No material weaknesses were identified.'
 }
     `.trim();
   }
 
   private generateKeyFindings(results: AssessmentResults): string {
     const findings = [];
-    
+
     // Risk findings
     const criticalRisks = results.riskAssessment.risksByLevel.CRITICAL || 0;
     if (criticalRisks > 0) {
       findings.push(`${criticalRisks} critical risk(s) identified requiring immediate attention`);
     }
-    
+
     // Control findings
     const lowEffectivenessControls = results.controlEffectiveness.controlsByEffectiveness.low || 0;
     if (lowEffectivenessControls > 0) {
-      findings.push(`${lowEffectivenessControls} control(s) with low effectiveness requiring improvement`);
+      findings.push(
+        `${lowEffectivenessControls} control(s) with low effectiveness requiring improvement`
+      );
     }
-    
+
     // Compliance findings
     if (results.complianceAssessment.materialWeaknesses.length > 0) {
-      findings.push(`${results.complianceAssessment.materialWeaknesses.length} material weakness(es) in compliance framework`);
+      findings.push(
+        `${results.complianceAssessment.materialWeaknesses.length} material weakness(es) in compliance framework`
+      );
     }
-    
+
     // Positive findings
     if (results.riskAssessment.inherentVsResidual.overallRiskReduction > 50) {
-      findings.push(`Strong risk mitigation with ${results.riskAssessment.inherentVsResidual.overallRiskReduction}% overall risk reduction`);
+      findings.push(
+        `Strong risk mitigation with ${results.riskAssessment.inherentVsResidual.overallRiskReduction}% overall risk reduction`
+      );
     }
-    
-    return findings.length > 0 ? findings.map(f => `• ${f}`).join('\n') : '• No significant findings identified';
+
+    return findings.length > 0
+      ? findings.map((f) => `• ${f}`).join('\n')
+      : '• No significant findings identified';
   }
 
   private generateDetailedFindings(results: AssessmentResults): string {
@@ -741,60 +755,77 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
 
   private generateRiskFindings(riskAssessment: any): string {
     const findings = [];
-    
+
     findings.push(`• ${riskAssessment.totalRisks} total risks assessed across all categories`);
-    
+
     if (riskAssessment.risksByLevel.CRITICAL > 0) {
-      findings.push(`• ${riskAssessment.risksByLevel.CRITICAL} critical risks requiring immediate mitigation`);
+      findings.push(
+        `• ${riskAssessment.risksByLevel.CRITICAL} critical risks requiring immediate mitigation`
+      );
     }
-    
-    findings.push(`• Overall risk reduction of ${riskAssessment.inherentVsResidual.overallRiskReduction}% achieved through existing controls`);
-    
+
+    findings.push(
+      `• Overall risk reduction of ${riskAssessment.inherentVsResidual.overallRiskReduction}% achieved through existing controls`
+    );
+
     if (riskAssessment.topRisks.length > 0) {
-      findings.push(`• Top risk: "${riskAssessment.topRisks[0].title}" with score ${riskAssessment.topRisks[0].riskScore}`);
+      findings.push(
+        `• Top risk: "${riskAssessment.topRisks[0].title}" with score ${riskAssessment.topRisks[0].riskScore}`
+      );
     }
-    
+
     return findings.join('\n');
   }
 
   private generateControlFindings(controlEffectiveness: any): string {
     const findings = [];
-    
-    findings.push(`• ${controlEffectiveness.totalControls} controls evaluated with average effectiveness of ${controlEffectiveness.averageEffectiveness}%`);
-    
+
+    findings.push(
+      `• ${controlEffectiveness.totalControls} controls evaluated with average effectiveness of ${controlEffectiveness.averageEffectiveness}%`
+    );
+
     if (controlEffectiveness.gaps.length > 0) {
-      findings.push(`• ${controlEffectiveness.gaps.length} control gaps identified requiring remediation`);
+      findings.push(
+        `• ${controlEffectiveness.gaps.length} control gaps identified requiring remediation`
+      );
       findings.push(`• Most critical gap: ${controlEffectiveness.gaps[0]?.description || 'N/A'}`);
     }
-    
+
     const highEffectivenessControls = controlEffectiveness.controlsByEffectiveness.high || 0;
     findings.push(`• ${highEffectivenessControls} controls demonstrate high effectiveness (≥80%)`);
-    
+
     return findings.join('\n');
   }
 
   private generateComplianceFindings(complianceAssessment: any): string {
     const findings = [];
-    
-    findings.push(`• Overall ${complianceAssessment.framework} compliance score: ${complianceAssessment.overallScore}%`);
+
+    findings.push(
+      `• Overall ${complianceAssessment.framework} compliance score: ${complianceAssessment.overallScore}%`
+    );
     findings.push(`• Compliance rating: ${complianceAssessment.overallRating.toUpperCase()}`);
-    
+
     if (complianceAssessment.materialWeaknesses.length > 0) {
-      findings.push(`• ${complianceAssessment.materialWeaknesses.length} material weakness(es) identified`);
+      findings.push(
+        `• ${complianceAssessment.materialWeaknesses.length} material weakness(es) identified`
+      );
     }
-    
+
     if (complianceAssessment.gaps.length > 0) {
       findings.push(`• ${complianceAssessment.gaps.length} compliance gaps requiring attention`);
     }
-    
-    const lowestComponent = complianceAssessment.componentScores.reduce((min: any, comp: any) => 
-      comp.score < min.score ? comp : min, complianceAssessment.componentScores[0]
+
+    const lowestComponent = complianceAssessment.componentScores.reduce(
+      (min: any, comp: any) => (comp.score < min.score ? comp : min),
+      complianceAssessment.componentScores[0]
     );
-    
+
     if (lowestComponent) {
-      findings.push(`• Lowest scoring component: ${lowestComponent.componentName} (${lowestComponent.score}%)`);
+      findings.push(
+        `• Lowest scoring component: ${lowestComponent.componentName} (${lowestComponent.score}%)`
+      );
     }
-    
+
     return findings.join('\n');
   }
 
@@ -802,12 +833,12 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
     if (recommendations.length === 0) {
       return 'No specific recommendations generated.';
     }
-    
+
     const criticalRecs = recommendations.filter((r: any) => r.priority === 'critical');
     const highRecs = recommendations.filter((r: any) => r.priority === 'high');
-    
+
     let content = `Priority Recommendations:\n\n`;
-    
+
     if (criticalRecs.length > 0) {
       content += `CRITICAL PRIORITY (${criticalRecs.length}):\n`;
       criticalRecs.slice(0, 5).forEach((rec: any, index: number) => {
@@ -816,7 +847,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
         content += `   Timeline: ${rec.timeline} days | Cost: $${rec.cost?.toLocaleString() || 'TBD'}\n\n`;
       });
     }
-    
+
     if (highRecs.length > 0) {
       content += `HIGH PRIORITY (${highRecs.length}):\n`;
       highRecs.slice(0, 5).forEach((rec: any, index: number) => {
@@ -825,7 +856,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
         content += `   Timeline: ${rec.timeline} days | Cost: $${rec.cost?.toLocaleString() || 'TBD'}\n\n`;
       });
     }
-    
+
     return content.trim();
   }
 
@@ -833,12 +864,12 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
     if (actionPlan.length === 0) {
       return 'No action items generated.';
     }
-    
+
     const criticalActions = actionPlan.filter((a: any) => a.priority === 'critical');
     const highActions = actionPlan.filter((a: any) => a.priority === 'high');
-    
+
     let content = `Implementation Action Plan:\n\n`;
-    
+
     content += `IMMEDIATE ACTIONS (Critical Priority - ${criticalActions.length}):\n`;
     criticalActions.slice(0, 5).forEach((action: any, index: number) => {
       content += `${index + 1}. ${action.title}\n`;
@@ -846,7 +877,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
       content += `   Due Date: ${new Date(action.dueDate).toLocaleDateString()}\n`;
       content += `   Estimated Cost: $${action.estimatedCost?.toLocaleString() || 'TBD'}\n\n`;
     });
-    
+
     content += `SHORT-TERM ACTIONS (High Priority - ${highActions.length}):\n`;
     highActions.slice(0, 5).forEach((action: any, index: number) => {
       content += `${index + 1}. ${action.title}\n`;
@@ -854,8 +885,11 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
       content += `   Due Date: ${new Date(action.dueDate).toLocaleDateString()}\n`;
       content += `   Estimated Cost: $${action.estimatedCost?.toLocaleString() || 'TBD'}\n\n`;
     });
-    
-    const totalCost = actionPlan.reduce((sum: number, action: any) => sum + (action.estimatedCost || 0), 0);
+
+    const totalCost = actionPlan.reduce(
+      (sum: number, action: any) => sum + (action.estimatedCost || 0),
+      0
+    );
     content += `Total Estimated Implementation Cost: $${totalCost.toLocaleString()}\n`;
 
     return content.trim();
@@ -865,9 +899,9 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
     if (complianceAssessment.materialWeaknesses.length === 0) {
       return 'No material weaknesses identified during this assessment.';
     }
-    
+
     let content = `Material Weaknesses Identified:\n\n`;
-    
+
     complianceAssessment.materialWeaknesses.forEach((mw: any, index: number) => {
       content += `${index + 1}. ${mw.title}\n`;
       content += `   Description: ${mw.description}\n`;
@@ -876,16 +910,18 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
       content += `   Likelihood: ${mw.likelihood}\n`;
       content += `   Remediation Timeline: ${mw.remediation?.timeline || 'TBD'} days\n\n`;
     });
-    
+
     return content.trim();
   }
 
   private generateRemediationPlanContent(results: AssessmentResults): string {
     const materialWeaknesses = results.complianceAssessment.materialWeaknesses || [];
-    const criticalRecommendations = results.recommendations.filter(r => r.priority === 'critical');
-    
+    const criticalRecommendations = results.recommendations.filter(
+      (r) => r.priority === 'critical'
+    );
+
     let content = `Remediation Plan:\n\n`;
-    
+
     if (materialWeaknesses.length > 0) {
       content += `MATERIAL WEAKNESS REMEDIATION:\n`;
       materialWeaknesses.forEach((mw: any, index: number) => {
@@ -896,7 +932,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
         content += `   Budget: $${mw.remediation?.budget?.toLocaleString() || 'TBD'}\n\n`;
       });
     }
-    
+
     if (criticalRecommendations.length > 0) {
       content += `CRITICAL ISSUE REMEDIATION:\n`;
       criticalRecommendations.slice(0, 5).forEach((rec, index) => {
@@ -906,7 +942,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
         content += `   Cost: $${rec.cost?.toLocaleString() || 'TBD'}\n\n`;
       });
     }
-    
+
     return content.trim();
   }
 
@@ -937,7 +973,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
 
   private generateReportHeader(template: ReportTemplate, options: ReportGenerationOptions): string {
     const format = options.format || template.format;
-    
+
     switch (format) {
       case 'html':
         return `
@@ -969,7 +1005,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
 
   private generateReportFooter(template: ReportTemplate, options: ReportGenerationOptions): string {
     const format = options.format || template.format;
-    
+
     switch (format) {
       case 'html':
         return `
@@ -1000,42 +1036,42 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
 
   private generateHTMLTable(table: TableConfig): string {
     let html = `<h3>${table.title}</h3>\n<table>\n<thead>\n<tr>\n`;
-    
-    table.headers.forEach(header => {
+
+    table.headers.forEach((header) => {
       html += `<th>${header}</th>\n`;
     });
-    
+
     html += '</tr>\n</thead>\n<tbody>\n';
-    
-    table.rows.forEach(row => {
+
+    table.rows.forEach((row) => {
       html += '<tr>\n';
-      row.forEach(cell => {
+      row.forEach((cell) => {
         html += `<td>${cell}</td>\n`;
       });
       html += '</tr>\n';
     });
-    
+
     html += '</tbody>\n</table>\n';
-    
+
     return html;
   }
 
   private generateTablePlaceholder(table: TableConfig): string {
     let text = `\n${table.title}\n${'-'.repeat(table.title.length)}\n`;
-    
+
     // Add headers
     text += table.headers.join(' | ') + '\n';
     text += table.headers.map(() => '---').join(' | ') + '\n';
-    
+
     // Add rows (limit to first 10 for readability)
-    table.rows.slice(0, 10).forEach(row => {
+    table.rows.slice(0, 10).forEach((row) => {
       text += row.join(' | ') + '\n';
     });
-    
+
     if (table.rows.length > 10) {
       text += `... and ${table.rows.length - 10} more rows\n`;
     }
-    
+
     return text + '\n';
   }
 
@@ -1066,15 +1102,11 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
   }
 
   private countCharts(template: ReportTemplate): number {
-    return template.sections.reduce((count, section) => 
-      count + (section.charts?.length || 0), 0
-    );
+    return template.sections.reduce((count, section) => count + (section.charts?.length || 0), 0);
   }
 
   private countTables(template: ReportTemplate): number {
-    return template.sections.reduce((count, section) => 
-      count + (section.tables?.length || 0), 0
-    );
+    return template.sections.reduce((count, section) => count + (section.tables?.length || 0), 0);
   }
 
   private estimateFileSize(content: string): number {
@@ -1083,17 +1115,17 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
   }
 
   private generateExecutiveSummaryContent(results: AssessmentResults): string {
-    const riskSummary = results.riskAssessment ? 
-      `Total Risks: ${results.riskAssessment.totalRisks || 0}, Critical: ${results.riskAssessment.risksByLevel?.CRITICAL || 0}` : 
-      'Risk assessment data not available';
-    
-    const complianceSummary = results.complianceAssessment ? 
-      `Compliance Score: ${results.complianceAssessment.overallScore || 0}%, Rating: ${results.complianceAssessment.overallRating || 'N/A'}` : 
-      'Compliance assessment data not available';
-    
-    const controlSummary = results.controlEffectiveness ? 
-      `Total Controls: ${results.controlEffectiveness.totalControls || 0}, Average Effectiveness: ${results.controlEffectiveness.averageEffectiveness || 0}%` : 
-      'Control effectiveness data not available';
+    const riskSummary = results.riskAssessment
+      ? `Total Risks: ${results.riskAssessment.totalRisks || 0}, Critical: ${results.riskAssessment.risksByLevel?.CRITICAL || 0}`
+      : 'Risk assessment data not available';
+
+    const complianceSummary = results.complianceAssessment
+      ? `Compliance Score: ${results.complianceAssessment.overallScore || 0}%, Rating: ${results.complianceAssessment.overallRating || 'N/A'}`
+      : 'Compliance assessment data not available';
+
+    const controlSummary = results.controlEffectiveness
+      ? `Total Controls: ${results.controlEffectiveness.totalControls || 0}, Average Effectiveness: ${results.controlEffectiveness.averageEffectiveness || 0}%`
+      : 'Control effectiveness data not available';
 
     return `
 EXECUTIVE SUMMARY
@@ -1121,4 +1153,4 @@ The results provide insights into areas requiring immediate attention and recomm
   }
 }
 
-export const reportGenerationService = new ReportGenerationService(); 
+export const reportGenerationService = new ReportGenerationService();

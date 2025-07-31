@@ -45,16 +45,16 @@ export class LocalStorageProvider implements StorageProvider {
     const fileId = this.generateFileId();
     const filename = options.filename || fileId;
     const filePath = this.getFilePath(fileId, filename);
-    
+
     // Ensure directory exists
     await fs.mkdir(path.dirname(filePath), { recursive: true });
-    
+
     // Write file
     await fs.writeFile(filePath, file);
-    
+
     // Calculate checksum
     const checksum = crypto.createHash('sha256').update(file).digest('hex');
-    
+
     // Save metadata
     const metadata = {
       ...options.metadata,
@@ -62,11 +62,8 @@ export class LocalStorageProvider implements StorageProvider {
       uploadedAt: new Date().toISOString(),
       checksum,
     };
-    
-    await fs.writeFile(
-      `${filePath}.meta`,
-      JSON.stringify(metadata, null, 2)
-    );
+
+    await fs.writeFile(`${filePath}.meta`, JSON.stringify(metadata, null, 2));
 
     // Register file path for retrieval
     this.fileRegistry.set(fileId, filePath);
@@ -91,11 +88,8 @@ export class LocalStorageProvider implements StorageProvider {
   async delete(fileId: string): Promise<void> {
     const filePath = this.getFilePathById(fileId);
     const metaPath = `${filePath}.meta`;
-    
-    await Promise.all([
-      fs.unlink(filePath).catch(() => {}),
-      fs.unlink(metaPath).catch(() => {}),
-    ]);
+
+    await Promise.all([fs.unlink(filePath).catch(() => {}), fs.unlink(metaPath).catch(() => {})]);
 
     this.fileRegistry.delete(fileId);
   }
@@ -119,7 +113,7 @@ export class LocalStorageProvider implements StorageProvider {
   async getMetadata(fileId: string): Promise<Record<string, any>> {
     const filePath = this.getFilePathById(fileId);
     const metaPath = `${filePath}.meta`;
-    
+
     try {
       const metaData = await fs.readFile(metaPath, 'utf-8');
       return JSON.parse(metaData);
@@ -137,16 +131,8 @@ export class LocalStorageProvider implements StorageProvider {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-    
-    return path.join(
-      this.basePath,
-      'documents',
-      String(year),
-      month,
-      day,
-      fileId,
-      filename
-    );
+
+    return path.join(this.basePath, 'documents', String(year), month, day, fileId, filename);
   }
 
   private getFilePathById(fileId: string): string {
@@ -172,7 +158,7 @@ export class LocalStorageProvider implements StorageProvider {
       '.txt': 'text/plain',
       '.csv': 'text/csv',
     };
-    
+
     return mimeTypes[ext] || 'application/octet-stream';
   }
 }
@@ -187,23 +173,26 @@ export function createStorageProvider(): StorageProvider {
 }
 
 // File validation utilities
-export function validateFile(file: File, options: {
-  maxSize?: number;
-  allowedTypes?: string[];
-  allowedExtensions?: string[];
-}): { valid: boolean; errors: string[] } {
+export function validateFile(
+  file: File,
+  options: {
+    maxSize?: number;
+    allowedTypes?: string[];
+    allowedExtensions?: string[];
+  }
+): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
-  
+
   // Check file size
   if (options.maxSize && file.size > options.maxSize) {
     errors.push(`File size exceeds maximum allowed size of ${formatFileSize(options.maxSize)}`);
   }
-  
+
   // Check file type
   if (options.allowedTypes && !options.allowedTypes.includes(file.type)) {
     errors.push(`File type ${file.type} is not allowed`);
   }
-  
+
   // Check file extension
   if (options.allowedExtensions) {
     const extension = path.extname(file.name).toLowerCase();
@@ -211,7 +200,7 @@ export function validateFile(file: File, options: {
       errors.push(`File extension ${extension} is not allowed`);
     }
   }
-  
+
   return {
     valid: errors.length === 0,
     errors,
@@ -222,18 +211,18 @@ export function formatFileSize(bytes: number): string {
   const units = ['B', 'KB', 'MB', 'GB', 'TB'];
   let size = bytes;
   let unitIndex = 0;
-  
+
   while (size >= 1024 && unitIndex < units.length - 1) {
     size /= 1024;
     unitIndex++;
   }
-  
+
   return `${size.toFixed(2)} ${units[unitIndex]}`;
 }
 
 export function getFileIcon(filename: string): string {
   const ext = path.extname(filename).toLowerCase();
-  
+
   const iconMap: Record<string, string> = {
     '.pdf': '📄',
     '.doc': '📝',
@@ -249,9 +238,9 @@ export function getFileIcon(filename: string): string {
     '.zip': '🗜️',
     '.rar': '🗜️',
   };
-  
+
   return iconMap[ext] || '📎';
 }
 
 // Export singleton instance
-export const storage = createStorageProvider(); 
+export const storage = createStorageProvider();

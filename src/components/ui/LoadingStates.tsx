@@ -124,23 +124,26 @@ export const LoadingCard: React.FC<LoadingCardProps> = ({
   actions = true,
   className
 }) => (
-  <DaisyCard className={className}>
-    {(title || description) && (
-      <DaisyCardHeader>
-        {title && <EnhancedSkeleton className="h-6 w-1/2 mb-2" />}
+  <DaisyCard className={className} >
+  {(title || description) && (
+</DaisyCard>
+      <DaisyCardHeader >
+  {title && 
+</DaisyCardHeader><EnhancedSkeleton className="h-6 w-1/2 mb-2" />}
         {description && <EnhancedSkeleton className="h-4 w-3/4" />}
       
     )}
     {content && (
-      <DaisyCardContent className="space-y-3">
-        <DaisySkeletonText lines={3} />
+      <DaisyCardContent className="space-y-3" >
+  <DaisySkeletonText lines={3} />
+</DaisyCardContent>
         {actions && (
           <div className="flex gap-2 pt-2">
             <DaisySkeletonButton />
             <DaisySkeletonButton />
           </div>
         )}
-      </DaisyCardBody>
+      </DaisySkeletonButton>
     )}
   </DaisyCard>
 );
@@ -270,8 +273,10 @@ export const LoadingDashboard: React.FC = () => (
     {/* Stats Cards */}
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {Array.from({ length: 4 }).map((_, i) => (
-        <DaisyCard key={i}>
-          <DaisyCardContent className="p-6">
+        <DaisyCard key={i} >
+  <DaisyCardContent className="p-6" >
+  </DaisySkeletonButton>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <EnhancedSkeleton className="h-4 w-24 mb-2" />
@@ -279,7 +284,7 @@ export const LoadingDashboard: React.FC = () => (
               </div>
               <EnhancedSkeleton className="h-8 w-8 rounded" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       ))}
     </div>
@@ -424,8 +429,9 @@ export const NetworkLoading: React.FC<NetworkLoadingProps> = ({
 
   return (
     <div className="flex items-center justify-center p-4">
-      <DaisyBadge variant={getVariant() as any} className="flex items-center gap-2">
-        {getIcon()}
+      <DaisyBadge variant={getVariant() as any} className="flex items-center gap-2" >
+  {getIcon()}
+</DaisySkeletonAvatar>
         <span>{message || getStatusText()}</span>
       </DaisyBadge>
     </div>

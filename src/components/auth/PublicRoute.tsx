@@ -10,7 +10,7 @@ export function PublicRoute() {
   // Handle authentication logic in useEffect
   useEffect(() => {
     if (isLoading) return; // Don't do anything while loading
-    
+
     if (isAuthenticated) {
       router.push('/dashboard');
     }
@@ -32,4 +32,4 @@ export function PublicRoute() {
 
   // If user is not authenticated, show landing page
   return <LandingPage />;
-} 
+}

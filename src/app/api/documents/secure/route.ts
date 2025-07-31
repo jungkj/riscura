@@ -3,7 +3,11 @@ import crypto from 'crypto';
 import { securityMiddleware, RATE_LIMITS, CORS_CONFIGS } from '@/lib/security/middleware';
 import { accessControl, Permission } from '@/lib/security/access-control';
 import { documentEncryption } from '@/lib/security/document-encryption';
-import { SecureDocumentResponse, DocumentUploadResponse, DocumentDownloadResponse } from '@/types/api/documents';
+import {
+  SecureDocumentResponse,
+  DocumentUploadResponse,
+  DocumentDownloadResponse,
+} from '@/types/api/documents';
 
 // Secure document upload with comprehensive security
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -14,7 +18,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       requiredPermissions: ['document:write'],
       rateLimit: RATE_LIMITS.UPLOAD,
       allowCors: true,
-      corsOrigins: CORS_CONFIGS.DEVELOPMENT
+      corsOrigins: CORS_CONFIGS.DEVELOPMENT,
     });
 
     if (securityResult) {
@@ -28,20 +32,17 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     // Parse multipart form data
     const formData = await request.formData();
-    
+
     // Extract document metadata
     const title = formData.get('title') as string;
     const description = formData.get('description') as string;
     const category = formData.get('category') as string;
-    const sensitivity = formData.get('sensitivity') as string || 'internal';
-    const confidentiality = formData.get('confidentiality') as string || 'internal';
+    const sensitivity = (formData.get('sensitivity') as string) || 'internal';
+    const confidentiality = (formData.get('confidentiality') as string) || 'internal';
 
     // Validate required fields
     if (!title || !category) {
-      return NextResponse.json(
-        { error: 'Title and category are required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Title and category are required' }, { status: 400 });
     }
 
     // Process files with security scanning
@@ -61,7 +62,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
         // Read file content
         const fileBuffer = Buffer.from(await file.arrayBuffer());
-        
+
         // Scan for malicious content
         const scanResult = await scanFileContent(fileBuffer, file.type);
         if (!scanResult.safe) {
@@ -72,11 +73,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         }
 
         // Encrypt file content
-        const encryptedFile = documentEncryption.encryptFile(
-          fileBuffer,
-          file.name,
-          userId
-        );
+        const encryptedFile = documentEncryption.encryptFile(fileBuffer, file.name, userId);
 
         processedFiles.push({
           id: `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -95,8 +92,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           scanResult: {
             status: 'clean',
             scanTime: new Date().toISOString(),
-            threats: []
-          }
+            threats: [],
+          },
         });
       }
     }
@@ -104,7 +101,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Create secure document record
     const documentId = `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const watermark = documentEncryption.createWatermark(documentId, userId, 'user@example.com');
-    
+
     const newDocument = {
       id: documentId,
       title,
@@ -135,7 +132,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         downloadable: true,
         printable: false,
         expiresAt: null as Date | null,
-        accessLog: [] as any[]
+        accessLog: [] as any[],
       },
       _count: {
         versions: 1,
@@ -153,25 +150,27 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         fileCount: processedFiles.length,
         totalSize: newDocument.size,
         sensitivity,
-        encrypted: true
+        encrypted: true,
       },
-      request
+      request,
     });
 
-    return NextResponse.json({
-      success: true,
-      message: 'Document uploaded and encrypted successfully',
-      data: newDocument,
-      security: {
-        encrypted: true,
-        watermarked: true,
-        auditLogged: true
-      }
-    }, { status: 201 });
-
+    return NextResponse.json(
+      {
+        success: true,
+        message: 'Document uploaded and encrypted successfully',
+        data: newDocument,
+        security: {
+          encrypted: true,
+          watermarked: true,
+          auditLogged: true,
+        },
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Secure document upload error:', error);
-    
+
     // Log security error
     await logSecurityEvent({
       userId: 'unknown',
@@ -180,13 +179,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       resourceId: 'unknown',
       result: 'error',
       metadata: { error: error instanceof Error ? error.message : 'Unknown error' },
-      request
+      request,
     });
 
-    return NextResponse.json(
-      { error: 'Failed to upload document securely' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to upload document securely' }, { status: 500 });
   }
 }
 
@@ -199,7 +195,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       requiredPermissions: ['document:read'],
       rateLimit: RATE_LIMITS.DOCUMENT,
       allowCors: true,
-      corsOrigins: CORS_CONFIGS.DEVELOPMENT
+      corsOrigins: CORS_CONFIGS.DEVELOPMENT,
     });
 
     if (securityResult) {
@@ -214,7 +210,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     // Parse query parameters
     const url = new URL(request.url);
     const searchParams = url.searchParams;
-    
+
     // Security-aware pagination
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
     const limit = Math.min(50, Math.max(1, parseInt(searchParams.get('limit') || '10'))); // Max 50 items
@@ -226,7 +222,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       limit,
       category: searchParams.get('category'),
       sensitivity: searchParams.get('sensitivity'),
-      search: searchParams.get('search')
+      search: searchParams.get('search'),
     });
 
     // Log access for audit trail
@@ -241,10 +237,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         filters: {
           category: searchParams.get('category'),
           sensitivity: searchParams.get('sensitivity'),
-          search: searchParams.get('search')
-        }
+          search: searchParams.get('search'),
+        },
       },
-      request
+      request,
     });
 
     return NextResponse.json({
@@ -254,21 +250,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         page,
         limit,
         totalCount: secureDocuments.totalCount,
-        hasNextPage: secureDocuments.hasNextPage
+        hasNextPage: secureDocuments.hasNextPage,
       },
       security: {
         userRole,
         accessLevel: 'filtered_by_permissions',
-        auditLogged: true
-      }
+        auditLogged: true,
+      },
     });
-
   } catch (error) {
     console.error('Secure document retrieval error:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve documents securely' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to retrieve documents securely' }, { status: 500 });
   }
 }
 
@@ -291,7 +283,7 @@ async function validateFileUpload(file: File): Promise<{ valid: boolean; reason?
     'text/csv',
     'image/png',
     'image/jpeg',
-    'image/gif'
+    'image/gif',
   ];
 
   if (!allowedTypes.includes(file.type)) {
@@ -311,8 +303,8 @@ async function validateFileUpload(file: File): Promise<{ valid: boolean; reason?
     /\.com$/i,
     /\.dll$/i,
     /\.sys$/i,
-    /\.\./,  // Directory traversal
-    /[<>:"|?*]/  // Invalid filename characters
+    /\.\./, // Directory traversal
+    /[<>:"|?*]/, // Invalid filename characters
   ];
 
   for (const pattern of dangerousPatterns) {
@@ -325,7 +317,10 @@ async function validateFileUpload(file: File): Promise<{ valid: boolean; reason?
 }
 
 // Content scanning for malicious content
-async function scanFileContent(buffer: Buffer, mimeType: string): Promise<{ safe: boolean; reason?: string; threats?: string[] }> {
+async function scanFileContent(
+  buffer: Buffer,
+  mimeType: string
+): Promise<{ safe: boolean; reason?: string; threats?: string[] }> {
   const threats: string[] = [];
 
   // Check for embedded scripts in PDFs
@@ -340,7 +335,11 @@ async function scanFileContent(buffer: Buffer, mimeType: string): Promise<{ safe
   }
 
   // Check for macros in Office documents
-  if (mimeType.includes('officedocument') || mimeType.includes('ms-excel') || mimeType.includes('msword')) {
+  if (
+    mimeType.includes('officedocument') ||
+    mimeType.includes('ms-excel') ||
+    mimeType.includes('msword')
+  ) {
     const content = buffer.toString('latin1');
     if (content.includes('xl/vbaProject.bin') || content.includes('word/vbaProject.bin')) {
       threats.push('VBA macros detected');
@@ -356,7 +355,7 @@ async function scanFileContent(buffer: Buffer, mimeType: string): Promise<{ safe
     'eval(',
     'document.write',
     'innerHTML',
-    'fromCharCode'
+    'fromCharCode',
   ];
 
   const content = buffer.toString('utf8').toLowerCase();
@@ -376,7 +375,7 @@ async function scanFileContent(buffer: Buffer, mimeType: string): Promise<{ safe
   };
 
   if (mimeType in validHeaders) {
-    const isValidHeader = validHeaders[mimeType].some(validHeader => 
+    const isValidHeader = validHeaders[mimeType].some((validHeader) =>
       header.toLowerCase().startsWith(validHeader)
     );
     if (!isValidHeader) {
@@ -387,7 +386,7 @@ async function scanFileContent(buffer: Buffer, mimeType: string): Promise<{ safe
   return {
     safe: threats.length === 0,
     reason: threats.length > 0 ? threats[0] : undefined,
-    threats
+    threats,
   };
 }
 
@@ -435,7 +434,7 @@ async function getSecureDocuments(
         printable: false,
         watermarkRequired: true,
         lastAccessed: new Date(),
-        accessCount: 15
+        accessCount: 15,
       },
       files: [
         {
@@ -445,7 +444,7 @@ async function getSecureDocuments(
           size: 3200000,
           encrypted: true,
           uploadedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-        }
+        },
       ],
     },
     {
@@ -477,7 +476,7 @@ async function getSecureDocuments(
         printable: false,
         watermarkRequired: true,
         lastAccessed: new Date(Date.now() - 24 * 60 * 60 * 1000),
-        accessCount: 8
+        accessCount: 8,
       },
       files: [
         {
@@ -487,20 +486,20 @@ async function getSecureDocuments(
           size: 1800000,
           encrypted: true,
           uploadedAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000),
-        }
+        },
       ],
-    }
+    },
   ];
 
   // Apply security filtering based on user role and permissions
-  let filteredDocuments = mockDocuments.filter(doc => {
+  let filteredDocuments = mockDocuments.filter((doc) => {
     // Check if user can access this sensitivity level
     const sensitivityLevels: Record<string, number> = {
-      'public': 1,
-      'internal': 2,
-      'confidential': 3,
-      'restricted': 4,
-      'top_secret': 5
+      public: 1,
+      internal: 2,
+      confidential: 3,
+      restricted: 4,
+      top_secret: 5,
     };
 
     const userAccessLevel = userRole === 'ADMIN' ? 5 : userRole === 'MANAGER' ? 3 : 2;
@@ -522,23 +521,22 @@ async function getSecureDocuments(
 
   // Apply additional filters
   if (filters.category) {
-    filteredDocuments = filteredDocuments.filter(doc => 
+    filteredDocuments = filteredDocuments.filter((doc) =>
       doc.category.toLowerCase().includes(filters.category!.toLowerCase())
     );
   }
 
   if (filters.sensitivity) {
-    filteredDocuments = filteredDocuments.filter(doc => 
-      doc.sensitivity === filters.sensitivity
-    );
+    filteredDocuments = filteredDocuments.filter((doc) => doc.sensitivity === filters.sensitivity);
   }
 
   if (filters.search) {
     const searchLower = filters.search.toLowerCase();
-    filteredDocuments = filteredDocuments.filter(doc => 
-      doc.title.toLowerCase().includes(searchLower) ||
-      doc.description.toLowerCase().includes(searchLower) ||
-      doc.tags.some(tag => tag.toLowerCase().includes(searchLower))
+    filteredDocuments = filteredDocuments.filter(
+      (doc) =>
+        doc.title.toLowerCase().includes(searchLower) ||
+        doc.description.toLowerCase().includes(searchLower) ||
+        doc.tags.some((tag) => tag.toLowerCase().includes(searchLower))
     );
   }
 
@@ -550,7 +548,7 @@ async function getSecureDocuments(
   );
 
   // Transform mock documents to match SecureDocumentResponse type
-  const transformedDocuments: SecureDocumentResponse[] = paginatedDocuments.map(doc => ({
+  const transformedDocuments: SecureDocumentResponse[] = paginatedDocuments.map((doc) => ({
     id: doc.id,
     title: doc.title,
     description: doc.description,
@@ -568,21 +566,25 @@ async function getSecureDocuments(
     metadata: {
       encrypted: doc.security?.encrypted || false,
       watermark: doc.security?.watermarkRequired ? 'CONFIDENTIAL' : undefined,
-      accessLevel: (doc.security?.accessLevel || 'internal') as 'public' | 'internal' | 'confidential' | 'restricted',
+      accessLevel: (doc.security?.accessLevel || 'internal') as
+        | 'public'
+        | 'internal'
+        | 'confidential'
+        | 'restricted',
       downloadable: doc.security?.downloadable || true,
       printable: doc.security?.printable || false,
       expiresAt: null as Date | null,
-      accessLog: [] as any[]
+      accessLog: [] as any[],
     },
     _count: {
-      versions: 1
-    }
+      versions: 1,
+    },
   }));
 
   return {
     documents: transformedDocuments,
     totalCount: total,
-    hasNextPage: filters.page * filters.limit < total
+    hasNextPage: filters.page * filters.limit < total,
   };
 }
 
@@ -604,10 +606,12 @@ async function logSecurityEvent(event: {
     resource: event.resource,
     resourceId: event.resourceId,
     result: event.result,
-    ipAddress: event.request.headers.get('x-forwarded-for')?.split(',')[0] || 
-               event.request.headers.get('x-real-ip') || 'unknown',
+    ipAddress:
+      event.request.headers.get('x-forwarded-for')?.split(',')[0] ||
+      event.request.headers.get('x-real-ip') ||
+      'unknown',
     userAgent: event.request.headers.get('user-agent') || 'unknown',
-    metadata: event.metadata || {}
+    metadata: event.metadata || {},
   };
 
   // In production, this would be sent to a security logging service
@@ -617,4 +621,4 @@ async function logSecurityEvent(event: {
   if (event.result === 'denied' || event.result === 'error') {
     console.warn('SECURITY ALERT:', logEntry);
   }
-} 
+}

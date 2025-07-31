@@ -287,8 +287,9 @@ const ThreatAlertsPanel: React.FC = () => {
     };
 
     return (
-      <DaisyBadge variant={variants[severity]} className="text-caption">
-        {severity.toUpperCase()}
+      <DaisyBadge variant={variants[severity]} className="text-caption" >
+  {severity.toUpperCase()}
+</DaisyBadge>
       </DaisyBadge>
     );
   };
@@ -301,8 +302,9 @@ const ThreatAlertsPanel: React.FC = () => {
     };
 
     return (
-      <DaisyBadge variant={variants[status]} className="text-caption">
-        {status.charAt(0).toUpperCase() + status.slice(1)}
+      <DaisyBadge variant={variants[status]} className="text-caption" >
+  {status.charAt(0).toUpperCase() + status.slice(1)}
+</DaisyBadge>
       </DaisyBadge>
     );
   };
@@ -347,8 +349,9 @@ const ThreatAlertsPanel: React.FC = () => {
                   <span>{alert.timestamp.toLocaleTimeString()}</span>
                 </div>
               </div>
-              <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
-                <MoreHorizontal className="h-3 w-3" />
+              <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
+  <MoreHorizontal className="h-3 w-3" />
+</DaisyButton>
               </DaisyButton>
             </div>
           </div>
@@ -374,8 +377,9 @@ const ComplianceFrameworksPanel: React.FC = () => {
     };
 
     return (
-      <DaisyBadge variant={variants[status]} className="text-caption">
-        {status.replace('-', ' ')}
+      <DaisyBadge variant={variants[status]} className="text-caption" >
+  {status.replace('-', ' ')}
+</DaisyBadge>
       </DaisyBadge>
     );
   };
@@ -621,9 +625,9 @@ export const SecurityDashboard: React.FC = () => {
       maxWidth="2xl"
     >
       {/* Tabs */}
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6">
-        <DaisyTabsList>
-          <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6" />
+        <DaisyTabsList />
+          <DaisyTabsTrigger value="overview">Overview</DaisySeparator>
           <DaisyTabsTrigger value="threats">Threat Monitoring</DaisyTabsTrigger>
           <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
           <DaisyTabsTrigger value="controls">Controls</DaisyTabsTrigger>
@@ -631,7 +635,7 @@ export const SecurityDashboard: React.FC = () => {
         </DaisyTabsList>
       </DaisyTabs>
 
-      <DaisyTabsContent value="overview" className="space-y-enterprise-6">
+      <DaisyTabsContent value="overview" className="space-y-enterprise-6" />
         {/* Security Metrics */}
         <ContentSection 
           title="Security Metrics"
@@ -652,10 +656,11 @@ export const SecurityDashboard: React.FC = () => {
         </ContentSection>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="threats" className="space-y-enterprise-6">
+      <DaisyTabsContent value="threats" className="space-y-enterprise-6" />
         <div className="text-center py-enterprise-12">
-          <DaisyAlertTriangle className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
-          <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
+          <DaisyAlertTriangle className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" >
+  <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
+</DaisyTabsContent>
             Threat Monitoring
           </h3>
           <p className="text-body-base text-text-secondary">
@@ -664,7 +669,7 @@ export const SecurityDashboard: React.FC = () => {
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="compliance" className="space-y-enterprise-6">
+      <DaisyTabsContent value="compliance" className="space-y-enterprise-6" />
         <div className="text-center py-enterprise-12">
           <CheckCircle className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -676,7 +681,7 @@ export const SecurityDashboard: React.FC = () => {
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="controls" className="space-y-enterprise-6">
+      <DaisyTabsContent value="controls" className="space-y-enterprise-6" />
         <div className="text-center py-enterprise-12">
           <Shield className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -688,7 +693,7 @@ export const SecurityDashboard: React.FC = () => {
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="audit" className="space-y-enterprise-6">
+      <DaisyTabsContent value="audit" className="space-y-enterprise-6" />
         <div className="text-center py-enterprise-12">
           <Activity className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">

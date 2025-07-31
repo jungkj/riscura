@@ -9,4 +9,4 @@ export default function DocumentsPageRoute() {
       <DocumentAnalysisPage />
     </ProtectedRoute>
   );
-} 
+}

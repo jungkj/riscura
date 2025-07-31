@@ -42,12 +42,14 @@ export const RiskByCategory: React.FC = () => {
   };
 
   return (
-    <DaisyCard>
-      <DaisyCardHeader>
+    <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTooltipProps>
         <DaisyCardTitle>Risk by Category</DaisyCardTitle>
-      
-      <DaisyCardContent>
-        <div className="h-80">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="h-80">
+</DaisyCardContent>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -69,7 +71,7 @@ export const RiskByCategory: React.FC = () => {
             </PieChart>
           </ResponsiveContainer>
         </div>
-      </DaisyCardBody>
+      </DaisyTooltip>
     </DaisyCard>
   );
 };

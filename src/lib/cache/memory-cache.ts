@@ -28,7 +28,7 @@ export class MemoryCache {
       updateAgeOnGet: true,
       updateAgeOnHas: true,
     });
-    
+
     // Check if we should persist to database
     this.persistToDB = process.env.CACHE_PERSIST === 'true';
   }
@@ -81,7 +81,7 @@ export class MemoryCache {
    */
   async set<T>(key: string, value: T, ttlMs?: number): Promise<void> {
     const ttl = ttlMs || 1000 * 60 * 5; // 5 minutes default
-    
+
     // Set in memory cache
     this.cache.set(key, value, { ttl });
 
@@ -160,7 +160,7 @@ export class MemoryCache {
    */
   async keys(pattern: string): Promise<string[]> {
     const regex = new RegExp(pattern.replace(/\*/g, '.*'));
-    const memoryKeys = Array.from(this.cache.keys()).filter(key => regex.test(key));
+    const memoryKeys = Array.from(this.cache.keys()).filter((key) => regex.test(key));
 
     if (this.persistToDB) {
       try {
@@ -171,9 +171,9 @@ export class MemoryCache {
           },
           select: { key: true },
         });
-        
-        const allKeys = new Set([...memoryKeys, ...dbKeys.map(item => item.key)]);
-        return Array.from(allKeys).filter(key => regex.test(key));
+
+        const allKeys = new Set([...memoryKeys, ...dbKeys.map((item) => item.key)]);
+        return Array.from(allKeys).filter((key) => regex.test(key));
       } catch (error) {
         console.error('Cache DB keys error:', error);
       }

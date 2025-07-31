@@ -23,7 +23,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'riscura' ? 'riscuraDark' : 'riscura');
+    setTheme((prevTheme) => (prevTheme === 'riscura' ? 'riscuraDark' : 'riscura'));
   };
 
   return (

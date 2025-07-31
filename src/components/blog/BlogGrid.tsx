@@ -37,16 +37,12 @@ export default function BlogGrid({ posts }: BlogGridProps) {
                 <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
                   {post.category}
                 </span>
-                <span className="text-gray-500 text-sm">
-                  {post.readingTime?.text}
-                </span>
+                <span className="text-gray-500 text-sm">{post.readingTime?.text}</span>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
                 {post.title}
               </h3>
-              <p className="text-gray-600 mb-4 line-clamp-3 flex-1">
-                {post.excerpt}
-              </p>
+              <p className="text-gray-600 mb-4 line-clamp-3 flex-1">{post.excerpt}</p>
               <div className="flex items-center mt-auto">
                 <Image
                   src={post.author.avatar}
@@ -56,14 +52,12 @@ export default function BlogGrid({ posts }: BlogGridProps) {
                   className="rounded-full mr-3"
                 />
                 <div className="text-sm">
-                  <p className="font-medium text-gray-900">
-                    {post.author.name}
-                  </p>
+                  <p className="font-medium text-gray-900">{post.author.name}</p>
                   <p className="text-gray-500">
                     {new Date(post.publishedAt).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',
-                      year: 'numeric'
+                      year: 'numeric',
                     })}
                   </p>
                 </div>

@@ -31,18 +31,14 @@ export async function POST(request: NextRequest) {
 
     // Validate payload
     if (!payload.metrics || !Array.isArray(payload.metrics)) {
-      return NextResponse.json(
-        { error: 'Invalid metrics data' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid metrics data' }, { status: 400 });
     }
 
     // Process each metric
-    const ip = request.headers.get('x-forwarded-for') || 
-              request.headers.get('x-real-ip') || 
-              'unknown';
-    
-    const processedMetrics = payload.metrics.map(metric => ({
+    const ip =
+      request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+
+    const processedMetrics = payload.metrics.map((metric) => ({
       ...metric,
       receivedAt: Date.now(),
       ip,
@@ -72,13 +68,9 @@ export async function POST(request: NextRequest) {
       processed: processedMetrics.length,
       sessionId: payload.sessionId,
     });
-
   } catch (error) {
     console.error('Performance metrics collection error:', error);
-    return NextResponse.json(
-      { error: 'Failed to process metrics' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to process metrics' }, { status: 500 });
   }
 }
 
@@ -97,7 +89,7 @@ export async function GET(request: NextRequest) {
       // Get metrics for specific session
       const pattern = `performance:${sessionId}:*`;
       const keys = await redisClient.smembers(`pattern:${pattern}`);
-      
+
       for (const key of keys) {
         const data = await redisClient.get(key);
         if (data) {
@@ -118,13 +110,9 @@ export async function GET(request: NextRequest) {
       timeframe,
       total: metrics.length,
     });
-
   } catch (error) {
     console.error('Performance metrics retrieval error:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve metrics' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to retrieve metrics' }, { status: 500 });
   }
 }
 
@@ -135,9 +123,12 @@ async function storeAggregatedMetrics(metrics: any[]) {
   const dayKey = `metrics:day:${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
 
   // Aggregate by metric type
-  const aggregated: Record<string, { count: number; sum: number; min: number; max: number; values: number[] }> = {};
+  const aggregated: Record<
+    string,
+    { count: number; sum: number; min: number; max: number; values: number[] }
+  > = {};
 
-  metrics.forEach(metric => {
+  metrics.forEach((metric) => {
     if (!aggregated[metric.name]) {
       aggregated[metric.name] = {
         count: 0,
@@ -198,7 +189,7 @@ async function checkPerformanceAlerts(metrics: any[]) {
     INP: 200,
   };
 
-  metrics.forEach(metric => {
+  metrics.forEach((metric) => {
     const threshold = thresholds[metric.name as keyof typeof thresholds];
     if (threshold && metric.value > threshold) {
       alerts.push({
@@ -219,26 +210,34 @@ async function checkPerformanceAlerts(metrics: any[]) {
   if (alerts.length > 0) {
     const alertsKey = `alerts:performance:${Date.now()}`;
     await redisClient.set(alertsKey, JSON.stringify(alerts), 86400); // 24 hours
-    
+
     // You could also send notifications here
     console.warn(`Performance alerts generated:`, alerts);
   }
 }
 
 // Get aggregated metrics
-async function getAggregatedMetrics(timeframe: string, metricType?: string | null, userId?: string | null) {
+async function getAggregatedMetrics(
+  timeframe: string,
+  metricType?: string | null,
+  userId?: string | null
+) {
   const now = new Date();
   const keys: string[] = [];
 
   // Determine which keys to query based on timeframe
   switch (timeframe) {
     case '1h':
-      keys.push(`metrics:hour:${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getHours()}`);
+      keys.push(
+        `metrics:hour:${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getHours()}`
+      );
       break;
     case '24h':
       for (let i = 0; i < 24; i++) {
         const hour = new Date(now.getTime() - i * 60 * 60 * 1000);
-        keys.push(`metrics:hour:${hour.getFullYear()}-${hour.getMonth()}-${hour.getDate()}-${hour.getHours()}`);
+        keys.push(
+          `metrics:hour:${hour.getFullYear()}-${hour.getMonth()}-${hour.getDate()}-${hour.getHours()}`
+        );
       }
       break;
     case '7d':
@@ -248,7 +247,9 @@ async function getAggregatedMetrics(timeframe: string, metricType?: string | nul
       }
       break;
     default:
-      keys.push(`metrics:hour:${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getHours()}`);
+      keys.push(
+        `metrics:hour:${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getHours()}`
+      );
   }
 
   const metrics: any[] = [];
@@ -284,31 +285,25 @@ function calculateMetricsSummary(metrics: any[]) {
     };
   }
 
-  const sessions = new Set(metrics.map(m => m.sessionId)).size;
-  const loadTimes = metrics
-    .filter(m => m.name === 'NAVIGATION_LOADTIME')
-    .map(m => m.value);
-  
-  const avgLoadTime = loadTimes.length > 0 
-    ? loadTimes.reduce((sum, time) => sum + time, 0) / loadTimes.length 
-    : 0;
+  const sessions = new Set(metrics.map((m) => m.sessionId)).size;
+  const loadTimes = metrics.filter((m) => m.name === 'NAVIGATION_LOADTIME').map((m) => m.value);
+
+  const avgLoadTime =
+    loadTimes.length > 0 ? loadTimes.reduce((sum, time) => sum + time, 0) / loadTimes.length : 0;
 
   // Calculate simplified performance score
-  const lcpMetrics = metrics.filter(m => m.name === 'LCP');
-  const fidMetrics = metrics.filter(m => m.name === 'FID');
-  const clsMetrics = metrics.filter(m => m.name === 'CLS');
+  const lcpMetrics = metrics.filter((m) => m.name === 'LCP');
+  const fidMetrics = metrics.filter((m) => m.name === 'FID');
+  const clsMetrics = metrics.filter((m) => m.name === 'CLS');
 
-  const avgLCP = lcpMetrics.length > 0 
-    ? lcpMetrics.reduce((sum, m) => sum + m.value, 0) / lcpMetrics.length 
-    : 0;
-  
-  const avgFID = fidMetrics.length > 0 
-    ? fidMetrics.reduce((sum, m) => sum + m.value, 0) / fidMetrics.length 
-    : 0;
-  
-  const avgCLS = clsMetrics.length > 0 
-    ? clsMetrics.reduce((sum, m) => sum + m.value, 0) / clsMetrics.length 
-    : 0;
+  const avgLCP =
+    lcpMetrics.length > 0 ? lcpMetrics.reduce((sum, m) => sum + m.value, 0) / lcpMetrics.length : 0;
+
+  const avgFID =
+    fidMetrics.length > 0 ? fidMetrics.reduce((sum, m) => sum + m.value, 0) / fidMetrics.length : 0;
+
+  const avgCLS =
+    clsMetrics.length > 0 ? clsMetrics.reduce((sum, m) => sum + m.value, 0) / clsMetrics.length : 0;
 
   // Simple performance scoring
   let performanceScore = 100;
@@ -331,7 +326,7 @@ function calculateMetricsSummary(metrics: any[]) {
 // Calculate percentile
 function calculatePercentile(sortedValues: number[], percentile: number): number {
   if (sortedValues.length === 0) return 0;
-  
+
   const index = Math.ceil((percentile / 100) * sortedValues.length) - 1;
   return sortedValues[Math.max(0, index)];
 }
@@ -339,4 +334,4 @@ function calculatePercentile(sortedValues: number[], percentile: number): number
 // Health check endpoint
 export async function HEAD() {
   return new NextResponse(null, { status: 200 });
-} 
+}

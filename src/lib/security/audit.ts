@@ -286,7 +286,7 @@ export class AuditService {
   private async storeEvents(events: SecurityAuditEvent[]): Promise<void> {
     try {
       await db.client.securityAuditEvent.createMany({
-        data: events.map(event => ({
+        data: events.map((event) => ({
           ...event,
           source: JSON.stringify(event.source),
           details: JSON.stringify(event.details),
@@ -305,7 +305,7 @@ export class AuditService {
     }
 
     const siemConfig = this.config.siemIntegration;
-    
+
     switch (siemConfig.provider) {
       case 'splunk':
         this.siemClients.set('splunk', new SplunkClient(siemConfig));
@@ -335,12 +335,12 @@ export class AuditService {
     }
 
     // Apply filters
-    const filteredEvents = events.filter(event => 
-      this.config.siemIntegration.filters.length === 0 ||
-      this.config.siemIntegration.filters.some(filter => 
-        event.eventType.includes(filter) || 
-        event.category.includes(filter)
-      )
+    const filteredEvents = events.filter(
+      (event) =>
+        this.config.siemIntegration.filters.length === 0 ||
+        this.config.siemIntegration.filters.some(
+          (filter) => event.eventType.includes(filter) || event.category.includes(filter)
+        )
     );
 
     if (filteredEvents.length === 0) {
@@ -359,7 +359,10 @@ export class AuditService {
     }
   }
 
-  private async sendToDestination(events: SecurityAuditEvent[], destination: AuditDestination): Promise<void> {
+  private async sendToDestination(
+    events: SecurityAuditEvent[],
+    destination: AuditDestination
+  ): Promise<void> {
     try {
       switch (destination.type) {
         case 'file':
@@ -380,17 +383,23 @@ export class AuditService {
   }
 
   // Destination Implementations
-  private async writeToFile(events: SecurityAuditEvent[], destination: AuditDestination): Promise<void> {
+  private async writeToFile(
+    events: SecurityAuditEvent[],
+    destination: AuditDestination
+  ): Promise<void> {
     const fs = await import('fs/promises');
     const path = destination.configuration.path || '/var/log/riscura/audit.log';
-    
+
     for (const event of events) {
       const logLine = this.formatEvent(event, destination.format) + '\n';
       await fs.appendFile(path, logLine);
     }
   }
 
-  private async sendToSyslog(events: SecurityAuditEvent[], destination: AuditDestination): Promise<void> {
+  private async sendToSyslog(
+    events: SecurityAuditEvent[],
+    destination: AuditDestination
+  ): Promise<void> {
     // Simplified syslog implementation
     for (const event of events) {
       const message = this.formatEvent(event, destination.format);
@@ -398,7 +407,10 @@ export class AuditService {
     }
   }
 
-  private async sendToWebhook(events: SecurityAuditEvent[], destination: AuditDestination): Promise<void> {
+  private async sendToWebhook(
+    events: SecurityAuditEvent[],
+    destination: AuditDestination
+  ): Promise<void> {
     const url = destination.configuration.url;
     const headers = destination.configuration.headers || {};
 
@@ -410,7 +422,7 @@ export class AuditService {
           ...headers,
         },
         body: JSON.stringify({
-          events: events.map(event => this.formatEvent(event, destination.format)),
+          events: events.map((event) => this.formatEvent(event, destination.format)),
           timestamp: new Date().toISOString(),
           source: 'riscura-audit',
         }),
@@ -585,10 +597,12 @@ export class AuditService {
 
   private isInternalIP(ip: string): boolean {
     // Simplified internal IP detection
-    return ip.startsWith('192.168.') || 
-           ip.startsWith('10.') || 
-           ip.startsWith('172.16.') ||
-           ip === '127.0.0.1';
+    return (
+      ip.startsWith('192.168.') ||
+      ip.startsWith('10.') ||
+      ip.startsWith('172.16.') ||
+      ip === '127.0.0.1'
+    );
   }
 
   private isOffHours(timestamp: Date): boolean {
@@ -622,7 +636,7 @@ export class AuditService {
 
   private async getRecentFailedLogins(userId: string, minutes: number): Promise<number> {
     const since = new Date(Date.now() - minutes * 60 * 1000);
-    
+
     const count = await db.client.securityAuditEvent.count({
       where: {
         userId,
@@ -639,7 +653,7 @@ export class AuditService {
 
   private async getRecentDataAccess(userId: string, minutes: number): Promise<number> {
     const since = new Date(Date.now() - minutes * 60 * 1000);
-    
+
     const events = await db.client.securityAuditEvent.findMany({
       where: {
         userId,
@@ -652,9 +666,7 @@ export class AuditService {
 
     // Sum up record counts from details
     return events.reduce((total, event) => {
-      const details = typeof event.details === 'string' 
-        ? JSON.parse(event.details) 
-        : event.details;
+      const details = typeof event.details === 'string' ? JSON.parse(event.details) : event.details;
       return total + (details.recordCount || 1);
     }, 0);
   }
@@ -662,15 +674,16 @@ export class AuditService {
   // Compliance Checking
   private isComplianceViolation(event: SecurityAuditEvent): boolean {
     // Check for data access without proper authorization
-    if (event.category === 'data_access' && 
-        event.tags.includes('sensitive') && 
-        !event.tags.includes('authorized')) {
+    if (
+      event.category === 'data_access' &&
+      event.tags.includes('sensitive') &&
+      !event.tags.includes('authorized')
+    ) {
       return true;
     }
 
     // Check for configuration changes without approval
-    if (event.category === 'configuration_change' && 
-        !event.details.approvedBy) {
+    if (event.category === 'configuration_change' && !event.details.approvedBy) {
       return true;
     }
 
@@ -685,19 +698,18 @@ export class AuditService {
   // Utility Methods
   private shouldLogEvent(event: SecurityAuditEvent): boolean {
     // Check if event type is configured to be logged
-    const eventTypeConfig = this.config.eventTypes.find(et => 
-      et.category === event.category
-    );
+    const eventTypeConfig = this.config.eventTypes.find((et) => et.category === event.category);
 
     if (!eventTypeConfig) {
       return false;
     }
 
-    return eventTypeConfig.actions.includes(event.action) || 
-           eventTypeConfig.actions.includes('*');
+    return eventTypeConfig.actions.includes(event.action) || eventTypeConfig.actions.includes('*');
   }
 
-  private getDataAccessSeverity(data: DataAccessAuditData): 'info' | 'low' | 'medium' | 'high' | 'critical' {
+  private getDataAccessSeverity(
+    data: DataAccessAuditData
+  ): 'info' | 'low' | 'medium' | 'high' | 'critical' {
     if (data.sensitive || data.classification === 'confidential') {
       return 'high';
     }
@@ -779,7 +791,7 @@ export class AuditService {
     ]);
 
     return {
-      events: events.map(event => ({
+      events: events.map((event) => ({
         ...event,
         source: typeof event.source === 'string' ? JSON.parse(event.source) : event.source,
         details: typeof event.details === 'string' ? JSON.parse(event.details) : event.details,
@@ -799,49 +811,38 @@ export class AuditService {
       },
     };
 
-    const [
-      totalEvents,
-      categoryCounts,
-      severityCounts,
-      outcomeCounts,
-      riskScoreAvg,
-    ] = await Promise.all([
-      db.client.securityAuditEvent.count({ where }),
-      db.client.securityAuditEvent.groupBy({
-        by: ['category'],
-        where,
-        _count: true,
-      }),
-      db.client.securityAuditEvent.groupBy({
-        by: ['severity'],
-        where,
-        _count: true,
-      }),
-      db.client.securityAuditEvent.groupBy({
-        by: ['outcome'],
-        where,
-        _count: true,
-      }),
-      db.client.securityAuditEvent.aggregate({
-        where,
-        _avg: {
-          risk_score: true,
-        },
-      }),
-    ]);
+    const [totalEvents, categoryCounts, severityCounts, outcomeCounts, riskScoreAvg] =
+      await Promise.all([
+        db.client.securityAuditEvent.count({ where }),
+        db.client.securityAuditEvent.groupBy({
+          by: ['category'],
+          where,
+          _count: true,
+        }),
+        db.client.securityAuditEvent.groupBy({
+          by: ['severity'],
+          where,
+          _count: true,
+        }),
+        db.client.securityAuditEvent.groupBy({
+          by: ['outcome'],
+          where,
+          _count: true,
+        }),
+        db.client.securityAuditEvent.aggregate({
+          where,
+          _avg: {
+            risk_score: true,
+          },
+        }),
+      ]);
 
     return {
       period,
       totalEvents,
-      categoryCounts: Object.fromEntries(
-        categoryCounts.map(c => [c.category, c._count])
-      ),
-      severityCounts: Object.fromEntries(
-        severityCounts.map(s => [s.severity, s._count])
-      ),
-      outcomeCounts: Object.fromEntries(
-        outcomeCounts.map(o => [o.outcome, o._count])
-      ),
+      categoryCounts: Object.fromEntries(categoryCounts.map((c) => [c.category, c._count])),
+      severityCounts: Object.fromEntries(severityCounts.map((s) => [s.severity, s._count])),
+      outcomeCounts: Object.fromEntries(outcomeCounts.map((o) => [o.outcome, o._count])),
       averageRiskScore: riskScoreAvg._avg.risk_score || 0,
     };
   }
@@ -859,14 +860,14 @@ export class AuditService {
             uniqueUsers: new Set(),
             actions: new Set(),
             lastAccessed: event.timestamp,
-            riskScore: 0
+            riskScore: 0,
           };
         }
-        
+
         patterns[key].accessCount++;
         patterns[key].uniqueUsers.add(event.userId);
         patterns[key].actions.add(event.action);
-        
+
         if (new Date(event.timestamp) > new Date(patterns[key].lastAccessed)) {
           patterns[key].lastAccessed = event.timestamp;
         }
@@ -924,27 +925,27 @@ export class AuditService {
           actions: {},
           timeDistribution: {},
           riskScore: 0,
-          anomalies: []
+          anomalies: [],
         };
       }
-      
+
       const userPattern = patterns[event.userId];
       userPattern.totalActions++;
       userPattern.uniqueEntities.add(`${event.entityType}:${event.entityId}`);
-      
+
       // Track action types
       if (!userPattern.actions[event.action]) {
         userPattern.actions[event.action] = 0;
       }
       userPattern.actions[event.action]++;
-      
+
       // Track time distribution
       const hour = new Date(event.timestamp).getHours();
       if (!userPattern.timeDistribution[hour]) {
         userPattern.timeDistribution[hour] = 0;
       }
       userPattern.timeDistribution[hour]++;
-      
+
       return patterns;
     }, {});
   }
@@ -954,7 +955,10 @@ export class AuditService {
     const totalActions = pattern.totalActions;
     const uniqueEntities = pattern.uniqueEntities.size;
     const actions = Object.keys(pattern.actions).length;
-    const timeDistribution = Object.values(pattern.timeDistribution).reduce((total: number, count: number) => total + count, 0);
+    const timeDistribution = Object.values(pattern.timeDistribution).reduce(
+      (total: number, count: number) => total + count,
+      0
+    );
 
     let score = 1;
 
@@ -1005,7 +1009,7 @@ class SplunkClient extends SIEMClient {
     const response = await fetch(`${this.config.endpoint}/services/collector/event`, {
       method: 'POST',
       headers: {
-        'Authorization': `Splunk ${this.config.authentication.token}`,
+        Authorization: `Splunk ${this.config.authentication.token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -1023,18 +1027,15 @@ class SplunkClient extends SIEMClient {
 
 class ElasticClient extends SIEMClient {
   async sendEvents(events: SecurityAuditEvent[]): Promise<void> {
-    const body = events.flatMap(event => [
-      { index: { _index: 'riscura-audit' } },
-      event,
-    ]);
+    const body = events.flatMap((event) => [{ index: { _index: 'riscura-audit' } }, event]);
 
     const response = await fetch(`${this.config.endpoint}/_bulk`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-ndjson',
-        'Authorization': `Basic ${Buffer.from(`${this.config.authentication.username}:${this.config.authentication.password}`).toString('base64')}`,
+        Authorization: `Basic ${Buffer.from(`${this.config.authentication.username}:${this.config.authentication.password}`).toString('base64')}`,
       },
-      body: body.map(item => JSON.stringify(item)).join('\n') + '\n',
+      body: body.map((item) => JSON.stringify(item)).join('\n') + '\n',
     });
 
     if (!response.ok) {
@@ -1049,7 +1050,7 @@ class QRadarClient extends SIEMClient {
       const response = await fetch(`${this.config.endpoint}/api/siem/events`, {
         method: 'POST',
         headers: {
-          'SEC': this.config.authentication.token,
+          SEC: this.config.authentication.token,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(event),
@@ -1067,7 +1068,7 @@ class SentinelClient extends SIEMClient {
     const response = await fetch(`${this.config.endpoint}/api/logs`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.config.authentication.token}`,
+        Authorization: `Bearer ${this.config.authentication.token}`,
         'Content-Type': 'application/json',
         'Log-Type': 'RiscuraAudit',
       },
@@ -1334,4 +1335,4 @@ export const createDefaultAuditConfig = (): AuditConfiguration => ({
     flushInterval: 60,
     filters: [],
   },
-}); 
+});

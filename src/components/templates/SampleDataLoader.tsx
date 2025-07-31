@@ -343,8 +343,10 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
 
   if (isLoading) {
     return (
-      <DaisyCard className={className}>
-        <DaisyCardContent className="p-8 text-center">
+      <DaisyCard className={className} >
+  <DaisyCardContent className="p-8 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Sparkles className="w-8 h-8 text-blue-600 animate-pulse" />
           </div>
@@ -354,17 +356,19 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
           </p>
           <DaisyProgress value={loadingProgress} className="h-3 mb-2" />
           <p className="text-sm text-gray-500">{loadingProgress}% complete</p>
-        </DaisyCardBody>
+        </DaisyProgress>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <div className={`space-y-6 ${className}`}>
-      <DaisyCard>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center space-x-2">
-            <Database className="w-5 h-5" />
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center space-x-2" >
+  <Database className="w-5 h-5" />
+</DaisyCardTitle>
             <span>Sample Data & Templates</span>
           </DaisyCardTitle>
           <p className="text-gray-600">
@@ -372,8 +376,9 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
           </p>
         
 
-        <DaisyCardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+</DaisyCardContent>
             {filteredTemplates.map((template) => {
               const Icon = template.icon;
               const CategoryIcon = getCategoryIcon(template.category);
@@ -387,16 +392,18 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
                   }`}
                   onClick={() => handleTemplateToggle(template.id)}
                 >
-                  <DaisyCardContent className="p-4">
-                    <div className="flex items-start justify-between mb-3">
+                  <DaisyCardContent className="p-4" >
+  <div className="flex items-start justify-between mb-3">
+</DaisyCard>
                       <div className="flex items-center space-x-2">
                         <div className={`p-2 rounded-lg ${getCategoryColor(template.category)}`}>
                           <CategoryIcon className="w-4 h-4" />
                         </div>
                         <DaisyCheckbox checked={isSelected} />
                       </div>
-                      <DaisyBadge variant="secondary" className="text-xs">
-                        {template.items} items
+                      <DaisyBadge variant="secondary" className="text-xs" >
+  {template.items} items
+</DaisyCheckbox>
                       </DaisyBadge>
                     </div>
 
@@ -441,7 +448,7 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
                         </div>
                       )}
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
@@ -454,18 +461,20 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
             <DaisyButton
               onClick={loadSampleData}
               disabled={selectedTemplates.length === 0}
-              className="flex items-center space-x-2"
-            >
-              <Download className="w-4 h-4" />
+              className="flex items-center space-x-2" >
+  <Download className="w-4 h-4" />
+</DaisyButton>
               <span>Load Sample Data</span>
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Benefits section */}
-      <DaisyCard>
-        <DaisyCardContent className="p-6">
+      <DaisyCard >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
           <h4 className="font-medium text-gray-900 mb-4">Why Use Sample Data?</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex items-start space-x-3">
@@ -502,7 +511,7 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

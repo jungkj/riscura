@@ -325,18 +325,21 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Progress overview */}
-      <DaisyCard>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center space-x-2">
-            <Sparkles className="w-5 h-5" />
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyProgressiveDisclosureProps>
+          <DaisyCardTitle className="flex items-center space-x-2" >
+  <Sparkles className="w-5 h-5" />
+</DaisyCardTitle>
             <span>Feature Discovery Progress</span>
           </DaisyCardTitle>
           <p className="text-gray-600">
             Unlock new features as you become more experienced with Riscura
           </p>
         
-        <DaisyCardContent>
-          <div className="space-y-4">
+        <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Overall Progress</span>
               <span className="text-sm text-gray-600">
@@ -363,20 +366,21 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
               })}
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyProgress>
       </DaisyCard>
 
       {/* Feature filters */}
-      <DaisyCard>
-        <DaisyCardContent className="p-4">
+      <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
           <div className="flex flex-wrap gap-2 mb-4">
             {categories.map(category => (
               <DaisyButton
                 key={category.id}
                 variant={selectedCategory === category.id ? 'default' : 'outline'}
                 size="sm"
-                onClick={() => setSelectedCategory(category.id)}
-              >
+                onClick={() => setSelectedCategory(category.id)} />
                 {category.name}
               </DaisyButton>
             ))}
@@ -392,7 +396,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
               <span>Show locked features</span>
             </label>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Features grid */}
@@ -402,8 +406,9 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
             {selectedCategory === 'all' && (
               <h3 className="text-lg font-semibold mb-4 capitalize flex items-center space-x-2">
                 <span>{category} Features</span>
-                <DaisyBadge variant="secondary" className="text-xs">
-                  {categoryFeatures.filter(f => f.isUnlocked).length} / {categoryFeatures.length}
+                <DaisyBadge variant="secondary" className="text-xs" >
+  {categoryFeatures.filter(f => f.isUnlocked).length} / {categoryFeatures.length}
+</DaisyBadge>
                 </DaisyBadge>
               </h3>
             )}
@@ -424,8 +429,9 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
                           : 'opacity-75 hover:shadow-md'
                       }`}
                     >
-                      <DaisyCardContent className="p-4">
-                        <div className="flex items-start space-x-3">
+                      <DaisyCardContent className="p-4" >
+  <div className="flex items-start space-x-3">
+</DaisyCard>
                           <div className={`p-2 rounded-lg ${
                             feature.isUnlocked 
                               ? 'bg-white' 
@@ -488,23 +494,24 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
                             )}
                             
                             <div className="flex items-center justify-between mt-3">
-                              <DaisyBadge variant="outline" className="text-xs capitalize">
-                                {feature.category}
+                              <DaisyBadge variant="outline" className="text-xs capitalize" >
+  {feature.category}
+</DaisyProgress>
                               </DaisyBadge>
                               
                               {feature.isUnlocked && (
                                 <DaisyButton
                                   variant="ghost"
                                   size="sm"
-                                  className="text-blue-600 hover:text-blue-700 h-auto p-0"
-                                >
-                                  Explore <ChevronRight className="w-3 h-3 ml-1" />
+                                  className="text-blue-600 hover:text-blue-700 h-auto p-0" >
+  Explore 
+</DaisyButton><ChevronRight className="w-3 h-3 ml-1" />
                                 </DaisyButton>
                               )}
                             </div>
                           </div>
                         </div>
-                      </DaisyCardBody>
+                      </DaisyCardContent>
                     </DaisyCard>
                   );
                 })}
@@ -525,8 +532,10 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
         const progress = getUnlockProgress(nextFeature);
         
         return (
-          <DaisyCard className="border-2 border-dashed border-blue-200 bg-blue-50">
-            <DaisyCardContent className="p-4">
+          <DaisyCard className="border-2 border-dashed border-blue-200 bg-blue-50" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
               <div className="flex items-center space-x-3">
                 <div className="p-2 bg-blue-100 rounded-lg">
                   <Lightbulb className="w-5 h-5 text-blue-600" />
@@ -546,7 +555,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
                   </div>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyProgress>
           </DaisyCard>
         );
       })()}

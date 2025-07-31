@@ -353,11 +353,11 @@ const RISK_FRAMEWORKS: Record<string, RiskFramework> = {
         scale: { min: 1, max: 5, unit: 'probability' },
         descriptions: {
           1: 'Remote (< 5%)',
-          2: 'Unlikely (5-25%)', 
+          2: 'Unlikely (5-25%)',
           3: 'Possible (25-50%)',
           4: 'Likely (50-75%)',
-          5: 'Almost Certain (> 75%)'
-        }
+          5: 'Almost Certain (> 75%)',
+        },
       },
       {
         dimension: 'impact',
@@ -365,14 +365,14 @@ const RISK_FRAMEWORKS: Record<string, RiskFramework> = {
         descriptions: {
           1: 'Insignificant',
           2: 'Minor',
-          3: 'Moderate', 
+          3: 'Moderate',
           4: 'Major',
-          5: 'Catastrophic'
-        }
-      }
+          5: 'Catastrophic',
+        },
+      },
     ],
     scoringMethod: 'matrix',
-    version: '2017'
+    version: '2017',
   },
   iso31000: {
     id: 'iso31000',
@@ -390,8 +390,8 @@ const RISK_FRAMEWORKS: Record<string, RiskFramework> = {
           4: 'Possible (20-50%)',
           5: 'Likely (50-80%)',
           6: 'Very Likely (80-95%)',
-          7: 'Almost Certain (> 95%)'
-        }
+          7: 'Almost Certain (> 95%)',
+        },
       },
       {
         dimension: 'impact',
@@ -401,14 +401,14 @@ const RISK_FRAMEWORKS: Record<string, RiskFramework> = {
           2: 'Marginal',
           3: 'Minor',
           4: 'Moderate',
-          5: 'Significant', 
+          5: 'Significant',
           6: 'Major',
-          7: 'Catastrophic'
-        }
-      }
+          7: 'Catastrophic',
+        },
+      },
     ],
     scoringMethod: 'quantitative',
-    version: '2018'
+    version: '2018',
   },
   nist: {
     id: 'nist',
@@ -424,24 +424,24 @@ const RISK_FRAMEWORKS: Record<string, RiskFramework> = {
           0.3: 'Low',
           0.5: 'Moderate',
           0.7: 'High',
-          0.9: 'Very High'
-        }
+          0.9: 'Very High',
+        },
       },
       {
         dimension: 'impact',
         scale: { min: 10, max: 100, unit: 'severity' },
         descriptions: {
           10: 'Very Low',
-          30: 'Low', 
+          30: 'Low',
           50: 'Moderate',
           70: 'High',
-          90: 'Very High'
-        }
-      }
+          90: 'Very High',
+        },
+      },
     ],
     scoringMethod: 'quantitative',
-    version: 'SP 800-30 Rev. 1'
-  }
+    version: 'SP 800-30 Rev. 1',
+  },
 };
 
 export class RiskAnalysisAIService {
@@ -454,7 +454,7 @@ export class RiskAnalysisAIService {
   }
 
   private initializeFrameworks(): void {
-    Object.values(RISK_FRAMEWORKS).forEach(framework => {
+    Object.values(RISK_FRAMEWORKS).forEach((framework) => {
       this.frameworks.set(framework.id, framework);
     });
   }
@@ -487,7 +487,11 @@ export class RiskAnalysisAIService {
       executiveSummary: '',
       methodology: selectedFramework.description,
       findings: [],
-      qualitativeAnalysis: await this.performQualitativeAnalysis(risk, selectedFramework, options.controls),
+      qualitativeAnalysis: await this.performQualitativeAnalysis(
+        risk,
+        selectedFramework,
+        options.controls
+      ),
       recommendations: [],
       actionPlan: [],
       monitoringPlan: [],
@@ -500,8 +504,8 @@ export class RiskAnalysisAIService {
         assumptions: [],
         limitations: [],
         reviewers: [],
-        approvers: []
-      }
+        approvers: [],
+      },
     };
 
     // Perform quantitative analysis if requested
@@ -510,14 +514,16 @@ export class RiskAnalysisAIService {
     }
 
     // Generate findings
-    report.findings = await this.generateFindings(risk, selectedFramework, report.qualitativeAnalysis);
+    report.findings = await this.generateFindings(
+      risk,
+      selectedFramework,
+      report.qualitativeAnalysis
+    );
 
     // Generate recommendations
-    report.recommendations = await this.generateRiskRecommendations(
-      risk, 
-      report, 
-      { riskTolerance: 'medium' }
-    );
+    report.recommendations = await this.generateRiskRecommendations(risk, report, {
+      riskTolerance: 'medium',
+    });
 
     // Create action plan
     report.actionPlan = await this.generateActionPlan(report.recommendations);
@@ -545,7 +551,7 @@ export class RiskAnalysisAIService {
     // Generate random samples based on distributions
     const likelihoodSamples = this.generateSamples(parameters.likelihoodDistribution, iterations);
     const impactSamples = this.generateSamples(parameters.impactDistribution, iterations);
-    
+
     // Apply correlations if provided
     const correlatedSamples = this.applyCorrelations(
       likelihoodSamples,
@@ -554,34 +560,33 @@ export class RiskAnalysisAIService {
     );
 
     // Calculate risk values for each iteration
-    const riskValues = correlatedSamples.map((sample, i) => 
-      sample.likelihood * sample.impact
-    );
+    const riskValues = correlatedSamples.map((sample, i) => sample.likelihood * sample.impact);
 
     // Calculate statistics
     const sorted = riskValues.sort((a, b) => a - b);
     const mean = riskValues.reduce((sum, val) => sum + val, 0) / iterations;
-    const variance = riskValues.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / (iterations - 1);
+    const variance =
+      riskValues.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / (iterations - 1);
     const stddev = Math.sqrt(variance);
 
     // Calculate confidence intervals
-    const confidenceIntervals = [90, 95, 99].map(level => ({
+    const confidenceIntervals = [90, 95, 99].map((level) => ({
       level,
       lower: this.percentile(sorted, (100 - level) / 2),
-      upper: this.percentile(sorted, 100 - (100 - level) / 2)
+      upper: this.percentile(sorted, 100 - (100 - level) / 2),
     }));
 
     // Calculate Value at Risk
-    const valueAtRisk = [95, 99, 99.9].map(confidence => ({
+    const valueAtRisk = [95, 99, 99.9].map((confidence) => ({
       confidence,
-      value: this.percentile(sorted, confidence)
+      value: this.percentile(sorted, confidence),
     }));
 
     // Calculate probability of exceedance
     const thresholds = [mean, mean + stddev, mean + 2 * stddev];
-    const probabilityOfExceedance = thresholds.map(threshold => ({
+    const probabilityOfExceedance = thresholds.map((threshold) => ({
       threshold,
-      probability: riskValues.filter(val => val > threshold).length / iterations
+      probability: riskValues.filter((val) => val > threshold).length / iterations,
     }));
 
     // Generate distribution data
@@ -593,7 +598,7 @@ export class RiskAnalysisAIService {
       '50': this.percentile(sorted, 50),
       '75': this.percentile(sorted, 75),
       '90': this.percentile(sorted, 90),
-      '95': this.percentile(sorted, 95)
+      '95': this.percentile(sorted, 95),
     };
 
     return {
@@ -610,9 +615,9 @@ export class RiskAnalysisAIService {
           skewness: this.calculateSkewness(riskValues, mean, stddev),
           kurtosis: this.calculateKurtosis(riskValues, mean, stddev),
           mode: this.calculateMode(sorted),
-          median: this.percentile(sorted, 50)
-        }
-      }
+          median: this.percentile(sorted, 50),
+        },
+      },
     };
   }
 
@@ -627,7 +632,10 @@ export class RiskAnalysisAIService {
       confidenceThreshold?: number;
     } = {}
   ): Promise<RiskCorrelationAnalysis> {
-    const cacheKey = risks.map(r => r.id).sort().join(',');
+    const cacheKey = risks
+      .map((r) => r.id)
+      .sort()
+      .join(',');
     if (this.correlationCache.has(cacheKey)) {
       return this.correlationCache.get(cacheKey)!;
     }
@@ -652,7 +660,7 @@ export class RiskAnalysisAIService {
       networkMetrics,
       clusters,
       dependencies,
-      systemicRisk
+      systemicRisk,
     };
 
     this.correlationCache.set(cacheKey, analysis);
@@ -680,25 +688,35 @@ export class RiskAnalysisAIService {
 
     // Generate mitigation recommendations
     if (currentScore > targetScore) {
-      recommendations.push(...await this.generateMitigationRecommendations(
-        risk, 
-        assessment, 
-        currentScore - targetScore,
-        options
-      ));
+      recommendations.push(
+        ...(await this.generateMitigationRecommendations(
+          risk,
+          assessment,
+          currentScore - targetScore,
+          options
+        ))
+      );
     }
 
     // Generate transfer recommendations
-    recommendations.push(...await this.generateTransferRecommendations(risk, assessment, options));
+    recommendations.push(
+      ...(await this.generateTransferRecommendations(risk, assessment, options))
+    );
 
     // Generate avoidance recommendations if risk is too high
-    if (currentScore >= 20) { // Critical risk threshold
-      recommendations.push(...await this.generateAvoidanceRecommendations(risk, assessment, options));
+    if (currentScore >= 20) {
+      // Critical risk threshold
+      recommendations.push(
+        ...(await this.generateAvoidanceRecommendations(risk, assessment, options))
+      );
     }
 
     // Generate acceptance recommendations for low risks
-    if (currentScore <= 5) { // Low risk threshold
-      recommendations.push(...await this.generateAcceptanceRecommendations(risk, assessment, options));
+    if (currentScore <= 5) {
+      // Low risk threshold
+      recommendations.push(
+        ...(await this.generateAcceptanceRecommendations(risk, assessment, options))
+      );
     }
 
     // Sort by priority and feasibility
@@ -741,20 +759,10 @@ export class RiskAnalysisAIService {
     const controlEffectiveness = await this.analyzeControlEffectiveness(risk, context.controls);
 
     // Calculate likelihood
-    const likelihood = await this.calculateLikelihood(
-      risk,
-      textAnalysis,
-      industryFactors,
-      context
-    );
+    const likelihood = await this.calculateLikelihood(risk, textAnalysis, industryFactors, context);
 
     // Calculate impact
-    const impact = await this.calculateImpact(
-      risk,
-      textAnalysis,
-      industryFactors,
-      context
-    );
+    const impact = await this.calculateImpact(risk, textAnalysis, industryFactors, context);
 
     // Apply framework-specific scoring
     const score = this.applyFrameworkScoring(likelihood, impact, selectedFramework);
@@ -775,16 +783,16 @@ export class RiskAnalysisAIService {
       factors: [
         ...textAnalysis.factors,
         ...industryFactors.factors,
-        ...controlEffectiveness.factors
+        ...controlEffectiveness.factors,
       ],
-      methodology: `AI-powered scoring using ${selectedFramework.name}`
+      methodology: `AI-powered scoring using ${selectedFramework.name}`,
     };
   }
 
   // Private helper methods for quantitative analysis
   private generateSamples(distribution: ProbabilityDistribution, count: number): number[] {
     const samples: number[] = [];
-    
+
     for (let i = 0; i < count; i++) {
       const random = Math.random();
       let sample: number;
@@ -815,8 +823,9 @@ export class RiskAnalysisAIService {
           break;
         }
         case 'uniform': {
-          sample = (distribution.parameters.min || 0) + 
-                  random * ((distribution.parameters.max || 1) - (distribution.parameters.min || 0));
+          sample =
+            (distribution.parameters.min || 0) +
+            random * ((distribution.parameters.max || 1) - (distribution.parameters.min || 0));
           break;
         }
         case 'beta': {
@@ -840,10 +849,11 @@ export class RiskAnalysisAIService {
   }
 
   private boxMullerTransform(mean: number, stddev: number): number {
-    let u = 0, v = 0;
-    while(u === 0) u = Math.random();
-    while(v === 0) v = Math.random();
-    
+    let u = 0,
+      v = 0;
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
+
     const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
     return z * stddev + mean;
   }
@@ -851,7 +861,7 @@ export class RiskAnalysisAIService {
   private triangularSample(min: number, max: number, mode: number, random: number): number {
     const range = max - min;
     const modeRatio = (mode - min) / range;
-    
+
     if (random < modeRatio) {
       return min + Math.sqrt(random * range * (mode - min));
     } else {
@@ -861,8 +871,8 @@ export class RiskAnalysisAIService {
 
   private betaSample(alpha: number, beta: number, random: number): number {
     // Simplified beta distribution sampling
-    const x = Math.pow(random, 1/alpha);
-    const y = Math.pow(1 - random, 1/beta);
+    const x = Math.pow(random, 1 / alpha);
+    const y = Math.pow(1 - random, 1 / beta);
     return x / (x + y);
   }
 
@@ -873,49 +883,56 @@ export class RiskAnalysisAIService {
   ): Array<{ likelihood: number; impact: number }> {
     // Simple correlation application - in production, use Cholesky decomposition
     const correlation = correlationMatrix?.['likelihood_impact'] || 0;
-    
+
     return likelihood.map((l, i) => ({
       likelihood: l,
-      impact: impact[i] + correlation * (l - likelihood.reduce((sum, val) => sum + val, 0) / likelihood.length)
+      impact:
+        impact[i] +
+        correlation * (l - likelihood.reduce((sum, val) => sum + val, 0) / likelihood.length),
     }));
   }
 
   private percentile(sorted: number[], p: number): number {
     if (p === 0) return sorted[0];
     if (p === 100) return sorted[sorted.length - 1];
-    
+
     const index = (p / 100) * (sorted.length - 1);
     const lower = Math.floor(index);
     const upper = Math.ceil(index);
-    
+
     if (lower === upper) return sorted[lower];
-    
+
     const weight = index - lower;
     return sorted[lower] * (1 - weight) + sorted[upper] * weight;
   }
 
-  private createHistogram(data: number[], bins: number): Array<{ value: number; frequency: number; cumulative: number }> {
+  private createHistogram(
+    data: number[],
+    bins: number
+  ): Array<{ value: number; frequency: number; cumulative: number }> {
     const min = Math.min(...data);
     const max = Math.max(...data);
     const binWidth = (max - min) / bins;
-    
-    const histogram = Array(bins).fill(0).map((_, i) => ({
-      value: min + (i + 0.5) * binWidth,
-      frequency: 0,
-      cumulative: 0
-    }));
-    
-    data.forEach(value => {
+
+    const histogram = Array(bins)
+      .fill(0)
+      .map((_, i) => ({
+        value: min + (i + 0.5) * binWidth,
+        frequency: 0,
+        cumulative: 0,
+      }));
+
+    data.forEach((value) => {
       const binIndex = Math.min(Math.floor((value - min) / binWidth), bins - 1);
       histogram[binIndex].frequency++;
     });
-    
+
     let cumulative = 0;
-    histogram.forEach(bin => {
+    histogram.forEach((bin) => {
       cumulative += bin.frequency;
       bin.cumulative = cumulative / data.length;
     });
-    
+
     return histogram;
   }
 
@@ -928,27 +945,29 @@ export class RiskAnalysisAIService {
   private calculateKurtosis(data: number[], mean: number, stddev: number): number {
     const n = data.length;
     const sum = data.reduce((acc, val) => acc + Math.pow((val - mean) / stddev, 4), 0);
-    return ((n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3))) * sum - 
-           (3 * Math.pow(n - 1, 2)) / ((n - 2) * (n - 3));
+    return (
+      ((n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3))) * sum -
+      (3 * Math.pow(n - 1, 2)) / ((n - 2) * (n - 3))
+    );
   }
 
   private calculateMode(sorted: number[]): number {
     const frequency: Record<number, number> = {};
-    sorted.forEach(val => {
+    sorted.forEach((val) => {
       const rounded = Math.round(val * 100) / 100;
       frequency[rounded] = (frequency[rounded] || 0) + 1;
     });
-    
+
     let maxFreq = 0;
     let mode = sorted[0];
-    
+
     Object.entries(frequency).forEach(([val, freq]) => {
       if (freq > maxFreq) {
         maxFreq = freq;
         mode = parseFloat(val);
       }
     });
-    
+
     return mode;
   }
 
@@ -969,8 +988,8 @@ export class RiskAnalysisAIService {
         businessModel: 'Traditional',
         lifecycle: 'mature',
         competitivePosition: 'Strong',
-        strategicObjectives: []
-      }
+        strategicObjectives: [],
+      },
     };
   }
 
@@ -984,19 +1003,19 @@ export class RiskAnalysisAIService {
         parameters: {
           min: 0.1,
           max: 0.9,
-          mode: risk.likelihood / 5
-        }
+          mode: risk.likelihood / 5,
+        },
       },
       impactDistribution: {
         type: 'triangular',
         parameters: {
           min: 10,
           max: 100,
-          mode: risk.impact * 20
-        }
+          mode: risk.impact * 20,
+        },
       },
       timeHorizon: 12,
-      iterations: 10000
+      iterations: 10000,
     };
 
     const results = await this.performMonteCarloSimulation(risk, parameters);
@@ -1008,7 +1027,7 @@ export class RiskAnalysisAIService {
       results,
       confidence: 0.85,
       validatedAt: new Date(),
-      validatedBy: 'ARIA AI Assistant'
+      validatedBy: 'ARIA AI Assistant',
     };
   }
 
@@ -1027,8 +1046,8 @@ export class RiskAnalysisAIService {
         impact: 'medium',
         evidence: ['Control gap analysis', 'Framework assessment'],
         source: 'AI Analysis',
-        confidence: 0.75
-      }
+        confidence: 0.75,
+      },
     ];
   }
 
@@ -1078,7 +1097,7 @@ export class RiskAnalysisAIService {
       clustering: 0,
       averagePathLength: 0,
       centralityMeasures: {},
-      criticalPaths: []
+      criticalPaths: [],
     };
   }
 
@@ -1106,14 +1125,11 @@ export class RiskAnalysisAIService {
       amplificationFactor: 0,
       systemicImportance: {},
       vulnerabilityIndex: 0,
-      resilience: 0
+      resilience: 0,
     };
   }
 
-  private calculateTargetRiskScore(
-    risk: Risk,
-    tolerance: 'low' | 'medium' | 'high'
-  ): number {
+  private calculateTargetRiskScore(risk: Risk, tolerance: 'low' | 'medium' | 'high'): number {
     const toleranceMultipliers = { low: 0.5, medium: 0.7, high: 0.9 };
     return risk.riskScore * toleranceMultipliers[tolerance];
   }
@@ -1163,7 +1179,7 @@ export class RiskAnalysisAIService {
   }
 
   private async analyzeRiskText(
-    description: string, 
+    description: string,
     category: RiskCategory
   ): Promise<TextAnalysisResult> {
     // NLP analysis implementation
@@ -1171,7 +1187,7 @@ export class RiskAnalysisAIService {
       factors: [],
       sentiment: 0,
       keywords: [],
-      complexity: 0
+      complexity: 0,
     };
   }
 
@@ -1181,7 +1197,7 @@ export class RiskAnalysisAIService {
   ): Promise<IndustryFactorsResult> {
     return {
       factors: [],
-      benchmark: 0
+      benchmark: 0,
     };
   }
 
@@ -1191,7 +1207,7 @@ export class RiskAnalysisAIService {
   ): Promise<ControlEffectivenessResult> {
     return {
       factors: [],
-      effectiveness: 0
+      effectiveness: 0,
     };
   }
 
@@ -1203,40 +1219,42 @@ export class RiskAnalysisAIService {
   ): Promise<number> {
     // Base likelihood from existing risk data
     const likelihood = risk.likelihood || 1;
-    
+
     // Text analysis factors (0.3 weight)
-    const textScore = Math.min(5, Math.max(1, 
-      1 + (textAnalysis.complexity * 2) + (textAnalysis.sentiment < 0 ? 2 : 0)
-    ));
-    
+    const textScore = Math.min(
+      5,
+      Math.max(1, 1 + textAnalysis.complexity * 2 + (textAnalysis.sentiment < 0 ? 2 : 0))
+    );
+
     // Industry benchmark factors (0.4 weight)
     const industryScore = Math.min(5, Math.max(1, industryFactors.benchmark));
-    
+
     // Historical data factors (0.2 weight)
     let historicalScore = 3; // default medium
     if (context.historicalData && context.historicalData.length > 0) {
-      const similarRisks = context.historicalData.filter(r => 
-        r.category === risk.category && r.riskScore > 0
+      const similarRisks = context.historicalData.filter(
+        (r) => r.category === risk.category && r.riskScore > 0
       );
       if (similarRisks.length > 0) {
-        const avgLikelihood = similarRisks.reduce((sum, r) => sum + r.likelihood, 0) / similarRisks.length;
+        const avgLikelihood =
+          similarRisks.reduce((sum, r) => sum + r.likelihood, 0) / similarRisks.length;
         historicalScore = Math.min(5, Math.max(1, avgLikelihood));
       }
     }
-    
+
     // Organization size factor (0.1 weight)
-    const sizeMultiplier = context.organizationSize === 'large' ? 1.2 : 
-                          context.organizationSize === 'small' ? 0.8 : 1.0;
-    
+    const sizeMultiplier =
+      context.organizationSize === 'large' ? 1.2 : context.organizationSize === 'small' ? 0.8 : 1.0;
+
     // Calculate weighted likelihood
-    const weightedLikelihood = (
-      (likelihood * 0.0) + // Don't use existing score in calculation
-      (textScore * 0.3) +
-      (industryScore * 0.4) +
-      (historicalScore * 0.2) +
-      (3 * 0.1) // base organizational factor
-    ) * sizeMultiplier;
-    
+    const weightedLikelihood =
+      (likelihood * 0.0 + // Don't use existing score in calculation
+        textScore * 0.3 +
+        industryScore * 0.4 +
+        historicalScore * 0.2 +
+        3 * 0.1) * // base organizational factor
+      sizeMultiplier;
+
     return Math.min(5, Math.max(1, Math.round(weightedLikelihood)));
   }
 
@@ -1248,44 +1266,52 @@ export class RiskAnalysisAIService {
   ): Promise<number> {
     // Base impact from existing risk data
     const impact = risk.impact || 1;
-    
+
     // Category-based impact multipliers
     const categoryMultipliers = {
       OPERATIONAL: 1.0,
       FINANCIAL: 1.3,
       STRATEGIC: 1.2,
       COMPLIANCE: 1.4,
-      TECHNOLOGY: 1.1
+      TECHNOLOGY: 1.1,
     };
-    
-    const categoryMultiplier = categoryMultipliers[risk.category as keyof typeof categoryMultipliers] || 1.0;
-    
+
+    const categoryMultiplier =
+      categoryMultipliers[risk.category as keyof typeof categoryMultipliers] || 1.0;
+
     // Text analysis impact indicators
-    const impactKeywords = ['critical', 'severe', 'major', 'significant', 'catastrophic', 'material'];
-    const keywordMatches = textAnalysis.keywords.filter(k => 
-      impactKeywords.some(ik => k.toLowerCase().includes(ik.toLowerCase()))
+    const impactKeywords = [
+      'critical',
+      'severe',
+      'major',
+      'significant',
+      'catastrophic',
+      'material',
+    ];
+    const keywordMatches = textAnalysis.keywords.filter((k) =>
+      impactKeywords.some((ik) => k.toLowerCase().includes(ik.toLowerCase()))
     ).length;
-    
-    const textImpactScore = Math.min(5, Math.max(1, 
-      2 + keywordMatches + (textAnalysis.complexity * 1.5)
-    ));
-    
+
+    const textImpactScore = Math.min(
+      5,
+      Math.max(1, 2 + keywordMatches + textAnalysis.complexity * 1.5)
+    );
+
     // Industry benchmark impact
-    const industryImpactScore = Math.min(5, Math.max(1, 
-      industryFactors.benchmark * categoryMultiplier
-    ));
-    
+    const industryImpactScore = Math.min(
+      5,
+      Math.max(1, industryFactors.benchmark * categoryMultiplier)
+    );
+
     // Organization size impact
-    const sizeImpactMultiplier = context.organizationSize === 'large' ? 1.3 : 
-                                context.organizationSize === 'small' ? 0.7 : 1.0;
-    
+    const sizeImpactMultiplier =
+      context.organizationSize === 'large' ? 1.3 : context.organizationSize === 'small' ? 0.7 : 1.0;
+
     // Calculate weighted impact
-    const weightedImpact = (
-      (textImpactScore * 0.4) +
-      (industryImpactScore * 0.4) +
-      (impact * 0.2) // some weight to existing assessment
-    ) * sizeImpactMultiplier;
-    
+    const weightedImpact =
+      (textImpactScore * 0.4 + industryImpactScore * 0.4 + impact * 0.2) * // some weight to existing assessment
+      sizeImpactMultiplier;
+
     return Math.min(5, Math.max(1, Math.round(weightedImpact)));
   }
 
@@ -1298,13 +1324,13 @@ export class RiskAnalysisAIService {
       case 'matrix':
         // Traditional risk matrix (likelihood × impact)
         return likelihood * impact;
-        
+
       case 'quantitative':
         // Weighted quantitative approach
         const likelihoodWeight = 0.6;
         const impactWeight = 0.4;
         return Math.round((likelihood * likelihoodWeight + impact * impactWeight) * 5);
-        
+
       case 'qualitative':
         // Qualitative assessment with non-linear scaling
         if (likelihood >= 4 && impact >= 4) return 25; // Critical
@@ -1314,7 +1340,7 @@ export class RiskAnalysisAIService {
         if (likelihood >= 2 && impact >= 3) return 12; // Medium
         if (likelihood >= 3 && impact >= 2) return 10; // Medium
         return likelihood * impact; // Default matrix
-        
+
       default:
         return likelihood * impact;
     }
@@ -1344,52 +1370,59 @@ export class RiskAnalysisAIService {
   }> {
     // Inherent risk is the risk without any controls
     const inherentRisk = risk.likelihood * risk.impact;
-    
+
     if (!controls || controls.length === 0) {
       return {
         inherentRisk,
         residualRisk: inherentRisk,
         controlEffectiveness: 0,
-        riskReduction: 0
+        riskReduction: 0,
       };
     }
-    
+
     // Calculate overall control effectiveness
     let totalEffectiveness = 0;
     let weightedEffectiveness = 0;
-    
+
     for (const control of controls) {
       const controlWeight = this.getControlWeight(control.type);
       let effectiveness = 0;
-      
+
       if (typeof control.effectiveness === 'number') {
         effectiveness = control.effectiveness;
       } else if (typeof control.effectiveness === 'string') {
         // Convert string effectiveness to number (0-100 scale)
         switch (control.effectiveness) {
-          case 'high': effectiveness = 80; break;
-          case 'medium': effectiveness = 50; break;
-          case 'low': effectiveness = 20; break;
-          default: effectiveness = 0;
+          case 'high':
+            effectiveness = 80;
+            break;
+          case 'medium':
+            effectiveness = 50;
+            break;
+          case 'low':
+            effectiveness = 20;
+            break;
+          default:
+            effectiveness = 0;
         }
       }
-      
+
       totalEffectiveness += effectiveness * controlWeight;
       weightedEffectiveness += controlWeight;
     }
-    
-    const overallEffectiveness = weightedEffectiveness > 0 ? 
-      totalEffectiveness / weightedEffectiveness : 0;
-    
+
+    const overallEffectiveness =
+      weightedEffectiveness > 0 ? totalEffectiveness / weightedEffectiveness : 0;
+
     // Calculate residual risk
     const riskReductionFactor = overallEffectiveness / 100; // Convert percentage to factor
     const residualRisk = Math.max(1, inherentRisk * (1 - riskReductionFactor));
-    
+
     return {
       inherentRisk,
       residualRisk: Math.round(residualRisk),
       controlEffectiveness: Math.round(overallEffectiveness),
-      riskReduction: Math.round((inherentRisk - residualRisk) / inherentRisk * 100)
+      riskReduction: Math.round(((inherentRisk - residualRisk) / inherentRisk) * 100),
     };
   }
 
@@ -1398,11 +1431,11 @@ export class RiskAnalysisAIService {
    */
   private getControlWeight(controlType: string): number {
     const weights = {
-      'PREVENTIVE': 1.0,
-      'DETECTIVE': 0.7,
-      'CORRECTIVE': 0.5,
-      'DIRECTIVE': 0.6,
-      'COMPENSATING': 0.4
+      PREVENTIVE: 1.0,
+      DETECTIVE: 0.7,
+      CORRECTIVE: 0.5,
+      DIRECTIVE: 0.6,
+      COMPENSATING: 0.4,
     };
     return weights[controlType as keyof typeof weights] || 0.5;
   }
@@ -1435,10 +1468,10 @@ export class RiskAnalysisAIService {
   }> {
     const appetite = organizationSettings.riskAppetite[riskCategory] || 10;
     const tolerance = organizationSettings.riskTolerance[riskCategory] || 15;
-    
+
     const withinAppetite = riskScore <= appetite;
     const withinTolerance = riskScore <= tolerance;
-    
+
     let recommendedAction: 'accept' | 'monitor' | 'mitigate' | 'escalate';
     if (withinAppetite) {
       recommendedAction = 'accept';
@@ -1449,12 +1482,12 @@ export class RiskAnalysisAIService {
     } else {
       recommendedAction = 'escalate';
     }
-    
+
     return {
       withinAppetite,
       withinTolerance,
       exceedsBy: Math.max(0, riskScore - tolerance),
-      recommendedAction
+      recommendedAction,
     };
   }
 }
@@ -1466,4 +1499,4 @@ interface ScoringFactor {
   source: string;
 }
 
-export const riskAnalysisAIService = new RiskAnalysisAIService(); 
+export const riskAnalysisAIService = new RiskAnalysisAIService();

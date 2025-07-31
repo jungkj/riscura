@@ -23,13 +23,15 @@ export function FilterWidget({
   onDelete,
   onDuplicate,
 }: FilterWidgetProps) {
+
   return (
     <DaisyCard 
       className={`h-full ${isSelected ? 'ring-2 ring-blue-500' : ''} cursor-pointer`}
       onClick={onSelect}
     >
-      <DaisyCardHeader className="pb-2 flex flex-row items-center justify-between">
-        <DaisyCardTitle className="text-sm font-medium">{widget.title}</DaisyCardTitle>
+      <DaisyCardHeader className="pb-2 flex flex-row items-center justify-between" >
+  <DaisyCardTitle className="text-sm font-medium">
+</DaisyCard>{widget.title}</DaisyCardTitle>
         <div className="flex items-center space-x-1">
           <DaisyButton
             variant="ghost"
@@ -53,9 +55,10 @@ export function FilterWidget({
           </DaisyButton>
         </div>
       
-      <DaisyCardContent className="pt-0">
-        <div className="text-sm text-gray-500">Filter control placeholder</div>
-      </DaisyCardBody>
+      <DaisyCardContent className="pt-0" >
+  <div className="text-sm text-gray-500">
+</DaisyCardContent>Filter control placeholder</div>
+      </DaisyCardContent>
     </DaisyCard>
   );
 } 

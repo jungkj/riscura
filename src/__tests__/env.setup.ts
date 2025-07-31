@@ -26,4 +26,4 @@ process.env.ENABLE_REAL_TIME = 'false';
 
 // Application config
 process.env.APP_URL = 'http://localhost:3000';
-process.env.PORT = '3000'; 
+process.env.PORT = '3000';

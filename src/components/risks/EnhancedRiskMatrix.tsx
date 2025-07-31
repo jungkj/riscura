@@ -322,9 +322,9 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
           ))}
         </>
       );
-    }
+    };
 
-    return (
+  return (
       <div className="relative">
         <div className="flex items-center justify-center h-full">
           <div className="text-center">
@@ -337,8 +337,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
         <DaisyButton
           size="sm"
           className="absolute top-1 right-1 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-          onClick={() => setSelectedCell(cell)}
-        >
+          onClick={() => setSelectedCell(cell)} />
           <Eye className="h-3 w-3" />
         </DaisyButton>
       </div>
@@ -347,9 +346,9 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
 
   // Enhanced risk item component
   const RiskItem: React.FC<{ risk: Risk; isSelected: boolean }> = ({ risk, isSelected }) => (
-    <DaisyTooltipProvider>
-      <DaisyTooltip>
-        <DaisyTooltipTrigger asChild>
+    <DaisyTooltipProvider />
+      <DaisyTooltip />
+        <DaisyTooltipTrigger asChild />
           <div
             draggable
             onDragStart={(e) => handleDragStart(e, risk)}
@@ -368,8 +367,9 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
             <div className="font-medium truncate">{risk.title}</div>
             <div className="text-xs opacity-75 truncate">{risk.owner}</div>
             <div className="flex items-center justify-between mt-1">
-              <DaisyBadge className="text-xs px-1 py-0" variant="secondary">
-                {risk.riskScore}
+              <DaisyBadge className="text-xs px-1 py-0" variant="secondary" >
+  {risk.riskScore}
+</DaisyTooltipProvider>
               </DaisyBadge>
               <div className="text-xs opacity-50">
                 {risk.likelihood}×{risk.impact}
@@ -377,12 +377,12 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
             </div>
           </div>
         </DaisyTooltipTrigger>
-        <DaisyTooltipContent side="top" className="max-w-xs">
+        <DaisyTooltipContent side="top" className="max-w-xs" />
           <div>
             <div className="font-medium">{risk.title}</div>
             <div className="text-sm text-slate-600 mt-1 line-clamp-2">{risk.description}</div>
             <div className="flex items-center gap-2 mt-2">
-              <DaisyBadge variant="outline" className="text-xs">{risk.category}</DaisyBadge>
+              <DaisyBadge variant="outline" className="text-xs">{risk.category}</DaisyTooltipContent>
               <DaisyBadge variant="secondary" className="text-xs">{risk.status}</DaisyBadge>
             </div>
             <div className="text-xs mt-2 text-slate-500">
@@ -400,31 +400,31 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
   return (
     <div className="space-y-4">
       {/* Enhanced Controls */}
-      <DaisyCard className="p-4">
-        <div className="flex items-center justify-between flex-wrap gap-4">
+      <DaisyCard className="p-4" >
+  <div className="flex items-center justify-between flex-wrap gap-4">
+</DaisyCard>
           <div className="flex items-center gap-2">
             <DaisyButton
               variant="outline"
               size="sm"
               onClick={handleZoomIn}
-              disabled={viewSettings.zoom >= 3}
-            >
+              disabled={viewSettings.zoom >= 3} />
               <ZoomIn className="h-4 w-4" />
             </DaisyButton>
             <DaisyButton
               variant="outline"
               size="sm"
               onClick={handleZoomOut}
-              disabled={viewSettings.zoom <= 0.5}
-            >
-              <ZoomOut className="h-4 w-4" />
+              disabled={viewSettings.zoom <= 0.5} >
+  <ZoomOut className="h-4 w-4" />
+</DaisyButton>
             </DaisyButton>
             <DaisyButton
               variant="outline"
               size="sm"
-              onClick={handleResetView}
-            >
-              <RotateCcw className="h-4 w-4" />
+              onClick={handleResetView} >
+  <RotateCcw className="h-4 w-4" />
+</DaisyButton>
             </DaisyButton>
             <div className="text-sm text-slate-600 px-2">
               Zoom: {Math.round(viewSettings.zoom * 100)}%
@@ -432,23 +432,24 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
           </div>
 
           {enableExport && (
-            <DaisyDropdownMenu>
-              <DaisyDropdownMenuTrigger asChild>
-                <DaisyButton variant="outline" size="sm" disabled={isExporting}>
-                  <Download className="h-4 w-4 mr-2" />
+            <DaisyDropdownMenu />
+              <DaisyDropdownMenuTrigger asChild />
+                <DaisyButton variant="outline" size="sm" disabled={isExporting} >
+  <Download className="h-4 w-4 mr-2" />
+</DaisyDropdownMenu>
                   Export
                 </DaisyButton>
               </DaisyDropdownMenuTrigger>
-              <DaisyDropdownMenuContent align="end">
-                <DaisyDropdownMenuLabel>Export Options</DaisyDropdownMenuLabel>
+              <DaisyDropdownMenuContent align="end" />
+                <DaisyDropdownMenuLabel>Export Options</DaisyDropdownMenuContent>
                 <DaisyDropdownMenuSeparator />
-                <DaisyDropdownMenuItem onClick={exportToPNG}>
+                <DaisyDropdownMenuItem onClick={exportToPNG} />
                   Export as PNG
-                </DaisyDropdownMenuItem>
-                <DaisyDropdownMenuItem onClick={exportToPDF}>
+                </DaisyDropdownMenuSeparator>
+                <DaisyDropdownMenuItem onClick={exportToPDF} />
                   Export as PDF
                 </DaisyDropdownMenuItem>
-                <DaisyDropdownMenuItem onClick={exportToSVG}>
+                <DaisyDropdownMenuItem onClick={exportToSVG} />
                   Export as SVG
                 </DaisyDropdownMenuItem>
               </DaisyDropdownMenuContent>
@@ -458,27 +459,31 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
       </DaisyCard>
 
       {/* Enhanced Matrix */}
-      <DaisyCard className={className}>
-        <DaisyCardHeader className="pb-4">
+      <DaisyCard className={className} >
+  <DaisyCardHeader className="pb-4" />
+</DaisyCard>
           <div className="flex items-center justify-between">
-            <DaisyCardTitle className="flex items-center gap-2">
-              <Grid3X3 className="h-5 w-5" />
+            <DaisyCardTitle className="flex items-center gap-2" >
+  <Grid3X3 className="h-5 w-5" />
+</DaisyCardTitle>
               Risk Matrix
-              <DaisyBadge variant="secondary" className="ml-2">
-                {risks.length} risks
+              <DaisyBadge variant="secondary" className="ml-2" >
+  {risks.length} risks
+</DaisyBadge>
               </DaisyBadge>
             </DaisyCardTitle>
             <div className="flex items-center gap-2">
-              <DaisyBadge variant="outline">
-                {viewMode === 'matrix' ? 'Matrix View' : 
+              <DaisyBadge variant="outline" >
+  {viewMode === 'matrix' ? 'Matrix View' : 
+</DaisyBadge>
                  viewMode === 'heatmap' ? 'Heatmap View' : 'Density View'}
               </DaisyBadge>
             </div>
           </div>
         
         
-        <DaisyCardContent className="p-6">
-          <div 
+        <DaisyCardContent className="p-6" >
+  <div 
             ref={matrixRef}
             className="relative overflow-hidden rounded-lg border"
             style={{
@@ -487,6 +492,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
               transition: viewSettings.animationsEnabled ? 'transform 0.3s ease-out' : 'none',
             }}
           >
+</DaisyCardContent>
             {/* Impact labels (left side) */}
             <div className="absolute left-0 top-12 bottom-0 w-16 flex flex-col-reverse">
               {[1, 2, 3, 4, 5].map(impact => (
@@ -604,18 +610,21 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Cell Detail Dialog */}
-      <DaisyDialog open={!!selectedCell} onOpenChange={() => setSelectedCell(null)}>
-        <DaisyDialogContent className="max-w-2xl">
-          <DaisyDialogHeader>
-            <DaisyDialogTitle>
-              Cell Details - Likelihood: {selectedCell?.likelihood}, Impact: {selectedCell?.impact}
+      <DaisyDialog open={!!selectedCell} onOpenChange={() => setSelectedCell(null)} />
+        <DaisyDialogContent className="max-w-2xl" >
+  <DaisyDialogHeader />
+</DaisyDialog>
+            <DaisyDialogTitle >
+  Cell Details - Likelihood: {selectedCell?.likelihood}, Impact: {selectedCell?.impact}
+</DaisyDialogTitle>
             </DaisyDialogTitle>
-            <DaisyDialogDescription>
-              Risk Score: {selectedCell?.riskScore} ({selectedCell?.level.toUpperCase()})
+            <DaisyDialogDescription >
+  Risk Score: {selectedCell?.riskScore} ({selectedCell?.level.toUpperCase()})
+</DaisyDialogDescription>
             </DaisyDialogDescription>
           </DaisyDialogHeader>
           

@@ -63,8 +63,8 @@ export const DEFAULT_MEMORY_CONFIG: MemoryConfig = {
     maxWebSocketConnections: 100,
     maxFileUploadSize: 100, // 100MB
     maxCacheSize: 200, // 200MB
-    maxEventListeners: 1000
-  }
+    maxEventListeners: 1000,
+  },
 };
 
 export class MemoryManager {
@@ -80,8 +80,8 @@ export class MemoryManager {
       intervals: 0,
       timeouts: 0,
       webSockets: 0,
-      fileHandles: 0
-    }
+      fileHandles: 0,
+    },
   };
   private resourceHandles: Map<string, ResourceHandle> = new Map();
   private memoryLeaks: ResourceLeak[] = [];
@@ -91,14 +91,14 @@ export class MemoryManager {
 
   constructor(config: Partial<MemoryConfig> = {}) {
     this.config = { ...DEFAULT_MEMORY_CONFIG, ...config };
-    
+
     // Initialize finalization registry for cleanup if available
     if (typeof FinalizationRegistry !== 'undefined') {
       this.finalizationRegistry = new FinalizationRegistry((id: string) => {
         this.handleResourceFinalization(id);
       });
     }
-    
+
     this.initializeMonitoring();
   }
 
@@ -131,7 +131,7 @@ export class MemoryManager {
     this.monitoringInterval = setInterval(() => {
       this.updateMemoryMetrics();
       this.detectMemoryLeaks();
-      
+
       // Trigger GC if memory usage is high
       if (this.metrics.memoryUsagePercent > 80) {
         this.requestGarbageCollection();
@@ -158,8 +158,7 @@ export class MemoryManager {
       this.metrics.usedJSHeapSize = memory.usedJSHeapSize;
       this.metrics.totalJSHeapSize = memory.totalJSHeapSize;
       this.metrics.jsHeapSizeLimit = memory.jsHeapSizeLimit;
-      this.metrics.memoryUsagePercent = 
-        (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100;
+      this.metrics.memoryUsagePercent = (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100;
     }
 
     // Update resource counts
@@ -175,7 +174,7 @@ export class MemoryManager {
       intervals: this.countResourcesByType('interval'),
       timeouts: this.countResourcesByType('timeout'),
       webSockets: this.countResourcesByType('webSocket'),
-      fileHandles: this.countResourcesByType('fileHandle')
+      fileHandles: this.countResourcesByType('fileHandle'),
     };
   }
 
@@ -198,15 +197,15 @@ export class MemoryManager {
 
     // Override addEventListener to track event listeners
     const originalAddEventListener = EventTarget.prototype.addEventListener;
-    EventTarget.prototype.addEventListener = function(type, listener, options) {
+    EventTarget.prototype.addEventListener = function (type, listener, options) {
       const result = originalAddEventListener.call(this, type, listener, options);
-      
+
       // Track this event listener
       const id = `listener-${Date.now()}-${Math.random()}`;
       memoryManager.registerResource(id, 'eventListener', 'EventTarget', () => {
         this.removeEventListener(type, listener as EventListener, options);
       });
-      
+
       return result;
     };
 
@@ -216,25 +215,25 @@ export class MemoryManager {
     const originalClearTimeout = window.clearTimeout;
     const originalClearInterval = window.clearInterval;
 
-    window.setTimeout = function(callback: any, delay?: any, ...args: any[]): number {
+    window.setTimeout = function (callback: any, delay?: any, ...args: any[]): number {
       const timeoutId = originalSetTimeout.call(this, callback, delay, ...args);
       const id = `timeout-${timeoutId}`;
-      
+
       memoryManager.registerResource(id, 'timeout', 'window', () => {
         originalClearTimeout(timeoutId);
       });
-      
+
       return timeoutId as number;
     } as any;
 
-    window.setInterval = function(callback: any, delay?: any, ...args: any[]): number {
+    window.setInterval = function (callback: any, delay?: any, ...args: any[]): number {
       const intervalId = originalSetInterval.call(this, callback, delay, ...args);
       const id = `interval-${intervalId}`;
-      
+
       memoryManager.registerResource(id, 'interval', 'window', () => {
         originalClearInterval(intervalId);
       });
-      
+
       return intervalId as number;
     } as any;
   }
@@ -266,18 +265,13 @@ export class MemoryManager {
   /**
    * Register a resource for tracking
    */
-  registerResource(
-    id: string,
-    type: string,
-    source: string,
-    cleanup: CleanupFunction
-  ): void {
+  registerResource(id: string, type: string, source: string, cleanup: CleanupFunction): void {
     const handle: ResourceHandle = {
       id,
       type,
       source,
       cleanup,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
 
     this.resourceHandles.set(id, handle);
@@ -324,7 +318,7 @@ export class MemoryManager {
         source: 'ResourceLimitCheck',
         timestamp: new Date(),
         details: { count, limit },
-        severity: 'high'
+        severity: 'high',
       });
 
       // Auto-cleanup oldest resources if enabled
@@ -339,11 +333,11 @@ export class MemoryManager {
    */
   private cleanupOldestResources(type: string, count: number): void {
     const resources = Array.from(this.resourceHandles.values())
-      .filter(handle => handle.type === type)
+      .filter((handle) => handle.type === type)
       .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
       .slice(0, count);
 
-    resources.forEach(handle => {
+    resources.forEach((handle) => {
       this.unregisterResource(handle.id);
     });
   }
@@ -358,11 +352,11 @@ export class MemoryManager {
         type: 'memory',
         source: 'MemoryMonitor',
         timestamp: new Date(),
-        details: { 
+        details: {
           usagePercent: this.metrics.memoryUsagePercent,
-          usedMemory: this.metrics.usedJSHeapSize 
+          usedMemory: this.metrics.usedJSHeapSize,
         },
-        severity: 'critical'
+        severity: 'critical',
       });
     }
 
@@ -384,11 +378,11 @@ export class MemoryManager {
           type: handle.type as any,
           source: handle.source,
           timestamp: now,
-          details: { 
+          details: {
             id: handle.id,
-            age: now.getTime() - handle.createdAt.getTime()
+            age: now.getTime() - handle.createdAt.getTime(),
           },
-          severity: 'medium'
+          severity: 'medium',
         });
       }
     }
@@ -399,7 +393,7 @@ export class MemoryManager {
    */
   private reportResourceLeak(leak: ResourceLeak): void {
     this.memoryLeaks.push(leak);
-    
+
     // Keep only recent leaks
     if (this.memoryLeaks.length > 100) {
       this.memoryLeaks = this.memoryLeaks.slice(-50);
@@ -442,7 +436,7 @@ export class MemoryManager {
    * Clean up weak references
    */
   private cleanupWeakRefs(): void {
-    this.weakRefs = this.weakRefs.filter(ref => ref.deref() !== undefined);
+    this.weakRefs = this.weakRefs.filter((ref) => ref.deref() !== undefined);
   }
 
   /**
@@ -463,10 +457,10 @@ export class MemoryManager {
   private performPartialCleanup(): void {
     // Clean up caches
     this.clearOldCacheEntries();
-    
+
     // Clean up event listeners from hidden elements
     this.cleanupHiddenElementListeners();
-    
+
     // Request garbage collection
     this.requestGarbageCollection();
   }
@@ -477,7 +471,7 @@ export class MemoryManager {
   private performPeriodicCleanup(): void {
     // Clean up old resources
     const oneHourAgo = new Date(Date.now() - 3600000);
-    
+
     for (const [id, handle] of this.resourceHandles.entries()) {
       if (handle.createdAt < oneHourAgo) {
         this.unregisterResource(id);
@@ -486,7 +480,7 @@ export class MemoryManager {
 
     // Clear old memory leaks
     this.memoryLeaks = this.memoryLeaks.filter(
-      leak => leak.timestamp.getTime() > oneHourAgo.getTime()
+      (leak) => leak.timestamp.getTime() > oneHourAgo.getTime()
     );
   }
 
@@ -503,8 +497,8 @@ export class MemoryManager {
    */
   private cleanupHiddenElementListeners(): void {
     const hiddenElements = document.querySelectorAll('[style*="display: none"], .hidden');
-    
-    hiddenElements.forEach(element => {
+
+    hiddenElements.forEach((element) => {
       // Remove resources associated with hidden elements
       for (const [id, handle] of this.resourceHandles.entries()) {
         if (handle.source.includes(element.tagName)) {
@@ -567,8 +561,8 @@ export class MemoryManager {
         intervals: 0,
         timeouts: 0,
         webSockets: 0,
-        fileHandles: 0
-      }
+        fileHandles: 0,
+      },
     };
 
     // Clear leaks
@@ -588,7 +582,7 @@ export const useMemoryCleanup = (
 ): void => {
   useEffect(() => {
     memoryManager.registerResource(resourceId, type, 'React Hook', cleanup);
-    
+
     return () => {
       memoryManager.unregisterResource(resourceId);
     };
@@ -601,24 +595,24 @@ export const useMemoryCleanup = (
 export const useMemoryTracking = (componentName: string) => {
   const renderCount = useRef(0);
   const createdAt = useRef(new Date());
-  
+
   useEffect(() => {
     renderCount.current++;
-    
+
     // Register component for tracking
     const id = `component-${componentName}-${Date.now()}`;
     memoryManager.registerResource(id, 'component', componentName, () => {
       // Component cleanup logic
     });
-    
+
     return () => {
       memoryManager.unregisterResource(id);
     };
   }, [componentName]);
-  
+
   return {
     renderCount: renderCount.current,
-    age: Date.now() - createdAt.current.getTime()
+    age: Date.now() - createdAt.current.getTime(),
   };
 };
 
@@ -632,21 +626,21 @@ export const useManagedInterval = (
 ): void => {
   const savedCallback = useRef(callback);
   const intervalId = useRef<NodeJS.Timeout>();
-  
+
   useEffect(() => {
     savedCallback.current = callback;
   }, [callback]);
-  
+
   useEffect(() => {
     if (delay !== null) {
       const id = setInterval(() => savedCallback.current(), delay);
       intervalId.current = id;
-      
+
       const resourceId = `managed-interval-${Date.now()}`;
       memoryManager.registerResource(resourceId, 'interval', 'useManagedInterval', () => {
         clearInterval(id);
       });
-      
+
       return () => {
         clearInterval(id);
         memoryManager.unregisterResource(resourceId);
@@ -665,22 +659,22 @@ export const useManagedEventListener = <T extends Event>(
   options?: AddEventListenerOptions
 ): void => {
   const handlerRef = useRef(handler);
-  
+
   useEffect(() => {
     handlerRef.current = handler;
   }, [handler]);
-  
+
   useEffect(() => {
     if (!element) return;
-    
+
     const eventHandler = (event: Event) => handlerRef.current(event as T);
     element.addEventListener(eventType, eventHandler, options);
-    
+
     const resourceId = `managed-listener-${eventType}-${Date.now()}`;
     memoryManager.registerResource(resourceId, 'eventListener', 'useManagedEventListener', () => {
       element.removeEventListener(eventType, eventHandler, options);
     });
-    
+
     return () => {
       element.removeEventListener(eventType, eventHandler, options);
       memoryManager.unregisterResource(resourceId);
@@ -698,7 +692,7 @@ export const useOptimizedMemo = <T>(
 ): T => {
   const memoValue = useMemo(() => {
     const value = factory();
-    
+
     // Track large objects
     if (debugName && typeof value === 'object' && value !== null) {
       const resourceId = `memo-${debugName}-${Date.now()}`;
@@ -706,10 +700,10 @@ export const useOptimizedMemo = <T>(
         // Cleanup logic for memoized value if needed
       });
     }
-    
+
     return value;
   }, deps);
-  
+
   return memoValue;
 };
 
@@ -723,20 +717,20 @@ export const useMemoryMetrics = (): {
 } => {
   const [metrics, setMetrics] = useState<MemoryMetrics>(memoryManager.getMetrics());
   const [leaks, setLeaks] = useState<ResourceLeak[]>(memoryManager.getResourceLeaks());
-  
+
   useEffect(() => {
     const interval = setInterval(() => {
       setMetrics(memoryManager.getMetrics());
       setLeaks(memoryManager.getResourceLeaks());
     }, 5000);
-    
+
     return () => clearInterval(interval);
   }, []);
-  
+
   return {
     metrics,
     leaks,
-    isMemoryHigh: metrics.memoryUsagePercent > 80
+    isMemoryHigh: metrics.memoryUsagePercent > 80,
   };
 };
 
@@ -748,4 +742,4 @@ if (typeof window !== 'undefined') {
   (window as any).__RISCURA_MEMORY_MANAGER__ = memoryManager;
 }
 
-export default MemoryManager; 
+export default MemoryManager;

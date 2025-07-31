@@ -15,11 +15,11 @@ export interface SecurityMiddlewareOptions {
   requireAuth?: boolean;
   requiredRoles?: string[];
   requiredPermissions?: string[];
-  
+
   // CSRF Protection
   enableCSRF?: boolean;
   csrfExcludeMethods?: string[];
-  
+
   // Rate Limiting
   enableRateLimit?: boolean;
   rateLimitType?: 'default' | 'auth' | 'upload' | 'api';
@@ -28,25 +28,25 @@ export interface SecurityMiddlewareOptions {
     windowMs: number;
     keyGenerator?: (req: NextRequest) => string;
   };
-  
+
   // Input Sanitization
   sanitizeInput?: boolean;
   sanitizationConfig?: 'strict' | 'basic' | 'rich' | 'text';
-  
+
   // Security Headers
   enableSecurityHeaders?: boolean;
   customHeaders?: Record<string, string>;
-  
+
   // CORS
   enableCORS?: boolean;
   corsOrigins?: string[];
   corsMethods?: string[];
   corsHeaders?: string[];
-  
+
   // Logging
   enableSecurityLogging?: boolean;
   logLevel?: 'error' | 'warn' | 'info' | 'debug';
-  
+
   // Custom validation
   customValidation?: (req: NextRequest) => Promise<{ isValid: boolean; error?: string }>;
 }
@@ -62,7 +62,7 @@ const DEFAULT_SECURITY_OPTIONS: SecurityMiddlewareOptions = {
   enableSecurityHeaders: true,
   enableCORS: false,
   enableSecurityLogging: true,
-  logLevel: productionGuard.isProduction() ? 'warn' : 'info'
+  logLevel: productionGuard.isProduction() ? 'warn' : 'info',
 };
 
 /**
@@ -94,7 +94,7 @@ export class SecurityMiddleware {
       ip: this.getClientIP(request),
       userAgent: request.headers.get('user-agent') || 'unknown',
       path: new URL(request.url).pathname,
-      method: request.method
+      method: request.method,
     };
 
     try {
@@ -114,7 +114,7 @@ export class SecurityMiddleware {
               productionCheck.details
             ),
             proceed: false,
-            context
+            context,
           };
         }
       }
@@ -128,13 +128,13 @@ export class SecurityMiddleware {
             path: context.path,
             method: context.method,
             limit: rateLimitResult.limit,
-            resetTime: rateLimitResult.resetTime
+            resetTime: rateLimitResult.resetTime,
           });
 
           return {
             response: this.createRateLimitResponse(rateLimitResult),
             proceed: false,
-            context
+            context,
           };
         }
         context.rateLimit = rateLimitResult;
@@ -147,7 +147,7 @@ export class SecurityMiddleware {
           return {
             response: corsResult.response,
             proceed: false,
-            context
+            context,
           };
         }
         context.cors = corsResult.headers;
@@ -161,17 +161,15 @@ export class SecurityMiddleware {
             ip: context.ip,
             path: context.path,
             method: context.method,
-            reason: csrfResult.reason
+            reason: csrfResult.reason,
           });
 
           return {
-            response: this.createSecurityErrorResponse(
-              'CSRF validation failed',
-              403,
-              { reason: csrfResult.reason }
-            ),
+            response: this.createSecurityErrorResponse('CSRF validation failed', 403, {
+              reason: csrfResult.reason,
+            }),
             proceed: false,
-            context
+            context,
           };
         }
         context.csrf = csrfResult;
@@ -186,17 +184,15 @@ export class SecurityMiddleware {
           productionGuard.logSecurityEvent('input_sanitization_failed', {
             ip: context.ip,
             path: context.path,
-            error: error instanceof Error ? error.message : 'Unknown error'
+            error: error instanceof Error ? error.message : 'Unknown error',
           });
 
           return {
-            response: this.createSecurityErrorResponse(
-              'Invalid input data',
-              400,
-              { error: 'Input validation failed' }
-            ),
+            response: this.createSecurityErrorResponse('Invalid input data', 400, {
+              error: 'Input validation failed',
+            }),
             proceed: false,
-            context
+            context,
           };
         }
       }
@@ -206,13 +202,11 @@ export class SecurityMiddleware {
         const customResult = await config.customValidation(request);
         if (!customResult.isValid) {
           return {
-            response: this.createSecurityErrorResponse(
-              'Custom validation failed',
-              400,
-              { error: customResult.error }
-            ),
+            response: this.createSecurityErrorResponse('Custom validation failed', 400, {
+              error: customResult.error,
+            }),
             proceed: false,
-            context
+            context,
           };
         }
       }
@@ -223,23 +217,20 @@ export class SecurityMiddleware {
       }
 
       return { proceed: true, context };
-
     } catch (error) {
       productionGuard.logSecurityEvent('security_middleware_error', {
         ip: context.ip,
         path: context.path,
         error: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
+        stack: error instanceof Error ? error.stack : undefined,
       });
 
       return {
-        response: this.createSecurityErrorResponse(
-          'Security check failed',
-          500,
-          { error: 'Internal security error' }
-        ),
+        response: this.createSecurityErrorResponse('Security check failed', 500, {
+          error: 'Internal security error',
+        }),
         proceed: false,
-        context
+        context,
       };
     }
   }
@@ -249,9 +240,9 @@ export class SecurityMiddleware {
    */
   createSecureResponse(
     body: any,
-    init: ResponseInit & { 
-      context?: any; 
-      options?: SecurityMiddlewareOptions 
+    init: ResponseInit & {
+      context?: any;
+      options?: SecurityMiddlewareOptions;
     } = {}
   ): NextResponse {
     const { context, options, ...responseInit } = init;
@@ -287,7 +278,10 @@ export class SecurityMiddleware {
     // Add security metadata
     response.headers.set('X-Security-Version', '1.0');
     response.headers.set('X-Request-ID', context?.requestId || this.generateRequestId());
-    response.headers.set('X-Processing-Time', context ? `${Date.now() - context.startTime}ms` : '0ms');
+    response.headers.set(
+      'X-Processing-Time',
+      context ? `${Date.now() - context.startTime}ms` : '0ms'
+    );
 
     return response;
   }
@@ -318,7 +312,7 @@ export class SecurityMiddleware {
 
     return {
       isValid: issues.length === 0,
-      details: issues.length > 0 ? { issues } : undefined
+      details: issues.length > 0 ? { issues } : undefined,
     };
   }
 
@@ -329,8 +323,9 @@ export class SecurityMiddleware {
     request: NextRequest,
     config: SecurityMiddlewareOptions
   ): { allowed: boolean; remaining: number; resetTime: number; limit: number } {
-    const rateLimitOptions = config.customRateLimit || rateLimitConfig[config.rateLimitType || 'default'];
-    
+    const rateLimitOptions =
+      config.customRateLimit || rateLimitConfig[config.rateLimitType || 'default'];
+
     const key = config.customRateLimit?.keyGenerator
       ? config.customRateLimit.keyGenerator(request)
       : this.getClientIP(request);
@@ -354,7 +349,7 @@ export class SecurityMiddleware {
         allowed: true,
         remaining: rateLimitOptions.max - 1,
         resetTime,
-        limit: rateLimitOptions.max
+        limit: rateLimitOptions.max,
       };
     }
 
@@ -363,7 +358,7 @@ export class SecurityMiddleware {
         allowed: false,
         remaining: 0,
         resetTime: current.resetTime,
-        limit: rateLimitOptions.max
+        limit: rateLimitOptions.max,
       };
     }
 
@@ -372,7 +367,7 @@ export class SecurityMiddleware {
       allowed: true,
       remaining: rateLimitOptions.max - current.count,
       resetTime: current.resetTime,
-      limit: rateLimitOptions.max
+      limit: rateLimitOptions.max,
     };
   }
 
@@ -389,7 +384,7 @@ export class SecurityMiddleware {
     // Handle preflight requests
     if (method === 'OPTIONS') {
       const response = new NextResponse(null, { status: 200 });
-      
+
       if (origin && this.isOriginAllowed(origin, config.corsOrigins)) {
         response.headers.set('Access-Control-Allow-Origin', origin);
         response.headers.set('Access-Control-Allow-Credentials', 'true');
@@ -425,7 +420,7 @@ export class SecurityMiddleware {
       return false;
     }
 
-    return allowedOrigins.some(allowed => {
+    return allowedOrigins.some((allowed) => {
       if (allowed === '*') return true;
       if (allowed.startsWith('*.')) {
         const domain = allowed.substring(2);
@@ -444,16 +439,16 @@ export class SecurityMiddleware {
   ): Promise<any> {
     try {
       const contentType = request.headers.get('content-type') || '';
-      
+
       if (contentType.includes('application/json')) {
         const body = await request.json();
         return inputSanitizer.sanitizeObject(body);
       }
-      
+
       if (contentType.includes('application/x-www-form-urlencoded')) {
         const formData = await request.formData();
         const sanitized: Record<string, any> = {};
-        
+
         for (const [key, value] of formData.entries()) {
           if (typeof value === 'string') {
             sanitized[key] = inputSanitizer.sanitizeText(value);
@@ -461,7 +456,7 @@ export class SecurityMiddleware {
             sanitized[key] = value; // File objects
           }
         }
-        
+
         return sanitized;
       }
 
@@ -485,14 +480,14 @@ export class SecurityMiddleware {
         code: `SECURITY_ERROR_${status}`,
         timestamp: new Date().toISOString(),
         requestId: this.generateRequestId(),
-        ...(productionGuard.isProduction() ? {} : { details })
+        ...(productionGuard.isProduction() ? {} : { details }),
       },
       { status }
     );
 
     // Apply security headers even to error responses
     securityHeaders.applyToResponse(response);
-    
+
     return response;
   }
 
@@ -507,7 +502,7 @@ export class SecurityMiddleware {
         limit: rateLimitResult.limit,
         remaining: rateLimitResult.remaining,
         resetTime: rateLimitResult.resetTime,
-        retryAfter: Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000)
+        retryAfter: Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000),
       },
       { status: 429 }
     );
@@ -516,10 +511,13 @@ export class SecurityMiddleware {
     response.headers.set('X-RateLimit-Limit', rateLimitResult.limit.toString());
     response.headers.set('X-RateLimit-Remaining', rateLimitResult.remaining.toString());
     response.headers.set('X-RateLimit-Reset', rateLimitResult.resetTime.toString());
-    response.headers.set('Retry-After', Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000).toString());
+    response.headers.set(
+      'Retry-After',
+      Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000).toString()
+    );
 
     securityHeaders.applyToResponse(response);
-    
+
     return response;
   }
 
@@ -548,15 +546,17 @@ export class SecurityMiddleware {
   private logSecurityEvent(event: string, context: any, level: string = 'info'): void {
     if (productionGuard.isProduction()) {
       // In production, use structured logging
-      console.log(JSON.stringify({
-        timestamp: new Date().toISOString(),
-        level,
-        event,
-        context: {
-          ...context,
-          environment: 'production'
-        }
-      }));
+      console.log(
+        JSON.stringify({
+          timestamp: new Date().toISOString(),
+          level,
+          event,
+          context: {
+            ...context,
+            environment: 'production',
+          },
+        })
+      );
     } else if (level !== 'debug') {
       // In development, use readable format for non-debug events
       console.log(`🛡️ Security Event [${level.toUpperCase()}]: ${event}`, context);
@@ -582,27 +582,24 @@ export function createSecureAPIHandler(
 ) {
   return async (req: NextRequest): Promise<NextResponse> => {
     const securityResult = await securityMiddleware.applySecurityMiddleware(req, options);
-    
+
     if (!securityResult.proceed) {
       return securityResult.response!;
     }
 
     try {
       const response = await handler(req, securityResult.context);
-      return securityMiddleware.createSecureResponse(
-        await response.json().catch(() => null),
-        {
-          status: response.status,
-          headers: Object.fromEntries(response.headers.entries()),
-          context: securityResult.context,
-          options
-        }
-      );
+      return securityMiddleware.createSecureResponse(await response.json().catch(() => null), {
+        status: response.status,
+        headers: Object.fromEntries(response.headers.entries()),
+        context: securityResult.context,
+        options,
+      });
     } catch (error) {
       productionGuard.logSecurityEvent('api_handler_error', {
         error: error instanceof Error ? error.message : 'Unknown error',
         path: new URL(req.url).pathname,
-        method: req.method
+        method: req.method,
       });
 
       return securityMiddleware.createSecureResponse(
@@ -622,7 +619,7 @@ export const SECURITY_PROFILES = {
     enableRateLimit: true,
     rateLimitType: 'default' as const,
     sanitizeInput: true,
-    sanitizationConfig: 'strict' as const
+    sanitizationConfig: 'strict' as const,
   },
 
   // Authenticated endpoints
@@ -632,7 +629,7 @@ export const SECURITY_PROFILES = {
     enableRateLimit: true,
     rateLimitType: 'api' as const,
     sanitizeInput: true,
-    sanitizationConfig: 'basic' as const
+    sanitizationConfig: 'basic' as const,
   },
 
   // Admin endpoints (maximum security)
@@ -644,7 +641,7 @@ export const SECURITY_PROFILES = {
     rateLimitType: 'api' as const,
     sanitizeInput: true,
     sanitizationConfig: 'strict' as const,
-    enableSecurityLogging: true
+    enableSecurityLogging: true,
   },
 
   // File upload endpoints
@@ -654,7 +651,7 @@ export const SECURITY_PROFILES = {
     enableRateLimit: true,
     rateLimitType: 'upload' as const,
     sanitizeInput: true,
-    sanitizationConfig: 'text' as const
+    sanitizationConfig: 'text' as const,
   },
 
   // Authentication endpoints
@@ -664,6 +661,6 @@ export const SECURITY_PROFILES = {
     enableRateLimit: true,
     rateLimitType: 'auth' as const,
     sanitizeInput: true,
-    sanitizationConfig: 'strict' as const
-  }
-} satisfies Record<string, SecurityMiddlewareOptions>; 
+    sanitizationConfig: 'strict' as const,
+  },
+} satisfies Record<string, SecurityMiddlewareOptions>;

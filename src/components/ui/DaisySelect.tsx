@@ -10,7 +10,10 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
 }
 
 export const DaisySelect = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, error, bordered = true, ghost, selectSize = 'md', color, children, ...props }, ref) => {
+  (
+    { className, error, bordered = true, ghost, selectSize = 'md', color, children, ...props },
+    ref
+  ) => {
     const sizeClasses = {
       xs: 'select-xs',
       sm: 'select-sm',
@@ -65,6 +68,12 @@ export const DaisySelectContent = ({ children }: { children: React.ReactNode }) 
   return <>{children}</>;
 };
 
-export const DaisySelectItem = ({ value, children }: { value: string; children: React.ReactNode }) => {
+export const DaisySelectItem = ({
+  value,
+  children,
+}: {
+  value: string;
+  children: React.ReactNode;
+}) => {
   return <option value={value}>{children}</option>;
 };

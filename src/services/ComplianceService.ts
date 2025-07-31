@@ -132,7 +132,7 @@ export class ComplianceService {
   ): Promise<ComplianceFramework[]> {
     const cacheKey = `${this.cacheKeyPrefix}frameworks:${organizationId}:${JSON.stringify(filters)}`;
     const cached = await redis.get(cacheKey);
-    
+
     if (cached) {
       return JSON.parse(cached);
     }
@@ -189,7 +189,7 @@ export class ComplianceService {
     requirements: Omit<CreateRequirementInput, 'frameworkId'>[]
   ): Promise<number> {
     const result = await prisma.complianceRequirement.createMany({
-      data: requirements.map(req => ({ ...req, frameworkId })),
+      data: requirements.map((req) => ({ ...req, frameworkId })),
     });
 
     await this.clearRequirementCache(frameworkId);
@@ -199,7 +199,7 @@ export class ComplianceService {
   async getRequirements(frameworkId: string): Promise<ComplianceRequirement[]> {
     const cacheKey = `${this.cacheKeyPrefix}requirements:${frameworkId}`;
     const cached = await redis.get(cacheKey);
-    
+
     if (cached) {
       return JSON.parse(cached);
     }
@@ -272,7 +272,7 @@ export class ComplianceService {
     // Create assessment items for all requirements
     const requirements = await this.getRequirements(input.frameworkId);
     await prisma.complianceAssessmentItem.createMany({
-      data: requirements.map(req => ({
+      data: requirements.map((req) => ({
         assessmentId: assessment.id,
         requirementId: req.id,
         status: ComplianceStatus.NOT_ASSESSED,
@@ -280,7 +280,7 @@ export class ComplianceService {
     });
 
     await this.clearAssessmentCache(input.organizationId);
-    
+
     // Send notification
     if (input.assessorId) {
       await notificationService.createNotification({
@@ -303,7 +303,7 @@ export class ComplianceService {
   ): Promise<ComplianceAssessment[]> {
     try {
       const cacheKey = `${this.cacheKeyPrefix}assessments:${organizationId}:${JSON.stringify(filters)}`;
-      
+
       // Try to get from cache
       try {
         const cached = await redis.get(cacheKey);
@@ -324,12 +324,12 @@ export class ComplianceService {
           framework: true,
           assessor: true,
           reviewer: true,
-        _count: {
-          select: { items: true, gaps: true },
+          _count: {
+            select: { items: true, gaps: true },
+          },
         },
-      },
-      orderBy: { assessmentDate: 'desc' },
-    });
+        orderBy: { assessmentDate: 'desc' },
+      });
 
       // Try to cache the result
       try {
@@ -338,7 +338,7 @@ export class ComplianceService {
         console.warn('[ComplianceService] Cache write error:', cacheError);
         // Continue without caching
       }
-      
+
       return assessments;
     } catch (error) {
       console.error('[ComplianceService] Error fetching assessments:', error);
@@ -500,18 +500,25 @@ export class ComplianceService {
     }
 
     const items = assessment.items;
-    const compliantCount = items.filter(i => i.status === ComplianceStatus.COMPLIANT).length;
-    const partiallyCompliantCount = items.filter(i => i.status === ComplianceStatus.PARTIALLY_COMPLIANT).length;
-    const nonCompliantCount = items.filter(i => i.status === ComplianceStatus.NON_COMPLIANT).length;
-    const notAssessedCount = items.filter(i => i.status === ComplianceStatus.NOT_ASSESSED).length;
-    const notApplicableCount = items.filter(i => i.status === ComplianceStatus.NOT_APPLICABLE).length;
+    const compliantCount = items.filter((i) => i.status === ComplianceStatus.COMPLIANT).length;
+    const partiallyCompliantCount = items.filter(
+      (i) => i.status === ComplianceStatus.PARTIALLY_COMPLIANT
+    ).length;
+    const nonCompliantCount = items.filter(
+      (i) => i.status === ComplianceStatus.NON_COMPLIANT
+    ).length;
+    const notAssessedCount = items.filter((i) => i.status === ComplianceStatus.NOT_ASSESSED).length;
+    const notApplicableCount = items.filter(
+      (i) => i.status === ComplianceStatus.NOT_APPLICABLE
+    ).length;
 
     const assessedCount = items.length - notAssessedCount - notApplicableCount;
-    const overallCompliance = assessedCount > 0
-      ? ((compliantCount + partiallyCompliantCount * 0.5) / assessedCount) * 100
-      : 0;
+    const overallCompliance =
+      assessedCount > 0
+        ? ((compliantCount + partiallyCompliantCount * 0.5) / assessedCount) * 100
+        : 0;
 
-    const criticalGaps = assessment.gaps.filter(g => g.severity === GapSeverity.CRITICAL);
+    const criticalGaps = assessment.gaps.filter((g) => g.severity === GapSeverity.CRITICAL);
 
     // Generate recommendations
     const recommendations = this.generateRecommendations(assessment);
@@ -543,9 +550,9 @@ export class ComplianceService {
       where: { assessmentId },
     });
 
-    const assessedCount = items.filter(i => i.status !== ComplianceStatus.NOT_ASSESSED).length;
+    const assessedCount = items.filter((i) => i.status !== ComplianceStatus.NOT_ASSESSED).length;
     const totalCount = items.length;
-    
+
     if (assessedCount === totalCount) {
       await prisma.complianceAssessment.update({
         where: { id: assessmentId },
@@ -594,32 +601,32 @@ export class ComplianceService {
     }
 
     // Unmapped requirements
-    const unmappedCount = assessment.items.filter((i: any) => 
-      i.requirement.controlMappings?.length === 0
+    const unmappedCount = assessment.items.filter(
+      (i: any) => i.requirement.controlMappings?.length === 0
     ).length;
     if (unmappedCount > 0) {
-      recommendations.push(`Map controls to ${unmappedCount} requirements without control coverage`);
+      recommendations.push(
+        `Map controls to ${unmappedCount} requirements without control coverage`
+      );
     }
 
     // Low scoring areas
-    const lowScoreItems = assessment.items.filter((i: any) => 
-      i.score !== null && i.score < 50
-    );
+    const lowScoreItems = assessment.items.filter((i: any) => i.score !== null && i.score < 50);
     if (lowScoreItems.length > 0) {
       recommendations.push(`Improve controls in ${lowScoreItems.length} low-scoring areas`);
     }
 
     // Missing documentation
-    const missingDocsCount = assessment.gaps.filter((g: any) => 
-      g.gapType === GapType.MISSING_DOCUMENTATION
+    const missingDocsCount = assessment.gaps.filter(
+      (g: any) => g.gapType === GapType.MISSING_DOCUMENTATION
     ).length;
     if (missingDocsCount > 0) {
       recommendations.push(`Complete documentation for ${missingDocsCount} requirements`);
     }
 
     // Training gaps
-    const trainingGaps = assessment.gaps.filter((g: any) => 
-      g.gapType === GapType.TRAINING_GAP
+    const trainingGaps = assessment.gaps.filter(
+      (g: any) => g.gapType === GapType.TRAINING_GAP
     ).length;
     if (trainingGaps > 0) {
       recommendations.push(`Implement training programs to address ${trainingGaps} knowledge gaps`);
@@ -650,7 +657,7 @@ export class ComplianceService {
   // Reporting
   async generateComplianceReport(assessmentId: string): Promise<any> {
     const analysis = await this.performGapAnalysis(assessmentId);
-    
+
     return {
       summary: {
         framework: analysis.framework.name,
@@ -665,25 +672,28 @@ export class ComplianceService {
       gaps: {
         total: analysis.gaps.length,
         bySeverity: {
-          critical: analysis.gaps.filter(g => g.severity === GapSeverity.CRITICAL).length,
-          high: analysis.gaps.filter(g => g.severity === GapSeverity.HIGH).length,
-          medium: analysis.gaps.filter(g => g.severity === GapSeverity.MEDIUM).length,
-          low: analysis.gaps.filter(g => g.severity === GapSeverity.LOW).length,
+          critical: analysis.gaps.filter((g) => g.severity === GapSeverity.CRITICAL).length,
+          high: analysis.gaps.filter((g) => g.severity === GapSeverity.HIGH).length,
+          medium: analysis.gaps.filter((g) => g.severity === GapSeverity.MEDIUM).length,
+          low: analysis.gaps.filter((g) => g.severity === GapSeverity.LOW).length,
         },
-        byType: analysis.gaps.reduce((acc, gap) => {
-          acc[gap.gapType] = (acc[gap.gapType] || 0) + 1;
-          return acc;
-        }, {} as Record<string, number>),
+        byType: analysis.gaps.reduce(
+          (acc, gap) => {
+            acc[gap.gapType] = (acc[gap.gapType] || 0) + 1;
+            return acc;
+          },
+          {} as Record<string, number>
+        ),
       },
       recommendations: analysis.recommendations,
-      detailedFindings: analysis.assessment.items.filter((i: any) => 
-        i.status !== ComplianceStatus.COMPLIANT && i.findings
-      ).map((i: any) => ({
-        requirement: i.requirement.title,
-        status: i.status,
-        findings: i.findings,
-        recommendations: i.recommendations,
-      })),
+      detailedFindings: analysis.assessment.items
+        .filter((i: any) => i.status !== ComplianceStatus.COMPLIANT && i.findings)
+        .map((i: any) => ({
+          requirement: i.requirement.title,
+          status: i.status,
+          findings: i.findings,
+          recommendations: i.recommendations,
+        })),
     };
   }
 }

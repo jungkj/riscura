@@ -28,17 +28,19 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (logoutType === 'all' && userId) {
       // Logout from all devices
       await invalidateAllSessions(userId);
-      
-      await logAuthEvent('LOGOUT_ALL_DEVICES', 
+
+      await logAuthEvent(
+        'LOGOUT_ALL_DEVICES',
         request.headers.get('x-forwarded-for') || 'unknown',
         null,
         { userId }
       );
     } else if (sessionId) {
       // Logout from current session only
-              await invalidateSession(sessionId);
-      
-      await logAuthEvent('LOGOUT_SUCCESS', 
+      await invalidateSession(sessionId);
+
+      await logAuthEvent(
+        'LOGOUT_SUCCESS',
         request.headers.get('x-forwarded-for') || 'unknown',
         null,
         { userId, sessionId }
@@ -69,10 +71,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
 
     return response;
-
   } catch (error) {
     console.error('Logout error:', error);
-    
+
     // Even if there's an error, we should clear cookies and return success
     // because the user is trying to logout
     const response = NextResponse.json({
@@ -118,7 +119,7 @@ async function logAuthEvent(
         where: { id: metadata.userId },
         select: { organizationId: true, email: true },
       });
-      
+
       if (user) {
         organizationId = user.organizationId;
         if (!email) email = user.email;
@@ -142,9 +143,9 @@ async function logAuthEvent(
 
 // Health check
 export async function GET(): Promise<NextResponse> {
-  return NextResponse.json({ 
-    status: 'ok', 
+  return NextResponse.json({
+    status: 'ok',
     endpoint: 'logout',
     timestamp: new Date().toISOString(),
   });
-} 
+}

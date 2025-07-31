@@ -43,31 +43,31 @@ export class MFAService {
    */
   async setupTOTP(userId: string, appName: string = 'Riscura'): Promise<MFASetupResult> {
     const user = await this.getUserForMFA(userId);
-    
+
     // Generate secret and QR code
     const secret = authenticator.generateSecret();
     const otpauthUrl = authenticator.keyuri(user.email, appName, secret);
     const qrCode = await this.generateQRCode(otpauthUrl);
-    
+
     // Generate backup codes
     const backupCodes = this.generateBackupCodes();
-    
+
     // Create setup token for verification
     const setupToken = this.generateSetupToken(userId, secret);
-    
+
     // Store encrypted in temporary setup
     await this.storeTempMFASetup(userId, {
       type: 'totp',
       secret: await encrypt(secret),
-      backupCodes: await Promise.all(backupCodes.map(code => encrypt(code))),
-      setupToken
+      backupCodes: await Promise.all(backupCodes.map((code) => encrypt(code))),
+      setupToken,
     });
 
     return {
       secret,
       qrCode,
       backupCodes,
-      setupToken
+      setupToken,
     };
   }
 
@@ -76,7 +76,7 @@ export class MFAService {
    */
   async setupSMS(userId: string, phoneNumber: string): Promise<MFASetupResult> {
     const user = await this.getUserForMFA(userId);
-    
+
     // Validate phone number format
     if (!this.isValidPhoneNumber(phoneNumber)) {
       throw new Error('Invalid phone number format');
@@ -84,49 +84,53 @@ export class MFAService {
 
     // Generate verification code
     const verificationCode = this.generateVerificationCode();
-    
+
     // Send SMS
     await this.sendSMS(phoneNumber, `Your Riscura verification code: ${verificationCode}`);
-    
+
     // Generate backup codes
     const backupCodes = this.generateBackupCodes();
-    
+
     // Create setup token
     const setupToken = this.generateSetupToken(userId, verificationCode);
-    
+
     // Store encrypted in temporary setup
     await this.storeTempMFASetup(userId, {
       type: 'sms',
       phoneNumber: await encrypt(phoneNumber),
       verificationCode: await encrypt(verificationCode),
-      backupCodes: await Promise.all(backupCodes.map(code => encrypt(code))),
-      setupToken
+      backupCodes: await Promise.all(backupCodes.map((code) => encrypt(code))),
+      setupToken,
     });
 
     return {
       secret: '', // Not applicable for SMS
       qrCode: '', // Not applicable for SMS
       backupCodes,
-      setupToken
+      setupToken,
     };
   }
 
   /**
    * Verify MFA setup and enable the method
    */
-  async verifySetup(userId: string, setupToken: string, verificationCode: string): Promise<boolean> {
+  async verifySetup(
+    userId: string,
+    setupToken: string,
+    verificationCode: string
+  ): Promise<boolean> {
     const tempSetup = await this.getTempMFASetup(userId, setupToken);
     if (!tempSetup) {
       throw new Error('Invalid or expired setup token');
     }
 
     let isValid = false;
-    
+
     if (tempSetup.type === 'totp') {
       const secret = await decrypt(tempSetup.secret);
       isValid = authenticator.verify({
         token: verificationCode,
-        secret
+        secret,
       });
     } else if (tempSetup.type === 'sms') {
       const storedCode = await decrypt(tempSetup.verificationCode);
@@ -148,15 +152,15 @@ export class MFAService {
       phoneNumber: tempSetup.phoneNumber,
       backupCodes: tempSetup.backupCodes,
       createdAt: new Date(),
-      metadata: {}
+      metadata: {},
     };
 
     // Store the MFA method
     await this.storeMFAMethod(mfaMethod);
-    
+
     // Clean up temporary setup
     await this.cleanupTempMFASetup(userId, setupToken);
-    
+
     return true;
   }
 
@@ -165,31 +169,31 @@ export class MFAService {
    */
   async verifyMFA(userId: string, code: string, methodId?: string): Promise<MFAVerificationResult> {
     const attempts = await this.getRecentAttempts(userId);
-    
+
     // Check if user is locked out
     if (attempts.length >= this.maxAttempts) {
       const lastAttempt = attempts[0];
       const lockoutUntil = new Date(lastAttempt.timestamp.getTime() + this.lockoutDuration);
-      
+
       if (new Date() < lockoutUntil) {
         return {
           success: false,
           remainingAttempts: 0,
-          lockoutUntil
+          lockoutUntil,
         };
       }
     }
 
     const methods = await this.getUserMFAMethods(userId);
-    const enabledMethods = methods.filter(m => m.isEnabled);
-    
+    const enabledMethods = methods.filter((m) => m.isEnabled);
+
     if (enabledMethods.length === 0) {
       throw new Error('No MFA methods enabled for user');
     }
 
     // Try specific method if provided, otherwise try all
-    const methodsToTry = methodId 
-      ? enabledMethods.filter(m => m.id === methodId)
+    const methodsToTry = methodId
+      ? enabledMethods.filter((m) => m.id === methodId)
       : enabledMethods;
 
     for (const method of methodsToTry) {
@@ -197,28 +201,27 @@ export class MFAService {
       if (result) {
         // Update last used
         await this.updateMethodLastUsed(method.id);
-        
+
         // Clear failed attempts
         await this.clearFailedAttempts(userId);
-        
+
         return {
           success: true,
-          methodUsed: method.type
+          methodUsed: method.type,
         };
       }
     }
 
     // Record failed attempt
     await this.recordFailedAttempt(userId);
-    
+
     const remainingAttempts = Math.max(0, this.maxAttempts - (attempts.length + 1));
-    
+
     return {
       success: false,
       remainingAttempts,
-      lockoutUntil: remainingAttempts === 0 
-        ? new Date(Date.now() + this.lockoutDuration)
-        : undefined
+      lockoutUntil:
+        remainingAttempts === 0 ? new Date(Date.now() + this.lockoutDuration) : undefined,
     };
   }
 
@@ -232,11 +235,11 @@ export class MFAService {
     }
 
     const backupCodes = this.generateBackupCodes();
-    const encryptedCodes = await Promise.all(backupCodes.map(code => encrypt(code)));
-    
+    const encryptedCodes = await Promise.all(backupCodes.map((code) => encrypt(code)));
+
     // Update the method
     await this.updateMFAMethod(methodId, {
-      backupCodes: encryptedCodes
+      backupCodes: encryptedCodes,
     });
 
     return backupCodes;
@@ -245,7 +248,11 @@ export class MFAService {
   /**
    * Disable MFA method
    */
-  async disableMFAMethod(userId: string, methodId: string, verificationCode: string): Promise<boolean> {
+  async disableMFAMethod(
+    userId: string,
+    methodId: string,
+    verificationCode: string
+  ): Promise<boolean> {
     // Verify current MFA before disabling
     const verification = await this.verifyMFA(userId, verificationCode, methodId);
     if (!verification.success) {
@@ -259,15 +266,15 @@ export class MFAService {
 
     // Don't allow disabling the last MFA method
     const userMethods = await this.getUserMFAMethods(userId);
-    const enabledMethods = userMethods.filter(m => m.isEnabled && m.id !== methodId);
-    
+    const enabledMethods = userMethods.filter((m) => m.isEnabled && m.id !== methodId);
+
     if (enabledMethods.length === 0) {
       throw new Error('Cannot disable the last MFA method');
     }
 
     // Disable the method
     await this.updateMFAMethod(methodId, { isEnabled: false });
-    
+
     return true;
   }
 
@@ -287,19 +294,19 @@ export class MFAService {
     hasBackupCodes: boolean;
   }> {
     const methods = await this.getUserMFAMethods(userId);
-    const enabledMethods = methods.filter(m => m.isEnabled);
-    
+    const enabledMethods = methods.filter((m) => m.isEnabled);
+
     return {
       isEnabled: enabledMethods.length > 0,
-      methods: methods.map(method => ({
+      methods: methods.map((method) => ({
         id: method.id,
         type: method.type,
         isEnabled: method.isEnabled,
         isPrimary: method.isPrimary,
         lastUsed: method.lastUsed,
-        maskedIdentifier: this.getMaskedIdentifier(method)
+        maskedIdentifier: this.getMaskedIdentifier(method),
       })),
-      hasBackupCodes: methods.some(m => m.backupCodes && m.backupCodes.length > 0)
+      hasBackupCodes: methods.some((m) => m.backupCodes && m.backupCodes.length > 0),
     };
   }
 
@@ -326,7 +333,7 @@ export class MFAService {
     const payload = {
       userId,
       secretHash: crypto.createHash('sha256').update(secret).digest('hex'),
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
     return Buffer.from(JSON.stringify(payload)).toString('base64');
   }
@@ -388,22 +395,22 @@ export class MFAService {
       const secret = await decrypt(method.secret);
       return authenticator.verify({
         token: code,
-        secret
+        secret,
       });
     }
-    
+
     if (method.type === 'backup_codes' && method.backupCodes) {
       for (const encryptedCode of method.backupCodes) {
         const backupCode = await decrypt(encryptedCode);
         if (backupCode === code.toUpperCase()) {
           // Remove used backup code
-          const updatedCodes = method.backupCodes.filter(c => c !== encryptedCode);
+          const updatedCodes = method.backupCodes.filter((c) => c !== encryptedCode);
           await this.updateMFAMethod(method.id, { backupCodes: updatedCodes });
           return true;
         }
       }
     }
-    
+
     return false;
   }
 
@@ -435,4 +442,4 @@ export class MFAService {
     }
     return method.type;
   }
-} 
+}

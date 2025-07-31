@@ -55,4 +55,4 @@ export function usePerformance() {
     throw new Error('usePerformance must be used within a PerformanceProvider');
   }
   return context;
-} 
+}

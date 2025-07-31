@@ -2,21 +2,21 @@
 
 // Optimized Chart Components for High Performance Rendering
 import React, { useMemo, useCallback, useState, useEffect, useRef } from 'react';
-import { 
-  LineChart, 
-  Line, 
-  AreaChart, 
-  Area, 
-  BarChart, 
-  Bar, 
-  PieChart, 
-  Pie, 
+import {
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
   Cell,
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
   ResponsiveContainer,
   ReferenceLine,
   Brush,
@@ -30,14 +30,14 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisySlider } from '@/components/ui/DaisySlider';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select';
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -45,15 +45,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
-import { 
-  Download, 
-  Settings, 
-  ZoomIn, 
-  ZoomOut, 
-  RotateCcw,
-  Maximize2,
-  Minimize2,
-} from 'lucide-react';
+import { Download, Settings, ZoomIn, ZoomOut, RotateCcw, Maximize2, Minimize2 } from 'lucide-react';
 
 export interface ChartDataPoint {
   [key: string]: any;
@@ -115,13 +107,21 @@ interface ChartState {
 }
 
 const COLORS = [
-  '#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#00ff00',
-  '#ff00ff', '#00ffff', '#ff0000', '#0000ff', '#ffff00'
+  '#8884d8',
+  '#82ca9d',
+  '#ffc658',
+  '#ff7300',
+  '#00ff00',
+  '#ff00ff',
+  '#00ffff',
+  '#ff0000',
+  '#0000ff',
+  '#ffff00',
 ];
 
 // Optimized data processing utilities
 const processChartData = (
-  data: ChartDataPoint[], 
+  data: ChartDataPoint[],
   maxPoints: number = 1000,
   aggregationMethod: 'sum' | 'avg' | 'max' | 'min' = 'avg'
 ): ChartDataPoint[] => {
@@ -135,9 +135,9 @@ const processChartData = (
     const aggregated: ChartDataPoint = {};
 
     // Aggregate numeric values
-    Object.keys(chunk[0] || {}).forEach(key => {
-      const values = chunk.map(item => item[key]).filter(val => typeof val === 'number');
-      
+    Object.keys(chunk[0] || {}).forEach((key) => {
+      const values = chunk.map((item) => item[key]).filter((val) => typeof val === 'number');
+
       if (values.length > 0) {
         switch (aggregationMethod) {
           case 'sum':
@@ -171,8 +171,8 @@ const OptimizedLineChart = React.memo<{
   data: ChartDataPoint[];
   onLoad?: () => void;
 }>(({ config, data, onLoad }) => {
-  const processedData = useMemo(() => 
-    processChartData(data, config.maxDataPoints, config.aggregationMethod),
+  const processedData = useMemo(
+    () => processChartData(data, config.maxDataPoints, config.aggregationMethod),
     [data, config.maxDataPoints, config.aggregationMethod]
   );
 
@@ -184,15 +184,11 @@ const OptimizedLineChart = React.memo<{
     <ResponsiveContainer width="100%" height={config.height || 300}>
       <LineChart data={processedData}>
         {config.enableGrid && <CartesianGrid strokeDasharray="3 3" />}
-        <XAxis 
-          dataKey={config.xKey} 
-          tick={{ fontSize: 12 }}
-          interval="preserveStartEnd"
-        />
+        <XAxis dataKey={config.xKey} tick={{ fontSize: 12 }} interval="preserveStartEnd" />
         <YAxis tick={{ fontSize: 12 }} />
         {config.enableTooltip && <DaisyTooltip />}
         {config.enableLegend && <Legend />}
-        
+
         {config.yKeys.map((key, index) => (
           <Line
             key={key}
@@ -205,7 +201,7 @@ const OptimizedLineChart = React.memo<{
             connectNulls={false}
           />
         ))}
-        
+
         {config.enableBrush && <Brush dataKey={config.xKey} height={30} />}
       </LineChart>
     </ResponsiveContainer>
@@ -218,8 +214,8 @@ const OptimizedAreaChart = React.memo<{
   data: ChartDataPoint[];
   onLoad?: () => void;
 }>(({ config, data, onLoad }) => {
-  const processedData = useMemo(() => 
-    processChartData(data, config.maxDataPoints, config.aggregationMethod),
+  const processedData = useMemo(
+    () => processChartData(data, config.maxDataPoints, config.aggregationMethod),
     [data, config.maxDataPoints, config.aggregationMethod]
   );
 
@@ -231,15 +227,11 @@ const OptimizedAreaChart = React.memo<{
     <ResponsiveContainer width="100%" height={config.height || 300}>
       <AreaChart data={processedData}>
         {config.enableGrid && <CartesianGrid strokeDasharray="3 3" />}
-        <XAxis 
-          dataKey={config.xKey} 
-          tick={{ fontSize: 12 }}
-          interval="preserveStartEnd"
-        />
+        <XAxis dataKey={config.xKey} tick={{ fontSize: 12 }} interval="preserveStartEnd" />
         <YAxis tick={{ fontSize: 12 }} />
         {config.enableTooltip && <DaisyTooltip />}
         {config.enableLegend && <Legend />}
-        
+
         {config.yKeys.map((key, index) => (
           <Area
             key={key}
@@ -252,7 +244,7 @@ const OptimizedAreaChart = React.memo<{
             animationDuration={config.enableAnimation ? config.animationDuration || 1000 : 0}
           />
         ))}
-        
+
         {config.enableBrush && <Brush dataKey={config.xKey} height={30} />}
       </AreaChart>
     </ResponsiveContainer>
@@ -265,8 +257,8 @@ const OptimizedBarChart = React.memo<{
   data: ChartDataPoint[];
   onLoad?: () => void;
 }>(({ config, data, onLoad }) => {
-  const processedData = useMemo(() => 
-    processChartData(data, config.maxDataPoints, config.aggregationMethod),
+  const processedData = useMemo(
+    () => processChartData(data, config.maxDataPoints, config.aggregationMethod),
     [data, config.maxDataPoints, config.aggregationMethod]
   );
 
@@ -278,15 +270,11 @@ const OptimizedBarChart = React.memo<{
     <ResponsiveContainer width="100%" height={config.height || 300}>
       <BarChart data={processedData}>
         {config.enableGrid && <CartesianGrid strokeDasharray="3 3" />}
-        <XAxis 
-          dataKey={config.xKey} 
-          tick={{ fontSize: 12 }}
-          interval="preserveStartEnd"
-        />
+        <XAxis dataKey={config.xKey} tick={{ fontSize: 12 }} interval="preserveStartEnd" />
         <YAxis tick={{ fontSize: 12 }} />
         {config.enableTooltip && <DaisyTooltip />}
         {config.enableLegend && <Legend />}
-        
+
         {config.yKeys.map((key, index) => (
           <Bar
             key={key}
@@ -295,7 +283,7 @@ const OptimizedBarChart = React.memo<{
             animationDuration={config.enableAnimation ? config.animationDuration || 1000 : 0}
           />
         ))}
-        
+
         {config.enableBrush && <Brush dataKey={config.xKey} height={30} />}
       </BarChart>
     </ResponsiveContainer>
@@ -332,9 +320,9 @@ const OptimizedPieChart = React.memo<{
           label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
         >
           {processedData.map((_, index) => (
-            <Cell 
-              key={`cell-${index}`} 
-              fill={config.colors[index] || COLORS[index % COLORS.length]} 
+            <Cell
+              key={`cell-${index}`}
+              fill={config.colors[index] || COLORS[index % COLORS.length]}
             />
           ))}
         </Pie>
@@ -351,8 +339,8 @@ const OptimizedScatterChart = React.memo<{
   data: ChartDataPoint[];
   onLoad?: () => void;
 }>(({ config, data, onLoad }) => {
-  const processedData = useMemo(() => 
-    processChartData(data, config.maxDataPoints, config.aggregationMethod),
+  const processedData = useMemo(
+    () => processChartData(data, config.maxDataPoints, config.aggregationMethod),
     [data, config.maxDataPoints, config.aggregationMethod]
   );
 
@@ -364,19 +352,11 @@ const OptimizedScatterChart = React.memo<{
     <ResponsiveContainer width="100%" height={config.height || 300}>
       <ScatterChart data={processedData}>
         {config.enableGrid && <CartesianGrid strokeDasharray="3 3" />}
-        <XAxis 
-          dataKey={config.xKey} 
-          tick={{ fontSize: 12 }}
-          type="number"
-        />
-        <YAxis 
-          dataKey={config.yKeys[0]}
-          tick={{ fontSize: 12 }} 
-          type="number"
-        />
+        <XAxis dataKey={config.xKey} tick={{ fontSize: 12 }} type="number" />
+        <YAxis dataKey={config.yKeys[0]} tick={{ fontSize: 12 }} type="number" />
         {config.enableTooltip && <DaisyTooltip />}
         {config.enableLegend && <Legend />}
-        
+
         <Scatter
           dataKey={config.yKeys[0]}
           fill={config.colors[0] || COLORS[0]}
@@ -454,7 +434,7 @@ const LazyChart: React.FC<{
   // Handle intersection observer
   useEffect(() => {
     if (enableIntersectionObserver && inView && !state.visible) {
-      setState(prev => ({ ...prev, visible: true }));
+      setState((prev) => ({ ...prev, visible: true }));
     }
   }, [inView, enableIntersectionObserver, state.visible]);
 
@@ -462,14 +442,14 @@ const LazyChart: React.FC<{
   useEffect(() => {
     if (!state.visible || state.loaded) return;
 
-    setState(prev => ({ ...prev, loading: true }));
+    setState((prev) => ({ ...prev, loading: true }));
 
     const loadChart = async () => {
       try {
         // Simulate loading delay
-        await new Promise(resolve => setTimeout(resolve, 100));
-        
-        setState(prev => ({
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        setState((prev) => ({
           ...prev,
           loading: false,
           loaded: true,
@@ -478,7 +458,7 @@ const LazyChart: React.FC<{
         onLoad();
       } catch (error) {
         const err = error instanceof Error ? error : new Error('Chart load failed');
-        setState(prev => ({
+        setState((prev) => ({
           ...prev,
           loading: false,
           error: err,
@@ -495,7 +475,7 @@ const LazyChart: React.FC<{
     if (!config.refreshInterval || !state.loaded) return;
 
     refreshTimeoutRef.current = setTimeout(() => {
-      setState(prev => ({ ...prev, loaded: false }));
+      setState((prev) => ({ ...prev, loaded: false }));
     }, config.refreshInterval);
 
     return () => {
@@ -511,11 +491,7 @@ const LazyChart: React.FC<{
 
   if (state.loading) {
     return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-      >
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
         <ChartSkeleton height={config.height} />
       </motion.div>
     );
@@ -529,7 +505,7 @@ const LazyChart: React.FC<{
             <div className="text-red-600 mb-2">Chart failed to load</div>
             <div className="text-sm text-gray-500">{state.error.message}</div>
             <button
-              onClick={() => setState(prev => ({ ...prev, loaded: false, error: null }))}
+              onClick={() => setState((prev) => ({ ...prev, loaded: false, error: null }))}
               className="mt-2 px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700"
             >
               Retry
@@ -575,9 +551,7 @@ const LazyChart: React.FC<{
       transition={{ duration: 0.3, delay: index * 0.1 }}
       className="bg-white rounded-lg shadow-sm border p-4"
     >
-      <ChartErrorBoundary onError={onError}>
-        {renderChart()}
-      </ChartErrorBoundary>
+      <ChartErrorBoundary onError={onError}>{renderChart()}</ChartErrorBoundary>
     </motion.div>
   );
 };
@@ -614,7 +588,7 @@ const OptimizedCharts: React.FC<OptimizedChartsProps> = ({
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              setVisibleCharts(prev => new Set([...prev, index]));
+              setVisibleCharts((prev) => new Set([...prev, index]));
             }
           });
         },
@@ -629,22 +603,25 @@ const OptimizedCharts: React.FC<OptimizedChartsProps> = ({
     });
 
     return () => {
-      observers.forEach(observer => observer.disconnect());
+      observers.forEach((observer) => observer.disconnect());
     };
   }, [charts, enableIntersectionObserver]);
 
   // Throttled chart loading
   const handleChartLoad = useCallback(
     throttle((chartIndex: number) => {
-      setLoadedCharts(prev => new Set([...prev, chartIndex]));
+      setLoadedCharts((prev) => new Set([...prev, chartIndex]));
       onChartLoad?.(chartIndex);
     }, 100),
     [onChartLoad]
   );
 
-  const handleChartError = useCallback((chartIndex: number, error: Error) => {
-    onChartError?.(chartIndex, error);
-  }, [onChartError]);
+  const handleChartError = useCallback(
+    (chartIndex: number, error: Error) => {
+      onChartError?.(chartIndex, error);
+    },
+    [onChartError]
+  );
 
   // Loading state
   if (loading) {
@@ -687,7 +664,9 @@ const OptimizedCharts: React.FC<OptimizedChartsProps> = ({
         {charts.map((chart, index) => (
           <div
             key={index}
-            ref={(el: HTMLDivElement | null) => { observerRefs.current[index] = el; }}
+            ref={(el: HTMLDivElement | null) => {
+              observerRefs.current[index] = el;
+            }}
           >
             <LazyChart
               config={chart}
@@ -713,19 +692,19 @@ export const useOptimizedCharts = (initialCharts: ChartConfig[]) => {
   const [error, setError] = useState<Error | null>(null);
 
   const addChart = useCallback((chart: ChartConfig) => {
-    setCharts(prev => [...prev, chart]);
+    setCharts((prev) => [...prev, chart]);
   }, []);
 
   const removeChart = useCallback((index: number) => {
-    setCharts(prev => prev.filter((_, i) => i !== index));
+    setCharts((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
   const updateChart = useCallback((index: number, updates: Partial<ChartConfig>) => {
-    setCharts(prev => prev.map((chart, i) => i === index ? { ...chart, ...updates } : chart));
+    setCharts((prev) => prev.map((chart, i) => (i === index ? { ...chart, ...updates } : chart)));
   }, []);
 
   const refreshCharts = useCallback(() => {
-    setCharts(prev => [...prev]);
+    setCharts((prev) => [...prev]);
   }, []);
 
   return {
@@ -739,4 +718,4 @@ export const useOptimizedCharts = (initialCharts: ChartConfig[]) => {
     updateChart,
     refreshCharts,
   };
-}; 
+};

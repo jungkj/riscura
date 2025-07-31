@@ -13,7 +13,7 @@ const importSchema = z.object({
 export const POST = withApiMiddleware({
   requireAuth: true,
   bodySchema: importSchema,
-  rateLimiters: ['fileUpload']
+  rateLimiters: ['fileUpload'],
 })(async (context, { fileId, fileName }) => {
   const { user, organizationId } = context;
 
@@ -23,19 +23,19 @@ export const POST = withApiMiddleware({
       where: {
         organizationId,
         status: {
-          in: ['QUEUED', 'PROCESSING']
+          in: ['QUEUED', 'PROCESSING'],
         },
         metadata: {
           path: ['fileId'],
-          equals: fileId
-        }
-      }
+          equals: fileId,
+        },
+      },
     });
 
     if (activeImport) {
       return {
         error: 'This file is already being imported',
-        jobId: activeImport.id
+        jobId: activeImport.id,
       };
     }
 
@@ -50,7 +50,7 @@ export const POST = withApiMiddleware({
     if (!validationResult.isValid) {
       return {
         error: 'File validation failed',
-        validationErrors: validationResult.errors
+        validationErrors: validationResult.errors,
       };
     }
 
@@ -70,28 +70,28 @@ export const POST = withApiMiddleware({
         fileName,
         source: 'google-drive',
         importedBy: user.email || user.name || user.id,
-        validationResult: validationResult.metadata
-      }
+        validationResult: validationResult.metadata,
+      },
     });
 
     return {
       jobId,
       message: 'Import job created successfully',
       status: 'QUEUED',
-      metadata: validationResult.metadata
+      metadata: validationResult.metadata,
     };
   } catch (error) {
     console.error('Error creating Google Drive import job:', error);
-    
+
     if (error instanceof Error && error.message.includes('No valid Google Drive authentication')) {
       return {
         error: 'Not authenticated with Google Drive',
-        code: 'AUTH_REQUIRED'
+        code: 'AUTH_REQUIRED',
       };
     }
-    
+
     return {
-      error: 'Failed to start import. Please try again.'
+      error: 'Failed to start import. Please try again.',
     };
   }
 });

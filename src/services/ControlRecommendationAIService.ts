@@ -366,19 +366,31 @@ const CONTROL_FRAMEWORKS: Record<string, ControlFramework> = {
         description: 'Governance of Enterprise IT',
         objectives: ['Ensure Governance Framework Setting', 'Ensure Benefits Delivery'],
         controlTemplates: [],
-        riskAlignment: ['strategic', 'operational']
-      }
+        riskAlignment: ['strategic', 'operational'],
+      },
     ],
     maturityLevels: [
-      { level: 0, name: 'Incomplete', description: 'Process not implemented', characteristics: [], requirements: [] },
-      { level: 1, name: 'Initial', description: 'Process is ad hoc', characteristics: [], requirements: [] }
+      {
+        level: 0,
+        name: 'Incomplete',
+        description: 'Process not implemented',
+        characteristics: [],
+        requirements: [],
+      },
+      {
+        level: 1,
+        name: 'Initial',
+        description: 'Process is ad hoc',
+        characteristics: [],
+        requirements: [],
+      },
     ],
     applicability: {
       industries: ['technology', 'financial_services', 'healthcare'],
       organizationSizes: ['medium', 'large', 'enterprise'],
       riskCategories: ['technology', 'operational'],
-      regulatoryRequirements: ['SOX', 'GDPR']
-    }
+      regulatoryRequirements: ['SOX', 'GDPR'],
+    },
   },
   itil: {
     id: 'itil',
@@ -392,16 +404,16 @@ const CONTROL_FRAMEWORKS: Record<string, ControlFramework> = {
         description: 'IT Service Management Practices',
         objectives: ['Service Value System', 'Service Value Chain'],
         controlTemplates: [],
-        riskAlignment: ['technology', 'operational']
-      }
+        riskAlignment: ['technology', 'operational'],
+      },
     ],
     maturityLevels: [],
     applicability: {
       industries: ['technology', 'telecommunications', 'financial_services'],
       organizationSizes: ['small', 'medium', 'large', 'enterprise'],
       riskCategories: ['technology', 'operational'],
-      regulatoryRequirements: ['ISO27001', 'SOC2']
-    }
+      regulatoryRequirements: ['ISO27001', 'SOC2'],
+    },
   },
   sox: {
     id: 'sox',
@@ -415,17 +427,17 @@ const CONTROL_FRAMEWORKS: Record<string, ControlFramework> = {
         description: 'Controls over Financial Reporting',
         objectives: ['Accurate Financial Reporting', 'Management Assessment'],
         controlTemplates: [],
-        riskAlignment: ['financial', 'compliance']
-      }
+        riskAlignment: ['financial', 'compliance'],
+      },
     ],
     maturityLevels: [],
     applicability: {
       industries: ['financial_services', 'public_companies'],
       organizationSizes: ['large', 'enterprise'],
       riskCategories: ['financial', 'compliance'],
-      regulatoryRequirements: ['SOX', 'SEC']
-    }
-  }
+      regulatoryRequirements: ['SOX', 'SEC'],
+    },
+  },
 };
 
 interface DependencyGraph {
@@ -476,7 +488,7 @@ export class ControlRecommendationAIService {
   }
 
   private initializeFrameworks(): void {
-    Object.values(CONTROL_FRAMEWORKS).forEach(framework => {
+    Object.values(CONTROL_FRAMEWORKS).forEach((framework) => {
       this.frameworks.set(framework.id, framework);
     });
   }
@@ -484,7 +496,7 @@ export class ControlRecommendationAIService {
   private async loadControlTemplates(): Promise<void> {
     // Load control templates from industry frameworks
     const templates = await this.buildControlTemplateLibrary();
-    templates.forEach(template => {
+    templates.forEach((template) => {
       this.controlTemplates.set(template.id, template);
     });
   }
@@ -516,10 +528,7 @@ export class ControlRecommendationAIService {
     }
 
     // Optimize and prioritize recommendations
-    const optimizedRecommendations = await this.optimizeRecommendations(
-      recommendations,
-      options
-    );
+    const optimizedRecommendations = await this.optimizeRecommendations(recommendations, options);
 
     return optimizedRecommendations;
   }
@@ -560,7 +569,7 @@ export class ControlRecommendationAIService {
   ): Promise<ImplementationPlan> {
     // Analyze dependencies and constraints
     const dependencyGraph = await this.buildDependencyGraph(recommendations);
-    
+
     // Optimize implementation sequence
     const optimizedSequence = await this.optimizeImplementationSequence(
       recommendations,
@@ -596,10 +605,7 @@ export class ControlRecommendationAIService {
     );
 
     // Estimate benefits
-    const benefits = await this.estimateBenefits(
-      recommendation,
-      context
-    );
+    const benefits = await this.estimateBenefits(recommendation, context);
 
     // Perform financial analysis
     const financialMetrics = await this.calculateFinancialMetrics(
@@ -609,10 +615,7 @@ export class ControlRecommendationAIService {
     );
 
     // Sensitivity analysis
-    const sensitivityAnalysis = await this.performSensitivityAnalysis(
-      recommendation,
-      context
-    );
+    const sensitivityAnalysis = await this.performSensitivityAnalysis(recommendation, context);
 
     return {
       implementation: implementationCosts,
@@ -622,7 +625,7 @@ export class ControlRecommendationAIService {
       roi: financialMetrics.roi,
       npv: financialMetrics.npv,
       irr: financialMetrics.irr,
-      sensitivityAnalysis
+      sensitivityAnalysis,
     };
   }
 
@@ -656,10 +659,7 @@ export class ControlRecommendationAIService {
     );
 
     // Consider contextual factors
-    const contextualFactors = await this.analyzeContextualFactors(
-      controlTemplate,
-      context
-    );
+    const contextualFactors = await this.analyzeContextualFactors(controlTemplate, context);
 
     // Calculate overall effectiveness
     const overallEffectiveness = this.calculateOverallEffectiveness(
@@ -708,18 +708,20 @@ export class ControlRecommendationAIService {
       priorityMatrix: {
         axes: { x: 'Impact', y: 'Effort' },
         items: [],
-        quadrants: []
+        quadrants: [],
       },
-      implementationRoadmap: []
+      implementationRoadmap: [],
     };
   }
 
   // Additional private methods would be implemented here...
-  private async buildDependencyGraph(recommendations: ControlRecommendation[]): Promise<DependencyGraph> {
+  private async buildDependencyGraph(
+    recommendations: ControlRecommendation[]
+  ): Promise<DependencyGraph> {
     // Build dependency graph for implementation sequencing
     return {
-      nodes: recommendations.map(r => r.id),
-      edges: []
+      nodes: recommendations.map((r) => r.id),
+      edges: [],
     };
   }
 
@@ -743,7 +745,7 @@ export class ControlRecommendationAIService {
       resources: [],
       dependencies: [],
       milestones: [],
-      riskMitigation: []
+      riskMitigation: [],
     };
   }
 
@@ -758,7 +760,7 @@ export class ControlRecommendationAIService {
       training: 10000,
       external: 15000,
       ongoing: 5000,
-      total: 105000
+      total: 105000,
     };
   }
 
@@ -773,7 +775,7 @@ export class ControlRecommendationAIService {
       training: 5000,
       external: 8000,
       ongoing: 12000,
-      total: 70000
+      total: 70000,
     };
   }
 
@@ -792,8 +794,8 @@ export class ControlRecommendationAIService {
       qualitativeBenefits: [
         'Improved stakeholder confidence',
         'Enhanced regulatory compliance',
-        'Better risk visibility'
-      ]
+        'Better risk visibility',
+      ],
     };
   }
 
@@ -812,12 +814,12 @@ export class ControlRecommendationAIService {
     const annualCosts = operationalCosts.total;
     const annualBenefits = benefits.total;
     const netAnnualBenefit = annualBenefits - annualCosts;
-    
+
     return {
-      paybackPeriod: totalImplementation / netAnnualBenefit * 12, // months
+      paybackPeriod: (totalImplementation / netAnnualBenefit) * 12, // months
       roi: netAnnualBenefit / totalImplementation,
       npv: netAnnualBenefit * 5 - totalImplementation, // 5-year NPV
-      irr: 0.25 // 25% IRR
+      irr: 0.25, // 25% IRR
     };
   }
 
@@ -833,25 +835,25 @@ export class ControlRecommendationAIService {
           assumptions: ['High user adoption', 'No implementation delays'],
           costImpact: -0.1,
           benefitImpact: 0.2,
-          likelihood: 0.3
+          likelihood: 0.3,
         },
         {
           name: 'Most Likely',
           assumptions: ['Normal implementation', 'Standard adoption'],
           costImpact: 0,
           benefitImpact: 0,
-          likelihood: 0.5
+          likelihood: 0.5,
         },
         {
           name: 'Worst Case',
           assumptions: ['Implementation delays', 'Low adoption'],
           costImpact: 0.3,
           benefitImpact: -0.2,
-          likelihood: 0.2
-        }
+          likelihood: 0.2,
+        },
       ],
       variables: [],
-      recommendations: ['Monitor implementation closely', 'Ensure proper change management']
+      recommendations: ['Monitor implementation closely', 'Ensure proper change management'],
     };
   }
 
@@ -904,7 +906,7 @@ export class ControlRecommendationAIService {
       effectiveness: 0.77,
       confidence: 0.72,
       factors: [],
-      recommendations: ['Regular monitoring recommended', 'Consider automation opportunities']
+      recommendations: ['Regular monitoring recommended', 'Consider automation opportunities'],
     };
   }
 }
@@ -989,4 +991,4 @@ interface EffectivenessFactor {
   explanation: string;
 }
 
-export const controlRecommendationAIService = new ControlRecommendationAIService(); 
+export const controlRecommendationAIService = new ControlRecommendationAIService();

@@ -67,11 +67,7 @@ export class NotificationService {
 
   // Check if notifications are supported
   public isSupported(): boolean {
-    return (
-      'Notification' in window &&
-      'serviceWorker' in navigator &&
-      'PushManager' in window
-    );
+    return 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
   }
 
   // Get service worker registration
@@ -126,7 +122,7 @@ export class NotificationService {
       // Subscribe to push notifications
       this.subscription = await this.registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: this.urlBase64ToUint8Array(this.vapidKey)
+        applicationServerKey: this.urlBase64ToUint8Array(this.vapidKey),
       });
 
       // Send subscription to server
@@ -149,13 +145,13 @@ export class NotificationService {
 
     try {
       const success = await this.subscription.unsubscribe();
-      
+
       if (success) {
         // Remove subscription from server
         if (this.endpoint) {
           await this.removeSubscriptionFromServer(this.subscription);
         }
-        
+
         this.subscription = null;
       }
 
@@ -191,7 +187,7 @@ export class NotificationService {
         requireInteraction: options.requireInteraction,
         renotify: options.renotify,
         dir: options.dir,
-        lang: options.lang
+        lang: options.lang,
       };
 
       await this.registration.showNotification(options.title, notificationOptions);
@@ -214,8 +210,8 @@ export class NotificationService {
         body: JSON.stringify({
           subscription: subscription.toJSON(),
           userAgent: navigator.userAgent,
-          timestamp: Date.now()
-        })
+          timestamp: Date.now(),
+        }),
       });
     } catch (error) {
       console.error('Failed to send subscription to server:', error);
@@ -233,8 +229,8 @@ export class NotificationService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          subscription: subscription.toJSON()
-        })
+          subscription: subscription.toJSON(),
+        }),
       });
     } catch (error) {
       console.error('Failed to remove subscription from server:', error);
@@ -243,10 +239,8 @@ export class NotificationService {
 
   // Convert VAPID key
   private urlBase64ToUint8Array(base64String: string): Uint8Array {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding)
-      .replace(/-/g, '+')
-      .replace(/_/g, '/');
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
 
     const rawData = window.atob(base64);
     const outputArray = new Uint8Array(rawData.length);
@@ -267,7 +261,7 @@ export class NotificationService {
     return {
       permission: Notification.permission,
       supported: this.isSupported(),
-      subscribed: !!this.subscription
+      subscribed: !!this.subscription,
     };
   }
 
@@ -277,7 +271,7 @@ export class NotificationService {
 
     try {
       const notifications = await this.registration.getNotifications(tag ? { tag } : undefined);
-      notifications.forEach(notification => notification.close());
+      notifications.forEach((notification) => notification.close());
     } catch (error) {
       console.error('Failed to clear notifications:', error);
     }
@@ -302,7 +296,7 @@ export function useNotifications(config: PushSubscriptionConfig) {
   const [permissionState, setPermissionState] = useState<NotificationPermissionState>({
     permission: 'default',
     supported: false,
-    subscribed: false
+    subscribed: false,
   });
   const [isSubscribing, setIsSubscribing] = useState(false);
 
@@ -313,7 +307,7 @@ export function useNotifications(config: PushSubscriptionConfig) {
 
   useEffect(() => {
     updatePermissionState();
-    
+
     // Listen for permission changes
     const checkPermission = () => updatePermissionState();
     document.addEventListener('visibilitychange', checkPermission);
@@ -350,19 +344,28 @@ export function useNotifications(config: PushSubscriptionConfig) {
   }, [service, updatePermissionState]);
 
   // Show notification
-  const showNotification = useCallback(async (options: NotificationOptions) => {
-    await service.showNotification(options);
-  }, [service]);
+  const showNotification = useCallback(
+    async (options: NotificationOptions) => {
+      await service.showNotification(options);
+    },
+    [service]
+  );
 
   // Clear notifications
-  const clearNotifications = useCallback(async (tag?: string) => {
-    await service.clearNotifications(tag);
-  }, [service]);
+  const clearNotifications = useCallback(
+    async (tag?: string) => {
+      await service.clearNotifications(tag);
+    },
+    [service]
+  );
 
   // Get active notifications
-  const getActiveNotifications = useCallback(async (tag?: string) => {
-    return await service.getActiveNotifications(tag);
-  }, [service]);
+  const getActiveNotifications = useCallback(
+    async (tag?: string) => {
+      return await service.getActiveNotifications(tag);
+    },
+    [service]
+  );
 
   return {
     permissionState,
@@ -374,90 +377,99 @@ export function useNotifications(config: PushSubscriptionConfig) {
     clearNotifications,
     getActiveNotifications,
     isSupported: service.isSupported(),
-    getSubscription: () => service.getSubscription()
+    getSubscription: () => service.getSubscription(),
   };
 }
 
 // Hook for notification templates
 export function useNotificationTemplates() {
-  const createRiskAlert = useCallback((riskName: string, severity: 'low' | 'medium' | 'high'): NotificationOptions => ({
-    title: 'Risk Alert',
-    body: `New ${severity} severity risk identified: ${riskName}`,
-    icon: '/images/icons/risk-alert.png',
-    badge: '/images/icons/badge.png',
-    tag: 'risk-alert',
-    data: { type: 'risk', severity, riskName },
-    vibrate: severity === 'high' ? [200, 100, 200] : [100],
-    requireInteraction: severity === 'high',
-    actions: [
-      {
-        action: 'view',
-        title: 'View Risk',
-        icon: '/images/icons/view.png'
-      },
-      {
-        action: 'dismiss',
-        title: 'Dismiss',
-        icon: '/images/icons/dismiss.png'
-      }
-    ]
-  }), []);
+  const createRiskAlert = useCallback(
+    (riskName: string, severity: 'low' | 'medium' | 'high'): NotificationOptions => ({
+      title: 'Risk Alert',
+      body: `New ${severity} severity risk identified: ${riskName}`,
+      icon: '/images/icons/risk-alert.png',
+      badge: '/images/icons/badge.png',
+      tag: 'risk-alert',
+      data: { type: 'risk', severity, riskName },
+      vibrate: severity === 'high' ? [200, 100, 200] : [100],
+      requireInteraction: severity === 'high',
+      actions: [
+        {
+          action: 'view',
+          title: 'View Risk',
+          icon: '/images/icons/view.png',
+        },
+        {
+          action: 'dismiss',
+          title: 'Dismiss',
+          icon: '/images/icons/dismiss.png',
+        },
+      ],
+    }),
+    []
+  );
 
-  const createComplianceReminder = useCallback((framework: string, dueDate: string): NotificationOptions => ({
-    title: 'Compliance Reminder',
-    body: `${framework} compliance review due on ${dueDate}`,
-    icon: '/images/icons/compliance.png',
-    badge: '/images/icons/badge.png',
-    tag: 'compliance-reminder',
-    data: { type: 'compliance', framework, dueDate },
-    actions: [
-      {
-        action: 'review',
-        title: 'Review Now',
-        icon: '/images/icons/review.png'
-      },
-      {
-        action: 'snooze',
-        title: 'Remind Later',
-        icon: '/images/icons/snooze.png'
-      }
-    ]
-  }), []);
+  const createComplianceReminder = useCallback(
+    (framework: string, dueDate: string): NotificationOptions => ({
+      title: 'Compliance Reminder',
+      body: `${framework} compliance review due on ${dueDate}`,
+      icon: '/images/icons/compliance.png',
+      badge: '/images/icons/badge.png',
+      tag: 'compliance-reminder',
+      data: { type: 'compliance', framework, dueDate },
+      actions: [
+        {
+          action: 'review',
+          title: 'Review Now',
+          icon: '/images/icons/review.png',
+        },
+        {
+          action: 'snooze',
+          title: 'Remind Later',
+          icon: '/images/icons/snooze.png',
+        },
+      ],
+    }),
+    []
+  );
 
-  const createSystemUpdate = useCallback((message: string): NotificationOptions => ({
-    title: 'System Update',
-    body: message,
-    icon: '/images/icons/system.png',
-    badge: '/images/icons/badge.png',
-    tag: 'system-update',
-    data: { type: 'system', message },
-    silent: true
-  }), []);
+  const createSystemUpdate = useCallback(
+    (message: string): NotificationOptions => ({
+      title: 'System Update',
+      body: message,
+      icon: '/images/icons/system.png',
+      badge: '/images/icons/badge.png',
+      tag: 'system-update',
+      data: { type: 'system', message },
+      silent: true,
+    }),
+    []
+  );
 
-  const createWorkflowNotification = useCallback((
-    workflowName: string, 
-    action: string
-  ): NotificationOptions => ({
-    title: 'Workflow Update',
-    body: `${workflowName}: ${action}`,
-    icon: '/images/icons/workflow.png',
-    badge: '/images/icons/badge.png',
-    tag: 'workflow-update',
-    data: { type: 'workflow', workflowName, action },
-    actions: [
-      {
-        action: 'view',
-        title: 'View Workflow',
-        icon: '/images/icons/view.png'
-      }
-    ]
-  }), []);
+  const createWorkflowNotification = useCallback(
+    (workflowName: string, action: string): NotificationOptions => ({
+      title: 'Workflow Update',
+      body: `${workflowName}: ${action}`,
+      icon: '/images/icons/workflow.png',
+      badge: '/images/icons/badge.png',
+      tag: 'workflow-update',
+      data: { type: 'workflow', workflowName, action },
+      actions: [
+        {
+          action: 'view',
+          title: 'View Workflow',
+          icon: '/images/icons/view.png',
+        },
+      ],
+    }),
+    []
+  );
 
   return {
     createRiskAlert,
     createComplianceReminder,
     createSystemUpdate,
-    createWorkflowNotification
+    createWorkflowNotification,
   };
 }
 
@@ -481,7 +493,7 @@ export const notificationUtils = {
       icon: notification.icon,
       tag: notification.tag,
       data: notification.data,
-      timestamp: notification.timestamp
+      timestamp: notification.timestamp,
     };
   },
 
@@ -490,7 +502,7 @@ export const notificationUtils = {
     try {
       const audio = new Audio(soundUrl);
       audio.volume = 0.5;
-      audio.play().catch(error => {
+      audio.play().catch((error) => {
         console.warn('Failed to play notification sound:', error);
       });
     } catch (error) {
@@ -503,7 +515,7 @@ export const notificationUtils = {
     if ('vibrate' in navigator) {
       navigator.vibrate(pattern);
     }
-  }
+  },
 };
 
-export default NotificationService; 
+export default NotificationService;

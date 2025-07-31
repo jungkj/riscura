@@ -22,15 +22,15 @@ import {
   createTestOrganization,
   createTestSubscriptionPlan,
   createTestSubscription,
-  type MockPrismaClient
+  type MockPrismaClient,
 } from '../../utils/test-helpers';
 
 // Mock the database
 const mockPrisma = createMockPrismaClient();
 jest.mock('@/lib/db', () => ({
   db: {
-    client: mockPrisma
-  }
+    client: mockPrisma,
+  },
 }));
 
 // Mock the billing manager
@@ -41,7 +41,7 @@ const mockBillingManager = {
 };
 
 jest.mock('@/lib/billing/manager', () => ({
-  billingManager: mockBillingManager
+  billingManager: mockBillingManager,
 }));
 
 import type { TestUser, TestOrganization } from '@/__tests__/utils/test-helpers';
@@ -62,9 +62,7 @@ describe('API Middleware', () => {
     mockHandler = jest.fn();
 
     // Setup default successful responses
-    mockHandler.mockResolvedValue(
-      NextResponse.json({ data: 'success' }, { status: 200 })
-    );
+    mockHandler.mockResolvedValue(NextResponse.json({ data: 'success' }, { status: 200 }));
 
     // Reset all mocks
     jest.clearAllMocks();
@@ -152,7 +150,7 @@ describe('API Middleware', () => {
     it('should allow authenticated requests', async () => {
       const wrappedHandler = withAPI(mockHandler, { requireAuth: true });
       const request = createMockRequest('GET', 'http://localhost:3000/api/test', {
-        user: testUser
+        user: testUser,
       });
 
       const response = await wrappedHandler(request);
@@ -164,16 +162,16 @@ describe('API Middleware', () => {
     it('should check permissions when specified', async () => {
       const wrappedHandler = withAPI(mockHandler, {
         requireAuth: true,
-        requiredPermissions: ['admin:billing']
+        requiredPermissions: ['admin:billing'],
       });
 
       const userWithoutPermission = {
         ...testUser,
-        permissions: ['read:risks']
+        permissions: ['read:risks'],
       };
 
       const request = createMockRequest('GET', 'http://localhost:3000/api/test', {
-        user: userWithoutPermission
+        user: userWithoutPermission,
       });
 
       const response = await wrappedHandler(request);
@@ -186,16 +184,16 @@ describe('API Middleware', () => {
     it('should allow wildcard permissions', async () => {
       const wrappedHandler = withAPI(mockHandler, {
         requireAuth: true,
-        requiredPermissions: ['admin:billing']
+        requiredPermissions: ['admin:billing'],
       });
 
       const adminUser = {
         ...testUser,
-        permissions: ['*']
+        permissions: ['*'],
       };
 
       const request = createMockRequest('GET', 'http://localhost:3000/api/test', {
-        user: adminUser
+        user: adminUser,
       });
 
       const response = await wrappedHandler(request);
@@ -217,12 +215,12 @@ describe('API Middleware', () => {
         const wrappedHandler = withAPI(mockHandler, {
           requireAuth: true,
           subscription: {
-            requireActive: true
-          }
+            requireActive: true,
+          },
         });
 
         const request = createMockRequest('GET', 'http://localhost:3000/api/test', {
-          user: testUser
+          user: testUser,
         });
 
         const response = await wrappedHandler(request);
@@ -240,12 +238,12 @@ describe('API Middleware', () => {
         const wrappedHandler = withAPI(mockHandler, {
           requireAuth: true,
           subscription: {
-            requireActive: true
-          }
+            requireActive: true,
+          },
         });
 
         const request = createMockRequest('GET', 'http://localhost:3000/api/test', {
-          user: testUser
+          user: testUser,
         });
 
         const response = await wrappedHandler(request);
@@ -258,7 +256,7 @@ describe('API Middleware', () => {
         const expiredTrialSubscription = {
           ...testSubscription,
           trialEnd: new Date(Date.now() - 24 * 60 * 60 * 1000), // Yesterday
-          status: 'trialing'
+          status: 'trialing',
         };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(expiredTrialSubscription);
@@ -266,12 +264,12 @@ describe('API Middleware', () => {
         const wrappedHandler = withAPI(mockHandler, {
           requireAuth: true,
           subscription: {
-            requireActive: true
-          }
+            requireActive: true,
+          },
         });
 
         const request = createMockRequest('GET', 'http://localhost:3000/api/test', {
-          user: testUser
+          user: testUser,
         });
 
         const response = await wrappedHandler(request);
@@ -285,7 +283,7 @@ describe('API Middleware', () => {
         const canceledSubscription = {
           ...testSubscription,
           cancelAtPeriodEnd: true,
-          currentPeriodEnd: new Date(Date.now() - 24 * 60 * 60 * 1000) // Yesterday
+          currentPeriodEnd: new Date(Date.now() - 24 * 60 * 60 * 1000), // Yesterday
         };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(canceledSubscription);
@@ -293,12 +291,12 @@ describe('API Middleware', () => {
         const wrappedHandler = withAPI(mockHandler, {
           requireAuth: true,
           subscription: {
-            requireActive: true
-          }
+            requireActive: true,
+          },
         });
 
         const request = createMockRequest('GET', 'http://localhost:3000/api/test', {
-          user: testUser
+          user: testUser,
         });
 
         const response = await wrappedHandler(request);
@@ -314,8 +312,14 @@ describe('API Middleware', () => {
         const planWithoutFeature = {
           ...testPlan,
           features: [
-            { id: 'basic_features', name: 'Basic', description: '', category: 'core', included: true }
-          ]
+            {
+              id: 'basic_features',
+              name: 'Basic',
+              description: '',
+              category: 'core',
+              included: true,
+            },
+          ],
         };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(testSubscription);
@@ -324,12 +328,12 @@ describe('API Middleware', () => {
         const wrappedHandler = withAPI(mockHandler, {
           requireAuth: true,
           subscription: {
-            requiredFeatures: ['advanced_analytics']
-          }
+            requiredFeatures: ['advanced_analytics'],
+          },
         });
 
         const request = createMockRequest('GET', 'http://localhost:3000/api/test', {
-          user: testUser
+          user: testUser,
         });
 
         const response = await wrappedHandler(request);
@@ -344,8 +348,14 @@ describe('API Middleware', () => {
         const planWithFeature = {
           ...testPlan,
           features: [
-            { id: 'advanced_analytics', name: 'Analytics', description: '', category: 'analytics', included: true }
-          ]
+            {
+              id: 'advanced_analytics',
+              name: 'Analytics',
+              description: '',
+              category: 'analytics',
+              included: true,
+            },
+          ],
         };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(testSubscription);
@@ -354,12 +364,12 @@ describe('API Middleware', () => {
         const wrappedHandler = withAPI(mockHandler, {
           requireAuth: true,
           subscription: {
-            requiredFeatures: ['advanced_analytics']
-          }
+            requiredFeatures: ['advanced_analytics'],
+          },
         });
 
         const request = createMockRequest('GET', 'http://localhost:3000/api/test', {
-          user: testUser
+          user: testUser,
         });
 
         const response = await wrappedHandler(request);
@@ -376,13 +386,13 @@ describe('API Middleware', () => {
           limits: {
             users: 5,
             risks: 10,
-            aiQueries: 100
-          }
+            aiQueries: 100,
+          },
         };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(testSubscription);
         mockBillingManager.getSubscriptionPlans.mockResolvedValue([planWithLimits]);
-        
+
         // Mock current usage at limit
         mockPrisma.risk.count.mockResolvedValue(10);
 
@@ -390,13 +400,13 @@ describe('API Middleware', () => {
           requireAuth: true,
           subscription: {
             requireActive: true,
-            checkLimits: { risks: 1 } // Trying to add 1 more risk
-          }
+            checkLimits: { risks: 1 }, // Trying to add 1 more risk
+          },
         });
 
         const request = createMockRequest('POST', 'http://localhost:3000/api/risks', {
           user: testUser,
-          body: { title: 'New Risk' }
+          body: { title: 'New Risk' },
         });
 
         const response = await wrappedHandler(request);
@@ -411,13 +421,13 @@ describe('API Middleware', () => {
         const planWithLimits = {
           ...testPlan,
           limits: {
-            risks: 100
-          }
+            risks: 100,
+          },
         };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(testSubscription);
         mockBillingManager.getSubscriptionPlans.mockResolvedValue([planWithLimits]);
-        
+
         // Mock current usage under limit
         mockPrisma.risk.count.mockResolvedValue(5);
 
@@ -425,13 +435,13 @@ describe('API Middleware', () => {
           requireAuth: true,
           subscription: {
             requireActive: true,
-            checkLimits: { risks: 1 }
-          }
+            checkLimits: { risks: 1 },
+          },
         });
 
         const request = createMockRequest('POST', 'http://localhost:3000/api/risks', {
           user: testUser,
-          body: { title: 'New Risk' }
+          body: { title: 'New Risk' },
         });
 
         const response = await wrappedHandler(request);
@@ -444,8 +454,8 @@ describe('API Middleware', () => {
         const planWithUnlimited = {
           ...testPlan,
           limits: {
-            risks: -1 // Unlimited
-          }
+            risks: -1, // Unlimited
+          },
         };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(testSubscription);
@@ -455,12 +465,12 @@ describe('API Middleware', () => {
           requireAuth: true,
           subscription: {
             requireActive: true,
-            checkLimits: { risks: 1000 } // Large request
-          }
+            checkLimits: { risks: 1000 }, // Large request
+          },
         });
 
         const request = createMockRequest('POST', 'http://localhost:3000/api/risks', {
-          user: testUser
+          user: testUser,
         });
 
         const response = await wrappedHandler(request);
@@ -480,13 +490,13 @@ describe('API Middleware', () => {
             trackUsage: {
               type: 'aiQueries',
               quantity: 1,
-              metadata: { feature: 'risk-analysis' }
-            }
-          }
+              metadata: { feature: 'risk-analysis' },
+            },
+          },
         });
 
         const request = createMockRequest('POST', 'http://localhost:3000/api/ai/analyze', {
-          user: testUser
+          user: testUser,
         });
 
         const response = await wrappedHandler(request);
@@ -501,22 +511,20 @@ describe('API Middleware', () => {
       });
 
       it('should not track usage on failed requests', async () => {
-        mockHandler.mockResolvedValue(
-          NextResponse.json({ error: 'Bad request' }, { status: 400 })
-        );
+        mockHandler.mockResolvedValue(NextResponse.json({ error: 'Bad request' }, { status: 400 }));
 
         const wrappedHandler = withAPI(mockHandler, {
           requireAuth: true,
           subscription: {
             trackUsage: {
               type: 'aiQueries',
-              quantity: 1
-            }
-          }
+              quantity: 1,
+            },
+          },
         });
 
         const request = createMockRequest('POST', 'http://localhost:3000/api/ai/analyze', {
-          user: testUser
+          user: testUser,
         });
 
         const response = await wrappedHandler(request);
@@ -533,13 +541,13 @@ describe('API Middleware', () => {
           subscription: {
             trackUsage: {
               type: 'aiQueries',
-              quantity: 1
-            }
-          }
+              quantity: 1,
+            },
+          },
         });
 
         const request = createMockRequest('POST', 'http://localhost:3000/api/ai/analyze', {
-          user: testUser
+          user: testUser,
         });
 
         const response = await wrappedHandler(request);
@@ -561,11 +569,11 @@ describe('API Middleware', () => {
 
         const wrappedHandler = withSubscription({
           requireActive: true,
-          trackUsage: { type: 'apiCalls', quantity: 1 }
+          trackUsage: { type: 'apiCalls', quantity: 1 },
         })(mockHandler);
 
         const request = createMockRequest('GET', 'http://localhost:3000/api/test', {
-          user: testUser
+          user: testUser,
         });
 
         const response = await wrappedHandler(request);
@@ -585,8 +593,14 @@ describe('API Middleware', () => {
         const planWithFeature = {
           ...testPlan,
           features: [
-            { id: 'advanced_analytics', name: 'Analytics', description: '', category: 'analytics', included: true }
-          ]
+            {
+              id: 'advanced_analytics',
+              name: 'Analytics',
+              description: '',
+              category: 'analytics',
+              included: true,
+            },
+          ],
         };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(testSubscription);
@@ -595,7 +609,7 @@ describe('API Middleware', () => {
         const wrappedHandler = withFeatureGate(['advanced_analytics'])(mockHandler);
 
         const request = createMockRequest('GET', 'http://localhost:3000/api/analytics', {
-          user: testUser
+          user: testUser,
         });
 
         const response = await wrappedHandler(request);
@@ -610,7 +624,7 @@ describe('API Middleware', () => {
         const wrappedHandler = withUsageTracking('apiCalls', 1, { endpoint: 'test' })(mockHandler);
 
         const request = createMockRequest('GET', 'http://localhost:3000/api/test', {
-          user: testUser
+          user: testUser,
         });
 
         const response = await wrappedHandler(request);
@@ -629,7 +643,7 @@ describe('API Middleware', () => {
       it('should create limit-enforced handler', async () => {
         const planWithLimits = {
           ...testPlan,
-          limits: { risks: 100 }
+          limits: { risks: 100 },
         };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(testSubscription);
@@ -639,7 +653,7 @@ describe('API Middleware', () => {
         const wrappedHandler = withPlanLimits({ risks: 1 })(mockHandler);
 
         const request = createMockRequest('POST', 'http://localhost:3000/api/risks', {
-          user: testUser
+          user: testUser,
         });
 
         const response = await wrappedHandler(request);
@@ -660,11 +674,11 @@ describe('API Middleware', () => {
 
       const wrappedHandler = withAPI(mockHandler, {
         requireAuth: true,
-        subscription: { requireActive: true }
+        subscription: { requireActive: true },
       });
 
       const request = createMockRequest('GET', 'http://localhost:3000/api/test', {
-        user: userWithoutOrg
+        user: userWithoutOrg,
       });
 
       const response = await wrappedHandler(request);
@@ -681,11 +695,11 @@ describe('API Middleware', () => {
 
       const wrappedHandler = withAPI(mockHandler, {
         requireAuth: true,
-        subscription: { requireActive: true }
+        subscription: { requireActive: true },
       });
 
       const request = createMockRequest('GET', 'http://localhost:3000/api/test', {
-        user: testUser
+        user: testUser,
       });
 
       const response = await wrappedHandler(request);
@@ -701,11 +715,11 @@ describe('API Middleware', () => {
 
       const wrappedHandler = withAPI(mockHandler, {
         requireAuth: true,
-        subscription: { requiredFeatures: ['advanced_analytics'] }
+        subscription: { requiredFeatures: ['advanced_analytics'] },
       });
 
       const request = createMockRequest('GET', 'http://localhost:3000/api/test', {
-        user: testUser
+        user: testUser,
       });
 
       const response = await wrappedHandler(request);

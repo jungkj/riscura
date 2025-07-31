@@ -18,7 +18,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requiredPermissions = [],
   requiredRoles = [],
   requireAll = false,
-  fallbackPath = '/auth/login'
+  fallbackPath = '/auth/login',
 }) => {
   const { user, isAuthenticated, isLoading, isInitialized } = useAuth();
   const router = useRouter();
@@ -33,10 +33,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     }
 
     if (!isAuthenticated || !user) {
-      console.log('[ProtectedRoute] Not authenticated, redirecting:', { 
-        isAuthenticated, 
+      console.log('[ProtectedRoute] Not authenticated, redirecting:', {
+        isAuthenticated,
         hasUser: !!user,
-        pathname 
+        pathname,
       });
       const redirectUrl = `${fallbackPath}?from=${encodeURIComponent(pathname || '')}`;
       router.push(redirectUrl);
@@ -52,7 +52,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     // Check permission requirements
     if (requiredPermissions.length > 0) {
       const hasRequiredPermissions = requireAll
-        ? requiredPermissions.every(permission => hasPermission(user.permissions, permission))
+        ? requiredPermissions.every((permission) => hasPermission(user.permissions, permission))
         : hasAnyPermission(user.permissions, requiredPermissions);
 
       if (!hasRequiredPermissions) {
@@ -60,7 +60,18 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         return;
       }
     }
-  }, [isAuthenticated, user, isLoading, isInitialized, router, pathname, fallbackPath, requiredRoles, requiredPermissions, requireAll]);
+  }, [
+    isAuthenticated,
+    user,
+    isLoading,
+    isInitialized,
+    router,
+    pathname,
+    fallbackPath,
+    requiredRoles,
+    requiredPermissions,
+    requireAll,
+  ]);
 
   // Show loading spinner while checking authentication
   if (!isInitialized || isLoading) {
@@ -84,7 +95,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // Check permission requirements
   if (requiredPermissions.length > 0) {
     const hasRequiredPermissions = requireAll
-      ? requiredPermissions.every(permission => hasPermission(user.permissions, permission))
+      ? requiredPermissions.every((permission) => hasPermission(user.permissions, permission))
       : hasAnyPermission(user.permissions, requiredPermissions);
 
     if (!hasRequiredPermissions) {
@@ -105,51 +116,37 @@ export const withProtectedRoute = <P extends object>(
       <Component {...props} />
     </ProtectedRoute>
   );
-  
+
   WrappedComponent.displayName = `withProtectedRoute(${Component.displayName || Component.name})`;
   return WrappedComponent;
 };
 
 // Specific role-based route components
 export const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <ProtectedRoute requiredRoles={['admin']}>
-    {children}
-  </ProtectedRoute>
+  <ProtectedRoute requiredRoles={['admin']}>{children}</ProtectedRoute>
 );
 
 export const RiskManagerRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <ProtectedRoute requiredRoles={['admin', 'risk_manager']}>
-    {children}
-  </ProtectedRoute>
+  <ProtectedRoute requiredRoles={['admin', 'risk_manager']}>{children}</ProtectedRoute>
 );
 
 export const AuditorRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <ProtectedRoute requiredRoles={['admin', 'auditor']}>
-    {children}
-  </ProtectedRoute>
+  <ProtectedRoute requiredRoles={['admin', 'auditor']}>{children}</ProtectedRoute>
 );
 
 // Permission-based route components
 export const ReadRisksRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <ProtectedRoute requiredPermissions={['read_risks']}>
-    {children}
-  </ProtectedRoute>
+  <ProtectedRoute requiredPermissions={['read_risks']}>{children}</ProtectedRoute>
 );
 
 export const WriteRisksRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <ProtectedRoute requiredPermissions={['write_risks']}>
-    {children}
-  </ProtectedRoute>
+  <ProtectedRoute requiredPermissions={['write_risks']}>{children}</ProtectedRoute>
 );
 
 export const ReadControlsRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <ProtectedRoute requiredPermissions={['read_controls']}>
-    {children}
-  </ProtectedRoute>
+  <ProtectedRoute requiredPermissions={['read_controls']}>{children}</ProtectedRoute>
 );
 
 export const WriteControlsRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <ProtectedRoute requiredPermissions={['write_controls']}>
-    {children}
-  </ProtectedRoute>
-); 
+  <ProtectedRoute requiredPermissions={['write_controls']}>{children}</ProtectedRoute>
+);

@@ -240,37 +240,37 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
   };
 
   return (
-    <DaisyCard className={className}>
-      <DaisyCardHeader>
+    <DaisyCard className={className} >
+  <DaisyCardHeader />
+</DaisyTooltip>
         <div className="flex items-center justify-between">
-          <DaisyCardTitle className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5" />
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <TrendingUp className="h-5 w-5" />
+</DaisyCardTitle>
             Risk Trends
           </DaisyCardTitle>
           
           <div className="flex items-center gap-2">
-            <DaisySelect value={selectedTimeRange} onValueChange={(value) => setSelectedTimeRange(value as typeof selectedTimeRange)}>
-              <DaisySelectTrigger className="w-24">
-                <DaisySelectValue />
-              </SelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="7d">7 days</SelectItem>
-                <DaisySelectItem value="30d">30 days</SelectItem>
-                <DaisySelectItem value="90d">90 days</SelectItem>
-                <DaisySelectItem value="1y">1 year</SelectItem>
-              </SelectContent>
+            <DaisySelect value={selectedTimeRange} onValueChange={(value) => setSelectedTimeRange(value as typeof selectedTimeRange)} />
+              <DaisySelectTrigger className="w-24" />
+                <DaisySelectValue /></DaisySelect>
+              <DaisySelectContent />
+                <DaisySelectItem value="7d">7 days</DaisySelectContent>
+                <DaisySelectItem value="30d">30 days</DaisySelectItem>
+                <DaisySelectItem value="90d">90 days</DaisySelectItem>
+                <DaisySelectItem value="1y">1 year</DaisySelectItem>
+              </DaisySelectContent>
             </DaisySelect>
             
-            <DaisySelect value={selectedChartType} onValueChange={(value) => setSelectedChartType(value as typeof selectedChartType)}>
-              <DaisySelectTrigger className="w-32">
-                <DaisySelectValue />
-              </SelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="line">Line Chart</SelectItem>
-                <DaisySelectItem value="area">Area Chart</SelectItem>
-                <DaisySelectItem value="bar">Bar Chart</SelectItem>
-                <DaisySelectItem value="composed">Composed</SelectItem>
-              </SelectContent>
+            <DaisySelect value={selectedChartType} onValueChange={(value) => setSelectedChartType(value as typeof selectedChartType)} />
+              <DaisySelectTrigger className="w-32" />
+                <DaisySelectValue /></DaisySelect>
+              <DaisySelectContent />
+                <DaisySelectItem value="line">Line Chart</DaisySelectContent>
+                <DaisySelectItem value="area">Area Chart</DaisySelectItem>
+                <DaisySelectItem value="bar">Bar Chart</DaisySelectItem>
+                <DaisySelectItem value="composed">Composed</DaisySelectItem>
+              </DaisySelectContent>
             </DaisySelect>
           </div>
         </div>
@@ -313,8 +313,9 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
         )}
       
       
-      <DaisyCardContent>
-        <div style={{ width: '100%', height: 400 }}>
+      <DaisyCardContent >
+  <div style={{ width: '100%', height: 400 }}>
+</DaisyCardContent>
           <ResponsiveContainer>
             {renderChart()}
           </ResponsiveContainer>
@@ -339,7 +340,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
             <span>Low</span>
           </div>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 }; 

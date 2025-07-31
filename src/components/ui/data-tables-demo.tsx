@@ -277,12 +277,14 @@ export const DataTablesDemo = () => {
             data={sampleChartData}
             height={200}
           />
-          <DaisyCard className="border border-gray-200">
-            <DaisyCardHeader>
+          <DaisyCard className="border border-gray-200" >
+  <DaisyCardHeader />
+</DaisyCard>
               <DaisyCardTitle className="text-[#191919] font-inter">Chart Features</DaisyCardTitle>
-            
-            <DaisyCardContent>
-              <div className="space-y-3">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-3">
+</DaisyCardContent>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-600" />
                   <span className="text-sm text-gray-700 font-inter">Clean minimal design</span>
@@ -304,7 +306,7 @@ export const DataTablesDemo = () => {
                   <span className="text-sm text-gray-700 font-inter">Responsive design</span>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
       </section>
@@ -349,12 +351,14 @@ export const DataTablesDemo = () => {
             showDate={true}
             showProgress={true}
           />
-          <DaisyCard className="border border-gray-200">
-            <DaisyCardHeader>
+          <DaisyCard className="border border-gray-200" >
+  <DaisyCardHeader />
+</DaisyTable>
               <DaisyCardTitle className="text-[#191919] font-inter">List Features</DaisyCardTitle>
-            
-            <DaisyCardContent>
-              <div className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
                 <div>
                   <h4 className="font-semibold text-sm text-[#191919] font-inter mb-2">Design Elements</h4>
                   <div className="space-y-2">
@@ -382,7 +386,7 @@ export const DataTablesDemo = () => {
                   </div>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
       </section>
@@ -391,8 +395,10 @@ export const DataTablesDemo = () => {
       <section className="space-y-4">
         <h2 className="text-xl font-bold text-[#191919] font-inter">Design System Integration</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <DaisyCard className="border border-gray-200">
-            <DaisyCardContent className="p-4">
+          <DaisyCard className="border border-gray-200" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
               <h3 className="font-semibold text-sm text-[#191919] font-inter mb-2">Colors</h3>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
@@ -408,11 +414,13 @@ export const DataTablesDemo = () => {
                   <span className="text-xs text-gray-600 font-inter">Card Background #FAFAFA</span>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
           
-          <DaisyCard className="border border-gray-200">
-            <DaisyCardContent className="p-4">
+          <DaisyCard className="border border-gray-200" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
               <h3 className="font-semibold text-sm text-[#191919] font-inter mb-2">Typography</h3>
               <div className="space-y-1 text-xs text-gray-600 font-inter">
                 <div>• Inter font family throughout</div>
@@ -420,11 +428,13 @@ export const DataTablesDemo = () => {
                 <div>• Proper hierarchy</div>
                 <div>• Readable line heights</div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
           
-          <DaisyCard className="border border-gray-200">
-            <DaisyCardContent className="p-4">
+          <DaisyCard className="border border-gray-200" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
               <h3 className="font-semibold text-sm text-[#191919] font-inter mb-2">Interactions</h3>
               <div className="space-y-1 text-xs text-gray-600 font-inter">
                 <div>• 200ms transition duration</div>
@@ -432,7 +442,7 @@ export const DataTablesDemo = () => {
                 <div>• Blue focus rings (#199BEC)</div>
                 <div>• Consistent spacing (8px grid)</div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
       </section>

@@ -51,7 +51,7 @@ export function useGestures(config: GestureConfig = {}) {
     pinchEnabled = false,
     pullToRefreshEnabled = false,
     preventScroll = false,
-    disabled = false
+    disabled = false,
   } = config;
 
   const gestureState = useRef<GestureState>({
@@ -61,7 +61,7 @@ export function useGestures(config: GestureConfig = {}) {
     velocity: 0,
     scale: 1,
     isPulling: false,
-    pullDistance: 0
+    pullDistance: 0,
   });
 
   const tapCount = useRef(0);
@@ -123,7 +123,14 @@ export function useGestures(config: GestureConfig = {}) {
   // Gesture handlers
   const bind = useGesture(
     {
-      onDrag: ({ movement: [mx, my], velocity: [vx, vy], direction: [dx, dy], cancel, first, last }) => {
+      onDrag: ({
+        movement: [mx, my],
+        velocity: [vx, vy],
+        direction: [dx, dy],
+        cancel,
+        first,
+        last,
+      }) => {
         if (disabled) return;
 
         const distance = Math.sqrt(mx * mx + my * my);
@@ -133,7 +140,7 @@ export function useGestures(config: GestureConfig = {}) {
           ...gestureState.current,
           isActive: !last,
           distance,
-          velocity: velocityMagnitude
+          velocity: velocityMagnitude,
         };
 
         if (first) {
@@ -203,21 +210,21 @@ export function useGestures(config: GestureConfig = {}) {
       onPointerUp: () => {
         if (disabled) return;
         cancelLongPress();
-        
+
         // Only trigger tap if not dragging
         if (gestureState.current.distance < 10) {
           handleTap();
         }
-      }
+      },
     },
     {
       drag: {
         threshold: 10,
-        preventScroll: preventScroll
+        preventScroll: preventScroll,
       },
       pinch: {
-        enabled: pinchEnabled
-      }
+        enabled: pinchEnabled,
+      },
     }
   );
 
@@ -231,7 +238,7 @@ export function useGestures(config: GestureConfig = {}) {
   return {
     bind,
     gestureState: gestureState.current,
-    clearTimers
+    clearTimers,
   };
 }
 
@@ -247,7 +254,7 @@ export function usePullToRefresh(onRefresh: () => void | Promise<void>, enabled 
       // Only trigger on downward pull from top
       if (dy > 0 && my > refreshThreshold && vy > 0.5 && window.scrollY === 0) {
         isRefreshing.current = true;
-        
+
         try {
           await onRefresh();
         } catch (error) {
@@ -255,15 +262,15 @@ export function usePullToRefresh(onRefresh: () => void | Promise<void>, enabled 
         } finally {
           isRefreshing.current = false;
         }
-        
+
         cancel();
       }
-    }
+    },
   });
 
   return {
     bind,
-    isRefreshing: isRefreshing.current
+    isRefreshing: isRefreshing.current,
   };
 }
 
@@ -289,7 +296,7 @@ export function useSwipeNavigation(
           onNext?.();
         }
       }
-    }
+    },
   });
 
   return bind;
@@ -306,7 +313,7 @@ export function usePinchZoom(
     onPinch: ({ offset: [scale] }) => {
       const clampedScale = Math.max(minScale, Math.min(maxScale, scale));
       onZoom(clampedScale);
-    }
+    },
   });
 
   return bind;
@@ -349,8 +356,8 @@ export function useLongPress(
     onPointerDown: start,
     onPointerUp: cancel,
     onPointerLeave: cancel,
-    onPointerCancel: cancel
+    onPointerCancel: cancel,
   };
 }
 
-export default useGestures; 
+export default useGestures;

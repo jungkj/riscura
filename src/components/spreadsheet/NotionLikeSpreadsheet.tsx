@@ -272,9 +272,9 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
     if (resizingColumn) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
-    }
+    };
 
-    return () => {
+  return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
@@ -324,11 +324,13 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <h3 className="font-medium text-gray-900">Risk Assessment Matrix</h3>
-            <DaisyBadge variant="outline" className="text-xs">
-              {rows.length} rows × {columns.length} cols
+            <DaisyBadge variant="outline" className="text-xs" >
+  {rows.length} rows × {columns.length} cols
+</DaisyBadge>
             </DaisyBadge>
-            <DaisyBadge variant="secondary" className="text-xs">
-              {gridLayout.estimatedRowsVisible} visible
+            <DaisyBadge variant="secondary" className="text-xs" >
+  {gridLayout.estimatedRowsVisible} visible
+</DaisyBadge>
             </DaisyBadge>
           </div>
           <div className="flex items-center space-x-2">
@@ -336,16 +338,16 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
               variant="ghost" 
               size="sm" 
               onClick={handleAutoFitColumns}
-              title="Auto-fit all columns"
-            >
-              <RotateCcw className="h-4 w-4 mr-1" />
+              title="Auto-fit all columns" >
+  <RotateCcw className="h-4 w-4 mr-1" />
+</DaisyButton>
               Auto-fit
             </DaisyButton>
-            <DaisyButton variant="ghost" size="sm" onClick={() => onRowInsert(rows.length)}>
+            <DaisyButton variant="ghost" size="sm" onClick={() => onRowInsert(rows.length)} />
               <Plus className="h-4 w-4 mr-1" />
               Add Row
             </DaisyButton>
-            <DaisyButton variant="ghost" size="sm" onClick={() => onColumnInsert(columns.length)}>
+            <DaisyButton variant="ghost" size="sm" onClick={() => onColumnInsert(columns.length)} />
               <Plus className="h-4 w-4 mr-1" />
               Add Column
             </DaisyButton>
@@ -357,8 +359,9 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
           <span>Grid: {gridLayout.totalColumns}×{gridLayout.totalRows}</span>
           <span>Viewport: {Math.round(viewportSize.width)}×{Math.round(viewportSize.height)}</span>
           {gridLayout.needsHorizontalScaling && (
-            <DaisyBadge variant="outline" className="text-xs text-orange-600">
-              Scaled {Math.round(gridLayout.horizontalScale * 100)}%
+            <DaisyBadge variant="outline" className="text-xs text-orange-600" >
+  Scaled {Math.round(gridLayout.horizontalScale * 100)}%
+</DaisyBadge>
             </DaisyBadge>
           )}
         </div>
@@ -461,16 +464,15 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
                                 handleCellSave(value);
                               }}
                             >
-                              <DaisySelectTrigger className="h-8 border-0 focus:ring-2 focus:ring-blue-500">
-                                <DaisySelectValue />
-                              </SelectTrigger>
-                              <DaisySelectContent>
+                              <DaisySelectTrigger className="h-8 border-0 focus:ring-2 focus:ring-blue-500" />
+                                <DaisySelectValue /></DaisySelect>
+                              <DaisySelectContent />
                                 {column.dropdownOptions?.map((option) => (
-                                  <DaisySelectItem key={option} value={option}>
+                                  <DaisySelectItem key={option} value={option} />
                                     {option}
-                                  </SelectItem>
+                                  </DaisySelectContent>
                                 ))}
-                              </SelectContent>
+                              </DaisySelectContent>
                             </DaisySelect>
                           ) : (
                             <DaisyTextarea
@@ -515,7 +517,7 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
                                 }}
                               >
                                 <Maximize2 className="h-3 w-3" />
-                              </DaisyButton>
+                              </DaisyTextarea>
                               <DaisyButton
                                 variant="ghost"
                                 size="sm"
@@ -545,8 +547,7 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
                   variant="ghost"
                   size="sm"
                   className="h-10 w-full justify-start text-gray-500 hover:text-gray-700"
-                  onClick={() => onRowInsert(rows.length)}
-                >
+                  onClick={() => onRowInsert(rows.length)} />
                   <Plus className="h-4 w-4 mr-2" />
                   Add row
                 </DaisyButton>
@@ -557,11 +558,13 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
       </div>
 
       {/* Cell Detail Modal */}
-      <DaisyDialog open={!!cellModal} onOpenChange={() => setCellModal(null)}>
-        <DaisyDialogContent className="max-w-2xl">
-          <DaisyDialogHeader>
-            <DaisyDialogTitle className="flex items-center space-x-2">
-              <div className="text-gray-500">
+      <DaisyDialog open={!!cellModal} onOpenChange={() => setCellModal(null)} />
+        <DaisyDialogContent className="max-w-2xl" >
+  <DaisyDialogHeader />
+</DaisyDialog>
+            <DaisyDialogTitle className="flex items-center space-x-2" >
+  <div className="text-gray-500">
+</DaisyDialogTitle>
                 {cellModal && getDataTypeIcon(cellModal.column.dataType)}
               </div>
               <span>{cellModal?.column.name}</span>
@@ -593,8 +596,7 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
                     size="sm"
                     onClick={() => cellModal && generateAIInsight(cellModal.cell, cellModal.column)}
                     disabled={generatingInsight}
-                    className="text-purple-600 border-purple-200 hover:bg-purple-50"
-                  >
+                    className="text-purple-600 border-purple-200 hover:bg-purple-50" />
                     {generatingInsight ? (
                       <>
                         <Bot className="h-4 w-4 mr-2 animate-spin" />
@@ -606,15 +608,16 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
                         AI Insights
                       </>
                     )}
-                  </DaisyButton>
-                  <DaisyBadge variant="secondary" className="text-xs">
-                    <Zap className="h-3 w-3 mr-1" />
+                  </DaisyTextarea>
+                  <DaisyBadge variant="secondary" className="text-xs" >
+  <Zap className="h-3 w-3 mr-1" />
+</DaisyBadge>
                     1 Credit
                   </DaisyBadge>
                 </div>
                 
                 <div className="flex items-center space-x-2">
-                  <DaisyButton variant="outline" onClick={() => setCellModal(null)}>
+                  <DaisyButton variant="outline" onClick={() => setCellModal(null)} />
                     Cancel
                   </DaisyButton>
                   <DaisyButton
@@ -635,14 +638,17 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
       </DaisyDialog>
 
       {/* AI Insight Modal */}
-      <DaisyDialog open={!!aiInsightCell} onOpenChange={() => setAiInsightCell(null)}>
-        <DaisyDialogContent className="max-w-xl">
-          <DaisyDialogHeader>
-            <DaisyDialogTitle className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-purple-600" />
+      <DaisyDialog open={!!aiInsightCell} onOpenChange={() => setAiInsightCell(null)} />
+        <DaisyDialogContent className="max-w-xl" >
+  <DaisyDialogHeader />
+</DaisyDialog>
+            <DaisyDialogTitle className="flex items-center gap-2" >
+  <Sparkles className="w-5 h-5 text-purple-600" />
+</DaisyDialogTitle>
               AI Risk Insights
-              <DaisyBadge variant="secondary" className="bg-purple-100 text-purple-700">
-                1 Credit
+              <DaisyBadge variant="secondary" className="bg-purple-100 text-purple-700" >
+  1 Credit
+</DaisyBadge>
               </DaisyBadge>
             </DaisyDialogTitle>
           </DaisyDialogHeader>

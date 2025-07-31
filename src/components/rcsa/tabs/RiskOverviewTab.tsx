@@ -95,15 +95,19 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
       {/* Main Risk Information */}
       <div className="lg:col-span-2 space-y-6">
         {/* Risk Description */}
-        <DaisyCard>
-          <DaisyCardHeader>
-            <DaisyCardTitle className="flex items-center gap-2">
-              <DaisyAlertTriangle className="h-5 w-5" />
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+            <DaisyCardTitle className="flex items-center gap-2" >
+  <DaisyAlertTriangle className="h-5 w-5" >
+  </DaisyCardTitle>
+</DaisyAlert>
               Risk Description
             </DaisyCardTitle>
-          
-          <DaisyCardContent>
-            <p className="text-foreground leading-relaxed">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <p className="text-foreground leading-relaxed">
+</DaisyCardContent>
               {risk.description}
             </p>
             
@@ -111,14 +115,16 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Category</p>
-                <DaisyBadge variant="outline" className="capitalize">
-                  {risk.category.toLowerCase().replace('_', ' ')}
+                <DaisyBadge variant="outline" className="capitalize" >
+  {risk.category.toLowerCase().replace('_', ' ')}
+</DaisyBadge>
                 </DaisyBadge>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Status</p>
-                <DaisyBadge className={getStatusColor(risk.status)}>
-                  {risk.status.toLowerCase().replace('_', ' ')}
+                <DaisyBadge className={getStatusColor(risk.status)} >
+  {risk.status.toLowerCase().replace('_', ' ')}
+</DaisyBadge>
                 </DaisyBadge>
               </div>
               <div>
@@ -154,31 +160,36 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
                 />
               </div>
             )}
-          </DaisyCardBody>
+          </DaisyCalendar>
         </DaisyCard>
 
         {/* Related Controls */}
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <div className="flex items-center justify-between">
-              <DaisyCardTitle className="flex items-center gap-2">
-                <Shield className="h-5 w-5" />
+              <DaisyCardTitle className="flex items-center gap-2" >
+  <Shield className="h-5 w-5" />
+</DaisyCardTitle>
                 Related Controls
                 <DaisyBadge variant="secondary">{relatedControls.length}</DaisyBadge>
               </DaisyCardTitle>
-              <DaisyButton variant="outline" size="sm">
-                <Edit className="h-4 w-4 mr-2" />
+              <DaisyButton variant="outline" size="sm" >
+  <Edit className="h-4 w-4 mr-2" />
+</DaisyButton>
                 Manage Controls
               </DaisyButton>
             </div>
           
-          <DaisyCardContent>
-            {relatedControls.length === 0 ? (
+          <DaisyCardContent >
+  {relatedControls.length === 0 ? (
+</DaisyCardContent>
               <div className="text-center py-8">
                 <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <p className="text-muted-foreground">No controls mapped to this risk yet.</p>
-                <DaisyButton variant="outline" className="mt-4">
-                  Map Controls
+                <DaisyButton variant="outline" className="mt-4" >
+  Map Controls
+</DaisyButton>
                 </DaisyButton>
               </div>
             ) : (
@@ -192,8 +203,9 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <h4 className="font-medium">{control.title}</h4>
-                        <DaisyBadge variant="outline" className="text-xs">
-                          {control.type}
+                        <DaisyBadge variant="outline" className="text-xs" >
+  {control.type}
+</DaisyBadge>
                         </DaisyBadge>
                       </div>
                       <p className="text-sm text-muted-foreground line-clamp-2">
@@ -224,27 +236,31 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
                 ))}
               </div>
             )}
-          </DaisyCardBody>
+          </DaisyProgress>
         </DaisyCard>
       </div>
 
       {/* Sidebar - Risk Metrics & Quick Actions */}
       <div className="space-y-6">
         {/* Risk Score Card */}
-        <DaisyCard>
-          <DaisyCardHeader>
-            <DaisyCardTitle className="flex items-center gap-2">
-              <Target className="h-5 w-5" />
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+            <DaisyCardTitle className="flex items-center gap-2" >
+  <Target className="h-5 w-5" />
+</DaisyCardTitle>
               Risk Score
             </DaisyCardTitle>
-          
-          <DaisyCardContent>
-            <div className="text-center">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="text-center">
+</DaisyCardContent>
               <div className={`text-4xl font-bold rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-4 ${getRiskLevelColor(riskLevel)}`}>
                 {riskScore}
               </div>
-              <DaisyBadge className={getRiskLevelColor(riskLevel)} variant="secondary">
-                {riskLevel} Risk
+              <DaisyBadge className={getRiskLevelColor(riskLevel)} variant="secondary" >
+  {riskLevel} Risk
+</DaisyBadge>
               </DaisyBadge>
             </div>
             
@@ -262,19 +278,22 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
                 <DaisyProgress value={(risk.impact / 5) * 100} className="mt-1 h-1" />
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisySeparator>
         </DaisyCard>
 
         {/* Control Effectiveness Summary */}
-        <DaisyCard>
-          <DaisyCardHeader>
-            <DaisyCardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+            <DaisyCardTitle className="flex items-center gap-2" >
+  <TrendingUp className="h-5 w-5" />
+</DaisyCardTitle>
               Control Effectiveness
             </DaisyCardTitle>
-          
-          <DaisyCardContent>
-            <div className="text-center mb-4">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="text-center mb-4">
+</DaisyCardContent>
               <div className="text-3xl font-bold text-foreground">
                 {Math.round(averageEffectiveness * 100)}%
               </div>
@@ -302,19 +321,22 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
                 <span className="font-medium">{controlCounts['PLANNED'] || 0}</span>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyProgress>
         </DaisyCard>
 
         {/* Timeline Card */}
-        <DaisyCard>
-          <DaisyCardHeader>
-            <DaisyCardTitle className="flex items-center gap-2">
-              <Clock className="h-5 w-5" />
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+            <DaisyCardTitle className="flex items-center gap-2" >
+  <Clock className="h-5 w-5" />
+</DaisyCardTitle>
               Timeline
             </DaisyCardTitle>
-          
-          <DaisyCardContent>
-            <div className="space-y-3">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-3">
+</DaisyCardContent>
               <div className="flex justify-between">
                 <span className="text-sm text-muted-foreground">Identified</span>
                 <span className="text-sm font-medium">
@@ -335,36 +357,43 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
               </div>
             </div>
             
-            <DaisyButton className="w-full mt-4" variant="outline">
-              <DaisyCalendar className="h-4 w-4 mr-2" />
+            <DaisyButton className="w-full mt-4" variant="outline" >
+  <DaisyCalendar className="h-4 w-4 mr-2" />
+</DaisyButton>
               Schedule Assessment
             </DaisyButton>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Quick Actions */}
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Quick Actions</DaisyCardTitle>
-          
-          <DaisyCardContent className="space-y-2">
-            <DaisyButton className="w-full" variant="outline">
-              <Edit className="h-4 w-4 mr-2" />
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-2" >
+  <DaisyButton className="w-full" variant="outline" >
+</DaisyCardContent>
+  <Edit className="h-4 w-4 mr-2" />
+</DaisyButton>
               Edit Risk
             </DaisyButton>
-            <DaisyButton className="w-full" variant="outline">
-              <Shield className="h-4 w-4 mr-2" />
+            <DaisyButton className="w-full" variant="outline" >
+  <Shield className="h-4 w-4 mr-2" />
+</DaisyButton>
               Map Controls
             </DaisyButton>
-            <DaisyButton className="w-full" variant="outline">
-              <CheckCircle className="h-4 w-4 mr-2" />
+            <DaisyButton className="w-full" variant="outline" >
+  <CheckCircle className="h-4 w-4 mr-2" />
+</DaisyButton>
               Start Assessment
             </DaisyButton>
-            <DaisyButton className="w-full" variant="outline">
-              <TrendingUp className="h-4 w-4 mr-2" />
+            <DaisyButton className="w-full" variant="outline" >
+  <TrendingUp className="h-4 w-4 mr-2" />
+</DaisyButton>
               View Analytics
             </DaisyButton>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
     </div>

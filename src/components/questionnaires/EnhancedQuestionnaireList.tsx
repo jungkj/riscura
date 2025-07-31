@@ -424,7 +424,9 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
   };
 
   // Render questionnaire card
-  const renderQuestionnaireCard = (questionnaire: EnhancedQuestionnaire) => (
+  const renderQuestionnaireCard = (questionnaire: EnhancedQuestionnaire) => {
+
+  return (
     <motion.div
       key={questionnaire.id}
       layout
@@ -433,8 +435,9 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.2 }}
     >
-      <DaisyCard className="h-full hover:shadow-md transition-shadow duration-200">
-        <DaisyCardHeader className="pb-3">
+      <DaisyCard className="h-full hover:shadow-md transition-shadow duration-200" >
+  <DaisyCardHeader className="pb-3" />
+</DaisyCard>
           <div className="flex items-start justify-between">
             <div className="flex items-center space-x-2">
               <DaisyCheckbox
@@ -448,8 +451,9 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
                 }}
               />
               {getCategoryIcon(questionnaire.category)}
-              <DaisyCardTitle className="text-lg font-semibold line-clamp-2">
-                {questionnaire.title}
+              <DaisyCardTitle className="text-lg font-semibold line-clamp-2" >
+  {questionnaire.title}
+</DaisyCheckbox>
               </DaisyCardTitle>
             </div>
             <div className="flex items-center space-x-1">
@@ -457,47 +461,46 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
                 variant="ghost"
                 size="sm"
                 onClick={() => toggleStar(questionnaire.id)}
-                className={questionnaire.isStarred ? 'text-yellow-500' : 'text-gray-400'}
-              >
+                className={questionnaire.isStarred ? 'text-yellow-500' : 'text-gray-400'} />
                 <Star className={`w-4 h-4 ${questionnaire.isStarred ? 'fill-current' : ''}`} />
               </DaisyButton>
               
-              <DaisyDropdownMenu>
-                <DaisyDropdownMenuTrigger asChild>
-                  <DaisyButton variant="ghost" size="sm">
-                    <MoreVertical className="w-4 h-4" />
+              <DaisyDropdownMenu />
+                <DaisyDropdownMenuTrigger asChild />
+                  <DaisyButton variant="ghost" size="sm" >
+  <MoreVertical className="w-4 h-4" />
+</DaisyDropdownMenu>
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent>
-                  <DaisyDropdownMenuItem onClick={() => handleView(questionnaire.id)}>
+                <DaisyDropdownMenuContent />
+                  <DaisyDropdownMenuItem onClick={() => handleView(questionnaire.id)} />
                     <Eye className="w-4 h-4 mr-2" />
                     View
-                  </DaisyDropdownMenuItem>
-                  <DaisyDropdownMenuItem onClick={() => handleEdit(questionnaire.id)}>
+                  </DaisyDropdownMenuContent>
+                  <DaisyDropdownMenuItem onClick={() => handleEdit(questionnaire.id)} />
                     <Edit3 className="w-4 h-4 mr-2" />
                     Edit
                   </DaisyDropdownMenuItem>
-                  <DaisyDropdownMenuItem onClick={() => handleDuplicate(questionnaire.id)}>
+                  <DaisyDropdownMenuItem onClick={() => handleDuplicate(questionnaire.id)} />
                     <Copy className="w-4 h-4 mr-2" />
                     Duplicate
                   </DaisyDropdownMenuItem>
                   <DaisyDropdownMenuSeparator />
-                  <DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuItem />
                     <Share2 className="w-4 h-4 mr-2" />
                     Share
-                  </DaisyDropdownMenuItem>
-                  <DaisyDropdownMenuItem>
+                  </DaisyDropdownMenuSeparator>
+                  <DaisyDropdownMenuItem />
                     <Download className="w-4 h-4 mr-2" />
                     Export
                   </DaisyDropdownMenuItem>
                   <DaisyDropdownMenuSeparator />
                   <DaisyDropdownMenuItem 
                     onClick={() => handleDelete(questionnaire.id)}
-                    className="text-red-600"
-                  >
+                    className="text-red-600" />
                     <Trash2 className="w-4 h-4 mr-2" />
                     Delete
-                  </DaisyDropdownMenuItem>
+                  </DaisyDropdownMenuSeparator>
                 </DaisyDropdownMenuContent>
               </DaisyDropdownMenu>
             </div>
@@ -506,19 +509,23 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
           <p className="text-sm text-muted-foreground line-clamp-2 mt-2">
             {questionnaire.description}
           </p>
+        </DaisyCardHeader>
         
-        
-        <DaisyCardContent className="space-y-4">
-          {/* Status and Priority Badges */}
+        <DaisyCardContent className="space-y-4" >
+  {/* Status and Priority Badges */}
+</DaisyCardContent>
           <div className="flex items-center space-x-2">
-            <DaisyBadge className={getStatusColor(questionnaire.status)}>
-              {questionnaire.status.replace('_', ' ')}
+            <DaisyBadge className={getStatusColor(questionnaire.status)} >
+  {questionnaire.status.replace('_', ' ')}
+</DaisyBadge>
             </DaisyBadge>
-            <DaisyBadge className={getPriorityColor(questionnaire.priority)}>
-              {questionnaire.priority}
+            <DaisyBadge className={getPriorityColor(questionnaire.priority)} >
+  {questionnaire.priority}
+</DaisyBadge>
             </DaisyBadge>
-            <DaisyBadge variant="outline">
-              v{questionnaire.version}
+            <DaisyBadge variant="outline" >
+  v{questionnaire.version}
+</DaisyBadge>
             </DaisyBadge>
           </div>
 
@@ -548,15 +555,17 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
               {questionnaire.tags.slice(0, 3).map(tagId => {
                 const tag = tags.find(t => t.id === tagId);
                 return tag ? (
-                  <DaisyBadge key={tagId} variant="outline" className="text-xs">
-                    <Tag className="w-3 h-3 mr-1" />
+                  <DaisyBadge key={tagId} variant="outline" className="text-xs" >
+  <Tag className="w-3 h-3 mr-1" />
+</DaisyBadge>
                     {tag.name}
                   </DaisyBadge>
                 ) : null;
               })}
               {questionnaire.tags.length > 3 && (
-                <DaisyBadge variant="outline" className="text-xs">
-                  +{questionnaire.tags.length - 3} more
+                <DaisyBadge variant="outline" className="text-xs" >
+  +{questionnaire.tags.length - 3} more
+</DaisyBadge>
                 </DaisyBadge>
               )}
             </div>
@@ -577,14 +586,15 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
           {/* Deadline Warning */}
           {questionnaire.hasDeadline && questionnaire.deadline && (
             <div className="flex items-center space-x-2 text-xs text-orange-600 bg-orange-50 p-2 rounded">
-              <DaisyAlertCircle className="w-3 h-3" />
-              <span>Due: {questionnaire.deadline.toLocaleDateString()}</span>
+              <DaisyAlertCircle className="w-3 h-3" >
+  <span>
+</DaisyCalendar>Due: {questionnaire.deadline.toLocaleDateString()}</span>
             </div>
           )}
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </motion.div>
-  );
+  );}
 
   // Render questionnaire list item
   const renderQuestionnaireListItem = (questionnaire: EnhancedQuestionnaire) => (
@@ -614,11 +624,13 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
             {getCategoryIcon(questionnaire.category)}
             <h3 className="font-semibold truncate">{questionnaire.title}</h3>
             <div className="flex items-center space-x-2">
-              <DaisyBadge className={getStatusColor(questionnaire.status)}>
-                {questionnaire.status.replace('_', ' ')}
+              <DaisyBadge className={getStatusColor(questionnaire.status)} >
+  {questionnaire.status.replace('_', ' ')}
+</DaisyCheckbox>
               </DaisyBadge>
-              <DaisyBadge className={getPriorityColor(questionnaire.priority)}>
-                {questionnaire.priority}
+              <DaisyBadge className={getPriorityColor(questionnaire.priority)} >
+  {questionnaire.priority}
+</DaisyBadge>
               </DaisyBadge>
             </div>
           </div>
@@ -639,38 +651,37 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
             variant="ghost"
             size="sm"
             onClick={() => toggleStar(questionnaire.id)}
-            className={questionnaire.isStarred ? 'text-yellow-500' : 'text-gray-400'}
-          >
+            className={questionnaire.isStarred ? 'text-yellow-500' : 'text-gray-400'} />
             <Star className={`w-4 h-4 ${questionnaire.isStarred ? 'fill-current' : ''}`} />
           </DaisyButton>
           
-          <DaisyDropdownMenu>
-            <DaisyDropdownMenuTrigger asChild>
-              <DaisyButton variant="ghost" size="sm">
-                <MoreVertical className="w-4 h-4" />
+          <DaisyDropdownMenu />
+            <DaisyDropdownMenuTrigger asChild />
+              <DaisyButton variant="ghost" size="sm" >
+  <MoreVertical className="w-4 h-4" />
+</DaisyDropdownMenu>
               </DaisyButton>
             </DaisyDropdownMenuTrigger>
-            <DaisyDropdownMenuContent>
-              <DaisyDropdownMenuItem onClick={() => handleView(questionnaire.id)}>
+            <DaisyDropdownMenuContent />
+              <DaisyDropdownMenuItem onClick={() => handleView(questionnaire.id)} />
                 <Eye className="w-4 h-4 mr-2" />
                 View
-              </DaisyDropdownMenuItem>
-              <DaisyDropdownMenuItem onClick={() => handleEdit(questionnaire.id)}>
+              </DaisyDropdownMenuContent>
+              <DaisyDropdownMenuItem onClick={() => handleEdit(questionnaire.id)} />
                 <Edit3 className="w-4 h-4 mr-2" />
                 Edit
               </DaisyDropdownMenuItem>
-              <DaisyDropdownMenuItem onClick={() => handleDuplicate(questionnaire.id)}>
+              <DaisyDropdownMenuItem onClick={() => handleDuplicate(questionnaire.id)} />
                 <Copy className="w-4 h-4 mr-2" />
                 Duplicate
               </DaisyDropdownMenuItem>
               <DaisyDropdownMenuSeparator />
               <DaisyDropdownMenuItem 
                 onClick={() => handleDelete(questionnaire.id)}
-                className="text-red-600"
-              >
+                className="text-red-600" />
                 <Trash2 className="w-4 h-4 mr-2" />
                 Delete
-              </DaisyDropdownMenuItem>
+              </DaisyDropdownMenuSeparator>
             </DaisyDropdownMenuContent>
           </DaisyDropdownMenu>
         </div>
@@ -695,27 +706,25 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
             <DaisyLabel className="text-sm font-medium">Sort by:</DaisyLabel>
-            <DaisySelect value={sortField} onValueChange={(value) => setSortField(value as keyof EnhancedQuestionnaire)}>
-              <DaisySelectTrigger className="w-40">
-                <DaisySelectValue />
-              </SelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="lastModified">Last Modified</SelectItem>
-                <DaisySelectItem value="title">Title</SelectItem>
-                <DaisySelectItem value="createdAt">Created Date</SelectItem>
-                <DaisySelectItem value="responseCount">Response Count</SelectItem>
-                <DaisySelectItem value="completionRate">Completion Rate</SelectItem>
-                <DaisySelectItem value="averageScore">Average Score</SelectItem>
-                <DaisySelectItem value="priority">Priority</SelectItem>
-                <DaisySelectItem value="status">Status</SelectItem>
-              </SelectContent>
+            <DaisySelect value={sortField} onValueChange={(value) => setSortField(value as keyof EnhancedQuestionnaire)} />
+              <DaisySelectTrigger className="w-40" />
+                <DaisySelectValue /></DaisySelect>
+              <DaisySelectContent />
+                <DaisySelectItem value="lastModified">Last Modified</DaisySelectContent>
+                <DaisySelectItem value="title">Title</DaisySelectItem>
+                <DaisySelectItem value="createdAt">Created Date</DaisySelectItem>
+                <DaisySelectItem value="responseCount">Response Count</DaisySelectItem>
+                <DaisySelectItem value="completionRate">Completion Rate</DaisySelectItem>
+                <DaisySelectItem value="averageScore">Average Score</DaisySelectItem>
+                <DaisySelectItem value="priority">Priority</DaisySelectItem>
+                <DaisySelectItem value="status">Status</DaisySelectItem>
+              </DaisySelectContent>
             </DaisySelect>
             
             <DaisyButton
               variant="outline"
               size="sm"
-              onClick={() => setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')}
-            >
+              onClick={() => setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')} />
               {sortDirection === 'asc' ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />}
             </DaisyButton>
           </div>
@@ -725,15 +734,13 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
           <DaisyButton
             variant={viewMode === 'grid' ? 'primary' : 'outline'}
             size="sm"
-            onClick={() => setViewMode('grid')}
-          >
+            onClick={() => setViewMode('grid')} />
             <Grid className="w-4 h-4" />
           </DaisyButton>
           <DaisyButton
             variant={viewMode === 'list' ? 'primary' : 'outline'}
             size="sm"
-            onClick={() => setViewMode('list')}
-          >
+            onClick={() => setViewMode('list')} />
             <List className="w-4 h-4" />
           </DaisyButton>
         </div>
@@ -765,8 +772,9 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
                 {sortedQuestionnaires.map(renderQuestionnaireCard)}
               </div>
             ) : (
-              <DaisyCard>
-                <div className="divide-y">
+              <DaisyCard >
+  <div className="divide-y">
+</DaisyCard>
                   {sortedQuestionnaires.map(renderQuestionnaireListItem)}
                 </div>
               </DaisyCard>

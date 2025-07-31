@@ -6,7 +6,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { getAuditLogger, AuditAction, AuditEntity, AuditEvent } from './audit-logger';
-import { extractIpAddress, getEntityComplianceFlags, inferActionFromMethod, inferClientType, extractAuditContext, createAuditMetadata } from './audit-utils';
+import {
+  extractIpAddress,
+  getEntityComplianceFlags,
+  inferActionFromMethod,
+  inferClientType,
+  extractAuditContext,
+  createAuditMetadata,
+} from './audit-utils';
 import { authOptions } from '@/lib/auth/auth-options';
 import { prisma } from '@/lib/prisma';
 
@@ -20,29 +27,76 @@ import { prisma } from '@/lib/prisma';
 function isValidAuditAction(value: string): value is AuditAction {
   const validActions: AuditAction[] = [
     // Authentication Actions
-    'LOGIN', 'LOGOUT', 'LOGIN_FAILED', 'PASSWORD_CHANGE', 'PASSWORD_RESET',
-    'MFA_ENABLE', 'MFA_DISABLE', 'SESSION_EXPIRE', 'ACCOUNT_LOCK',
+    'LOGIN',
+    'LOGOUT',
+    'LOGIN_FAILED',
+    'PASSWORD_CHANGE',
+    'PASSWORD_RESET',
+    'MFA_ENABLE',
+    'MFA_DISABLE',
+    'SESSION_EXPIRE',
+    'ACCOUNT_LOCK',
     // Data Actions
-    'CREATE', 'READ', 'UPDATE', 'DELETE', 'EXPORT', 'IMPORT', 'BULK_UPDATE',
-    'BULK_DELETE', 'RESTORE', 'ARCHIVE', 'MERGE', 'CLONE', 'SHARE',
+    'CREATE',
+    'READ',
+    'UPDATE',
+    'DELETE',
+    'EXPORT',
+    'IMPORT',
+    'BULK_UPDATE',
+    'BULK_DELETE',
+    'RESTORE',
+    'ARCHIVE',
+    'MERGE',
+    'CLONE',
+    'SHARE',
     // Permission Actions
-    'PERMISSION_GRANT', 'PERMISSION_REVOKE', 'ROLE_ASSIGN', 'ROLE_REMOVE',
-    'ACCESS_DENIED', 'ESCALATION_REQUEST', 'ESCALATION_APPROVE',
+    'PERMISSION_GRANT',
+    'PERMISSION_REVOKE',
+    'ROLE_ASSIGN',
+    'ROLE_REMOVE',
+    'ACCESS_DENIED',
+    'ESCALATION_REQUEST',
+    'ESCALATION_APPROVE',
     // System Actions
-    'SYSTEM_START', 'SYSTEM_STOP', 'BACKUP_CREATE', 'BACKUP_RESTORE',
-    'CONFIG_CHANGE', 'MAINTENANCE_START', 'MAINTENANCE_END',
+    'SYSTEM_START',
+    'SYSTEM_STOP',
+    'BACKUP_CREATE',
+    'BACKUP_RESTORE',
+    'CONFIG_CHANGE',
+    'MAINTENANCE_START',
+    'MAINTENANCE_END',
     // Compliance Actions
-    'AUDIT_START', 'AUDIT_END', 'POLICY_UPDATE', 'VIOLATION_DETECTED',
-    'COMPLIANCE_CHECK', 'RISK_ASSESSMENT', 'CONTROL_TEST',
+    'AUDIT_START',
+    'AUDIT_END',
+    'POLICY_UPDATE',
+    'VIOLATION_DETECTED',
+    'COMPLIANCE_CHECK',
+    'RISK_ASSESSMENT',
+    'CONTROL_TEST',
     // Document Actions
-    'DOCUMENT_UPLOAD', 'DOCUMENT_DOWNLOAD', 'DOCUMENT_VIEW', 'DOCUMENT_EDIT',
-    'DOCUMENT_DELETE', 'DOCUMENT_SHARE', 'DOCUMENT_APPROVE',
+    'DOCUMENT_UPLOAD',
+    'DOCUMENT_DOWNLOAD',
+    'DOCUMENT_VIEW',
+    'DOCUMENT_EDIT',
+    'DOCUMENT_DELETE',
+    'DOCUMENT_SHARE',
+    'DOCUMENT_APPROVE',
     // Billing Actions
-    'SUBSCRIPTION_CREATE', 'SUBSCRIPTION_UPDATE', 'SUBSCRIPTION_CANCEL',
-    'PAYMENT_SUCCESS', 'PAYMENT_FAILED', 'INVOICE_GENERATE',
+    'SUBSCRIPTION_CREATE',
+    'SUBSCRIPTION_UPDATE',
+    'SUBSCRIPTION_CANCEL',
+    'PAYMENT_SUCCESS',
+    'PAYMENT_FAILED',
+    'INVOICE_GENERATE',
     // AI Actions
-    'AI_QUERY', 'AI_RESPONSE', 'AI_TRAINING', 'AI_MODEL_UPDATE',
-    'PROBO_ANALYSIS', 'RISK_PREDICTION', 'CONTROL_GENERATION'
+    'AI_QUERY',
+    'AI_RESPONSE',
+    'AI_TRAINING',
+    'AI_MODEL_UPDATE',
+    'PROBO_ANALYSIS',
+    'RISK_PREDICTION',
+    'CONTROL_GENERATION',
   ];
   return validActions.includes(value as AuditAction);
 }
@@ -52,13 +106,35 @@ function isValidAuditAction(value: string): value is AuditAction {
  */
 function isValidAuditEntity(value: string): value is AuditEntity {
   const validEntities: AuditEntity[] = [
-    'USER', 'ORGANIZATION', 'ROLE', 'PERMISSION', 'SESSION',
-    'RISK', 'CONTROL', 'ASSESSMENT', 'COMPLIANCE_FRAMEWORK',
-    'DOCUMENT', 'REPORT', 'DASHBOARD', 'NOTIFICATION',
-    'SUBSCRIPTION', 'INVOICE', 'PAYMENT', 'WEBHOOK',
-    'API_KEY', 'INTEGRATION', 'BACKUP', 'SYSTEM',
-    'POLICY', 'PROCEDURE', 'INCIDENT', 'QUESTIONNAIRE',
-    'AI_MODEL', 'ANALYTICS', 'EXPORT', 'IMPORT'
+    'USER',
+    'ORGANIZATION',
+    'ROLE',
+    'PERMISSION',
+    'SESSION',
+    'RISK',
+    'CONTROL',
+    'ASSESSMENT',
+    'COMPLIANCE_FRAMEWORK',
+    'DOCUMENT',
+    'REPORT',
+    'DASHBOARD',
+    'NOTIFICATION',
+    'SUBSCRIPTION',
+    'INVOICE',
+    'PAYMENT',
+    'WEBHOOK',
+    'API_KEY',
+    'INTEGRATION',
+    'BACKUP',
+    'SYSTEM',
+    'POLICY',
+    'PROCEDURE',
+    'INCIDENT',
+    'QUESTIONNAIRE',
+    'AI_MODEL',
+    'ANALYTICS',
+    'EXPORT',
+    'IMPORT',
   ];
   return validEntities.includes(value as AuditEntity);
 }
@@ -89,14 +165,14 @@ export function withAuditLogging<T extends any[]>(
   return async (req: NextRequest, ...args: T): Promise<NextResponse> => {
     const startTime = Date.now();
     const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     // Extract basic request information
     const method = req.method;
     const path = req.nextUrl.pathname;
     const userAgent = req.headers.get('user-agent') || undefined;
     const ipAddress = extractIpAddress(req);
     const organizationId = req.headers.get('organization-id') || 'unknown';
-    
+
     // Get session information
     let session;
     let userId: string | undefined;
@@ -109,7 +185,7 @@ export function withAuditLogging<T extends any[]>(
     }
 
     const auditLogger = getAuditLogger(prisma);
-    
+
     // Determine entity ID
     let entityId = options.entityId;
     if (typeof entityId === 'function') {
@@ -125,14 +201,18 @@ export function withAuditLogging<T extends any[]>(
     const baseEvent = {
       userId,
       organizationId,
-      action: options.action || (() => {
-        const inferredAction = inferActionFromMethod(method);
-        return isValidAuditAction(inferredAction) ? inferredAction : 'READ';
-      })(),
-      entity: options.entity || (() => {
-        const defaultEntity = 'API_KEY';
-        return isValidAuditEntity(defaultEntity) ? defaultEntity : 'SYSTEM';
-      })(),
+      action:
+        options.action ||
+        (() => {
+          const inferredAction = inferActionFromMethod(method);
+          return isValidAuditAction(inferredAction) ? inferredAction : 'READ';
+        })(),
+      entity:
+        options.entity ||
+        (() => {
+          const defaultEntity = 'API_KEY';
+          return isValidAuditEntity(defaultEntity) ? defaultEntity : 'SYSTEM';
+        })(),
       entityId: typeof entityId === 'string' ? entityId : undefined,
       resource: options.resource || path.split('/')[2] || 'unknown',
       method,
@@ -152,7 +232,7 @@ export function withAuditLogging<T extends any[]>(
     try {
       // Execute the handler
       response = await handler(req, ...args);
-      
+
       // Log successful operation if not skipped
       if (!options.skipSuccessLogging) {
         await auditLogger.log({
@@ -168,10 +248,9 @@ export function withAuditLogging<T extends any[]>(
       }
 
       return response;
-
     } catch (err) {
       error = err as Error;
-      
+
       // Log failed operation if not skipped
       if (!options.skipFailureLogging) {
         await auditLogger.log({
@@ -201,9 +280,12 @@ export function withAuditLogging<T extends any[]>(
  * Decorator for authentication endpoints
  */
 export function withAuthAudit(
-  action: Extract<AuditAction, 'LOGIN' | 'LOGOUT' | 'LOGIN_FAILED' | 'PASSWORD_CHANGE' | 'PASSWORD_RESET'>
+  action: Extract<
+    AuditAction,
+    'LOGIN' | 'LOGOUT' | 'LOGIN_FAILED' | 'PASSWORD_CHANGE' | 'PASSWORD_RESET'
+  >
 ) {
-  return function<T extends any[]>(
+  return function <T extends any[]>(
     handler: (req: NextRequest, ...args: T) => Promise<NextResponse>
   ) {
     return withAuditLogging(handler, {
@@ -228,7 +310,7 @@ export function withDataAudit(
   action?: Extract<AuditAction, 'CREATE' | 'UPDATE' | 'DELETE' | 'READ'>,
   entityIdExtractor?: (req: NextRequest, context?: any) => string
 ) {
-  return function<T extends any[]>(
+  return function <T extends any[]>(
     handler: (req: NextRequest, ...args: T) => Promise<NextResponse>
   ) {
     return withAuditLogging(handler, {
@@ -251,11 +333,8 @@ export function withDataAudit(
 /**
  * Decorator for permission-sensitive endpoints
  */
-export function withPermissionAudit(
-  requiredPermission: string,
-  entity: AuditEntity = 'API_KEY'
-) {
-  return function<T extends any[]>(
+export function withPermissionAudit(requiredPermission: string, entity: AuditEntity = 'API_KEY') {
+  return function <T extends any[]>(
     handler: (req: NextRequest, ...args: T) => Promise<NextResponse>
   ) {
     return withAuditLogging(handler, {
@@ -277,9 +356,12 @@ export function withPermissionAudit(
  * Decorator for system administration endpoints
  */
 export function withSystemAudit(
-  action: Extract<AuditAction, 'SYSTEM_START' | 'SYSTEM_STOP' | 'CONFIG_CHANGE' | 'BACKUP_CREATE' | 'MAINTENANCE_START'>
+  action: Extract<
+    AuditAction,
+    'SYSTEM_START' | 'SYSTEM_STOP' | 'CONFIG_CHANGE' | 'BACKUP_CREATE' | 'MAINTENANCE_START'
+  >
 ) {
-  return function<T extends any[]>(
+  return function <T extends any[]>(
     handler: (req: NextRequest, ...args: T) => Promise<NextResponse>
   ) {
     return withAuditLogging(handler, {
@@ -301,10 +383,13 @@ export function withSystemAudit(
  * Decorator for compliance-related endpoints
  */
 export function withComplianceAudit(
-  action: Extract<AuditAction, 'COMPLIANCE_CHECK' | 'AUDIT_START' | 'AUDIT_END' | 'POLICY_UPDATE' | 'VIOLATION_DETECTED'>,
+  action: Extract<
+    AuditAction,
+    'COMPLIANCE_CHECK' | 'AUDIT_START' | 'AUDIT_END' | 'POLICY_UPDATE' | 'VIOLATION_DETECTED'
+  >,
   framework?: string
 ) {
-  return function<T extends any[]>(
+  return function <T extends any[]>(
     handler: (req: NextRequest, ...args: T) => Promise<NextResponse>
   ) {
     return withAuditLogging(handler, {
@@ -323,15 +408,9 @@ export function withComplianceAudit(
   };
 }
 
-
-
-
-
-
 // ============================================================================
 // AUDIT QUERY HELPERS
 // ============================================================================
-
 
 // ============================================================================
 // BATCH AUDIT OPERATIONS
@@ -344,7 +423,7 @@ export async function logBatchAuditEvents(
   events: Array<Omit<AuditEvent, 'id' | 'timestamp'>>
 ): Promise<void> {
   const auditLogger = getAuditLogger(prisma);
-  
+
   for (const event of events) {
     await auditLogger.log(event);
   }
@@ -362,7 +441,7 @@ export async function logBulkOperation(
   metadata?: Record<string, any>
 ): Promise<void> {
   const auditLogger = getAuditLogger(prisma);
-  
+
   await auditLogger.log({
     userId,
     organizationId,
@@ -382,4 +461,3 @@ export async function logBulkOperation(
     complianceFlags: getEntityComplianceFlags(entity),
   });
 }
-

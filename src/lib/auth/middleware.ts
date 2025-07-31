@@ -51,13 +51,10 @@ export async function withAuth(
   return async (req: NextRequest): Promise<NextResponse> => {
     try {
       // Get session from NextAuth
-      const session = await getServerSession(authOptions) as any;
+      const session = (await getServerSession(authOptions)) as any;
 
       if (!session?.user?.email) {
-        return NextResponse.json(
-          { error: 'Authentication required' },
-          { status: 401 }
-        );
+        return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
       }
 
       // Get user from database with organization
@@ -75,69 +72,53 @@ export async function withAuth(
       });
 
       if (!user) {
-        return NextResponse.json(
-          { error: 'User not found' },
-          { status: 401 }
-        );
+        return NextResponse.json({ error: 'User not found' }, { status: 401 });
       }
 
       if (!user.isActive) {
-        return NextResponse.json(
-          { error: 'Account is inactive' },
-          { status: 403 }
-        );
+        return NextResponse.json({ error: 'Account is inactive' }, { status: 403 });
       }
 
       if (options.requireOrganization !== false && !user.organizationId) {
-        return NextResponse.json(
-          { error: 'Organization membership required' },
-          { status: 403 }
-        );
+        return NextResponse.json({ error: 'Organization membership required' }, { status: 403 });
       }
 
       if (user.organization && !user.organization.isActive) {
-        return NextResponse.json(
-          { error: 'Organization is inactive' },
-          { status: 403 }
-        );
+        return NextResponse.json({ error: 'Organization is inactive' }, { status: 403 });
       }
 
-             // Check role permissions
-       const userPermissions = [...(ROLE_PERMISSIONS[user.role as keyof typeof ROLE_PERMISSIONS] || [])];
-       
-       if (options.allowedRoles && !options.allowedRoles.includes(user.role)) {
-         return NextResponse.json(
-           { error: 'Insufficient role permissions' },
-           { status: 403 }
-         );
-       }
+      // Check role permissions
+      const userPermissions = [
+        ...(ROLE_PERMISSIONS[user.role as keyof typeof ROLE_PERMISSIONS] || []),
+      ];
 
-       if (options.requiredPermissions) {
-         const hasPermission = options.requiredPermissions.every(permission =>
-           userPermissions.includes(permission) || userPermissions.includes('*')
-         );
+      if (options.allowedRoles && !options.allowedRoles.includes(user.role)) {
+        return NextResponse.json({ error: 'Insufficient role permissions' }, { status: 403 });
+      }
 
-         if (!hasPermission) {
-           return NextResponse.json(
-             { error: 'Insufficient permissions' },
-             { status: 403 }
-           );
-         }
-       }
+      if (options.requiredPermissions) {
+        const hasPermission = options.requiredPermissions.every(
+          (permission) => userPermissions.includes(permission) || userPermissions.includes('*')
+        );
 
-       // Create authenticated user object
-       const authenticatedUser: AuthenticatedUser = {
-         id: user.id,
-         email: user.email,
-         firstName: user.firstName,
-         lastName: user.lastName,
-         role: user.role,
-         organizationId: user.organizationId!,
-         permissions: userPermissions,
-         avatar: user.avatar,
-         isActive: user.isActive,
-         lastLoginAt: user.lastLoginAt,
-       };
+        if (!hasPermission) {
+          return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
+        }
+      }
+
+      // Create authenticated user object
+      const authenticatedUser: AuthenticatedUser = {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+        organizationId: user.organizationId!,
+        permissions: userPermissions,
+        avatar: user.avatar,
+        isActive: user.isActive,
+        lastLoginAt: user.lastLoginAt,
+      };
 
       // Add user to request
       const authReq = req as AuthenticatedRequest;
@@ -152,10 +133,7 @@ export async function withAuth(
       return handler(authReq);
     } catch (error) {
       console.error('Authentication middleware error:', error);
-      return NextResponse.json(
-        { error: 'Authentication failed' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 500 });
     }
   };
 }
@@ -197,12 +175,15 @@ function checkAuthorization(
 
   // Check required permissions
   if (requiredPermissions.length > 0) {
-    const hasAllPermissions = requiredPermissions.every(permission => 
-      user.permissions.includes(permission) || user.permissions.includes('*')
+    const hasAllPermissions = requiredPermissions.every(
+      (permission) => user.permissions.includes(permission) || user.permissions.includes('*')
     );
 
     if (!hasAllPermissions) {
-      return { allowed: false, reason: `Missing required permissions: ${requiredPermissions.join(', ')}` };
+      return {
+        allowed: false,
+        reason: `Missing required permissions: ${requiredPermissions.join(', ')}`,
+      };
     }
   }
 
@@ -211,7 +192,7 @@ function checkAuthorization(
     const url = new URL(req.url);
     const pathParts = url.pathname.split('/');
     const userIdInPath = pathParts[pathParts.length - 1];
-    
+
     if (userIdInPath === user.id) {
       return { allowed: true };
     }
@@ -224,13 +205,9 @@ function checkAuthorization(
  * Role-based access control decorator
  */
 export function requireRole(...roles: string[]) {
-  return function (
-    target: any,
-    propertyName: string,
-    descriptor: PropertyDescriptor
-  ) {
+  return function (target: any, propertyName: string, descriptor: PropertyDescriptor) {
     const method = descriptor.value;
-    
+
     descriptor.value = withAuth(method, { requiredRoles: roles });
   };
 }
@@ -239,13 +216,9 @@ export function requireRole(...roles: string[]) {
  * Permission-based access control decorator
  */
 export function requirePermission(...permissions: string[]) {
-  return function (
-    target: any,
-    propertyName: string,
-    descriptor: PropertyDescriptor
-  ) {
+  return function (target: any, propertyName: string, descriptor: PropertyDescriptor) {
     const method = descriptor.value;
-    
+
     descriptor.value = withAuth(method, { requiredPermissions: permissions });
   };
 }
@@ -262,7 +235,10 @@ export function hasRole(user: AuthenticatedUser, role: string): boolean {
   return user.role === role;
 }
 
-export function belongsToOrganization(user: { organizationId: string }, organizationId: string): boolean {
+export function belongsToOrganization(
+  user: { organizationId: string },
+  organizationId: string
+): boolean {
   return user.organizationId === organizationId;
 }
 
@@ -289,25 +265,25 @@ export function rateLimit(
 ): { allowed: boolean; remaining: number; resetTime: number } {
   const now = Date.now();
   const resetTime = now + windowMs;
-  
+
   // Clean expired entries
   for (const [k, v] of rateLimitStore.entries()) {
     if (v.resetTime <= now) {
       rateLimitStore.delete(k);
     }
   }
-  
+
   const current = rateLimitStore.get(key);
-  
+
   if (!current || current.resetTime <= now) {
     rateLimitStore.set(key, { count: 1, resetTime });
     return { allowed: true, remaining: limit - 1, resetTime };
   }
-  
+
   if (current.count >= limit) {
     return { allowed: false, remaining: 0, resetTime: current.resetTime };
   }
-  
+
   current.count++;
   return { allowed: true, remaining: limit - current.count, resetTime: current.resetTime };
 }
@@ -320,19 +296,19 @@ export function validateCSRFToken(req: NextRequest): boolean {
   if (!productionGuard.isProduction() && productionGuard.isDemoMode()) {
     return true;
   }
-  
+
   const token = req.headers.get('x-csrf-token') || req.headers.get('csrf-token');
   const sessionToken = req.cookies.get('csrf-token')?.value;
-  
+
   if (!token || !sessionToken || token !== sessionToken) {
     productionGuard.logSecurityEvent('csrf_validation_failed', {
       hasToken: !!token,
       hasSessionToken: !!sessionToken,
-      tokensMatch: token === sessionToken
+      tokensMatch: token === sessionToken,
     });
     return false;
   }
-  
+
   return true;
 }
 
@@ -340,14 +316,12 @@ export function generateCSRFToken(): string {
   return require('crypto').randomBytes(32).toString('hex');
 }
 
-
-
 function getDefaultRateLimitKey(req: NextRequest): string {
   // Try to get IP from various headers
   const forwarded = req.headers.get('x-forwarded-for');
   const realIp = req.headers.get('x-real-ip');
   const ip = forwarded ? forwarded.split(',')[0] : realIp || req.ip || 'unknown';
-  
+
   return `${ip}:${req.nextUrl.pathname}`;
 }
 
@@ -375,7 +349,7 @@ export function cors(config: CORSConfig = {}) {
     // Handle OPTIONS preflight request
     if (req.method === 'OPTIONS') {
       const response = new NextResponse(null, { status: 200 });
-      
+
       // Set CORS headers
       if (typeof origin === 'string') {
         response.headers.set('Access-Control-Allow-Origin', origin);
@@ -391,13 +365,13 @@ export function cors(config: CORSConfig = {}) {
 
       response.headers.set('Access-Control-Allow-Methods', methods.join(', '));
       response.headers.set('Access-Control-Allow-Headers', allowedHeaders.join(', '));
-      
+
       if (credentials) {
         response.headers.set('Access-Control-Allow-Credentials', 'true');
       }
-      
+
       response.headers.set('Access-Control-Max-Age', String(maxAge));
-      
+
       return response;
     }
 
@@ -420,7 +394,7 @@ export function applySecurityHeaders(response: NextResponse): NextResponse {
   response.headers.set('X-XSS-Protection', '1; mode=block');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
-  
+
   // Content Security Policy
   const csp = [
     "default-src 'self'",
@@ -431,9 +405,9 @@ export function applySecurityHeaders(response: NextResponse): NextResponse {
     "connect-src 'self'",
     "frame-ancestors 'none'",
   ].join('; ');
-  
+
   response.headers.set('Content-Security-Policy', csp);
-  
+
   return response;
 }
 
@@ -455,7 +429,9 @@ export function requestLogger() {
 }
 
 // Combined middleware composer
-export function composeMiddleware(...middlewares: Array<(req: NextRequest) => Promise<NextResponse | null> | NextResponse | null>) {
+export function composeMiddleware(
+  ...middlewares: Array<(req: NextRequest) => Promise<NextResponse | null> | NextResponse | null>
+) {
   return async (req: NextRequest): Promise<NextResponse | null> => {
     for (const middleware of middlewares) {
       const result = await middleware(req);
@@ -471,19 +447,13 @@ export function composeMiddleware(...middlewares: Array<(req: NextRequest) => Pr
 export function requireOrganization() {
   return async (req: AuthenticatedRequest): Promise<NextResponse | null> => {
     const user = getAuthenticatedUser(req);
-    
+
     if (!user) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
 
     if (!user.organizationId) {
-      return NextResponse.json(
-        { error: 'Organization membership required' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Organization membership required' }, { status: 403 });
     }
 
     return null; // Continue
@@ -492,29 +462,23 @@ export function requireOrganization() {
 
 // Permission checking utilities
 export function hasAnyPermission(user: AuthenticatedUser, permissions: string[]): boolean {
-  return permissions.some(permission => hasPermission(user, permission));
+  return permissions.some((permission) => hasPermission(user, permission));
 }
 
 export function hasAllPermissions(user: AuthenticatedUser, permissions: string[]): boolean {
-  return permissions.every(permission => hasPermission(user, permission));
+  return permissions.every((permission) => hasPermission(user, permission));
 }
 
 export function requirePermissions(...permissions: string[]) {
   return async (req: AuthenticatedRequest): Promise<NextResponse | null> => {
     const user = getAuthenticatedUser(req);
-    
+
     if (!user) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
 
     if (!hasAllPermissions(user, permissions)) {
-      return NextResponse.json(
-        { error: 'Insufficient permissions' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
 
     return null; // Continue
@@ -529,19 +493,13 @@ export function hasAnyRole(user: AuthenticatedUser, roles: string[]): boolean {
 export function requireRoles(...roles: string[]) {
   return async (req: AuthenticatedRequest): Promise<NextResponse | null> => {
     const user = getAuthenticatedUser(req);
-    
+
     if (!user) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
 
     if (!hasAnyRole(user, roles)) {
-      return NextResponse.json(
-        { error: 'Insufficient role permissions' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Insufficient role permissions' }, { status: 403 });
     }
 
     return null; // Continue
@@ -557,13 +515,11 @@ export async function withApiKey(
 ) {
   return async (req: NextRequest): Promise<NextResponse> => {
     try {
-      const apiKey = req.headers.get('x-api-key') || req.headers.get('authorization')?.replace('Bearer ', '');
+      const apiKey =
+        req.headers.get('x-api-key') || req.headers.get('authorization')?.replace('Bearer ', '');
 
       if (!apiKey) {
-        return NextResponse.json(
-          { error: 'API key required' },
-          { status: 401 }
-        );
+        return NextResponse.json({ error: 'API key required' }, { status: 401 });
       }
 
       // Validate API key
@@ -586,23 +542,17 @@ export async function withApiKey(
       });
 
       if (!apiKeyRecord || !apiKeyRecord.organization.isActive) {
-        return NextResponse.json(
-          { error: 'Invalid or expired API key' },
-          { status: 401 }
-        );
+        return NextResponse.json({ error: 'Invalid or expired API key' }, { status: 401 });
       }
 
       // Check scopes if required
       if (options.requiredScopes) {
-        const hasRequiredScopes = options.requiredScopes.every(scope =>
-          apiKeyRecord.scopes.includes(scope) || apiKeyRecord.scopes.includes('*')
+        const hasRequiredScopes = options.requiredScopes.every(
+          (scope) => apiKeyRecord.scopes.includes(scope) || apiKeyRecord.scopes.includes('*')
         );
 
         if (!hasRequiredScopes) {
-          return NextResponse.json(
-            { error: 'Insufficient API key scopes' },
-            { status: 403 }
-          );
+          return NextResponse.json({ error: 'Insufficient API key scopes' }, { status: 403 });
         }
       }
 
@@ -628,10 +578,7 @@ export async function withApiKey(
       return handler(authReq);
     } catch (error) {
       console.error('API key authentication error:', error);
-      return NextResponse.json(
-        { error: 'Authentication failed' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 500 });
     }
   };
 }
@@ -641,8 +588,8 @@ export async function validateSession(sessionToken: string): Promise<Authenticat
   try {
     // This would typically validate a JWT or session token
     // For now, we'll use NextAuth's session validation
-    const session = await getServerSession(authOptions) as any;
-    
+    const session = (await getServerSession(authOptions)) as any;
+
     if (!session?.user?.email) {
       return null;
     }
@@ -679,9 +626,4 @@ export async function validateSession(sessionToken: string): Promise<Authenticat
 }
 
 // Export types
-export type {
-  AuthenticatedRequest,
-  AuthenticatedUser,
-  RateLimitConfig,
-  CORSConfig,
-}; 
+export type { AuthenticatedRequest, AuthenticatedUser, RateLimitConfig, CORSConfig };

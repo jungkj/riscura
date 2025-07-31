@@ -158,8 +158,9 @@ export default function FrameworkComplianceCheckPage() {
       interval = setInterval(() => {
         setTimeElapsed(prev => prev + 1);
       }, 1000);
-    }
-    return () => clearInterval(interval);
+    };
+
+  return () => clearInterval(interval);
   }, [assessmentInProgress]);
 
   const getAllRequirements = (framework: Framework) => {
@@ -264,8 +265,7 @@ export default function FrameworkComplianceCheckPage() {
             <DaisyButton
               variant="ghost"
               onClick={() => router.push('/dashboard/quick-actions')}
-              className="mb-4"
-            >
+              className="mb-4" />
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Quick Actions
             </DaisyButton>
@@ -275,8 +275,9 @@ export default function FrameworkComplianceCheckPage() {
                 <h1 className="text-3xl font-bold text-gray-900">Framework Compliance Check</h1>
                 <p className="text-gray-600 mt-1">Assess compliance against regulatory frameworks</p>
               </div>
-              <DaisyBadge variant="outline" className="text-sm">
-                <Clock className="h-4 w-4 mr-1" />
+              <DaisyBadge variant="outline" className="text-sm" >
+  <Clock className="h-4 w-4 mr-1" />
+</DaisyBadge>
                 25-35 min
               </DaisyBadge>
             </div>
@@ -291,25 +292,27 @@ export default function FrameworkComplianceCheckPage() {
                   <DaisyCard
                     key={framework.id}
                     className="hover:shadow-md transition-shadow cursor-pointer"
-                    onClick={() => setSelectedFramework(framework)}
-                  >
-                    <DaisyCardContent className="p-6">
-                      <div className="flex items-start justify-between">
+                    onClick={() => setSelectedFramework(framework)} />
+                    <DaisyCardContent className="p-6" >
+  <div className="flex items-start justify-between">
+</DaisyCard>
                         <div>
                           <h3 className="text-lg font-semibold text-gray-900">{framework.name}</h3>
                           <p className="text-gray-600 mt-1">{framework.description}</p>
                           <div className="flex items-center gap-4 mt-3">
-                            <DaisyBadge variant="outline">
-                              {framework.totalRequirements} Requirements
+                            <DaisyBadge variant="outline" >
+  {framework.totalRequirements} Requirements
+</DaisyBadge>
                             </DaisyBadge>
-                            <DaisyBadge variant="outline">
-                              {framework.categories.length} Categories
+                            <DaisyBadge variant="outline" >
+  {framework.categories.length} Categories
+</DaisyBadge>
                             </DaisyBadge>
                           </div>
                         </div>
                         <Shield className="h-8 w-8 text-gray-400" />
                       </div>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                 ))}
               </div>
@@ -318,12 +321,14 @@ export default function FrameworkComplianceCheckPage() {
 
           {selectedFramework && !assessmentInProgress && currentRequirementIndex === 0 && (
             /* Pre-Assessment */
-            <DaisyCard>
-              <DaisyCardHeader>
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                 <DaisyCardTitle>Ready to Start Assessment</DaisyCardTitle>
-              
-              <DaisyCardContent className="space-y-4">
-                <div className="p-4 bg-blue-50 rounded-lg">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4" >
+  <div className="p-4 bg-blue-50 rounded-lg">
+</DaisyCardContent>
                   <h3 className="font-medium text-blue-900 mb-2">Selected Framework</h3>
                   <p className="text-blue-800">{selectedFramework.name} - {selectedFramework.description}</p>
                 </div>
@@ -339,18 +344,18 @@ export default function FrameworkComplianceCheckPage() {
                 </div>
 
                 <div className="flex gap-3">
-                  <DaisyButton onClick={startAssessment} size="lg">
-                    <Play className="h-5 w-5 mr-2" />
+                  <DaisyButton onClick={startAssessment} size="lg" >
+  <Play className="h-5 w-5 mr-2" />
+</DaisyButton>
                     Start Assessment
                   </DaisyButton>
                   <DaisyButton
                     variant="outline"
-                    onClick={() => setSelectedFramework(null)}
-                  >
+                    onClick={() => setSelectedFramework(null)} />
                     Choose Different Framework
                   </DaisyButton>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           )}
 
@@ -358,8 +363,10 @@ export default function FrameworkComplianceCheckPage() {
             /* Assessment in Progress */
             <div className="space-y-6">
               {/* Progress Bar */}
-              <DaisyCard>
-                <DaisyCardContent className="p-6">
+              <DaisyCard >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <p className="text-sm text-gray-600">Assessment Progress</p>
@@ -374,26 +381,30 @@ export default function FrameworkComplianceCheckPage() {
                   <p className="text-sm text-gray-600 mt-2">
                     Requirement {currentRequirementIndex + 1} of {getAllRequirements(selectedFramework).length}
                   </p>
-                </DaisyCardBody>
+                </DaisyProgress>
               </DaisyCard>
 
               {/* Current Requirement */}
-              <DaisyCard>
-                <DaisyCardHeader>
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                   <div className="flex items-center justify-between">
-                    <DaisyCardTitle className="text-lg">
-                      {getAllRequirements(selectedFramework)[currentRequirementIndex].code} - 
+                    <DaisyCardTitle className="text-lg" >
+  {getAllRequirements(selectedFramework)[currentRequirementIndex].code} - 
+</DaisyCardTitle>
                       {getAllRequirements(selectedFramework)[currentRequirementIndex].title}
                     </DaisyCardTitle>
-                    <DaisyBadge variant="outline">
-                      {selectedFramework.categories.find(cat => 
+                    <DaisyBadge variant="outline" >
+  {selectedFramework.categories.find(cat => 
+</DaisyBadge>
                         cat.requirements.includes(getAllRequirements(selectedFramework)[currentRequirementIndex])
                       )?.name}
                     </DaisyBadge>
                   </div>
                 
-                <DaisyCardContent className="space-y-6">
-                  <div className="p-4 bg-gray-50 rounded-lg">
+                <DaisyCardContent className="space-y-6" >
+  <div className="p-4 bg-gray-50 rounded-lg">
+</DaisyCardContent>
                     <p className="text-gray-700">
                       {getAllRequirements(selectedFramework)[currentRequirementIndex].description}
                     </p>
@@ -406,8 +417,7 @@ export default function FrameworkComplianceCheckPage() {
                         size="lg"
                         variant="outline"
                         className="border-green-500 hover:bg-green-50"
-                        onClick={() => markRequirement('compliant')}
-                      >
+                        onClick={() => markRequirement('compliant')} />
                         <CheckCircle className="h-5 w-5 mr-2 text-green-600" />
                         Compliant
                       </DaisyButton>
@@ -415,8 +425,7 @@ export default function FrameworkComplianceCheckPage() {
                         size="lg"
                         variant="outline"
                         className="border-red-500 hover:bg-red-50"
-                        onClick={() => markRequirement('non-compliant')}
-                      >
+                        onClick={() => markRequirement('non-compliant')} />
                         <XCircle className="h-5 w-5 mr-2 text-red-600" />
                         Non-Compliant
                       </DaisyButton>
@@ -424,17 +433,16 @@ export default function FrameworkComplianceCheckPage() {
                         size="lg"
                         variant="outline"
                         className="border-yellow-500 hover:bg-yellow-50"
-                        onClick={() => markRequirement('partial')}
-                      >
-                        <DaisyAlertTriangle className="h-5 w-5 mr-2 text-yellow-600" />
-                        Partial
+                        onClick={() => markRequirement('partial')} />
+                        <DaisyAlertTriangle className="h-5 w-5 mr-2 text-yellow-600" >
+  Partial
+</DaisyButton>
                       </DaisyButton>
                       <DaisyButton
                         size="lg"
                         variant="outline"
                         className="border-gray-500 hover:bg-gray-50"
-                        onClick={() => markRequirement('not-assessed')}
-                      >
+                        onClick={() => markRequirement('not-assessed')} />
                         <Shield className="h-5 w-5 mr-2 text-gray-600" />
                         Skip
                       </DaisyButton>
@@ -442,16 +450,18 @@ export default function FrameworkComplianceCheckPage() {
                   </div>
 
                   <div className="flex justify-between pt-4 border-t">
-                    <DaisyButton variant="outline" onClick={pauseAssessment}>
-                      <Pause className="h-4 w-4 mr-2" />
+                    <DaisyButton variant="outline" onClick={pauseAssessment} >
+  <Pause className="h-4 w-4 mr-2" />
+</DaisyButton>
                       Pause
                     </DaisyButton>
-                    <DaisyButton variant="outline" onClick={resetAssessment}>
-                      <RotateCcw className="h-4 w-4 mr-2" />
+                    <DaisyButton variant="outline" onClick={resetAssessment} >
+  <RotateCcw className="h-4 w-4 mr-2" />
+</DaisyButton>
                       Reset
                     </DaisyButton>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </div>
           )}
@@ -459,23 +469,26 @@ export default function FrameworkComplianceCheckPage() {
           {/* Paused State */}
           {!assessmentInProgress && selectedFramework && currentRequirementIndex > 0 && 
            currentRequirementIndex < getAllRequirements(selectedFramework).length && (
-            <DaisyCard>
-              <DaisyCardContent className="p-12 text-center">
+            <DaisyCard >
+  <DaisyCardContent className="p-12 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
                 <Pause className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Assessment Paused</h3>
                 <p className="text-gray-600 mb-4">
                   You've completed {currentRequirementIndex} of {getAllRequirements(selectedFramework).length} requirements
                 </p>
                 <div className="flex gap-3 justify-center">
-                  <DaisyButton onClick={() => setAssessmentInProgress(true)}>
+                  <DaisyButton onClick={() => setAssessmentInProgress(true)} />
                     <Play className="h-4 w-4 mr-2" />
                     Resume Assessment
                   </DaisyButton>
-                  <DaisyButton variant="outline" onClick={resetAssessment}>
-                    Start Over
+                  <DaisyButton variant="outline" onClick={resetAssessment} >
+  Start Over
+</DaisyButton>
                   </DaisyButton>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           )}
         </div>

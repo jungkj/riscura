@@ -45,10 +45,13 @@ export const POST = withApiMiddleware(
       user.organizationId
     );
 
-    return NextResponse.json({
-      data: schedule,
-      message: 'Report schedule created successfully',
-    }, { status: 201 });
+    return NextResponse.json(
+      {
+        data: schedule,
+        message: 'Report schedule created successfully',
+      },
+      { status: 201 }
+    );
   },
   { requireAuth: true }
 );

@@ -9,4 +9,4 @@ export default function Dashboard() {
       <DashboardPage />
     </ProtectedRoute>
   );
-} 
+}

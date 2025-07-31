@@ -91,8 +91,18 @@ export const SparklesCore: React.FC<SparklesCoreProps> = ({
         particle.size * 2
       );
 
-      gradient.addColorStop(0, `${particle.color}${Math.floor(particle.opacity * 255).toString(16).padStart(2, '0')}`);
-      gradient.addColorStop(0.5, `${particle.color}${Math.floor(particle.opacity * 128).toString(16).padStart(2, '0')}`);
+      gradient.addColorStop(
+        0,
+        `${particle.color}${Math.floor(particle.opacity * 255)
+          .toString(16)
+          .padStart(2, '0')}`
+      );
+      gradient.addColorStop(
+        0.5,
+        `${particle.color}${Math.floor(particle.opacity * 128)
+          .toString(16)
+          .padStart(2, '0')}`
+      );
       gradient.addColorStop(1, `${particle.color}00`);
 
       ctx.fillStyle = gradient;
@@ -101,7 +111,9 @@ export const SparklesCore: React.FC<SparklesCoreProps> = ({
       ctx.fill();
 
       // Core sparkle
-      ctx.fillStyle = `${particle.color}${Math.floor(particle.opacity * 255).toString(16).padStart(2, '0')}`;
+      ctx.fillStyle = `${particle.color}${Math.floor(particle.opacity * 255)
+        .toString(16)
+        .padStart(2, '0')}`;
       ctx.beginPath();
       ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
       ctx.fill();
@@ -188,4 +200,4 @@ export const SparklesText: React.FC<SparklesTextProps> = ({
       <span className="relative z-10">{text}</span>
     </div>
   );
-}; 
+};

@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { 
-  checkDatabaseConnection, 
-  checkDatabaseConnectionDetailed, 
+import {
+  checkDatabaseConnection,
+  checkDatabaseConnectionDetailed,
   getDatabaseStatus,
-  connectDatabase 
+  connectDatabase,
 } from '@/lib/db';
 
 /**
  * Database Health Check API Endpoint
  * GET /api/health/database
- * 
+ *
  * Returns comprehensive database health information including:
  * - Connection status
  * - Performance metrics
@@ -18,23 +18,24 @@ import {
  */
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
-  
+
   try {
     // Get detailed database status
     const [basicStatus, detailedConnection] = await Promise.all([
       getDatabaseStatus(),
       checkDatabaseConnectionDetailed(),
     ]);
-    
+
     const responseTime = Date.now() - startTime;
-    
+
     // Determine overall health status
-    const overallStatus = basicStatus.status === 'healthy' && detailedConnection.isHealthy 
-      ? 'healthy' 
-      : basicStatus.status === 'degraded' 
-        ? 'degraded' 
-        : 'unhealthy';
-    
+    const overallStatus =
+      basicStatus.status === 'healthy' && detailedConnection.isHealthy
+        ? 'healthy'
+        : basicStatus.status === 'degraded'
+          ? 'degraded'
+          : 'unhealthy';
+
     const healthData = {
       status: overallStatus,
       timestamp: new Date().toISOString(),
@@ -49,11 +50,12 @@ export async function GET(request: NextRequest) {
         active: basicStatus.connections.active,
         max: basicStatus.connections.max,
         utilization: Math.round(basicStatus.connections.utilization * 100) / 100,
-        status: basicStatus.connections.utilization > 90 
-          ? 'critical' 
-          : basicStatus.connections.utilization > 70 
-            ? 'warning' 
-            : 'normal',
+        status:
+          basicStatus.connections.utilization > 90
+            ? 'critical'
+            : basicStatus.connections.utilization > 70
+              ? 'warning'
+              : 'normal',
       },
       performance: {
         averageResponseTime: basicStatus.performance.averageResponseTime,
@@ -67,7 +69,7 @@ export async function GET(request: NextRequest) {
           maxConnections: process.env.DB_CONNECTION_POOL_MAX || '50',
           minConnections: process.env.DB_CONNECTION_POOL_MIN || '5',
           acquireTimeout: process.env.DB_CONNECTION_POOL_ACQUIRE_TIMEOUT || '60000',
-        }
+        },
       },
       checks: {
         basicConnection: detailedConnection.isHealthy,
@@ -77,29 +79,29 @@ export async function GET(request: NextRequest) {
       },
       lastHealthCheck: basicStatus.lastHealthCheck,
     };
-    
+
     // Return appropriate HTTP status based on health
-    const httpStatus = overallStatus === 'healthy' 
-      ? 200 
-      : overallStatus === 'degraded' 
-        ? 200 // Still operational but with warnings
-        : 503; // Service unavailable
-    
-    return NextResponse.json(healthData, { 
+    const httpStatus =
+      overallStatus === 'healthy'
+        ? 200
+        : overallStatus === 'degraded'
+          ? 200 // Still operational but with warnings
+          : 503; // Service unavailable
+
+    return NextResponse.json(healthData, {
       status: httpStatus,
       headers: {
         'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0',
-      }
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
     });
-    
   } catch (error) {
     const responseTime = Date.now() - startTime;
     const errorMessage = error instanceof Error ? error.message : 'Unknown database error';
-    
+
     console.error('❌ Database health check failed:', error);
-    
+
     const errorResponse = {
       status: 'unhealthy',
       timestamp: new Date().toISOString(),
@@ -132,14 +134,14 @@ export async function GET(request: NextRequest) {
       error: errorMessage,
       lastHealthCheck: new Date(),
     };
-    
-    return NextResponse.json(errorResponse, { 
+
+    return NextResponse.json(errorResponse, {
       status: 503,
       headers: {
         'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0',
-      }
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
     });
   }
 }
@@ -175,7 +177,7 @@ export async function POST(request: NextRequest) {
         try {
           await connectDatabase();
           const healthCheck = await checkDatabaseConnection();
-          
+
           return NextResponse.json({
             success: true,
             message: 'Database reconnection successful',
@@ -209,7 +211,7 @@ export async function POST(request: NextRequest) {
     }
   } catch (error) {
     console.error('❌ Health check POST API error:', error);
-    
+
     return NextResponse.json(
       {
         success: false,
@@ -244,9 +246,9 @@ export async function OPTIONS() {
     },
     {
       headers: {
-        'Allow': 'GET, OPTIONS',
+        Allow: 'GET, OPTIONS',
         'Cache-Control': 'public, max-age=3600',
-      }
+      },
     }
   );
-} 
+}

@@ -120,7 +120,14 @@ export interface AuditConfiguration {
 }
 
 export interface AuditEventType {
-  category: 'authentication' | 'authorization' | 'data_access' | 'data_modification' | 'system_access' | 'configuration_change' | 'security_event';
+  category:
+    | 'authentication'
+    | 'authorization'
+    | 'data_access'
+    | 'data_modification'
+    | 'system_access'
+    | 'configuration_change'
+    | 'security_event';
   actions: string[];
   includeDetails: boolean;
   sensitive: boolean;
@@ -168,7 +175,13 @@ export interface DLPPolicy {
 export interface DLPRule {
   id: string;
   name: string;
-  type: 'pattern' | 'keyword' | 'document_classifier' | 'data_identifier' | 'file_type' | 'content_analysis';
+  type:
+    | 'pattern'
+    | 'keyword'
+    | 'document_classifier'
+    | 'data_identifier'
+    | 'file_type'
+    | 'content_analysis';
   pattern?: string;
   keywords?: string[];
   sensitivity: 'low' | 'medium' | 'high' | 'critical';
@@ -177,7 +190,15 @@ export interface DLPRule {
 }
 
 export interface DLPAction {
-  type: 'log' | 'alert' | 'block' | 'encrypt' | 'watermark' | 'quarantine' | 'notify_admin' | 'notify_user';
+  type:
+    | 'log'
+    | 'alert'
+    | 'block'
+    | 'encrypt'
+    | 'watermark'
+    | 'quarantine'
+    | 'notify_admin'
+    | 'notify_user';
   parameters?: Record<string, any>;
 }
 
@@ -208,7 +229,12 @@ export interface ThreatDetectionConfiguration {
 
 export interface AnomalyDetectionConfig {
   enabled: boolean;
-  algorithms: ('isolation_forest' | 'one_class_svm' | 'local_outlier_factor' | 'gaussian_mixture')[];
+  algorithms: (
+    | 'isolation_forest'
+    | 'one_class_svm'
+    | 'local_outlier_factor'
+    | 'gaussian_mixture'
+  )[];
   sensitivityLevel: 'low' | 'medium' | 'high';
   learningPeriodDays: number;
   alertThreshold: number;
@@ -237,7 +263,13 @@ export interface BehaviorAnalysisConfig {
 }
 
 export interface BehaviorRiskFactor {
-  factor: 'login_time' | 'login_location' | 'access_pattern' | 'data_volume' | 'failed_attempts' | 'privilege_escalation';
+  factor:
+    | 'login_time'
+    | 'login_location'
+    | 'access_pattern'
+    | 'data_volume'
+    | 'failed_attempts'
+    | 'privilege_escalation';
   weight: number;
   enabled: boolean;
 }
@@ -263,7 +295,12 @@ export interface ThreatIntelligenceConfig {
 export interface ThreatIntelligenceFeed {
   id: string;
   name: string;
-  type: 'ip_reputation' | 'domain_reputation' | 'malware_signatures' | 'phishing_urls' | 'threat_actors';
+  type:
+    | 'ip_reputation'
+    | 'domain_reputation'
+    | 'malware_signatures'
+    | 'phishing_urls'
+    | 'threat_actors';
   url: string;
   format: 'stix' | 'misp' | 'json' | 'csv' | 'xml';
   authentication?: Record<string, any>;
@@ -295,14 +332,26 @@ export interface AutomatedResponseRule {
 }
 
 export interface ResponseTrigger {
-  type: 'threat_score' | 'anomaly_detected' | 'policy_violation' | 'failed_login_threshold' | 'suspicious_activity';
+  type:
+    | 'threat_score'
+    | 'anomaly_detected'
+    | 'policy_violation'
+    | 'failed_login_threshold'
+    | 'suspicious_activity';
   condition: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'matches';
   value: any;
   timeWindow?: number;
 }
 
 export interface ResponseAction {
-  type: 'block_ip' | 'suspend_user' | 'force_logout' | 'require_mfa' | 'alert_admin' | 'quarantine_device' | 'increase_monitoring';
+  type:
+    | 'block_ip'
+    | 'suspend_user'
+    | 'force_logout'
+    | 'require_mfa'
+    | 'alert_admin'
+    | 'quarantine_device'
+    | 'increase_monitoring';
   parameters?: Record<string, any>;
   duration?: number;
   reversible: boolean;
@@ -368,7 +417,12 @@ export interface SuppressionRule {
 export interface SecurityReport {
   id: string;
   name: string;
-  type: 'compliance' | 'threat_summary' | 'user_activity' | 'incident_report' | 'vulnerability_assessment';
+  type:
+    | 'compliance'
+    | 'threat_summary'
+    | 'user_activity'
+    | 'incident_report'
+    | 'vulnerability_assessment';
   schedule: ReportSchedule;
   format: 'pdf' | 'html' | 'json' | 'csv';
   recipients: string[];
@@ -535,7 +589,12 @@ export interface RenewalProcess {
   start_date: Date;
   submission_deadline: Date;
   audit_scheduled?: Date;
-  status: 'not_started' | 'documentation' | 'audit_scheduled' | 'audit_complete' | 'decision_pending';
+  status:
+    | 'not_started'
+    | 'documentation'
+    | 'audit_scheduled'
+    | 'audit_complete'
+    | 'decision_pending';
   tasks: RenewalTask[];
 }
 
@@ -556,7 +615,11 @@ export interface SurveillanceAudit {
   auditor: string;
   scope: string[];
   findings: AssessmentFinding[];
-  outcome: 'satisfactory' | 'minor_nonconformities' | 'major_nonconformities' | 'certificate_suspended';
+  outcome:
+    | 'satisfactory'
+    | 'minor_nonconformities'
+    | 'major_nonconformities'
+    | 'certificate_suspended';
 }
 
 export interface AuditPreparation {
@@ -587,7 +650,14 @@ export interface DataRetentionPolicy {
 }
 
 export interface CategoryRetentionPolicy {
-  category: 'audit_logs' | 'user_data' | 'financial_records' | 'communication' | 'system_logs' | 'backups' | 'session_data';
+  category:
+    | 'audit_logs'
+    | 'user_data'
+    | 'financial_records'
+    | 'communication'
+    | 'system_logs'
+    | 'backups'
+    | 'session_data';
   retention_period: number;
   archive_after: number;
   purge_method: 'secure_delete' | 'cryptographic_erasure' | 'physical_destruction';
@@ -863,7 +933,13 @@ export interface AutomationCondition {
 }
 
 export interface AutomationAction {
-  type: 'isolate_system' | 'block_user' | 'collect_evidence' | 'notify_team' | 'create_ticket' | 'run_script';
+  type:
+    | 'isolate_system'
+    | 'block_user'
+    | 'collect_evidence'
+    | 'notify_team'
+    | 'create_ticket'
+    | 'run_script';
   parameters: Record<string, any>;
   timeout: number;
   retryAttempts: number;
@@ -921,7 +997,14 @@ export interface SecurityAuditEvent {
   userId?: string;
   sessionId?: string;
   eventType: string;
-  category: 'authentication' | 'authorization' | 'data_access' | 'data_modification' | 'system_access' | 'configuration_change' | 'security_event';
+  category:
+    | 'authentication'
+    | 'authorization'
+    | 'data_access'
+    | 'data_modification'
+    | 'system_access'
+    | 'configuration_change'
+    | 'security_event';
   action: string;
   resource?: string;
   resourceId?: string;
@@ -967,9 +1050,24 @@ export interface SecurityIncident {
   organizationId: string;
   title: string;
   description: string;
-  type: 'data_breach' | 'unauthorized_access' | 'malware' | 'phishing' | 'ddos' | 'insider_threat' | 'policy_violation' | 'system_compromise';
+  type:
+    | 'data_breach'
+    | 'unauthorized_access'
+    | 'malware'
+    | 'phishing'
+    | 'ddos'
+    | 'insider_threat'
+    | 'policy_violation'
+    | 'system_compromise';
   severity: 'low' | 'medium' | 'high' | 'critical';
-  status: 'new' | 'investigating' | 'contained' | 'eradicated' | 'recovery' | 'closed' | 'false_positive';
+  status:
+    | 'new'
+    | 'investigating'
+    | 'contained'
+    | 'eradicated'
+    | 'recovery'
+    | 'closed'
+    | 'false_positive';
   priority: 'low' | 'medium' | 'high' | 'critical';
   assignedTo?: string;
   reportedBy: string;
@@ -1013,7 +1111,14 @@ export interface IncidentTimelineEntry {
 
 export interface IncidentEvidence {
   id: string;
-  type: 'log' | 'screenshot' | 'file' | 'network_capture' | 'memory_dump' | 'disk_image' | 'witness_statement';
+  type:
+    | 'log'
+    | 'screenshot'
+    | 'file'
+    | 'network_capture'
+    | 'memory_dump'
+    | 'disk_image'
+    | 'witness_statement';
   name: string;
   description: string;
   collectedBy: string;
@@ -1250,4 +1355,4 @@ export interface AdversarialDefense {
   type: 'adversarial_training' | 'input_transformation' | 'ensemble' | 'detection_and_rejection';
   parameters: Record<string, any>;
   effectiveness_score: number;
-} 
+}

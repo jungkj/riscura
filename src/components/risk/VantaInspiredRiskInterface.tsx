@@ -205,7 +205,9 @@ const VantaInspiredRiskInterface = () => {
       case 'Mitigated':
         return <CheckCircle2 className="w-4 h-4" />;
       case 'Active':
-        return <DaisyAlertCircle className="w-4 h-4" />;
+        return <DaisyAlertCircle className="w-4 h-4" >
+  ;
+</DaisyAlertCircle>
       case 'In Progress':
         return <Clock className="w-4 h-4" />;
       case 'Accepted':
@@ -308,31 +310,29 @@ const VantaInspiredRiskInterface = () => {
             </div>
             
             {/* Filters */}
-            <DaisySelect value={filterSeverity} onValueChange={setFilterSeverity}>
-              <DaisySelectTrigger className="w-32">
-                <DaisySelectValue placeholder="Severity" />
-              </SelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="all">All Severity</SelectItem>
-                <DaisySelectItem value="Critical">Critical</SelectItem>
-                <DaisySelectItem value="High">High</SelectItem>
-                <DaisySelectItem value="Medium">Medium</SelectItem>
-                <DaisySelectItem value="Low">Low</SelectItem>
-              </SelectContent>
+            <DaisySelect value={filterSeverity} onValueChange={setFilterSeverity} />
+              <DaisySelectTrigger className="w-32" />
+                <DaisySelectValue placeholder="Severity" /></DaisyInput>
+              <DaisySelectContent />
+                <DaisySelectItem value="all">All Severity</DaisySelectContent>
+                <DaisySelectItem value="Critical">Critical</DaisySelectItem>
+                <DaisySelectItem value="High">High</DaisySelectItem>
+                <DaisySelectItem value="Medium">Medium</DaisySelectItem>
+                <DaisySelectItem value="Low">Low</DaisySelectItem>
+              </DaisySelectContent>
             </DaisySelect>
 
-            <DaisySelect value={filterStatus} onValueChange={setFilterStatus}>
-              <DaisySelectTrigger className="w-32">
-                <DaisySelectValue placeholder="Status" />
-              </SelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="all">All Status</SelectItem>
-                <DaisySelectItem value="Active">Active</SelectItem>
-                <DaisySelectItem value="In Progress">In Progress</SelectItem>
-                <DaisySelectItem value="Mitigated">Mitigated</SelectItem>
-                <DaisySelectItem value="Accepted">Accepted</SelectItem>
-                <DaisySelectItem value="Closed">Closed</SelectItem>
-              </SelectContent>
+            <DaisySelect value={filterStatus} onValueChange={setFilterStatus} />
+              <DaisySelectTrigger className="w-32" />
+                <DaisySelectValue placeholder="Status" /></DaisySelect>
+              <DaisySelectContent />
+                <DaisySelectItem value="all">All Status</DaisySelectContent>
+                <DaisySelectItem value="Active">Active</DaisySelectItem>
+                <DaisySelectItem value="In Progress">In Progress</DaisySelectItem>
+                <DaisySelectItem value="Mitigated">Mitigated</DaisySelectItem>
+                <DaisySelectItem value="Accepted">Accepted</DaisySelectItem>
+                <DaisySelectItem value="Closed">Closed</DaisySelectItem>
+              </DaisySelectContent>
             </DaisySelect>
             
             {/* View Mode Toggle */}
@@ -341,27 +341,27 @@ const VantaInspiredRiskInterface = () => {
                 variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
                 size="sm"
                 onClick={() => setViewMode('grid')}
-                className="h-8 w-8 p-0"
-              >
+                className="h-8 w-8 p-0" />
                 <Grid3X3 className="w-4 h-4" />
               </DaisyButton>
               <DaisyButton
                 variant={viewMode === 'list' ? 'secondary' : 'ghost'}
                 size="sm"
                 onClick={() => setViewMode('list')}
-                className="h-8 w-8 p-0"
-              >
+                className="h-8 w-8 p-0" />
                 <List className="w-4 h-4" />
               </DaisyButton>
             </div>
             
             {/* Action Buttons */}
-            <DaisyButton variant="outline" size="sm">
-              <Download className="w-4 h-4 mr-2" />
+            <DaisyButton variant="outline" size="sm" >
+  <Download className="w-4 h-4 mr-2" />
+</DaisyButton>
               Export
             </DaisyButton>
-            <DaisyButton className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white">
-              <Plus className="w-4 h-4 mr-2" />
+            <DaisyButton className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white" >
+  <Plus className="w-4 h-4 mr-2" />
+</DaisyButton>
               New Risk
             </DaisyButton>
           </div>
@@ -373,32 +373,37 @@ const VantaInspiredRiskInterface = () => {
         <div className="flex items-center space-x-8">
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-600">Total Risks:</span>
-            <DaisyBadge variant="outline" className="font-medium">
-              {stats.total}
+            <DaisyBadge variant="outline" className="font-medium" >
+  {stats.total}
+</DaisyBadge>
             </DaisyBadge>
           </div>
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-600">Critical:</span>
-            <DaisyBadge className="bg-red-100 text-red-800 border-red-200">
-              {stats.critical}
+            <DaisyBadge className="bg-red-100 text-red-800 border-red-200" >
+  {stats.critical}
+</DaisyBadge>
             </DaisyBadge>
           </div>
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-600">Open:</span>
-            <DaisyBadge className="bg-orange-100 text-orange-800 border-orange-200">
-              {stats.open}
+            <DaisyBadge className="bg-orange-100 text-orange-800 border-orange-200" >
+  {stats.open}
+</DaisyBadge>
             </DaisyBadge>
           </div>
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-600">Overdue:</span>
-            <DaisyBadge className="bg-red-100 text-red-800 border-red-200">
-              {stats.overdue}
+            <DaisyBadge className="bg-red-100 text-red-800 border-red-200" >
+  {stats.overdue}
+</DaisyBadge>
             </DaisyBadge>
           </div>
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-600">Showing:</span>
-            <DaisyBadge variant="outline">
-              {filteredRisks.length} of {stats.total}
+            <DaisyBadge variant="outline" >
+  {filteredRisks.length} of {stats.total}
+</DaisyBadge>
             </DaisyBadge>
           </div>
         </div>
@@ -406,41 +411,37 @@ const VantaInspiredRiskInterface = () => {
 
       {/* Main Content */}
       <div className="p-6">
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6" />
           {/* Tab Navigation */}
-          <DaisyTabsList className="grid w-full grid-cols-4 lg:w-auto lg:grid-cols-4 bg-gray-100 p-1 rounded-lg">
+          <DaisyTabsList className="grid w-full grid-cols-4 lg:w-auto lg:grid-cols-4 bg-gray-100 p-1 rounded-lg" />
             <DaisyTabsTrigger 
               value="register" 
-              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm"
-            >
+              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm" />
               <List className="w-4 h-4 mr-2" />
               Risk Register
-            </DaisyTabsTrigger>
+            </DaisyTabs>
             <DaisyTabsTrigger 
               value="heatmap"
-              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm"
-            >
+              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm" />
               <BarChart3 className="w-4 h-4 mr-2" />
               Risk Heatmap
             </DaisyTabsTrigger>
             <DaisyTabsTrigger 
               value="library"
-              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm"
-            >
+              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm" />
               <BookOpen className="w-4 h-4 mr-2" />
               Risk Library
             </DaisyTabsTrigger>
             <DaisyTabsTrigger 
               value="analytics"
-              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm"
-            >
+              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm" />
               <BarChart3 className="w-4 h-4 mr-2" />
               Analytics
             </DaisyTabsTrigger>
           </DaisyTabsList>
 
           {/* Tab Content */}
-          <DaisyTabsContent value="register" className="space-y-6">
+          <DaisyTabsContent value="register" className="space-y-6" />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredRisks.map((risk, index) => (
                 <RiskCard
@@ -466,7 +467,7 @@ const VantaInspiredRiskInterface = () => {
             )}
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="heatmap" className="space-y-6">
+          <DaisyTabsContent value="heatmap" className="space-y-6" />
             <div className="text-center py-12">
               <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">Risk Heatmap</h3>
@@ -476,7 +477,7 @@ const VantaInspiredRiskInterface = () => {
             </div>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="library" className="space-y-6">
+          <DaisyTabsContent value="library" className="space-y-6" />
             <div className="text-center py-12">
               <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">Risk Library</h3>
@@ -486,7 +487,7 @@ const VantaInspiredRiskInterface = () => {
             </div>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="analytics" className="space-y-6">
+          <DaisyTabsContent value="analytics" className="space-y-6" />
             <div className="text-center py-12">
               <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">Risk Analytics</h3>
@@ -500,9 +501,10 @@ const VantaInspiredRiskInterface = () => {
 
       {/* Risk Detail Modal */}
       {selectedRisk && (
-        <DaisyDialog open={!!selectedRisk} onOpenChange={() => setSelectedRisk(null)}>
-          <DaisyDialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DaisyDialogHeader>
+        <DaisyDialog open={!!selectedRisk} onOpenChange={() => setSelectedRisk(null)} />
+          <DaisyDialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" >
+  <DaisyDialogHeader />
+</DaisyDialog>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <DaisyDialogTitle className="text-xl">{selectedRisk.title}</DaisyDialogTitle>
@@ -515,12 +517,14 @@ const VantaInspiredRiskInterface = () => {
                   </DaisyBadge>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <DaisyButton variant="outline" size="sm">
-                    <Edit className="w-4 h-4 mr-2" />
+                  <DaisyButton variant="outline" size="sm" >
+  <Edit className="w-4 h-4 mr-2" />
+</DaisyButton>
                     Edit
                   </DaisyButton>
-                  <DaisyButton variant="outline" size="sm">
-                    <History className="w-4 h-4 mr-2" />
+                  <DaisyButton variant="outline" size="sm" >
+  <History className="w-4 h-4 mr-2" />
+</DaisyButton>
                     History
                   </DaisyButton>
                 </div>
@@ -607,8 +611,9 @@ const VantaInspiredRiskInterface = () => {
                   <h4 className="font-medium text-gray-900 mb-2">Linked Vendors</h4>
                   <div className="flex flex-wrap gap-2">
                     {selectedRisk.linkedVendors.map((vendor, index) => (
-                      <DaisyBadge key={index} variant="outline" className="text-xs">
-                        {vendor}
+                      <DaisyBadge key={index} variant="outline" className="text-xs" >
+  {vendor}
+</DaisyBadge>
                       </DaisyBadge>
                     ))}
                   </div>

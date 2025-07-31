@@ -558,20 +558,20 @@ export default function QuickActionsPage() {
             <div className="flex items-center gap-4">
               <HighContrastToggle variant="badge" size="sm" showLabel={false} />
               
-              <DaisyTooltipProvider>
-                <DaisyTooltip>
-                  <DaisyTooltipTrigger asChild>
+              <DaisyTooltipProvider />
+                <DaisyTooltip />
+                  <DaisyTooltipTrigger asChild />
                     <DaisyButton
                       variant="secondary"
                       size="sm"
                       onClick={startGuidedTour}
-                      className="flex items-center gap-2"
-                    >
-                      <Play className="w-4 h-4" />
+                      className="flex items-center gap-2" >
+  <Play className="w-4 h-4" />
+</DaisyTooltipProvider>
                       Getting Started
                     </DaisyButton>
                   </DaisyTooltipTrigger>
-                  <DaisyTooltipContent>
+                  <DaisyTooltipContent />
                     <p>Take a guided tour of the platform</p>
                   </DaisyTooltipContent>
                 </DaisyTooltip>
@@ -592,8 +592,10 @@ export default function QuickActionsPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <DaisyCard className="bg-white border-gray-200 hover:shadow-md transition-shadow">
-                <DaisyCardContent className="p-6">
+              <DaisyCard className="bg-white border-gray-200 hover:shadow-md transition-shadow" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-contrast-low">{stat.label}</p>
@@ -611,15 +613,17 @@ export default function QuickActionsPage() {
                       <stat.icon className="w-6 h-6" style={{ color: stat.color }} />
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </motion.div>
           ))}
         </div>
 
         {/* Search and Filters */}
-        <DaisyCard className="bg-white border-gray-200 mb-8">
-          <DaisyCardContent className="p-6">
+        <DaisyCard className="bg-white border-gray-200 mb-8" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex flex-col lg:flex-row gap-4">
               {/* Search */}
               <div className="flex-1">
@@ -640,11 +644,10 @@ export default function QuickActionsPage() {
                   variant={showFavoritesOnly ? "primary" : "secondary"}
                   size="sm"
                   onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-                  className="flex items-center gap-2"
-                >
+                  className="flex items-center gap-2" />
                   <Star className={`w-4 h-4 ${showFavoritesOnly ? 'fill-current' : ''}`} />
                   Favorites Only
-                </DaisyButton>
+                </DaisyInput>
 
                 <select
                   value={selectedCategory}
@@ -660,7 +663,7 @@ export default function QuickActionsPage() {
                 </select>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Workflow Categories */}
@@ -674,8 +677,9 @@ export default function QuickActionsPage() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: categoryIndex * 0.1 }}
               >
-                <DaisyCard className="bg-white border-gray-200">
-                  <DaisyCardHeader className="pb-4">
+                <DaisyCard className="bg-white border-gray-200" >
+  <DaisyCardHeader className="pb-4" />
+</DaisyCard>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div 
@@ -685,8 +689,9 @@ export default function QuickActionsPage() {
                           <category.icon className="w-6 h-6" style={{ color: category.color }} />
                         </div>
                         <div>
-                          <DaisyCardTitle className="text-xl font-bold text-contrast-medium font-inter">
-                            {category.title}
+                          <DaisyCardTitle className="text-xl font-bold text-contrast-medium font-inter" >
+  {category.title}
+</DaisyCardTitle>
                           </DaisyCardTitle>
                           <p className="text-contrast-low font-inter mt-1">
                             {category.description}
@@ -707,8 +712,9 @@ export default function QuickActionsPage() {
                       </div>
                     </div>
                   
-                  <DaisyCardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+</DaisyCardContent>
                       {category.actions.map((action, actionIndex) => (
                         <motion.div
                           key={action.id}
@@ -717,8 +723,10 @@ export default function QuickActionsPage() {
                           transition={{ delay: (categoryIndex * 0.1) + (actionIndex * 0.05) }}
                           className="group"
                         >
-                          <DaisyCard className="h-full bg-gray-50 border-gray-200 hover:shadow-md hover:border-interactive-primary/30 transition-all duration-200 cursor-pointer">
-                            <DaisyCardContent className="p-4 h-full flex flex-col">
+                          <DaisyCard className="h-full bg-gray-50 border-gray-200 hover:shadow-md hover:border-interactive-primary/30 transition-all duration-200 cursor-pointer" >
+  <DaisyCardContent className="p-4 h-full flex flex-col" >
+  </DaisyCard>
+</DaisyCardContent>
                               {/* Action Header */}
                               <div className="flex items-start justify-between mb-3">
                                 <div 
@@ -731,9 +739,9 @@ export default function QuickActionsPage() {
                                   {action.isNew && (
                                     <DaisyBadge className="bg-blue-100 text-blue-700 text-xs">New</DaisyBadge>
                                   )}
-                                  <DaisyTooltipProvider>
-                                    <DaisyTooltip>
-                                      <DaisyTooltipTrigger asChild>
+                                  <DaisyTooltipProvider />
+                                    <DaisyTooltip />
+                                      <DaisyTooltipTrigger asChild />
                                         <DaisyButton
                                           variant="ghost"
                                           size="sm"
@@ -750,9 +758,9 @@ export default function QuickActionsPage() {
                                                 : 'text-gray-400'
                                             }`} 
                                           />
-                                        </DaisyButton>
+                                        </DaisyTooltipProvider>
                                       </DaisyTooltipTrigger>
-                                      <DaisyTooltipContent>
+                                      <DaisyTooltipContent />
                                         <p>{favorites.includes(action.id) ? 'Remove from favorites' : 'Add to favorites'}</p>
                                       </DaisyTooltipContent>
                                     </DaisyTooltip>
@@ -795,24 +803,26 @@ export default function QuickActionsPage() {
                               <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
                                 <div className="flex flex-wrap gap-1">
                                   {action.tags.slice(0, 2).map(tag => (
-                                    <DaisyBadge key={tag} variant="secondary" className="text-xs">
-                                      {tag}
+                                    <DaisyBadge key={tag} variant="secondary" className="text-xs" >
+  {tag}
+</DaisyBadge>
                                     </DaisyBadge>
                                   ))}
                                   {action.tags.length > 2 && (
-                                    <DaisyBadge variant="secondary" className="text-xs">
-                                      +{action.tags.length - 2}
+                                    <DaisyBadge variant="secondary" className="text-xs" >
+  +{action.tags.length - 2}
+</DaisyBadge>
                                     </DaisyBadge>
                                   )}
                                 </div>
                                 <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-interactive-primary group-hover:translate-x-1 transition-all" />
                               </div>
-                            </DaisyCardBody>
+                            </DaisyCardContent>
                           </DaisyCard>
                         </motion.div>
                       ))}
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               </motion.div>
             ))}
@@ -845,8 +855,10 @@ export default function QuickActionsPage() {
         )}
 
         {/* Help Section */}
-        <DaisyCard className="bg-blue-50 border-blue-200 mt-8">
-          <DaisyCardContent className="p-6">
+        <DaisyCard className="bg-blue-50 border-blue-200 mt-8" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                 <HelpCircle className="w-6 h-6 text-blue-600" />
@@ -863,24 +875,23 @@ export default function QuickActionsPage() {
                       variant="primary"
                       size="sm"
                       onClick={startGuidedTour}
-                      className="flex items-center gap-2"
-                    >
-                    <Play className="w-4 h-4" />
+                      className="flex items-center gap-2" >
+  <Play className="w-4 h-4" />
+</DaisyButton>
                     Start Guided Tour
                   </DaisyButton>
                   <DaisyButton
                     variant="secondary"
                     size="sm"
                     onClick={() => router.push('/dashboard/help')}
-                    className="flex items-center gap-2"
-                  >
+                    className="flex items-center gap-2" />
                     <BookOpen className="w-4 h-4" />
                     View Documentation
                   </DaisyButton>
                 </div>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </main>
 

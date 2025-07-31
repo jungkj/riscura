@@ -8,47 +8,47 @@ export interface EnhancedControl extends Control {
   controlType: 'preventive' | 'detective' | 'corrective' | 'compensating';
   controlNature: 'manual' | 'automated' | 'hybrid';
   frequency: 'continuous' | 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually';
-  
+
   // Relationships
   mappedRisks: string[]; // Risk IDs
   parentControls: string[]; // Parent control IDs
   childControls: string[]; // Child control IDs
   relatedControls: string[]; // Related control IDs
-  
+
   // Effectiveness and Performance
   maturityLevel: 1 | 2 | 3 | 4 | 5; // Maturity scoring
   effectivenessScore: number; // 0-100
   performanceMetrics: ControlMetrics;
   testingHistory: ControlTest[];
-  
+
   // AI-Powered Features
   aiAssessment?: ControlAIAssessment;
   aiRecommendations: AIControlRecommendation[];
   riskMitigationEffectiveness: RiskMitigationScore[];
-  
+
   // Testing and Validation (use different property names to avoid conflicts)
   testingSchedule: TestingSchedule;
   testingStatus: 'not_tested' | 'scheduled' | 'in_progress' | 'passed' | 'failed' | 'overdue';
   lastTestPerformed?: Date; // renamed from lastTestDate to avoid conflict
   nextTestScheduled?: Date; // renamed from nextTestDate to avoid conflict
   testingEvidence: ControlEvidence[];
-  
+
   // Compliance and Frameworks
   complianceMapping: ComplianceMapping[];
   regulatoryRequirements: string[];
   industryBenchmarks: IndustryBenchmark[];
-  
+
   // Collaboration and Workflow
   assignments: ControlAssignment[];
   reviews: ControlReview[];
   approvals: ControlApproval[];
   controlComments: ControlComment[];
-  
+
   // Documentation and Evidence
   procedures: ControlProcedure[];
   evidenceRequirements: EvidenceRequirement[];
   auditTrail: ControlAuditEntry[];
-  
+
   // Performance Analytics
   trendData: ControlTrendData[];
   benchmarkComparison: BenchmarkComparison;
@@ -59,7 +59,16 @@ export interface ControlFramework {
   id: string;
   name: string;
   version: string;
-  category: 'SOC2' | 'ISO27001' | 'NIST' | 'PCI-DSS' | 'HIPAA' | 'GDPR' | 'SOX' | 'COBIT' | 'Custom';
+  category:
+    | 'SOC2'
+    | 'ISO27001'
+    | 'NIST'
+    | 'PCI-DSS'
+    | 'HIPAA'
+    | 'GDPR'
+    | 'SOX'
+    | 'COBIT'
+    | 'Custom';
   domain: string;
   subdomain?: string;
   controlObjective: string;
@@ -565,4 +574,4 @@ export interface ControlExportOptions {
   includeDeficiencies: boolean;
   dateRange?: { start: Date; end: Date };
   frameworks?: string[];
-} 
+}

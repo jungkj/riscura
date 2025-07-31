@@ -30,7 +30,7 @@ const sampleRiskData: RiskRecord[] = [
     riskLevel: 'critical',
     owner: {
       name: 'Sarah Chen',
-      email: 'sarah.chen@company.com'
+      email: 'sarah.chen@company.com',
     },
     progress: 25,
     dueDate: new Date('2024-02-15'),
@@ -43,7 +43,7 @@ const sampleRiskData: RiskRecord[] = [
     riskLevel: 'high',
     owner: {
       name: 'Michael Rodriguez',
-      email: 'michael.rodriguez@company.com'
+      email: 'michael.rodriguez@company.com',
     },
     progress: 85,
     dueDate: new Date('2024-01-30'),
@@ -56,7 +56,7 @@ const sampleRiskData: RiskRecord[] = [
     riskLevel: 'medium',
     owner: {
       name: 'Emma Johnson',
-      email: 'emma.johnson@company.com'
+      email: 'emma.johnson@company.com',
     },
     progress: 60,
     dueDate: new Date('2024-03-01'),
@@ -69,7 +69,7 @@ const sampleRiskData: RiskRecord[] = [
     riskLevel: 'high',
     owner: {
       name: 'David Park',
-      email: 'david.park@company.com'
+      email: 'david.park@company.com',
     },
     progress: 10,
     dueDate: new Date('2024-02-01'),
@@ -82,7 +82,7 @@ const sampleRiskData: RiskRecord[] = [
     riskLevel: 'low',
     owner: {
       name: 'Lisa Wang',
-      email: 'lisa.wang@company.com'
+      email: 'lisa.wang@company.com',
     },
     progress: 100,
     dueDate: new Date('2024-01-25'),
@@ -216,12 +216,12 @@ export const RiskRegisterTable: React.FC = () => {
         },
         {
           label: 'open risks',
-          value: sampleRiskData.filter(r => r.status === 'open').length,
+          value: sampleRiskData.filter((r) => r.status === 'open').length,
           variant: 'destructive',
         },
         {
           label: 'mitigated',
-          value: sampleRiskData.filter(r => r.status === 'mitigated').length,
+          value: sampleRiskData.filter((r) => r.status === 'mitigated').length,
           variant: 'success',
         },
       ]}
@@ -261,7 +261,7 @@ const sampleControlData: ControlRecord[] = [
     lastTested: new Date('2024-01-10'),
     owner: {
       name: 'Alex Kim',
-      email: 'alex.kim@company.com'
+      email: 'alex.kim@company.com',
     },
   },
   {
@@ -273,7 +273,7 @@ const sampleControlData: ControlRecord[] = [
     lastTested: new Date('2024-01-08'),
     owner: {
       name: 'Maria Santos',
-      email: 'maria.santos@company.com'
+      email: 'maria.santos@company.com',
     },
   },
   {
@@ -285,7 +285,7 @@ const sampleControlData: ControlRecord[] = [
     lastTested: new Date('2024-01-05'),
     owner: {
       name: 'John Smith',
-      email: 'john.smith@company.com'
+      email: 'john.smith@company.com',
     },
   },
 ];
@@ -382,4 +382,4 @@ export const ControlsTable: React.FC = () => {
   );
 };
 
-export default { RiskRegisterTable, ControlsTable }; 
+export default { RiskRegisterTable, ControlsTable };

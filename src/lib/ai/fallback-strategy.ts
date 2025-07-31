@@ -20,7 +20,7 @@ export class AIFallbackStrategy {
   private riskTemplates: Map<string, RiskTemplate> = new Map();
   private staticResponses: Map<string, string> = new Map();
   private offlineKnowledgeBase: Map<string, any> = new Map();
-  
+
   constructor() {
     this.initializeTemplates();
     this.initializeStaticResponses();
@@ -32,15 +32,16 @@ export class AIFallbackStrategy {
    */
   async getRiskAnalysisFallback(risk: Risk): Promise<FallbackResponse> {
     const template = this.riskTemplates.get(risk.category.toLowerCase());
-    
+
     if (template) {
       const content = this.generateRiskAnalysisFromTemplate(risk, template);
       return {
         content,
         confidence: 0.6,
         fallbackType: 'template',
-        disclaimer: 'This response is generated from pre-configured templates. AI analysis is currently unavailable.',
-        actionable: true
+        disclaimer:
+          'This response is generated from pre-configured templates. AI analysis is currently unavailable.',
+        actionable: true,
       };
     }
 
@@ -51,7 +52,7 @@ export class AIFallbackStrategy {
       confidence: 0.4,
       fallbackType: 'static',
       disclaimer: 'This is a basic risk analysis. Enhanced AI insights are currently unavailable.',
-      actionable: true
+      actionable: true,
     };
   }
 
@@ -60,15 +61,16 @@ export class AIFallbackStrategy {
    */
   async getControlRecommendationsFallback(risk: Risk): Promise<FallbackResponse> {
     const template = this.riskTemplates.get(risk.category.toLowerCase());
-    
+
     if (template) {
       const content = this.generateControlRecommendationsFromTemplate(risk, template);
       return {
         content,
         confidence: 0.7,
         fallbackType: 'template',
-        disclaimer: 'Control recommendations based on industry best practices. AI optimization unavailable.',
-        actionable: true
+        disclaimer:
+          'Control recommendations based on industry best practices. AI optimization unavailable.',
+        actionable: true,
       };
     }
 
@@ -77,8 +79,9 @@ export class AIFallbackStrategy {
       content: basicRecommendations,
       confidence: 0.5,
       fallbackType: 'static',
-      disclaimer: 'Basic control recommendations. Enhanced AI suggestions are currently unavailable.',
-      actionable: true
+      disclaimer:
+        'Basic control recommendations. Enhanced AI suggestions are currently unavailable.',
+      actionable: true,
     };
   }
 
@@ -88,14 +91,15 @@ export class AIFallbackStrategy {
   async getGeneralAssistanceFallback(query: string): Promise<FallbackResponse> {
     const queryType = this.categorizeQuery(query);
     const staticResponse = this.staticResponses.get(queryType);
-    
+
     if (staticResponse) {
       return {
         content: staticResponse,
         confidence: 0.6,
         fallbackType: 'static',
-        disclaimer: 'This response is from our knowledge base. AI assistance is currently unavailable.',
-        actionable: false
+        disclaimer:
+          'This response is from our knowledge base. AI assistance is currently unavailable.',
+        actionable: false,
       };
     }
 
@@ -103,8 +107,9 @@ export class AIFallbackStrategy {
       content: this.getGenericFallbackResponse(),
       confidence: 0.3,
       fallbackType: 'static',
-      disclaimer: 'AI assistance is currently unavailable. Please try again later or contact support.',
-      actionable: false
+      disclaimer:
+        'AI assistance is currently unavailable. Please try again later or contact support.',
+      actionable: false,
     };
   }
 
@@ -113,7 +118,7 @@ export class AIFallbackStrategy {
    */
   async getOfflineKnowledgeResponse(query: string): Promise<FallbackResponse | null> {
     const keywords = this.extractKeywords(query);
-    
+
     for (const keyword of keywords) {
       const knowledge = this.offlineKnowledgeBase.get(keyword.toLowerCase());
       if (knowledge) {
@@ -122,11 +127,11 @@ export class AIFallbackStrategy {
           confidence: knowledge.confidence || 0.8,
           fallbackType: 'offline',
           disclaimer: 'Response from offline knowledge base. Real-time AI analysis unavailable.',
-          actionable: knowledge.actionable || false
+          actionable: knowledge.actionable || false,
         };
       }
     }
-    
+
     return null;
   }
 
@@ -157,7 +162,7 @@ export class AIFallbackStrategy {
       confidence: 1.0,
       fallbackType: 'static',
       disclaimer: 'System status information is current as of the last update.',
-      actionable: true
+      actionable: true,
     };
   }
 
@@ -169,22 +174,22 @@ export class AIFallbackStrategy {
         'Human error',
         'System failures',
         'Resource constraints',
-        'Quality issues'
+        'Quality issues',
       ],
       mitigationStrategies: [
         'Implement process standardization',
         'Provide comprehensive training',
         'Establish monitoring systems',
         'Create backup procedures',
-        'Regular quality audits'
+        'Regular quality audits',
       ],
       controls: [
         'Standard Operating Procedures (SOPs)',
         'Training programs',
         'Quality control checkpoints',
         'Incident response procedures',
-        'Performance monitoring'
-      ]
+        'Performance monitoring',
+      ],
     });
 
     this.riskTemplates.set('financial', {
@@ -194,22 +199,22 @@ export class AIFallbackStrategy {
         'Credit risk',
         'Liquidity constraints',
         'Foreign exchange fluctuations',
-        'Interest rate changes'
+        'Interest rate changes',
       ],
       mitigationStrategies: [
         'Diversify investment portfolio',
         'Implement hedging strategies',
         'Maintain adequate reserves',
         'Regular financial monitoring',
-        'Stress testing'
+        'Stress testing',
       ],
       controls: [
         'Financial policies and procedures',
         'Segregation of duties',
         'Regular reconciliations',
         'Independent reviews',
-        'Risk limits and thresholds'
-      ]
+        'Risk limits and thresholds',
+      ],
     });
 
     this.riskTemplates.set('technology', {
@@ -219,22 +224,22 @@ export class AIFallbackStrategy {
         'System outages',
         'Data breaches',
         'Legacy system issues',
-        'Integration challenges'
+        'Integration challenges',
       ],
       mitigationStrategies: [
         'Implement cybersecurity framework',
         'Regular system updates',
         'Data backup and recovery',
         'Security awareness training',
-        'Third-party security assessments'
+        'Third-party security assessments',
       ],
       controls: [
         'Access controls and authentication',
         'Network security monitoring',
         'Data encryption',
         'Incident response plan',
-        'Regular security testing'
-      ]
+        'Regular security testing',
+      ],
     });
 
     this.riskTemplates.set('compliance', {
@@ -244,27 +249,29 @@ export class AIFallbackStrategy {
         'Non-compliance penalties',
         'Audit findings',
         'Policy gaps',
-        'Training deficiencies'
+        'Training deficiencies',
       ],
       mitigationStrategies: [
         'Regular compliance monitoring',
         'Legal and regulatory updates',
         'Policy reviews and updates',
         'Compliance training programs',
-        'Internal audit functions'
+        'Internal audit functions',
       ],
       controls: [
         'Compliance management system',
         'Regular policy reviews',
         'Training and awareness programs',
         'Monitoring and reporting',
-        'Corrective action procedures'
-      ]
+        'Corrective action procedures',
+      ],
     });
   }
 
   private initializeStaticResponses(): void {
-    this.staticResponses.set('risk_assessment', `
+    this.staticResponses.set(
+      'risk_assessment',
+      `
 Risk assessment is a systematic process of identifying, analyzing, and evaluating risks that could affect your organization's objectives. Here's a basic framework:
 
 1. **Risk Identification**: Identify potential risks across all business areas
@@ -274,9 +281,12 @@ Risk assessment is a systematic process of identifying, analyzing, and evaluatin
 5. **Monitoring**: Continuously monitor and review risks
 
 For detailed guidance, please refer to your organization's risk management policy or contact the risk management team.
-    `);
+    `
+    );
 
-    this.staticResponses.set('control_framework', `
+    this.staticResponses.set(
+      'control_framework',
+      `
 Control frameworks provide structured approaches to managing risks. Common frameworks include:
 
 - **COSO**: Comprehensive framework for internal controls
@@ -285,9 +295,12 @@ Control frameworks provide structured approaches to managing risks. Common frame
 - **SOX**: Financial reporting controls
 
 Each framework provides specific guidance on control design, implementation, and monitoring.
-    `);
+    `
+    );
 
-    this.staticResponses.set('compliance_help', `
+    this.staticResponses.set(
+      'compliance_help',
+      `
 For compliance-related questions:
 
 1. Review relevant regulatory requirements
@@ -297,7 +310,8 @@ For compliance-related questions:
 5. Contact external advisors if needed
 
 Common compliance frameworks include SOC 2, ISO 27001, GDPR, and industry-specific regulations.
-    `);
+    `
+    );
   }
 
   private initializeOfflineKnowledge(): void {
@@ -311,7 +325,7 @@ Common compliance frameworks include SOC 2, ISO 27001, GDPR, and industry-specif
 
 Use a 5x5 matrix for detailed analysis or 3x3 for simplified assessment.`,
       confidence: 0.9,
-      actionable: true
+      actionable: true,
     });
 
     this.offlineKnowledgeBase.set('control testing', {
@@ -328,7 +342,7 @@ Use a 5x5 matrix for detailed analysis or 3x3 for simplified assessment.`,
 - Re-performance
 - Data analytics`,
       confidence: 0.85,
-      actionable: true
+      actionable: true,
     });
   }
 
@@ -339,13 +353,13 @@ Use a 5x5 matrix for detailed analysis or 3x3 for simplified assessment.`,
 **Category**: ${template.category}
 
 **Common Risk Factors in ${template.category} Category**:
-${template.commonFactors.map(factor => `• ${factor}`).join('\n')}
+${template.commonFactors.map((factor) => `• ${factor}`).join('\n')}
 
 **Recommended Mitigation Strategies**:
-${template.mitigationStrategies.map(strategy => `• ${strategy}`).join('\n')}
+${template.mitigationStrategies.map((strategy) => `• ${strategy}`).join('\n')}
 
 **Suggested Controls**:
-${template.controls.map(control => `• ${control}`).join('\n')}
+${template.controls.map((control) => `• ${control}`).join('\n')}
 
 **Current Risk Details**:
 - Likelihood: ${risk.likelihood}/5
@@ -434,25 +448,32 @@ For detailed analysis and specific recommendations, please use the AI-powered ri
 
   private categorizeQuery(query: string): string {
     const queryLower = query.toLowerCase();
-    
-    if (queryLower.includes('risk') && (queryLower.includes('assess') || queryLower.includes('analysis'))) {
+
+    if (
+      queryLower.includes('risk') &&
+      (queryLower.includes('assess') || queryLower.includes('analysis'))
+    ) {
       return 'risk_assessment';
     }
-    if (queryLower.includes('control') && (queryLower.includes('framework') || queryLower.includes('standard'))) {
+    if (
+      queryLower.includes('control') &&
+      (queryLower.includes('framework') || queryLower.includes('standard'))
+    ) {
       return 'control_framework';
     }
     if (queryLower.includes('compliance') || queryLower.includes('regulatory')) {
       return 'compliance_help';
     }
-    
+
     return 'general';
   }
 
   private extractKeywords(query: string): string[] {
     const words = query.toLowerCase().split(/\s+/);
-    const keywords = words.filter(word => 
-      word.length > 3 && 
-      !['the', 'and', 'but', 'for', 'are', 'with', 'this', 'that', 'what', 'how'].includes(word)
+    const keywords = words.filter(
+      (word) =>
+        word.length > 3 &&
+        !['the', 'and', 'but', 'for', 'are', 'with', 'this', 'that', 'what', 'how'].includes(word)
     );
     return keywords;
   }
@@ -481,4 +502,4 @@ I apologize, but AI assistance is currently unavailable. Here are some alternati
 Please try again later as AI services are typically restored within 30 minutes.
     `;
   }
-} 
+}

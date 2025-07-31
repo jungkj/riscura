@@ -185,15 +185,18 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
       </div>
 
       {/* Quick Tours */}
-      <DaisyCard>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center gap-2">
-            <Lightbulb className="w-5 h-5 text-yellow-500" />
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <Lightbulb className="w-5 h-5 text-yellow-500" />
+</DaisyCardTitle>
             Guided Tours
           </DaisyCardTitle>
-        
-        <DaisyCardContent>
-          <div className="grid gap-3">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="grid gap-3">
+</DaisyCardContent>
             {helpResources.filter(r => r.type === 'tour').map((resource) => (
               <div
                 key={resource.id}
@@ -207,8 +210,9 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-medium text-gray-900">{resource.title}</h3>
                     {resource.isPopular && (
-                      <DaisyBadge variant="secondary" className="text-xs bg-yellow-100 text-yellow-700">
-                        <Star className="w-3 h-3 mr-1" />
+                      <DaisyBadge variant="secondary" className="text-xs bg-yellow-100 text-yellow-700" >
+  <Star className="w-3 h-3 mr-1" />
+</DaisyBadge>
                         Popular
                       </DaisyBadge>
                     )}
@@ -226,25 +230,29 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
                     )}
                   </div>
                 </div>
-                <DaisyButton variant="outline" size="sm">
-                  Start Tour
+                <DaisyButton variant="outline" size="sm" >
+  Start Tour
+</DaisyButton>
                 </DaisyButton>
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Other Resources */}
-      <DaisyCard>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-green-600" />
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <BookOpen className="w-5 h-5 text-green-600" />
+</DaisyCardTitle>
             Documentation & Guides
           </DaisyCardTitle>
-        
-        <DaisyCardContent>
-          <div className="grid gap-3">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="grid gap-3">
+</DaisyCardContent>
             {helpResources.filter(r => r.type !== 'tour').map((resource) => (
               <div
                 key={resource.id}
@@ -258,8 +266,9 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-medium text-gray-900">{resource.title}</h3>
                     {resource.isNew && (
-                      <DaisyBadge variant="secondary" className="text-xs bg-blue-100 text-blue-700">
-                        New
+                      <DaisyBadge variant="secondary" className="text-xs bg-blue-100 text-blue-700" >
+  New
+</DaisyBadge>
                       </DaisyBadge>
                     )}
                   </div>
@@ -282,19 +291,22 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Quick Actions */}
-      <DaisyCard>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center gap-2">
-            <Settings className="w-5 h-5 text-purple-600" />
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <Settings className="w-5 h-5 text-purple-600" />
+</DaisyCardTitle>
             Quick Actions
           </DaisyCardTitle>
-        
-        <DaisyCardContent>
-          <div className="grid grid-cols-2 gap-3">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="grid grid-cols-2 gap-3">
+</DaisyCardContent>
             <DaisyButton
               variant="outline"
               onClick={() => {
@@ -312,8 +324,7 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
             <DaisyButton
               variant="outline"
               onClick={() => window.open('/help/keyboard-shortcuts', '_blank')}
-              className="flex items-center gap-2 h-auto p-4"
-            >
+              className="flex items-center gap-2 h-auto p-4" />
               <Target className="w-4 h-4" />
               <div className="text-left">
                 <div className="font-medium">Shortcuts</div>
@@ -321,7 +332,7 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
               </div>
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

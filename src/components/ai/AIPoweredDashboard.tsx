@@ -282,8 +282,9 @@ const PredictionCard: React.FC<{
               <h3 className="text-body-sm font-semibold text-text-primary">
                 {prediction.title}
               </h3>
-              <DaisyBadge variant={impactConfig.badge as any} className="text-caption">
-                {prediction.impact.toUpperCase()}
+              <DaisyBadge variant={impactConfig.badge as any} className="text-caption" >
+  {prediction.impact.toUpperCase()}
+</DaisyBadge>
               </DaisyBadge>
             </div>
             <p className="text-caption text-text-secondary">
@@ -337,17 +338,15 @@ const PredictionCard: React.FC<{
             variant="ghost" 
             size="sm" 
             className="h-6 px-enterprise-2 text-purple-600 hover:text-purple-700"
-            onClick={() => onAction('view', prediction)}
-          >
+            onClick={() => onAction('view', prediction)} />
             <Eye className="h-3 w-3 mr-enterprise-1" />
             Analyze
-          </DaisyButton>
+          </DaisyProgress>
           <DaisyButton 
             variant="ghost" 
             size="sm" 
             className="h-6 px-enterprise-2"
-            onClick={() => onAction('dismiss', prediction)}
-          >
+            onClick={() => onAction('dismiss', prediction)} />
             Dismiss
           </DaisyButton>
         </div>
@@ -393,9 +392,9 @@ const RecommendationPanel: React.FC<{
             </h3>
             <DaisyBadge 
               className={cn("text-caption", priorityConfig.color, priorityConfig.bg)}
-              variant="outline"
-            >
-              {recommendation.priority.toUpperCase()}
+              variant="outline" >
+  {recommendation.priority.toUpperCase()}
+</DaisyBadge>
             </DaisyBadge>
           </div>
           <p className="text-caption text-text-secondary mb-enterprise-2">
@@ -454,17 +453,15 @@ const RecommendationPanel: React.FC<{
           <DaisyButton 
             size="sm" 
             className="h-6 px-enterprise-3 bg-purple-600 hover:bg-purple-700"
-            onClick={() => onAction('implement', recommendation)}
-          >
+            onClick={() => onAction('implement', recommendation)} />
             <ArrowRight className="h-3 w-3 mr-enterprise-1" />
             Implement
-          </DaisyButton>
+          </DaisyProgress>
           <DaisyButton 
             variant="outline" 
             size="sm" 
             className="h-6 px-enterprise-2"
-            onClick={() => onAction('view', recommendation)}
-          >
+            onClick={() => onAction('view', recommendation)} />
             Details
           </DaisyButton>
         </div>
@@ -472,8 +469,7 @@ const RecommendationPanel: React.FC<{
           variant="ghost" 
           size="sm" 
           className="h-6 px-enterprise-2"
-          onClick={() => onAction('dismiss', recommendation)}
-        >
+          onClick={() => onAction('dismiss', recommendation)} />
           Dismiss
         </DaisyButton>
       </div>
@@ -627,16 +623,16 @@ export const AIPoweredDashboard: React.FC = () => {
       )}
 
       {/* Tabs */}
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6">
-        <DaisyTabsList>
-          <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6" />
+        <DaisyTabsList />
+          <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
           <DaisyTabsTrigger value="predictions">Predictions</DaisyTabsTrigger>
           <DaisyTabsTrigger value="recommendations">Recommendations</DaisyTabsTrigger>
           <DaisyTabsTrigger value="trends">Trends</DaisyTabsTrigger>
         </DaisyTabsList>
       </DaisyTabs>
 
-      <DaisyTabsContent value="overview">
+      <DaisyTabsContent value="overview" />
         <div className="space-y-enterprise-6">
           {/* Critical Alerts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-enterprise-4">
@@ -679,7 +675,7 @@ export const AIPoweredDashboard: React.FC = () => {
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="predictions">
+      <DaisyTabsContent value="predictions" />
         <div className="space-y-enterprise-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-enterprise-4">
             {samplePredictions.map((prediction) => (
@@ -693,7 +689,7 @@ export const AIPoweredDashboard: React.FC = () => {
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="recommendations">
+      <DaisyTabsContent value="recommendations" />
         <div className="space-y-enterprise-4">
           <div className="grid grid-cols-1 gap-enterprise-4">
             {sampleRecommendations.map((recommendation) => (
@@ -707,7 +703,7 @@ export const AIPoweredDashboard: React.FC = () => {
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="trends">
+      <DaisyTabsContent value="trends" />
         <div className="space-y-enterprise-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-enterprise-4">
             {sampleTrendData.map((trend) => (

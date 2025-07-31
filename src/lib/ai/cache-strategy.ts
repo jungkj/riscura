@@ -21,7 +21,7 @@ export class EnhancedAICacheStrategy {
   private memoryCache: LRUCache<string, CacheEntry>;
   private stats: CacheStats;
   private persistentStore: Map<string, CacheEntry>;
-  
+
   constructor(
     private maxMemorySize: number = 1000,
     private defaultTTL: number = 900000, // 15 minutes
@@ -33,15 +33,15 @@ export class EnhancedAICacheStrategy {
       ttlAutopurge: true,
       allowStale: false,
     });
-    
+
     this.stats = {
       hits: 0,
       misses: 0,
       hitRate: 0,
       size: 0,
-      memoryUsage: 0
+      memoryUsage: 0,
     };
-    
+
     this.persistentStore = new Map();
     this.loadPersistentCache();
     this.startMaintenanceTasks();
@@ -52,10 +52,10 @@ export class EnhancedAICacheStrategy {
    */
   get(key: string): any | null {
     const cacheKey = this.generateCacheKey(key);
-    
+
     // Try memory cache first (fastest)
     let entry = this.memoryCache.get(cacheKey);
-    
+
     if (entry) {
       if (this.isEntryValid(entry)) {
         entry.hitCount++;
@@ -67,21 +67,21 @@ export class EnhancedAICacheStrategy {
         this.memoryCache.delete(cacheKey);
       }
     }
-    
+
     // Try persistent cache (slower but larger)
     entry = this.persistentStore.get(cacheKey);
     if (entry && this.isEntryValid(entry)) {
       entry.hitCount++;
       entry.lastAccessed = Date.now();
-      
+
       // Promote to memory cache for faster future access
       this.memoryCache.set(cacheKey, entry);
-      
+
       this.stats.hits++;
       this.updateHitRate();
       return entry.response;
     }
-    
+
     // Cache miss
     this.stats.misses++;
     this.updateHitRate();
@@ -94,28 +94,28 @@ export class EnhancedAICacheStrategy {
   set(key: string, response: any, customTTL?: number): void {
     const cacheKey = this.generateCacheKey(key);
     const ttl = customTTL || this.calculateDynamicTTL(response);
-    
+
     const entry: CacheEntry = {
       response,
       timestamp: Date.now(),
       ttl,
       hitCount: 0,
-      lastAccessed: Date.now()
+      lastAccessed: Date.now(),
     };
-    
+
     // Always store in memory cache for fast access
     this.memoryCache.set(cacheKey, entry);
-    
+
     // Store in persistent cache based on importance
     if (this.shouldPersist(response, entry)) {
       this.persistentStore.set(cacheKey, entry);
-      
+
       // Cleanup persistent cache if it gets too large
       if (this.persistentStore.size > this.maxPersistentSize) {
         this.cleanupPersistentCache();
       }
     }
-    
+
     this.updateStats();
   }
 
@@ -124,17 +124,15 @@ export class EnhancedAICacheStrategy {
    */
   invalidate(pattern?: string | RegExp): number {
     let invalidatedCount = 0;
-    
+
     if (!pattern) {
       // Clear all caches
       this.memoryCache.clear();
       this.persistentStore.clear();
       invalidatedCount = this.stats.size;
     } else {
-      const regex = typeof pattern === 'string' 
-        ? new RegExp(pattern) 
-        : pattern;
-      
+      const regex = typeof pattern === 'string' ? new RegExp(pattern) : pattern;
+
       // Invalidate matching entries
       for (const key of this.memoryCache.keys()) {
         if (regex.test(key)) {
@@ -142,7 +140,7 @@ export class EnhancedAICacheStrategy {
           invalidatedCount++;
         }
       }
-      
+
       for (const key of this.persistentStore.keys()) {
         if (regex.test(key)) {
           this.persistentStore.delete(key);
@@ -150,7 +148,7 @@ export class EnhancedAICacheStrategy {
         }
       }
     }
-    
+
     this.updateStats();
     return invalidatedCount;
   }
@@ -177,20 +175,20 @@ export class EnhancedAICacheStrategy {
   export(): Record<string, any> {
     const memoryEntries: Record<string, any> = {};
     const persistentEntries: Record<string, any> = {};
-    
+
     for (const [key, value] of this.memoryCache.entries()) {
       memoryEntries[key] = value;
     }
-    
+
     for (const [key, value] of this.persistentStore.entries()) {
       persistentEntries[key] = value;
     }
-    
+
     return {
       memory: memoryEntries,
       persistent: persistentEntries,
       stats: this.stats,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
   }
 
@@ -207,53 +205,56 @@ export class EnhancedAICacheStrategy {
     if (this.isStaticContent(response)) {
       return 3600000; // 1 hour
     }
-    
+
     // Shorter TTL for dynamic content
     if (this.isDynamicContent(response)) {
       return 300000; // 5 minutes
     }
-    
+
     // Medium TTL for analysis results
     if (this.isAnalysisContent(response)) {
       return 1800000; // 30 minutes
     }
-    
+
     return this.defaultTTL;
   }
 
   private isStaticContent(response: any): boolean {
     // Check for static content indicators
     const content = JSON.stringify(response).toLowerCase();
-    return content.includes('framework') || 
-           content.includes('definition') || 
-           content.includes('standard');
+    return (
+      content.includes('framework') ||
+      content.includes('definition') ||
+      content.includes('standard')
+    );
   }
 
   private isDynamicContent(response: any): boolean {
     // Check for dynamic content indicators
     const content = JSON.stringify(response).toLowerCase();
-    return content.includes('current') || 
-           content.includes('today') || 
-           content.includes('realtime');
+    return content.includes('current') || content.includes('today') || content.includes('realtime');
   }
 
   private isAnalysisContent(response: any): boolean {
     // Check for analysis content indicators
     const content = JSON.stringify(response).toLowerCase();
-    return content.includes('analysis') || 
-           content.includes('assessment') || 
-           content.includes('recommendation');
+    return (
+      content.includes('analysis') ||
+      content.includes('assessment') ||
+      content.includes('recommendation')
+    );
   }
 
   private shouldPersist(response: any, entry: CacheEntry): boolean {
     // Persist high-value responses
     const responseSize = JSON.stringify(response).length;
-    
+
     // Don't persist very large responses
-    if (responseSize > 100000) { // 100KB
+    if (responseSize > 100000) {
+      // 100KB
       return false;
     }
-    
+
     // Persist analysis results and frameworks
     return this.isAnalysisContent(response) || this.isStaticContent(response);
   }
@@ -261,9 +262,13 @@ export class EnhancedAICacheStrategy {
   private cleanupPersistentCache(): void {
     // Sort by last accessed time and hit count
     const entries = Array.from(this.persistentStore.entries())
-      .map(([key, entry]) => ({ key, entry, score: entry.hitCount / Math.max(1, Date.now() - entry.lastAccessed) }))
+      .map(([key, entry]) => ({
+        key,
+        entry,
+        score: entry.hitCount / Math.max(1, Date.now() - entry.lastAccessed),
+      }))
       .sort((a, b) => a.score - b.score);
-    
+
     // Remove least valuable entries
     const toRemove = Math.floor(this.maxPersistentSize * 0.2); // Remove 20%
     for (let i = 0; i < toRemove && i < entries.length; i++) {
@@ -309,7 +314,7 @@ export class EnhancedAICacheStrategy {
         this.persistentStore.delete(key);
       }
     }
-    
+
     this.updateStats();
   }
-} 
+}

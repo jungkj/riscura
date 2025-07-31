@@ -224,8 +224,8 @@ export default function InteractiveRiskHeatmap({
       const cell = heatmapCells.find(c => c.x === data.x && c.y === data.y);
       if (!cell) return null;
 
-      return (
-        <div className="bg-white p-3 border rounded-lg shadow-lg max-w-xs">
+  return (
+    <div className="bg-white p-3 border rounded-lg shadow-lg max-w-xs">
           <div className="font-medium text-sm mb-2">{cell.label}</div>
           <div className="space-y-1 text-xs">
             <div>Risk Score: <span className="font-medium">{cell.value}</span></div>
@@ -400,13 +400,16 @@ export default function InteractiveRiskHeatmap({
 
   return (
     <DaisyCard className={`${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
-      <DaisyCardHeader className="pb-3">
-        <div className="flex items-center justify-between">
+      <DaisyCardHeader className="pb-3" >
+  <div className="flex items-center justify-between">
+</DaisyCard>
           <div className="flex items-center space-x-2">
-            <DaisyAlertTriangle className="w-5 h-5 text-orange-600" />
-            <DaisyCardTitle className="text-lg">Risk Heatmap</DaisyCardTitle>
-            <DaisyBadge variant="secondary" className="text-xs">
-              {filteredData.length} risks
+            <DaisyAlertTriangle className="w-5 h-5 text-orange-600" >
+  <DaisyCardTitle className="text-lg">
+</DaisyAlertTriangle>Risk Heatmap</DaisyCardTitle>
+            <DaisyBadge variant="secondary" className="text-xs" >
+  {filteredData.length} risks
+</DaisyBadge>
             </DaisyBadge>
           </div>
           
@@ -416,8 +419,7 @@ export default function InteractiveRiskHeatmap({
                 variant="ghost"
                 size="sm"
                 onClick={() => setViewMode(viewMode === 'heatmap' ? 'scatter' : 'heatmap')}
-                className="p-2"
-              >
+                className="p-2" />
                 <Eye className="w-4 h-4" />
               </DaisyButton>
               
@@ -425,8 +427,7 @@ export default function InteractiveRiskHeatmap({
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowTooltip(!showTooltip)}
-                className="p-2"
-              >
+                className="p-2" />
                 <Settings className="w-4 h-4" />
               </DaisyButton>
               
@@ -434,26 +435,25 @@ export default function InteractiveRiskHeatmap({
                 variant="ghost"
                 size="sm"
                 onClick={exportHeatmap}
-                className="p-2"
-              >
-                <Download className="w-4 h-4" />
+                className="p-2" >
+  <Download className="w-4 h-4" />
+</DaisyButton>
               </DaisyButton>
               
               <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={resetView}
-                className="p-2"
-              >
-                <RotateCcw className="w-4 h-4" />
+                className="p-2" >
+  <RotateCcw className="w-4 h-4" />
+</DaisyButton>
               </DaisyButton>
               
               <DaisyButton
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsFullscreen(!isFullscreen)}
-                className="p-2"
-              >
+                className="p-2" />
                 <Maximize2 className="w-4 h-4" />
               </DaisyButton>
             </div>
@@ -464,32 +464,30 @@ export default function InteractiveRiskHeatmap({
         <div className="flex items-center space-x-4 mt-3">
           <div className="flex items-center space-x-2">
             <Filter className="w-4 h-4 text-gray-500" />
-            <DaisySelect value={filterCategory} onValueChange={setFilterCategory}>
-              <DaisySelectTrigger className="w-40">
-                <DaisySelectValue placeholder="Category" />
-              </SelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="all">All Categories</SelectItem>
+            <DaisySelect value={filterCategory} onValueChange={setFilterCategory} />
+              <DaisySelectTrigger className="w-40" />
+                <DaisySelectValue placeholder="Category" /></DaisySelect>
+              <DaisySelectContent />
+                <DaisySelectItem value="all">All Categories</DaisySelectContent>
                 {categories.map(category => (
-                  <DaisySelectItem key={category} value={category}>
+                  <DaisySelectItem key={category} value={category} />
                     {category}
-                  </SelectItem>
+                  </DaisySelectItem>
                 ))}
-              </SelectContent>
+              </DaisySelectContent>
             </DaisySelect>
             
-            <DaisySelect value={filterStatus} onValueChange={setFilterStatus}>
-              <DaisySelectTrigger className="w-32">
-                <DaisySelectValue placeholder="Status" />
-              </SelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="all">All Status</SelectItem>
+            <DaisySelect value={filterStatus} onValueChange={setFilterStatus} />
+              <DaisySelectTrigger className="w-32" />
+                <DaisySelectValue placeholder="Status" /></DaisySelect>
+              <DaisySelectContent />
+                <DaisySelectItem value="all">All Status</DaisySelectContent>
                 {statuses.map(status => (
-                  <DaisySelectItem key={status} value={status}>
+                  <DaisySelectItem key={status} value={status} />
                     {status}
-                  </SelectItem>
+                  </DaisySelectItem>
                 ))}
-              </SelectContent>
+              </DaisySelectContent>
             </DaisySelect>
           </div>
           
@@ -498,23 +496,22 @@ export default function InteractiveRiskHeatmap({
             <DaisyButton
               variant={viewMode === 'heatmap' ? 'primary' : 'outline'}
               size="sm"
-              onClick={() => setViewMode('heatmap')}
-            >
+              onClick={() => setViewMode('heatmap')} />
               Heatmap
             </DaisyButton>
             <DaisyButton
               variant={viewMode === 'scatter' ? 'primary' : 'outline'}
               size="sm"
-              onClick={() => setViewMode('scatter')}
-            >
+              onClick={() => setViewMode('scatter')} />
               Scatter
             </DaisyButton>
           </div>
         </div>
       
 
-      <DaisyCardContent>
-        <DaisyTooltipProvider>
+      <DaisyCardContent >
+  <DaisyTooltipProvider />
+</DaisyCardContent>
           {viewMode === 'heatmap' ? renderHeatmapGrid() : renderScatterPlot()}
         
         
@@ -549,8 +546,7 @@ export default function InteractiveRiskHeatmap({
               <DaisyButton
                 variant="ghost"
                 size="sm"
-                onClick={() => setSelectedCell(null)}
-              >
+                onClick={() => setSelectedCell(null)} />
                 ×
               </DaisyButton>
             </div>
@@ -565,8 +561,9 @@ export default function InteractiveRiskHeatmap({
                   <div className="font-medium text-sm truncate">{risk.title}</div>
                   <div className="flex items-center justify-between mt-1">
                     <span className="text-xs text-gray-600">{risk.category}</span>
-                    <DaisyBadge variant="outline" className="text-xs">
-                      {risk.status}
+                    <DaisyBadge variant="outline" className="text-xs" >
+  {risk.status}
+</DaisyBadge>
                     </DaisyBadge>
                   </div>
                 </div>
@@ -574,7 +571,7 @@ export default function InteractiveRiskHeatmap({
             </div>
           </div>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 } 

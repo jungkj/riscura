@@ -192,7 +192,13 @@ export interface PaymentIntent {
   stripePaymentIntentId: string;
   amount: number;
   currency: string;
-  status: 'requires_payment_method' | 'requires_confirmation' | 'requires_action' | 'processing' | 'succeeded' | 'canceled';
+  status:
+    | 'requires_payment_method'
+    | 'requires_confirmation'
+    | 'requires_action'
+    | 'processing'
+    | 'succeeded'
+    | 'canceled';
   invoiceId?: string;
   subscriptionId?: string;
   paymentMethodId?: string;
@@ -204,7 +210,17 @@ export interface PaymentIntent {
 export interface BillingEvent {
   id: string;
   organizationId: string;
-  type: 'subscription_created' | 'subscription_updated' | 'subscription_canceled' | 'invoice_created' | 'invoice_paid' | 'invoice_failed' | 'payment_succeeded' | 'payment_failed' | 'trial_ending' | 'usage_threshold';
+  type:
+    | 'subscription_created'
+    | 'subscription_updated'
+    | 'subscription_canceled'
+    | 'invoice_created'
+    | 'invoice_paid'
+    | 'invoice_failed'
+    | 'payment_succeeded'
+    | 'payment_failed'
+    | 'trial_ending'
+    | 'usage_threshold';
   eventData: Record<string, any>;
   processed: boolean;
   processedAt?: Date;
@@ -381,7 +397,13 @@ export interface CustomerPortalSession {
 export interface BillingAlert {
   id: string;
   organizationId: string;
-  type: 'payment_failed' | 'trial_ending' | 'usage_limit' | 'subscription_canceled' | 'high_usage' | 'dunning_started';
+  type:
+    | 'payment_failed'
+    | 'trial_ending'
+    | 'usage_limit'
+    | 'subscription_canceled'
+    | 'high_usage'
+    | 'dunning_started';
   title: string;
   message: string;
   severity: 'info' | 'warning' | 'critical';
@@ -414,4 +436,4 @@ export interface SubscriptionUpgrade {
   stripeSubscriptionScheduleId?: string;
   createdAt: Date;
   completedAt?: Date;
-} 
+}

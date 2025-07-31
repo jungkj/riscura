@@ -145,8 +145,9 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
                   <span>Likelihood: {validLikelihood}/5</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <DaisyAlertTriangle className="w-4 h-4 text-muted-foreground" />
-                  <span>Impact: {validImpact}/5</span>
+                  <DaisyAlertTriangle className="w-4 h-4 text-muted-foreground" >
+  <span>
+</DaisyAlertTriangle>Impact: {validImpact}/5</span>
                 </div>
               </div>
             </div>
@@ -196,17 +197,18 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
         transition={{ delay: 0.2 }}
         className="flex justify-between pt-4"
       >
-        <DaisyButton onClick={onBack} variant="outline" size="lg" disabled={isCreating}>
-          <ChevronLeft className="w-4 h-4 mr-2" />
+        <DaisyButton onClick={onBack} variant="outline" size="lg" disabled={isCreating} >
+  <ChevronLeft className="w-4 h-4 mr-2" />
+</DaisyCalendar>
           Back
         </DaisyButton>
         <DaisyButton 
           onClick={handleCreate} 
           size="lg" 
           className="min-w-[140px]"
-          disabled={isCreating}
-        >
-          {isCreating ? (
+          disabled={isCreating} >
+  {isCreating ? (
+</DaisyButton>
             <>Creating...</>
           ) : (
             <>

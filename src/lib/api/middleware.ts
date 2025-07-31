@@ -5,30 +5,19 @@ import { db } from '@/lib/db';
 import { env } from '@/config/env';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-options';
-import { 
-  ApiResponseFormatter, 
+import {
+  ApiResponseFormatter,
   VersionedResponseFormatter,
-  ResponseOptions 
+  ResponseOptions,
 } from './response-formatter';
-import { 
-  globalErrorHandler, 
-  createAuthError, 
-  createForbiddenError 
-} from './error-handler';
-import { 
-  parseAndValidate, 
+import { globalErrorHandler, createAuthError, createForbiddenError } from './error-handler';
+import {
+  parseAndValidate,
   validateQueryParams,
-  formatValidationErrors 
+  formatValidationErrors,
 } from './validation-schemas';
-import { 
-  applyRateLimit, 
-  getRateLimiterForEndpoint 
-} from './rate-limiter';
-import { 
-  getApiVersionFromRequest, 
-  ApiVersionMiddleware,
-  ApiVersion 
-} from './versioning';
+import { applyRateLimit, getRateLimiterForEndpoint } from './rate-limiter';
+import { getApiVersionFromRequest, ApiVersionMiddleware, ApiVersion } from './versioning';
 import { getAuthenticatedUser } from '@/lib/auth/middleware';
 import { billingManager } from '@/lib/billing/manager';
 
@@ -49,7 +38,10 @@ export class APIError extends Error {
 }
 
 export class ValidationError extends APIError {
-  constructor(message: string, public errors?: any[]) {
+  constructor(
+    message: string,
+    public errors?: any[]
+  ) {
     super(message, 400, 'VALIDATION_ERROR');
     this.details = errors;
   }
@@ -164,7 +156,7 @@ export function createErrorResponse(
   requestId?: string
 ): NextResponse<APIResponse> {
   const isAPIError = error instanceof APIError;
-  
+
   const response: APIResponse = {
     success: false,
     error: {
@@ -216,7 +208,7 @@ class RateLimiter {
     this.cleanup(windowStart);
 
     const entry = this.requests.get(key);
-    
+
     if (!entry) {
       this.requests.set(key, { count: 1, resetTime: now + this.config.windowMs });
       return { allowed: true };
@@ -255,10 +247,7 @@ class RateLimiter {
 // VALIDATION UTILITIES
 // ============================================================================
 
-export function validateRequest<T>(
-  schema: z.ZodSchema<T>,
-  data: unknown
-): T {
+export function validateRequest<T>(schema: z.ZodSchema<T>, data: unknown): T {
   try {
     return schema.parse(data);
   } catch (error) {
@@ -269,17 +258,12 @@ export function validateRequest<T>(
   }
 }
 
-export function validateQuery<T>(
-  schema: z.ZodSchema<T>,
-  searchParams: URLSearchParams
-): T {
+export function validateQuery<T>(schema: z.ZodSchema<T>, searchParams: URLSearchParams): T {
   const queryObject = Object.fromEntries(searchParams.entries());
   return validateRequest(schema, queryObject);
 }
 
-export function validateBody<T>(
-  schema: z.ZodSchema<T>
-) {
+export function validateBody<T>(schema: z.ZodSchema<T>) {
   return async (req: NextRequest): Promise<T> => {
     try {
       const body = await req.json();
@@ -315,10 +299,7 @@ export function parsePagination(
   searchParams: URLSearchParams,
   options: PaginationOptions = {}
 ): PaginationResult {
-  const {
-    maxLimit = 100,
-    defaultLimit = 20,
-  } = options;
+  const { maxLimit = 100, defaultLimit = 20 } = options;
 
   const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
   const limit = Math.min(
@@ -340,7 +321,7 @@ export function createPaginationMeta(
   total: number
 ): APIResponse['pagination'] {
   const totalPages = Math.ceil(total / limit);
-  
+
   return {
     page,
     limit,
@@ -366,14 +347,12 @@ export function parseSorting(
   searchParams: URLSearchParams,
   options: SortOptions = {}
 ): Record<string, 'asc' | 'desc'> {
-  const {
-    allowedFields,
-    defaultField = 'createdAt',
-    defaultOrder = 'desc',
-  } = options;
+  const { allowedFields, defaultField = 'createdAt', defaultOrder = 'desc' } = options;
 
   const sortBy = searchParams.get('sortBy') || searchParams.get('sort') || defaultField;
-  const sortOrder = (searchParams.get('sortOrder') || searchParams.get('order') || defaultOrder) as 'asc' | 'desc';
+  const sortOrder = (searchParams.get('sortOrder') || searchParams.get('order') || defaultOrder) as
+    | 'asc'
+    | 'desc';
 
   // Validate sort field if allowedFields is provided
   if (allowedFields && !allowedFields.includes(sortBy)) {
@@ -403,7 +382,7 @@ export function parseFilters(searchParams: URLSearchParams): Record<string, any>
 
     // Handle array values (comma-separated)
     if (value.includes(',')) {
-      filters[key] = value.split(',').map(v => v.trim());
+      filters[key] = value.split(',').map((v) => v.trim());
     } else {
       filters[key] = value;
     }
@@ -427,13 +406,17 @@ async function enforceSubscriptionLimits(
   // Check if organization has an active subscription
   if (subscriptionOptions.requireActive) {
     const subscription = await billingManager.getActiveSubscription(organizationId);
-    
+
     if (!subscription) {
       throw new SubscriptionError('Active subscription required');
     }
 
     // Check if subscription is in trial and expired
-    if (subscription.trialEnd && subscription.trialEnd < new Date() && subscription.status !== 'active') {
+    if (
+      subscription.trialEnd &&
+      subscription.trialEnd < new Date() &&
+      subscription.status !== 'active'
+    ) {
       throw new SubscriptionError('Trial period has ended. Please subscribe to continue.');
     }
 
@@ -446,39 +429,41 @@ async function enforceSubscriptionLimits(
   // Check feature availability
   if (subscriptionOptions.requiredFeatures?.length) {
     const subscription = await billingManager.getActiveSubscription(organizationId);
-    
+
     if (!subscription) {
       throw new SubscriptionError('Subscription required for this feature');
     }
 
     const plans = await billingManager.getSubscriptionPlans();
-    const currentPlan = plans.find(p => p.id === subscription.planId);
-    
+    const currentPlan = plans.find((p) => p.id === subscription.planId);
+
     if (!currentPlan) {
       throw new SubscriptionError('Invalid subscription plan');
     }
 
     // Check if all required features are included in the plan
-    const missingFeatures = subscriptionOptions.requiredFeatures.filter(feature => {
-      return !currentPlan.features.some(f => f.id === feature && f.included);
+    const missingFeatures = subscriptionOptions.requiredFeatures.filter((feature) => {
+      return !currentPlan.features.some((f) => f.id === feature && f.included);
     });
 
     if (missingFeatures.length > 0) {
-      throw new PlanLimitError(`This feature requires a higher plan. Missing features: ${missingFeatures.join(', ')}`);
+      throw new PlanLimitError(
+        `This feature requires a higher plan. Missing features: ${missingFeatures.join(', ')}`
+      );
     }
   }
 
   // Check usage limits
   if (subscriptionOptions.checkLimits) {
     const subscription = await billingManager.getActiveSubscription(organizationId);
-    
+
     if (!subscription) {
       throw new SubscriptionError('Subscription required for limit checking');
     }
 
     const plans = await billingManager.getSubscriptionPlans();
-    const currentPlan = plans.find(p => p.id === subscription.planId);
-    
+    const currentPlan = plans.find((p) => p.id === subscription.planId);
+
     if (!currentPlan) {
       throw new SubscriptionError('Invalid subscription plan');
     }
@@ -486,16 +471,18 @@ async function enforceSubscriptionLimits(
     // Check each limit
     for (const [limitType, requestedQuantity] of Object.entries(subscriptionOptions.checkLimits)) {
       const planLimit = currentPlan.limits[limitType];
-      
+
       // -1 means unlimited
       if (planLimit === -1) continue;
-      
+
       if (typeof planLimit === 'number' && planLimit > 0) {
         // Get current usage (simplified - in production you'd query actual usage)
         const currentUsage = await getCurrentUsage(organizationId, limitType);
-        
+
         if (currentUsage + requestedQuantity > planLimit) {
-          throw new PlanLimitError(`${limitType} limit exceeded. Current: ${currentUsage}, Limit: ${planLimit}`);
+          throw new PlanLimitError(
+            `${limitType} limit exceeded. Current: ${currentUsage}, Limit: ${planLimit}`
+          );
         }
       }
     }
@@ -507,28 +494,28 @@ async function getCurrentUsage(organizationId: string, limitType: string): Promi
   switch (limitType) {
     case 'users':
       const userCount = await db.client.user.count({
-        where: { organizationId, isActive: true }
+        where: { organizationId, isActive: true },
       });
       return userCount;
-      
+
     case 'risks':
       const riskCount = await db.client.risk.count({
-        where: { organizationId }
+        where: { organizationId },
       });
       return riskCount;
-      
+
     case 'controls':
       const controlCount = await db.client.control.count({
-        where: { organizationId }
+        where: { organizationId },
       });
       return controlCount;
-      
+
     case 'documents':
       const documentCount = await db.client.document.count({
-        where: { organizationId }
+        where: { organizationId },
       });
       return documentCount;
-      
+
     case 'aiQueries':
       // Get AI queries for current month
       const now = new Date();
@@ -536,11 +523,11 @@ async function getCurrentUsage(organizationId: string, limitType: string): Promi
       const aiQueryCount = await db.client.aIUsageLog.count({
         where: {
           organizationId,
-          createdAt: { gte: startOfMonth }
-        }
+          createdAt: { gte: startOfMonth },
+        },
       });
       return aiQueryCount;
-      
+
     default:
       return 0;
   }
@@ -581,22 +568,25 @@ export function withAPI(
 ) {
   return async (req: NextRequest): Promise<NextResponse> => {
     const requestId = crypto.randomUUID();
-    
+
     try {
       // CORS handling
       if (options.cors) {
         const origin = req.headers.get('origin');
-        const allowedOrigins = Array.isArray(options.cors.origin) 
-          ? options.cors.origin 
+        const allowedOrigins = Array.isArray(options.cors.origin)
+          ? options.cors.origin
           : [options.cors.origin].filter(Boolean);
 
         if (req.method === 'OPTIONS') {
           return new NextResponse(null, {
             status: 200,
             headers: {
-              'Access-Control-Allow-Origin': origin && allowedOrigins.includes(origin) ? origin : '*',
-              'Access-Control-Allow-Methods': options.cors.methods?.join(', ') || 'GET, POST, PUT, DELETE, OPTIONS',
-              'Access-Control-Allow-Headers': options.cors.headers?.join(', ') || 'Content-Type, Authorization',
+              'Access-Control-Allow-Origin':
+                origin && allowedOrigins.includes(origin) ? origin : '*',
+              'Access-Control-Allow-Methods':
+                options.cors.methods?.join(', ') || 'GET, POST, PUT, DELETE, OPTIONS',
+              'Access-Control-Allow-Headers':
+                options.cors.headers?.join(', ') || 'Content-Type, Authorization',
               'Access-Control-Max-Age': '86400',
             },
           });
@@ -607,17 +597,17 @@ export function withAPI(
       if (options.rateLimit) {
         const rateLimiter = new RateLimiter(options.rateLimit);
         const { allowed, resetTime } = await rateLimiter.checkLimit(req);
-        
+
         if (!allowed) {
           const response = createErrorResponse(
             new RateLimitError('Rate limit exceeded'),
             requestId
           );
-          
+
           if (resetTime) {
             response.headers.set('X-RateLimit-Reset', String(resetTime));
           }
-          
+
           return response;
         }
       }
@@ -626,7 +616,7 @@ export function withAPI(
       if (options.requireAuth) {
         try {
           let user = getAuthenticatedUser(req as any);
-          
+
           // Development mode bypass: Create a mock user for testing
           if (!user && process.env.NODE_ENV === 'development') {
             console.log('🔧 Development mode: Using mock authentication');
@@ -640,22 +630,23 @@ export function withAPI(
               permissions: ['*'], // All permissions for development
               avatar: '',
               isActive: true,
-              lastLoginAt: new Date()
+              lastLoginAt: new Date(),
             };
-            
+
             // Add mock user to request
             (req as any).user = mockUser;
             user = mockUser;
           }
-          
+
           if (!user) {
             throw new AuthenticationError();
           }
 
           // Permission checking
           if (options.requiredPermissions && options.requiredPermissions.length > 0) {
-            const hasPermission = options.requiredPermissions.some(permission => 
-              user.permissions.includes(permission) || user.permissions.includes('*')
+            const hasPermission = options.requiredPermissions.some(
+              (permission) =>
+                user.permissions.includes(permission) || user.permissions.includes('*')
             );
 
             if (!hasPermission) {
@@ -726,12 +717,12 @@ export function withAPI(
       // Add CORS headers to response
       if (options.cors) {
         const origin = req.headers.get('origin');
-        const allowedOrigins = Array.isArray(options.cors.origin) 
-          ? options.cors.origin 
+        const allowedOrigins = Array.isArray(options.cors.origin)
+          ? options.cors.origin
           : [options.cors.origin].filter(Boolean);
 
         response.headers.set(
-          'Access-Control-Allow-Origin', 
+          'Access-Control-Allow-Origin',
           origin && allowedOrigins.includes(origin) ? origin : '*'
         );
       }
@@ -740,10 +731,9 @@ export function withAPI(
       response.headers.set('X-Request-ID', requestId);
 
       return response;
-
     } catch (error) {
       console.error('API Error:', error);
-      
+
       if (error instanceof APIError) {
         return createErrorResponse(error, requestId);
       }
@@ -762,9 +752,7 @@ export function withAPI(
 // ============================================================================
 
 export function withAuth(requiredPermissions?: string[]) {
-  return (
-    handler: (req: NextRequest) => Promise<NextResponse> | NextResponse
-  ) => {
+  return (handler: (req: NextRequest) => Promise<NextResponse> | NextResponse) => {
     return withAPI(handler, {
       requireAuth: true,
       requiredPermissions,
@@ -772,54 +760,52 @@ export function withAuth(requiredPermissions?: string[]) {
   };
 }
 
-export function withValidation<T, U>(
-  bodySchema?: z.ZodSchema<T>,
-  querySchema?: z.ZodSchema<U>
-) {
+export function withValidation<T, U>(bodySchema?: z.ZodSchema<T>, querySchema?: z.ZodSchema<U>) {
   return (
-    handler: (req: NextRequest, validatedBody?: T, validatedQuery?: U) => Promise<NextResponse> | NextResponse
+    handler: (
+      req: NextRequest,
+      validatedBody?: T,
+      validatedQuery?: U
+    ) => Promise<NextResponse> | NextResponse
   ) => {
-    return withAPI(async (req: NextRequest) => {
-      let validatedBody: T | undefined;
-      let validatedQuery: U | undefined;
+    return withAPI(
+      async (req: NextRequest) => {
+        let validatedBody: T | undefined;
+        let validatedQuery: U | undefined;
 
-      if (bodySchema && ['POST', 'PUT', 'PATCH'].includes(req.method)) {
-        const body = await req.json();
-        validatedBody = validateRequest(bodySchema, body);
+        if (bodySchema && ['POST', 'PUT', 'PATCH'].includes(req.method)) {
+          const body = await req.json();
+          validatedBody = validateRequest(bodySchema, body);
+        }
+
+        if (querySchema) {
+          validatedQuery = validateQuery(querySchema, req.nextUrl.searchParams);
+        }
+
+        return handler(req, validatedBody, validatedQuery);
+      },
+      {
+        validateBody: bodySchema,
+        validateQuery: querySchema,
       }
-
-      if (querySchema) {
-        validatedQuery = validateQuery(querySchema, req.nextUrl.searchParams);
-      }
-
-      return handler(req, validatedBody, validatedQuery);
-    }, {
-      validateBody: bodySchema,
-      validateQuery: querySchema,
-    });
+    );
   };
 }
 
 export function withRateLimit(config: RateLimitConfig) {
-  return (
-    handler: (req: NextRequest) => Promise<NextResponse> | NextResponse
-  ) => {
+  return (handler: (req: NextRequest) => Promise<NextResponse> | NextResponse) => {
     return withAPI(handler, { rateLimit: config });
   };
 }
 
 export function withCORS(corsOptions: MiddlewareOptions['cors']) {
-  return (
-    handler: (req: NextRequest) => Promise<NextResponse> | NextResponse
-  ) => {
+  return (handler: (req: NextRequest) => Promise<NextResponse> | NextResponse) => {
     return withAPI(handler, { cors: corsOptions });
   };
 }
 
 export function withSubscription(subscriptionOptions: MiddlewareOptions['subscription']) {
-  return (
-    handler: (req: NextRequest) => Promise<NextResponse> | NextResponse
-  ) => {
+  return (handler: (req: NextRequest) => Promise<NextResponse> | NextResponse) => {
     return withAPI(handler, {
       requireAuth: true,
       subscription: subscriptionOptions,
@@ -828,9 +814,7 @@ export function withSubscription(subscriptionOptions: MiddlewareOptions['subscri
 }
 
 export function withFeatureGate(requiredFeatures: string[]) {
-  return (
-    handler: (req: NextRequest) => Promise<NextResponse> | NextResponse
-  ) => {
+  return (handler: (req: NextRequest) => Promise<NextResponse> | NextResponse) => {
     return withAPI(handler, {
       requireAuth: true,
       subscription: {
@@ -842,9 +826,7 @@ export function withFeatureGate(requiredFeatures: string[]) {
 }
 
 export function withUsageTracking(type: string, quantity?: number, metadata?: Record<string, any>) {
-  return (
-    handler: (req: NextRequest) => Promise<NextResponse> | NextResponse
-  ) => {
+  return (handler: (req: NextRequest) => Promise<NextResponse> | NextResponse) => {
     return withAPI(handler, {
       requireAuth: true,
       subscription: {
@@ -855,9 +837,7 @@ export function withUsageTracking(type: string, quantity?: number, metadata?: Re
 }
 
 export function withPlanLimits(limits: Record<string, number>) {
-  return (
-    handler: (req: NextRequest) => Promise<NextResponse> | NextResponse
-  ) => {
+  return (handler: (req: NextRequest) => Promise<NextResponse> | NextResponse) => {
     return withAPI(handler, {
       requireAuth: true,
       subscription: {
@@ -887,7 +867,7 @@ export interface HealthCheckResult {
 
 export async function performHealthCheck(): Promise<HealthCheckResult> {
   const startTime = Date.now();
-  
+
   const result: HealthCheckResult = {
     status: 'healthy',
     timestamp: new Date().toISOString(),
@@ -932,4 +912,4 @@ export type {
   MiddlewareOptions,
   RateLimitConfig,
   HealthCheckResult,
-}; 
+};

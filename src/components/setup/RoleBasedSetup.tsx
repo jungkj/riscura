@@ -126,7 +126,7 @@ const OrganizationSetup: React.FC<{ onUpdate: (data: any) => void }> = ({ onUpda
       </div>
 
       <div>
-        <DaisyLabel htmlFor="industry">Industry</DaisyLabel>
+        <DaisyLabel htmlFor="industry">Industry</DaisyInput>
         <select
           id="industry"
           className="w-full p-2 border border-gray-300 rounded-md"
@@ -366,8 +366,9 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
                   }`}
                   onClick={() => handleRoleSelect(role)}
                 >
-                  <DaisyCardContent className="p-6">
-                    <div className="flex items-start space-x-4">
+                  <DaisyCardContent className="p-6" >
+  <div className="flex items-start space-x-4">
+</DaisyCard>
                       <div className={`p-3 rounded-lg ${role.color}`}>
                         <Icon className="w-6 h-6" />
                       </div>
@@ -379,8 +380,9 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
                             <span className="text-xs font-medium text-gray-500">Key Features:</span>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {role.features.slice(0, 3).map((feature) => (
-                                <DaisyBadge key={feature} variant="secondary" className="text-xs">
-                                  {feature}
+                                <DaisyBadge key={feature} variant="secondary" className="text-xs" >
+  {feature}
+</DaisyBadge>
                                 </DaisyBadge>
                               ))}
                             </div>
@@ -388,7 +390,7 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
                         </div>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
@@ -432,8 +434,10 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
   if (isCompleting) {
     return (
       <div className="max-w-md mx-auto">
-        <DaisyCard>
-          <DaisyCardContent className="p-8 text-center">
+        <DaisyCard >
+  <DaisyCardContent className="p-8 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="w-8 h-8 text-green-600 animate-pulse" />
             </div>
@@ -441,17 +445,17 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
             <p className="text-gray-600 mb-4">
               We're customizing Riscura based on your preferences.
             </p>
-            <DaisyProgress value={100} className="h-2" />
-          </DaisyCardBody>
+            <DaisyProgress value={100} className="h-2" /></DaisyProgress>
         </DaisyCard>
       </div>
     );
-  }
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
-      <DaisyCard>
-        <DaisyCardHeader>
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
           <div className="flex items-center justify-between">
             <div>
               <DaisyCardTitle>Welcome to Riscura</DaisyCardTitle>
@@ -460,8 +464,9 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
               </p>
             </div>
             {onSkip && (
-              <DaisyButton variant="ghost" onClick={onSkip}>
-                Skip Setup
+              <DaisyButton variant="ghost" onClick={onSkip} >
+  Skip Setup
+</DaisyButton>
               </DaisyButton>
             )}
           </div>
@@ -475,28 +480,29 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
           </div>
         
 
-        <DaisyCardContent className="p-6">
-          {renderStepContent()}
+        <DaisyCardContent className="p-6" >
+  {renderStepContent()}
+</DaisyProgress>
 
           <div className="flex justify-between mt-8">
             <DaisyButton
               variant="outline"
               onClick={previousStep}
-              disabled={currentStep === 0}
-            >
-              <ChevronLeft className="w-4 h-4 mr-2" />
+              disabled={currentStep === 0} >
+  <ChevronLeft className="w-4 h-4 mr-2" />
+</DaisyButton>
               Previous
             </DaisyButton>
 
             <DaisyButton
               onClick={nextStep}
-              disabled={currentStep === 0 && !selectedRole}
-            >
-              {currentStep === steps.length - 1 ? 'Complete Setup' : 'Next'}
+              disabled={currentStep === 0 && !selectedRole} >
+  {currentStep === steps.length - 1 ? 'Complete Setup' : 'Next'}
+</DaisyButton>
               <ChevronRight className="w-4 h-4 ml-2" />
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

@@ -8,17 +8,13 @@ async function testSharePointIntegration() {
 
   // Check environment variables
   console.log('1️⃣ Checking environment configuration...');
-  const requiredEnvVars = [
-    'AZURE_AD_TENANT_ID',
-    'AZURE_AD_CLIENT_ID',
-    'GRAPH_API_SCOPE'
-  ];
+  const requiredEnvVars = ['AZURE_AD_TENANT_ID', 'AZURE_AD_CLIENT_ID', 'GRAPH_API_SCOPE'];
 
-  const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
+  const missingVars = requiredEnvVars.filter((varName) => !process.env[varName]);
   if (missingVars.length > 0) {
     console.error('❌ Missing required environment variables:', missingVars.join(', '));
     console.log('\nPlease set the following in your .env file:');
-    missingVars.forEach(varName => {
+    missingVars.forEach((varName) => {
       console.log(`${varName}=your-value-here`);
     });
     process.exit(1);
@@ -32,7 +28,7 @@ async function testSharePointIntegration() {
     const authService = getSharePointAuthService();
     const token = await authService.getAccessToken();
     console.log('✅ Successfully acquired access token');
-    console.log(`   Token preview: ${token.substring(0, 20)}...`);
+    // Do not log sensitive token information
   } catch (error) {
     console.error('❌ Authentication failed:', error);
     console.log('\nTroubleshooting tips:');
@@ -47,10 +43,13 @@ async function testSharePointIntegration() {
   try {
     const authService = getSharePointAuthService();
     const graphClient = await authService.getGraphClient();
-    
+
     // Try to get user info (requires User.Read permission)
-    const response = await graphClient.api('/me').get().catch(() => null);
-    
+    const response = await graphClient
+      .api('/me')
+      .get()
+      .catch(() => null);
+
     if (response) {
       console.log('✅ Graph API access confirmed (user context)');
     } else {
@@ -77,10 +76,10 @@ async function testSharePointIntegration() {
       console.log('\n5️⃣ Attempting to list Excel files...');
       const files = await fileService.listExcelFiles(process.env.SHAREPOINT_SITE_ID);
       console.log(`✅ Found ${files.length} Excel files`);
-      
+
       if (files.length > 0) {
         console.log('\n   Sample files:');
-        files.slice(0, 3).forEach(file => {
+        files.slice(0, 3).forEach((file) => {
           console.log(`   - ${file.name} (${Math.round(file.size / 1024)}KB)`);
         });
       }

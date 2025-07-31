@@ -502,4 +502,4 @@ export class ApprovalWorkflowManager {
   }
 }
 
-export const approvalWorkflowManager = new ApprovalWorkflowManager(); 
+export const approvalWorkflowManager = new ApprovalWorkflowManager();

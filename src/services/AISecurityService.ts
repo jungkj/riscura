@@ -82,13 +82,13 @@ export interface PIIEntity {
   replacementValue: string;
 }
 
-export type PIIType = 
-  | 'email' 
-  | 'phone' 
-  | 'ssn' 
-  | 'credit_card' 
-  | 'name' 
-  | 'address' 
+export type PIIType =
+  | 'email'
+  | 'phone'
+  | 'ssn'
+  | 'credit_card'
+  | 'name'
+  | 'address'
   | 'date_of_birth'
   | 'passport'
   | 'driver_license'
@@ -105,7 +105,7 @@ export interface ContentFlag {
   action: 'log' | 'warn' | 'block' | 'escalate';
 }
 
-export type ContentFlagType = 
+export type ContentFlagType =
   | 'inappropriate'
   | 'harmful'
   | 'bias'
@@ -249,15 +249,13 @@ export class AISecurityService {
   /**
    * Process AI request with full security pipeline
    */
-  async processSecureAIRequest(
-    request: {
-      content: string;
-      userId: string;
-      sessionId: string;
-      action: AIAction;
-      metadata?: Record<string, unknown>;
-    }
-  ): Promise<{
+  async processSecureAIRequest(request: {
+    content: string;
+    userId: string;
+    sessionId: string;
+    action: AIAction;
+    metadata?: Record<string, unknown>;
+  }): Promise<{
     sanitizedContent: string;
     auditLogId: string;
     securityApproved: boolean;
@@ -300,7 +298,7 @@ export class AISecurityService {
           piiDetected: piiResult.piiDetected,
           tokens: this.countTokens(request.content),
           classification,
-          contentFlags: contentAnalysis.flags
+          contentFlags: contentAnalysis.flags,
         },
         responseData: {
           originalResponse: '',
@@ -308,13 +306,13 @@ export class AISecurityService {
           confidence: 0,
           sources: [],
           moderation: contentAnalysis.moderation,
-          classification
+          classification,
         },
         securityAnalysis,
         complianceFlags: await this.checkCompliance(request, piiResult, classification),
         riskScore: this.calculateRiskScore(securityAnalysis, contentAnalysis),
         classification,
-        retentionDate: new Date(Date.now() + this.config.retentionPolicyDays * 24 * 60 * 60 * 1000)
+        retentionDate: new Date(Date.now() + this.config.retentionPolicyDays * 24 * 60 * 60 * 1000),
       };
 
       // Store audit log
@@ -326,9 +324,8 @@ export class AISecurityService {
         sanitizedContent: piiResult.sanitizedContent,
         auditLogId,
         securityApproved,
-        warnings
+        warnings,
       };
-
     } catch (error) {
       console.error('Security processing error:', error);
       throw new Error('Security processing failed');
@@ -353,7 +350,7 @@ export class AISecurityService {
     try {
       // 1. Content filtering for response
       const contentAnalysis = await this.analyzeContent(response);
-      
+
       // 2. PII detection in response
       const piiResult = await this.detectAndRedactPII(response);
       if (piiResult.piiDetected.length > 0) {
@@ -369,18 +366,17 @@ export class AISecurityService {
           confidence,
           sources,
           moderation: contentAnalysis.moderation,
-          classification: await this.classifyData(response, piiResult.piiDetected)
+          classification: await this.classifyData(response, piiResult.piiDetected),
         };
-        
+
         await this.updateAuditLog(auditLog);
       }
 
       return {
         filteredResponse: piiResult.sanitizedContent,
         approved: contentAnalysis.moderation.approved,
-        warnings
+        warnings,
       };
-
     } catch (error) {
       console.error('Response security processing error:', error);
       throw new Error('Response security processing failed');
@@ -404,7 +400,7 @@ export class AISecurityService {
     // Detect PII using patterns
     for (const [type, pattern] of this.piiPatterns) {
       const matches = Array.from(content.matchAll(pattern));
-      
+
       for (const match of matches) {
         if (match.index !== undefined) {
           const entity: PIIEntity = {
@@ -413,7 +409,7 @@ export class AISecurityService {
             confidence: this.calculatePIIConfidence(type, match[0]),
             position: { start: match.index, end: match.index + match[0].length },
             redactionMethod: this.getRedactionMethod(type),
-            replacementValue: this.generateReplacement(type, match[0])
+            replacementValue: this.generateReplacement(type, match[0]),
           };
           piiEntities.push(entity);
         }
@@ -425,7 +421,7 @@ export class AISecurityService {
 
     // Apply redaction
     for (const entity of piiEntities) {
-      sanitizedContent = 
+      sanitizedContent =
         sanitizedContent.slice(0, entity.position.start) +
         entity.replacementValue +
         sanitizedContent.slice(entity.position.end);
@@ -449,8 +445,8 @@ export class AISecurityService {
           flags: [],
           confidence: 1.0,
           reasoning: 'Content filtering disabled',
-          suggestedActions: []
-        }
+          suggestedActions: [],
+        },
       };
     }
 
@@ -464,14 +460,14 @@ export class AISecurityService {
           severity: this.getContentFlagSeverity(type),
           confidence: 0.8,
           description: `Content flagged for ${type}`,
-          action: this.getContentFlagAction(type)
+          action: this.getContentFlagAction(type),
         };
         flags.push(flag);
       }
     }
 
     // Generate moderation result
-    const criticalFlags = flags.filter(f => f.severity === 'critical' || f.severity === 'high');
+    const criticalFlags = flags.filter((f) => f.severity === 'critical' || f.severity === 'high');
     const approved = criticalFlags.length === 0;
 
     return {
@@ -481,8 +477,10 @@ export class AISecurityService {
         flags,
         confidence: 0.85,
         reasoning: approved ? 'Content passed security checks' : 'Content flagged for review',
-        suggestedActions: approved ? [] : ['Review flagged content', 'Consider content modification']
-      }
+        suggestedActions: approved
+          ? []
+          : ['Review flagged content', 'Consider content modification'],
+      },
     };
   }
 
@@ -490,7 +488,7 @@ export class AISecurityService {
    * Classify data sensitivity
    */
   private async classifyData(
-    content: string, 
+    content: string,
     piiEntities: PIIEntity[]
   ): Promise<DataClassification> {
     let level: DataClassification['level'] = 'public';
@@ -509,7 +507,7 @@ export class AISecurityService {
       financial: /\b(account|payment|credit|financial|money|salary)\b/i,
       medical: /\b(medical|health|patient|diagnosis|treatment)\b/i,
       legal: /\b(legal|court|lawsuit|contract|agreement)\b/i,
-      confidential: /\b(confidential|secret|private|internal)\b/i
+      confidential: /\b(confidential|secret|private|internal)\b/i,
     };
 
     for (const [category, pattern] of Object.entries(sensitivePatterns)) {
@@ -526,7 +524,7 @@ export class AISecurityService {
       categories,
       sensitivity: Math.min(sensitivity, 100),
       handlingRequirements: this.getHandlingRequirements(level),
-      retentionPeriod: this.getRetentionPeriod(level)
+      retentionPeriod: this.getRetentionPeriod(level),
     };
   }
 
@@ -538,14 +536,14 @@ export class AISecurityService {
     piiResult: { piiDetected: PIIEntity[] }
   ): Promise<SecurityAnalysis> {
     const anomalies: SecurityAnomaly[] = [];
-    
+
     // Check for unusual access patterns
     if (await this.detectUnusualAccess(request.userId, request.action)) {
       anomalies.push({
         type: 'unusual_access',
         description: 'Unusual access pattern detected',
         severity: 'medium',
-        evidence: { action: request.action, timestamp: new Date() }
+        evidence: { action: request.action, timestamp: new Date() },
       });
     }
 
@@ -555,7 +553,7 @@ export class AISecurityService {
         type: 'data_exfiltration',
         description: 'High volume of PII detected',
         severity: 'high',
-        evidence: { piiCount: piiResult.piiDetected.length }
+        evidence: { piiCount: piiResult.piiDetected.length },
       });
     }
 
@@ -571,8 +569,8 @@ export class AISecurityService {
         atRest: true,
         algorithm: 'AES-256-GCM',
         keyVersion: 'v1.0',
-        strength: 256
-      }
+        strength: 256,
+      },
     };
   }
 
@@ -591,13 +589,13 @@ export class AISecurityService {
 
       switch (standard.name) {
         case 'GDPR':
-          if (piiResult.piiDetected.some(p => p.type === 'email' || p.type === 'name')) {
+          if (piiResult.piiDetected.some((p) => p.type === 'email' || p.type === 'name')) {
             flags.push({
               standard: 'GDPR',
               requirement: 'Article 6 - Lawful basis for processing',
               status: 'warning',
               details: 'Personal data processing detected',
-              remediation: 'Ensure consent or legitimate interest basis'
+              remediation: 'Ensure consent or legitimate interest basis',
             });
           }
           break;
@@ -608,7 +606,7 @@ export class AISecurityService {
               standard: 'SOC2',
               requirement: 'CC6.1 - Logical access security',
               status: 'compliant',
-              details: 'Restricted data access properly controlled'
+              details: 'Restricted data access properly controlled',
             });
           }
           break;
@@ -618,7 +616,7 @@ export class AISecurityService {
             standard: 'ISO27001',
             requirement: 'A.12.3 - Information backup',
             status: 'compliant',
-            details: 'Audit trail maintained'
+            details: 'Audit trail maintained',
           });
           break;
       }
@@ -634,11 +632,9 @@ export class AISecurityService {
     standard: ComplianceStandard,
     period: { start: Date; end: Date }
   ): Promise<ComplianceReport> {
-    const auditLogs = Array.from(this.auditLogs.values())
-      .filter(log => 
-        log.timestamp >= period.start && 
-        log.timestamp <= period.end
-      );
+    const auditLogs = Array.from(this.auditLogs.values()).filter(
+      (log) => log.timestamp >= period.start && log.timestamp <= period.end
+    );
 
     const findings: ComplianceFinding[] = [];
     const recommendations: ComplianceRecommendation[] = [];
@@ -647,25 +643,25 @@ export class AISecurityService {
     const summary: ComplianceSummary = {
       totalAuditLogs: auditLogs.length,
       complianceScore: this.calculateComplianceScore(auditLogs, standard),
-      criticalFindings: findings.filter(f => f.riskLevel === 'critical').length,
+      criticalFindings: findings.filter((f) => f.riskLevel === 'critical').length,
       resolvedIssues: 0,
-      pendingActions: findings.filter(f => f.status === 'fail').length,
-      dataClassificationBreakdown: this.getDataClassificationBreakdown(auditLogs)
+      pendingActions: findings.filter((f) => f.status === 'fail').length,
+      dataClassificationBreakdown: this.getDataClassificationBreakdown(auditLogs),
     };
 
     // Generate findings based on standard
     switch (standard.name) {
       case 'GDPR':
-        findings.push(...await this.generateGDPRFindings(auditLogs));
-        recommendations.push(...await this.generateGDPRRecommendations(auditLogs));
+        findings.push(...(await this.generateGDPRFindings(auditLogs)));
+        recommendations.push(...(await this.generateGDPRRecommendations(auditLogs)));
         break;
       case 'SOC2':
-        findings.push(...await this.generateSOC2Findings(auditLogs));
-        recommendations.push(...await this.generateSOC2Recommendations(auditLogs));
+        findings.push(...(await this.generateSOC2Findings(auditLogs)));
+        recommendations.push(...(await this.generateSOC2Recommendations(auditLogs)));
         break;
       case 'ISO27001':
-        findings.push(...await this.generateISO27001Findings(auditLogs));
-        recommendations.push(...await this.generateISO27001Recommendations(auditLogs));
+        findings.push(...(await this.generateISO27001Findings(auditLogs)));
+        recommendations.push(...(await this.generateISO27001Recommendations(auditLogs)));
         break;
     }
 
@@ -678,9 +674,13 @@ export class AISecurityService {
       summary,
       findings,
       recommendations,
-      status: summary.complianceScore >= 80 ? 'compliant' : 
-               summary.complianceScore >= 60 ? 'partial_compliance' : 'non_compliant',
-      nextReviewDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000) // 90 days
+      status:
+        summary.complianceScore >= 80
+          ? 'compliant'
+          : summary.complianceScore >= 60
+            ? 'partial_compliance'
+            : 'non_compliant',
+      nextReviewDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 90 days
     };
   }
 
@@ -709,12 +709,12 @@ export class AISecurityService {
       requestData: {
         ...auditLog.requestData,
         originalContent: this.encryptData(auditLog.requestData.originalContent),
-        sanitizedContent: this.encryptData(auditLog.requestData.sanitizedContent)
-      }
+        sanitizedContent: this.encryptData(auditLog.requestData.sanitizedContent),
+      },
     };
 
     this.auditLogs.set(auditLog.id, encryptedLog);
-    
+
     // In production, store to secure database
     // await this.databaseService.storeAuditLog(encryptedLog);
   }
@@ -724,7 +724,7 @@ export class AISecurityService {
    */
   private async updateAuditLog(auditLog: AIAuditLog): Promise<void> {
     this.auditLogs.set(auditLog.id, auditLog);
-    
+
     // In production, update in secure database
     // await this.databaseService.updateAuditLog(auditLog);
   }
@@ -736,7 +736,7 @@ export class AISecurityService {
       ['phone', /\b\d{3}[-.]?\d{3}[-.]?\d{4}\b/g],
       ['ssn', /\b\d{3}-?\d{2}-?\d{4}\b/g],
       ['credit_card', /\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b/g],
-      ['ip_address', /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g]
+      ['ip_address', /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g],
     ]);
   }
 
@@ -745,7 +745,7 @@ export class AISecurityService {
       ['inappropriate', /\b(offensive|inappropriate|harmful)\b/i],
       ['financial', /\b(account\s*number|routing\s*number|bank\s*details)\b/i],
       ['medical', /\b(patient\s*id|medical\s*record|diagnosis)\b/i],
-      ['confidential', /\b(confidential|classified|secret)\b/i]
+      ['confidential', /\b(confidential|classified|secret)\b/i],
     ]);
   }
 
@@ -755,18 +755,18 @@ export class AISecurityService {
       email: 0.95,
       phone: 0.85,
       ssn: 0.99,
-      credit_card: 0.90,
-      name: 0.70,
+      credit_card: 0.9,
+      name: 0.7,
       address: 0.75,
-      date_of_birth: 0.80,
+      date_of_birth: 0.8,
       passport: 0.95,
-      driver_license: 0.90,
+      driver_license: 0.9,
       bank_account: 0.85,
-      ip_address: 0.80,
-      custom: 0.60
+      ip_address: 0.8,
+      custom: 0.6,
     };
-    
-    return confidenceMap[type] || 0.60;
+
+    return confidenceMap[type] || 0.6;
   }
 
   private getRedactionMethod(type: PIIType): PIIEntity['redactionMethod'] {
@@ -782,9 +782,9 @@ export class AISecurityService {
       driver_license: 'hash',
       bank_account: 'hash',
       ip_address: 'mask',
-      custom: 'mask'
+      custom: 'mask',
     };
-    
+
     return methodMap[type] || 'mask';
   }
 
@@ -817,9 +817,9 @@ export class AISecurityService {
       confidential: 'critical',
       financial: 'high',
       medical: 'high',
-      legal: 'medium'
+      legal: 'medium',
     };
-    
+
     return severityMap[type] || 'medium';
   }
 
@@ -833,9 +833,9 @@ export class AISecurityService {
       confidential: 'block',
       financial: 'block',
       medical: 'block',
-      legal: 'warn'
+      legal: 'warn',
     };
-    
+
     return actionMap[type] || 'log';
   }
 
@@ -844,20 +844,25 @@ export class AISecurityService {
       public: ['Standard handling'],
       internal: ['Internal use only', 'Employee access only'],
       confidential: ['Restricted access', 'Encryption required', 'Audit trail'],
-      restricted: ['Need-to-know basis', 'Executive approval', 'Enhanced encryption', 'Full audit trail']
+      restricted: [
+        'Need-to-know basis',
+        'Executive approval',
+        'Enhanced encryption',
+        'Full audit trail',
+      ],
     };
-    
+
     return requirements[level] || ['Standard handling'];
   }
 
   private getRetentionPeriod(level: DataClassification['level']): number {
     const periods: Record<DataClassification['level'], number> = {
-      public: 365,      // 1 year
-      internal: 1095,   // 3 years
+      public: 365, // 1 year
+      internal: 1095, // 3 years
       confidential: 2555, // 7 years
-      restricted: 3650   // 10 years
+      restricted: 3650, // 10 years
     };
-    
+
     return periods[level] || 365;
   }
 
@@ -866,34 +871,53 @@ export class AISecurityService {
     return content.split(/\s+/).length + content.split(/[.,!?;:]/).length - 1;
   }
 
-  private calculateRiskScore(security: SecurityAnalysis, content: { flags: ContentFlag[] }): number {
+  private calculateRiskScore(
+    security: SecurityAnalysis,
+    content: { flags: ContentFlag[] }
+  ): number {
     let score = 0;
-    
+
     // Security analysis scoring
     switch (security.threatLevel) {
-      case 'critical': score += 80; break;
-      case 'high': score += 60; break;
-      case 'medium': score += 40; break;
-      case 'low': score += 20; break;
+      case 'critical':
+        score += 80;
+        break;
+      case 'high':
+        score += 60;
+        break;
+      case 'medium':
+        score += 40;
+        break;
+      case 'low':
+        score += 20;
+        break;
     }
-    
+
     // Content flags scoring
-    content.flags.forEach(flag => {
+    content.flags.forEach((flag) => {
       switch (flag.severity) {
-        case 'critical': score += 20; break;
-        case 'high': score += 15; break;
-        case 'medium': score += 10; break;
-        case 'low': score += 5; break;
+        case 'critical':
+          score += 20;
+          break;
+        case 'high':
+          score += 15;
+          break;
+        case 'medium':
+          score += 10;
+          break;
+        case 'low':
+          score += 5;
+          break;
       }
     });
-    
+
     return Math.min(score, 100);
   }
 
   private calculateThreatLevel(anomalies: SecurityAnomaly[]): SecurityAnalysis['threatLevel'] {
-    if (anomalies.some(a => a.severity === 'critical')) return 'critical';
-    if (anomalies.some(a => a.severity === 'high')) return 'high';
-    if (anomalies.some(a => a.severity === 'medium')) return 'medium';
+    if (anomalies.some((a) => a.severity === 'critical')) return 'critical';
+    if (anomalies.some((a) => a.severity === 'high')) return 'high';
+    if (anomalies.some((a) => a.severity === 'medium')) return 'medium';
     return 'low';
   }
 
@@ -909,7 +933,7 @@ export class AISecurityService {
       permissions: ['read', 'write', 'ai_query'],
       restrictions: [],
       role: 'user',
-      lastValidated: new Date()
+      lastValidated: new Date(),
     };
   }
 
@@ -918,7 +942,7 @@ export class AISecurityService {
       hashValid: true,
       checksum: 'abc123def456',
       lastVerified: new Date(),
-      modifications: []
+      modifications: [],
     };
   }
 
@@ -926,11 +950,11 @@ export class AISecurityService {
     // Simplified compliance scoring
     const totalLogs = logs.length;
     if (totalLogs === 0) return 100;
-    
-    const compliantLogs = logs.filter(log => 
-      log.complianceFlags.every(flag => flag.status === 'compliant')
+
+    const compliantLogs = logs.filter((log) =>
+      log.complianceFlags.every((flag) => flag.status === 'compliant')
     ).length;
-    
+
     return Math.round((compliantLogs / totalLogs) * 100);
   }
 
@@ -939,23 +963,21 @@ export class AISecurityService {
       public: 0,
       internal: 0,
       confidential: 0,
-      restricted: 0
+      restricted: 0,
     };
-    
-    logs.forEach(log => {
+
+    logs.forEach((log) => {
       breakdown[log.classification.level]++;
     });
-    
+
     return breakdown;
   }
 
   private async generateGDPRFindings(logs: AIAuditLog[]): Promise<ComplianceFinding[]> {
     const findings: ComplianceFinding[] = [];
-    
-    const piiProcessingLogs = logs.filter(log => 
-      log.requestData.piiDetected.length > 0
-    );
-    
+
+    const piiProcessingLogs = logs.filter((log) => log.requestData.piiDetected.length > 0);
+
     if (piiProcessingLogs.length > 0) {
       findings.push({
         id: generateId('finding'),
@@ -964,14 +986,16 @@ export class AISecurityService {
         description: `${piiProcessingLogs.length} instances of PII processing detected with proper safeguards`,
         evidence: [`${piiProcessingLogs.length} audit logs with PII redaction`],
         riskLevel: 'low',
-        remediation: 'Continue current PII protection practices'
+        remediation: 'Continue current PII protection practices',
       });
     }
-    
+
     return findings;
   }
 
-  private async generateGDPRRecommendations(logs: AIAuditLog[]): Promise<ComplianceRecommendation[]> {
+  private async generateGDPRRecommendations(
+    logs: AIAuditLog[]
+  ): Promise<ComplianceRecommendation[]> {
     return [
       {
         priority: 'medium',
@@ -979,8 +1003,8 @@ export class AISecurityService {
         description: 'Implement automated data subject access request handling',
         implementation: 'Develop DSAR automation system',
         timeline: '3 months',
-        cost: 'medium'
-      }
+        cost: 'medium',
+      },
     ];
   }
 
@@ -993,12 +1017,14 @@ export class AISecurityService {
         description: 'Access controls properly implemented for AI system',
         evidence: ['Audit logs', 'Access control checks'],
         riskLevel: 'low',
-        remediation: 'Maintain current access control standards'
-      }
+        remediation: 'Maintain current access control standards',
+      },
     ];
   }
 
-  private async generateSOC2Recommendations(logs: AIAuditLog[]): Promise<ComplianceRecommendation[]> {
+  private async generateSOC2Recommendations(
+    logs: AIAuditLog[]
+  ): Promise<ComplianceRecommendation[]> {
     return [
       {
         priority: 'high',
@@ -1006,8 +1032,8 @@ export class AISecurityService {
         description: 'Enhance monitoring and alerting for AI security events',
         implementation: 'Deploy advanced SIEM integration',
         timeline: '2 months',
-        cost: 'high'
-      }
+        cost: 'high',
+      },
     ];
   }
 
@@ -1020,12 +1046,14 @@ export class AISecurityService {
         description: 'Audit trails properly maintained and backed up',
         evidence: ['Backup logs', 'Retention policies'],
         riskLevel: 'low',
-        remediation: 'Continue current backup practices'
-      }
+        remediation: 'Continue current backup practices',
+      },
     ];
   }
 
-  private async generateISO27001Recommendations(logs: AIAuditLog[]): Promise<ComplianceRecommendation[]> {
+  private async generateISO27001Recommendations(
+    logs: AIAuditLog[]
+  ): Promise<ComplianceRecommendation[]> {
     return [
       {
         priority: 'medium',
@@ -1033,59 +1061,55 @@ export class AISecurityService {
         description: 'Regular security awareness training for AI system users',
         implementation: 'Quarterly training program',
         timeline: '1 month',
-        cost: 'low'
-      }
+        cost: 'low',
+      },
     ];
   }
 
   // Public API methods
-  public async getAuditLogs(
-    filters?: {
-      userId?: string;
-      dateRange?: { start: Date; end: Date };
-      threatLevel?: SecurityAnalysis['threatLevel'];
-    }
-  ): Promise<AIAuditLog[]> {
+  public async getAuditLogs(filters?: {
+    userId?: string;
+    dateRange?: { start: Date; end: Date };
+    threatLevel?: SecurityAnalysis['threatLevel'];
+  }): Promise<AIAuditLog[]> {
     let logs = Array.from(this.auditLogs.values());
-    
+
     if (filters) {
       if (filters.userId) {
-        logs = logs.filter(log => log.userId === filters.userId);
+        logs = logs.filter((log) => log.userId === filters.userId);
       }
       if (filters.dateRange) {
-        logs = logs.filter(log => 
-          log.timestamp >= filters.dateRange!.start && 
-          log.timestamp <= filters.dateRange!.end
+        logs = logs.filter(
+          (log) =>
+            log.timestamp >= filters.dateRange!.start && log.timestamp <= filters.dateRange!.end
         );
       }
       if (filters.threatLevel) {
-        logs = logs.filter(log => 
-          log.securityAnalysis.threatLevel === filters.threatLevel
-        );
+        logs = logs.filter((log) => log.securityAnalysis.threatLevel === filters.threatLevel);
       }
     }
-    
+
     return logs;
   }
 
   public async exportAuditLogs(format: 'json' | 'csv' = 'json'): Promise<string> {
     const logs = Array.from(this.auditLogs.values());
-    
+
     if (format === 'json') {
       return JSON.stringify(logs, null, 2);
     } else {
       // CSV export logic
       const headers = ['id', 'timestamp', 'userId', 'action', 'threatLevel', 'riskScore'];
-      const rows = logs.map(log => [
+      const rows = logs.map((log) => [
         log.id,
         log.timestamp.toISOString(),
         log.userId,
         log.action.type,
         log.securityAnalysis.threatLevel,
-        log.riskScore.toString()
+        log.riskScore.toString(),
       ]);
-      
-      return [headers, ...rows].map(row => row.join(',')).join('\n');
+
+      return [headers, ...rows].map((row) => row.join(',')).join('\n');
     }
   }
 
@@ -1098,39 +1122,39 @@ export class AISecurityService {
   } {
     const logs = Array.from(this.auditLogs.values());
     const totalLogs = logs.length;
-    
+
     if (totalLogs === 0) {
       return {
         totalAuditLogs: 0,
         avgRiskScore: 0,
         threatLevelDistribution: {},
         piiDetectionRate: 0,
-        complianceScore: 100
+        complianceScore: 100,
       };
     }
-    
+
     const avgRiskScore = logs.reduce((sum, log) => sum + log.riskScore, 0) / totalLogs;
-    
+
     const threatLevelDistribution: Record<string, number> = {};
-    logs.forEach(log => {
+    logs.forEach((log) => {
       const level = log.securityAnalysis.threatLevel;
       threatLevelDistribution[level] = (threatLevelDistribution[level] || 0) + 1;
     });
-    
-    const piiDetectedLogs = logs.filter(log => log.requestData.piiDetected.length > 0).length;
+
+    const piiDetectedLogs = logs.filter((log) => log.requestData.piiDetected.length > 0).length;
     const piiDetectionRate = (piiDetectedLogs / totalLogs) * 100;
-    
-    const compliantLogs = logs.filter(log => 
-      log.complianceFlags.every(flag => flag.status === 'compliant')
+
+    const compliantLogs = logs.filter((log) =>
+      log.complianceFlags.every((flag) => flag.status === 'compliant')
     ).length;
     const complianceScore = (compliantLogs / totalLogs) * 100;
-    
+
     return {
       totalAuditLogs: totalLogs,
       avgRiskScore: Math.round(avgRiskScore * 100) / 100,
       threatLevelDistribution,
       piiDetectionRate: Math.round(piiDetectionRate * 100) / 100,
-      complianceScore: Math.round(complianceScore * 100) / 100
+      complianceScore: Math.round(complianceScore * 100) / 100,
     };
   }
 }
@@ -1146,19 +1170,19 @@ export const aiSecurityService = new AISecurityService({
     {
       name: 'SOC2',
       enabled: true,
-      requirements: ['CC6.1', 'CC6.2', 'CC6.3']
+      requirements: ['CC6.1', 'CC6.2', 'CC6.3'],
     },
     {
       name: 'ISO27001',
       enabled: true,
-      requirements: ['A.12.3', 'A.18.1', 'A.18.2']
+      requirements: ['A.12.3', 'A.18.1', 'A.18.2'],
     },
     {
       name: 'GDPR',
       enabled: true,
-      requirements: ['Article 6', 'Article 25', 'Article 32']
-    }
+      requirements: ['Article 6', 'Article 25', 'Article 32'],
+    },
   ],
   retentionPolicyDays: 2555, // 7 years
-  anonymizationLevel: 'advanced'
-}); 
+  anonymizationLevel: 'advanced',
+});

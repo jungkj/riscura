@@ -688,7 +688,7 @@ export const apiRegistry = new APIRegistry();
 export function ApiEndpoint(info: Partial<APIEndpointInfo>) {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
-    
+
     descriptor.value = async function (req: NextRequest, context?: any) {
       // Register endpoint if not already registered
       if (info.path && info.method) {
@@ -707,13 +707,13 @@ export function ApiEndpoint(info: Partial<APIEndpointInfo>) {
           },
           ...info,
         } as APIEndpointInfo;
-        
+
         apiRegistry.registerEndpoint(fullInfo);
       }
-      
+
       return originalMethod.call(this, req, context);
     };
-    
+
     return descriptor;
   };
 }
@@ -729,7 +729,7 @@ export function zodToOpenAPI(schema: z.ZodType<any>): SchemaObject {
       ...(schema.maxLength !== null && { maxLength: schema.maxLength }),
     };
   }
-  
+
   if (schema instanceof z.ZodNumber) {
     return {
       type: 'number',
@@ -737,54 +737,54 @@ export function zodToOpenAPI(schema: z.ZodType<any>): SchemaObject {
       ...(schema.maxValue !== null && { maximum: schema.maxValue }),
     };
   }
-  
+
   if (schema instanceof z.ZodBoolean) {
     return { type: 'boolean' };
   }
-  
+
   if (schema instanceof z.ZodArray) {
     return {
       type: 'array',
       items: zodToOpenAPI(schema.element),
     };
   }
-  
+
   if (schema instanceof z.ZodObject) {
     const properties: Record<string, SchemaObject> = {};
     const required: string[] = [];
-    
+
     for (const [key, value] of Object.entries(schema.shape)) {
       properties[key] = zodToOpenAPI(value as z.ZodType<any>);
       if (!(value as z.ZodType<any>).isOptional()) {
         required.push(key);
       }
     }
-    
+
     return {
       type: 'object',
       properties,
       required: required.length > 0 ? required : undefined,
     };
   }
-  
+
   if (schema instanceof z.ZodEnum) {
     return {
       type: 'string',
       enum: schema.options,
     };
   }
-  
+
   if (schema instanceof z.ZodOptional) {
     return zodToOpenAPI(schema.unwrap());
   }
-  
+
   if (schema instanceof z.ZodNullable) {
     return {
       ...zodToOpenAPI(schema.unwrap()),
       nullable: true,
     };
   }
-  
+
   return { type: 'object' };
 }
 

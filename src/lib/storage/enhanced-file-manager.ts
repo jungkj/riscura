@@ -2,7 +2,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { createHash } from 'crypto';
 import path from 'path';
 import { uploadFile, getFile, deleteFile, generateSignedUrl } from './s3-client';
-import { validateFile, generateThumbnail, extractTextContent, performVirusScan } from './file-validator';
+import {
+  validateFile,
+  generateThumbnail,
+  extractTextContent,
+  performVirusScan,
+} from './file-validator';
 import { prisma } from '@/lib/db';
 
 export interface FileUploadResult {
@@ -103,12 +108,10 @@ export class EnhancedFileManager {
       try {
         const thumbnail = await generateThumbnail(buffer, validationResult.fileInfo.detectedType);
         if (thumbnail) {
-          const thumbnailResult = await uploadFile(
-            thumbnail,
-            `thumb_${fileName}`,
-            'image/jpeg',
-            { uploadedBy: userId, category: 'thumbnail' }
-          );
+          const thumbnailResult = await uploadFile(thumbnail, `thumb_${fileName}`, 'image/jpeg', {
+            uploadedBy: userId,
+            category: 'thumbnail',
+          });
           thumbnailUrl = thumbnailResult.url;
         }
       } catch (error) {
@@ -132,7 +135,7 @@ export class EnhancedFileManager {
     if (!prisma) {
       throw new Error('Database connection not available');
     }
-    
+
     const document = await prisma.document.create({
       data: {
         id: uuidv4(),
@@ -215,7 +218,7 @@ export class EnhancedFileManager {
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      
+
       try {
         const result = await this.uploadFile(
           file,
@@ -225,7 +228,7 @@ export class EnhancedFileManager {
           organizationId,
           metadata
         );
-        
+
         successful.push(result);
         warnings.push(...result.warnings);
         onFileComplete?.(result);
@@ -258,7 +261,7 @@ export class EnhancedFileManager {
     if (!prisma) {
       throw new Error('Database connection not available');
     }
-    
+
     const existingDocument = await prisma.document.findUnique({
       where: { id: documentId },
     });
@@ -287,7 +290,7 @@ export class EnhancedFileManager {
         content: result.url,
         extractedText: result.extractedText,
         aiAnalysis: {
-          ...existingDocument.aiAnalysis as any,
+          ...(existingDocument.aiAnalysis as any),
           versions: [
             ...((existingDocument.aiAnalysis as any)?.versions || []),
             {
@@ -360,7 +363,7 @@ export class EnhancedFileManager {
     if (!prisma) {
       throw new Error('Database connection not available');
     }
-    
+
     const [documents, total] = await Promise.all([
       prisma.document.findMany({
         where: whereClause,
@@ -391,7 +394,7 @@ export class EnhancedFileManager {
     if (!prisma) {
       throw new Error('Database connection not available');
     }
-    
+
     const document = await prisma.document.findUnique({
       where: { id: documentId },
       include: {
@@ -425,9 +428,7 @@ export class EnhancedFileManager {
     return {
       ...document,
       downloadUrl: `/api/documents/${document.id}/download`,
-      previewUrl: this.canPreview(document.type) 
-        ? `/api/documents/${document.id}/preview` 
-        : null,
+      previewUrl: this.canPreview(document.type) ? `/api/documents/${document.id}/preview` : null,
       thumbnailUrl: (document.aiAnalysis as any)?.thumbnailUrl,
     };
   }
@@ -439,7 +440,7 @@ export class EnhancedFileManager {
     if (!prisma) {
       throw new Error('Database connection not available');
     }
-    
+
     const document = await prisma.document.findUnique({
       where: { id: documentId },
     });
@@ -458,7 +459,7 @@ export class EnhancedFileManager {
     if (document.content) {
       try {
         // Extract filename from URL or use document ID
-        const fileName = document.content.includes('/') 
+        const fileName = document.content.includes('/')
           ? document.content.split('/').pop() || document.id
           : document.id;
         await deleteFile(fileName);
@@ -487,7 +488,7 @@ export class EnhancedFileManager {
     expiresIn: number = 3600
   ): Promise<string> {
     const document = await this.getDocument(documentId, userId);
-    
+
     if (document.content?.startsWith('http')) {
       // For S3 URLs, generate signed URL
       const fileName = document.content.split('/').pop();
@@ -503,7 +504,7 @@ export class EnhancedFileManager {
     if (!prisma) {
       throw new Error('Database connection not available');
     }
-    
+
     return await prisma.document.findFirst({
       where: {
         organizationId,
@@ -582,4 +583,4 @@ export class EnhancedFileManager {
 
     return `${size.toFixed(1)} ${units[unitIndex]}`;
   }
-} 
+}

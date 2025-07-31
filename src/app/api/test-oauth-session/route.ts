@@ -11,9 +11,9 @@ export async function GET(req: NextRequest) {
         cookie: req.headers.get('cookie') || '',
       },
     });
-    
+
     const data = await response.json();
-    
+
     return NextResponse.json({
       oauthSessionResponse: {
         status: response.status,
@@ -21,11 +21,11 @@ export async function GET(req: NextRequest) {
       },
       cookies: {
         sessionToken: req.cookies.get('session-token')?.value ? 'exists' : 'missing',
-        allCookies: req.cookies.getAll().map(c => c.name),
+        allCookies: req.cookies.getAll().map((c) => c.name),
       },
-      recommendation: data.user ? 
-        'OAuth session is returning a valid user. Check if AuthContext is processing it correctly.' :
-        'OAuth session is returning null user. This causes the redirect.',
+      recommendation: data.user
+        ? 'OAuth session is returning a valid user. Check if AuthContext is processing it correctly.'
+        : 'OAuth session is returning null user. This causes the redirect.',
     });
   } catch (error) {
     return NextResponse.json({

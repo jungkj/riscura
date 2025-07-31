@@ -7,7 +7,15 @@ interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
   size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
-export const DaisyTable = ({ className, zebra, pinRows, pinCols, size = 'md', children, ...props }: TableProps) => {
+export const DaisyTable = ({
+  className,
+  zebra,
+  pinRows,
+  pinCols,
+  size = 'md',
+  children,
+  ...props
+}: TableProps) => {
   const sizeClasses = {
     xs: 'table-xs',
     sm: 'table-sm',
@@ -17,7 +25,7 @@ export const DaisyTable = ({ className, zebra, pinRows, pinCols, size = 'md', ch
 
   return (
     <div className="overflow-x-auto">
-      <table 
+      <table
         className={cn(
           'table',
           zebra && 'table-zebra',
@@ -25,7 +33,7 @@ export const DaisyTable = ({ className, zebra, pinRows, pinCols, size = 'md', ch
           pinCols && 'table-pin-cols',
           sizeClasses[size],
           className
-        )} 
+        )}
         {...props}
       >
         {children}

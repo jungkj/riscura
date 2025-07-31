@@ -9,6 +9,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Activity, Plus, Download, Filter } from 'lucide-react';
 
 export default function RiskHeatMapPage() {
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -18,40 +19,46 @@ export default function RiskHeatMapPage() {
           <p className="text-gray-600">Visualize and analyze your organization's risk landscape through our interactive heat map interface.</p>
         </div>
         <div className="flex items-center gap-3">
-          <DaisyButton variant="outline" className="text-sm">
-            <Filter className="h-4 w-4 mr-2" />
+          <DaisyButton variant="outline" className="text-sm" >
+  <Filter className="h-4 w-4 mr-2" />
+</DaisyButton>
             Filters
           </DaisyButton>
-          <DaisyButton variant="outline" className="text-sm">
-            <Download className="h-4 w-4 mr-2" />
+          <DaisyButton variant="outline" className="text-sm" >
+  <Download className="h-4 w-4 mr-2" />
+</DaisyButton>
             Export
           </DaisyButton>
-          <DaisyButton>
-            <Plus className="h-4 w-4 mr-2" />
+          <DaisyButton >
+  <Plus className="h-4 w-4 mr-2" />
+</DaisyButton>
             Add Risk
           </DaisyButton>
         </div>
       </div>
 
       {/* Heat Map Content */}
-      <DaisyCard>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center gap-2">
-            <Activity className="h-5 w-5 text-blue-600" />
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <Activity className="h-5 w-5 text-blue-600" />
+</DaisyCardTitle>
             Interactive Risk Heat Map
           </DaisyCardTitle>
-        
-        <DaisyCardContent>
-          <Suspense 
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <Suspense 
             fallback={
               <div className="flex items-center justify-center p-12">
+</DaisyCardContent>
                 <LoadingSpinner />
               </div>
             }
           >
             <RiskHeatMap />
           </Suspense>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

@@ -11,48 +11,48 @@ export enum ErrorCode {
   AUTH_EXPIRED = 'AUTH_EXPIRED',
   FORBIDDEN = 'FORBIDDEN',
   INSUFFICIENT_PERMISSIONS = 'INSUFFICIENT_PERMISSIONS',
-  
+
   // Validation
   VALIDATION_ERROR = 'VALIDATION_ERROR',
   INVALID_INPUT = 'INVALID_INPUT',
   MISSING_REQUIRED_FIELD = 'MISSING_REQUIRED_FIELD',
   INVALID_FORMAT = 'INVALID_FORMAT',
-  
+
   // Resource
   NOT_FOUND = 'NOT_FOUND',
   ALREADY_EXISTS = 'ALREADY_EXISTS',
   CONFLICT = 'CONFLICT',
   RESOURCE_LOCKED = 'RESOURCE_LOCKED',
-  
+
   // Rate Limiting
   RATE_LIMIT_EXCEEDED = 'RATE_LIMIT_EXCEEDED',
   TOO_MANY_REQUESTS = 'TOO_MANY_REQUESTS',
-  
+
   // File & Upload
   FILE_TOO_LARGE = 'FILE_TOO_LARGE',
   INVALID_FILE_TYPE = 'INVALID_FILE_TYPE',
   UPLOAD_FAILED = 'UPLOAD_FAILED',
-  
+
   // Database
   DATABASE_ERROR = 'DATABASE_ERROR',
   CONNECTION_ERROR = 'CONNECTION_ERROR',
   TRANSACTION_FAILED = 'TRANSACTION_FAILED',
-  
+
   // External Services
   EXTERNAL_SERVICE_ERROR = 'EXTERNAL_SERVICE_ERROR',
   AI_SERVICE_UNAVAILABLE = 'AI_SERVICE_UNAVAILABLE',
   EMAIL_SERVICE_ERROR = 'EMAIL_SERVICE_ERROR',
-  
+
   // Business Logic
   BUSINESS_RULE_VIOLATION = 'BUSINESS_RULE_VIOLATION',
   ASSESSMENT_IN_PROGRESS = 'ASSESSMENT_IN_PROGRESS',
   INVALID_STATE_TRANSITION = 'INVALID_STATE_TRANSITION',
-  
+
   // Server
   INTERNAL_ERROR = 'INTERNAL_ERROR',
   SERVICE_UNAVAILABLE = 'SERVICE_UNAVAILABLE',
   TIMEOUT = 'TIMEOUT',
-  MAINTENANCE_MODE = 'MAINTENANCE_MODE'
+  MAINTENANCE_MODE = 'MAINTENANCE_MODE',
 }
 
 // Error severity levels
@@ -60,7 +60,7 @@ export enum ErrorSeverity {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
-  CRITICAL = 'critical'
+  CRITICAL = 'critical',
 }
 
 // Base error interface
@@ -139,7 +139,7 @@ export class ApiError extends Error implements BaseError {
       [ErrorCode.INTERNAL_ERROR]: 500,
       [ErrorCode.SERVICE_UNAVAILABLE]: 503,
       [ErrorCode.TIMEOUT]: 504,
-      [ErrorCode.MAINTENANCE_MODE]: 503
+      [ErrorCode.MAINTENANCE_MODE]: 503,
     };
 
     return statusMap[code] || 500;
@@ -155,7 +155,7 @@ export class ApiError extends Error implements BaseError {
       context: this.context,
       retryable: this.retryable,
       userMessage: this.userMessage,
-      stack: process.env.NODE_ENV === 'development' ? this.stack : undefined
+      stack: process.env.NODE_ENV === 'development' ? this.stack : undefined,
     };
   }
 }
@@ -171,7 +171,7 @@ export class ValidationError extends ApiError {
     super(ErrorCode.VALIDATION_ERROR, message, {
       severity: ErrorSeverity.LOW,
       context: { validationErrors: errors },
-      statusCode: 400
+      statusCode: 400,
     });
     this.validationErrors = errors;
   }
@@ -179,15 +179,12 @@ export class ValidationError extends ApiError {
 
 // Business logic error class
 export class BusinessLogicError extends ApiError {
-  constructor(
-    message: string,
-    context?: Record<string, any>
-  ) {
+  constructor(message: string, context?: Record<string, any>) {
     super(ErrorCode.BUSINESS_RULE_VIOLATION, message, {
       severity: ErrorSeverity.MEDIUM,
       context,
       statusCode: 422,
-      userMessage: message
+      userMessage: message,
     });
   }
 }
@@ -196,17 +193,13 @@ export class BusinessLogicError extends ApiError {
 export class ExternalServiceError extends ApiError {
   public readonly serviceName: string;
 
-  constructor(
-    serviceName: string,
-    message: string,
-    cause?: Error
-  ) {
+  constructor(serviceName: string, message: string, cause?: Error) {
     super(ErrorCode.EXTERNAL_SERVICE_ERROR, message, {
       severity: ErrorSeverity.HIGH,
       context: { serviceName },
       cause,
       retryable: true,
-      statusCode: 502
+      statusCode: 502,
     });
     this.serviceName = serviceName;
   }
@@ -218,16 +211,12 @@ export class RateLimitError extends ApiError {
   public readonly limit: number;
   public readonly remaining: number;
 
-  constructor(
-    retryAfter: number,
-    limit: number,
-    remaining: number = 0
-  ) {
+  constructor(retryAfter: number, limit: number, remaining: number = 0) {
     super(ErrorCode.RATE_LIMIT_EXCEEDED, 'Rate limit exceeded', {
       severity: ErrorSeverity.LOW,
       context: { retryAfter, limit, remaining },
       statusCode: 429,
-      userMessage: `Too many requests. Please wait ${retryAfter} seconds before trying again.`
+      userMessage: `Too many requests. Please wait ${retryAfter} seconds before trying again.`,
     });
     this.retryAfter = retryAfter;
     this.limit = limit;
@@ -249,17 +238,19 @@ export class ConsoleErrorLogger implements ErrorLogger {
         code: error.code,
         message: error.message,
         severity: error.severity,
-        context: error.context
+        context: error.context,
       },
-      request: request ? {
-        method: request.method,
-        url: request.url,
-        userAgent: request.headers.get('user-agent'),
-        ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip'),
-        requestId: request.headers.get('x-request-id')
-      } : undefined,
+      request: request
+        ? {
+            method: request.method,
+            url: request.url,
+            userAgent: request.headers.get('user-agent'),
+            ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip'),
+            requestId: request.headers.get('x-request-id'),
+          }
+        : undefined,
       context,
-      stack: process.env.NODE_ENV === 'development' && error.cause ? error.cause.stack : undefined
+      stack: process.env.NODE_ENV === 'development' && error.cause ? error.cause.stack : undefined,
     };
 
     if (error.severity === ErrorSeverity.CRITICAL || error.severity === ErrorSeverity.HIGH) {
@@ -281,14 +272,8 @@ export class ApiErrorHandler {
   /**
    * Handle and format any error for API response
    */
-  async handleError(
-    error: unknown,
-    request?: NextRequest,
-    context?: Record<string, any>
-  ) {
-    const responseOptions = request 
-      ? ApiResponseFormatter.createResponseOptions(request)
-      : {};
+  async handleError(error: unknown, request?: NextRequest, context?: Record<string, any>) {
+    const responseOptions = request ? ApiResponseFormatter.createResponseOptions(request) : {};
 
     // Handle ApiError instances
     if (error instanceof ApiError) {
@@ -320,10 +305,10 @@ export class ApiErrorHandler {
    * Handle Zod validation errors
    */
   private handleZodError(error: ZodError): ValidationError {
-    const validationErrors = error.issues.map(issue => ({
+    const validationErrors = error.issues.map((issue) => ({
       field: issue.path.join('.'),
       message: issue.message,
-      code: issue.code
+      code: issue.code,
     }));
 
     return new ValidationError(validationErrors);
@@ -340,31 +325,31 @@ export class ApiErrorHandler {
             severity: ErrorSeverity.LOW,
             context: { prismaCode: error.code, meta: error.meta },
             statusCode: 409,
-            userMessage: 'A record with this information already exists'
+            userMessage: 'A record with this information already exists',
           });
-        
+
         case 'P2025':
           return new ApiError(ErrorCode.NOT_FOUND, 'Resource not found', {
             severity: ErrorSeverity.LOW,
             context: { prismaCode: error.code, meta: error.meta },
             statusCode: 404,
-            userMessage: 'The requested resource could not be found'
+            userMessage: 'The requested resource could not be found',
           });
-        
+
         case 'P2003':
           return new ApiError(ErrorCode.CONFLICT, 'Foreign key constraint failed', {
             severity: ErrorSeverity.MEDIUM,
             context: { prismaCode: error.code, meta: error.meta },
             statusCode: 409,
-            userMessage: 'This operation conflicts with existing data'
+            userMessage: 'This operation conflicts with existing data',
           });
-        
+
         default:
           return new ApiError(ErrorCode.DATABASE_ERROR, 'Database operation failed', {
             severity: ErrorSeverity.HIGH,
             context: { prismaCode: error.code, meta: error.meta },
             cause: error,
-            statusCode: 500
+            statusCode: 500,
           });
       }
     }
@@ -374,7 +359,7 @@ export class ApiErrorHandler {
         severity: ErrorSeverity.HIGH,
         context: { prismaError: true },
         cause: error,
-        statusCode: 500
+        statusCode: 500,
       });
     }
 
@@ -383,7 +368,7 @@ export class ApiErrorHandler {
         severity: ErrorSeverity.CRITICAL,
         context: { prismaError: true },
         cause: error,
-        statusCode: 500
+        statusCode: 500,
       });
     }
 
@@ -393,7 +378,7 @@ export class ApiErrorHandler {
         context: { prismaError: true },
         cause: error,
         retryable: true,
-        statusCode: 503
+        statusCode: 503,
       });
     }
 
@@ -402,7 +387,7 @@ export class ApiErrorHandler {
         severity: ErrorSeverity.MEDIUM,
         context: { prismaError: true },
         cause: error,
-        statusCode: 400
+        statusCode: 400,
       });
     }
 
@@ -410,7 +395,7 @@ export class ApiErrorHandler {
       severity: ErrorSeverity.HIGH,
       context: { prismaError: true },
       cause: error,
-      statusCode: 500
+      statusCode: 500,
     });
   }
 
@@ -425,7 +410,7 @@ export class ApiErrorHandler {
           severity: ErrorSeverity.MEDIUM,
           cause: error,
           retryable: true,
-          statusCode: 504
+          statusCode: 504,
         });
       }
 
@@ -434,7 +419,7 @@ export class ApiErrorHandler {
           severity: ErrorSeverity.HIGH,
           cause: error,
           retryable: true,
-          statusCode: 503
+          statusCode: 503,
         });
       }
 
@@ -443,21 +428,21 @@ export class ApiErrorHandler {
           severity: ErrorSeverity.MEDIUM,
           cause: error,
           retryable: true,
-          statusCode: 502
+          statusCode: 502,
         });
       }
 
       return new ApiError(ErrorCode.INTERNAL_ERROR, error.message, {
         severity: ErrorSeverity.HIGH,
         cause: error,
-        statusCode: 500
+        statusCode: 500,
       });
     }
 
     return new ApiError(ErrorCode.INTERNAL_ERROR, 'Unknown error occurred', {
       severity: ErrorSeverity.HIGH,
       context: { originalError: String(error) },
-      statusCode: 500
+      statusCode: 500,
     });
   }
 
@@ -466,46 +451,38 @@ export class ApiErrorHandler {
    */
   private formatApiError(error: ApiError, responseOptions: ResponseOptions) {
     if (error instanceof ValidationError) {
-      return ApiResponseFormatter.validationError(
-        error.validationErrors,
-        responseOptions
-      );
+      return ApiResponseFormatter.validationError(error.validationErrors, responseOptions);
     }
 
     if (error instanceof RateLimitError) {
-      return ApiResponseFormatter.rateLimitError(
-        error.retryAfter,
-        {
-          ...responseOptions,
-          headers: {
-            'X-RateLimit-Limit': error.limit.toString(),
-            'X-RateLimit-Remaining': error.remaining.toString(),
-            'X-RateLimit-Reset': new Date(Date.now() + error.retryAfter * 1000).toISOString()
-          }
-        }
-      );
+      return ApiResponseFormatter.rateLimitError(error.retryAfter, {
+        ...responseOptions,
+        headers: {
+          'X-RateLimit-Limit': error.limit.toString(),
+          'X-RateLimit-Remaining': error.remaining.toString(),
+          'X-RateLimit-Reset': new Date(Date.now() + error.retryAfter * 1000).toISOString(),
+        },
+      });
     }
 
-    return ApiResponseFormatter.error(
-      error.code,
-      error.userMessage || error.message,
-      {
-        ...responseOptions,
-        details: process.env.NODE_ENV === 'development' ? error.context : undefined,
-        status: error.statusCode
-      }
-    );
+    return ApiResponseFormatter.error(error.code, error.userMessage || error.message, {
+      ...responseOptions,
+      details: process.env.NODE_ENV === 'development' ? error.context : undefined,
+      status: error.statusCode,
+    });
   }
 
   /**
    * Check if error is a Prisma error
    */
   private isPrismaError(error: unknown): boolean {
-    return error instanceof Prisma.PrismaClientKnownRequestError ||
-           error instanceof Prisma.PrismaClientUnknownRequestError ||
-           error instanceof Prisma.PrismaClientRustPanicError ||
-           error instanceof Prisma.PrismaClientInitializationError ||
-           error instanceof Prisma.PrismaClientValidationError;
+    return (
+      error instanceof Prisma.PrismaClientKnownRequestError ||
+      error instanceof Prisma.PrismaClientUnknownRequestError ||
+      error instanceof Prisma.PrismaClientRustPanicError ||
+      error instanceof Prisma.PrismaClientInitializationError ||
+      error instanceof Prisma.PrismaClientValidationError
+    );
   }
 }
 
@@ -513,29 +490,30 @@ export class ApiErrorHandler {
 export const globalErrorHandler = new ApiErrorHandler();
 
 // Error factory functions
-export const createAuthError = (message?: string) => 
+export const createAuthError = (message?: string) =>
   new ApiError(ErrorCode.AUTH_REQUIRED, message || 'Authentication required', {
     severity: ErrorSeverity.LOW,
     statusCode: 401,
-    userMessage: 'Please log in to access this resource'
+    userMessage: 'Please log in to access this resource',
   });
 
-export const createForbiddenError = (message?: string) => 
+export const createForbiddenError = (message?: string) =>
   new ApiError(ErrorCode.FORBIDDEN, message || 'Access denied', {
     severity: ErrorSeverity.LOW,
     statusCode: 403,
-    userMessage: 'You do not have permission to access this resource'
+    userMessage: 'You do not have permission to access this resource',
   });
 
-export const createNotFoundError = (resource?: string) => 
+export const createNotFoundError = (resource?: string) =>
   new ApiError(ErrorCode.NOT_FOUND, `${resource || 'Resource'} not found`, {
     severity: ErrorSeverity.LOW,
     statusCode: 404,
-    userMessage: `The requested ${resource?.toLowerCase() || 'resource'} could not be found`
+    userMessage: `The requested ${resource?.toLowerCase() || 'resource'} could not be found`,
   });
 
-export const createValidationError = (errors: Array<{ field: string; message: string; code: string }>) =>
-  new ValidationError(errors);
+export const createValidationError = (
+  errors: Array<{ field: string; message: string; code: string }>
+) => new ValidationError(errors);
 
 export const createBusinessLogicError = (message: string, context?: Record<string, any>) =>
   new BusinessLogicError(message, context);
@@ -547,9 +525,7 @@ export const createRateLimitError = (retryAfter: number, limit: number, remainin
   new RateLimitError(retryAfter, limit, remaining);
 
 // Error handling middleware
-export function withErrorHandling<T extends any[], R>(
-  handler: (...args: T) => Promise<R>
-) {
+export function withErrorHandling<T extends any[], R>(handler: (...args: T) => Promise<R>) {
   return async (...args: T): Promise<R> => {
     try {
       return await handler(...args);
@@ -558,9 +534,9 @@ export function withErrorHandling<T extends any[], R>(
       if (error instanceof ApiError) {
         throw error;
       }
-      
+
       // Convert other errors to ApiError
       throw await globalErrorHandler.handleError(error);
     }
   };
-} 
+}

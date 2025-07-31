@@ -26,7 +26,7 @@ export interface AIRequest {
   timestamp: Date;
 }
 
-export type AIRequestType = 
+export type AIRequestType =
   | 'risk_analysis'
   | 'control_recommendation'
   | 'content_generation'
@@ -87,7 +87,11 @@ export interface MessageAttachment {
   data?: unknown;
 }
 
-export type AgentType = 'risk_analyzer' | 'control_advisor' | 'compliance_expert' | 'general_assistant';
+export type AgentType =
+  | 'risk_analyzer'
+  | 'control_advisor'
+  | 'compliance_expert'
+  | 'general_assistant';
 
 // Risk Analysis Types
 export interface RiskAnalysis {
@@ -301,7 +305,7 @@ export interface ComplianceMapping {
 }
 
 // Content Generation Types
-export type ContentType = 
+export type ContentType =
   | 'risk_description'
   | 'control_procedure'
   | 'policy_document'
@@ -564,7 +568,15 @@ export interface OpenAIRun {
   created_at: number;
   thread_id: string;
   assistant_id: string;
-  status: 'queued' | 'in_progress' | 'requires_action' | 'cancelling' | 'cancelled' | 'failed' | 'completed' | 'expired';
+  status:
+    | 'queued'
+    | 'in_progress'
+    | 'requires_action'
+    | 'cancelling'
+    | 'cancelled'
+    | 'failed'
+    | 'completed'
+    | 'expired';
   required_action?: unknown;
   last_error?: unknown;
   expires_at?: number;
@@ -606,4 +618,4 @@ export interface OpenAIMessage {
   assistant_id?: string;
   run_id?: string;
   metadata?: Record<string, unknown>;
-} 
+}

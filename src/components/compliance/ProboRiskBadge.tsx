@@ -98,9 +98,9 @@ export function ProboRiskBadge({ level, className }: ProboRiskBadgeProps) {
         "text-xs font-medium px-2 py-1",
         colorClasses,
         className
-      )}
-    >
-      {label}
+      )} >
+  {label}
+</DaisyBadge>
     </DaisyBadge>
   );
 } 

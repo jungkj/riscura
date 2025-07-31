@@ -12,6 +12,7 @@ const DEMO_ORGANIZATION_ID = 'org_demo_123'
 const DEMO_USER_ID = 'user_demo_123'
 
 export default function RealTimeDashboardPage() {
+
   return (
     <div className="container mx-auto py-8 space-y-8">
       {/* Header */}
@@ -29,89 +30,106 @@ export default function RealTimeDashboardPage() {
         </div>
         
         {/* Connection Info */}
-        <DaisyAlert>
-          <Database className="h-4 w-4" />
-          <DaisyAlertDescription>
-            <div className="flex items-center justify-between">
+        <DaisyAlert >
+  <Database className="h-4 w-4" />
+</DaisyAlert>
+          <DaisyAlertDescription >
+  <div className="flex items-center justify-between">
+                </DaisyAlertDescription>
+</DaisyAlert>
               <span>
                 Connected to Supabase database with real-time subscriptions enabled.
                 Changes to risks, controls, documents, and activities will appear instantly.
               </span>
               <div className="flex items-center gap-2">
-                <DaisyBadge variant="secondary" className="flex items-center gap-1">
-                  <Globe className="h-3 w-3" />
+                <DaisyBadge variant="secondary" className="flex items-center gap-1" >
+  <Globe className="h-3 w-3" />
+</DaisyBadge>
                   zggstcxinvxsfksssydyr.supabase.co
                 </DaisyBadge>
-                <DaisyBadge variant="outline" className="flex items-center gap-1">
-                  <Activity className="h-3 w-3" />
+                <DaisyBadge variant="outline" className="flex items-center gap-1" >
+  <Activity className="h-3 w-3" />
+</DaisyBadge>
                   Real-time
                 </DaisyBadge>
               </div>
             </div>
-          
-        </DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
       </div>
 
       {/* Features Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <DaisyCard>
-          <DaisyCardHeader>
-            <DaisyCardTitle className="flex items-center gap-2">
-              <Database className="h-5 w-5 text-blue-500" />
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+            <DaisyCardTitle className="flex items-center gap-2" >
+  <Database className="h-5 w-5 text-blue-500" />
+</DaisyCardTitle>
               Live Database Connection
             </DaisyCardTitle>
-            <DaisyCardDescription>
-              Direct connection to your Supabase PostgreSQL database
+            <DaisyCardDescription >
+  Direct connection to your Supabase PostgreSQL database
+</DaisyCardDescription>
             </p>
           
-          <DaisyCardContent>
-            <ul className="text-sm space-y-1 text-muted-foreground">
+          <DaisyCardContent >
+  <ul className="text-sm space-y-1 text-muted-foreground">
+</DaisyCardContent>
               <li>• Real-time data synchronization</li>
               <li>• Automatic reconnection handling</li>
               <li>• Connection status monitoring</li>
               <li>• Offline mode detection</li>
             </ul>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard>
-          <DaisyCardHeader>
-            <DaisyCardTitle className="flex items-center gap-2">
-              <Zap className="h-5 w-5 text-yellow-500" />
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+            <DaisyCardTitle className="flex items-center gap-2" >
+  <Zap className="h-5 w-5 text-yellow-500" />
+</DaisyCardTitle>
               Instant Updates
             </DaisyCardTitle>
-            <DaisyCardDescription>
-              See changes as they happen across all data types
+            <DaisyCardDescription >
+  See changes as they happen across all data types
+</DaisyCardDescription>
             </p>
           
-          <DaisyCardContent>
-            <ul className="text-sm space-y-1 text-muted-foreground">
+          <DaisyCardContent >
+  <ul className="text-sm space-y-1 text-muted-foreground">
+</DaisyCardContent>
               <li>• Risk management updates</li>
               <li>• Control effectiveness changes</li>
               <li>• Document uploads/modifications</li>
               <li>• User activity tracking</li>
             </ul>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard>
-          <DaisyCardHeader>
-            <DaisyCardTitle className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-green-500" />
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+            <DaisyCardTitle className="flex items-center gap-2" >
+  <Activity className="h-5 w-5 text-green-500" />
+</DaisyCardTitle>
               Live Metrics
             </DaisyCardTitle>
-            <DaisyCardDescription>
-              Real-time analytics and performance indicators
+            <DaisyCardDescription >
+  Real-time analytics and performance indicators
+</DaisyCardDescription>
             </p>
           
-          <DaisyCardContent>
-            <ul className="text-sm space-y-1 text-muted-foreground">
+          <DaisyCardContent >
+  <ul className="text-sm space-y-1 text-muted-foreground">
+</DaisyCardContent>
               <li>• Risk distribution analysis</li>
               <li>• Control effectiveness rates</li>
               <li>• Activity feed monitoring</li>
               <li>• Team collaboration metrics</li>
             </ul>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -121,8 +139,9 @@ export default function RealTimeDashboardPage() {
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[...Array(4)].map((_, i) => (
-                <DaisyCard key={i} className="animate-pulse">
-                  <DaisyCardHeader className="space-y-2">
+                <DaisyCard key={i} className="animate-pulse" >
+  <DaisyCardHeader className="space-y-2" />
+</DaisyCard>
                     <div className="h-4 bg-gray-200 rounded w-3/4"></div>
                     <div className="h-8 bg-gray-200 rounded w-1/2"></div>
                   
@@ -139,15 +158,18 @@ export default function RealTimeDashboardPage() {
       </Suspense>
 
       {/* Instructions */}
-      <DaisyCard>
-        <DaisyCardHeader>
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
           <DaisyCardTitle>How to Test Real-Time Features</DaisyCardTitle>
-          <DaisyCardDescription>
-            Follow these steps to see live updates in action
+          <DaisyCardDescription >
+  Follow these steps to see live updates in action
+</DaisyCardDescription>
           </p>
         
-        <DaisyCardContent>
-          <div className="space-y-4">
+        <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <h4 className="font-medium">Option 1: Database Direct Access</h4>
@@ -169,16 +191,19 @@ export default function RealTimeDashboardPage() {
               </div>
             </div>
             
-            <DaisyAlert>
-              <Activity className="h-4 w-4" />
-              <DaisyAlertDescription>
-                <strong>Pro Tip:</strong> Open this page in multiple browser tabs or windows 
+            <DaisyAlert >
+  <Activity className="h-4 w-4" />
+</DaisyAlert>
+              <DaisyAlertDescription >
+  <strong>
+                </DaisyAlertDescription>
+</DaisyAlert>Pro Tip:</strong> Open this page in multiple browser tabs or windows 
                 to see real-time synchronization between different sessions. Changes made in 
                 one tab will instantly appear in all other tabs.
-              
-            </DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   )

@@ -1,47 +1,67 @@
-"use client";
+'use client';
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { Questionnaire, Question, Response, QuestionnaireState, QuestionnaireAnalytics, RiskCategory } from '@/types';
+import {
+  Questionnaire,
+  Question,
+  Response,
+  QuestionnaireState,
+  QuestionnaireAnalytics,
+  RiskCategory,
+} from '@/types';
 
 interface QuestionnaireContextType extends QuestionnaireState {
   // CRUD Operations
-  createQuestionnaire: (data: Omit<Questionnaire, 'id' | 'createdAt' | 'responses' | 'analytics'>) => Promise<Questionnaire>;
+  createQuestionnaire: (
+    data: Omit<Questionnaire, 'id' | 'createdAt' | 'responses' | 'analytics'>
+  ) => Promise<Questionnaire>;
   updateQuestionnaire: (id: string, data: Partial<Questionnaire>) => Promise<Questionnaire>;
   deleteQuestionnaire: (id: string) => Promise<void>;
   getQuestionnaire: (id: string) => Questionnaire | null;
-  
+
   // Question Management
   addQuestion: (questionnaireId: string, question: Omit<Question, 'id'>) => Promise<Question>;
-  updateQuestion: (questionnaireId: string, questionId: string, data: Partial<Question>) => Promise<Question>;
+  updateQuestion: (
+    questionnaireId: string,
+    questionId: string,
+    data: Partial<Question>
+  ) => Promise<Question>;
   deleteQuestion: (questionnaireId: string, questionId: string) => Promise<void>;
   reorderQuestions: (questionnaireId: string, questionIds: string[]) => Promise<void>;
-  
+
   // AI Question Generation
   generateQuestionsForRisk: (riskCategory: RiskCategory, count?: number) => Promise<Question[]>;
   generateQuestionsForControl: (controlType: string, count?: number) => Promise<Question[]>;
-  
+
   // Response Management
-  submitResponse: (questionnaireId: string, responses: Omit<Response, 'id' | 'createdAt'>[]) => Promise<void>;
+  submitResponse: (
+    questionnaireId: string,
+    responses: Omit<Response, 'id' | 'createdAt'>[]
+  ) => Promise<void>;
   updateResponse: (responseId: string, data: Partial<Response>) => Promise<Response>;
   getResponses: (questionnaireId: string, userId?: string) => Response[];
-  
+
   // Analytics
   getQuestionnaireAnalytics: (questionnaireId: string) => QuestionnaireAnalytics | null;
   getCompletionStats: () => { total: number; completed: number; pending: number; overdue: number };
   getResponseTrends: (questionnaireId: string) => { date: string; responses: number }[];
-  
+
   // Distribution
   distributeQuestionnaire: (questionnaireId: string, userIds: string[]) => Promise<void>;
   sendReminders: (questionnaireId: string) => Promise<void>;
-  
+
   // Conditional Logic
   evaluateConditions: (question: Question, responses: Response[]) => boolean;
-  getNextQuestion: (questionnaireId: string, currentQuestionId: string, responses: Response[]) => Question | null;
-  
+  getNextQuestion: (
+    questionnaireId: string,
+    currentQuestionId: string,
+    responses: Response[]
+  ) => Question | null;
+
   // Utility
   duplicateQuestionnaire: (questionnaireId: string, newTitle: string) => Promise<Questionnaire>;
   exportResponses: (questionnaireId: string, format: 'csv' | 'excel') => Promise<void>;
-  
+
   // Error handling
   clearError: () => void;
 }
@@ -59,7 +79,10 @@ type QuestionnaireAction =
   | { type: 'SET_RESPONSES'; payload: Response[] }
   | { type: 'ADD_RESPONSE'; payload: Response }
   | { type: 'UPDATE_RESPONSE'; payload: Response }
-  | { type: 'SET_ANALYTICS'; payload: { questionnaireId: string; analytics: QuestionnaireAnalytics } };
+  | {
+      type: 'SET_ANALYTICS';
+      payload: { questionnaireId: string; analytics: QuestionnaireAnalytics };
+    };
 
 // Initial state
 const initialState: QuestionnaireState = {
@@ -72,65 +95,70 @@ const initialState: QuestionnaireState = {
 };
 
 // Questionnaire reducer
-const questionnaireReducer = (state: QuestionnaireState, action: QuestionnaireAction): QuestionnaireState => {
+const questionnaireReducer = (
+  state: QuestionnaireState,
+  action: QuestionnaireAction
+): QuestionnaireState => {
   switch (action.type) {
     case 'SET_LOADING':
       return { ...state, loading: action.payload };
-    
+
     case 'SET_ERROR':
       return { ...state, error: action.payload, loading: false };
-    
+
     case 'CLEAR_ERROR':
       return { ...state, error: null };
-    
+
     case 'SET_QUESTIONNAIRES':
       return { ...state, questionnaires: action.payload, loading: false };
-    
+
     case 'ADD_QUESTIONNAIRE':
       return {
         ...state,
         questionnaires: [action.payload, ...state.questionnaires],
         loading: false,
       };
-    
+
     case 'UPDATE_QUESTIONNAIRE':
       return {
         ...state,
-        questionnaires: state.questionnaires.map(q =>
+        questionnaires: state.questionnaires.map((q) =>
           q.id === action.payload.id ? action.payload : q
         ),
-        selectedQuestionnaire: state.selectedQuestionnaire?.id === action.payload.id ? action.payload : state.selectedQuestionnaire,
+        selectedQuestionnaire:
+          state.selectedQuestionnaire?.id === action.payload.id
+            ? action.payload
+            : state.selectedQuestionnaire,
         loading: false,
       };
-    
+
     case 'DELETE_QUESTIONNAIRE':
       return {
         ...state,
-        questionnaires: state.questionnaires.filter(q => q.id !== action.payload),
-        selectedQuestionnaire: state.selectedQuestionnaire?.id === action.payload ? null : state.selectedQuestionnaire,
+        questionnaires: state.questionnaires.filter((q) => q.id !== action.payload),
+        selectedQuestionnaire:
+          state.selectedQuestionnaire?.id === action.payload ? null : state.selectedQuestionnaire,
         loading: false,
       };
-    
+
     case 'SET_SELECTED_QUESTIONNAIRE':
       return { ...state, selectedQuestionnaire: action.payload };
-    
+
     case 'SET_RESPONSES':
       return { ...state, responses: action.payload };
-    
+
     case 'ADD_RESPONSE':
       return {
         ...state,
         responses: [...state.responses, action.payload],
       };
-    
+
     case 'UPDATE_RESPONSE':
       return {
         ...state,
-        responses: state.responses.map(r =>
-          r.id === action.payload.id ? action.payload : r
-        ),
+        responses: state.responses.map((r) => (r.id === action.payload.id ? action.payload : r)),
       };
-    
+
     case 'SET_ANALYTICS':
       return {
         ...state,
@@ -139,13 +167,15 @@ const questionnaireReducer = (state: QuestionnaireState, action: QuestionnaireAc
           [action.payload.questionnaireId]: action.payload.analytics,
         },
       };
-    
+
     default:
       return state;
   }
 };
 
-const QuestionnaireContext = createContext<QuestionnaireContextType>({} as QuestionnaireContextType);
+const QuestionnaireContext = createContext<QuestionnaireContextType>(
+  {} as QuestionnaireContextType
+);
 
 export const useQuestionnaires = () => {
   const context = useContext(QuestionnaireContext);
@@ -158,13 +188,15 @@ export const useQuestionnaires = () => {
 // Mock API service
 const questionnaireService = {
   async getAllQuestionnaires(): Promise<Questionnaire[]> {
-    await new Promise(resolve => setTimeout(resolve, 800));
+    await new Promise((resolve) => setTimeout(resolve, 800));
     return generateMockQuestionnaires();
   },
 
-  async createQuestionnaire(data: Omit<Questionnaire, 'id' | 'createdAt' | 'responses' | 'analytics'>): Promise<Questionnaire> {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+  async createQuestionnaire(
+    data: Omit<Questionnaire, 'id' | 'createdAt' | 'responses' | 'analytics'>
+  ): Promise<Questionnaire> {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     const newQuestionnaire: Questionnaire = {
       ...data,
       id: `questionnaire-${Date.now()}`,
@@ -172,21 +204,21 @@ const questionnaireService = {
       responses: [],
       completionRate: 0,
     };
-    
+
     return newQuestionnaire;
   },
 
   async updateQuestionnaire(id: string, data: Partial<Questionnaire>): Promise<Questionnaire> {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
     return {
-      ...data as Questionnaire,
+      ...(data as Questionnaire),
       id,
     };
   },
 
   async deleteQuestionnaire(): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
   },
 };
 
@@ -315,12 +347,20 @@ const generateAIQuestions = (category: RiskCategory | string, count: number = 5)
     ],
   };
 
-  const templates = questionTemplates[category as keyof typeof questionTemplates] || questionTemplates.operational;
-  
+  const templates =
+    questionTemplates[category as keyof typeof questionTemplates] || questionTemplates.operational;
+
   return templates.slice(0, count).map((text, index) => ({
     id: `ai-${category}-${index + 1}`,
     text,
-    type: index % 4 === 0 ? 'rating' : index % 4 === 1 ? 'multiple_choice' : index % 4 === 2 ? 'yes_no' : 'text',
+    type:
+      index % 4 === 0
+        ? 'rating'
+        : index % 4 === 1
+          ? 'multiple_choice'
+          : index % 4 === 2
+            ? 'yes_no'
+            : 'text',
     required: index < 2,
     order: index + 1,
     category: category as string,
@@ -339,16 +379,18 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
       try {
         const questionnaires = await questionnaireService.getAllQuestionnaires();
         dispatch({ type: 'SET_QUESTIONNAIRES', payload: questionnaires });
-        
+
         // Generate mock analytics
-        questionnaires.forEach(q => {
+        questionnaires.forEach((q) => {
           const analytics: QuestionnaireAnalytics = {
             totalResponses: Math.floor(Math.random() * 50) + 10,
             completionRate: q.completionRate || Math.random() * 0.8 + 0.2,
             averageTime: Math.floor(Math.random() * 20) + 5,
             responsesByQuestion: {},
             trends: Array.from({ length: 30 }, (_, i) => ({
-              date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+              date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000)
+                .toISOString()
+                .split('T')[0],
               responses: Math.floor(Math.random() * 10),
             })),
           };
@@ -363,7 +405,9 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   // CRUD Operations
-  const createQuestionnaire = async (data: Omit<Questionnaire, 'id' | 'createdAt' | 'responses' | 'analytics'>) => {
+  const createQuestionnaire = async (
+    data: Omit<Questionnaire, 'id' | 'createdAt' | 'responses' | 'analytics'>
+  ) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
       const newQuestionnaire = await questionnaireService.createQuestionnaire(data);
@@ -399,7 +443,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const getQuestionnaire = (id: string) => {
-    return state.questionnaires.find(q => q.id === id) || null;
+    return state.questionnaires.find((q) => q.id === id) || null;
   };
 
   // Question Management
@@ -421,11 +465,15 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     return newQuestion;
   };
 
-  const updateQuestion = async (questionnaireId: string, questionId: string, data: Partial<Question>) => {
+  const updateQuestion = async (
+    questionnaireId: string,
+    questionId: string,
+    data: Partial<Question>
+  ) => {
     const questionnaire = getQuestionnaire(questionnaireId);
     if (!questionnaire) throw new Error('Questionnaire not found');
 
-    const updatedQuestions = questionnaire.questions.map(q =>
+    const updatedQuestions = questionnaire.questions.map((q) =>
       q.id === questionId ? { ...q, ...data } : q
     );
 
@@ -435,14 +483,14 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     await updateQuestionnaire(questionnaireId, updatedQuestionnaire);
-    return updatedQuestions.find(q => q.id === questionId)!;
+    return updatedQuestions.find((q) => q.id === questionId)!;
   };
 
   const deleteQuestion = async (questionnaireId: string, questionId: string) => {
     const questionnaire = getQuestionnaire(questionnaireId);
     if (!questionnaire) throw new Error('Questionnaire not found');
 
-    const updatedQuestions = questionnaire.questions.filter(q => q.id !== questionId);
+    const updatedQuestions = questionnaire.questions.filter((q) => q.id !== questionId);
     const updatedQuestionnaire = {
       ...questionnaire,
       questions: updatedQuestions,
@@ -455,10 +503,12 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     const questionnaire = getQuestionnaire(questionnaireId);
     if (!questionnaire) throw new Error('Questionnaire not found');
 
-    const reorderedQuestions = questionIds.map((id, index) => {
-      const question = questionnaire.questions.find(q => q.id === id);
-      return question ? { ...question, order: index + 1 } : null;
-    }).filter(Boolean) as Question[];
+    const reorderedQuestions = questionIds
+      .map((id, index) => {
+        const question = questionnaire.questions.find((q) => q.id === id);
+        return question ? { ...question, order: index + 1 } : null;
+      })
+      .filter(Boolean) as Question[];
 
     const updatedQuestionnaire = {
       ...questionnaire,
@@ -470,33 +520,36 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // AI Question Generation
   const generateQuestionsForRisk = async (riskCategory: RiskCategory, count = 5) => {
-    await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate AI processing
+    await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate AI processing
     return generateAIQuestions(riskCategory, count);
   };
 
   const generateQuestionsForControl = async (controlType: string, count = 5) => {
-    await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate AI processing
+    await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate AI processing
     return generateAIQuestions(controlType, count);
   };
 
   // Response Management
-  const submitResponse = async (_questionnaireId: string, responses: Omit<Response, 'id' | 'createdAt'>[]) => {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    const newResponses = responses.map(r => ({
+  const submitResponse = async (
+    _questionnaireId: string,
+    responses: Omit<Response, 'id' | 'createdAt'>[]
+  ) => {
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
+    const newResponses = responses.map((r) => ({
       ...r,
       id: `response-${Date.now()}-${Math.random()}`,
       createdAt: new Date().toISOString(),
     }));
 
-    newResponses.forEach(response => {
+    newResponses.forEach((response) => {
       dispatch({ type: 'ADD_RESPONSE', payload: response });
     });
   };
 
   const updateResponse = async (responseId: string, data: Partial<Response>) => {
     const updatedResponse = {
-      ...state.responses.find(r => r.id === responseId)!,
+      ...state.responses.find((r) => r.id === responseId)!,
       ...data,
       updatedAt: new Date().toISOString(),
     };
@@ -509,12 +562,12 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     const questionnaire = getQuestionnaire(questionnaireId);
     if (!questionnaire) return [];
 
-    let responses = state.responses.filter(r => 
-      questionnaire.questions.some(q => q.id === r.questionId)
+    let responses = state.responses.filter((r) =>
+      questionnaire.questions.some((q) => q.id === r.questionId)
     );
 
     if (userId) {
-      responses = responses.filter(r => r.userId === userId);
+      responses = responses.filter((r) => r.userId === userId);
     }
 
     return responses;
@@ -527,10 +580,10 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const getCompletionStats = () => {
     const total = state.questionnaires.length;
-    const completed = state.questionnaires.filter(q => q.status === 'completed').length;
-    const pending = state.questionnaires.filter(q => q.status === 'active').length;
-    const overdue = state.questionnaires.filter(q => 
-      q.status === 'active' && new Date(q.dueDate) < new Date()
+    const completed = state.questionnaires.filter((q) => q.status === 'completed').length;
+    const pending = state.questionnaires.filter((q) => q.status === 'active').length;
+    const overdue = state.questionnaires.filter(
+      (q) => q.status === 'active' && new Date(q.dueDate) < new Date()
     ).length;
 
     return { total, completed, pending, overdue };
@@ -543,12 +596,12 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Distribution
   const distributeQuestionnaire = async (questionnaireId: string, userIds: string[]) => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     console.log(`Distributed questionnaire ${questionnaireId} to ${userIds.length} users`);
   };
 
   const sendReminders = async (questionnaireId: string) => {
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
     console.log(`Sent reminders for questionnaire ${questionnaireId}`);
   };
 
@@ -556,17 +609,23 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
   const evaluateConditions = (question: Question, responses: Response[]) => {
     if (!question.conditional) return true;
 
-    const dependentResponse = responses.find(r => r.questionId === question.conditional!.dependsOn);
+    const dependentResponse = responses.find(
+      (r) => r.questionId === question.conditional!.dependsOn
+    );
     if (!dependentResponse) return false;
 
     return dependentResponse.answer === question.conditional.showWhen;
   };
 
-  const getNextQuestion = (questionnaireId: string, currentQuestionId: string, responses: Response[]) => {
+  const getNextQuestion = (
+    questionnaireId: string,
+    currentQuestionId: string,
+    responses: Response[]
+  ) => {
     const questionnaire = getQuestionnaire(questionnaireId);
     if (!questionnaire) return null;
 
-    const currentIndex = questionnaire.questions.findIndex(q => q.id === currentQuestionId);
+    const currentIndex = questionnaire.questions.findIndex((q) => q.id === currentQuestionId);
     if (currentIndex === -1) return null;
 
     for (let i = currentIndex + 1; i < questionnaire.questions.length; i++) {
@@ -596,7 +655,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const exportResponses = async (questionnaireId: string, format: 'csv' | 'excel') => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     console.log(`Exported responses for questionnaire ${questionnaireId} in ${format} format`);
   };
 
@@ -605,33 +664,35 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <QuestionnaireContext.Provider value={{
-      ...state,
-      createQuestionnaire,
-      updateQuestionnaire,
-      deleteQuestionnaire,
-      getQuestionnaire,
-      addQuestion,
-      updateQuestion,
-      deleteQuestion,
-      reorderQuestions,
-      generateQuestionsForRisk,
-      generateQuestionsForControl,
-      submitResponse,
-      updateResponse,
-      getResponses,
-      getQuestionnaireAnalytics,
-      getCompletionStats,
-      getResponseTrends,
-      distributeQuestionnaire,
-      sendReminders,
-      evaluateConditions,
-      getNextQuestion,
-      duplicateQuestionnaire,
-      exportResponses,
-      clearError,
-    }}>
+    <QuestionnaireContext.Provider
+      value={{
+        ...state,
+        createQuestionnaire,
+        updateQuestionnaire,
+        deleteQuestionnaire,
+        getQuestionnaire,
+        addQuestion,
+        updateQuestion,
+        deleteQuestion,
+        reorderQuestions,
+        generateQuestionsForRisk,
+        generateQuestionsForControl,
+        submitResponse,
+        updateResponse,
+        getResponses,
+        getQuestionnaireAnalytics,
+        getCompletionStats,
+        getResponseTrends,
+        distributeQuestionnaire,
+        sendReminders,
+        evaluateConditions,
+        getNextQuestion,
+        duplicateQuestionnaire,
+        exportResponses,
+        clearError,
+      }}
+    >
       {children}
     </QuestionnaireContext.Provider>
   );
-}; 
+};

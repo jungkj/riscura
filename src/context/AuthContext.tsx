@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { User } from '@/types';
@@ -146,12 +146,12 @@ export const useAuth = () => {
 const authService = {
   // Login with email and password
   login: async (
-    email: string, 
-    password: string, 
+    email: string,
+    password: string,
     rememberMe: boolean = false
   ): Promise<{ user: AuthUser; token: string }> => {
     console.log('AuthContext: Attempting login for:', email);
-    
+
     const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: {
@@ -165,7 +165,7 @@ const authService = {
 
     // Check if response is JSON or HTML
     const contentType = response.headers.get('content-type');
-    
+
     let data;
     try {
       if (contentType && contentType.includes('application/json')) {
@@ -175,10 +175,12 @@ const authService = {
         // If not JSON, try to read as text to see what we got
         const text = await response.text();
         console.error('AuthContext: API returned non-JSON response:', text.substring(0, 500));
-        
+
         // Check if it's an HTML error page
         if (text.includes('<!DOCTYPE html>')) {
-          throw new Error('Server error: The login API is not responding correctly. Please check the server logs or use demo credentials (admin@riscura.com / admin123)');
+          throw new Error(
+            'Server error: The login API is not responding correctly. Please check the server logs or use demo credentials (admin@riscura.com / admin123)'
+          );
         } else {
           throw new Error(`Server returned unexpected content: ${text.substring(0, 100)}...`);
         }
@@ -188,7 +190,9 @@ const authService = {
       if (parseError instanceof Error && parseError.message.includes('Server error:')) {
         throw parseError; // Re-throw our custom error
       }
-      throw new Error('Server error: Unable to process response. Please try again or use demo credentials (admin@riscura.com / admin123)');
+      throw new Error(
+        'Server error: Unable to process response. Please try again or use demo credentials (admin@riscura.com / admin123)'
+      );
     }
 
     if (!response.ok) {
@@ -254,7 +258,7 @@ const authService = {
   // Logout user
   logout: async (logoutType: 'current' | 'all' = 'current'): Promise<void> => {
     const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
-    
+
     try {
       if (token && token !== 'oauth-session') {
         // Regular token logout
@@ -262,7 +266,7 @@ const authService = {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ logoutType }),
         });
@@ -316,7 +320,7 @@ const authService = {
   // Get current user profile
   getCurrentUser: async (): Promise<AuthUser | null> => {
     const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
-    
+
     if (!token) {
       return null;
     }
@@ -324,7 +328,7 @@ const authService = {
     try {
       const response = await fetch('/api/users/me', {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -351,7 +355,7 @@ const authService = {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(userData),
     });
@@ -377,7 +381,7 @@ const authService = {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ currentPassword, newPassword }),
     });
@@ -402,7 +406,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const oauthResponse = await fetch('/api/google-oauth/session');
         const oauthData = await oauthResponse.json();
         console.log('[AuthContext] OAuth session response:', oauthData);
-        
+
         if (oauthData && oauthData.user) {
           // Convert simple OAuth user to AuthUser format
           const authUser: AuthUser = {
@@ -420,8 +424,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             createdAt: new Date().toISOString(),
             lastLogin: new Date().toISOString(),
           };
-          
-          dispatch({ type: 'AUTH_INITIALIZE', payload: { user: authUser, token: 'oauth-session' } });
+
+          dispatch({
+            type: 'AUTH_INITIALIZE',
+            payload: { user: authUser, token: 'oauth-session' },
+          });
           return;
         }
       } catch (error) {
@@ -430,7 +437,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       // If no OAuth session, check for JWT token
       const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
-      
+
       if (!token) {
         dispatch({ type: 'AUTH_INITIALIZE', payload: null });
         return;
@@ -439,13 +446,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         // Try to get current user with existing token
         const user = await authService.getCurrentUser();
-        
+
         if (user) {
           dispatch({ type: 'AUTH_INITIALIZE', payload: { user, token } });
         } else {
           // Token might be expired, try to refresh
           const refreshResult = await authService.refreshToken();
-          
+
           if (refreshResult) {
             dispatch({ type: 'AUTH_INITIALIZE', payload: refreshResult });
           } else {
@@ -473,20 +480,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     // Set up token refresh interval (25 minutes - less frequent)
-    const refreshInterval = setInterval(async () => {
-      try {
-        const result = await authService.refreshToken();
-        if (result) {
-          dispatch({ type: 'AUTH_SUCCESS', payload: result });
-        } else {
-          // Refresh failed, logout user
-          dispatch({ type: 'AUTH_LOGOUT' });
+    const refreshInterval = setInterval(
+      async () => {
+        try {
+          const result = await authService.refreshToken();
+          if (result) {
+            dispatch({ type: 'AUTH_SUCCESS', payload: result });
+          } else {
+            // Refresh failed, logout user
+            dispatch({ type: 'AUTH_LOGOUT' });
+          }
+        } catch (error) {
+          console.error('Token refresh error:', error);
+          // Don't logout on refresh error, just log it
         }
-      } catch (error) {
-        console.error('Token refresh error:', error);
-        // Don't logout on refresh error, just log it
-      }
-    }, 25 * 60 * 1000); // 25 minutes
+      },
+      25 * 60 * 1000
+    ); // 25 minutes
 
     return () => clearInterval(refreshInterval);
   }, [state.isAuthenticated, state.token]);

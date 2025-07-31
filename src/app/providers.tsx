@@ -13,23 +13,22 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ClientProvider>
       <PerformanceProvider>
-        <ThemeProvider 
-          attribute="class" 
-          defaultTheme="light" 
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
           enableSystem={false}
           storageKey="riscura-theme"
         >
-          <DaisyTooltipProvider>
-            <AuthProvider>
-              <AIProvider>
-                {children}
-                <Toaster />
-                <AuthDebugger />
-              </AIProvider>
-            </AuthProvider>
-          
+          <DaisyTooltipProvider />
+          <AuthProvider>
+            <AIProvider>
+              {children}
+              <Toaster />
+              <AuthDebugger />
+            </AIProvider>
+          </AuthProvider>
         </ThemeProvider>
       </PerformanceProvider>
     </ClientProvider>
   );
-} 
+}

@@ -172,7 +172,9 @@ export function ProboIntegrationDashboard() {
       case 'vendor_assessment': return <Building className="h-4 w-4" />;
       case 'control_update': return <Shield className="h-4 w-4" />;
       case 'compliance_review': return <CheckCircle className="h-4 w-4" />;
-      case 'finding_resolved': return <DaisyAlertTriangle className="h-4 w-4" />;
+      case 'finding_resolved': return <DaisyAlertTriangle className="h-4 w-4" >
+  ;
+</DaisyAlertTriangle>
       default: return <FileText className="h-4 w-4" />;
     }
   };
@@ -197,12 +199,13 @@ export function ProboIntegrationDashboard() {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
+
+  return (
+    <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#199BEC]"></div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -213,12 +216,14 @@ export function ProboIntegrationDashboard() {
           <p className="text-[#A8A8A8]">Powered by Probo AI integration</p>
         </div>
         <div className="flex items-center space-x-2">
-          <DaisyBadge className="bg-[#199BEC] text-white">
-            <Zap className="h-3 w-3 mr-1" />
+          <DaisyBadge className="bg-[#199BEC] text-white" >
+  <Zap className="h-3 w-3 mr-1" />
+</DaisyBadge>
             Live Data
           </DaisyBadge>
-          <DaisyButton className="bg-[#199BEC] hover:bg-[#199BEC]/90">
-            <Download className="h-4 w-4 mr-2" />
+          <DaisyButton className="bg-[#199BEC] hover:bg-[#199BEC]/90" >
+  <Download className="h-4 w-4 mr-2" />
+</DaisyButton>
             Export Report
           </DaisyButton>
         </div>
@@ -226,8 +231,10 @@ export function ProboIntegrationDashboard() {
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-          <DaisyCardContent className="p-4">
+        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[#A8A8A8]">Compliance Score</p>
@@ -241,29 +248,34 @@ export function ProboIntegrationDashboard() {
                 <Shield className="h-6 w-6 text-[#199BEC]" />
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-          <DaisyCardContent className="p-4">
+        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[#A8A8A8]">Total Vendors</p>
                 <p className="text-2xl font-bold text-[#191919]">{stats.totalVendors}</p>
                 <div className="flex items-center text-xs text-red-600 mt-1">
-                  <DaisyAlertTriangle className="h-3 w-3 mr-1" />
-                  {stats.highRiskVendors} high risk
+                  <DaisyAlertTriangle className="h-3 w-3 mr-1" >
+  {stats.highRiskVendors} high risk
+</DaisyAlertTriangle>
                 </div>
               </div>
               <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
                 <Building className="h-6 w-6 text-blue-600" />
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-          <DaisyCardContent className="p-4">
+        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[#A8A8A8]">SOC 2 Progress</p>
@@ -277,11 +289,13 @@ export function ProboIntegrationDashboard() {
                 <CheckCircle className="h-6 w-6 text-purple-600" />
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-          <DaisyCardContent className="p-4">
+        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[#A8A8A8]">Controls Implemented</p>
@@ -294,25 +308,28 @@ export function ProboIntegrationDashboard() {
                 <Database className="h-6 w-6 text-green-600" />
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
       {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Compliance Frameworks */}
-        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-          <DaisyCardHeader>
+        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardHeader />
+</DaisyCard>
             <div className="flex items-center justify-between">
               <DaisyCardTitle className="text-[#191919] font-inter">Compliance Frameworks</DaisyCardTitle>
-              <DaisyButton size="sm" variant="outline">
-                <Plus className="h-4 w-4 mr-1" />
+              <DaisyButton size="sm" variant="outline" >
+  <Plus className="h-4 w-4 mr-1" />
+</DaisyButton>
                 Add Framework
               </DaisyButton>
             </div>
           
-          <DaisyCardContent className="space-y-4">
-            {frameworks.map((framework, index) => (
+          <DaisyCardContent className="space-y-4" >
+  {frameworks.map((framework, index) => (
+</DaisyCardContent>
               <div key={index} className="border border-[#D8C3A5] rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
                   <div>
@@ -322,8 +339,9 @@ export function ProboIntegrationDashboard() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <DaisyBadge className={cn('text-xs', getFrameworkStatusColor(framework.status))}>
-                      {framework.status.replace('_', ' ')}
+                    <DaisyBadge className={cn('text-xs', getFrameworkStatusColor(framework.status))} >
+  {framework.status.replace('_', ' ')}
+</DaisyBadge>
                     </DaisyBadge>
                     <p className="text-lg font-bold text-[#191919] mt-1">{framework.progress}%</p>
                   </div>
@@ -331,23 +349,26 @@ export function ProboIntegrationDashboard() {
                 <DaisyProgress value={framework.progress} className="h-2" />
                 <div className="flex items-center justify-between mt-2 text-xs text-[#A8A8A8]">
                   <span>Last assessed: {framework.lastAssessed.toLocaleDateString()}</span>
-                  <DaisyButton size="sm" variant="ghost" className="text-xs h-6 px-2">
-                    View Details
+                  <DaisyButton size="sm" variant="ghost" className="text-xs h-6 px-2" >
+  View Details
+</DaisyProgress>
                     <ArrowRight className="h-3 w-3 ml-1" />
                   </DaisyButton>
                 </div>
               </div>
             ))}
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Recent Activity */}
-        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-          <DaisyCardHeader>
+        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle className="text-[#191919] font-inter">Recent Activity</DaisyCardTitle>
-          
-          <DaisyCardContent>
-            <div className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
               {recentActivities.map((activity) => (
                 <div key={activity.id} className="flex items-start space-x-3">
                   <div className="h-8 w-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -357,8 +378,9 @@ export function ProboIntegrationDashboard() {
                     <div className="flex items-center justify-between">
                       <h4 className="font-medium text-[#191919] text-sm">{activity.title}</h4>
                       {activity.severity && (
-                        <DaisyBadge className={cn('text-xs', getSeverityColor(activity.severity))}>
-                          {activity.severity}
+                        <DaisyBadge className={cn('text-xs', getSeverityColor(activity.severity))} >
+  {activity.severity}
+</DaisyBadge>
                         </DaisyBadge>
                       )}
                     </div>
@@ -370,51 +392,62 @@ export function ProboIntegrationDashboard() {
                 </div>
               ))}
             </div>
-            <DaisyButton variant="outline" className="w-full mt-4 border-[#D8C3A5]">
-              View All Activity
+            <DaisyButton variant="outline" className="w-full mt-4 border-[#D8C3A5]" >
+  View All Activity
+</DaisyButton>
             </DaisyButton>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
       {/* Quick Actions */}
-      <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-        <DaisyCardHeader>
+      <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardHeader />
+</DaisyCard>
           <DaisyCardTitle className="text-[#191919] font-inter">Quick Actions</DaisyCardTitle>
-          <DaisyCardDescription>
-            Common tasks powered by Probo AI integration
+          <DaisyCardDescription >
+  Common tasks powered by Probo AI integration
+</DaisyCardDescription>
           </p>
         
-        <DaisyCardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <DaisyButton className="h-20 flex-col bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200">
-              <Building className="h-6 w-6 mb-2" />
+        <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+</DaisyCardContent>
+            <DaisyButton className="h-20 flex-col bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200" >
+  <Building className="h-6 w-6 mb-2" />
+</DaisyButton>
               <span className="text-sm">Assess New Vendor</span>
             </DaisyButton>
-            <DaisyButton className="h-20 flex-col bg-green-50 hover:bg-green-100 text-green-700 border-green-200">
-              <Shield className="h-6 w-6 mb-2" />
+            <DaisyButton className="h-20 flex-col bg-green-50 hover:bg-green-100 text-green-700 border-green-200" >
+  <Shield className="h-6 w-6 mb-2" />
+</DaisyButton>
               <span className="text-sm">Import SOC 2 Controls</span>
             </DaisyButton>
-            <DaisyButton className="h-20 flex-col bg-purple-50 hover:bg-purple-100 text-purple-700 border-purple-200">
-              <Database className="h-6 w-6 mb-2" />
+            <DaisyButton className="h-20 flex-col bg-purple-50 hover:bg-purple-100 text-purple-700 border-purple-200" >
+  <Database className="h-6 w-6 mb-2" />
+</DaisyButton>
               <span className="text-sm">Browse Mitigation Library</span>
             </DaisyButton>
-            <DaisyButton className="h-20 flex-col bg-orange-50 hover:bg-orange-100 text-orange-700 border-orange-200">
-              <BarChart3 className="h-6 w-6 mb-2" />
+            <DaisyButton className="h-20 flex-col bg-orange-50 hover:bg-orange-100 text-orange-700 border-orange-200" >
+  <BarChart3 className="h-6 w-6 mb-2" />
+</DaisyButton>
               <span className="text-sm">Generate Compliance Report</span>
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Integration Status */}
-      <DaisyAlert>
-        <Zap className="h-4 w-4" />
-        <DaisyAlertDescription>
-          <strong>Probo AI Integration Active:</strong> Real-time vendor assessments, automated control mapping, 
+      <DaisyAlert >
+  <Zap className="h-4 w-4" />
+</DaisyAlert>
+        <DaisyAlertDescription >
+  <strong>
+                </DaisyAlertDescription>
+</DaisyAlert>Probo AI Integration Active:</strong> Real-time vendor assessments, automated control mapping, 
           and 650+ security controls library available. All data synced as of {new Date().toLocaleTimeString()}.
-        
-      </DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
     </div>
   );
 } 

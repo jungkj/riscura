@@ -15,12 +15,11 @@ export const usePerformanceMonitor = (componentName: string) => {
     const endTime = performance.now();
     const renderTime = endTime - startTime.current;
 
-    setMetrics(prev => ({
+    setMetrics((prev) => ({
       renderCount: renderCount.current,
       lastRenderTime: renderTime,
-      averageRenderTime: prev.averageRenderTime === 0 
-        ? renderTime 
-        : (prev.averageRenderTime + renderTime) / 2,
+      averageRenderTime:
+        prev.averageRenderTime === 0 ? renderTime : (prev.averageRenderTime + renderTime) / 2,
     }));
 
     if (process.env.NODE_ENV === 'development') {
@@ -53,19 +52,19 @@ export const useDebounce = <T>(value: T, delay: number): T => {
 };
 
 // Throttled callback hook
-export const useThrottle = <T extends unknown[]>(
-  callback: (...args: T) => void,
-  delay: number
-) => {
+export const useThrottle = <T extends unknown[]>(callback: (...args: T) => void, delay: number) => {
   const lastRun = useRef<number>(0);
 
-  return useCallback((...args: T) => {
-    const now = Date.now();
-    if (now - lastRun.current >= delay) {
-      callback(...args);
-      lastRun.current = now;
-    }
-  }, [callback, delay]);
+  return useCallback(
+    (...args: T) => {
+      const now = Date.now();
+      if (now - lastRun.current >= delay) {
+        callback(...args);
+        lastRun.current = now;
+      }
+    },
+    [callback, delay]
+  );
 };
 
 // Memoized calculation hook
@@ -78,30 +77,26 @@ export const useMemoizedCalculation = <T, R>(
     const start = performance.now();
     const result = calculator(data);
     const end = performance.now();
-    
+
     if (process.env.NODE_ENV === 'development') {
       console.log(`Calculation took ${(end - start).toFixed(2)}ms`);
     }
-    
+
     return result;
   }, [data, calculator, ...dependencies]);
 };
 
 // Virtual scrolling hook for large lists
-export const useVirtualScrolling = <T>(
-  items: T[],
-  itemHeight: number,
-  containerHeight: number
-) => {
+export const useVirtualScrolling = <T>(items: T[], itemHeight: number, containerHeight: number) => {
   const [scrollTop, setScrollTop] = useState(0);
-  
+
   const visibleItems = useMemo(() => {
     const startIndex = Math.floor(scrollTop / itemHeight);
     const endIndex = Math.min(
       startIndex + Math.ceil(containerHeight / itemHeight) + 1,
       items.length
     );
-    
+
     return {
       startIndex,
       endIndex,
@@ -122,9 +117,7 @@ export const useVirtualScrolling = <T>(
 };
 
 // Intersection observer hook for lazy loading
-export const useIntersectionObserver = (
-  options: IntersectionObserverInit = {}
-) => {
+export const useIntersectionObserver = (options: IntersectionObserverInit = {}) => {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [entry, setEntry] = useState<IntersectionObserverEntry | null>(null);
   const elementRef = useRef<HTMLElement>(null);
@@ -133,13 +126,10 @@ export const useIntersectionObserver = (
     const element = elementRef.current;
     if (!element) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsIntersecting(entry.isIntersecting);
-        setEntry(entry);
-      },
-      options
-    );
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsIntersecting(entry.isIntersecting);
+      setEntry(entry);
+    }, options);
 
     observer.observe(element);
 
@@ -164,16 +154,16 @@ export const useLazyImage = (src: string, placeholder?: string) => {
   useEffect(() => {
     if (isIntersecting && src && !isLoaded) {
       const img = new Image();
-      
+
       img.onload = () => {
         setImageSrc(src);
         setIsLoaded(true);
       };
-      
+
       img.onerror = () => {
         setIsError(true);
       };
-      
+
       img.src = src;
     }
   }, [isIntersecting, src, isLoaded]);
@@ -198,7 +188,11 @@ export const useMemoryMonitor = () => {
   useEffect(() => {
     const updateMemoryInfo = () => {
       if ('memory' in performance) {
-        const memory = (performance as { memory: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
+        const memory = (
+          performance as {
+            memory: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number };
+          }
+        ).memory;
         setMemoryInfo({
           usedJSHeapSize: memory.usedJSHeapSize,
           totalJSHeapSize: memory.totalJSHeapSize,
@@ -226,9 +220,11 @@ export const useBundleAnalyzer = () => {
 
   useEffect(() => {
     const analyzeBundleSize = () => {
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      const navigation = performance.getEntriesByType(
+        'navigation'
+      )[0] as PerformanceNavigationTiming;
       const resources = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
-      
+
       const totalSize = resources.reduce((total, resource) => {
         return total + (resource.transferSize || 0);
       }, 0);
@@ -257,16 +253,15 @@ export const useOptimizedState = <T>(initialValue: T) => {
   const stateRef = useRef(state);
 
   const optimizedSetState = useCallback((newValue: T | ((prev: T) => T)) => {
-    setState(prevState => {
-      const nextState = typeof newValue === 'function' 
-        ? (newValue as (prev: T) => T)(prevState)
-        : newValue;
-      
+    setState((prevState) => {
+      const nextState =
+        typeof newValue === 'function' ? (newValue as (prev: T) => T)(prevState) : newValue;
+
       // Only update if value actually changed
       if (Object.is(nextState, stateRef.current)) {
         return prevState;
       }
-      
+
       stateRef.current = nextState;
       return nextState;
     });
@@ -285,7 +280,8 @@ export const withPerformanceOptimization = <P extends object>(
   displayName?: string
 ) => {
   const OptimizedComponent = React.memo(Component);
-  OptimizedComponent.displayName = displayName || `Optimized(${Component.displayName || Component.name})`;
+  OptimizedComponent.displayName =
+    displayName || `Optimized(${Component.displayName || Component.name})`;
   return OptimizedComponent;
 };
 
@@ -305,13 +301,14 @@ export const useComponentPerformance = (componentName: string) => {
 
   useEffect(() => {
     const renderTime = performance.now() - renderStartTime.current;
-    
-    setPerformanceData(prev => ({
+
+    setPerformanceData((prev) => ({
       renderCount: renderCount.current,
       lastRenderTime: renderTime,
-      averageRenderTime: prev.renderCount === 0 
-        ? renderTime 
-        : (prev.averageRenderTime * prev.renderCount + renderTime) / renderCount.current,
+      averageRenderTime:
+        prev.renderCount === 0
+          ? renderTime
+          : (prev.averageRenderTime * prev.renderCount + renderTime) / renderCount.current,
     }));
 
     if (process.env.NODE_ENV === 'development' && renderTime > 16) {
@@ -320,4 +317,4 @@ export const useComponentPerformance = (componentName: string) => {
   }, [componentName]);
 
   return performanceData;
-}; 
+};

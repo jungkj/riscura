@@ -123,25 +123,25 @@ export const SpreadsheetColumnHeader: React.FC<SpreadsheetColumnHeaderProps> = (
         </div>
 
         {/* Column menu */}
-        <DaisyDropdownMenu>
-          <DaisyDropdownMenuTrigger asChild>
+        <DaisyDropdownMenu />
+          <DaisyDropdownMenuTrigger asChild />
             <DaisyButton 
               variant="ghost" 
               size="sm" 
-              className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity ml-1"
-            >
-              <ChevronDown className="h-3 w-3" />
+              className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity ml-1" >
+  <ChevronDown className="h-3 w-3" />
+</DaisyDropdownMenu>
             </DaisyButton>
           </DaisyDropdownMenuTrigger>
-          <DaisyDropdownMenuContent align="start" className="w-48">
+          <DaisyDropdownMenuContent align="start" className="w-48" />
             {/* Sorting */}
             {onSort && (
               <>
-                <DaisyDropdownMenuItem onClick={() => onSort('asc')}>
+                <DaisyDropdownMenuItem onClick={() => onSort('asc')} />
                   <ArrowUp className="h-4 w-4 mr-2" />
                   Sort A-Z
-                </DaisyDropdownMenuItem>
-                <DaisyDropdownMenuItem onClick={() => onSort('desc')}>
+                </DaisyDropdownMenuContent>
+                <DaisyDropdownMenuItem onClick={() => onSort('desc')} />
                   <ArrowDown className="h-4 w-4 mr-2" />
                   Sort Z-A
                 </DaisyDropdownMenuItem>
@@ -150,11 +150,11 @@ export const SpreadsheetColumnHeader: React.FC<SpreadsheetColumnHeaderProps> = (
             )}
             
             {/* Insert columns */}
-            <DaisyDropdownMenuItem onClick={onInsertLeft}>
+            <DaisyDropdownMenuItem onClick={onInsertLeft} />
               <Plus className="h-4 w-4 mr-2" />
               Insert column left
-            </DaisyDropdownMenuItem>
-            <DaisyDropdownMenuItem onClick={onInsertRight}>
+            </DaisyDropdownMenuSeparator>
+            <DaisyDropdownMenuItem onClick={onInsertRight} />
               <Plus className="h-4 w-4 mr-2" />
               Insert column right
             </DaisyDropdownMenuItem>
@@ -162,14 +162,14 @@ export const SpreadsheetColumnHeader: React.FC<SpreadsheetColumnHeaderProps> = (
             <DaisyDropdownMenuSeparator />
             
             {/* Column properties */}
-            <DaisyDropdownMenuItem>
+            <DaisyDropdownMenuItem />
               <Settings className="h-4 w-4 mr-2" />
               Column properties
-            </DaisyDropdownMenuItem>
+            </DaisyDropdownMenuSeparator>
             
             {/* Hide/Show */}
             {onHide && (
-              <DaisyDropdownMenuItem onClick={onHide}>
+              <DaisyDropdownMenuItem onClick={onHide} />
                 <EyeOff className="h-4 w-4 mr-2" />
                 Hide column
               </DaisyDropdownMenuItem>
@@ -179,10 +179,10 @@ export const SpreadsheetColumnHeader: React.FC<SpreadsheetColumnHeaderProps> = (
             {onDelete && (
               <>
                 <DaisyDropdownMenuSeparator />
-                <DaisyDropdownMenuItem onClick={onDelete} className="text-red-600">
+                <DaisyDropdownMenuItem onClick={onDelete} className="text-red-600" />
                   <Trash2 className="h-4 w-4 mr-2" />
                   Delete column
-                </DaisyDropdownMenuItem>
+                </DaisyDropdownMenuSeparator>
               </>
             )}
           </DaisyDropdownMenuContent>

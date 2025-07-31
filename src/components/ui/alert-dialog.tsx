@@ -24,16 +24,18 @@ const AlertDialogOverlay = React.forwardRef<
     )}
     {...props}
     ref={ref}
-  />
-));
+  >
+  ));
+</DaisyAlertDialogPrimitive>
 AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName;
 
 const AlertDialogContent = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>
 >(({ className, ...props }, ref) => (
-  <DaisyAlertDialogPortal>
-    <DaisyAlertDialogOverlay />
+  <DaisyAlertDialogPortal >
+  <DaisyAlertDialogOverlay />
+</DaisyAlertDialogPortal>
     <DaisyAlertDialogPrimitive.Content
       ref={ref}
       className={cn(
@@ -52,8 +54,7 @@ const AlertDialogContent = React.forwardRef<
         className
       )}
       {...props}
-    />
-  </AlertDialogPortal>
+    /></DaisyAlertDialogPrimitive>
 ));
 AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName;
 
@@ -100,8 +101,9 @@ const AlertDialogTitle = React.forwardRef<
       className
     )}
     {...props}
-  />
-));
+  >
+  ));
+</DaisyAlertDialogPrimitive>
 AlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName;
 
 const AlertDialogDescription = React.forwardRef<
@@ -117,8 +119,9 @@ const AlertDialogDescription = React.forwardRef<
       className
     )}
     {...props}
-  />
-));
+  >
+  ));
+</DaisyAlertDialogPrimitive>
 AlertDialogDescription.displayName =
   AlertDialogPrimitive.Description.displayName;
 
@@ -138,8 +141,9 @@ const AlertDialogAction = React.forwardRef<
       className
     )}
     {...props}
-  />
-));
+  >
+  ));
+</DaisyAlertDialogPrimitive>
 AlertDialogAction.displayName = AlertDialogPrimitive.Action.displayName;
 
 const AlertDialogCancel = React.forwardRef<
@@ -160,8 +164,9 @@ const AlertDialogCancel = React.forwardRef<
       className
     )}
     {...props}
-  />
-));
+  >
+  ));
+</DaisyAlertDialogPrimitive>
 AlertDialogCancel.displayName = AlertDialogPrimitive.Cancel.displayName;
 
 export {

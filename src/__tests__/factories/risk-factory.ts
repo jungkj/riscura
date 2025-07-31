@@ -27,7 +27,7 @@ export class RiskFactory {
     const likelihood = options.likelihood || Math.floor(Math.random() * 5) + 1;
     const impact = options.impact || Math.floor(Math.random() * 5) + 1;
     const riskScore = options.riskScore || likelihood * impact;
-    
+
     return {
       id,
       title: options.title || `Test Risk ${this.counter}`,
@@ -81,9 +81,7 @@ export class RiskFactory {
   }
 
   static createByCategory(category: RiskCategory, count: number = 1): Risk[] {
-    return Array.from({ length: count }, () =>
-      this.create({ category })
-    );
+    return Array.from({ length: count }, () => this.create({ category }));
   }
 
   static createBatch(count: number, options: CreateRiskOptions = {}): Risk[] {
@@ -122,7 +120,7 @@ export const testRisks = {
     likelihood: 3,
     impact: 4,
   }),
-  
+
   financial: RiskFactory.create({
     id: 'risk-2',
     title: 'Financial Risk Test',
@@ -130,7 +128,7 @@ export const testRisks = {
     likelihood: 2,
     impact: 5,
   }),
-  
+
   compliance: RiskFactory.create({
     id: 'risk-3',
     title: 'Compliance Risk Test',
@@ -138,7 +136,7 @@ export const testRisks = {
     likelihood: 4,
     impact: 3,
   }),
-  
+
   technology: RiskFactory.create({
     id: 'risk-4',
     title: 'Technology Risk Test',
@@ -146,7 +144,7 @@ export const testRisks = {
     likelihood: 5,
     impact: 4,
   }),
-  
+
   strategic: RiskFactory.create({
     id: 'risk-5',
     title: 'Strategic Risk Test',
@@ -154,4 +152,4 @@ export const testRisks = {
     likelihood: 2,
     impact: 4,
   }),
-}; 
+};

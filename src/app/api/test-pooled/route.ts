@@ -17,7 +17,7 @@ export async function GET() {
   };
 
   const dbUrl = process.env.DATABASE_URL || process.env.database_url;
-  
+
   if (dbUrl) {
     try {
       const url = new URL(dbUrl);
@@ -26,14 +26,17 @@ export async function GET() {
         port: url.port,
         isDirectUrl: url.hostname.includes('db.') && url.hostname.includes('.supabase.co'),
         isPooledUrl: url.hostname.includes('pooler.supabase.com'),
-        projectRef: url.hostname.match(/db\.([^.]+)\.supabase\.co/)?.[1] || 
-                    url.hostname.match(/postgres\.([^:]+)/)?.[1] || 
-                    'unknown',
+        projectRef:
+          url.hostname.match(/db\.([^.]+)\.supabase\.co/)?.[1] ||
+          url.hostname.match(/postgres\.([^:]+)/)?.[1] ||
+          'unknown',
       };
 
       // If it's a direct URL, show what the pooled URL should be
       if (results.urlAnalysis.isDirectUrl) {
-        const match = dbUrl.match(/postgresql:\/\/postgres:([^@]+)@db\.([^.]+)\.supabase\.co:5432\/postgres/);
+        const match = dbUrl.match(
+          /postgresql:\/\/postgres:([^@]+)@db\.([^.]+)\.supabase\.co:5432\/postgres/
+        );
         if (match) {
           const [, password, projectRef] = match;
           results.suggestedPooledUrl = `postgresql://postgres.${projectRef}:[YOUR-PASSWORD]@aws-0-us-west-1.pooler.supabase.com:6543/postgres`;
@@ -54,7 +57,7 @@ export async function GET() {
           const testUrl = new URL(dbUrl);
           testUrl.searchParams.set('pgbouncer', 'true');
           testUrl.searchParams.set('connection_limit', '1');
-          
+
           const prisma = new PrismaClient({
             datasources: {
               db: {
@@ -62,7 +65,7 @@ export async function GET() {
               },
             },
           });
-          
+
           const result = await prisma.$queryRaw`SELECT 1 as test`;
           results.pooledTest = {
             success: true,
@@ -81,7 +84,7 @@ export async function GET() {
     }
   }
 
-  return NextResponse.json(results, { 
+  return NextResponse.json(results, {
     status: 200,
     headers: {
       'Content-Type': 'application/json',

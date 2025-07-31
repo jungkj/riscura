@@ -34,12 +34,7 @@ export const DaisyTabsList = ({ children, className, ...props }: TabsListProps) 
 
 export const DaisyTabsTrigger = ({ children, className, value, ...props }: TabsTriggerProps) => {
   return (
-    <button
-      role="tab"
-      className={cn('tab', className)}
-      aria-selected={false}
-      {...props}
-    >
+    <button role="tab" className={cn('tab', className)} aria-selected={false} {...props}>
       {children}
     </button>
   );

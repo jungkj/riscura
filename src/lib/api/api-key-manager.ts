@@ -145,7 +145,9 @@ class APIKeyManager {
       referrerWhitelist: config.referrerWhitelist || [],
       createdAt: now,
       updatedAt: now,
-      expiresAt: config.expiresInDays ? now + (config.expiresInDays * 24 * 60 * 60 * 1000) : undefined,
+      expiresAt: config.expiresInDays
+        ? now + config.expiresInDays * 24 * 60 * 60 * 1000
+        : undefined,
       usage: {
         totalRequests: 0,
         lastRequest: 0,
@@ -161,7 +163,7 @@ class APIKeyManager {
       apiKey.rotationSchedule = {
         enabled: true,
         intervalDays: config.rotationIntervalDays || 90,
-        nextRotation: now + ((config.rotationIntervalDays || 90) * 24 * 60 * 60 * 1000),
+        nextRotation: now + (config.rotationIntervalDays || 90) * 24 * 60 * 60 * 1000,
         notifyDaysBefore: 7,
       };
     }
@@ -197,7 +199,7 @@ class APIKeyManager {
       const rawKey = keyParts[2];
 
       // Get API key from store
-      const apiKey = this.keyStore.get(keyId) || await this.loadKeyFromStorage(keyId);
+      const apiKey = this.keyStore.get(keyId) || (await this.loadKeyFromStorage(keyId));
       if (!apiKey) {
         result.reason = 'Key not found';
         return result;
@@ -233,9 +235,16 @@ class APIKeyManager {
       }
 
       // Check referrer whitelist
-      if (referrer && apiKey.referrerWhitelist.length > 0 && !this.isReferrerWhitelisted(referrer, apiKey.referrerWhitelist)) {
+      if (
+        referrer &&
+        apiKey.referrerWhitelist.length > 0 &&
+        !this.isReferrerWhitelisted(referrer, apiKey.referrerWhitelist)
+      ) {
         result.reason = 'Referrer not whitelisted';
-        await this.recordSuspiciousActivity(keyId, 'referrer_not_whitelisted', { referrer, clientIP });
+        await this.recordSuspiciousActivity(keyId, 'referrer_not_whitelisted', {
+          referrer,
+          clientIP,
+        });
         return result;
       }
 
@@ -281,10 +290,10 @@ class APIKeyManager {
     if (apiKey) {
       apiKey.usage.totalRequests++;
       apiKey.usage.lastRequest = usage.timestamp;
-      apiKey.usage.requestsByEndpoint[usage.endpoint] = 
+      apiKey.usage.requestsByEndpoint[usage.endpoint] =
         (apiKey.usage.requestsByEndpoint[usage.endpoint] || 0) + 1;
       apiKey.usage.bytesTransferred += usage.bytesTransferred;
-      
+
       if (usage.statusCode >= 400) {
         apiKey.usage.errorCount++;
       }
@@ -322,8 +331,8 @@ class APIKeyManager {
 
     // Update rotation schedule
     if (existingKey.rotationSchedule) {
-      existingKey.rotationSchedule.nextRotation = 
-        now + (existingKey.rotationSchedule.intervalDays * 24 * 60 * 60 * 1000);
+      existingKey.rotationSchedule.nextRotation =
+        now + existingKey.rotationSchedule.intervalDays * 24 * 60 * 60 * 1000;
     }
 
     await this.saveKeyToStorage(existingKey);
@@ -345,13 +354,13 @@ class APIKeyManager {
 
     apiKey.status = 'revoked';
     apiKey.updatedAt = Date.now();
-    
+
     if (reason) {
       apiKey.metadata.revocationReason = reason;
     }
 
     await this.saveKeyToStorage(apiKey);
-    
+
     // Remove from Redis cache
     await redisClient.delete(`api_key:${keyId}`);
   }
@@ -370,7 +379,10 @@ class APIKeyManager {
   }
 
   // Update rate limits
-  public async updateRateLimits(keyId: string, rateLimits: Partial<APIKey['rateLimits']>): Promise<void> {
+  public async updateRateLimits(
+    keyId: string,
+    rateLimits: Partial<APIKey['rateLimits']>
+  ): Promise<void> {
     const apiKey = this.keyStore.get(keyId);
     if (!apiKey) {
       throw new Error('API key not found');
@@ -386,10 +398,10 @@ class APIKeyManager {
   public async getMetrics(): Promise<APIKeyMetrics> {
     const keys = Array.from(this.keyStore.values());
     const now = Date.now();
-    const last24h = now - (24 * 60 * 60 * 1000);
+    const last24h = now - 24 * 60 * 60 * 1000;
 
     const totalRequests = keys.reduce((sum, key) => sum + key.usage.totalRequests, 0);
-    const requestsLast24h = this.usageStore.filter(usage => usage.timestamp > last24h).length;
+    const requestsLast24h = this.usageStore.filter((usage) => usage.timestamp > last24h).length;
     const totalErrors = keys.reduce((sum, key) => sum + key.usage.errorCount, 0);
     const totalResponseTime = this.usageStore.reduce((sum, usage) => sum + usage.responseTime, 0);
 
@@ -397,7 +409,7 @@ class APIKeyManager {
     const topKeys = keys
       .sort((a, b) => b.usage.totalRequests - a.usage.totalRequests)
       .slice(0, 10)
-      .map(key => ({
+      .map((key) => ({
         keyId: key.id,
         requests: key.usage.totalRequests,
         name: key.name,
@@ -405,7 +417,7 @@ class APIKeyManager {
 
     // Top endpoints
     const endpointCounts = new Map<string, number>();
-    this.usageStore.forEach(usage => {
+    this.usageStore.forEach((usage) => {
       endpointCounts.set(usage.endpoint, (endpointCounts.get(usage.endpoint) || 0) + 1);
     });
 
@@ -416,15 +428,16 @@ class APIKeyManager {
 
     return {
       totalKeys: keys.length,
-      activeKeys: keys.filter(k => k.status === 'active').length,
-      expiredKeys: keys.filter(k => k.status === 'expired').length,
-      revokedKeys: keys.filter(k => k.status === 'revoked').length,
+      activeKeys: keys.filter((k) => k.status === 'active').length,
+      expiredKeys: keys.filter((k) => k.status === 'expired').length,
+      revokedKeys: keys.filter((k) => k.status === 'revoked').length,
       totalRequests,
       requestsLast24h,
       topKeys,
       topEndpoints,
       errorRate: totalRequests > 0 ? (totalErrors / totalRequests) * 100 : 0,
-      averageResponseTime: this.usageStore.length > 0 ? totalResponseTime / this.usageStore.length : 0,
+      averageResponseTime:
+        this.usageStore.length > 0 ? totalResponseTime / this.usageStore.length : 0,
     };
   }
 
@@ -440,15 +453,15 @@ class APIKeyManager {
 
     // Apply filters
     if (filters.userId) {
-      keys = keys.filter(k => k.userId === filters.userId);
+      keys = keys.filter((k) => k.userId === filters.userId);
     }
 
     if (filters.organizationId) {
-      keys = keys.filter(k => k.organizationId === filters.organizationId);
+      keys = keys.filter((k) => k.organizationId === filters.organizationId);
     }
 
     if (filters.status) {
-      keys = keys.filter(k => k.status === filters.status);
+      keys = keys.filter((k) => k.status === filters.status);
     }
 
     const total = keys.length;
@@ -459,7 +472,7 @@ class APIKeyManager {
     keys = keys.slice(offset, offset + limit);
 
     // Remove sensitive data
-    const sanitizedKeys = keys.map(key => ({
+    const sanitizedKeys = keys.map((key) => ({
       ...key,
       key: `${key.key.substring(0, 12)}...${key.key.substring(key.key.length - 4)}`,
       hashedKey: '[HIDDEN]',
@@ -482,7 +495,7 @@ class APIKeyManager {
   }
 
   private isIPWhitelisted(clientIP: string, whitelist: string[]): boolean {
-    return whitelist.some(pattern => {
+    return whitelist.some((pattern) => {
       if (pattern.includes('/')) {
         // CIDR notation
         return this.isIPInCIDR(clientIP, pattern);
@@ -499,7 +512,7 @@ class APIKeyManager {
 
   private isReferrerWhitelisted(referrer: string, whitelist: string[]): boolean {
     const referrerUrl = new URL(referrer);
-    return whitelist.some(pattern => {
+    return whitelist.some((pattern) => {
       if (pattern.includes('*')) {
         const regex = new RegExp(pattern.replace(/\*/g, '.*'));
         return regex.test(referrerUrl.hostname);
@@ -518,18 +531,22 @@ class APIKeyManager {
   }
 
   private hasRequiredScope(apiKey: APIKey, endpoint: string, method: string): boolean {
-    return apiKey.scopes.some(scope => {
+    return apiKey.scopes.some((scope) => {
       // Check if endpoint matches resource pattern
       const resourceMatch = scope.resource === '*' || endpoint.startsWith(scope.resource);
-      
+
       // Check if method is allowed
-      const methodMatch = scope.actions.includes('*') || scope.actions.includes(method.toLowerCase());
-      
+      const methodMatch =
+        scope.actions.includes('*') || scope.actions.includes(method.toLowerCase());
+
       return resourceMatch && methodMatch;
     });
   }
 
-  private async checkRateLimits(apiKey: APIKey, clientIP: string): Promise<{
+  private async checkRateLimits(
+    apiKey: APIKey,
+    clientIP: string
+  ): Promise<{
     allowed: boolean;
     remaining: { perMinute: number; perHour: number; perDay: number };
   }> {
@@ -554,7 +571,7 @@ class APIKeyManager {
         perDay: Math.max(0, apiKey.rateLimits.requestsPerDay - dayCount),
       };
 
-      const allowed = 
+      const allowed =
         minuteCount < apiKey.rateLimits.requestsPerMinute &&
         hourCount < apiKey.rateLimits.requestsPerHour &&
         dayCount < apiKey.rateLimits.requestsPerDay;
@@ -597,7 +614,8 @@ class APIKeyManager {
 
     // Check rotation warning
     if (apiKey.rotationSchedule?.enabled) {
-      const daysUntilRotation = (apiKey.rotationSchedule.nextRotation - now) / (24 * 60 * 60 * 1000);
+      const daysUntilRotation =
+        (apiKey.rotationSchedule.nextRotation - now) / (24 * 60 * 60 * 1000);
       if (daysUntilRotation <= apiKey.rotationSchedule.notifyDaysBefore) {
         warnings.push(`Key rotation scheduled in ${Math.ceil(daysUntilRotation)} days`);
       }
@@ -619,7 +637,7 @@ class APIKeyManager {
     };
 
     console.warn('Suspicious API key activity:', event);
-    
+
     // Store in Redis for analysis
     await redisClient.client.lpush('suspicious_api_activity', JSON.stringify(event));
     await redisClient.client.expire('suspicious_api_activity', 86400); // 24 hours
@@ -634,14 +652,17 @@ class APIKeyManager {
 
   private setupRotationScheduler(): void {
     // Check for keys needing rotation every hour
-    this.rotationTimer = setInterval(async () => {
-      await this.checkRotationSchedule();
-    }, 60 * 60 * 1000);
+    this.rotationTimer = setInterval(
+      async () => {
+        await this.checkRotationSchedule();
+      },
+      60 * 60 * 1000
+    );
   }
 
   private async checkRotationSchedule(): Promise<void> {
     const now = Date.now();
-    
+
     for (const apiKey of this.keyStore.values()) {
       if (apiKey.rotationSchedule?.enabled && apiKey.rotationSchedule.nextRotation <= now) {
         try {
@@ -679,4 +700,4 @@ class APIKeyManager {
 export const apiKeyManager = new APIKeyManager();
 
 // Export class for custom instances
-export { APIKeyManager }; 
+export { APIKeyManager };

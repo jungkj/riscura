@@ -67,7 +67,7 @@ async function initializeWebVitals() {
       console.log('Web vitals module not available, skipping Core Web Vitals monitoring');
       return;
     }
-    
+
     const { getCLS, getFID, getFCP, getLCP, getTTFB } = webVitalsModule;
 
     getCLS((metric) => {
@@ -116,12 +116,12 @@ function initializeMemoryManagement() {
     if ('memory' in performance) {
       const memory = (performance as any).memory;
       const usagePercent = (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100;
-      
+
       performanceMetrics.memoryUsage = usagePercent;
-      
+
       if (usagePercent > performanceConfig.alerts.memoryUsageThreshold) {
         console.warn('Memory usage threshold exceeded:', usagePercent);
-        
+
         // Trigger garbage collection if available
         if ('gc' in window && typeof (window as any).gc === 'function') {
           (window as any).gc();
@@ -132,7 +132,7 @@ function initializeMemoryManagement() {
 
   // Check memory every 30 seconds
   setInterval(checkMemory, performanceConfig.memory.monitoringIntervalMs);
-  
+
   // Initial check
   checkMemory();
 
@@ -163,7 +163,7 @@ function initializeWebSocketOptimization() {
     constructor(url: string | URL, protocols?: string | string[]) {
       super(url, protocols);
       activeConnections++;
-      
+
       this.addEventListener('close', () => {
         activeConnections--;
       });
@@ -257,4 +257,4 @@ export function isPerformanceInitialized() {
 export function resetPerformanceInitialization() {
   isInitialized = false;
   performanceMetrics = {};
-} 
+}

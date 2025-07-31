@@ -10,7 +10,15 @@ export interface Column {
   id: string;
   name: string;
   position: number;
-  dataType: 'TEXT' | 'NUMBER' | 'DATE' | 'DROPDOWN' | 'RATING' | 'USER_REFERENCE' | 'CALCULATED' | 'BOOLEAN';
+  dataType:
+    | 'TEXT'
+    | 'NUMBER'
+    | 'DATE'
+    | 'DROPDOWN'
+    | 'RATING'
+    | 'USER_REFERENCE'
+    | 'CALCULATED'
+    | 'BOOLEAN';
   isRequired?: boolean;
   width: number;
   dropdownOptions?: string[];
@@ -61,9 +69,13 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
   isReadOnly = false,
   selectedCells = [],
   onCellSelect,
-  className
+  className,
 }) => {
-  const [editingCell, setEditingCell] = useState<{ rowId: string; columnId: string; value: string } | null>(null);
+  const [editingCell, setEditingCell] = useState<{
+    rowId: string;
+    columnId: string;
+    value: string;
+  } | null>(null);
   const [selectedRange, setSelectedRange] = useState<{ start: string; end: string } | null>(null);
   const [draggedColumn, setDraggedColumn] = useState<string | null>(null);
 
@@ -87,81 +99,93 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
     horizontal: true,
   });
 
-  const handleCellClick = useCallback((rowId: string, columnId: string, currentValue: string) => {
-    if (isReadOnly) return;
-    
-    const column = columns.find(c => c.id === columnId);
-    if (column?.isLocked) return;
+  const handleCellClick = useCallback(
+    (rowId: string, columnId: string, currentValue: string) => {
+      if (isReadOnly) return;
 
-    setEditingCell({ rowId, columnId, value: currentValue });
-  }, [columns, isReadOnly]);
+      const column = columns.find((c) => c.id === columnId);
+      if (column?.isLocked) return;
 
-  const handleCellSave = useCallback((newValue: string) => {
-    if (!editingCell) return;
+      setEditingCell({ rowId, columnId, value: currentValue });
+    },
+    [columns, isReadOnly]
+  );
 
-    onCellEdit(editingCell.rowId, editingCell.columnId, newValue);
-    setEditingCell(null);
-  }, [editingCell, onCellEdit]);
+  const handleCellSave = useCallback(
+    (newValue: string) => {
+      if (!editingCell) return;
 
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (!editingCell) return;
-
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleCellSave(editingCell.value);
-      
-      // Move to next row
-      const currentRowIndex = rows.findIndex(r => r.id === editingCell.rowId);
-      const nextRow = rows[currentRowIndex + 1];
-      if (nextRow) {
-        setEditingCell({ 
-          rowId: nextRow.id, 
-          columnId: editingCell.columnId, 
-          value: getCellValue(nextRow.id, editingCell.columnId) 
-        });
-      }
-    } else if (e.key === 'Tab') {
-      e.preventDefault();
-      handleCellSave(editingCell.value);
-      
-      // Move to next column
-      const currentColumnIndex = columns.findIndex(c => c.id === editingCell.columnId);
-      const nextColumn = columns[currentColumnIndex + (e.shiftKey ? -1 : 1)];
-      if (nextColumn) {
-        setEditingCell({ 
-          rowId: editingCell.rowId, 
-          columnId: nextColumn.id, 
-          value: getCellValue(editingCell.rowId, nextColumn.id) 
-        });
-      }
-    } else if (e.key === 'Escape') {
+      onCellEdit(editingCell.rowId, editingCell.columnId, newValue);
       setEditingCell(null);
-    }
-  }, [editingCell, rows, columns, handleCellSave]);
+    },
+    [editingCell, onCellEdit]
+  );
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (!editingCell) return;
+
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleCellSave(editingCell.value);
+
+        // Move to next row
+        const currentRowIndex = rows.findIndex((r) => r.id === editingCell.rowId);
+        const nextRow = rows[currentRowIndex + 1];
+        if (nextRow) {
+          setEditingCell({
+            rowId: nextRow.id,
+            columnId: editingCell.columnId,
+            value: getCellValue(nextRow.id, editingCell.columnId),
+          });
+        }
+      } else if (e.key === 'Tab') {
+        e.preventDefault();
+        handleCellSave(editingCell.value);
+
+        // Move to next column
+        const currentColumnIndex = columns.findIndex((c) => c.id === editingCell.columnId);
+        const nextColumn = columns[currentColumnIndex + (e.shiftKey ? -1 : 1)];
+        if (nextColumn) {
+          setEditingCell({
+            rowId: editingCell.rowId,
+            columnId: nextColumn.id,
+            value: getCellValue(editingCell.rowId, nextColumn.id),
+          });
+        }
+      } else if (e.key === 'Escape') {
+        setEditingCell(null);
+      }
+    },
+    [editingCell, rows, columns, handleCellSave]
+  );
 
   const getCellValue = (rowId: string, columnId: string): string => {
-    const row = rows.find(r => r.id === rowId);
-    const cell = row?.cells.find(c => c.columnId === columnId);
+    const row = rows.find((r) => r.id === rowId);
+    const cell = row?.cells.find((c) => c.columnId === columnId);
     return cell?.displayValue || '';
   };
 
   const getCell = (rowId: string, columnId: string): Cell | undefined => {
-    const row = rows.find(r => r.id === rowId);
-    return row?.cells.find(c => c.columnId === columnId);
+    const row = rows.find((r) => r.id === rowId);
+    return row?.cells.find((c) => c.columnId === columnId);
   };
 
   // Calculate total width for horizontal scrolling
   const totalWidth = columns.reduce((sum, col) => sum + col.width, 0) + 60; // +60 for row numbers
 
   return (
-    <div 
+    <div
       ref={parentRef}
-      className={cn("spreadsheet-grid relative overflow-auto border rounded-lg bg-white", className)}
+      className={cn(
+        'spreadsheet-grid relative overflow-auto border rounded-lg bg-white',
+        className
+      )}
       style={{ height: '600px' }}
       onKeyDown={handleKeyDown}
       tabIndex={0}
     >
-      <div 
+      <div
         ref={scrollElementRef}
         className="overflow-auto h-full w-full"
         style={{ contain: 'strict' }}
@@ -173,7 +197,7 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
             <div className="w-12 h-10 border-r bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-500 sticky left-0 z-30">
               #
             </div>
-            
+
             {/* Column headers */}
             {columns.map((column, index) => (
               <SpreadsheetColumnHeader
@@ -212,26 +236,29 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
                   {/* Row cells */}
                   {columns.map((column) => {
                     const cell = getCell(row.id, column.id);
-                    const isEditing = editingCell?.rowId === row.id && editingCell?.columnId === column.id;
+                    const isEditing =
+                      editingCell?.rowId === row.id && editingCell?.columnId === column.id;
                     const isSelected = selectedCells.includes(`${row.id}-${column.id}`);
 
                     return (
                       <div
                         key={`${row.id}-${column.id}`}
                         className={cn(
-                          "border-r relative",
-                          isSelected && "bg-blue-50",
-                          cell?.hasError && "bg-red-50"
+                          'border-r relative',
+                          isSelected && 'bg-blue-50',
+                          cell?.hasError && 'bg-red-50'
                         )}
                         style={{ width: column.width }}
                       >
                         <SpreadsheetCell
-                          cell={cell || {
-                            id: `${row.id}-${column.id}`,
-                            columnId: column.id,
-                            value: '',
-                            displayValue: ''
-                          }}
+                          cell={
+                            cell || {
+                              id: `${row.id}-${column.id}`,
+                              columnId: column.id,
+                              value: '',
+                              displayValue: '',
+                            }
+                          }
                           column={column}
                           rowId={row.id}
                           isEditing={isEditing || false}
@@ -239,11 +266,11 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
                           isReadOnly={isReadOnly || column.isLocked}
                           onClick={handleCellClick}
                           onSave={handleCellSave}
-                          onValueChange={(value) => 
-                            setEditingCell(prev => prev ? { ...prev, value } : null)
+                          onValueChange={(value) =>
+                            setEditingCell((prev) => (prev ? { ...prev, value } : null))
                           }
                         />
-                        
+
                         {/* Cell comment indicator */}
                         {cell?.comments && cell.comments.length > 0 && (
                           <div className="absolute top-0 right-0 w-2 h-2 bg-orange-400 rounded-full transform translate-x-1 -translate-y-1"></div>
@@ -257,11 +284,11 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
           </div>
 
           {/* Add Row Button */}
-          <div 
+          <div
             className="flex border-b sticky bottom-0 bg-white z-10"
-            style={{ 
+            style={{
               transform: `translateY(${rowVirtualizer.getTotalSize()}px)`,
-              height: 40
+              height: 40,
             }}
           >
             <div className="w-12 h-10 border-r bg-gray-50"></div>
@@ -272,7 +299,12 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
                 disabled={isReadOnly}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
                 Add row
               </button>
@@ -286,8 +318,18 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
         <div className="absolute inset-0 flex items-center justify-center bg-gray-50 bg-opacity-75">
           <div className="text-center">
             <div className="text-gray-400 mb-2">
-              <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              <svg
+                className="w-12 h-12 mx-auto"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1}
+                  d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                />
               </svg>
             </div>
             <p className="text-gray-500">No data yet</p>
@@ -299,4 +341,4 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
   );
 };
 
-export default SpreadsheetGrid; 
+export default SpreadsheetGrid;

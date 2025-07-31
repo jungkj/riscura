@@ -16,7 +16,7 @@ export async function GET(
 
     // Get params
     const resolvedParams = await params;
-    
+
     // Reconstruct file path
     const filePath = `/api/files/${resolvedParams.path.join('/')}`;
 
@@ -47,9 +47,6 @@ export async function GET(
     });
   } catch (error) {
     console.error('Error serving file:', error);
-    return NextResponse.json(
-      { error: 'Failed to serve file' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to serve file' }, { status: 500 });
   }
 }

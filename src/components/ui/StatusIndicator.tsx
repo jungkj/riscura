@@ -2,24 +2,24 @@
 
 import React from 'react';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { 
-  CheckCircle, 
-  AlertTriangle, 
-  Clock, 
-  XCircle, 
+import {
+  CheckCircle,
+  AlertTriangle,
+  Clock,
+  XCircle,
   Info,
   AlertCircle,
   Minus,
   Shield,
   Target,
-  Activity
+  Activity,
 } from 'lucide-react';
 
-export type StatusType = 
-  | 'success' 
-  | 'warning' 
-  | 'error' 
-  | 'info' 
+export type StatusType =
+  | 'success'
+  | 'warning'
+  | 'error'
+  | 'info'
   | 'neutral'
   | 'compliant'
   | 'non-compliant'
@@ -50,7 +50,7 @@ const statusConfig = {
     bgColor: '#E8F5E8',
     borderColor: '#C8E6C9',
     semanticLabel: 'Success',
-    ariaLabel: 'Status: Success'
+    ariaLabel: 'Status: Success',
   },
   warning: {
     icon: AlertTriangle,
@@ -58,7 +58,7 @@ const statusConfig = {
     bgColor: '#FFF3E0',
     borderColor: '#FFE0B2',
     semanticLabel: 'Warning',
-    ariaLabel: 'Status: Warning - Attention required'
+    ariaLabel: 'Status: Warning - Attention required',
   },
   error: {
     icon: XCircle,
@@ -66,7 +66,7 @@ const statusConfig = {
     bgColor: '#FFEBEE',
     borderColor: '#FFCDD2',
     semanticLabel: 'Error',
-    ariaLabel: 'Status: Error - Action required'
+    ariaLabel: 'Status: Error - Action required',
   },
   info: {
     icon: Info,
@@ -74,7 +74,7 @@ const statusConfig = {
     bgColor: '#E3F2FD',
     borderColor: '#BBDEFB',
     semanticLabel: 'Information',
-    ariaLabel: 'Status: Information'
+    ariaLabel: 'Status: Information',
   },
   neutral: {
     icon: Minus,
@@ -82,7 +82,7 @@ const statusConfig = {
     bgColor: '#F5F5F5',
     borderColor: '#E0E0E0',
     semanticLabel: 'Neutral',
-    ariaLabel: 'Status: Neutral'
+    ariaLabel: 'Status: Neutral',
   },
   compliant: {
     icon: Shield,
@@ -90,7 +90,7 @@ const statusConfig = {
     bgColor: '#E8F5E8',
     borderColor: '#C8E6C9',
     semanticLabel: 'Compliant',
-    ariaLabel: 'Compliance Status: Compliant'
+    ariaLabel: 'Compliance Status: Compliant',
   },
   'non-compliant': {
     icon: AlertCircle,
@@ -98,7 +98,7 @@ const statusConfig = {
     bgColor: '#FFEBEE',
     borderColor: '#FFCDD2',
     semanticLabel: 'Non-Compliant',
-    ariaLabel: 'Compliance Status: Non-Compliant - Immediate attention required'
+    ariaLabel: 'Compliance Status: Non-Compliant - Immediate attention required',
   },
   'in-progress': {
     icon: Activity,
@@ -106,7 +106,7 @@ const statusConfig = {
     bgColor: '#E3F2FD',
     borderColor: '#BBDEFB',
     semanticLabel: 'In Progress',
-    ariaLabel: 'Status: In Progress'
+    ariaLabel: 'Status: In Progress',
   },
   pending: {
     icon: Clock,
@@ -114,7 +114,7 @@ const statusConfig = {
     bgColor: '#FFF3E0',
     borderColor: '#FFE0B2',
     semanticLabel: 'Pending',
-    ariaLabel: 'Status: Pending review'
+    ariaLabel: 'Status: Pending review',
   },
   overdue: {
     icon: AlertTriangle,
@@ -122,7 +122,7 @@ const statusConfig = {
     bgColor: '#FFEBEE',
     borderColor: '#FFCDD2',
     semanticLabel: 'Overdue',
-    ariaLabel: 'Status: Overdue - Urgent action required'
+    ariaLabel: 'Status: Overdue - Urgent action required',
   },
   completed: {
     icon: CheckCircle,
@@ -130,7 +130,7 @@ const statusConfig = {
     bgColor: '#E8F5E8',
     borderColor: '#C8E6C9',
     semanticLabel: 'Completed',
-    ariaLabel: 'Status: Completed'
+    ariaLabel: 'Status: Completed',
   },
   'not-started': {
     icon: Minus,
@@ -138,7 +138,7 @@ const statusConfig = {
     bgColor: '#F5F5F5',
     borderColor: '#E0E0E0',
     semanticLabel: 'Not Started',
-    ariaLabel: 'Status: Not Started'
+    ariaLabel: 'Status: Not Started',
   },
   deactivated: {
     icon: Minus,
@@ -146,8 +146,8 @@ const statusConfig = {
     bgColor: '#FAFAFA',
     borderColor: '#E0E0E0',
     semanticLabel: 'Deactivated',
-    ariaLabel: 'Status: Deactivated'
-  }
+    ariaLabel: 'Status: Deactivated',
+  },
 };
 
 const sizeConfig = {
@@ -155,20 +155,20 @@ const sizeConfig = {
     iconSize: 'w-3 h-3',
     padding: 'px-2 py-1',
     fontSize: 'text-xs',
-    gap: 'gap-1'
+    gap: 'gap-1',
   },
   md: {
     iconSize: 'w-4 h-4',
     padding: 'px-3 py-1.5',
     fontSize: 'text-sm',
-    gap: 'gap-2'
+    gap: 'gap-2',
   },
   lg: {
     iconSize: 'w-5 h-5',
     padding: 'px-4 py-2',
     fontSize: 'text-base',
-    gap: 'gap-2'
-  }
+    gap: 'gap-2',
+  },
 };
 
 export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
@@ -181,7 +181,7 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
   variant = 'default',
   className = '',
   ariaLabel,
-  id
+  id,
 }) => {
   const config = statusConfig[status];
   const sizeStyles = sizeConfig[size];
@@ -193,19 +193,19 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
         return {
           backgroundColor: config.bgColor,
           color: config.color,
-          border: 'none'
+          border: 'none',
         };
       case 'outline':
         return {
           backgroundColor: 'transparent',
           color: config.color,
-          border: `1px solid ${config.color}`
+          border: `1px solid ${config.color}`,
         };
       default:
         return {
           backgroundColor: config.bgColor,
           color: config.color,
-          border: `1px solid ${config.borderColor}`
+          border: `1px solid ${config.borderColor}`,
         };
     }
   };
@@ -228,17 +228,12 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
       >
         {showIcon && (
           <>
-            <IconComponent 
-              className={`${sizeStyles.iconSize} flex-shrink-0`}
-              aria-hidden="true"
-            />
+            <IconComponent className={`${sizeStyles.iconSize} flex-shrink-0`} aria-hidden="true" />
             <span className="sr-only">{config.semanticLabel}:</span>
           </>
         )}
         <span>{label}</span>
-        {description && (
-          <span className="sr-only">. {description}</span>
-        )}
+        {description && <span className="sr-only">. {description}</span>}
       </DaisyBadge>
     );
   }
@@ -258,17 +253,12 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
     >
       {showIcon && (
         <>
-          <IconComponent 
-            className={`${sizeStyles.iconSize} flex-shrink-0`}
-            aria-hidden="true"
-          />
+          <IconComponent className={`${sizeStyles.iconSize} flex-shrink-0`} aria-hidden="true" />
           <span className="sr-only">{config.semanticLabel}:</span>
         </>
       )}
       <span>{label}</span>
-      {description && (
-        <span className="sr-only">. {description}</span>
-      )}
+      {description && <span className="sr-only">. {description}</span>}
     </div>
   );
 };
@@ -315,7 +305,7 @@ export const RiskStatusIndicator: React.FC<{
     critical: 'error' as StatusType,
     high: 'warning' as StatusType,
     medium: 'info' as StatusType,
-    low: 'success' as StatusType
+    low: 'success' as StatusType,
   };
 
   const getLabel = () => {
@@ -379,4 +369,4 @@ export const HighContrastStatusIndicator: React.FC<StatusIndicatorProps> = (prop
   );
 };
 
-export default StatusIndicator; 
+export default StatusIndicator;

@@ -52,7 +52,7 @@ export class OfflineManager {
       enableBackgroundSync: true,
       enablePushNotifications: false,
       maxOfflineStorage: 50, // 50MB
-      ...config
+      ...config,
     };
 
     this.initializeEventListeners();
@@ -89,7 +89,7 @@ export class OfflineManager {
     console.log('Connection restored');
     this.isOnline = true;
     this.notifyListeners(true);
-    
+
     // Start immediate sync when coming back online
     setTimeout(() => {
       this.syncPendingOperations();
@@ -120,25 +120,27 @@ export class OfflineManager {
   }
 
   // Queue operations for later sync
-  public queueOperation(operation: Omit<QueuedOperation, 'id' | 'timestamp' | 'retryCount'>): string {
+  public queueOperation(
+    operation: Omit<QueuedOperation, 'id' | 'timestamp' | 'retryCount'>
+  ): string {
     const id = `op_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     const queuedOp: QueuedOperation = {
       id,
       timestamp: new Date().toISOString(),
       retryCount: 0,
-      ...operation
+      ...operation,
     };
 
     this.operationQueue.set(id, queuedOp);
-    
+
     // Save to local storage
     localStorageService.addToOfflineQueue({
       id,
       type: operation.type,
       endpoint: operation.endpoint,
       data: operation.data,
-      timestamp: queuedOp.timestamp
+      timestamp: queuedOp.timestamp,
     });
 
     console.log(`Queued operation: ${operation.type} ${operation.resource}`);
@@ -167,11 +169,11 @@ export class OfflineManager {
 
   // Get operations by type or resource
   public getOperationsByType(type: QueuedOperation['type']): QueuedOperation[] {
-    return this.getQueuedOperations().filter(op => op.type === type);
+    return this.getQueuedOperations().filter((op) => op.type === type);
   }
 
   public getOperationsByResource(resource: string): QueuedOperation[] {
-    return this.getQueuedOperations().filter(op => op.resource === resource);
+    return this.getQueuedOperations().filter((op) => op.resource === resource);
   }
 
   // Sync pending operations
@@ -181,7 +183,7 @@ export class OfflineManager {
         success: false,
         syncedOperations: 0,
         failedOperations: 0,
-        errors: []
+        errors: [],
       };
     }
 
@@ -197,18 +199,18 @@ export class OfflineManager {
       for (const operation of operations) {
         try {
           const success = await this.executeOperation(operation);
-          
+
           if (success) {
             this.removeOperation(operation.id);
             syncedCount++;
             console.log(`Synced operation: ${operation.id}`);
           } else {
             operation.retryCount++;
-            
+
             if (operation.retryCount >= this.config.maxRetries) {
               errors.push({
                 operationId: operation.id,
-                error: 'Max retries exceeded'
+                error: 'Max retries exceeded',
               });
               this.removeOperation(operation.id);
               failedCount++;
@@ -221,7 +223,7 @@ export class OfflineManager {
           operation.retryCount++;
           errors.push({
             operationId: operation.id,
-            error: error instanceof Error ? error.message : String(error)
+            error: error instanceof Error ? error.message : String(error),
           });
 
           if (operation.retryCount >= this.config.maxRetries) {
@@ -246,12 +248,11 @@ export class OfflineManager {
         syncedOperations: syncedCount,
         failedOperations: failedCount,
         errors,
-        nextSyncTime: new Date(Date.now() + this.config.syncInterval)
+        nextSyncTime: new Date(Date.now() + this.config.syncInterval),
       };
 
       console.log('Sync completed:', result);
       return result;
-
     } finally {
       this.isSyncing = false;
     }
@@ -259,17 +260,17 @@ export class OfflineManager {
 
   private getSortedOperations(): QueuedOperation[] {
     const operations = this.getQueuedOperations();
-    
+
     // Sort by priority and timestamp
     return operations.sort((a, b) => {
       const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
       const aPriority = priorityOrder[a.priority];
       const bPriority = priorityOrder[b.priority];
-      
+
       if (aPriority !== bPriority) {
         return bPriority - aPriority; // Higher priority first
       }
-      
+
       return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(); // Older first
     });
   }
@@ -281,9 +282,9 @@ export class OfflineManager {
         headers: {
           'Content-Type': 'application/json',
           'X-Offline-Sync': 'true',
-          'X-Operation-Id': operation.id
+          'X-Operation-Id': operation.id,
         },
-        body: operation.type !== 'delete' ? JSON.stringify(operation.data) : undefined
+        body: operation.type !== 'delete' ? JSON.stringify(operation.data) : undefined,
       });
 
       if (!response.ok) {
@@ -292,16 +293,13 @@ export class OfflineManager {
       }
 
       const result = await response.json();
-      
+
       // Handle any response metadata
       if (operation.metadata?.updateLocalData && result.data) {
         // Update local storage with server response
-        autoSaveService.autoSave(
-          operation.data.id,
-          operation.resource as any,
-          result.data,
-          { immediate: true }
-        );
+        autoSaveService.autoSave(operation.data.id, operation.resource as any, result.data, {
+          immediate: true,
+        });
       }
 
       return true;
@@ -313,10 +311,14 @@ export class OfflineManager {
 
   private getHttpMethod(type: QueuedOperation['type']): string {
     switch (type) {
-      case 'create': return 'POST';
-      case 'update': return 'PUT';
-      case 'delete': return 'DELETE';
-      default: return 'POST';
+      case 'create':
+        return 'POST';
+      case 'update':
+        return 'PUT';
+      case 'delete':
+        return 'DELETE';
+      default:
+        return 'POST';
     }
   }
 
@@ -327,10 +329,11 @@ export class OfflineManager {
   }
 
   private loadQueuedOperations(): void {
-    const operations = localStorageService.getCachedData<QueuedOperation[]>('offline_operations') || [];
-    
+    const operations =
+      localStorageService.getCachedData<QueuedOperation[]>('offline_operations') || [];
+
     this.operationQueue.clear();
-    operations.forEach(op => {
+    operations.forEach((op) => {
       this.operationQueue.set(op.id, op);
     });
 
@@ -360,7 +363,7 @@ export class OfflineManager {
   }
 
   private notifyListeners(isOnline: boolean): void {
-    this.listeners.forEach(callback => callback(isOnline));
+    this.listeners.forEach((callback) => callback(isOnline));
   }
 
   // Storage management
@@ -373,12 +376,12 @@ export class OfflineManager {
     const storageInfo = localStorageService.getStorageInfo();
     const usedMB = storageInfo.used / (1024 * 1024);
     const quotaMB = this.config.maxOfflineStorage;
-    
+
     return {
       used: usedMB,
       available: quotaMB - usedMB,
       quota: quotaMB,
-      percentage: (usedMB / quotaMB) * 100
+      percentage: (usedMB / quotaMB) * 100,
     };
   }
 
@@ -398,7 +401,7 @@ export class OfflineManager {
   // Configuration management
   public updateConfig(newConfig: Partial<OfflineConfig>): void {
     this.config = { ...this.config, ...newConfig };
-    
+
     // Restart sync timer if interval changed
     if (newConfig.syncInterval !== undefined || newConfig.enableBackgroundSync !== undefined) {
       this.stopSyncTimer();
@@ -424,12 +427,12 @@ export class OfflineManager {
 
   public getOperationsPendingByPriority(): Record<string, number> {
     const operations = this.getQueuedOperations();
-    
+
     return {
-      critical: operations.filter(op => op.priority === 'critical').length,
-      high: operations.filter(op => op.priority === 'high').length,
-      medium: operations.filter(op => op.priority === 'medium').length,
-      low: operations.filter(op => op.priority === 'low').length
+      critical: operations.filter((op) => op.priority === 'critical').length,
+      high: operations.filter((op) => op.priority === 'high').length,
+      medium: operations.filter((op) => op.priority === 'medium').length,
+      low: operations.filter((op) => op.priority === 'low').length,
     };
   }
 
@@ -439,7 +442,7 @@ export class OfflineManager {
         success: false,
         syncedOperations: 0,
         failedOperations: 0,
-        errors: [{ operationId: 'none', error: 'Device is offline' }]
+        errors: [{ operationId: 'none', error: 'Device is offline' }],
       };
     }
 
@@ -451,7 +454,7 @@ export class OfflineManager {
     this.stopSyncTimer();
     this.listeners.clear();
     this.saveQueuedOperations();
-    
+
     window.removeEventListener('online', this.handleOnline);
     window.removeEventListener('offline', this.handleOffline);
   }
@@ -463,7 +466,9 @@ export const offlineManager = OfflineManager.getInstance();
 // Hook for React components
 export function useOfflineStatus() {
   const [isOnline, setIsOnline] = React.useState(offlineManager.isOnlineMode());
-  const [pendingCount, setPendingCount] = React.useState(offlineManager.getPendingOperationsCount());
+  const [pendingCount, setPendingCount] = React.useState(
+    offlineManager.getPendingOperationsCount()
+  );
   const [lastSync, setLastSync] = React.useState(offlineManager.getLastSyncTime());
 
   React.useEffect(() => {
@@ -501,8 +506,8 @@ export function useOfflineStatus() {
     lastSync,
     queueOperation,
     forceSync,
-    isSyncing: offlineManager.isSyncInProgress()
+    isSyncing: offlineManager.isSyncInProgress(),
   };
 }
 
-import React from 'react'; 
+import React from 'react';

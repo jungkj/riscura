@@ -5,37 +5,37 @@ export interface EnhancedRisk extends Risk {
   // Workflow states
   workflowState: 'identified' | 'assessed' | 'mitigated' | 'monitored' | 'closed';
   workflowHistory: WorkflowTransition[];
-  
+
   // AI-powered fields
   aiSuggestions?: AISuggestions;
   aiConfidence: number;
   aiLastAnalyzed?: Date;
-  
+
   // Enhanced metadata
   priority: 'critical' | 'high' | 'medium' | 'low';
   businessUnit?: string;
   riskOwner: string;
   riskApprover?: string;
-  
+
   // Collaboration
   riskComments: RiskComment[];
   approvals: RiskApproval[];
   assignments: RiskAssignment[];
-  
+
   // Analytics
   trendData?: RiskTrend[];
   correlatedRisks?: string[];
   mitigationStrategies: MitigationStrategy[];
-  
+
   // Templates and categorization
   template?: RiskTemplate;
   subCategory?: string;
   tags: string[];
-  
+
   // Compliance and regulatory
   regulatoryFrameworks: string[];
   complianceRequirements: string[];
-  
+
   // Financial impact
   potentialLoss?: FinancialImpact;
   costOfMitigation?: number;
@@ -163,36 +163,36 @@ export interface AdvancedRiskFilters {
   status?: string[];
   priority?: string[];
   riskLevel?: string[];
-  
+
   // Date filters
   dateRange?: {
     start: Date;
     end: Date;
     field: 'createdAt' | 'updatedAt' | 'lastAssessed' | 'nextReview';
   };
-  
+
   // Score filters
   scoreRange?: {
     min: number;
     max: number;
   };
-  
+
   // Assignment filters
   assignedTo?: string[];
   owner?: string[];
   approver?: string[];
-  
+
   // AI filters
   aiConfidenceRange?: {
     min: number;
     max: number;
   };
-  
+
   // Custom filters
   tags?: string[];
   businessUnit?: string[];
   regulatoryFramework?: string[];
-  
+
   // Advanced queries
   searchQuery?: string;
   correlatedWith?: string; // risk ID
@@ -326,4 +326,4 @@ export interface AIRecommendation {
   effort: 'low' | 'medium' | 'high';
   timeline: string;
   affectedRisks: string[];
-} 
+}

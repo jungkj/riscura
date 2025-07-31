@@ -5,16 +5,16 @@ import { getSharePointFileService } from '@/services/sharepoint/file.service';
 import { getSharePointAuthService } from '@/services/sharepoint/auth.service';
 
 const connectSchema = z.object({
-  siteUrl: z.string().url().refine(
-    (url) => url.includes('sharepoint.com'),
-    'Must be a valid SharePoint URL'
-  ),
+  siteUrl: z
+    .string()
+    .url()
+    .refine((url) => url.includes('sharepoint.com'), 'Must be a valid SharePoint URL'),
 });
 
 export const POST = withApiMiddleware({
   requireAuth: true,
   bodySchema: connectSchema,
-  rateLimiters: ['standard']
+  rateLimiters: ['standard'],
 })(async (context, { siteUrl }) => {
   const { user, organizationId } = context;
 
@@ -25,12 +25,12 @@ export const POST = withApiMiddleware({
 
     // Get site information from URL
     const siteInfo = await fileService.getSiteByUrl(siteUrl);
-    
+
     // Validate access to the site
     const hasAccess = await authService.validateSiteAccess(siteInfo.id);
     if (!hasAccess) {
       return {
-        error: 'Access denied to the specified SharePoint site'
+        error: 'Access denied to the specified SharePoint site',
       };
     }
 
@@ -42,9 +42,9 @@ export const POST = withApiMiddleware({
       where: {
         organizationId_siteId: {
           organizationId,
-          siteId: siteInfo.id
-        }
-      }
+          siteId: siteInfo.id,
+        },
+      },
     });
 
     if (existingIntegration) {
@@ -55,8 +55,8 @@ export const POST = withApiMiddleware({
           displayName: siteInfo.displayName,
           driveId,
           isActive: true,
-          lastSyncedAt: new Date()
-        }
+          lastSyncedAt: new Date(),
+        },
       });
 
       return {
@@ -66,9 +66,9 @@ export const POST = withApiMiddleware({
           siteId: updatedIntegration.siteId,
           driveId: updatedIntegration.driveId,
           isActive: updatedIntegration.isActive,
-          webUrl: siteInfo.webUrl
+          webUrl: siteInfo.webUrl,
         },
-        message: 'SharePoint connection updated successfully'
+        message: 'SharePoint connection updated successfully',
       };
     }
 
@@ -79,8 +79,8 @@ export const POST = withApiMiddleware({
         displayName: siteInfo.displayName,
         siteId: siteInfo.id,
         driveId,
-        isActive: true
-      }
+        isActive: true,
+      },
     });
 
     return {
@@ -90,21 +90,21 @@ export const POST = withApiMiddleware({
         siteId: integration.siteId,
         driveId: integration.driveId,
         isActive: integration.isActive,
-        webUrl: siteInfo.webUrl
+        webUrl: siteInfo.webUrl,
       },
-      message: 'SharePoint connected successfully'
+      message: 'SharePoint connected successfully',
     };
   } catch (error) {
     console.error('SharePoint connection error:', error);
-    
+
     if (error instanceof Error && error.message.includes('404')) {
       return {
-        error: 'SharePoint site not found. Please check the URL and try again.'
+        error: 'SharePoint site not found. Please check the URL and try again.',
       };
     }
-    
+
     return {
-      error: 'Failed to connect to SharePoint. Please check your permissions and try again.'
+      error: 'Failed to connect to SharePoint. Please check your permissions and try again.',
     };
   }
 });
@@ -112,37 +112,37 @@ export const POST = withApiMiddleware({
 // GET endpoint to list connections
 export const GET = withApiMiddleware({
   requireAuth: true,
-  rateLimiters: ['standard']
+  rateLimiters: ['standard'],
 })(async (context) => {
   const { organizationId } = context;
 
   const integrations = await prisma.sharePointIntegration.findMany({
     where: {
       organizationId,
-      isActive: true
+      isActive: true,
     },
     orderBy: {
-      createdAt: 'desc'
-    }
+      createdAt: 'desc',
+    },
   });
 
   return {
-    integrations: integrations.map(integration => ({
+    integrations: integrations.map((integration) => ({
       id: integration.id,
       displayName: integration.displayName,
       siteId: integration.siteId,
       driveId: integration.driveId,
       isActive: integration.isActive,
       lastSyncedAt: integration.lastSyncedAt,
-      createdAt: integration.createdAt
-    }))
+      createdAt: integration.createdAt,
+    })),
   };
 });
 
 // DELETE endpoint to disconnect
 export const DELETE = withApiMiddleware({
   requireAuth: true,
-  rateLimiters: ['standard']
+  rateLimiters: ['standard'],
 })(async (context) => {
   const { organizationId } = context;
   const { searchParams } = new URL(context.req.url);
@@ -150,7 +150,7 @@ export const DELETE = withApiMiddleware({
 
   if (!integrationId) {
     return {
-      error: 'Integration ID is required'
+      error: 'Integration ID is required',
     };
   }
 
@@ -158,23 +158,23 @@ export const DELETE = withApiMiddleware({
   const integration = await prisma.sharePointIntegration.findFirst({
     where: {
       id: integrationId,
-      organizationId
-    }
+      organizationId,
+    },
   });
 
   if (!integration) {
     return {
-      error: 'Integration not found'
+      error: 'Integration not found',
     };
   }
 
   // Soft delete by marking as inactive
   await prisma.sharePointIntegration.update({
     where: { id: integrationId },
-    data: { isActive: false }
+    data: { isActive: false },
   });
 
   return {
-    message: 'SharePoint disconnected successfully'
+    message: 'SharePoint disconnected successfully',
   };
 });

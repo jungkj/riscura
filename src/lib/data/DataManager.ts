@@ -44,4 +44,4 @@ export class DataManager {
 }
 
 // Export singleton instance
-export const dataManager = DataManager.getInstance(); 
+export const dataManager = DataManager.getInstance();

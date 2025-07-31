@@ -1,9 +1,9 @@
 // Proactive Monitoring & Intelligence Types
-import { 
-  RiskCategory, 
-  RiskImpact, 
-  TrendDirection, 
-  ConfidenceInterval
+import {
+  RiskCategory,
+  RiskImpact,
+  TrendDirection,
+  ConfidenceInterval,
 } from './risk-intelligence.types';
 
 // === Core Monitoring Types ===
@@ -76,7 +76,7 @@ export interface FindingImpact {
   stakeholders: string[];
 }
 
-export type AnalysisType = 
+export type AnalysisType =
   | 'risk_analysis'
   | 'control_testing'
   | 'compliance_check'
@@ -87,7 +87,7 @@ export type AnalysisType =
   | 'workflow_analysis'
   | 'external_intelligence';
 
-export type AnalysisFrequency = 
+export type AnalysisFrequency =
   | 'real_time'
   | 'hourly'
   | 'daily'
@@ -203,7 +203,7 @@ export interface ProactiveInsight {
   metadata: Record<string, unknown>;
 }
 
-export type InsightType = 
+export type InsightType =
   | 'risk_increase'
   | 'control_degradation'
   | 'compliance_gap'
@@ -305,7 +305,7 @@ export interface ActionItem {
   notes?: string;
 }
 
-export type ActionType = 
+export type ActionType =
   | 'investigation'
   | 'mitigation'
   | 'monitoring'
@@ -319,7 +319,13 @@ export type ActionType =
 
 export type ActionPriority = 'immediate' | 'urgent' | 'high' | 'medium' | 'low';
 
-export type ActionStatus = 'pending' | 'assigned' | 'in_progress' | 'completed' | 'cancelled' | 'blocked';
+export type ActionStatus =
+  | 'pending'
+  | 'assigned'
+  | 'in_progress'
+  | 'completed'
+  | 'cancelled'
+  | 'blocked';
 
 // === Smart Notifications ===
 
@@ -454,7 +460,7 @@ export interface DeliveryChannel {
   escalation?: EscalationRule;
 }
 
-export type NotificationChannel = 
+export type NotificationChannel =
   | 'in_app'
   | 'email'
   | 'sms'
@@ -548,7 +554,7 @@ export interface HealthCheckReport {
   nextCheck: Date;
 }
 
-export type HealthCheckType = 
+export type HealthCheckType =
   | 'risk_register'
   | 'control_framework'
   | 'workflow_efficiency'
@@ -778,7 +784,7 @@ export interface ExternalIntelligence {
   expiresAt?: Date;
 }
 
-export type IntelligenceType = 
+export type IntelligenceType =
   | 'industry_risk_trend'
   | 'regulatory_update'
   | 'compliance_alert'
@@ -880,7 +886,7 @@ export interface BackgroundTask {
   metadata: Record<string, unknown>;
 }
 
-export type TaskType = 
+export type TaskType =
   | 'monitoring'
   | 'analysis'
   | 'notification'
@@ -892,7 +898,7 @@ export type TaskType =
   | 'trend_analysis'
   | 'anomaly_detection';
 
-export type TaskStatus = 
+export type TaskStatus =
   | 'queued'
   | 'running'
   | 'completed'
@@ -1192,4 +1198,4 @@ export interface DashboardContext {
   activeFilters: Record<string, unknown>;
   timeRange: TimeWindow;
   preferences: Record<string, unknown>;
-} 
+}

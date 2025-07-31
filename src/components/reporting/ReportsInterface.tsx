@@ -5,8 +5,13 @@ import { cn } from '@/lib/utils';
 import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { 
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -79,4 +84,4 @@ export const ReportsInterface: React.FC = () => {
   );
 };
 
-export default ReportsInterface; 
+export default ReportsInterface;

@@ -49,9 +49,9 @@ export default function AIFeaturesSection() {
 
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
-    }
+    };
 
-    return () => observer.disconnect();
+  return () => observer.disconnect();
   }, []);
 
   return (
@@ -65,8 +65,9 @@ export default function AIFeaturesSection() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           {/* AI Badge */}
-          <DaisyBadge className="bg-gradient-to-r from-[#199BEC] to-purple-600 text-white px-6 py-2 mb-8 text-sm rounded-full">
-            <Sparkles className="w-4 h-4 mr-2" />
+          <DaisyBadge className="bg-gradient-to-r from-[#199BEC] to-purple-600 text-white px-6 py-2 mb-8 text-sm rounded-full" >
+  <Sparkles className="w-4 h-4 mr-2" />
+</DaisyBadge>
             Powered by Artificial Intelligence
           </DaisyBadge>
           
@@ -98,13 +99,14 @@ export default function AIFeaturesSection() {
                 }`}
                 style={{ transitionDelay: `${index * 200}ms` }}
               >
-                <DaisyCardContent className="p-8">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#199BEC] to-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                <DaisyCardContent className="p-8" >
+  <div className="w-16 h-16 bg-gradient-to-br from-[#199BEC] to-purple-600 rounded-2xl flex items-center justify-center mb-6">
+</DaisyCard>
                     <IconComponent className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
                   <p className="text-gray-300 leading-relaxed">{feature.description}</p>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             );
           })}
@@ -119,12 +121,14 @@ export default function AIFeaturesSection() {
             Join forward-thinking organizations using Riscura AI to stay ahead of risks.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <DaisyButton size="lg" className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-4">
-              Start free trial
+            <DaisyButton size="lg" className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-4" >
+  Start free trial
+</DaisyButton>
               <ArrowRight className="w-5 h-5 ml-2" />
             </DaisyButton>
-            <DaisyButton size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-4">
-              Schedule demo
+            <DaisyButton size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-4" >
+  Schedule demo
+</DaisyButton>
             </DaisyButton>
           </div>
         </div>

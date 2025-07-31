@@ -89,7 +89,7 @@ export const DEFAULT_DATABASE_CONFIG: DatabaseConfig = {
     destroyTimeoutMillis: 5000,
     idleTimeoutMillis: 30000,
     reapIntervalMillis: 1000,
-    createRetryIntervalMillis: 100
+    createRetryIntervalMillis: 100,
   },
   queryTimeout: 30000,
   slowQueryThreshold: 1000, // 1 second
@@ -103,21 +103,21 @@ export const DEFAULT_DATABASE_CONFIG: DatabaseConfig = {
       db: 0,
       keyPrefix: 'riscura:cache:',
       retryDelayOnFailover: 100,
-      maxRetriesPerRequest: 3
+      maxRetriesPerRequest: 3,
     },
     ttl: {
-      default: 300,    // 5 minutes
-      short: 60,       // 1 minute
-      medium: 1800,    // 30 minutes
-      long: 86400      // 24 hours
-    }
+      default: 300, // 5 minutes
+      short: 60, // 1 minute
+      medium: 1800, // 30 minutes
+      long: 86400, // 24 hours
+    },
   },
   readReplicas: [],
   sharding: {
     enabled: false,
     strategy: 'tenant',
-    shards: []
-  }
+    shards: [],
+  },
 };
 
 export class DatabasePerformanceOptimizer {
@@ -132,7 +132,7 @@ export class DatabasePerformanceOptimizer {
     averageQueryTime: 0,
     connectionPoolUtilization: 0,
     replicationLag: 0,
-    shardDistribution: {}
+    shardDistribution: {},
   };
   private queryLog: QueryMetrics[] = [];
   private readReplicas: PrismaClient[] = [];
@@ -150,21 +150,21 @@ export class DatabasePerformanceOptimizer {
   private async initializeOptimizer(): Promise<void> {
     // Initialize Redis cache
     await this.initializeCache();
-    
+
     // Set up read replicas
     await this.initializeReadReplicas();
-    
+
     // Set up sharding if enabled
     if (this.config.sharding.enabled) {
       await this.initializeSharding();
     }
-    
+
     // Set up query monitoring
     this.setupQueryMonitoring();
-    
+
     // Start metrics collection
     this.startMetricsCollection();
-    
+
     // Set up connection pool optimization
     await this.optimizeConnectionPool();
   }
@@ -181,7 +181,7 @@ export class DatabasePerformanceOptimizer {
         lazyConnect: true,
         retryDelayOnFailover: this.config.cacheConfig.redis.retryDelayOnFailover,
         maxRetriesPerRequest: this.config.cacheConfig.redis.maxRetriesPerRequest,
-        commandTimeout: 5000
+        commandTimeout: 5000,
       });
 
       await this.redis.connect();
@@ -200,10 +200,10 @@ export class DatabasePerformanceOptimizer {
       try {
         const replicaClient = new PrismaClient({
           datasources: {
-            db: { url: replica.url }
-          }
+            db: { url: replica.url },
+          },
         });
-        
+
         await replicaClient.$connect();
         this.readReplicas.push(replicaClient);
         console.log(`Read replica initialized: ${replica.url}`);
@@ -221,10 +221,10 @@ export class DatabasePerformanceOptimizer {
       try {
         const shardClient = new PrismaClient({
           datasources: {
-            db: { url: shard.url }
-          }
+            db: { url: shard.url },
+          },
         });
-        
+
         await shardClient.$connect();
         this.shardClients.set(shard.id, shardClient);
         console.log(`Shard initialized: ${shard.id}`);
@@ -241,11 +241,11 @@ export class DatabasePerformanceOptimizer {
     // Intercept Prisma queries for monitoring
     this.prisma.$use(async (params, next) => {
       const start = Date.now();
-      
+
       try {
         const result = await next(params);
         const duration = Date.now() - start;
-        
+
         // Log query metrics
         this.logQueryMetrics({
           duration,
@@ -253,7 +253,7 @@ export class DatabasePerformanceOptimizer {
           params: params.args,
           resultCount: Array.isArray(result) ? result.length : result ? 1 : 0,
           cacheHit: false,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
 
         // Log slow queries
@@ -291,7 +291,7 @@ export class DatabasePerformanceOptimizer {
         SET SESSION interactive_timeout = ${this.config.connectionPool.idleTimeoutMillis / 1000};
         SET SESSION max_connections = ${this.config.connectionPool.max};
       `;
-      
+
       console.log('Connection pool optimized');
     } catch (error) {
       console.error('Failed to optimize connection pool:', error);
@@ -319,7 +319,7 @@ export class DatabasePerformanceOptimizer {
           query: `Cache hit: ${key}`,
           resultCount: 1,
           cacheHit: true,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
         return JSON.parse(cached);
       }
@@ -337,7 +337,7 @@ export class DatabasePerformanceOptimizer {
         query: `Cache miss: ${key}`,
         resultCount: Array.isArray(result) ? result.length : 1,
         cacheHit: false,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       return result;
@@ -357,7 +357,7 @@ export class DatabasePerformanceOptimizer {
 
     // Select read replica based on load balancing
     const selectedReplica = this.selectReadReplica();
-    
+
     try {
       const result = await queryFn(selectedReplica);
       this.logQueryMetrics({
@@ -366,7 +366,7 @@ export class DatabasePerformanceOptimizer {
         resultCount: Array.isArray(result) ? result.length : 1,
         cacheHit: false,
         replica: 'replica',
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return result;
     } catch (error) {
@@ -415,29 +415,23 @@ export class DatabasePerformanceOptimizer {
       useTransaction?: boolean;
     } = {}
   ): Promise<T[]> {
-    const { 
-      batchSize = 10, 
-      concurrency = 5, 
-      useTransaction = false 
-    } = options;
+    const { batchSize = 10, concurrency = 5, useTransaction = false } = options;
 
     if (useTransaction) {
       return this.prisma.$transaction(queries, {
-        timeout: this.config.queryTimeout
+        timeout: this.config.queryTimeout,
       });
     }
 
     // Execute in batches with controlled concurrency
     const results: T[] = [];
-    
+
     for (let i = 0; i < queries.length; i += batchSize) {
       const batch = queries.slice(i, i + batchSize);
-      const batchPromises = batch.map(query => 
-        this.limitConcurrency(query, concurrency)
-      );
-      
+      const batchPromises = batch.map((query) => this.limitConcurrency(query, concurrency));
+
       const batchResults = await Promise.allSettled(batchPromises);
-      
+
       for (const result of batchResults) {
         if (result.status === 'fulfilled') {
           results.push(result.value);
@@ -460,7 +454,7 @@ export class DatabasePerformanceOptimizer {
   ): Promise<T> {
     // Simple semaphore implementation
     if (this.metrics.activeConnections >= maxConcurrency) {
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
       return this.limitConcurrency(operation, maxConcurrency);
     }
 
@@ -477,7 +471,7 @@ export class DatabasePerformanceOptimizer {
    */
   private selectReadReplica(): PrismaClient {
     if (this.readReplicas.length === 0) return this.prisma;
-    
+
     // Simple round-robin for now, can be enhanced with weights
     const index = this.metrics.totalQueries % this.readReplicas.length;
     return this.readReplicas[index];
@@ -488,28 +482,26 @@ export class DatabasePerformanceOptimizer {
    */
   private getShardId(shardKey: string): string {
     const { strategy, shards } = this.config.sharding;
-    
+
     switch (strategy) {
       case 'hash':
         const hash = this.hashString(shardKey);
         return shards[hash % shards.length].id;
-      
+
       case 'tenant':
         // Use tenant ID as shard key
-        const tenantShard = shards.find(s => 
-          s.ranges?.includes(shardKey)
-        );
+        const tenantShard = shards.find((s) => s.ranges?.includes(shardKey));
         return tenantShard?.id || shards[0].id;
-      
+
       case 'range':
         // Range-based sharding
-        const rangeShard = shards.find(s => {
+        const rangeShard = shards.find((s) => {
           const [min, max] = s.ranges?.[0]?.split('-') || ['0', '999999'];
           const keyNum = parseInt(shardKey) || 0;
           return keyNum >= parseInt(min) && keyNum <= parseInt(max);
         });
         return rangeShard?.id || shards[0].id;
-      
+
       default:
         return shards[0].id;
     }
@@ -522,7 +514,7 @@ export class DatabasePerformanceOptimizer {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
     return Math.abs(hash);
@@ -533,7 +525,7 @@ export class DatabasePerformanceOptimizer {
    */
   private logQueryMetrics(metrics: QueryMetrics): void {
     this.queryLog.push(metrics);
-    
+
     // Keep only recent queries in memory
     if (this.queryLog.length > 1000) {
       this.queryLog = this.queryLog.slice(-500);
@@ -547,17 +539,17 @@ export class DatabasePerformanceOptimizer {
     try {
       // Calculate cache hit rate
       const recentQueries = this.queryLog.slice(-100);
-      const cacheHits = recentQueries.filter(q => q.cacheHit).length;
-      this.metrics.cacheHitRate = recentQueries.length > 0 ? 
-        (cacheHits / recentQueries.length) * 100 : 0;
+      const cacheHits = recentQueries.filter((q) => q.cacheHit).length;
+      this.metrics.cacheHitRate =
+        recentQueries.length > 0 ? (cacheHits / recentQueries.length) * 100 : 0;
 
       // Calculate average query time
-      const queryTimes = recentQueries.map(q => q.duration);
-      this.metrics.averageQueryTime = queryTimes.length > 0 ?
-        queryTimes.reduce((a, b) => a + b, 0) / queryTimes.length : 0;
+      const queryTimes = recentQueries.map((q) => q.duration);
+      this.metrics.averageQueryTime =
+        queryTimes.length > 0 ? queryTimes.reduce((a, b) => a + b, 0) / queryTimes.length : 0;
 
       // Update connection pool utilization
-      this.metrics.connectionPoolUtilization = 
+      this.metrics.connectionPoolUtilization =
         (this.metrics.activeConnections / this.config.connectionPool.max) * 100;
 
       // Measure replication lag if replicas exist
@@ -577,7 +569,7 @@ export class DatabasePerformanceOptimizer {
       // Write to primary and measure time to read from replica
       const testKey = `replication_test_${Date.now()}`;
       const writeTime = Date.now();
-      
+
       // This would be a actual test write/read operation
       // For now, we'll simulate
       this.metrics.replicationLag = Math.random() * 100; // Simulated lag in ms
@@ -600,7 +592,7 @@ export class DatabasePerformanceOptimizer {
         description: 'High number of slow queries detected',
         impact: `${this.metrics.slowQueries} slow queries out of ${this.metrics.totalQueries} total`,
         implementation: 'Add database indexes for frequently queried columns',
-        estimatedImprovement: '60-80% query performance improvement'
+        estimatedImprovement: '60-80% query performance improvement',
       });
     }
 
@@ -612,7 +604,7 @@ export class DatabasePerformanceOptimizer {
         description: 'Low cache hit rate',
         impact: `Cache hit rate is ${this.metrics.cacheHitRate.toFixed(1)}% (target: >70%)`,
         implementation: 'Increase cache TTL for stable data, implement cache warming',
-        estimatedImprovement: '40-50% response time improvement'
+        estimatedImprovement: '40-50% response time improvement',
       });
     }
 
@@ -624,7 +616,7 @@ export class DatabasePerformanceOptimizer {
         description: 'High connection pool utilization',
         impact: `Pool utilization: ${this.metrics.connectionPoolUtilization.toFixed(1)}%`,
         implementation: 'Increase connection pool size or add read replicas',
-        estimatedImprovement: '30-40% throughput improvement'
+        estimatedImprovement: '30-40% throughput improvement',
       });
     }
 
@@ -636,7 +628,7 @@ export class DatabasePerformanceOptimizer {
         description: 'Consider implementing database sharding',
         impact: `High query volume: ${this.metrics.totalQueries} queries`,
         implementation: 'Implement tenant-based or hash-based sharding',
-        estimatedImprovement: '50-70% scalability improvement'
+        estimatedImprovement: '50-70% scalability improvement',
       });
     }
 
@@ -696,62 +688,55 @@ export class DatabasePerformanceOptimizer {
 /**
  * Generate optimized pagination query
  */
-export function buildOptimizedPagination(
-  page: number,
-  limit: number,
-  orderBy?: string
-) {
+export function buildOptimizedPagination(page: number, limit: number, orderBy?: string) {
   const skip = (page - 1) * limit;
   const take = Math.min(limit, 100); // Max 100 items per page
-  
+
   return {
     skip,
     take,
-    ...(orderBy && { orderBy: { [orderBy]: 'desc' as const } })
+    ...(orderBy && { orderBy: { [orderBy]: 'desc' as const } }),
   };
 }
 
 /**
  * Generate optimized search query
  */
-export function buildOptimizedSearch(
-  searchTerm: string,
-  fields: string[]
-) {
+export function buildOptimizedSearch(searchTerm: string, fields: string[]) {
   if (!searchTerm || searchTerm.length < 2) return {};
 
-  const searchConditions = fields.map(field => ({
+  const searchConditions = fields.map((field) => ({
     [field]: {
       contains: searchTerm,
-      mode: 'insensitive' as const
-    }
+      mode: 'insensitive' as const,
+    },
   }));
 
   return {
     where: {
-      OR: searchConditions
-    }
+      OR: searchConditions,
+    },
   };
 }
 
 /**
  * Generate cache key
  */
-export function generateCacheKey(
-  prefix: string,
-  params: Record<string, any>
-): string {
+export function generateCacheKey(prefix: string, params: Record<string, any>): string {
   const sortedParams = Object.keys(params)
     .sort()
-    .reduce((result, key) => {
-      result[key] = params[key];
-      return result;
-    }, {} as Record<string, any>);
+    .reduce(
+      (result, key) => {
+        result[key] = params[key];
+        return result;
+      },
+      {} as Record<string, any>
+    );
 
   const paramString = JSON.stringify(sortedParams);
   const hash = require('crypto').createHash('md5').update(paramString).digest('hex');
-  
+
   return `${prefix}:${hash}`;
 }
 
-export default DatabasePerformanceOptimizer; 
+export default DatabasePerformanceOptimizer;

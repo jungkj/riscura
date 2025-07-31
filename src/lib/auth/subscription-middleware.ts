@@ -5,7 +5,15 @@ import { db } from '@/lib/db';
 
 export interface SubscriptionStatus {
   isActive: boolean;
-  status: 'FREE' | 'TRIALING' | 'ACTIVE' | 'PAST_DUE' | 'CANCELED' | 'INCOMPLETE' | 'INCOMPLETE_EXPIRED' | 'UNPAID';
+  status:
+    | 'FREE'
+    | 'TRIALING'
+    | 'ACTIVE'
+    | 'PAST_DUE'
+    | 'CANCELED'
+    | 'INCOMPLETE'
+    | 'INCOMPLETE_EXPIRED'
+    | 'UNPAID';
   plan: string;
   trialEnd: Date | null;
   trialDaysLeft: number | null;
@@ -31,20 +39,36 @@ export interface SubscriptionRequirement {
 const PLAN_FEATURES = {
   free: {
     features: ['Basic risk management', 'Up to 10 risks', 'Basic reporting'],
-    limits: { users: 3, risks: 10, storage: '100MB', aiQueries: 50 }
+    limits: { users: 3, risks: 10, storage: '100MB', aiQueries: 50 },
   },
   pro: {
-    features: ['Advanced risk management', 'Unlimited risks', 'Advanced reporting', 'AI insights', 'Integrations'],
-    limits: { users: 25, risks: -1, storage: '10GB', aiQueries: 1000 }
+    features: [
+      'Advanced risk management',
+      'Unlimited risks',
+      'Advanced reporting',
+      'AI insights',
+      'Integrations',
+    ],
+    limits: { users: 25, risks: -1, storage: '10GB', aiQueries: 1000 },
   },
   enterprise: {
-    features: ['Enterprise risk management', 'Unlimited everything', 'Custom reporting', 'Advanced AI', 'SSO', 'API access'],
-    limits: { users: -1, risks: -1, storage: 'Unlimited', aiQueries: -1 }
-  }
+    features: [
+      'Enterprise risk management',
+      'Unlimited everything',
+      'Custom reporting',
+      'Advanced AI',
+      'SSO',
+      'API access',
+    ],
+    limits: { users: -1, risks: -1, storage: 'Unlimited', aiQueries: -1 },
+  },
 };
 
 // Get subscription status for a user
-export async function getSubscriptionStatus(userId: string, organizationId: string): Promise<SubscriptionStatus> {
+export async function getSubscriptionStatus(
+  userId: string,
+  organizationId: string
+): Promise<SubscriptionStatus> {
   try {
     // Get organization with active subscription
     const organization = await db.client.organization.findUnique({
@@ -52,12 +76,12 @@ export async function getSubscriptionStatus(userId: string, organizationId: stri
       include: {
         subscriptions: {
           where: {
-            status: { in: ['ACTIVE', 'TRIALING', 'PAST_DUE'] }
+            status: { in: ['ACTIVE', 'TRIALING', 'PAST_DUE'] },
           },
           orderBy: { createdAt: 'desc' },
-          take: 1
-        }
-      }
+          take: 1,
+        },
+      },
     });
 
     if (!organization) {
@@ -79,12 +103,12 @@ export async function getSubscriptionStatus(userId: string, organizationId: stri
       status = subscription.status as SubscriptionStatus['status'];
       isActive = ['ACTIVE', 'TRIALING'].includes(subscription.status);
       trialEnd = subscription.trialEnd;
-      
+
       if (trialEnd) {
         const timeDiff = trialEnd.getTime() - now.getTime();
         trialDaysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
         isTrialExpired = timeDiff <= 0;
-        
+
         if (isTrialExpired && subscription.status === 'TRIALING') {
           isActive = false;
           status = 'FREE';
@@ -110,7 +134,7 @@ export async function getSubscriptionStatus(userId: string, organizationId: stri
       isTrialExpired,
       needsUpgrade,
       features: planConfig.features,
-      limits: planConfig.limits
+      limits: planConfig.limits,
     };
   } catch (error) {
     console.error('Error getting subscription status:', error);
@@ -124,7 +148,7 @@ export async function getSubscriptionStatus(userId: string, organizationId: stri
       isTrialExpired: false,
       needsUpgrade: true,
       features: PLAN_FEATURES.free.features,
-      limits: PLAN_FEATURES.free.limits
+      limits: PLAN_FEATURES.free.limits,
     };
   }
 }
@@ -151,7 +175,7 @@ export function checkSubscriptionRequirements(
     const planHierarchy = { free: 0, pro: 1, enterprise: 2 };
     const userPlanLevel = planHierarchy[subscriptionStatus.plan as keyof typeof planHierarchy] || 0;
     const requiredPlanLevel = planHierarchy[minPlan];
-    
+
     if (userPlanLevel < requiredPlanLevel) {
       return { allowed: false, reason: `${minPlan} plan or higher required` };
     }
@@ -160,7 +184,7 @@ export function checkSubscriptionRequirements(
   // Check required features
   if (requiredFeatures) {
     const missingFeatures = requiredFeatures.filter(
-      feature => !subscriptionStatus.features.includes(feature)
+      (feature) => !subscriptionStatus.features.includes(feature)
     );
     if (missingFeatures.length > 0) {
       return { allowed: false, reason: `Missing required features: ${missingFeatures.join(', ')}` };
@@ -177,7 +201,7 @@ export async function withSubscription(
 ) {
   try {
     import { unstable_getServerSession } from 'next-auth/next';
-    
+
     if (!session?.user) {
       return NextResponse.json(
         { error: 'Authentication required', code: 'AUTH_REQUIRED' },
@@ -187,17 +211,17 @@ export async function withSubscription(
 
     const user = session.user as any;
     const subscriptionStatus = await getSubscriptionStatus(user.id, user.organizationId);
-    
+
     // Check requirements
     const { allowed, reason } = checkSubscriptionRequirements(subscriptionStatus, requirements);
-    
+
     if (!allowed) {
       return NextResponse.json(
-        { 
+        {
           error: reason || 'Subscription upgrade required',
           code: 'SUBSCRIPTION_REQUIRED',
           subscriptionStatus,
-          upgradeUrl: '/billing/upgrade'
+          upgradeUrl: '/billing/upgrade',
         },
         { status: 402 } // Payment Required
       );
@@ -226,25 +250,25 @@ export function withSubscriptionCheck(
 ) {
   return async (req: NextRequest, context: any) => {
     const subscriptionCheck = await withSubscription(req, requirements);
-    
+
     if (subscriptionCheck instanceof NextResponse) {
       return subscriptionCheck; // Return error response
     }
-    
+
     // Add subscription data to context
     const enhancedContext = {
       ...context,
       subscription: subscriptionCheck.subscriptionStatus,
-      user: subscriptionCheck.user
+      user: subscriptionCheck.user,
     };
-    
+
     // Create new request with subscription headers
     const enhancedRequest = new NextRequest(req.url, {
       method: req.method,
       headers: subscriptionCheck.headers,
-      body: req.body
+      body: req.body,
     });
-    
+
     return handler(enhancedRequest, enhancedContext);
   };
 }
@@ -252,17 +276,22 @@ export function withSubscriptionCheck(
 // Utility to get subscription status from session
 export function getSubscriptionFromSession(session: any): SubscriptionStatus | null {
   if (!session?.user) return null;
-  
+
   const user = session.user;
   return {
     isActive: user.subscriptionStatus === 'ACTIVE' || user.subscriptionStatus === 'TRIALING',
     status: user.subscriptionStatus || 'FREE',
     plan: user.plan || 'free',
     trialEnd: user.trialEnd ? new Date(user.trialEnd) : null,
-    trialDaysLeft: user.trialEnd ? Math.ceil((new Date(user.trialEnd).getTime() - Date.now()) / (1000 * 60 * 60 * 24)) : null,
+    trialDaysLeft: user.trialEnd
+      ? Math.ceil((new Date(user.trialEnd).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+      : null,
     isTrialExpired: user.trialEnd ? new Date(user.trialEnd) < new Date() : false,
     needsUpgrade: !user.subscriptionStatus || user.subscriptionStatus === 'FREE',
-    features: PLAN_FEATURES[user.plan as keyof typeof PLAN_FEATURES]?.features || PLAN_FEATURES.free.features,
-    limits: PLAN_FEATURES[user.plan as keyof typeof PLAN_FEATURES]?.limits || PLAN_FEATURES.free.limits
+    features:
+      PLAN_FEATURES[user.plan as keyof typeof PLAN_FEATURES]?.features ||
+      PLAN_FEATURES.free.features,
+    limits:
+      PLAN_FEATURES[user.plan as keyof typeof PLAN_FEATURES]?.limits || PLAN_FEATURES.free.limits,
   };
-} 
+}

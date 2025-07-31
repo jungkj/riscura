@@ -190,8 +190,9 @@ export default function EmptyStateWizard({
         >
           <div {...getRootProps()} className="h-full">
             <input {...getInputProps()} />
-            <DaisyCardContent className="p-6 h-full flex flex-col">
-              <div className="flex items-center justify-between mb-4">
+            <DaisyCardContent className="p-6 h-full flex flex-col" >
+  <div className="flex items-center justify-between mb-4">
+</DaisyProgress>
                 <div className="p-3 bg-green-100 rounded-lg">
                   <FileSpreadsheet className="w-6 h-6 text-green-700" />
                 </div>
@@ -226,7 +227,7 @@ export default function EmptyStateWizard({
               {hoveredCard === 'import' && !uploadingFile && (
                 <div className="absolute inset-0 bg-gradient-to-t from-blue-50 to-transparent opacity-0 animate-fade-in" />
               )}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </div>
         </DaisyCard>
 
@@ -240,8 +241,9 @@ export default function EmptyStateWizard({
           onMouseLeave={() => setHoveredCard(null)}
           onClick={handleStartFresh}
         >
-          <DaisyCardContent className="p-6 h-full flex flex-col">
-            <div className="flex items-center justify-between mb-4">
+          <DaisyCardContent className="p-6 h-full flex flex-col" >
+  <div className="flex items-center justify-between mb-4">
+</DaisyCard>
               <div className="p-3 bg-blue-100 rounded-lg">
                 <Zap className="w-6 h-6 text-blue-700" />
               </div>
@@ -258,12 +260,13 @@ export default function EmptyStateWizard({
 
             <div className="space-y-2">
               <p className="text-sm text-gray-500">Estimated time: 5 minutes</p>
-              <DaisyButton variant="outline" className="w-full group">
-                Get Started
+              <DaisyButton variant="outline" className="w-full group" >
+  Get Started
+</DaisyButton>
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </DaisyButton>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Explore Demo Card */}
@@ -276,8 +279,9 @@ export default function EmptyStateWizard({
           onMouseLeave={() => setHoveredCard(null)}
           onClick={handleExploreDemo}
         >
-          <DaisyCardContent className="p-6 h-full flex flex-col">
-            <div className="flex items-center justify-between mb-4">
+          <DaisyCardContent className="p-6 h-full flex flex-col" >
+  <div className="flex items-center justify-between mb-4">
+</DaisyCard>
               <div className="p-3 bg-purple-100 rounded-lg">
                 <Play className="w-6 h-6 text-purple-700" />
               </div>
@@ -297,18 +301,21 @@ export default function EmptyStateWizard({
                 <Users className="w-4 h-4" />
                 <span>Live demo environment</span>
               </div>
-              <DaisyButton variant="outline" className="w-full group">
-                Start Tour
+              <DaisyButton variant="outline" className="w-full group" >
+  Start Tour
+</DaisyButton>
                 <Play className="w-4 h-4 ml-2 group-hover:scale-110 transition-transform" />
               </DaisyButton>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
       {/* Interactive Heat Map Preview */}
-      <DaisyCard className="overflow-hidden">
-        <DaisyCardContent className="p-8">
+      <DaisyCard className="overflow-hidden" >
+  <DaisyCardContent className="p-8" >
+  </DaisyCard>
+</DaisyCardContent>
           <div className="text-center space-y-4">
             <div className="relative mx-auto w-full max-w-2xl">
               <div className="aspect-[16/9] bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg flex items-center justify-center relative overflow-hidden">
@@ -338,7 +345,7 @@ export default function EmptyStateWizard({
               </p>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Value Propositions */}

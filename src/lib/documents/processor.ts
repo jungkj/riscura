@@ -8,7 +8,7 @@ function getOpenAIClient() {
   if (!apiKey) {
     throw new Error('OpenAI API key not configured');
   }
-  
+
   return new OpenAI({
     apiKey,
     organization: process.env.OPENAI_ORG_ID,
@@ -82,7 +82,6 @@ export interface DocumentQuality {
 }
 
 export class DocumentProcessor {
-  
   // Main document analysis function
   async analyzeDocument(documentId: string): Promise<DocumentAnalysis> {
     const document = await db.client.document.findUnique({
@@ -98,7 +97,7 @@ export class DocumentProcessor {
     }
 
     let extractedText = '';
-    
+
     // Process all files attached to the document
     for (const file of document.files) {
       try {
@@ -115,13 +114,7 @@ export class DocumentProcessor {
     }
 
     // Perform AI analysis
-    const [
-      classification,
-      extractedContent,
-      summary,
-      anomalies,
-      quality
-    ] = await Promise.all([
+    const [classification, extractedContent, summary, anomalies, quality] = await Promise.all([
       this.classifyDocument(extractedText, document.category),
       this.extractRisksAndControls(extractedText),
       this.generateSummary(extractedText),
@@ -180,21 +173,21 @@ export class DocumentProcessor {
     switch (mimeType) {
       case 'text/plain':
         return fileBuffer.toString('utf-8');
-      
+
       case 'application/pdf':
         return await this.extractPDFText(fileBuffer);
-      
+
       case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
         return await this.extractDocxText(fileBuffer);
-      
+
       case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
         return await this.extractXlsxText(fileBuffer);
-      
+
       case 'image/png':
       case 'image/jpeg':
       case 'image/gif':
         return await this.extractImageText(fileBuffer);
-      
+
       default:
         throw new Error(`Unsupported file type: ${mimeType}`);
     }
@@ -206,28 +199,28 @@ export class DocumentProcessor {
       if (!process.env.OPENAI_API_KEY) {
         throw new Error('OpenAI API key not configured for image processing');
       }
-      
+
       const openai = getOpenAIClient();
       const base64Image = imageBuffer.toString('base64');
-      
+
       const response = await openai.chat.completions.create({
-        model: "gpt-4-vision-preview",
+        model: 'gpt-4-vision-preview',
         messages: [
           {
-            role: "user",
+            role: 'user',
             content: [
               {
-                type: "text",
-                text: "Extract all text content from this image. Focus on identifying any risk management, control procedures, compliance requirements, or business process information. Return only the extracted text."
+                type: 'text',
+                text: 'Extract all text content from this image. Focus on identifying any risk management, control procedures, compliance requirements, or business process information. Return only the extracted text.',
               },
               {
-                type: "image_url",
+                type: 'image_url',
                 image_url: {
-                  url: `data:image/jpeg;base64,${base64Image}`
-                }
-              }
-            ]
-          }
+                  url: `data:image/jpeg;base64,${base64Image}`,
+                },
+              },
+            ],
+          },
         ],
         max_tokens: 4000,
       });
@@ -259,7 +252,10 @@ export class DocumentProcessor {
   }
 
   // AI-powered document classification
-  private async classifyDocument(text: string, currentCategory?: string): Promise<{
+  private async classifyDocument(
+    text: string,
+    currentCategory?: string
+  ): Promise<{
     category: string;
     confidence: number;
     suggestedTags: string[];
@@ -300,23 +296,24 @@ Return a JSON response with:
 
       const openai = getOpenAIClient();
       const response = await openai.chat.completions.create({
-        model: "gpt-4",
+        model: 'gpt-4',
         messages: [
           {
-            role: "system",
-            content: "You are an expert document classifier for risk management and compliance systems. Analyze documents and provide accurate classifications."
+            role: 'system',
+            content:
+              'You are an expert document classifier for risk management and compliance systems. Analyze documents and provide accurate classifications.',
           },
           {
-            role: "user",
-            content: prompt
-          }
+            role: 'user',
+            content: prompt,
+          },
         ],
         temperature: 0.3,
         max_tokens: 500,
       });
 
       const result = JSON.parse(response.choices[0]?.message?.content || '{}');
-      
+
       return {
         category: result.category || currentCategory || 'other',
         confidence: result.confidence || 0.5,
@@ -380,23 +377,24 @@ Return JSON with: { "risks": [...], "controls": [...], "compliance": [...] }
 
       const openai = getOpenAIClient();
       const response = await openai.chat.completions.create({
-        model: "gpt-4",
+        model: 'gpt-4',
         messages: [
           {
-            role: "system",
-            content: "You are an expert risk management analyst. Extract structured information about risks, controls, and compliance from documents."
+            role: 'system',
+            content:
+              'You are an expert risk management analyst. Extract structured information about risks, controls, and compliance from documents.',
           },
           {
-            role: "user",
-            content: prompt
-          }
+            role: 'user',
+            content: prompt,
+          },
         ],
         temperature: 0.2,
         max_tokens: 2000,
       });
 
       const result = JSON.parse(response.choices[0]?.message?.content || '{}');
-      
+
       return {
         text,
         risks: result.risks || [],
@@ -438,16 +436,17 @@ ${text.substring(0, 4000)}...
 
       const openai = getOpenAIClient();
       const response = await openai.chat.completions.create({
-        model: "gpt-4",
+        model: 'gpt-4',
         messages: [
           {
-            role: "system",
-            content: "You are an expert business analyst. Create clear, concise summaries of business documents."
+            role: 'system',
+            content:
+              'You are an expert business analyst. Create clear, concise summaries of business documents.',
           },
           {
-            role: "user",
-            content: prompt
-          }
+            role: 'user',
+            content: prompt,
+          },
         ],
         temperature: 0.3,
         max_tokens: 500,
@@ -471,12 +470,16 @@ ${text.substring(0, 4000)}...
         description: 'Document appears to have very little content',
         severity: 'high',
         location: 'entire document',
-        suggestion: 'Consider adding more detailed content or checking if text extraction was successful',
+        suggestion:
+          'Consider adding more detailed content or checking if text extraction was successful',
       });
     }
 
     // Check for formatting issues
-    if (text.includes('[PDF text extraction requires') || text.includes('[DOCX text extraction requires')) {
+    if (
+      text.includes('[PDF text extraction requires') ||
+      text.includes('[DOCX text extraction requires')
+    ) {
       anomalies.push({
         type: 'formatting',
         description: 'Text extraction incomplete due to missing libraries',
@@ -521,14 +524,14 @@ ${text.substring(0, 4000)}...
   private async detectLanguage(text: string): Promise<string> {
     // Simple language detection based on common words
     const sample = text.substring(0, 200).toLowerCase();
-    
+
     if (sample.includes('the ') && sample.includes(' and ') && sample.includes(' of ')) {
       return 'en';
     }
-    
+
     return 'unknown';
   }
 }
 
 // Export singleton instance
-export const documentProcessor = new DocumentProcessor(); 
+export const documentProcessor = new DocumentProcessor();

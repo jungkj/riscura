@@ -89,40 +89,42 @@ class DatabaseConnection {
     }
 
     let lastError: Error | null = null;
-    
+
     for (let attempt = 1; attempt <= DATABASE_CONFIG.retry.attempts; attempt++) {
       try {
         console.log(`Database connection attempt ${attempt}/${DATABASE_CONFIG.retry.attempts}`);
-        
+
         await this.client.$connect();
         await this.client.$queryRaw`SELECT 1`;
-        
+
         this.isConnected = true;
         this.connectionAttempts = attempt;
-        
+
         console.log(`Database connected successfully on attempt ${attempt}`);
         return this.client;
-        
       } catch (error) {
         lastError = error as Error;
         console.error(`Database connection attempt ${attempt} failed:`, error);
-        
+
         if (attempt < DATABASE_CONFIG.retry.attempts) {
-          const delay = DATABASE_CONFIG.retry.delay * Math.pow(DATABASE_CONFIG.retry.backoff, attempt - 1);
+          const delay =
+            DATABASE_CONFIG.retry.delay * Math.pow(DATABASE_CONFIG.retry.backoff, attempt - 1);
           console.log(`Retrying in ${delay}ms...`);
           await this.sleep(delay);
         }
       }
     }
-    
-    throw new Error(`Failed to connect to database after ${DATABASE_CONFIG.retry.attempts} attempts: ${lastError?.message}`);
+
+    throw new Error(
+      `Failed to connect to database after ${DATABASE_CONFIG.retry.attempts} attempts: ${lastError?.message}`
+    );
   }
 
   async disconnect(): Promise<void> {
     if (this.healthCheckInterval) {
       clearInterval(this.healthCheckInterval);
     }
-    
+
     if (this.client) {
       await this.client.$disconnect();
       this.isConnected = false;
@@ -132,14 +134,16 @@ class DatabaseConnection {
   async healthCheck(): Promise<ConnectionPoolStatus> {
     try {
       const startTime = Date.now();
-      
+
       await this.client.$queryRaw`SELECT 1`;
-      
-      const dbStats = await this.client.$queryRaw<Array<{
-        numbackends: number;
-        xact_commit: number;
-        xact_rollback: number;
-      }>>`
+
+      const dbStats = await this.client.$queryRaw<
+        Array<{
+          numbackends: number;
+          xact_commit: number;
+          xact_rollback: number;
+        }>
+      >`
         SELECT 
           numbackends,
           xact_commit,
@@ -151,12 +155,13 @@ class DatabaseConnection {
       const queryTime = Date.now() - startTime;
       this.queryTimes.push(queryTime);
 
-      const avgQueryTime = this.queryTimes.length > 0 
-        ? this.queryTimes.reduce((a, b) => a + b, 0) / this.queryTimes.length 
-        : 0;
+      const avgQueryTime =
+        this.queryTimes.length > 0
+          ? this.queryTimes.reduce((a, b) => a + b, 0) / this.queryTimes.length
+          : 0;
 
       const stats = dbStats[0] || {};
-      
+
       const status: ConnectionPoolStatus = {
         isHealthy: true,
         activeConnections: stats.numbackends || 0,
@@ -171,7 +176,6 @@ class DatabaseConnection {
 
       this.isConnected = true;
       return status;
-      
     } catch (error) {
       this.isConnected = false;
       return {
@@ -198,35 +202,37 @@ class DatabaseConnection {
     operationName = 'database operation'
   ): Promise<T> {
     let lastError: Error | null = null;
-    
+
     for (let attempt = 1; attempt <= DATABASE_CONFIG.retry.attempts; attempt++) {
       try {
         if (!this.isConnected) {
           await this.connect();
         }
-        
+
         return await operation(this.client);
-        
       } catch (error) {
         lastError = error as Error;
         console.error(`${operationName} attempt ${attempt} failed:`, error);
-        
+
         if (this.isConnectionError(error)) {
           this.isConnected = false;
-          
+
           if (attempt < DATABASE_CONFIG.retry.attempts) {
-            const delay = DATABASE_CONFIG.retry.delay * Math.pow(DATABASE_CONFIG.retry.backoff, attempt - 1);
+            const delay =
+              DATABASE_CONFIG.retry.delay * Math.pow(DATABASE_CONFIG.retry.backoff, attempt - 1);
             console.log(`Retrying ${operationName} in ${delay}ms...`);
             await this.sleep(delay);
             continue;
           }
         }
-        
+
         throw error;
       }
     }
-    
-    throw new Error(`${operationName} failed after ${DATABASE_CONFIG.retry.attempts} attempts: ${lastError?.message}`);
+
+    throw new Error(
+      `${operationName} failed after ${DATABASE_CONFIG.retry.attempts} attempts: ${lastError?.message}`
+    );
   }
 
   private isConnectionError(error: any): boolean {
@@ -239,22 +245,22 @@ class DatabaseConnection {
       'ECONNREFUSED',
       'ETIMEDOUT',
     ];
-    
+
     const errorMessage = error?.message?.toLowerCase() || '';
-    return connectionErrorMessages.some(msg => errorMessage.includes(msg));
+    return connectionErrorMessages.some((msg) => errorMessage.includes(msg));
   }
 
   private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   async gracefulShutdown(): Promise<void> {
     console.log('Initiating graceful database shutdown...');
-    
+
     if (this.healthCheckInterval) {
       clearInterval(this.healthCheckInterval);
     }
-    
+
     try {
       await this.client.$disconnect();
       console.log('Database disconnected successfully');
@@ -293,9 +299,9 @@ if (typeof process !== 'undefined') {
     console.log('SIGTERM received, shutting down database connection...');
     await databaseConnection.gracefulShutdown();
   });
-  
+
   process.on('SIGINT', async () => {
     console.log('SIGINT received, shutting down database connection...');
     await databaseConnection.gracefulShutdown();
   });
-} 
+}

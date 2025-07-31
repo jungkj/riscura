@@ -330,5 +330,5 @@ export const GET = withAPI(handleGet, {
   rateLimit: {
     maxRequests: 100,
     windowMs: 60 * 60 * 1000, // 1 hour
-  }
+  },
 });

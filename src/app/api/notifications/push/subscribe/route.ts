@@ -15,11 +15,13 @@ const subscribeSchema = z.object({
       auth: z.string(),
     }),
   }),
-  deviceInfo: z.object({
-    userAgent: z.string().optional(),
-    platform: z.string().optional(),
-    browser: z.string().optional(),
-  }).optional(),
+  deviceInfo: z
+    .object({
+      userAgent: z.string().optional(),
+      platform: z.string().optional(),
+      browser: z.string().optional(),
+    })
+    .optional(),
 });
 
 export const POST = withApiMiddleware(async (req: NextRequest) => {

@@ -20,12 +20,9 @@ const changePasswordSchema = z.object({
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     // Basic authentication check
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
 
     // Get user from database
@@ -52,23 +49,16 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!user || !user.isActive) {
-      return NextResponse.json(
-        { error: 'User not found or inactive' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'User not found or inactive' }, { status: 401 });
     }
 
     return NextResponse.json({
       success: true,
       user,
     });
-
   } catch (error) {
     console.error('Get user profile error:', error);
-    return NextResponse.json(
-      { error: 'Failed to get user profile' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to get user profile' }, { status: 500 });
   }
 }
 
@@ -76,12 +66,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 export async function PUT(request: NextRequest): Promise<NextResponse> {
   try {
     // Basic authentication check
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
 
     // Get user from database
@@ -90,10 +77,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!user || !user.isActive) {
-      return NextResponse.json(
-        { error: 'User not found or inactive' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'User not found or inactive' }, { status: 401 });
     }
 
     const body = await request.json();
@@ -101,7 +85,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
 
     if (!validationResult.success) {
       return NextResponse.json(
-        { 
+        {
           error: 'Invalid request data',
           details: validationResult.error.errors,
         },
@@ -140,13 +124,9 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
       success: true,
       user: updatedUser,
     });
-
   } catch (error) {
     console.error('Update profile error:', error);
-    return NextResponse.json(
-      { error: 'Failed to update user profile' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to update user profile' }, { status: 500 });
   }
 }
 
@@ -154,12 +134,9 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
 export async function PATCH(request: NextRequest): Promise<NextResponse> {
   try {
     // Basic authentication check
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
 
     // Get user from database
@@ -168,14 +145,11 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!user || !user.isActive) {
-      return NextResponse.json(
-        { error: 'User not found or inactive' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'User not found or inactive' }, { status: 401 });
     }
 
     const body = await request.json();
-    
+
     // Check if this is a password change request
     if (!body.currentPassword || !body.newPassword) {
       return NextResponse.json(
@@ -188,7 +162,7 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
 
     if (!validationResult.success) {
       return NextResponse.json(
-        { 
+        {
           error: 'Invalid request data',
           details: validationResult.error.errors,
         },
@@ -208,19 +182,13 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!currentUser || !currentUser.passwordHash) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // Verify current password (simplified version)
     // In production, you would use proper password verification
     if (currentPassword !== 'demo-password') {
-      return NextResponse.json(
-        { error: 'Current password is incorrect' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Current password is incorrect' }, { status: 400 });
     }
 
     // Hash new password (simplified version)
@@ -240,12 +208,8 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
       success: true,
       message: 'Password changed successfully',
     });
-
   } catch (error) {
     console.error('Change password error:', error);
-    return NextResponse.json(
-      { error: 'Failed to change password' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to change password' }, { status: 500 });
   }
-} 
+}

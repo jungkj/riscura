@@ -45,7 +45,7 @@ export class CSRFProtection {
 
   private constructor(config?: Partial<CSRFConfig>) {
     this.config = { ...DEFAULT_CSRF_CONFIG, ...config };
-    
+
     // Validate configuration
     if (!this.config.secret || this.config.secret.length < 32) {
       throw new Error('CSRF secret must be at least 32 characters long');
@@ -65,36 +65,38 @@ export class CSRFProtection {
   generateToken(sessionId?: string): string {
     // Generate random bytes
     const randomBytes = crypto.randomBytes(this.config.tokenLength);
-    
+
     // Create a timestamp for token rotation
     const timestamp = Date.now().toString();
-    
+
     // Combine with session ID if provided
-    const data = sessionId ? `${randomBytes.toString('hex')}.${timestamp}.${sessionId}` : `${randomBytes.toString('hex')}.${timestamp}`;
-    
+    const data = sessionId
+      ? `${randomBytes.toString('hex')}.${timestamp}.${sessionId}`
+      : `${randomBytes.toString('hex')}.${timestamp}`;
+
     // Create HMAC signature to prevent tampering
     const hmac = crypto.createHmac('sha256', this.config.secret);
     hmac.update(data);
     const signature = hmac.digest('hex');
-    
+
     const token = `${data}.${signature}`;
-    
+
     // Store token for validation
     this.tokenStore.set(token, {
       token,
       timestamp: Date.now(),
-      sessionId
+      sessionId,
     });
-    
+
     // Clean expired tokens
     this.cleanExpiredTokens();
-    
+
     productionGuard.logSecurityEvent('csrf_token_generated', {
       tokenId: token.substring(0, 8) + '...',
       sessionId: sessionId?.substring(0, 8) + '...',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-    
+
     return token;
   }
 
@@ -104,7 +106,7 @@ export class CSRFProtection {
   validateToken(token: string, sessionId?: string): boolean {
     if (!token) {
       productionGuard.logSecurityEvent('csrf_validation_failed', {
-        reason: 'missing_token'
+        reason: 'missing_token',
       });
       return false;
     }
@@ -120,7 +122,7 @@ export class CSRFProtection {
       if (parts.length < 3) {
         productionGuard.logSecurityEvent('csrf_validation_failed', {
           reason: 'invalid_token_format',
-          tokenId: token.substring(0, 8) + '...'
+          tokenId: token.substring(0, 8) + '...',
         });
         return false;
       }
@@ -130,17 +132,19 @@ export class CSRFProtection {
       const providedSessionId = rest.join('.'); // Remaining parts form session ID
 
       // Reconstruct original data
-      const data = providedSessionId ? `${randomPart}.${timestamp}.${providedSessionId}` : `${randomPart}.${timestamp}`;
-      
+      const data = providedSessionId
+        ? `${randomPart}.${timestamp}.${providedSessionId}`
+        : `${randomPart}.${timestamp}`;
+
       // Verify HMAC signature
       const hmac = crypto.createHmac('sha256', this.config.secret);
       hmac.update(data);
       const expectedSignature = hmac.digest('hex');
-      
+
       if (signature !== expectedSignature) {
         productionGuard.logSecurityEvent('csrf_validation_failed', {
           reason: 'invalid_signature',
-          tokenId: token.substring(0, 8) + '...'
+          tokenId: token.substring(0, 8) + '...',
         });
         return false;
       }
@@ -150,7 +154,7 @@ export class CSRFProtection {
       if (!storedToken) {
         productionGuard.logSecurityEvent('csrf_validation_failed', {
           reason: 'token_not_found',
-          tokenId: token.substring(0, 8) + '...'
+          tokenId: token.substring(0, 8) + '...',
         });
         return false;
       }
@@ -162,7 +166,7 @@ export class CSRFProtection {
         productionGuard.logSecurityEvent('csrf_validation_failed', {
           reason: 'token_expired',
           tokenId: token.substring(0, 8) + '...',
-          age: tokenAge
+          age: tokenAge,
         });
         return false;
       }
@@ -173,7 +177,7 @@ export class CSRFProtection {
           reason: 'session_mismatch',
           tokenId: token.substring(0, 8) + '...',
           expectedSession: sessionId?.substring(0, 8) + '...',
-          providedSession: providedSessionId?.substring(0, 8) + '...'
+          providedSession: providedSessionId?.substring(0, 8) + '...',
         });
         return false;
       }
@@ -182,16 +186,15 @@ export class CSRFProtection {
       if (tokenAge > this.config.rotationInterval) {
         productionGuard.logSecurityEvent('csrf_token_rotation_needed', {
           tokenId: token.substring(0, 8) + '...',
-          age: tokenAge
+          age: tokenAge,
         });
       }
 
       return true;
-
     } catch (error) {
       productionGuard.logSecurityEvent('csrf_validation_error', {
         error: error instanceof Error ? error.message : 'Unknown error',
-        tokenId: token.substring(0, 8) + '...'
+        tokenId: token.substring(0, 8) + '...',
       });
       return false;
     }
@@ -206,7 +209,7 @@ export class CSRFProtection {
       this.tokenStore.delete(oldToken);
       productionGuard.logSecurityEvent('csrf_token_rotated', {
         oldTokenId: oldToken.substring(0, 8) + '...',
-        sessionId: sessionId?.substring(0, 8) + '...'
+        sessionId: sessionId?.substring(0, 8) + '...',
       });
     }
 
@@ -231,7 +234,7 @@ export class CSRFProtection {
     if (cleanedCount > 0) {
       productionGuard.logSecurityEvent('csrf_tokens_cleaned', {
         cleanedCount,
-        remainingCount: this.tokenStore.size
+        remainingCount: this.tokenStore.size,
       });
     }
   }
@@ -247,7 +250,7 @@ export class CSRFProtection {
       sameSite: this.config.sameSite,
       secure: this.config.secure,
       httpOnly: this.config.httpOnly,
-      path: '/'
+      path: '/',
     };
 
     // Set the cookie
@@ -269,7 +272,10 @@ export class CSRFProtection {
   /**
    * Validate CSRF protection for request
    */
-  validateRequest(request: NextRequest, sessionId?: string): {
+  validateRequest(
+    request: NextRequest,
+    sessionId?: string
+  ): {
     isValid: boolean;
     reason?: string;
     shouldRotate?: boolean;
@@ -291,7 +297,7 @@ export class CSRFProtection {
     if (!headerToken || !cookieToken) {
       return {
         isValid: false,
-        reason: 'Missing CSRF tokens'
+        reason: 'Missing CSRF tokens',
       };
     }
 
@@ -299,7 +305,7 @@ export class CSRFProtection {
     if (headerToken !== cookieToken) {
       return {
         isValid: false,
-        reason: 'CSRF tokens do not match'
+        reason: 'CSRF tokens do not match',
       };
     }
 
@@ -308,18 +314,18 @@ export class CSRFProtection {
     if (!isValid) {
       return {
         isValid: false,
-        reason: 'Invalid CSRF token'
+        reason: 'Invalid CSRF token',
       };
     }
 
     // Check if token should be rotated
     const storedToken = this.tokenStore.get(headerToken);
-    const shouldRotate = storedToken && 
-      (Date.now() - storedToken.timestamp) > this.config.rotationInterval;
+    const shouldRotate =
+      storedToken && Date.now() - storedToken.timestamp > this.config.rotationInterval;
 
     return {
       isValid: true,
-      shouldRotate
+      shouldRotate,
     };
   }
 
@@ -331,17 +337,15 @@ export class CSRFProtection {
     init?: ResponseInit & { sessionId?: string; rotateToken?: boolean }
   ): NextResponse {
     const { sessionId, rotateToken, ...responseInit } = init || {};
-    
+
     const response = NextResponse.json(body, responseInit);
-    
+
     // Generate or rotate token
-    const token = rotateToken 
-      ? this.generateToken(sessionId)
-      : this.generateToken(sessionId);
-    
+    const token = rotateToken ? this.generateToken(sessionId) : this.generateToken(sessionId);
+
     // Set token in cookie
     this.setTokenCookie(response, token);
-    
+
     // Also provide token in response body for client-side access
     if (body && typeof body === 'object') {
       body[this.config.tokenName] = token;
@@ -356,21 +360,21 @@ export class CSRFProtection {
   middleware() {
     return async (request: NextRequest): Promise<NextResponse | null> => {
       const validation = this.validateRequest(request);
-      
+
       if (!validation.isValid) {
         productionGuard.logSecurityEvent('csrf_protection_blocked', {
           method: request.method,
           url: request.url,
           reason: validation.reason,
           ip: request.headers.get('x-forwarded-for') || 'unknown',
-          userAgent: request.headers.get('user-agent') || 'unknown'
+          userAgent: request.headers.get('user-agent') || 'unknown',
         });
 
         return NextResponse.json(
           {
             error: 'CSRF protection failed',
             code: 'CSRF_TOKEN_INVALID',
-            message: validation.reason
+            message: validation.reason,
           },
           { status: 403 }
         );
@@ -415,7 +419,7 @@ export class CSRFProtection {
     return {
       activeTokens: this.tokenStore.size,
       oldestToken: oldest === now ? 0 : now - oldest,
-      newestToken: newest === 0 ? 0 : now - newest
+      newestToken: newest === 0 ? 0 : now - newest,
     };
   }
 }
@@ -432,7 +436,10 @@ export function validateCSRFToken(token: string, sessionId?: string): boolean {
   return csrfProtection.validateToken(token, sessionId);
 }
 
-export function validateCSRFRequest(request: NextRequest, sessionId?: string): {
+export function validateCSRFRequest(
+  request: NextRequest,
+  sessionId?: string
+): {
   isValid: boolean;
   reason?: string;
   shouldRotate?: boolean;
@@ -456,17 +463,17 @@ export function rotateCSRFToken(oldToken: string, sessionId?: string): string {
  */
 export function getCSRFTokenForClient(): string | null {
   if (typeof window === 'undefined') return null;
-  
+
   // Get token from cookie
   const cookies = document.cookie.split(';');
-  const csrfCookie = cookies.find(cookie => 
+  const csrfCookie = cookies.find((cookie) =>
     cookie.trim().startsWith(`${DEFAULT_CSRF_CONFIG.cookieName}=`)
   );
-  
+
   if (csrfCookie) {
     return csrfCookie.split('=')[1];
   }
-  
+
   return null;
 }
 
@@ -475,33 +482,35 @@ export function getCSRFTokenForClient(): string | null {
  */
 export function fetchWithCSRF(url: string, options: RequestInit = {}): Promise<Response> {
   const token = getCSRFTokenForClient();
-  
-  if (token && options.method && !['GET', 'HEAD', 'OPTIONS'].includes(options.method.toUpperCase())) {
+
+  if (
+    token &&
+    options.method &&
+    !['GET', 'HEAD', 'OPTIONS'].includes(options.method.toUpperCase())
+  ) {
     options.headers = {
       ...options.headers,
-      [DEFAULT_CSRF_CONFIG.headerName]: token
+      [DEFAULT_CSRF_CONFIG.headerName]: token,
     };
   }
-  
+
   return fetch(url, options);
 }
 
 /**
  * Express/Next.js middleware wrapper
  */
-export function withCSRFProtection(
-  handler: (req: NextRequest) => Promise<NextResponse>
-) {
+export function withCSRFProtection(handler: (req: NextRequest) => Promise<NextResponse>) {
   return async (req: NextRequest): Promise<NextResponse> => {
     // Apply CSRF protection
     const csrfResult = await csrfProtection.middleware()(req);
     if (csrfResult) {
       return csrfResult; // CSRF validation failed
     }
-    
+
     // Call the actual handler
     const response = await handler(req);
-    
+
     // Check if token rotation is needed
     const rotationNeeded = response.headers.get('X-CSRF-Token-Rotation-Needed');
     if (rotationNeeded) {
@@ -509,15 +518,15 @@ export function withCSRFProtection(
       if (headerToken) {
         const newToken = csrfProtection.rotateToken(headerToken);
         csrfProtection.setTokenCookie(response, newToken);
-        
+
         // Add new token to response body if it's JSON
         try {
           const body = await response.json();
           if (body && typeof body === 'object') {
             body[DEFAULT_CSRF_CONFIG.tokenName] = newToken;
-            return NextResponse.json(body, { 
+            return NextResponse.json(body, {
               status: response.status,
-              headers: response.headers 
+              headers: response.headers,
             });
           }
         } catch {
@@ -525,7 +534,7 @@ export function withCSRFProtection(
         }
       }
     }
-    
+
     return response;
   };
-} 
+}

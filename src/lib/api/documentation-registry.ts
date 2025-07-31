@@ -286,9 +286,7 @@ apiRegistry.registerEndpoint({
   tags: ['Risk Management'],
   operationId: 'createRisk',
   security: [{ BearerAuth: [] }],
-  parameters: [
-    { $ref: '#/components/parameters/OrganizationId' },
-  ],
+  parameters: [{ $ref: '#/components/parameters/OrganizationId' }],
   requestBody: {
     required: true,
     content: {
@@ -566,8 +564,8 @@ apiRegistry.registerSchema('SubscriptionPlan', {
     price: {
       type: 'object',
       properties: {
-        monthly: { type: 'number', example: 99.00 },
-        yearly: { type: 'number', example: 990.00 },
+        monthly: { type: 'number', example: 99.0 },
+        yearly: { type: 'number', example: 990.0 },
       },
     },
     features: {

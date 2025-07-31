@@ -12,7 +12,7 @@ import {
   NotificationChannel,
   IntelligentPriority,
   PersonalizedContent,
-  ContextualData
+  ContextualData,
 } from '@/types/proactive-monitoring.types';
 import { Risk, Control } from '@/types';
 import { generateId } from '@/lib/utils';
@@ -26,7 +26,13 @@ import { ControlRecommendationAIService } from './ControlRecommendationAIService
 // Enhanced AI processing interfaces
 export interface AIProcessingTask {
   id: string;
-  type: 'risk_analysis' | 'trend_analysis' | 'compliance_check' | 'insight_generation' | 'prediction' | 'notification_generation';
+  type:
+    | 'risk_analysis'
+    | 'trend_analysis'
+    | 'compliance_check'
+    | 'insight_generation'
+    | 'prediction'
+    | 'notification_generation';
   priority: 'critical' | 'high' | 'medium' | 'low';
   targetEntity: {
     id: string;
@@ -106,13 +112,13 @@ export class ProactiveAIIntegrationService {
   private readonly complianceAIService: ComplianceAIService;
   private readonly riskAnalysisAIService: RiskAnalysisAIService;
   private readonly controlRecommendationAIService: ControlRecommendationAIService;
-  
+
   private processingQueue: AIProcessingTask[] = [];
   private activeProcessingTasks: Map<string, AIProcessingTask> = new Map();
   private processingResults: Map<string, AIProcessingResult> = new Map();
   private backgroundProcessor: NodeJS.Timeout | null = null;
   private isProcessing: boolean = false;
-  
+
   private config: BackgroundProcessingConfig = {
     batchSize: 5,
     processingInterval: 10000, // 10 seconds
@@ -120,14 +126,14 @@ export class ProactiveAIIntegrationService {
     retrySettings: {
       maxRetries: 3,
       backoffMultiplier: 2,
-      maxBackoffDelay: 60000 // 1 minute
+      maxBackoffDelay: 60000, // 1 minute
     },
     priorityWeights: {
       critical: 10,
       high: 7,
       medium: 4,
-      low: 1
-    }
+      low: 1,
+    },
   };
 
   constructor(
@@ -139,7 +145,8 @@ export class ProactiveAIIntegrationService {
     this.aiService = aiService || new AIService();
     this.complianceAIService = complianceAIService || new ComplianceAIService();
     this.riskAnalysisAIService = riskAnalysisAIService || new RiskAnalysisAIService();
-    this.controlRecommendationAIService = controlRecommendationAIService || new ControlRecommendationAIService();
+    this.controlRecommendationAIService =
+      controlRecommendationAIService || new ControlRecommendationAIService();
   }
 
   /**
@@ -170,7 +177,7 @@ export class ProactiveAIIntegrationService {
 
     // Wait for active tasks to complete
     while (this.activeProcessingTasks.size > 0) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
   }
 
@@ -182,13 +189,15 @@ export class ProactiveAIIntegrationService {
       ...task,
       id: generateId('ai-task'),
       status: 'pending',
-      retryCount: 0
+      retryCount: 0,
     };
 
     this.processingQueue.push(aiTask);
     this.sortQueueByPriority();
 
-    console.log(`Queued AI task: ${aiTask.type} for ${aiTask.targetEntity.type}:${aiTask.targetEntity.id}`);
+    console.log(
+      `Queued AI task: ${aiTask.type} for ${aiTask.targetEntity.type}:${aiTask.targetEntity.id}`
+    );
     return aiTask.id;
   }
 
@@ -206,21 +215,21 @@ export class ProactiveAIIntegrationService {
       targetEntity: {
         id: entityId,
         type: entityType,
-        data: context
+        data: context,
       },
       aiModel: 'gpt-4',
       context: {
         ...context,
         timestamp: new Date().toISOString(),
-        requestType: 'insight_generation'
+        requestType: 'insight_generation',
       },
       scheduledAt: new Date(),
-      maxRetries: 3
+      maxRetries: 3,
     });
 
     // Wait for processing (in real implementation, this would be async)
     await this.waitForTaskCompletion(taskId);
-    
+
     const result = this.processingResults.get(taskId);
     if (!result) {
       throw new Error('Failed to generate insights');
@@ -246,17 +255,17 @@ export class ProactiveAIIntegrationService {
         targetEntity: {
           id: risk.id,
           type: 'risk',
-          data: { risk, controls, historicalData }
+          data: { risk, controls, historicalData },
         },
         aiModel: 'gpt-4',
         context: {
           riskContext: risk,
-          controlsContext: controls.filter(c => c.linkedRisks?.includes(risk.id)),
+          controlsContext: controls.filter((c) => c.linkedRisks?.includes(risk.id)),
           historicalContext: historicalData,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         },
         scheduledAt: new Date(),
-        maxRetries: 3
+        maxRetries: 3,
       });
 
       await this.waitForTaskCompletion(taskId);
@@ -283,16 +292,16 @@ export class ProactiveAIIntegrationService {
       targetEntity: {
         id: userId,
         type: 'system',
-        data: { context, triggers }
+        data: { context, triggers },
       },
       aiModel: 'gpt-3.5-turbo',
       context: {
         userContext: context,
         triggers,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
       scheduledAt: new Date(),
-      maxRetries: 2
+      maxRetries: 2,
     });
 
     await this.waitForTaskCompletion(taskId);
@@ -319,26 +328,26 @@ export class ProactiveAIIntegrationService {
       targetEntity: {
         id: entityId,
         type: entityType as 'risk' | 'control' | 'process' | 'compliance' | 'system',
-        data: { timeSeriesData, context }
+        data: { timeSeriesData, context },
       },
       aiModel: 'gpt-4',
       context: {
         timeSeriesData,
         entityContext: context,
         analysisType: 'trend_analysis',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
       scheduledAt: new Date(),
-      maxRetries: 3
+      maxRetries: 3,
     });
 
     await this.waitForTaskCompletion(taskId);
     const result = this.processingResults.get(taskId);
-    
+
     return {
       trends: [] as unknown[], // Would be populated by AI analysis
-      insights: result?.insights || [] as ProactiveInsight[],
-      predictions: result?.predictions || [] as PredictiveResult[]
+      insights: result?.insights || ([] as ProactiveInsight[]),
+      predictions: result?.predictions || ([] as PredictiveResult[]),
     };
   }
 
@@ -351,23 +360,23 @@ export class ProactiveAIIntegrationService {
     urgency: 'immediate' | 'high' | 'medium' | 'low' = 'medium'
   ): Promise<ActionRecommendation[]> {
     const priority = this.mapUrgencyToPriority(urgency);
-    
+
     const taskId = await this.queueAITask({
       type: 'insight_generation',
       priority,
       targetEntity: {
         id: entityId,
         type: entityType,
-        data: { urgency, timestamp: new Date() }
+        data: { urgency, timestamp: new Date() },
       },
       aiModel: urgency === 'immediate' ? 'gpt-4' : 'gpt-3.5-turbo',
       context: {
         urgency,
         realtimeRequest: true,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
       scheduledAt: new Date(),
-      maxRetries: urgency === 'immediate' ? 1 : 3
+      maxRetries: urgency === 'immediate' ? 1 : 3,
     });
 
     await this.waitForTaskCompletion(taskId);
@@ -385,7 +394,7 @@ export class ProactiveAIIntegrationService {
 
     this.isProcessing = true;
     const batchSize = Math.min(
-      this.config.batchSize, 
+      this.config.batchSize,
       this.config.maxConcurrentTasks - this.activeProcessingTasks.size
     );
 
@@ -395,7 +404,7 @@ export class ProactiveAIIntegrationService {
     }
 
     const batch = this.processingQueue.splice(0, batchSize);
-    const processingPromises = batch.map(task => this.processAITask(task));
+    const processingPromises = batch.map((task) => this.processAITask(task));
 
     try {
       await Promise.allSettled(processingPromises);
@@ -415,7 +424,7 @@ export class ProactiveAIIntegrationService {
 
     try {
       const result = await this.executeAITask(task);
-      
+
       const processingResult: AIProcessingResult = {
         taskId: task.id,
         ...result,
@@ -423,31 +432,30 @@ export class ProactiveAIIntegrationService {
         tokenUsage: {
           prompt: 100,
           completion: 200,
-          total: 300
-        }
+          total: 300,
+        },
       };
 
       this.processingResults.set(task.id, processingResult);
       console.log(`Completed AI task: ${task.type} in ${processingResult.processingTime}ms`);
-
     } catch (error) {
       console.error(`Error processing AI task ${task.id}:`, error);
-      
+
       if (task.retryCount < task.maxRetries) {
         task.retryCount++;
         task.status = 'pending';
-        
+
         // Add delay before retry
         const delay = Math.min(
           this.config.retrySettings.backoffMultiplier ** task.retryCount * 1000,
           this.config.retrySettings.maxBackoffDelay
         );
-        
+
         setTimeout(() => {
           this.processingQueue.unshift(task);
           this.sortQueueByPriority();
         }, delay);
-        
+
         console.log(`Retrying AI task ${task.id} (attempt ${task.retryCount + 1})`);
       } else {
         console.error(`Failed AI task ${task.id} after ${task.maxRetries} retries`);
@@ -470,22 +478,22 @@ export class ProactiveAIIntegrationService {
     switch (task.type) {
       case 'risk_analysis':
         return await this.executeRiskAnalysis(task);
-      
+
       case 'trend_analysis':
         return await this.executeTrendAnalysis(task);
-      
+
       case 'compliance_check':
         return await this.executeComplianceCheck(task);
-      
+
       case 'insight_generation':
         return await this.executeInsightGeneration(task);
-      
+
       case 'prediction':
         return await this.executePrediction(task);
-      
+
       case 'notification_generation':
         return await this.executeNotificationGeneration(task);
-      
+
       default:
         throw new Error(`Unknown AI task type: ${task.type}`);
     }
@@ -543,7 +551,7 @@ export class ProactiveAIIntegrationService {
     notifications: SmartNotification[];
     confidence: number;
   }> {
-    // Simple mock implementation  
+    // Simple mock implementation
     return this.getEmptyResult();
   }
 
@@ -558,7 +566,7 @@ export class ProactiveAIIntegrationService {
     confidence: number;
   }> {
     const riskData = task.targetEntity.data as { risk: Risk };
-    
+
     return {
       insights: [] as ProactiveInsight[],
       recommendations: [] as ActionRecommendation[],
@@ -572,11 +580,11 @@ export class ProactiveAIIntegrationService {
           confidence: 0.8,
           factors: ['Historical trend', 'Industry patterns', 'Current risk score'],
           mitigation: ['Implement additional controls', 'Increase monitoring frequency'],
-          impact: 'medium'
-        }
+          impact: 'medium',
+        },
       ],
       notifications: [] as SmartNotification[],
-      confidence: 0.8
+      confidence: 0.8,
     };
   }
 
@@ -605,19 +613,19 @@ export class ProactiveAIIntegrationService {
 
   private async waitForTaskCompletion(taskId: string, timeout: number = 30000): Promise<void> {
     const startTime = Date.now();
-    
+
     while (Date.now() - startTime < timeout) {
       if (this.processingResults.has(taskId)) {
         return;
       }
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
     }
-    
+
     throw new Error(`Task ${taskId} timed out`);
   }
 
   private convertToIntelligentInsights(insights: ProactiveInsight[]): IntelligentInsight[] {
-    return insights.map(insight => ({
+    return insights.map((insight) => ({
       id: insight.id,
       category: insight.category as any,
       title: insight.title,
@@ -630,7 +638,7 @@ export class ProactiveAIIntegrationService {
       affectedEntities: [] as string[],
       timeframe: '1-30 days',
       aiGenerated: true,
-      generatedAt: insight.createdAt
+      generatedAt: insight.createdAt,
     }));
   }
 
@@ -639,7 +647,7 @@ export class ProactiveAIIntegrationService {
       immediate: 'critical',
       high: 'high',
       medium: 'medium',
-      low: 'low'
+      low: 'low',
     };
     return mapping[urgency] || 'medium';
   }
@@ -664,7 +672,7 @@ export class ProactiveAIIntegrationService {
       timeline: '2-4 weeks',
       resources: [] as string[],
       dependencies: [] as string[],
-      successCriteria: [] as string[]
+      successCriteria: [] as string[],
     };
   }
 
@@ -679,8 +687,8 @@ export class ProactiveAIIntegrationService {
         confidence: 0.8,
         factors: ['Historical data', 'Current controls'],
         mitigation: ['Enhanced monitoring'],
-        impact: 'medium'
-      }
+        impact: 'medium',
+      },
     ];
   }
 
@@ -696,7 +704,7 @@ export class ProactiveAIIntegrationService {
       recommendations: [] as ActionRecommendation[],
       predictions: [] as PredictiveResult[],
       notifications: [] as SmartNotification[],
-      confidence: 0
+      confidence: 0,
     };
   }
 
@@ -711,7 +719,7 @@ export class ProactiveAIIntegrationService {
       queueSize: this.processingQueue.length,
       activeTasksCount: this.activeProcessingTasks.size,
       completedTasksCount: this.processingResults.size,
-      isProcessing: this.isProcessing
+      isProcessing: this.isProcessing,
     };
   }
 
@@ -733,4 +741,4 @@ export class ProactiveAIIntegrationService {
 }
 
 // Export singleton instance
-export const proactiveAIIntegrationService = new ProactiveAIIntegrationService(); 
+export const proactiveAIIntegrationService = new ProactiveAIIntegrationService();

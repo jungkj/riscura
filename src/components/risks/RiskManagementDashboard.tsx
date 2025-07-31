@@ -194,8 +194,9 @@ const RiskCard: React.FC<{ risk: Risk; onAction: (action: string, risk: Risk) =>
         <div className="flex-1">
           <div className="flex items-center space-x-enterprise-2 mb-enterprise-1">
             <span className="text-caption font-medium text-text-tertiary">{risk.id}</span>
-            <DaisyBadge variant={statusConfig.variant} className="text-caption">
-              <StatusIcon className="h-3 w-3 mr-enterprise-1" />
+            <DaisyBadge variant={statusConfig.variant} className="text-caption" >
+  <StatusIcon className="h-3 w-3 mr-enterprise-1" />
+</DaisyBadge>
               {risk.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
             </DaisyBadge>
           </div>
@@ -210,8 +211,7 @@ const RiskCard: React.FC<{ risk: Risk; onAction: (action: string, risk: Risk) =>
           variant="ghost" 
           size="sm" 
           className="h-6 w-6 p-0"
-          onClick={() => onAction('menu', risk)}
-        >
+          onClick={() => onAction('menu', risk)} />
           <MoreHorizontal className="h-3 w-3" />
         </DaisyButton>
       </div>
@@ -264,8 +264,9 @@ const RiskCard: React.FC<{ risk: Risk; onAction: (action: string, risk: Risk) =>
             </div>
             <span className="text-caption text-text-secondary">{risk.owner.name}</span>
           </div>
-          <DaisyBadge variant="outline" className="text-caption">
-            {risk.category}
+          <DaisyBadge variant="outline" className="text-caption" >
+  {risk.category}
+</DaisyBadge>
           </DaisyBadge>
         </div>
 
@@ -292,13 +293,15 @@ const RiskCard: React.FC<{ risk: Risk; onAction: (action: string, risk: Risk) =>
         {/* Framework Tags */}
         <div className="flex flex-wrap gap-enterprise-1">
           {risk.framework.slice(0, 2).map((framework) => (
-            <DaisyBadge key={framework} variant="outline" className="text-caption">
-              {framework}
+            <DaisyBadge key={framework} variant="outline" className="text-caption" >
+  {framework}
+</DaisyCalendar>
             </DaisyBadge>
           ))}
           {risk.framework.length > 2 && (
-            <DaisyBadge variant="outline" className="text-caption">
-              +{risk.framework.length - 2}
+            <DaisyBadge variant="outline" className="text-caption" >
+  +{risk.framework.length - 2}
+</DaisyBadge>
             </DaisyBadge>
           )}
         </div>
@@ -311,8 +314,7 @@ const RiskCard: React.FC<{ risk: Risk; onAction: (action: string, risk: Risk) =>
             variant="ghost" 
             size="sm" 
             className="h-6 px-enterprise-2"
-            onClick={() => onAction('view', risk)}
-          >
+            onClick={() => onAction('view', risk)} />
             <Eye className="h-3 w-3 mr-enterprise-1" />
             View
           </DaisyButton>
@@ -320,8 +322,7 @@ const RiskCard: React.FC<{ risk: Risk; onAction: (action: string, risk: Risk) =>
             variant="ghost" 
             size="sm" 
             className="h-6 px-enterprise-2"
-            onClick={() => onAction('edit', risk)}
-          >
+            onClick={() => onAction('edit', risk)} />
             <Edit className="h-3 w-3 mr-enterprise-1" />
             Edit
           </DaisyButton>
@@ -396,30 +397,28 @@ const RiskRegister: React.FC = () => {
           </div>
 
           {/* Filters */}
-          <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory}>
-            <DaisySelectTrigger className="w-40">
-              <DaisySelectValue placeholder="Category" />
-            </SelectTrigger>
-            <DaisySelectContent>
-              <DaisySelectItem value="all">All Categories</SelectItem>
+          <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory} />
+            <DaisySelectTrigger className="w-40" />
+              <DaisySelectValue placeholder="Category" /></DaisyInput>
+            <DaisySelectContent />
+              <DaisySelectItem value="all">All Categories</DaisySelectContent>
               {categories.map(category => (
-                <DaisySelectItem key={category} value={category}>{category}</SelectItem>
+                <DaisySelectItem key={category} value={category}>{category}</DaisySelectItem>
               ))}
-            </SelectContent>
+            </DaisySelectContent>
           </DaisySelect>
 
-          <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus}>
-            <DaisySelectTrigger className="w-40">
-              <DaisySelectValue placeholder="Status" />
-            </SelectTrigger>
-            <DaisySelectContent>
-              <DaisySelectItem value="all">All Status</SelectItem>
+          <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus} />
+            <DaisySelectTrigger className="w-40" />
+              <DaisySelectValue placeholder="Status" /></DaisySelect>
+            <DaisySelectContent />
+              <DaisySelectItem value="all">All Status</DaisySelectContent>
               {statuses.map(status => (
-                <DaisySelectItem key={status} value={status}>
+                <DaisySelectItem key={status} value={status} />
                   {status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                </SelectItem>
+                </DaisySelectItem>
               ))}
-            </SelectContent>
+            </DaisySelectContent>
           </DaisySelect>
         </div>
 
@@ -430,16 +429,14 @@ const RiskRegister: React.FC = () => {
               variant={viewMode === 'card' ? 'primary' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('card')}
-              className="h-6 px-enterprise-2"
-            >
+              className="h-6 px-enterprise-2" />
               <LayoutGrid className="h-3 w-3" />
             </DaisyButton>
             <DaisyButton
               variant={viewMode === 'table' ? 'primary' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('table')}
-              className="h-6 px-enterprise-2"
-            >
+              className="h-6 px-enterprise-2" />
               <List className="h-3 w-3" />
             </DaisyButton>
           </div>
@@ -476,15 +473,17 @@ const RiskRegister: React.FC = () => {
       {/* Empty State */}
       {filteredRisks.length === 0 && (
         <div className="text-center py-enterprise-12">
-          <DaisyAlertTriangle className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
-          <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
+          <DaisyAlertTriangle className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" >
+  <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
+</DaisyAlertTriangle>
             No risks found
           </h3>
           <p className="text-body-base text-text-secondary mb-enterprise-4">
             Try adjusting your filters or search terms.
           </p>
-          <DaisyButton variant="outline">
-            Clear Filters
+          <DaisyButton variant="outline" >
+  Clear Filters
+</DaisyButton>
           </DaisyButton>
         </div>
       )}
@@ -629,12 +628,12 @@ export const RiskManagementDashboard: React.FC = () => {
     >
       {/* Tabs */}
       <div className="flex items-center justify-between mb-enterprise-6">
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
-          <DaisyTabsList>
-            <DaisyTabsTrigger value="register">Risk Register</DaisyTabsTrigger>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
+          <DaisyTabsList />
+            <DaisyTabsTrigger value="register">Risk Register</DaisyTabs>
             <DaisyTabsTrigger value="assessment">Assessment</DaisyTabsTrigger>
             <DaisyTabsTrigger value="heatmap">Heat Map</DaisyTabsTrigger>
-            <DaisyTabsTrigger value="controls">
+            <DaisyTabsTrigger value="controls" />
               <Shield className="h-4 w-4 mr-2" />
               Probo Controls
             </DaisyTabsTrigger>
@@ -644,7 +643,7 @@ export const RiskManagementDashboard: React.FC = () => {
         
         {/* Risk Creation Flow Toggle */}
         <div className="flex items-center space-x-2">
-          <DaisyLabel htmlFor="flow-toggle" className="text-sm font-medium">
+          <DaisyLabel htmlFor="flow-toggle" className="text-sm font-medium" />
             New Interactive Flow
           </DaisyLabel>
           <DaisySwitch
@@ -655,11 +654,11 @@ export const RiskManagementDashboard: React.FC = () => {
         </div>
       </div>
 
-      <DaisyTabsContent value="register">
+      <DaisyTabsContent value="register" />
         <RiskRegister />
-      </DaisyTabsContent>
+      </DaisySwitch>
 
-      <DaisyTabsContent value="assessment">
+      <DaisyTabsContent value="assessment" />
         <div className="text-center py-enterprise-12">
           <Target className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -671,7 +670,7 @@ export const RiskManagementDashboard: React.FC = () => {
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="heatmap">
+      <DaisyTabsContent value="heatmap" />
         <div className="text-center py-enterprise-12">
           <Map className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
@@ -683,10 +682,11 @@ export const RiskManagementDashboard: React.FC = () => {
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="controls" className="space-y-6">
+      <DaisyTabsContent value="controls" className="space-y-6" />
         {/* Probo Integration Header */}
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="p-2 bg-[#199BEC]/10 rounded-lg">
@@ -694,37 +694,45 @@ export const RiskManagementDashboard: React.FC = () => {
                 </div>
                 <div>
                   <DaisyCardTitle className="text-lg">Probo Security Controls</DaisyCardTitle>
-                  <DaisyCardDescription>
-                    AI-powered risk-control mapping with 651+ industry-standard controls
+                  <DaisyCardDescription >
+  AI-powered risk-control mapping with 651+ industry-standard controls
+</DaisyCardDescription>
                   </p>
                 </div>
               </div>
-              <DaisyButton onClick={handleImportProboControls} className="flex items-center space-x-2">
-                <Plus className="h-4 w-4" />
+              <DaisyButton onClick={handleImportProboControls} className="flex items-center space-x-2" >
+  <Plus className="h-4 w-4" />
+</DaisyButton>
                 <span>Import Controls</span>
               </DaisyButton>
             </div>
           
-          <DaisyCardContent>
-            <DaisyAlert>
+          <DaisyCardContent >
+  <DaisyAlert >
+  </DaisyCardContent>
+</DaisyAlert>
               <Zap className="h-4 w-4" />
-              <DaisyAlertDescription>
-                Probo integration automatically maps your risks to relevant security controls, 
+              <DaisyAlertDescription >
+  Probo integration automatically maps your risks to relevant security controls, 
+                </DaisyAlertDescription>
+</DaisyAlert>
                 providing AI-powered recommendations for risk mitigation strategies.
-              
-            </DaisyAlert>
-          </DaisyCardBody>
+                </DaisyAlertDescription>
+              </DaisyAlert>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Risk-Control Mappings */}
         {isLoadingMappings ? (
-          <DaisyCard>
-            <DaisyCardContent className="flex items-center justify-center py-8">
+          <DaisyCard >
+  <DaisyCardContent className="flex items-center justify-center py-8" >
+  </DaisyCard>
+</DaisyCardContent>
               <div className="text-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#199BEC] mx-auto mb-4"></div>
                 <p className="text-sm text-gray-600">Loading control mappings...</p>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         ) : (
           <div className="grid gap-4">
@@ -734,24 +742,27 @@ export const RiskManagementDashboard: React.FC = () => {
               const controlCount = mapping?.controlIds?.length || 0;
               
               return (
-                <DaisyCard key={risk.id}>
-                  <DaisyCardHeader>
+                <DaisyCard key={risk.id} >
+  <DaisyCardHeader />
+</DaisyCard>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
-                          <DaisyBadge variant="outline" className="text-xs">
-                            {risk.id}
+                          <DaisyBadge variant="outline" className="text-xs" >
+  {risk.id}
+</DaisyBadge>
                           </DaisyBadge>
                           <DaisyBadge 
                             variant={risk.riskLevel === 'critical' ? 'destructive' : 
-                                   risk.riskLevel === 'high' ? 'secondary' : 'outline'}
-                          >
-                            {risk.riskLevel.toUpperCase()}
+                                   risk.riskLevel === 'high' ? 'secondary' : 'outline'} >
+  {risk.riskLevel.toUpperCase()}
+</DaisyBadge>
                           </DaisyBadge>
                         </div>
                         <DaisyCardTitle className="text-base">{risk.title}</DaisyCardTitle>
-                        <DaisyCardDescription className="line-clamp-2">
-                          {risk.description}
+                        <DaisyCardDescription className="line-clamp-2" >
+  {risk.description}
+</DaisyCardDescription>
                         </p>
                       </div>
                       <div className="text-right">
@@ -760,8 +771,9 @@ export const RiskManagementDashboard: React.FC = () => {
                       </div>
                     </div>
                   
-                  <DaisyCardContent>
-                    <div className="space-y-4">
+                  <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
                       {/* Coverage Progress */}
                       <div>
                         <div className="flex justify-between text-sm mb-2">
@@ -788,17 +800,19 @@ export const RiskManagementDashboard: React.FC = () => {
 
                       {/* Actions */}
                       <div className="flex space-x-2 pt-2">
-                        <DaisyButton variant="outline" size="sm" className="flex items-center space-x-1">
-                          <Link2 className="h-3 w-3" />
+                        <DaisyButton variant="outline" size="sm" className="flex items-center space-x-1" >
+  <Link2 className="h-3 w-3" />
+</DaisyProgress>
                           <span>View Controls</span>
                         </DaisyButton>
-                        <DaisyButton variant="outline" size="sm" className="flex items-center space-x-1">
-                          <Target className="h-3 w-3" />
+                        <DaisyButton variant="outline" size="sm" className="flex items-center space-x-1" >
+  <Target className="h-3 w-3" />
+</DaisyButton>
                           <span>Create Tasks</span>
                         </DaisyButton>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
@@ -806,7 +820,7 @@ export const RiskManagementDashboard: React.FC = () => {
         )}
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="analytics">
+      <DaisyTabsContent value="analytics" />
         <div className="text-center py-enterprise-12">
           <BarChart3 className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">

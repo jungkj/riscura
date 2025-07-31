@@ -44,7 +44,7 @@ export interface SecurityHeaders {
 export interface CSPViolationReport {
   'csp-report': {
     'document-uri': string;
-    'referrer': string;
+    referrer: string;
     'violated-directive': string;
     'effective-directive': string;
     'original-policy': string;
@@ -87,22 +87,14 @@ class CSPManager {
         'https://*.amazonaws.com',
         'https://*.cloudfront.net',
       ],
-      fontSrc: [
-        "'self'",
-        'https://fonts.gstatic.com',
-        'https://cdn.jsdelivr.net',
-      ],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com', 'https://cdn.jsdelivr.net'],
       connectSrc: [
         "'self'",
         'https://api.riscura.com',
         'wss://api.riscura.com',
         'https://*.amazonaws.com',
       ],
-      frameSrc: [
-        "'self'",
-        'https://www.youtube.com',
-        'https://player.vimeo.com',
-      ],
+      frameSrc: ["'self'", 'https://www.youtube.com', 'https://player.vimeo.com'],
       mediaSrc: ["'self'", 'https:'],
       objectSrc: ["'none'"],
       childSrc: ["'self'"],
@@ -126,17 +118,15 @@ class CSPManager {
   private adjustForEnvironment(): void {
     if (this.config.environment === 'production') {
       // Remove unsafe directives in production
-      this.config.scriptSrc = this.config.scriptSrc.filter(
-        src => !src.includes('unsafe')
-      );
-      
+      this.config.scriptSrc = this.config.scriptSrc.filter((src) => !src.includes('unsafe'));
+
       // Add nonce-based script loading
       this.config.scriptSrc.push("'nonce-{NONCE}'");
       this.config.styleSrc.push("'nonce-{NONCE}'");
-      
+
       // Stricter policies for production
       this.config.connectSrc = this.config.connectSrc.filter(
-        src => !src.includes('localhost') && !src.includes('127.0.0.1')
+        (src) => !src.includes('localhost') && !src.includes('127.0.0.1')
       );
     }
 
@@ -148,7 +138,7 @@ class CSPManager {
         'https://localhost:*',
         'wss://localhost:*'
       );
-      
+
       // Allow webpack dev server
       this.config.scriptSrc.push('webpack:');
       this.config.connectSrc.push('webpack:');
@@ -175,9 +165,7 @@ class CSPManager {
 
     // Helper function to process directive values
     const processDirective = (values: string[]): string => {
-      return values
-        .map(value => value.replace('{NONCE}', currentNonce))
-        .join(' ');
+      return values.map((value) => value.replace('{NONCE}', currentNonce)).join(' ');
     };
 
     // Add all directives
@@ -310,7 +298,7 @@ class CSPManager {
     const byDirective: Record<string, number> = {};
     const byBlockedUri: Record<string, number> = {};
 
-    this.violations.forEach(violation => {
+    this.violations.forEach((violation) => {
       const directive = violation['csp-report']['violated-directive'];
       const blockedUri = violation['csp-report']['blocked-uri'];
 
@@ -359,31 +347,28 @@ class CSPManager {
 export const cspManager = new CSPManager();
 
 // Middleware function for Next.js
-export function cspMiddleware(
-  request: NextRequest,
-  config?: Partial<CSPConfig>
-): NextResponse {
+export function cspMiddleware(request: NextRequest, config?: Partial<CSPConfig>): NextResponse {
   const manager = config ? new CSPManager(config) : cspManager;
-  
+
   // Generate nonce for this request
   const nonce = manager.generateNonce();
-  
+
   // Get security headers
   const securityHeaders = manager.buildSecurityHeaders(nonce);
-  
+
   // Create response
   const response = NextResponse.next();
-  
+
   // Apply security headers
   Object.entries(securityHeaders).forEach(([key, value]) => {
     if (value) {
       response.headers.set(key, value);
     }
   });
-  
+
   // Add nonce to request for use in components
   response.headers.set('X-Nonce', nonce);
-  
+
   return response;
 }
 
@@ -394,7 +379,7 @@ export function useCSPNonce(): string {
     const metaTag = document.querySelector('meta[name="csp-nonce"]');
     return metaTag?.getAttribute('content') || '';
   }
-  
+
   // Server-side: would be provided by middleware
   return '';
 }
@@ -409,7 +394,7 @@ export function createNonceScript(
   const attrs = Object.entries(attributes)
     .map(([key, value]) => ` ${key}="${value}"`)
     .join('');
-  
+
   return `<script src="${src}"${nonceAttr}${attrs}></script>`;
 }
 
@@ -423,7 +408,7 @@ export function createNonceStyle(
   const attrs = Object.entries(attributes)
     .map(([key, value]) => ` ${key}="${value}"`)
     .join('');
-  
+
   return `<link rel="stylesheet" href="${href}"${nonceAttr}${attrs}>`;
 }
 
@@ -449,40 +434,24 @@ export const cspConfigs = {
       'webpack:',
     ],
   },
-  
+
   staging: {
     environment: 'staging' as const,
     enableViolationReporting: true,
-    scriptSrc: [
-      "'self'",
-      "'nonce-{NONCE}'",
-      'https://staging-cdn.riscura.com',
-    ],
-    connectSrc: [
-      "'self'",
-      'https://staging-api.riscura.com',
-      'wss://staging-api.riscura.com',
-    ],
+    scriptSrc: ["'self'", "'nonce-{NONCE}'", 'https://staging-cdn.riscura.com'],
+    connectSrc: ["'self'", 'https://staging-api.riscura.com', 'wss://staging-api.riscura.com'],
   },
-  
+
   production: {
     environment: 'production' as const,
     enableViolationReporting: true,
     upgradeInsecureRequests: true,
     blockAllMixedContent: true,
-    scriptSrc: [
-      "'self'",
-      "'nonce-{NONCE}'",
-      'https://cdn.riscura.com',
-    ],
-    connectSrc: [
-      "'self'",
-      'https://api.riscura.com',
-      'wss://api.riscura.com',
-    ],
+    scriptSrc: ["'self'", "'nonce-{NONCE}'", 'https://cdn.riscura.com'],
+    connectSrc: ["'self'", 'https://api.riscura.com', 'wss://api.riscura.com'],
     reportUri: 'https://monitoring.riscura.com/csp-report',
   },
 };
 
 // Export class for custom instances
-export { CSPManager }; 
+export { CSPManager };

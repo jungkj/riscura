@@ -137,9 +137,9 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
 
   // Risk item component
   const RiskItem: React.FC<{ risk: Risk; isSelected: boolean }> = ({ risk, isSelected }) => (
-    <DaisyTooltipProvider>
-      <DaisyTooltip>
-        <DaisyTooltipTrigger asChild>
+    <DaisyTooltipProvider />
+      <DaisyTooltip />
+        <DaisyTooltipTrigger asChild />
           <div
             draggable
             onDragStart={(e) => handleDragStart(e, risk)}
@@ -154,13 +154,13 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
             <div className="font-medium truncate">{risk.title}</div>
             <div className="text-xs opacity-75">{risk.owner}</div>
           </div>
-        </DaisyTooltipTrigger>
-        <DaisyTooltipContent>
+        </DaisyTooltipProvider>
+        <DaisyTooltipContent />
           <div className="max-w-xs">
             <div className="font-medium">{risk.title}</div>
             <div className="text-sm text-muted-foreground mt-1">{risk.description}</div>
             <div className="flex items-center gap-2 mt-2">
-              <DaisyBadge variant="outline">{risk.category}</DaisyBadge>
+              <DaisyBadge variant="outline">{risk.category}</DaisyTooltipContent>
               <DaisyBadge variant="secondary">{risk.status}</DaisyBadge>
             </div>
             <div className="text-xs mt-1">
@@ -195,8 +195,9 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
   );
 
   return (
-    <DaisyCard className={className}>
-      <DaisyCardHeader>
+    <DaisyCard className={className} >
+  <DaisyCardHeader />
+</DaisyCard>
         <div className="flex items-center justify-between">
           <div>
             <DaisyCardTitle>Risk Matrix</DaisyCardTitle>
@@ -204,18 +205,21 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
               Drag risks to reposition them based on likelihood and impact
             </p>
           </div>
-          <DaisyDialog>
-            <DaisyDialogTrigger asChild>
-              <DaisyButton variant="outline" size="sm">
-                <Maximize2 className="h-4 w-4 mr-2" />
+          <DaisyDialog />
+            <DaisyDialogTrigger asChild />
+              <DaisyButton variant="outline" size="sm" >
+  <Maximize2 className="h-4 w-4 mr-2" />
+</DaisyDialog>
                 Full View
               </DaisyButton>
             </DaisyDialogTrigger>
-            <DaisyDialogContent className="max-w-6xl">
-              <DaisyDialogHeader>
+            <DaisyDialogContent className="max-w-6xl" >
+  <DaisyDialogHeader />
+</DaisyDialogContent>
                 <DaisyDialogTitle>Risk Matrix - Full View</DaisyDialogTitle>
-                <DaisyDialogDescription>
-                  Interactive risk matrix showing all risks positioned by likelihood and impact
+                <DaisyDialogDescription >
+  Interactive risk matrix showing all risks positioned by likelihood and impact
+</DaisyDialogDescription>
                 </DaisyDialogDescription>
               </DaisyDialogHeader>
               <div className="mt-4">
@@ -225,8 +229,9 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
           </DaisyDialog>
         </div>
       
-      <DaisyCardContent>
-        <div className="space-y-4">
+      <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
           {/* Matrix Legend */}
           <MatrixLegend />
           
@@ -367,7 +372,7 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
             </div>
           </div>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 }; 

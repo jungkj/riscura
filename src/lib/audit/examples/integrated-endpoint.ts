@@ -29,7 +29,10 @@ const UpdateRiskSchema = CreateRiskSchema.partial();
 // EXAMPLE: GET /api/risks - List Risks with Access Logging
 // ============================================================================
 
-async function handleGetRisks(req: NextRequest, context: { user: any; organization: any; prisma: any }) {
+async function handleGetRisks(
+  req: NextRequest,
+  context: { user: any; organization: any; prisma: any }
+) {
   const { searchParams } = new URL(req.url);
   const page = parseInt(searchParams.get('page') || '1');
   const limit = parseInt(searchParams.get('limit') || '10');
@@ -76,7 +79,6 @@ async function handleGetRisks(req: NextRequest, context: { user: any; organizati
         pages: Math.ceil(totalCount / limit),
       },
     });
-
   } catch (error) {
     console.error('Risk list error:', error);
     // Error logging is automatically handled by the audit middleware
@@ -87,8 +89,8 @@ async function handleGetRisks(req: NextRequest, context: { user: any; organizati
 // Apply audit logging decorator that automatically logs access attempts
 export const GET = withAPI(
   withDataAudit(
-    'RISK',                    // Entity type
-    'READ',                    // Action
+    'RISK', // Entity type
+    'READ', // Action
     // Entity ID extractor function (optional for list endpoints)
     undefined
   )(handleGetRisks),
@@ -105,7 +107,10 @@ export const GET = withAPI(
 // EXAMPLE: POST /api/risks - Create Risk with Change Logging
 // ============================================================================
 
-async function handleCreateRisk(req: NextRequest, context: { user: any; organization: any; prisma: any }) {
+async function handleCreateRisk(
+  req: NextRequest,
+  context: { user: any; organization: any; prisma: any }
+) {
   try {
     const body = await req.json();
     const validatedData = CreateRiskSchema.parse(body);
@@ -151,14 +156,16 @@ async function handleCreateRisk(req: NextRequest, context: { user: any; organiza
       }
     );
 
-    return NextResponse.json({
-      success: true,
-      data: risk,
-    }, { status: 201 });
-
+    return NextResponse.json(
+      {
+        success: true,
+        data: risk,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Risk creation error:', error);
-    
+
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
@@ -180,8 +187,8 @@ async function handleCreateRisk(req: NextRequest, context: { user: any; organiza
 // Apply audit logging decorator for create operations
 export const POST = withAPI(
   withDataAudit(
-    'RISK',                    // Entity type
-    'CREATE',                  // Action
+    'RISK', // Entity type
+    'CREATE', // Action
     // Entity ID extractor - for create operations, extract from response
     (req, context) => context?.createdId || 'unknown'
   )(handleCreateRisk),
@@ -198,7 +205,10 @@ export const POST = withAPI(
 // EXAMPLE: PUT /api/risks/[id] - Update Risk with Change Tracking
 // ============================================================================
 
-async function handleUpdateRisk(req: NextRequest, context: { params: { id: string }; user: any; organization: any; prisma: any }) {
+async function handleUpdateRisk(
+  req: NextRequest,
+  context: { params: { id: string }; user: any; organization: any; prisma: any }
+) {
   const riskId = context.params.id;
 
   try {
@@ -250,7 +260,9 @@ async function handleUpdateRisk(req: NextRequest, context: { params: { id: strin
 
     // Track detailed changes for audit
     const changedFields = Object.keys(validatedData).filter(
-      key => JSON.stringify(currentRisk[key as keyof typeof currentRisk]) !== JSON.stringify(validatedData[key as keyof typeof validatedData])
+      (key) =>
+        JSON.stringify(currentRisk[key as keyof typeof currentRisk]) !==
+        JSON.stringify(validatedData[key as keyof typeof validatedData])
     );
 
     if (changedFields.length > 0) {
@@ -262,13 +274,18 @@ async function handleUpdateRisk(req: NextRequest, context: { params: { id: strin
         context.user.id,
         context.organization.id,
         {
-          before: Object.fromEntries(changedFields.map(field => [field, currentRisk[field as keyof typeof currentRisk]])),
-          after: Object.fromEntries(changedFields.map(field => [field, updatedRisk[field as keyof typeof updatedRisk]])),
+          before: Object.fromEntries(
+            changedFields.map((field) => [field, currentRisk[field as keyof typeof currentRisk]])
+          ),
+          after: Object.fromEntries(
+            changedFields.map((field) => [field, updatedRisk[field as keyof typeof updatedRisk]])
+          ),
           fields: changedFields,
           changeType: 'UPDATE',
         },
         {
-          significantChange: changedFields.includes('likelihood') || changedFields.includes('impact'),
+          significantChange:
+            changedFields.includes('likelihood') || changedFields.includes('impact'),
           riskScoreChanged: currentRisk.riskScore !== updatedRisk.riskScore,
           previousRiskScore: currentRisk.riskScore,
           newRiskScore: updatedRisk.riskScore,
@@ -280,10 +297,9 @@ async function handleUpdateRisk(req: NextRequest, context: { params: { id: strin
       success: true,
       data: updatedRisk,
     });
-
   } catch (error) {
     console.error('Risk update error:', error);
-    
+
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
@@ -305,8 +321,8 @@ async function handleUpdateRisk(req: NextRequest, context: { params: { id: strin
 // Apply audit logging decorator for update operations
 export const PUT = withAPI(
   withDataAudit(
-    'RISK',                    // Entity type
-    'UPDATE',                  // Action
+    'RISK', // Entity type
+    'UPDATE', // Action
     // Entity ID extractor from URL parameters
     (req, context) => context?.params?.id || 'unknown'
   )(handleUpdateRisk),
@@ -323,7 +339,10 @@ export const PUT = withAPI(
 // EXAMPLE: DELETE /api/risks/[id] - Delete Risk with Audit Trail
 // ============================================================================
 
-async function handleDeleteRisk(req: NextRequest, context: { params: { id: string }; user: any; organization: any; prisma: any }) {
+async function handleDeleteRisk(
+  req: NextRequest,
+  context: { params: { id: string }; user: any; organization: any; prisma: any }
+) {
   const riskId = context.params.id;
 
   try {
@@ -379,7 +398,6 @@ async function handleDeleteRisk(req: NextRequest, context: { params: { id: strin
       success: true,
       message: 'Risk deleted successfully',
     });
-
   } catch (error) {
     console.error('Risk deletion error:', error);
     throw error;
@@ -389,8 +407,8 @@ async function handleDeleteRisk(req: NextRequest, context: { params: { id: strin
 // Apply audit logging decorator for delete operations (high severity)
 export const DELETE = withAPI(
   withDataAudit(
-    'RISK',                    // Entity type
-    'DELETE',                  // Action
+    'RISK', // Entity type
+    'DELETE', // Action
     // Entity ID extractor from URL parameters
     (req, context) => context?.params?.id || 'unknown'
   )(handleDeleteRisk),
@@ -448,17 +466,10 @@ async function handleLogin(req: NextRequest) {
     const token = generateAuthToken(user);
 
     // Log successful login
-    await logAuthEvent(
-      context.prisma,
-      'LOGIN',
-      user.id,
-      user.organizationId,
-      req,
-      {
-        loginMethod: 'PASSWORD',
-        sessionDuration: '24h',
-      }
-    );
+    await logAuthEvent(context.prisma, 'LOGIN', user.id, user.organizationId, req, {
+      loginMethod: 'PASSWORD',
+      sessionDuration: '24h',
+    });
 
     return NextResponse.json({
       success: true,
@@ -472,7 +483,6 @@ async function handleLogin(req: NextRequest) {
         token,
       },
     });
-
   } catch (error) {
     console.error('Login error:', error);
     throw error;
@@ -480,19 +490,16 @@ async function handleLogin(req: NextRequest) {
 }
 
 // Apply authentication audit logging
-export const POST_LOGIN = withAPI(
-  withAuthAudit('LOGIN')(handleLogin),
-  {
-    auth: false, // This IS the auth endpoint
-    rateLimit: {
-      requests: 5,
-      window: '15m',
-    },
-    tags: ['Authentication'],
-    summary: 'User Login',
-    description: 'Authenticate user with comprehensive audit logging',
-  }
-);
+export const POST_LOGIN = withAPI(withAuthAudit('LOGIN')(handleLogin), {
+  auth: false, // This IS the auth endpoint
+  rateLimit: {
+    requests: 5,
+    window: '15m',
+  },
+  tags: ['Authentication'],
+  summary: 'User Login',
+  description: 'Authenticate user with comprehensive audit logging',
+});
 
 // ============================================================================
 // UTILITY FUNCTIONS (would be in separate files in real implementation)
@@ -514,14 +521,14 @@ function generateAuthToken(user: any): string {
 
 /**
  * This example demonstrates:
- * 
+ *
  * 1. **Automatic Audit Logging**: Using decorators for transparent audit logging
  * 2. **Manual Audit Logging**: For complex scenarios requiring detailed change tracking
  * 3. **Different Audit Types**: Data operations, authentication, access control
  * 4. **Change Tracking**: Before/after state capture for compliance
  * 5. **Error Logging**: Automatic capture of failures and exceptions
  * 6. **Compliance Features**: Retention periods, encryption flags, compliance tags
- * 
+ *
  * Key Benefits:
  * - Non-intrusive: Audit logging doesn't clutter business logic
  * - Comprehensive: Captures all necessary data for compliance

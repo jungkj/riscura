@@ -10,7 +10,7 @@ import {
   DeliveryChannel,
   EscalationRule,
   ActionItem,
-  UserContext
+  UserContext,
 } from '@/types/proactive-monitoring.types';
 import { Risk, Control } from '@/types';
 import { generateId } from '@/lib/utils';
@@ -82,7 +82,12 @@ interface NotificationAnalytics {
 // Enhanced AI notification interfaces
 interface AINotificationRequest {
   userId: string;
-  triggerType: 'risk_change' | 'compliance_gap' | 'trend_alert' | 'insight_available' | 'deadline_approaching';
+  triggerType:
+    | 'risk_change'
+    | 'compliance_gap'
+    | 'trend_alert'
+    | 'insight_available'
+    | 'deadline_approaching';
   entityId: string;
   entityType: 'risk' | 'control' | 'compliance' | 'process';
   context: Record<string, unknown>;
@@ -190,7 +195,7 @@ export class SmartNotificationService {
       for (const risk of risks) {
         // Analyze risk for alert-worthy conditions
         const riskAnalysis = await this.aiService.analyzeRiskForAlert(risk);
-        
+
         if (!riskAnalysis.requiresAlert) continue;
 
         // Get affected users
@@ -199,15 +204,19 @@ export class SmartNotificationService {
         for (const userId of affectedUsers) {
           const userContext = await this.userService.getUserContext(userId);
           const contextualData = await this.buildContextualData(userId, userContext);
-          
+
           // Generate AI insight for this specific risk and user
-          const aiInsight = await this.aiService.generateRiskInsight(risk, userContext, riskAnalysis);
-          
+          const aiInsight = await this.aiService.generateRiskInsight(
+            risk,
+            userContext,
+            riskAnalysis
+          );
+
           // Calculate intelligent priority
           const intelligentPriority = await this.calculateIntelligentPriority(
-            risk, 
-            userContext, 
-            riskAnalysis, 
+            risk,
+            userContext,
+            riskAnalysis,
             'risk_alert'
           );
 
@@ -238,7 +247,10 @@ export class SmartNotificationService {
             autoExpire: true,
             expiresAt: this.calculateExpirationDate('risk_alert', intelligentPriority.calculated),
             suppressionRules: await this.getSuppressionRules(userId, 'risk_alert'),
-            deliveryChannels: await this.getDeliveryChannels(userId, intelligentPriority.calculated),
+            deliveryChannels: await this.getDeliveryChannels(
+              userId,
+              intelligentPriority.calculated
+            ),
             personalizedContent,
             aggregatedWith: [],
             metadata: {
@@ -246,8 +258,8 @@ export class SmartNotificationService {
               riskCategory: risk.category,
               analysisId: riskAnalysis.id,
               generatedAt: new Date(),
-              actionItems
-            }
+              actionItems,
+            },
           };
 
           notifications.push(notification);
@@ -258,7 +270,6 @@ export class SmartNotificationService {
       const aggregatedNotifications = await this.processNotificationAggregation(notifications);
 
       return aggregatedNotifications;
-
     } catch (error) {
       console.error('Error generating risk alerts:', error);
       throw new Error('Failed to generate risk alerts');
@@ -275,7 +286,7 @@ export class SmartNotificationService {
       for (const control of controls) {
         // Check if control needs attention (testing due, effectiveness declining, etc.)
         const controlAnalysis = await this.aiService.analyzeControlForReminder(control);
-        
+
         if (!controlAnalysis.requiresReminder) continue;
 
         // Get responsible users
@@ -284,15 +295,19 @@ export class SmartNotificationService {
         for (const userId of responsibleUsers) {
           const userContext = await this.userService.getUserContext(userId);
           const contextualData = await this.buildContextualData(userId, userContext);
-          
+
           // Generate AI insight
-          const aiInsight = await this.aiService.generateControlInsight(control, userContext, controlAnalysis);
-          
+          const aiInsight = await this.aiService.generateControlInsight(
+            control,
+            userContext,
+            controlAnalysis
+          );
+
           // Calculate priority
           const intelligentPriority = await this.calculateIntelligentPriority(
-            control, 
-            userContext, 
-            controlAnalysis, 
+            control,
+            userContext,
+            controlAnalysis,
             'control_reminder'
           );
 
@@ -305,7 +320,11 @@ export class SmartNotificationService {
           );
 
           // Create action items
-          const actionItems = await this.generateControlActionItems(control, controlAnalysis, userContext);
+          const actionItems = await this.generateControlActionItems(
+            control,
+            controlAnalysis,
+            userContext
+          );
 
           const notification: SmartNotification = {
             id: generateId('smart-notification'),
@@ -321,17 +340,23 @@ export class SmartNotificationService {
             intelligentPriority,
             dismissible: true,
             autoExpire: true,
-            expiresAt: this.calculateExpirationDate('control_reminder', intelligentPriority.calculated),
+            expiresAt: this.calculateExpirationDate(
+              'control_reminder',
+              intelligentPriority.calculated
+            ),
             suppressionRules: await this.getSuppressionRules(userId, 'control_reminder'),
-            deliveryChannels: await this.getDeliveryChannels(userId, intelligentPriority.calculated),
+            deliveryChannels: await this.getDeliveryChannels(
+              userId,
+              intelligentPriority.calculated
+            ),
             personalizedContent,
             aggregatedWith: [],
             metadata: {
               controlId: control.id,
               analysisId: controlAnalysis.id,
               actionItems,
-              generatedAt: new Date()
-            }
+              generatedAt: new Date(),
+            },
           };
 
           notifications.push(notification);
@@ -339,7 +364,6 @@ export class SmartNotificationService {
       }
 
       return notifications;
-
     } catch (error) {
       console.error('Error creating control reminders:', error);
       throw new Error('Failed to create control reminders');
@@ -349,14 +373,16 @@ export class SmartNotificationService {
   /**
    * Identify compliance gaps and generate alerts
    */
-  async identifyComplianceGaps(requirements: ComplianceRequirement[]): Promise<SmartNotification[]> {
+  async identifyComplianceGaps(
+    requirements: ComplianceRequirement[]
+  ): Promise<SmartNotification[]> {
     try {
       const notifications: SmartNotification[] = [];
 
       for (const requirement of requirements) {
         // Analyze compliance status
         const complianceAnalysis = await this.aiService.analyzeComplianceRequirement(requirement);
-        
+
         if (complianceAnalysis.status === 'compliant') continue;
 
         // Get relevant users based on requirement scope
@@ -365,19 +391,19 @@ export class SmartNotificationService {
         for (const userId of relevantUsers) {
           const userContext = await this.userService.getUserContext(userId);
           const contextualData = await this.buildContextualData(userId, userContext);
-          
+
           // Generate AI insight
           const aiInsight = await this.aiService.generateComplianceInsight(
-            requirement, 
-            userContext, 
+            requirement,
+            userContext,
             complianceAnalysis
           );
-          
+
           // Calculate priority (compliance gaps are typically high priority)
           const intelligentPriority = await this.calculateIntelligentPriority(
-            requirement, 
-            userContext, 
-            complianceAnalysis, 
+            requirement,
+            userContext,
+            complianceAnalysis,
             'compliance_gap'
           );
 
@@ -391,8 +417,8 @@ export class SmartNotificationService {
 
           // Create action items
           const actionItems = await this.generateComplianceActionItems(
-            requirement, 
-            complianceAnalysis, 
+            requirement,
+            complianceAnalysis,
             userContext
           );
 
@@ -411,7 +437,10 @@ export class SmartNotificationService {
             dismissible: false, // Compliance gaps are typically non-dismissible
             autoExpire: false,
             suppressionRules: [], // No suppression for compliance
-            deliveryChannels: await this.getDeliveryChannels(userId, intelligentPriority.calculated),
+            deliveryChannels: await this.getDeliveryChannels(
+              userId,
+              intelligentPriority.calculated
+            ),
             personalizedContent,
             aggregatedWith: [],
             metadata: {
@@ -420,8 +449,8 @@ export class SmartNotificationService {
               gapSeverity: complianceAnalysis.gap?.severity,
               deadline: requirement.deadline,
               actionItems,
-              generatedAt: new Date()
-            }
+              generatedAt: new Date(),
+            },
           };
 
           notifications.push(notification);
@@ -429,7 +458,6 @@ export class SmartNotificationService {
       }
 
       return notifications;
-
     } catch (error) {
       console.error('Error identifying compliance gaps:', error);
       throw new Error('Failed to identify compliance gaps');
@@ -449,20 +477,24 @@ export class SmartNotificationService {
       for (const [userId, activities] of userActivities.entries()) {
         // Analyze workflow patterns
         const workflowAnalysis = await this.aiService.analyzeWorkflowEfficiency(activities);
-        
+
         if (!workflowAnalysis.hasImprovementOpportunity) continue;
 
         const userContext = await this.userService.getUserContext(userId);
         const contextualData = await this.buildContextualData(userId, userContext);
-        
+
         // Generate AI insight
-        const aiInsight = await this.aiService.generateWorkflowInsight(activities, userContext, workflowAnalysis);
-        
+        const aiInsight = await this.aiService.generateWorkflowInsight(
+          activities,
+          userContext,
+          workflowAnalysis
+        );
+
         // Calculate priority
         const intelligentPriority = await this.calculateIntelligentPriority(
-          activities, 
-          userContext, 
-          workflowAnalysis, 
+          activities,
+          userContext,
+          workflowAnalysis,
           'workflow_improvement'
         );
 
@@ -491,7 +523,10 @@ export class SmartNotificationService {
           intelligentPriority,
           dismissible: true,
           autoExpire: true,
-          expiresAt: this.calculateExpirationDate('workflow_suggestion', intelligentPriority.calculated),
+          expiresAt: this.calculateExpirationDate(
+            'workflow_suggestion',
+            intelligentPriority.calculated
+          ),
           suppressionRules: await this.getSuppressionRules(userId, 'workflow_suggestion'),
           deliveryChannels: await this.getDeliveryChannels(userId, intelligentPriority.calculated),
           personalizedContent,
@@ -501,15 +536,14 @@ export class SmartNotificationService {
             improvementType: workflowAnalysis.improvementType,
             potentialTimeSavings: workflowAnalysis.potentialTimeSavings,
             actionItems,
-            generatedAt: new Date()
-          }
+            generatedAt: new Date(),
+          },
         };
 
         notifications.push(notification);
       }
 
       return notifications;
-
     } catch (error) {
       console.error('Error suggesting workflow improvements:', error);
       throw new Error('Failed to suggest workflow improvements');
@@ -525,13 +559,15 @@ export class SmartNotificationService {
 
       // Check suppression rules
       if (await this.isNotificationSuppressed(notification)) {
-        return [{
-          notificationId: notification.id,
-          channel: 'none' as NotificationChannel,
-          status: 'suppressed',
-          timestamp: new Date(),
-          metadata: { reason: 'suppression_rule_matched' }
-        }];
+        return [
+          {
+            notificationId: notification.id,
+            channel: 'none' as NotificationChannel,
+            status: 'suppressed',
+            timestamp: new Date(),
+            metadata: { reason: 'suppression_rule_matched' },
+          },
+        ];
       }
 
       // Process delivery through each configured channel
@@ -555,7 +591,6 @@ export class SmartNotificationService {
           if (channelConfig.escalation?.enabled && deliveryResult.status === 'failed') {
             await this.handleEscalation(notification, channelConfig.escalation);
           }
-
         } catch (error) {
           console.error(`Error delivering to ${channelConfig.channel}:`, error);
           results.push({
@@ -563,7 +598,7 @@ export class SmartNotificationService {
             channel: channelConfig.channel,
             status: 'failed',
             timestamp: new Date(),
-            error: error instanceof Error ? error.message : 'Unknown error'
+            error: error instanceof Error ? error.message : 'Unknown error',
           });
         }
       }
@@ -575,12 +610,11 @@ export class SmartNotificationService {
       await this.eventService.emit('notification:delivered', {
         notificationId: notification.id,
         userId: notification.userId,
-        channels: results.map(r => r.channel),
-        timestamp: new Date()
+        channels: results.map((r) => r.channel),
+        timestamp: new Date(),
       });
 
       return results;
-
     } catch (error) {
       console.error('Error sending notification:', error);
       throw new Error('Failed to send notification');
@@ -596,7 +630,7 @@ export class SmartNotificationService {
       if (userQueue.length === 0) return;
 
       const userPreferences = await this.getUserPreferences(userId);
-      
+
       // Check if batching is enabled
       if (userPreferences.notificationFrequency === 'batched') {
         await this.processBatchedNotifications(userId, userQueue);
@@ -611,7 +645,6 @@ export class SmartNotificationService {
 
       // Clear processed queue
       this.notificationQueue.delete(userId);
-
     } catch (error) {
       console.error(`Error processing notification queue for user ${userId}:`, error);
     }
@@ -620,20 +653,22 @@ export class SmartNotificationService {
   /**
    * Update notification preferences
    */
-  async updateNotificationPreferences(userId: string, preferences: Partial<UserPreferences>): Promise<void> {
+  async updateNotificationPreferences(
+    userId: string,
+    preferences: Partial<UserPreferences>
+  ): Promise<void> {
     try {
       const currentPreferences = await this.getUserPreferences(userId);
       const updatedPreferences = { ...currentPreferences, ...preferences };
-      
+
       await this.cacheService.set(`user_preferences:${userId}`, updatedPreferences);
-      
+
       // Emit preferences updated event
       await this.eventService.emit('notification:preferences_updated', {
         userId,
         preferences: updatedPreferences,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
-
     } catch (error) {
       console.error('Error updating notification preferences:', error);
       throw new Error('Failed to update notification preferences');
@@ -643,7 +678,10 @@ export class SmartNotificationService {
   /**
    * Get notification analytics for a user
    */
-  async getNotificationAnalytics(userId: string, timeRange?: { start: Date; end: Date }): Promise<NotificationAnalytics[]> {
+  async getNotificationAnalytics(
+    userId: string,
+    timeRange?: { start: Date; end: Date }
+  ): Promise<NotificationAnalytics[]> {
     try {
       return await this.analyticsService.getNotificationAnalytics(userId, timeRange);
     } catch (error) {
@@ -654,7 +692,10 @@ export class SmartNotificationService {
 
   // Private helper methods
 
-  private async buildContextualData(userId: string, userContext: UserContext): Promise<ContextualData> {
+  private async buildContextualData(
+    userId: string,
+    userContext: UserContext
+  ): Promise<ContextualData> {
     const preferences = await this.getUserPreferences(userId);
     const workingHours = await this.getWorkingHours(userId);
     const currentActivity = await this.getCurrentActivity(userId);
@@ -667,7 +708,7 @@ export class SmartNotificationService {
       workingHours: workingHours as any, // Type assertion needed for service integration
       currentActivity,
       relevantEntities,
-      historicalContext: historicalContext as any // Type assertion needed for service integration
+      historicalContext: historicalContext as any, // Type assertion needed for service integration
     };
   }
 
@@ -692,7 +733,7 @@ export class SmartNotificationService {
       relevanceScore: priorityAnalysis.relevanceScore,
       impactScore: priorityAnalysis.impactScore,
       contextScore: priorityAnalysis.contextScore,
-      personalizedScore: priorityAnalysis.personalizedScore
+      personalizedScore: priorityAnalysis.personalizedScore,
     };
   }
 
@@ -702,8 +743,11 @@ export class SmartNotificationService {
     userContext: UserContext,
     aiInsight: unknown
   ): Promise<PersonalizedContent> {
-    const template = await this.templateService.getTemplate(notificationType, userContext.preferences.language);
-    
+    const template = await this.templateService.getTemplate(
+      notificationType,
+      userContext.preferences.language
+    );
+
     return await this.aiService.generatePersonalizedContent(
       template,
       entity,
@@ -733,7 +777,12 @@ export class SmartNotificationService {
     analysis: unknown,
     userContext: UserContext
   ): Promise<ActionItem[]> {
-    return await this.aiService.generateActionItems('compliance', requirement, analysis, userContext);
+    return await this.aiService.generateActionItems(
+      'compliance',
+      requirement,
+      analysis,
+      userContext
+    );
   }
 
   private async generateWorkflowActionItems(
@@ -746,7 +795,7 @@ export class SmartNotificationService {
   private calculateExpirationDate(notificationType: string, priority: InsightPriority): Date {
     const now = new Date();
     const expirationHours = this.getExpirationHours(notificationType, priority);
-    
+
     return new Date(now.getTime() + expirationHours * 60 * 60 * 1000);
   }
 
@@ -755,13 +804,15 @@ export class SmartNotificationService {
       risk_alert: { critical: 24, high: 48, medium: 72, low: 168, info: 168 },
       control_reminder: { critical: 12, high: 24, medium: 48, low: 168, info: 168 },
       compliance_gap: { critical: 6, high: 12, medium: 24, low: 48, info: 48 },
-      workflow_suggestion: { critical: 168, high: 168, medium: 336, low: 672, info: 672 }
+      workflow_suggestion: { critical: 168, high: 168, medium: 336, low: 672, info: 672 },
     };
 
     return expirationMap[notificationType]?.[priority] || 72;
   }
 
-  private async processNotificationAggregation(notifications: SmartNotification[]): Promise<SmartNotification[]> {
+  private async processNotificationAggregation(
+    notifications: SmartNotification[]
+  ): Promise<SmartNotification[]> {
     // Group related notifications and aggregate them
     const grouped = this.groupRelatedNotifications(notifications);
     const aggregated: SmartNotification[] = [];
@@ -772,12 +823,12 @@ export class SmartNotificationService {
       } else {
         // Create aggregated notification
         const primaryNotification = group[0];
-        const relatedIds = group.slice(1).map(n => n.id);
-        
+        const relatedIds = group.slice(1).map((n) => n.id);
+
         primaryNotification.aggregatedWith = relatedIds;
         primaryNotification.personalizedContent.title = `${group.length} Related Alerts`;
         primaryNotification.personalizedContent.summary = `Multiple items require your attention`;
-        
+
         aggregated.push(primaryNotification);
       }
     }
@@ -788,40 +839,40 @@ export class SmartNotificationService {
   private groupRelatedNotifications(notifications: SmartNotification[]): SmartNotification[][] {
     // Simple grouping by user and type for now
     const groups = new Map<string, SmartNotification[]>();
-    
+
     for (const notification of notifications) {
       const key = `${notification.userId}-${notification.type}`;
       const group = groups.get(key) || [];
       group.push(notification);
       groups.set(key, group);
     }
-    
+
     return Array.from(groups.values());
   }
 
   private groupActivitiesByUser(activities: UserActivity[]): Map<string, UserActivity[]> {
     const grouped = new Map<string, UserActivity[]>();
-    
+
     for (const activity of activities) {
       const userActivities = grouped.get(activity.userId) || [];
       userActivities.push(activity);
       grouped.set(activity.userId, userActivities);
     }
-    
+
     return grouped;
   }
 
   private async isNotificationSuppressed(notification: SmartNotification): Promise<boolean> {
     const suppressionKey = `${notification.userId}-${notification.type}`;
     const suppressedUntil = this.suppressionCache.get(suppressionKey);
-    
+
     if (suppressedUntil && suppressedUntil > new Date()) {
       return true;
     }
 
     // Check dynamic suppression rules
     for (const rule of notification.suppressionRules) {
-      if (rule.enabled && await this.evaluateSuppressionRule(rule, notification)) {
+      if (rule.enabled && (await this.evaluateSuppressionRule(rule, notification))) {
         return true;
       }
     }
@@ -829,26 +880,32 @@ export class SmartNotificationService {
     return false;
   }
 
-  private async evaluateSuppressionRule(rule: SuppressionRule, notification: SmartNotification): Promise<boolean> {
+  private async evaluateSuppressionRule(
+    rule: SuppressionRule,
+    notification: SmartNotification
+  ): Promise<boolean> {
     // Evaluate suppression rule condition
     return await this.aiService.evaluateCondition(rule.condition, notification);
   }
 
   private async deliverToChannel(
-    notification: SmartNotification, 
+    notification: SmartNotification,
     channelConfig: DeliveryChannel
   ): Promise<DeliveryResult> {
     return await this.deliveryService.deliver(notification, channelConfig);
   }
 
-  private async handleEscalation(notification: SmartNotification, escalation: EscalationRule): Promise<void> {
+  private async handleEscalation(
+    notification: SmartNotification,
+    escalation: EscalationRule
+  ): Promise<void> {
     // Implement escalation logic
     await this.deliveryService.escalate(notification, escalation);
   }
 
   private async trackDeliveryMetrics(
-    notification: SmartNotification, 
-    channel: DeliveryChannel, 
+    notification: SmartNotification,
+    channel: DeliveryChannel,
     result: DeliveryResult
   ): Promise<void> {
     const analytics: NotificationAnalytics = {
@@ -856,43 +913,52 @@ export class SmartNotificationService {
       userId: notification.userId,
       metrics: {
         deliveryTime: Date.now() - notification.timestamp.getTime(),
-        effectiveness: result.status === 'sent' ? 100 : 0
+        effectiveness: result.status === 'sent' ? 100 : 0,
       },
       interactions: {
         viewed: false,
         dismissed: false,
         acted: false,
-        escalated: false
-      }
+        escalated: false,
+      },
     };
 
     this.deliveryMetrics.set(notification.id, analytics);
     await this.analyticsService.recordDeliveryMetrics(analytics);
   }
 
-  private async updateNotificationStatus(notification: SmartNotification, results: DeliveryResult[]): Promise<void> {
-    const successfulDeliveries = results.filter(r => r.status === 'sent');
-    
+  private async updateNotificationStatus(
+    notification: SmartNotification,
+    results: DeliveryResult[]
+  ): Promise<void> {
+    const successfulDeliveries = results.filter((r) => r.status === 'sent');
+
     if (successfulDeliveries.length > 0) {
       await this.cacheService.set(`notification:${notification.id}`, {
         ...notification,
         deliveryStatus: 'delivered',
-        deliveredAt: new Date()
+        deliveredAt: new Date(),
       });
     }
   }
 
-  private async processBatchedNotifications(userId: string, notifications: SmartNotification[]): Promise<void> {
+  private async processBatchedNotifications(
+    userId: string,
+    notifications: SmartNotification[]
+  ): Promise<void> {
     // Group notifications by priority and send in batches
     const batches = this.createNotificationBatches(notifications);
-    
+
     for (const batch of batches) {
       const batchNotification = await this.createBatchNotification(userId, batch);
       await this.sendNotification(batchNotification);
     }
   }
 
-  private async processDigestNotifications(userId: string, notifications: SmartNotification[]): Promise<void> {
+  private async processDigestNotifications(
+    userId: string,
+    notifications: SmartNotification[]
+  ): Promise<void> {
     // Create daily digest
     const digestNotification = await this.createDigestNotification(userId, notifications);
     await this.sendNotification(digestNotification);
@@ -900,10 +966,10 @@ export class SmartNotificationService {
 
   private createNotificationBatches(notifications: SmartNotification[]): SmartNotification[][] {
     // Simple batching by priority
-    const critical = notifications.filter(n => n.priority === 'critical');
-    const high = notifications.filter(n => n.priority === 'high');
-    const medium = notifications.filter(n => n.priority === 'medium');
-    const low = notifications.filter(n => n.priority === 'low' || n.priority === 'info');
+    const critical = notifications.filter((n) => n.priority === 'critical');
+    const high = notifications.filter((n) => n.priority === 'high');
+    const medium = notifications.filter((n) => n.priority === 'medium');
+    const low = notifications.filter((n) => n.priority === 'low' || n.priority === 'info');
 
     const batches: SmartNotification[][] = [];
     if (critical.length > 0) batches.push(critical);
@@ -914,7 +980,10 @@ export class SmartNotificationService {
     return batches;
   }
 
-  private async createBatchNotification(userId: string, batch: SmartNotification[]): Promise<SmartNotification> {
+  private async createBatchNotification(
+    userId: string,
+    batch: SmartNotification[]
+  ): Promise<SmartNotification> {
     const userContext = await this.userService.getUserContext(userId);
     const contextualData = await this.buildContextualData(userId, userContext);
 
@@ -936,7 +1005,7 @@ export class SmartNotificationService {
         relevanceScore: 70,
         impactScore: 60,
         contextScore: 80,
-        personalizedScore: 75
+        personalizedScore: 75,
       },
       dismissible: true,
       autoExpire: true,
@@ -946,21 +1015,24 @@ export class SmartNotificationService {
       personalizedContent: {
         title: `${batch.length} Items Require Attention`,
         summary: `You have ${batch.length} notifications`,
-        details: batch.map(n => n.personalizedContent.summary).join('\n'),
+        details: batch.map((n) => n.personalizedContent.summary).join('\n'),
         recommendations: [],
         tone: 'professional',
-        complexity: 'simple'
+        complexity: 'simple',
       },
-      aggregatedWith: batch.map(n => n.id),
+      aggregatedWith: batch.map((n) => n.id),
       metadata: {
         batchSize: batch.length,
         batchType: 'priority',
-        originalNotifications: batch.map(n => n.id)
-      }
+        originalNotifications: batch.map((n) => n.id),
+      },
     };
   }
 
-  private async createDigestNotification(userId: string, notifications: SmartNotification[]): Promise<SmartNotification> {
+  private async createDigestNotification(
+    userId: string,
+    notifications: SmartNotification[]
+  ): Promise<SmartNotification> {
     const userContext = await this.userService.getUserContext(userId);
     const contextualData = await this.buildContextualData(userId, userContext);
 
@@ -988,7 +1060,7 @@ export class SmartNotificationService {
         relevanceScore: 80,
         impactScore: 50,
         contextScore: 90,
-        personalizedScore: 85
+        personalizedScore: 85,
       },
       dismissible: true,
       autoExpire: true,
@@ -1001,24 +1073,24 @@ export class SmartNotificationService {
         details: this.createDigestContent(notifications),
         recommendations: [],
         tone: 'professional',
-        complexity: 'detailed'
+        complexity: 'detailed',
       },
-      aggregatedWith: notifications.map(n => n.id),
+      aggregatedWith: notifications.map((n) => n.id),
       metadata: {
         digestDate: new Date().toISOString().split('T')[0],
         notificationCount: notifications.length,
-        categories: this.getDigestCategories(notifications)
-      }
+        categories: this.getDigestCategories(notifications),
+      },
     };
   }
 
   private createDigestContent(notifications: SmartNotification[]): string {
     const sections = [
-      '📊 Today\'s Summary:',
+      "📊 Today's Summary:",
       `• ${notifications.length} total notifications`,
-      `• ${notifications.filter(n => n.priority === 'critical' || n.priority === 'high').length} high priority items`,
+      `• ${notifications.filter((n) => n.priority === 'critical' || n.priority === 'high').length} high priority items`,
       '',
-      '🔍 Key Items:'
+      '🔍 Key Items:',
     ];
 
     // Add top 5 most important notifications
@@ -1038,16 +1110,16 @@ export class SmartNotificationService {
 
   private getDigestCategories(notifications: SmartNotification[]): string[] {
     const categories = new Set<string>();
-    
+
     for (const notification of notifications) {
       categories.add(notification.type);
     }
-    
+
     return Array.from(categories);
   }
 
   private async delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   // Service integration helper methods
@@ -1059,7 +1131,9 @@ export class SmartNotificationService {
     return await this.userService.getUsersForEntity('control', control.id);
   }
 
-  private async getUsersForComplianceRequirement(requirement: ComplianceRequirement): Promise<string[]> {
+  private async getUsersForComplianceRequirement(
+    requirement: ComplianceRequirement
+  ): Promise<string[]> {
     return await this.userService.getUsersForEntity('compliance', requirement.id);
   }
 
@@ -1097,26 +1171,63 @@ export class SmartNotificationService {
     };
   }
 
-  private async getSuppressionRules(userId: string, notificationType: string): Promise<SuppressionRule[]> {
+  private async getSuppressionRules(
+    userId: string,
+    notificationType: string
+  ): Promise<SuppressionRule[]> {
     return await this.userService.getSuppressionRules(userId, notificationType);
   }
 
-  private async getDeliveryChannels(userId: string, priority: InsightPriority): Promise<DeliveryChannel[]> {
+  private async getDeliveryChannels(
+    userId: string,
+    priority: InsightPriority
+  ): Promise<DeliveryChannel[]> {
     return await this.userService.getDeliveryChannels(userId, priority);
   }
 }
 
 // Service interfaces
 interface AIInsightService {
-  analyzeRiskForAlert(risk: Risk): Promise<{ requiresAlert: boolean; id: string; severity: string }>;
-  analyzeControlForReminder(control: Control): Promise<{ requiresReminder: boolean; id: string; type: string }>;
-  analyzeComplianceRequirement(requirement: ComplianceRequirement): Promise<{ status: string; gap?: { severity: string } }>;
-  analyzeWorkflowEfficiency(activities: UserActivity[]): Promise<{ hasImprovementOpportunity: boolean; improvementType: string; potentialTimeSavings: number }>;
-  generateRiskInsight(risk: Risk, context: UserContext, analysis: unknown): Promise<{ insight: string }>;
-  generateControlInsight(control: Control, context: UserContext, analysis: unknown): Promise<{ insight: string }>;
-  generateComplianceInsight(requirement: ComplianceRequirement, context: UserContext, analysis: unknown): Promise<{ insight: string }>;
-  generateWorkflowInsight(activities: UserActivity[], context: UserContext, analysis: unknown): Promise<{ insight: string }>;
-  calculatePriority(entity: unknown, context: UserContext, analysis: unknown, type: string): Promise<{
+  analyzeRiskForAlert(
+    risk: Risk
+  ): Promise<{ requiresAlert: boolean; id: string; severity: string }>;
+  analyzeControlForReminder(
+    control: Control
+  ): Promise<{ requiresReminder: boolean; id: string; type: string }>;
+  analyzeComplianceRequirement(
+    requirement: ComplianceRequirement
+  ): Promise<{ status: string; gap?: { severity: string } }>;
+  analyzeWorkflowEfficiency(activities: UserActivity[]): Promise<{
+    hasImprovementOpportunity: boolean;
+    improvementType: string;
+    potentialTimeSavings: number;
+  }>;
+  generateRiskInsight(
+    risk: Risk,
+    context: UserContext,
+    analysis: unknown
+  ): Promise<{ insight: string }>;
+  generateControlInsight(
+    control: Control,
+    context: UserContext,
+    analysis: unknown
+  ): Promise<{ insight: string }>;
+  generateComplianceInsight(
+    requirement: ComplianceRequirement,
+    context: UserContext,
+    analysis: unknown
+  ): Promise<{ insight: string }>;
+  generateWorkflowInsight(
+    activities: UserActivity[],
+    context: UserContext,
+    analysis: unknown
+  ): Promise<{ insight: string }>;
+  calculatePriority(
+    entity: unknown,
+    context: UserContext,
+    analysis: unknown,
+    type: string
+  ): Promise<{
     priority: InsightPriority;
     factors: unknown[];
     urgencyScore: number;
@@ -1125,8 +1236,18 @@ interface AIInsightService {
     contextScore: number;
     personalizedScore: number;
   }>;
-  generatePersonalizedContent(template: unknown, entity: unknown, context: UserContext, insight: unknown): Promise<PersonalizedContent>;
-  generateActionItems(type: string, entity: unknown, analysis: unknown, context: UserContext): Promise<ActionItem[]>;
+  generatePersonalizedContent(
+    template: unknown,
+    entity: unknown,
+    context: UserContext,
+    insight: unknown
+  ): Promise<PersonalizedContent>;
+  generateActionItems(
+    type: string,
+    entity: unknown,
+    analysis: unknown,
+    context: UserContext
+  ): Promise<ActionItem[]>;
   evaluateCondition(condition: string, notification: SmartNotification): Promise<boolean>;
 }
 
@@ -1152,7 +1273,10 @@ interface DeliveryService {
 }
 
 interface AnalyticsService {
-  getNotificationAnalytics(userId: string, timeRange?: { start: Date; end: Date }): Promise<NotificationAnalytics[]>;
+  getNotificationAnalytics(
+    userId: string,
+    timeRange?: { start: Date; end: Date }
+  ): Promise<NotificationAnalytics[]>;
   recordDeliveryMetrics(analytics: NotificationAnalytics): Promise<void>;
 }
 
@@ -1163,4 +1287,4 @@ interface CacheService {
 
 interface EventService {
   emit(event: string, data: unknown): Promise<void>;
-} 
+}

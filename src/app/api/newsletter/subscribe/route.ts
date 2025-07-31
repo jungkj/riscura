@@ -12,23 +12,23 @@ export const POST = withApiMiddleware({
   rateLimiters: ['standard'],
 })(async (context, data) => {
   const { email } = data;
-  
+
   try {
     // Here you would integrate with your email service provider
     // For example: SendGrid, Mailchimp, ConvertKit, etc.
-    
+
     // For now, we'll just simulate the subscription
     console.log(`Newsletter subscription for: ${email}`);
-    
+
     // In production, you would:
     // 1. Add to your email list
     // 2. Send a confirmation email
     // 3. Track the subscription
-    
+
     // Example SendGrid integration:
     // const sgMail = require('@sendgrid/mail');
     // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-    // 
+    //
     // await sgMail.send({
     //   to: email,
     //   from: 'hello@riscura.com',
@@ -36,7 +36,7 @@ export const POST = withApiMiddleware({
     //   text: 'Thank you for subscribing...',
     //   html: '<strong>Thank you for subscribing...</strong>',
     // });
-    
+
     return {
       success: true,
       message: 'Successfully subscribed to newsletter',

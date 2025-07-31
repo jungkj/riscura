@@ -1,12 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { 
-  statusColors, 
-  getStatusColor, 
-  getRiskLevelColor, 
+import {
+  statusColors,
+  getStatusColor,
+  getRiskLevelColor,
   getConfidenceColor,
   colorClasses,
-  dataColors 
+  dataColors,
 } from '@/lib/design-system/colors';
 
 // Status Badge with enhanced visual feedback
@@ -27,47 +27,49 @@ export const EnhancedStatusBadge: React.FC<StatusBadgeProps> = ({
   animated = true,
   showIcon = false,
   onClick,
-  className = ''
+  className = '',
 }) => {
   const colorConfig = getStatusColor(status);
-  
+
   const sizeClasses = {
     sm: 'px-2 py-1 text-xs',
     md: 'px-3 py-1.5 text-sm',
-    lg: 'px-4 py-2 text-base'
+    lg: 'px-4 py-2 text-base',
   };
-  
+
   const getVariantClasses = () => {
     const statusLower = status.toLowerCase();
-    
+
     // New color scheme: Low=Green, Medium=Yellow, High=Red, Critical=Red
     const colorMapping = {
-      'low': 'bg-green-50 text-green-700 border-green-200',
-      'medium': 'bg-yellow-50 text-yellow-800 border-yellow-200', 
-      'high': 'bg-red-50 text-red-700 border-red-200',
-      'critical': 'bg-red-100 text-red-800 border-red-300',
-      'success': 'bg-green-50 text-green-700 border-green-200',
-      'mitigated': 'bg-green-50 text-green-700 border-green-200',
-      'identified': 'bg-blue-50 text-blue-700 border-blue-200',
-      'assessed': 'bg-blue-50 text-blue-700 border-blue-200',
-      'monitoring': 'bg-slate-50 text-slate-700 border-slate-200'
+      low: 'bg-green-50 text-green-700 border-green-200',
+      medium: 'bg-yellow-50 text-yellow-800 border-yellow-200',
+      high: 'bg-red-50 text-red-700 border-red-200',
+      critical: 'bg-red-100 text-red-800 border-red-300',
+      success: 'bg-green-50 text-green-700 border-green-200',
+      mitigated: 'bg-green-50 text-green-700 border-green-200',
+      identified: 'bg-blue-50 text-blue-700 border-blue-200',
+      assessed: 'bg-blue-50 text-blue-700 border-blue-200',
+      monitoring: 'bg-slate-50 text-slate-700 border-slate-200',
     };
-    
+
     const outlineMapping = {
-      'low': 'text-green-700 border-green-300 bg-transparent',
-      'medium': 'text-yellow-800 border-yellow-400 bg-transparent',
-      'high': 'text-red-700 border-red-300 bg-transparent', 
-      'critical': 'text-red-800 border-red-400 bg-transparent',
-      'success': 'text-green-700 border-green-300 bg-transparent',
-      'mitigated': 'text-green-700 border-green-300 bg-transparent',
-      'identified': 'text-blue-700 border-blue-300 bg-transparent',
-      'assessed': 'text-blue-700 border-blue-300 bg-transparent',
-      'monitoring': 'text-slate-700 border-slate-300 bg-transparent'
+      low: 'text-green-700 border-green-300 bg-transparent',
+      medium: 'text-yellow-800 border-yellow-400 bg-transparent',
+      high: 'text-red-700 border-red-300 bg-transparent',
+      critical: 'text-red-800 border-red-400 bg-transparent',
+      success: 'text-green-700 border-green-300 bg-transparent',
+      mitigated: 'text-green-700 border-green-300 bg-transparent',
+      identified: 'text-blue-700 border-blue-300 bg-transparent',
+      assessed: 'text-blue-700 border-blue-300 bg-transparent',
+      monitoring: 'text-slate-700 border-slate-300 bg-transparent',
     };
-    
-    const baseClasses = colorMapping[statusLower as keyof typeof colorMapping] || colorMapping['medium'];
-    const outlineClasses = outlineMapping[statusLower as keyof typeof outlineMapping] || outlineMapping['medium'];
-    
+
+    const baseClasses =
+      colorMapping[statusLower as keyof typeof colorMapping] || colorMapping['medium'];
+    const outlineClasses =
+      outlineMapping[statusLower as keyof typeof outlineMapping] || outlineMapping['medium'];
+
     switch (variant) {
       case 'outline':
         return `border-2 ${outlineClasses}`;
@@ -77,10 +79,10 @@ export const EnhancedStatusBadge: React.FC<StatusBadgeProps> = ({
         return baseClasses;
     }
   };
-  
+
   const getStatusIcon = () => {
     const iconSize = size === 'sm' ? 'w-3 h-3' : size === 'lg' ? 'w-5 h-5' : 'w-4 h-4';
-    
+
     switch (status.toLowerCase()) {
       case 'critical':
         return <div className={`${iconSize} bg-red-500 rounded-full`} />;
@@ -95,14 +97,16 @@ export const EnhancedStatusBadge: React.FC<StatusBadgeProps> = ({
         return <div className={`${iconSize} bg-blue-500 rounded-full`} />;
     }
   };
-  
+
   const Component = animated ? motion.span : 'span';
-  const animationProps = animated ? {
-    whileHover: { scale: 1.05 },
-    whileTap: { scale: 0.95 },
-    transition: { duration: 0.2 }
-  } : {};
-  
+  const animationProps = animated
+    ? {
+        whileHover: { scale: 1.05 },
+        whileTap: { scale: 0.95 },
+        transition: { duration: 0.2 },
+      }
+    : {};
+
   return (
     <Component
       {...(animated ? animationProps : {})}
@@ -139,17 +143,17 @@ export const EnhancedRiskLevelIndicator: React.FC<RiskLevelIndicatorProps> = ({
   size = 'md',
   orientation = 'horizontal',
   animated = true,
-  className = ''
+  className = '',
 }) => {
   const riskColor = getRiskLevelColor(level);
   const confidenceColor = getConfidenceColor(confidence);
-  
+
   const sizeClasses = {
     sm: 'text-xs',
     md: 'text-sm',
-    lg: 'text-base'
+    lg: 'text-base',
   };
-  
+
   const getRiskLevelText = () => {
     if (typeof level === 'number') {
       if (level >= 20) return 'Critical';
@@ -160,28 +164,30 @@ export const EnhancedRiskLevelIndicator: React.FC<RiskLevelIndicatorProps> = ({
     }
     return level.toString();
   };
-  
+
   const getRiskValue = () => {
     return typeof level === 'number' ? level : 0;
   };
-  
+
   const Component = animated ? motion.div : 'div';
-  
+
   return (
     <Component
       className={`
         ${orientation === 'horizontal' ? 'flex items-center gap-3' : 'flex flex-col gap-2'}
         ${className}
       `}
-      {...(animated ? { 
-        initial: { opacity: 0, scale: 0.9 },
-        animate: { opacity: 1, scale: 1 },
-        transition: { duration: 0.3 }
-      } : {})}
+      {...(animated
+        ? {
+            initial: { opacity: 0, scale: 0.9 },
+            animate: { opacity: 1, scale: 1 },
+            transition: { duration: 0.3 },
+          }
+        : {})}
     >
       {/* Risk Level Badge */}
       <div className="flex items-center gap-2">
-        <div 
+        <div
           className="w-3 h-3 rounded-full"
           style={{ backgroundColor: riskColor.color || riskColor[500] }}
         />
@@ -189,12 +195,10 @@ export const EnhancedRiskLevelIndicator: React.FC<RiskLevelIndicatorProps> = ({
           {getRiskLevelText()}
         </span>
         {typeof level === 'number' && (
-          <span className={`${sizeClasses[size]} text-slate-500`}>
-            ({level})
-          </span>
+          <span className={`${sizeClasses[size]} text-slate-500`}>({level})</span>
         )}
       </div>
-      
+
       {/* Risk Level Bar */}
       <div className="relative">
         <div className="w-24 h-2 bg-slate-200 rounded-full overflow-hidden">
@@ -207,19 +211,21 @@ export const EnhancedRiskLevelIndicator: React.FC<RiskLevelIndicatorProps> = ({
           />
         </div>
       </div>
-      
+
       {/* Confidence Indicator */}
       {showConfidence && (
         <div className="flex items-center gap-2">
-          <span className={`${sizeClasses[size]} text-slate-600`}>
-            Confidence:
-          </span>
-          <div 
+          <span className={`${sizeClasses[size]} text-slate-600`}>Confidence:</span>
+          <div
             className={`
               px-2 py-1 rounded text-xs font-medium
-              ${confidence >= 0.8 ? 'bg-green-100 text-green-700' :
-                confidence >= 0.6 ? 'bg-yellow-100 text-yellow-700' :
-                'bg-red-100 text-red-700'}
+              ${
+                confidence >= 0.8
+                  ? 'bg-green-100 text-green-700'
+                  : confidence >= 0.6
+                    ? 'bg-yellow-100 text-yellow-700'
+                    : 'bg-red-100 text-red-700'
+              }
             `}
           >
             {Math.round(confidence * 100)}%
@@ -248,23 +254,19 @@ export const EnhancedProgressRing: React.FC<DaisyProgressRingProps> = ({
   status = 'info',
   showPercentage = true,
   animated = true,
-  className = ''
+  className = '',
 }) => {
   const normalizedRadius = (size - strokeWidth) / 2;
   const circumference = normalizedRadius * 2 * Math.PI;
   const strokeDasharray = `${circumference} ${circumference}`;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
-  
+
   const statusColor = getStatusColor(status);
   const progressColor = statusColor.color || statusColor[500] || '#3b82f6';
-  
+
   return (
     <div className={`relative ${className}`} style={{ width: size, height: size }}>
-      <svg
-        height={size}
-        width={size}
-        className="transform -rotate-90"
-      >
+      <svg height={size} width={size} className="transform -rotate-90">
         {/* Background circle */}
         <circle
           stroke="#e5e7eb"
@@ -287,14 +289,12 @@ export const EnhancedProgressRing: React.FC<DaisyProgressRingProps> = ({
           cy={size / 2}
           initial={animated ? { strokeDashoffset: circumference } : {}}
           animate={animated ? { strokeDashoffset } : {}}
-          transition={animated ? { duration: 1, ease: "easeInOut" } : {}}
+          transition={animated ? { duration: 1, ease: 'easeInOut' } : {}}
         />
       </svg>
       {showPercentage && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-sm font-semibold text-slate-700">
-            {Math.round(progress)}%
-          </span>
+          <span className="text-sm font-semibold text-slate-700">{Math.round(progress)}%</span>
         </div>
       )}
     </div>
@@ -319,14 +319,14 @@ export const EnhancedColorDot: React.FC<ColorDotProps> = ({
   interactive = false,
   tooltip,
   onClick,
-  className = ''
+  className = '',
 }) => {
   const sizeClasses = {
     sm: 'w-2 h-2',
     md: 'w-3 h-3',
-    lg: 'w-4 h-4'
+    lg: 'w-4 h-4',
   };
-  
+
   const getColor = () => {
     if (status) {
       const statusColor = getStatusColor(status);
@@ -334,9 +334,9 @@ export const EnhancedColorDot: React.FC<ColorDotProps> = ({
     }
     return color;
   };
-  
+
   const Component = interactive ? motion.div : 'div';
-  
+
   return (
     <Component
       className={`
@@ -347,11 +347,13 @@ export const EnhancedColorDot: React.FC<ColorDotProps> = ({
       style={{ backgroundColor: getColor() }}
       onClick={onClick}
       title={tooltip}
-      {...(interactive ? {
-        whileHover: { scale: 1.2 },
-        whileTap: { scale: 0.9 },
-        transition: { duration: 0.2 }
-      } : {})}
+      {...(interactive
+        ? {
+            whileHover: { scale: 1.2 },
+            whileTap: { scale: 0.9 },
+            transition: { duration: 0.2 },
+          }
+        : {})}
     />
   );
 };
@@ -372,20 +374,20 @@ export const EnhancedTrendIndicator: React.FC<TrendIndicatorProps> = ({
   showValue = true,
   size = 'md',
   animated = true,
-  className = ''
+  className = '',
 }) => {
   const sizeClasses = {
     sm: 'text-xs',
     md: 'text-sm',
-    lg: 'text-base'
+    lg: 'text-base',
   };
-  
+
   const iconSizes = {
     sm: 'w-3 h-3',
     md: 'w-4 h-4',
-    lg: 'w-5 h-5'
+    lg: 'w-5 h-5',
   };
-  
+
   const getTrendConfig = () => {
     switch (trend) {
       case 'up':
@@ -393,28 +395,28 @@ export const EnhancedTrendIndicator: React.FC<TrendIndicatorProps> = ({
           color: 'text-green-600',
           bgColor: 'bg-green-100',
           icon: '↗',
-          label: 'Increasing'
+          label: 'Increasing',
         };
       case 'down':
         return {
           color: 'text-red-600',
           bgColor: 'bg-red-100',
           icon: '↘',
-          label: 'Decreasing'
+          label: 'Decreasing',
         };
       default:
         return {
           color: 'text-slate-600',
           bgColor: 'bg-slate-100',
           icon: '→',
-          label: 'Stable'
+          label: 'Stable',
         };
     }
   };
-  
+
   const trendConfig = getTrendConfig();
   const Component = animated ? motion.div : 'div';
-  
+
   return (
     <Component
       className={`
@@ -423,11 +425,13 @@ export const EnhancedTrendIndicator: React.FC<TrendIndicatorProps> = ({
         ${sizeClasses[size]}
         ${className}
       `}
-      {...(animated ? {
-        initial: { opacity: 0, x: -10 },
-        animate: { opacity: 1, x: 0 },
-        transition: { duration: 0.3 }
-      } : {})}
+      {...(animated
+        ? {
+            initial: { opacity: 0, x: -10 },
+            animate: { opacity: 1, x: 0 },
+            transition: { duration: 0.3 },
+          }
+        : {})}
     >
       <span className={`${iconSizes[size]} flex items-center justify-center font-bold`}>
         {trendConfig.icon}
@@ -441,4 +445,4 @@ export const EnhancedTrendIndicator: React.FC<TrendIndicatorProps> = ({
       <span className="font-medium">{trendConfig.label}</span>
     </Component>
   );
-}; 
+};

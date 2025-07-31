@@ -174,7 +174,7 @@ const ImageErrorFallback = memo(({
         }}
       />
     );
-  }
+  };
 
   return (
     <div className={cn(
@@ -182,10 +182,12 @@ const ImageErrorFallback = memo(({
       className
     )}>
       <div className="text-center p-4">
-        <DaisyAlertCircle className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-        <p className="text-sm text-gray-500 mb-2">Failed to load image</p>
-        <DaisyButton onClick={retry} variant="outline" size="sm">
-          Retry
+        <DaisyAlertCircle className="w-8 h-8 text-gray-400 mx-auto mb-2" >
+  <p className="text-sm text-gray-500 mb-2">
+</DaisyAlertCircle>Failed to load image</p>
+        <DaisyButton onClick={retry} variant="outline" size="sm" >
+  Retry
+</DaisyButton>
         </DaisyButton>
       </div>
     </div>
@@ -460,7 +462,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
         )}
       </div>
     );
-  }
+  };
 
   return (
     <div 
@@ -531,9 +533,9 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
                 variant="secondary"
                 size="sm"
                 onClick={downloadImage}
-                className="bg-black bg-opacity-50 hover:bg-opacity-70 text-white border-none"
-              >
-                <Download className="w-4 h-4" />
+                className="bg-black bg-opacity-50 hover:bg-opacity-70 text-white border-none" >
+  <Download className="w-4 h-4" />
+</DaisySkeleton>
               </DaisyButton>
             )}
             {enableFullscreen && (
@@ -541,8 +543,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
                 variant="secondary"
                 size="sm"
                 onClick={() => setIsFullscreen(true)}
-                className="bg-black bg-opacity-50 hover:bg-opacity-70 text-white border-none"
-              >
+                className="bg-black bg-opacity-50 hover:bg-opacity-70 text-white border-none" />
                 <Maximize2 className="w-4 h-4" />
               </DaisyButton>
             )}

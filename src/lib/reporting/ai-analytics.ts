@@ -76,14 +76,13 @@ export interface ExecutiveSummary {
 }
 
 export class AIAnalyticsEngine {
-
   // Generate automated insights for a report
   async generateInsights(reportId: string, lookbackDays: number = 30): Promise<AIInsight[]> {
     const insights: AIInsight[] = [];
 
     // Get report data
     const reportData = await reportingEngine.generateReportData(reportId);
-    
+
     // Analyze trends
     const trendInsights = await this.analyzeTrends(reportData, lookbackDays);
     insights.push(...trendInsights);
@@ -117,7 +116,7 @@ export class AIAnalyticsEngine {
     for (const widget of reportData.widgets) {
       if (widget.data.length > 0) {
         const trendAnalysis = this.calculateTrend(widget.data, lookbackDays);
-        
+
         if (trendAnalysis.confidence > 0.7) {
           insights.push({
             id: `trend_${widget.id}_${Date.now()}`,
@@ -145,7 +144,7 @@ export class AIAnalyticsEngine {
   private calculateTrend(data: any[], lookbackDays: number): TrendAnalysis {
     // Simple linear regression for trend calculation
     const timeSeriesData = this.extractTimeSeries(data);
-    
+
     if (timeSeriesData.length < 2) {
       return {
         metric: 'unknown',
@@ -159,7 +158,7 @@ export class AIAnalyticsEngine {
     }
 
     const { slope, rSquared } = this.linearRegression(timeSeriesData);
-    
+
     let direction: 'increasing' | 'decreasing' | 'stable' | 'volatile' = 'stable';
     if (Math.abs(slope) > 0.1) {
       direction = slope > 0 ? 'increasing' : 'decreasing';
@@ -187,8 +186,8 @@ export class AIAnalyticsEngine {
   // Extract time series data from widget data
   private extractTimeSeries(data: any[]): { date: Date; value: number }[] {
     return data
-      .filter(item => item.date && item.value !== undefined)
-      .map(item => ({
+      .filter((item) => item.date && item.value !== undefined)
+      .map((item) => ({
         date: new Date(item.date),
         value: Number(item.value) || 0,
       }))
@@ -196,12 +195,15 @@ export class AIAnalyticsEngine {
   }
 
   // Perform linear regression
-  private linearRegression(data: { date: Date; value: number }[]): { slope: number; rSquared: number } {
+  private linearRegression(data: { date: Date; value: number }[]): {
+    slope: number;
+    rSquared: number;
+  } {
     const n = data.length;
     const startTime = data[0].date.getTime();
-    
+
     // Convert dates to numeric values (days since start)
-    const points = data.map(point => ({
+    const points = data.map((point) => ({
       x: (point.date.getTime() - startTime) / (1000 * 60 * 60 * 24),
       y: point.value,
     }));
@@ -222,14 +224,18 @@ export class AIAnalyticsEngine {
       const predicted = slope * p.x + intercept;
       return sum + Math.pow(p.y - predicted, 2);
     }, 0);
-    
-    const rSquared = ssTotal !== 0 ? 1 - (ssResidual / ssTotal) : 0;
+
+    const rSquared = ssTotal !== 0 ? 1 - ssResidual / ssTotal : 0;
 
     return { slope, rSquared };
   }
 
   // Generate forecast points
-  private generateForecast(historicalData: { date: Date; value: number }[], slope: number, days: number): ForecastPoint[] {
+  private generateForecast(
+    historicalData: { date: Date; value: number }[],
+    slope: number,
+    days: number
+  ): ForecastPoint[] {
     const forecast: ForecastPoint[] = [];
     const lastPoint = historicalData[historicalData.length - 1];
     const startTime = historicalData[0].date.getTime();
@@ -239,10 +245,10 @@ export class AIAnalyticsEngine {
       const date = new Date(lastPoint.date.getTime() + i * 24 * 60 * 60 * 1000);
       const x = lastX + i;
       const value = lastPoint.value + slope * i;
-      
+
       // Simple confidence interval (would be more sophisticated in practice)
       const uncertainty = Math.abs(value * 0.1); // 10% uncertainty
-      
+
       forecast.push({
         date,
         value,
@@ -259,14 +265,14 @@ export class AIAnalyticsEngine {
   // Identify trend drivers
   private identifyTrendDrivers(data: any[]): string[] {
     const drivers: string[] = [];
-    
+
     // Analyze data for potential drivers
     // This is a simplified implementation
-    if (data.some(item => item.category === 'high_risk')) {
+    if (data.some((item) => item.category === 'high_risk')) {
       drivers.push('High-risk events increasing');
     }
-    
-    if (data.some(item => item.status === 'overdue')) {
+
+    if (data.some((item) => item.status === 'overdue')) {
       drivers.push('Overdue items accumulating');
     }
 
@@ -275,9 +281,13 @@ export class AIAnalyticsEngine {
 
   // Generate trend description
   private generateTrendDescription(trend: TrendAnalysis): string {
-    const direction = trend.direction === 'increasing' ? 'upward' : 
-                     trend.direction === 'decreasing' ? 'downward' : 'stable';
-    
+    const direction =
+      trend.direction === 'increasing'
+        ? 'upward'
+        : trend.direction === 'decreasing'
+          ? 'downward'
+          : 'stable';
+
     return `${trend.metric} shows a ${direction} trend over the ${trend.period} with ${trend.magnitude.toFixed(1)}% change (confidence: ${(trend.confidence * 100).toFixed(1)}%)`;
   }
 
@@ -312,7 +322,7 @@ export class AIAnalyticsEngine {
 
     for (const widget of reportData.widgets) {
       const anomalies = this.findAnomalies(widget.data, lookbackDays);
-      
+
       for (const anomaly of anomalies) {
         insights.push({
           id: `anomaly_${widget.id}_${Date.now()}_${Math.random()}`,
@@ -343,11 +353,12 @@ export class AIAnalyticsEngine {
 
     // Calculate rolling statistics
     const windowSize = Math.min(7, Math.floor(timeSeriesData.length / 3));
-    
+
     for (let i = windowSize; i < timeSeriesData.length; i++) {
       const window = timeSeriesData.slice(i - windowSize, i);
       const mean = window.reduce((sum, p) => sum + p.value, 0) / window.length;
-      const variance = window.reduce((sum, p) => sum + Math.pow(p.value - mean, 2), 0) / window.length;
+      const variance =
+        window.reduce((sum, p) => sum + Math.pow(p.value - mean, 2), 0) / window.length;
       const stdDev = Math.sqrt(variance);
 
       const currentValue = timeSeriesData[i].value;
@@ -446,7 +457,8 @@ export class AIAnalyticsEngine {
           [risk2.likelihood, risk2.impact]
         );
 
-        if (Math.abs(correlation) > 0.3) { // Only significant correlations
+        if (Math.abs(correlation) > 0.3) {
+          // Only significant correlations
           correlations.push({
             risk1Id: risk1.id,
             risk2Id: risk2.id,
@@ -561,7 +573,7 @@ export class AIAnalyticsEngine {
       },
     });
 
-    const highRisks = risks.filter(risk => (risk.likelihood * risk.impact) > 15);
+    const highRisks = risks.filter((risk) => risk.likelihood * risk.impact > 15);
 
     if (highRisks.length > 0) {
       insights.push({
@@ -588,17 +600,20 @@ export class AIAnalyticsEngine {
   }
 
   // Generate executive summary
-  async generateExecutiveSummary(organizationId: string, period: { from: Date; to: Date }): Promise<ExecutiveSummary> {
+  async generateExecutiveSummary(
+    organizationId: string,
+    period: { from: Date; to: Date }
+  ): Promise<ExecutiveSummary> {
     // Get key metrics
     const keyMetrics = await this.calculateKeyMetrics(organizationId, period);
-    
+
     // Get top risks
     const topRisks = await this.getTopRisks(organizationId, 5);
-    
+
     // Generate achievements and concerns
     const achievements = await this.identifyAchievements(organizationId, period);
     const concerns = await this.identifyConcerns(organizationId, period);
-    
+
     // Generate recommendations
     const recommendations = await this.generateExecutiveRecommendations(organizationId);
 
@@ -614,12 +629,17 @@ export class AIAnalyticsEngine {
   }
 
   // Calculate key metrics for executive summary
-  private async calculateKeyMetrics(organizationId: string, period: { from: Date; to: Date }): Promise<{
-    name: string;
-    value: number;
-    change: number;
-    status: 'good' | 'warning' | 'critical';
-  }[]> {
+  private async calculateKeyMetrics(
+    organizationId: string,
+    period: { from: Date; to: Date }
+  ): Promise<
+    {
+      name: string;
+      value: number;
+      change: number;
+      status: 'good' | 'warning' | 'critical';
+    }[]
+  > {
     const metrics: {
       name: string;
       value: number;
@@ -642,13 +662,21 @@ export class AIAnalyticsEngine {
       },
     });
 
-    const riskChange = previousPeriodRisks > 0 ? ((totalRisks - previousPeriodRisks) / previousPeriodRisks) * 100 : 0;
+    const riskChange =
+      previousPeriodRisks > 0
+        ? ((totalRisks - previousPeriodRisks) / previousPeriodRisks) * 100
+        : 0;
 
     metrics.push({
       name: 'Total Risks',
       value: totalRisks,
       change: riskChange,
-      status: totalRisks > previousPeriodRisks * 1.2 ? 'critical' : totalRisks > previousPeriodRisks * 1.1 ? 'warning' : 'good',
+      status:
+        totalRisks > previousPeriodRisks * 1.2
+          ? 'critical'
+          : totalRisks > previousPeriodRisks * 1.1
+            ? 'warning'
+            : 'good',
     });
 
     // Control effectiveness
@@ -657,9 +685,10 @@ export class AIAnalyticsEngine {
       select: { effectivenessScore: true },
     });
 
-    const avgEffectiveness = controls.length > 0 
-      ? controls.reduce((sum, c) => sum + c.effectivenessScore, 0) / controls.length
-      : 0;
+    const avgEffectiveness =
+      controls.length > 0
+        ? controls.reduce((sum, c) => sum + c.effectivenessScore, 0) / controls.length
+        : 0;
 
     metrics.push({
       name: 'Avg Control Effectiveness',
@@ -672,22 +701,24 @@ export class AIAnalyticsEngine {
   }
 
   // Get top risks
-  private async getTopRisks(organizationId: string, limit: number): Promise<{
-    id: string;
-    name: string;
-    score: number;
-    trend: 'increasing' | 'decreasing' | 'stable';
-  }[]> {
+  private async getTopRisks(
+    organizationId: string,
+    limit: number
+  ): Promise<
+    {
+      id: string;
+      name: string;
+      score: number;
+      trend: 'increasing' | 'decreasing' | 'stable';
+    }[]
+  > {
     const risks = await db.client.risk.findMany({
       where: { organizationId, status: 'open' },
-      orderBy: [
-        { likelihood: 'desc' },
-        { impact: 'desc' },
-      ],
+      orderBy: [{ likelihood: 'desc' }, { impact: 'desc' }],
       take: limit,
     });
 
-    return risks.map(risk => ({
+    return risks.map((risk) => ({
       id: risk.id,
       name: risk.name,
       score: risk.likelihood * risk.impact,
@@ -696,7 +727,10 @@ export class AIAnalyticsEngine {
   }
 
   // Identify achievements
-  private async identifyAchievements(organizationId: string, period: { from: Date; to: Date }): Promise<string[]> {
+  private async identifyAchievements(
+    organizationId: string,
+    period: { from: Date; to: Date }
+  ): Promise<string[]> {
     const achievements: string[] = [];
 
     // Check for resolved risks
@@ -729,7 +763,10 @@ export class AIAnalyticsEngine {
   }
 
   // Identify concerns
-  private async identifyConcerns(organizationId: string, period: { from: Date; to: Date }): Promise<string[]> {
+  private async identifyConcerns(
+    organizationId: string,
+    period: { from: Date; to: Date }
+  ): Promise<string[]> {
     const concerns: string[] = [];
 
     // Check for overdue items
@@ -789,43 +826,43 @@ export class AIAnalyticsEngine {
   // Generate natural language report summary
   async generateNaturalLanguageReport(reportData: any): Promise<string> {
     const insights = await this.generateInsights(reportData.reportId || 'temp');
-    
-    let summary = "## Risk Management Summary\n\n";
-    
+
+    let summary = '## Risk Management Summary\n\n';
+
     // Trends section
-    const trendInsights = insights.filter(i => i.type === 'trend');
+    const trendInsights = insights.filter((i) => i.type === 'trend');
     if (trendInsights.length > 0) {
-      summary += "### Key Trends\n";
+      summary += '### Key Trends\n';
       for (const insight of trendInsights.slice(0, 3)) {
         summary += `- ${insight.description}\n`;
       }
-      summary += "\n";
+      summary += '\n';
     }
 
     // Anomalies section
-    const anomalyInsights = insights.filter(i => i.type === 'anomaly');
+    const anomalyInsights = insights.filter((i) => i.type === 'anomaly');
     if (anomalyInsights.length > 0) {
-      summary += "### Anomalies Detected\n";
+      summary += '### Anomalies Detected\n';
       for (const insight of anomalyInsights.slice(0, 3)) {
         summary += `- ${insight.description}\n`;
       }
-      summary += "\n";
+      summary += '\n';
     }
 
     // Recommendations section
-    const recommendations = insights.filter(i => i.type === 'recommendation');
+    const recommendations = insights.filter((i) => i.type === 'recommendation');
     if (recommendations.length > 0) {
-      summary += "### Recommendations\n";
+      summary += '### Recommendations\n';
       for (const insight of recommendations.slice(0, 5)) {
         summary += `- ${insight.title}: ${insight.description}\n`;
       }
-      summary += "\n";
+      summary += '\n';
     }
 
-    summary += "This report was generated automatically using AI-powered analytics.";
+    summary += 'This report was generated automatically using AI-powered analytics.';
 
     return summary;
   }
 }
 
-export const aiAnalyticsEngine = new AIAnalyticsEngine(); 
+export const aiAnalyticsEngine = new AIAnalyticsEngine();

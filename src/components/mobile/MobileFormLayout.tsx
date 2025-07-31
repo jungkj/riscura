@@ -349,8 +349,9 @@ export default function MobileFormLayout({
     const renderInput = () => {
       switch (field.type) {
         case 'textarea':
-          return (
-            <DaisyTextarea
+
+  return (
+    <DaisyTextarea
               {...fieldProps}
               placeholder={field.placeholder}
               rows={field.rows || 3}
@@ -359,17 +360,16 @@ export default function MobileFormLayout({
           
         case 'select':
           return (
-            <DaisySelect value={value} onValueChange={(val) => handleFieldChange(field.id, val)}>
-              <DaisySelectTrigger className={error ? 'border-red-500' : ''}>
-                <DaisySelectValue placeholder={field.placeholder} />
-              </SelectTrigger>
-              <DaisySelectContent>
+            <DaisySelect value={value} onValueChange={(val) => handleFieldChange(field.id, val)} />
+              <DaisySelectTrigger className={error ? 'border-red-500' : ''} />
+                <DaisySelectValue placeholder={field.placeholder} /></DaisyTextarea>
+              <DaisySelectContent />
                 {field.options?.map(option => (
-                  <DaisySelectItem key={option.value} value={option.value}>
+                  <DaisySelectItem key={option.value} value={option.value} />
                     {option.label}
-                  </SelectItem>
+                  </DaisySelectContent>
                 ))}
-              </SelectContent>
+              </DaisySelectContent>
             </DaisySelect>
           );
           
@@ -383,20 +383,20 @@ export default function MobileFormLayout({
                 disabled={field.disabled}
                 aria-describedby={error ? `${field.id}-error` : field.description ? `${field.id}-description` : undefined}
               />
-              <DaisyLabel htmlFor={field.id} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              <DaisyLabel htmlFor={field.id} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" />
                 {field.label}
                 {isRequired && <span className="text-red-500 ml-1">*</span>}
-              </DaisyLabel>
+              </DaisyCheckbox>
             </div>
           );
           
         case 'radio':
           return (
-            <DaisyRadioGroup value={value} onValueChange={(val) => handleFieldChange(field.id, val)}>
+            <DaisyRadioGroup value={value} onValueChange={(val) => handleFieldChange(field.id, val)} />
               {field.options?.map(option => (
                 <div key={option.value} className="flex items-center space-x-2">
                   <DaisyRadioGroupItem value={option.value} id={`${field.id}-${option.value}`} />
-                  <DaisyLabel htmlFor={`${field.id}-${option.value}`}>{option.label}</DaisyLabel>
+                  <DaisyLabel htmlFor={`${field.id}-${option.value}`}>{option.label}</DaisyRadioGroup>
                 </div>
               ))}
             </DaisyRadioGroup>
@@ -411,7 +411,7 @@ export default function MobileFormLayout({
                 onCheckedChange={(checked) => handleFieldChange(field.id, checked)}
                 disabled={field.disabled}
               />
-              <DaisyLabel htmlFor={field.id}>{field.label}</DaisyLabel>
+              <DaisyLabel htmlFor={field.id}>{field.label}</DaisySwitch>
             </div>
           );
           
@@ -431,8 +431,7 @@ export default function MobileFormLayout({
               />
               <DaisyLabel
                 htmlFor={field.id}
-                className="flex items-center justify-center px-4 py-8 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 transition-colors"
-              >
+                className="flex items-center justify-center px-4 py-8 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 transition-colors" />
                 <div className="text-center">
                   <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
                   <p className="text-sm text-gray-600">
@@ -444,7 +443,7 @@ export default function MobileFormLayout({
                     </p>
                   )}
                 </div>
-              </DaisyLabel>
+              </DaisyInput>
               {value && (
                 <div className="text-sm text-gray-600">
                   {field.multiple && Array.isArray(value) 
@@ -470,14 +469,13 @@ export default function MobileFormLayout({
                 size="sm"
                 className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                 onClick={() => togglePasswordVisibility(field.id)}
-                aria-label={showPassword[field.id] ? 'Hide password' : 'Show password'}
-              >
+                aria-label={showPassword[field.id] ? 'Hide password' : 'Show password'} />
                 {showPassword[field.id] ? (
                   <EyeOff className="w-4 h-4 text-gray-400" />
                 ) : (
                   <Eye className="w-4 h-4 text-gray-400" />
                 )}
-              </DaisyButton>
+              </DaisyInput>
             </div>
           );
           
@@ -503,10 +501,10 @@ export default function MobileFormLayout({
     return (
       <div key={field.id} className="space-y-2">
         {field.type !== 'checkbox' && field.type !== 'switch' && (
-          <DaisyLabel htmlFor={field.id} className="text-sm font-medium">
+          <DaisyLabel htmlFor={field.id} className="text-sm font-medium" />
             {field.label}
             {isRequired && <span className="text-red-500 ml-1">*</span>}
-          </DaisyLabel>
+          </DaisyInput>
         )}
         
         {renderInput()}
@@ -519,8 +517,9 @@ export default function MobileFormLayout({
         
         {error && (
           <p id={`${field.id}-error`} className="text-xs text-red-600 flex items-center">
-            <DaisyAlertTriangle className="w-3 h-3 mr-1" />
-            {error}
+            <DaisyAlertTriangle className="w-3 h-3 mr-1" >
+  {error}
+</DaisyAlertTriangle>
           </p>
         )}
       </div>
@@ -549,9 +548,9 @@ export default function MobileFormLayout({
                   size="sm"
                   onClick={onCancel}
                   className="p-2"
-                  aria-label="Cancel"
-                >
-                  <X className="w-5 h-5" />
+                  aria-label="Cancel" >
+  <X className="w-5 h-5" />
+</DaisyButton>
                 </DaisyButton>
               )}
               <div>
@@ -598,7 +597,7 @@ export default function MobileFormLayout({
                     <div className="flex items-center space-x-3">
                       {section.icon}
                       <div>
-                        <DaisyCardTitle className="text-base">{section.title}</DaisyCardTitle>
+                        <DaisyCardTitle className="text-base">{section.title}</DaisyProgress>
                         {section.description && (
                           <p className="text-sm text-gray-500 mt-1">{section.description}</p>
                         )}
@@ -606,12 +605,14 @@ export default function MobileFormLayout({
                     </div>
                     
                     <div className="flex items-center space-x-2">
-                      <DaisyBadge variant="secondary" className="text-xs">
-                        {index + 1} of {sections.length}
+                      <DaisyBadge variant="secondary" className="text-xs" >
+  {index + 1} of {sections.length}
+</DaisyBadge>
                       </DaisyBadge>
                       {section.collapsible && (
-                        <DaisyButton variant="ghost" size="sm" className="p-1">
-                          {isExpanded ? (
+                        <DaisyButton variant="ghost" size="sm" className="p-1" >
+  {isExpanded ? (
+</DaisyButton>
                             <ChevronUp className="w-4 h-4" />
                           ) : (
                             <ChevronDown className="w-4 h-4" />
@@ -623,9 +624,10 @@ export default function MobileFormLayout({
                 
                 
                 {(!section.collapsible || isExpanded) && (
-                  <DaisyCardContent className="space-y-4">
-                    {section.fields.map(field => renderField(field))}
-                  </DaisyCardBody>
+                  <DaisyCardContent className="space-y-4" >
+  {section.fields.map(field => renderField(field))}
+</DaisyCardContent>
+                  </DaisyCardContent>
                 )}
               </DaisyCard>
             );
@@ -643,9 +645,9 @@ export default function MobileFormLayout({
                 variant="outline"
                 onClick={onCancel}
                 disabled={isSubmitting}
-                className="flex-1"
-              >
-                {cancelLabel}
+                className="flex-1" >
+  {cancelLabel}
+</DaisyButton>
               </DaisyButton>
             )}
             
@@ -653,9 +655,9 @@ export default function MobileFormLayout({
               type="submit"
               onClick={handleSubmit}
               disabled={isSubmitting || loading}
-              className="flex-1"
-            >
-              {isSubmitting ? (
+              className="flex-1" >
+  {isSubmitting ? (
+</DaisyButton>
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                   Saving...
@@ -685,8 +687,7 @@ export default function MobileFormLayout({
             size="sm"
             onClick={() => setCurrentStep(prev => Math.max(0, prev - 1))}
             disabled={currentStep === 0}
-            className="bg-white shadow-lg"
-          >
+            className="bg-white shadow-lg" />
             <ChevronLeft className="w-4 h-4 mr-1" />
             Previous
           </DaisyButton>
@@ -696,8 +697,7 @@ export default function MobileFormLayout({
             size="sm"
             onClick={() => setCurrentStep(prev => Math.min(sections.length - 1, prev + 1))}
             disabled={currentStep === sections.length - 1}
-            className="bg-white shadow-lg"
-          >
+            className="bg-white shadow-lg" />
             Next
             <ChevronRight className="w-4 h-4 ml-1" />
           </DaisyButton>

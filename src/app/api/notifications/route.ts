@@ -5,7 +5,7 @@ import { notificationService } from '@/services/NotificationService';
 export const GET = withApiMiddleware(
   async (req: NextRequest) => {
     const user = (req as any).user;
-    
+
     if (!user || !user.organizationId) {
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
@@ -27,7 +27,7 @@ export const GET = withApiMiddleware(
       );
 
       const totalPages = Math.ceil(result.total / limit);
-      
+
       return NextResponse.json({
         success: true,
         data: result.notifications,
@@ -36,8 +36,8 @@ export const GET = withApiMiddleware(
           page,
           limit,
           pages: totalPages,
-          unreadCount: unreadOnly ? result.total : undefined
-        }
+          unreadCount: unreadOnly ? result.total : undefined,
+        },
       });
     } catch (error) {
       console.error('Get notifications error:', error);

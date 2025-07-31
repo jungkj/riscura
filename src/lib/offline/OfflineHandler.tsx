@@ -59,7 +59,7 @@ class OfflineHandler {
       enableCompression: true,
       enableEncryption: false,
       criticalActions: ['risk-assessment', 'compliance-update', 'incident-report'],
-      ...config
+      ...config,
     };
 
     this.initialize();
@@ -120,7 +120,7 @@ class OfflineHandler {
   private emit(event: string, data?: any): void {
     const listeners = this.eventListeners.get(event);
     if (listeners) {
-      listeners.forEach(callback => callback(data));
+      listeners.forEach((callback) => callback(data));
     }
   }
 
@@ -144,7 +144,7 @@ class OfflineHandler {
       maxRetries: options.maxRetries || this.config.maxRetries,
       priority: options.priority || 'medium',
       userId: options.userId,
-      metadata: options.metadata
+      metadata: options.metadata,
     };
 
     // Insert action based on priority
@@ -188,7 +188,7 @@ class OfflineHandler {
       timestamp: new Date(),
       expiresAt: expiresIn ? new Date(Date.now() + expiresIn) : undefined,
       version: 1,
-      checksum: this.generateChecksum(data)
+      checksum: this.generateChecksum(data),
     };
 
     this.offlineData.set(key, offlineData);
@@ -198,7 +198,7 @@ class OfflineHandler {
 
   public getCachedData(key: string): any | null {
     const cachedData = this.offlineData.get(key);
-    
+
     if (!cachedData) {
       return null;
     }
@@ -227,7 +227,7 @@ class OfflineHandler {
         syncedActions: 0,
         failedActions: 0,
         conflicts: 0,
-        errors: []
+        errors: [],
       };
     }
 
@@ -239,15 +239,15 @@ class OfflineHandler {
       syncedActions: 0,
       failedActions: 0,
       conflicts: 0,
-      errors: []
+      errors: [],
     };
 
     const actionsToSync = [...this.actionQueue];
-    
+
     for (const action of actionsToSync) {
       try {
         const syncSuccess = await this.syncAction(action);
-        
+
         if (syncSuccess) {
           result.syncedActions++;
           this.removeActionFromQueue(action.id);
@@ -258,7 +258,7 @@ class OfflineHandler {
             this.removeActionFromQueue(action.id);
             result.errors.push({
               actionId: action.id,
-              error: 'Max retries exceeded'
+              error: 'Max retries exceeded',
             });
           }
         }
@@ -266,9 +266,9 @@ class OfflineHandler {
         result.failedActions++;
         result.errors.push({
           actionId: action.id,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         });
-        
+
         action.retryCount++;
         if (action.retryCount >= action.maxRetries) {
           this.removeActionFromQueue(action.id);
@@ -287,7 +287,7 @@ class OfflineHandler {
     try {
       // Simulate API call - replace with actual API integration
       const response = await this.makeAPICall(action);
-      
+
       if (response.success) {
         this.emit('actionSynced', action);
         return true;
@@ -326,7 +326,7 @@ class OfflineHandler {
       serverData,
       resolve: (resolution: 'local' | 'server' | 'merge', mergedData?: any) => {
         this.resolveSyncConflict(action, resolution, mergedData);
-      }
+      },
     });
   }
 
@@ -350,13 +350,13 @@ class OfflineHandler {
         action.retryCount = 0;
         break;
     }
-    
+
     this.persistActionQueue();
   }
 
   // Utility methods
   private removeActionFromQueue(actionId: string): void {
-    this.actionQueue = this.actionQueue.filter(action => action.id !== actionId);
+    this.actionQueue = this.actionQueue.filter((action) => action.id !== actionId);
   }
 
   private generateId(): string {
@@ -369,7 +369,7 @@ class OfflineHandler {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
     return hash.toString();
@@ -379,7 +379,7 @@ class OfflineHandler {
     if (!this.config.enableCompression) {
       return data;
     }
-    
+
     // Simple compression - in production, use a proper compression library
     try {
       const jsonString = JSON.stringify(data);
@@ -395,7 +395,7 @@ class OfflineHandler {
     if (!this.config.enableCompression) {
       return data;
     }
-    
+
     // Simple decompression - in production, use a proper compression library
     return data;
   }
@@ -403,12 +403,14 @@ class OfflineHandler {
   // Persistence methods
   private persistActionQueue(): void {
     if (typeof localStorage === 'undefined') return;
-    
+
     try {
-      const serialized = JSON.stringify(this.actionQueue.map(action => ({
-        ...action,
-        timestamp: action.timestamp.toISOString()
-      })));
+      const serialized = JSON.stringify(
+        this.actionQueue.map((action) => ({
+          ...action,
+          timestamp: action.timestamp.toISOString(),
+        }))
+      );
       localStorage.setItem('riscura_offline_actions', serialized);
     } catch (error) {
       console.error('Failed to persist action queue:', error);
@@ -417,13 +419,13 @@ class OfflineHandler {
 
   private persistOfflineData(): void {
     if (typeof localStorage === 'undefined') return;
-    
+
     try {
       const dataArray = Array.from(this.offlineData.entries()).map(([key, data]) => ({
         ...data,
         key,
         timestamp: data.timestamp.toISOString(),
-        expiresAt: data.expiresAt?.toISOString()
+        expiresAt: data.expiresAt?.toISOString(),
       }));
       localStorage.setItem('riscura_offline_data', JSON.stringify(dataArray));
     } catch (error) {
@@ -433,7 +435,7 @@ class OfflineHandler {
 
   private loadPersistedData(): void {
     if (typeof localStorage === 'undefined') return;
-    
+
     try {
       // Load action queue
       const actionsData = localStorage.getItem('riscura_offline_actions');
@@ -441,7 +443,7 @@ class OfflineHandler {
         const actions = JSON.parse(actionsData);
         this.actionQueue = actions.map((action: any) => ({
           ...action,
-          timestamp: new Date(action.timestamp)
+          timestamp: new Date(action.timestamp),
         }));
       }
 
@@ -455,8 +457,8 @@ class OfflineHandler {
             {
               ...item,
               timestamp: new Date(item.timestamp),
-              expiresAt: item.expiresAt ? new Date(item.expiresAt) : undefined
-            }
+              expiresAt: item.expiresAt ? new Date(item.expiresAt) : undefined,
+            },
           ])
         );
       }
@@ -521,7 +523,7 @@ class OfflineHandler {
       isOnline: this.isOnline,
       queuedActions: this.actionQueue.length,
       cachedDataItems: this.offlineData.size,
-      syncInProgress: this.syncInProgress
+      syncInProgress: this.syncInProgress,
     };
   }
 
@@ -547,32 +549,36 @@ class OfflineHandler {
   public async saveRiskAssessment(data: any): Promise<string> {
     return this.queueAction('risk-assessment', data, {
       priority: 'critical',
-      metadata: { type: 'risk-assessment' }
+      metadata: { type: 'risk-assessment' },
     });
   }
 
   public async updateCompliance(data: any): Promise<string> {
     return this.queueAction('compliance-update', data, {
       priority: 'high',
-      metadata: { type: 'compliance-update' }
+      metadata: { type: 'compliance-update' },
     });
   }
 
   public async reportIncident(data: any): Promise<string> {
     return this.queueAction('incident-report', data, {
       priority: 'critical',
-      metadata: { type: 'incident-report' }
+      metadata: { type: 'incident-report' },
     });
   }
 
   public async saveFormData(formId: string, data: any): Promise<string> {
     // Cache form data for offline editing
     this.cacheData(`form_${formId}`, data, 24 * 60 * 60 * 1000); // 24 hours
-    
-    return this.queueAction('form-save', { formId, data }, {
-      priority: 'medium',
-      metadata: { type: 'form-save', formId }
-    });
+
+    return this.queueAction(
+      'form-save',
+      { formId, data },
+      {
+        priority: 'medium',
+        metadata: { type: 'form-save', formId },
+      }
+    );
   }
 
   public getFormData(formId: string): any | null {
@@ -607,7 +613,7 @@ export const useOffline = () => {
 
   React.useEffect(() => {
     const updateStatus = () => setStatus(offlineHandler.getStatus());
-    
+
     offlineHandler.on('online', updateStatus);
     offlineHandler.on('offline', updateStatus);
     offlineHandler.on('actionQueued', updateStatus);
@@ -631,8 +637,8 @@ export const useOffline = () => {
     updateCompliance: offlineHandler.updateCompliance.bind(offlineHandler),
     reportIncident: offlineHandler.reportIncident.bind(offlineHandler),
     saveFormData: offlineHandler.saveFormData.bind(offlineHandler),
-    getFormData: offlineHandler.getFormData.bind(offlineHandler)
+    getFormData: offlineHandler.getFormData.bind(offlineHandler),
   };
 };
 
-export default OfflineHandler; 
+export default OfflineHandler;

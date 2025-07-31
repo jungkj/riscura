@@ -16,18 +16,13 @@ export const SUBSCRIPTION_PLANS = {
     name: 'Free',
     price: 0,
     priceId: null,
-    features: [
-      'Up to 5 risks',
-      'Basic risk assessment',
-      'Email support',
-      'Standard templates'
-    ],
+    features: ['Up to 5 risks', 'Basic risk assessment', 'Email support', 'Standard templates'],
     limits: {
       risks: 5,
       controls: 10,
       users: 1,
-      storage: '100MB'
-    }
+      storage: '100MB',
+    },
   },
   PRO: {
     name: 'Pro',
@@ -40,14 +35,14 @@ export const SUBSCRIPTION_PLANS = {
       'Custom templates',
       'Integration APIs',
       'Advanced reporting',
-      'Team collaboration'
+      'Team collaboration',
     ],
     limits: {
       risks: Infinity,
       controls: Infinity,
       users: 10,
-      storage: '10GB'
-    }
+      storage: '10GB',
+    },
   },
   ENTERPRISE: {
     name: 'Enterprise',
@@ -61,15 +56,15 @@ export const SUBSCRIPTION_PLANS = {
       'Advanced security',
       'Compliance frameworks',
       'White-label options',
-      'SLA guarantee'
+      'SLA guarantee',
     ],
     limits: {
       risks: Infinity,
       controls: Infinity,
       users: Infinity,
-      storage: 'Unlimited'
-    }
-  }
+      storage: 'Unlimited',
+    },
+  },
 } as const;
 
 export type SubscriptionPlan = keyof typeof SUBSCRIPTION_PLANS;
@@ -78,7 +73,7 @@ export type SubscriptionPlan = keyof typeof SUBSCRIPTION_PLANS;
 export const FREE_TRIAL_CONFIG = {
   duration: 7, // 7 days
   plan: 'PRO' as SubscriptionPlan,
-  autoCancel: true
+  autoCancel: true,
 };
 
 // Helper functions
@@ -86,7 +81,7 @@ export function formatPrice(price: number): string {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-    minimumFractionDigits: 0
+    minimumFractionDigits: 0,
   }).format(price);
 }
 
@@ -124,27 +119,25 @@ export function createCheckoutSession(params: {
       userId: params.userId,
       organizationId: params.organizationId,
     },
-    subscription_data: params.trialPeriodDays ? {
-      trial_period_days: params.trialPeriodDays,
-      metadata: {
-        userId: params.userId,
-        organizationId: params.organizationId,
-      }
-    } : {
-      metadata: {
-        userId: params.userId,
-        organizationId: params.organizationId,
-      }
-    },
+    subscription_data: params.trialPeriodDays
+      ? {
+          trial_period_days: params.trialPeriodDays,
+          metadata: {
+            userId: params.userId,
+            organizationId: params.organizationId,
+          },
+        }
+      : {
+          metadata: {
+            userId: params.userId,
+            organizationId: params.organizationId,
+          },
+        },
     allow_promotion_codes: true,
   });
 }
 
-export function createCustomer(params: {
-  email: string;
-  name: string;
-  organizationId: string;
-}) {
+export function createCustomer(params: { email: string; name: string; organizationId: string }) {
   return stripe.customers.create({
     email: params.email,
     name: params.name,
@@ -152,4 +145,4 @@ export function createCustomer(params: {
       organizationId: params.organizationId,
     },
   });
-} 
+}

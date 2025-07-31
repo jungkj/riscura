@@ -75,15 +75,19 @@ export function inferActionFromMethod(method: string): string {
  */
 export function inferClientType(userAgent?: string): 'web' | 'mobile' | 'api' | 'unknown' {
   if (!userAgent) return 'unknown';
-  
-  if (userAgent.includes('Mobile') || userAgent.includes('Android') || userAgent.includes('iPhone')) {
+
+  if (
+    userAgent.includes('Mobile') ||
+    userAgent.includes('Android') ||
+    userAgent.includes('iPhone')
+  ) {
     return 'mobile';
   }
-  
+
   if (userAgent.includes('curl') || userAgent.includes('Postman') || userAgent.includes('axios')) {
     return 'api';
   }
-  
+
   return 'web';
 }
 
@@ -95,7 +99,7 @@ export function generateEventId(): string {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
     return crypto.randomUUID();
   }
-  
+
   // Fallback implementation
   return `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 }

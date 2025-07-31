@@ -1,6 +1,6 @@
 'use client';
 
-import { 
+import {
   EnhancedControl,
   ControlFramework,
   ControlAIAssessment,
@@ -16,12 +16,11 @@ import {
   AutomationAssessment,
   ControlAnalyticsTrend,
   MaturityGap,
-  MaturityRoadmap
+  MaturityRoadmap,
 } from '@/types/enhanced-control.types';
 import { Control } from '@/types';
 
 export class EnhancedControlService {
-  
   constructor() {}
 
   // AI-Powered Control Assessment
@@ -37,9 +36,9 @@ export class EnhancedControlService {
             includeMaturity: true,
             includeGapAnalysis: true,
             includeAutomation: true,
-            includeRiskCoverage: true
-          }
-        })
+            includeRiskCoverage: true,
+          },
+        }),
       });
 
       const result = await response.json();
@@ -53,17 +52,20 @@ export class EnhancedControlService {
   // Control Effectiveness Scoring
   async calculateEffectivenessScore(control: EnhancedControl): Promise<number> {
     const weights = {
-      testResults: 0.4,        // 40% - Testing outcomes
-      maturity: 0.25,          // 25% - Maturity level
-      automation: 0.15,        // 15% - Automation level
-      compliance: 0.10,        // 10% - Compliance status
-      deficiencies: 0.10       // 10% - Outstanding deficiencies
+      testResults: 0.4, // 40% - Testing outcomes
+      maturity: 0.25, // 25% - Maturity level
+      automation: 0.15, // 15% - Automation level
+      compliance: 0.1, // 10% - Compliance status
+      deficiencies: 0.1, // 10% - Outstanding deficiencies
     };
 
     // Calculate test results score
-    const passRate = control.testingHistory.length > 0 
-      ? control.testingHistory.filter(t => t.overallResult === 'passed').length / control.testingHistory.length * 100
-      : 0;
+    const passRate =
+      control.testingHistory.length > 0
+        ? (control.testingHistory.filter((t) => t.overallResult === 'passed').length /
+            control.testingHistory.length) *
+          100
+        : 0;
 
     // Calculate maturity score
     const maturityScore = (control.maturityLevel / 5) * 100;
@@ -72,23 +74,26 @@ export class EnhancedControlService {
     const automationScore = control.aiAssessment?.automationPotential.currentAutomationLevel || 0;
 
     // Calculate compliance score
-    const complianceScore = control.complianceMapping.length > 0
-      ? control.complianceMapping.filter(m => m.complianceStatus === 'compliant').length / control.complianceMapping.length * 100
-      : 100;
+    const complianceScore =
+      control.complianceMapping.length > 0
+        ? (control.complianceMapping.filter((m) => m.complianceStatus === 'compliant').length /
+            control.complianceMapping.length) *
+          100
+        : 100;
 
     // Calculate deficiency impact (inverted)
     const criticalDeficiencies = control.testingHistory
-      .flatMap(t => t.deficiencies)
-      .filter(d => d.severity === 'critical' && d.status === 'open').length;
-    const deficiencyScore = Math.max(0, 100 - (criticalDeficiencies * 20));
+      .flatMap((t) => t.deficiencies)
+      .filter((d) => d.severity === 'critical' && d.status === 'open').length;
+    const deficiencyScore = Math.max(0, 100 - criticalDeficiencies * 20);
 
     // Weighted average
-    const effectivenessScore = 
-      (passRate * weights.testResults) +
-      (maturityScore * weights.maturity) +
-      (automationScore * weights.automation) +
-      (complianceScore * weights.compliance) +
-      (deficiencyScore * weights.deficiencies);
+    const effectivenessScore =
+      passRate * weights.testResults +
+      maturityScore * weights.maturity +
+      automationScore * weights.automation +
+      complianceScore * weights.compliance +
+      deficiencyScore * weights.deficiencies;
 
     return Math.round(effectivenessScore);
   }
@@ -101,8 +106,8 @@ export class EnhancedControlService {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: 'risk_control_mapping',
-          data: { controlId, risks }
-        })
+          data: { controlId, risks },
+        }),
       });
 
       const result = await response.json();
@@ -115,7 +120,7 @@ export class EnhancedControlService {
 
   // Generate Control Recommendations
   async generateControlRecommendations(
-    risks: any[], 
+    risks: any[],
     existingControls: EnhancedControl[]
   ): Promise<AIControlRecommendation[]> {
     try {
@@ -124,8 +129,8 @@ export class EnhancedControlService {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: 'control_recommendations',
-          data: { risks, existingControls }
-        })
+          data: { risks, existingControls },
+        }),
       });
 
       const result = await response.json();
@@ -138,21 +143,21 @@ export class EnhancedControlService {
 
   // Control Testing Workflow
   async scheduleControlTest(
-    controlId: string, 
-    testType: string, 
+    controlId: string,
+    testType: string,
     schedule: TestingSchedule
   ): Promise<{ success: boolean; testId?: string }> {
     try {
       // In a real implementation, this would integrate with a scheduling system
       const testId = `test-${Date.now()}`;
-      
+
       // Calculate next test date based on frequency
       const nextTestDate = this.calculateNextTestDate(schedule);
-      
+
       console.log(`Scheduled ${testType} test for control ${controlId}`, {
         testId,
         nextTestDate,
-        schedule
+        schedule,
       });
 
       return { success: true, testId };
@@ -165,10 +170,10 @@ export class EnhancedControlService {
   // Maturity Assessment
   async assessControlMaturity(control: EnhancedControl): Promise<MaturityAssessment> {
     const currentLevel = control.maturityLevel;
-    
+
     // Determine target level based on risk criticality and industry standards
     const targetLevel = this.determineTargetMaturityLevel(control);
-    
+
     const maturityGaps = this.identifyMaturityGaps(currentLevel, targetLevel);
     const roadmap = this.generateMaturityRoadmap(currentLevel, targetLevel);
 
@@ -176,7 +181,7 @@ export class EnhancedControlService {
       currentLevel,
       targetLevel,
       maturityGaps,
-      roadmapToTarget: roadmap
+      roadmapToTarget: roadmap,
     };
   }
 
@@ -188,8 +193,8 @@ export class EnhancedControlService {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: 'automation_analysis',
-          data: { control }
-        })
+          data: { control },
+        }),
       });
 
       const result = await response.json();
@@ -210,12 +215,13 @@ export class EnhancedControlService {
         category: 'SOC2',
         domain: 'Common Criteria',
         subdomain: 'CC6.1',
-        controlObjective: 'Implement logical and physical access controls to restrict access to information assets',
+        controlObjective:
+          'Implement logical and physical access controls to restrict access to information assets',
         requirements: [
           'Access controls are implemented to restrict access to information and system resources',
           'Physical access to facilities and systems is restricted to authorized personnel',
-          'Logical access controls are implemented and regularly reviewed'
-        ]
+          'Logical access controls are implemented and regularly reviewed',
+        ],
       },
       {
         id: 'iso27001-a9.1.1',
@@ -228,8 +234,8 @@ export class EnhancedControlService {
         requirements: [
           'Access control policy shall be established',
           'Policy shall be documented and communicated',
-          'Policy shall be regularly reviewed and updated'
-        ]
+          'Policy shall be regularly reviewed and updated',
+        ],
       },
       {
         id: 'nist-ac-1',
@@ -242,15 +248,15 @@ export class EnhancedControlService {
         requirements: [
           'Develop and document access control policy',
           'Disseminate policy to relevant personnel',
-          'Review and update policy periodically'
-        ]
-      }
+          'Review and update policy periodically',
+        ],
+      },
     ];
   }
 
   // Advanced Filtering
   filterControls(controls: EnhancedControl[], filters: AdvancedControlFilters): EnhancedControl[] {
-    return controls.filter(control => {
+    return controls.filter((control) => {
       // Framework filter
       if (filters.framework && filters.framework.length > 0) {
         if (!filters.framework.includes(control.framework.category)) return false;
@@ -273,8 +279,10 @@ export class EnhancedControlService {
 
       // Effectiveness range filter
       if (filters.effectivenessRange) {
-        if (control.effectivenessScore < filters.effectivenessRange.min || 
-            control.effectivenessScore > filters.effectivenessRange.max) {
+        if (
+          control.effectivenessScore < filters.effectivenessRange.min ||
+          control.effectivenessScore > filters.effectivenessRange.max
+        ) {
           return false;
         }
       }
@@ -291,16 +299,18 @@ export class EnhancedControlService {
           control.title,
           control.description,
           control.framework.name,
-          control.framework.controlObjective
-        ].join(' ').toLowerCase();
-        
+          control.framework.controlObjective,
+        ]
+          .join(' ')
+          .toLowerCase();
+
         if (!searchableText.includes(query)) return false;
       }
 
       // Has deficiencies filter
       if (filters.hasDeficiencies !== undefined) {
-        const hasOpenDeficiencies = control.testingHistory.some(test => 
-          test.deficiencies.some(def => def.status === 'open')
+        const hasOpenDeficiencies = control.testingHistory.some((test) =>
+          test.deficiencies.some((def) => def.status === 'open')
         );
         if (filters.hasDeficiencies && !hasOpenDeficiencies) return false;
         if (!filters.hasDeficiencies && hasOpenDeficiencies) return false;
@@ -311,7 +321,9 @@ export class EnhancedControlService {
   }
 
   // Bulk Operations
-  async performBulkOperation(operation: ControlBulkOperation): Promise<{ success: boolean; errors?: string[] }> {
+  async performBulkOperation(
+    operation: ControlBulkOperation
+  ): Promise<{ success: boolean; errors?: string[] }> {
     try {
       switch (operation.type) {
         case 'test':
@@ -338,36 +350,45 @@ export class EnhancedControlService {
   // Analytics Generation
   async generateControlAnalytics(controls: EnhancedControl[]): Promise<ControlAnalytics> {
     const totalControls = controls.length;
-    
-    const controlsByFramework = controls.reduce((acc, control) => {
-      acc[control.framework.category] = (acc[control.framework.category] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
 
-    const controlsByType = controls.reduce((acc, control) => {
-      acc[control.controlType] = (acc[control.controlType] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const controlsByFramework = controls.reduce(
+      (acc, control) => {
+        acc[control.framework.category] = (acc[control.framework.category] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
-    const controlsByMaturity = controls.reduce((acc, control) => {
-      acc[control.maturityLevel] = (acc[control.maturityLevel] || 0) + 1;
-      return acc;
-    }, {} as Record<number, number>);
+    const controlsByType = controls.reduce(
+      (acc, control) => {
+        acc[control.controlType] = (acc[control.controlType] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
-    const averageEffectiveness = controls.reduce((sum, control) => 
-      sum + control.effectivenessScore, 0) / totalControls;
+    const controlsByMaturity = controls.reduce(
+      (acc, control) => {
+        acc[control.maturityLevel] = (acc[control.maturityLevel] || 0) + 1;
+        return acc;
+      },
+      {} as Record<number, number>
+    );
+
+    const averageEffectiveness =
+      controls.reduce((sum, control) => sum + control.effectivenessScore, 0) / totalControls;
 
     const testingMetrics = this.calculateTestingMetrics(controls);
     const deficiencyMetrics = this.calculateDeficiencyMetrics(controls);
     const complianceMetrics = this.calculateComplianceMetrics(controls);
-    
+
     const trendData = this.generateAnalyticsTrendData(controls);
     const topPerformingControls = controls
       .sort((a, b) => b.effectivenessScore - a.effectivenessScore)
       .slice(0, 10);
-    
+
     const controlsNeedingAttention = controls
-      .filter(c => c.effectivenessScore < 70 || c.testingStatus === 'overdue')
+      .filter((c) => c.effectivenessScore < 70 || c.testingStatus === 'overdue')
       .sort((a, b) => a.effectivenessScore - b.effectivenessScore)
       .slice(0, 10);
 
@@ -382,7 +403,7 @@ export class EnhancedControlService {
       complianceMetrics,
       trendData,
       topPerformingControls,
-      controlsNeedingAttention
+      controlsNeedingAttention,
     };
   }
 
@@ -399,7 +420,7 @@ export class EnhancedControlService {
         domain: 'Access Control',
         subdomain: 'A.9.1.1',
         controlObjective: 'Establish, document and review access control policy',
-        requirements: ['Access control policy shall be established']
+        requirements: ['Access control policy shall be established'],
       },
       controlType: 'preventive',
       controlNature: 'manual',
@@ -418,7 +439,7 @@ export class EnhancedControlService {
         autoDetectionRate: 0,
         falsePositiveRate: 0,
         timeToDetection: 0,
-        timeToResponse: 0
+        timeToResponse: 0,
       },
       testingHistory: [],
       aiRecommendations: [],
@@ -434,9 +455,9 @@ export class EnhancedControlService {
           escalation: {
             enabled: true,
             daysOverdue: [1, 3, 7],
-            escalationPath: []
-          }
-        }
+            escalationPath: [],
+          },
+        },
       },
       testingStatus: 'not_tested',
       lastTestPerformed: control.lastTestDate ? new Date(control.lastTestDate) : undefined,
@@ -458,8 +479,8 @@ export class EnhancedControlService {
         peerGroup: 'Mid-size companies',
         metrics: [],
         position: 'average',
-        improvementAreas: []
-      }
+        improvementAreas: [],
+      },
     };
   }
 
@@ -473,14 +494,14 @@ export class EnhancedControlService {
         currentLevel: 3,
         targetLevel: 4,
         maturityGaps: [],
-        roadmapToTarget: []
+        roadmapToTarget: [],
       },
       gapAnalysis: [],
       improvementOpportunities: [],
       automationPotential: this.getMockAutomationAssessment(),
       riskCoverage: this.getMockRiskCoverage(),
       confidenceScore: 0.8,
-      lastAnalyzed: new Date()
+      lastAnalyzed: new Date(),
     };
   }
 
@@ -490,7 +511,7 @@ export class EnhancedControlService {
       riskCoveragePercentage: 85,
       criticalRisksCovered: 3,
       gaps: [],
-      redundancies: []
+      redundancies: [],
     };
   }
 
@@ -505,13 +526,17 @@ export class EnhancedControlService {
         priority: 'medium',
         effort: 'medium',
         expectedBenefit: 'Faster detection and response times',
-        implementationSteps: ['Evaluate monitoring tools', 'Implement solution', 'Test and validate'],
+        implementationSteps: [
+          'Evaluate monitoring tools',
+          'Implement solution',
+          'Test and validate',
+        ],
         timeline: 8,
         cost: 15000,
         riskReduction: 25,
         affectedRisks: [],
-        confidenceScore: 0.85
-      }
+        confidenceScore: 0.85,
+      },
     ];
   }
 
@@ -521,7 +546,7 @@ export class EnhancedControlService {
       automationPotential: 'medium',
       automationOpportunities: [],
       currentAutomationLevel: 30,
-      targetAutomationLevel: 70
+      targetAutomationLevel: 70,
     };
   }
 
@@ -568,7 +593,7 @@ export class EnhancedControlService {
         currentState: `Level ${current}`,
         desiredState: `Level ${level}`,
         effort: level - current > 1 ? 'high' : 'medium',
-        priority: level
+        priority: level,
       });
     }
     return gaps;
@@ -583,7 +608,7 @@ export class EnhancedControlService {
         activities: [`Implement Level ${level} processes`, `Document procedures`, `Train staff`],
         duration: 12,
         dependencies: level > current + 1 ? [`Level ${level - 1} completion`] : [],
-        resources: ['Process analyst', 'Training coordinator']
+        resources: ['Process analyst', 'Training coordinator'],
       });
     }
     return roadmap;
@@ -614,71 +639,75 @@ export class EnhancedControlService {
     return { success: true };
   }
 
-  private async bulkAssign(controlIds: string[], assignmentData: any): Promise<{ success: boolean }> {
+  private async bulkAssign(
+    controlIds: string[],
+    assignmentData: any
+  ): Promise<{ success: boolean }> {
     console.log('Bulk assigning controls:', controlIds, assignmentData);
     return { success: true };
   }
 
   private calculateTestingMetrics(controls: EnhancedControl[]): any {
     const totalTests = controls.reduce((sum, c) => sum + c.testingHistory.length, 0);
-    const passedTests = controls.reduce((sum, c) => 
-      sum + c.testingHistory.filter(t => t.overallResult === 'passed').length, 0
+    const passedTests = controls.reduce(
+      (sum, c) => sum + c.testingHistory.filter((t) => t.overallResult === 'passed').length,
+      0
     );
-    
+
     return {
       totalTestsCompleted: totalTests,
       overallPassRate: totalTests > 0 ? (passedTests / totalTests) * 100 : 0,
       averageTestDuration: 2.5,
-      overdueTests: controls.filter(c => c.testingStatus === 'overdue').length,
-      upcomingTests: controls.filter(c => c.testingStatus === 'scheduled').length,
-      testingFrequencyCompliance: 85
+      overdueTests: controls.filter((c) => c.testingStatus === 'overdue').length,
+      upcomingTests: controls.filter((c) => c.testingStatus === 'scheduled').length,
+      testingFrequencyCompliance: 85,
     };
   }
 
   private calculateDeficiencyMetrics(controls: EnhancedControl[]): any {
-    const allDeficiencies = controls.flatMap(c => 
-      c.testingHistory.flatMap(t => t.deficiencies)
+    const allDeficiencies = controls.flatMap((c) =>
+      c.testingHistory.flatMap((t) => t.deficiencies)
     );
-    
+
     return {
       totalDeficiencies: allDeficiencies.length,
-      openDeficiencies: allDeficiencies.filter(d => d.status === 'open').length,
-      criticalDeficiencies: allDeficiencies.filter(d => d.severity === 'critical').length,
+      openDeficiencies: allDeficiencies.filter((d) => d.status === 'open').length,
+      criticalDeficiencies: allDeficiencies.filter((d) => d.severity === 'critical').length,
       averageResolutionTime: 15,
-      deficiencyTrends: []
+      deficiencyTrends: [],
     };
   }
 
   private calculateComplianceMetrics(controls: EnhancedControl[]): any {
-    const allMappings = controls.flatMap(c => c.complianceMapping);
-    const compliantMappings = allMappings.filter(m => m.complianceStatus === 'compliant');
-    
+    const allMappings = controls.flatMap((c) => c.complianceMapping);
+    const compliantMappings = allMappings.filter((m) => m.complianceStatus === 'compliant');
+
     return {
-      overallComplianceScore: allMappings.length > 0 ? 
-        (compliantMappings.length / allMappings.length) * 100 : 100,
+      overallComplianceScore:
+        allMappings.length > 0 ? (compliantMappings.length / allMappings.length) * 100 : 100,
       frameworkCompliance: {},
-      gapsIdentified: allMappings.filter(m => m.gaps.length > 0).length,
-      remediationProgress: 75
+      gapsIdentified: allMappings.filter((m) => m.gaps.length > 0).length,
+      remediationProgress: 75,
     };
   }
 
   private generateAnalyticsTrendData(controls: EnhancedControl[]): ControlAnalyticsTrend[] {
     const trendData: ControlAnalyticsTrend[] = [];
     const now = new Date();
-    
+
     for (let i = 11; i >= 0; i--) {
       const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      
+
       trendData.push({
         date,
         totalControls: controls.length,
         averageEffectiveness: 75 + (Math.random() - 0.5) * 10,
         testsCompleted: Math.floor(controls.length * 0.8 + (Math.random() - 0.5) * 10),
         deficienciesIdentified: Math.floor(Math.random() * 5),
-        complianceScore: 85 + (Math.random() - 0.5) * 15
+        complianceScore: 85 + (Math.random() - 0.5) * 15,
       });
     }
-    
+
     return trendData;
   }
-} 
+}

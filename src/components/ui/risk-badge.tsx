@@ -105,9 +105,9 @@ export const RiskBadge: FC<RiskBadgeProps> = ({
         animated && 'hover:scale-105 hover:shadow-sm',
         'relative overflow-hidden',
         className
-      )}
-    >
-      {/* Animated pulse indicator for critical risks */}
+      )} >
+  {/* Animated pulse indicator for critical risks */}
+</DaisyBadge>
       {level === 'critical' && animated && (
         <div className="absolute -top-1 -right-1 opacity-75">
           <div className={cn(

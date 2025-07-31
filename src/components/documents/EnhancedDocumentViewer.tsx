@@ -216,12 +216,14 @@ export default function EnhancedDocumentViewer({
 
   const renderPreview = () => {
     if (!document || !canPreview(document.type)) {
-      return (
-        <div className="flex flex-col items-center justify-center h-96 text-gray-500">
+
+  return (
+    <div className="flex flex-col items-center justify-center h-96 text-gray-500">
           <FileText className="w-16 h-16 mb-4" />
           <p>Preview not available for this file type</p>
-          <DaisyButton onClick={handleDownload} className="mt-4">
-            <Download className="w-4 h-4 mr-2" />
+          <DaisyButton onClick={handleDownload} className="mt-4" >
+  <Download className="w-4 h-4 mr-2" />
+</DaisyButton>
             Download to View
           </DaisyButton>
         </div>
@@ -236,8 +238,7 @@ export default function EnhancedDocumentViewer({
               variant="outline"
               size="sm"
               onClick={() => setZoom(Math.max(25, zoom - 25))}
-              disabled={zoom <= 25}
-            >
+              disabled={zoom <= 25} />
               <ZoomOut className="w-4 h-4" />
             </DaisyButton>
             <span className="text-sm font-medium">{zoom}%</span>
@@ -245,22 +246,19 @@ export default function EnhancedDocumentViewer({
               variant="outline"
               size="sm"
               onClick={() => setZoom(Math.min(300, zoom + 25))}
-              disabled={zoom >= 300}
-            >
+              disabled={zoom >= 300} />
               <ZoomIn className="w-4 h-4" />
             </DaisyButton>
             <DaisyButton
               variant="outline"
               size="sm"
-              onClick={() => setRotation((rotation + 90) % 360)}
-            >
+              onClick={() => setRotation((rotation + 90) % 360)} />
               <RotateCw className="w-4 h-4" />
             </DaisyButton>
             <DaisyButton
               variant="outline"
               size="sm"
-              onClick={() => setFullscreen(true)}
-            >
+              onClick={() => setFullscreen(true)} />
               <Maximize2 className="w-4 h-4" />
             </DaisyButton>
           </div>
@@ -294,15 +292,15 @@ export default function EnhancedDocumentViewer({
 
     if (document.type.startsWith('text/') && document.extractedText) {
       return (
-        <DaisyScrollArea className="h-96 w-full border rounded-lg p-4">
+        <DaisyScrollArea className="h-96 w-full border rounded-lg p-4" />
           <pre className="text-sm whitespace-pre-wrap font-mono">
             {document.extractedText}
           </pre>
         </DaisyScrollArea>
       );
-    }
+    };
 
-    return (
+  return (
       <div className="flex flex-col items-center justify-center h-96 text-gray-500">
         <FileText className="w-16 h-16 mb-4" />
         <p>Loading preview...</p>
@@ -336,12 +334,12 @@ export default function EnhancedDocumentViewer({
       <DaisySeparator />
 
       <div>
-        <DaisyLabel className="text-sm font-medium text-gray-500">Uploaded By</DaisyLabel>
+        <DaisyLabel className="text-sm font-medium text-gray-500">Uploaded By</DaisySeparator>
         <div className="flex items-center mt-2">
-          <DaisyAvatar className="w-8 h-8 mr-2">
-            <DaisyAvatarFallback>
+          <DaisyAvatar className="w-8 h-8 mr-2" />
+            <DaisyAvatarFallback />
               {document?.uploader.firstName[0]}{document?.uploader.lastName[0]}
-            </DaisyAvatarFallback>
+            </DaisyAvatar>
           </DaisyAvatar>
           <div>
             <p className="text-sm font-medium">
@@ -356,11 +354,12 @@ export default function EnhancedDocumentViewer({
         <>
           <DaisySeparator />
           <div>
-            <DaisyLabel className="text-sm font-medium text-gray-500">Warnings</DaisyLabel>
+            <DaisyLabel className="text-sm font-medium text-gray-500">Warnings</DaisySeparator>
             <div className="mt-2 space-y-1">
               {document.aiAnalysis.warnings.map((warning, index) => (
-                <DaisyBadge key={index} variant="secondary" className="mr-1">
-                  {warning}
+                <DaisyBadge key={index} variant="secondary" className="mr-1" >
+  {warning}
+</DaisyBadge>
                 </DaisyBadge>
               ))}
             </div>
@@ -374,8 +373,10 @@ export default function EnhancedDocumentViewer({
     <div className="space-y-4">
       {document?.aiAnalysis?.versions && document.aiAnalysis.versions.length > 0 ? (
         document.aiAnalysis.versions.map((version, index) => (
-          <DaisyCard key={version.version}>
-            <DaisyCardContent className="p-4">
+          <DaisyCard key={version.version} >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">Version {version.version}</p>
@@ -390,7 +391,7 @@ export default function EnhancedDocumentViewer({
                   {formatFileSize(version.size)}
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         ))
       ) : (
@@ -408,8 +409,9 @@ export default function EnhancedDocumentViewer({
           onChange={(e) => setComment(e.target.value)}
           className="min-h-[80px]"
         />
-        <DaisyButton onClick={handleAddComment} disabled={!comment.trim()}>
-          Add Comment
+        <DaisyButton onClick={handleAddComment} disabled={!comment.trim()} >
+  Add Comment
+</DaisyTextarea>
         </DaisyButton>
       </div>
 
@@ -418,13 +420,15 @@ export default function EnhancedDocumentViewer({
       <div className="space-y-4">
         {comments.length > 0 ? (
           comments.map((comment) => (
-            <DaisyCard key={comment.id}>
-              <DaisyCardContent className="p-4">
+            <DaisyCard key={comment.id} >
+  <DaisyCardContent className="p-4" >
+  </DaisySeparator>
+</DaisyCardContent>
                 <div className="flex items-start space-x-3">
-                  <DaisyAvatar className="w-8 h-8">
-                    <DaisyAvatarFallback>
+                  <DaisyAvatar className="w-8 h-8" />
+                    <DaisyAvatarFallback />
                       {comment.author.name.split(' ').map((n: string) => n[0]).join('')}
-                    </DaisyAvatarFallback>
+                    </DaisyAvatar>
                   </DaisyAvatar>
                   <div className="flex-1">
                     <div className="flex items-center space-x-2">
@@ -436,7 +440,7 @@ export default function EnhancedDocumentViewer({
                     <p className="text-sm mt-1">{comment.text}</p>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           ))
         ) : (
@@ -459,12 +463,13 @@ export default function EnhancedDocumentViewer({
       <div className="flex flex-col items-center justify-center h-96 text-red-500">
         <FileText className="w-16 h-16 mb-4" />
         <p>{error || 'Document not found'}</p>
-        <DaisyButton onClick={onClose} variant="outline" className="mt-4">
-          Close
+        <DaisyButton onClick={onClose} variant="outline" className="mt-4" >
+  Close
+</DaisyButton>
         </DaisyButton>
       </div>
     );
-  }
+  };
 
   return (
     <>
@@ -481,31 +486,34 @@ export default function EnhancedDocumentViewer({
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <DaisyButton variant="outline" onClick={handleDownload}>
-              <Download className="w-4 h-4 mr-2" />
+            <DaisyButton variant="outline" onClick={handleDownload} >
+  <Download className="w-4 h-4 mr-2" />
+</DaisyButton>
               Download
             </DaisyButton>
             {onShare && (
-              <DaisyButton variant="outline" onClick={() => onShare(document)}>
+              <DaisyButton variant="outline" onClick={() => onShare(document)} />
                 <Share2 className="w-4 h-4 mr-2" />
                 Share
               </DaisyButton>
             )}
             {onEdit && (
-              <DaisyButton variant="outline" onClick={() => onEdit(document)}>
+              <DaisyButton variant="outline" onClick={() => onEdit(document)} />
                 <Edit3 className="w-4 h-4 mr-2" />
                 Edit
               </DaisyButton>
             )}
             {onDelete && (
-              <DaisyButton variant="outline" onClick={handleDelete}>
-                <Trash2 className="w-4 h-4 mr-2" />
+              <DaisyButton variant="outline" onClick={handleDelete} >
+  <Trash2 className="w-4 h-4 mr-2" />
+</DaisyButton>
                 Delete
               </DaisyButton>
             )}
             {onClose && (
-              <DaisyButton variant="outline" onClick={onClose}>
-                <X className="w-4 h-4" />
+              <DaisyButton variant="outline" onClick={onClose} >
+  <X className="w-4 h-4" />
+</DaisyButton>
               </DaisyButton>
             )}
           </div>
@@ -513,39 +521,39 @@ export default function EnhancedDocumentViewer({
 
         {/* Content */}
         <div className="p-6">
-          <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
-            <DaisyTabsList className="grid w-full grid-cols-4">
-              <DaisyTabsTrigger value="preview">
+          <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
+            <DaisyTabsList className="grid w-full grid-cols-4" />
+              <DaisyTabsTrigger value="preview" />
                 <Eye className="w-4 h-4 mr-2" />
                 Preview
-              </DaisyTabsTrigger>
-              <DaisyTabsTrigger value="metadata">
+              </DaisyTabs>
+              <DaisyTabsTrigger value="metadata" />
                 <FileText className="w-4 h-4 mr-2" />
                 Details
               </DaisyTabsTrigger>
-              <DaisyTabsTrigger value="versions">
+              <DaisyTabsTrigger value="versions" />
                 <History className="w-4 h-4 mr-2" />
                 Versions
               </DaisyTabsTrigger>
-              <DaisyTabsTrigger value="comments">
+              <DaisyTabsTrigger value="comments" />
                 <MessageSquare className="w-4 h-4 mr-2" />
                 Comments
               </DaisyTabsTrigger>
             </DaisyTabsList>
 
-            <DaisyTabsContent value="preview" className="mt-6">
+            <DaisyTabsContent value="preview" className="mt-6" />
               {renderPreview()}
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="metadata" className="mt-6">
+            <DaisyTabsContent value="metadata" className="mt-6" />
               {renderMetadata()}
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="versions" className="mt-6">
+            <DaisyTabsContent value="versions" className="mt-6" />
               {renderVersionHistory()}
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="comments" className="mt-6">
+            <DaisyTabsContent value="comments" className="mt-6" />
               {renderComments()}
             </DaisyTabsContent>
           </DaisyTabs>
@@ -566,8 +574,7 @@ export default function EnhancedDocumentViewer({
               <DaisyButton
                 variant="outline"
                 className="absolute top-4 right-4 z-10"
-                onClick={() => setFullscreen(false)}
-              >
+                onClick={() => setFullscreen(false)} />
                 <X className="w-4 h-4" />
               </DaisyButton>
               <img

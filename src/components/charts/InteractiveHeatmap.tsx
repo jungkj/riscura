@@ -243,10 +243,12 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
 
   return (
     <DaisyCard className={`bg-[#FAFAFA] border-gray-200 ${className}`}>
-      <DaisyCardHeader>
-        <div className="flex items-center justify-between">
-          <DaisyCardTitle className="flex items-center gap-2">
-            <Activity className="h-5 w-5 text-[#199BEC]" />
+      <DaisyCardHeader >
+  <div className="flex items-center justify-between">
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <Activity className="h-5 w-5 text-[#199BEC]" />
+</DaisyCardTitle>
             Risk Heatmap
           </DaisyCardTitle>
           <div className="flex items-center gap-2">
@@ -262,14 +264,16 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
               <RotateCcw className="h-4 w-4 mr-2" />
               Reset
             </DaisyButton>
-            <DaisyButton variant="outline" size="sm">
-              <Maximize2 className="h-4 w-4" />
+            <DaisyButton variant="outline" size="sm" >
+  <Maximize2 className="h-4 w-4" />
+</DaisyButton>
             </DaisyButton>
           </div>
         </div>
       
-      <DaisyCardContent>
-        <div className="space-y-6">
+      <DaisyCardContent >
+  <div className="space-y-6">
+</DaisyCardContent>
           {/* Filters */}
           <div className="flex flex-wrap gap-2">
             <div className="flex items-center gap-2">
@@ -277,8 +281,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
               <DaisyButton
                 variant={filterCategory === null ? "primary" : "outline"}
                 size="sm"
-                onClick={() => setFilterCategory(null)}
-              >
+                onClick={() => setFilterCategory(null)} />
                 All
               </DaisyButton>
               {categories.map(category => (
@@ -287,8 +290,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
                   variant={filterCategory === category ? "primary" : "outline"}
                   size="sm"
                   onClick={() => setFilterCategory(category)}
-                  className="capitalize"
-                >
+                  className="capitalize" />
                   <div 
                     className="w-2 h-2 rounded-full mr-2" 
                     style={{ backgroundColor: categoryColors[category as keyof typeof categoryColors] }}
@@ -305,8 +307,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
               <DaisyButton
                 variant={filterStatus === null ? "primary" : "outline"}
                 size="sm"
-                onClick={() => setFilterStatus(null)}
-              >
+                onClick={() => setFilterStatus(null)} />
                 All
               </DaisyButton>
               {statuses.map(status => (
@@ -315,8 +316,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
                   variant={filterStatus === status ? "primary" : "outline"}
                   size="sm"
                   onClick={() => setFilterStatus(status)}
-                  className="capitalize"
-                >
+                  className="capitalize" />
                   <div 
                     className="w-2 h-2 rounded-full mr-2" 
                     style={{ backgroundColor: statusColors[status as keyof typeof statusColors] }}
@@ -363,9 +363,9 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
                       if (!cell) return null;
 
                       return (
-                        <DaisyTooltipProvider key={cell.id}>
-                          <DaisyTooltip>
-                            <DaisyTooltipTrigger asChild>
+                        <DaisyTooltipProvider key={cell.id} />
+                          <DaisyTooltip />
+                            <DaisyTooltipTrigger asChild />
                               <motion.div
                                 className={`w-16 h-16 border-2 rounded-lg cursor-pointer transition-all duration-200 flex flex-col items-center justify-center ${
                                   interactive ? 'hover:scale-105 hover:shadow-lg' : ''
@@ -395,8 +395,8 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
                                   </>
                                 )}
                               </motion.div>
-                            </DaisyTooltipTrigger>
-                            <DaisyTooltipContent className="max-w-xs">
+                            </DaisyTooltipProvider>
+                            <DaisyTooltipContent className="max-w-xs" />
                               <div className="space-y-2">
                                 <div className="font-semibold">
                                   Impact: {impact} | Likelihood: {likelihood}
@@ -458,8 +458,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
                   <DaisyButton
                     variant="ghost"
                     size="sm"
-                    onClick={() => setSelectedCell(null)}
-                  >
+                    onClick={() => setSelectedCell(null)} />
                     ×
                   </DaisyButton>
                 </div>
@@ -567,7 +566,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
             </div>
           )}
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 }; 

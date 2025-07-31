@@ -260,17 +260,18 @@ export function RCSANavigationTabs({
       {tab.badge !== undefined && (
         <DaisyBadge 
           variant={getBadgeVariant(tab.badge)}
-          className="ml-1 text-xs"
-        >
-          {tab.badge}
+          className="ml-1 text-xs" >
+  {tab.badge}
+</DaisyBadge>
         </DaisyBadge>
       )}
     </div>
   );
 
   if (variant === 'pills') {
-    return (
-      <div className={cn("flex flex-wrap gap-2 mb-6", className)}>
+
+  return (
+    <div className={cn("flex flex-wrap gap-2 mb-6", className)}>
         {tabs.map((tab) => (
                      <DaisyButton
              key={tab.value}
@@ -278,23 +279,22 @@ export function RCSANavigationTabs({
              size="sm"
              onClick={() => handleTabChange(tab.value)}
              disabled={tab.disabled}
-             className="h-auto py-2 px-3"
-           >
+             className="h-auto py-2 px-3" />
             {getTabContent(tab)}
           </DaisyButton>
         ))}
         {children}
       </div>
     );
-  }
+  };
 
   return (
     <div className={cn("border-b border-border mb-6", className)}>
-      <DaisyTabs value={currentTab} onValueChange={handleTabChange}>
+      <DaisyTabs value={currentTab} onValueChange={handleTabChange} />
         <DaisyTabsList className={cn(
           "h-auto p-0 bg-transparent w-full justify-start",
           variant === 'compact' && "space-x-1"
-        )}>
+        )} />
           {tabs.map((tab) => (
             <DaisyTabsTrigger
               key={tab.value}
@@ -305,10 +305,9 @@ export function RCSANavigationTabs({
                 variant === 'compact' ? "px-3 py-2" : "px-4 py-3",
                 tab.disabled && "opacity-50 cursor-not-allowed"
               )}
-              title={showDescriptions ? tab.description : undefined}
-            >
+              title={showDescriptions ? tab.description : undefined} />
               {getTabContent(tab)}
-            </DaisyTabsTrigger>
+            </DaisyTabs>
           ))}
         </DaisyTabsList>
       </DaisyTabs>
@@ -373,8 +372,9 @@ export function RCSAQuickNavigation({
         <h3 className="text-sm font-medium text-foreground">
           Related {type === 'risks' ? 'Risks' : 'Controls'}
         </h3>
-        <DaisyBadge variant="secondary" className="text-xs">
-          {entities.length}
+        <DaisyBadge variant="secondary" className="text-xs" >
+  {entities.length}
+</DaisyBadge>
         </DaisyBadge>
       </div>
       
@@ -394,8 +394,9 @@ export function RCSAQuickNavigation({
           >
             <div className="flex items-center gap-1">
               {type === 'risks' ? (
-                <DaisyAlertTriangle className="h-3 w-3" />
-              ) : (
+                <DaisyAlertTriangle className="h-3 w-3" >
+  ) : (
+</DaisyButton>
                 <Shield className="h-3 w-3" />
               )}
               <span className="truncate">{entity.title}</span>
@@ -407,9 +408,9 @@ export function RCSAQuickNavigation({
           <DaisyButton
             variant="ghost"
             size="sm"
-            className="h-auto py-1 px-2 text-xs text-muted-foreground"
-          >
-            +{entities.length - 5} more
+            className="h-auto py-1 px-2 text-xs text-muted-foreground" >
+  +{entities.length - 5} more
+</DaisyButton>
           </DaisyButton>
         )}
       </div>
@@ -431,6 +432,7 @@ export function RCSATabContent({
   actions?: React.ReactNode;
   className?: string;
 }) {
+
   return (
     <div className={cn("space-y-6", className)}>
       {(title || description || actions) && (

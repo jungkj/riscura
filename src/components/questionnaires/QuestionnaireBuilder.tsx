@@ -381,9 +381,9 @@ export function QuestionnaireBuilder({
       <div className="p-4 border-b border-notion-border">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-notion-text-primary">Edit Question</h3>
-          <DaisyButton variant="ghost" size="sm" onClick={() => setShowQuestionEditor(false)}>
+          <DaisyButton variant="ghost" size="sm" onClick={() => setShowQuestionEditor(false)} />
             <X className="w-4 h-4" />
-          </DaisyButton>
+          </DaisyCalendar>
         </div>
       </div>
 
@@ -402,25 +402,24 @@ export function QuestionnaireBuilder({
 
         {/* Question Type */}
         <div className="space-y-2">
-          <DaisyLabel htmlFor="question-type">Question Type</DaisyLabel>
+          <DaisyLabel htmlFor="question-type">Question Type</DaisyTextarea>
           <DaisySelect 
             value={questionForm.type} 
             onValueChange={(value) => setQuestionForm(prev => ({ ...prev, type: value as QuestionType }))}
           >
-            <DaisySelectTrigger>
-              <DaisySelectValue />
-            </SelectTrigger>
-            <DaisySelectContent>
-              <DaisySelectItem value="text">Text Input</SelectItem>
-              <DaisySelectItem value="textarea">Long Text</SelectItem>
-              <DaisySelectItem value="number">Number</SelectItem>
-              <DaisySelectItem value="single_choice">Single Choice</SelectItem>
-              <DaisySelectItem value="multiple_choice">Multiple Choice</SelectItem>
-              <DaisySelectItem value="scale">Scale/Rating</SelectItem>
-              <DaisySelectItem value="boolean">Yes/No</SelectItem>
-              <DaisySelectItem value="date">Date</SelectItem>
-              <DaisySelectItem value="file_upload">File Upload</SelectItem>
-            </SelectContent>
+            <DaisySelectTrigger />
+              <DaisySelectValue /></DaisySelect>
+            <DaisySelectContent />
+              <DaisySelectItem value="text">Text Input</DaisySelectContent>
+              <DaisySelectItem value="textarea">Long Text</DaisySelectItem>
+              <DaisySelectItem value="number">Number</DaisySelectItem>
+              <DaisySelectItem value="single_choice">Single Choice</DaisySelectItem>
+              <DaisySelectItem value="multiple_choice">Multiple Choice</DaisySelectItem>
+              <DaisySelectItem value="scale">Scale/Rating</DaisySelectItem>
+              <DaisySelectItem value="boolean">Yes/No</DaisySelectItem>
+              <DaisySelectItem value="date">Date</DaisySelectItem>
+              <DaisySelectItem value="file_upload">File Upload</DaisySelectItem>
+            </DaisySelectContent>
           </DaisySelect>
         </div>
 
@@ -438,7 +437,7 @@ export function QuestionnaireBuilder({
 
         {/* Required Toggle */}
         <div className="flex items-center justify-between">
-          <DaisyLabel htmlFor="question-required">Required Question</DaisyLabel>
+          <DaisyLabel htmlFor="question-required">Required Question</DaisyTextarea>
           <DaisySwitch
             id="question-required"
             checked={questionForm.required}
@@ -449,7 +448,7 @@ export function QuestionnaireBuilder({
         {/* Question-specific Configuration */}
         {questionForm.type === 'single_choice' || questionForm.type === 'multiple_choice' ? (
           <div className="space-y-2">
-            <DaisyLabel>Answer Options</DaisyLabel>
+            <DaisyLabel>Answer Options</DaisySwitch>
             <div className="space-y-2">
               {(questionForm.config.options || []).map((option, index) => (
                 <div key={index} className="flex items-center space-x-2">
@@ -477,7 +476,7 @@ export function QuestionnaireBuilder({
                     }}
                   >
                     <Trash2 className="w-4 h-4" />
-                  </DaisyButton>
+                  </DaisyInput>
                 </div>
               ))}
               <DaisyButton
@@ -530,7 +529,7 @@ export function QuestionnaireBuilder({
                 />
               </div>
               <div>
-                <DaisyLabel>Max Value</DaisyLabel>
+                <DaisyLabel>Max Value</DaisyInput>
                 <DaisyInput
                   type="number"
                   value={questionForm.config.scale?.max || 10}
@@ -550,7 +549,7 @@ export function QuestionnaireBuilder({
                 />
               </div>
               <div>
-                <DaisyLabel>Step</DaisyLabel>
+                <DaisyLabel>Step</DaisyInput>
                 <DaisyInput
                   type="number"
                   value={questionForm.config.scale?.step || 1}
@@ -575,8 +574,9 @@ export function QuestionnaireBuilder({
 
         {/* Save Button */}
         <div className="pt-4 border-t border-notion-border">
-          <DaisyButton onClick={saveQuestionForm} className="w-full">
-            <Save className="w-4 h-4 mr-2" />
+          <DaisyButton onClick={saveQuestionForm} className="w-full" >
+  <Save className="w-4 h-4 mr-2" />
+</DaisyInput>
             Save Question
           </DaisyButton>
         </div>
@@ -594,23 +594,26 @@ export function QuestionnaireBuilder({
               {questionnaire ? 'Edit Questionnaire' : 'Create Questionnaire'}
             </h1>
             {aiEnabled && (
-              <DaisyBadge className="bg-secondary/20 text-foreground border-border">
-                <Brain className="w-3 h-3 mr-1" />
+              <DaisyBadge className="bg-secondary/20 text-foreground border-border" >
+  <Brain className="w-3 h-3 mr-1" />
+</DaisyBadge>
                 AI Enhanced
               </DaisyBadge>
             )}
           </div>
 
           <div className="flex items-center space-x-2">
-            <DaisyButton variant="ghost" onClick={() => setIsPreviewMode(!isPreviewMode)}>
+            <DaisyButton variant="ghost" onClick={() => setIsPreviewMode(!isPreviewMode)} />
               <Eye className="w-4 h-4 mr-2" />
               {isPreviewMode ? 'Edit' : 'Preview'}
             </DaisyButton>
-            <DaisyButton variant="outline" onClick={onCancel}>
-              Cancel
+            <DaisyButton variant="outline" onClick={onCancel} >
+  Cancel
+</DaisyButton>
             </DaisyButton>
-            <DaisyButton onClick={handleSave}>
-              <Save className="w-4 h-4 mr-2" />
+            <DaisyButton onClick={handleSave} >
+  <Save className="w-4 h-4 mr-2" />
+</DaisyButton>
               Save
             </DaisyButton>
           </div>
@@ -620,22 +623,24 @@ export function QuestionnaireBuilder({
       <div className="flex">
         {/* Main Content */}
         <main className="flex-1 p-6">
-          <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <DaisyTabsList>
-              <DaisyTabsTrigger value="builder">Builder</DaisyTabsTrigger>
+          <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6" />
+            <DaisyTabsList />
+              <DaisyTabsTrigger value="builder">Builder</DaisyTabs>
               <DaisyTabsTrigger value="settings">Settings</DaisyTabsTrigger>
               <DaisyTabsTrigger value="ai">AI Configuration</DaisyTabsTrigger>
               <DaisyTabsTrigger value="preview">Preview</DaisyTabsTrigger>
             </DaisyTabsList>
 
-            <DaisyTabsContent value="builder" className="space-y-6">
+            <DaisyTabsContent value="builder" className="space-y-6" />
               {/* Questionnaire Header */}
-              <DaisyCard>
-                <DaisyCardHeader>
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                   <DaisyCardTitle>Questionnaire Details</DaisyCardTitle>
-                
-                <DaisyCardContent className="space-y-4">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4" >
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+</DaisyCardContent>
                     <div>
                       <DaisyLabel htmlFor="title">Title</DaisyLabel>
                       <DaisyInput
@@ -646,18 +651,17 @@ export function QuestionnaireBuilder({
                       />
                     </div>
                     <div>
-                      <DaisyLabel htmlFor="category">Category</DaisyLabel>
-                      <DaisySelect value={category} onValueChange={(value) => setCategory(value as QuestionnaireCategory)}>
-                        <DaisySelectTrigger>
-                          <DaisySelectValue />
-                        </SelectTrigger>
-                        <DaisySelectContent>
-                          <DaisySelectItem value="risk_assessment">Risk Assessment</SelectItem>
-                          <DaisySelectItem value="compliance_audit">Compliance Audit</SelectItem>
-                          <DaisySelectItem value="control_testing">Control Testing</SelectItem>
-                          <DaisySelectItem value="vendor_assessment">Vendor Assessment</SelectItem>
-                          <DaisySelectItem value="security_review">Security Review</SelectItem>
-                        </SelectContent>
+                      <DaisyLabel htmlFor="category">Category</DaisyInput>
+                      <DaisySelect value={category} onValueChange={(value) => setCategory(value as QuestionnaireCategory)} />
+                        <DaisySelectTrigger />
+                          <DaisySelectValue /></DaisySelect>
+                        <DaisySelectContent />
+                          <DaisySelectItem value="risk_assessment">Risk Assessment</DaisySelectContent>
+                          <DaisySelectItem value="compliance_audit">Compliance Audit</DaisySelectItem>
+                          <DaisySelectItem value="control_testing">Control Testing</DaisySelectItem>
+                          <DaisySelectItem value="vendor_assessment">Vendor Assessment</DaisySelectItem>
+                          <DaisySelectItem value="security_review">Security Review</DaisySelectItem>
+                        </DaisySelectContent>
                       </DaisySelect>
                     </div>
                   </div>
@@ -672,36 +676,40 @@ export function QuestionnaireBuilder({
                     />
                   </div>
                   <div className="flex items-center justify-between">
-                    <DaisyLabel htmlFor="ai-enabled">Enable AI Features</DaisyLabel>
+                    <DaisyLabel htmlFor="ai-enabled">Enable AI Features</DaisyTextarea>
                     <DaisySwitch
                       id="ai-enabled"
                       checked={aiEnabled}
                       onCheckedChange={setAiEnabled}
                     />
                   </div>
-                </DaisyCardBody>
+                </DaisySwitch>
               </DaisyCard>
 
               {/* Sections */}
-              <DaisyCard>
-                <DaisyCardHeader>
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                   <div className="flex items-center justify-between">
                     <DaisyCardTitle>Sections & Questions</DaisyCardTitle>
-                    <DaisyButton onClick={addSection}>
-                      <Plus className="w-4 h-4 mr-2" />
+                    <DaisyButton onClick={addSection} >
+  <Plus className="w-4 h-4 mr-2" />
+</DaisyButton>
                       Add Section
                     </DaisyButton>
                   </div>
                 
-                <DaisyCardContent>
-                  {sections.length === 0 ? (
+                <DaisyCardContent >
+  {sections.length === 0 ? (
+</DaisyCardContent>
                     <div className="text-center py-8">
                       <Layers className="w-12 h-12 text-notion-text-tertiary mx-auto mb-4" />
                       <p className="text-notion-text-secondary mb-4">
                         No sections yet. Add your first section to get started.
                       </p>
-                      <DaisyButton onClick={addSection}>
-                        <Plus className="w-4 h-4 mr-2" />
+                      <DaisyButton onClick={addSection} >
+  <Plus className="w-4 h-4 mr-2" />
+</DaisyButton>
                         Add Section
                       </DaisyButton>
                     </div>
@@ -730,15 +738,13 @@ export function QuestionnaireBuilder({
                               <DaisyButton
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => addQuestion(section.id)}
-                              >
+                                onClick={() => addQuestion(section.id)} />
                                 <Plus className="w-4 h-4" />
-                              </DaisyButton>
+                              </DaisyInput>
                               <DaisyButton
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => deleteSection(section.id)}
-                              >
+                                onClick={() => deleteSection(section.id)} />
                                 <Trash2 className="w-4 h-4" />
                               </DaisyButton>
                             </div>
@@ -772,11 +778,12 @@ export function QuestionnaireBuilder({
                                   <div className="flex items-center space-x-2 text-xs text-notion-text-secondary">
                                     <span className="capitalize">{question.type.replace('_', ' ')}</span>
                                     {question.required && (
-                                      <DaisyBadge variant="outline" className="text-xs bg-secondary/20 text-foreground">Required</DaisyBadge>
+                                      <DaisyBadge variant="outline" className="text-xs bg-secondary/20 text-foreground">Required</DaisyTextarea>
                                     )}
                                     {question.aiGenerated && (
-                                      <DaisyBadge variant="outline" className="text-xs bg-secondary/20 text-foreground">
-                                        <Brain className="w-3 h-3 mr-1" />
+                                      <DaisyBadge variant="outline" className="text-xs bg-secondary/20 text-foreground" >
+  <Brain className="w-3 h-3 mr-1" />
+</DaisyBadge>
                                         AI
                                       </DaisyBadge>
                                     )}
@@ -804,15 +811,13 @@ export function QuestionnaireBuilder({
                                   <DaisyButton
                                     variant="ghost"
                                     size="sm"
-                                    onClick={() => duplicateQuestion(question.id)}
-                                  >
+                                    onClick={() => duplicateQuestion(question.id)} />
                                     <Copy className="w-4 h-4" />
                                   </DaisyButton>
                                   <DaisyButton
                                     variant="ghost"
                                     size="sm"
-                                    onClick={() => deleteQuestion(question.id)}
-                                  >
+                                    onClick={() => deleteQuestion(question.id)} />
                                     <Trash2 className="w-4 h-4" />
                                   </DaisyButton>
                                 </div>
@@ -827,8 +832,7 @@ export function QuestionnaireBuilder({
                                 <DaisyButton
                                   variant="ghost"
                                   size="sm"
-                                  onClick={() => addQuestion(section.id)}
-                                >
+                                  onClick={() => addQuestion(section.id)} />
                                   <Plus className="w-4 h-4 mr-2" />
                                   Add Question
                                 </DaisyButton>
@@ -839,76 +843,91 @@ export function QuestionnaireBuilder({
                       ))}
                     </div>
                   )}
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="settings">
-              <DaisyCard>
-                <DaisyCardHeader>
+            <DaisyTabsContent value="settings" />
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                   <DaisyCardTitle>Questionnaire Settings</DaisyCardTitle>
-                
-                <DaisyCardContent>
-                  <div className="space-y-6">
-                    <DaisyAlert>
-                      <Info className="w-4 h-4" />
-                      <DaisyAlertDescription>
-                        Configure advanced settings for questionnaire behavior, validation, and user experience.
-                      
-                    </DaisyAlert>
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-6">
+</DaisyCardContent>
+                    <DaisyAlert >
+  <Info className="w-4 h-4" />
+</DaisyAlert>
+                      <DaisyAlertDescription >
+  Configure advanced settings for questionnaire behavior, validation, and user experience.
+                </DaisyAlertDescription>
+</DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
                     
                     <div className="text-center py-8 text-notion-text-secondary">
                       <Settings className="w-12 h-12 mx-auto mb-4" />
                       <p>Advanced settings panel coming soon...</p>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="ai">
-              <DaisyCard>
-                <DaisyCardHeader>
+            <DaisyTabsContent value="ai" />
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                   <DaisyCardTitle>AI Configuration</DaisyCardTitle>
-                
-                <DaisyCardContent>
-                  <div className="space-y-6">
-                    <DaisyAlert>
-                      <Brain className="w-4 h-4" />
-                      <DaisyAlertDescription>
-                        Configure AI-powered features for intelligent question generation, response analysis, and risk assessment.
-                      
-                    </DaisyAlert>
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-6">
+</DaisyCardContent>
+                    <DaisyAlert >
+  <Brain className="w-4 h-4" />
+</DaisyAlert>
+                      <DaisyAlertDescription >
+  Configure AI-powered features for intelligent question generation, response analysis, and risk assessment.
+                </DaisyAlertDescription>
+</DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
                     
                     <div className="text-center py-8 text-notion-text-secondary">
                       <Brain className="w-12 h-12 mx-auto mb-4" />
                       <p>AI configuration panel coming soon...</p>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="preview">
-              <DaisyCard>
-                <DaisyCardHeader>
+            <DaisyTabsContent value="preview" />
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                   <DaisyCardTitle>Preview</DaisyCardTitle>
-                
-                <DaisyCardContent>
-                  <div className="space-y-6">
-                    <DaisyAlert>
-                      <Eye className="w-4 h-4" />
-                      <DaisyAlertDescription>
-                        Preview how your questionnaire will appear to respondents.
-                      
-                    </DaisyAlert>
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-6">
+</DaisyCardContent>
+                    <DaisyAlert >
+  <Eye className="w-4 h-4" />
+</DaisyAlert>
+                      <DaisyAlertDescription >
+  Preview how your questionnaire will appear to respondents.
+                </DaisyAlertDescription>
+</DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
                     
                     <div className="text-center py-8 text-notion-text-secondary">
                       <Eye className="w-12 h-12 mx-auto mb-4" />
                       <p>Preview mode coming soon...</p>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </DaisyTabsContent>
           </DaisyTabs>

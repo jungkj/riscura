@@ -46,32 +46,32 @@ export async function generatePDF(
   options: PDFGenerationOptions
 ): Promise<PDFGenerationResult> {
   const mergedOptions = { ...DEFAULT_OPTIONS, ...options };
-  
+
   // Ensure reports directory exists
   const reportsDir = '/tmp/reports';
   await fs.mkdir(reportsDir, { recursive: true });
-  
+
   const filePath = path.join(reportsDir, options.fileName);
-  
+
   let browser: puppeteer.Browser | null = null;
-  
+
   try {
     // Generate HTML content
     const htmlContent = await generateHTMLContent(templateName, data, mergedOptions);
-    
+
     // Launch browser
     browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
-    
+
     const page = await browser.newPage();
-    
+
     // Set content
     await page.setContent(htmlContent, {
       waitUntil: 'networkidle0',
     });
-    
+
     // Generate PDF
     const pdf = await page.pdf({
       path: filePath,
@@ -83,15 +83,14 @@ export async function generatePDF(
       footerTemplate: mergedOptions.footerTemplate || getDefaultFooterTemplate(),
       printBackground: true,
     });
-    
+
     const stats = await fs.stat(filePath);
-    
+
     return {
       filePath,
       fileSize: stats.size,
       fileName: options.fileName,
     };
-    
   } catch (error) {
     console.error('PDF generation failed:', error);
     throw new Error(`PDF generation failed: ${error.message}`);
@@ -111,23 +110,23 @@ async function generateHTMLContent(
   options: PDFGenerationOptions
 ): Promise<string> {
   const baseStyles = getBaseStyles();
-  
+
   switch (templateName) {
     case 'risk_assessment_standard':
       return generateRiskAssessmentHTML(data, baseStyles);
-    
+
     case 'compliance_status_standard':
       return generateComplianceStatusHTML(data, baseStyles);
-    
+
     case 'control_effectiveness_standard':
       return generateControlEffectivenessHTML(data, baseStyles);
-    
+
     case 'executive_summary_standard':
       return generateExecutiveSummaryHTML(data, baseStyles);
-    
+
     case 'audit_trail_standard':
       return generateAuditTrailHTML(data, baseStyles);
-    
+
     default:
       return generateGenericReportHTML(data, baseStyles);
   }
@@ -138,11 +137,13 @@ async function generateHTMLContent(
  */
 function generateRiskAssessmentHTML(data: any, baseStyles: string): string {
   const { summary, risks, categoryDistribution, topRisks } = data;
-  
-  const periodText = data.filters?.dateRange 
-    ? data.filters.dateRange.from.toLocaleDateString() + ' - ' + data.filters.dateRange.to.toLocaleDateString()
+
+  const periodText = data.filters?.dateRange
+    ? data.filters.dateRange.from.toLocaleDateString() +
+      ' - ' +
+      data.filters.dateRange.to.toLocaleDateString()
     : 'All Time';
-  
+
   return `
     <!DOCTYPE html>
     <html>
@@ -210,7 +211,9 @@ function generateRiskAssessmentHTML(data: any, baseStyles: string): string {
               </tr>
             </thead>
             <tbody>
-              ${topRisks.map((risk: any) => `
+              ${topRisks
+                .map(
+                  (risk: any) => `
                 <tr>
                   <td>${risk.title}</td>
                   <td><span class="category-badge">${risk.category}</span></td>
@@ -220,7 +223,9 @@ function generateRiskAssessmentHTML(data: any, baseStyles: string): string {
                   <td><span class="status-badge ${risk.status.toLowerCase()}">${risk.status}</span></td>
                   <td>${risk.owner || 'Unassigned'}</td>
                 </tr>
-              `).join('')}
+              `
+                )
+                .join('')}
             </tbody>
           </table>
         </div>
@@ -229,7 +234,9 @@ function generateRiskAssessmentHTML(data: any, baseStyles: string): string {
         <div class="section">
           <h2>All Risks</h2>
           <div class="risk-list">
-            ${risks.map((risk: any) => `
+            ${risks
+              .map(
+                (risk: any) => `
               <div class="risk-item">
                 <div class="risk-header">
                   <h3>${risk.title}</h3>
@@ -245,7 +252,9 @@ function generateRiskAssessmentHTML(data: any, baseStyles: string): string {
                   </div>
                 </div>
               </div>
-            `).join('')}
+            `
+              )
+              .join('')}
           </div>
         </div>
       </div>
@@ -259,7 +268,7 @@ function generateRiskAssessmentHTML(data: any, baseStyles: string): string {
  */
 function generateComplianceStatusHTML(data: any, baseStyles: string): string {
   const { frameworks, complianceScores, overallCompliance } = data;
-  
+
   return `
     <!DOCTYPE html>
     <html>
@@ -304,7 +313,9 @@ function generateComplianceStatusHTML(data: any, baseStyles: string): string {
               </tr>
             </thead>
             <tbody>
-              ${complianceScores.map((score: any) => `
+              ${complianceScores
+                .map(
+                  (score: any) => `
                 <tr>
                   <td>${score.frameworkName}</td>
                   <td>
@@ -317,14 +328,18 @@ function generateComplianceStatusHTML(data: any, baseStyles: string): string {
                   <td>${score.totalRequirements}</td>
                   <td><span class="status-badge ${getComplianceStatus(score.score)}">${getComplianceStatusText(score.score)}</span></td>
                 </tr>
-              `).join('')}
+              `
+                )
+                .join('')}
             </tbody>
           </table>
         </div>
 
         <div class="section">
           <h2>Framework Details</h2>
-          ${frameworks.map((framework: any) => `
+          ${frameworks
+            .map(
+              (framework: any) => `
             <div class="framework-detail">
               <h3>${framework.name}</h3>
               <p>${framework.description || 'No description available'}</p>
@@ -333,7 +348,9 @@ function generateComplianceStatusHTML(data: any, baseStyles: string): string {
                 <span><strong>Version:</strong> ${framework.version || 'N/A'}</span>
               </div>
             </div>
-          `).join('')}
+          `
+            )
+            .join('')}
         </div>
       </div>
     </body>
@@ -346,7 +363,7 @@ function generateComplianceStatusHTML(data: any, baseStyles: string): string {
  */
 function generateControlEffectivenessHTML(data: any, baseStyles: string): string {
   const { controls, effectivenessStats, totalControls, averageEffectiveness } = data;
-  
+
   return `
     <!DOCTYPE html>
     <html>
@@ -403,7 +420,9 @@ function generateControlEffectivenessHTML(data: any, baseStyles: string): string
               </tr>
             </thead>
             <tbody>
-              ${controls.map((control: any) => `
+              ${controls
+                .map(
+                  (control: any) => `
                 <tr>
                   <td>${control.title}</td>
                   <td><span class="category-badge">${control.category}</span></td>
@@ -413,7 +432,9 @@ function generateControlEffectivenessHTML(data: any, baseStyles: string): string
                   <td>${control.owner || 'Unassigned'}</td>
                   <td>${control.lastTested ? new Date(control.lastTested).toLocaleDateString() : 'Never'}</td>
                 </tr>
-              `).join('')}
+              `
+                )
+                .join('')}
             </tbody>
           </table>
         </div>
@@ -428,7 +449,7 @@ function generateControlEffectivenessHTML(data: any, baseStyles: string): string
  */
 function generateExecutiveSummaryHTML(data: any, baseStyles: string): string {
   const { executiveSummary } = data;
-  
+
   return `
     <!DOCTYPE html>
     <html>
@@ -853,12 +874,13 @@ function getBaseStyles(): string {
  */
 function generateCategoryChart(distribution: Record<string, number>): string {
   const total = Object.values(distribution).reduce((sum, count) => sum + count, 0);
-  
+
   return `
     <div class="chart-bars">
-      ${Object.entries(distribution).map(([category, count]) => {
-        const percentage = total > 0 ? (count / total) * 100 : 0;
-        return `
+      ${Object.entries(distribution)
+        .map(([category, count]) => {
+          const percentage = total > 0 ? (count / total) * 100 : 0;
+          return `
           <div class="chart-bar">
             <div class="bar-label">${category}</div>
             <div class="bar-container">
@@ -867,7 +889,8 @@ function generateCategoryChart(distribution: Record<string, number>): string {
             </div>
           </div>
         `;
-      }).join('')}
+        })
+        .join('')}
     </div>
     <style>
       .chart-bars {
@@ -951,4 +974,4 @@ function getComplianceStatusText(score: number): string {
   if (score >= 75) return 'Good';
   if (score >= 60) return 'Fair';
   return 'Needs Improvement';
-} 
+}

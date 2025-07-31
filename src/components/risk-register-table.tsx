@@ -171,8 +171,12 @@ const RiskLevelCell: React.FC<{ value: string }> = ({ value }) => {
 
   const getIcon = (level: string) => {
     switch (level) {
-      case 'Critical': return <DaisyAlertTriangle className="h-3 w-3 mr-1" />;
-      case 'High': return <DaisyAlertTriangle className="h-3 w-3 mr-1" />;
+      case 'Critical': return <DaisyAlertTriangle className="h-3 w-3 mr-1" >
+  ;
+</DaisyAlertTriangle>
+      case 'High': return <DaisyAlertTriangle className="h-3 w-3 mr-1" >
+  ;
+</DaisyAlertTriangle>
       case 'Medium': return <Shield className="h-3 w-3 mr-1" />;
       case 'Low': return <CheckCircle className="h-3 w-3 mr-1" />;
       default: return null;
@@ -180,8 +184,9 @@ const RiskLevelCell: React.FC<{ value: string }> = ({ value }) => {
   };
 
   return (
-    <DaisyBadge variant={getVariant(value) as any} className="text-xs font-medium flex items-center">
-      {getIcon(value)}
+    <DaisyBadge variant={getVariant(value) as any} className="text-xs font-medium flex items-center" >
+  {getIcon(value)}
+</DaisyBadge>
       {value}
     </DaisyBadge>
   );
@@ -201,7 +206,9 @@ const StatusCell: React.FC<{ value: string }> = ({ value }) => {
 
   const getIcon = (status: string) => {
     switch (status) {
-      case 'Open': return <DaisyAlertTriangle className="h-3 w-3 mr-1" />;
+      case 'Open': return <DaisyAlertTriangle className="h-3 w-3 mr-1" >
+  ;
+</DaisyAlertTriangle>
       case 'In Review': return <Clock className="h-3 w-3 mr-1" />;
       case 'Mitigated': return <Shield className="h-3 w-3 mr-1" />;
       case 'Accepted': return <CheckCircle className="h-3 w-3 mr-1" />;
@@ -211,8 +218,9 @@ const StatusCell: React.FC<{ value: string }> = ({ value }) => {
   };
 
   return (
-    <DaisyBadge variant={getVariant(value) as any} className="text-xs font-medium flex items-center">
-      {getIcon(value)}
+    <DaisyBadge variant={getVariant(value) as any} className="text-xs font-medium flex items-center" >
+  {getIcon(value)}
+</DaisyBadge>
       {value}
     </DaisyBadge>
   );
@@ -243,10 +251,10 @@ const OwnerCell: React.FC<{ owner: RiskData['owner'] }> = ({ owner }) => {
   
   return (
     <div className="flex items-center space-x-enterprise-2">
-      <DaisyAvatar className="w-6 h-6">
-        <DaisyAvatarFallback className="text-xs bg-interactive-primary text-white">
+      <DaisyAvatar className="w-6 h-6" />
+        <DaisyAvatarFallback className="text-xs bg-interactive-primary text-white" />
           {initials}
-        </DaisyAvatarFallback>
+        </DaisyAvatar>
       </DaisyAvatar>
       <div className="min-w-0">
         <div className="text-body-sm text-text-primary font-medium truncate">
@@ -313,8 +321,9 @@ export const RiskRegisterTable: React.FC = () => {
       sortable: true,
       searchable: true,
       render: (value) => (
-        <DaisyBadge variant="outline" className="text-xs border-border">
-          {value}
+        <DaisyBadge variant="outline" className="text-xs border-border" >
+  {value}
+</DaisyBadge>
         </DaisyBadge>
       ),
     },
@@ -419,11 +428,13 @@ export const RiskRegisterTable: React.FC = () => {
         </div>
         
         <div className="flex items-center space-x-enterprise-3">
-          <DaisyBadge variant="outline" className="text-body-sm border-border">
-            {sampleRiskData.length} total risks
+          <DaisyBadge variant="outline" className="text-body-sm border-border" >
+  {sampleRiskData.length} total risks
+</DaisyBadge>
           </DaisyBadge>
-          <DaisyBadge variant="error" className="text-body-sm">
-            {sampleRiskData.filter(r => r.riskLevel === 'Critical' || r.riskLevel === 'High').length} high priority
+          <DaisyBadge variant="error" className="text-body-sm" >
+  {sampleRiskData.filter(r => r.riskLevel === 'Critical' || r.riskLevel === 'High').length} high priority
+</DaisyBadge>
           </DaisyBadge>
         </div>
       </div>

@@ -255,10 +255,11 @@ export default function TouchOptimizedTable({
     
     const config = statusConfig[status.toLowerCase() as keyof typeof statusConfig] || 
                   { variant: 'secondary' as const, label: status };
-    
-    return (
-      <DaisyBadge variant={config.variant} className="text-xs">
-        {config.label}
+
+  return (
+    <DaisyBadge variant={config.variant} className="text-xs" >
+  {config.label}
+</DaisyBadge>
       </DaisyBadge>
     );
   };
@@ -303,8 +304,9 @@ export default function TouchOptimizedTable({
           }
         }}
       >
-        <DaisyCardContent className="p-4">
-          <div className="flex items-start justify-between">
+        <DaisyCardContent className="p-4" >
+  <div className="flex items-start justify-between">
+</DaisyCard>
             <div className="flex-1 min-w-0">
               {/* Primary column (first column) */}
               <div className="flex items-center space-x-3 mb-2">
@@ -358,35 +360,33 @@ export default function TouchOptimizedTable({
             </div>
             
             {/* Action menu */}
-            <DaisyDropdownMenu>
-              <DaisyDropdownMenuTrigger asChild>
+            <DaisyDropdownMenu />
+              <DaisyDropdownMenuTrigger asChild />
                 <DaisyButton
                   variant="ghost"
                   size="sm"
                   className="ml-2 h-8 w-8 p-0"
                   onClick={(e) => e.stopPropagation()}
-                  aria-label="Row actions"
-                >
+                  aria-label="Row actions" />
                   <MoreVertical className="w-4 h-4" />
-                </DaisyButton>
+                </DaisyCheckbox>
               </DaisyDropdownMenuTrigger>
-              <DaisyDropdownMenuContent align="end" className="w-48">
-                <DaisyDropdownMenuItem onClick={(e) => e.stopPropagation()}>
+              <DaisyDropdownMenuContent align="end" className="w-48" />
+                <DaisyDropdownMenuItem onClick={(e) => e.stopPropagation()} />
                   <Eye className="w-4 h-4 mr-2" />
                   View Details
-                </DaisyDropdownMenuItem>
-                <DaisyDropdownMenuItem onClick={(e) => e.stopPropagation()}>
+                </DaisyDropdownMenuContent>
+                <DaisyDropdownMenuItem onClick={(e) => e.stopPropagation()} />
                   <Edit className="w-4 h-4 mr-2" />
                   Edit
                 </DaisyDropdownMenuItem>
                 <DaisyDropdownMenuSeparator />
                 <DaisyDropdownMenuItem 
                   className="text-red-600"
-                  onClick={(e) => e.stopPropagation()}
-                >
+                  onClick={(e) => e.stopPropagation()} />
                   <Trash2 className="w-4 h-4 mr-2" />
                   Delete
-                </DaisyDropdownMenuItem>
+                </DaisyDropdownMenuSeparator>
               </DaisyDropdownMenuContent>
             </DaisyDropdownMenu>
           </div>
@@ -407,7 +407,7 @@ export default function TouchOptimizedTable({
               </DaisyButton>
             </div>
           )}
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
   };
@@ -435,12 +435,14 @@ export default function TouchOptimizedTable({
           {filterable && (
             <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
               <SheetTrigger asChild>
-                <DaisyButton variant="outline" size="sm" className="whitespace-nowrap">
-                  <Filter className="w-4 h-4 mr-2" />
+                <DaisyButton variant="outline" size="sm" className="whitespace-nowrap" >
+  <Filter className="w-4 h-4 mr-2" />
+</DaisyInput>
                   Filter
                   {Object.values(filters).filter(Boolean).length > 0 && (
-                    <DaisyBadge variant="secondary" className="ml-2 text-xs">
-                      {Object.values(filters).filter(Boolean).length}
+                    <DaisyBadge variant="secondary" className="ml-2 text-xs" >
+  {Object.values(filters).filter(Boolean).length}
+</DaisyBadge>
                     </DaisyBadge>
                   )}
                 </DaisyButton>
@@ -465,10 +467,11 @@ export default function TouchOptimizedTable({
                   ))}
                   
                   <div className="flex space-x-2 pt-4">
-                    <DaisyButton onClick={clearFilters} variant="outline" className="flex-1">
-                      Clear All
+                    <DaisyButton onClick={clearFilters} variant="outline" className="flex-1" >
+  Clear All
+</DaisyInput>
                     </DaisyButton>
-                    <DaisyButton onClick={() => setIsFilterOpen(false)} className="flex-1">
+                    <DaisyButton onClick={() => setIsFilterOpen(false)} className="flex-1" />
                       Apply
                     </DaisyButton>
                   </div>
@@ -483,15 +486,16 @@ export default function TouchOptimizedTable({
               size="sm"
               onClick={onRefresh}
               disabled={loading || isRefreshing}
-              aria-label="Refresh data"
-            >
-              <RefreshCw className={`w-4 h-4 ${loading || isRefreshing ? 'animate-spin' : ''}`} />
+              aria-label="Refresh data" >
+  <RefreshCw className={`w-4 h-4 ${loading || isRefreshing ? 'animate-spin' : ''}`} />
+</DaisyButton>
             </DaisyButton>
           )}
           
           {onExport && (
-            <DaisyButton variant="outline" size="sm" onClick={onExport}>
-              <Download className="w-4 h-4" />
+            <DaisyButton variant="outline" size="sm" onClick={onExport} >
+  <Download className="w-4 h-4" />
+</DaisyButton>
             </DaisyButton>
           )}
         </div>
@@ -506,8 +510,7 @@ export default function TouchOptimizedTable({
               variant="ghost"
               size="sm"
               onClick={() => setSelectedRows(new Set())}
-              className="text-blue-700 hover:text-blue-800"
-            >
+              className="text-blue-700 hover:text-blue-800" />
               Clear Selection
             </DaisyButton>
           </div>
@@ -517,8 +520,9 @@ export default function TouchOptimizedTable({
         {(searchQuery || Object.values(filters).some(Boolean)) && (
           <div className="flex flex-wrap gap-2">
             {searchQuery && (
-              <DaisyBadge variant="secondary" className="flex items-center gap-1">
-                Search: {searchQuery}
+              <DaisyBadge variant="secondary" className="flex items-center gap-1" >
+  Search: {searchQuery}
+</DaisyBadge>
                 <X 
                   className="w-3 h-3 cursor-pointer" 
                   onClick={() => setSearchQuery('')}
@@ -527,8 +531,9 @@ export default function TouchOptimizedTable({
             )}
             {Object.entries(filters).map(([key, value]) => 
               value && (
-                <DaisyBadge key={key} variant="secondary" className="flex items-center gap-1">
-                  {columns.find(col => col.key === key)?.label}: {value}
+                <DaisyBadge key={key} variant="secondary" className="flex items-center gap-1" >
+  {columns.find(col => col.key === key)?.label}: {value}
+</DaisyBadge>
                   <X 
                     className="w-3 h-3 cursor-pointer" 
                     onClick={() => handleFilterChange(key, '')}
@@ -572,9 +577,9 @@ export default function TouchOptimizedTable({
                 variant="outline"
                 size="sm"
                 onClick={clearFilters}
-                className="mt-2"
-              >
-                Clear Filters
+                className="mt-2" >
+  Clear Filters
+</DaisyButton>
               </DaisyButton>
             )}
           </div>
@@ -617,10 +622,9 @@ export default function TouchOptimizedTable({
               size="sm"
               onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
               disabled={currentPage === 1}
-              aria-label="Previous page"
-            >
+              aria-label="Previous page" />
               <ChevronLeft className="w-4 h-4" />
-            </DaisyButton>
+            </DaisyCheckbox>
             
             <span className="text-sm font-medium px-3">
               {currentPage} of {totalPages}
@@ -631,8 +635,7 @@ export default function TouchOptimizedTable({
               size="sm"
               onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
               disabled={currentPage === totalPages}
-              aria-label="Next page"
-            >
+              aria-label="Next page" />
               <ChevronRight className="w-4 h-4" />
             </DaisyButton>
           </div>

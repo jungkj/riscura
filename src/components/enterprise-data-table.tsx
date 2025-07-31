@@ -64,8 +64,9 @@ const StatusBadgeCell: React.FC<{ value: any }> = ({ value }) => {
   };
 
   return (
-    <DaisyBadge variant={getVariant(value) as any} className="text-xs font-medium">
-      {value}
+    <DaisyBadge variant={getVariant(value) as any} className="text-xs font-medium" >
+  {value}
+</DaisyBadge>
     </DaisyBadge>
   );
 };
@@ -78,9 +79,9 @@ const UserAvatarCell: React.FC<{ value: any }> = ({ value }) => {
   
   return (
     <div className="flex items-center space-x-enterprise-2">
-      <DaisyAvatar className="w-6 h-6">
+      <DaisyAvatar className="w-6 h-6" />
         <DaisyAvatarImage src={user.avatar} alt={user.name} />
-        <DaisyAvatarFallback className="text-xs">{initials}</DaisyAvatarFallback>
+        <DaisyAvatarFallback className="text-xs">{initials}</DaisyAvatar>
       </DaisyAvatar>
       <span className="text-body-sm text-text-primary truncate">{user.name}</span>
     </div>
@@ -177,17 +178,18 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
         );
       case 'actions':
         return (
-          <DaisyDropdownMenu>
-            <DaisyDropdownMenuTrigger asChild>
-              <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
-                <MoreVertical className="h-3 w-3" />
+          <DaisyDropdownMenu />
+            <DaisyDropdownMenuTrigger asChild />
+              <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
+  <MoreVertical className="h-3 w-3" />
+</DaisyCalendar>
               </DaisyButton>
             </DaisyDropdownMenuTrigger>
-            <DaisyDropdownMenuContent align="end">
-              <DaisyDropdownMenuItem onClick={() => onRowClick?.(row)}>
+            <DaisyDropdownMenuContent align="end" />
+              <DaisyDropdownMenuItem onClick={() => onRowClick?.(row)} />
                 <Eye className="h-3 w-3 mr-enterprise-1" />
                 View Details
-              </DaisyDropdownMenuItem>
+              </DaisyDropdownMenuContent>
             </DaisyDropdownMenuContent>
           </DaisyDropdownMenu>
         );
@@ -212,13 +214,14 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
     return (
       <div className="flex items-center justify-center h-64 bg-surface-primary rounded-lg border border-border">
         <div className="text-center">
-          <DaisyAlertTriangle className="h-8 w-8 text-semantic-error mx-auto mb-enterprise-2" />
-          <div className="text-heading-sm text-text-primary mb-enterprise-1">Error loading data</div>
+          <DaisyAlertTriangle className="h-8 w-8 text-semantic-error mx-auto mb-enterprise-2" >
+  <div className="text-heading-sm text-text-primary mb-enterprise-1">
+</DaisyAlertTriangle>Error loading data</div>
           <div className="text-body-sm text-text-secondary">{error}</div>
         </div>
       </div>
     );
-  }
+  };
 
   return (
     <div className={cn("enterprise-data-table bg-surface-primary rounded-lg border border-border shadow-notion-sm", className)}>
@@ -253,20 +256,22 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
                 >
                   {action.icon && <action.icon className="h-3 w-3 mr-enterprise-1" />}
                   {action.label}
-                </DaisyButton>
+                </DaisyInput>
               ))}
             </div>
           )}
         </div>
         
         <div className="flex items-center space-x-enterprise-2">
-          <DaisyButton variant="outline" size="sm" className="text-button border-border hover:border-interactive-primary">
-            <Download className="h-3 w-3 mr-enterprise-1" />
+          <DaisyButton variant="outline" size="sm" className="text-button border-border hover:border-interactive-primary" >
+  <Download className="h-3 w-3 mr-enterprise-1" />
+</DaisyButton>
             Export
           </DaisyButton>
           
-          <DaisyButton variant="outline" size="sm" className="text-button border-border hover:border-interactive-primary">
-            <RefreshCw className="h-3 w-3" />
+          <DaisyButton variant="outline" size="sm" className="text-button border-border hover:border-interactive-primary" >
+  <RefreshCw className="h-3 w-3" />
+</DaisyButton>
           </DaisyButton>
         </div>
       </div>

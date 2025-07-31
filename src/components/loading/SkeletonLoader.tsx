@@ -17,14 +17,14 @@ const BaseSkeleton: React.FC<DaisySkeletonProps> = ({
   width = '100%',
   height = '1rem',
   rounded = 'md',
-  animate = true
+  animate = true,
 }) => {
   const roundedClasses = {
     none: 'rounded-none',
     sm: 'rounded-sm',
     md: 'rounded-md',
     lg: 'rounded-lg',
-    full: 'rounded-full'
+    full: 'rounded-full',
   };
 
   return (
@@ -32,7 +32,7 @@ const BaseSkeleton: React.FC<DaisySkeletonProps> = ({
       className={`bg-gray-200 ${roundedClasses[rounded]} ${animate ? 'animate-pulse' : ''} ${className}`}
       style={{
         width: typeof width === 'number' ? `${width}px` : width,
-        height: typeof height === 'number' ? `${height}px` : height
+        height: typeof height === 'number' ? `${height}px` : height,
       }}
     />
   );
@@ -50,7 +50,7 @@ const TextSkeleton: React.FC<TextSkeletonProps> = ({
   lines = 3,
   className = '',
   lineHeight = '1rem',
-  lastLineWidth = '75%'
+  lastLineWidth = '75%',
 }) => {
   return (
     <div className={`space-y-2 ${className}`}>
@@ -77,7 +77,7 @@ const CardSkeleton: React.FC<DaisyCardSkeletonProps> = ({
   className = '',
   showHeader = true,
   showFooter = false,
-  contentLines = 4
+  contentLines = 4,
 }) => {
   return (
     <div className={`bg-white border border-gray-200 rounded-lg shadow-sm p-4 xs:p-6 ${className}`}>
@@ -90,11 +90,11 @@ const CardSkeleton: React.FC<DaisyCardSkeletonProps> = ({
           <BaseSkeleton width={20} height={20} rounded="sm" />
         </div>
       )}
-      
+
       <div className="space-y-3">
         <TextSkeleton lines={contentLines} />
       </div>
-      
+
       {showFooter && (
         <div className="mt-4 pt-4 border-t border-gray-200">
           <div className="flex items-center justify-between">
@@ -119,7 +119,7 @@ const TableSkeleton: React.FC<DaisyTableSkeletonProps> = ({
   rows = 5,
   columns = 4,
   className = '',
-  showHeader = true
+  showHeader = true,
 }) => {
   return (
     <div className={`bg-white border border-gray-200 rounded-lg overflow-hidden ${className}`}>
@@ -132,17 +132,13 @@ const TableSkeleton: React.FC<DaisyTableSkeletonProps> = ({
           </div>
         </div>
       )}
-      
+
       <div className="divide-y divide-gray-200">
         {Array.from({ length: rows }).map((_, rowIndex) => (
           <div key={rowIndex} className="px-4 xs:px-6 py-4">
             <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
               {Array.from({ length: columns }).map((_, colIndex) => (
-                <BaseSkeleton 
-                  key={colIndex} 
-                  height="1rem" 
-                  width={colIndex === 0 ? '90%' : '70%'} 
-                />
+                <BaseSkeleton key={colIndex} height="1rem" width={colIndex === 0 ? '90%' : '70%'} />
               ))}
             </div>
           </div>
@@ -164,17 +160,19 @@ const ListSkeleton: React.FC<ListSkeletonProps> = ({
   items = 5,
   className = '',
   showAvatar = true,
-  showActions = false
+  showActions = false,
 }) => {
   return (
-    <div className={`bg-white border border-gray-200 rounded-lg divide-y divide-gray-200 ${className}`}>
+    <div
+      className={`bg-white border border-gray-200 rounded-lg divide-y divide-gray-200 ${className}`}
+    >
       {Array.from({ length: items }).map((_, index) => (
         <div key={index} className="p-4 xs:p-6">
           <div className="flex items-start space-x-3 xs:space-x-4">
             {showAvatar && (
               <BaseSkeleton width={40} height={40} rounded="full" className="flex-shrink-0" />
             )}
-            
+
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between mb-2">
                 <BaseSkeleton width="120px" height="1rem" />
@@ -182,7 +180,7 @@ const ListSkeleton: React.FC<ListSkeletonProps> = ({
               </div>
               <TextSkeleton lines={2} lineHeight="0.875rem" lastLineWidth="85%" />
             </div>
-            
+
             {showActions && (
               <div className="flex-shrink-0">
                 <BaseSkeleton width={24} height={24} rounded="sm" />
@@ -207,7 +205,7 @@ const ChartSkeleton: React.FC<ChartSkeletonProps> = ({
   type = 'bar',
   className = '',
   showLegend = true,
-  height = '300px'
+  height = '300px',
 }) => {
   const renderChartContent = () => {
     switch (type) {
@@ -224,7 +222,7 @@ const ChartSkeleton: React.FC<ChartSkeletonProps> = ({
             ))}
           </div>
         );
-      
+
       case 'line':
       case 'area':
         return (
@@ -255,14 +253,14 @@ const ChartSkeleton: React.FC<ChartSkeletonProps> = ({
             </svg>
           </div>
         );
-      
+
       case 'pie':
         return (
           <div className="flex items-center justify-center h-full">
             <BaseSkeleton width={200} height={200} rounded="full" />
           </div>
         );
-      
+
       default:
         return null;
     }
@@ -274,11 +272,11 @@ const ChartSkeleton: React.FC<ChartSkeletonProps> = ({
         <BaseSkeleton width="150px" height="1.25rem" />
         <BaseSkeleton width="80px" height="2rem" rounded="md" />
       </div>
-      
+
       <div style={{ height }} className="mb-4">
         {renderChartContent()}
       </div>
-      
+
       {showLegend && (
         <div className="flex flex-wrap gap-4 justify-center">
           {Array.from({ length: 4 }).map((_, index) => (
@@ -305,17 +303,17 @@ const FormSkeleton: React.FC<FormSkeletonProps> = ({
   fields = 6,
   className = '',
   showButtons = true,
-  columns = 1
+  columns = 1,
 }) => {
   const gridCols = columns === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1';
-  
+
   return (
     <div className={`bg-white border border-gray-200 rounded-lg p-4 xs:p-6 ${className}`}>
       <div className="mb-6">
         <BaseSkeleton width="200px" height="1.5rem" className="mb-2" />
         <BaseSkeleton width="300px" height="1rem" />
       </div>
-      
+
       <div className={`grid ${gridCols} gap-4 xs:gap-6 mb-6`}>
         {Array.from({ length: fields }).map((_, index) => (
           <div key={index} className="space-y-2">
@@ -324,7 +322,7 @@ const FormSkeleton: React.FC<FormSkeletonProps> = ({
           </div>
         ))}
       </div>
-      
+
       {showButtons && (
         <div className="flex flex-col xs:flex-row gap-3 xs:justify-end">
           <BaseSkeleton width="100px" height="2.5rem" rounded="md" />
@@ -340,9 +338,7 @@ interface DashboardSkeletonProps {
   className?: string;
 }
 
-const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
-  className = ''
-}) => {
+const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({ className = '' }) => {
   return (
     <div className={`p-4 xs:p-6 space-y-6 ${className}`}>
       {/* Header */}
@@ -356,7 +352,7 @@ const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
           <BaseSkeleton width="120px" height="2.5rem" rounded="md" />
         </div>
       </div>
-      
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4 xs:gap-6">
         {Array.from({ length: 4 }).map((_, index) => (
@@ -370,20 +366,20 @@ const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
           </div>
         ))}
       </div>
-      
+
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Large Chart */}
         <div className="lg:col-span-2">
           <ChartSkeleton type="area" height="400px" />
         </div>
-        
+
         {/* Activity List */}
         <div>
           <ListSkeleton items={6} showAvatar={true} />
         </div>
       </div>
-      
+
       {/* Data Table */}
       <DaisyTableSkeleton rows={8} columns={5} />
     </div>
@@ -400,7 +396,7 @@ interface ProgressiveSkeletonProps {
 const ProgressiveSkeleton: React.FC<DaisyProgressiveSkeletonProps> = ({
   itemCount = 3,
   itemHeight = '80px',
-  className = ''
+  className = '',
 }) => {
   return (
     <div className={`space-y-4 ${className}`}>
@@ -435,7 +431,7 @@ export const SkeletonLoader = {
   Chart: ChartSkeleton,
   Form: FormSkeleton,
   Dashboard: DashboardSkeleton,
-  Progressive: ProgressiveSkeleton
+  Progressive: ProgressiveSkeleton,
 };
 
-export default SkeletonLoader; 
+export default SkeletonLoader;

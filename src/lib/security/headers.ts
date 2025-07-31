@@ -14,14 +14,14 @@ export interface SecurityHeadersConfig {
     reportUri?: string;
     directives?: CSPDirectives;
   };
-  
+
   // HTTP Strict Transport Security
   hsts?: {
     maxAge?: number;
     includeSubDomains?: boolean;
     preload?: boolean;
   };
-  
+
   // Additional headers
   xFrameOptions?: 'DENY' | 'SAMEORIGIN' | string;
   xContentTypeOptions?: boolean;
@@ -30,7 +30,7 @@ export interface SecurityHeadersConfig {
   crossOriginEmbedderPolicy?: string;
   crossOriginOpenerPolicy?: string;
   crossOriginResourcePolicy?: string;
-  
+
   // Custom headers
   customHeaders?: Record<string, string>;
 }
@@ -71,78 +71,78 @@ const DEFAULT_SECURITY_CONFIG: SecurityHeadersConfig = {
         "'self'",
         "'unsafe-inline'", // Required for Next.js in development
         "'unsafe-eval'", // Required for Next.js in development
-        "https://cdn.jsdelivr.net", // For external libraries
-        "https://unpkg.com", // For external libraries
-        "https://www.google.com", // For reCAPTCHA
-        "https://www.gstatic.com", // For Google services
-        "https://js.stripe.com", // For Stripe
-        "https://checkout.stripe.com" // For Stripe checkout
+        'https://cdn.jsdelivr.net', // For external libraries
+        'https://unpkg.com', // For external libraries
+        'https://www.google.com', // For reCAPTCHA
+        'https://www.gstatic.com', // For Google services
+        'https://js.stripe.com', // For Stripe
+        'https://checkout.stripe.com', // For Stripe checkout
       ],
       styleSrc: [
         "'self'",
         "'unsafe-inline'", // Required for styled-components and CSS-in-JS
-        "https://fonts.googleapis.com", // For Google Fonts
-        "https://cdn.jsdelivr.net", // For external CSS libraries
-        "https://unpkg.com" // For external CSS libraries
+        'https://fonts.googleapis.com', // For Google Fonts
+        'https://cdn.jsdelivr.net', // For external CSS libraries
+        'https://unpkg.com', // For external CSS libraries
       ],
       imgSrc: [
         "'self'",
-        "data:", // For base64 images
-        "blob:", // For generated images
-        "https:", // Allow all HTTPS images
-        "https://images.unsplash.com", // For demo images
-        "https://avatars.githubusercontent.com", // For GitHub avatars
-        "https://lh3.googleusercontent.com", // For Google profile images
-        "https://www.gravatar.com" // For Gravatar images
+        'data:', // For base64 images
+        'blob:', // For generated images
+        'https:', // Allow all HTTPS images
+        'https://images.unsplash.com', // For demo images
+        'https://avatars.githubusercontent.com', // For GitHub avatars
+        'https://lh3.googleusercontent.com', // For Google profile images
+        'https://www.gravatar.com', // For Gravatar images
       ],
       connectSrc: [
         "'self'",
-        "https://api.openai.com", // For AI features
-        "https://api.stripe.com", // For payment processing
-        "https://checkout.stripe.com", // For Stripe checkout
-        "https://api.github.com", // For GitHub integration
-        "https://www.google-analytics.com", // For analytics
-        "https://vitals.vercel-analytics.com", // For Vercel analytics
-        productionGuard.isProduction() ? undefined : "ws://localhost:*", // WebSocket for development
-        productionGuard.isProduction() ? undefined : "http://localhost:*" // Local development
+        'https://api.openai.com', // For AI features
+        'https://api.stripe.com', // For payment processing
+        'https://checkout.stripe.com', // For Stripe checkout
+        'https://api.github.com', // For GitHub integration
+        'https://www.google-analytics.com', // For analytics
+        'https://vitals.vercel-analytics.com', // For Vercel analytics
+        productionGuard.isProduction() ? undefined : 'ws://localhost:*', // WebSocket for development
+        productionGuard.isProduction() ? undefined : 'http://localhost:*', // Local development
       ].filter(Boolean) as string[],
       fontSrc: [
         "'self'",
-        "data:", // For base64 fonts
-        "https://fonts.gstatic.com", // For Google Fonts
-        "https://cdn.jsdelivr.net", // For external fonts
-        "https://unpkg.com" // For external fonts
+        'data:', // For base64 fonts
+        'https://fonts.gstatic.com', // For Google Fonts
+        'https://cdn.jsdelivr.net', // For external fonts
+        'https://unpkg.com', // For external fonts
       ],
       objectSrc: ["'none'"], // Prevent Flash and Java applets
-      mediaSrc: ["'self'", "data:", "blob:"],
+      mediaSrc: ["'self'", 'data:', 'blob:'],
       frameSrc: [
         "'self'",
-        "https://js.stripe.com", // For Stripe elements
-        "https://checkout.stripe.com", // For Stripe checkout
-        "https://www.google.com" // For reCAPTCHA
+        'https://js.stripe.com', // For Stripe elements
+        'https://checkout.stripe.com', // For Stripe checkout
+        'https://www.google.com', // For reCAPTCHA
       ],
-      childSrc: ["'self'", "blob:"],
-      workerSrc: ["'self'", "blob:"],
+      childSrc: ["'self'", 'blob:'],
+      workerSrc: ["'self'", 'blob:'],
       manifestSrc: ["'self'"],
       formAction: ["'self'"],
       frameAncestors: ["'none'"], // Prevent embedding in frames
       baseUri: ["'self'"],
       upgradeInsecureRequests: productionGuard.isProduction(),
       blockAllMixedContent: productionGuard.isProduction(),
-      reportUri: env.CSP_REPORT_URI ? [env.CSP_REPORT_URI] : undefined
-    }
+      reportUri: env.CSP_REPORT_URI ? [env.CSP_REPORT_URI] : undefined,
+    },
   },
-  
+
   hsts: {
     maxAge: env.HSTS_MAX_AGE || 31536000, // 1 year
     includeSubDomains: env.HSTS_INCLUDE_SUBDOMAINS !== false,
-    preload: env.HSTS_PRELOAD === true
+    preload: env.HSTS_PRELOAD === true,
   },
-  
+
   xFrameOptions: 'DENY',
   xContentTypeOptions: true,
   referrerPolicy: 'strict-origin-when-cross-origin',
-  
+
   // Permissions Policy (formerly Feature Policy)
   permissionsPolicy: [
     'geolocation=()',
@@ -155,12 +155,12 @@ const DEFAULT_SECURITY_CONFIG: SecurityHeadersConfig = {
     'speaker=(self)',
     'vibrate=()',
     'fullscreen=(self)',
-    'picture-in-picture=()'
+    'picture-in-picture=()',
   ].join(', '),
-  
+
   crossOriginEmbedderPolicy: 'unsafe-none', // More permissive for third-party integrations
   crossOriginOpenerPolicy: 'same-origin-allow-popups', // For OAuth popups
-  crossOriginResourcePolicy: 'cross-origin' // Allow cross-origin requests for API
+  crossOriginResourcePolicy: 'cross-origin', // Allow cross-origin requests for API
 };
 
 /**
@@ -176,33 +176,33 @@ const PRODUCTION_SECURITY_CONFIG: SecurityHeadersConfig = {
       scriptSrc: [
         "'self'",
         "'nonce-{NONCE}'", // Use nonces instead of unsafe-inline in production
-        "https://cdn.jsdelivr.net",
-        "https://www.google.com",
-        "https://www.gstatic.com",
-        "https://js.stripe.com",
-        "https://checkout.stripe.com"
+        'https://cdn.jsdelivr.net',
+        'https://www.google.com',
+        'https://www.gstatic.com',
+        'https://js.stripe.com',
+        'https://checkout.stripe.com',
       ],
       styleSrc: [
         "'self'",
         "'nonce-{NONCE}'", // Use nonces instead of unsafe-inline in production
-        "https://fonts.googleapis.com",
-        "https://cdn.jsdelivr.net"
+        'https://fonts.googleapis.com',
+        'https://cdn.jsdelivr.net',
       ],
       connectSrc: [
         "'self'",
-        "https://api.openai.com",
-        "https://api.stripe.com",
-        "https://checkout.stripe.com",
-        "https://api.github.com",
-        "https://www.google-analytics.com",
-        "https://vitals.vercel-analytics.com"
+        'https://api.openai.com',
+        'https://api.stripe.com',
+        'https://checkout.stripe.com',
+        'https://api.github.com',
+        'https://www.google-analytics.com',
+        'https://vitals.vercel-analytics.com',
       ],
       upgradeInsecureRequests: true,
-      blockAllMixedContent: true
-    }
+      blockAllMixedContent: true,
+    },
   },
   crossOriginEmbedderPolicy: 'require-corp',
-  crossOriginResourcePolicy: 'same-site'
+  crossOriginResourcePolicy: 'same-site',
 };
 
 /**
@@ -214,7 +214,7 @@ export class SecurityHeaders {
   private nonce?: string;
 
   private constructor(config?: SecurityHeadersConfig) {
-    this.config = productionGuard.isProduction() 
+    this.config = productionGuard.isProduction()
       ? { ...PRODUCTION_SECURITY_CONFIG, ...config }
       : { ...DEFAULT_SECURITY_CONFIG, ...config };
   }
@@ -254,24 +254,22 @@ export class SecurityHeaders {
       if (value === undefined) return;
 
       let directiveName = directive;
-      
+
       // Convert camelCase to kebab-case
       directiveName = directiveName.replace(/([A-Z])/g, '-$1').toLowerCase();
-      
+
       if (typeof value === 'boolean') {
         if (value) {
           cspParts.push(directiveName);
         }
       } else if (Array.isArray(value)) {
         let sources = value;
-        
+
         // Replace nonce placeholder with actual nonce
         if (nonce) {
-          sources = sources.map(source => 
-            source.replace('{NONCE}', nonce)
-          );
+          sources = sources.map((source) => source.replace('{NONCE}', nonce));
         }
-        
+
         cspParts.push(`${directiveName} ${sources.join(' ')}`);
       } else if (typeof value === 'string') {
         cspParts.push(`${directiveName} ${value}`);
@@ -286,17 +284,17 @@ export class SecurityHeaders {
    */
   private buildHSTS(): string {
     const { maxAge, includeSubDomains, preload } = this.config.hsts || {};
-    
+
     let hsts = `max-age=${maxAge || 31536000}`;
-    
+
     if (includeSubDomains !== false) {
       hsts += '; includeSubDomains';
     }
-    
+
     if (preload) {
       hsts += '; preload';
     }
-    
+
     return hsts;
   }
 
@@ -309,7 +307,7 @@ export class SecurityHeaders {
     // Content Security Policy
     if (this.config.csp?.directives) {
       const cspValue = this.buildCSP(this.config.csp.directives, nonce);
-      const headerName = this.config.csp.reportOnly 
+      const headerName = this.config.csp.reportOnly
         ? 'Content-Security-Policy-Report-Only'
         : 'Content-Security-Policy';
       headers[headerName] = cspValue;
@@ -378,7 +376,7 @@ export class SecurityHeaders {
    */
   applyToResponse(response: NextResponse, nonce?: string): NextResponse {
     const headers = this.getHeaders(nonce);
-    
+
     Object.entries(headers).forEach(([key, value]) => {
       response.headers.set(key, value);
     });
@@ -394,10 +392,7 @@ export class SecurityHeaders {
   /**
    * Create a new response with security headers
    */
-  createSecureResponse(
-    body?: any,
-    init?: ResponseInit & { nonce?: string }
-  ): NextResponse {
+  createSecureResponse(body?: any, init?: ResponseInit & { nonce?: string }): NextResponse {
     const { nonce, ...responseInit } = init || {};
     const response = NextResponse.json(body, responseInit);
     return this.applyToResponse(response, nonce);
@@ -432,11 +427,17 @@ export class SecurityHeaders {
       warnings.push('CSP default-src directive not configured');
     }
 
-    if (this.config.csp?.directives?.scriptSrc?.includes("'unsafe-eval'") && productionGuard.isProduction()) {
+    if (
+      this.config.csp?.directives?.scriptSrc?.includes("'unsafe-eval'") &&
+      productionGuard.isProduction()
+    ) {
       warnings.push("'unsafe-eval' in script-src is not recommended for production");
     }
 
-    if (this.config.csp?.directives?.scriptSrc?.includes("'unsafe-inline'") && productionGuard.isProduction()) {
+    if (
+      this.config.csp?.directives?.scriptSrc?.includes("'unsafe-inline'") &&
+      productionGuard.isProduction()
+    ) {
       warnings.push("'unsafe-inline' in script-src is not recommended for production");
     }
 
@@ -453,7 +454,7 @@ export class SecurityHeaders {
     return {
       isValid: errors.length === 0,
       warnings,
-      errors
+      errors,
     };
   }
 }
@@ -466,7 +467,10 @@ export function applySecurityHeaders(response: NextResponse, nonce?: string): Ne
   return securityHeaders.applyToResponse(response, nonce);
 }
 
-export function createSecureResponse(body?: any, init?: ResponseInit & { nonce?: string }): NextResponse {
+export function createSecureResponse(
+  body?: any,
+  init?: ResponseInit & { nonce?: string }
+): NextResponse {
   return securityHeaders.createSecureResponse(body, init);
 }
 
@@ -506,6 +510,6 @@ export function handleCSPReport(report: any): void {
     userAgent: report['user-agent'],
     blockedUri: report['blocked-uri'],
     violatedDirective: report['violated-directive'],
-    originalPolicy: report['original-policy']
+    originalPolicy: report['original-policy'],
   });
-} 
+}

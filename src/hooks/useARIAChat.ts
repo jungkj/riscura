@@ -1,20 +1,15 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { 
-  ConversationMessage, 
-  AgentType, 
-  AIError,
-  MessageAttachment
-} from '@/types/ai.types';
+import { ConversationMessage, AgentType, AIError, MessageAttachment } from '@/types/ai.types';
 import { Risk, Control, Document } from '@/types';
 import { useAI } from '@/context/AIContext';
 import { useAuth } from '@/context/AuthContext';
 import { generateId } from '@/lib/utils';
-import { 
-  contextIntelligenceService, 
-  IntelligentContext, 
+import {
+  contextIntelligenceService,
+  IntelligentContext,
   SmartContextSuggestion,
-  ActivityContext 
+  ActivityContext,
 } from '@/services/ContextIntelligenceService';
 
 // Enhanced RiskContext with real data integration
@@ -102,7 +97,10 @@ export interface ConversationTemplate {
 
 export interface ChatActions {
   sendMessage: (content: string, attachments?: MessageAttachment[]) => Promise<void>;
-  sendMessageWithContext: (content: string, contextOverride?: Partial<RiskContext>) => Promise<void>;
+  sendMessageWithContext: (
+    content: string,
+    contextOverride?: Partial<RiskContext>
+  ) => Promise<void>;
   regenerateMessage: (messageId: string) => Promise<void>;
   applySuggestion: (suggestion: AISuggestion) => Promise<void>;
   applySmartSuggestion: (suggestion: SmartContextSuggestion) => Promise<void>;
@@ -113,7 +111,11 @@ export interface ChatActions {
   clearSearch: () => void;
   exportConversation: (format: 'json' | 'pdf' | 'markdown') => Promise<void>;
   setContext: (context: Partial<RiskContext>) => void;
-  enrichContext: (selectedEntities: { risks?: Risk[]; controls?: Control[]; documents?: Document[] }) => Promise<void>;
+  enrichContext: (selectedEntities: {
+    risks?: Risk[];
+    controls?: Control[];
+    documents?: Document[];
+  }) => Promise<void>;
   useTemplate: (template: ConversationTemplate) => void;
   clearMessages: () => void;
   switchAgent: (agentType: AgentType) => void;
@@ -129,14 +131,15 @@ const defaultTemplates: ConversationTemplate[] = [
     id: 'risk-analysis-comprehensive',
     title: 'Comprehensive Risk Analysis',
     description: 'Deep dive analysis of selected risks with contextual insights',
-    initialMessage: 'Please provide a comprehensive analysis of the selected risks, including correlations, trends, and recommendations.',
+    initialMessage:
+      'Please provide a comprehensive analysis of the selected risks, including correlations, trends, and recommendations.',
     category: 'risk_analysis',
     requiredContext: ['risks'],
     smartPrompts: [
       'What are the key risk correlations?',
       'How do these risks compare to industry benchmarks?',
-      'What control gaps exist for these risks?'
-    ]
+      'What control gaps exist for these risks?',
+    ],
   },
   {
     id: 'control-effectiveness-review',
@@ -148,8 +151,8 @@ const defaultTemplates: ConversationTemplate[] = [
     smartPrompts: [
       'Which controls need immediate attention?',
       'How can we improve control efficiency?',
-      'What are the testing gaps?'
-    ]
+      'What are the testing gaps?',
+    ],
   },
   {
     id: 'compliance-gap-analysis',
@@ -161,21 +164,22 @@ const defaultTemplates: ConversationTemplate[] = [
     smartPrompts: [
       'What are the critical compliance gaps?',
       'Which regulations require immediate attention?',
-      'How can we prioritize remediation efforts?'
-    ]
+      'How can we prioritize remediation efforts?',
+    ],
   },
   {
     id: 'contextual-risk-advice',
     title: 'Contextual Risk Advice',
     description: 'Get personalized risk management advice based on your current context',
-    initialMessage: 'Based on my current work context, what risk management priorities should I focus on?',
+    initialMessage:
+      'Based on my current work context, what risk management priorities should I focus on?',
     category: 'general',
     smartPrompts: [
       'What should I prioritize today?',
       'Are there any urgent risk issues?',
-      'How can I improve my risk management efficiency?'
-    ]
-  }
+      'How can I improve my risk management efficiency?',
+    ],
+  },
 ];
 
 // Custom hook for enhanced ARIA chat with deep context integration
@@ -183,13 +187,13 @@ export const useARIAChat = (initialContext?: RiskContext) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { user } = useAuth();
-  const { 
-    sendMessage: aiSendMessage, 
-    isLoading: aiLoading, 
+  const {
+    sendMessage: aiSendMessage,
+    isLoading: aiLoading,
     error: aiError,
     clearError: aiClearError,
     selectedAgent,
-    switchAgent
+    switchAgent,
   } = useAI();
 
   const [state, setState] = useState<ChatState>({
@@ -199,7 +203,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
     currentStream: '',
     streamingMessageId: null,
     context: initialContext || {
-      relatedEntities: { risks: [], controls: [], documents: [] }
+      relatedEntities: { risks: [], controls: [], documents: [] },
     },
     suggestions: [],
     error: null,
@@ -212,7 +216,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
     contextQuality: { relevance: 0, completeness: 0, freshness: 0 },
     contextMode: 'moderate',
     autoContextUpdate: true,
-    recentActivity: []
+    recentActivity: [],
   });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -227,10 +231,10 @@ export const useARIAChat = (initialContext?: RiskContext) => {
   useEffect(() => {
     if (user && state.autoContextUpdate) {
       refreshContext();
-      
+
       // Set up periodic context updates
       contextUpdateTimer.current = setInterval(refreshContext, 30000); // Every 30 seconds
-      
+
       return () => {
         if (contextUpdateTimer.current) {
           clearInterval(contextUpdateTimer.current);
@@ -246,9 +250,9 @@ export const useARIAChat = (initialContext?: RiskContext) => {
         action: 'navigate',
         entityType: 'document', // Page navigation
         entityId: pathname,
-        context: { page: pathname, search: searchParams?.toString() || '' }
+        context: { page: pathname, search: searchParams?.toString() || '' },
       });
-      
+
       // Refresh context on navigation
       setTimeout(refreshContext, 1000);
     }
@@ -266,7 +270,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
         {
           risks: state.context.intelligentContext?.current.selectedEntities.risks || [],
           controls: state.context.intelligentContext?.current.selectedEntities.controls || [],
-          documents: state.context.intelligentContext?.current.selectedEntities.documents || []
+          documents: state.context.intelligentContext?.current.selectedEntities.documents || [],
         },
         {
           maxTokens: 4000,
@@ -274,7 +278,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
           includeAnalytics: true,
           includeRelated: true,
           summarizationLevel: state.contextMode,
-          agentType: selectedAgent
+          agentType: selectedAgent,
         }
       );
 
@@ -291,293 +295,330 @@ export const useARIAChat = (initialContext?: RiskContext) => {
         selectedAgent
       );
 
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         context: {
           ...prev.context,
           intelligentContext,
           contextRelevance: analysis.relevanceScore,
-          smartSuggestions
+          smartSuggestions,
         },
         smartSuggestions,
         contextQuality: {
           relevance: analysis.relevanceScore,
           completeness: analysis.completeness,
-          freshness: analysis.freshness
-        }
+          freshness: analysis.freshness,
+        },
       }));
     } catch (error) {
       console.error('Error refreshing context:', error);
     }
-  }, [user, pathname, selectedAgent, state.contextMode, state.context.intelligentContext, state.messages]);
+  }, [
+    user,
+    pathname,
+    selectedAgent,
+    state.contextMode,
+    state.context.intelligentContext,
+    state.messages,
+  ]);
 
   // Track user activity
-  const trackActivity = useCallback((activity: Omit<ActivityContext, 'timestamp'>) => {
-    if (!user) return;
+  const trackActivity = useCallback(
+    (activity: Omit<ActivityContext, 'timestamp'>) => {
+      if (!user) return;
 
-    const fullActivity: ActivityContext = {
-      ...activity,
-      timestamp: new Date()
-    };
-
-    // Update local state
-    setState(prev => ({
-      ...prev,
-      recentActivity: [fullActivity, ...prev.recentActivity.slice(0, 49)] // Keep last 50
-    }));
-
-    // Update context intelligence service
-    contextIntelligenceService.updateContext(user.id, fullActivity);
-  }, [user]);
-
-  // Enhanced send message with context injection
-  const sendMessage = useCallback(async (content: string, attachments?: MessageAttachment[]) => {
-    if (!content.trim() || state.isLoading) return;
-
-    setState(prev => ({ ...prev, isLoading: true, error: null }));
-
-    try {
-      // Track message activity
-      trackActivity({
-        action: 'send_message',
-        entityType: 'document', // Message
-        entityId: generateId('message'),
-        context: { 
-          content: content.substring(0, 100), // First 100 chars
-          agentType: selectedAgent,
-          hasAttachments: !!attachments?.length
-        }
-      });
-
-      // Create user message
-      const userMessage: ChatMessage = {
-        id: generateId('message'),
-        role: 'user',
-        content,
+      const fullActivity: ActivityContext = {
+        ...activity,
         timestamp: new Date(),
-        attachments
       };
 
-      setState(prev => ({ 
-        ...prev, 
-        messages: [...prev.messages, userMessage],
-        typingIndicator: true
+      // Update local state
+      setState((prev) => ({
+        ...prev,
+        recentActivity: [fullActivity, ...prev.recentActivity.slice(0, 49)], // Keep last 50
       }));
 
-      // Generate context-enhanced prompt
-      let enhancedContent = content;
-      if (state.context.intelligentContext && state.contextMode !== 'minimal') {
-        const contextString = await contextIntelligenceService.generateSmartContext(
-          state.context.intelligentContext,
+      // Update context intelligence service
+      contextIntelligenceService.updateContext(user.id, fullActivity);
+    },
+    [user]
+  );
+
+  // Enhanced send message with context injection
+  const sendMessage = useCallback(
+    async (content: string, attachments?: MessageAttachment[]) => {
+      if (!content.trim() || state.isLoading) return;
+
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+
+      try {
+        // Track message activity
+        trackActivity({
+          action: 'send_message',
+          entityType: 'document', // Message
+          entityId: generateId('message'),
+          context: {
+            content: content.substring(0, 100), // First 100 chars
+            agentType: selectedAgent,
+            hasAttachments: !!attachments?.length,
+          },
+        });
+
+        // Create user message
+        const userMessage: ChatMessage = {
+          id: generateId('message'),
+          role: 'user',
           content,
-          selectedAgent,
-          {
-            maxTokens: 2000,
-            prioritizeRecent: true,
-            includeAnalytics: true,
-            includeRelated: true,
-            summarizationLevel: state.contextMode,
-            agentType: selectedAgent
+          timestamp: new Date(),
+          attachments,
+        };
+
+        setState((prev) => ({
+          ...prev,
+          messages: [...prev.messages, userMessage],
+          typingIndicator: true,
+        }));
+
+        // Generate context-enhanced prompt
+        let enhancedContent = content;
+        if (state.context.intelligentContext && state.contextMode !== 'minimal') {
+          const contextString = await contextIntelligenceService.generateSmartContext(
+            state.context.intelligentContext,
+            content,
+            selectedAgent,
+            {
+              maxTokens: 2000,
+              prioritizeRecent: true,
+              includeAnalytics: true,
+              includeRelated: true,
+              summarizationLevel: state.contextMode,
+              agentType: selectedAgent,
+            }
+          );
+
+          if (contextString) {
+            enhancedContent = `Context:\n${contextString}\n\nUser Query: ${content}`;
           }
-        );
-
-        if (contextString) {
-          enhancedContent = `Context:\n${contextString}\n\nUser Query: ${content}`;
         }
+
+        // Send to AI with enhanced context
+        await aiSendMessage(enhancedContent, attachments);
+
+        setState((prev) => ({ ...prev, typingIndicator: false }));
+
+        // Refresh context after message
+        setTimeout(refreshContext, 2000);
+      } catch (error) {
+        setState((prev) => ({
+          ...prev,
+          isLoading: false,
+          error: error as AIError,
+          typingIndicator: false,
+        }));
+      } finally {
+        setState((prev) => ({ ...prev, isLoading: false }));
       }
-
-      // Send to AI with enhanced context
-      await aiSendMessage(enhancedContent, attachments);
-
-      setState(prev => ({ ...prev, typingIndicator: false }));
-
-      // Refresh context after message
-      setTimeout(refreshContext, 2000);
-
-    } catch (error) {
-      setState(prev => ({ 
-        ...prev, 
-        isLoading: false, 
-        error: error as AIError,
-        typingIndicator: false
-      }));
-    } finally {
-      setState(prev => ({ ...prev, isLoading: false }));
-    }
-  }, [state.isLoading, state.context.intelligentContext, state.contextMode, selectedAgent, trackActivity, aiSendMessage, refreshContext]);
+    },
+    [
+      state.isLoading,
+      state.context.intelligentContext,
+      state.contextMode,
+      selectedAgent,
+      trackActivity,
+      aiSendMessage,
+      refreshContext,
+    ]
+  );
 
   // Send message with context override
-  const sendMessageWithContext = useCallback(async (
-    content: string, 
-    contextOverride?: Partial<RiskContext>
-  ) => {
-    if (contextOverride) {
-      setState(prev => ({
-        ...prev,
-        context: { ...prev.context, ...contextOverride }
-      }));
-      
-      // Refresh context with new data
-      await refreshContext();
-    }
+  const sendMessageWithContext = useCallback(
+    async (content: string, contextOverride?: Partial<RiskContext>) => {
+      if (contextOverride) {
+        setState((prev) => ({
+          ...prev,
+          context: { ...prev.context, ...contextOverride },
+        }));
 
-    await sendMessage(content);
-  }, [sendMessage, refreshContext]);
+        // Refresh context with new data
+        await refreshContext();
+      }
+
+      await sendMessage(content);
+    },
+    [sendMessage, refreshContext]
+  );
 
   // Enrich context with selected entities
-  const enrichContext = useCallback(async (selectedEntities: {
-    risks?: Risk[];
-    controls?: Control[];
-    documents?: Document[];
-  }) => {
-    if (!user) return;
+  const enrichContext = useCallback(
+    async (selectedEntities: { risks?: Risk[]; controls?: Control[]; documents?: Document[] }) => {
+      if (!user) return;
 
-    // Track context enrichment activity
-    trackActivity({
-      action: 'enrich_context',
-      entityType: 'document',
-      entityId: 'context_enrichment',
-      context: {
-        risksCount: selectedEntities.risks?.length || 0,
-        controlsCount: selectedEntities.controls?.length || 0,
-        documentsCount: selectedEntities.documents?.length || 0
-      }
-    });
-
-    // Update context with selected entities
-    setState(prev => ({
-      ...prev,
-      context: {
-        ...prev.context,
-        currentRisk: selectedEntities.risks?.[0],
-        currentControl: selectedEntities.controls?.[0],
-        currentDocument: selectedEntities.documents?.[0],
-        relatedEntities: {
-          risks: selectedEntities.risks?.map(r => r.id) || prev.context.relatedEntities.risks,
-          controls: selectedEntities.controls?.map(c => c.id) || prev.context.relatedEntities.controls,
-          documents: selectedEntities.documents?.map(d => d.id) || prev.context.relatedEntities.documents
-        }
-      }
-    }));
-
-    // Refresh intelligent context
-    await refreshContext();
-  }, [user, trackActivity, refreshContext]);
-
-  // Apply smart suggestion
-  const applySmartSuggestion = useCallback(async (suggestion: SmartContextSuggestion) => {
-    trackActivity({
-      action: 'apply_suggestion',
-      entityType: 'document',
-      entityId: suggestion.id,
-      context: { 
-        suggestionType: suggestion.type,
-        relevanceScore: suggestion.relevanceScore
-      }
-    });
-
-    if (suggestion.quickAction) {
-      await suggestion.quickAction.action();
-    }
-
-    // Remove applied suggestion
-    setState(prev => ({
-      ...prev,
-      smartSuggestions: prev.smartSuggestions.filter(s => s.id !== suggestion.id)
-    }));
-  }, [trackActivity]);
-
-  // Set context mode
-  const setContextMode = useCallback((mode: 'minimal' | 'moderate' | 'comprehensive') => {
-    setState(prev => ({ ...prev, contextMode: mode }));
-    
-    trackActivity({
-      action: 'change_context_mode',
-      entityType: 'document',
-      entityId: 'context_mode',
-      context: { mode }
-    });
-
-    // Refresh context with new mode
-    setTimeout(refreshContext, 1000);
-  }, [trackActivity, refreshContext]);
-
-  // Use template with enhanced context
-  const useTemplate = useCallback(async (template: ConversationTemplate) => {
-    trackActivity({
-      action: 'use_template',
-      entityType: 'document',
-      entityId: template.id,
-      context: { 
-        category: template.category,
-        requiredContext: template.requiredContext 
-      }
-    });
-
-    // Check if required context is available
-    if (template.requiredContext) {
-      const missingContext = template.requiredContext.filter(required => {
-        switch (required) {
-          case 'risks':
-            return !state.context.relatedEntities.risks.length;
-          case 'controls':
-            return !state.context.relatedEntities.controls.length;
-          case 'documents':
-            return !state.context.relatedEntities.documents.length;
-          default:
-            return false;
-        }
+      // Track context enrichment activity
+      trackActivity({
+        action: 'enrich_context',
+        entityType: 'document',
+        entityId: 'context_enrichment',
+        context: {
+          risksCount: selectedEntities.risks?.length || 0,
+          controlsCount: selectedEntities.controls?.length || 0,
+          documentsCount: selectedEntities.documents?.length || 0,
+        },
       });
 
-      if (missingContext.length > 0) {
-        setState(prev => ({
-          ...prev,
-          error: {
-            type: 'missing_context',
-            message: `This template requires: ${missingContext.join(', ')}. Please select the required entities first.`,
-            code: 'MISSING_CONTEXT',
-            timestamp: new Date(),
-            retryable: false,
-            fallbackUsed: false
-          }
-        }));
-        return;
-      }
-    }
-
-    // Apply template context if provided
-    if (template.context) {
-      setState(prev => ({
+      // Update context with selected entities
+      setState((prev) => ({
         ...prev,
-        context: { ...prev.context, ...template.context }
+        context: {
+          ...prev.context,
+          currentRisk: selectedEntities.risks?.[0],
+          currentControl: selectedEntities.controls?.[0],
+          currentDocument: selectedEntities.documents?.[0],
+          relatedEntities: {
+            risks: selectedEntities.risks?.map((r) => r.id) || prev.context.relatedEntities.risks,
+            controls:
+              selectedEntities.controls?.map((c) => c.id) || prev.context.relatedEntities.controls,
+            documents:
+              selectedEntities.documents?.map((d) => d.id) ||
+              prev.context.relatedEntities.documents,
+          },
+        },
       }));
-    }
 
-    // Send template message
-    await sendMessage(template.initialMessage);
-  }, [state.context, trackActivity, sendMessage]);
+      // Refresh intelligent context
+      await refreshContext();
+    },
+    [user, trackActivity, refreshContext]
+  );
+
+  // Apply smart suggestion
+  const applySmartSuggestion = useCallback(
+    async (suggestion: SmartContextSuggestion) => {
+      trackActivity({
+        action: 'apply_suggestion',
+        entityType: 'document',
+        entityId: suggestion.id,
+        context: {
+          suggestionType: suggestion.type,
+          relevanceScore: suggestion.relevanceScore,
+        },
+      });
+
+      if (suggestion.quickAction) {
+        await suggestion.quickAction.action();
+      }
+
+      // Remove applied suggestion
+      setState((prev) => ({
+        ...prev,
+        smartSuggestions: prev.smartSuggestions.filter((s) => s.id !== suggestion.id),
+      }));
+    },
+    [trackActivity]
+  );
+
+  // Set context mode
+  const setContextMode = useCallback(
+    (mode: 'minimal' | 'moderate' | 'comprehensive') => {
+      setState((prev) => ({ ...prev, contextMode: mode }));
+
+      trackActivity({
+        action: 'change_context_mode',
+        entityType: 'document',
+        entityId: 'context_mode',
+        context: { mode },
+      });
+
+      // Refresh context with new mode
+      setTimeout(refreshContext, 1000);
+    },
+    [trackActivity, refreshContext]
+  );
+
+  // Use template with enhanced context
+  const useTemplate = useCallback(
+    async (template: ConversationTemplate) => {
+      trackActivity({
+        action: 'use_template',
+        entityType: 'document',
+        entityId: template.id,
+        context: {
+          category: template.category,
+          requiredContext: template.requiredContext,
+        },
+      });
+
+      // Check if required context is available
+      if (template.requiredContext) {
+        const missingContext = template.requiredContext.filter((required) => {
+          switch (required) {
+            case 'risks':
+              return !state.context.relatedEntities.risks.length;
+            case 'controls':
+              return !state.context.relatedEntities.controls.length;
+            case 'documents':
+              return !state.context.relatedEntities.documents.length;
+            default:
+              return false;
+          }
+        });
+
+        if (missingContext.length > 0) {
+          setState((prev) => ({
+            ...prev,
+            error: {
+              type: 'missing_context',
+              message: `This template requires: ${missingContext.join(', ')}. Please select the required entities first.`,
+              code: 'MISSING_CONTEXT',
+              timestamp: new Date(),
+              retryable: false,
+              fallbackUsed: false,
+            },
+          }));
+          return;
+        }
+      }
+
+      // Apply template context if provided
+      if (template.context) {
+        setState((prev) => ({
+          ...prev,
+          context: { ...prev.context, ...template.context },
+        }));
+      }
+
+      // Send template message
+      await sendMessage(template.initialMessage);
+    },
+    [state.context, trackActivity, sendMessage]
+  );
 
   // Enhanced search with context awareness
-  const searchMessages = useCallback((query: string) => {
-    setState(prev => ({ ...prev, searchQuery: query }));
-    
-    if (!query.trim()) {
-      setState(prev => ({ ...prev, filteredMessages: [] }));
-      return;
-    }
+  const searchMessages = useCallback(
+    (query: string) => {
+      setState((prev) => ({ ...prev, searchQuery: query }));
 
-    const filtered = state.messages.filter(message =>
-      message.content.toLowerCase().includes(query.toLowerCase()) ||
-      (message.metadata && 'agentType' in message.metadata && 
-       typeof message.metadata.agentType === 'string' && 
-       message.metadata.agentType.includes(query.toLowerCase())) ||
-      (message.contextData?.relatedEntities && message.contextData.relatedEntities.some(entity => 
-        entity.toLowerCase().includes(query.toLowerCase())
-      ))
-    );
+      if (!query.trim()) {
+        setState((prev) => ({ ...prev, filteredMessages: [] }));
+        return;
+      }
 
-    setState(prev => ({ ...prev, filteredMessages: filtered }));
-  }, [state.messages]);
+      const filtered = state.messages.filter(
+        (message) =>
+          message.content.toLowerCase().includes(query.toLowerCase()) ||
+          (message.metadata &&
+            'agentType' in message.metadata &&
+            typeof message.metadata.agentType === 'string' &&
+            message.metadata.agentType.includes(query.toLowerCase())) ||
+          (message.contextData?.relatedEntities &&
+            message.contextData.relatedEntities.some((entity) =>
+              entity.toLowerCase().includes(query.toLowerCase())
+            ))
+      );
+
+      setState((prev) => ({ ...prev, filteredMessages: filtered }));
+    },
+    [state.messages]
+  );
 
   const actions: ChatActions = {
     sendMessage,
@@ -604,22 +645,22 @@ export const useARIAChat = (initialContext?: RiskContext) => {
     },
     searchMessages,
     clearSearch: () => {
-      setState(prev => ({ ...prev, searchQuery: '', filteredMessages: [] }));
+      setState((prev) => ({ ...prev, searchQuery: '', filteredMessages: [] }));
     },
     exportConversation: async (format: 'json' | 'pdf' | 'markdown') => {
       // Implementation for export
       console.log('Exporting conversation as:', format);
     },
     setContext: (context: Partial<RiskContext>) => {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
-        context: { ...prev.context, ...context }
+        context: { ...prev.context, ...context },
       }));
     },
     enrichContext,
     useTemplate,
     clearMessages: () => {
-      setState(prev => ({ ...prev, messages: [] }));
+      setState((prev) => ({ ...prev, messages: [] }));
     },
     switchAgent: (agentType: AgentType) => {
       switchAgent(agentType);
@@ -627,25 +668,25 @@ export const useARIAChat = (initialContext?: RiskContext) => {
         action: 'switch_agent',
         entityType: 'document',
         entityId: agentType,
-        context: { agentType }
+        context: { agentType },
       });
     },
     clearError: () => {
-      setState(prev => ({ ...prev, error: null }));
+      setState((prev) => ({ ...prev, error: null }));
       aiClearError();
     },
     setContextMode,
     refreshContext,
-    trackActivity
+    trackActivity,
   };
 
   return {
     state: {
       ...state,
       isLoading: state.isLoading || aiLoading,
-      error: state.error || aiError
+      error: state.error || aiError,
     },
     actions,
-    messagesEndRef
+    messagesEndRef,
   };
-}; 
+};

@@ -270,9 +270,9 @@ export default function TrendAnalysisChart({
     
     const data = payload[0].payload;
     const config = metricConfigs[selectedMetric];
-    
-    return (
-      <div className="bg-white p-3 border rounded-lg shadow-lg">
+
+  return (
+    <div className="bg-white p-3 border rounded-lg shadow-lg">
         <div className="font-medium text-sm mb-2">
           {format(new Date(label), 'MMM dd, yyyy')}
         </div>
@@ -485,8 +485,9 @@ export default function TrendAnalysisChart({
   
   return (
     <DaisyCard className={`${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
-      <DaisyCardHeader className="pb-3">
-        <div className="flex items-center justify-between">
+      <DaisyCardHeader className="pb-3" >
+  <div className="flex items-center justify-between">
+</DaisyTooltip>
           <div className="flex items-center space-x-2">
             <Activity className="w-5 h-5 text-blue-600" />
             <DaisyCardTitle className="text-lg">Trend Analysis</DaisyCardTitle>
@@ -494,9 +495,9 @@ export default function TrendAnalysisChart({
               <DaisyBadge 
                 variant={trendStats.trend === 'increasing' ? 'destructive' : 
                         trendStats.trend === 'decreasing' ? 'default' : 'secondary'}
-                className="text-xs"
-              >
-                {trendStats.trend === 'increasing' && <TrendingUp className="w-3 h-3 mr-1" />}
+                className="text-xs" >
+  {trendStats.trend === 'increasing' && 
+</DaisyBadge><TrendingUp className="w-3 h-3 mr-1" />}
                 {trendStats.trend === 'decreasing' && <TrendingDown className="w-3 h-3 mr-1" />}
                 {trendStats.percentChange > 0 ? '+' : ''}{trendStats.percentChange}%
               </DaisyBadge>
@@ -508,17 +509,16 @@ export default function TrendAnalysisChart({
               variant="ghost"
               size="sm"
               onClick={handleExport}
-              className="p-2"
-            >
-              <Download className="w-4 h-4" />
+              className="p-2" >
+  <Download className="w-4 h-4" />
+</DaisyButton>
             </DaisyButton>
             
             <DaisyButton
               variant="ghost"
               size="sm"
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className="p-2"
-            >
+              className="p-2" />
               <Maximize2 className="w-4 h-4" />
             </DaisyButton>
           </div>
@@ -528,29 +528,27 @@ export default function TrendAnalysisChart({
         <div className="flex flex-wrap items-center gap-4 mt-3">
           <div className="flex items-center space-x-2">
             <Filter className="w-4 h-4 text-gray-500" />
-            <DaisySelect value={selectedMetric} onValueChange={(value: any) => setSelectedMetric(value)}>
-              <DaisySelectTrigger className="w-48">
-                <DaisySelectValue />
-              </SelectTrigger>
-              <DaisySelectContent>
+            <DaisySelect value={selectedMetric} onValueChange={(value: any) => setSelectedMetric(value)} />
+              <DaisySelectTrigger className="w-48" />
+                <DaisySelectValue /></DaisySelect>
+              <DaisySelectContent />
                 {Object.entries(metricConfigs).map(([key, config]) => (
-                  <DaisySelectItem key={key} value={key}>
+                  <DaisySelectItem key={key} value={key} />
                     {config.label}
-                  </SelectItem>
+                  </DaisySelectContent>
                 ))}
-              </SelectContent>
+              </DaisySelectContent>
             </DaisySelect>
             
-            <DaisySelect value={timeRange} onValueChange={(value: any) => setTimeRange(value)}>
-              <DaisySelectTrigger className="w-24">
-                <DaisySelectValue />
-              </SelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="7d">7 days</SelectItem>
-                <DaisySelectItem value="30d">30 days</SelectItem>
-                <DaisySelectItem value="90d">90 days</SelectItem>
-                <DaisySelectItem value="1y">1 year</SelectItem>
-              </SelectContent>
+            <DaisySelect value={timeRange} onValueChange={(value: any) => setTimeRange(value)} />
+              <DaisySelectTrigger className="w-24" />
+                <DaisySelectValue /></DaisySelect>
+              <DaisySelectContent />
+                <DaisySelectItem value="7d">7 days</DaisySelectContent>
+                <DaisySelectItem value="30d">30 days</DaisySelectItem>
+                <DaisySelectItem value="90d">90 days</DaisySelectItem>
+                <DaisySelectItem value="1y">1 year</DaisySelectItem>
+              </DaisySelectContent>
             </DaisySelect>
           </div>
           
@@ -558,29 +556,25 @@ export default function TrendAnalysisChart({
             <DaisyButton
               variant={chartType === 'line' ? 'primary' : 'outline'}
               size="sm"
-              onClick={() => setChartType('line')}
-            >
+              onClick={() => setChartType('line')} />
               <LineChartIcon className="w-4 h-4" />
             </DaisyButton>
             <DaisyButton
               variant={chartType === 'area' ? 'primary' : 'outline'}
               size="sm"
-              onClick={() => setChartType('area')}
-            >
+              onClick={() => setChartType('area')} />
               <AreaChartIcon className="w-4 h-4" />
             </DaisyButton>
             <DaisyButton
               variant={chartType === 'bar' ? 'primary' : 'outline'}
               size="sm"
-              onClick={() => setChartType('bar')}
-            >
+              onClick={() => setChartType('bar')} />
               <BarChart3 className="w-4 h-4" />
             </DaisyButton>
             <DaisyButton
               variant={chartType === 'composed' ? 'primary' : 'outline'}
               size="sm"
-              onClick={() => setChartType('composed')}
-            >
+              onClick={() => setChartType('composed')} />
               <Activity className="w-4 h-4" />
             </DaisyButton>
           </div>
@@ -592,7 +586,7 @@ export default function TrendAnalysisChart({
                 checked={showMovingAverage}
                 onCheckedChange={setShowMovingAverage}
               />
-              <DaisyLabel htmlFor="moving-average" className="text-sm">7-day MA</DaisyLabel>
+              <DaisyLabel htmlFor="moving-average" className="text-sm">7-day MA</DaisySwitch>
             </div>
             
             <div className="flex items-center space-x-2">
@@ -601,21 +595,22 @@ export default function TrendAnalysisChart({
                 checked={localShowForecast}
                 onCheckedChange={setShowForecast}
               />
-              <DaisyLabel htmlFor="forecast" className="text-sm">Forecast</DaisyLabel>
+              <DaisyLabel htmlFor="forecast" className="text-sm">Forecast</DaisySwitch>
             </div>
           </div>
         </div>
       
 
-      <DaisyCardContent>
-        <DaisyTabs value={selectedTab} onValueChange={setSelectedTab}>
-          <DaisyTabsList className="grid w-full grid-cols-3">
-            <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+      <DaisyCardContent >
+  <DaisyTabs value={selectedTab} onValueChange={setSelectedTab} />
+</DaisyCardContent>
+          <DaisyTabsList className="grid w-full grid-cols-3" />
+            <DaisyTabsTrigger value="overview">Overview</DaisyTabsList>
             <DaisyTabsTrigger value="detailed">Detailed View</DaisyTabsTrigger>
             <DaisyTabsTrigger value="insights">Insights</DaisyTabsTrigger>
           </DaisyTabsList>
           
-          <DaisyTabsContent value="overview" className="space-y-4">
+          <DaisyTabsContent value="overview" className="space-y-4" />
             {/* Key Metrics */}
             {trendStats && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
@@ -655,7 +650,7 @@ export default function TrendAnalysisChart({
             </ResponsiveContainer>
           </DaisyTabsContent>
           
-          <DaisyTabsContent value="detailed" className="space-y-4">
+          <DaisyTabsContent value="detailed" className="space-y-4" />
             <ResponsiveContainer width="100%" height={height + 100}>
               <LineChart data={combinedData} margin={{ top: 5, right: 30, left: 20, bottom: 60 }}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -687,10 +682,12 @@ export default function TrendAnalysisChart({
             </ResponsiveContainer>
           </DaisyTabsContent>
           
-          <DaisyTabsContent value="insights" className="space-y-4">
+          <DaisyTabsContent value="insights" className="space-y-4" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <DaisyCard>
-                <DaisyCardContent className="p-4">
+              <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyTabsContent>
+</DaisyCardContent>
                   <h4 className="font-medium mb-3 flex items-center">
                     <Target className="w-4 h-4 mr-2" />
                     Forecast Summary
@@ -717,14 +714,17 @@ export default function TrendAnalysisChart({
                       </div>
                     </div>
                   )}
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
               
-              <DaisyCard>
-                <DaisyCardContent className="p-4">
+              <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
                   <h4 className="font-medium mb-3 flex items-center">
-                    <DaisyAlertTriangle className="w-4 h-4 mr-2" />
-                    Key Insights
+                    <DaisyAlertTriangle className="w-4 h-4 mr-2" >
+  Key Insights
+</DaisyAlertTriangle>
                   </h4>
                   <div className="space-y-2 text-sm">
                     {trendStats?.trend === 'increasing' && (
@@ -746,12 +746,12 @@ export default function TrendAnalysisChart({
                       📊 Data points: {filteredData.length} | Range: {timeRange}
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </div>
           </DaisyTabsContent>
         </DaisyTabs>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 } 

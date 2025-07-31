@@ -11,7 +11,7 @@ import { TourProvider } from '@/components/ui/HelpSystem';
 import { GlobalStyles } from '@/components/ui/GlobalStyles';
 import { AccessibilityAnnouncements } from '@/components/ui/HighContrastToggle';
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
@@ -34,9 +34,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   title: {
     default: 'Riscura - AI-Powered Risk Management Platform',
-    template: '%s | Riscura'
+    template: '%s | Riscura',
   },
-  description: 'Transform your risk management with AI-powered insights, automated compliance workflows, and comprehensive RCSA capabilities.',
+  description:
+    'Transform your risk management with AI-powered insights, automated compliance workflows, and comprehensive RCSA capabilities.',
   keywords: ['risk management', 'compliance', 'RCSA', 'AI', 'security', 'governance'],
   authors: [{ name: 'Riscura Team' }],
   creator: 'Riscura',
@@ -51,7 +52,8 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: '/',
     title: 'Riscura - AI-Powered Risk Management Platform',
-    description: 'Transform your risk management with AI-powered insights and automated compliance workflows.',
+    description:
+      'Transform your risk management with AI-powered insights and automated compliance workflows.',
     siteName: 'Riscura',
     images: [
       {
@@ -67,7 +69,8 @@ export const metadata: Metadata = {
     site: '@riscura',
     creator: '@riscura',
     title: 'Riscura - AI-Powered Risk Management Platform',
-    description: 'Transform your risk management with AI-powered insights and automated compliance workflows.',
+    description:
+      'Transform your risk management with AI-powered insights and automated compliance workflows.',
     images: ['/images/og/twitter-image.png'],
   },
   robots: {
@@ -85,9 +88,7 @@ export const metadata: Metadata = {
       { url: '/images/logo/riscura.png', sizes: '16x16', type: 'image/png' },
     ],
     shortcut: '/images/logo/riscura.png',
-    apple: [
-      { url: '/images/logo/riscura.png', sizes: '180x180', type: 'image/png' },
-    ],
+    apple: [{ url: '/images/logo/riscura.png', sizes: '180x180', type: 'image/png' }],
   },
   alternates: {
     canonical: 'https://riscura.com',
@@ -95,13 +96,14 @@ export const metadata: Metadata = {
   category: 'technology',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" style={{ backgroundColor: '#FFFFFF' }} className={inter.variable} suppressHydrationWarning>
+    <html
+      lang="en"
+      style={{ backgroundColor: '#FFFFFF' }}
+      className={inter.variable}
+      suppressHydrationWarning
+    >
       <head>
         <link rel="icon" href="/images/logo/riscura.png" sizes="any" />
         <link rel="manifest" href="/manifest.json" />
@@ -113,13 +115,11 @@ export default function RootLayout({
           <AccessibilityAnnouncements />
           <Providers>
             <TourProvider>
-              <ToastProvider>
-                {children}
-              </ToastProvider>
+              <ToastProvider>{children}</ToastProvider>
             </TourProvider>
           </Providers>
         </CriticalErrorBoundary>
       </body>
     </html>
-  )
-} 
+  );
+}

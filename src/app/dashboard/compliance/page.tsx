@@ -10,11 +10,11 @@ export default function CompliancePage() {
           <h1 className="text-2xl font-bold text-gray-900">Compliance</h1>
           <p className="text-gray-600">Framework status and compliance tracking</p>
         </div>
-        
+
         <div className="bg-white rounded-lg border p-6">
           <p className="text-gray-600">Compliance dashboard coming soon...</p>
         </div>
       </div>
     </ProtectedRoute>
   );
-} 
+}

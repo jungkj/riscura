@@ -7,4 +7,4 @@ export default function TestPage() {
       <p>This is a simple test page to isolate issues.</p>
     </div>
   );
-} 
+}

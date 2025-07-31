@@ -129,9 +129,11 @@ npm run alerts:test        # Test alert system
   - `/performance/` - Optimization utilities
   - `/auth/` - Authentication utilities and middleware
   - `/billing/` - Billing and subscription management
+  - `/cache/` - Redis caching layer with multiple strategies
+  - `/db.ts` - Database client with connection pooling and retry logic
 - `/src/context/` - Global state management providers
 - `/src/services/` - Business logic service layer
-  - `/ai/` - AI service integrations
+  - `/ai/` - AI service integrations (AIService.ts)
 - `/src/hooks/` - Custom React hooks
 - `/src/types/` - TypeScript type definitions
 - `/scripts/` - Development and deployment scripts
@@ -141,28 +143,44 @@ npm run alerts:test        # Test alert system
 
 1. **API Development**: Always use `withApiMiddleware()` wrapper for new API endpoints
    ```typescript
-   // Current pattern (most endpoints use this):
+   // Legacy pattern (still widely used):
    export const POST = withApiMiddleware(async (req) => {
      const user = (req as any).user;
      // Your handler code
      return NextResponse.json({ data });
    });
    
-   // Recommended pattern (newer, supports validation & rate limiting):
-   export const POST = withApiMiddleware({
-     requireAuth: true,
-     bodySchema: MyBodySchema,
-     rateLimiters: ['standard'] // or 'auth', 'fileUpload', 'expensive', 'bulk', 'report'
-   })(async (context, validatedData) => {
-     const { user, organizationId } = context;
-     // Return data directly - middleware handles response formatting
-     return { data: result };
-   });
+   // Modern pattern (newer implementation in middleware.ts):
+   export const POST = withAPI(
+     async (req: NextRequest) => {
+       const user = (req as any).user;
+       const body = await req.json();
+       
+       // Your handler code
+       return createAPIResponse(data, {
+         message: 'Success',
+         statusCode: 200
+       });
+     },
+     {
+       requireAuth: true,
+       validateBody: MyBodySchema,
+       rateLimit: {
+         windowMs: 15 * 60 * 1000,
+         maxRequests: 100
+       },
+       subscription: {
+         requireActive: true,
+         requiredFeatures: ['feature-name'],
+         trackUsage: { type: 'api-call', quantity: 1 }
+       }
+     }
+   );
    ```
    
-   Available rate limiters:
+   Available rate limiters (via RateLimiterManager):
    - `standard`: 1000 requests per 15 minutes
-   - `auth`: 5 attempts per 15 minutes
+   - `auth`: 5 attempts per 15 minutes  
    - `fileUpload`: 50 uploads per hour
    - `expensive`: 10 operations per hour
    - `bulk`: 5 operations per 10 minutes
@@ -247,6 +265,55 @@ See `env.example` for:
 - Push notification support
 - App-like navigation with gesture support
 
+## Core Architectural Patterns
+
+### API Middleware System
+The codebase uses a comprehensive middleware system (`/src/lib/api/middleware.ts`) that provides:
+- **Authentication**: Via `withAuth()` or `requireAuth: true` option
+- **Rate Limiting**: Built-in rate limiter manager with predefined strategies
+- **Validation**: Request body and query parameter validation using Zod schemas
+- **Error Handling**: Standardized error responses with proper status codes
+- **Subscription Management**: Feature gating and usage tracking
+- **Response Formatting**: Consistent API response structure
+
+### Multi-Tenant Database Architecture
+All database operations must respect organization boundaries:
+```typescript
+// Always include organizationId in queries
+const data = await db.client.risk.findMany({
+  where: { 
+    organizationId: user.organizationId,
+    // other conditions
+  }
+});
+
+// Use helper functions
+const query = db.forOrganization(organizationId);
+```
+
+### AI Service Integration
+The AIService (`/src/services/AIService.ts`) provides:
+- **Multiple AI Providers**: OpenAI and Anthropic with lazy initialization
+- **Rate Limiting**: Built-in rate limiting and circuit breaker patterns
+- **Caching**: Response caching for cost optimization
+- **Usage Tracking**: Token usage and cost tracking
+- **Specialized Methods**: Risk analysis, control recommendations, compliance gaps
+
+### Caching Strategy
+Multi-layer caching with Redis (`/src/lib/cache/`):
+- **API Response Caching**: Via `api-cache.ts`
+- **Query Result Caching**: Via `query-cache.ts`
+- **Memory Caching**: In-memory LRU cache for hot data
+- **Cache Invalidation**: Pattern-based invalidation service
+
+### Database Connection Management
+The database client (`/src/lib/db.ts`) provides:
+- **Automatic Retry Logic**: Exponential backoff for transient failures
+- **Connection Pooling**: Configurable pool sizes for different environments
+- **Supabase Auto-conversion**: Automatic conversion from direct to pooled URLs in production
+- **Transaction Helpers**: `withTransaction()` for atomic operations
+- **Query Builders**: Pagination, search, and filter helpers
+
 ## Current Development Phase
 
 The codebase is in Phase 2 of a multi-phase development plan:
@@ -277,68 +344,3 @@ The codebase currently has TypeScript strict mode disabled with ongoing migratio
    - New code should be fully typed
    - API endpoints should use proper request/response types
    - Critical business logic should have comprehensive types
-
-## Development Guidelines
-
-### File Structure Conventions
-- **API Routes**: Follow Next.js App Router pattern in `/src/app/api/`
-- **Components**: Domain-organized in `/src/components/` with UI primitives in `/ui/`
-- **Services**: Business logic in `/src/services/` with clear separation of concerns
-- **Types**: Shared types in `/src/types/` with domain-specific type files
-- **Utils**: Shared utilities in `/src/lib/` with feature-specific subdirectories
-
-### Code Quality Standards
-- **TypeScript**: Strict mode disabled but aim for type safety
-- **API Endpoints**: Must use `withApiMiddleware()` from `/src/lib/api/middleware.ts`
-- **Error Handling**: Use standardized error classes and response formatting
-- **Performance**: Implement virtual scrolling for large datasets (100+ items)
-- **Caching**: Multi-layer caching with Redis for expensive operations
-- **Testing**: Write tests for new features, aim for 80% coverage
-
-### Common Patterns
-- **Authentication Check**: Use `getAuthenticatedUser()` from auth middleware
-- **Rate Limiting**: Applied automatically via `withApiMiddleware()`
-  - Available rate limiters: `standard`, `auth`, `fileUpload`, `expensive`, `bulk`, `report`
-- **Validation**: Use Zod schemas for request validation
-- **Response Format**: Use `ApiResponseFormatter` for consistent API responses
-- **Error Responses**: Use `globalErrorHandler` for error formatting
-- **Error Classes**: Use standardized errors from `/src/lib/api/errors.ts`:
-  - `APIError`, `ValidationError`, `AuthenticationError`, `ForbiddenError`
-  - `RateLimitError`, `SubscriptionError`, `PlanLimitError`
-
-### Current Development Phase
-- **Phase**: Technical debt resolution while supporting feature development
-- **TypeScript Errors**: ~785 errors across 165 files (being systematically reduced)
-- **Focus Areas**:
-  1. Database model updates and Prisma schema alignment
-  2. Enum standardization (case sensitivity issues)
-  3. Missing interface properties
-  4. Gradual TypeScript strict mode re-enablement
-
-## Additional Resources
-
-### Scripts Directory
-- `/scripts/dev-setup.js` - Full development environment setup and validation
-- `/scripts/type-check.js` - Comprehensive TypeScript checking including Next.js build
-- `/src/scripts/test-auth-flow.ts` - Comprehensive authentication testing
-- `/src/scripts/test-full-stack.ts` - Full stack test runner
-
-### CI/CD
-- GitHub Actions workflows in `.github/workflows/` for automated testing and deployment
-- Includes security scanning, performance testing, and comprehensive test suites
-
-### Documentation
-- `/docs/` directory contains technical documentation, API specs, and implementation guides
-- `/src/lib/api/README.md` - Detailed API standardization documentation
-
-### Quick Start for New Developers
-1. Run `npm run dev:setup` to set up the development environment
-2. Run `npm run test:auth-flow` to verify authentication is working
-3. Run `./test-website.sh` for quick full-stack validation
-4. Use `npm run precommit` before committing changes
-5. Review current development phase and TypeScript guidelines before coding
-
-### Shell Test Scripts
-- `./test-website.sh` - Full stack website testing
-- `./test-oauth-deployment.sh` - OAuth deployment verification
-- `./test-auth-endpoints.sh` - Authentication endpoint testing

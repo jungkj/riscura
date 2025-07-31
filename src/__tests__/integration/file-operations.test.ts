@@ -13,7 +13,7 @@ const TEST_USER = {
   email: 'file-test@riscura.com',
   password: 'FileTest123!',
   name: 'File Test User',
-  role: 'RISK_MANAGER'
+  role: 'RISK_MANAGER',
 };
 
 // File test configurations
@@ -22,38 +22,40 @@ const FILE_CONFIGS = {
     name: 'test-policy.pdf',
     mimeType: 'application/pdf',
     size: 1024 * 1024, // 1MB
-    content: Buffer.from('%PDF-1.4\n1 0 obj\n<<\n/Type /Catalog\n/Pages 2 0 R\n>>\nendobj\n2 0 obj\n<<\n/Type /Pages\n/Kids [3 0 R]\n/Count 1\n>>\nendobj\n3 0 obj\n<<\n/Type /Page\n/Parent 2 0 R\n/MediaBox [0 0 612 792]\n>>\nendobj\nxref\n0 4\n0000000000 65535 f \n0000000010 00000 n \n0000000079 00000 n \n0000000173 00000 n \ntrailer\n<<\n/Size 4\n/Root 1 0 R\n>>\nstartxref\n251\n%%EOF')
+    content: Buffer.from(
+      '%PDF-1.4\n1 0 obj\n<<\n/Type /Catalog\n/Pages 2 0 R\n>>\nendobj\n2 0 obj\n<<\n/Type /Pages\n/Kids [3 0 R]\n/Count 1\n>>\nendobj\n3 0 obj\n<<\n/Type /Page\n/Parent 2 0 R\n/MediaBox [0 0 612 792]\n>>\nendobj\nxref\n0 4\n0000000000 65535 f \n0000000010 00000 n \n0000000079 00000 n \n0000000173 00000 n \ntrailer\n<<\n/Size 4\n/Root 1 0 R\n>>\nstartxref\n251\n%%EOF'
+    ),
   },
   word: {
     name: 'test-document.docx',
     mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     size: 512 * 1024, // 512KB
-    content: Buffer.from('PK\x03\x04')
+    content: Buffer.from('PK\x03\x04'),
   },
   excel: {
     name: 'test-spreadsheet.xlsx',
     mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     size: 256 * 1024, // 256KB
-    content: Buffer.from('PK\x03\x04')
+    content: Buffer.from('PK\x03\x04'),
   },
   image: {
     name: 'test-image.png',
     mimeType: 'image/png',
     size: 100 * 1024, // 100KB
-    content: Buffer.from([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A])
+    content: Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
   },
   text: {
     name: 'test-text.txt',
     mimeType: 'text/plain',
     size: 1024, // 1KB
-    content: Buffer.from('This is a test text file for file operations integration testing.')
+    content: Buffer.from('This is a test text file for file operations integration testing.'),
   },
   oversized: {
     name: 'oversized-file.pdf',
     mimeType: 'application/pdf',
     size: 200 * 1024 * 1024, // 200MB - exceeds typical limits
-    content: Buffer.alloc(200 * 1024 * 1024, 'x')
-  }
+    content: Buffer.alloc(200 * 1024 * 1024, 'x'),
+  },
 };
 
 class FileOperationsHelper {
@@ -81,9 +83,9 @@ class FileOperationsHelper {
   }
 
   // File creation utilities
-  async createTestFile(config: typeof FILE_CONFIGS[keyof typeof FILE_CONFIGS]): Promise<string> {
+  async createTestFile(config: (typeof FILE_CONFIGS)[keyof typeof FILE_CONFIGS]): Promise<string> {
     const testDir = path.join(process.cwd(), 'test-files');
-    
+
     // Ensure test directory exists
     if (!fs.existsSync(testDir)) {
       fs.mkdirSync(testDir, { recursive: true });
@@ -91,7 +93,7 @@ class FileOperationsHelper {
 
     const filePath = path.join(testDir, config.name);
     fs.writeFileSync(filePath, config.content);
-    
+
     return filePath;
   }
 
@@ -120,16 +122,23 @@ class FileOperationsHelper {
     await this.page.setInputFiles('[data-testid="file-input"]', filePath);
 
     // Wait for file validation
-    await expect(this.page.locator('[data-testid="file-validation-success"]')).toBeVisible({ timeout: 30000 });
+    await expect(this.page.locator('[data-testid="file-validation-success"]')).toBeVisible({
+      timeout: 30000,
+    });
 
     // Submit form
     await this.page.click('[data-testid="upload-submit-button"]');
 
     // Wait for upload completion
-    await expect(this.page.locator('[data-testid="upload-success"]')).toBeVisible({ timeout: UPLOAD_TIMEOUT });
+    await expect(this.page.locator('[data-testid="upload-success"]')).toBeVisible({
+      timeout: UPLOAD_TIMEOUT,
+    });
 
     // Extract document ID
-    const documentId = await this.page.getAttribute('[data-testid="uploaded-document"]', 'data-document-id');
+    const documentId = await this.page.getAttribute(
+      '[data-testid="uploaded-document"]',
+      'data-document-id'
+    );
     return documentId!;
   }
 
@@ -150,19 +159,26 @@ class FileOperationsHelper {
 
     // Wait for all files to be validated
     for (let i = 0; i < filePaths.length; i++) {
-      await expect(this.page.locator(`[data-testid="file-${i}-validation-success"]`)).toBeVisible({ timeout: 30000 });
+      await expect(this.page.locator(`[data-testid="file-${i}-validation-success"]`)).toBeVisible({
+        timeout: 30000,
+      });
     }
 
     // Submit form
     await this.page.click('[data-testid="upload-submit-button"]');
 
     // Wait for upload completion
-    await expect(this.page.locator('[data-testid="batch-upload-success"]')).toBeVisible({ timeout: UPLOAD_TIMEOUT });
+    await expect(this.page.locator('[data-testid="batch-upload-success"]')).toBeVisible({
+      timeout: UPLOAD_TIMEOUT,
+    });
 
     // Extract document IDs
     const documentIds: string[] = [];
     for (let i = 0; i < filePaths.length; i++) {
-      const docId = await this.page.getAttribute(`[data-testid="uploaded-document-${i}"]`, 'data-document-id');
+      const docId = await this.page.getAttribute(
+        `[data-testid="uploaded-document-${i}"]`,
+        'data-document-id'
+      );
       if (docId) documentIds.push(docId);
     }
 
@@ -186,15 +202,19 @@ class FileOperationsHelper {
 
     // Monitor upload progress
     await expect(this.page.locator('[data-testid="upload-progress-bar"]')).toBeVisible();
-    
+
     // Wait for progress to reach 100%
-    await expect(this.page.locator('[data-testid="upload-progress-100"]')).toBeVisible({ timeout: UPLOAD_TIMEOUT });
+    await expect(this.page.locator('[data-testid="upload-progress-100"]')).toBeVisible({
+      timeout: UPLOAD_TIMEOUT,
+    });
 
     // Submit form
     await this.page.click('[data-testid="upload-submit-button"]');
 
     // Verify completion
-    await expect(this.page.locator('[data-testid="upload-success"]')).toBeVisible({ timeout: UPLOAD_TIMEOUT });
+    await expect(this.page.locator('[data-testid="upload-success"]')).toBeVisible({
+      timeout: UPLOAD_TIMEOUT,
+    });
   }
 
   // File download operations
@@ -209,17 +229,17 @@ class FileOperationsHelper {
 
     // Verify download
     expect(download.suggestedFilename()).toBeTruthy();
-    
+
     // Save to test location
     const downloadPath = path.join(process.cwd(), 'test-downloads', download.suggestedFilename()!);
     const downloadDir = path.dirname(downloadPath);
-    
+
     if (!fs.existsSync(downloadDir)) {
       fs.mkdirSync(downloadDir, { recursive: true });
     }
-    
+
     await download.saveAs(downloadPath);
-    
+
     // Verify file exists and has content
     expect(fs.existsSync(downloadPath)).toBe(true);
     expect(fs.statSync(downloadPath).size).toBeGreaterThan(0);
@@ -241,7 +261,7 @@ class FileOperationsHelper {
 
     // Should download as ZIP file
     expect(download.suggestedFilename()).toMatch(/\.zip$/);
-    
+
     // Save and verify
     const downloadPath = path.join(process.cwd(), 'test-downloads', download.suggestedFilename()!);
     await download.saveAs(downloadPath);
@@ -261,7 +281,7 @@ class FileOperationsHelper {
 
     // Wait for validation error
     await expect(this.page.locator(`[data-testid="validation-error"]`)).toBeVisible();
-    
+
     // Verify specific error message
     const errorText = await this.page.locator('[data-testid="validation-error"]').textContent();
     expect(errorText).toContain(expectedError);
@@ -269,7 +289,7 @@ class FileOperationsHelper {
 
   async testFileSizeLimit(): Promise<void> {
     const oversizedFile = await this.createTestFile(FILE_CONFIGS.oversized);
-    
+
     await this.page.goto(`${BASE_URL}/documents`);
     await this.page.waitForLoadState('networkidle');
 
@@ -281,7 +301,7 @@ class FileOperationsHelper {
 
     // Wait for size validation error
     await expect(this.page.locator('[data-testid="file-size-error"]')).toBeVisible();
-    
+
     // Verify error message mentions size limit
     const errorText = await this.page.locator('[data-testid="file-size-error"]').textContent();
     expect(errorText).toMatch(/size|limit|large/i);
@@ -308,7 +328,9 @@ class FileOperationsHelper {
     await expect(this.page.locator('[data-testid="analysis-progress"]')).toBeVisible();
 
     // Wait for completion (AI analysis can take longer)
-    await expect(this.page.locator('[data-testid="analysis-complete"]')).toBeVisible({ timeout: 180000 });
+    await expect(this.page.locator('[data-testid="analysis-complete"]')).toBeVisible({
+      timeout: 180000,
+    });
 
     // Verify analysis results
     await expect(this.page.locator('[data-testid="extracted-risks"]')).toBeVisible();
@@ -334,11 +356,16 @@ class FileOperationsHelper {
     await expect(this.page.locator('[data-testid="version-upload-dialog"]')).toBeVisible();
 
     await this.page.setInputFiles('[data-testid="version-file-input"]', newFilePath);
-    await this.page.fill('[data-testid="version-notes-input"]', 'Updated document with latest revisions');
+    await this.page.fill(
+      '[data-testid="version-notes-input"]',
+      'Updated document with latest revisions'
+    );
     await this.page.click('[data-testid="upload-version-submit"]');
 
     // Wait for version upload
-    await expect(this.page.locator('[data-testid="version-upload-success"]')).toBeVisible({ timeout: UPLOAD_TIMEOUT });
+    await expect(this.page.locator('[data-testid="version-upload-success"]')).toBeVisible({
+      timeout: UPLOAD_TIMEOUT,
+    });
 
     // Verify new version
     const newVersion = await this.page.locator('[data-testid="current-version"]').textContent();
@@ -347,7 +374,7 @@ class FileOperationsHelper {
     // Check version history
     await this.page.click('[data-testid="version-history-button"]');
     await expect(this.page.locator('[data-testid="version-history-dialog"]')).toBeVisible();
-    
+
     const versionCount = await this.page.locator('[data-testid="version-item"]').count();
     expect(versionCount).toBe(2);
   }
@@ -365,13 +392,17 @@ class FileOperationsHelper {
     await this.page.waitForTimeout(1000); // Debounce delay
 
     // Verify results count
-    const resultsCount = await this.page.locator('[data-testid="search-results-count"]').textContent();
+    const resultsCount = await this.page
+      .locator('[data-testid="search-results-count"]')
+      .textContent();
     expect(parseInt(resultsCount || '0')).toBe(expectedResults);
 
     // Verify results contain search term
     const searchResults = await this.page.locator('[data-testid="document-item"]').count();
     if (searchResults > 0) {
-      const firstResultTitle = await this.page.locator('[data-testid="document-item"]:first-child [data-testid="document-title"]').textContent();
+      const firstResultTitle = await this.page
+        .locator('[data-testid="document-item"]:first-child [data-testid="document-title"]')
+        .textContent();
       expect(firstResultTitle?.toLowerCase()).toContain(searchTerm.toLowerCase());
     }
   }
@@ -385,7 +416,9 @@ class FileOperationsHelper {
     await this.page.waitForTimeout(1000);
 
     // Verify filtered results
-    const policyDocs = await this.page.locator('[data-testid="document-item"][data-category="policy"]').count();
+    const policyDocs = await this.page
+      .locator('[data-testid="document-item"][data-category="policy"]')
+      .count();
     const totalVisible = await this.page.locator('[data-testid="document-item"]:visible').count();
     expect(policyDocs).toBe(totalVisible);
 
@@ -395,7 +428,9 @@ class FileOperationsHelper {
     await this.page.waitForTimeout(1000);
 
     // Verify date filtering works
-    const dateFilteredCount = await this.page.locator('[data-testid="document-item"]:visible').count();
+    const dateFilteredCount = await this.page
+      .locator('[data-testid="document-item"]:visible')
+      .count();
     expect(dateFilteredCount).toBeGreaterThanOrEqual(0);
   }
 
@@ -416,7 +451,7 @@ class FileOperationsHelper {
     await this.page.click('[data-testid="bulk-actions-menu"]');
     await this.page.click('[data-testid="bulk-categorize-action"]');
     await expect(this.page.locator('[data-testid="bulk-categorize-dialog"]')).toBeVisible();
-    
+
     await this.page.selectOption('[data-testid="bulk-category-select"]', 'procedure');
     await this.page.click('[data-testid="apply-bulk-category"]');
 
@@ -425,7 +460,10 @@ class FileOperationsHelper {
 
     // Verify changes were applied
     for (const docId of documentIds) {
-      const category = await this.page.getAttribute(`[data-testid="document-item-${docId}"]`, 'data-category');
+      const category = await this.page.getAttribute(
+        `[data-testid="document-item-${docId}"]`,
+        'data-category'
+      );
       expect(category).toBe('procedure');
     }
   }
@@ -461,7 +499,7 @@ test.describe('File Operations Integration Tests', () => {
     const documentId = await helper.uploadSingleFile(pdfFile, {
       title: 'Integration Test PDF',
       description: 'PDF file for integration testing',
-      category: 'policy'
+      category: 'policy',
     });
 
     expect(documentId).toBeTruthy();
@@ -480,7 +518,7 @@ test.describe('File Operations Integration Tests', () => {
     const documentIds = await helper.uploadMultipleFiles([pdfFile, wordFile, textFile], {
       title: 'Batch Upload Test',
       description: 'Multiple files for batch upload testing',
-      category: 'procedure'
+      category: 'procedure',
     });
 
     expect(documentIds).toHaveLength(3);
@@ -495,13 +533,13 @@ test.describe('File Operations Integration Tests', () => {
       ...FILE_CONFIGS.pdf,
       name: 'large-test-file.pdf',
       size: 10 * 1024 * 1024, // 10MB
-      content: Buffer.alloc(10 * 1024 * 1024, 'x')
+      content: Buffer.alloc(10 * 1024 * 1024, 'x'),
     });
 
     await helper.uploadWithProgressTracking(largeFile, {
       title: 'Large File Test',
       description: 'Testing large file upload with progress tracking',
-      category: 'report'
+      category: 'report',
     });
   });
 
@@ -514,7 +552,7 @@ test.describe('File Operations Integration Tests', () => {
       name: 'test.exe',
       mimeType: 'application/x-executable',
       size: 1024,
-      content: Buffer.from('Invalid file content')
+      content: Buffer.from('Invalid file content'),
     });
 
     await helper.testFileValidation(invalidFile, 'file type not allowed');
@@ -525,13 +563,15 @@ test.describe('File Operations Integration Tests', () => {
     const policyFile = await helper.createTestFile({
       ...FILE_CONFIGS.pdf,
       name: 'policy-document.pdf',
-      content: Buffer.from('%PDF-1.4\nPolicy Document\nData Protection Policy\n1. Purpose: This policy establishes requirements for protecting personal data\n2. Scope: Applies to all employees\n3. Risk: Unauthorized access to personal data\n4. Control: Implement access controls and encryption')
+      content: Buffer.from(
+        '%PDF-1.4\nPolicy Document\nData Protection Policy\n1. Purpose: This policy establishes requirements for protecting personal data\n2. Scope: Applies to all employees\n3. Risk: Unauthorized access to personal data\n4. Control: Implement access controls and encryption'
+      ),
     });
 
     const documentId = await helper.uploadSingleFile(policyFile, {
       title: 'Data Protection Policy',
       description: 'Policy document for AI analysis testing',
-      category: 'policy'
+      category: 'policy',
     });
 
     // Run AI analysis
@@ -544,14 +584,14 @@ test.describe('File Operations Integration Tests', () => {
     const documentId = await helper.uploadSingleFile(initialFile, {
       title: 'Versioned Document',
       description: 'Document for version testing',
-      category: 'procedure'
+      category: 'procedure',
     });
 
     // Upload new version
     const updatedFile = await helper.createTestFile({
       ...FILE_CONFIGS.pdf,
       name: 'updated-document.pdf',
-      content: Buffer.from('%PDF-1.4\nUpdated content for version 2.0')
+      content: Buffer.from('%PDF-1.4\nUpdated content for version 2.0'),
     });
 
     await helper.testDocumentVersioning(documentId, updatedFile);
@@ -560,9 +600,30 @@ test.describe('File Operations Integration Tests', () => {
   test('Document search and filtering functionality', async () => {
     // Upload test documents with different attributes
     const testFiles = [
-      { config: FILE_CONFIGS.pdf, metadata: { title: 'Security Policy', description: 'Security guidelines', category: 'policy' } },
-      { config: FILE_CONFIGS.word, metadata: { title: 'Risk Assessment Procedure', description: 'Risk assessment process', category: 'procedure' } },
-      { config: FILE_CONFIGS.excel, metadata: { title: 'Compliance Report', description: 'Quarterly compliance report', category: 'report' } }
+      {
+        config: FILE_CONFIGS.pdf,
+        metadata: {
+          title: 'Security Policy',
+          description: 'Security guidelines',
+          category: 'policy',
+        },
+      },
+      {
+        config: FILE_CONFIGS.word,
+        metadata: {
+          title: 'Risk Assessment Procedure',
+          description: 'Risk assessment process',
+          category: 'procedure',
+        },
+      },
+      {
+        config: FILE_CONFIGS.excel,
+        metadata: {
+          title: 'Compliance Report',
+          description: 'Quarterly compliance report',
+          category: 'report',
+        },
+      },
     ];
 
     for (const testFile of testFiles) {
@@ -585,12 +646,12 @@ test.describe('File Operations Integration Tests', () => {
     for (let i = 0; i < 3; i++) {
       const filePath = await helper.createTestFile({
         ...FILE_CONFIGS.pdf,
-        name: `bulk-test-${i}.pdf`
+        name: `bulk-test-${i}.pdf`,
       });
       const docId = await helper.uploadSingleFile(filePath, {
         title: `Bulk Test Document ${i + 1}`,
         description: `Document ${i + 1} for bulk operations testing`,
-        category: 'guideline'
+        category: 'guideline',
       });
       testFiles.push(docId);
     }
@@ -611,12 +672,15 @@ test.describe('File Operations Integration Tests', () => {
 
     // Fill metadata
     await helper.page.fill('[data-testid="document-title-input"]', 'Network Test File');
-    await helper.page.fill('[data-testid="document-description-input"]', 'Testing network interruption');
+    await helper.page.fill(
+      '[data-testid="document-description-input"]',
+      'Testing network interruption'
+    );
     await helper.page.selectOption('[data-testid="document-category-select"]', 'other');
 
     // Start upload then simulate network failure
     await helper.page.setInputFiles('[data-testid="file-input"]', testFile);
-    
+
     // Simulate network disconnection mid-upload
     await helper.page.context().setOffline(true);
     await helper.page.click('[data-testid="upload-submit-button"]');
@@ -630,7 +694,9 @@ test.describe('File Operations Integration Tests', () => {
     await helper.page.click('[data-testid="retry-upload-button"]');
 
     // Verify successful retry
-    await expect(helper.page.locator('[data-testid="upload-success"]')).toBeVisible({ timeout: UPLOAD_TIMEOUT });
+    await expect(helper.page.locator('[data-testid="upload-success"]')).toBeVisible({
+      timeout: UPLOAD_TIMEOUT,
+    });
   });
 
   test('Concurrent file operations', async () => {
@@ -639,21 +705,21 @@ test.describe('File Operations Integration Tests', () => {
     for (let i = 0; i < 3; i++) {
       const filePath = await helper.createTestFile({
         ...FILE_CONFIGS.pdf,
-        name: `concurrent-${i}.pdf`
+        name: `concurrent-${i}.pdf`,
       });
-      
+
       uploadPromises.push(
         helper.uploadSingleFile(filePath, {
           title: `Concurrent Upload ${i + 1}`,
           description: `Concurrent upload test ${i + 1}`,
-          category: 'other'
+          category: 'other',
         })
       );
     }
 
     const documentIds = await Promise.all(uploadPromises);
     expect(documentIds).toHaveLength(3);
-    documentIds.forEach(id => expect(id).toBeTruthy());
+    documentIds.forEach((id) => expect(id).toBeTruthy());
   });
 
   test('File security and virus scanning simulation', async () => {
@@ -662,7 +728,7 @@ test.describe('File Operations Integration Tests', () => {
       name: 'suspicious-file.pdf',
       mimeType: 'application/pdf',
       size: 1024,
-      content: Buffer.from('EICAR-STANDARD-ANTIVIRUS-TEST-FILE') // Simulated virus signature
+      content: Buffer.from('EICAR-STANDARD-ANTIVIRUS-TEST-FILE'), // Simulated virus signature
     });
 
     await helper.page.goto(`${BASE_URL}/documents`);
@@ -675,9 +741,13 @@ test.describe('File Operations Integration Tests', () => {
     await helper.page.setInputFiles('[data-testid="file-input"]', suspiciousFile);
 
     // Should trigger security scan failure
-    await expect(helper.page.locator('[data-testid="security-scan-error"]')).toBeVisible({ timeout: 30000 });
-    
-    const errorText = await helper.page.locator('[data-testid="security-scan-error"]').textContent();
+    await expect(helper.page.locator('[data-testid="security-scan-error"]')).toBeVisible({
+      timeout: 30000,
+    });
+
+    const errorText = await helper.page
+      .locator('[data-testid="security-scan-error"]')
+      .textContent();
     expect(errorText).toMatch(/security|virus|threat/i);
   });
-}); 
+});

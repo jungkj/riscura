@@ -161,50 +161,51 @@ export function NotificationCenter() {
 
   return (
     <>
-      <DaisyDropdownMenu>
-        <DaisyDropdownMenuTrigger asChild>
-          <DaisyButton variant="ghost" shape="square" size="md" className="relative">
-            <Bell className="h-5 w-5" />
+      <DaisyDropdownMenu />
+        <DaisyDropdownMenuTrigger asChild />
+          <DaisyButton variant="ghost" shape="square" size="md" className="relative" >
+  <Bell className="h-5 w-5" />
+</DaisyDropdownMenu>
             {unreadCount > 0 && (
               <DaisyBadge
                 variant="error"
-                className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center"
-              >
-                {unreadCount > 99 ? '99+' : unreadCount}
+                className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center" >
+  {unreadCount > 99 ? '99+' : unreadCount}
+</DaisyBadge>
               </DaisyBadge>
             )}
           </DaisyButton>
         </DaisyDropdownMenuTrigger>
-        <DaisyDropdownMenuContent align="end" className="w-[400px]">
+        <DaisyDropdownMenuContent align="end" className="w-[400px]" />
           <div className="flex items-center justify-between p-4 border-b">
             <h3 className="font-semibold">Notifications</h3>
             <div className="flex items-center gap-2">
               <DaisyButton
                 variant="ghost"
                 size="sm"
-                onClick={() => setShowPreferences(true)}
-              >
+                onClick={() => setShowPreferences(true)} />
                 <Settings className="h-4 w-4" />
-              </DaisyButton>
+              </DaisyDropdownMenuContent>
               {unreadCount > 0 && (
-                <DaisyButton variant="ghost" size="sm" onClick={markAllAsRead}>
-                  <Check className="h-4 w-4 mr-1" />
+                <DaisyButton variant="ghost" size="sm" onClick={markAllAsRead} >
+  <Check className="h-4 w-4 mr-1" />
+</DaisyButton>
                   Mark all read
                 </DaisyButton>
               )}
             </div>
           </div>
 
-          <DaisyTabs value={filter} onValueChange={(v) => setFilter(v as 'all' | 'unread')}>
-            <DaisyTabsList className="grid w-full grid-cols-2">
-              <DaisyTabsTrigger value="all">All</DaisyTabsTrigger>
-              <DaisyTabsTrigger value="unread">
+          <DaisyTabs value={filter} onValueChange={(v) => setFilter(v as 'all' | 'unread')} />
+            <DaisyTabsList className="grid w-full grid-cols-2" />
+              <DaisyTabsTrigger value="all">All</DaisyTabs>
+              <DaisyTabsTrigger value="unread" />
                 Unread {unreadCount > 0 && `(${unreadCount})`}
               </DaisyTabsTrigger>
             </DaisyTabsList>
             
-            <DaisyTabsContent value={filter} className="mt-0">
-              <DaisyScrollArea className="h-[400px]">
+            <DaisyTabsContent value={filter} className="mt-0" />
+              <DaisyScrollArea className="h-[400px]" />
                 {loading ? (
                   <div className="p-8 text-center text-muted-foreground">
                     Loading notifications...
@@ -226,19 +227,19 @@ export function NotificationCenter() {
                     ))}
                   </div>
                 )}
-              </DaisyScrollArea>
+              </DaisyTabsContent>
             </DaisyTabsContent>
           </DaisyTabs>
 
           <DaisyDropdownMenuSeparator />
-          <DaisyDropdownMenuItem asChild>
+          <DaisyDropdownMenuItem asChild />
             <a
               href="/notifications"
               className="w-full text-center py-2 text-sm text-muted-foreground hover:text-foreground"
             >
               View all notifications
             </a>
-          </DaisyDropdownMenuItem>
+          </DaisyDropdownMenuSeparator>
         </DaisyDropdownMenuContent>
       </DaisyDropdownMenu>
 

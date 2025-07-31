@@ -35,7 +35,12 @@ export interface AIIntegrationContext {
 }
 
 export interface AIServiceRequest {
-  type: 'risk_analysis' | 'compliance_check' | 'control_recommendation' | 'proactive_monitoring' | 'custom_query';
+  type:
+    | 'risk_analysis'
+    | 'compliance_check'
+    | 'control_recommendation'
+    | 'proactive_monitoring'
+    | 'custom_query';
   content: string;
   context: AIIntegrationContext;
   options?: {
@@ -91,7 +96,7 @@ export class AIIntegrationService {
           sessionId: request.context.sessionId,
           organizationId: request.context.organizationId,
           ipAddress: 'unknown',
-          userAgent: 'ai_integration_service'
+          userAgent: 'ai_integration_service',
         };
       }
 
@@ -121,21 +126,20 @@ export class AIIntegrationService {
           modelUsed: finalResult.modelUsed || 'default',
           securityApproved: finalResult.securityApproved !== false,
           tenantIsolated: !!request.context.tenantId,
-          complianceValidated: finalResult.complianceValidated !== false
+          complianceValidated: finalResult.complianceValidated !== false,
         },
         recommendations: finalResult.recommendations,
         insights: finalResult.insights,
-        warnings: finalResult.warnings || []
+        warnings: finalResult.warnings || [],
       };
 
       // Cache successful responses
       this.requestCache.set(requestId, response);
-      
-      return response;
 
+      return response;
     } catch (error) {
       console.error(`AI Integration error for request ${requestId}:`, error);
-      
+
       // Return error response
       return {
         requestId,
@@ -148,9 +152,9 @@ export class AIIntegrationService {
           modelUsed: 'error_fallback',
           securityApproved: false,
           tenantIsolated: false,
-          complianceValidated: false
+          complianceValidated: false,
         },
-        warnings: [`Processing error: ${error instanceof Error ? error.message : 'Unknown error'}`]
+        warnings: [`Processing error: ${error instanceof Error ? error.message : 'Unknown error'}`],
       };
     }
   }
@@ -162,19 +166,19 @@ export class AIIntegrationService {
     switch (request.type) {
       case 'risk_analysis':
         return await this.processRiskAnalysis(request);
-      
+
       case 'compliance_check':
         return await this.processComplianceCheck(request);
-      
+
       case 'control_recommendation':
         return await this.processControlRecommendation(request);
-      
+
       case 'proactive_monitoring':
         return await this.processProactiveMonitoring(request);
-      
+
       case 'custom_query':
         return await this.processCustomQuery(request);
-      
+
       default:
         throw new Error(`Unsupported AI service type: ${request.type}`);
     }
@@ -196,24 +200,25 @@ export class AIIntegrationService {
         recommendations: [
           'Implement regular risk assessments',
           'Establish monitoring procedures',
-          'Review control effectiveness'
+          'Review control effectiveness',
         ],
         insights: [
           'Risk category identified',
           'Impact assessment completed',
-          'Mitigation strategies available'
-        ]
+          'Mitigation strategies available',
+        ],
       };
     } catch (error) {
       console.error('Risk analysis error:', error);
       return {
-        content: 'Risk analysis completed with basic assessment. The identified risk requires further evaluation.',
+        content:
+          'Risk analysis completed with basic assessment. The identified risk requires further evaluation.',
         confidence: 0.7,
         sources: ['fallback_analysis'],
         modelUsed: 'fallback',
         securityApproved: true,
         complianceValidated: true,
-        warnings: ['Advanced risk analysis temporarily unavailable']
+        warnings: ['Advanced risk analysis temporarily unavailable'],
       };
     }
   }
@@ -233,24 +238,25 @@ export class AIIntegrationService {
         recommendations: [
           'Review data handling procedures',
           'Update privacy policies',
-          'Conduct compliance training'
+          'Conduct compliance training',
         ],
         insights: [
           'Compliance gap identified',
           'Regulatory requirements reviewed',
-          'Action plan available'
-        ]
+          'Action plan available',
+        ],
       };
     } catch (error) {
       console.error('Compliance check error:', error);
       return {
-        content: 'Compliance check completed. Please review against your organization\'s compliance requirements.',
+        content:
+          "Compliance check completed. Please review against your organization's compliance requirements.",
         confidence: 0.7,
         sources: ['fallback_compliance'],
         modelUsed: 'fallback',
         securityApproved: true,
         complianceValidated: true,
-        warnings: ['Advanced compliance analysis temporarily unavailable']
+        warnings: ['Advanced compliance analysis temporarily unavailable'],
       };
     }
   }
@@ -270,24 +276,25 @@ export class AIIntegrationService {
         recommendations: [
           'Implement access controls',
           'Establish monitoring procedures',
-          'Create incident response plan'
+          'Create incident response plan',
         ],
         insights: [
           'Control gaps identified',
           'Implementation roadmap created',
-          'Cost-benefit analysis available'
-        ]
+          'Cost-benefit analysis available',
+        ],
       };
     } catch (error) {
       console.error('Control recommendation error:', error);
       return {
-        content: 'Control recommendations generated. Please review and implement appropriate controls.',
+        content:
+          'Control recommendations generated. Please review and implement appropriate controls.',
         confidence: 0.7,
         sources: ['fallback_controls'],
         modelUsed: 'fallback',
         securityApproved: true,
         complianceValidated: true,
-        warnings: ['Advanced control recommendations temporarily unavailable']
+        warnings: ['Advanced control recommendations temporarily unavailable'],
       };
     }
   }
@@ -307,24 +314,21 @@ export class AIIntegrationService {
         recommendations: [
           'Configure automated alerts',
           'Review monitoring thresholds',
-          'Establish response procedures'
+          'Establish response procedures',
         ],
-        insights: [
-          'Trend analysis completed',
-          'Anomalies detected',
-          'Predictive model activated'
-        ]
+        insights: ['Trend analysis completed', 'Anomalies detected', 'Predictive model activated'],
       };
     } catch (error) {
       console.error('Proactive monitoring error:', error);
       return {
-        content: 'Proactive monitoring analysis completed. Continue with standard risk management practices.',
+        content:
+          'Proactive monitoring analysis completed. Continue with standard risk management practices.',
         confidence: 0.7,
         sources: ['fallback_monitoring'],
         modelUsed: 'fallback',
         securityApproved: true,
         complianceValidated: true,
-        warnings: ['Advanced proactive monitoring temporarily unavailable']
+        warnings: ['Advanced proactive monitoring temporarily unavailable'],
       };
     }
   }
@@ -341,7 +345,7 @@ export class AIIntegrationService {
       securityApproved: true,
       complianceValidated: true,
       recommendations: [],
-      insights: []
+      insights: [],
     };
   }
 
@@ -364,7 +368,7 @@ export class AIIntegrationService {
         serviceResult.content,
         {
           modelOverride: request.options?.modelOverride,
-          customInstructions: [`Original request: ${request.content}`]
+          customInstructions: [`Original request: ${request.content}`],
         }
       );
 
@@ -373,7 +377,7 @@ export class AIIntegrationService {
         content: tenantResponse.content,
         modelUsed: tenantResponse.metadata.modelUsed,
         securityApproved: tenantResponse.isolation.dataEncrypted,
-        complianceValidated: tenantResponse.isolation.complianceValidated
+        complianceValidated: tenantResponse.isolation.complianceValidated,
       };
     } catch (error) {
       console.warn('Tenant isolation failed, using direct result:', error);
@@ -425,7 +429,7 @@ export class AIIntegrationService {
       riskAnalysis: true,
       compliance: true,
       controlRecommendation: true,
-      proactiveAI: true
+      proactiveAI: true,
     };
 
     const healthyServices = Object.values(services).filter(Boolean).length;
@@ -442,10 +446,10 @@ export class AIIntegrationService {
     return {
       status,
       services,
-      uptime: Date.now() // Simplified uptime calculation
+      uptime: Date.now(), // Simplified uptime calculation
     };
   }
 }
 
 // Export singleton instance
-export const aiIntegrationService = new AIIntegrationService(); 
+export const aiIntegrationService = new AIIntegrationService();

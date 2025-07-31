@@ -53,5 +53,5 @@ export const AuthStorage = {
       return 'sessionStorage';
     }
     return null;
-  }
-}; 
+  },
+};

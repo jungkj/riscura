@@ -67,7 +67,7 @@ export interface TenantTemplate {
 
 export class TenantProvisioningService {
   private billingManager: BillingManager;
-  
+
   constructor() {
     this.billingManager = new BillingManager();
   }
@@ -85,7 +85,7 @@ export class TenantProvisioningService {
       if (!validation.valid) {
         return {
           success: false,
-          errors: validation.errors
+          errors: validation.errors,
         };
       }
 
@@ -94,7 +94,7 @@ export class TenantProvisioningService {
       if (!organizationResult.success) {
         return {
           success: false,
-          errors: organizationResult.errors || ['Failed to create organization']
+          errors: organizationResult.errors || ['Failed to create organization'],
         };
       }
 
@@ -107,7 +107,7 @@ export class TenantProvisioningService {
         await this.cleanupOrganization(organizationId);
         return {
           success: false,
-          errors: adminResult.errors || ['Failed to create admin user']
+          errors: adminResult.errors || ['Failed to create admin user'],
         };
       }
 
@@ -122,21 +122,27 @@ export class TenantProvisioningService {
           warnings.push(...billingResult.warnings);
         }
       } catch (error) {
-        warnings.push(`Billing setup incomplete: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        warnings.push(
+          `Billing setup incomplete: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
       }
 
       // Step 5: Apply tenant template
       try {
         await this.applyTenantTemplate(request, organizationId);
       } catch (error) {
-        warnings.push(`Template application incomplete: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        warnings.push(
+          `Template application incomplete: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
       }
 
       // Step 6: Setup domain and branding
       try {
         await this.setupCustomDomain(request, organizationId);
       } catch (error) {
-        warnings.push(`Custom domain setup incomplete: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        warnings.push(
+          `Custom domain setup incomplete: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
       }
 
       // Step 7: Initialize sample data (if requested)
@@ -144,14 +150,16 @@ export class TenantProvisioningService {
         try {
           await this.createSampleData(organizationId, request.industry);
         } catch (error) {
-          warnings.push(`Sample data creation incomplete: ${error instanceof Error ? error.message : 'Unknown error'}`);
+          warnings.push(
+            `Sample data creation incomplete: ${error instanceof Error ? error.message : 'Unknown error'}`
+          );
         }
       }
 
       // Step 8: Generate setup token and temporary password
       const setupToken = this.generateSetupToken(organizationId, adminUserId);
       const temporaryPassword = this.generateTemporaryPassword();
-      
+
       // Store encrypted temporary password
       await this.storeTemporaryCredentials(adminUserId, temporaryPassword, setupToken);
 
@@ -160,8 +168,8 @@ export class TenantProvisioningService {
         organizationId,
         adminUserId,
         temporaryPassword,
-        setupToken
-      }).catch(error => {
+        setupToken,
+      }).catch((error) => {
         console.error('Failed to send welcome email:', error);
       });
 
@@ -173,14 +181,15 @@ export class TenantProvisioningService {
         temporaryPassword,
         setupToken,
         billingStatus,
-        warnings: warnings.length > 0 ? warnings : undefined
+        warnings: warnings.length > 0 ? warnings : undefined,
       };
-
     } catch (error) {
       console.error('Tenant provisioning error:', error);
       return {
         success: false,
-        errors: [`Provisioning failed: ${error instanceof Error ? error.message : 'Unknown error'}`]
+        errors: [
+          `Provisioning failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        ],
       };
     }
   }
@@ -200,7 +209,7 @@ export class TenantProvisioningService {
           {
             name: 'Risk Manager',
             permissions: ['risks:read', 'risks:write', 'controls:read', 'controls:write'],
-            isDefault: true
+            isDefault: true,
           },
           {
             name: 'Compliance Officer',
@@ -209,18 +218,18 @@ export class TenantProvisioningService {
           {
             name: 'Executive',
             permissions: ['dashboard:read', 'reports:read'],
-          }
+          },
         ],
         sampleData: {
           risks: this.getFinancialSampleRisks(),
           controls: this.getFinancialSampleControls(),
-          frameworks: ['SOX', 'BASEL III', 'COSO']
+          frameworks: ['SOX', 'BASEL III', 'COSO'],
         },
         configuration: {
           riskCategories: ['Operational', 'Credit', 'Market', 'Liquidity', 'Regulatory'],
           riskAppetite: 'moderate',
-          reportingFrequency: 'monthly'
-        }
+          reportingFrequency: 'monthly',
+        },
       },
       {
         id: 'healthcare',
@@ -232,23 +241,23 @@ export class TenantProvisioningService {
           {
             name: 'Risk Manager',
             permissions: ['risks:read', 'risks:write', 'controls:read', 'controls:write'],
-            isDefault: true
+            isDefault: true,
           },
           {
             name: 'Privacy Officer',
             permissions: ['privacy:read', 'privacy:write', 'compliance:read'],
-          }
+          },
         ],
         sampleData: {
           risks: this.getHealthcareSampleRisks(),
           controls: this.getHealthcareSampleControls(),
-          frameworks: ['HIPAA', 'HITECH', 'Joint Commission']
+          frameworks: ['HIPAA', 'HITECH', 'Joint Commission'],
         },
         configuration: {
           riskCategories: ['Patient Safety', 'Privacy', 'Operational', 'Regulatory'],
           riskAppetite: 'low',
-          reportingFrequency: 'quarterly'
-        }
+          reportingFrequency: 'quarterly',
+        },
       },
       {
         id: 'technology',
@@ -260,24 +269,24 @@ export class TenantProvisioningService {
           {
             name: 'Risk Manager',
             permissions: ['risks:read', 'risks:write', 'controls:read', 'controls:write'],
-            isDefault: true
+            isDefault: true,
           },
           {
             name: 'CISO',
             permissions: ['security:read', 'security:write', 'incidents:read'],
-          }
+          },
         ],
         sampleData: {
           risks: this.getTechnologySampleRisks(),
           controls: this.getTechnologySampleControls(),
-          frameworks: ['ISO 27001', 'GDPR', 'SOC 2']
+          frameworks: ['ISO 27001', 'GDPR', 'SOC 2'],
         },
         configuration: {
           riskCategories: ['Cybersecurity', 'Data Privacy', 'Operational', 'Third Party'],
           riskAppetite: 'moderate',
-          reportingFrequency: 'monthly'
-        }
-      }
+          reportingFrequency: 'monthly',
+        },
+      },
     ];
   }
 
@@ -300,9 +309,9 @@ export class TenantProvisioningService {
         'billing-setup',
         'template-applied',
         'domain-configured',
-        'welcome-email-sent'
+        'welcome-email-sent',
       ],
-      totalSteps: 6
+      totalSteps: 6,
     };
   }
 
@@ -317,15 +326,17 @@ export class TenantProvisioningService {
       await db.client.organization.update({
         where: { id: organizationId },
         data: {
-          settings: configuration
-        }
+          settings: configuration,
+        },
       });
 
       return { success: true };
     } catch (error) {
       return {
         success: false,
-        errors: [`Failed to update configuration: ${error instanceof Error ? error.message : 'Unknown error'}`]
+        errors: [
+          `Failed to update configuration: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        ],
       };
     }
   }
@@ -361,7 +372,7 @@ export class TenantProvisioningService {
 
     return {
       valid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -379,24 +390,26 @@ export class TenantProvisioningService {
           companySize: request.companySize,
           settings: {
             features: request.features || [],
-            onboarding: request.onboardingOptions || {}
+            onboarding: request.onboardingOptions || {},
           },
           metadata: {
             provisionedAt: new Date().toISOString(),
             template: this.getTemplateIdForIndustry(request.industry),
-            provisioningVersion: '1.0'
-          }
-        }
+            provisioningVersion: '1.0',
+          },
+        },
       });
 
       return {
         success: true,
-        organizationId: organization.id
+        organizationId: organization.id,
       };
     } catch (error) {
       return {
         success: false,
-        errors: [`Organization creation failed: ${error instanceof Error ? error.message : 'Unknown error'}`]
+        errors: [
+          `Organization creation failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        ],
       };
     }
   }
@@ -410,8 +423,10 @@ export class TenantProvisioningService {
     errors?: string[];
   }> {
     try {
-      const hashedPassword = await this.hashPassword('temp-' + crypto.randomBytes(8).toString('hex'));
-      
+      const hashedPassword = await this.hashPassword(
+        'temp-' + crypto.randomBytes(8).toString('hex')
+      );
+
       const user = await db.client.user.create({
         data: {
           email: request.adminEmail,
@@ -425,19 +440,21 @@ export class TenantProvisioningService {
           metadata: {
             isProvisioned: true,
             needsPasswordReset: true,
-            provisionedAt: new Date().toISOString()
-          }
-        }
+            provisionedAt: new Date().toISOString(),
+          },
+        },
       });
 
       return {
         success: true,
-        userId: user.id
+        userId: user.id,
       };
     } catch (error) {
       return {
         success: false,
-        errors: [`User creation failed: ${error instanceof Error ? error.message : 'Unknown error'}`]
+        errors: [
+          `User creation failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        ],
       };
     }
   }
@@ -454,33 +471,29 @@ export class TenantProvisioningService {
     try {
       if (request.billingInfo?.paymentMethodId) {
         // Create subscription with payment method
-        await this.billingManager.createSubscription(
-          organizationId,
-          request.planId,
-          {
-            trialDays: request.trialDays,
-            paymentMethodId: request.billingInfo.paymentMethodId
-          }
-        );
+        await this.billingManager.createSubscription(organizationId, request.planId, {
+          trialDays: request.trialDays,
+          paymentMethodId: request.billingInfo.paymentMethodId,
+        });
         return { status: 'active' };
       } else {
         // Start trial without payment method
-        await this.billingManager.createSubscription(
-          organizationId,
-          request.planId,
-          {
-            trialDays: request.trialDays || 14
-          }
-        );
-        return { 
+        await this.billingManager.createSubscription(organizationId, request.planId, {
+          trialDays: request.trialDays || 14,
+        });
+        return {
           status: 'trial',
-          warnings: ['Trial started without payment method - billing setup will be required before trial expires']
+          warnings: [
+            'Trial started without payment method - billing setup will be required before trial expires',
+          ],
         };
       }
     } catch (error) {
       return {
         status: 'pending',
-        warnings: [`Billing setup incomplete: ${error instanceof Error ? error.message : 'Unknown error'}`]
+        warnings: [
+          `Billing setup incomplete: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        ],
       };
     }
   }
@@ -490,7 +503,7 @@ export class TenantProvisioningService {
     organizationId: string
   ): Promise<void> {
     const templates = await this.getTenantTemplates();
-    const template = templates.find(t => t.industry === request.industry) || templates[0];
+    const template = templates.find((t) => t.industry === request.industry) || templates[0];
 
     // Create default roles
     for (const roleTemplate of template.defaultRoles) {
@@ -499,8 +512,8 @@ export class TenantProvisioningService {
           name: roleTemplate.name,
           permissions: roleTemplate.permissions,
           organizationId,
-          isDefault: roleTemplate.isDefault || false
-        }
+          isDefault: roleTemplate.isDefault || false,
+        },
       });
     }
 
@@ -510,9 +523,9 @@ export class TenantProvisioningService {
       data: {
         settings: {
           ...template.configuration,
-          templateId: template.id
-        }
-      }
+          templateId: template.id,
+        },
+      },
     });
   }
 
@@ -531,10 +544,10 @@ export class TenantProvisioningService {
           customDomain: {
             domain: request.customDomain,
             status: 'pending-verification',
-            configuredAt: new Date().toISOString()
-          }
-        }
-      }
+            configuredAt: new Date().toISOString(),
+          },
+        },
+      },
     });
 
     // TODO: Setup DNS verification, SSL certificates, etc.
@@ -542,7 +555,7 @@ export class TenantProvisioningService {
 
   private async createSampleData(organizationId: string, industry?: string): Promise<void> {
     const templates = await this.getTenantTemplates();
-    const template = templates.find(t => t.industry === industry) || templates[0];
+    const template = templates.find((t) => t.industry === industry) || templates[0];
 
     // Create sample risks
     if (template.sampleData.risks) {
@@ -550,8 +563,8 @@ export class TenantProvisioningService {
         await db.client.risk.create({
           data: {
             ...riskData,
-            organizationId
-          }
+            organizationId,
+          },
         });
       }
     }
@@ -562,8 +575,8 @@ export class TenantProvisioningService {
         await db.client.control.create({
           data: {
             ...controlData,
-            organizationId
-          }
+            organizationId,
+          },
         });
       }
     }
@@ -574,11 +587,13 @@ export class TenantProvisioningService {
     temporaryPassword: string,
     setupToken: string
   ): Promise<void> {
-    const encrypted = await encrypt(JSON.stringify({
-      temporaryPassword,
-      setupToken,
-      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
-    }));
+    const encrypted = await encrypt(
+      JSON.stringify({
+        temporaryPassword,
+        setupToken,
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+      })
+    );
 
     // Store in cache or database
     // TODO: Implement proper storage
@@ -600,7 +615,7 @@ export class TenantProvisioningService {
   private async cleanupOrganization(organizationId: string): Promise<void> {
     try {
       await db.client.organization.delete({
-        where: { id: organizationId }
+        where: { id: organizationId },
       });
     } catch (error) {
       console.error('Failed to cleanup organization:', error);
@@ -618,7 +633,7 @@ export class TenantProvisioningService {
       organizationId,
       userId,
       timestamp: Date.now(),
-      type: 'setup'
+      type: 'setup',
     };
     return Buffer.from(JSON.stringify(payload)).toString('base64');
   }
@@ -636,7 +651,7 @@ export class TenantProvisioningService {
     const mapping: Record<string, string> = {
       financial: 'financial-services',
       healthcare: 'healthcare',
-      technology: 'technology'
+      technology: 'technology',
     };
     return mapping[industry || ''] || 'technology';
   }
@@ -655,7 +670,7 @@ export class TenantProvisioningService {
         category: 'Credit',
         likelihood: 'medium',
         impact: 'high',
-        status: 'open'
+        status: 'open',
       },
       {
         title: 'Operational Risk - IT Systems',
@@ -663,8 +678,8 @@ export class TenantProvisioningService {
         category: 'Operational',
         likelihood: 'low',
         impact: 'high',
-        status: 'open'
-      }
+        status: 'open',
+      },
     ];
   }
 
@@ -675,8 +690,8 @@ export class TenantProvisioningService {
         description: 'Monthly monitoring and reporting of credit risk concentrations',
         category: 'Preventive',
         frequency: 'monthly',
-        status: 'active'
-      }
+        status: 'active',
+      },
     ];
   }
 
@@ -688,8 +703,8 @@ export class TenantProvisioningService {
         category: 'Privacy',
         likelihood: 'medium',
         impact: 'very-high',
-        status: 'open'
-      }
+        status: 'open',
+      },
     ];
   }
 
@@ -700,8 +715,8 @@ export class TenantProvisioningService {
         description: 'Role-based access controls for patient data systems',
         category: 'Preventive',
         frequency: 'continuous',
-        status: 'active'
-      }
+        status: 'active',
+      },
     ];
   }
 
@@ -713,8 +728,8 @@ export class TenantProvisioningService {
         category: 'Cybersecurity',
         likelihood: 'medium',
         impact: 'high',
-        status: 'open'
-      }
+        status: 'open',
+      },
     ];
   }
 
@@ -725,8 +740,8 @@ export class TenantProvisioningService {
         description: 'MFA implementation for all system access',
         category: 'Preventive',
         frequency: 'continuous',
-        status: 'active'
-      }
+        status: 'active',
+      },
     ];
   }
-} 
+}

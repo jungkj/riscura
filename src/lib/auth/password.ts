@@ -94,11 +94,19 @@ export function checkPasswordStrength(password: string): PasswordStrengthResult 
 
   // Dictionary words (simplified check)
   const commonPasswords = [
-    'password', '123456', '12345678', 'qwerty', 'abc123',
-    'password123', 'admin', 'letmein', 'welcome', 'monkey'
+    'password',
+    '123456',
+    '12345678',
+    'qwerty',
+    'abc123',
+    'password123',
+    'admin',
+    'letmein',
+    'welcome',
+    'monkey',
   ];
 
-  if (commonPasswords.some(common => password.toLowerCase().includes(common))) {
+  if (commonPasswords.some((common) => password.toLowerCase().includes(common))) {
     feedback.push('Password should not contain common words');
     score -= 1;
   }
@@ -116,27 +124,31 @@ export function checkPasswordStrength(password: string): PasswordStrengthResult 
  * Generate a secure random password
  */
 export function generateSecurePassword(length: number = 16): string {
-  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
+  const charset =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
   let password = '';
-  
+
   // Ensure at least one character from each required type
   const lowercase = 'abcdefghijklmnopqrstuvwxyz';
   const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const numbers = '0123456789';
   const special = '!@#$%^&*()_+-=[]{}|;:,.<>?';
-  
+
   password += getRandomChar(lowercase);
   password += getRandomChar(uppercase);
   password += getRandomChar(numbers);
   password += getRandomChar(special);
-  
+
   // Fill the rest with random characters
   for (let i = 4; i < length; i++) {
     password += getRandomChar(charset);
   }
-  
+
   // Shuffle the password
-  return password.split('').sort(() => Math.random() - 0.5).join('');
+  return password
+    .split('')
+    .sort(() => Math.random() - 0.5)
+    .join('');
 }
 
 /**
@@ -153,11 +165,23 @@ export async function checkPasswordCompromised(password: string): Promise<boolea
   // TODO: Integrate with Have I Been Pwned API
   // For now, just check against a basic list
   const compromisedPasswords = [
-    'password', '123456', '12345678', 'qwerty', 'abc123',
-    'password123', 'admin', 'letmein', 'welcome', 'monkey',
-    'dragon', 'passw0rd', 'master', '123123', 'football'
+    'password',
+    '123456',
+    '12345678',
+    'qwerty',
+    'abc123',
+    'password123',
+    'admin',
+    'letmein',
+    'welcome',
+    'monkey',
+    'dragon',
+    'passw0rd',
+    'master',
+    '123123',
+    'football',
   ];
-  
+
   return compromisedPasswords.includes(password.toLowerCase());
 }
 
@@ -178,7 +202,7 @@ export function verifyPasswordResetToken(token: string, maxAge: number = 3600000
     const decoded = Buffer.from(token, 'base64url').toString();
     const [timestamp] = decoded.split(':');
     const tokenAge = Date.now() - parseInt(timestamp);
-    
+
     return tokenAge <= maxAge;
   } catch (error) {
     return false;
@@ -230,4 +254,4 @@ export function getPasswordStrengthColor(score: number): string {
     default:
       return 'gray';
   }
-} 
+}

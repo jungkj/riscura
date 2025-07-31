@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { Workflow, WorkflowStep, WorkflowState, WorkflowCondition } from '@/types';
@@ -9,28 +9,48 @@ interface WorkflowContextType extends WorkflowState {
   updateWorkflow: (id: string, data: Partial<Workflow>) => Promise<Workflow>;
   deleteWorkflow: (id: string) => Promise<void>;
   getWorkflow: (id: string) => Workflow | null;
-  
+
   // Step Management
   addStep: (workflowId: string, step: Omit<WorkflowStep, 'id'>) => Promise<WorkflowStep>;
-  updateStep: (workflowId: string, stepId: string, data: Partial<WorkflowStep>) => Promise<WorkflowStep>;
+  updateStep: (
+    workflowId: string,
+    stepId: string,
+    data: Partial<WorkflowStep>
+  ) => Promise<WorkflowStep>;
   deleteStep: (workflowId: string, stepId: string) => Promise<void>;
   reorderSteps: (workflowId: string, stepIds: string[]) => Promise<void>;
-  
+
   // Workflow Execution
   startWorkflow: (workflowId: string, context?: Record<string, unknown>) => Promise<void>;
-  completeStep: (workflowId: string, stepId: string, result: 'completed' | 'rejected', comments?: string) => Promise<void>;
+  completeStep: (
+    workflowId: string,
+    stepId: string,
+    result: 'completed' | 'rejected',
+    comments?: string
+  ) => Promise<void>;
   skipStep: (workflowId: string, stepId: string, reason: string) => Promise<void>;
   escalateStep: (workflowId: string, stepId: string) => Promise<void>;
-  
+
   // Routing and Conditions
-  evaluateConditions: (conditions: WorkflowCondition[], context: Record<string, unknown>) => boolean;
-  getNextStep: (workflowId: string, currentStepId: string, context: Record<string, unknown>) => WorkflowStep | null;
+  evaluateConditions: (
+    conditions: WorkflowCondition[],
+    context: Record<string, unknown>
+  ) => boolean;
+  getNextStep: (
+    workflowId: string,
+    currentStepId: string,
+    context: Record<string, unknown>
+  ) => WorkflowStep | null;
   getActiveSteps: (workflowId: string) => WorkflowStep[];
-  
+
   // Assignment and Notifications
   assignStep: (workflowId: string, stepId: string, assigneeId: string) => Promise<void>;
-  sendNotification: (workflowId: string, stepId: string, type: 'assigned' | 'overdue' | 'escalated') => Promise<void>;
-  
+  sendNotification: (
+    workflowId: string,
+    stepId: string,
+    type: 'assigned' | 'overdue' | 'escalated'
+  ) => Promise<void>;
+
   // Analytics and Reporting
   getWorkflowStats: () => {
     total: number;
@@ -45,14 +65,14 @@ interface WorkflowContextType extends WorkflowState {
     completionRate: number;
     rejectionRate: number;
   }[];
-  
+
   // Templates and Duplication
   createTemplate: (workflowId: string, templateName: string) => Promise<Workflow>;
   duplicateWorkflow: (workflowId: string, newName: string) => Promise<Workflow>;
-  
+
   // Utility
   exportWorkflow: (workflowId: string, format: 'json' | 'pdf') => Promise<void>;
-  
+
   // Error handling
   clearError: () => void;
 }
@@ -84,65 +104,67 @@ const workflowReducer = (state: WorkflowState, action: WorkflowAction): Workflow
   switch (action.type) {
     case 'SET_LOADING':
       return { ...state, loading: action.payload };
-    
+
     case 'SET_ERROR':
       return { ...state, error: action.payload, loading: false };
-    
+
     case 'CLEAR_ERROR':
       return { ...state, error: null };
-    
+
     case 'SET_WORKFLOWS':
       return { ...state, workflows: action.payload, loading: false };
-    
+
     case 'ADD_WORKFLOW':
       return {
         ...state,
         workflows: [action.payload, ...state.workflows],
         loading: false,
       };
-    
+
     case 'UPDATE_WORKFLOW':
       return {
         ...state,
-        workflows: state.workflows.map(w =>
-          w.id === action.payload.id ? action.payload : w
-        ),
-        selectedWorkflow: state.selectedWorkflow?.id === action.payload.id ? action.payload : state.selectedWorkflow,
+        workflows: state.workflows.map((w) => (w.id === action.payload.id ? action.payload : w)),
+        selectedWorkflow:
+          state.selectedWorkflow?.id === action.payload.id
+            ? action.payload
+            : state.selectedWorkflow,
         loading: false,
       };
-    
+
     case 'DELETE_WORKFLOW':
       return {
         ...state,
-        workflows: state.workflows.filter(w => w.id !== action.payload),
-        selectedWorkflow: state.selectedWorkflow?.id === action.payload ? null : state.selectedWorkflow,
+        workflows: state.workflows.filter((w) => w.id !== action.payload),
+        selectedWorkflow:
+          state.selectedWorkflow?.id === action.payload ? null : state.selectedWorkflow,
         loading: false,
       };
-    
+
     case 'SET_SELECTED_WORKFLOW':
       return { ...state, selectedWorkflow: action.payload };
-    
+
     case 'SET_ACTIVE_STEPS':
       return { ...state, activeSteps: action.payload };
-    
+
     case 'UPDATE_STEP':
       return {
         ...state,
-        workflows: state.workflows.map(w =>
+        workflows: state.workflows.map((w) =>
           w.id === action.payload.workflowId
             ? {
                 ...w,
-                steps: w.steps.map(s =>
+                steps: w.steps.map((s) =>
                   s.id === action.payload.step.id ? action.payload.step : s
                 ),
               }
             : w
         ),
-        activeSteps: state.activeSteps.map(s =>
+        activeSteps: state.activeSteps.map((s) =>
           s.id === action.payload.step.id ? action.payload.step : s
         ),
       };
-    
+
     default:
       return state;
   }
@@ -161,33 +183,33 @@ export const useWorkflows = () => {
 // Mock API service
 const workflowService = {
   async getAllWorkflows(): Promise<Workflow[]> {
-    await new Promise(resolve => setTimeout(resolve, 800));
+    await new Promise((resolve) => setTimeout(resolve, 800));
     return generateMockWorkflows();
   },
 
   async createWorkflow(data: Omit<Workflow, 'id' | 'createdAt'>): Promise<Workflow> {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     const newWorkflow: Workflow = {
       ...data,
       id: `workflow-${Date.now()}`,
       createdAt: new Date().toISOString(),
     };
-    
+
     return newWorkflow;
   },
 
   async updateWorkflow(id: string, data: Partial<Workflow>): Promise<Workflow> {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
     return {
-      ...data as Workflow,
+      ...(data as Workflow),
       id,
     };
   },
 
   async deleteWorkflow(): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
   },
 };
 
@@ -335,11 +357,13 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       try {
         const workflows = await workflowService.getAllWorkflows();
         dispatch({ type: 'SET_WORKFLOWS', payload: workflows });
-        
+
         // Set active steps
         const activeSteps = workflows
-          .filter(w => w.status === 'active')
-          .flatMap(w => w.steps.filter(s => s.status === 'pending' || s.status === 'in_progress'));
+          .filter((w) => w.status === 'active')
+          .flatMap((w) =>
+            w.steps.filter((s) => s.status === 'pending' || s.status === 'in_progress')
+          );
         dispatch({ type: 'SET_ACTIVE_STEPS', payload: activeSteps });
       } catch {
         dispatch({ type: 'SET_ERROR', payload: 'Failed to load workflows' });
@@ -386,7 +410,7 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const getWorkflow = (id: string) => {
-    return state.workflows.find(w => w.id === id) || null;
+    return state.workflows.find((w) => w.id === id) || null;
   };
 
   // Step Management
@@ -412,9 +436,7 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const workflow = getWorkflow(workflowId);
     if (!workflow) throw new Error('Workflow not found');
 
-    const updatedSteps = workflow.steps.map(s =>
-      s.id === stepId ? { ...s, ...data } : s
-    );
+    const updatedSteps = workflow.steps.map((s) => (s.id === stepId ? { ...s, ...data } : s));
 
     const updatedWorkflow = {
       ...workflow,
@@ -422,8 +444,8 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     };
 
     await updateWorkflow(workflowId, updatedWorkflow);
-    const updatedStep = updatedSteps.find(s => s.id === stepId)!;
-    
+    const updatedStep = updatedSteps.find((s) => s.id === stepId)!;
+
     dispatch({ type: 'UPDATE_STEP', payload: { workflowId, step: updatedStep } });
     return updatedStep;
   };
@@ -432,7 +454,7 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const workflow = getWorkflow(workflowId);
     if (!workflow) throw new Error('Workflow not found');
 
-    const updatedSteps = workflow.steps.filter(s => s.id !== stepId);
+    const updatedSteps = workflow.steps.filter((s) => s.id !== stepId);
     const updatedWorkflow = {
       ...workflow,
       steps: updatedSteps,
@@ -445,10 +467,12 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const workflow = getWorkflow(workflowId);
     if (!workflow) throw new Error('Workflow not found');
 
-    const reorderedSteps = stepIds.map((id, index) => {
-      const step = workflow.steps.find(s => s.id === id);
-      return step ? { ...step, order: index + 1 } : null;
-    }).filter(Boolean) as WorkflowStep[];
+    const reorderedSteps = stepIds
+      .map((id, index) => {
+        const step = workflow.steps.find((s) => s.id === id);
+        return step ? { ...step, order: index + 1 } : null;
+      })
+      .filter(Boolean) as WorkflowStep[];
 
     const updatedWorkflow = {
       ...workflow,
@@ -472,7 +496,12 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     console.log(`Started workflow ${workflowId}`, context);
   };
 
-  const completeStep = async (workflowId: string, stepId: string, result: 'completed' | 'rejected', comments?: string) => {
+  const completeStep = async (
+    workflowId: string,
+    stepId: string,
+    result: 'completed' | 'rejected',
+    comments?: string
+  ) => {
     await updateStep(workflowId, stepId, {
       status: result,
       completedAt: new Date().toISOString(),
@@ -482,7 +511,9 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     // Check if workflow is complete
     const workflow = getWorkflow(workflowId);
     if (workflow) {
-      const allCompleted = workflow.steps.every(s => s.status === 'completed' || s.status === 'skipped');
+      const allCompleted = workflow.steps.every(
+        (s) => s.status === 'completed' || s.status === 'skipped'
+      );
       if (allCompleted) {
         await updateWorkflow(workflowId, {
           status: 'completed',
@@ -501,20 +532,23 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const escalateStep = async (workflowId: string, stepId: string) => {
     const workflow = getWorkflow(workflowId);
-    const step = workflow?.steps.find(s => s.id === stepId);
-    
+    const step = workflow?.steps.find((s) => s.id === stepId);
+
     if (step?.escalation?.escalateTo) {
       await updateStep(workflowId, stepId, {
         assignee: step.escalation.escalateTo,
       });
-      
+
       await sendNotification(workflowId, stepId, 'escalated');
     }
   };
 
   // Routing and Conditions
-  const evaluateConditions = (conditions: WorkflowCondition[], context: Record<string, unknown>) => {
-    return conditions.every(condition => {
+  const evaluateConditions = (
+    conditions: WorkflowCondition[],
+    context: Record<string, unknown>
+  ) => {
+    return conditions.every((condition) => {
       const value = context[condition.field];
       switch (condition.operator) {
         case 'equals':
@@ -531,11 +565,15 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     });
   };
 
-  const getNextStep = (workflowId: string, currentStepId: string, context: Record<string, unknown>) => {
+  const getNextStep = (
+    workflowId: string,
+    currentStepId: string,
+    context: Record<string, unknown>
+  ) => {
     const workflow = getWorkflow(workflowId);
     if (!workflow) return null;
 
-    const currentIndex = workflow.steps.findIndex(s => s.id === currentStepId);
+    const currentIndex = workflow.steps.findIndex((s) => s.id === currentStepId);
     if (currentIndex === -1) return null;
 
     for (let i = currentIndex + 1; i < workflow.steps.length; i++) {
@@ -552,7 +590,7 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const workflow = getWorkflow(workflowId);
     if (!workflow) return [];
 
-    return workflow.steps.filter(s => s.status === 'pending' || s.status === 'in_progress');
+    return workflow.steps.filter((s) => s.status === 'pending' || s.status === 'in_progress');
   };
 
   // Assignment and Notifications
@@ -561,23 +599,30 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     await sendNotification(workflowId, stepId, 'assigned');
   };
 
-  const sendNotification = async (workflowId: string, stepId: string, type: 'assigned' | 'overdue' | 'escalated') => {
-    await new Promise(resolve => setTimeout(resolve, 300));
+  const sendNotification = async (
+    workflowId: string,
+    stepId: string,
+    type: 'assigned' | 'overdue' | 'escalated'
+  ) => {
+    await new Promise((resolve) => setTimeout(resolve, 300));
     console.log(`Sent ${type} notification for workflow ${workflowId}, step ${stepId}`);
   };
 
   // Analytics and Reporting
   const getWorkflowStats = () => {
     const total = state.workflows.length;
-    const active = state.workflows.filter(w => w.status === 'active').length;
-    const completed = state.workflows.filter(w => w.status === 'completed').length;
-    const overdue = state.workflows.filter(w => 
-      w.status === 'active' && w.steps.some(s => 
-        (s.status === 'pending' || s.status === 'in_progress') && 
-        new Date(s.dueDate) < new Date()
-      )
+    const active = state.workflows.filter((w) => w.status === 'active').length;
+    const completed = state.workflows.filter((w) => w.status === 'completed').length;
+    const overdue = state.workflows.filter(
+      (w) =>
+        w.status === 'active' &&
+        w.steps.some(
+          (s) =>
+            (s.status === 'pending' || s.status === 'in_progress') &&
+            new Date(s.dueDate) < new Date()
+        )
     ).length;
-    
+
     const averageCompletionTime = 5.2; // Mock value in days
 
     return { total, active, completed, overdue, averageCompletionTime };
@@ -587,7 +632,7 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const workflow = getWorkflow(workflowId);
     if (!workflow) return [];
 
-    return workflow.steps.map(step => ({
+    return workflow.steps.map((step) => ({
       stepId: step.id,
       averageTime: Math.random() * 48 + 12, // Mock hours
       completionRate: Math.random() * 0.3 + 0.7, // 70-100%
@@ -604,7 +649,11 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       ...workflow,
       name: templateName,
       status: 'draft' as const,
-      steps: workflow.steps.map(s => ({ ...s, status: 'pending' as const, completedAt: undefined })),
+      steps: workflow.steps.map((s) => ({
+        ...s,
+        status: 'pending' as const,
+        completedAt: undefined,
+      })),
     };
 
     return createWorkflow(template);
@@ -625,7 +674,7 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   // Utility
   const exportWorkflow = async (workflowId: string, format: 'json' | 'pdf') => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     console.log(`Exported workflow ${workflowId} in ${format} format`);
   };
 
@@ -634,33 +683,35 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   return (
-    <WorkflowContext.Provider value={{
-      ...state,
-      createWorkflow,
-      updateWorkflow,
-      deleteWorkflow,
-      getWorkflow,
-      addStep,
-      updateStep,
-      deleteStep,
-      reorderSteps,
-      startWorkflow,
-      completeStep,
-      skipStep,
-      escalateStep,
-      evaluateConditions,
-      getNextStep,
-      getActiveSteps,
-      assignStep,
-      sendNotification,
-      getWorkflowStats,
-      getStepAnalytics,
-      createTemplate,
-      duplicateWorkflow,
-      exportWorkflow,
-      clearError,
-    }}>
+    <WorkflowContext.Provider
+      value={{
+        ...state,
+        createWorkflow,
+        updateWorkflow,
+        deleteWorkflow,
+        getWorkflow,
+        addStep,
+        updateStep,
+        deleteStep,
+        reorderSteps,
+        startWorkflow,
+        completeStep,
+        skipStep,
+        escalateStep,
+        evaluateConditions,
+        getNextStep,
+        getActiveSteps,
+        assignStep,
+        sendNotification,
+        getWorkflowStats,
+        getStepAnalytics,
+        createTemplate,
+        duplicateWorkflow,
+        exportWorkflow,
+        clearError,
+      }}
+    >
       {children}
     </WorkflowContext.Provider>
   );
-}; 
+};

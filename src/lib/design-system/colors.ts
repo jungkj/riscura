@@ -18,9 +18,9 @@ export const baseColors = {
     700: '#404040',
     800: '#262626',
     900: '#171717',
-    950: '#0a0a0a'
+    950: '#0a0a0a',
   },
-  
+
   // Primary Blue (trust, reliability)
   primary: {
     50: '#eff6ff',
@@ -33,9 +33,9 @@ export const baseColors = {
     700: '#1d4ed8',
     800: '#1e40af',
     900: '#1e3a8a',
-    950: '#172554'
+    950: '#172554',
   },
-  
+
   // Riscura Brand Blue
   riscura: {
     50: '#e6f7ff',
@@ -48,8 +48,8 @@ export const baseColors = {
     700: '#1073b6',
     800: '#0c5f9b',
     900: '#084b80',
-    950: '#043765'
-  }
+    950: '#043765',
+  },
 };
 
 // Status Color System (enhanced for clarity and accessibility)
@@ -69,9 +69,9 @@ export const statusColors = {
     text: '#dc2626',
     bg: '#fef2f2',
     border: '#fecaca',
-    hover: '#fee2e2'
+    hover: '#fee2e2',
   },
-  
+
   // High Priority (orange/amber)
   high: {
     50: '#fffbeb',
@@ -87,9 +87,9 @@ export const statusColors = {
     text: '#d97706',
     bg: '#fffbeb',
     border: '#fde68a',
-    hover: '#fef3c7'
+    hover: '#fef3c7',
   },
-  
+
   // Medium Priority (yellow)
   medium: {
     50: '#fefce8',
@@ -105,9 +105,9 @@ export const statusColors = {
     text: '#ca8a04',
     bg: '#fefce8',
     border: '#fef08a',
-    hover: '#fef9c3'
+    hover: '#fef9c3',
   },
-  
+
   // Success/Mitigated (green)
   success: {
     50: '#f0fdf4',
@@ -123,9 +123,9 @@ export const statusColors = {
     text: '#16a34a',
     bg: '#f0fdf4',
     border: '#bbf7d0',
-    hover: '#dcfce7'
+    hover: '#dcfce7',
   },
-  
+
   // Info/New (blue)
   info: {
     50: '#eff6ff',
@@ -141,9 +141,9 @@ export const statusColors = {
     text: '#2563eb',
     bg: '#eff6ff',
     border: '#bfdbfe',
-    hover: '#dbeafe'
+    hover: '#dbeafe',
   },
-  
+
   // Warning (amber)
   warning: {
     50: '#fffbeb',
@@ -159,8 +159,8 @@ export const statusColors = {
     text: '#ea580c',
     bg: '#fffbeb',
     border: '#fed7aa',
-    hover: '#fef3c7'
-  }
+    hover: '#fef3c7',
+  },
 };
 
 // Interactive State Colors
@@ -171,32 +171,32 @@ export const interactiveColors = {
     border: 'rgba(0, 0, 0, 0.12)',
     text: 'rgba(0, 0, 0, 0.87)',
     primary: '#2563eb',
-    secondary: '#64748b'
+    secondary: '#64748b',
   },
-  
+
   // Active/pressed states
   active: {
     background: 'rgba(0, 0, 0, 0.08)',
     border: 'rgba(0, 0, 0, 0.24)',
     text: 'rgba(0, 0, 0, 0.87)',
     primary: '#1d4ed8',
-    secondary: '#475569'
+    secondary: '#475569',
   },
-  
+
   // Focus states (accessibility)
   focus: {
     ring: '#3b82f6',
     ringOffset: '#ffffff',
-    outline: '#2563eb'
+    outline: '#2563eb',
   },
-  
+
   // Disabled states
   disabled: {
     background: 'rgba(0, 0, 0, 0.02)',
     text: 'rgba(0, 0, 0, 0.26)',
     border: 'rgba(0, 0, 0, 0.06)',
-    opacity: 0.5
-  }
+    opacity: 0.5,
+  },
 };
 
 // Data Visualization Color Palette (color-blind friendly)
@@ -204,28 +204,57 @@ export const dataColors = {
   // Primary palette for charts (8 distinct colors)
   palette: [
     '#3b82f6', // Blue
-    '#10b981', // Emerald  
+    '#10b981', // Emerald
     '#f59e0b', // Amber
     '#ef4444', // Red
     '#8b5cf6', // Violet
     '#06b6d4', // Cyan
     '#84cc16', // Lime
-    '#f97316'  // Orange
+    '#f97316', // Orange
   ],
-  
+
   // Sequential color scales for metrics
   sequential: {
     blue: ['#eff6ff', '#dbeafe', '#bfdbfe', '#93c5fd', '#60a5fa', '#3b82f6', '#2563eb', '#1d4ed8'],
     green: ['#f0fdf4', '#dcfce7', '#bbf7d0', '#86efac', '#4ade80', '#22c55e', '#16a34a', '#15803d'],
     red: ['#fef2f2', '#fee2e2', '#fecaca', '#fca5a5', '#f87171', '#ef4444', '#dc2626', '#b91c1c'],
-    orange: ['#fff7ed', '#ffedd5', '#fed7aa', '#fdba74', '#fb923c', '#f97316', '#ea580c', '#c2410c']
+    orange: [
+      '#fff7ed',
+      '#ffedd5',
+      '#fed7aa',
+      '#fdba74',
+      '#fb923c',
+      '#f97316',
+      '#ea580c',
+      '#c2410c',
+    ],
   },
-  
+
   // Diverging color scale (for risk comparisons)
   diverging: {
-    redBlue: ['#b91c1c', '#dc2626', '#ef4444', '#f87171', '#e5e7eb', '#93c5fd', '#60a5fa', '#3b82f6', '#2563eb'],
-    redGreen: ['#b91c1c', '#dc2626', '#ef4444', '#f87171', '#e5e7eb', '#86efac', '#4ade80', '#22c55e', '#16a34a']
-  }
+    redBlue: [
+      '#b91c1c',
+      '#dc2626',
+      '#ef4444',
+      '#f87171',
+      '#e5e7eb',
+      '#93c5fd',
+      '#60a5fa',
+      '#3b82f6',
+      '#2563eb',
+    ],
+    redGreen: [
+      '#b91c1c',
+      '#dc2626',
+      '#ef4444',
+      '#f87171',
+      '#e5e7eb',
+      '#86efac',
+      '#4ade80',
+      '#22c55e',
+      '#16a34a',
+    ],
+  },
 };
 
 // Risk-specific Color Mapping
@@ -236,25 +265,25 @@ export const riskColors = {
     high: statusColors.high,
     medium: statusColors.medium,
     low: statusColors.success,
-    unknown: statusColors.info
+    unknown: statusColors.info,
   },
-  
+
   // Workflow states
   workflow: {
     identified: statusColors.info,
     assessed: statusColors.warning,
     mitigated: statusColors.success,
     monitoring: statusColors.medium,
-    closed: baseColors.neutral
+    closed: baseColors.neutral,
   },
-  
+
   // Confidence indicators
   confidence: {
     high: statusColors.success,
     medium: statusColors.warning,
     low: statusColors.critical,
-    unknown: baseColors.neutral
-  }
+    unknown: baseColors.neutral,
+  },
 };
 
 // Utility Functions for Color Application
@@ -271,9 +300,9 @@ export const getStatusColor = (status: string) => {
     assessed: statusColors.warning,
     identified: statusColors.info,
     monitoring: statusColors.medium,
-    closed: baseColors.neutral
+    closed: baseColors.neutral,
   };
-  
+
   return statusMap[status.toLowerCase()] || baseColors.neutral;
 };
 
@@ -285,7 +314,7 @@ export const getRiskLevelColor = (level: string | number) => {
     if (level >= 5) return riskColors.levels.low;
     return riskColors.levels.unknown;
   }
-  
+
   return riskColors.levels[level as keyof typeof riskColors.levels] || riskColors.levels.unknown;
 };
 
@@ -307,21 +336,22 @@ export const colorClasses = {
     success: 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100',
     warning: 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100',
     info: 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100',
-    neutral: 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+    neutral: 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100',
   },
-  
+
   // Interactive states
   interactive: {
-    button: 'hover:bg-slate-50 active:bg-slate-100 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+    button:
+      'hover:bg-slate-50 active:bg-slate-100 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
     card: 'hover:shadow-lg hover:border-slate-300 transition-all duration-200',
-    link: 'text-blue-600 hover:text-blue-700 hover:underline focus:ring-2 focus:ring-blue-500'
+    link: 'text-blue-600 hover:text-blue-700 hover:underline focus:ring-2 focus:ring-blue-500',
   },
-  
+
   // Background variants
   background: {
     surface: 'bg-white border border-slate-200',
     elevated: 'bg-white border border-slate-200 shadow-sm',
     sunken: 'bg-slate-50 border border-slate-200',
-    overlay: 'bg-white/95 backdrop-blur-sm border border-slate-200/60'
-  }
-}; 
+    overlay: 'bg-white/95 backdrop-blur-sm border border-slate-200/60',
+  },
+};

@@ -96,4 +96,4 @@ export interface ReportMetrics {
   averageGenerationTime: number;
   popularTemplates: string[];
   exportCounts: Record<ExportFormat, number>;
-} 
+}

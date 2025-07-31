@@ -1,5 +1,11 @@
 import { NextRequest } from 'next/server';
-import { withAPI, withValidation, createAPIResponse, ForbiddenError, ConflictError } from './middleware';
+import {
+  withAPI,
+  withValidation,
+  createAPIResponse,
+  ForbiddenError,
+  ConflictError,
+} from './middleware';
 import { createNotFoundError } from './error-handler';
 import { bulkOperationSchema } from './schemas';
 import { getAuthenticatedUser, type AuthenticatedRequest } from '@/lib/auth/middleware';
@@ -102,7 +108,6 @@ export function createBulkHandler(
             status: 'success',
             data: operationResult,
           });
-
         } catch (error) {
           result.failed++;
           result.errors.push({
@@ -153,14 +158,14 @@ export function createBulkHandler(
 function getEntityTypeEnum(entityType: string): string {
   const typeMap: Record<string, string> = {
     risk: 'RISK',
-    control: 'CONTROL', 
+    control: 'CONTROL',
     document: 'DOCUMENT',
     questionnaire: 'QUESTIONNAIRE',
     workflow: 'WORKFLOW',
     report: 'REPORT',
     task: 'TASK',
   };
-  
+
   return typeMap[entityType] || 'TASK';
 }
 
@@ -173,11 +178,16 @@ function getEntityTable(entityType: string): string {
     workflow: 'workflow',
     report: 'report',
   };
-  
+
   return tableMap[entityType] || entityType;
 }
 
-async function updateEntity(table: string, id: string, updateData: any, userId: string): Promise<any> {
+async function updateEntity(
+  table: string,
+  id: string,
+  updateData: any,
+  userId: string
+): Promise<any> {
   return await (db.client as any)[table].update({
     where: { id },
     data: {
@@ -191,7 +201,7 @@ async function updateEntity(table: string, id: string, updateData: any, userId: 
 async function deleteEntity(table: string, id: string, entityType: string): Promise<any> {
   // Check for dependencies before deletion
   await checkDependencies(table, id, entityType);
-  
+
   return await (db.client as any)[table].delete({
     where: { id },
   });
@@ -281,7 +291,7 @@ function getExportIncludes(table: string): any {
       recipients: true,
     },
   };
-  
+
   return includeMap[table] || {};
 }
 
@@ -292,7 +302,7 @@ export async function validateBulkIds(
   organizationId: string
 ): Promise<{ valid: string[]; invalid: string[] }> {
   const table = getEntityTable(entityType);
-  
+
   const entities = await (db.client as any)[table].findMany({
     where: {
       id: { in: ids },
@@ -300,23 +310,26 @@ export async function validateBulkIds(
     },
     select: { id: true },
   });
-  
+
   const valid = entities.map((e: any) => e.id);
-  const invalid = ids.filter(id => !valid.includes(id));
-  
+  const invalid = ids.filter((id) => !valid.includes(id));
+
   return { valid, invalid };
 }
 
 // Bulk progress tracking
 export class BulkOperationProgress {
-  private progressMap = new Map<string, {
-    total: number;
-    completed: number;
-    failed: number;
-    status: 'running' | 'completed' | 'failed';
-    startTime: Date;
-    endTime?: Date;
-  }>();
+  private progressMap = new Map<
+    string,
+    {
+      total: number;
+      completed: number;
+      failed: number;
+      status: 'running' | 'completed' | 'failed';
+      startTime: Date;
+      endTime?: Date;
+    }
+  >();
 
   startOperation(operationId: string, total: number): void {
     this.progressMap.set(operationId, {
@@ -333,7 +346,7 @@ export class BulkOperationProgress {
     if (progress) {
       progress.completed = completed;
       progress.failed = failed;
-      
+
       if (completed + failed >= progress.total) {
         progress.status = failed > 0 ? 'failed' : 'completed';
         progress.endTime = new Date();
@@ -350,4 +363,4 @@ export class BulkOperationProgress {
   }
 }
 
-export const bulkProgress = new BulkOperationProgress(); 
+export const bulkProgress = new BulkOperationProgress();

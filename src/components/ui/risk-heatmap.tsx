@@ -328,15 +328,18 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
 
   return (
     <>
-      <DaisyCard className={className}>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center">
-            <Target className="w-5 h-5 mr-2 text-blue-600" />
+      <DaisyCard className={className} >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center" >
+  <Target className="w-5 h-5 mr-2 text-blue-600" />
+</DaisyCardTitle>
             Inherent Risk Heat Map
           </DaisyCardTitle>
-        
-        <DaisyCardContent>
-          <div className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
             {/* Heat Map Grid */}
             <div className="overflow-x-auto">
               <div className="min-w-[600px] flex">
@@ -417,7 +420,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Risk Details Modal */}

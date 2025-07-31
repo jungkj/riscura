@@ -7,22 +7,22 @@ export const performanceMonitor = {
       performance.mark(`${name}-start`);
     }
   },
-  
+
   endMeasure: (name: string) => {
     if (typeof performance !== 'undefined') {
       performance.mark(`${name}-end`);
       performance.measure(name, `${name}-start`, `${name}-end`);
       const measure = performance.getEntriesByName(name, 'measure')[0];
-      
+
       if (process.env.NODE_ENV === 'development' && measure) {
         console.log(`⚡ Performance: ${name} took ${measure.duration.toFixed(2)}ms`);
       }
-      
+
       return measure?.duration || 0;
     }
     return 0;
   },
-  
+
   clearMeasures: (name?: string) => {
     if (typeof performance !== 'undefined') {
       if (name) {
@@ -34,7 +34,7 @@ export const performanceMonitor = {
         performance.clearMeasures();
       }
     }
-  }
+  },
 };
 
 // Debounced callback hook with performance tracking
@@ -44,17 +44,17 @@ export const useOptimizedCallback = <T extends (...args: any[]) => any>(
   delay: number = 0
 ): T => {
   const timeoutRef = useRef<NodeJS.Timeout>();
-  
+
   return useCallback(
     ((...args: Parameters<T>) => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
-      
+
       if (delay === 0) {
         return callback(...args);
       }
-      
+
       timeoutRef.current = setTimeout(() => {
         performanceMonitor.startMeasure('callback-execution');
         callback(...args);
@@ -75,12 +75,13 @@ export const useOptimizedMemo = <T>(
     performanceMonitor.startMeasure(`memo-${debugName || 'anonymous'}`);
     const result = factory();
     performanceMonitor.endMeasure(`memo-${debugName || 'anonymous'}`);
-    
+
     // Track memory usage in development
     if (process.env.NODE_ENV === 'development' && debugName) {
       try {
         const size = JSON.stringify(result).length;
-        if (size > 10000) { // Warn about large memoized values
+        if (size > 10000) {
+          // Warn about large memoized values
           console.warn(`📊 Large memoized value detected: ${debugName} (${size} bytes)`);
         }
       } catch (error) {
@@ -88,15 +89,13 @@ export const useOptimizedMemo = <T>(
         console.warn(`📊 Could not measure size for memoized value: ${debugName}`);
       }
     }
-    
+
     return result;
   }, deps);
 };
 
 // Intersection Observer hook for lazy loading
-export const useIntersectionObserver = (
-  options: IntersectionObserverInit = {}
-) => {
+export const useIntersectionObserver = (options: IntersectionObserverInit = {}) => {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasIntersected, setHasIntersected] = useState(false);
   const elementRef = useRef<HTMLElement>(null);
@@ -137,14 +136,14 @@ export const useVirtualScrolling = <T>(
   overscan: number = 5
 ) => {
   const [scrollTop, setScrollTop] = useState(0);
-  
+
   const visibleItems = useMemo(() => {
     const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
     const endIndex = Math.min(
       items.length - 1,
       Math.ceil((scrollTop + containerHeight) / itemHeight) + overscan
     );
-    
+
     return {
       startIndex,
       endIndex,
@@ -183,7 +182,7 @@ export const usePerformanceMetrics = (componentName: string) => {
     totalRenderTime: 0,
     avgRenderTime: 0,
   });
-  
+
   const startTime = useRef<number>();
 
   useEffect(() => {
@@ -192,14 +191,15 @@ export const usePerformanceMetrics = (componentName: string) => {
 
   useEffect(() => {
     if (startTime.current) {
-      const renderTime = (typeof performance !== 'undefined' ? performance.now() : Date.now()) - startTime.current;
+      const renderTime =
+        (typeof performance !== 'undefined' ? performance.now() : Date.now()) - startTime.current;
       const metrics = metricsRef.current;
-      
+
       metrics.renderCount++;
       metrics.lastRenderTime = renderTime;
       metrics.totalRenderTime += renderTime;
       metrics.avgRenderTime = metrics.totalRenderTime / metrics.renderCount;
-      
+
       if (process.env.NODE_ENV === 'development' && metrics.renderCount % 10 === 0) {
         console.log(`📊 ${componentName} Performance:`, {
           renders: metrics.renderCount,
@@ -219,7 +219,7 @@ export const useReducedMotion = () => {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     setPrefersReducedMotion(mediaQuery.matches);
 
@@ -266,7 +266,7 @@ export const useThrottledScroll = (callback: (scrollY: number) => void, delay: n
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+
     window.addEventListener('scroll', throttledCallback);
     return () => window.removeEventListener('scroll', throttledCallback);
   }, [throttledCallback]);
@@ -278,7 +278,7 @@ export const useDevicePixelRatio = () => {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+
     setDevicePixelRatio(window.devicePixelRatio || 1);
 
     const handleChange = () => {
@@ -301,15 +301,21 @@ export const useDevicePixelRatio = () => {
 export const useLazyComponent = () => {
   const [loadedComponents, setLoadedComponents] = useState<Set<string>>(new Set());
 
-  const loadComponent = useCallback((componentName: string) => {
-    if (!loadedComponents.has(componentName)) {
-      setLoadedComponents(prev => new Set([...prev, componentName]));
-    }
-  }, [loadedComponents]);
+  const loadComponent = useCallback(
+    (componentName: string) => {
+      if (!loadedComponents.has(componentName)) {
+        setLoadedComponents((prev) => new Set([...prev, componentName]));
+      }
+    },
+    [loadedComponents]
+  );
 
-  const isComponentLoaded = useCallback((componentName: string) => {
-    return loadedComponents.has(componentName);
-  }, [loadedComponents]);
+  const isComponentLoaded = useCallback(
+    (componentName: string) => {
+      return loadedComponents.has(componentName);
+    },
+    [loadedComponents]
+  );
 
   return { loadComponent, isComponentLoaded };
 };
@@ -346,8 +352,11 @@ export const useNetworkStatus = () => {
     if (typeof navigator === 'undefined') return;
 
     const updateNetworkStatus = () => {
-      const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
-      
+      const connection =
+        (navigator as any).connection ||
+        (navigator as any).mozConnection ||
+        (navigator as any).webkitConnection;
+
       setNetworkStatus({
         isOnline: navigator.onLine,
         connectionType: connection?.type || 'unknown',
@@ -355,8 +364,8 @@ export const useNetworkStatus = () => {
       });
     };
 
-    const handleOnline = () => setNetworkStatus(prev => ({ ...prev, isOnline: true }));
-    const handleOffline = () => setNetworkStatus(prev => ({ ...prev, isOnline: false }));
+    const handleOnline = () => setNetworkStatus((prev) => ({ ...prev, isOnline: true }));
+    const handleOffline = () => setNetworkStatus((prev) => ({ ...prev, isOnline: false }));
 
     updateNetworkStatus();
 
@@ -378,4 +387,4 @@ export const useNetworkStatus = () => {
   }, []);
 
   return networkStatus;
-}; 
+};

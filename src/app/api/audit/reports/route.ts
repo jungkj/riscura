@@ -41,7 +41,7 @@ const AuditReportRequestSchema = z.object({
 
 async function handlePost(req: NextRequest) {
   const user = (req as any).user;
-  
+
   if (!user || !user.organizationId) {
     return NextResponse.json(
       {
@@ -54,7 +54,7 @@ async function handlePost(req: NextRequest) {
       { status: 403 }
     );
   }
-  
+
   const organizationId = user.organizationId;
   const userId = user.id;
 
@@ -103,7 +103,7 @@ async function handlePost(req: NextRequest) {
 
     // Generate the report
     const auditLogger = getAuditLogger(db.client);
-    
+
     // Log audit start event
     await auditLogger.log({
       action: 'AUDIT_START',
@@ -126,7 +126,7 @@ async function handlePost(req: NextRequest) {
         reportType: validatedData.reportType,
       },
     });
-    
+
     const report = await auditLogger.generateReport(
       organizationId,
       validatedData.reportType,
@@ -181,10 +181,9 @@ async function handlePost(req: NextRequest) {
         reportGenerated: true,
       },
     });
-
   } catch (error) {
     console.error('Audit report generation error:', error);
-    
+
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
@@ -192,9 +191,9 @@ async function handlePost(req: NextRequest) {
           error: {
             code: 'VALIDATION_ERROR',
             message: 'Invalid report request',
-            details: error.errors.map(err => ({
+            details: error.errors.map((err) => ({
               field: err.path.join('.'),
-              message: err.message
+              message: err.message,
             })),
           },
         },
@@ -238,7 +237,7 @@ async function convertReportToCSV(report: AuditReport): Promise<string> {
     'Error Message',
   ];
 
-  const rows = report.events.map(event => [
+  const rows = report.events.map((event) => [
     event.timestamp.toISOString(),
     event.userId || '',
     event.action,
@@ -256,7 +255,7 @@ async function convertReportToCSV(report: AuditReport): Promise<string> {
   ]);
 
   const csvContent = [headers, ...rows]
-    .map(row => row.map(field => `"${field.replace(/"/g, '""')}"`).join(','))
+    .map((row) => row.map((field) => `"${field.replace(/"/g, '""')}"`).join(','))
     .join('\n');
 
   return csvContent;
@@ -278,12 +277,16 @@ async function convertReportToPDF(report: AuditReport): Promise<Buffer> {
     - Risk Score: ${report.summary.riskScore?.toFixed(2) || 'N/A'}%
     
     Top Actions:
-    ${report.summary.topActions.map(item => `- ${item.action}: ${item.count}`).join('\n')}
+    ${report.summary.topActions.map((item) => `- ${item.action}: ${item.count}`).join('\n')}
     
     Events:
-    ${report.events.slice(0, 100).map(event => 
-      `${event.timestamp.toISOString()} - ${event.action} - ${event.entity} - ${event.status}`
-    ).join('\n')}
+    ${report.events
+      .slice(0, 100)
+      .map(
+        (event) =>
+          `${event.timestamp.toISOString()} - ${event.action} - ${event.entity} - ${event.status}`
+      )
+      .join('\n')}
   `;
 
   return Buffer.from(pdfContent, 'utf-8');
@@ -294,7 +297,7 @@ async function convertReportToXLSX(report: AuditReport): Promise<Buffer> {
   // like xlsx or exceljs to generate a proper Excel file
   const xlsxContent = JSON.stringify({
     summary: report.summary,
-    events: report.events.map(event => ({
+    events: report.events.map((event) => ({
       timestamp: event.timestamp.toISOString(),
       userId: event.userId,
       action: event.action,
@@ -311,15 +314,12 @@ async function convertReportToXLSX(report: AuditReport): Promise<Buffer> {
 // EXPORT HANDLERS
 // ============================================================================
 
-export const POST = withAPI(
-  handlePost,
-  {
-    requireAuth: true,
-    requiredPermissions: ['audit:read', 'reports:generate'],
-    rateLimit: {
-      windowMs: 60 * 60 * 1000, // 1 hour
-      maxRequests: 10,
-    },
-    validateBody: AuditReportRequestSchema,
-  }
-);
+export const POST = withAPI(handlePost, {
+  requireAuth: true,
+  requiredPermissions: ['audit:read', 'reports:generate'],
+  rateLimit: {
+    windowMs: 60 * 60 * 1000, // 1 hour
+    maxRequests: 10,
+  },
+  validateBody: AuditReportRequestSchema,
+});

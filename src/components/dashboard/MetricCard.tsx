@@ -21,9 +21,12 @@ export default function MetricCard({
   icon,
   isLoading = false
 }: MetricCardProps) {
+
   return (
-    <DaisyCard>
-      <DaisyCardContent className="p-6">
+    <DaisyCard >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
         <div className="flex items-center justify-between space-y-0 pb-2">
           <p className="text-sm font-medium text-muted-foreground">{title}</p>
           {icon && <div className="text-muted-foreground">{icon}</div>}
@@ -53,7 +56,7 @@ export default function MetricCard({
             )
           )}
         </div>
-      </DaisyCardBody>
+      </DaisySkeleton>
     </DaisyCard>
   );
 }

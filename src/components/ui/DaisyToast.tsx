@@ -51,7 +51,7 @@ export const useToast = () => {
   if (!context) {
     throw new Error('useToast must be used within a ToastProvider');
   }
-  
+
   return {
     toast: context.addToast,
     toasts: context.toasts,
@@ -93,33 +93,33 @@ const ToastViewport: React.FC = () => {
 };
 
 // Compatibility exports
-export const ToastAction: React.FC<React.HTMLAttributes<HTMLButtonElement>> = ({ 
-  children, 
+export const ToastAction: React.FC<React.HTMLAttributes<HTMLButtonElement>> = ({
+  children,
   className,
-  ...props 
+  ...props
 }) => (
   <button className={cn('btn btn-sm', className)} {...props}>
     {children}
   </button>
 );
 
-export const ToastClose: React.FC<React.HTMLAttributes<HTMLButtonElement>> = ({ 
+export const ToastClose: React.FC<React.HTMLAttributes<HTMLButtonElement>> = ({
   className,
-  ...props 
+  ...props
 }) => (
   <button className={cn('btn btn-sm btn-circle btn-ghost', className)} {...props}>
     <X className="h-4 w-4" />
   </button>
 );
 
-export const ToastTitle: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ 
+export const ToastTitle: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   className,
-  ...props 
+  ...props
 }) => <div className={cn('font-bold', className)} {...props} />;
 
-export const ToastDescription: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ 
+export const ToastDescription: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   className,
-  ...props 
+  ...props
 }) => <div className={cn('text-sm', className)} {...props} />;
 
 export const Toast = ({ children }: { children: React.ReactNode }) => children;

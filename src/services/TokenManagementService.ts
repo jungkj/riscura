@@ -109,13 +109,13 @@ export const PRICING_TIERS: Record<string, PricingTier> = {
       dailyTokenLimit: 10000,
       weeklyTokenLimit: 50000,
       monthlyTokenLimit: 200000,
-      dailyCostLimit: 2.00,
-      weeklyCostLimit: 10.00,
-      monthlyCostLimit: 40.00,
-      conversationLimit: 20
+      dailyCostLimit: 2.0,
+      weeklyCostLimit: 10.0,
+      monthlyCostLimit: 40.0,
+      conversationLimit: 20,
     },
     features: ['Basic AI chat', 'Limited agents', 'Standard support'],
-    monthlyPrice: 0
+    monthlyPrice: 0,
   },
   professional: {
     id: 'professional',
@@ -125,13 +125,13 @@ export const PRICING_TIERS: Record<string, PricingTier> = {
       dailyTokenLimit: 50000,
       weeklyTokenLimit: 300000,
       monthlyTokenLimit: 1200000,
-      dailyCostLimit: 10.00,
-      weeklyCostLimit: 60.00,
-      monthlyCostLimit: 240.00,
-      conversationLimit: 100
+      dailyCostLimit: 10.0,
+      weeklyCostLimit: 60.0,
+      monthlyCostLimit: 240.0,
+      conversationLimit: 100,
     },
     features: ['All AI agents', 'Priority support', 'Usage analytics', 'Export reports'],
-    monthlyPrice: 29.99
+    monthlyPrice: 29.99,
   },
   enterprise: {
     id: 'enterprise',
@@ -141,14 +141,14 @@ export const PRICING_TIERS: Record<string, PricingTier> = {
       dailyTokenLimit: 1000000,
       weeklyTokenLimit: 5000000,
       monthlyTokenLimit: 20000000,
-      dailyCostLimit: 200.00,
-      weeklyCostLimit: 1000.00,
-      monthlyCostLimit: 4000.00,
-      conversationLimit: 1000
+      dailyCostLimit: 200.0,
+      weeklyCostLimit: 1000.0,
+      monthlyCostLimit: 4000.0,
+      conversationLimit: 1000,
     },
     features: ['Unlimited usage', 'Custom agents', 'Dedicated support', 'API access', 'SSO'],
-    monthlyPrice: 199.99
-  }
+    monthlyPrice: 199.99,
+  },
 };
 
 // Model pricing configuration (based on OpenAI pricing as of 2024)
@@ -157,26 +157,26 @@ export const MODEL_PRICING: Record<string, ModelPricing> = {
     inputCostPer1k: 0.005,
     outputCostPer1k: 0.015,
     name: 'GPT-4o',
-    provider: 'openai'
+    provider: 'openai',
   },
   'gpt-4o-mini': {
     inputCostPer1k: 0.00015,
     outputCostPer1k: 0.0006,
     name: 'GPT-4o Mini',
-    provider: 'openai'
+    provider: 'openai',
   },
   'gpt-4-turbo': {
     inputCostPer1k: 0.01,
     outputCostPer1k: 0.03,
     name: 'GPT-4 Turbo',
-    provider: 'openai'
+    provider: 'openai',
   },
   'gpt-3.5-turbo': {
     inputCostPer1k: 0.0015,
     outputCostPer1k: 0.002,
     name: 'GPT-3.5 Turbo',
-    provider: 'openai'
-  }
+    provider: 'openai',
+  },
 };
 
 export class TokenManagementService {
@@ -184,7 +184,7 @@ export class TokenManagementService {
   private conversationUsageCache: Map<string, ConversationUsage> = new Map();
   private tokenTransactions: TokenTransaction[] = [];
   private usageAlerts: UsageAlert[] = [];
-  
+
   // Storage keys for persistence
   private readonly USER_USAGE_KEY = 'riscura_user_usage';
   private readonly CONVERSATION_USAGE_KEY = 'riscura_conversation_usage';
@@ -199,11 +199,7 @@ export class TokenManagementService {
   /**
    * Calculate cost for token usage based on model
    */
-  calculateCost(
-    promptTokens: number,
-    completionTokens: number,
-    model: string
-  ): number {
+  calculateCost(promptTokens: number, completionTokens: number, model: string): number {
     const pricing = MODEL_PRICING[model];
     if (!pricing) {
       console.warn(`Unknown model pricing for: ${model}, using default`);
@@ -244,7 +240,7 @@ export class TokenManagementService {
       cost: usage.estimatedCost,
       timestamp: new Date(),
       messageId,
-      duration
+      duration,
     };
 
     this.tokenTransactions.push(transaction);
@@ -279,7 +275,10 @@ export class TokenManagementService {
   /**
    * Check if user can make a request (quota enforcement)
    */
-  canMakeRequest(userId: string, estimatedTokens: number = 1000): {
+  canMakeRequest(
+    userId: string,
+    estimatedTokens: number = 1000
+  ): {
     allowed: boolean;
     reason?: string;
     quotaStatus: {
@@ -300,7 +299,7 @@ export class TokenManagementService {
       weeklyUsed: userUsage.weeklyTokens,
       weeklyLimit: quotas.weeklyTokenLimit,
       monthlyUsed: userUsage.monthlyTokens,
-      monthlyLimit: quotas.monthlyTokenLimit
+      monthlyLimit: quotas.monthlyTokenLimit,
     };
 
     // Check daily limit
@@ -308,7 +307,7 @@ export class TokenManagementService {
       return {
         allowed: false,
         reason: `Daily token limit exceeded (${quotas.dailyTokenLimit.toLocaleString()})`,
-        quotaStatus
+        quotaStatus,
       };
     }
 
@@ -317,7 +316,7 @@ export class TokenManagementService {
       return {
         allowed: false,
         reason: `Weekly token limit exceeded (${quotas.weeklyTokenLimit.toLocaleString()})`,
-        quotaStatus
+        quotaStatus,
       };
     }
 
@@ -326,7 +325,7 @@ export class TokenManagementService {
       return {
         allowed: false,
         reason: `Monthly token limit exceeded (${quotas.monthlyTokenLimit.toLocaleString()})`,
-        quotaStatus
+        quotaStatus,
       };
     }
 
@@ -337,16 +336,14 @@ export class TokenManagementService {
    * Get active alerts for user
    */
   getActiveAlerts(userId: string): UsageAlert[] {
-    return this.usageAlerts.filter(
-      alert => alert.userId === userId && !alert.acknowledged
-    );
+    return this.usageAlerts.filter((alert) => alert.userId === userId && !alert.acknowledged);
   }
 
   /**
    * Acknowledge alert
    */
   acknowledgeAlert(alertId: string): void {
-    const alert = this.usageAlerts.find(a => a.id === alertId);
+    const alert = this.usageAlerts.find((a) => a.id === alertId);
     if (alert) {
       alert.acknowledged = true;
       this.persistData();
@@ -386,21 +383,21 @@ export class TokenManagementService {
 
     // Filter transactions for the period
     const periodTransactions = this.tokenTransactions.filter(
-      txn => txn.userId === userId &&
-             txn.timestamp >= reportStartDate &&
-             txn.timestamp <= reportEndDate
+      (txn) =>
+        txn.userId === userId && txn.timestamp >= reportStartDate && txn.timestamp <= reportEndDate
     );
 
     // Calculate totals
     const totalTokens = periodTransactions.reduce((sum, txn) => sum + txn.totalTokens, 0);
     const totalCost = periodTransactions.reduce((sum, txn) => sum + txn.cost, 0);
-    const conversationCount = new Set(periodTransactions.map(txn => txn.conversationId)).size;
+    const conversationCount = new Set(periodTransactions.map((txn) => txn.conversationId)).size;
 
     // Agent breakdown
-    const agentBreakdown: Record<AgentType, { tokens: number; cost: number; count: number }> = {} as Record<AgentType, { tokens: number; cost: number; count: number }>;
+    const agentBreakdown: Record<AgentType, { tokens: number; cost: number; count: number }> =
+      {} as Record<AgentType, { tokens: number; cost: number; count: number }>;
     const modelBreakdown: Record<string, { tokens: number; cost: number; count: number }> = {};
 
-    periodTransactions.forEach(txn => {
+    periodTransactions.forEach((txn) => {
       // Agent breakdown
       if (!agentBreakdown[txn.agentType]) {
         agentBreakdown[txn.agentType] = { tokens: 0, cost: 0, count: 0 };
@@ -423,7 +420,7 @@ export class TokenManagementService {
 
     // Top conversations
     const conversationUsageMap = new Map<string, { tokens: number; cost: number; count: number }>();
-    periodTransactions.forEach(txn => {
+    periodTransactions.forEach((txn) => {
       const key = txn.conversationId;
       if (!conversationUsageMap.has(key)) {
         conversationUsageMap.set(key, { tokens: 0, cost: 0, count: 0 });
@@ -435,8 +432,8 @@ export class TokenManagementService {
     });
 
     const topConversations = Array.from(this.conversationUsageCache.values())
-      .filter(conv => conv.userId === userId)
-      .filter(conv => conversationUsageMap.has(conv.conversationId))
+      .filter((conv) => conv.userId === userId)
+      .filter((conv) => conversationUsageMap.has(conv.conversationId))
       .sort((a, b) => b.totalCost - a.totalCost)
       .slice(0, 10);
 
@@ -451,7 +448,7 @@ export class TokenManagementService {
       agentBreakdown,
       modelBreakdown,
       costTrend,
-      topConversations
+      topConversations,
     };
   }
 
@@ -486,43 +483,42 @@ export class TokenManagementService {
     // Current session stats (last hour)
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
     const sessionTransactions = this.tokenTransactions.filter(
-      txn => txn.userId === userId && txn.timestamp >= oneHourAgo
+      (txn) => txn.userId === userId && txn.timestamp >= oneHourAgo
     );
 
     const sessionTokens = sessionTransactions.reduce((sum, txn) => sum + txn.totalTokens, 0);
     const sessionCost = sessionTransactions.reduce((sum, txn) => sum + txn.cost, 0);
-    const sessionDuration = sessionTransactions.length > 0 
-      ? Date.now() - sessionTransactions[0].timestamp.getTime()
-      : 0;
+    const sessionDuration =
+      sessionTransactions.length > 0 ? Date.now() - sessionTransactions[0].timestamp.getTime() : 0;
 
     // Today's stats
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const todayTransactions = this.tokenTransactions.filter(
-      txn => txn.userId === userId && txn.timestamp >= today
+      (txn) => txn.userId === userId && txn.timestamp >= today
     );
 
     const todayTokens = todayTransactions.reduce((sum, txn) => sum + txn.totalTokens, 0);
     const todayCost = todayTransactions.reduce((sum, txn) => sum + txn.cost, 0);
-    const todayConversations = new Set(todayTransactions.map(txn => txn.conversationId)).size;
+    const todayConversations = new Set(todayTransactions.map((txn) => txn.conversationId)).size;
 
     // Quota status
     const quotaStatus = {
       daily: {
         used: userUsage.dailyTokens,
         limit: quotas.dailyTokenLimit,
-        percentage: (userUsage.dailyTokens / quotas.dailyTokenLimit) * 100
+        percentage: (userUsage.dailyTokens / quotas.dailyTokenLimit) * 100,
       },
       weekly: {
         used: userUsage.weeklyTokens,
         limit: quotas.weeklyTokenLimit,
-        percentage: (userUsage.weeklyTokens / quotas.weeklyTokenLimit) * 100
+        percentage: (userUsage.weeklyTokens / quotas.weeklyTokenLimit) * 100,
       },
       monthly: {
         used: userUsage.monthlyTokens,
         limit: quotas.monthlyTokenLimit,
-        percentage: (userUsage.monthlyTokens / quotas.monthlyTokenLimit) * 100
-      }
+        percentage: (userUsage.monthlyTokens / quotas.monthlyTokenLimit) * 100,
+      },
     };
 
     // Cost projections
@@ -530,29 +526,31 @@ export class TokenManagementService {
     const daysInWeek = 7;
     const daysInMonth = 30;
     const currentHour = new Date().getHours();
-    
+
     const hourlyRate = todayCost / Math.max(currentHour, 1);
     const dailyProjected = hourlyRate * hoursInDay;
-    const weeklyProjected = (userUsage.weeklyCost / Math.max(1, this.getDaysInCurrentWeek())) * daysInWeek;
-    const monthlyProjected = (userUsage.monthlyCost / Math.max(1, this.getDaysInCurrentMonth())) * daysInMonth;
+    const weeklyProjected =
+      (userUsage.weeklyCost / Math.max(1, this.getDaysInCurrentWeek())) * daysInWeek;
+    const monthlyProjected =
+      (userUsage.monthlyCost / Math.max(1, this.getDaysInCurrentMonth())) * daysInMonth;
 
     return {
       currentSession: {
         tokens: sessionTokens,
         cost: sessionCost,
-        duration: sessionDuration
+        duration: sessionDuration,
       },
       today: {
         tokens: todayTokens,
         cost: todayCost,
-        conversations: todayConversations
+        conversations: todayConversations,
       },
       quotaStatus,
       costProjection: {
         dailyProjected,
         weeklyProjected,
-        monthlyProjected
-      }
+        monthlyProjected,
+      },
     };
   }
 
@@ -564,9 +562,10 @@ export class TokenManagementService {
     format: 'json' | 'csv',
     period: 'daily' | 'weekly' | 'monthly' | 'all' = 'monthly'
   ): string {
-    const reportPeriod: 'daily' | 'weekly' | 'monthly' | 'custom' = period === 'all' ? 'monthly' : period;
+    const reportPeriod: 'daily' | 'weekly' | 'monthly' | 'custom' =
+      period === 'all' ? 'monthly' : period;
     const report = this.generateUsageReport(userId, reportPeriod);
-    
+
     if (format === 'json') {
       return JSON.stringify(report, null, 2);
     } else {
@@ -587,7 +586,7 @@ export class TokenManagementService {
     userUsage.monthlyCost = 0;
     userUsage.conversationCount = 0;
     userUsage.lastReset = new Date();
-    
+
     this.userUsageCache.set(userId, userUsage);
     this.persistData();
   }
@@ -605,7 +604,7 @@ export class TokenManagementService {
     userUsage.tier = tier;
     this.userUsageCache.set(userId, userUsage);
     this.persistData();
-    
+
     return true;
   }
 
@@ -613,7 +612,7 @@ export class TokenManagementService {
 
   private getUserUsageOrCreate(userId: string): UserUsage {
     let userUsage = this.userUsageCache.get(userId);
-    
+
     if (!userUsage) {
       userUsage = {
         userId,
@@ -625,14 +624,14 @@ export class TokenManagementService {
         monthlyCost: 0,
         conversationCount: 0,
         lastReset: new Date(),
-        tier: PRICING_TIERS.free
+        tier: PRICING_TIERS.free,
       };
       this.userUsageCache.set(userId, userUsage);
     }
 
     // Reset counters if needed
     this.resetCountersIfNeeded(userUsage);
-    
+
     return userUsage;
   }
 
@@ -643,7 +642,7 @@ export class TokenManagementService {
     userId: string
   ): Promise<void> {
     let convUsage = this.conversationUsageCache.get(conversationId);
-    
+
     if (!convUsage) {
       convUsage = {
         conversationId,
@@ -653,7 +652,7 @@ export class TokenManagementService {
         messageCount: 0,
         startTime: new Date(),
         lastActivity: new Date(),
-        userId
+        userId,
       };
     }
 
@@ -667,7 +666,7 @@ export class TokenManagementService {
 
   private async updateUserUsage(userId: string, usage: TokenUsage): Promise<void> {
     const userUsage = this.getUserUsageOrCreate(userId);
-    
+
     userUsage.dailyTokens += usage.totalTokens;
     userUsage.weeklyTokens += usage.totalTokens;
     userUsage.monthlyTokens += usage.totalTokens;
@@ -684,25 +683,45 @@ export class TokenManagementService {
 
     // Check daily quota
     if (userUsage.dailyTokens > quotas.dailyTokenLimit * 0.8) {
-      this.generateAlert(userId, 'quota_warning', 'Daily token usage is at 80%', 
-        quotas.dailyTokenLimit * 0.8, userUsage.dailyTokens);
+      this.generateAlert(
+        userId,
+        'quota_warning',
+        'Daily token usage is at 80%',
+        quotas.dailyTokenLimit * 0.8,
+        userUsage.dailyTokens
+      );
     }
 
     if (userUsage.dailyTokens > quotas.dailyTokenLimit) {
-      this.generateAlert(userId, 'quota_exceeded', 'Daily token limit exceeded', 
-        quotas.dailyTokenLimit, userUsage.dailyTokens);
+      this.generateAlert(
+        userId,
+        'quota_exceeded',
+        'Daily token limit exceeded',
+        quotas.dailyTokenLimit,
+        userUsage.dailyTokens
+      );
     }
 
     // Check weekly quota
     if (userUsage.weeklyTokens > quotas.weeklyTokenLimit * 0.8) {
-      this.generateAlert(userId, 'quota_warning', 'Weekly token usage is at 80%', 
-        quotas.weeklyTokenLimit * 0.8, userUsage.weeklyTokens);
+      this.generateAlert(
+        userId,
+        'quota_warning',
+        'Weekly token usage is at 80%',
+        quotas.weeklyTokenLimit * 0.8,
+        userUsage.weeklyTokens
+      );
     }
 
     // Check cost thresholds
     if (userUsage.dailyCost > quotas.dailyCostLimit * 0.9) {
-      this.generateAlert(userId, 'cost_threshold', 'Daily cost is approaching limit', 
-        quotas.dailyCostLimit * 0.9, userUsage.dailyCost);
+      this.generateAlert(
+        userId,
+        'cost_threshold',
+        'Daily cost is approaching limit',
+        quotas.dailyCostLimit * 0.9,
+        userUsage.dailyCost
+      );
     }
   }
 
@@ -715,18 +734,19 @@ export class TokenManagementService {
   ): void {
     // Don't create duplicate alerts
     const existingAlert = this.usageAlerts.find(
-      alert => alert.userId === userId && 
-                alert.type === type && 
-                !alert.acknowledged &&
-                alert.threshold === threshold
+      (alert) =>
+        alert.userId === userId &&
+        alert.type === type &&
+        !alert.acknowledged &&
+        alert.threshold === threshold
     );
 
     if (existingAlert) {
       return;
     }
 
-    const severity = currentUsage > threshold * 1.1 ? 'critical' : 
-                    currentUsage > threshold ? 'high' : 'medium';
+    const severity =
+      currentUsage > threshold * 1.1 ? 'critical' : currentUsage > threshold ? 'high' : 'medium';
 
     const alert: UsageAlert = {
       id: this.generateId('alert'),
@@ -737,7 +757,7 @@ export class TokenManagementService {
       currentUsage,
       timestamp: new Date(),
       userId,
-      acknowledged: false
+      acknowledged: false,
     };
 
     this.usageAlerts.push(alert);
@@ -780,8 +800,7 @@ export class TokenManagementService {
   }
 
   private isSameMonth(date1: Date, date2: Date): boolean {
-    return date1.getMonth() === date2.getMonth() && 
-           date1.getFullYear() === date2.getFullYear();
+    return date1.getMonth() === date2.getMonth() && date1.getFullYear() === date2.getFullYear();
   }
 
   private getWeekNumber(date: Date): [number, number] {
@@ -789,7 +808,10 @@ export class TokenManagementService {
     const dayNum = d.getUTCDay() || 7;
     d.setUTCDate(d.getUTCDate() + 4 - dayNum);
     const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    return [d.getUTCFullYear(), Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7)];
+    return [
+      d.getUTCFullYear(),
+      Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7),
+    ];
   }
 
   private getDaysInCurrentWeek(): number {
@@ -810,8 +832,8 @@ export class TokenManagementService {
     endDate: Date
   ): { date: Date; cost: number; tokens: number }[] {
     const dailyAggregation = new Map<string, { cost: number; tokens: number }>();
-    
-    transactions.forEach(txn => {
+
+    transactions.forEach((txn) => {
       const dateKey = txn.timestamp.toISOString().split('T')[0];
       if (!dailyAggregation.has(dateKey)) {
         dailyAggregation.set(dateKey, { cost: 0, tokens: 0 });
@@ -825,7 +847,7 @@ export class TokenManagementService {
       .map(([dateKey, data]) => ({
         date: new Date(dateKey),
         cost: data.cost,
-        tokens: data.tokens
+        tokens: data.tokens,
       }))
       .sort((a, b) => a.date.getTime() - b.date.getTime());
   }
@@ -839,35 +861,39 @@ export class TokenManagementService {
       'Conversation Count',
       'Agent Type',
       'Agent Tokens',
-      'Agent Cost'
+      'Agent Cost',
     ];
 
     const rows = [headers.join(',')];
 
     // Add summary row
-    rows.push([
-      report.startDate.toISOString().split('T')[0],
-      report.period,
-      report.totalTokens.toString(),
-      report.totalCost.toFixed(4),
-      report.conversationCount.toString(),
-      'TOTAL',
-      report.totalTokens.toString(),
-      report.totalCost.toFixed(4)
-    ].join(','));
-
-    // Add agent breakdown
-    Object.entries(report.agentBreakdown).forEach(([agent, data]) => {
-      rows.push([
+    rows.push(
+      [
         report.startDate.toISOString().split('T')[0],
         report.period,
         report.totalTokens.toString(),
         report.totalCost.toFixed(4),
         report.conversationCount.toString(),
-        agent,
-        data.tokens.toString(),
-        data.cost.toFixed(4)
-      ].join(','));
+        'TOTAL',
+        report.totalTokens.toString(),
+        report.totalCost.toFixed(4),
+      ].join(',')
+    );
+
+    // Add agent breakdown
+    Object.entries(report.agentBreakdown).forEach(([agent, data]) => {
+      rows.push(
+        [
+          report.startDate.toISOString().split('T')[0],
+          report.period,
+          report.totalTokens.toString(),
+          report.totalCost.toFixed(4),
+          report.conversationCount.toString(),
+          agent,
+          data.tokens.toString(),
+          data.cost.toFixed(4),
+        ].join(',')
+      );
     });
 
     return rows.join('\n');
@@ -875,22 +901,25 @@ export class TokenManagementService {
 
   private startCleanupInterval(): void {
     // Clean up old transactions and alerts every hour
-    setInterval(() => {
-      const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-      
-      // Keep only last 30 days of transactions
-      this.tokenTransactions = this.tokenTransactions.filter(
-        txn => txn.timestamp >= thirtyDaysAgo
-      );
+    setInterval(
+      () => {
+        const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
-      // Remove acknowledged alerts older than 7 days
-      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-      this.usageAlerts = this.usageAlerts.filter(
-        alert => !alert.acknowledged || alert.timestamp >= sevenDaysAgo
-      );
+        // Keep only last 30 days of transactions
+        this.tokenTransactions = this.tokenTransactions.filter(
+          (txn) => txn.timestamp >= thirtyDaysAgo
+        );
 
-      this.persistData();
-    }, 60 * 60 * 1000); // Every hour
+        // Remove acknowledged alerts older than 7 days
+        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        this.usageAlerts = this.usageAlerts.filter(
+          (alert) => !alert.acknowledged || alert.timestamp >= sevenDaysAgo
+        );
+
+        this.persistData();
+      },
+      60 * 60 * 1000
+    ); // Every hour
   }
 
   private loadStoredData(): void {
@@ -908,7 +937,7 @@ export class TokenManagementService {
           const userUsage = usage as UserUsage;
           this.userUsageCache.set(userId, {
             ...userUsage,
-            lastReset: new Date(userUsage.lastReset)
+            lastReset: new Date(userUsage.lastReset),
           });
         });
       }
@@ -922,7 +951,7 @@ export class TokenManagementService {
           this.conversationUsageCache.set(conversationId, {
             ...conversationUsage,
             startTime: new Date(conversationUsage.startTime),
-            lastActivity: new Date(conversationUsage.lastActivity)
+            lastActivity: new Date(conversationUsage.lastActivity),
           });
         });
       }
@@ -932,7 +961,7 @@ export class TokenManagementService {
       if (transactionsData) {
         this.tokenTransactions = JSON.parse(transactionsData).map((txn: TokenTransaction) => ({
           ...txn,
-          timestamp: new Date(txn.timestamp)
+          timestamp: new Date(txn.timestamp),
         }));
       }
 
@@ -941,7 +970,7 @@ export class TokenManagementService {
       if (alertsData) {
         this.usageAlerts = JSON.parse(alertsData).map((alert: UsageAlert) => ({
           ...alert,
-          timestamp: new Date(alert.timestamp)
+          timestamp: new Date(alert.timestamp),
         }));
       }
     } catch (error) {
@@ -986,4 +1015,4 @@ export class TokenManagementService {
 }
 
 // Export singleton instance
-export const tokenManagementService = new TokenManagementService(); 
+export const tokenManagementService = new TokenManagementService();

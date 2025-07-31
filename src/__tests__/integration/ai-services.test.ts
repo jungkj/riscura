@@ -14,14 +14,16 @@ const aiServiceHandlers = [
   // OpenAI API mock
   http.post('https://api.openai.com/v1/chat/completions', ({ request }: { request: Request }) => {
     return HttpResponse.json({
-      choices: [{
-        message: {
-          content: JSON.stringify({
-            risks: [{ title: 'Test Risk', severity: 'HIGH' }],
-            summary: 'Mock AI analysis'
-          })
-        }
-      }]
+      choices: [
+        {
+          message: {
+            content: JSON.stringify({
+              risks: [{ title: 'Test Risk', severity: 'HIGH' }],
+              summary: 'Mock AI analysis',
+            }),
+          },
+        },
+      ],
     });
   }),
 
@@ -29,9 +31,9 @@ const aiServiceHandlers = [
   http.post('/api/ai/analyze', ({ request }: { request: Request }) => {
     return HttpResponse.json({
       analysis: 'Mock analysis result',
-      confidence: 0.95
+      confidence: 0.95,
     });
-  })
+  }),
 ];
 
 const server = setupServer(...aiServiceHandlers);
@@ -94,22 +96,22 @@ class AIServiceTestUtils {
         
         4. Risk Monitoring
         Risks should be monitored monthly and reported quarterly.
-      `
+      `,
     };
-    
+
     return documents[type];
   }
 
   static async uploadTestDocument(documentContent: string, filename: string) {
     // Simulate file upload
     const buffer = Buffer.from(documentContent, 'utf-8');
-    
+
     // Mock FormData for file upload
     const formData = new FormData();
     const blob = new Blob([buffer], { type: 'application/pdf' });
     formData.append('file', blob, filename);
     formData.append('documentType', 'policy');
-    
+
     return formData;
   }
 
@@ -117,7 +119,7 @@ class AIServiceTestUtils {
     expect(analysis).toHaveProperty('risks');
     expect(analysis).toHaveProperty('controls');
     expect(analysis).toHaveProperty('compliance');
-    
+
     if (analysis.risks && Array.isArray(analysis.risks)) {
       analysis.risks.forEach((risk: any) => {
         expect(risk).toHaveProperty('title');
@@ -125,10 +127,10 @@ class AIServiceTestUtils {
         expect(risk).toHaveProperty('category');
         expect(risk).toHaveProperty('likelihood');
         expect(risk).toHaveProperty('impact');
-        
+
         expect(risk.likelihood).toBeGreaterThanOrEqual(1);
         expect(risk.likelihood).toBeLessThanOrEqual(5);
-        
+
         expect(risk.impact).toHaveProperty('financial');
         expect(risk.impact).toHaveProperty('operational');
         expect(risk.impact).toHaveProperty('reputational');
@@ -144,7 +146,7 @@ class AIServiceTestUtils {
         expect(control).toHaveProperty('description');
         expect(control).toHaveProperty('type');
         expect(['preventive', 'detective', 'corrective']).toContain(control.type);
-        
+
         if (control.effectiveness) {
           expect(control.effectiveness).toBeGreaterThanOrEqual(1);
           expect(control.effectiveness).toBeLessThanOrEqual(5);
@@ -155,9 +157,9 @@ class AIServiceTestUtils {
 
   static measureProcessingTime<T>(fn: () => Promise<T>): Promise<{ result: T; duration: number }> {
     const start = performance.now();
-    return fn().then(result => ({
+    return fn().then((result) => ({
       result,
-      duration: performance.now() - start
+      duration: performance.now() - start,
     }));
   }
 }
@@ -178,39 +180,42 @@ describe('AI Service Integration Tests', () => {
   describe('Document Processing Pipeline', () => {
     test('should process policy document and extract risks', async () => {
       const documentContent = AIServiceTestUtils.createTestDocument('policy');
-      const formData = await AIServiceTestUtils.uploadTestDocument(documentContent, 'privacy-policy.pdf');
-      
+      const formData = await AIServiceTestUtils.uploadTestDocument(
+        documentContent,
+        'privacy-policy.pdf'
+      );
+
       const response = await fetch('/api/ai/analyze', {
         method: 'POST',
-        body: formData
+        body: formData,
       });
-      
+
       expect(response.ok).toBe(true);
-      
+
       const result = await response.json();
       expect(result.success).toBe(true);
       expect(result.data).toHaveProperty('analysis');
-      
+
       AIServiceTestUtils.validateRiskAnalysis(result.data.analysis);
     });
 
     test('should handle different document types correctly', async () => {
       const documentTypes = ['policy', 'procedure', 'guideline'] as const;
-      
+
       for (const docType of documentTypes) {
         const documentContent = AIServiceTestUtils.createTestDocument(docType);
         const formData = await AIServiceTestUtils.uploadTestDocument(
-          documentContent, 
+          documentContent,
           `test-${docType}.pdf`
         );
-        
+
         const response = await fetch('/api/ai/analyze', {
           method: 'POST',
-          body: formData
+          body: formData,
         });
-        
+
         expect(response.ok).toBe(true);
-        
+
         const result = await response.json();
         expect(result.data.documentType).toBeTruthy();
       }
@@ -218,20 +223,23 @@ describe('AI Service Integration Tests', () => {
 
     test('should extract compliance requirements accurately', async () => {
       const documentContent = AIServiceTestUtils.createTestDocument('policy');
-      const formData = await AIServiceTestUtils.uploadTestDocument(documentContent, 'compliance-policy.pdf');
-      
+      const formData = await AIServiceTestUtils.uploadTestDocument(
+        documentContent,
+        'compliance-policy.pdf'
+      );
+
       const response = await fetch('/api/ai/analyze', {
         method: 'POST',
-        body: formData
+        body: formData,
       });
-      
+
       const result = await response.json();
       const compliance = result.data.analysis?.compliance;
-      
+
       if (compliance) {
         expect(compliance).toHaveProperty('frameworks');
         expect(compliance).toHaveProperty('requirements');
-        
+
         if (compliance.frameworks) {
           expect(Array.isArray(compliance.frameworks)).toBe(true);
           compliance.frameworks.forEach((framework: string) => {
@@ -244,16 +252,19 @@ describe('AI Service Integration Tests', () => {
 
     test('should process documents within performance thresholds', async () => {
       const documentContent = AIServiceTestUtils.createTestDocument('policy');
-      const formData = await AIServiceTestUtils.uploadTestDocument(documentContent, 'performance-test.pdf');
-      
+      const formData = await AIServiceTestUtils.uploadTestDocument(
+        documentContent,
+        'performance-test.pdf'
+      );
+
       const { result, duration } = await AIServiceTestUtils.measureProcessingTime(async () => {
         const response = await fetch('/api/ai/analyze', {
           method: 'POST',
-          body: formData
+          body: formData,
         });
         return response.json();
       });
-      
+
       expect(result.success).toBe(true);
       expect(duration).toBeLessThan(30000); // Should complete within 30 seconds
     });
@@ -275,51 +286,59 @@ describe('AI Service Integration Tests', () => {
         No access controls were functioning.
         Backup systems failed.
       `;
-      
-      const formData = await AIServiceTestUtils.uploadTestDocument(highRiskContent, 'security-incident.pdf');
-      
+
+      const formData = await AIServiceTestUtils.uploadTestDocument(
+        highRiskContent,
+        'security-incident.pdf'
+      );
+
       const response = await fetch('/api/ai/analyze', {
         method: 'POST',
-        body: formData
+        body: formData,
       });
-      
+
       const result = await response.json();
       const risks = result.data.analysis?.risks;
-      
+
       if (risks && risks.length > 0) {
         // Should identify high-impact risks
-        const hasHighImpactRisk = risks.some((risk: any) => 
-          risk.impact.financial >= 4 || 
-          risk.impact.reputational >= 4 || 
-          risk.impact.regulatory >= 4
+        const hasHighImpactRisk = risks.some(
+          (risk: any) =>
+            risk.impact.financial >= 4 ||
+            risk.impact.reputational >= 4 ||
+            risk.impact.regulatory >= 4
         );
-        
+
         expect(hasHighImpactRisk).toBe(true);
       }
     });
 
     test('should suggest appropriate controls for identified risks', async () => {
       const documentContent = AIServiceTestUtils.createTestDocument('policy');
-      const formData = await AIServiceTestUtils.uploadTestDocument(documentContent, 'control-analysis.pdf');
-      
+      const formData = await AIServiceTestUtils.uploadTestDocument(
+        documentContent,
+        'control-analysis.pdf'
+      );
+
       const response = await fetch('/api/ai/analyze', {
         method: 'POST',
-        body: formData
+        body: formData,
       });
-      
+
       const result = await response.json();
-      
+
       AIServiceTestUtils.validateControlAnalysis(result.data.analysis);
-      
+
       const controls = result.data.analysis?.controls;
       if (controls && controls.length > 0) {
         // Controls should be relevant to the document content
-        const hasRelevantControls = controls.some((control: any) => 
-          control.name.toLowerCase().includes('data') ||
-          control.name.toLowerCase().includes('access') ||
-          control.name.toLowerCase().includes('encryption')
+        const hasRelevantControls = controls.some(
+          (control: any) =>
+            control.name.toLowerCase().includes('data') ||
+            control.name.toLowerCase().includes('access') ||
+            control.name.toLowerCase().includes('encryption')
         );
-        
+
         expect(hasRelevantControls).toBe(true);
       }
     });
@@ -340,24 +359,28 @@ describe('AI Service Integration Tests', () => {
         - Contact information for data protection officer
         - Legal basis for processing
       `;
-      
-      const formData = await AIServiceTestUtils.uploadTestDocument(gapAnalysisContent, 'incomplete-policy.pdf');
-      
+
+      const formData = await AIServiceTestUtils.uploadTestDocument(
+        gapAnalysisContent,
+        'incomplete-policy.pdf'
+      );
+
       const response = await fetch('/api/ai/analyze', {
         method: 'POST',
-        body: formData
+        body: formData,
       });
-      
+
       const result = await response.json();
       const analysis = result.data.analysis;
-      
+
       expect(analysis.complianceGaps).toBeGreaterThan(0);
-      
+
       if (analysis.insights) {
-        const hasGapInsights = analysis.insights.some((insight: string) => 
-          insight.toLowerCase().includes('missing') ||
-          insight.toLowerCase().includes('gap') ||
-          insight.toLowerCase().includes('incomplete')
+        const hasGapInsights = analysis.insights.some(
+          (insight: string) =>
+            insight.toLowerCase().includes('missing') ||
+            insight.toLowerCase().includes('gap') ||
+            insight.toLowerCase().includes('incomplete')
         );
         expect(hasGapInsights).toBe(true);
       }
@@ -368,26 +391,37 @@ describe('AI Service Integration Tests', () => {
     test('should handle AI service timeout gracefully', async () => {
       // Mock a timeout scenario
       server.use(
-        http.post('https://api.openai.com/v1/chat/completions', ({ request }: { request: Request }) => {
-          return HttpResponse.json({
-            choices: [{
-              message: { content: 'Mock response' }
-            }]
-          }, { status: 408 });
-        })
+        http.post(
+          'https://api.openai.com/v1/chat/completions',
+          ({ request }: { request: Request }) => {
+            return HttpResponse.json(
+              {
+                choices: [
+                  {
+                    message: { content: 'Mock response' },
+                  },
+                ],
+              },
+              { status: 408 }
+            );
+          }
+        )
       );
-      
+
       const documentContent = AIServiceTestUtils.createTestDocument('policy');
-      const formData = await AIServiceTestUtils.uploadTestDocument(documentContent, 'timeout-test.pdf');
-      
+      const formData = await AIServiceTestUtils.uploadTestDocument(
+        documentContent,
+        'timeout-test.pdf'
+      );
+
       const response = await fetch('/api/ai/analyze', {
         method: 'POST',
-        body: formData
+        body: formData,
       });
-      
+
       // Should handle timeout gracefully
       expect(response.status).toBe(408);
-      
+
       const result = await response.json();
       expect(result.success).toBe(false);
       expect(result.error).toContain('timeout');
@@ -395,59 +429,83 @@ describe('AI Service Integration Tests', () => {
 
     test('should retry failed requests with exponential backoff', async () => {
       let attemptCount = 0;
-      
+
       server.use(
-        http.post('https://api.openai.com/v1/chat/completions', ({ request }: { request: Request }) => {
-          attemptCount++;
-          
-          if (attemptCount < 3) {
+        http.post(
+          'https://api.openai.com/v1/chat/completions',
+          ({ request }: { request: Request }) => {
+            attemptCount++;
+
+            if (attemptCount < 3) {
+              return HttpResponse.json(
+                {
+                  choices: [
+                    {
+                      message: { content: 'Mock response' },
+                    },
+                  ],
+                },
+                { status: 500 }
+              );
+            }
+
+            // Succeed on third attempt
             return HttpResponse.json({
-              choices: [{
-                message: { content: 'Mock response' }
-              }]
-            }, { status: 500 });
+              choices: [
+                {
+                  message: { content: 'Mock response with higher confidence' },
+                },
+              ],
+            });
           }
-          
-          // Succeed on third attempt
-          return HttpResponse.json({
-            choices: [{
-              message: { content: 'Mock response with higher confidence' }
-            }]
-          });
-        })
+        )
       );
-      
+
       const documentContent = AIServiceTestUtils.createTestDocument('policy');
-      const formData = await AIServiceTestUtils.uploadTestDocument(documentContent, 'retry-test.pdf');
-      
+      const formData = await AIServiceTestUtils.uploadTestDocument(
+        documentContent,
+        'retry-test.pdf'
+      );
+
       const response = await fetch('/api/ai/analyze', {
         method: 'POST',
-        body: formData
+        body: formData,
       });
-      
+
       expect(response.ok).toBe(true);
       expect(attemptCount).toBe(3); // Should have retried twice
     });
 
     test('should handle malformed AI responses', async () => {
       server.use(
-        http.post('https://api.openai.com/v1/chat/completions', ({ request }: { request: Request }) => {
-          return HttpResponse.json({
-            choices: [{
-              message: { content: 'Mock batch analysis response' }
-            }]
-          }, { status: 500 });
-        })
+        http.post(
+          'https://api.openai.com/v1/chat/completions',
+          ({ request }: { request: Request }) => {
+            return HttpResponse.json(
+              {
+                choices: [
+                  {
+                    message: { content: 'Mock batch analysis response' },
+                  },
+                ],
+              },
+              { status: 500 }
+            );
+          }
+        )
       );
-      
+
       const documentContent = AIServiceTestUtils.createTestDocument('policy');
-      const formData = await AIServiceTestUtils.uploadTestDocument(documentContent, 'malformed-test.pdf');
-      
+      const formData = await AIServiceTestUtils.uploadTestDocument(
+        documentContent,
+        'malformed-test.pdf'
+      );
+
       const response = await fetch('/api/ai/analyze', {
         method: 'POST',
-        body: formData
+        body: formData,
       });
-      
+
       // Should handle malformed response gracefully
       const result = await response.json();
       expect(result.success).toBe(false);
@@ -456,23 +514,32 @@ describe('AI Service Integration Tests', () => {
 
     test('should handle rate limiting from AI service', async () => {
       server.use(
-        http.post('https://api.openai.com/v1/chat/completions', ({ request }: { request: Request }) => {
-          return HttpResponse.json({
-            error: { message: 'Mock API error' }
-          }, { status: 429 });
-        })
+        http.post(
+          'https://api.openai.com/v1/chat/completions',
+          ({ request }: { request: Request }) => {
+            return HttpResponse.json(
+              {
+                error: { message: 'Mock API error' },
+              },
+              { status: 429 }
+            );
+          }
+        )
       );
-      
+
       const documentContent = AIServiceTestUtils.createTestDocument('policy');
-      const formData = await AIServiceTestUtils.uploadTestDocument(documentContent, 'rate-limit-test.pdf');
-      
+      const formData = await AIServiceTestUtils.uploadTestDocument(
+        documentContent,
+        'rate-limit-test.pdf'
+      );
+
       const response = await fetch('/api/ai/analyze', {
         method: 'POST',
-        body: formData
+        body: formData,
       });
-      
+
       expect(response.status).toBe(429);
-      
+
       const result = await response.json();
       expect(result.success).toBe(false);
       expect(result.error).toContain('rate limit');
@@ -483,61 +550,63 @@ describe('AI Service Integration Tests', () => {
     test('should process small documents quickly', async () => {
       const smallDoc = 'Short policy document with minimal content.';
       const formData = await AIServiceTestUtils.uploadTestDocument(smallDoc, 'small-doc.pdf');
-      
+
       const { duration } = await AIServiceTestUtils.measureProcessingTime(async () => {
         const response = await fetch('/api/ai/analyze', {
           method: 'POST',
-          body: formData
+          body: formData,
         });
         return response.json();
       });
-      
+
       expect(duration).toBeLessThan(5000); // Should complete within 5 seconds
     });
 
     test('should handle large documents within acceptable time', async () => {
       // Create a large document
-      const largeContent = Array(1000).fill(
-        AIServiceTestUtils.createTestDocument('policy')
-      ).join('\n\n');
-      
+      const largeContent = Array(1000)
+        .fill(AIServiceTestUtils.createTestDocument('policy'))
+        .join('\n\n');
+
       const formData = await AIServiceTestUtils.uploadTestDocument(largeContent, 'large-doc.pdf');
-      
+
       const { duration } = await AIServiceTestUtils.measureProcessingTime(async () => {
         const response = await fetch('/api/ai/analyze', {
           method: 'POST',
-          body: formData
+          body: formData,
         });
         return response.json();
       });
-      
+
       expect(duration).toBeLessThan(60000); // Should complete within 60 seconds
     });
 
     test('should process multiple documents concurrently', async () => {
       const documentCount = 5;
-      const documents = Array(documentCount).fill(null).map((_, index) => ({
-        content: AIServiceTestUtils.createTestDocument('policy'),
-        filename: `concurrent-doc-${index}.pdf`
-      }));
-      
+      const documents = Array(documentCount)
+        .fill(null)
+        .map((_, index) => ({
+          content: AIServiceTestUtils.createTestDocument('policy'),
+          filename: `concurrent-doc-${index}.pdf`,
+        }));
+
       const { duration } = await AIServiceTestUtils.measureProcessingTime(async () => {
-        const promises = documents.map(async doc => {
+        const promises = documents.map(async (doc) => {
           const formData = await AIServiceTestUtils.uploadTestDocument(doc.content, doc.filename);
           const response = await fetch('/api/ai/analyze', {
             method: 'POST',
-            body: formData
+            body: formData,
           });
           return response.json();
         });
-        
+
         return Promise.all(promises);
       });
-      
+
       // Concurrent processing should be faster than sequential
       expect(duration).toBeLessThan(documentCount * 10000); // Less than 10s per document
     });
   });
 });
 
-export { AIServiceTestUtils }; 
+export { AIServiceTestUtils };

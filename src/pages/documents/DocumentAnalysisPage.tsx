@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import DocumentUpload from '@/components/documents/DocumentUpload';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardContent } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -126,7 +126,7 @@ export default function DocumentAnalysisPage() {
       case 'processing':
         return <DaisyBadge variant="secondary"><Clock className="h-3 w-3 mr-1" />Processing</DaisyBadge>;
       case 'failed':
-        return <DaisyBadge variant="error"><DaisyAlertTriangle className="h-3 w-3 mr-1" />Failed</DaisyBadge>;
+        return <DaisyBadge variant="error"><AlertTriangle className="h-3 w-3 mr-1" />Failed</DaisyBadge>;
       default:
         return <DaisyBadge variant="outline">Unknown</DaisyBadge>;
     }
@@ -176,7 +176,7 @@ export default function DocumentAnalysisPage() {
                 <p className="text-sm text-muted-foreground">Total Documents</p>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard>
@@ -188,19 +188,19 @@ export default function DocumentAnalysisPage() {
                 <p className="text-sm text-muted-foreground">Analyzed</p>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard>
           <DaisyCardContent className="p-6">
             <div className="flex items-center gap-2">
-              <DaisyAlertTriangle className="h-5 w-5 text-orange-600" />
+              <AlertTriangle className="h-5 w-5 text-orange-600" />
               <div>
                 <p className="text-2xl font-bold">{analysisStats.risksIdentified}</p>
                 <p className="text-sm text-muted-foreground">Risks Found</p>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard>
@@ -212,7 +212,7 @@ export default function DocumentAnalysisPage() {
                 <p className="text-sm text-muted-foreground">Avg Confidence</p>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </motion.div>
 
@@ -255,21 +255,24 @@ export default function DocumentAnalysisPage() {
           </motion.div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="history" className="space-y-6">
+        <DaisyTabsContent value="history" className="space-y-6" />
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <DaisyCard>
-              <DaisyCardHeader>
-                <DaisyCardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5" />
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
+                <DaisyCardTitle className="flex items-center gap-2" >
+  <Clock className="h-5 w-5" />
+</DaisyCardTitle>
                   Recent Analyses
                 </DaisyCardTitle>
-              
-              <DaisyCardContent>
-                <div className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
                   {recentAnalyses.map((analysis) => (
                     <div key={analysis.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center gap-4">
@@ -288,33 +291,37 @@ export default function DocumentAnalysisPage() {
                           <p className="text-sm text-muted-foreground">{analysis.confidence}% confidence</p>
                         </div>
                         {getStatusBadge(analysis.status)}
-                        <DaisyButton variant="ghost" size="sm">
-                          <Download className="h-4 w-4" />
+                        <DaisyButton variant="ghost" size="sm" >
+  <Download className="h-4 w-4" />
+</DaisyButton>
                         </DaisyButton>
                       </div>
                     </div>
                   ))}
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </motion.div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="trends" className="space-y-6">
+        <DaisyTabsContent value="trends" className="space-y-6" />
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <DaisyCard>
-              <DaisyCardHeader>
-                <DaisyCardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5" />
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
+                <DaisyCardTitle className="flex items-center gap-2" >
+  <BarChart3 className="h-5 w-5" />
+</DaisyCardTitle>
                   Risk Category Trends
                 </DaisyCardTitle>
-              
-              <DaisyCardContent>
-                <div className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
                   {riskTrends.map((trend) => (
                     <div key={trend.category} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center gap-4">
@@ -344,26 +351,29 @@ export default function DocumentAnalysisPage() {
                     </div>
                   ))}
                 </div>
-              </DaisyCardBody>
+              </DaisyProgress>
             </DaisyCard>
           </motion.div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="insights" className="space-y-6">
+        <DaisyTabsContent value="insights" className="space-y-6" />
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <DaisyCard>
-              <DaisyCardHeader>
-                <DaisyCardTitle className="flex items-center gap-2">
-                  <Brain className="h-5 w-5" />
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
+                <DaisyCardTitle className="flex items-center gap-2" >
+  <Brain className="h-5 w-5" />
+</DaisyCardTitle>
                   AI-Generated Insights
                 </DaisyCardTitle>
-              
-              <DaisyCardContent>
-                <div className="space-y-6">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-6">
+</DaisyCardContent>
                   <div className="p-4 bg-[#D8C3A5]/20 dark:bg-[#D8C3A5]/10 rounded-lg border border-[#D8C3A5] dark:border-[#D8C3A5]">
                     <h4 className="font-medium text-[#191919] dark:text-[#191919] mb-2">
                       📊 Pattern Recognition
@@ -404,11 +414,13 @@ export default function DocumentAnalysisPage() {
                     </p>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </motion.div>
         </DaisyTabsContent>
       </DaisyTabs>
     </motion.div>
   );
-} 
+}
+
+export default DocumentAnalysisPage; 

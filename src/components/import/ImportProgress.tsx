@@ -45,8 +45,9 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
 
   if (isLoading && !job) {
     return (
-      <DaisyCard className="p-6">
-        <div className="flex items-center justify-center">
+      <DaisyCard className="p-6" >
+  <div className="flex items-center justify-center">
+</DaisyCard>
           <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
           <span className="ml-2">Loading import status...</span>
         </div>
@@ -56,16 +57,18 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
 
   if (error) {
     return (
-      <DaisyAlert variant="error">
-        {error}
+      <DaisyAlert variant="error" >
+  {error}
+</DaisyAlert>
       </DaisyAlert>
     );
   }
 
   if (!job) {
     return (
-      <DaisyAlert variant="error">
-        Import job not found
+      <DaisyAlert variant="error" >
+  Import job not found
+</DaisyAlert>
       </DaisyAlert>
     );
   }
@@ -119,8 +122,9 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
   };
 
   return (
-    <DaisyCard className="p-6">
-      <div className="space-y-4">
+    <DaisyCard className="p-6" >
+  <div className="space-y-4">
+</DaisyCard>
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -139,9 +143,9 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
               onClick={handleCancel}
               variant="outline"
               size="sm"
-              disabled={cancelling}
-            >
-              {cancelling ? (
+              disabled={cancelling} >
+  {cancelling ? (
+</DaisyButton>
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <X className="h-4 w-4" />
@@ -163,8 +167,9 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
 
         {/* Error Message */}
         {job.status === 'FAILED' && job.errorMessage && (
-          <DaisyAlert variant="error">
-            <DaisyAlertCircle className="h-4 w-4" />
+          <DaisyAlert variant="error" >
+  <DaisyAlertCircle className="h-4 w-4" />
+</DaisyProgress>
             <span className="ml-2">{job.errorMessage}</span>
           </DaisyAlert>
         )}
@@ -172,8 +177,9 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
         {/* Success Results */}
         {job.status === 'COMPLETED' && (
           <>
-            <DaisyAlert variant="success">
-              <CheckCircle className="h-4 w-4" />
+            <DaisyAlert variant="success" >
+  <CheckCircle className="h-4 w-4" />
+</DaisyAlert>
               <span className="ml-2">
                 {job.progressMessage || 'Import completed successfully!'}
               </span>
@@ -207,8 +213,7 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
           <div className="flex gap-2 pt-2">
             <DaisyButton
               onClick={() => router.push('/risks')}
-              size="sm"
-            >
+              size="sm" />
               <Eye className="h-4 w-4 mr-2" />
               View Imported Data
             </DaisyButton>

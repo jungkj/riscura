@@ -34,7 +34,7 @@ export function useWebSocket(onMessage?: (message: any) => void): WebSocketHook 
     try {
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       const wsUrl = `${protocol}//${window.location.host}/ws/chat?token=${session.accessToken}`;
-      
+
       const ws = new WebSocket(wsUrl);
       wsRef.current = ws;
 
@@ -47,13 +47,13 @@ export function useWebSocket(onMessage?: (message: any) => void): WebSocketHook 
       ws.onmessage = (event) => {
         try {
           const message = JSON.parse(event.data);
-          
+
           // Handle internal messages
           switch (message.type) {
             case 'connected':
               console.log('WebSocket authenticated', message.payload);
               break;
-            
+
             case 'error':
               toast({
                 title: 'Connection Error',
@@ -61,12 +61,12 @@ export function useWebSocket(onMessage?: (message: any) => void): WebSocketHook 
                 variant: 'destructive',
               });
               break;
-            
+
             case 'heartbeat':
               // Respond to heartbeat
               ws.send(JSON.stringify({ type: 'heartbeat_ack' }));
               break;
-            
+
             default:
               // Pass other messages to the handler
               if (onMessage) {
@@ -96,7 +96,7 @@ export function useWebSocket(onMessage?: (message: any) => void): WebSocketHook 
         if (reconnectAttemptsRef.current < 5) {
           const delay = Math.min(1000 * Math.pow(2, reconnectAttemptsRef.current), 30000);
           reconnectAttemptsRef.current++;
-          
+
           reconnectTimeoutRef.current = setTimeout(() => {
             console.log(`Attempting to reconnect (attempt ${reconnectAttemptsRef.current})...`);
             connect();
@@ -129,51 +129,72 @@ export function useWebSocket(onMessage?: (message: any) => void): WebSocketHook 
     }
   }, []);
 
-  const joinChannel = useCallback((channelId: string) => {
-    sendMessage({ type: 'join', channelId });
-  }, [sendMessage]);
+  const joinChannel = useCallback(
+    (channelId: string) => {
+      sendMessage({ type: 'join', channelId });
+    },
+    [sendMessage]
+  );
 
-  const leaveChannel = useCallback((channelId: string) => {
-    sendMessage({ type: 'leave', channelId });
-  }, [sendMessage]);
+  const leaveChannel = useCallback(
+    (channelId: string) => {
+      sendMessage({ type: 'leave', channelId });
+    },
+    [sendMessage]
+  );
 
-  const sendChatMessage = useCallback((channelId: string, content: string, attachments?: any[]) => {
-    sendMessage({
-      type: 'message',
-      channelId,
-      payload: { content, attachments },
-    });
-  }, [sendMessage]);
+  const sendChatMessage = useCallback(
+    (channelId: string, content: string, attachments?: any[]) => {
+      sendMessage({
+        type: 'message',
+        channelId,
+        payload: { content, attachments },
+      });
+    },
+    [sendMessage]
+  );
 
-  const sendTyping = useCallback((channelId: string, isTyping: boolean) => {
-    sendMessage({
-      type: 'typing',
-      channelId,
-      payload: { isTyping },
-    });
-  }, [sendMessage]);
+  const sendTyping = useCallback(
+    (channelId: string, isTyping: boolean) => {
+      sendMessage({
+        type: 'typing',
+        channelId,
+        payload: { isTyping },
+      });
+    },
+    [sendMessage]
+  );
 
-  const markAsRead = useCallback((channelId: string, messageId: string) => {
-    sendMessage({
-      type: 'read',
-      channelId,
-      payload: { messageId },
-    });
-  }, [sendMessage]);
+  const markAsRead = useCallback(
+    (channelId: string, messageId: string) => {
+      sendMessage({
+        type: 'read',
+        channelId,
+        payload: { messageId },
+      });
+    },
+    [sendMessage]
+  );
 
-  const addReaction = useCallback((messageId: string, emoji: string) => {
-    sendMessage({
-      type: 'reaction',
-      payload: { messageId, emoji },
-    });
-  }, [sendMessage]);
+  const addReaction = useCallback(
+    (messageId: string, emoji: string) => {
+      sendMessage({
+        type: 'reaction',
+        payload: { messageId, emoji },
+      });
+    },
+    [sendMessage]
+  );
 
-  const updatePresence = useCallback((status: string) => {
-    sendMessage({
-      type: 'presence',
-      payload: { status },
-    });
-  }, [sendMessage]);
+  const updatePresence = useCallback(
+    (status: string) => {
+      sendMessage({
+        type: 'presence',
+        payload: { status },
+      });
+    },
+    [sendMessage]
+  );
 
   return {
     connected,

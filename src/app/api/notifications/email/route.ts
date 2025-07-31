@@ -74,10 +74,10 @@ export async function POST(request: NextRequest) {
     const rateLimitResult = await checkRateLimit(request);
     if (!rateLimitResult.allowed) {
       return NextResponse.json(
-        { 
-          success: false, 
+        {
+          success: false,
           error: 'Rate limit exceeded',
-          retryAfter: rateLimitResult.retryAfter 
+          retryAfter: rateLimitResult.retryAfter,
         },
         { status: 429 }
       );
@@ -85,8 +85,8 @@ export async function POST(request: NextRequest) {
 
     // Validate email addresses
     const recipients = Array.isArray(payload.to) ? payload.to : [payload.to];
-    const validEmails = recipients.filter(email => isValidEmail(email));
-    
+    const validEmails = recipients.filter((email) => isValidEmail(email));
+
     if (validEmails.length === 0) {
       return NextResponse.json(
         { success: false, error: 'No valid email addresses provided' },
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
 
         const info = await transporter.sendMail(mailOptions);
         results.delivered++;
-        
+
         if (!results.messageId) {
           results.messageId = info.messageId;
         }
@@ -137,11 +137,10 @@ export async function POST(request: NextRequest) {
             messageId: info.messageId,
           },
         });
-
       } catch (emailError) {
         results.failed++;
         console.error(`Failed to send email to ${email}:`, emailError);
-        
+
         // Log failed delivery
         Sentry.captureException(emailError, {
           tags: {
@@ -167,10 +166,9 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(results);
-
   } catch (error) {
     console.error('Email notification error:', error);
-    
+
     Sentry.captureException(error, {
       tags: {
         endpoint: '/api/notifications/email',
@@ -181,7 +179,12 @@ export async function POST(request: NextRequest) {
       {
         success: false,
         error: 'Failed to send email notification',
-        details: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.message : String(error)) : undefined,
+        details:
+          process.env.NODE_ENV === 'development'
+            ? error instanceof Error
+              ? error.message
+              : String(error)
+            : undefined,
       },
       { status: 500 }
     );
@@ -195,9 +198,8 @@ async function checkRateLimit(request: NextRequest): Promise<{
   allowed: boolean;
   retryAfter?: number;
 }> {
-  const ip = request.headers.get('x-forwarded-for') || 
-           request.headers.get('x-real-ip') || 
-           'unknown';
+  const ip =
+    request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
 
   // Simple in-memory rate limiting (in production, use Redis)
   const rateLimitKey = `email_rate_limit:${ip}`;
@@ -324,4 +326,4 @@ async function trackEmailMetrics(metrics: {
     // Don't throw - email sending is more important than metrics
     console.error('Failed to track email metrics:', error);
   }
-} 
+}

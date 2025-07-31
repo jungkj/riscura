@@ -257,7 +257,9 @@ export default function AIInsightsCard({
   // Get type icon
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'risk_analysis': return <DaisyAlertTriangle className="w-4 h-4" />;
+      case 'risk_analysis': return <DaisyAlertTriangle className="w-4 h-4" >
+  ;
+</DaisyAlertTriangle>
       case 'control_recommendation': return <Target className="w-4 h-4" />;
       case 'compliance_gap': return <CheckCircle2 className="w-4 h-4" />;
       case 'trend_prediction': return <TrendingUp className="w-4 h-4" />;
@@ -307,16 +309,19 @@ export default function AIInsightsCard({
   };
 
   if (isLoading) {
-    return (
-      <DaisyCard className={className}>
-        <DaisyCardHeader>
+
+  return (
+    <DaisyCard className={className} >
+  <DaisyCardHeader />
+</DaisyCard>
           <div className="flex items-center space-x-2">
             <Brain className="w-5 h-5 text-purple-600" />
             <DaisyCardTitle className="text-lg">AI Insights</DaisyCardTitle>
           </div>
         
-        <DaisyCardContent>
-          <div className="space-y-4">
+        <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
             {[1, 2, 3].map((i) => (
               <div key={i} className="animate-pulse">
                 <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
@@ -325,20 +330,22 @@ export default function AIInsightsCard({
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
-  }
+  };
 
   return (
-    <DaisyCard className={className}>
-      <DaisyCardHeader className="pb-3">
+    <DaisyCard className={className} >
+  <DaisyCardHeader className="pb-3" />
+</DaisyCard>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Brain className="w-5 h-5 text-purple-600" />
             <DaisyCardTitle className="text-lg">AI Insights</DaisyCardTitle>
-            <DaisyBadge variant="secondary" className="text-xs">
-              <Zap className="w-3 h-3 mr-1" />
+            <DaisyBadge variant="secondary" className="text-xs" >
+  <Zap className="w-3 h-3 mr-1" />
+</DaisyBadge>
               {insights.length} insights
             </DaisyBadge>
           </div>
@@ -348,24 +355,25 @@ export default function AIInsightsCard({
             size="sm"
             onClick={fetchInsights}
             disabled={isLoading}
-            className="p-2"
-          >
-            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+            className="p-2" >
+  <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+</DaisyButton>
           </DaisyButton>
         </div>
       
 
-      <DaisyCardContent className="p-0">
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <DaisyTabsList className="grid w-full grid-cols-5 mx-4 mb-4">
-            <DaisyTabsTrigger value="all" className="text-xs">All</DaisyTabsTrigger>
+      <DaisyCardContent className="p-0" >
+  <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full" />
+</DaisyCardContent>
+          <DaisyTabsList className="grid w-full grid-cols-5 mx-4 mb-4" />
+            <DaisyTabsTrigger value="all" className="text-xs">All</DaisyTabsList>
             <DaisyTabsTrigger value="high-priority" className="text-xs">Priority</DaisyTabsTrigger>
             <DaisyTabsTrigger value="risks" className="text-xs">Risks</DaisyTabsTrigger>
             <DaisyTabsTrigger value="recommendations" className="text-xs">Controls</DaisyTabsTrigger>
             <DaisyTabsTrigger value="compliance" className="text-xs">Compliance</DaisyTabsTrigger>
           </DaisyTabsList>
 
-          <DaisyTabsContent value={activeTab} className="mt-0">
+          <DaisyTabsContent value={activeTab} className="mt-0" />
             <div className="max-h-96 overflow-y-auto px-4">
               {filteredInsights.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
@@ -390,7 +398,7 @@ export default function AIInsightsCard({
                             className={`text-xs ${getPriorityColor(insight.priority)}`}
                           >
                             {insight.priority}
-                          </DaisyBadge>
+                          </DaisyTabsContent>
                         </div>
                         
                         <div className="flex items-center space-x-1">
@@ -461,7 +469,7 @@ export default function AIInsightsCard({
                             >
                               {action.label}
                               <ArrowRight className="w-3 h-3 ml-1" />
-                            </DaisyButton>
+                            </DaisyProgress>
                           ))}
                         </div>
                       )}
@@ -472,7 +480,7 @@ export default function AIInsightsCard({
             </div>
           </DaisyTabsContent>
         </DaisyTabs>
-      </DaisyCardBody>
+      </DaisyCardContent>
 
       {/* Detailed Insight Modal/Panel */}
       {selectedInsight && (
@@ -491,8 +499,7 @@ export default function AIInsightsCard({
                   variant="ghost"
                   size="sm"
                   onClick={() => setSelectedInsight(null)}
-                  className="p-2"
-                >
+                  className="p-2" />
                   ×
                 </DaisyButton>
               </div>
@@ -544,7 +551,7 @@ export default function AIInsightsCard({
                         }}
                       >
                         {action.label}
-                      </DaisyButton>
+                      </DaisyProgress>
                     ))}
                   </div>
                 )}
@@ -554,16 +561,14 @@ export default function AIInsightsCard({
                     <DaisyButton
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleInsightInteraction(selectedInsight.id, 'like')}
-                    >
+                      onClick={() => handleInsightInteraction(selectedInsight.id, 'like')} />
                       <ThumbsUp className="w-4 h-4" />
                     </DaisyButton>
                     
                     <DaisyButton
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleInsightInteraction(selectedInsight.id, 'dislike')}
-                    >
+                      onClick={() => handleInsightInteraction(selectedInsight.id, 'dislike')} />
                       <ThumbsDown className="w-4 h-4" />
                     </DaisyButton>
                   </div>

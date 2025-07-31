@@ -321,21 +321,24 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
 
   if (loading) {
     return (
-      <DaisyCard className={cn("w-full", className)}>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center gap-2">
-            <Brain className="h-5 w-5 text-indigo-600 animate-pulse" />
+      <DaisyCard className={cn("w-full", className)} >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <Brain className="h-5 w-5 text-indigo-600 animate-pulse" />
+</DaisyCardTitle>
             {title}
           </DaisyCardTitle>
-        
-        <DaisyCardContent>
-          <div className="h-64 flex items-center justify-center">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="h-64 flex items-center justify-center">
+</DaisyCardContent>
             <div className="text-center">
               <RefreshCw className="h-8 w-8 animate-spin text-gray-400 mx-auto mb-2" />
               <p className="text-sm text-gray-500">Generating predictions...</p>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
   }
@@ -347,25 +350,27 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
   );
 
   return (
-    <DaisyCard className={cardClass}>
-      <DaisyCardHeader className="pb-3">
+    <DaisyCard className={cardClass} >
+  <DaisyCardHeader className="pb-3" />
+</DaisyCard>
         <div className="flex items-center justify-between">
-          <DaisyCardTitle className="flex items-center gap-2">
-            <Brain className="h-5 w-5 text-indigo-600" />
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <Brain className="h-5 w-5 text-indigo-600" />
+</DaisyCardTitle>
             {title}
             {prediction && getTrendIcon(prediction.trend)}
           </DaisyCardTitle>
           
           {interactive && (
             <div className="flex items-center gap-2">
-              <DaisyButton variant="ghost" size="sm" onClick={handleExport}>
-                <Download className="h-4 w-4" />
+              <DaisyButton variant="ghost" size="sm" onClick={handleExport} >
+  <Download className="h-4 w-4" />
+</DaisyButton>
               </DaisyButton>
               <DaisyButton 
                 variant="ghost" 
                 size="sm" 
-                onClick={() => setFullscreen(!fullscreen)}
-              >
+                onClick={() => setFullscreen(!fullscreen)} />
                 <Maximize className="h-4 w-4" />
               </DaisyButton>
             </div>
@@ -382,27 +387,30 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
               <span className="text-sm text-gray-500">Predicted:</span>
               <span className="font-semibold">{prediction.predictedValue.toFixed(1)}</span>
             </div>
-            <DaisyBadge className={cn("text-xs", getRiskLevelColor(prediction.riskLevel))}>
-              {prediction.riskLevel} risk
+            <DaisyBadge className={cn("text-xs", getRiskLevelColor(prediction.riskLevel))} >
+  {prediction.riskLevel} risk
+</DaisyBadge>
             </DaisyBadge>
-            <DaisyBadge variant="outline" className="text-xs">
-              {(prediction.confidence * 100).toFixed(0)}% confidence
+            <DaisyBadge variant="outline" className="text-xs" >
+  {(prediction.confidence * 100).toFixed(0)}% confidence
+</DaisyBadge>
             </DaisyBadge>
           </div>
         )}
       
 
-      <DaisyCardContent className="space-y-4">
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
+      <DaisyCardContent className="space-y-4" >
+  <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
+</DaisyCardContent>
           <div className="flex items-center justify-between">
-            <DaisyTabsList className="grid grid-cols-3 w-auto">
-              <DaisyTabsTrigger value="forecast" className="text-xs">
+            <DaisyTabsList className="grid grid-cols-3 w-auto" />
+              <DaisyTabsTrigger value="forecast" className="text-xs" />
                 Forecast
-              </DaisyTabsTrigger>
-              <DaisyTabsTrigger value="factors" className="text-xs">
+              </DaisyTabsList>
+              <DaisyTabsTrigger value="factors" className="text-xs" />
                 Factors
               </DaisyTabsTrigger>
-              <DaisyTabsTrigger value="confidence" className="text-xs">
+              <DaisyTabsTrigger value="confidence" className="text-xs" />
                 Confidence
               </DaisyTabsTrigger>
             </DaisyTabsList>
@@ -433,7 +441,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
           </div>
 
           {/* Forecast Tab */}
-          <DaisyTabsContent value="forecast" className="mt-4">
+          <DaisyTabsContent value="forecast" className="mt-4" />
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart data={chartData}>
@@ -517,7 +525,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
           </DaisyTabsContent>
 
           {/* Factors Tab */}
-          <DaisyTabsContent value="factors" className="mt-4">
+          <DaisyTabsContent value="factors" className="mt-4" />
             {prediction && showFactors && (
               <div className="space-y-3">
                 <h4 className="font-medium text-sm">Prediction Factors</h4>
@@ -531,9 +539,9 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                           className={cn(
                             "text-xs",
                             factor.direction === 'positive' ? 'text-green-600' : 'text-red-600'
-                          )}
-                        >
-                          {factor.direction === 'positive' ? '+' : '-'}{(factor.impact * 100).toFixed(0)}%
+                          )} >
+  {factor.direction === 'positive' ? '+' : '-'}{(factor.impact * 100).toFixed(0)}%
+</DaisyTabsContent>
                         </DaisyBadge>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-1.5">
@@ -557,7 +565,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
           </DaisyTabsContent>
 
           {/* Confidence Tab */}
-          <DaisyTabsContent value="confidence" className="mt-4">
+          <DaisyTabsContent value="confidence" className="mt-4" />
             <div className="space-y-4">
               <div className="h-40">
                 <ResponsiveContainer width="100%" height="100%">
@@ -615,7 +623,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
             </div>
           </div>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 }; 

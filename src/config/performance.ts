@@ -91,10 +91,22 @@ export const performanceConfigSchema = z.object({
     maxConcurrent: z.number().min(1).default(3),
     resumeEnabled: z.boolean().default(true),
     virusScan: z.boolean().default(true),
-    allowedTypes: z.array(z.string()).default([
-      'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx',
-      'txt', 'csv', 'jpg', 'png', 'gif'
-    ]),
+    allowedTypes: z
+      .array(z.string())
+      .default([
+        'pdf',
+        'doc',
+        'docx',
+        'xls',
+        'xlsx',
+        'ppt',
+        'pptx',
+        'txt',
+        'csv',
+        'jpg',
+        'png',
+        'gif',
+      ]),
   }),
 
   // Performance Monitoring
@@ -172,7 +184,12 @@ function loadPerformanceConfig(): PerformanceConfig {
     images: {
       enabled: process.env.IMAGE_OPTIMIZATION_ENABLED !== 'false',
       quality: parseInt(process.env.IMAGE_QUALITY || '80'),
-      formats: (process.env.IMAGE_FORMATS?.split(',') || ['webp', 'avif', 'jpeg']) as ('webp' | 'avif' | 'jpeg' | 'png')[],
+      formats: (process.env.IMAGE_FORMATS?.split(',') || ['webp', 'avif', 'jpeg']) as (
+        | 'webp'
+        | 'avif'
+        | 'jpeg'
+        | 'png'
+      )[],
       lazyLoading: process.env.IMAGE_LAZY_LOADING !== 'false',
       preloadCritical: process.env.IMAGE_PRELOAD_CRITICAL !== 'false',
     },
@@ -203,8 +220,18 @@ function loadPerformanceConfig(): PerformanceConfig {
       resumeEnabled: process.env.FILE_UPLOAD_RESUME_ENABLED !== 'false',
       virusScan: process.env.FILE_UPLOAD_VIRUS_SCAN !== 'false',
       allowedTypes: process.env.FILE_UPLOAD_ALLOWED_TYPES?.split(',') || [
-        'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx',
-        'txt', 'csv', 'jpg', 'png', 'gif'
+        'pdf',
+        'doc',
+        'docx',
+        'xls',
+        'xlsx',
+        'ppt',
+        'pptx',
+        'txt',
+        'csv',
+        'jpg',
+        'png',
+        'gif',
       ],
     },
     monitoring: {
@@ -221,7 +248,9 @@ function loadPerformanceConfig(): PerformanceConfig {
       fidThresholdMs: parseInt(process.env.ALERT_FID_THRESHOLD_MS || '100'),
       clsThreshold: parseFloat(process.env.ALERT_CLS_THRESHOLD || '0.1'),
       taskQueueThreshold: parseInt(process.env.ALERT_TASK_QUEUE_THRESHOLD || '100'),
-      websocketConnectionThreshold: parseInt(process.env.ALERT_WEBSOCKET_CONNECTION_THRESHOLD || '80'),
+      websocketConnectionThreshold: parseInt(
+        process.env.ALERT_WEBSOCKET_CONNECTION_THRESHOLD || '80'
+      ),
     },
     external: {
       datadogApiKey: process.env.DATADOG_API_KEY,
@@ -253,4 +282,4 @@ export const websocketConfig = performanceConfig.websocket;
 export const fileUploadConfig = performanceConfig.fileUpload;
 export const monitoringConfig = performanceConfig.monitoring;
 export const alertConfig = performanceConfig.alerts;
-export const externalConfig = performanceConfig.external; 
+export const externalConfig = performanceConfig.external;

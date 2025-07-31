@@ -9,7 +9,7 @@ export const GET = withApiMiddleware(
   async (req: NextRequest) => {
     // Get user from request (added by middleware)
     const user = (req as any).user;
-    
+
     if (!user || !user.organizationId) {
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
@@ -21,7 +21,7 @@ export const GET = withApiMiddleware(
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = parseInt(searchParams.get('limit') || '10', 10);
-    
+
     const filters: ReportFilters = {
       type: searchParams.get('type') as ReportType | undefined,
       status: searchParams.get('status') as ReportStatus | undefined,
@@ -35,12 +35,7 @@ export const GET = withApiMiddleware(
     if (dateFrom) filters.dateFrom = new Date(dateFrom);
     if (dateTo) filters.dateTo = new Date(dateTo);
 
-    const result = await ReportService.getReports(
-      user.organizationId,
-      filters,
-      page,
-      limit
-    );
+    const result = await ReportService.getReports(user.organizationId, filters, page, limit);
 
     return NextResponse.json({
       data: result.reports,
@@ -69,7 +64,7 @@ export const POST = withApiMiddleware(
   async (req: NextRequest) => {
     // Get user from request (added by middleware)
     const user = (req as any).user;
-    
+
     if (!user || !user.organizationId) {
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
@@ -80,20 +75,19 @@ export const POST = withApiMiddleware(
     const body = await req.json();
     const validatedData = CreateReportSchema.parse(body);
 
-    const report = await ReportService.createReport(
-      validatedData,
-      user.id,
-      user.organizationId
-    );
+    const report = await ReportService.createReport(validatedData, user.id, user.organizationId);
 
-    return NextResponse.json({
-      data: report,
-      message: 'Report created successfully',
-    }, { status: 201 });
+    return NextResponse.json(
+      {
+        data: report,
+        message: 'Report created successfully',
+      },
+      { status: 201 }
+    );
   },
-  { 
+  {
     requireAuth: true,
-    validateBody: CreateReportSchema 
+    validateBody: CreateReportSchema,
   }
 );
 
@@ -113,7 +107,7 @@ export const DELETE = withApiMiddleware(
   async (req: NextRequest) => {
     // Get user from request (added by middleware)
     const user = (req as any).user;
-    
+
     if (!user || !user.organizationId) {
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
@@ -123,24 +117,23 @@ export const DELETE = withApiMiddleware(
 
     // Check if user has admin permissions
     if (user.role !== 'ADMIN' && user.role !== 'OWNER') {
-      return NextResponse.json(
-        { error: 'Insufficient permissions' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
 
     const body = await req.json();
-    const { reportIds } = z.object({
-      reportIds: z.array(z.string()).min(1),
-    }).parse(body);
+    const { reportIds } = z
+      .object({
+        reportIds: z.array(z.string()).min(1),
+      })
+      .parse(body);
 
     // Delete reports one by one
     const results = await Promise.allSettled(
-      reportIds.map(id => ReportService.deleteReport(id, user.organizationId))
+      reportIds.map((id) => ReportService.deleteReport(id, user.organizationId))
     );
 
-    const successful = results.filter(r => r.status === 'fulfilled').length;
-    const failed = results.filter(r => r.status === 'rejected').length;
+    const successful = results.filter((r) => r.status === 'fulfilled').length;
+    const failed = results.filter((r) => r.status === 'rejected').length;
 
     return NextResponse.json({
       message: `Deleted ${successful} reports, ${failed} failed`,
@@ -148,8 +141,8 @@ export const DELETE = withApiMiddleware(
       failed,
     });
   },
-  { 
+  {
     requireAuth: true,
-    requiredPermissions: ['reports.delete'] 
+    requiredPermissions: ['reports.delete'],
   }
 );

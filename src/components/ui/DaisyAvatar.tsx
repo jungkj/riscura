@@ -13,14 +13,12 @@ export const DaisyAvatar = ({ children, className, size = 'md', ...props }: Avat
     xs: 'w-8',
     sm: 'w-10',
     md: 'w-12',
-    lg: 'w-16'
+    lg: 'w-16',
   };
 
   return (
     <div className={cn('avatar', className)} {...props}>
-      <div className={cn('rounded-full', sizeClasses[size])}>
-        {children}
-      </div>
+      <div className={cn('rounded-full', sizeClasses[size])}>{children}</div>
     </div>
   );
 };

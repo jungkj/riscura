@@ -35,14 +35,12 @@ export default function NewsletterCTA() {
   return (
     <section className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-8 md:p-12 text-white">
       <div className="max-w-2xl mx-auto text-center">
-        <h2 className="text-3xl font-bold mb-4">
-          Stay Ahead of Risk Management Trends
-        </h2>
+        <h2 className="text-3xl font-bold mb-4">Stay Ahead of Risk Management Trends</h2>
         <p className="text-lg mb-8 text-blue-100">
-          Get weekly insights on transforming your Excel-based risk management into intelligent automation. 
-          Join 5,000+ risk professionals.
+          Get weekly insights on transforming your Excel-based risk management into intelligent
+          automation. Join 5,000+ risk professionals.
         </p>
-        
+
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
           <input
             type="email"

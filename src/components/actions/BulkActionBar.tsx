@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { designTokens } from '@/lib/design-system/tokens';
-import { 
-  ActionIcons, 
-  StatusIcons, 
+import {
+  ActionIcons,
+  StatusIcons,
   DataIcons,
   FileIcons,
   UserIcons,
-  RiskManagementIcons
+  RiskManagementIcons,
 } from '@/components/icons/IconLibrary';
 import { LoadingStates, Spinner } from '@/components/states/LoadingState';
 
@@ -71,7 +71,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   itemCount,
   itemName,
   onConfirm,
-  onCancel
+  onCancel,
 }) => {
   if (!isOpen) return null;
 
@@ -92,25 +92,27 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
         <div className="flex items-center space-x-3 mb-4">
-          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-            action.color === 'danger' ? 'bg-red-100' :
-            action.color === 'warning' ? 'bg-yellow-100' :
-            action.color === 'success' ? 'bg-green-100' :
-            'bg-blue-100'
-          }`}>
+          <div
+            className={`w-10 h-10 rounded-full flex items-center justify-center ${
+              action.color === 'danger'
+                ? 'bg-red-100'
+                : action.color === 'warning'
+                  ? 'bg-yellow-100'
+                  : action.color === 'success'
+                    ? 'bg-green-100'
+                    : 'bg-blue-100'
+            }`}
+          >
             <action.icon size="md" color={action.color} />
           </div>
-          <h2 className="text-lg font-semibold text-gray-900">
-            Confirm {action.label}
-          </h2>
+          <h2 className="text-lg font-semibold text-gray-900">Confirm {action.label}</h2>
         </div>
-        
+
         <p className="text-sm text-gray-600 mb-6">
-          {action.confirmationMessage || 
-            `Are you sure you want to ${action.label.toLowerCase()} ${itemCount} ${itemCount === 1 ? itemName : itemName + 's'}? This action cannot be undone.`
-          }
+          {action.confirmationMessage ||
+            `Are you sure you want to ${action.label.toLowerCase()} ${itemCount} ${itemCount === 1 ? itemName : itemName + 's'}? This action cannot be undone.`}
         </p>
-        
+
         <div className="flex space-x-3">
           <button
             onClick={onCancel}
@@ -143,7 +145,7 @@ const ProgressModal: React.FC<DaisyProgressModalProps> = ({
   progress,
   action,
   onCancel,
-  onClose
+  onClose,
 }) => {
   if (!isOpen) return null;
 
@@ -165,11 +167,13 @@ const ProgressModal: React.FC<DaisyProgressModalProps> = ({
             {isComplete ? 'Action Complete' : `${action.label} in Progress`}
           </h2>
         </div>
-        
+
         <div className="mb-4">
           <div className="flex justify-between text-sm text-gray-600 mb-2">
             <span>Progress</span>
-            <span>{progress.completed} of {progress.total}</span>
+            <span>
+              {progress.completed} of {progress.total}
+            </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
@@ -182,9 +186,7 @@ const ProgressModal: React.FC<DaisyProgressModalProps> = ({
         </div>
 
         {progress.current && !isComplete && (
-          <p className="text-sm text-gray-600 mb-4">
-            Processing: {progress.current}
-          </p>
+          <p className="text-sm text-gray-600 mb-4">Processing: {progress.current}</p>
         )}
 
         {progress.errors.length > 0 && (
@@ -202,9 +204,7 @@ const ProgressModal: React.FC<DaisyProgressModalProps> = ({
                 </p>
               ))}
               {progress.errors.length > 3 && (
-                <p className="text-xs text-red-700">
-                  ... and {progress.errors.length - 3} more
-                </p>
+                <p className="text-xs text-red-700">... and {progress.errors.length - 3} more</p>
               )}
             </div>
           </div>
@@ -245,13 +245,13 @@ export function BulkActionBar<T = any>({
   showSelectAll = true,
   showItemCount = true,
   position = 'top',
-  className = ''
+  className = '',
 }: BulkActionBarProps<T>) {
   const [confirmationModal, setConfirmationModal] = useState<{
     isOpen: boolean;
     action: BulkAction | null;
   }>({ isOpen: false, action: null });
-  
+
   const [progressModal, setProgressModal] = useState<{
     isOpen: boolean;
     progress: BulkActionProgress | null;
@@ -270,12 +270,16 @@ export function BulkActionBar<T = any>({
 
     // Check selection constraints
     if (action.minSelection && selectedCount < action.minSelection) {
-      alert(`Please select at least ${action.minSelection} ${action.minSelection === 1 ? itemName : itemNamePlural}`);
+      alert(
+        `Please select at least ${action.minSelection} ${action.minSelection === 1 ? itemName : itemNamePlural}`
+      );
       return;
     }
-    
+
     if (action.maxSelection && selectedCount > action.maxSelection) {
-      alert(`Please select no more than ${action.maxSelection} ${action.maxSelection === 1 ? itemName : itemNamePlural}`);
+      alert(
+        `Please select no more than ${action.maxSelection} ${action.maxSelection === 1 ? itemName : itemNamePlural}`
+      );
       return;
     }
 
@@ -295,28 +299,28 @@ export function BulkActionBar<T = any>({
     const initialProgress: BulkActionProgress = {
       total: selectedCount,
       completed: 0,
-      errors: []
+      errors: [],
     };
-    
+
     setProgressModal({
       isOpen: true,
       progress: initialProgress,
-      action
+      action,
     });
 
     try {
       // For demonstration, we'll simulate progress updates
       // In a real implementation, you'd integrate with your actual bulk operation
       const result = await onBulkAction(action.id, selectedItems);
-      
+
       // Update progress to completion
-      setProgressModal(prev => ({
+      setProgressModal((prev) => ({
         ...prev,
         progress: {
           total: selectedCount,
           completed: selectedCount,
-          errors: result.errors || []
-        }
+          errors: result.errors || [],
+        },
       }));
 
       // Clear selection if action was successful
@@ -325,15 +329,16 @@ export function BulkActionBar<T = any>({
           onClearSelection();
         }, 2000);
       }
-
     } catch (error) {
-      setProgressModal(prev => ({
+      setProgressModal((prev) => ({
         ...prev,
         progress: {
           total: selectedCount,
           completed: selectedCount,
-          errors: [{ id: 'general', error: error instanceof Error ? error.message : 'Unknown error' }]
-        }
+          errors: [
+            { id: 'general', error: error instanceof Error ? error.message : 'Unknown error' },
+          ],
+        },
       }));
     } finally {
       setIsExecuting(false);
@@ -341,8 +346,9 @@ export function BulkActionBar<T = any>({
   };
 
   const getActionButtonClasses = (action: BulkAction) => {
-    const baseClasses = "inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed";
-    
+    const baseClasses =
+      'inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
+
     switch (action.color) {
       case 'danger':
         return `${baseClasses} text-red-700 bg-red-100 hover:bg-red-200 focus:ring-2 focus:ring-red-500`;
@@ -360,14 +366,16 @@ export function BulkActionBar<T = any>({
   const positionClasses = {
     top: 'mb-4',
     bottom: 'mt-4',
-    floating: 'fixed bottom-4 left-1/2 transform -translate-x-1/2 shadow-lg z-40'
+    floating: 'fixed bottom-4 left-1/2 transform -translate-x-1/2 shadow-lg z-40',
   };
 
   if (selectedCount === 0 && position !== 'floating') return null;
 
   return (
     <>
-      <div className={`bg-white border border-gray-200 rounded-lg p-4 ${positionClasses[position]} ${className}`}>
+      <div
+        className={`bg-white border border-gray-200 rounded-lg p-4 ${positionClasses[position]} ${className}`}
+      >
         <div className="flex items-center justify-between">
           {/* Selection Info */}
           <div className="flex items-center space-x-4">
@@ -397,7 +405,8 @@ export function BulkActionBar<T = any>({
               <div className="flex items-center space-x-2">
                 <DataIcons.Database size="xs" color="secondary" />
                 <span className="text-sm font-medium text-gray-900">
-                  {selectedCount} of {totalItems} {selectedCount === 1 ? itemName : itemNamePlural} selected
+                  {selectedCount} of {totalItems} {selectedCount === 1 ? itemName : itemNamePlural}{' '}
+                  selected
                 </span>
               </div>
             )}
@@ -416,7 +425,8 @@ export function BulkActionBar<T = any>({
           {selectedCount > 0 && (
             <div className="flex items-center space-x-2">
               {actions.map((action) => {
-                const isDisabled = action.disabled || 
+                const isDisabled =
+                  action.disabled ||
                   (action.minSelection && selectedCount < action.minSelection) ||
                   (action.maxSelection && selectedCount > action.maxSelection) ||
                   isExecuting;
@@ -470,36 +480,36 @@ export const commonBulkActions = {
       icon: StatusIcons.CheckCircle,
       color: 'success' as const,
       requiresConfirmation: true,
-      confirmationMessage: 'Are you sure you want to approve the selected risks?'
+      confirmationMessage: 'Are you sure you want to approve the selected risks?',
     },
     {
       id: 'reject',
       label: 'Reject',
       icon: StatusIcons.XCircle,
       color: 'danger' as const,
-      requiresConfirmation: true
+      requiresConfirmation: true,
     },
     {
       id: 'archive',
       label: 'Archive',
       icon: FileIcons.Archive,
       color: 'secondary' as const,
-      requiresConfirmation: true
+      requiresConfirmation: true,
     },
     {
       id: 'export',
       label: 'Export',
       icon: ActionIcons.Download,
       color: 'primary' as const,
-      requiresConfirmation: false
+      requiresConfirmation: false,
     },
     {
       id: 'assign',
       label: 'Assign Owner',
       icon: UserIcons.Users,
       color: 'primary' as const,
-      requiresConfirmation: false
-    }
+      requiresConfirmation: false,
+    },
   ],
 
   // User Management Actions
@@ -509,14 +519,14 @@ export const commonBulkActions = {
       label: 'Activate',
       icon: StatusIcons.CheckCircle,
       color: 'success' as const,
-      requiresConfirmation: true
+      requiresConfirmation: true,
     },
     {
       id: 'deactivate',
       label: 'Deactivate',
       icon: StatusIcons.XCircle,
       color: 'warning' as const,
-      requiresConfirmation: true
+      requiresConfirmation: true,
     },
     {
       id: 'delete',
@@ -524,15 +534,16 @@ export const commonBulkActions = {
       icon: ActionIcons.Trash,
       color: 'danger' as const,
       requiresConfirmation: true,
-      confirmationMessage: 'Are you sure you want to permanently delete the selected users? This action cannot be undone.'
+      confirmationMessage:
+        'Are you sure you want to permanently delete the selected users? This action cannot be undone.',
     },
     {
       id: 'export',
       label: 'Export',
       icon: ActionIcons.Download,
       color: 'primary' as const,
-      requiresConfirmation: false
-    }
+      requiresConfirmation: false,
+    },
   ],
 
   // Document Actions
@@ -544,23 +555,23 @@ export const commonBulkActions = {
       color: 'primary' as const,
       requiresConfirmation: false,
       maxSelection: 10,
-      tooltip: 'Download up to 10 documents at once'
+      tooltip: 'Download up to 10 documents at once',
     },
     {
       id: 'move',
       label: 'Move to Folder',
       icon: FileIcons.Folder,
       color: 'secondary' as const,
-      requiresConfirmation: false
+      requiresConfirmation: false,
     },
     {
       id: 'delete',
       label: 'Delete',
       icon: ActionIcons.Trash,
       color: 'danger' as const,
-      requiresConfirmation: true
-    }
-  ]
+      requiresConfirmation: true,
+    },
+  ],
 };
 
-export default BulkActionBar; 
+export default BulkActionBar;

@@ -14,20 +14,20 @@ interface SpinnerProps {
 export const Spinner: React.FC<SpinnerProps> = ({
   size = 'md',
   color = 'primary',
-  className = ''
+  className = '',
 }) => {
   const sizeClasses = {
     xs: 'w-3 h-3',
     sm: 'w-4 h-4',
     md: 'w-6 h-6',
     lg: 'w-8 h-8',
-    xl: 'w-12 h-12'
+    xl: 'w-12 h-12',
   };
 
   const colorClasses = {
     primary: 'text-blue-600',
     secondary: 'text-gray-600',
-    white: 'text-white'
+    white: 'text-white',
   };
 
   return (
@@ -67,9 +67,7 @@ interface PulseProps {
 }
 
 export const Pulse: React.FC<PulseProps> = ({ className = '', children }) => (
-  <div className={`animate-pulse ${className}`}>
-    {children}
-  </div>
+  <div className={`animate-pulse ${className}`}>{children}</div>
 );
 
 // Skeleton loading components
@@ -84,7 +82,7 @@ export const Skeleton: React.FC<DaisySkeletonProps> = ({
   className = '',
   width,
   height,
-  rounded = false
+  rounded = false,
 }) => {
   const style: React.CSSProperties = {};
   if (width) style.width = typeof width === 'number' ? `${width}px` : width;
@@ -107,11 +105,7 @@ export const SkeletonText: React.FC<{
 }> = ({ lines = 3, className = '' }) => (
   <div className={`space-y-2 ${className}`}>
     {Array.from({ length: lines }).map((_, index) => (
-      <DaisySkeleton
-        key={index}
-        height={16}
-        width={index === lines - 1 ? '75%' : '100%'}
-      />
+      <DaisySkeleton key={index} height={16} width={index === lines - 1 ? '75%' : '100%'} />
     ))}
   </div>
 );
@@ -123,10 +117,8 @@ export const SkeletonCard: React.FC<{
   className?: string;
 }> = ({ showAvatar = false, showImage = false, className = '' }) => (
   <div className={`p-6 border border-gray-200 rounded-lg ${className}`}>
-    {showImage && (
-      <DaisySkeleton height={200} className="mb-4" />
-    )}
-    
+    {showImage && <DaisySkeleton height={200} className="mb-4" />}
+
     <div className="space-y-4">
       {showAvatar && (
         <div className="flex items-center space-x-3">
@@ -137,12 +129,12 @@ export const SkeletonCard: React.FC<{
           </div>
         </div>
       )}
-      
+
       <div className="space-y-2">
         <DaisySkeleton height={20} width="80%" />
         <DaisySkeletonText lines={2} />
       </div>
-      
+
       <div className="flex space-x-2">
         <DaisySkeleton height={32} width={80} />
         <DaisySkeleton height={32} width={100} />
@@ -166,7 +158,7 @@ export const SkeletonTable: React.FC<{
         ))}
       </div>
     </div>
-    
+
     {/* Rows */}
     <div className="divide-y divide-gray-200">
       {Array.from({ length: rows }).map((_, rowIndex) => (
@@ -194,7 +186,7 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
   isLoading,
   children,
   message = 'Loading...',
-  className = ''
+  className = '',
 }) => (
   <div className={`relative ${className}`}>
     {children}
@@ -225,19 +217,19 @@ export const ProgressBar: React.FC<DaisyProgressBarProps> = ({
   color = 'primary',
   showLabel = false,
   label,
-  className = ''
+  className = '',
 }) => {
   const sizeClasses = {
     sm: 'h-1',
     md: 'h-2',
-    lg: 'h-3'
+    lg: 'h-3',
   };
 
   const colorClasses = {
     primary: 'bg-blue-600',
     success: 'bg-green-600',
     warning: 'bg-yellow-600',
-    error: 'bg-red-600'
+    error: 'bg-red-600',
   };
 
   const clampedProgress = Math.min(100, Math.max(0, progress));
@@ -274,13 +266,13 @@ export const DotsLoading: React.FC<{
   const sizeClasses = {
     sm: 'w-1 h-1',
     md: 'w-2 h-2',
-    lg: 'w-3 h-3'
+    lg: 'w-3 h-3',
   };
 
   const colorClasses = {
     primary: 'bg-blue-600',
     secondary: 'bg-gray-600',
-    white: 'bg-white'
+    white: 'bg-white',
   };
 
   return (
@@ -291,7 +283,7 @@ export const DotsLoading: React.FC<{
           className={`${sizeClasses[size]} ${colorClasses[color]} rounded-full animate-pulse`}
           style={{
             animationDelay: `${index * 0.2}s`,
-            animationDuration: '1s'
+            animationDuration: '1s',
           }}
         />
       ))}
@@ -315,7 +307,7 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
   loadingText = 'Loading...',
   disabled = false,
   className = '',
-  onClick
+  onClick,
 }) => (
   <button
     onClick={onClick}
@@ -338,11 +330,7 @@ export const PageLoading: React.FC<{
   message?: string;
   showLogo?: boolean;
   className?: string;
-}> = ({ 
-  message = 'Loading page...', 
-  showLogo = false,
-  className = '' 
-}) => (
+}> = ({ message = 'Loading page...', showLogo = false, className = '' }) => (
   <div className={`min-h-screen flex items-center justify-center bg-gray-50 ${className}`}>
     <div className="text-center">
       {showLogo && (
@@ -362,17 +350,11 @@ export const SectionLoading: React.FC<{
   title?: string;
   description?: string;
   className?: string;
-}> = ({ 
-  title = 'Loading...', 
-  description,
-  className = '' 
-}) => (
+}> = ({ title = 'Loading...', description, className = '' }) => (
   <div className={`text-center py-12 ${className}`}>
     <Spinner size="lg" className="mx-auto mb-4" />
     <h3 className="text-lg font-medium text-gray-900 mb-2">{title}</h3>
-    {description && (
-      <p className="text-sm text-gray-600">{description}</p>
-    )}
+    {description && <p className="text-sm text-gray-600">{description}</p>}
   </div>
 );
 
@@ -381,16 +363,10 @@ export const InlineLoading: React.FC<{
   text?: string;
   size?: 'sm' | 'md';
   className?: string;
-}> = ({ 
-  text = 'Loading...', 
-  size = 'sm',
-  className = '' 
-}) => (
+}> = ({ text = 'Loading...', size = 'sm', className = '' }) => (
   <div className={`inline-flex items-center ${className}`}>
     <Spinner size={size} className="mr-2" />
-    <span className={`${size === 'sm' ? 'text-sm' : 'text-base'} text-gray-600`}>
-      {text}
-    </span>
+    <span className={`${size === 'sm' ? 'text-sm' : 'text-base'} text-gray-600`}>{text}</span>
   </div>
 );
 
@@ -436,7 +412,10 @@ export const LoadingStates = {
   List: ({ items = 5 }: { items?: number }) => (
     <div className="space-y-4">
       {Array.from({ length: items }).map((_, index) => (
-        <div key={index} className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg">
+        <div
+          key={index}
+          className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg"
+        >
           <DaisySkeleton width={40} height={40} rounded />
           <div className="flex-1 space-y-2">
             <DaisySkeleton height={16} width="60%" />
@@ -464,7 +443,7 @@ export const LoadingStates = {
         </div>
       </div>
     </div>
-  )
+  ),
 };
 
 export default {
@@ -481,5 +460,5 @@ export default {
   PageLoading,
   SectionLoading,
   InlineLoading,
-  LoadingStates
-}; 
+  LoadingStates,
+};

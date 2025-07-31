@@ -2,9 +2,21 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { z } from 'zod';
 import { db } from '@/lib/db';
-import { RiskCategory, RiskStatus, ControlType, ControlCategory, AutomationLevel, EffectivenessRating, ControlStatus, Priority } from '@/types/rcsa.types';
+import {
+  RiskCategory,
+  RiskStatus,
+  ControlType,
+  ControlCategory,
+  AutomationLevel,
+  EffectivenessRating,
+  ControlStatus,
+  Priority,
+} from '@/types/rcsa.types';
 import { EntityType, RiskLevel } from '@prisma/client';
-import { riskSchema as baseRiskSchema, controlSchema as baseControlSchema } from '@/lib/validations';
+import {
+  riskSchema as baseRiskSchema,
+  controlSchema as baseControlSchema,
+} from '@/lib/validations';
 
 // Extend base schemas for import-specific fields
 const riskSchema = baseRiskSchema.extend({
@@ -37,13 +49,14 @@ const importBodySchema = z.object({
 function mapEffectivenessRating(rating?: string): EffectivenessRating | undefined {
   if (!rating) return undefined;
   const lower = rating.toLowerCase();
-  
+
   if (lower.includes('effective') && !lower.includes('non') && !lower.includes('partial')) {
     return EffectivenessRating.EFFECTIVE;
   }
   if (lower.includes('partial')) return EffectivenessRating.PARTIALLY_EFFECTIVE;
-  if (lower.includes('non') || lower.includes('ineffective')) return EffectivenessRating.NOT_EFFECTIVE;
-  
+  if (lower.includes('non') || lower.includes('ineffective'))
+    return EffectivenessRating.NOT_EFFECTIVE;
+
   return undefined;
 }
 
@@ -68,35 +81,32 @@ export const POST = withApiMiddleware({
 })(async (context, validatedData) => {
   const { risks, controls, sourceFileName } = validatedData;
   const { user, organizationId } = context;
-  
+
   try {
     const result = await db.client.$transaction(async (prisma) => {
       const riskIdMap = new Map<string, string>();
       const createdRisks = [];
       const createdControls = [];
       const createdMappings = [];
-      
+
       // Create or update risks
       for (const risk of risks) {
         const riskScore = risk.likelihood * risk.impact;
         let riskLevel: RiskLevel;
-        
+
         if (riskScore <= 6) riskLevel = RiskLevel.LOW;
         else if (riskScore <= 12) riskLevel = RiskLevel.MEDIUM;
         else if (riskScore <= 20) riskLevel = RiskLevel.HIGH;
         else riskLevel = RiskLevel.CRITICAL;
-        
+
         // Check if risk already exists
         const existingRisk = await prisma.risk.findFirst({
           where: {
             organizationId,
-            OR: [
-              { title: risk.title },
-              { description: risk.description }
-            ]
-          }
+            OR: [{ title: risk.title }, { description: risk.description }],
+          },
         });
-        
+
         let dbRisk;
         if (existingRisk) {
           // Update existing risk
@@ -113,7 +123,7 @@ export const POST = withApiMiddleware({
               status: risk.status,
               owner: risk.owner,
               updatedAt: new Date(),
-            }
+            },
           });
         } else {
           // Create new risk
@@ -131,13 +141,13 @@ export const POST = withApiMiddleware({
               organizationId,
               createdBy: user.id,
               dateIdentified: new Date(),
-            }
+            },
           });
         }
-        
+
         riskIdMap.set(risk.externalId, dbRisk.id);
         createdRisks.push(dbRisk);
-        
+
         // Store extracted risk record for traceability
         await prisma.extractedRisk.create({
           data: {
@@ -147,23 +157,20 @@ export const POST = withApiMiddleware({
             organizationId,
             extractedBy: user.id,
             confidence: 0.95, // High confidence since user approved
-          }
+          },
         });
       }
-      
+
       // Create or update controls
       for (const control of controls) {
         // Check if control already exists
         const existingControl = await prisma.control.findFirst({
           where: {
             organizationId,
-            OR: [
-              { title: control.title },
-              { description: control.description }
-            ]
-          }
+            OR: [{ title: control.title }, { description: control.description }],
+          },
         });
-        
+
         let dbControl;
         if (existingControl) {
           // Update existing control
@@ -179,7 +186,7 @@ export const POST = withApiMiddleware({
               owner: control.owner,
               effectivenessRating: mapEffectivenessRating(control.designEffectiveness),
               updatedAt: new Date(),
-            }
+            },
           });
         } else {
           // Create new control
@@ -197,12 +204,12 @@ export const POST = withApiMiddleware({
               priority: Priority.MEDIUM,
               organizationId,
               createdBy: user.id,
-            }
+            },
           });
         }
-        
+
         createdControls.push(dbControl);
-        
+
         // Store extracted control record for traceability
         await prisma.extractedControl.create({
           data: {
@@ -212,9 +219,9 @@ export const POST = withApiMiddleware({
             organizationId,
             extractedBy: user.id,
             confidence: 0.95,
-          }
+          },
         });
-        
+
         // Create risk-control mappings
         for (const riskExternalId of control.riskIds) {
           const riskId = riskIdMap.get(riskExternalId);
@@ -225,24 +232,24 @@ export const POST = withApiMiddleware({
                 riskId_controlId: {
                   riskId,
                   controlId: dbControl.id,
-                }
-              }
+                },
+              },
             });
-            
+
             if (!existingMapping) {
               const mapping = await prisma.controlRiskMapping.create({
                 data: {
                   riskId,
                   controlId: dbControl.id,
                   effectiveness: calculateEffectivenessScore(control.operatingEffectiveness),
-                }
+                },
               });
               createdMappings.push(mapping);
             }
           }
         }
       }
-      
+
       // Create activity log
       await prisma.activity.create({
         data: {
@@ -258,31 +265,30 @@ export const POST = withApiMiddleware({
           },
           userId: user.id,
           organizationId,
-        }
+        },
       });
-      
+
       return {
         risks: createdRisks,
         controls: createdControls,
         mappings: createdMappings,
       };
     });
-    
+
     return {
       success: true,
       data: {
         importedRisks: result.risks.length,
         importedControls: result.controls.length,
         createdMappings: result.mappings.length,
-        message: `Successfully imported ${result.risks.length} risks and ${result.controls.length} controls`
-      }
+        message: `Successfully imported ${result.risks.length} risks and ${result.controls.length} controls`,
+      },
     };
-    
   } catch (error) {
     console.error('RCSA import error:', error);
     return {
       success: false,
-      error: 'Failed to import RCSA data to database'
+      error: 'Failed to import RCSA data to database',
     };
   }
 });

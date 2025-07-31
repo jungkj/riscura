@@ -319,15 +319,18 @@ export default function DragDropImport({
   return (
     <div className="space-y-6">
       {/* Import Mode Selection */}
-      <DaisyCard>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center gap-2">
-            <Zap className="h-5 w-5 text-blue-600" />
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <Zap className="h-5 w-5 text-blue-600" />
+</DaisyCardTitle>
             Import Mode Selection
           </DaisyCardTitle>
-        
-        <DaisyCardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+</DaisyCardContent>
             {IMPORT_MODES.map((mode) => {
               const IconComponent = mode.icon;
               return (
@@ -353,8 +356,9 @@ export default function DragDropImport({
                         {mode.description}
                       </p>
                       <div className="flex items-center gap-2 mt-2">
-                        <DaisyBadge variant={mode.aiEnabled ? "default" : "secondary"} className="text-xs">
-                          {mode.aiEnabled ? (
+                        <DaisyBadge variant={mode.aiEnabled ? "default" : "secondary"} className="text-xs" >
+  {mode.aiEnabled ? (
+</DaisyBadge>
                             <>
                               <Brain className="h-3 w-3 mr-1" />
                               AI Powered
@@ -373,17 +377,19 @@ export default function DragDropImport({
               );
             })}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Processing Options */}
       {selectedMode.aiEnabled && (
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle className="text-lg">Processing Options</DaisyCardTitle>
-          
-          <DaisyCardContent>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+</DaisyCardContent>
               <div className="flex items-center space-x-2">
                 <DaisyCheckbox
                   id="aiAnalysis"
@@ -392,9 +398,9 @@ export default function DragDropImport({
                     setOptions(prev => ({ ...prev, aiAnalysis: !!checked }))
                   }
                 />
-                <DaisyLabel htmlFor="aiAnalysis" className="text-sm">
+                <DaisyLabel htmlFor="aiAnalysis" className="text-sm" />
                   AI Analysis
-                </DaisyLabel>
+                </DaisyCheckbox>
               </div>
               <div className="flex items-center space-x-2">
                 <DaisyCheckbox
@@ -404,9 +410,9 @@ export default function DragDropImport({
                     setOptions(prev => ({ ...prev, autoMap: !!checked }))
                   }
                 />
-                <DaisyLabel htmlFor="autoMap" className="text-sm">
+                <DaisyLabel htmlFor="autoMap" className="text-sm" />
                   Auto-map Fields
-                </DaisyLabel>
+                </DaisyCheckbox>
               </div>
               <div className="flex items-center space-x-2">
                 <DaisyCheckbox
@@ -416,9 +422,9 @@ export default function DragDropImport({
                     setOptions(prev => ({ ...prev, validateData: !!checked }))
                   }
                 />
-                <DaisyLabel htmlFor="validateData" className="text-sm">
+                <DaisyLabel htmlFor="validateData" className="text-sm" />
                   Validate Data
-                </DaisyLabel>
+                </DaisyCheckbox>
               </div>
               <div className="flex items-center space-x-2">
                 <DaisyCheckbox
@@ -428,9 +434,9 @@ export default function DragDropImport({
                     setOptions(prev => ({ ...prev, createMissing: !!checked }))
                   }
                 />
-                <DaisyLabel htmlFor="createMissing" className="text-sm">
+                <DaisyLabel htmlFor="createMissing" className="text-sm" />
                   Create Missing Items
-                </DaisyLabel>
+                </DaisyCheckbox>
               </div>
               <div className="flex items-center space-x-2">
                 <DaisyCheckbox
@@ -440,18 +446,20 @@ export default function DragDropImport({
                     setOptions(prev => ({ ...prev, previewMode: !!checked }))
                   }
                 />
-                <DaisyLabel htmlFor="previewMode" className="text-sm">
+                <DaisyLabel htmlFor="previewMode" className="text-sm" />
                   Preview Mode
-                </DaisyLabel>
+                </DaisyCheckbox>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
 
       {/* File Drop Zone */}
-      <DaisyCard>
-        <DaisyCardContent className="p-6">
+      <DaisyCard >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
           <div
             {...getRootProps()}
             className={`
@@ -492,27 +500,30 @@ export default function DragDropImport({
               </div>
             </motion.div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Selected Files */}
       {files.length > 0 && (
-        <DaisyCard>
-          <DaisyCardHeader>
-            <DaisyCardTitle className="flex items-center justify-between">
-              <span>Selected Files ({files.length})</span>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+            <DaisyCardTitle className="flex items-center justify-between" >
+  <span>
+</DaisyCardTitle>Selected Files ({files.length})</span>
               <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={resetImport}
-                disabled={isProcessing}
-              >
-                Clear All
+                disabled={isProcessing} >
+  Clear All
+</DaisyButton>
               </DaisyButton>
             </DaisyCardTitle>
-          
-          <DaisyCardContent>
-            <div className="space-y-3">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="space-y-3">
+</DaisyCardContent>
               {files.map((fileObj) => {
                 const FileIcon = getFileIcon(fileObj.file.type);
                 return (
@@ -542,8 +553,9 @@ export default function DragDropImport({
                         <CheckCircle className="h-5 w-5 text-green-600" />
                       )}
                       {fileObj.status === 'error' && (
-                        <DaisyAlertCircle className="h-5 w-5 text-red-600" />
-                      )}
+                        <DaisyAlertCircle className="h-5 w-5 text-red-600" >
+  )}
+</DaisyProgress>
                       {fileObj.status === 'processing' && (
                         <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
                       )}
@@ -551,8 +563,7 @@ export default function DragDropImport({
                         variant="ghost"
                         size="sm"
                         onClick={() => removeFile(fileObj.id)}
-                        disabled={isProcessing}
-                      >
+                        disabled={isProcessing} />
                         <X className="h-4 w-4" />
                       </DaisyButton>
                     </div>
@@ -560,16 +571,19 @@ export default function DragDropImport({
                 );
               })}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
 
       {/* Error Display */}
       {processingError && (
-        <DaisyAlert variant="error">
-          <DaisyAlertCircle className="h-4 w-4" />
+        <DaisyAlert variant="error" >
+  <DaisyAlertCircle className="h-4 w-4" />
+</DaisyAlert>
           <DaisyAlertDescription>{processingError}
-        </DaisyAlert>
+                </DaisyAlertDescription>
+                </DaisyAlertDescription>
+              </DaisyAlert>
       )}
 
       {/* Action Buttons */}
@@ -578,9 +592,9 @@ export default function DragDropImport({
           <DaisyButton
             onClick={processFiles}
             disabled={isProcessing}
-            className="flex-1"
-          >
-            {isProcessing ? (
+            className="flex-1" >
+  {isProcessing ? (
+</DaisyButton>
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                 Processing...
@@ -596,24 +610,29 @@ export default function DragDropImport({
       )}
 
       {/* Results Dialog */}
-      <DaisyDialog open={showResults} onOpenChange={setShowResults}>
-        <DaisyDialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-          <DaisyDialogHeader>
+      <DaisyDialog open={showResults} onOpenChange={setShowResults} />
+        <DaisyDialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto" >
+  <DaisyDialogHeader />
+</DaisyDialog>
             <DaisyDialogTitle>Import Results</DaisyDialogTitle>
-            <DaisyDialogDescription>
-              Review the results of your import process
+            <DaisyDialogDescription >
+  Review the results of your import process
+</DaisyDialogDescription>
             </DaisyDialogDescription>
           </DaisyDialogHeader>
           <div className="space-y-4">
             {processingResults.map((result, idx) => (
-              <DaisyCard key={idx}>
-                <DaisyCardHeader>
-                  <DaisyCardTitle className="text-lg">
-                    {result.filename || `File ${idx + 1}`}
+              <DaisyCard key={idx} >
+  <DaisyCardHeader />
+</DaisyCard>
+                  <DaisyCardTitle className="text-lg" >
+  {result.filename || `File ${idx + 1}`}
+</DaisyCardTitle>
                   </DaisyCardTitle>
-                
-                <DaisyCardContent>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="grid grid-cols-2 gap-4 text-sm">
+</DaisyCardContent>
                     <div>
                       <strong>Type:</strong> {result.type}
                     </div>
@@ -633,14 +652,14 @@ export default function DragDropImport({
                       </div>
                     )}
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             ))}
           </div>
-          <DaisyDialogFooter>
-            <DaisyButton onClick={() => setShowResults(false)}>
+          <DaisyDialogFooter />
+            <DaisyButton onClick={() => setShowResults(false)} />
               Close
-            </DaisyButton>
+            </DaisyDialogFooter>
           </DaisyDialogFooter>
         </DaisyDialogContent>
       </DaisyDialog>

@@ -41,8 +41,8 @@ export function VirtualizedDataTable<T extends Record<string, any>>({
 
     // Search filter
     if (searchTerm && searchable) {
-      filtered = data.filter(item =>
-        Object.values(item).some(value =>
+      filtered = data.filter((item) =>
+        Object.values(item).some((value) =>
           String(value).toLowerCase().includes(searchTerm.toLowerCase())
         )
       );
@@ -67,49 +67,55 @@ export function VirtualizedDataTable<T extends Record<string, any>>({
     return filtered;
   }, [data, searchTerm, sortConfig, searchable, sortable]);
 
-  const handleSort = useCallback((key: keyof T) => {
-    if (!sortable) return;
+  const handleSort = useCallback(
+    (key: keyof T) => {
+      if (!sortable) return;
 
-    setSortConfig(current => {
-      if (current?.key === key) {
-        return {
-          key,
-          direction: current.direction === 'asc' ? 'desc' : 'asc',
-        };
-      }
-      return { key, direction: 'asc' };
-    });
-  }, [sortable]);
+      setSortConfig((current) => {
+        if (current?.key === key) {
+          return {
+            key,
+            direction: current.direction === 'asc' ? 'desc' : 'asc',
+          };
+        }
+        return { key, direction: 'asc' };
+      });
+    },
+    [sortable]
+  );
 
-  const Row = useCallback(({ index, style }: { index: number; style: React.CSSProperties }) => {
-    const item = processedData[index];
-    const isEven = index % 2 === 0;
+  const Row = useCallback(
+    ({ index, style }: { index: number; style: React.CSSProperties }) => {
+      const item = processedData[index];
+      const isEven = index % 2 === 0;
 
-    return (
-      <div
-        style={style}
-        className={`flex items-center border-b border-gray-200 hover:bg-gray-50 cursor-pointer ${
-          isEven ? 'bg-white' : 'bg-gray-50'
-        }`}
-        onClick={() => onItemClick?.(item, index)}
-      >
-        {columns.map((column, colIndex) => {
-          const value = item[column.key];
-          const cellContent = column.render ? column.render(value, item) : String(value);
+      return (
+        <div
+          style={style}
+          className={`flex items-center border-b border-gray-200 hover:bg-gray-50 cursor-pointer ${
+            isEven ? 'bg-white' : 'bg-gray-50'
+          }`}
+          onClick={() => onItemClick?.(item, index)}
+        >
+          {columns.map((column, colIndex) => {
+            const value = item[column.key];
+            const cellContent = column.render ? column.render(value, item) : String(value);
 
-          return (
-            <div
-              key={String(column.key)}
-              className="flex-1 px-4 py-2 text-sm truncate"
-              style={{ width: column.width }}
-            >
-              {cellContent}
-            </div>
-          );
-        })}
-      </div>
-    );
-  }, [processedData, columns, onItemClick]);
+            return (
+              <div
+                key={String(column.key)}
+                className="flex-1 px-4 py-2 text-sm truncate"
+                style={{ width: column.width }}
+              >
+                {cellContent}
+              </div>
+            );
+          })}
+        </div>
+      );
+    },
+    [processedData, columns, onItemClick]
+  );
 
   return (
     <div className={`border border-gray-300 rounded-lg ${className}`}>
@@ -140,9 +146,7 @@ export function VirtualizedDataTable<T extends Record<string, any>>({
             <div className="flex items-center justify-between">
               {column.title}
               {sortable && sortConfig?.key === column.key && (
-                <span className="ml-2">
-                  {sortConfig.direction === 'asc' ? '↑' : '↓'}
-                </span>
+                <span className="ml-2">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
               )}
             </div>
           </div>
@@ -193,4 +197,4 @@ export const MemoizedListItem = React.memo<{
   </div>
 ));
 
-MemoizedListItem.displayName = 'MemoizedListItem'; 
+MemoizedListItem.displayName = 'MemoizedListItem';

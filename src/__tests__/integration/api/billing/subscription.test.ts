@@ -14,15 +14,15 @@ import {
   createTestSubscription,
   expectValidApiResponse,
   expectSubscriptionEnforcement,
-  type MockPrismaClient
+  type MockPrismaClient,
 } from '../../../utils/test-helpers';
 
 // Mock the database
 const mockPrisma = createMockPrismaClient();
 jest.mock('@/lib/db', () => ({
   db: {
-    client: mockPrisma
-  }
+    client: mockPrisma,
+  },
 }));
 
 // Mock the billing manager with proper types
@@ -38,7 +38,7 @@ const mockBillingManager = {
 };
 
 jest.mock('@/lib/billing/manager', () => ({
-  billingManager: mockBillingManager
+  billingManager: mockBillingManager,
 }));
 
 describe('/api/billing/subscriptions', () => {
@@ -71,7 +71,7 @@ describe('/api/billing/subscriptions', () => {
       mockBillingManager.getSubscriptionPlans.mockResolvedValue(mockPlans);
 
       const request = createMockRequest('GET', 'http://localhost:3000/api/billing/plans');
-      
+
       // Import the route handler dynamically to ensure mocks are applied
       const { GET } = await import('@/app/api/billing/plans/route');
       const response = await GET(request);
@@ -92,11 +92,9 @@ describe('/api/billing/subscriptions', () => {
       const mockPlans = [testPlan];
       mockBillingManager.getSubscriptionPlans.mockResolvedValue(mockPlans);
 
-      const request = createMockRequest(
-        'GET',
-        'http://localhost:3000/api/billing/plans',
-        { searchParams: { type: 'professional', active: 'true' } }
-      );
+      const request = createMockRequest('GET', 'http://localhost:3000/api/billing/plans', {
+        searchParams: { type: 'professional', active: 'true' },
+      });
 
       const { GET } = await import('@/app/api/billing/plans/route');
       const response = await GET(request);
@@ -115,7 +113,7 @@ describe('/api/billing/subscriptions', () => {
       mockBillingManager.getSubscriptionPlans.mockResolvedValue([]);
 
       const request = createMockRequest('GET', 'http://localhost:3000/api/billing/plans');
-      
+
       const { GET } = await import('@/app/api/billing/plans/route');
       const response = await GET(request);
       const data = await response.json();
@@ -125,10 +123,12 @@ describe('/api/billing/subscriptions', () => {
     });
 
     it('should handle service errors gracefully', async () => {
-      mockBillingManager.getSubscriptionPlans.mockRejectedValue(new Error('Database connection failed'));
+      mockBillingManager.getSubscriptionPlans.mockRejectedValue(
+        new Error('Database connection failed')
+      );
 
       const request = createMockRequest('GET', 'http://localhost:3000/api/billing/plans');
-      
+
       const { GET } = await import('@/app/api/billing/plans/route');
       const response = await GET(request);
       const data = await response.json();
@@ -146,7 +146,10 @@ describe('/api/billing/subscriptions', () => {
   describe('POST /api/billing/subscriptions', () => {
     it('should create a new subscription successfully', async () => {
       // Mock database checks
-      (mockPrisma.subscriptionPlan.findUnique as any).mockResolvedValue({ ...testPlan, isActive: true });
+      (mockPrisma.subscriptionPlan.findUnique as any).mockResolvedValue({
+        ...testPlan,
+        isActive: true,
+      });
       (mockPrisma.organizationSubscription.findFirst as any).mockResolvedValue(null);
       mockBillingManager.createSubscription.mockResolvedValue(testSubscription);
 
@@ -155,11 +158,10 @@ describe('/api/billing/subscriptions', () => {
         options: { trialDays: 14 },
       };
 
-      const request = createMockRequest(
-        'POST',
-        'http://localhost:3000/api/billing/subscriptions',
-        { body: requestBody, user: testUser }
-      );
+      const request = createMockRequest('POST', 'http://localhost:3000/api/billing/subscriptions', {
+        body: requestBody,
+        user: testUser,
+      });
 
       const { POST } = await import('@/app/api/billing/subscriptions/route');
       const response = await POST(request);
@@ -179,11 +181,9 @@ describe('/api/billing/subscriptions', () => {
     });
 
     it('should require authentication', async () => {
-      const request = createMockRequest(
-        'POST',
-        'http://localhost:3000/api/billing/subscriptions',
-        { body: { planId: testPlan.id } }
-      );
+      const request = createMockRequest('POST', 'http://localhost:3000/api/billing/subscriptions', {
+        body: { planId: testPlan.id },
+      });
 
       const { POST } = await import('@/app/api/billing/subscriptions/route');
       const response = await POST(request);
@@ -212,14 +212,16 @@ describe('/api/billing/subscriptions', () => {
 
     it('should handle duplicate subscription errors', async () => {
       // Mock database checks showing existing subscription
-      (mockPrisma.subscriptionPlan.findUnique as any).mockResolvedValue({ ...testPlan, isActive: true });
+      (mockPrisma.subscriptionPlan.findUnique as any).mockResolvedValue({
+        ...testPlan,
+        isActive: true,
+      });
       (mockPrisma.organizationSubscription.findFirst as any).mockResolvedValue(testSubscription);
 
-      const request = createMockRequest(
-        'POST',
-        'http://localhost:3000/api/billing/subscriptions',
-        { body: { planId: testPlan.id }, user: testUser }
-      );
+      const request = createMockRequest('POST', 'http://localhost:3000/api/billing/subscriptions', {
+        body: { planId: testPlan.id },
+        user: testUser,
+      });
 
       const { POST } = await import('@/app/api/billing/subscriptions/route');
       const response = await POST(request);
@@ -240,14 +242,12 @@ describe('/api/billing/subscriptions', () => {
       // Mock database response instead of billing manager
       (mockPrisma.organizationSubscription.findFirst as any).mockResolvedValue({
         ...testSubscription,
-        plan: testPlan
+        plan: testPlan,
       });
 
-      const request = createMockRequest(
-        'GET',
-        'http://localhost:3000/api/billing/subscriptions',
-        { user: testUser }
-      );
+      const request = createMockRequest('GET', 'http://localhost:3000/api/billing/subscriptions', {
+        user: testUser,
+      });
 
       const { GET } = await import('@/app/api/billing/subscriptions/route');
       const response = await GET(request);
@@ -273,11 +273,9 @@ describe('/api/billing/subscriptions', () => {
       // Mock no subscription found
       (mockPrisma.organizationSubscription.findFirst as any).mockResolvedValue(null);
 
-      const request = createMockRequest(
-        'GET',
-        'http://localhost:3000/api/billing/subscriptions',
-        { user: testUser }
-      );
+      const request = createMockRequest('GET', 'http://localhost:3000/api/billing/subscriptions', {
+        user: testUser,
+      });
 
       const { GET } = await import('@/app/api/billing/subscriptions/route');
       const response = await GET(request);
@@ -291,10 +289,7 @@ describe('/api/billing/subscriptions', () => {
     });
 
     it('should require authentication', async () => {
-      const request = createMockRequest(
-        'GET',
-        'http://localhost:3000/api/billing/subscriptions'
-      );
+      const request = createMockRequest('GET', 'http://localhost:3000/api/billing/subscriptions');
 
       const { GET } = await import('@/app/api/billing/subscriptions/route');
       const response = await GET(request);
@@ -316,11 +311,10 @@ describe('/api/billing/subscriptions', () => {
       (mockPrisma.organizationSubscription.findFirst as any).mockResolvedValue(testSubscription);
       mockBillingManager.changeSubscriptionPlan.mockResolvedValue(updatedSubscription);
 
-      const request = createMockRequest(
-        'PUT',
-        'http://localhost:3000/api/billing/subscriptions',
-        { body: { subscriptionId: testSubscription.id, planId: 'new-plan-123', action: 'upgrade' }, user: testUser }
-      );
+      const request = createMockRequest('PUT', 'http://localhost:3000/api/billing/subscriptions', {
+        body: { subscriptionId: testSubscription.id, planId: 'new-plan-123', action: 'upgrade' },
+        user: testUser,
+      });
 
       const { PUT } = await import('@/app/api/billing/subscriptions/route');
       const response = await PUT(request);
@@ -339,11 +333,10 @@ describe('/api/billing/subscriptions', () => {
     it('should require billing permissions for plan changes', async () => {
       const regularUser = { ...testUser, role: 'USER', permissions: ['read:risks'] };
 
-      const request = createMockRequest(
-        'PUT',
-        'http://localhost:3000/api/billing/subscriptions',
-        { body: { subscriptionId: testSubscription.id, planId: 'new-plan-123', action: 'upgrade' }, user: regularUser }
-      );
+      const request = createMockRequest('PUT', 'http://localhost:3000/api/billing/subscriptions', {
+        body: { subscriptionId: testSubscription.id, planId: 'new-plan-123', action: 'upgrade' },
+        user: regularUser,
+      });
 
       const { PUT } = await import('@/app/api/billing/subscriptions/route');
       const response = await PUT(request);
@@ -375,10 +368,7 @@ describe('/api/billing/subscriptions', () => {
       const response = await DELETE(request);
       const data = await response.json();
 
-      expect(mockBillingManager.cancelSubscription).toHaveBeenCalledWith(
-        testSubscription.id,
-        true
-      );
+      expect(mockBillingManager.cancelSubscription).toHaveBeenCalledWith(testSubscription.id, true);
 
       expect(response.status).toBe(200);
       expectValidApiResponse(data);
@@ -438,18 +428,16 @@ describe('/api/billing/subscriptions', () => {
       // Mock no active subscription
       mockBillingManager.getActiveSubscription.mockResolvedValue(null);
 
-      const request = createMockRequest(
-        'GET',
-        'http://localhost:3000/api/advanced-analytics',
-        { user: testUser }
-      );
+      const request = createMockRequest('GET', 'http://localhost:3000/api/advanced-analytics', {
+        user: testUser,
+      });
 
       // This would be an endpoint with subscription enforcement
       // The actual implementation would use the withSubscription middleware
-      
+
       // For testing purposes, we'll simulate the enforcement
       const subscription = await mockBillingManager.getActiveSubscription(testUser.organizationId);
-      
+
       if (!subscription) {
         const response = {
           success: false,
@@ -458,7 +446,7 @@ describe('/api/billing/subscriptions', () => {
             message: 'Active subscription required',
           },
         };
-        
+
         expectSubscriptionEnforcement(response);
       }
     });
@@ -467,7 +455,7 @@ describe('/api/billing/subscriptions', () => {
       mockBillingManager.getActiveSubscription.mockResolvedValue(testSubscription);
 
       const subscription = await mockBillingManager.getActiveSubscription(testUser.organizationId);
-      
+
       expect(subscription).not.toBeNull();
       expect(subscription.status).toBe('active');
     });
@@ -479,7 +467,7 @@ describe('/api/billing/subscriptions', () => {
 
   // Note: The billing analytics endpoint is not implemented yet.
   // These tests are commented out until the endpoint is created.
-  
+
   /* 
   describe('GET /api/billing/analytics', () => {
     it('should return billing analytics for organization', async () => {

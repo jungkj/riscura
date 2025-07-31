@@ -16,12 +16,12 @@ interface AccordionProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-export const DaisyAccordion = ({ 
-  type = 'single', 
-  defaultValue = [], 
-  children, 
+export const DaisyAccordion = ({
+  type = 'single',
+  defaultValue = [],
+  children,
   className,
-  ...props 
+  ...props
 }: AccordionProps) => {
   const [openItems, setOpenItems] = useState<string[]>(
     Array.isArray(defaultValue) ? defaultValue : defaultValue ? [defaultValue] : []
@@ -29,14 +29,10 @@ export const DaisyAccordion = ({
 
   const toggleItem = (value: string) => {
     if (type === 'single') {
-      setOpenItems(current => 
-        current.includes(value) ? [] : [value]
-      );
+      setOpenItems((current) => (current.includes(value) ? [] : [value]));
     } else {
-      setOpenItems(current =>
-        current.includes(value)
-          ? current.filter(item => item !== value)
-          : [...current, value]
+      setOpenItems((current) =>
+        current.includes(value) ? current.filter((item) => item !== value) : [...current, value]
       );
     }
   };
@@ -54,19 +50,24 @@ interface AccordionItemProps extends React.HTMLAttributes<HTMLDivElement> {
   value: string;
 }
 
-export const DaisyAccordionItem = ({ value, children, className, ...props }: AccordionItemProps) => {
+export const DaisyAccordionItem = ({
+  value,
+  children,
+  className,
+  ...props
+}: AccordionItemProps) => {
   const context = useContext(AccordionContext);
   if (!context) throw new Error('AccordionItem must be used within Accordion');
-  
+
   const isOpen = context.openItems.includes(value);
 
   return (
-    <div 
+    <div
       className={cn(
         'collapse collapse-arrow join-item border border-base-300',
         isOpen && 'collapse-open',
         className
-      )} 
+      )}
       {...props}
     >
       {children}
@@ -83,7 +84,7 @@ export const DaisyAccordionTrigger = ({ children, className, ...props }: Accordi
   if (!context) throw new Error('AccordionTrigger must be used within AccordionItem');
 
   return (
-    <div 
+    <div
       className={cn('collapse-title text-base font-medium', className)}
       onClick={(e) => {
         const item = e.currentTarget.closest('.collapse');

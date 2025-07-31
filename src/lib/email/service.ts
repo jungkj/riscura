@@ -55,7 +55,7 @@ class MockEmailProvider implements EmailProvider {
       subject: options.subject,
       template: options.template,
     });
-    
+
     return {
       messageId: `mock-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       success: true,
@@ -164,7 +164,8 @@ const EMAIL_TEMPLATES: Record<string, EmailTemplate> = {
 class EmailService {
   private transporter: nodemailer.Transporter | null = null;
   private templates: Map<string, EmailTemplate> = new Map();
-  private queue: Array<{ id: string; email: EmailOptions; retryCount: number; scheduledAt: Date }> = [];
+  private queue: Array<{ id: string; email: EmailOptions; retryCount: number; scheduledAt: Date }> =
+    [];
   private isProcessing = false;
   private provider: EmailProvider;
   private config: EmailConfig;
@@ -202,10 +203,13 @@ class EmailService {
       host: emailConfig.host,
       port: emailConfig.port,
       secure: emailConfig.port === 465,
-      auth: emailConfig.user && emailConfig.pass ? {
-        user: emailConfig.user,
-        pass: emailConfig.pass,
-      } : undefined,
+      auth:
+        emailConfig.user && emailConfig.pass
+          ? {
+              user: emailConfig.user,
+              pass: emailConfig.pass,
+            }
+          : undefined,
       tls: {
         rejectUnauthorized: env.NODE_ENV === 'production',
       },
@@ -415,8 +419,16 @@ class EmailService {
       const mailOptions = {
         from: emailConfig.from,
         to: Array.isArray(options.to) ? options.to.join(', ') : options.to,
-        cc: options.cc ? (Array.isArray(options.cc) ? options.cc.join(', ') : options.cc) : undefined,
-        bcc: options.bcc ? (Array.isArray(options.bcc) ? options.bcc.join(', ') : options.bcc) : undefined,
+        cc: options.cc
+          ? Array.isArray(options.cc)
+            ? options.cc.join(', ')
+            : options.cc
+          : undefined,
+        bcc: options.bcc
+          ? Array.isArray(options.bcc)
+            ? options.bcc.join(', ')
+            : options.bcc
+          : undefined,
         subject: options.subject,
         text: options.text,
         html: options.html,
@@ -425,7 +437,7 @@ class EmailService {
       };
 
       const result = await this.transporter.sendMail(mailOptions);
-      
+
       console.log('Email sent successfully:', {
         messageId: result.messageId,
         to: options.to,
@@ -439,16 +451,17 @@ class EmailService {
         pending: result.pending || [],
         envelope: result.envelope,
       };
-
     } catch (error) {
       console.error('Failed to send email:', error);
-      throw new Error(`Email sending failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Email sending failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
   async sendTemplate(
-    templateName: string, 
-    to: string | string[], 
+    templateName: string,
+    to: string | string[],
     data: Record<string, any>,
     options: Partial<Omit<EmailOptions, 'template' | 'templateData'>> = {}
   ): Promise<EmailResult | null> {
@@ -477,14 +490,14 @@ class EmailService {
     const processText = (text: string) => {
       return text.replace(/\{\{(\w+)(\|(\w+))?\}\}/g, (match, key, _, filter) => {
         let value = data[key] || match;
-        
+
         // Apply filters
         if (filter === 'upper') {
           value = String(value).toUpperCase();
         } else if (filter === 'lower') {
           value = String(value).toLowerCase();
         }
-        
+
         return String(value);
       });
     };
@@ -500,7 +513,7 @@ class EmailService {
   async queueEmail(options: EmailOptions): Promise<string> {
     const id = generateId();
     const scheduledAt = options.deliveryTime || new Date();
-    
+
     this.queue.push({
       id,
       email: options,
@@ -515,25 +528,25 @@ class EmailService {
   private async startQueueProcessor() {
     setInterval(async () => {
       if (this.isProcessing || this.queue.length === 0) return;
-      
+
       this.isProcessing = true;
-      
+
       try {
         const now = new Date();
-        const readyEmails = this.queue.filter(item => item.scheduledAt <= now);
-        
+        const readyEmails = this.queue.filter((item) => item.scheduledAt <= now);
+
         for (const item of readyEmails) {
           try {
             await this.send(item.email);
             // Remove from queue on success
-            this.queue = this.queue.filter(q => q.id !== item.id);
+            this.queue = this.queue.filter((q) => q.id !== item.id);
           } catch (error) {
             console.error(`Failed to send queued email ${item.id}:`, error);
-            
+
             item.retryCount++;
             if (item.retryCount >= 3) {
               console.error(`Email ${item.id} failed after 3 attempts, removing from queue`);
-              this.queue = this.queue.filter(q => q.id !== item.id);
+              this.queue = this.queue.filter((q) => q.id !== item.id);
             } else {
               // Retry in 5 minutes
               item.scheduledAt = new Date(Date.now() + 5 * 60 * 1000);
@@ -597,9 +610,11 @@ class EmailService {
   /**
    * Send bulk emails
    */
-  async sendBulkEmails(emails: EmailOptions[]): Promise<Array<{ messageId: string; success: boolean }>> {
+  async sendBulkEmails(
+    emails: EmailOptions[]
+  ): Promise<Array<{ messageId: string; success: boolean }>> {
     const results = [];
-    
+
     for (const email of emails) {
       try {
         const result = await this.sendEmail(email);
@@ -646,7 +661,7 @@ class EmailService {
     verificationToken: string
   ): Promise<void> {
     const verificationUrl = `${env.APP_URL}/auth/verify-email?token=${verificationToken}`;
-    
+
     await this.sendTemplateEmail('emailVerification', user.email, {
       firstName: user.firstName,
       verificationUrl,
@@ -661,7 +676,7 @@ class EmailService {
     resetToken: string
   ): Promise<void> {
     const resetUrl = `${env.APP_URL}/auth/reset-password?token=${resetToken}`;
-    
+
     await this.sendTemplateEmail('passwordReset', user.email, {
       firstName: user.firstName,
       resetUrl,
@@ -683,7 +698,7 @@ class EmailService {
     }
   ): Promise<void> {
     const riskUrl = `${env.APP_URL}/dashboard/risks/${risk.id}`;
-    
+
     for (const user of users) {
       await this.sendTemplateEmail('riskAlert', user.email, {
         firstName: user.firstName,
@@ -710,7 +725,7 @@ class EmailService {
     }
   ): Promise<void> {
     const workflowUrl = `${env.APP_URL}/dashboard/workflows/${workflow.id}`;
-    
+
     await this.sendTemplateEmail('workflowNotification', user.email, {
       firstName: user.firstName,
       workflowName: workflow.name,
@@ -746,4 +761,4 @@ class EmailService {
 }
 
 // Export singleton instance
-export const emailService = new EmailService(); 
+export const emailService = new EmailService();

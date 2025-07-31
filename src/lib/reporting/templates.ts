@@ -45,7 +45,8 @@ export const riskRegisterTemplate: ReportTemplate = {
         position: { x: 7, y: 0, w: 5, h: 4 },
         dataSource: {
           type: 'query',
-          source: 'SELECT likelihood, impact, COUNT(*) as count FROM risks GROUP BY likelihood, impact',
+          source:
+            'SELECT likelihood, impact, COUNT(*) as count FROM risks GROUP BY likelihood, impact',
           parameters: {},
         },
         visualization: {
@@ -711,15 +712,15 @@ export const templateCategories = {
 
 // Get template by ID
 export function getTemplateById(id: string): ReportTemplate | undefined {
-  return reportTemplates.find(template => template.id === id);
+  return reportTemplates.find((template) => template.id === id);
 }
 
 // Get templates by category
 export function getTemplatesByCategory(category: string): ReportTemplate[] {
-  return reportTemplates.filter(template => template.category === category);
+  return reportTemplates.filter((template) => template.category === category);
 }
 
 // Get templates by type
 export function getTemplatesByType(type: string): ReportTemplate[] {
-  return reportTemplates.filter(template => template.type === type);
-} 
+  return reportTemplates.filter((template) => template.type === type);
+}

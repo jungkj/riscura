@@ -8,103 +8,103 @@ export const animations = {
     from: { opacity: 0 },
     to: { opacity: 1 },
     duration: 300,
-    easing: 'ease-out'
+    easing: 'ease-out',
   },
   fadeOut: {
     from: { opacity: 1 },
     to: { opacity: 0 },
     duration: 300,
-    easing: 'ease-in'
+    easing: 'ease-in',
   },
   fadeInUp: {
     from: { opacity: 0, transform: 'translateY(20px)' },
     to: { opacity: 1, transform: 'translateY(0)' },
     duration: 400,
-    easing: 'ease-out'
+    easing: 'ease-out',
   },
   fadeInDown: {
     from: { opacity: 0, transform: 'translateY(-20px)' },
     to: { opacity: 1, transform: 'translateY(0)' },
     duration: 400,
-    easing: 'ease-out'
+    easing: 'ease-out',
   },
   fadeInLeft: {
     from: { opacity: 0, transform: 'translateX(-20px)' },
     to: { opacity: 1, transform: 'translateX(0)' },
     duration: 400,
-    easing: 'ease-out'
+    easing: 'ease-out',
   },
   fadeInRight: {
     from: { opacity: 0, transform: 'translateX(20px)' },
     to: { opacity: 1, transform: 'translateX(0)' },
     duration: 400,
-    easing: 'ease-out'
+    easing: 'ease-out',
   },
-  
+
   // Scale animations
   scaleIn: {
     from: { opacity: 0, transform: 'scale(0.8)' },
     to: { opacity: 1, transform: 'scale(1)' },
     duration: 300,
-    easing: 'ease-out'
+    easing: 'ease-out',
   },
   scaleOut: {
     from: { opacity: 1, transform: 'scale(1)' },
     to: { opacity: 0, transform: 'scale(0.8)' },
     duration: 300,
-    easing: 'ease-in'
+    easing: 'ease-in',
   },
-  
+
   // Slide animations
   slideInLeft: {
     from: { transform: 'translateX(-100%)' },
     to: { transform: 'translateX(0)' },
     duration: 400,
-    easing: 'ease-out'
+    easing: 'ease-out',
   },
   slideInRight: {
     from: { transform: 'translateX(100%)' },
     to: { transform: 'translateX(0)' },
     duration: 400,
-    easing: 'ease-out'
+    easing: 'ease-out',
   },
   slideInUp: {
     from: { transform: 'translateY(100%)' },
     to: { transform: 'translateY(0)' },
     duration: 400,
-    easing: 'ease-out'
+    easing: 'ease-out',
   },
   slideInDown: {
     from: { transform: 'translateY(-100%)' },
     to: { transform: 'translateY(0)' },
     duration: 400,
-    easing: 'ease-out'
+    easing: 'ease-out',
   },
-  
+
   // Bounce animations
   bounceIn: {
     keyframes: [
       { offset: 0, opacity: 0, transform: 'scale(0.3)' },
       { offset: 0.5, opacity: 1, transform: 'scale(1.05)' },
       { offset: 0.7, transform: 'scale(0.9)' },
-      { offset: 1, opacity: 1, transform: 'scale(1)' }
+      { offset: 1, opacity: 1, transform: 'scale(1)' },
     ],
     duration: 600,
-    easing: 'ease-out'
+    easing: 'ease-out',
   },
-  
+
   // Pulse animation
   pulse: {
     keyframes: [
       { offset: 0, transform: 'scale(1)' },
       { offset: 0.5, transform: 'scale(1.05)' },
-      { offset: 1, transform: 'scale(1)' }
+      { offset: 1, transform: 'scale(1)' },
     ],
     duration: 1000,
     easing: 'ease-in-out',
-    iterations: Infinity
+    iterations: Infinity,
   },
-  
+
   // Shake animation
   shake: {
     keyframes: [
@@ -118,11 +118,11 @@ export const animations = {
       { offset: 0.7, transform: 'translateX(-10px)' },
       { offset: 0.8, transform: 'translateX(10px)' },
       { offset: 0.9, transform: 'translateX(-10px)' },
-      { offset: 1, transform: 'translateX(0)' }
+      { offset: 1, transform: 'translateX(0)' },
     ],
     duration: 600,
-    easing: 'ease-in-out'
-  }
+    easing: 'ease-in-out',
+  },
 } as const;
 
 export type AnimationName = keyof typeof animations;
@@ -139,7 +139,7 @@ export const easings = {
   easeInElastic: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
   easeOutElastic: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
   easeInBounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-  easeOutBounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'
+  easeOutBounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
 } as const;
 
 // Animation utilities
@@ -163,7 +163,7 @@ export class AnimationUtils {
       easing: options?.easing || animation.easing,
       iterations: options?.iterations || 1,
       direction: options?.direction || 'normal',
-      fill: options?.fillMode || 'forwards'
+      fill: options?.fillMode || 'forwards',
     };
 
     if ('keyframes' in animation) {
@@ -183,14 +183,14 @@ export class AnimationUtils {
     const actualTo = to === 'auto' ? element.scrollHeight : to;
 
     return new Promise((resolve) => {
-      const animation = element.animate([
-        { height: `${actualFrom}px` },
-        { height: `${actualTo}px` }
-      ], {
-        duration,
-        easing: 'ease-out',
-        fill: 'forwards'
-      });
+      const animation = element.animate(
+        [{ height: `${actualFrom}px` }, { height: `${actualTo}px` }],
+        {
+          duration,
+          easing: 'ease-out',
+          fill: 'forwards',
+        }
+      );
 
       animation.addEventListener('finish', () => resolve());
     });
@@ -206,14 +206,14 @@ export class AnimationUtils {
     const actualTo = to === 'auto' ? element.scrollWidth : to;
 
     return new Promise((resolve) => {
-      const animation = element.animate([
-        { width: `${actualFrom}px` },
-        { width: `${actualTo}px` }
-      ], {
-        duration,
-        easing: 'ease-out',
-        fill: 'forwards'
-      });
+      const animation = element.animate(
+        [{ width: `${actualFrom}px` }, { width: `${actualTo}px` }],
+        {
+          duration,
+          easing: 'ease-out',
+          fill: 'forwards',
+        }
+      );
 
       animation.addEventListener('finish', () => resolve());
     });
@@ -227,7 +227,7 @@ export class AnimationUtils {
     const promises = elements.map((element, index) => {
       return new Promise<void>((resolve) => {
         const animation = this.createAnimation(element, animationName, {
-          delay: index * staggerDelay
+          delay: index * staggerDelay,
         });
         animation.addEventListener('finish', () => resolve());
       });
@@ -247,11 +247,11 @@ export class AnimationUtils {
     }
   ): Animation {
     const { stiffness = 100, damping = 10, mass = 1 } = options || {};
-    
+
     // Simple spring physics approximation
     const omega = Math.sqrt(stiffness / mass);
     const zeta = damping / (2 * Math.sqrt(stiffness * mass));
-    
+
     let duration = 1000;
     if (zeta < 1) {
       duration = (4 / (omega * Math.sqrt(1 - zeta * zeta))) * 1000;
@@ -262,7 +262,7 @@ export class AnimationUtils {
     return element.animate([from, to], {
       duration: Math.min(duration, 2000),
       easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-      fill: 'forwards'
+      fill: 'forwards',
     });
   }
 
@@ -280,14 +280,17 @@ export class AnimationUtils {
     const translateY = toRect.top - fromRect.top;
 
     return new Promise((resolve) => {
-      const animation = element.animate([
-        { transform: 'translate(0, 0) scale(1, 1)' },
-        { transform: `translate(${translateX}px, ${translateY}px) scale(${scaleX}, ${scaleY})` }
-      ], {
-        duration,
-        easing: 'ease-out',
-        fill: 'forwards'
-      });
+      const animation = element.animate(
+        [
+          { transform: 'translate(0, 0) scale(1, 1)' },
+          { transform: `translate(${translateX}px, ${translateY}px) scale(${scaleX}, ${scaleY})` },
+        ],
+        {
+          duration,
+          easing: 'ease-out',
+          fill: 'forwards',
+        }
+      );
 
       animation.addEventListener('finish', () => resolve());
     });
@@ -302,17 +305,20 @@ export class AnimationUtils {
       up: ['translateY(100%)', 'translateY(0)'],
       down: ['translateY(-100%)', 'translateY(0)'],
       left: ['translateX(100%)', 'translateX(0)'],
-      right: ['translateX(-100%)', 'translateX(0)']
+      right: ['translateX(-100%)', 'translateX(0)'],
     };
 
-    return element.animate([
-      { transform: transforms[direction][0], opacity: 0 },
-      { transform: transforms[direction][1], opacity: 1 }
-    ], {
-      duration,
-      easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-      fill: 'forwards'
-    });
+    return element.animate(
+      [
+        { transform: transforms[direction][0], opacity: 0 },
+        { transform: transforms[direction][1], opacity: 1 },
+      ],
+      {
+        duration,
+        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        fill: 'forwards',
+      }
+    );
   }
 }
 
@@ -339,7 +345,7 @@ export class ScrollAnimationUtils {
       },
       {
         threshold: 0.1,
-        rootMargin: '50px'
+        rootMargin: '50px',
       }
     );
   }
@@ -388,7 +394,7 @@ export function useAnimation(
     if (!ref.current || !trigger || prefersReducedMotion) return;
 
     const animation = AnimationUtils.createAnimation(ref.current, animationName, options);
-    
+
     return () => {
       animation.cancel();
     };
@@ -415,9 +421,12 @@ export function useStaggeredAnimation(
     AnimationUtils.staggeredAnimation(elements, animationName, staggerDelay);
   }, [animationName, trigger, staggerDelay, prefersReducedMotion]);
 
-  const setRef = React.useCallback((index: number) => (element: HTMLElement | null) => {
-    refs.current[index] = element;
-  }, []);
+  const setRef = React.useCallback(
+    (index: number) => (element: HTMLElement | null) => {
+      refs.current[index] = element;
+    },
+    []
+  );
 
   return setRef;
 }
@@ -458,7 +467,7 @@ export function useSpringAnimation(
     if (!ref.current || !trigger || prefersReducedMotion) return;
 
     const animation = AnimationUtils.createSpringAnimation(ref.current, from, to, options);
-    
+
     return () => {
       animation.cancel();
     };
@@ -472,7 +481,7 @@ export function useAnimationQueue() {
   const [isAnimating, setIsAnimating] = React.useState(false);
 
   const addToQueue = React.useCallback((animation: () => Promise<void>) => {
-    setQueue(prev => [...prev, animation]);
+    setQueue((prev) => [...prev, animation]);
   }, []);
 
   const clearQueue = React.useCallback(() => {
@@ -484,14 +493,14 @@ export function useAnimationQueue() {
 
     const processQueue = async () => {
       setIsAnimating(true);
-      
+
       while (queue.length > 0) {
         const animation = queue.shift();
         if (animation) {
           await animation();
         }
       }
-      
+
       setIsAnimating(false);
     };
 
@@ -507,17 +516,19 @@ export function generateAnimationCSS(
   className: string = 'animate'
 ): string {
   const animation = animations[animationName];
-  
+
   if ('keyframes' in animation) {
     // Generate keyframes CSS
-    const keyframesCSS = animation.keyframes.map((keyframe, index) => {
-      const percent = keyframe.offset * 100;
-      const properties = Object.entries(keyframe)
-        .filter(([key]) => key !== 'offset')
-        .map(([key, value]) => `${key}: ${value}`)
-        .join('; ');
-      return `${percent}% { ${properties} }`;
-    }).join('\n  ');
+    const keyframesCSS = animation.keyframes
+      .map((keyframe, index) => {
+        const percent = keyframe.offset * 100;
+        const properties = Object.entries(keyframe)
+          .filter(([key]) => key !== 'offset')
+          .map(([key, value]) => `${key}: ${value}`)
+          .join('; ');
+        return `${percent}% { ${properties} }`;
+      })
+      .join('\n  ');
 
     return `
 @keyframes ${className}-${animationName} {
@@ -553,4 +564,4 @@ export function generateAnimationCSS(
 // Initialize scroll animations
 if (typeof window !== 'undefined') {
   ScrollAnimationUtils.initialize();
-} 
+}

@@ -15,8 +15,8 @@ export async function HEAD() {
     headers: {
       'Content-Length': '0',
       'Cache-Control': 'no-cache, no-store, must-revalidate',
-      'Pragma': 'no-cache',
-      'Expires': '0',
+      Pragma: 'no-cache',
+      Expires: '0',
     },
   });
 }
@@ -27,4 +27,4 @@ export async function POST() {
     timestamp: Date.now(),
     echo: 'pong',
   });
-} 
+}

@@ -10,15 +10,28 @@ const CreateControlSchema = z.object({
   type: z.enum(['PREVENTIVE', 'DETECTIVE', 'CORRECTIVE']),
   frequency: z.enum(['CONTINUOUS', 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'ANNUALLY']),
   effectiveness: z.number().min(0).max(100).optional(),
-  status: z.enum(['PLANNED', 'IMPLEMENTED', 'TESTING', 'OPERATIONAL', 'REMEDIATION', 'DISABLED', 'ACTIVE', 'INACTIVE']).optional(),
-  category: z.enum(['TECHNICAL', 'ADMINISTRATIVE', 'PHYSICAL', 'OPERATIONAL', 'MANAGEMENT']).optional(),
-  automationLevel: z.enum(['MANUAL', 'SEMI_AUTOMATED']).optional()
+  status: z
+    .enum([
+      'PLANNED',
+      'IMPLEMENTED',
+      'TESTING',
+      'OPERATIONAL',
+      'REMEDIATION',
+      'DISABLED',
+      'ACTIVE',
+      'INACTIVE',
+    ])
+    .optional(),
+  category: z
+    .enum(['TECHNICAL', 'ADMINISTRATIVE', 'PHYSICAL', 'OPERATIONAL', 'MANAGEMENT'])
+    .optional(),
+  automationLevel: z.enum(['MANUAL', 'SEMI_AUTOMATED']).optional(),
 });
 
 export const GET = withApiMiddleware(
   async (req: NextRequest) => {
     const { user } = req as AuthenticatedRequest;
-    
+
     if (!user || !user.organizationId) {
       console.warn('[Controls API] Missing user or organizationId', { user });
       return NextResponse.json(
@@ -29,18 +42,18 @@ export const GET = withApiMiddleware(
 
     try {
       console.log('[Controls API] Fetching controls for organization:', user.organizationId);
-      
+
       // Parse pagination parameters from query string
       const { searchParams } = new URL(req.url);
       const page = parseInt(searchParams.get('page') || '1');
       const limit = parseInt(searchParams.get('limit') || '50');
       const offset = (page - 1) * limit;
-      
+
       // Get total count for pagination
       const totalCount = await db.client.control.count({
-        where: { organizationId: user.organizationId }
+        where: { organizationId: user.organizationId },
       });
-      
+
       // Single optimized query with relationships
       let controls;
       try {
@@ -49,42 +62,47 @@ export const GET = withApiMiddleware(
           include: {
             risks: {
               include: {
-                risk: true
-              }
+                risk: true,
+              },
             },
             assignedUser: {
               select: {
                 id: true,
                 firstName: true,
                 lastName: true,
-                email: true
-              }
+                email: true,
+              },
             },
             creator: {
               select: {
                 id: true,
                 firstName: true,
                 lastName: true,
-                email: true
-              }
-            }
+                email: true,
+              },
+            },
           },
           orderBy: { createdAt: 'desc' },
           skip: offset,
-          take: limit
+          take: limit,
         });
       } catch (relationError) {
-        console.warn('[Controls API] Error fetching relationships, falling back to basic query:', relationError);
+        console.warn(
+          '[Controls API] Error fetching relationships, falling back to basic query:',
+          relationError
+        );
         // Fallback to basic query without relationships
         controls = await db.client.control.findMany({
           where: { organizationId: user.organizationId },
           orderBy: { createdAt: 'desc' },
           skip: offset,
-          take: limit
+          take: limit,
         });
       }
 
-      console.log(`[Controls API] Found ${controls.length} controls (page ${page}, total: ${totalCount})`);
+      console.log(
+        `[Controls API] Found ${controls.length} controls (page ${page}, total: ${totalCount})`
+      );
 
       return NextResponse.json({
         success: true,
@@ -94,22 +112,22 @@ export const GET = withApiMiddleware(
           page,
           limit,
           total: totalCount,
-          totalPages: Math.ceil(totalCount / limit)
-        }
+          totalPages: Math.ceil(totalCount / limit),
+        },
       });
     } catch (error) {
       console.error('[Controls API] Critical error:', {
         error,
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined,
-        organizationId: user.organizationId
+        organizationId: user.organizationId,
       });
-      
+
       return NextResponse.json(
-        { 
-          success: false, 
+        {
+          success: false,
           error: 'Failed to fetch controls',
-          details: error instanceof Error ? error.message : 'Unknown error'
+          details: error instanceof Error ? error.message : 'Unknown error',
         },
         { status: 500 }
       );
@@ -121,7 +139,7 @@ export const GET = withApiMiddleware(
 export const POST = withApiMiddleware(
   async (req: NextRequest) => {
     const { user } = req as AuthenticatedRequest;
-    
+
     if (!user || !user.organizationId) {
       console.warn('[Controls API] Missing user or organizationId in POST', { user });
       return NextResponse.json(
@@ -133,9 +151,9 @@ export const POST = withApiMiddleware(
     try {
       const body = await req.json();
       console.log('[Controls API] Creating control with data:', body);
-      
+
       const validatedData = CreateControlSchema.parse(body);
-      
+
       console.log('[Controls API] Creating control with processed data');
 
       const control = await db.client.control.create({
@@ -149,23 +167,26 @@ export const POST = withApiMiddleware(
           category: validatedData.category || 'OPERATIONAL',
           automationLevel: validatedData.automationLevel || 'MANUAL',
           organization: {
-            connect: { id: user.organizationId }
+            connect: { id: user.organizationId },
           },
           assignedUser: {
-            connect: { id: user.id }
+            connect: { id: user.id },
           },
           creator: {
-            connect: { id: user.id }
-          }
-        }
+            connect: { id: user.id },
+          },
+        },
       });
 
       console.log('[Controls API] Control created successfully:', control.id);
 
-      return NextResponse.json({
-        success: true,
-        data: control
-      }, { status: 201 });
+      return NextResponse.json(
+        {
+          success: true,
+          data: control,
+        },
+        { status: 201 }
+      );
     } catch (error) {
       if (error instanceof z.ZodError) {
         console.error('[Controls API] Validation error:', error.errors);
@@ -174,39 +195,43 @@ export const POST = withApiMiddleware(
           { status: 400 }
         );
       }
-      
+
       // Check for foreign key constraint errors
       if (error instanceof Error && error.message.includes('organizationId_fkey')) {
         console.error('[Controls API] Organization not found:', user.organizationId);
         return NextResponse.json(
-          { 
-            success: false, 
+          {
+            success: false,
             error: 'Organization not found',
-            details: 'The organization does not exist in the database. Please ensure your organization is properly set up.',
-            hint: process.env.NODE_ENV === 'development' ? 'In development mode, you may need to seed the database with test organizations.' : undefined
+            details:
+              'The organization does not exist in the database. Please ensure your organization is properly set up.',
+            hint:
+              process.env.NODE_ENV === 'development'
+                ? 'In development mode, you may need to seed the database with test organizations.'
+                : undefined,
           },
           { status: 404 }
         );
       }
-      
+
       console.error('[Controls API] Create control error:', {
         error,
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined,
-        user: { id: user.id, organizationId: user.organizationId }
+        user: { id: user.id, organizationId: user.organizationId },
       });
-      
+
       return NextResponse.json(
-        { 
-          success: false, 
+        {
+          success: false,
           error: 'Failed to create control',
-          details: error instanceof Error ? error.message : 'Unknown error'
+          details: error instanceof Error ? error.message : 'Unknown error',
         },
         { status: 500 }
       );
     }
   },
-  { 
-    requireAuth: true
+  {
+    requireAuth: true,
   }
 );

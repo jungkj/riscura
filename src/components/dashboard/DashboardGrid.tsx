@@ -109,8 +109,8 @@ export function DashboardGrid({
     const isExpanded = expandedWidget === widget.id;
     const isRefreshing = refreshingWidget === widget.id;
 
-    return (
-      <motion.div
+  return (
+    <motion.div
         key={widget.id}
         layout
         initial={{ opacity: 0, scale: 0.9 }}
@@ -118,64 +118,63 @@ export function DashboardGrid({
         exit={{ opacity: 0, scale: 0.9 }}
         className={`${isExpanded ? 'col-span-full row-span-2' : ''}`}
       >
-        <DaisyCard className="h-full bg-[#FAFAFA] border-[#D8C3A5] hover:shadow-lg transition-shadow font-inter">
-          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <DaisyCardTitle className="text-base font-semibold text-[#191919] font-inter">
-              {widget.title}
+        <DaisyCard className="h-full bg-[#FAFAFA] border-[#D8C3A5] hover:shadow-lg transition-shadow font-inter" >
+  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+</DaisyCard>
+            <DaisyCardTitle className="text-base font-semibold text-[#191919] font-inter" >
+  {widget.title}
+</DaisyCardTitle>
             </DaisyCardTitle>
             <div className="flex items-center space-x-1">
-              <DaisyTooltip>
-                <DaisyTooltipTrigger asChild>
+              <DaisyTooltip />
+                <DaisyTooltipTrigger asChild />
                   <DaisyButton
                     variant="ghost"
                     size="sm"
                     onClick={() => handleWidgetRefresh(widget.id)}
                     disabled={isRefreshing}
-                    className="bg-transparent text-[#A8A8A8] hover:text-[#191919] hover:bg-[#D8C3A5]/20 font-inter"
-                  >
+                    className="bg-transparent text-[#A8A8A8] hover:text-[#191919] hover:bg-[#D8C3A5]/20 font-inter" />
                     <RefreshCw className={`w-3 h-3 ${isRefreshing ? 'animate-spin' : ''}`} />
-                  </DaisyButton>
+                  </DaisyTooltip>
                 </DaisyTooltipTrigger>
                 <DaisyTooltipContent>Refresh Widget</DaisyTooltipContent>
               </DaisyTooltip>
 
-              <DaisyTooltip>
-                <DaisyTooltipTrigger asChild>
+              <DaisyTooltip />
+                <DaisyTooltipTrigger asChild />
                   <DaisyButton
                     variant="ghost"
                     size="sm"
                     onClick={() => setExpandedWidget(isExpanded ? null : widget.id)}
-                    className="bg-transparent text-[#A8A8A8] hover:text-[#191919] hover:bg-[#D8C3A5]/20 font-inter"
-                  >
+                    className="bg-transparent text-[#A8A8A8] hover:text-[#191919] hover:bg-[#D8C3A5]/20 font-inter" />
                     {isExpanded ? <Minimize className="w-3 h-3" /> : <Maximize className="w-3 h-3" />}
-                  </DaisyButton>
+                  </DaisyTooltip>
                 </DaisyTooltipTrigger>
                 <DaisyTooltipContent>{isExpanded ? 'Minimize' : 'Expand'}</DaisyTooltipContent>
               </DaisyTooltip>
 
-              <DaisyDropdownMenu>
-                <DaisyDropdownMenuTrigger asChild>
+              <DaisyDropdownMenu />
+                <DaisyDropdownMenuTrigger asChild />
                   <DaisyButton 
                     variant="ghost" 
                     size="sm"
-                    className="bg-transparent text-[#A8A8A8] hover:text-[#191919] hover:bg-[#D8C3A5]/20 font-inter"
-                  >
-                    <MoreHorizontal className="w-3 h-3" />
+                    className="bg-transparent text-[#A8A8A8] hover:text-[#191919] hover:bg-[#D8C3A5]/20 font-inter" >
+  <MoreHorizontal className="w-3 h-3" />
+</DaisyDropdownMenu>
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent align="end" className="bg-[#FAFAFA] border-[#D8C3A5]">
-                  <DaisyDropdownMenuItem className="text-[#191919] hover:bg-[#D8C3A5]/20 font-inter">
+                <DaisyDropdownMenuContent align="end" className="bg-[#FAFAFA] border-[#D8C3A5]" />
+                  <DaisyDropdownMenuItem className="text-[#191919] hover:bg-[#D8C3A5]/20 font-inter" />
                     <Download className="w-3 h-3 mr-2" />
                     Export Data
-                  </DaisyDropdownMenuItem>
-                  <DaisyDropdownMenuItem className="text-[#191919] hover:bg-[#D8C3A5]/20 font-inter">
+                  </DaisyDropdownMenuContent>
+                  <DaisyDropdownMenuItem className="text-[#191919] hover:bg-[#D8C3A5]/20 font-inter" />
                     <Settings className="w-3 h-3 mr-2" />
                     Configure
                   </DaisyDropdownMenuItem>
                   <DaisyDropdownMenuItem 
                     onClick={() => onWidgetToggle(widget.id)}
-                    className="text-[#191919] hover:bg-[#D8C3A5]/20 font-inter"
-                  >
+                    className="text-[#191919] hover:bg-[#D8C3A5]/20 font-inter" />
                     <Eye className="w-3 h-3 mr-2" />
                     Hide Widget
                   </DaisyDropdownMenuItem>
@@ -184,9 +183,10 @@ export function DashboardGrid({
             </div>
           
           
-          <DaisyCardContent className="p-4">
-            {renderWidgetContent(widget, isExpanded, data)}
-          </DaisyCardBody>
+          <DaisyCardContent className="p-4" >
+  {renderWidgetContent(widget, isExpanded, data)}
+</DaisyCardContent>
+          </DaisyCardContent>
         </DaisyCard>
       </motion.div>
     );
@@ -219,14 +219,16 @@ export function DashboardGrid({
           <h2 className="text-lg font-semibold text-[#191919] font-inter">
             Dashboard Widgets
           </h2>
-          <DaisyBadge variant="outline" className="text-xs border-[#D8C3A5] text-[#191919] font-inter">
-            {widgets.filter(w => w.visible).length} of {widgets.length} visible
+          <DaisyBadge variant="outline" className="text-xs border-[#D8C3A5] text-[#191919] font-inter" >
+  {widgets.filter(w => w.visible).length} of {widgets.length} visible
+</DaisyBadge>
           </DaisyBadge>
         </div>
 
         <div className="flex items-center space-x-2">
-          <DaisyButton variant="outline" size="sm" onClick={onLayoutReset} className="border-[#D8C3A5] text-[#191919] hover:bg-[#D8C3A5]/20 font-inter">
-            Reset Layout
+          <DaisyButton variant="outline" size="sm" onClick={onLayoutReset} className="border-[#D8C3A5] text-[#191919] hover:bg-[#D8C3A5]/20 font-inter" >
+  Reset Layout
+</DaisyButton>
           </DaisyButton>
         </div>
       </div>
@@ -254,7 +256,9 @@ export function DashboardGrid({
 function MetricsWidget({ data, expanded }: { data: any; expanded: boolean }) {
   const metrics = [
     { label: 'Total Risks', value: data.totalRisks, trend: '+2.3%', positive: false, icon: <BarChart3 className="w-4 h-4" /> },
-    { label: 'High Priority', value: data.highPriorityRisks, trend: '-5.1%', positive: true, icon: <DaisyAlertTriangle className="w-4 h-4" /> },
+    { label: 'High Priority', value: data.highPriorityRisks, trend: '-5.1%', positive: true, icon: <DaisyAlertTriangle className="w-4 h-4" >
+  },
+</DaisyAlertTriangle>
     { label: 'Compliance Score', value: `${data.complianceScore}%`, trend: '+1.2%', positive: true, icon: <CheckCircle className="w-4 h-4" /> },
     { label: 'Active Controls', value: data.controlsActive, trend: '+3.4%', positive: true, icon: <Shield className="w-4 h-4" /> },
   ];
@@ -298,8 +302,9 @@ function RiskHeatmapWidget({ risks, expanded }: { risks: Risk[]; expanded: boole
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-medium text-[#A8A8A8] font-inter">Risk Trends</h3>
-        <DaisyBadge variant="outline" className="text-xs border-[#D8C3A5] text-[#191919] font-inter">
-          {risks.length} Total Risks
+        <DaisyBadge variant="outline" className="text-xs border-[#D8C3A5] text-[#191919] font-inter" >
+  {risks.length} Total Risks
+</DaisyBadge>
         </DaisyBadge>
       </div>
 
@@ -326,15 +331,16 @@ function AIInsightsWidget({ enabled, expanded }: { enabled: boolean; expanded: b
   ];
 
   if (!enabled) {
-    return (
-      <div className="flex items-center justify-center h-32 text-[#A8A8A8]">
+
+  return (
+    <div className="flex items-center justify-center h-32 text-[#A8A8A8]">
         <div className="text-center space-y-2">
           <Brain className="w-8 h-8 mx-auto opacity-50" />
           <p className="text-sm font-inter">AI Insights Disabled</p>
         </div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-4">
@@ -343,8 +349,9 @@ function AIInsightsWidget({ enabled, expanded }: { enabled: boolean; expanded: b
           <Brain className="w-4 h-4 text-[#191919]" />
           <h3 className="text-sm font-medium text-[#A8A8A8] font-inter">AI Insights</h3>
         </div>
-        <DaisyBadge className="bg-[#191919] text-[#FAFAFA] text-xs font-inter">
-          Live
+        <DaisyBadge className="bg-[#191919] text-[#FAFAFA] text-xs font-inter" >
+  Live
+</DaisyBadge>
         </DaisyBadge>
       </div>
 
@@ -364,9 +371,9 @@ function AIInsightsWidget({ enabled, expanded }: { enabled: boolean; expanded: b
                 <div className="flex items-center space-x-2">
                   <DaisyBadge 
                     variant={insight.severity === 'high' ? 'destructive' : insight.severity === 'medium' ? 'default' : 'secondary'}
-                    className="text-xs font-inter"
-                  >
-                    {insight.severity}
+                    className="text-xs font-inter" >
+  {insight.severity}
+</DaisyBadge>
                   </DaisyBadge>
                   <span className="text-xs text-[#A8A8A8] font-inter">
                     {insight.confidence}% confidence
@@ -389,8 +396,9 @@ function ComplianceWidget({ expanded }: { expanded: boolean }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-medium text-[#A8A8A8] font-inter">Compliance Status</h3>
-        <DaisyBadge variant="outline" className="text-xs border-[#D8C3A5] text-[#191919] font-inter">
-          94% Average
+        <DaisyBadge variant="outline" className="text-xs border-[#D8C3A5] text-[#191919] font-inter" >
+  94% Average
+</DaisyBadge>
         </DaisyBadge>
       </div>
 
@@ -470,8 +478,9 @@ function PredictiveWidget({ expanded }: { expanded: boolean }) {
           <TrendingUp className="w-4 h-4 text-[#191919]" />
           <h3 className="text-sm font-medium text-[#A8A8A8] font-inter">Predictive Analytics</h3>
         </div>
-        <DaisyBadge variant="outline" className="text-xs border-[#D8C3A5] text-[#191919] font-inter">
-          AI Powered
+        <DaisyBadge variant="outline" className="text-xs border-[#D8C3A5] text-[#191919] font-inter" >
+  AI Powered
+</DaisyBadge>
         </DaisyBadge>
       </div>
 

@@ -7,15 +7,15 @@ import { useRouter } from 'next/navigation';
 
 // Mock dependencies
 jest.mock('next/navigation', () => ({
-  useRouter: jest.fn()
+  useRouter: jest.fn(),
 }));
 
 jest.mock('@/lib/api/rcsa-client', () => ({
   rcsaApiClient: {
     getTestScripts: jest.fn(),
     generateTestScript: jest.fn(),
-    createTestScript: jest.fn()
-  }
+    createTestScript: jest.fn(),
+  },
 }));
 
 jest.mock('@/context/RCSAContext', () => ({
@@ -23,8 +23,8 @@ jest.mock('@/context/RCSAContext', () => ({
   useRCSA: () => ({
     risks: mockRisks,
     controls: mockControls,
-    refreshData: jest.fn()
-  })
+    refreshData: jest.fn(),
+  }),
 }));
 
 // Mock data
@@ -41,8 +41,8 @@ const mockRisks = [
     status: 'ACTIVE',
     organizationId: 'org1',
     createdAt: new Date(),
-    updatedAt: new Date()
-  }
+    updatedAt: new Date(),
+  },
 ];
 
 const mockControls = [
@@ -60,15 +60,17 @@ const mockControls = [
     createdAt: new Date(),
     updatedAt: new Date(),
     tags: [] as string[],
-    risks: [{
-      id: 'mapping1',
-      riskId: '1',
-      controlId: '1',
-      effectiveness: 0.85,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }]
-  }
+    risks: [
+      {
+        id: 'mapping1',
+        riskId: '1',
+        controlId: '1',
+        effectiveness: 0.85,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ],
+  },
 ];
 
 const mockTestScripts = [
@@ -85,15 +87,17 @@ const mockTestScripts = [
     organizationId: 'org1',
     createdAt: new Date(),
     updatedAt: new Date(),
-    controls: [{
-      id: 'mapping1',
-      controlId: '1',
-      testScriptId: '1',
-      isMandatory: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }]
-  }
+    controls: [
+      {
+        id: 'mapping1',
+        controlId: '1',
+        testScriptId: '1',
+        isMandatory: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ],
+  },
 ];
 
 describe('NotionRCSASpreadsheet', () => {
@@ -104,7 +108,7 @@ describe('NotionRCSASpreadsheet', () => {
     (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
     (rcsaApiClient.getTestScripts as jest.Mock).mockResolvedValue({
       success: true,
-      data: { data: mockTestScripts }
+      data: { data: mockTestScripts },
     });
   });
 
@@ -148,7 +152,7 @@ describe('NotionRCSASpreadsheet', () => {
     await waitFor(() => {
       const expandButton = screen.getAllByRole('button')[0];
       fireEvent.click(expandButton);
-      
+
       // Verify expansion logic
       expect(screen.getByText('Access Control')).toBeVisible();
     });
@@ -164,7 +168,7 @@ describe('NotionRCSASpreadsheet', () => {
     await waitFor(() => {
       const viewButtons = screen.getAllByRole('button', { name: /view/i });
       fireEvent.click(viewButtons[0]);
-      
+
       expect(mockPush).toHaveBeenCalledWith('/risks/1');
     });
   });
@@ -179,7 +183,7 @@ describe('NotionRCSASpreadsheet', () => {
     await waitFor(() => {
       const generateButton = screen.getByText('Generate Control');
       fireEvent.click(generateButton);
-      
+
       // AI Generator modal should be visible
       expect(screen.getByText(/AI Control Generator/i)).toBeInTheDocument();
     });
@@ -197,16 +201,16 @@ describe('NotionRCSASpreadsheet', () => {
           testType: 'MANUAL',
           frequency: 'MONTHLY',
           automationCapable: false,
-          tags: ['ai-generated']
+          tags: ['ai-generated'],
         },
         confidence: 0.85,
-        reasoning: 'Generated based on control type'
-      }
+        reasoning: 'Generated based on control type',
+      },
     });
 
     (rcsaApiClient.createTestScript as jest.Mock).mockResolvedValue({
       success: true,
-      data: { id: '2', ...mockTestScripts[0] }
+      data: { id: '2', ...mockTestScripts[0] },
     });
 
     render(
@@ -223,7 +227,7 @@ describe('NotionRCSASpreadsheet', () => {
     await waitFor(() => {
       expect(rcsaApiClient.generateTestScript).toHaveBeenCalledWith({
         controlId: '1',
-        controlDescription: 'Implement strong access controls'
+        controlDescription: 'Implement strong access controls',
       });
     });
   });

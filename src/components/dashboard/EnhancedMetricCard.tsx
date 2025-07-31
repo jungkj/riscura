@@ -198,8 +198,9 @@ export const EnhancedMetricCard: React.FC<EnhancedMetricCardProps> = ({
         {/* Accent border */}
         <div className={cn("absolute top-0 left-0 right-0 h-1", styles.accent)} />
         
-        <DaisyCardContent className={cn("relative", spacingClasses.padding.lg)}>
-          {isLoading ? (
+        <DaisyCardContent className={cn("relative", spacingClasses.padding.lg)} >
+  {isLoading ? (
+</DaisyCard>
             <LoadingSkeleton />
           ) : (
             <>
@@ -211,9 +212,9 @@ export const EnhancedMetricCard: React.FC<EnhancedMetricCardProps> = ({
                   {badge && (
                     <DaisyBadge 
                       variant={badge.variant === 'danger' ? 'destructive' : badge.variant === 'success' ? 'default' : badge.variant === 'warning' ? 'secondary' : 'default'} 
-                      className="text-xs font-medium"
-                    >
-                      {badge.text}
+                      className="text-xs font-medium" >
+  {badge.text}
+</DaisyBadge>
                     </DaisyBadge>
                   )}
                 </div>
@@ -295,7 +296,7 @@ export const EnhancedMetricCard: React.FC<EnhancedMetricCardProps> = ({
               </div>
             </>
           )}
-        </DaisyCardBody>
+        </DaisyProgress>
 
         {/* Hover effect overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-white/0 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />

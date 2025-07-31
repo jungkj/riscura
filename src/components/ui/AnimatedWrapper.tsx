@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import { motion, Variants } from 'framer-motion';
 
-export type AnimationType = 
+export type AnimationType =
   | 'fade'
   | 'slide-up'
   | 'slide-down'
@@ -103,14 +103,14 @@ const getAnimationVariants = (
     case 'bounce':
       return {
         hidden: { opacity: 0, y: -10 },
-        visible: { 
-          opacity: 1, 
-          y: 0, 
-          transition: { 
-            ...baseTransition, 
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: {
+            ...baseTransition,
             type: 'spring',
             bounce: 0.4,
-          } 
+          },
         },
       };
 
@@ -174,7 +174,8 @@ export const AnimatedWrapper: React.FC<AnimatedWrapperProps> = ({
   }
 
   // Use custom variants if provided, otherwise generate from animationType
-  const variants = customVariants || getAnimationVariants(animationType, distance, duration, easing);
+  const variants =
+    customVariants || getAnimationVariants(animationType, distance, duration, easing);
 
   // Configure motion props
   const motionProps: any = {

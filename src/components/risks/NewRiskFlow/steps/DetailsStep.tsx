@@ -66,7 +66,7 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
         className="grid grid-cols-2 gap-4"
       >
         <div>
-          <DaisyLabel htmlFor="owner">
+          <DaisyLabel htmlFor="owner" />
             <User2 className="w-4 h-4 inline mr-1" />
             Risk Owner
           </DaisyLabel>
@@ -82,8 +82,9 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
           />
           {errors.owner && (
             <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
-              <DaisyAlertCircle className="w-3 h-3" />
-              {errors.owner}
+              <DaisyAlertCircle className="w-3 h-3" >
+  {errors.owner}
+</DaisyInput>
             </p>
           )}
         </div>
@@ -94,19 +95,18 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
             value={riskData.status}
             onValueChange={(value) => updateRiskData({ status: value as RiskStatus })}
           >
-            <DaisySelectTrigger className="mt-1">
-              <DaisySelectValue />
-            </SelectTrigger>
-            <DaisySelectContent>
+            <DaisySelectTrigger className="mt-1" />
+              <DaisySelectValue /></DaisySelect>
+            <DaisySelectContent />
               {statuses.map((status) => (
-                <DaisySelectItem key={status.value} value={status.value}>
+                <DaisySelectItem key={status.value} value={status.value} />
                   <span className="flex items-center gap-2">
                     <span>{status.icon}</span>
                     {status.label}
                   </span>
-                </SelectItem>
+                </DaisySelectContent>
               ))}
-            </SelectContent>
+            </DaisySelectContent>
           </DaisySelect>
         </div>
       </motion.div>
@@ -116,7 +116,7 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <DaisyLabel htmlFor="treatment">
+        <DaisyLabel htmlFor="treatment" />
           <Shield className="w-4 h-4 inline mr-1" />
           Treatment Strategy
         </DaisyLabel>
@@ -156,8 +156,9 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
         </div>
         {errors.treatmentStrategy && (
           <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
-            <DaisyAlertCircle className="w-3 h-3" />
-            {errors.treatmentStrategy}
+            <DaisyAlertCircle className="w-3 h-3" >
+  {errors.treatmentStrategy}
+</DaisyAlertCircle>
           </p>
         )}
       </motion.div>
@@ -185,10 +186,10 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
         className="grid grid-cols-2 gap-4"
       >
         <div>
-          <DaisyLabel htmlFor="dateIdentified">
+          <DaisyLabel htmlFor="dateIdentified" />
             <DaisyCalendar className="w-4 h-4 inline mr-1" />
             Date Identified
-          </DaisyLabel>
+          </DaisyTextarea>
           <DaisyInput
             id="dateIdentified"
             type="date"
@@ -199,10 +200,10 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
         </div>
 
         <div>
-          <DaisyLabel htmlFor="nextReview">
+          <DaisyLabel htmlFor="nextReview" />
             <DaisyCalendar className="w-4 h-4 inline mr-1" />
             Next Review Date
-          </DaisyLabel>
+          </DaisyInput>
           <DaisyInput
             id="nextReview"
             type="date"
@@ -219,12 +220,14 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
         transition={{ delay: 0.5 }}
         className="flex justify-between pt-4"
       >
-        <DaisyButton onClick={onBack} variant="outline" size="lg">
-          <ChevronLeft className="w-4 h-4 mr-2" />
+        <DaisyButton onClick={onBack} variant="outline" size="lg" >
+  <ChevronLeft className="w-4 h-4 mr-2" />
+</DaisyInput>
           Back
         </DaisyButton>
-        <DaisyButton onClick={handleNext} size="lg" className="min-w-[120px]">
-          Next
+        <DaisyButton onClick={handleNext} size="lg" className="min-w-[120px]" >
+  Next
+</DaisyButton>
         </DaisyButton>
       </motion.div>
     </div>

@@ -4,23 +4,20 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
   try {
     return NextResponse.json(
-      { 
+      {
         error: 'List questionnaires not implemented',
         data: [],
         meta: {
           total: 0,
           page: 1,
-          limit: 20
-        }
+          limit: 20,
+        },
       },
       { status: 501 }
     );
   } catch (error) {
     console.error('Get questionnaires error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -28,17 +25,14 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     return NextResponse.json(
-      { 
-        error: 'Create questionnaire not implemented'
+      {
+        error: 'Create questionnaire not implemented',
       },
       { status: 501 }
     );
   } catch (error) {
     console.error('Create questionnaire error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -46,17 +40,14 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     return NextResponse.json(
-      { 
-        error: 'Update questionnaire not implemented'
+      {
+        error: 'Update questionnaire not implemented',
       },
       { status: 501 }
     );
   } catch (error) {
     console.error('Update questionnaire error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -64,16 +55,13 @@ export async function PUT(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     return NextResponse.json(
-      { 
-        error: 'Delete questionnaire not implemented'
+      {
+        error: 'Delete questionnaire not implemented',
       },
       { status: 501 }
     );
   } catch (error) {
     console.error('Delete questionnaire error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-} 
+}

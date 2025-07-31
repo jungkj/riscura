@@ -1,7 +1,12 @@
 import jsPDF from 'jspdf';
 import ExcelJS from 'exceljs';
 import html2canvas from 'html2canvas';
-import { ReportData, ReportWidget, ExportFormat, ExportOptions as BaseExportOptions } from '@/types/reporting';
+import {
+  ReportData,
+  ReportWidget,
+  ExportFormat,
+  ExportOptions as BaseExportOptions,
+} from '@/types/reporting';
 
 export interface PDFExportOptions extends BaseExportOptions {
   title?: string;
@@ -20,7 +25,6 @@ export interface ChartExportData {
 }
 
 export class ReportExporter {
-
   // Export report to PDF
   async exportToPDF(
     reportData: any,
@@ -99,7 +103,7 @@ export class ReportExporter {
 
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
-    
+
     const summaryText = [
       `Total Widgets: ${summary.totalWidgets}`,
       `Data Points: ${summary.dataPoints}`,
@@ -191,7 +195,8 @@ export class ReportExporter {
 
     // Data rows
     pdf.setFont('helvetica', 'normal');
-    for (const row of data.slice(0, 20)) { // Limit to 20 rows
+    for (const row of data.slice(0, 20)) {
+      // Limit to 20 rows
       x = 20;
       for (const key of Object.keys(row)) {
         const value = String(row[key] || '');
@@ -235,7 +240,7 @@ export class ReportExporter {
   // Add watermark
   private addWatermark(pdf: jsPDF, watermark: string, pageWidth: number, pageHeight: number): void {
     const pageCount = pdf.getNumberOfPages();
-    
+
     for (let i = 1; i <= pageCount; i++) {
       pdf.setPage(i);
       pdf.setFontSize(50);
@@ -245,7 +250,7 @@ export class ReportExporter {
         angle: 45,
       });
     }
-    
+
     // Reset text color
     pdf.setTextColor(0, 0, 0);
   }
@@ -253,7 +258,7 @@ export class ReportExporter {
   // Add footer
   private addFooter(pdf: jsPDF, pageWidth: number, pageHeight: number): void {
     const pageCount = pdf.getNumberOfPages();
-    
+
     for (let i = 1; i <= pageCount; i++) {
       pdf.setPage(i);
       pdf.setFontSize(8);
@@ -263,22 +268,19 @@ export class ReportExporter {
   }
 
   // Export report to Excel using ExcelJS
-  async exportToExcel(
-    reportData: ReportData,
-    options: BaseExportOptions = {}
-  ): Promise<Buffer> {
+  async exportToExcel(reportData: ReportData, options: BaseExportOptions = {}): Promise<Buffer> {
     try {
       const workbook = new ExcelJS.Workbook();
-      
+
       // Set workbook properties
       workbook.creator = 'Riscura RCSA Platform';
       workbook.lastModifiedBy = 'Riscura';
       workbook.created = new Date();
       workbook.modified = new Date();
-      
+
       // Create summary sheet
       const summarySheet = workbook.addWorksheet('Summary');
-      
+
       // Add summary data
       const summaryData = [
         ['Report Title', reportData.title],
@@ -287,32 +289,32 @@ export class ReportExporter {
         ['Report Type', reportData.type],
         ['Organization', reportData.organizationName || 'N/A'],
       ];
-      
+
       summarySheet.addRows(summaryData);
-      
+
       // Style the summary sheet
       summarySheet.getColumn(1).width = 20;
       summarySheet.getColumn(2).width = 30;
       summarySheet.getRow(1).font = { bold: true, size: 14 };
-      
+
       // Process each widget
       reportData.widgets.forEach((widget, index) => {
         if (!widget.data || !Array.isArray(widget.data)) return;
-        
+
         const sheetName = widget.title?.substring(0, 31) || `Widget_${index + 1}`;
         const worksheet = workbook.addWorksheet(sheetName);
-        
+
         // Add widget title
         worksheet.addRow([widget.title || `Widget ${index + 1}`]);
         worksheet.getRow(1).font = { bold: true, size: 12 };
         worksheet.addRow([]); // Empty row
-        
+
         // Add data based on widget type
         if (widget.type === 'table' && widget.data.length > 0) {
           // Add headers
           const headers = Object.keys(widget.data[0]);
           worksheet.addRow(headers);
-          
+
           // Style headers
           const headerRow = worksheet.lastRow;
           if (headerRow) {
@@ -320,32 +322,31 @@ export class ReportExporter {
             headerRow.fill = {
               type: 'pattern',
               pattern: 'solid',
-              fgColor: { argb: 'FFE0E0E0' }
+              fgColor: { argb: 'FFE0E0E0' },
             };
           }
-          
+
           // Add data rows
-          widget.data.forEach(row => {
-            const values = headers.map(header => row[header]);
+          widget.data.forEach((row) => {
+            const values = headers.map((header) => row[header]);
             worksheet.addRow(values);
           });
-          
+
           // Auto-fit columns
           headers.forEach((_, colIndex) => {
             worksheet.getColumn(colIndex + 1).width = 15;
           });
-          
         } else if (widget.type === 'chart') {
           // For charts, add the underlying data
           worksheet.addRow(['Chart Data']);
           worksheet.getRow(3).font = { bold: true };
-          
+
           if (widget.data.length > 0) {
             const headers = Object.keys(widget.data[0]);
             worksheet.addRow(headers);
-            
-            widget.data.forEach(row => {
-              const values = headers.map(header => row[header]);
+
+            widget.data.forEach((row) => {
+              const values = headers.map((header) => row[header]);
               worksheet.addRow(values);
             });
           }
@@ -353,30 +354,28 @@ export class ReportExporter {
           // For KPIs, add key metrics
           worksheet.addRow(['KPI Metrics']);
           worksheet.getRow(3).font = { bold: true };
-          
+
           if (widget.data.length > 0) {
-            widget.data.forEach(kpi => {
+            widget.data.forEach((kpi) => {
               worksheet.addRow([kpi.label || 'Metric', kpi.value || 0]);
             });
           }
         }
       });
-      
+
       // Generate buffer
       const buffer = await workbook.xlsx.writeBuffer();
       return Buffer.from(buffer);
-      
     } catch (error) {
       console.error('Error exporting to Excel:', error);
-      throw new Error(`Excel export failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Excel export failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
   // Export report to CSV
-  async exportToCSV(
-    reportData: any,
-    options: PDFExportOptions = {}
-  ): Promise<Buffer> {
+  async exportToCSV(reportData: any, options: PDFExportOptions = {}): Promise<Buffer> {
     let csvContent = '';
 
     // Add title and metadata
@@ -398,14 +397,14 @@ export class ReportExporter {
       for (const widget of reportData.widgets) {
         if (widget.data && widget.data.length > 0) {
           csvContent += `WIDGET: ${widget.id}\n`;
-          
+
           // Headers
           const headers = Object.keys(widget.data[0]);
           csvContent += headers.join(',') + '\n';
-          
+
           // Data rows
           for (const row of widget.data) {
-            const values = headers.map(header => {
+            const values = headers.map((header) => {
               const value = row[header];
               // Escape commas and quotes in CSV
               if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
@@ -424,12 +423,15 @@ export class ReportExporter {
   }
 
   // Convert HTML element to image
-  async htmlToImage(element: HTMLElement, options: {
-    format?: 'png' | 'jpeg';
-    quality?: number;
-    backgroundColor?: string;
-    scale?: number;
-  } = {}): Promise<string> {
+  async htmlToImage(
+    element: HTMLElement,
+    options: {
+      format?: 'png' | 'jpeg';
+      quality?: number;
+      backgroundColor?: string;
+      scale?: number;
+    } = {}
+  ): Promise<string> {
     const canvas = await html2canvas(element, {
       backgroundColor: options.backgroundColor || '#ffffff',
       scale: options.scale || 2,
@@ -484,4 +486,4 @@ export class ReportExporter {
   }
 }
 
-export const reportExporter = new ReportExporter(); 
+export const reportExporter = new ReportExporter();

@@ -1,12 +1,14 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const testToken = Buffer.from(JSON.stringify({
-    test: true,
-    timestamp: new Date().toISOString(),
-    expires: new Date(Date.now() + 60000).toISOString(), // 1 minute
-  })).toString('base64');
-  
+  const testToken = Buffer.from(
+    JSON.stringify({
+      test: true,
+      timestamp: new Date().toISOString(),
+      expires: new Date(Date.now() + 60000).toISOString(), // 1 minute
+    })
+  ).toString('base64');
+
   const response = NextResponse.json({
     message: 'Test cookie set',
     cookieOptions: {
@@ -19,7 +21,7 @@ export async function GET() {
     environment: process.env.NODE_ENV,
     domain: process.env.COOKIE_DOMAIN || 'not set',
   });
-  
+
   // Set the test cookie
   response.cookies.set('test-session-cookie', testToken, {
     httpOnly: true,
@@ -28,6 +30,6 @@ export async function GET() {
     maxAge: 60, // 1 minute
     path: '/',
   });
-  
+
   return response;
 }

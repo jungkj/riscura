@@ -1,13 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence, useMotionValue, useTransform, useDragControls } from 'framer-motion';
+import {
+  motion,
+  AnimatePresence,
+  useMotionValue,
+  useTransform,
+  useDragControls,
+} from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { 
-  variants, 
-  interactions, 
-  feedbackAnimations, 
-  timings, 
+import {
+  variants,
+  interactions,
+  feedbackAnimations,
+  timings,
   easings,
-  animationUtils 
+  animationUtils,
 } from '@/lib/design-system/micro-interactions';
 
 // Enhanced Interactive Button with Micro-Interactions
@@ -32,14 +38,14 @@ export const EnhancedInteractiveButton: React.FC<EnhancedInteractiveButtonProps>
   variant = 'primary',
   size = 'md',
   disabled = false,
-  className = ''
+  className = '',
 }) => {
   const [isPressed, setIsPressed] = useState(false);
   const [feedbackState, setFeedbackState] = useState<'idle' | 'success' | 'error'>('idle');
 
   const handleClick = async () => {
     if (disabled || loading) return;
-    
+
     setIsPressed(true);
     try {
       if (onClick) {
@@ -59,13 +65,13 @@ export const EnhancedInteractiveButton: React.FC<EnhancedInteractiveButtonProps>
     primary: 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700',
     secondary: 'bg-slate-600 text-white border-slate-600 hover:bg-slate-700',
     outline: 'bg-transparent text-blue-600 border-blue-600 hover:bg-blue-50',
-    ghost: 'bg-transparent text-slate-600 border-transparent hover:bg-slate-100'
+    ghost: 'bg-transparent text-slate-600 border-transparent hover:bg-slate-100',
   };
 
   const sizeClasses = {
     sm: 'px-3 py-1.5 text-sm',
     md: 'px-4 py-2 text-base',
-    lg: 'px-6 py-3 text-lg'
+    lg: 'px-6 py-3 text-lg',
   };
 
   return (
@@ -78,13 +84,16 @@ export const EnhancedInteractiveButton: React.FC<EnhancedInteractiveButtonProps>
       )}
       variants={variants.button}
       initial="initial"
-      whileHover={!disabled && !loading ? "hover" : undefined}
-      whileTap={!disabled && !loading ? "tap" : undefined}
+      whileHover={!disabled && !loading ? 'hover' : undefined}
+      whileTap={!disabled && !loading ? 'tap' : undefined}
       animate={
-        loading ? "loading" : 
-        feedbackState === 'success' ? "success" :
-        feedbackState === 'error' ? "error" : 
-        "initial"
+        loading
+          ? 'loading'
+          : feedbackState === 'success'
+            ? 'success'
+            : feedbackState === 'error'
+              ? 'error'
+              : 'initial'
       }
       onClick={handleClick}
       disabled={disabled || loading}
@@ -97,7 +106,7 @@ export const EnhancedInteractiveButton: React.FC<EnhancedInteractiveButtonProps>
             initial={{ scale: 0, opacity: 0.3 }}
             animate={{ scale: 4, opacity: 0 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
           />
         )}
       </AnimatePresence>
@@ -114,7 +123,7 @@ export const EnhancedInteractiveButton: React.FC<EnhancedInteractiveButtonProps>
             <motion.div
               className="w-4 h-4 border-2 border-current border-t-transparent rounded-full"
               animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
             />
           </motion.div>
         )}
@@ -122,7 +131,7 @@ export const EnhancedInteractiveButton: React.FC<EnhancedInteractiveButtonProps>
 
       {/* Button Content */}
       <motion.span
-        className={cn("relative flex items-center gap-2", loading && "opacity-0")}
+        className={cn('relative flex items-center gap-2', loading && 'opacity-0')}
         layout
       >
         {children}
@@ -145,13 +154,13 @@ export const EnhancedDraggableCard: React.FC<EnhancedDraggableCardProps> = ({
   onDragEnd,
   dragConstraints,
   className = '',
-  disabled = false
+  disabled = false,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const dragControls = useDragControls();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  
+
   const rotateX = useTransform(y, [-100, 100], [5, -5]);
   const rotateY = useTransform(x, [-100, 100], [-5, 5]);
 
@@ -170,8 +179,8 @@ export const EnhancedDraggableCard: React.FC<EnhancedDraggableCardProps> = ({
       dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
       style={{ x, y, rotateX, rotateY }}
       variants={variants.draggable}
-      animate={isDragging ? "drag" : "initial"}
-      whileHover={!disabled && !isDragging ? "hover" : undefined}
+      animate={isDragging ? 'drag' : 'initial'}
+      whileHover={!disabled && !isDragging ? 'hover' : undefined}
       onDragStart={() => setIsDragging(true)}
       onDragEnd={(event, info) => {
         setIsDragging(false);
@@ -181,7 +190,7 @@ export const EnhancedDraggableCard: React.FC<EnhancedDraggableCardProps> = ({
     >
       {/* Drag Handle Indicator */}
       <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-slate-300 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-      
+
       {children}
     </motion.div>
   );
@@ -201,7 +210,7 @@ export const EnhancedSkeleton: React.FC<EnhancedSkeletonProps> = ({
   lines = 3,
   avatar = false,
   height = 'h-4',
-  animated = true
+  animated = true,
 }) => {
   return (
     <div className={cn('animate-pulse', className)}>
@@ -212,18 +221,18 @@ export const EnhancedSkeleton: React.FC<EnhancedSkeletonProps> = ({
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent"
                 animate={{
-                  x: ['-100%', '100%']
+                  x: ['-100%', '100%'],
                 }}
                 transition={{
                   duration: 1.5,
                   repeat: Infinity,
-                  ease: "easeInOut"
+                  ease: 'easeInOut',
                 }}
               />
             )}
           </div>
         )}
-        
+
         <div className="flex-1 space-y-3">
           {Array.from({ length: lines }).map((_, i) => (
             <motion.div
@@ -238,20 +247,20 @@ export const EnhancedSkeleton: React.FC<EnhancedSkeletonProps> = ({
               transition={{
                 duration: 1.5,
                 repeat: Infinity,
-                delay: i * 0.1
+                delay: i * 0.1,
               }}
             >
               {animated && (
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent"
                   animate={{
-                    x: ['-100%', '100%']
+                    x: ['-100%', '100%'],
                   }}
                   transition={{
                     duration: 1.5,
                     repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: i * 0.1
+                    ease: 'easeInOut',
+                    delay: i * 0.1,
                   }}
                 />
               )}
@@ -281,57 +290,51 @@ export const EnhancedProgress: React.FC<EnhancedProgressProps> = ({
   showPercentage = true,
   animated = true,
   color = 'blue',
-  size = 'md'
+  size = 'md',
 }) => {
   const percentage = Math.min((value / max) * 100, 100);
-  
+
   const colorClasses = {
     blue: 'bg-blue-600',
     green: 'bg-green-600',
     red: 'bg-red-600',
-    yellow: 'bg-yellow-600'
+    yellow: 'bg-yellow-600',
   };
 
   const sizeClasses = {
     sm: 'h-1',
     md: 'h-2',
-    lg: 'h-3'
+    lg: 'h-3',
   };
 
   return (
     <div className={cn('relative', className)}>
-      <div className={cn(
-        'w-full bg-slate-200 rounded-full overflow-hidden',
-        sizeClasses[size]
-      )}>
+      <div className={cn('w-full bg-slate-200 rounded-full overflow-hidden', sizeClasses[size])}>
         <motion.div
-          className={cn(
-            'h-full rounded-full relative overflow-hidden',
-            colorClasses[color]
-          )}
+          className={cn('h-full rounded-full relative overflow-hidden', colorClasses[color])}
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
           transition={{
             duration: animated ? timings.moderate : 0,
-            ease: easings.smooth
+            ease: easings.smooth,
           }}
         >
           {animated && (
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30"
               animate={{
-                x: ['-100%', '100%']
+                x: ['-100%', '100%'],
               }}
               transition={{
                 duration: 1.5,
                 repeat: Infinity,
-                ease: "easeInOut"
+                ease: 'easeInOut',
               }}
             />
           )}
         </motion.div>
       </div>
-      
+
       {showPercentage && (
         <motion.div
           className="absolute top-full mt-1 text-xs text-slate-600 font-medium"
@@ -360,7 +363,7 @@ export const EnhancedToast: React.FC<EnhancedToastProps> = ({
   type = 'info',
   onClose,
   autoClose = 5000,
-  className = ''
+  className = '',
 }) => {
   const [isVisible, setIsVisible] = useState(true);
 
@@ -379,14 +382,14 @@ export const EnhancedToast: React.FC<EnhancedToastProps> = ({
     success: 'bg-green-50 border-green-200 text-green-800',
     error: 'bg-red-50 border-red-200 text-red-800',
     warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
-    info: 'bg-blue-50 border-blue-200 text-blue-800'
+    info: 'bg-blue-50 border-blue-200 text-blue-800',
   };
 
   const icons = {
     success: '✓',
     error: '✕',
     warning: '⚠',
-    info: 'ℹ'
+    info: 'ℹ',
   };
 
   return (
@@ -408,15 +411,13 @@ export const EnhancedToast: React.FC<EnhancedToastProps> = ({
             className="flex-shrink-0 w-5 h-5 rounded-full bg-current flex items-center justify-center text-white text-xs font-bold"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 500 }}
+            transition={{ delay: 0.2, type: 'spring', stiffness: 500 }}
           >
             {icons[type]}
           </motion.div>
-          
-          <div className="flex-1 text-sm font-medium">
-            {message}
-          </div>
-          
+
+          <div className="flex-1 text-sm font-medium">{message}</div>
+
           {onClose && (
             <motion.button
               className="flex-shrink-0 text-current hover:opacity-70 transition-opacity"
@@ -430,14 +431,14 @@ export const EnhancedToast: React.FC<EnhancedToastProps> = ({
               ✕
             </motion.button>
           )}
-          
+
           {/* Progress Bar for Auto-close */}
           {autoClose > 0 && (
             <motion.div
               className="absolute bottom-0 left-0 h-1 bg-current rounded-b-lg"
               initial={{ width: '100%' }}
               animate={{ width: '0%' }}
-              transition={{ duration: autoClose / 1000, ease: "linear" }}
+              transition={{ duration: autoClose / 1000, ease: 'linear' }}
             />
           )}
         </motion.div>
@@ -458,7 +459,7 @@ export const EnhancedHoverCard: React.FC<EnhancedHoverCardProps> = ({
   trigger,
   content,
   placement = 'top',
-  className = ''
+  className = '',
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -466,17 +467,17 @@ export const EnhancedHoverCard: React.FC<EnhancedHoverCardProps> = ({
     top: 'bottom-full mb-2',
     bottom: 'top-full mt-2',
     left: 'right-full mr-2',
-    right: 'left-full ml-2'
+    right: 'left-full ml-2',
   };
 
   return (
-    <div 
+    <div
       className="relative inline-block"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {trigger}
-      
+
       <AnimatePresence>
         {isHovered && (
           <motion.div
@@ -491,15 +492,19 @@ export const EnhancedHoverCard: React.FC<EnhancedHoverCardProps> = ({
             transition={{ duration: timings.quick, ease: easings.snappy }}
           >
             {content}
-            
+
             {/* Arrow */}
             <div
               className={cn(
                 'absolute w-2 h-2 bg-white border transform rotate-45',
-                placement === 'top' && 'top-full -mt-1 left-1/2 -translate-x-1/2 border-r border-b border-l-0 border-t-0',
-                placement === 'bottom' && 'bottom-full -mb-1 left-1/2 -translate-x-1/2 border-l border-t border-r-0 border-b-0',
-                placement === 'left' && 'left-full -ml-1 top-1/2 -translate-y-1/2 border-t border-r border-l-0 border-b-0',
-                placement === 'right' && 'right-full -mr-1 top-1/2 -translate-y-1/2 border-b border-l border-t-0 border-r-0'
+                placement === 'top' &&
+                  'top-full -mt-1 left-1/2 -translate-x-1/2 border-r border-b border-l-0 border-t-0',
+                placement === 'bottom' &&
+                  'bottom-full -mb-1 left-1/2 -translate-x-1/2 border-l border-t border-r-0 border-b-0',
+                placement === 'left' &&
+                  'left-full -ml-1 top-1/2 -translate-y-1/2 border-t border-r border-l-0 border-b-0',
+                placement === 'right' &&
+                  'right-full -mr-1 top-1/2 -translate-y-1/2 border-b border-l border-t-0 border-r-0'
               )}
             />
           </motion.div>
@@ -507,4 +512,4 @@ export const EnhancedHoverCard: React.FC<EnhancedHoverCardProps> = ({
       </AnimatePresence>
     </div>
   );
-}; 
+};

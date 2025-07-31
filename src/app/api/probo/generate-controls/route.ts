@@ -6,7 +6,7 @@ import {
   ControlGenerationRequest,
   ProboIntegrationConfig,
   ComplianceFramework,
-  ProboControlCategory
+  ProboControlCategory,
 } from '@/types/probo-integration.types';
 
 /**
@@ -16,12 +16,9 @@ import {
 export async function POST(request: NextRequest) {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Parse request body
@@ -44,7 +41,7 @@ export async function POST(request: NextRequest) {
       autoApplyRecommendations: false,
       confidenceThreshold: 0.8,
       frameworks: [] as ComplianceFramework[],
-      customCategories: [] as ProboControlCategory[]
+      customCategories: [] as ProboControlCategory[],
     };
 
     // Get Probo service instance
@@ -54,17 +51,18 @@ export async function POST(request: NextRequest) {
     const response = await proboService.generateControlsForRisk(body);
 
     // Log the generation for analytics
-    console.log(`Generated ${response.controls.length} controls for risk ${body.riskId} by user ${(session.user as any).id || session.user.email}`);
+    console.log(
+      `Generated ${response.controls.length} controls for risk ${body.riskId} by user ${(session.user as any).id || session.user.email}`
+    );
 
     return NextResponse.json(response);
-
   } catch (error) {
     console.error('Error generating controls:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to generate controls',
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -78,12 +76,9 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions) as any;
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -106,24 +101,23 @@ export async function GET(request: NextRequest) {
         'Network Security',
         'Incident Response',
         'Compliance Monitoring',
-        'Vendor Management'
+        'Vendor Management',
       ],
       usage: {
         controlsGenerated: metrics.totalControls,
         mappingsCreated: metrics.implementedControls,
-        lastActivity: metrics.lastUpdated.toISOString()
-      }
+        lastActivity: metrics.lastUpdated.toISOString(),
+      },
     });
-
   } catch (error) {
     console.error('Error getting generation status:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to get generation status',
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
   }
-} 
+}

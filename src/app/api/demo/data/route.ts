@@ -65,7 +65,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         case 'users':
           return NextResponse.json({
             success: true,
-            data: demoData.users.map(user => ({
+            data: demoData.users.map((user) => ({
               id: user.id,
               email: user.email,
               firstName: user.firstName,
@@ -90,10 +90,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           });
 
         default:
-          return NextResponse.json(
-            { error: `Unknown data type: ${dataType}` },
-            { status: 400 }
-          );
+          return NextResponse.json({ error: `Unknown data type: ${dataType}` }, { status: 400 });
       }
     }
 
@@ -101,10 +98,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     if (userEmail) {
       const user = getTestUserByEmail(userEmail);
       if (!user) {
-        return NextResponse.json(
-          { error: 'User not found' },
-          { status: 404 }
-        );
+        return NextResponse.json({ error: 'User not found' }, { status: 404 });
       }
 
       // Filter based on permissions
@@ -113,7 +107,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         risks: hasPermission(user.id, 'risks:read') ? demoData.risks : [],
         controls: hasPermission(user.id, 'controls:read') ? demoData.controls : [],
         documents: hasPermission(user.id, 'documents:read') ? demoData.documents : [],
-        dashboardMetrics: hasPermission(user.id, 'dashboard:read') ? demoData.dashboardMetrics : null,
+        dashboardMetrics: hasPermission(user.id, 'dashboard:read')
+          ? demoData.dashboardMetrics
+          : null,
       };
 
       return NextResponse.json({
@@ -147,13 +143,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         demoMode: true,
       },
     });
-
   } catch (error) {
     console.error('Demo data API error:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve demo data' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to retrieve demo data' }, { status: 500 });
   }
 }
 
@@ -213,7 +205,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
       case 'analyze':
         // Simulate AI analysis
-        await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate processing time
+        await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate processing time
 
         const analysisResult = {
           summary: `AI analysis completed for ${type}`,
@@ -238,17 +230,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         });
 
       default:
-        return NextResponse.json(
-          { error: `Unknown action: ${action}` },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
     }
-
   } catch (error) {
     console.error('Demo operation error:', error);
-    return NextResponse.json(
-      { error: 'Demo operation failed' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Demo operation failed' }, { status: 500 });
   }
-} 
+}

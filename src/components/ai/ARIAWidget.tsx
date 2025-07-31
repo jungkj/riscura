@@ -43,7 +43,9 @@ const ProactiveSuggestionCard: React.FC<{
 }> = ({ suggestion, onDismiss, onAccept }) => {
   const getIcon = (type: string) => {
     switch (type) {
-      case 'risk_alert': return <DaisyAlertCircle className="h-4 w-4 text-amber-500" />;
+      case 'risk_alert': return <DaisyAlertCircle className="h-4 w-4 text-amber-500" >
+  ;
+</DaisyAlertCircle>
       case 'insight': return <Sparkles className="h-4 w-4 text-blue-500" />;
       case 'recommendation': return <CheckCircle2 className="h-4 w-4 text-green-500" />;
       default: return <Bot className="h-4 w-4 text-gray-500" />;
@@ -69,8 +71,9 @@ const ProactiveSuggestionCard: React.FC<{
       <DaisyCard className={cn(
         "p-3 shadow-lg border-l-4 max-w-sm",
         getPriorityColor(suggestion.priority)
-      )}>
-        <div className="flex items-start gap-3">
+      )} >
+  <div className="flex items-start gap-3">
+</DaisyCard>
           {getIcon(suggestion.type)}
           <div className="flex-1 min-w-0">
             <h4 className="font-medium text-sm text-foreground">
@@ -84,17 +87,17 @@ const ProactiveSuggestionCard: React.FC<{
                 size="sm" 
                 variant="outline" 
                 onClick={onAccept}
-                className="h-6 text-xs"
-              >
-                Open ARIA
+                className="h-6 text-xs" >
+  Open ARIA
+</DaisyButton>
               </DaisyButton>
               <DaisyButton 
                 size="sm" 
                 variant="ghost" 
                 onClick={onDismiss}
-                className="h-6 text-xs"
-              >
-                Dismiss
+                className="h-6 text-xs" >
+  Dismiss
+</DaisyButton>
               </DaisyButton>
             </div>
           </div>
@@ -102,9 +105,9 @@ const ProactiveSuggestionCard: React.FC<{
             variant="ghost" 
             size="sm" 
             onClick={onDismiss}
-            className="h-5 w-5 p-0 text-muted-foreground hover:text-foreground"
-          >
-            <X className="h-3 w-3" />
+            className="h-5 w-5 p-0 text-muted-foreground hover:text-foreground" >
+  <X className="h-3 w-3" />
+</DaisyButton>
           </DaisyButton>
         </div>
       </DaisyCard>
@@ -260,7 +263,7 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
   if (disabled || !isVisible) return null;
 
   return (
-    <DaisyTooltipProvider>
+    <DaisyTooltipProvider />
       <div className={cn('fixed z-50', getPositionClasses(), className)}>
         {/* Proactive Suggestions */}
         <AnimatePresence>
@@ -292,8 +295,8 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
           whileTap={{ scale: 0.95 }}
           className="relative"
         >
-          <DaisyTooltip>
-            <DaisyTooltipTrigger asChild>
+          <DaisyTooltip />
+            <DaisyTooltipTrigger asChild />
               <DaisyButton
                 onClick={handleToggleChat}
                 size="lg"
@@ -302,9 +305,9 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
                   "bg-[#D8C3A5] hover:bg-[#C4AE96] border-2 border-[#191919] dark:border-[#FAFAFA]",
                   "text-[#191919] hover:text-[#000000]",
                   isOpen && "bg-[#191919] hover:bg-[#2A2A2A] text-[#FAFAFA] border-[#D8C3A5]"
-                )}
-              >
-                <AnimatePresence mode="wait">
+                )} >
+  <AnimatePresence mode="wait">
+</DaisyTooltipProvider>
                   {isOpen ? (
                     <motion.div
                       key="close"
@@ -330,7 +333,7 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
                 </AnimatePresence>
               </DaisyButton>
             </DaisyTooltipTrigger>
-            <DaisyTooltipContent side="left" className="bg-[#191919] text-[#FAFAFA] border-[#D8C3A5]">
+            <DaisyTooltipContent side="left" className="bg-[#191919] text-[#FAFAFA] border-[#D8C3A5]" />
               <div className="flex flex-col items-center">
                 <span>{isOpen ? 'Close ARIA' : 'Open ARIA'}</span>
                 <span className="text-xs text-[#D8C3A5]">Ctrl+K</span>
@@ -348,9 +351,9 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
                 className="absolute -top-1 -right-1"
               >
                 <DaisyBadge 
-                  className="h-6 w-6 rounded-full p-0 flex items-center justify-center text-xs animate-pulse bg-[#191919] text-[#FAFAFA] border-[#D8C3A5]"
-                >
-                  {state.messages.filter(m => m.role === 'assistant').length}
+                  className="h-6 w-6 rounded-full p-0 flex items-center justify-center text-xs animate-pulse bg-[#191919] text-[#FAFAFA] border-[#D8C3A5]" >
+  {state.messages.filter(m => m.role === 'assistant').length}
+</DaisyBadge>
                 </DaisyBadge>
               </motion.div>
             )}

@@ -245,11 +245,13 @@ export function AIQuestionSuggestions({
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center space-x-2">
-          <DaisyBadge variant="outline" className={getPriorityColor(suggestion.priority)}>
-            {suggestion.priority.toUpperCase()}
+          <DaisyBadge variant="outline" className={getPriorityColor(suggestion.priority)} >
+  {suggestion.priority.toUpperCase()}
+</DaisyBadge>
           </DaisyBadge>
-          <DaisyBadge variant="outline" className="text-xs">
-            {suggestion.category}
+          <DaisyBadge variant="outline" className="text-xs" >
+  {suggestion.category}
+</DaisyBadge>
           </DaisyBadge>
         </div>
         
@@ -288,8 +290,9 @@ export function AIQuestionSuggestions({
         <p className="text-xs text-notion-text-secondary mb-1">Context Factors:</p>
         <div className="flex flex-wrap gap-1">
           {suggestion.contextFactors.map((factor, index) => (
-            <DaisyBadge key={index} variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
-              {factor}
+            <DaisyBadge key={index} variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200" >
+  {factor}
+</DaisyBadge>
             </DaisyBadge>
           ))}
         </div>
@@ -300,8 +303,9 @@ export function AIQuestionSuggestions({
         <p className="text-xs text-notion-text-secondary mb-1">Tags:</p>
         <div className="flex flex-wrap gap-1">
           {suggestion.tags.map((tag, index) => (
-            <DaisyBadge key={index} variant="outline" className="text-xs">
-              {tag}
+            <DaisyBadge key={index} variant="outline" className="text-xs" >
+  {tag}
+</DaisyBadge>
             </DaisyBadge>
           ))}
         </div>
@@ -310,28 +314,31 @@ export function AIQuestionSuggestions({
       {/* Actions */}
       <div className="flex items-center justify-between pt-3 border-t border-notion-border">
         <div className="flex items-center space-x-1">
-          <DaisyTooltip>
-            <DaisyTooltipTrigger>
-              <DaisyButton variant="ghost" size="sm">
-                <ThumbsUp className="w-3 h-3" />
+          <DaisyTooltip />
+            <DaisyTooltipTrigger />
+              <DaisyButton variant="ghost" size="sm" >
+  <ThumbsUp className="w-3 h-3" />
+</DaisyTooltip>
               </DaisyButton>
             </DaisyTooltipTrigger>
             <DaisyTooltipContent>Good suggestion</DaisyTooltipContent>
           </DaisyTooltip>
           
-          <DaisyTooltip>
-            <DaisyTooltipTrigger>
-              <DaisyButton variant="ghost" size="sm">
-                <ThumbsDown className="w-3 h-3" />
+          <DaisyTooltip />
+            <DaisyTooltipTrigger />
+              <DaisyButton variant="ghost" size="sm" >
+  <ThumbsDown className="w-3 h-3" />
+</DaisyTooltip>
               </DaisyButton>
             </DaisyTooltipTrigger>
             <DaisyTooltipContent>Poor suggestion</DaisyTooltipContent>
           </DaisyTooltip>
           
-          <DaisyTooltip>
-            <DaisyTooltipTrigger>
-              <DaisyButton variant="ghost" size="sm">
-                <Copy className="w-3 h-3" />
+          <DaisyTooltip />
+            <DaisyTooltipTrigger />
+              <DaisyButton variant="ghost" size="sm" >
+  <Copy className="w-3 h-3" />
+</DaisyTooltip>
               </DaisyButton>
             </DaisyTooltipTrigger>
             <DaisyTooltipContent>Copy question text</DaisyTooltipContent>
@@ -341,8 +348,7 @@ export function AIQuestionSuggestions({
         <DaisyButton 
           size="sm" 
           onClick={() => onApplySuggestion(suggestion)}
-          className="bg-notion-blue hover:bg-notion-blue/90"
-        >
+          className="bg-notion-blue hover:bg-notion-blue/90" />
           <Plus className="w-3 h-3 mr-1" />
           Add
         </DaisyButton>
@@ -359,25 +365,24 @@ export function AIQuestionSuggestions({
           <h4 className="font-medium text-notion-text-primary">AI Question Generator</h4>
         </div>
         
-        <DaisySelect value={selectedContext} onValueChange={setSelectedContext}>
-          <DaisySelectTrigger className="w-full">
-            <DaisySelectValue placeholder="Select context" />
-          </SelectTrigger>
-          <DaisySelectContent>
-            <DaisySelectItem value="industry">Industry Best Practices</SelectItem>
-            <DaisySelectItem value="framework">Compliance Framework</SelectItem>
-            <DaisySelectItem value="risk">Risk-Based Assessment</SelectItem>
-            <DaisySelectItem value="maturity">Maturity Assessment</SelectItem>
-            <DaisySelectItem value="audit">Audit Readiness</SelectItem>
-          </SelectContent>
+        <DaisySelect value={selectedContext} onValueChange={setSelectedContext} />
+          <DaisySelectTrigger className="w-full" />
+            <DaisySelectValue placeholder="Select context" /></DaisySelect>
+          <DaisySelectContent />
+            <DaisySelectItem value="industry">Industry Best Practices</DaisySelectContent>
+            <DaisySelectItem value="framework">Compliance Framework</DaisySelectItem>
+            <DaisySelectItem value="risk">Risk-Based Assessment</DaisySelectItem>
+            <DaisySelectItem value="maturity">Maturity Assessment</DaisySelectItem>
+            <DaisySelectItem value="audit">Audit Readiness</DaisySelectItem>
+          </DaisySelectContent>
         </DaisySelect>
 
         <DaisyButton 
           onClick={generateContextualSuggestions}
           disabled={isGenerating}
-          className="w-full"
-        >
-          {isGenerating ? (
+          className="w-full" >
+  {isGenerating ? (
+</DaisyButton>
             <>
               <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
               Generating...
@@ -409,39 +414,37 @@ export function AIQuestionSuggestions({
           onClick={generateCustomSuggestions}
           disabled={isGenerating || !customPrompt.trim()}
           size="sm"
-          className="w-full"
-        >
-          <Sparkles className="w-4 h-4 mr-2" />
+          className="w-full" >
+  <Sparkles className="w-4 h-4 mr-2" />
+</DaisyTextarea>
           Generate Custom Question
         </DaisyButton>
       </div>
 
       {/* Filters */}
       <div className="grid grid-cols-2 gap-2">
-        <DaisySelect value={filterType} onValueChange={(value) => setFilterType(value as QuestionType | 'all')}>
-          <DaisySelectTrigger>
-            <DaisySelectValue placeholder="Type" />
-          </SelectTrigger>
-          <DaisySelectContent>
-            <DaisySelectItem value="all">All Types</SelectItem>
-            <DaisySelectItem value="text">Text</SelectItem>
-            <DaisySelectItem value="single_choice">Single Choice</SelectItem>
-            <DaisySelectItem value="multiple_choice">Multiple Choice</SelectItem>
-            <DaisySelectItem value="scale">Scale</SelectItem>
-            <DaisySelectItem value="boolean">Yes/No</SelectItem>
-          </SelectContent>
+        <DaisySelect value={filterType} onValueChange={(value) => setFilterType(value as QuestionType | 'all')} />
+          <DaisySelectTrigger />
+            <DaisySelectValue placeholder="Type" /></DaisySelect>
+          <DaisySelectContent />
+            <DaisySelectItem value="all">All Types</DaisySelectContent>
+            <DaisySelectItem value="text">Text</DaisySelectItem>
+            <DaisySelectItem value="single_choice">Single Choice</DaisySelectItem>
+            <DaisySelectItem value="multiple_choice">Multiple Choice</DaisySelectItem>
+            <DaisySelectItem value="scale">Scale</DaisySelectItem>
+            <DaisySelectItem value="boolean">Yes/No</DaisySelectItem>
+          </DaisySelectContent>
         </DaisySelect>
 
-        <DaisySelect value={filterPriority} onValueChange={(value) => setFilterPriority(value as 'high' | 'medium' | 'low' | 'all')}>
-          <DaisySelectTrigger>
-            <DaisySelectValue placeholder="Priority" />
-          </SelectTrigger>
-          <DaisySelectContent>
-            <DaisySelectItem value="all">All Priorities</SelectItem>
-            <DaisySelectItem value="high">High</SelectItem>
-            <DaisySelectItem value="medium">Medium</SelectItem>
-            <DaisySelectItem value="low">Low</SelectItem>
-          </SelectContent>
+        <DaisySelect value={filterPriority} onValueChange={(value) => setFilterPriority(value as 'high' | 'medium' | 'low' | 'all')} />
+          <DaisySelectTrigger />
+            <DaisySelectValue placeholder="Priority" /></DaisySelect>
+          <DaisySelectContent />
+            <DaisySelectItem value="all">All Priorities</DaisySelectContent>
+            <DaisySelectItem value="high">High</DaisySelectItem>
+            <DaisySelectItem value="medium">Medium</DaisySelectItem>
+            <DaisySelectItem value="low">Low</DaisySelectItem>
+          </DaisySelectContent>
         </DaisySelect>
       </div>
 
@@ -456,9 +459,9 @@ export function AIQuestionSuggestions({
               variant="ghost" 
               size="sm"
               onClick={generateContextualSuggestions}
-              disabled={isGenerating}
-            >
-              <RefreshCw className="w-3 h-3 mr-1" />
+              disabled={isGenerating} >
+  <RefreshCw className="w-3 h-3 mr-1" />
+</DaisyButton>
               Refresh
             </DaisyButton>
           )}

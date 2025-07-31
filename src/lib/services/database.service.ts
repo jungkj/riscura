@@ -26,7 +26,7 @@ export class DatabaseService {
     try {
       const isConnected = await checkDatabaseConnection();
       const isSeeded = await isDatabaseSeeded();
-      
+
       let version: string | undefined;
       if (isConnected) {
         const result = await db.raw`SELECT version();`;
@@ -75,11 +75,11 @@ export class DatabaseService {
     userId?: string
   ) {
     const riskRepo = await createRiskRepository();
-    
+
     // Calculate risk score if likelihood and impact provided
     const riskScore = (riskData.likelihood || 1) * (riskData.impact || 1);
     let riskLevel: 'low' | 'medium' | 'high' | 'critical';
-    
+
     if (riskScore >= 20) {
       riskLevel = 'critical';
     } else if (riskScore >= 15) {
@@ -118,7 +118,7 @@ export class DatabaseService {
     userId?: string
   ) {
     const riskRepo = await createRiskRepository();
-    
+
     // Recalculate risk score if likelihood or impact changed
     if (updateData.likelihood !== undefined || updateData.impact !== undefined) {
       return riskRepo.updateRiskScore(
@@ -145,15 +145,11 @@ export class DatabaseService {
 
   async getRisksForDashboard(organizationId: string) {
     const riskRepo = await createRiskRepository();
-    
-    const [
-      statistics,
-      highPriorityRisks,
-      dueForReview
-    ] = await Promise.all([
+
+    const [statistics, highPriorityRisks, dueForReview] = await Promise.all([
       riskRepo.getStatistics(organizationId),
       riskRepo.findHighPriority(organizationId, { limit: 5 }),
-      riskRepo.findDueForReview(organizationId, 30)
+      riskRepo.findDueForReview(organizationId, 30),
     ]);
 
     return {
@@ -166,7 +162,7 @@ export class DatabaseService {
         highRisks: statistics.byLevel.high || 0,
         averageScore: Math.round(statistics.averageScore * 10) / 10,
         dueForReviewCount: statistics.dueForReview,
-      }
+      },
     };
   }
 
@@ -192,12 +188,12 @@ export class DatabaseService {
   ) {
     return this.executeTransaction(organizationId, async () => {
       const results: any[] = [];
-      
+
       for (const riskData of risks) {
         const risk = await this.createRisk(riskData, organizationId, userId);
         results.push(risk);
       }
-      
+
       return results;
     });
   }
@@ -209,12 +205,7 @@ export class DatabaseService {
     options?: { page?: number; limit?: number }
   ) {
     const riskRepo = await createRiskRepository();
-    return riskRepo.search(
-      searchTerm,
-      ['title', 'description'],
-      organizationId,
-      options
-    );
+    return riskRepo.search(searchTerm, ['title', 'description'], organizationId, options);
   }
 
   // Organization operations
@@ -316,7 +307,6 @@ export class DatabaseService {
 
       operations.push('Maintenance completed successfully');
       return { success: true, operations };
-
     } catch (error) {
       console.error('Maintenance operation failed:', error);
       errors.push(error instanceof Error ? error.message : 'Unknown error');
@@ -356,4 +346,4 @@ export const databaseService = DatabaseService.getInstance();
 // Export types for external use
 export type DatabaseHealthStatus = Awaited<ReturnType<DatabaseService['checkHealth']>>;
 export type OrganizationOverview = Awaited<ReturnType<DatabaseService['getOrganizationOverview']>>;
-export type RiskDashboardData = Awaited<ReturnType<DatabaseService['getRisksForDashboard']>>; 
+export type RiskDashboardData = Awaited<ReturnType<DatabaseService['getRisksForDashboard']>>;

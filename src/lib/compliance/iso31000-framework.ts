@@ -117,7 +117,7 @@ export class ISO31000FrameworkService {
     'Dynamic',
     'Best available information',
     'Human and cultural factors',
-    'Continual improvement'
+    'Continual improvement',
   ];
 
   constructor() {
@@ -139,8 +139,8 @@ export class ISO31000FrameworkService {
           outputs: ['Stakeholder feedback', 'Communication records'],
           techniques: ['Interviews', 'Surveys', 'Workshops'],
           roles: ['Risk Manager', 'Communications Team'],
-          frequency: 'Ongoing'
-        }
+          frequency: 'Ongoing',
+        },
       ],
       inputs: ['Stakeholder requirements', 'Risk information'],
       outputs: ['Communication plan', 'Stakeholder feedback'],
@@ -151,16 +151,16 @@ export class ISO31000FrameworkService {
           name: 'Initial',
           description: 'Ad hoc communication',
           characteristics: ['Informal communication', 'Limited stakeholder involvement'],
-          evidenceRequired: ['Basic communication records']
+          evidenceRequired: ['Basic communication records'],
         },
         {
           level: 5,
           name: 'Optimized',
           description: 'Integrated communication',
           characteristics: ['Systematic communication', 'Active stakeholder engagement'],
-          evidenceRequired: ['Communication strategy', 'Stakeholder feedback analysis']
-        }
-      ]
+          evidenceRequired: ['Communication strategy', 'Stakeholder feedback analysis'],
+        },
+      ],
     };
 
     // Scope, Context and Criteria
@@ -177,8 +177,8 @@ export class ISO31000FrameworkService {
           outputs: ['Risk management scope', 'Boundaries definition'],
           techniques: ['Scope analysis', 'Boundary setting'],
           roles: ['Risk Manager', 'Senior Management'],
-          frequency: 'Annual'
-        }
+          frequency: 'Annual',
+        },
       ],
       inputs: ['Strategic objectives', 'External environment'],
       outputs: ['Risk criteria', 'Context definition'],
@@ -189,16 +189,16 @@ export class ISO31000FrameworkService {
           name: 'Initial',
           description: 'Basic scope definition',
           characteristics: ['Unclear boundaries', 'Limited context analysis'],
-          evidenceRequired: ['Basic scope document']
+          evidenceRequired: ['Basic scope document'],
         },
         {
           level: 5,
           name: 'Optimized',
           description: 'Comprehensive context',
           characteristics: ['Clear boundaries', 'Detailed context analysis'],
-          evidenceRequired: ['Comprehensive context analysis', 'Risk criteria matrix']
-        }
-      ]
+          evidenceRequired: ['Comprehensive context analysis', 'Risk criteria matrix'],
+        },
+      ],
     };
 
     // Risk Assessment
@@ -215,7 +215,7 @@ export class ISO31000FrameworkService {
           outputs: ['Risk register', 'Risk scenarios'],
           techniques: ['Brainstorming', 'Checklists', 'SWOT analysis'],
           roles: ['Risk Analysts', 'Subject Matter Experts'],
-          frequency: 'Quarterly'
+          frequency: 'Quarterly',
         },
         {
           id: 'risk-analysis',
@@ -225,8 +225,8 @@ export class ISO31000FrameworkService {
           outputs: ['Risk analysis results', 'Risk ratings'],
           techniques: ['Qualitative analysis', 'Quantitative analysis', 'Monte Carlo'],
           roles: ['Risk Analysts', 'Data Analysts'],
-          frequency: 'Quarterly'
-        }
+          frequency: 'Quarterly',
+        },
       ],
       inputs: ['Risk criteria', 'Information sources'],
       outputs: ['Risk assessment report', 'Risk priorities'],
@@ -237,16 +237,16 @@ export class ISO31000FrameworkService {
           name: 'Initial',
           description: 'Basic risk assessment',
           characteristics: ['Ad hoc identification', 'Simple analysis'],
-          evidenceRequired: ['Basic risk register']
+          evidenceRequired: ['Basic risk register'],
         },
         {
           level: 5,
           name: 'Optimized',
           description: 'Advanced risk assessment',
           characteristics: ['Systematic identification', 'Sophisticated analysis'],
-          evidenceRequired: ['Comprehensive risk assessment', 'Quantitative models']
-        }
-      ]
+          evidenceRequired: ['Comprehensive risk assessment', 'Quantitative models'],
+        },
+      ],
     };
 
     this.processes.set('communication-consultation', communication);
@@ -260,32 +260,31 @@ export class ISO31000FrameworkService {
     controls: Control[],
     assessor: string
   ): Promise<ISO31000Assessment> {
-    
     const processAssessments: ProcessAssessment[] = [];
-    
+
     // Assess each process
     for (const [processId, process] of this.processes) {
       const assessment = await this.assessProcess(process, risks, controls);
       processAssessments.push(assessment);
     }
-    
+
     // Calculate overall maturity
     const overallMaturity = Math.round(
       processAssessments.reduce((sum, p) => sum + p.maturityLevel, 0) / processAssessments.length
     );
-    
+
     // Assess principle compliance
     const principleCompliance = await this.assessPrincipleCompliance(risks, controls);
-    
+
     // Identify gaps
     const gaps = this.identifyProcessGaps(processAssessments);
-    
+
     // Generate recommendations
     const recommendations = await this.generateISO31000Recommendations(processAssessments, gaps);
-    
+
     // Create improvement plan
     const improvementPlan = this.createImprovementPlan(recommendations);
-    
+
     return {
       organizationId,
       assessmentDate: new Date(),
@@ -296,7 +295,7 @@ export class ISO31000FrameworkService {
       principleCompliance,
       gaps,
       recommendations,
-      improvementPlan
+      improvementPlan,
     };
   }
 
@@ -309,10 +308,9 @@ export class ISO31000FrameworkService {
     quickWins: string[];
     roadmap: ImprovementPhase[];
   }> {
-    
     const processGaps: ProcessGap[] = [];
-    
-    currentAssessment.processAssessments.forEach(assessment => {
+
+    currentAssessment.processAssessments.forEach((assessment) => {
       const gap: ProcessGap = {
         processId: assessment.processId,
         currentMaturity: assessment.maturityLevel,
@@ -320,29 +318,29 @@ export class ISO31000FrameworkService {
         gap: targetMaturity - assessment.maturityLevel,
         impact: this.determineGapImpact(targetMaturity - assessment.maturityLevel),
         effort: this.determineGapEffort(targetMaturity - assessment.maturityLevel),
-        priority: this.calculateGapPriority(assessment, targetMaturity)
+        priority: this.calculateGapPriority(assessment, targetMaturity),
       };
       processGaps.push(gap);
     });
-    
+
     // Identify priority areas
     const priorityAreas = processGaps
-      .filter(gap => gap.impact === 'high' && gap.gap > 1)
-      .map(gap => this.processes.get(gap.processId)?.name || gap.processId);
-    
+      .filter((gap) => gap.impact === 'high' && gap.gap > 1)
+      .map((gap) => this.processes.get(gap.processId)?.name || gap.processId);
+
     // Identify quick wins
     const quickWins = processGaps
-      .filter(gap => gap.effort === 'low' && gap.gap > 0)
-      .map(gap => this.processes.get(gap.processId)?.name || gap.processId);
-    
+      .filter((gap) => gap.effort === 'low' && gap.gap > 0)
+      .map((gap) => this.processes.get(gap.processId)?.name || gap.processId);
+
     // Create improvement roadmap
     const roadmap = this.createImprovementRoadmap(processGaps);
-    
+
     return {
       processGaps,
       priorityAreas,
       quickWins,
-      roadmap
+      roadmap,
     };
   }
 
@@ -351,40 +349,39 @@ export class ISO31000FrameworkService {
     risks: Risk[],
     controls: Control[]
   ): Promise<ProcessAssessment> {
-    
     // Simplified assessment logic
     let maturityLevel = 1;
     let score = 20;
-    
+
     // Assess based on available evidence
     if (risks.length > 0) {
       maturityLevel = Math.min(3, maturityLevel + 1);
       score += 30;
     }
-    
+
     if (controls.length > 0) {
       maturityLevel = Math.min(4, maturityLevel + 1);
       score += 30;
     }
-    
+
     // Additional maturity indicators
     const hasDocumentation = true; // Would check for actual documentation
     if (hasDocumentation) {
       score += 20;
     }
-    
+
     const strengths: string[] = [];
     const weaknesses: string[] = [];
     const evidence: Evidence[] = [];
     const recommendations: string[] = [];
-    
+
     if (maturityLevel >= 3) {
       strengths.push('Systematic approach implemented');
     } else {
       weaknesses.push('Lacks systematic approach');
       recommendations.push('Implement systematic process');
     }
-    
+
     return {
       processId: process.id,
       maturityLevel,
@@ -392,7 +389,7 @@ export class ISO31000FrameworkService {
       strengths,
       weaknesses,
       evidence,
-      recommendations
+      recommendations,
     };
   }
 
@@ -400,41 +397,40 @@ export class ISO31000FrameworkService {
     risks: Risk[],
     controls: Control[]
   ): Promise<PrincipleCompliance[]> {
-    
-    return this.principles.map(principle => {
+    return this.principles.map((principle) => {
       let compliance: 'full' | 'partial' | 'minimal' | 'none' = 'minimal';
       let score = 40;
-      
+
       // Simplified compliance assessment
       if (risks.length > 10 && controls.length > 5) {
         compliance = 'partial';
         score = 60;
       }
-      
+
       if (risks.length > 20 && controls.length > 15) {
         compliance = 'full';
         score = 85;
       }
-      
+
       return {
         principle,
         compliance,
         score,
         evidence: ['Risk register', 'Control documentation'],
-        gaps: compliance === 'full' ? [] : [`Improve ${principle.toLowerCase()} implementation`]
+        gaps: compliance === 'full' ? [] : [`Improve ${principle.toLowerCase()} implementation`],
       };
     });
   }
 
   private identifyProcessGaps(processAssessments: ProcessAssessment[]): ProcessGap[] {
-    return processAssessments.map(assessment => ({
+    return processAssessments.map((assessment) => ({
       processId: assessment.processId,
       currentMaturity: assessment.maturityLevel,
       targetMaturity: 4, // Target level 4
       gap: 4 - assessment.maturityLevel,
       impact: this.determineGapImpact(4 - assessment.maturityLevel),
       effort: this.determineGapEffort(4 - assessment.maturityLevel),
-      priority: this.calculateGapPriority(assessment, 4)
+      priority: this.calculateGapPriority(assessment, 4),
     }));
   }
 
@@ -442,10 +438,9 @@ export class ISO31000FrameworkService {
     processAssessments: ProcessAssessment[],
     gaps: ProcessGap[]
   ): Promise<ISO31000Recommendation[]> {
-    
     const recommendations: ISO31000Recommendation[] = [];
-    
-    gaps.forEach(gap => {
+
+    gaps.forEach((gap) => {
       if (gap.gap > 0) {
         const process = this.processes.get(gap.processId);
         recommendations.push({
@@ -458,15 +453,15 @@ export class ISO31000FrameworkService {
             'Develop process documentation',
             'Implement systematic procedures',
             'Train personnel',
-            'Establish monitoring'
+            'Establish monitoring',
           ],
           timeline: gap.effort === 'high' ? 180 : gap.effort === 'medium' ? 90 : 45,
           cost: gap.effort === 'high' ? 50000 : gap.effort === 'medium' ? 25000 : 10000,
-          benefit: 'Improved risk management effectiveness'
+          benefit: 'Improved risk management effectiveness',
         });
       }
     });
-    
+
     return recommendations;
   }
 
@@ -478,7 +473,7 @@ export class ISO31000FrameworkService {
         duration: 90,
         activities: ['Establish governance', 'Define processes', 'Train staff'],
         deliverables: ['Process documentation', 'Training materials'],
-        cost: 30000
+        cost: 30000,
       },
       {
         phase: 2,
@@ -486,7 +481,7 @@ export class ISO31000FrameworkService {
         duration: 120,
         activities: ['Implement processes', 'Deploy tools', 'Monitor progress'],
         deliverables: ['Operational processes', 'Monitoring reports'],
-        cost: 50000
+        cost: 50000,
       },
       {
         phase: 3,
@@ -494,13 +489,13 @@ export class ISO31000FrameworkService {
         duration: 90,
         activities: ['Optimize processes', 'Continuous improvement', 'Advanced analytics'],
         deliverables: ['Optimized processes', 'Performance metrics'],
-        cost: 25000
-      }
+        cost: 25000,
+      },
     ];
-    
+
     const totalDuration = phases.reduce((sum, phase) => sum + phase.duration, 0);
     const totalCost = phases.reduce((sum, phase) => sum + phase.cost, 0);
-    
+
     return {
       phases,
       totalDuration,
@@ -509,42 +504,42 @@ export class ISO31000FrameworkService {
         'Improved risk management maturity',
         'Better risk visibility',
         'Enhanced decision making',
-        'Regulatory compliance'
+        'Regulatory compliance',
       ],
       successMetrics: [
         'Maturity level improvement',
         'Risk assessment coverage',
         'Stakeholder satisfaction',
-        'Compliance scores'
-      ]
+        'Compliance scores',
+      ],
     };
   }
 
   private createImprovementRoadmap(gaps: ProcessGap[]): ImprovementPhase[] {
     // Sort gaps by priority
     const sortedGaps = gaps.sort((a, b) => b.priority - a.priority);
-    
+
     const phases: ImprovementPhase[] = [];
     let currentPhase = 1;
     const currentDuration = 0;
-    
-    sortedGaps.forEach(gap => {
+
+    sortedGaps.forEach((gap) => {
       if (gap.gap > 0) {
         const phaseDuration = gap.effort === 'high' ? 120 : gap.effort === 'medium' ? 90 : 60;
-        
+
         phases.push({
           phase: currentPhase,
           name: `Improve ${this.processes.get(gap.processId)?.name}`,
           duration: phaseDuration,
           activities: [`Enhance ${gap.processId} maturity`],
           deliverables: [`Improved ${gap.processId} process`],
-          cost: gap.effort === 'high' ? 40000 : gap.effort === 'medium' ? 25000 : 15000
+          cost: gap.effort === 'high' ? 40000 : gap.effort === 'medium' ? 25000 : 15000,
         });
-        
+
         currentPhase++;
       }
     });
-    
+
     return phases;
   }
 
@@ -564,8 +559,8 @@ export class ISO31000FrameworkService {
   private calculateGapPriority(assessment: ProcessAssessment, targetMaturity: number): number {
     const gap = targetMaturity - assessment.maturityLevel;
     const weaknessCount = assessment.weaknesses.length;
-    return Math.round((gap * 30) + (weaknessCount * 10));
+    return Math.round(gap * 30 + weaknessCount * 10);
   }
 }
 
-export const iso31000FrameworkService = new ISO31000FrameworkService(); 
+export const iso31000FrameworkService = new ISO31000FrameworkService();

@@ -1,13 +1,13 @@
 'use client';
 
-import React, { 
-  createContext, 
-  useContext, 
-  useEffect, 
-  useState, 
-  useRef, 
-  useCallback, 
-  useMemo
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
 } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -64,7 +64,7 @@ export const useVirtualScrolling = (
   overscan: number = 5
 ) => {
   const [scrollTop, setScrollTop] = useState(0);
-  
+
   const visibleRange = useMemo(() => {
     const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
     const endIndex = Math.min(
@@ -73,7 +73,7 @@ export const useVirtualScrolling = (
     );
     return { startIndex, endIndex };
   }, [scrollTop, itemHeight, containerHeight, overscan, items.length]);
-  
+
   const visibleItems = useMemo(() => {
     return items.slice(visibleRange.startIndex, visibleRange.endIndex + 1).map((item, index) => ({
       item,
@@ -81,13 +81,13 @@ export const useVirtualScrolling = (
       top: (visibleRange.startIndex + index) * itemHeight,
     }));
   }, [items, visibleRange, itemHeight]);
-  
+
   const totalHeight = items.length * itemHeight;
-  
+
   const handleScroll = useCallback((event: React.UIEvent<HTMLDivElement>) => {
     setScrollTop(event.currentTarget.scrollTop);
   }, []);
-  
+
   return {
     visibleItems,
     totalHeight,
@@ -101,7 +101,7 @@ export const useVirtualScrolling = (
 
 export const useOfflineData = () => {
   const { isOnline, cacheData, getCachedData } = usePerformance();
-  
+
   const fetchWithCache = useCallback(
     async (key: string, fetcher: () => Promise<any>, ttl: number = 300000) => {
       // Try cache first if offline
@@ -110,7 +110,7 @@ export const useOfflineData = () => {
         if (cached) return cached;
         throw new Error('No cached data available offline');
       }
-      
+
       try {
         const data = await fetcher();
         cacheData(key, data, ttl);
@@ -124,7 +124,7 @@ export const useOfflineData = () => {
     },
     [isOnline, cacheData, getCachedData]
   );
-  
+
   return { fetchWithCache, isOnline };
 };
 
@@ -132,42 +132,42 @@ export const useOfflineData = () => {
 class PerformanceCache {
   private cache = new Map();
   private maxSize: number;
-  
+
   constructor(maxSize: number = 100) {
     this.maxSize = maxSize;
   }
-  
+
   set(key: string, data: any, ttl: number = 300000): void {
     // Remove oldest entries if cache is full
     if (this.cache.size >= this.maxSize) {
       const oldestKey = Array.from(this.cache.keys())[0];
       this.cache.delete(oldestKey);
     }
-    
+
     this.cache.set(key, {
       data,
       timestamp: Date.now(),
       ttl,
     });
   }
-  
+
   get(key: string): any {
     const entry = this.cache.get(key);
     if (!entry) return null;
-    
+
     // Check if expired
     if (Date.now() - entry.timestamp > entry.ttl) {
       this.cache.delete(key);
       return null;
     }
-    
+
     return entry.data;
   }
-  
+
   clear(): void {
     this.cache.clear();
   }
-  
+
   size(): number {
     return this.cache.size;
   }
@@ -184,7 +184,7 @@ export const PerformanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
     memoryUsage: 0,
     networkSpeed: 'unknown',
   });
-  
+
   const [settings, setSettings] = useState<PerformanceSettings>({
     enableVirtualScrolling: true,
     enableImageOptimization: true,
@@ -194,54 +194,54 @@ export const PerformanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
     preloadStrategy: 'viewport',
     compressionLevel: 'medium',
   });
-  
+
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const cacheRef = useRef(new PerformanceCache(settings.maxCacheSize));
   const componentCacheRef = useRef(new Map());
-  
+
   // Monitor online status
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
-    
+
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
-    
+
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
   }, []);
-  
+
   // Update cache size when settings change
   useEffect(() => {
     cacheRef.current = new PerformanceCache(settings.maxCacheSize);
   }, [settings.maxCacheSize]);
-  
+
   const updateSettings = useCallback((newSettings: Partial<PerformanceSettings>) => {
-    setSettings(prev => ({ ...prev, ...newSettings }));
+    setSettings((prev) => ({ ...prev, ...newSettings }));
   }, []);
-  
+
   const cacheData = useCallback((key: string, data: any, ttl: number = 300000) => {
     cacheRef.current.set(key, data, ttl);
   }, []);
-  
+
   const getCachedData = useCallback((key: string) => {
     return cacheRef.current.get(key);
   }, []);
-  
+
   const clearCache = useCallback(() => {
     cacheRef.current.clear();
   }, []);
-  
+
   const preloadComponent = useCallback(async (componentPath: string): Promise<any> => {
     if (componentCacheRef.current.has(componentPath)) {
       return componentCacheRef.current.get(componentPath);
     }
-    
+
     const promise = import(componentPath);
     componentCacheRef.current.set(componentPath, promise);
-    
+
     try {
       return await promise;
     } catch (error) {
@@ -249,7 +249,7 @@ export const PerformanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
       throw error;
     }
   }, []);
-  
+
   const measurePerformance = useCallback((label: string, fn: () => void) => {
     if ('performance' in window && 'mark' in performance) {
       performance.mark(`${label}-start`);
@@ -260,7 +260,7 @@ export const PerformanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
       fn();
     }
   }, []);
-  
+
   const contextValue = {
     metrics,
     settings,
@@ -273,12 +273,8 @@ export const PerformanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
     preloadComponent,
     measurePerformance,
   };
-  
-  return (
-    <PerformanceContext.Provider value={contextValue}>
-      {children}
-    </PerformanceContext.Provider>
-  );
+
+  return <PerformanceContext.Provider value={contextValue}>{children}</PerformanceContext.Provider>;
 };
 
 // Simplified Components
@@ -296,11 +292,11 @@ export const LazyImage: React.FC<{
   const [hasError, setHasError] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
-  
+
   useEffect(() => {
     const img = imgRef.current;
     if (!img) return;
-    
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -310,38 +306,45 @@ export const LazyImage: React.FC<{
       },
       { threshold: 0.1, rootMargin: '50px' }
     );
-    
+
     observer.observe(img);
-    
+
     return () => observer.unobserve(img);
   }, []);
-  
+
   const handleLoad = useCallback(() => {
     setIsLoaded(true);
     onLoad?.();
   }, [onLoad]);
-  
+
   const handleError = useCallback(() => {
     setHasError(true);
     onError?.();
   }, [onError]);
-  
+
   if (!isInView) {
     return (
-      <div ref={imgRef} className={cn('bg-gray-200 animate-pulse', className)} style={{ width, height }}>
+      <div
+        ref={imgRef}
+        className={cn('bg-gray-200 animate-pulse', className)}
+        style={{ width, height }}
+      >
         {placeholder}
       </div>
     );
   }
-  
+
   if (hasError) {
     return (
-      <div className={cn('bg-gray-200 flex items-center justify-center', className)} style={{ width, height }}>
+      <div
+        className={cn('bg-gray-200 flex items-center justify-center', className)}
+        style={{ width, height }}
+      >
         <span className="text-gray-500 text-sm">Failed to load</span>
       </div>
     );
   }
-  
+
   return (
     <div className={cn('relative', className)}>
       {!isLoaded && (
@@ -377,12 +380,9 @@ export const VirtualScrollContainer: React.FC<{
     height,
     overscan
   );
-  
+
   return (
-    <div 
-      {...containerProps}
-      className={cn('overflow-auto', className)}
-    >
+    <div {...containerProps} className={cn('overflow-auto', className)}>
       <div style={{ height: totalHeight, position: 'relative' }}>
         {visibleItems.map(({ item, index, top }) => (
           <div
@@ -403,4 +403,4 @@ export const VirtualScrollContainer: React.FC<{
   );
 };
 
-export default PerformanceProvider; 
+export default PerformanceProvider;

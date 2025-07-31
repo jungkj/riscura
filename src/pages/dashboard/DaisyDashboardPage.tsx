@@ -97,12 +97,13 @@ export default function DaisyDashboardPage() {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
+
+  return (
+    <div className="flex items-center justify-center min-h-screen">
         <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
     );
-  }
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -126,9 +127,10 @@ export default function DaisyDashboardPage() {
               key={stat.label} 
               compact 
               className="cursor-pointer hover:shadow-lg transition-shadow"
-              onClick={stat.onClick}
-            >
-              <DaisyCardBody>
+              onClick={stat.onClick} >
+  <DaisyCardBody >
+  </DaisyCard>
+</DaisyCardBody>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-base-content/70">{stat.label}</p>
@@ -151,8 +153,10 @@ export default function DaisyDashboardPage() {
 
       {/* Recent Risks and Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <DaisyCard>
-          <DaisyCardBody>
+        <DaisyCard >
+  <DaisyCardBody >
+  </DaisyCard>
+</DaisyCardBody>
             <DaisyCardTitle>Recent Risks</DaisyCardTitle>
             <div className="overflow-x-auto">
               <table className="table table-sm">
@@ -172,13 +176,15 @@ export default function DaisyDashboardPage() {
                       <td>{risk.title}</td>
                       <td>{risk.category}</td>
                       <td>
-                        <DaisyBadge variant={getSeverityColor(risk.severity)} size="sm">
-                          {risk.severity}
+                        <DaisyBadge variant={getSeverityColor(risk.severity)} size="sm" >
+  {risk.severity}
+</DaisyBadge>
                         </DaisyBadge>
                       </td>
                       <td>
-                        <DaisyBadge variant={getStatusColor(risk.status)} size="sm" outline>
-                          {risk.status}
+                        <DaisyBadge variant={getStatusColor(risk.status)} size="sm" outline >
+  {risk.status}
+</DaisyBadge>
                         </DaisyBadge>
                       </td>
                     </tr>
@@ -187,15 +193,17 @@ export default function DaisyDashboardPage() {
               </table>
             </div>
             <div className="card-actions mt-4">
-              <DaisyButton variant="primary" size="sm" onClick={() => router.push('/dashboard/risks')}>
+              <DaisyButton variant="primary" size="sm" onClick={() => router.push('/dashboard/risks')} />
                 View All Risks
               </DaisyButton>
             </div>
           </DaisyCardBody>
         </DaisyCard>
 
-        <DaisyCard>
-          <DaisyCardBody>
+        <DaisyCard >
+  <DaisyCardBody >
+  </DaisyCard>
+</DaisyCardBody>
             <DaisyCardTitle>Recent Activity</DaisyCardTitle>
             <div className="space-y-4">
               <div className="flex items-start gap-4">
@@ -237,19 +245,21 @@ export default function DaisyDashboardPage() {
       </div>
 
       {/* Quick Actions */}
-      <DaisyCard>
-        <DaisyCardBody>
+      <DaisyCard >
+  <DaisyCardBody >
+  </DaisyCard>
+</DaisyCardBody>
           <DaisyCardTitle>Quick Actions</DaisyCardTitle>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <DaisyButton variant="outline" onClick={() => router.push('/dashboard/risks/new')}>
+            <DaisyButton variant="outline" onClick={() => router.push('/dashboard/risks/new')} />
               <AlertTriangle className="h-4 w-4 mr-2" />
               Create New Risk
             </DaisyButton>
-            <DaisyButton variant="outline" onClick={() => router.push('/dashboard/controls/new')}>
+            <DaisyButton variant="outline" onClick={() => router.push('/dashboard/controls/new')} />
               <Shield className="h-4 w-4 mr-2" />
               Add Control
             </DaisyButton>
-            <DaisyButton variant="outline" onClick={() => router.push('/dashboard/documents/upload')}>
+            <DaisyButton variant="outline" onClick={() => router.push('/dashboard/documents/upload')} />
               <FileText className="h-4 w-4 mr-2" />
               Upload Document
             </DaisyButton>
@@ -259,12 +269,13 @@ export default function DaisyDashboardPage() {
 
       {/* Empty State Example */}
       {stats.totalRisks === 0 && (
-        <DaisyAlert variant="info">
-          <div>
+        <DaisyAlert variant="info" >
+  <div>
+</DaisyAlert>
             <h3 className="font-bold">No risks identified yet</h3>
             <div className="text-xs">Start by creating your first risk assessment to get insights.</div>
           </div>
-          <DaisyButton size="sm" variant="primary" onClick={() => router.push('/dashboard/risks/new')}>
+          <DaisyButton size="sm" variant="primary" onClick={() => router.push('/dashboard/risks/new')} />
             Create First Risk
           </DaisyButton>
         </DaisyAlert>

@@ -263,20 +263,22 @@ export default function DocumentSearch({
 
   return (
     <div className={`space-y-6 ${className}`}>
-      <DaisyTabs defaultValue="search" className="w-full">
-        <DaisyTabsList className="grid w-full grid-cols-2">
-          <DaisyTabsTrigger value="search">Search Filters</DaisyTabsTrigger>
+      <DaisyTabs defaultValue="search" className="w-full" />
+        <DaisyTabsList className="grid w-full grid-cols-2" />
+          <DaisyTabsTrigger value="search">Search Filters</DaisyTabs>
           <DaisyTabsTrigger value="saved">Saved Searches</DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="search" className="space-y-6 mt-6">
+        <DaisyTabsContent value="search" className="space-y-6 mt-6" />
           {/* Basic Search */}
-          <DaisyCard>
-            <DaisyCardHeader>
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
               <DaisyCardTitle className="text-lg">Basic Search</DaisyCardTitle>
-            
-            <DaisyCardContent className="space-y-4">
-              <div className="space-y-2">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4" >
+  <div className="space-y-2">
+</DaisyCardContent>
                 <DaisyLabel htmlFor="search-query">Search Query</DaisyLabel>
                 <DaisyInput
                   id="search-query"
@@ -288,21 +290,20 @@ export default function DocumentSearch({
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <DaisyLabel>Category</DaisyLabel>
+                  <DaisyLabel>Category</DaisyInput>
                   <DaisySelect 
                     value={filters.category} 
                     onValueChange={(value) => setFilters(prev => ({ ...prev, category: value }))}
                   >
-                    <DaisySelectTrigger>
-                      <DaisySelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <DaisySelectContent>
+                    <DaisySelectTrigger />
+                      <DaisySelectValue placeholder="Select category" /></DaisySelect>
+                    <DaisySelectContent />
                       {CATEGORY_OPTIONS.map(option => (
-                        <DaisySelectItem key={option.value} value={option.value}>
+                        <DaisySelectItem key={option.value} value={option.value} />
                           {option.label}
-                        </SelectItem>
+                        </DaisySelectContent>
                       ))}
-                    </SelectContent>
+                    </DaisySelectContent>
                   </DaisySelect>
                 </div>
 
@@ -312,29 +313,30 @@ export default function DocumentSearch({
                     value={filters.fileType} 
                     onValueChange={(value) => setFilters(prev => ({ ...prev, fileType: value }))}
                   >
-                    <DaisySelectTrigger>
-                      <DaisySelectValue placeholder="Select file type" />
-                    </SelectTrigger>
-                    <DaisySelectContent>
+                    <DaisySelectTrigger />
+                      <DaisySelectValue placeholder="Select file type" /></DaisySelect>
+                    <DaisySelectContent />
                       {FILE_TYPE_OPTIONS.map(option => (
-                        <DaisySelectItem key={option.value} value={option.value}>
+                        <DaisySelectItem key={option.value} value={option.value} />
                           {option.label}
-                        </SelectItem>
+                        </DaisySelectContent>
                       ))}
-                    </SelectContent>
+                    </DaisySelectContent>
                   </DaisySelect>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Advanced Filters */}
-          <DaisyCard>
-            <DaisyCardHeader>
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
               <DaisyCardTitle className="text-lg">Advanced Filters</DaisyCardTitle>
-            
-            <DaisyCardContent className="space-y-4">
-              {/* Tags */}
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4" >
+  {/* Tags */}
+</DaisyCardContent>
               <div className="space-y-2">
                 <DaisyLabel>Tags</DaisyLabel>
                 <div className="flex gap-2">
@@ -344,15 +346,17 @@ export default function DocumentSearch({
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && addTag()}
                   />
-                  <DaisyButton onClick={addTag} size="sm">
-                    <Plus className="w-4 h-4" />
+                  <DaisyButton onClick={addTag} size="sm" >
+  <Plus className="w-4 h-4" />
+</DaisyInput>
                   </DaisyButton>
                 </div>
                 {filters.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {filters.tags.map((tag, index) => (
-                      <DaisyBadge key={index} variant="secondary" className="cursor-pointer">
-                        {tag}
+                      <DaisyBadge key={index} variant="secondary" className="cursor-pointer" >
+  {tag}
+</DaisyBadge>
                         <X 
                           className="w-3 h-3 ml-1" 
                           onClick={() => removeTag(tag)}
@@ -372,24 +376,24 @@ export default function DocumentSearch({
                       key={index}
                       variant="outline"
                       size="sm"
-                      onClick={() => setDateRange(range.value())}
-                    >
+                      onClick={() => setDateRange(range.value())} />
                       {range.label}
                     </DaisyButton>
                   ))}
                 </div>
                 <div className="flex gap-2">
-                  <DaisyPopover>
-                    <DaisyPopoverTrigger asChild>
-                      <DaisyButton variant="outline" className="justify-start text-left font-normal">
-                        {filters.dateRange.from ? (
+                  <DaisyPopover />
+                    <DaisyPopoverTrigger asChild />
+                      <DaisyButton variant="outline" className="justify-start text-left font-normal" >
+  {filters.dateRange.from ? (
+</DaisyPopover>
                           format(filters.dateRange.from, 'PPP')
                         ) : (
                           'From date'
                         )}
                       </DaisyButton>
                     </DaisyPopoverTrigger>
-                    <DaisyPopoverContent className="w-auto p-0">
+                    <DaisyPopoverContent className="w-auto p-0" />
                       <DaisyCalendar
                         mode="single"
                         selected={filters.dateRange.from}
@@ -398,17 +402,18 @@ export default function DocumentSearch({
                       />
                     </DaisyPopoverContent>
                   </DaisyPopover>
-                  <DaisyPopover>
-                    <DaisyPopoverTrigger asChild>
-                      <DaisyButton variant="outline" className="justify-start text-left font-normal">
-                        {filters.dateRange.to ? (
+                  <DaisyPopover />
+                    <DaisyPopoverTrigger asChild />
+                      <DaisyButton variant="outline" className="justify-start text-left font-normal" >
+  {filters.dateRange.to ? (
+</DaisyPopover>
                           format(filters.dateRange.to, 'PPP')
                         ) : (
                           'To date'
                         )}
                       </DaisyButton>
                     </DaisyPopoverTrigger>
-                    <DaisyPopoverContent className="w-auto p-0">
+                    <DaisyPopoverContent className="w-auto p-0" />
                       <DaisyCalendar
                         mode="single"
                         selected={filters.dateRange.to}
@@ -445,21 +450,20 @@ export default function DocumentSearch({
               {/* Linked Entity */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <DaisyLabel>Linked Entity Type</DaisyLabel>
+                  <DaisyLabel>Linked Entity Type</DaisySlider>
                   <DaisySelect 
                     value={filters.linkedEntityType} 
                     onValueChange={(value) => setFilters(prev => ({ ...prev, linkedEntityType: value }))}
                   >
-                    <DaisySelectTrigger>
-                      <DaisySelectValue placeholder="Select entity type" />
-                    </SelectTrigger>
-                    <DaisySelectContent>
-                      <DaisySelectItem value="">All Types</SelectItem>
-                      <DaisySelectItem value="RISK">Risk</SelectItem>
-                      <DaisySelectItem value="CONTROL">Control</SelectItem>
-                      <DaisySelectItem value="ASSESSMENT">Assessment</SelectItem>
-                      <DaisySelectItem value="AUDIT">Audit</SelectItem>
-                    </SelectContent>
+                    <DaisySelectTrigger />
+                      <DaisySelectValue placeholder="Select entity type" /></DaisySelect>
+                    <DaisySelectContent />
+                      <DaisySelectItem value="">All Types</DaisySelectContent>
+                      <DaisySelectItem value="RISK">Risk</DaisySelectItem>
+                      <DaisySelectItem value="CONTROL">Control</DaisySelectItem>
+                      <DaisySelectItem value="ASSESSMENT">Assessment</DaisySelectItem>
+                      <DaisySelectItem value="AUDIT">Audit</DaisySelectItem>
+                    </DaisySelectContent>
                   </DaisySelect>
                 </div>
 
@@ -472,27 +476,28 @@ export default function DocumentSearch({
                   />
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyInput>
           </DaisyCard>
 
           {/* Search Actions */}
           <div className="flex items-center justify-between">
-            <DaisyButton variant="outline" onClick={clearFilters}>
-              Clear Filters
+            <DaisyButton variant="outline" onClick={clearFilters} >
+  Clear Filters
+</DaisyButton>
             </DaisyButton>
             
             <div className="flex items-center gap-2">
               <DaisyButton
                 variant="outline"
                 onClick={() => setShowSaveSearch(true)}
-                disabled={!filters.query && !filters.category && !filters.fileType}
-              >
+                disabled={!filters.query && !filters.category && !filters.fileType} />
                 <Save className="w-4 h-4 mr-2" />
                 Save Search
               </DaisyButton>
               
-              <DaisyButton onClick={handleSearch} disabled={searching}>
-                {searching ? (
+              <DaisyButton onClick={handleSearch} disabled={searching} >
+  {searching ? (
+</DaisyButton>
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                     Searching...
@@ -509,12 +514,14 @@ export default function DocumentSearch({
 
           {/* Save Search Dialog */}
           {showSaveSearch && (
-            <DaisyCard>
-              <DaisyCardHeader>
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                 <DaisyCardTitle className="text-lg">Save Search</DaisyCardTitle>
-              
-              <DaisyCardContent className="space-y-4">
-                <div className="space-y-2">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4" >
+  <div className="space-y-2">
+</DaisyCardContent>
                   <DaisyLabel htmlFor="search-name">Search Name</DaisyLabel>
                   <DaisyInput
                     id="search-name"
@@ -524,23 +531,25 @@ export default function DocumentSearch({
                   />
                 </div>
                 <div className="flex items-center gap-2">
-                  <DaisyButton onClick={handleSaveSearch}>Save</DaisyButton>
-                  <DaisyButton variant="outline" onClick={() => setShowSaveSearch(false)}>
+                  <DaisyButton onClick={handleSaveSearch}>Save</DaisyInput>
+                  <DaisyButton variant="outline" onClick={() => setShowSaveSearch(false)} />
                     Cancel
                   </DaisyButton>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           )}
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="saved" className="space-y-4 mt-6">
-          <DaisyCard>
-            <DaisyCardHeader>
+        <DaisyTabsContent value="saved" className="space-y-4 mt-6" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
               <DaisyCardTitle className="text-lg">Saved Searches</DaisyCardTitle>
-            
-            <DaisyCardContent>
-              {savedSearches.length === 0 ? (
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  {savedSearches.length === 0 ? (
+</DaisyCardContent>
                 <div className="text-center py-8">
                   <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">No saved searches</h3>
@@ -561,26 +570,29 @@ export default function DocumentSearch({
                           Used {search.useCount} time{search.useCount !== 1 ? 's' : ''}
                         </p>
                       </div>
-                      <DaisyButton size="sm" variant="ghost">
-                        Load
+                      <DaisyButton size="sm" variant="ghost" >
+  Load
+</DaisyButton>
                       </DaisyButton>
                     </div>
                   ))}
                 </div>
               )}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>
 
       {/* Search Facets */}
       {Object.keys(searchFacets).length > 0 && (
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle className="text-lg">Refine Results</DaisyCardTitle>
-          
-          <DaisyCardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+</DaisyCardContent>
               {searchFacets.categories && searchFacets.categories.length > 0 && (
                 <div>
                   <h4 className="font-medium mb-2">Categories</h4>
@@ -623,7 +635,7 @@ export default function DocumentSearch({
                 </div>
               )}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
     </div>

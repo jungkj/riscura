@@ -27,12 +27,12 @@ export async function getSubscriptionStatus(organizationId: string): Promise<Sub
       include: {
         subscriptions: {
           where: {
-            status: { in: ['ACTIVE', 'TRIALING', 'PAST_DUE'] }
+            status: { in: ['ACTIVE', 'TRIALING', 'PAST_DUE'] },
           },
           orderBy: { createdAt: 'desc' },
-          take: 1
-        }
-      }
+          take: 1,
+        },
+      },
     });
 
     if (!organization) {
@@ -56,7 +56,7 @@ export async function getSubscriptionStatus(organizationId: string): Promise<Sub
       const timeDiff = trialEnd.getTime() - now.getTime();
       trialDaysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
       isTrialExpired = timeDiff <= 0;
-      
+
       if (isTrialExpired && subscription.status === 'TRIALING') {
         isActive = false;
         status = 'FREE';
@@ -77,7 +77,7 @@ export async function getSubscriptionStatus(organizationId: string): Promise<Sub
       trialEnd,
       trialDaysLeft,
       isTrialExpired,
-      needsUpgrade: !isActive && plan === 'free'
+      needsUpgrade: !isActive && plan === 'free',
     };
   } catch (error) {
     console.error('Error getting subscription status:', error);
@@ -93,7 +93,7 @@ function createFreeStatus(): SubscriptionStatus {
     trialEnd: null,
     trialDaysLeft: null,
     isTrialExpired: false,
-    needsUpgrade: true
+    needsUpgrade: true,
   };
 }
 
@@ -115,7 +115,7 @@ export function checkSubscriptionAccess(
     const planLevels = { free: 0, pro: 1, enterprise: 2 };
     const userLevel = planLevels[subscription.plan as keyof typeof planLevels] || 0;
     const requiredLevel = planLevels[requirements.minPlan];
-    
+
     if (userLevel < requiredLevel) {
       return { allowed: false, reason: `${requirements.minPlan} plan or higher required` };
     }
@@ -125,32 +125,27 @@ export function checkSubscriptionAccess(
 }
 
 // Middleware wrapper for subscription checks
-export function withSubscriptionAuth(
-  requirements: SubscriptionRequirement = {}
-) {
+export function withSubscriptionAuth(requirements: SubscriptionRequirement = {}) {
   return async (req: NextRequest) => {
     try {
       const session = await getServerSession(authOptions);
-      
+
       if (!session?.user) {
-        return NextResponse.json(
-          { error: 'Authentication required' },
-          { status: 401 }
-        );
+        return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
       }
 
       const user = session.user as any;
       const subscriptionStatus = await getSubscriptionStatus(user.organizationId);
-      
+
       const { allowed, reason } = checkSubscriptionAccess(subscriptionStatus, requirements);
-      
+
       if (!allowed) {
         return NextResponse.json(
-          { 
+          {
             error: reason || 'Subscription upgrade required',
             code: 'SUBSCRIPTION_REQUIRED',
             subscriptionStatus,
-            upgradeUrl: '/billing/upgrade'
+            upgradeUrl: '/billing/upgrade',
           },
           { status: 402 }
         );
@@ -159,10 +154,7 @@ export function withSubscriptionAuth(
       return null; // Allow the request to continue
     } catch (error) {
       console.error('Subscription auth error:', error);
-      return NextResponse.json(
-        { error: 'Subscription verification failed' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Subscription verification failed' }, { status: 500 });
     }
   };
-} 
+}

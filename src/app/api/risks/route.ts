@@ -11,13 +11,13 @@ const CreateRiskSchema = z.object({
   likelihood: z.number().min(1).max(5),
   impact: z.number().min(1).max(5),
   status: z.nativeEnum(RiskStatus).optional(),
-  addToRCSA: z.boolean().optional() // Option to automatically add to RCSA
+  addToRCSA: z.boolean().optional(), // Option to automatically add to RCSA
 });
 
 export const GET = withApiMiddleware(
   async (req: NextRequest) => {
     const user = (req as any).user;
-    
+
     if (!user || !user.organizationId) {
       console.warn('[Risks API] Missing user or organizationId', { user });
       return NextResponse.json(
@@ -28,24 +28,24 @@ export const GET = withApiMiddleware(
 
     try {
       console.log('[Risks API] Fetching risks for organization:', user.organizationId);
-      
+
       // Parse pagination parameters from query string
       const { searchParams } = new URL(req.url);
       const page = parseInt(searchParams.get('page') || '1');
       const limit = parseInt(searchParams.get('limit') || '50');
       const offset = (page - 1) * limit;
-      
+
       // Get total count for pagination
       const totalCount = await db.client.risk.count({
-        where: { organizationId: user.organizationId }
+        where: { organizationId: user.organizationId },
       });
-      
+
       // Start with a simple query first
       const risks = await db.client.risk.findMany({
         where: { organizationId: user.organizationId },
         orderBy: { createdAt: 'desc' },
         skip: offset,
-        take: limit
+        take: limit,
       });
 
       console.log(`[Risks API] Found ${risks.length} risks (page ${page}, total: ${totalCount})`);
@@ -60,8 +60,8 @@ export const GET = withApiMiddleware(
             page,
             limit,
             total: totalCount,
-            totalPages: Math.ceil(totalCount / limit)
-          }
+            totalPages: Math.ceil(totalCount / limit),
+          },
         });
       }
 
@@ -72,21 +72,21 @@ export const GET = withApiMiddleware(
           include: {
             controls: {
               include: {
-                control: true
-              }
+                control: true,
+              },
             },
             creator: {
               select: {
                 id: true,
                 firstName: true,
                 lastName: true,
-                email: true
-              }
-            }
+                email: true,
+              },
+            },
           },
           orderBy: { createdAt: 'desc' },
           skip: offset,
-          take: limit
+          take: limit,
         });
 
         return NextResponse.json({
@@ -96,11 +96,14 @@ export const GET = withApiMiddleware(
             page,
             limit,
             total: totalCount,
-            totalPages: Math.ceil(totalCount / limit)
-          }
+            totalPages: Math.ceil(totalCount / limit),
+          },
         });
       } catch (relationError) {
-        console.warn('[Risks API] Error fetching relationships, returning basic data:', relationError);
+        console.warn(
+          '[Risks API] Error fetching relationships, returning basic data:',
+          relationError
+        );
         // If relationships fail, return basic risk data with pagination
         return NextResponse.json({
           success: true,
@@ -109,8 +112,8 @@ export const GET = withApiMiddleware(
             page,
             limit,
             total: totalCount,
-            totalPages: Math.ceil(totalCount / limit)
-          }
+            totalPages: Math.ceil(totalCount / limit),
+          },
         });
       }
     } catch (error) {
@@ -118,14 +121,14 @@ export const GET = withApiMiddleware(
         error,
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined,
-        organizationId: user.organizationId
+        organizationId: user.organizationId,
       });
-      
+
       return NextResponse.json(
-        { 
-          success: false, 
+        {
+          success: false,
           error: 'Failed to fetch risks',
-          details: error instanceof Error ? error.message : 'Unknown error'
+          details: error instanceof Error ? error.message : 'Unknown error',
         },
         { status: 500 }
       );
@@ -137,7 +140,7 @@ export const GET = withApiMiddleware(
 export const POST = withApiMiddleware(
   async (req: NextRequest) => {
     const user = (req as any).user;
-    
+
     if (!user || !user.organizationId) {
       console.warn('[Risks API] Missing user or organizationId in POST', { user });
       return NextResponse.json(
@@ -149,12 +152,12 @@ export const POST = withApiMiddleware(
     try {
       const body = await req.json();
       console.log('[Risks API] Creating risk with data:', body);
-      
+
       const validatedData = CreateRiskSchema.parse(body);
-      
+
       const riskScore = validatedData.likelihood * validatedData.impact;
       const riskLevel = calculateRiskLevel(riskScore);
-      
+
       console.log('[Risks API] Calculated risk score:', riskScore, 'level:', riskLevel);
 
       const riskData = {
@@ -169,20 +172,22 @@ export const POST = withApiMiddleware(
         organizationId: user.organizationId,
         createdBy: user.id,
         dateIdentified: new Date(),
-        metadata: validatedData.addToRCSA ? {
-          includedInRCSA: true,
-          lastRCSASync: new Date().toISOString()
-        } : undefined
+        metadata: validatedData.addToRCSA
+          ? {
+              includedInRCSA: true,
+              lastRCSASync: new Date().toISOString(),
+            }
+          : undefined,
       };
 
       console.log('[Risks API] Creating risk with processed data:', riskData);
 
       const risk = await db.client.risk.create({
-        data: riskData
+        data: riskData,
       });
 
       console.log('[Risks API] Risk created successfully:', risk.id);
-      
+
       // Create activity log if added to RCSA
       if (validatedData.addToRCSA) {
         await db.client.activity.create({
@@ -192,15 +197,18 @@ export const POST = withApiMiddleware(
             entityId: risk.id,
             description: 'Risk created and added to RCSA',
             userId: user.id,
-            organizationId: user.organizationId
-          }
+            organizationId: user.organizationId,
+          },
         });
       }
 
-      return NextResponse.json({
-        success: true,
-        data: risk
-      }, { status: 201 });
+      return NextResponse.json(
+        {
+          success: true,
+          data: risk,
+        },
+        { status: 201 }
+      );
     } catch (error) {
       if (error instanceof z.ZodError) {
         console.error('[Risks API] Validation error:', error.errors);
@@ -209,46 +217,50 @@ export const POST = withApiMiddleware(
           { status: 400 }
         );
       }
-      
+
       // Check for foreign key constraint errors
       if (error instanceof Error && error.message.includes('organizationId_fkey')) {
         console.error('[Risks API] Organization not found:', user.organizationId);
         return NextResponse.json(
-          { 
-            success: false, 
+          {
+            success: false,
             error: 'Organization not found',
-            details: 'The organization does not exist in the database. Please ensure your organization is properly set up.',
-            hint: process.env.NODE_ENV === 'development' ? 'In development mode, you may need to seed the database with test organizations.' : undefined
+            details:
+              'The organization does not exist in the database. Please ensure your organization is properly set up.',
+            hint:
+              process.env.NODE_ENV === 'development'
+                ? 'In development mode, you may need to seed the database with test organizations.'
+                : undefined,
           },
           { status: 404 }
         );
       }
-      
+
       console.error('[Risks API] Create risk error:', {
         error,
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined,
-        user: { id: user.id, organizationId: user.organizationId }
+        user: { id: user.id, organizationId: user.organizationId },
       });
-      
+
       return NextResponse.json(
-        { 
-          success: false, 
+        {
+          success: false,
           error: 'Failed to create risk',
-          details: error instanceof Error ? error.message : 'Unknown error'
+          details: error instanceof Error ? error.message : 'Unknown error',
         },
         { status: 500 }
       );
     }
   },
-  { 
-    requireAuth: true
+  {
+    requireAuth: true,
   }
 );
 
 function calculateRiskLevel(score: number): RiskLevel {
-  if (score <= 6) return RiskLevel.LOW;      // 1-6 (24% of range)
-  if (score <= 12) return RiskLevel.MEDIUM;  // 7-12 (24% of range)
-  if (score <= 20) return RiskLevel.HIGH;    // 13-20 (32% of range)
-  return RiskLevel.CRITICAL;                 // 21-25 (20% of range)
+  if (score <= 6) return RiskLevel.LOW; // 1-6 (24% of range)
+  if (score <= 12) return RiskLevel.MEDIUM; // 7-12 (24% of range)
+  if (score <= 20) return RiskLevel.HIGH; // 13-20 (32% of range)
+  return RiskLevel.CRITICAL; // 21-25 (20% of range)
 }

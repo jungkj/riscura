@@ -130,8 +130,7 @@ export default function TemplatesPage() {
           variant="ghost"
           size="sm"
           onClick={() => router.back()}
-          className="mb-4"
-        >
+          className="mb-4" />
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
         </DaisyButton>
@@ -152,22 +151,24 @@ export default function TemplatesPage() {
           return (
             <DaisyCard 
               key={template.id}
-              className="border-gray-200 hover:shadow-lg transition-all duration-300"
-            >
-              <DaisyCardHeader>
+              className="border-gray-200 hover:shadow-lg transition-all duration-300" >
+  <DaisyCardHeader />
+</DaisyCard>
                 <div className="flex items-start justify-between mb-3">
                   <div className={`p-3 bg-gray-50 rounded-lg ${template.color}`}>
                     <Icon className="h-6 w-6" />
                   </div>
-                  <DaisyBadge variant="secondary" className="text-xs">
-                    {template.badge}
+                  <DaisyBadge variant="secondary" className="text-xs" >
+  {template.badge}
+</DaisyBadge>
                   </DaisyBadge>
                 </div>
                 <DaisyCardTitle className="text-xl">{template.name}</DaisyCardTitle>
                 <DaisyCardDescription>{template.description}</p>
               
-              <DaisyCardContent>
-                <div className="space-y-4">
+              <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardDescription>
                   <div className="space-y-2">
                     <p className="text-sm font-medium text-gray-700">Includes:</p>
                     <ul className="space-y-1">
@@ -183,8 +184,7 @@ export default function TemplatesPage() {
                   <DaisyButton
                     className="w-full"
                     onClick={() => handleDownload(template.type)}
-                    disabled={downloading === template.type}
-                  >
+                    disabled={downloading === template.type} />
                     {downloading === template.type ? (
                       <>
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -198,22 +198,25 @@ export default function TemplatesPage() {
                     )}
                   </DaisyButton>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           );
         })}
       </div>
 
       {/* Instructions Section */}
-      <DaisyCard className="mt-8 border-gray-200">
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5 text-blue-600" />
+      <DaisyCard className="mt-8 border-gray-200" >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <FileText className="h-5 w-5 text-blue-600" />
+</DaisyCardTitle>
             How to Use These Templates
           </DaisyCardTitle>
-        
-        <DaisyCardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        </DaisyCardHeader>
+        <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+</DaisyCardContent>
             <div className="space-y-2">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
@@ -256,7 +259,7 @@ export default function TemplatesPage() {
               <strong>Pro Tip:</strong> Start with the sample data to understand the format, then gradually replace it with your own information. The templates include validation rules to help ensure data quality.
             </p>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

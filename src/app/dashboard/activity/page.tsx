@@ -10,11 +10,11 @@ export default function ActivityPage() {
           <h1 className="text-2xl font-bold text-gray-900">Recent Activity</h1>
           <p className="text-gray-600">Latest updates and changes</p>
         </div>
-        
+
         <div className="bg-white rounded-lg border p-6">
           <p className="text-gray-600">Activity feed coming soon...</p>
         </div>
       </div>
     </ProtectedRoute>
   );
-} 
+}

@@ -40,4 +40,4 @@ export const AUTH_CONFIG: AuthConfig = {
   bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS || '12'),
 };
 
-export default AUTH_CONFIG; 
+export default AUTH_CONFIG;

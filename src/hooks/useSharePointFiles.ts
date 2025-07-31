@@ -28,73 +28,83 @@ export const useSharePointFiles = (integrationId: string): UseSharePointFilesRet
   const [lastPath, setLastPath] = useState<string>('/');
 
   // List files in a path
-  const listFiles = useCallback(async (path: string = '/') => {
-    if (!integrationId) return;
-    
-    try {
-      setIsLoading(true);
-      setError(null);
-      setCurrentPath(path);
-      setLastPath(path);
-      
-      const response = await api.post('/api/sharepoint/files', {
-        integrationId,
-        path: path === '/' ? undefined : path
-      });
-      
-      const data = await response.json();
-      
-      if (data.files) {
-        setFiles(data.files.map((file: any) => ({
-          ...file,
-          modifiedDate: new Date(file.modifiedDate)
-        })));
-      } else if (data.error) {
-        setError(data.error);
+  const listFiles = useCallback(
+    async (path: string = '/') => {
+      if (!integrationId) return;
+
+      try {
+        setIsLoading(true);
+        setError(null);
+        setCurrentPath(path);
+        setLastPath(path);
+
+        const response = await api.post('/api/sharepoint/files', {
+          integrationId,
+          path: path === '/' ? undefined : path,
+        });
+
+        const data = await response.json();
+
+        if (data.files) {
+          setFiles(
+            data.files.map((file: any) => ({
+              ...file,
+              modifiedDate: new Date(file.modifiedDate),
+            }))
+          );
+        } else if (data.error) {
+          setError(data.error);
+          setFiles([]);
+        }
+      } catch (err) {
+        console.error('Error listing files:', err);
+        setError('Failed to load files from SharePoint');
         setFiles([]);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      console.error('Error listing files:', err);
-      setError('Failed to load files from SharePoint');
-      setFiles([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [integrationId]);
+    },
+    [integrationId]
+  );
 
   // Search for files
-  const searchFiles = useCallback(async (query: string) => {
-    if (!integrationId || !query.trim()) return;
-    
-    try {
-      setIsLoading(true);
-      setError(null);
-      
-      const response = await api.put('/api/sharepoint/files', {
-        integrationId,
-        query,
-        fileTypes: ['xlsx', 'xls']
-      });
-      
-      const data = await response.json();
-      
-      if (data.files) {
-        setFiles(data.files.map((file: any) => ({
-          ...file,
-          modifiedDate: new Date(file.modifiedDate)
-        })));
-      } else if (data.error) {
-        setError(data.error);
+  const searchFiles = useCallback(
+    async (query: string) => {
+      if (!integrationId || !query.trim()) return;
+
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        const response = await api.put('/api/sharepoint/files', {
+          integrationId,
+          query,
+          fileTypes: ['xlsx', 'xls'],
+        });
+
+        const data = await response.json();
+
+        if (data.files) {
+          setFiles(
+            data.files.map((file: any) => ({
+              ...file,
+              modifiedDate: new Date(file.modifiedDate),
+            }))
+          );
+        } else if (data.error) {
+          setError(data.error);
+          setFiles([]);
+        }
+      } catch (err) {
+        console.error('Error searching files:', err);
+        setError('Failed to search files in SharePoint');
         setFiles([]);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      console.error('Error searching files:', err);
-      setError('Failed to search files in SharePoint');
-      setFiles([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [integrationId]);
+    },
+    [integrationId]
+  );
 
   // Refresh current view
   const refresh = useCallback(async () => {
@@ -108,6 +118,6 @@ export const useSharePointFiles = (integrationId: string): UseSharePointFilesRet
     currentPath,
     listFiles,
     searchFiles,
-    refresh
+    refresh,
   };
 };

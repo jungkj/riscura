@@ -91,23 +91,29 @@ export class VendorAssessmentService {
   /**
    * Assess a vendor using both Probo's capabilities and Riscura's AI enhancements
    */
-  async assessVendor(websiteUrl: string, organizationContext?: any): Promise<EnhancedVendorAssessment> {
+  async assessVendor(
+    websiteUrl: string,
+    organizationContext?: any
+  ): Promise<EnhancedVendorAssessment> {
     try {
       // Get initial assessment from Probo
       const proboAssessment = await this.proboService.assessVendor(websiteUrl);
-      
+
       // Enhance with Riscura's AI capabilities
       const riskProfile = await this.generateVendorRiskProfile(proboAssessment);
       const complianceAnalysis = await this.analyzeCompliance(proboAssessment.vendorInfo);
-      const contractualRecommendations = await this.generateContractualRecommendations(proboAssessment);
-      const dueDiligenceChecklist = await this.generateDueDiligenceChecklist(proboAssessment.vendorInfo);
+      const contractualRecommendations =
+        await this.generateContractualRecommendations(proboAssessment);
+      const dueDiligenceChecklist = await this.generateDueDiligenceChecklist(
+        proboAssessment.vendorInfo
+      );
 
       return {
         ...proboAssessment,
         riskProfile,
         complianceAnalysis,
         contractualRecommendations,
-        dueDiligenceChecklist
+        dueDiligenceChecklist,
       };
     } catch (error) {
       console.error('Enhanced vendor assessment failed:', error);
@@ -155,10 +161,10 @@ export class VendorAssessmentService {
    */
   async analyzeCompliance(vendorInfo: VendorInfo): Promise<ComplianceAnalysis> {
     const frameworks = ['SOC2', 'ISO27001', 'GDPR', 'HIPAA', 'PCI DSS'];
-    
+
     const analysis: ComplianceAnalysis = {
       frameworks: [],
-      certifications: []
+      certifications: [],
     };
 
     // Analyze each framework
@@ -171,7 +177,7 @@ export class VendorAssessmentService {
         name: framework,
         coverage,
         gaps,
-        recommendations
+        recommendations,
       });
     }
 
@@ -180,7 +186,7 @@ export class VendorAssessmentService {
       analysis.certifications.push({
         name: cert,
         status: 'UNKNOWN', // Would need to verify with actual cert databases
-        validationNeeded: true
+        validationNeeded: true,
       });
     }
 
@@ -190,7 +196,9 @@ export class VendorAssessmentService {
   /**
    * Generate contractual recommendations based on risk assessment
    */
-  async generateContractualRecommendations(assessment: VendorAssessment): Promise<ContractualRecommendation[]> {
+  async generateContractualRecommendations(
+    assessment: VendorAssessment
+  ): Promise<ContractualRecommendation[]> {
     const recommendations: ContractualRecommendation[] = [];
 
     // High-risk vendors need stronger contractual protections
@@ -199,14 +207,15 @@ export class VendorAssessmentService {
         clause: 'Enhanced Security Requirements',
         reason: 'High risk score requires additional security controls',
         priority: 'HIGH',
-        template: 'Vendor shall implement and maintain information security controls equivalent to SOC 2 Type II standards.'
+        template:
+          'Vendor shall implement and maintain information security controls equivalent to SOC 2 Type II standards.',
       });
 
       recommendations.push({
         clause: 'Right to Audit',
         reason: 'High-risk vendors require audit rights',
         priority: 'HIGH',
-        template: 'Customer reserves the right to conduct security audits with 30 days notice.'
+        template: 'Customer reserves the right to conduct security audits with 30 days notice.',
       });
     }
 
@@ -217,7 +226,8 @@ export class VendorAssessmentService {
         clause: 'Data Processing Agreement',
         reason: 'Vendor processes customer data requiring DPA',
         priority: 'HIGH',
-        template: 'A comprehensive DPA must be executed covering data protection, breach notification, and deletion requirements.'
+        template:
+          'A comprehensive DPA must be executed covering data protection, breach notification, and deletion requirements.',
       });
     }
 
@@ -227,7 +237,7 @@ export class VendorAssessmentService {
         clause: 'Compliance Certification Timeline',
         reason: 'Vendor lacks security certifications',
         priority: 'MEDIUM',
-        template: 'Vendor agrees to obtain SOC 2 Type II certification within 12 months.'
+        template: 'Vendor agrees to obtain SOC 2 Type II certification within 12 months.',
       });
     }
 
@@ -242,45 +252,45 @@ export class VendorAssessmentService {
       {
         category: 'Legal',
         item: 'Verify legal entity registration',
-        status: 'PENDING'
+        status: 'PENDING',
       },
       {
         category: 'Financial',
         item: 'Review financial stability (D&B report)',
-        status: 'PENDING'
+        status: 'PENDING',
       },
       {
         category: 'Security',
         item: 'Validate security certifications',
-        status: vendorInfo.certifications.length > 0 ? 'PENDING' : 'NOT_APPLICABLE'
+        status: vendorInfo.certifications.length > 0 ? 'PENDING' : 'NOT_APPLICABLE',
       },
       {
         category: 'Privacy',
         item: 'Review privacy policy compliance',
         status: vendorInfo.privacyPolicyURL ? 'PENDING' : 'PENDING',
-        evidence: vendorInfo.privacyPolicyURL || undefined
+        evidence: vendorInfo.privacyPolicyURL || undefined,
       },
       {
         category: 'Operational',
         item: 'Assess business continuity plans',
-        status: 'PENDING'
+        status: 'PENDING',
       },
       {
         category: 'Technical',
         item: 'Review security architecture documentation',
         status: vendorInfo.securityPageURL ? 'PENDING' : 'PENDING',
-        evidence: vendorInfo.securityPageURL || undefined
+        evidence: vendorInfo.securityPageURL || undefined,
       },
       {
         category: 'Compliance',
         item: 'Verify compliance with applicable regulations',
-        status: 'PENDING'
+        status: 'PENDING',
       },
       {
         category: 'Insurance',
         item: 'Confirm cyber liability insurance coverage',
-        status: 'PENDING'
-      }
+        status: 'PENDING',
+      },
     ];
 
     return checklist;
@@ -299,25 +309,25 @@ export class VendorAssessmentService {
         privacy: assessment.vendorInfo.privacyPolicyURL ? 80 : 40,
         compliance: assessment.vendorInfo.certifications.length > 0 ? 75 : 35,
         operational: 60,
-        financial: 65
+        financial: 65,
       },
       riskFactors: this.extractRiskFactors(assessment),
       recommendations: this.generateBasicRecommendations(assessment),
       complianceGaps: this.identifyComplianceGaps(assessment),
-      mitigationStrategies: this.generateMitigationStrategies(assessment)
+      mitigationStrategies: this.generateMitigationStrategies(assessment),
     };
   }
 
   private extractRiskFactors(assessment: VendorAssessment): RiskFactor[] {
     const factors: RiskFactor[] = [];
 
-    assessment.findings.forEach(finding => {
+    assessment.findings.forEach((finding) => {
       factors.push({
         category: finding.category,
         factor: finding.description,
         impact: finding.severity,
         likelihood: 'MEDIUM',
-        description: finding.description
+        description: finding.description,
       });
     });
 
@@ -355,7 +365,7 @@ export class VendorAssessmentService {
         requirement: 'SOC 2 Type II Certification',
         status: 'MISSING',
         severity: 'HIGH',
-        description: 'Vendor lacks SOC 2 certification for security controls'
+        description: 'Vendor lacks SOC 2 certification for security controls',
       });
     }
 
@@ -365,7 +375,7 @@ export class VendorAssessmentService {
         requirement: 'Privacy Policy',
         status: 'MISSING',
         severity: 'HIGH',
-        description: 'No accessible privacy policy for data protection compliance'
+        description: 'No accessible privacy policy for data protection compliance',
       });
     }
 
@@ -381,7 +391,7 @@ export class VendorAssessmentService {
         strategy: 'Implement continuous security monitoring and quarterly reviews',
         priority: 'HIGH',
         timeline: '30 days',
-        resources: ['Security team', 'Audit tools', 'Compliance documentation']
+        resources: ['Security team', 'Audit tools', 'Compliance documentation'],
       });
     }
 
@@ -390,7 +400,7 @@ export class VendorAssessmentService {
       strategy: 'Include right-to-audit clause in vendor agreement',
       priority: 'MEDIUM',
       timeline: 'Next contract renewal',
-      resources: ['Legal team', 'Contract templates']
+      resources: ['Legal team', 'Contract templates'],
     });
 
     return strategies;
@@ -399,7 +409,7 @@ export class VendorAssessmentService {
   private calculateFrameworkCoverage(vendorInfo: VendorInfo, framework: string): number {
     // Simplified coverage calculation
     let coverage = 0;
-    
+
     if (vendorInfo.certifications.includes(framework)) coverage += 40;
     if (vendorInfo.securityPageURL) coverage += 20;
     if (vendorInfo.privacyPolicyURL) coverage += 20;
@@ -439,4 +449,4 @@ export class VendorAssessmentService {
 
     return recommendations;
   }
-} 
+}

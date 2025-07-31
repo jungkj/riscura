@@ -402,9 +402,11 @@ export default function QuestionnairePage() {
     };
 
     const config = statusConfig[status] || { color: 'bg-gray-100 text-gray-800', label: 'Unknown' };
-    return (
-      <DaisyBadge variant="outline" className={config.color}>
-        {config.label}
+
+  return (
+    <DaisyBadge variant="outline" className={config.color} >
+  {config.label}
+</DaisyBadge>
       </DaisyBadge>
     );
   };
@@ -421,15 +423,17 @@ export default function QuestionnairePage() {
 
   if (error) {
     return (
-      <DaisyCard className="bg-white border border-gray-100 shadow-sm">
-        <DaisyCardContent className="p-6">
+      <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
           <div className="text-center text-red-600">
             <p>Error loading questionnaires: {error}</p>
-            <DaisyButton onClick={() => window.location.reload()} className="mt-2 bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a]">
+            <DaisyButton onClick={() => window.location.reload()} className="mt-2 bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a]" />
               Retry
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
   }
@@ -442,7 +446,7 @@ export default function QuestionnairePage() {
         onCancel={() => setShowBuilder(false)}
       />
     );
-  }
+  };
 
   return (
     <div className="container mx-auto py-6 space-y-6">
@@ -454,82 +458,94 @@ export default function QuestionnairePage() {
             Create and manage dynamic questionnaires with AI assistance
           </p>
         </div>
-        <DaisyButton onClick={handleCreateNew} className="bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] border-0 shadow-md hover:shadow-lg transition-all duration-300 font-inter font-medium">
-          <Plus className="mr-2 h-4 w-4" />
+        <DaisyButton onClick={handleCreateNew} className="bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] border-0 shadow-md hover:shadow-lg transition-all duration-300 font-inter font-medium" >
+  <Plus className="mr-2 h-4 w-4" />
+</DaisyButton>
           Create Questionnaire
         </DaisyButton>
       </div>
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
-          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
+  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+</DaisyCard>
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Total Questionnaires</DaisyCardTitle>
             <FileText className="h-4 w-4 text-gray-400" />
           
-          <DaisyCardContent>
-            <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+          <DaisyCardContent >
+  <div className="text-2xl font-bold text-gray-900">
+</DaisyCardContent>{stats.total}</div>
             <p className="text-xs text-gray-600">
               Across all statuses
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
-          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
+  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+</DaisyCard>
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Active</DaisyCardTitle>
             <CheckCircle className="h-4 w-4 text-green-600" />
           
-          <DaisyCardContent>
-            <div className="text-2xl font-bold text-green-600">{stats.active}</div>
+          <DaisyCardContent >
+  <div className="text-2xl font-bold text-green-600">
+</DaisyCardContent>{stats.active}</div>
             <p className="text-xs text-gray-600">
               Currently collecting responses
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
-          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
+  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+</DaisyCard>
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Completion Rate</DaisyCardTitle>
             <TrendingUp className="h-4 w-4 text-[#191919]" />
           
-          <DaisyCardContent>
-            <div className={`text-2xl font-bold ${getCompletionColor(stats.averageCompletion)}`}>
+          <DaisyCardContent >
+  <div className={`text-2xl font-bold ${getCompletionColor(stats.averageCompletion)}`}>
+</DaisyCardContent>
               {(stats.averageCompletion * 100).toFixed(1)}%
             </div>
             <p className="text-xs text-gray-600">
               Average across all questionnaires
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
-          <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
+  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+</DaisyCard>
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Total Responses</DaisyCardTitle>
             <BarChart3 className="h-4 w-4 text-[#191919]" />
           
-          <DaisyCardContent>
-            <div className="text-2xl font-bold text-[#191919]">{stats.totalResponses}</div>
+          <DaisyCardContent >
+  <div className="text-2xl font-bold text-[#191919]">
+</DaisyCardContent>{stats.totalResponses}</div>
             <p className="text-xs text-gray-600">
               All-time responses collected
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
       {/* Questionnaires Table */}
-      <DaisyCard className="bg-white border border-gray-100 shadow-sm">
-        <DaisyCardHeader>
+      <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
+  <DaisyCardHeader />
+</DaisyCard>
           <DaisyCardTitle className="text-gray-900 font-inter">Questionnaires</DaisyCardTitle>
-          <DaisyCardDescription className="text-gray-600 font-inter">
-            Manage your questionnaires and track completion rates
+          <DaisyCardDescription className="text-gray-600 font-inter" >
+  Manage your questionnaires and track completion rates
+</DaisyCardDescription>
           </p>
         
-        <DaisyCardContent>
-          <DaisyTable>
-            <DaisyTableHeader>
-              <DaisyTableRow>
-                <DaisyTableHead className="text-gray-700 font-medium">Title</DaisyTableHead>
+        <DaisyCardContent >
+  <DaisyTable />
+</DaisyCardContent>
+            <DaisyTableHeader />
+              <DaisyTableRow />
+                <DaisyTableHead className="text-gray-700 font-medium">Title</DaisyTableHeader>
                 <DaisyTableHead className="text-gray-700 font-medium">Status</DaisyTableHead>
                 <DaisyTableHead className="text-gray-700 font-medium">Category</DaisyTableHead>
                 <DaisyTableHead className="text-gray-700 font-medium">Created</DaisyTableHead>
@@ -537,75 +553,72 @@ export default function QuestionnairePage() {
                 <DaisyTableHead className="text-gray-700 font-medium">Actions</DaisyTableHead>
               </DaisyTableRow>
             </DaisyTableHeader>
-            <DaisyTableBody>
+            <DaisyTableBody />
               {questionnaires.map((questionnaire) => (
-                <DaisyTableRow key={questionnaire.id} className="hover:bg-[#D8C3A5]/20">
-                  <DaisyTableCell>
+                <DaisyTableRow key={questionnaire.id} className="hover:bg-[#D8C3A5]/20" />
+                  <DaisyTableCell />
                     <div>
                       <div className="font-medium text-gray-900">{questionnaire.title}</div>
                       <div className="text-sm text-gray-600">{questionnaire.description}</div>
                     </div>
-                  </DaisyTableCell>
+                  </DaisyTableBody>
                   <DaisyTableCell>{getStatusBadge(questionnaire.status)}</DaisyTableCell>
-                  <DaisyTableCell>
-                    <DaisyBadge variant="outline" className="bg-secondary/20 text-muted-foreground border-0">
-                      {questionnaire.category.replace('_', ' ')}
+                  <DaisyTableCell />
+                    <DaisyBadge variant="outline" className="bg-secondary/20 text-muted-foreground border-0" >
+  {questionnaire.category.replace('_', ' ')}
+</DaisyTableCell>
                     </DaisyBadge>
                   </DaisyTableCell>
-                  <DaisyTableCell className="text-gray-600">
+                  <DaisyTableCell className="text-gray-600" />
                     {formatDate(questionnaire.createdAt.toISOString())}
                   </DaisyTableCell>
-                  <DaisyTableCell>
+                  <DaisyTableCell />
                     <div className="flex items-center space-x-2">
                       <DaisyProgress value={questionnaire.analytics.overview.completionRate * 100} className="w-16 bg-secondary/20 border border-border h-2" />
                       <span className="text-sm text-gray-600">{(questionnaire.analytics.overview.completionRate * 100).toFixed(0)}%</span>
                     </div>
                   </DaisyTableCell>
-                  <DaisyTableCell>
-                    <DaisyDropdownMenu>
-                      <DaisyDropdownMenuTrigger asChild>
-                        <DaisyButton variant="ghost" className="h-8 w-8 p-0 text-gray-600 hover:text-gray-900 hover:bg-[#D8C3A5]/20">
-                          <MoreHorizontal className="h-4 w-4" />
+                  <DaisyTableCell />
+                    <DaisyDropdownMenu />
+                      <DaisyDropdownMenuTrigger asChild />
+                        <DaisyButton variant="ghost" className="h-8 w-8 p-0 text-gray-600 hover:text-gray-900 hover:bg-[#D8C3A5]/20" >
+  <MoreHorizontal className="h-4 w-4" />
+</DaisyTableCell>
                         </DaisyButton>
                       </DaisyDropdownMenuTrigger>
-                      <DaisyDropdownMenuContent align="end" className="bg-white border border-gray-100 shadow-lg">
-                        <DaisyDropdownMenuLabel className="text-gray-900">Actions</DaisyDropdownMenuLabel>
+                      <DaisyDropdownMenuContent align="end" className="bg-white border border-gray-100 shadow-lg" />
+                        <DaisyDropdownMenuLabel className="text-gray-900">Actions</DaisyDropdownMenuContent>
                         <DaisyDropdownMenuItem
                           onClick={() => handleEdit(questionnaire)}
-                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium"
-                        >
+                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium" />
                           <Edit className="mr-2 h-4 w-4" />
                           Edit
                         </DaisyDropdownMenuItem>
                         <DaisyDropdownMenuItem
                           onClick={() => handleDuplicate(questionnaire)}
-                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium"
-                        >
+                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium" />
                           <Copy className="mr-2 h-4 w-4" />
                           Duplicate
                         </DaisyDropdownMenuItem>
                         <DaisyDropdownMenuItem
                           onClick={() => handleDistribute(questionnaire)}
-                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium"
-                        >
+                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium" />
                           <Send className="mr-2 h-4 w-4" />
                           Distribute
                         </DaisyDropdownMenuItem>
                         <DaisyDropdownMenuItem
                           onClick={() => handleViewAnalytics(questionnaire)}
-                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium"
-                        >
+                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium" />
                           <BarChart3 className="mr-2 h-4 w-4" />
                           Analytics
                         </DaisyDropdownMenuItem>
                         <DaisyDropdownMenuSeparator className="bg-gray-100" />
                         <DaisyDropdownMenuItem
                           onClick={() => handleDelete(questionnaire.id)}
-                          className="text-red-600 hover:bg-red-50 font-inter font-medium"
-                        >
+                          className="text-red-600 hover:bg-red-50 font-inter font-medium" />
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
-                        </DaisyDropdownMenuItem>
+                        </DaisyDropdownMenuSeparator>
                       </DaisyDropdownMenuContent>
                     </DaisyDropdownMenu>
                   </DaisyTableCell>
@@ -613,16 +626,18 @@ export default function QuestionnairePage() {
               ))}
             </DaisyTableBody>
           </DaisyTable>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Analytics Dialog */}
-      <DaisyDialog open={showAnalytics} onOpenChange={setShowAnalytics}>
-        <DaisyDialogContent className="max-w-4xl bg-white border border-gray-100 shadow-lg">
-          <DaisyDialogHeader>
+      <DaisyDialog open={showAnalytics} onOpenChange={setShowAnalytics} />
+        <DaisyDialogContent className="max-w-4xl bg-white border border-gray-100 shadow-lg" >
+  <DaisyDialogHeader />
+</DaisyDialog>
             <DaisyDialogTitle className="text-gray-900">Questionnaire Analytics</DaisyDialogTitle>
-            <DaisyDialogDescription className="text-gray-600">
-              {selectedQuestionnaire?.title} - Response analytics and insights
+            <DaisyDialogDescription className="text-gray-600" >
+  {selectedQuestionnaire?.title} - Response analytics and insights
+</DaisyDialogDescription>
             </DaisyDialogDescription>
           </DaisyDialogHeader>
           {selectedQuestionnaire && (

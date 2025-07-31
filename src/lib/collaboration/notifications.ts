@@ -31,7 +31,7 @@ export interface NotificationPreferences {
   quietHours: {
     enabled: boolean;
     startTime: string; // HH:mm format
-    endTime: string;   // HH:mm format
+    endTime: string; // HH:mm format
     timezone: string;
   };
 }
@@ -70,7 +70,6 @@ export interface NotificationDigest {
 }
 
 export class NotificationManager {
-
   // Get user notification preferences
   async getUserPreferences(userId: string): Promise<NotificationPreferences> {
     const preferences = await db.client.notificationPreferences.findUnique({
@@ -86,12 +85,15 @@ export class NotificationManager {
   }
 
   // Update user notification preferences
-  async updateUserPreferences(userId: string, preferences: Partial<NotificationPreferences>): Promise<NotificationPreferences> {
+  async updateUserPreferences(
+    userId: string,
+    preferences: Partial<NotificationPreferences>
+  ): Promise<NotificationPreferences> {
     const updated = await db.client.notificationPreferences.upsert({
       where: { userId },
       update: preferences,
       create: {
-        ...await this.createDefaultPreferences(userId),
+        ...(await this.createDefaultPreferences(userId)),
         ...preferences,
       },
     });
@@ -135,7 +137,6 @@ export class NotificationManager {
     channels?: ('email' | 'push' | 'sms' | 'slack' | 'in_app')[];
     scheduleAt?: Date;
   }): Promise<void> {
-    
     const recipient = await db.client.user.findUnique({
       where: { id: notification.recipientId },
     });
@@ -148,7 +149,9 @@ export class NotificationManager {
     const preferences = await this.getUserPreferences(notification.recipientId);
 
     // Determine which channels to use
-    const channels = notification.channels || this.determineChannels(notification.type, notification.urgency || 'medium', preferences);
+    const channels =
+      notification.channels ||
+      this.determineChannels(notification.type, notification.urgency || 'medium', preferences);
 
     // Create notification record
     const dbNotification = await db.client.notification.create({
@@ -169,7 +172,7 @@ export class NotificationManager {
     if (this.isQuietHours(preferences) && notification.urgency !== 'urgent') {
       // Schedule for after quiet hours
       const scheduleAt = this.calculateAfterQuietHours(preferences);
-      channels.forEach(channel => {
+      channels.forEach((channel) => {
         this.queueNotification({
           recipientId: notification.recipientId,
           type: notification.type,
@@ -212,7 +215,7 @@ export class NotificationManager {
         }
       } catch (error) {
         console.error(`Failed to send ${channel} notification:`, error);
-        
+
         // Queue for retry if critical
         if (notification.urgency === 'urgent' || notification.urgency === 'high') {
           this.queueNotification({
@@ -236,7 +239,10 @@ export class NotificationManager {
   }
 
   // Send in-app notification
-  private async sendInAppNotification(notification: any, preferences: NotificationPreferences): Promise<void> {
+  private async sendInAppNotification(
+    notification: any,
+    preferences: NotificationPreferences
+  ): Promise<void> {
     if (!preferences.inApp.enabled || !preferences.inApp.types.includes(notification.type)) {
       return;
     }
@@ -245,12 +251,12 @@ export class NotificationManager {
     if (collaborationServer) {
       collaborationServer.sendToUser(notification.recipientId, {
         type: 'notification:received',
-        payload: { 
+        payload: {
           notification: {
             ...notification,
             playSound: preferences.inApp.playSound,
             showDesktop: preferences.inApp.showDesktop,
-          }
+          },
         },
         timestamp: new Date(),
         userId: notification.senderId,
@@ -265,7 +271,10 @@ export class NotificationManager {
   }
 
   // Send email notification
-  private async sendEmailNotification(notification: any, preferences: NotificationPreferences): Promise<void> {
+  private async sendEmailNotification(
+    notification: any,
+    preferences: NotificationPreferences
+  ): Promise<void> {
     if (!preferences.email.enabled || !preferences.email.types.includes(notification.type)) {
       return;
     }
@@ -315,10 +324,12 @@ export class NotificationManager {
   }
 
   // Send push notification
-  private async sendPushNotification(notification: any, preferences: NotificationPreferences): Promise<void> {
+  private async sendPushNotification(
+    notification: any,
+    preferences: NotificationPreferences
+  ): Promise<void> {
     // The rest of the push notification code won't execute since pushSubscription is always null
     // This is intentional until the pushSubscription model is implemented
-    
     // Queue push notification
     // await this.queueNotification({
     //   recipientId: notification.recipientId,
@@ -343,7 +354,10 @@ export class NotificationManager {
   }
 
   // Send SMS notification
-  private async sendSMSNotification(notification: any, preferences: NotificationPreferences): Promise<void> {
+  private async sendSMSNotification(
+    notification: any,
+    preferences: NotificationPreferences
+  ): Promise<void> {
     if (!preferences.sms.enabled || !preferences.sms.types.includes(notification.type)) {
       return;
     }
@@ -375,8 +389,15 @@ export class NotificationManager {
   }
 
   // Send Slack notification
-  private async sendSlackNotification(notification: any, preferences: NotificationPreferences): Promise<void> {
-    if (!preferences.slack.enabled || !preferences.slack.types.includes(notification.type) || !preferences.slack.webhookUrl) {
+  private async sendSlackNotification(
+    notification: any,
+    preferences: NotificationPreferences
+  ): Promise<void> {
+    if (
+      !preferences.slack.enabled ||
+      !preferences.slack.types.includes(notification.type) ||
+      !preferences.slack.webhookUrl
+    ) {
       return;
     }
 
@@ -432,7 +453,6 @@ export class NotificationManager {
     data: Record<string, any>;
     scheduledAt: Date;
   }): Promise<NotificationQueue> {
-    
     // TODO: Implement notificationQueue model in Prisma schema
     // return await db.client.notificationQueue.create({
     //   data: {
@@ -477,7 +497,7 @@ export class NotificationManager {
     for (const notification of pendingNotifications) {
       try {
         await this.deliverQueuedNotification(notification);
-        
+
         // await db.client.notificationQueue.update({
         //   where: { id: notification.id },
         //   data: {
@@ -487,7 +507,7 @@ export class NotificationManager {
         // });
       } catch (error) {
         console.error(`Failed to deliver queued notification ${notification.id}:`, error);
-        
+
         const newAttempts = notification.attempts + 1;
         if (newAttempts >= notification.maxAttempts) {
           // await db.client.notificationQueue.update({
@@ -543,7 +563,7 @@ export class NotificationManager {
       subject: data.subject,
       html: data.html,
     });
-    
+
     // Simulated email delivery
     // In real implementation:
     // await emailService.send({
@@ -567,7 +587,7 @@ export class NotificationManager {
         data: data.data,
       },
     });
-    
+
     // In real implementation:
     // await webpush.sendNotification(data.subscription, JSON.stringify({
     //   title: data.title,
@@ -586,7 +606,7 @@ export class NotificationManager {
       to: data.to,
       message: data.message,
     });
-    
+
     // In real implementation:
     // await smsService.send({
     //   to: data.to,
@@ -601,7 +621,7 @@ export class NotificationManager {
       webhookUrl: data.webhookUrl,
       message: data.message,
     });
-    
+
     // In real implementation:
     // await fetch(data.webhookUrl, {
     //   method: 'POST',
@@ -634,9 +654,10 @@ export class NotificationManager {
 
   // Generate digest for specific user
   private async generateUserDigest(userId: string, frequency: 'daily' | 'weekly'): Promise<void> {
-    const since = frequency === 'daily' 
-      ? new Date(Date.now() - 24 * 60 * 60 * 1000)
-      : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const since =
+      frequency === 'daily'
+        ? new Date(Date.now() - 24 * 60 * 60 * 1000)
+        : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
     const notifications = await db.client.notification.findMany({
       where: {
@@ -661,14 +682,17 @@ export class NotificationManager {
     }
 
     // Group notifications by type
-    const groupedNotifications = notifications.reduce((acc, notification) => {
-      const type = notification.type;
-      if (!acc[type]) {
-        acc[type] = [];
-      }
-      acc[type].push(notification);
-      return acc;
-    }, {} as Record<string, any[]>);
+    const groupedNotifications = notifications.reduce(
+      (acc, notification) => {
+        const type = notification.type;
+        if (!acc[type]) {
+          acc[type] = [];
+        }
+        acc[type].push(notification);
+        return acc;
+      },
+      {} as Record<string, any[]>
+    );
 
     // Generate digest content
     const digestContent = this.generateDigestContent(groupedNotifications, frequency);
@@ -690,7 +714,7 @@ export class NotificationManager {
     // Mark notifications as included in digest
     await db.client.notification.updateMany({
       where: {
-        id: { in: notifications.map(n => n.id) },
+        id: { in: notifications.map((n) => n.id) },
       },
       data: {
         includeInDigest: true,
@@ -736,7 +760,11 @@ export class NotificationManager {
   }
 
   // Determine appropriate channels based on type and urgency
-  private determineChannels(type: string, urgency: string, preferences: NotificationPreferences): ('email' | 'push' | 'sms' | 'slack' | 'in_app')[] {
+  private determineChannels(
+    type: string,
+    urgency: string,
+    preferences: NotificationPreferences
+  ): ('email' | 'push' | 'sms' | 'slack' | 'in_app')[] {
     const channels: ('email' | 'push' | 'sms' | 'slack' | 'in_app')[] = [];
 
     // Always try in-app first
@@ -796,12 +824,12 @@ export class NotificationManager {
     const currentTime = now.getHours() * 60 + now.getMinutes();
 
     const scheduleTime = new Date(now);
-    
+
     if (currentTime > endTime) {
       // Schedule for next day
       scheduleTime.setDate(scheduleTime.getDate() + 1);
     }
-    
+
     scheduleTime.setHours(Math.floor(endTime / 60));
     scheduleTime.setMinutes(endTime % 60);
     scheduleTime.setSeconds(0);
@@ -817,7 +845,10 @@ export class NotificationManager {
   }
 
   // Get notification template
-  private async getNotificationTemplate(type: string, channel: string): Promise<NotificationTemplate | null> {
+  private async getNotificationTemplate(
+    type: string,
+    channel: string
+  ): Promise<NotificationTemplate | null> {
     // TODO: Implement notificationTemplate model in Prisma schema
     // return await db.client.notificationTemplate.findFirst({
     //   where: {
@@ -826,13 +857,16 @@ export class NotificationManager {
     //     isActive: true,
     //   },
     // });
-    
+
     // Return null for now
     return null;
   }
 
   // Render template with variables
-  private renderTemplate(template: NotificationTemplate, variables: Record<string, any>): { subject: string; content: string } {
+  private renderTemplate(
+    template: NotificationTemplate,
+    variables: Record<string, any>
+  ): { subject: string; content: string } {
     let subject = template.subject;
     let content = template.template;
 
@@ -847,11 +881,15 @@ export class NotificationManager {
   }
 
   // Add notification to digest queue
-  private async addToDigest(userId: string, notification: any, frequency: 'daily' | 'weekly'): Promise<void> {
+  private async addToDigest(
+    userId: string,
+    notification: any,
+    frequency: 'daily' | 'weekly'
+  ): Promise<void> {
     // Mark notification as pending digest
     await db.client.notification.update({
       where: { id: notification.id },
-      data: { 
+      data: {
         pendingDigest: true,
         digestFrequency: frequency,
       },
@@ -859,7 +897,10 @@ export class NotificationManager {
   }
 
   // Generate digest content HTML
-  private generateDigestContent(groupedNotifications: Record<string, any[]>, frequency: string): string {
+  private generateDigestContent(
+    groupedNotifications: Record<string, any[]>,
+    frequency: string
+  ): string {
     let html = `
       <html>
         <head>
@@ -886,7 +927,8 @@ export class NotificationManager {
           <h2>${this.getTypeDisplayName(type)} (${notifications.length})</h2>
       `;
 
-      for (const notification of notifications.slice(0, 10)) { // Limit to 10 per type
+      for (const notification of notifications.slice(0, 10)) {
+        // Limit to 10 per type
         html += `
           <div class="notification">
             <strong>${notification.title}</strong><br>
@@ -919,13 +961,13 @@ export class NotificationManager {
   // Get display name for notification type
   private getTypeDisplayName(type: string): string {
     const displayNames: Record<string, string> = {
-      'TASK_ASSIGNED': 'Task Assignments',
-      'APPROVAL_REQUIRED': 'Approval Requests',
-      'MENTION': 'Mentions',
-      'COMMENT_CREATED': 'Comments',
-      'DOCUMENT_SHARED': 'Shared Documents',
-      'RISK_UPDATED': 'Risk Updates',
-      'CONTROL_UPDATED': 'Control Updates',
+      TASK_ASSIGNED: 'Task Assignments',
+      APPROVAL_REQUIRED: 'Approval Requests',
+      MENTION: 'Mentions',
+      COMMENT_CREATED: 'Comments',
+      DOCUMENT_SHARED: 'Shared Documents',
+      RISK_UPDATED: 'Risk Updates',
+      CONTROL_UPDATED: 'Control Updates',
     };
 
     return displayNames[type] || type.replace(/_/g, ' ').toLowerCase();
@@ -934,13 +976,13 @@ export class NotificationManager {
   // Get Slack message color based on notification type
   private getSlackColor(type: string): string {
     const colors: Record<string, string> = {
-      'TASK_ASSIGNED': '#36a64f',
-      'APPROVAL_REQUIRED': '#ff9900',
-      'MENTION': '#2196f3',
-      'COMMENT_CREATED': '#9c27b0',
-      'DOCUMENT_SHARED': '#607d8b',
-      'RISK_UPDATED': '#f44336',
-      'CONTROL_UPDATED': '#4caf50',
+      TASK_ASSIGNED: '#36a64f',
+      APPROVAL_REQUIRED: '#ff9900',
+      MENTION: '#2196f3',
+      COMMENT_CREATED: '#9c27b0',
+      DOCUMENT_SHARED: '#607d8b',
+      RISK_UPDATED: '#f44336',
+      CONTROL_UPDATED: '#4caf50',
     };
 
     return colors[type] || '#757575';
@@ -1013,13 +1055,15 @@ export class NotificationManager {
   }
 
   // Get user notifications with pagination
-  async getUserNotifications(userId: string, options: {
-    limit?: number;
-    offset?: number;
-    unreadOnly?: boolean;
-    types?: string[];
-  } = {}): Promise<{ notifications: any[]; total: number; unreadCount: number }> {
-    
+  async getUserNotifications(
+    userId: string,
+    options: {
+      limit?: number;
+      offset?: number;
+      unreadOnly?: boolean;
+      types?: string[];
+    } = {}
+  ): Promise<{ notifications: any[]; total: number; unreadCount: number }> {
     const where: any = {
       recipientId: userId,
     };
@@ -1080,25 +1124,34 @@ export function startNotificationProcessor(): void {
   const dailyDigestTime = new Date();
   dailyDigestTime.setHours(8, 0, 0, 0);
   const msUntilDailyDigest = dailyDigestTime.getTime() - Date.now();
-  const dailyDigestDelay = msUntilDailyDigest > 0 ? msUntilDailyDigest : 24 * 60 * 60 * 1000 - Math.abs(msUntilDailyDigest);
+  const dailyDigestDelay =
+    msUntilDailyDigest > 0
+      ? msUntilDailyDigest
+      : 24 * 60 * 60 * 1000 - Math.abs(msUntilDailyDigest);
 
   setTimeout(() => {
     notificationManager.generateDigests('daily');
-    setInterval(() => {
-      notificationManager.generateDigests('daily');
-    }, 24 * 60 * 60 * 1000);
+    setInterval(
+      () => {
+        notificationManager.generateDigests('daily');
+      },
+      24 * 60 * 60 * 1000
+    );
   }, dailyDigestDelay);
 
   // Generate weekly digests on Monday at 8 AM
   const weeklyDigestTime = new Date();
-  weeklyDigestTime.setDate(weeklyDigestTime.getDate() + (1 - weeklyDigestTime.getDay() + 7) % 7); // Next Monday
+  weeklyDigestTime.setDate(weeklyDigestTime.getDate() + ((1 - weeklyDigestTime.getDay() + 7) % 7)); // Next Monday
   weeklyDigestTime.setHours(8, 0, 0, 0);
   const msUntilWeeklyDigest = weeklyDigestTime.getTime() - Date.now();
 
   setTimeout(() => {
     notificationManager.generateDigests('weekly');
-    setInterval(() => {
-      notificationManager.generateDigests('weekly');
-    }, 7 * 24 * 60 * 60 * 1000);
+    setInterval(
+      () => {
+        notificationManager.generateDigests('weekly');
+      },
+      7 * 24 * 60 * 60 * 1000
+    );
   }, msUntilWeeklyDigest);
-} 
+}

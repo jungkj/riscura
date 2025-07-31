@@ -10,7 +10,7 @@ export const DaisyScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(
     const scrollClasses = {
       vertical: 'overflow-y-auto overflow-x-hidden',
       horizontal: 'overflow-x-auto overflow-y-hidden',
-      both: 'overflow-auto'
+      both: 'overflow-auto',
     };
 
     return (

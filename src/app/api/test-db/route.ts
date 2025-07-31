@@ -45,7 +45,7 @@ export async function GET() {
         },
       },
     });
-    
+
     results.tests.prismaConnection = {
       success: true,
       clientCreated: true,
@@ -74,7 +74,7 @@ export async function GET() {
     };
   }
 
-  return NextResponse.json(results, { 
+  return NextResponse.json(results, {
     status: 200,
     headers: {
       'Content-Type': 'application/json',

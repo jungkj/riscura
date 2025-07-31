@@ -256,4 +256,4 @@ export interface BulkOperationResult {
   errors: any[];
   startedAt: string;
   completedAt?: string;
-} 
+}

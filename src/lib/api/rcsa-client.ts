@@ -1,7 +1,7 @@
-import { 
-  Risk, 
-  Control, 
-  ControlRiskMapping, 
+import {
+  Risk,
+  Control,
+  ControlRiskMapping,
   AssessmentEvidence,
   AssessmentFinding,
   CreateRiskRequest,
@@ -23,7 +23,7 @@ import {
   TestExecution,
   GenerateTestScriptRequest,
   GenerateTestScriptResponse,
-  TestScriptControl
+  TestScriptControl,
 } from '@/types/rcsa.types';
 import { getSession } from 'next-auth/react';
 
@@ -63,14 +63,11 @@ export class RCSAApiClient {
     }
   }
 
-  private async request<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<ApiResponse<T>> {
+  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
     try {
       // Get authenticated headers with session
       const authenticatedHeaders = await this.getAuthenticatedHeaders();
-      
+
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         headers: {
           ...authenticatedHeaders,
@@ -82,18 +79,18 @@ export class RCSAApiClient {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        
+
         // Handle authentication errors specifically
         if (response.status === 401) {
           console.error('Authentication required for API request:', endpoint);
           throw new Error(errorData.message || 'Authentication required. Please sign in again.');
         }
-        
+
         if (response.status === 403) {
           console.error('Insufficient permissions for API request:', endpoint);
           throw new Error(errorData.message || 'Insufficient permissions for this operation.');
         }
-        
+
         throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
       }
 
@@ -117,17 +114,17 @@ export class RCSAApiClient {
 
   private buildQueryString(params: Record<string, any>): string {
     const searchParams = new URLSearchParams();
-    
+
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
         if (Array.isArray(value)) {
-          value.forEach(v => searchParams.append(key, String(v)));
+          value.forEach((v) => searchParams.append(key, String(v)));
         } else {
           searchParams.append(key, String(value));
         }
       }
     });
-    
+
     return searchParams.toString();
   }
 
@@ -138,7 +135,7 @@ export class RCSAApiClient {
   async getRisks(params: RiskQueryParams = {}): Promise<ApiResponse<PaginatedResponse<Risk>>> {
     const queryString = this.buildQueryString(params);
     const endpoint = `/risks${queryString ? `?${queryString}` : ''}`;
-    
+
     return this.request<PaginatedResponse<Risk>>(endpoint);
   }
 
@@ -177,10 +174,12 @@ export class RCSAApiClient {
   // CONTROL MANAGEMENT
   // ============================================================================
 
-  async getControls(params: ControlQueryParams = {}): Promise<ApiResponse<PaginatedResponse<Control>>> {
+  async getControls(
+    params: ControlQueryParams = {}
+  ): Promise<ApiResponse<PaginatedResponse<Control>>> {
     const queryString = this.buildQueryString(params);
     const endpoint = `/controls${queryString ? `?${queryString}` : ''}`;
-    
+
     return this.request<PaginatedResponse<Control>>(endpoint);
   }
 
@@ -220,20 +219,22 @@ export class RCSAApiClient {
   // ============================================================================
 
   async getControlRiskMappings(
-    riskId?: string, 
+    riskId?: string,
     controlId?: string
   ): Promise<ApiResponse<ControlRiskMapping[]>> {
     const params: Record<string, string> = {};
     if (riskId) params.riskId = riskId;
     if (controlId) params.controlId = controlId;
-    
+
     const queryString = this.buildQueryString(params);
     const endpoint = `/control-risk-mappings${queryString ? `?${queryString}` : ''}`;
-    
+
     return this.request<ControlRiskMapping[]>(endpoint);
   }
 
-  async mapControlToRisk(mapping: CreateControlRiskMappingRequest): Promise<ApiResponse<ControlRiskMapping>> {
+  async mapControlToRisk(
+    mapping: CreateControlRiskMappingRequest
+  ): Promise<ApiResponse<ControlRiskMapping>> {
     return this.request<ControlRiskMapping>('/control-risk-mappings', {
       method: 'POST',
       body: JSON.stringify(mapping),
@@ -257,14 +258,19 @@ export class RCSAApiClient {
     });
   }
 
-  async bulkMapControls(riskId: string, controlIds: string[]): Promise<ApiResponse<ControlRiskMapping[]>> {
+  async bulkMapControls(
+    riskId: string,
+    controlIds: string[]
+  ): Promise<ApiResponse<ControlRiskMapping[]>> {
     return this.request<ControlRiskMapping[]>('/control-risk-mappings/bulk', {
       method: 'POST',
       body: JSON.stringify({ riskId, controlIds }),
     });
   }
 
-  async bulkUpdateEffectiveness(updates: { riskId: string; controlId: string; effectiveness: number }[]): Promise<ApiResponse<ControlRiskMapping[]>> {
+  async bulkUpdateEffectiveness(
+    updates: { riskId: string; controlId: string; effectiveness: number }[]
+  ): Promise<ApiResponse<ControlRiskMapping[]>> {
     return this.request<ControlRiskMapping[]>('/control-risk-mappings/bulk-update', {
       method: 'PATCH',
       body: JSON.stringify({ updates }),
@@ -275,14 +281,17 @@ export class RCSAApiClient {
   // EVIDENCE MANAGEMENT
   // ============================================================================
 
-  async getEvidence(controlId?: string, assessmentId?: string): Promise<ApiResponse<AssessmentEvidence[]>> {
+  async getEvidence(
+    controlId?: string,
+    assessmentId?: string
+  ): Promise<ApiResponse<AssessmentEvidence[]>> {
     const params: Record<string, string> = {};
     if (controlId) params.controlId = controlId;
     if (assessmentId) params.assessmentId = assessmentId;
-    
+
     const queryString = this.buildQueryString(params);
     const endpoint = `/evidence${queryString ? `?${queryString}` : ''}`;
-    
+
     return this.request<AssessmentEvidence[]>(endpoint);
   }
 
@@ -293,7 +302,10 @@ export class RCSAApiClient {
     });
   }
 
-  async updateEvidence(id: string, updates: Partial<AssessmentEvidence>): Promise<ApiResponse<AssessmentEvidence>> {
+  async updateEvidence(
+    id: string,
+    updates: Partial<AssessmentEvidence>
+  ): Promise<ApiResponse<AssessmentEvidence>> {
     return this.request<AssessmentEvidence>(`/evidence/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(updates),
@@ -310,25 +322,33 @@ export class RCSAApiClient {
   // ASSESSMENT FINDINGS
   // ============================================================================
 
-  async getFindings(controlId?: string, assessmentId?: string): Promise<ApiResponse<AssessmentFinding[]>> {
+  async getFindings(
+    controlId?: string,
+    assessmentId?: string
+  ): Promise<ApiResponse<AssessmentFinding[]>> {
     const params: Record<string, string> = {};
     if (controlId) params.controlId = controlId;
     if (assessmentId) params.assessmentId = assessmentId;
-    
+
     const queryString = this.buildQueryString(params);
     const endpoint = `/findings${queryString ? `?${queryString}` : ''}`;
-    
+
     return this.request<AssessmentFinding[]>(endpoint);
   }
 
-  async createFinding(finding: Partial<AssessmentFinding>): Promise<ApiResponse<AssessmentFinding>> {
+  async createFinding(
+    finding: Partial<AssessmentFinding>
+  ): Promise<ApiResponse<AssessmentFinding>> {
     return this.request<AssessmentFinding>('/findings', {
       method: 'POST',
       body: JSON.stringify(finding),
     });
   }
 
-  async updateFinding(id: string, updates: Partial<AssessmentFinding>): Promise<ApiResponse<AssessmentFinding>> {
+  async updateFinding(
+    id: string,
+    updates: Partial<AssessmentFinding>
+  ): Promise<ApiResponse<AssessmentFinding>> {
     return this.request<AssessmentFinding>(`/findings/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(updates),
@@ -346,21 +366,21 @@ export class RCSAApiClient {
   // ============================================================================
 
   async scheduleControlTest(
-    controlId: string, 
-    testDate: Date, 
+    controlId: string,
+    testDate: Date,
     assignee?: string
   ): Promise<ApiResponse<Control>> {
     return this.request<Control>(`/controls/${controlId}/schedule-test`, {
       method: 'POST',
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         nextTestDate: testDate.toISOString(),
-        assignee 
+        assignee,
       }),
     });
   }
 
   async completeControlTest(
-    controlId: string, 
+    controlId: string,
     results: {
       effectiveness: number;
       testResults: string;
@@ -384,21 +404,20 @@ export class RCSAApiClient {
   // ANALYTICS & REPORTING
   // ============================================================================
 
-  async getRCSAAnalytics(
-    dateFrom?: string,
-    dateTo?: string
-  ): Promise<ApiResponse<RCSAAnalytics>> {
+  async getRCSAAnalytics(dateFrom?: string, dateTo?: string): Promise<ApiResponse<RCSAAnalytics>> {
     const params: Record<string, string> = {};
     if (dateFrom) params.dateFrom = dateFrom;
     if (dateTo) params.dateTo = dateTo;
-    
+
     const queryString = this.buildQueryString(params);
     const endpoint = `/analytics/rcsa${queryString ? `?${queryString}` : ''}`;
-    
+
     return this.request<RCSAAnalytics>(endpoint);
   }
 
-  async getRiskCoverageReport(): Promise<ApiResponse<{ riskId: string; controlCount: number; effectivenessScore: number }[]>> {
+  async getRiskCoverageReport(): Promise<
+    ApiResponse<{ riskId: string; controlCount: number; effectivenessScore: number }[]>
+  > {
     return this.request('/analytics/risk-coverage');
   }
 
@@ -426,14 +445,18 @@ export class RCSAApiClient {
     });
   }
 
-  async bulkUpdateRisks(updates: { id: string; data: UpdateRiskRequest }[]): Promise<ApiResponse<Risk[]>> {
+  async bulkUpdateRisks(
+    updates: { id: string; data: UpdateRiskRequest }[]
+  ): Promise<ApiResponse<Risk[]>> {
     return this.request<Risk[]>('/risks/bulk-update', {
       method: 'PATCH',
       body: JSON.stringify({ updates }),
     });
   }
 
-  async bulkUpdateControls(updates: { id: string; data: UpdateControlRequest }[]): Promise<ApiResponse<Control[]>> {
+  async bulkUpdateControls(
+    updates: { id: string; data: UpdateControlRequest }[]
+  ): Promise<ApiResponse<Control[]>> {
     return this.request<Control[]>('/controls/bulk-update', {
       method: 'PATCH',
       body: JSON.stringify({ updates }),
@@ -445,13 +468,16 @@ export class RCSAApiClient {
   // ============================================================================
 
   async validateRiskControlMapping(
-    riskId: string, 
+    riskId: string,
     controlId: string
   ): Promise<ApiResponse<{ valid: boolean; reason?: string }>> {
     return this.request(`/validate/risk-control-mapping?riskId=${riskId}&controlId=${controlId}`);
   }
 
-  async calculateRiskScore(likelihood: number, impact: number): Promise<ApiResponse<{ score: number; level: string }>> {
+  async calculateRiskScore(
+    likelihood: number,
+    impact: number
+  ): Promise<ApiResponse<{ score: number; level: string }>> {
     return this.request(`/calculate/risk-score?likelihood=${likelihood}&impact=${impact}`);
   }
 
@@ -480,9 +506,7 @@ export class RCSAApiClient {
     return this.request<TestScript>(`/test-scripts/${id}`);
   }
 
-  async createTestScript(
-    data: CreateTestScriptRequest
-  ): Promise<ApiResponse<TestScript>> {
+  async createTestScript(data: CreateTestScriptRequest): Promise<ApiResponse<TestScript>> {
     return this.request<TestScript>('/test-scripts', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -620,7 +644,7 @@ export const rcsaHelpers = {
    * Format control frequency display
    */
   formatFrequency: (frequency: string): string => {
-    return frequency.toLowerCase().replace(/^\w/, c => c.toUpperCase());
+    return frequency.toLowerCase().replace(/^\w/, (c) => c.toUpperCase());
   },
 
   /**
@@ -640,4 +664,4 @@ export const rcsaHelpers = {
   },
 };
 
-export default rcsaApiClient; 
+export default rcsaApiClient;
